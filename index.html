@@ -1,0 +1,779 @@
+<! DOCTYPE html>
+
+<html lang="pt-br" style="scroll-behavior: smooth;" >
+
+
+
+<cabeça>
+
+ <meta charset="UTF-8">
+
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ 
+
+<!-- Meta tags de SEO -->
+
+ <title>Deo Magalhães – Neuropsicólogo</title>
+
+ <link rel="ícone" type="image/png" href="favicon2.png">
+
+ <meta name="description" content="Deo Magalhães (CRP 04/42784) é Neuropsicólogo, Neurocientista do Desenvolvimento, Analista do Comportamento além de Especialista em Filosofia pela PUC Minas, atua em avaliação e intervenção neuropsicológica precoce, atendendo crianças, adolescentes, adultos e idosos com foco científico e humano." >
+
+ <meta name="autor" content="Deo Magalhães">
+
+ <meta name="keywords" content="neuropsicologo, guaranesia, neuropsicologia, TDAH, TEA, diagnóstico,, atípico, dificuldade de aprendizagem, avaliação neuropsicológica">
+
+
+
+<!-- Estilos CSS Internos -->
+
+ <estilo>
+
+ : raiz {
+
+ --cor primária: #2c3e50; /* Azul escuro */
+
+ --cor secundária: #3498db; /* Azul claro */
+
+ --background-color: #f8f9fa;
+
+ --text-color: #333;
+
+ --cinza claro: #ecf0f1;
+
+ }
+
+ corpo {
+
+ família de fontes: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+ margem: 0;
+
+ preenchimento: 0;
+
+ cor de fundo: var(--background-color);
+
+ cor: var(--text-color);
+
+ altura da linha: 1,6;
+
+ }
+
+ .container {
+
+ largura máxima: 960px;
+
+ margem: 0 automático;
+
+ preenchimento: 20px;
+
+ }
+
+ 
+
+/* ESTILOS DA BARRA SUPERIOR (BARRA SUPERIOR) */
+
+ .barra superior {
+
+ cor de fundo: var (- cor primária);
+
+ preenchimento: 3px 0;
+
+ tamanho da fonte: 14px;
+
+ cor: branco;
+
+ }
+
+ .conteúdo da barra superior {
+
+ Display: Flex;
+
+ justify-content: espaço entre;
+
+ alinhar itens: centro;
+
+ flex-wrap: envoltório;
+
+ }
+
+ .contato-info-esquerda {
+
+ Display: Flex;
+
+ alinhar itens: centro;
+
+ lacuna: 20px; /* Espaçamento entre os itens da esquerda */
+
+ }
+
+ .contact-info-left a, .contact-info-left span {
+
+ cor: branco;
+
+ decoração de texto: nenhum;
+
+ Display: Inline-Flex;
+
+ alinhar itens: centro;
+
+ Lacuna: 8px; /* Espaço entre ícone e texto */
+
+ }
+
+ .social-info-direito {
+
+ Display: Flex;
+
+ alinhar itens: centro;
+
+ Lacuna: 15px; /* Espaçamento entre os ícones da direita */
+
+ }
+
+ .social-info-right a {
+
+ cor: branco;
+
+ transição: opacidade 0,3s;
+
+ }
+
+ .social-info-right a:hover {
+
+ opacidade: 0,8;
+
+ }
+
+
+
+/* ESTILOS DO CABEÇALHO E NAVEGAÇÃO */
+
+ cabeçalho {
+
+ cor de fundo: branco;
+
+ altura: 90px; /* Altura inicial do cabeçalho */
+
+ preenchimento: 0,5rem 0;
+
+ borda inferior: 1px sólido #ddd;
+
+ posição: pegajoso;
+
+ topo: 0;
+
+ índice z: 1000;
+
+ Display: Flex;
+
+ justify-content: espaço ao redor;
+
+ alinhar itens: centro;
+
+ transição: todos os 0,3s de facilidade de entrada;
+
+ }
+
+ cabeçalho .logo {
+
+ altura: 100%;
+
+ Display: Flex;
+
+ alinhar itens: centro;
+
+ }
+
+ cabeçalho .logo img {
+
+ altura: 100%;
+
+ Largura: Auto;
+
+ }
+
+ nav a {
+
+ margem: 0 15px;
+
+ decoração de texto: nenhum;
+
+ cor: var(--cor primária);
+
+ peso da fonte: 500;
+
+ transição: cor 0,3s;
+
+ }
+
+ nav a:hover {
+
+ cor: var(--secondary-color);
+
+ }
+
+
+
+/* ESTILOS DO CABEÇALHO QUE ENCOLHE */
+
+ .header-scrolled {
+
+ altura: 60px !importante; /* Altura final do cabeçalho */
+
+ preenchimento: 0.2rem 0 !important;
+
+ sombra da caixa: 0 2px 10px rgba(0,0,0,0.1);
+
+ }
+
+
+
+/* ESTILOS GERAIS DAS SEÇÕES */
+
+ seção {
+
+ preenchimento: 60px 0;
+
+ borda inferior: 1px var sólido (--cinza claro);
+
+ }
+
+ seção:último do tipo {
+
+ borda inferior: nenhuma;
+
+ }
+
+ .hero {
+
+ plano de fundo: var(--cor primária);
+
+ cor: branco;
+
+ alinhamento de texto: centro;
+
+ preenchimento: 100px 20px;
+
+ }
+
+ .hero h1 {
+
+ tamanho da fonte: 2.8em;
+
+ margem inferior: 10px;
+
+ }
+
+ .hero p {
+
+ tamanho da fonte: 1.2em;
+
+ largura máxima: 700px;
+
+ margem: 0 auto 20px auto;
+
+ }
+
+ .cta-button {
+
+ Voltarcor de fundo: var(--cor secundária);
+
+ cor: branco;
+
+ preenchimento: 15px 30px;
+
+ decoração de texto: nenhum;
+
+ raio da borda: 5px;
+
+ peso da fonte: negrito;
+
+ transição: cor de fundo 0,3s;
+
+ }
+
+ .cta-button:hover {
+
+ cor de fundo: #2980b9;
+
+ }
+
+ h2 {
+
+ alinhamento de texto: centro;
+
+ tamanho da fonte: 2.5em;
+
+ margem inferior: 40px;
+
+ cor: var(--cor primária);
+
+ }
+
+ .cartão-de-serviço, .sobre-conteúdo {
+
+ fundo: branco;
+
+ preenchimento: 30px;
+
+ raio da borda: 8px;
+
+ sombra da caixa: 0 4px 15px rgba (0,0,0,0,0,08);
+
+ margem inferior: 20px;
+
+ }
+
+ .services-grid {
+
+ exibição: grade;
+
+ colunas de modelo de grade: repetição (ajuste automático, minmax (280px, 1fr));
+
+ lacuna: 20px;
+
+ }
+
+ .cartão-de-serviço h3 {
+
+ cor: var(--secondary-color);
+
+ margem superior: 0;
+
+ }
+
+ .formulário de contato {
+
+ largura máxima: 600px;
+
+ margem: 0 automático;
+
+ }
+
+ .contact-form input, .contact-form textarea {
+
+ largura: 100%;
+
+ preenchimento: 12px;
+
+ margem inferior: 15px;
+
+ borda: 1px sólido #ccc;
+
+ raio da borda: 5px;
+
+ dimensionamento da caixa: caixa de borda;
+
+ }
+
+ .botão de formulário de contato {
+
+ largura: 100%;
+
+ preenchimento: 15px;
+
+ cor de fundo: var(--cor secundária);
+
+ cor: branco;
+
+ borda: nenhuma;
+
+ raio da borda: 5px;
+
+ tamanho da fonte: 1em;
+
+ cursor: ponteiro;
+
+ transição: cor de fundo 0,3s;
+
+ }
+
+ .botão de formulário de contato:hover {
+
+ cor de fundo: #2980b9;
+
+ }
+
+ .informações de contato {
+
+ alinhamento de texto: centro;
+
+ margem superior: 40px;
+
+ }
+
+ .contact-info p {
+
+ tamanho da fonte: 1.1em;
+
+ }
+
+ rodapé {
+
+ cor de fundo: var (- cor primária);
+
+ cor: branco;
+
+ alinhamento de texto: centro;
+
+ preenchimento: 20px;
+
+ }
+
+ rodapé p {
+
+ margem: 0;
+
+ }
+
+
+
+/* RESPONSIVIDADE PARA TELAS PEQUENAS */
+
+ @media (largura máxima: 768px) {
+
+ .conteúdo da barra superior {
+
+ justificar-conteúdo: centro;
+
+ Lacuna: 15px;
+
+ }
+
+ .contato-info-esquerda {
+
+ largura: 100%;
+
+ justificar-conteúdo: centro;
+
+ }
+
+ cabeçalho {
+
+ flex-direção: coluna;
+
+ altura: auto !important; /* Altura automática no mobile */
+
+ preenchimento: 10px 0;
+
+ }
+
+ nav {
+
+ margem superior: 10px;
+
+ }
+
+ nav a {
+
+ exibição: bloco;
+
+ alinhamento de texto: centro;
+
+ preenchimento: 5px;
+
+ }
+
+ .hero h1 {tamanho da fonte: 2em; }
+
+ h2 {tamanho da fonte: 2em; }
+
+ }
+
+ </estilo>
+
+</cabeça>
+
+
+
+<corpo>
+
+ <div class="top-bar">
+
+ <div class="conteúdo da barra superior do contêiner">
+
+ <div class="contact-info-left">
+
+ <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp">
+
+ <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></caminho></svg>
+
+ <vão>(35) 9 3300-3807</vão>
+
+ </a>
+
+ <span> ✉️ E-mail: contato@deomagalhaes.com.br</span>
+
+ </div>
+
+ <div class="social-info-right">
+
+ <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram">
+
+ <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"> </linha></svg>
+
+ </a>
+
+ <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização">
+
+ <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+
+ </a>
+
+ </div>
+
+ </div>
+
+ </div>
+
+ <cabeçalho>
+
+ <a href="#home" class="logo">
+
+ <img src="logodeo.png" alt="Logotipo Deo Magalhães Neuropsicólogo">
+
+ </a>
+
+ <nav>
+
+ <a href="#sobre">Sobre Mim</a>
+
+ <a href="#servicos">Serviços</a>
+
+ <a href="#blog">Artigos</a>
+
+ <a href="#contato">Contato</a>
+
+ </nav>
+
+ </cabeçalho>
+
+
+
+<principal>
+
+ <!-- O restante do seu conteúdo (main, seções, footer ) permanece o mesmo -->
+
+ <!-- 1. Seção Home (Hero) -->
+
+ <id da seção="home" class="hero">
+
+ <h1>Neuropsicologia para Transformar Vidas</h1>
+
+ <p>O ser humano é complexo, e compreendê-lo abre caminhos para bem-estar, aprendizado e qualidade de vida.</p>
+
+ <p>Deo Magalhães, Neuropsicólogo, oferece avaliação especializada, intervenção personalizada e orientação fundamentada em ciência para todas as fases do desenvolvimento humano.</p>
+
+ <a href="#contato" class="cta-button">Agende uma Avaliação</a>
+
+ </seção>
+
+
+
+<!-- 2. Seção Sobre Mim -->
+
+ <section id="sobre">
+
+ <div class="container">
+
+ <h2>Sobre Deo Magalhães</h2>
+
+ <div class="about-content">
+
+ <p>Neuropsicólogo (CRP 04/42784), graduado em Psicologia pela PUC Minas e especializado em Neuropsicologia Clínica, Neurociências do Desenvolvimento, Análise do Comportamento Aplicada ao Autismo, ABA Clínica e em Filosofia, também pela PUC Minas. Atuo na avaliação e intervenção precoce de processos cognitivos, emocionais e comportamentais, ajudando famílias e indivíduos a compreenderem suas potencialidades e desafios.</p>
+
+ <p>A prática profissional é pautada em evidências científicas, ética profissional e profundo respeito pela singularidade de cada pessoa. Atendo crianças, adolescentes, adultos e idosos, oferecendo suporte em casos como dificuldades de aprendizagem, transtornos do neurodesenvolvimento, quadros neurológicos, alterações cognitivas e questões emocionais.</p>
+
+ <h3>Formação e Experiência:</h3>
+
+ <ul>
+
+ <li>Psicólogo – CRP 04/42784</li>
+
+ <li>Membro da SBNp - Sociedade Brasileira de Neuropsicologia</li>
+
+ <li>Especialização em Neuropsicologia Clínica</li>
+
+ <li>Especialização em Neurociências do Desenvolvimento</li>
+
+ <li>Especialização em ABA no Autismo</li>
+
+ <li>Especialização em ABA na Clínica</li>
+
+ <li>Especialização em Filosofia</li>
+
+ <li>Experiência em contextos clínicos, educacionais e hospitalares</li>
+
+ <li>Expertise na produção de documentos técnicos (laudos, relatórios, pareceres, </li>
+
+ <li>Atualização constante em neurociências, psicometria e reabilitação cognitiva</li>
+
+ </ul>
+
+ </div>
+
+ </div>
+
+ </seção>
+
+
+
+<!-- 3. Seção Serviços -->
+
+ <section id="servicos" style="background-color: var(--light-gray);" >
+
+ <div class="container">
+
+ <h2>Meus Serviços</h2>
+
+ <div class="services-grid">
+
+ <div class="service-card">
+
+ <h3> 🔹 Avaliação Neuropsicológica</h3>
+
+ <p>Investigação detalhada das funções cognitivas, emocionais e comportamentais, utilizando instrumentos psicométricos reconhecidos, para auxiliar diagnósticos, planejamentos terapêuticos ou decisões acadêmicas/profissionais.</p>
+
+ </div>
+
+ <div class="service-card">
+
+ <h3> 🔹 Acompanhamento Neuropsicológico</h3>
+
+ <p>Intervenções personalizadas para fortalecimento de funções cognitivas (atenção, memória, funções executivas), manejo emocional e estratégias compensatórias.</p>
+
+ </div>
+
+ <div class="service-card">
+
+ <h3> 🔹 Orientação a Pais e Profissionais</h3>
+
+ <p>Apoio técnico para escolas, famílias e equipes multidisciplinares, promovendo compreensão do funcionamento neuropsicológico e estratégias eficazes para o cotidiano.</p>
+
+ </div>
+
+ <div class="service-card">
+
+ <h3> 🔹 Consultoria Científica</h3>
+
+ <p>Suporte em projetos, treinamentos e produção de materiais na área de neurociências e psicologia aplicada.</p>
+
+ </div>
+
+ </div>
+
+ </div>
+
+ </seção>
+
+
+
+<!-- 4. Seção Artigos/Blog -->
+
+ <id da seção = "blog">
+
+ <div class="container" style="text-align: center;" >
+
+ <h2>Conteúdo em Neuropsicologia</h2>
+
+ <p>A neuropsicologia está em constante evolução. Nesta seção, compartilho artigos, reflexões e informações atualizadas voltadas a profissionais, famílias e pessoas interessadas no funcionamento do cérebro e do comportamento humano.</p>
+
+ <p><strong>➤ Em breve, conteúdos exclusivos sobre desenvolvimento cognitivo, estratégias de intervenção, saúde mental e neurociências aplicadas.</strong></p>
+
+ </div>
+
+ </seção>
+
+
+
+<!-- 5. Seção Contato -->
+
+ <section id="contato" style="background-color: var(--light-gray);" >
+
+ <div class="container">
+
+ <h2>Fale Comigo</h2>
+
+ <p style="text-align: center;" >Se deseja agendar uma avaliação, tirar dúvidas ou saber mais sobre meus serviços, entre em contato. Será um prazer atender você.</p>
+
+ 
+
+<form action="https://api.formsubmit.co/contato@deomagalhaes.com.br" method="POST" class="contact-form">
+
+ <input type="text" name="name" placeholder="Seu Nome" obrigatório>
+
+ <input type="email" name="email" placeholder="Seu E-mail" obrigatório>
+
+ <textarea name="message" rows="5" placeholder="Sua Mensagem" required></textarea>
+
+ <tipo de entrada="oculto" nome="_next" valor="https://deomagalhaes.com.br/obrigado.html">
+
+ <input type="hidden" name="_subject" value="Novo Contato do Site!" >
+
+ <input type="hidden" name="_captcha" value="false">
+
+ <button type="submit">Enviar Mensagem</button>
+
+ </formulário>
+
+
+
+<div class="contact-info">
+
+ <p><strong>WhatsApp:</strong> <a href="https://wa.me/5535933003807" target="_blank">Clique aqui para conversar</a></p>
+
+ <p><strong>Instagram:</strong> <a href="https://instagram.com/neuropsiguaranesia" target="_blank">@neuropsiguaranesia</a></p>
+
+ <p><strong>E-mail: </strong> contato@deomagalhaes.com.br</p>
+
+ </div>
+
+ </div>
+
+ </seção>
+
+ </principal>
+
+
+
+<rodapé>
+
+ <p>&copy; 2024 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+
+ <p>Guaranésia, MG</p>
+
+ </rodapé>
+
+
+
+<script>
+
+ const cabeçalho = document.querySelector('cabeçalho' );
+
+ const shrinkOn = 100;
+
+ function checkScroll() {
+
+ if (window.scrollY > shrinkOn) {
+
+ header.classList.add('cabeçalho rolado');
+
+ } else {
+
+ header.classList.remove('cabeçalho rolado');
+
+ }
+
+ }
+
+ window.addEventListener('scroll', checkScroll);
+
+ </script>
+
+
+
+</corpo>
+
+</html>
