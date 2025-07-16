@@ -15,18 +15,14 @@
     <!-- Estilos CSS Internos -->
     <style>
         :root {
-            /* Core brand colors - Blue and White Professional Theme */
             --primary-color: #1e3a5f; /* Azul escuro */
             --primary-light: #4a6fa5;
-            --primary-glow: #6b93d6;
-            --secondary-color: #bdd7ee; /* Azul claro */
-            --secondary-light: #d9e7f2;
             --accent-color: #4a90a4;
+            --secondary-color: #bdd7ee; /* Azul claro */
             --background-color: #ffffff;
             --text-color: #1e3a5f;
             --light-gray: #f8fafc;
             --border-color: #e2e8f0;
-            --input-bg: #f1f5f9;
             --shadow-color: rgba(30, 58, 95, 0.1);
         }
 
@@ -56,20 +52,17 @@
             font-size: 14px;
             color: white;
         }
-
         .top-bar-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
         }
-
         .contact-info-left {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-
         .contact-info-left a, .contact-info-left span {
             color: white;
             text-decoration: none;
@@ -78,22 +71,18 @@
             gap: 8px;
             transition: opacity 0.3s;
         }
-
         .contact-info-left a:hover {
             opacity: 0.8;
         }
-
         .social-info-right {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
         .social-info-right a {
             color: white;
             transition: opacity 0.3s;
         }
-
         .social-info-right a:hover {
             opacity: 0.8;
         }
@@ -102,7 +91,7 @@
         header {
             background-color: white;
             height: 90px;
-            padding: 0.5rem 0;
+            padding: 0 20px;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
@@ -113,33 +102,20 @@
             transition: all 0.3s ease-in-out;
             box-shadow: 0 2px 4px var(--shadow-color);
         }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
         header .logo {
             height: 60px;
             display: flex;
             align-items: center;
+            cursor: pointer;
         }
-
         header .logo img {
             height: 100%;
             width: auto;
         }
-
         nav {
             display: flex;
-            gap: 30px;
+            gap: 20px;
         }
-
         nav a {
             text-decoration: none;
             color: var(--primary-color);
@@ -147,19 +123,17 @@
             padding: 8px 16px;
             border-radius: 6px;
             transition: all 0.3s;
+            cursor: pointer;
         }
-
         nav a:hover, nav a.active {
             background-color: var(--secondary-color);
             color: var(--primary-color);
         }
-
-        /* Menu mobile */
         .mobile-menu-btn {
             display: none;
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             color: var(--primary-color);
             cursor: pointer;
         }
@@ -167,47 +141,38 @@
         /* ESTILOS DO CABEÇALHO QUE ENCOLHE */
         .header-scrolled {
             height: 70px !important;
-            padding: 0.3rem 0 !important;
         }
-
         .header-scrolled .logo {
             height: 50px !important;
         }
 
         /* ESTILOS GERAIS DAS SEÇÕES */
-        .page-content {
-            min-height: calc(100vh - 200px);
-            padding-top: 20px;
+        .page {
+            display: none; /* Páginas começam escondidas */
         }
-
-        .hidden {
-            display: none !important;
+        .page.active {
+            display: block; /* Página ativa é mostrada */
         }
-
         section {
             padding: 80px 0;
         }
-
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             color: white;
             text-align: center;
             padding: 120px 20px;
         }
-
         .hero h1 {
             font-size: 3.2em;
             margin-bottom: 20px;
             font-weight: 700;
         }
-
         .hero p {
             font-size: 1.3em;
             max-width: 800px;
             margin: 0 auto 30px auto;
             opacity: 0.95;
         }
-
         .cta-button {
             background-color: white;
             color: var(--primary-color);
@@ -219,20 +184,18 @@
             transition: all 0.3s;
             display: inline-block;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
         }
-
         .cta-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
-
         h1 {
             font-size: 3em;
             margin-bottom: 20px;
             color: var(--primary-color);
             text-align: center;
         }
-
         h2 {
             text-align: center;
             font-size: 2.8em;
@@ -240,15 +203,12 @@
             color: var(--primary-color);
             font-weight: 700;
         }
-
         h3 {
             color: var(--accent-color);
             font-size: 1.5em;
             margin-bottom: 15px;
             font-weight: 600;
         }
-
-        /* CARDS E CONTEÚDO */
         .service-card, .about-content, .content-card {
             background: white;
             padding: 40px;
@@ -258,32 +218,26 @@
             border: 1px solid var(--border-color);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-
         .service-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 35px rgba(30, 58, 95, 0.15);
         }
-
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
             margin-top: 40px;
         }
-
         .service-card h3 {
             color: var(--accent-color);
             margin-top: 0;
             margin-bottom: 20px;
             font-size: 1.4em;
         }
-
         .service-card p {
             font-size: 1.05em;
             line-height: 1.7;
         }
-
-        /* FORMULÁRIOS */
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
@@ -292,35 +246,30 @@
             border-radius: 12px;
             box-shadow: 0 8px 25px var(--shadow-color);
         }
-
         .form-group {
             margin-bottom: 24px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--primary-color);
         }
-
         .contact-form input, .contact-form textarea, .contact-form select {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
-            background-color: var(--input-bg);
+            background-color: var(--light-gray);
             transition: border-color 0.3s, box-shadow 0.3s;
             box-sizing: border-box;
         }
-
         .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px rgba(74, 144, 164, 0.1);
         }
-
         .contact-form button {
             width: 100%;
             padding: 16px;
@@ -333,59 +282,33 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .contact-form button:hover {
             background-color: var(--primary-light);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px var(--shadow-color);
         }
-
-        /* SEÇÕES ALTERNADAS */
-        .section-light {
-            background-color: white;
-        }
-
-        .section-gray {
-            background-color: var(--light-gray);
-        }
-
-        /* INFORMAÇÕES DE CONTATO */
+        .section-light { background-color: white; }
+        .section-gray { background-color: var(--light-gray); }
         .contact-info {
             text-align: center;
             margin-top: 50px;
         }
-
         .contact-info p {
             font-size: 1.2em;
             margin-bottom: 15px;
         }
-
         .contact-info a {
             color: var(--accent-color);
             text-decoration: none;
             font-weight: 600;
         }
-
-        .contact-info a:hover {
-            color: var(--primary-color);
-        }
-
-        /* LISTAS */
-        ul {
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-            font-size: 1.05em;
-        }
-
-        /* CALENDÁRIO E AGENDAMENTO */
+        .contact-info a:hover { color: var(--primary-color); }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; font-size: 1.05em; }
         .calendar-section {
             text-align: center;
             padding: 60px 0;
         }
-
         .calendar-embed {
             max-width: 800px;
             margin: 0 auto;
@@ -394,14 +317,11 @@
             box-shadow: 0 8px 25px var(--shadow-color);
             overflow: hidden;
         }
-
         .calendar-embed iframe {
             width: 100%;
             height: 600px;
             border: none;
         }
-
-        /* FOOTER */
         footer {
             background-color: var(--primary-color);
             color: white;
@@ -409,13 +329,10 @@
             padding: 40px 20px;
             margin-top: 60px;
         }
-
         footer p {
             margin: 5px 0;
             font-size: 1.05em;
         }
-
-        /* NAVEGAÇÃO DE SERVIÇOS */
         .service-nav {
             display: flex;
             gap: 15px;
@@ -423,7 +340,6 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-
         .service-nav a {
             padding: 10px 20px;
             background-color: var(--secondary-color);
@@ -433,34 +349,36 @@
             font-weight: 500;
             transition: all 0.3s;
             border: 2px solid transparent;
+            cursor: pointer;
         }
-
         .service-nav a:hover, .service-nav a.active {
             background-color: var(--primary-color);
             color: white;
-            border-color: var(--primary-color);
         }
+        .service-content { display: none; }
+        .service-content.active { display: block; }
 
         /* RESPONSIVIDADE */
         @media (max-width: 768px) {
             .top-bar-content {
                 justify-content: center;
-                gap: 15px;
+                gap: 10px;
                 flex-direction: column;
                 text-align: center;
             }
-
             .contact-info-left {
                 width: 100%;
                 justify-content: center;
                 flex-direction: column;
                 gap: 10px;
             }
-
+            header {
+                padding: 0 20px;
+                flex-wrap: nowrap;
+            }
             .mobile-menu-btn {
                 display: block;
             }
-
             nav {
                 display: none;
                 position: absolute;
@@ -471,87 +389,24 @@
                 flex-direction: column;
                 padding: 20px;
                 box-shadow: 0 4px 12px var(--shadow-color);
+                border-top: 1px solid var(--border-color);
             }
-
             nav.mobile-open {
                 display: flex;
             }
-
-            header {
-                height: auto !important;
-                padding: 15px 0;
-            }
-
-            .header-content {
-                flex-direction: column;
-                position: relative;
-            }
-
-            .hero h1 { 
-                font-size: 2.2em; 
-            }
-
-            h1 { 
-                font-size: 2.2em; 
-            }
-
-            h2 { 
-                font-size: 2em; 
-            }
-
-            .service-card, .about-content, .content-card {
+            .hero h1 { font-size: 2.2em; }
+            h1 { font-size: 2.2em; }
+            h2 { font-size: 2em; }
+            .service-card, .about-content, .content-card, .contact-form {
                 padding: 25px;
             }
-
             .services-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-
-            .contact-form {
-                padding: 25px;
-                margin: 0 10px;
-            }
-
-            .service-nav {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .calendar-embed iframe {
-                height: 500px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 15px;
-            }
-
-            .hero {
-                padding: 80px 15px;
-            }
-
-            .hero h1 {
-                font-size: 1.8em;
-            }
-
-            .hero p {
-                font-size: 1.1em;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            h2 {
-                font-size: 1.6em;
-                margin-bottom: 40px;
-            }
-
-            section {
-                padding: 60px 0;
-            }
+            .contact-form { margin: 0 10px; }
+            .service-nav { flex-direction: column; align-items: center; }
+            .calendar-embed iframe { height: 500px; }
         }
     </style>
 </head>
@@ -563,7 +418,7 @@
             <div class="contact-info-left">
                 <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    <span>(35) 9 3300-3807</span>
+                    <span>(35 ) 9 3300-3807</span>
                 </a>
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
@@ -583,36 +438,31 @@
 
     <!-- Cabeçalho -->
     <header>
-        <div class="header-content">
-            <a href="#" class="logo" onclick="showPage('home')">
-                <img src="logo-deo.png" alt="Logotipo Deo Magalhães Neuropsicólogo">
-            </a>
-            
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-            
-            <nav id="mainNav">
-                <a href="#" onclick="showPage('home')" id="nav-home">Home</a>
-                <a href="#" onclick="showPage('sobre')" id="nav-sobre">Sobre</a>
-                <a href="#" onclick="showPage('servicos')" id="nav-servicos">Serviços</a>
-                <a href="#" onclick="showPage('agendamento')" id="nav-agendamento">Agendamento</a>
-                <a href="#" onclick="showPage('artigos')" id="nav-artigos">Artigos</a>
-                <a href="#" onclick="showPage('contato')" id="nav-contato">Contato</a>
-            </nav>
-        </div>
+        <a class="logo" data-page="home">
+            <img src="logo-deo.png" alt="Logotipo Deo Magalhães Neuropsicólogo">
+        </a>
+        <nav id="mainNav">
+            <a data-page="home">Home</a>
+            <a data-page="sobre">Sobre</a>
+            <a data-page="servicos">Serviços</a>
+            <a data-page="agendamento">Agendamento</a>
+            <a data-page="artigos">Artigos</a>
+            <a data-page="contato">Contato</a>
+        </nav>
+        <button class="mobile-menu-btn">☰</button>
     </header>
 
-    <main class="page-content">
-        <!-- Página Home -->
+    <main>
+        <!-- As páginas agora são controladas pela classe 'active' via JS -->
         <div id="page-home" class="page">
             <section class="hero">
                 <div class="container">
                     <h1>Neuropsicologia para Transformar Vidas</h1>
                     <p>O ser humano é complexo, e compreendê-lo abre caminhos para bem-estar, aprendizado e qualidade de vida.</p>
                     <p>Deo Magalhães, Neuropsicólogo, oferece avaliação especializada, intervenção personalizada e orientação fundamentada em ciência para todas as fases do desenvolvimento humano.</p>
-                    <a href="#" onclick="showPage('agendamento')" class="cta-button">Agende uma Avaliação</a>
+                    <a class="cta-button" data-page="agendamento">Agende uma Avaliação</a>
                 </div>
             </section>
-
             <section class="section-light">
                 <div class="container">
                     <h2>Meus Serviços</h2>
@@ -620,40 +470,36 @@
                         <div class="service-card">
                             <h3>🔹 Avaliação Neuropsicológica</h3>
                             <p>Investigação detalhada das funções cognitivas, emocionais e comportamentais, utilizando instrumentos psicométricos reconhecidos.</p>
-                            <a href="#" onclick="showService('avaliacao')" style="color: var(--accent-color); font-weight: 600;">Saiba mais →</a>
+                            <a data-service="avaliacao" style="color: var(--accent-color ); font-weight: 600; cursor: pointer;">Saiba mais →</a>
                         </div>
                         <div class="service-card">
                             <h3>🔹 Acompanhamento Neuropsicológico</h3>
                             <p>Intervenções personalizadas para fortalecimento de funções cognitivas e estratégias compensatórias.</p>
-                            <a href="#" onclick="showService('acompanhamento')" style="color: var(--accent-color); font-weight: 600;">Saiba mais →</a>
+                            <a data-service="acompanhamento" style="color: var(--accent-color); font-weight: 600; cursor: pointer;">Saiba mais →</a>
                         </div>
                         <div class="service-card">
                             <h3>🔹 Orientação a Pais e Profissionais</h3>
                             <p>Apoio técnico para escolas, famílias e equipes multidisciplinares.</p>
-                            <a href="#" onclick="showService('orientacao')" style="color: var(--accent-color); font-weight: 600;">Saiba mais →</a>
+                            <a data-service="orientacao" style="color: var(--accent-color); font-weight: 600; cursor: pointer;">Saiba mais →</a>
                         </div>
                         <div class="service-card">
                             <h3>🔹 Consultoria Científica</h3>
                             <p>Suporte em projetos, treinamentos e produção de materiais na área de neurociências.</p>
-                            <a href="#" onclick="showService('consultoria')" style="color: var(--accent-color); font-weight: 600;">Saiba mais →</a>
+                            <a data-service="consultoria" style="color: var(--accent-color); font-weight: 600; cursor: pointer;">Saiba mais →</a>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- Página Sobre -->
-        <div id="page-sobre" class="page hidden">
+        <div id="page-sobre" class="page">
             <section class="section-light">
                 <div class="container">
                     <h1>Sobre Deo Magalhães</h1>
                     <div class="about-content">
                         <p><strong>Neuropsicólogo (CRP 04/42784)</strong>, graduado em Psicologia pela PUC Minas e especializado em Neuropsicologia Clínica, Neurociências do Desenvolvimento, Análise do Comportamento Aplicada ao Autismo, ABA Clínica e em Filosofia, também pela PUC Minas.</p>
-                        
                         <p>Atuo na avaliação e intervenção precoce de processos cognitivos, emocionais e comportamentais, ajudando famílias e indivíduos a compreenderem suas potencialidades e desafios.</p>
-                        
                         <p>A prática profissional é pautada em evidências científicas, ética profissional e profundo respeito pela singularidade de cada pessoa. Atendo crianças, adolescentes, adultos e idosos, oferecendo suporte em casos como dificuldades de aprendizagem, transtornos do neurodesenvolvimento, quadros neurológicos, alterações cognitivas e questões emocionais.</p>
-                        
                         <h3>Formação e Experiência:</h3>
                         <ul>
                             <li>Psicólogo – CRP 04/42784</li>
@@ -667,7 +513,6 @@
                             <li>Expertise na produção de documentos técnicos (laudos, relatórios, pareceres)</li>
                             <li>Atualização constante em neurociências, psicometria e reabilitação cognitiva</li>
                         </ul>
-
                         <h3>Missão Profissional:</h3>
                         <p>Promover o bem-estar e o desenvolvimento humano através de uma compreensão científica e humanizada do funcionamento neuropsicológico, oferecendo suporte especializado para que cada pessoa possa alcançar seu máximo potencial.</p>
                     </div>
@@ -675,25 +520,20 @@
             </section>
         </div>
 
-        <!-- Página Serviços -->
-        <div id="page-servicos" class="page hidden">
+        <div id="page-servicos" class="page">
             <section class="section-light">
                 <div class="container">
                     <h1>Serviços Especializados</h1>
-                    
                     <div class="service-nav">
-                        <a href="#" onclick="showService('avaliacao')" id="service-nav-avaliacao">Avaliação Neuropsicológica</a>
-                        <a href="#" onclick="showService('acompanhamento')" id="service-nav-acompanhamento">Acompanhamento</a>
-                        <a href="#" onclick="showService('orientacao')" id="service-nav-orientacao">Orientação</a>
-                        <a href="#" onclick="showService('consultoria')" id="service-nav-consultoria">Consultoria</a>
+                        <a data-service="avaliacao">Avaliação Neuropsicológica</a>
+                        <a data-service="acompanhamento">Acompanhamento</a>
+                        <a data-service="orientacao">Orientação</a>
+                        <a data-service="consultoria">Consultoria</a>
                     </div>
-
-                    <!-- Avaliação Neuropsicológica -->
                     <div id="service-avaliacao" class="service-content">
                         <div class="content-card">
                             <h2>Avaliação Neuropsicológica</h2>
                             <p>A avaliação neuropsicológica é um processo diagnóstico especializado que investiga o funcionamento cognitivo, emocional e comportamental através de métodos científicos rigorosos.</p>
-                            
                             <h3>O que é avaliado:</h3>
                             <ul>
                                 <li><strong>Atenção e Concentração:</strong> Capacidade de focar e manter o foco</li>
@@ -704,7 +544,6 @@
                                 <li><strong>Velocidade de Processamento:</strong> Rapidez mental</li>
                                 <li><strong>Aspectos Emocionais:</strong> Regulação emocional e aspectos psicológicos</li>
                             </ul>
-
                             <h3>Indicações para avaliação:</h3>
                             <ul>
                                 <li>Dificuldades de aprendizagem</li>
@@ -715,7 +554,6 @@
                                 <li>Transtornos do neurodesenvolvimento</li>
                                 <li>Orientação vocacional e profissional</li>
                             </ul>
-
                             <h3>Como funciona o processo:</h3>
                             <ol>
                                 <li><strong>Entrevista Inicial:</strong> Coleta de informações detalhadas</li>
@@ -724,19 +562,15 @@
                                 <li><strong>Entrega do Laudo:</strong> Relatório detalhado com recomendações</li>
                                 <li><strong>Devolutiva:</strong> Explicação dos resultados e orientações</li>
                             </ol>
-
                             <div class="contact-info">
-                                <a href="#" onclick="showPage('agendamento')" class="cta-button">Agendar Avaliação</a>
+                                <a class="cta-button" data-page="agendamento">Agendar Avaliação</a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Acompanhamento Neuropsicológico -->
-                    <div id="service-acompanhamento" class="service-content hidden">
+                    <div id="service-acompanhamento" class="service-content">
                         <div class="content-card">
                             <h2>Acompanhamento Neuropsicológico</h2>
                             <p>O acompanhamento neuropsicológico é um processo terapêutico focado na estimulação e fortalecimento das funções cognitivas, oferecendo estratégias personalizadas para cada indivíduo.</p>
-                            
                             <h3>Objetivos do acompanhamento:</h3>
                             <ul>
                                 <li>Estimulação cognitiva direcionada</li>
@@ -746,136 +580,45 @@
                                 <li>Apoio no processo de aprendizagem</li>
                                 <li>Regulação emocional</li>
                             </ul>
-
-                            <h3>Metodologia utilizada:</h3>
-                            <ul>
-                                <li><strong>Treinamento Cognitivo:</strong> Exercícios específicos para cada função</li>
-                                <li><strong>Técnicas Comportamentais:</strong> Estratégias baseadas em ABA</li>
-                                <li><strong>Psicoeducação:</strong> Orientação sobre o funcionamento neuropsicológico</li>
-                                <li><strong>Estratégias Adaptativas:</strong> Ferramentas para o dia a dia</li>
-                                <li><strong>Envolvimento Familiar:</strong> Participação ativa da família</li>
-                            </ul>
-
-                            <h3>Público-alvo:</h3>
-                            <ul>
-                                <li>Crianças com dificuldades de aprendizagem</li>
-                                <li>Adolescentes com TDAH ou TEA</li>
-                                <li>Adultos em reabilitação cognitiva</li>
-                                <li>Idosos com declínio cognitivo</li>
-                                <li>Pessoas com lesões cerebrais</li>
-                            </ul>
-
-                            <h3>Duração e frequência:</h3>
-                            <p>O acompanhamento é personalizado conforme as necessidades de cada caso, geralmente variando entre 3 a 12 meses, com sessões semanais ou quinzenais de 50 minutos.</p>
-
                             <div class="contact-info">
-                                <a href="#" onclick="showPage('agendamento')" class="cta-button">Agendar Consulta</a>
+                                <a class="cta-button" data-page="agendamento">Agendar Consulta</a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Orientação a Pais e Profissionais -->
-                    <div id="service-orientacao" class="service-content hidden">
+                    <div id="service-orientacao" class="service-content">
                         <div class="content-card">
                             <h2>Orientação a Pais e Profissionais</h2>
                             <p>Serviço especializado que oferece suporte técnico e orientação para famílias, educadores e profissionais da saúde, promovendo uma abordagem integrada no cuidado e desenvolvimento.</p>
-                            
                             <h3>Para Pais e Familiares:</h3>
                             <ul>
                                 <li>Compreensão do funcionamento neuropsicológico</li>
                                 <li>Estratégias de manejo comportamental</li>
                                 <li>Orientações para estimulação em casa</li>
-                                <li>Apoio no processo de adaptação escolar</li>
-                                <li>Técnicas de comunicação eficaz</li>
-                                <li>Redução do estresse familiar</li>
-                                <li>Planejamento de rotinas estruturadas</li>
                             </ul>
-
                             <h3>Para Profissionais da Educação:</h3>
                             <ul>
                                 <li>Adaptações curriculares</li>
                                 <li>Estratégias pedagógicas específicas</li>
                                 <li>Manejo de comportamentos em sala de aula</li>
-                                <li>Identificação precoce de dificuldades</li>
-                                <li>Colaboração na elaboração de PEI</li>
-                                <li>Treinamento em inclusão escolar</li>
                             </ul>
-
-                            <h3>Para Profissionais da Saúde:</h3>
-                            <ul>
-                                <li>Discussão de casos clínicos</li>
-                                <li>Elaboração de planos terapêuticos integrados</li>
-                                <li>Orientação sobre encaminhamentos</li>
-                                <li>Capacitação em avaliação neuropsicológica</li>
-                                <li>Supervisão técnica</li>
-                            </ul>
-
-                            <h3>Modalidades de atendimento:</h3>
-                            <ul>
-                                <li><strong>Consultas individuais:</strong> Orientação personalizada</li>
-                                <li><strong>Grupos de pais:</strong> Workshops e palestras</li>
-                                <li><strong>Treinamentos institucionais:</strong> Para escolas e clínicas</li>
-                                <li><strong>Consultoria online:</strong> Atendimento à distância</li>
-                                <li><strong>Relatórios técnicos:</strong> Documentação especializada</li>
-                            </ul>
-
                             <div class="contact-info">
-                                <a href="#" onclick="showPage('contato')" class="cta-button">Solicitar Orientação</a>
+                                <a class="cta-button" data-page="contato">Solicitar Orientação</a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Consultoria Científica -->
-                    <div id="service-consultoria" class="service-content hidden">
+                    <div id="service-consultoria" class="service-content">
                         <div class="content-card">
                             <h2>Consultoria Científica</h2>
                             <p>Serviço especializado para instituições, pesquisadores e profissionais que buscam expertise em neuropsicologia, neurociências e análise do comportamento aplicada.</p>
-                            
                             <h3>Áreas de consultoria:</h3>
                             <ul>
                                 <li><strong>Pesquisa Científica:</strong> Delineamento e execução de estudos</li>
                                 <li><strong>Validação de Instrumentos:</strong> Adaptação e validação de testes</li>
                                 <li><strong>Análise de Dados:</strong> Estatística aplicada à neuropsicologia</li>
                                 <li><strong>Revisão de Literatura:</strong> Estado da arte em neurociências</li>
-                                <li><strong>Elaboração de Protocolos:</strong> Procedimentos padronizados</li>
-                                <li><strong>Treinamento Técnico:</strong> Capacitação profissional</li>
                             </ul>
-
-                            <h3>Serviços oferecidos:</h3>
-                            <ul>
-                                <li>Consultoria em projetos de pesquisa</li>
-                                <li>Supervisão de trabalhos acadêmicos</li>
-                                <li>Pareceres técnicos especializados</li>
-                                <li>Desenvolvimento de materiais educativos</li>
-                                <li>Palestras e workshops</li>
-                                <li>Revisão de artigos científicos</li>
-                                <li>Elaboração de protocolos de avaliação</li>
-                            </ul>
-
-                            <h3>Público-alvo:</h3>
-                            <ul>
-                                <li>Universidades e centros de pesquisa</li>
-                                <li>Clínicas e hospitais</li>
-                                <li>Empresas de tecnologia em saúde</li>
-                                <li>Editoras científicas</li>
-                                <li>Órgãos públicos de saúde e educação</li>
-                                <li>Profissionais em formação</li>
-                            </ul>
-
-                            <h3>Metodologia:</h3>
-                            <p>Trabalho baseado em evidências científicas atuais, utilizando metodologias rigorosas e éticas profissionais estabelecidas. Cada projeto é desenvolvido de forma personalizada, considerando os objetivos específicos e recursos disponíveis.</p>
-
-                            <h3>Diferenciais:</h3>
-                            <ul>
-                                <li>Formação multidisciplinar (Psicologia, Neurociências, Filosofia)</li>
-                                <li>Experiência em diferentes contextos (clínico, educacional, pesquisa)</li>
-                                <li>Conhecimento em ABA e neuropsicologia do desenvolvimento</li>
-                                <li>Atualização constante com literatura internacional</li>
-                                <li>Abordagem ética e rigorosa</li>
-                            </ul>
-
                             <div class="contact-info">
-                                <a href="#" onclick="showPage('contato')" class="cta-button">Solicitar Consultoria</a>
+                                <a class="cta-button" data-page="contato">Solicitar Consultoria</a>
                             </div>
                         </div>
                     </div>
@@ -883,246 +626,20 @@
             </section>
         </div>
 
-        <!-- Página Agendamento -->
-        <div id="page-agendamento" class="page hidden">
+        <div id="page-agendamento" class="page">
             <section class="section-light">
                 <div class="container">
                     <h1>Agendamento Online</h1>
                     <p style="text-align: center; font-size: 1.2em; margin-bottom: 40px;">
                         Escolha o melhor horário para sua consulta ou avaliação neuropsicológica.
                     </p>
-
                     <div class="calendar-section">
                         <div class="calendar-embed">
-                            <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2zL4_hgPaKRQKSdO9x8xP5Y7jV7Ou6XCvV6AJi2Hxl3mLXD8XAWwFtH6Bg1v6LRh3A?gv=true" 
-                                    style="border: 0" 
-                                    width="100%" 
-                                    height="600" 
-                                    frameborder="0" 
-                                    scrolling="no">
-                            </iframe>
+                            <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2zL4_hgPaKRQKSdO9x8xP5Y7jV7Ou6XCvV6AJi2Hxl3mLXD8XAWwFtH6Bg1v6LRh3A?gv=true" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
                         </div>
                     </div>
-
                     <div class="content-card" style="margin-top: 40px;">
                         <h3>Informações importantes:</h3>
                         <ul>
                             <li><strong>Primeira consulta:</strong> Duração de 90 minutos para entrevista inicial</li>
-                            <li><strong>Avaliação neuropsicológica:</strong> Processo completo de 4-8 sessões</li>
-                            <li><strong>Acompanhamento:</strong> Sessões de 50 minutos</li>
-                            <li><strong>Cancelamento:</strong> Comunique com 24h de antecedência</li>
-                            <li><strong>Documentos:</strong> Traga laudos médicos e relatórios escolares relevantes</li>
-                        </ul>
-
-                        <h3>Contatos para agendamento:</h3>
-                        <div class="contact-info">
-                            <p><strong>WhatsApp:</strong> <a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></p>
-                            <p><strong>E-mail:</strong> <a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Página Artigos -->
-        <div id="page-artigos" class="page hidden">
-            <section class="section-light">
-                <div class="container">
-                    <h1>Artigos e Conteúdo Científico</h1>
-                    <div class="content-card">
-                        <p style="text-align: center; font-size: 1.2em;">
-                            A neuropsicologia está em constante evolução. Nesta seção, compartilho artigos, reflexões e informações atualizadas voltadas a profissionais, famílias e pessoas interessadas no funcionamento do cérebro e do comportamento humano.
-                        </p>
-                        
-                        <h3>Temas abordados:</h3>
-                        <ul>
-                            <li>Desenvolvimento cognitivo infantil</li>
-                            <li>Estratégias de intervenção neuropsicológica</li>
-                            <li>TDAH: diagnóstico e manejo</li>
-                            <li>Transtorno do Espectro Autista</li>
-                            <li>Dificuldades de aprendizagem</li>
-                            <li>Envelhecimento e cognição</li>
-                            <li>Neuroplasticidade e reabilitação</li>
-                            <li>Saúde mental e neuropsicologia</li>
-                        </ul>
-
-                        <div style="text-align: center; margin-top: 40px; padding: 40px; background-color: var(--light-gray); border-radius: 12px;">
-                            <h3 style="color: var(--accent-color);">Em breve!</h3>
-                            <p><strong>Conteúdos exclusivos sobre desenvolvimento cognitivo, estratégias de intervenção, saúde mental e neurociências aplicadas.</strong></p>
-                            <p>Acompanhe nossas redes sociais para ser notificado sobre novos artigos:</p>
-                            <div style="margin-top: 20px;">
-                                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" style="color: var(--accent-color); font-weight: 600; margin: 0 15px;">Instagram</a>
-                                <a href="mailto:contato@deomagalhaes.com.br" style="color: var(--accent-color); font-weight: 600; margin: 0 15px;">Newsletter</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Página Contato -->
-        <div id="page-contato" class="page hidden">
-            <section class="section-light">
-                <div class="container">
-                    <h1>Entre em Contato</h1>
-                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 50px;">
-                        Se deseja agendar uma avaliação, tirar dúvidas ou saber mais sobre meus serviços, entre em contato. Será um prazer atender você.
-                    </p>
-                    
-                    <form action="https://api.formsubmit.co/contato@deomagalhaes.com.br" method="POST" class="contact-form">
-                        <div class="form-group">
-                            <label for="name">Nome completo *</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">E-mail *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Telefone</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">Assunto *</label>
-                            <select id="subject" name="subject" required>
-                                <option value="">Selecione o assunto</option>
-                                <option value="Avaliação Neuropsicológica">Avaliação Neuropsicológica</option>
-                                <option value="Acompanhamento Neuropsicológico">Acompanhamento Neuropsicológico</option>
-                                <option value="Orientação a Pais">Orientação a Pais</option>
-                                <option value="Consultoria Científica">Consultoria Científica</option>
-                                <option value="Dúvidas Gerais">Dúvidas Gerais</option>
-                                <option value="Outros">Outros</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Mensagem *</label>
-                            <textarea id="message" name="message" rows="5" required placeholder="Descreva sua necessidade ou dúvida. Inclua informações relevantes como idade, principais dificuldades observadas, objetivos, etc."></textarea>
-                        </div>
-
-                        <input type="hidden" name="_next" value="https://deomagalhaes.com.br/obrigado.html">
-                        <input type="hidden" name="_subject" value="Novo Contato do Site!">
-                        <input type="hidden" name="_captcha" value="false">
-                        
-                        <button type="submit">Enviar Mensagem</button>
-                    </form>
-
-                    <div class="contact-info">
-                        <h3>Outras formas de contato:</h3>
-                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></p>
-                        <p><strong>Instagram:</strong> <a href="https://instagram.com/neuropsiguaranesia" target="_blank">@neuropsiguaranesia</a></p>
-                        <p><strong>E-mail:</strong> <a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></p>
-                        <p><strong>Localização:</strong> <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank">Guaranésia, MG</a></p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
-            <p>Guaranésia, MG | <a href="mailto:contato@deomagalhaes.com.br" style="color: white;">contato@deomagalhaes.com.br</a></p>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        // Controle de navegação entre páginas
-        function showPage(pageId) {
-            // Esconder todas as páginas
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.add('hidden'));
-            
-            // Mostrar a página selecionada
-            const targetPage = document.getElementById(`page-${pageId}`);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-            }
-            
-            // Atualizar navegação ativa
-            const navLinks = document.querySelectorAll('nav a');
-            navLinks.forEach(link => link.classList.remove('active'));
-            
-            const activeNav = document.getElementById(`nav-${pageId}`);
-            if (activeNav) {
-                activeNav.classList.add('active');
-            }
-            
-            // Fechar menu mobile se estiver aberto
-            const nav = document.getElementById('mainNav');
-            nav.classList.remove('mobile-open');
-            
-            // Rolar para o topo
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Controle de navegação entre serviços
-        function showService(serviceId) {
-            showPage('servicos');
-            
-            // Esconder todos os conteúdos de serviço
-            const serviceContents = document.querySelectorAll('.service-content');
-            serviceContents.forEach(content => content.classList.add('hidden'));
-            
-            // Mostrar o serviço selecionado
-            const targetService = document.getElementById(`service-${serviceId}`);
-            if (targetService) {
-                targetService.classList.remove('hidden');
-            }
-            
-            // Atualizar navegação de serviços
-            const serviceNavLinks = document.querySelectorAll('.service-nav a');
-            serviceNavLinks.forEach(link => link.classList.remove('active'));
-            
-            const activeServiceNav = document.getElementById(`service-nav-${serviceId}`);
-            if (activeServiceNav) {
-                activeServiceNav.classList.add('active');
-            }
-        }
-
-        // Controle do menu mobile
-        function toggleMobileMenu() {
-            const nav = document.getElementById('mainNav');
-            nav.classList.toggle('mobile-open');
-        }
-
-        // Efeito de shrink no header
-        function handleScroll() {
-            const header = document.querySelector('header');
-            const shrinkOn = 100;
-            
-            if (window.scrollY > shrinkOn) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-        }
-
-        // Event listeners
-        window.addEventListener('scroll', handleScroll);
-        
-        // Inicializar página home como ativa
-        document.addEventListener('DOMContentLoaded', function() {
-            showPage('home');
-            
-            // Mostrar primeiro serviço por padrão na página de serviços
-            showService('avaliacao');
-        });
-
-        // Fechar menu mobile ao clicar fora
-        document.addEventListener('click', function(event) {
-            const nav = document.getElementById('mainNav');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            
-            if (!nav.contains(event.target) && !menuBtn.contains(event.target)) {
-                nav.classList.remove('mobile-open');
-            }
-        });
-    </script>
-</body>
-</html>
+                            <li><strong>Avaliação neuropsicológica:</strong>
