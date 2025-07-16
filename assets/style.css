@@ -1,64 +1,159 @@
+/* Conteúdo ATUALIZADO para assets/style.css */
 :root {
-    --primary-color: #1e3a5f; --primary-light: #4a6fa5; --accent-color: #4a90a4;
-    --background-color: #ffffff; --text-color: #1e3a5f; --light-gray: #f8fafc;
-    --border-color: #e2e8f0; --shadow-color: rgba(30, 58, 95, 0.1); --input-bg: #f1f5f9;
+    --primary-color: #1e3a5f;
+    --primary-light: #4a6fa5;
+    --accent-color: #4a90a4;
+    --background-color: #ffffff;
+    --text-color: #1e3a5f;
+    --light-gray: #f8fafc;
+    --border-color: #e2e8f0;
+    --shadow-color: rgba(30, 58, 95, 0.1);
+    --input-bg: #f1f5f9;
+    /* Nova cor para o título "Salvar Vidas" */
+    --hero-highlight-blue: #aed6f1; 
 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: var(--background-color); color: var(--text-color); line-height: 1.6; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* --- 1. MUDANÇAS NA TOP BAR --- */
 .top-bar { background-color: var(--primary-color); padding: 8px 0; font-size: 14px; color: white; }
-.top-bar-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-.contact-info-left { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
-.contact-info-left a, .contact-info-left span { color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.3s; }
-.contact-info-left a:hover { opacity: 0.8; }
-.social-info-right { display: flex; align-items: center; gap: 15px; }
-.social-info-right a { color: white; transition: opacity 0.3s; }
-.social-info-right a:hover { opacity: 0.8; }
-header { background-color: white; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; transition: padding 0.3s ease-in-out; box-shadow: 0 2px 4px var(--shadow-color); }
+.top-bar-content { display: flex; justify-content: space-between; align-items: center; }
+.top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 20px; }
+.top-bar a { color: white; transition: opacity 0.3s; display: flex; align-items: center; }
+.top-bar a:hover { opacity: 0.8; }
+.top-bar svg { width: 20px; height: 20px; }
+
+/* --- 2. MUDANÇAS NO CABEÇALHO --- */
+header {
+    background-color: white;
+    padding: 15px 0; /* Aumenta o espaçamento vertical */
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
 .header-content { display: flex; justify-content: space-between; align-items: center; }
-header .logo img { height: 60px; width: auto; transition: height 0.3s ease-in-out; }
-.header-scrolled .logo img { height: 50px; }
+
+/* Novo estilo para o logo e texto */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre o logo e o texto */
+    text-decoration: none; /* Remove sublinhado do link */
+    color: inherit; /* Herda a cor do texto padrão */
+}
+.logo-container img {
+    height: 70px; /* Logo maior */
+    width: auto;
+}
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+.logo-text .name {
+    font-family: "Georgia", "Times New Roman", serif; /* Fonte diferente e elegante */
+    font-size: 1.8em; /* Tamanho do nome */
+    font-weight: 600;
+    color: var(--primary-color);
+    line-height: 1.1;
+}
+.logo-text .subtitle {
+    font-size: 0.9em; /* Subtítulo menor */
+    color: var(--text-color);
+    font-weight: 400;
+}
+
 nav { display: flex; gap: 25px; }
 nav a { text-decoration: none; color: var(--primary-color); font-weight: 500; padding: 8px 16px; border-radius: 6px; transition: all 0.3s; }
 nav a:hover { background-color: #e2e8f0; }
 nav a.active { background-color: var(--primary-color); color: white; }
 .mobile-menu-btn { display: none; background: none; border: none; font-size: 28px; color: var(--primary-color); cursor: pointer; }
+
+/* --- 3. MUDANÇAS NA SEÇÃO HERO --- */
+.hero {
+    /* Novo degradê com azuis mais vivos */
+    background: linear-gradient(to right, #2c3e50, #3498db);
+    color: white;
+    text-align: center;
+    padding: 120px 20px;
+}
+.hero h1 {
+    font-size: 3.5em; /* Fonte maior */
+    font-weight: 700;
+    color: white; /* Cor de "Neuropsicologia para" */
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+.hero h1 .highlight {
+    display: block; /* Coloca "Salvar Vidas" na linha de baixo */
+    color: var(--hero-highlight-blue); /* Azul destacado */
+}
+.hero p {
+    font-size: 1.3em; /* Fonte maior */
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    opacity: 0.95;
+}
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espaço entre os botões */
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
+}
+.cta-button {
+    background-color: white;
+    color: var(--primary-color);
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1em;
+    transition: all 0.3s;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 2px solid transparent;
+}
+.cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+/* Estilo para o segundo botão */
+.cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+.cta-button.secondary:hover {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+/* Estilos restantes (sem alterações) */
 main { padding-top: 40px; }
-h1 { font-size: 2.8em; margin-bottom: 10px; color: var(--primary-color); text-align: center; }
 h2 { text-align: center; font-size: 2.5em; margin-bottom: 50px; color: var(--primary-color); font-weight: 700; }
 h3 { color: var(--accent-color); font-size: 1.5em; margin-bottom: 15px; font-weight: 600; }
-.page-subtitle { text-align: center; font-size: 1.2em; max-width: 800px; margin: 0 auto 50px auto; color: #555; }
-.hero { background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); color: white; text-align: center; padding: 100px 20px; }
-.hero h1 { color: white; }
-.hero p { font-size: 1.2em; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.95; }
-.cta-button { background-color: white; color: var(--primary-color); padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1em; transition: all 0.3s; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-.cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-.service-card, .content-card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 8px 25px var(--shadow-color); border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; }
+.service-card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 8px 25px var(--shadow-color); border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; }
 .service-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(30, 58, 95, 0.15); }
 .link-arrow { color: var(--accent-color); font-weight: 600; text-decoration: none; display: inline-block; transition: transform 0.2s; }
 .link-arrow:hover { transform: translateX(4px); }
-.contact-form { max-width: 700px; margin: 40px auto; }
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
-.contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; background-color: var(--input-bg); transition: border-color 0.3s, box-shadow 0.3s; }
-.contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(74, 144, 164, 0.2); }
-.contact-form button { width: 100%; padding: 16px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: background-color 0.3s; }
-.contact-form button:hover { background-color: var(--primary-light); }
 section { padding: 80px 0; }
-.section-gray { background-color: var(--light-gray); }
-.service-section { margin-bottom: 50px; scroll-margin-top: 100px; }
-.placeholder-content { text-align: center; padding: 40px; background-color: var(--light-gray); border-radius: 12px; }
-.social-links-inline { margin-top: 20px; }
-.social-links-inline a { color: var(--accent-color); font-weight: 600; margin: 0 15px; text-decoration: none; }
 footer { background-color: var(--primary-color); color: white; text-align: center; padding: 40px 20px; margin-top: 60px; }
 footer p { margin: 5px 0; }
 footer a { color: white; text-decoration: none; }
 @media (max-width: 768px) {
-    h1 { font-size: 2.2em; } h2 { font-size: 2em; }
+    .logo-text .name { font-size: 1.5em; }
+    .hero h1 { font-size: 2.5em; }
     .mobile-menu-btn { display: block; }
     .header-content { position: relative; }
     nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 20px; box-shadow: 0 4px 12px var(--shadow-color); border-top: 1px solid var(--border-color); }
     nav.mobile-open { display: flex; }
-    .top-bar-content, .contact-info-left { justify-content: center; text-align: center; flex-direction: column; }
+    .top-bar-content { justify-content: space-between; } /* Mantém os ícones nas pontas */
 }
