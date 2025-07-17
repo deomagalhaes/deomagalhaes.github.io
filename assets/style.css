@@ -1,4 +1,4 @@
-/* Conteúdo CSS COMPLETO E ATUALIZADO */
+/* Conteúdo CSS COMPLETO E CORRIGIDO */
 :root {
     --primary-dark-blue: #2c3e50;
     --primary-vibrant-blue: #3498db;
@@ -66,11 +66,17 @@ section { padding: 60px 0; }
 .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
 .cta-button { background-color: white; color: var(--primary-dark-blue); padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1em; transition: all 0.3s; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 2px solid transparent; }
 .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+/* CORREÇÃO: Erro de sintaxe e lógica invertida */
 .cta-button.secondary {
-    background-color: white; /* Fundo branco */
+    background-color: transparent;
     border: 2px solid white;
-    color: var(--primary-dark-blue); /* Texto azul escuro */
-.cta-button.secondary:hover { background-color: white; color: var(--primary-dark-blue); }
+    color: white;
+}
+.cta-button.secondary:hover {
+    background-color: white;
+    color: var(--primary-dark-blue);
+}
 
 /* --- Seção de Apresentação (Intro) --- */
 .intro-section { padding: 60px 0; }
@@ -92,7 +98,21 @@ section { padding: 60px 0; }
     flex-direction: column; 
     justify-content: center; 
 }
-.intro-card .icon { width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; margin-left: auto; margin-right: auto; }
+/* CORREÇÃO: Regras específicas para o ícone e seu SVG */
+.intro-card .icon {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.intro-card .icon svg {
+    width: 100%;
+    height: auto;
+}
 .intro-card h3 { font-size: 1.6em; color: var(--primary-dark-blue); }
 .intro-card p { color: var(--text-color-light); }
 .intro-details { text-align: left; }
@@ -100,7 +120,13 @@ section { padding: 60px 0; }
 .intro-details .bio { color: var(--text-color-light); margin-bottom: 30px; font-size: 1.1em; }
 .credentials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 20px; margin-bottom: 30px; }
 .credential-item { display: flex; align-items: center; gap: 10px; color: var(--text-color-dark); }
-.credential-item svg { width: 24px; height: 24px; color: var(--primary-vibrant-blue); flex-shrink: 0; }
+/* CORREÇÃO: Tamanho fixo para o SVG das credenciais */
+.credential-item svg {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-vibrant-blue);
+    flex-shrink: 0;
+}
 .intro-details .cta-button { background-color: var(--primary-vibrant-blue); color: white; display: inline-block; }
 .intro-details .cta-button:hover { background-color: var(--accent-bright-blue); }
 
@@ -146,13 +172,28 @@ section { padding: 60px 0; }
 .page-section ul { list-style-position: inside; }
 
 /* --- Rodapé --- */
-footer { padding: 0; margin: 0; }
-.main-footer { background-color: var(--primary-dark-blue); color: #e2e8f0; padding-top: 50px; font-size: 1.05em; }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding-bottom: 30px; }
+/* CORREÇÃO: Maior especificidade para evitar conflitos */
+footer.main-footer {
+    background-color: var(--primary-dark-blue);
+    color: #e2e8f0;
+    padding-top: 50px;
+    font-size: 1.05em;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding-bottom: 30px;
+}
 .footer-column { padding: 0 10px; }
 .footer-column h4 { color: white; font-size: 1.3em; margin-bottom: 20px; font-weight: 600; }
 .footer-column ul { list-style: none; padding: 0; margin: 0; }
 .footer-column li { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+/* CORREÇÃO: Tamanho fixo para o SVG do rodapé */
+.footer-column li svg {
+    width: 16px;
+    height: 16px;
+}
 .footer-column a { color: #e2e8f0; text-decoration: none; transition: color 0.3s; display: flex; align-items: center; gap: 8px; }
 .footer-column a:hover { color: var(--primary-vibrant-blue); }
 .footer-bottom { position: relative; padding: 20px 0 15px 0; text-align: center; font-size: 0.9em; color: #94a3b8; }
