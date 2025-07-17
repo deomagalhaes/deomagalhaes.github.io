@@ -77,7 +77,17 @@ section { padding: 60px 0; }
     background-color: white;
     color: var(--primary-dark-blue);
 }
+/* --- Variação do Botão Secundário para Fundos Claros --- */
+.cta-button.secondary.light-bg-variant {
+    background-color: transparent;           /* Fundo transparente */
+    color: var(--primary-dark-blue);         /* CORRIGIDO: Texto azul escuro */
+    border-color: var(--primary-dark-blue);  /* CORRIGIDO: Borda azul escura */
+}
 
+.cta-button.secondary.light-bg-variant:hover {
+    background-color: var(--primary-dark-blue); /* Fundo azul escuro no hover */
+    color: white;                              /* Texto branco no hover */
+}
 /* --- Seção de Apresentação (Intro) --- */
 .intro-section { padding: 60px 0; }
 .intro-grid {
