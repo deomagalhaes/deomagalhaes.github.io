@@ -71,9 +71,10 @@ section { padding: 80px 0; }
 /* --- Seção de Apresentação (Intro) - CORRIGIDA --- */
 .intro-section {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* CORREÇÃO: Divisão exata 50/50 */
+    grid-template-columns: 1fr 1fr;
     gap: 50px;
     align-items: center;
+    padding: 60px 0; /* Altura da seção diminuída */
 }
 .intro-card {
     background-color: white;
@@ -87,7 +88,16 @@ section { padding: 80px 0; }
     flex-direction: column;
     justify-content: center;
 }
-.intro-card .icon { width: 90px; height: 90px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.intro-card .icon {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-left: auto; /* Ícone centralizado */
+    margin-right: auto; /* Ícone centralizado */
+}
 .intro-card h3 { font-size: 1.6em; color: var(--primary-dark-blue); }
 .intro-card p { color: var(--text-color-light); }
 .intro-details { text-align: left; }
@@ -99,15 +109,46 @@ section { padding: 80px 0; }
 .intro-details .cta-button { background-color: var(--primary-vibrant-blue); color: white; display: inline-block; }
 .intro-details .cta-button:hover { background-color: var(--accent-bright-blue); }
 
-/* --- Seção de Serviços Detalhada --- */
-.services-grid-detailed { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
-.service-card-detailed { background-color: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; display: flex; flex-direction: column; text-align: left; transition: transform 0.3s, box-shadow 0.3s; }
+/* --- Seção de Serviços Detalhada - CORRIGIDA --- */
+.services-grid-detailed {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 30px;
+}
+.service-card-detailed {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center; /* Centraliza tudo por padrão */
+}
 .service-card-detailed:hover { transform: translateY(-5px); box-shadow: 0 12px 35px var(--shadow-color); }
-.service-card-detailed .icon { background-color: var(--card-icon-bg); border-radius: 8px; width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary-vibrant-blue); }
+.service-card-detailed .icon {
+    background-color: var(--card-icon-bg);
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: var(--primary-vibrant-blue);
+    margin-left: auto; /* Garante a centralização do ícone */
+    margin-right: auto;
+}
 .service-card-detailed .icon svg { width: 28px; height: 28px; }
 .service-card-detailed h3 { font-size: 1.3em; color: var(--primary-dark-blue); margin-bottom: 10px; }
 .service-card-detailed .description { color: var(--text-color-light); font-size: 0.95em; margin-bottom: 20px; flex-grow: 1; }
-.service-card-detailed ul { list-style: none; padding: 0; margin-bottom: 20px; flex-grow: 1; }
+.service-card-detailed ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    text-align: left; /* Força o alinhamento à esquerda para a lista */
+}
 .service-card-detailed li { color: var(--text-color-light); font-size: 0.95em; margin-bottom: 8px; display: flex; align-items: flex-start; }
 .service-card-detailed li::before { content: '●'; color: var(--primary-vibrant-blue); margin-right: 10px; font-size: 0.8em; line-height: 1.6; }
 .service-card-detailed .cta-button-small { display: block; width: 100%; text-align: center; background-color: transparent; border: 1px solid var(--border-color); color: var(--primary-dark-blue); padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.3s; margin-top: auto; }
@@ -141,51 +182,17 @@ section { padding: 80px 0; }
 .page-section ul { list-style-position: inside; }
 
 /* --- Rodapé - CORRIGIDO --- */
-footer { /* Zera o estilo do footer antigo */
-    padding: 0;
-    margin: 0;
-}
-.main-footer {
-    background-color: var(--primary-dark-blue);
-    color: #e2e8f0;
-    padding-top: 60px;
-    font-size: 1.05em;
-}
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px; /* Reduz o gap para ajudar no alinhamento */
-    padding-bottom: 40px;
-}
-.footer-column {
-    padding: 0 10px; /* Adiciona padding para evitar que o texto cole nas bordas do grid */
-}
-.footer-column h4 {
-    color: white;
-    font-size: 1.3em;
-    margin-bottom: 20px;
-    font-weight: 600;
-}
+footer { padding: 0; margin: 0; }
+.main-footer { background-color: var(--primary-dark-blue); color: #e2e8f0; padding-top: 60px; font-size: 1.05em; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding-bottom: 40px; }
+.footer-column { padding: 0 10px; }
+.footer-column h4 { color: white; font-size: 1.3em; margin-bottom: 20px; font-weight: 600; }
 .footer-column ul { list-style: none; padding: 0; margin: 0; }
 .footer-column li { margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 .footer-column a { color: #e2e8f0; text-decoration: none; transition: color 0.3s; display: flex; align-items: center; gap: 8px; }
 .footer-column a:hover { color: var(--primary-vibrant-blue); }
-.footer-bottom {
-    position: relative;
-    padding: 25px 0 20px 0; /* Reduz o padding inferior */
-    text-align: center;
-    font-size: 0.9em;
-    color: #94a3b8;
-}
-.footer-bottom::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 5%;
-    width: 90%; /* Linha com 90% da largura */
-    height: 1px;
-    background-color: #3e5266;
-}
+.footer-bottom { position: relative; padding: 25px 0 20px 0; text-align: center; font-size: 0.9em; color: #94a3b8; }
+.footer-bottom::before { content: ''; position: absolute; top: 0; left: 5%; width: 90%; height: 1px; background-color: #3e5266; }
 .footer-bottom p { margin: 5px 0; }
 
 /* --- Media Queries (Responsividade) --- */
