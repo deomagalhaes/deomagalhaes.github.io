@@ -278,3 +278,19 @@
             </div>
         </div>
     </footer>
+
+        <!-- SCRIPT PARA O MENU MOBILE - COPIE E COLE ANTES DE </body> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function( ) {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mainNav = document.querySelector('#main-nav');
+
+            if (mobileMenuBtn && mainNav) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
