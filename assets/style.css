@@ -117,3 +117,159 @@ footer a { color: white; text-decoration: none; }
 @media (max-width: 576px) {
     .services-grid-detailed { grid-template-columns: 1fr; }
 }
+/* --- ESTILOS CORRIGIDOS PARA AS NOVAS SEÇÕES E RODAPÉ --- */
+
+/* Seção CTA */
+.cta-section {
+    background-color: var(--primary-vibrant-blue); /* Cor azul mais vibrante da referência */
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+}
+.cta-section h2 {
+    font-size: 2.8em;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.cta-section p {
+    font-size: 1.2em;
+    max-width: 650px;
+    margin: 0 auto 40px auto;
+    opacity: 0.95;
+    line-height: 1.7;
+}
+.cta-section .hero-buttons .cta-button {
+    background-color: white;
+    color: var(--primary-dark-blue);
+    padding: 15px 35px;
+    font-size: 1.1em;
+}
+.cta-section .hero-buttons .cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: white;
+}
+.cta-section .hero-buttons .cta-button.secondary:hover {
+    background-color: white;
+    color: var(--primary-dark-blue);
+    border-color: white;
+}
+
+/* Seção de Contato na Home */
+.contact-section-home {
+    padding: 100px 0;
+    background-color: var(--light-gray);
+}
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.contact-form-container {
+    max-width: 750px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+}
+.contact-form-container form .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+.contact-form-container form .form-group { margin-bottom: 25px; }
+.contact-form-container form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: var(--text-color-dark);
+}
+.contact-form-container form input,
+.contact-form-container form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1em;
+    background-color: #f8fafc;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.contact-form-container form input:focus,
+.contact-form-container form textarea:focus {
+    outline: none;
+    border-color: var(--primary-vibrant-blue);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+.contact-form-container form button {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--primary-dark-blue);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.contact-form-container form button:hover {
+    background-color: var(--primary-vibrant-blue);
+    transform: translateY(-2px);
+}
+
+/* Rodapé Principal */
+.main-footer {
+    background-color: var(--primary-dark-blue);
+    color: #e2e8f0;
+    padding-top: 60px;
+    font-size: 1.05em;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    padding-bottom: 40px;
+}
+.footer-column h4 {
+    color: white;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.footer-column ul { list-style: none; padding: 0; }
+.footer-column li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-column a {
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-column a:hover { color: var(--primary-vibrant-blue); }
+.footer-bottom {
+    border-top: 1px solid #3e5266;
+    padding: 25px 0;
+    text-align: center;
+    font-size: 0.9em;
+    color: #94a3b8;
+}
+.footer-bottom p { margin: 5px 0; }
+
+/* Ajustes de Responsividade */
+@media (max-width: 768px) {
+    .contact-form-container form .form-grid { grid-template-columns: 1fr; }
+    .footer-grid { text-align: center; }
+    .footer-column li, .footer-column a { justify-content: center; }
+}
