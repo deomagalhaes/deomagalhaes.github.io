@@ -54,12 +54,12 @@ nav a.active { background-color: var(--primary-dark-blue); color: white; }
 
 /* --- Conteúdo Principal --- */
 main { padding-top: 0; }
-section { padding: 60px 0; } /* Espaçamento vertical reduzido */
+section { padding: 60px 0; }
 .section-title { text-align: center; margin-bottom: 15px; font-size: 2.5em; color: var(--primary-dark-blue); font-weight: 700; }
 .section-subtitle { text-align: center; max-width: 600px; margin: 0 auto 40px auto; color: var(--text-color-light); font-size: 1.1em; }
 
 /* --- Seção Hero --- */
-.hero { background: linear-gradient(to right, var(--primary-dark-blue), var(--primary-vibrant-blue)); color: white; text-align: center; padding: 80px 20px; } /* Espaçamento vertical reduzido */
+.hero { background: linear-gradient(to right, var(--primary-dark-blue), var(--primary-vibrant-blue)); color: white; text-align: center; padding: 80px 20px; }
 .hero h1 { font-size: 3.5em; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 15px; }
 .hero h1 .highlight { display: block; color: var(--hero-highlight-blue); }
 .hero p { font-size: 1.3em; max-width: 800px; margin: 0 auto 40px auto; opacity: 0.95; }
@@ -70,9 +70,25 @@ section { padding: 60px 0; } /* Espaçamento vertical reduzido */
 .cta-button.secondary:hover { background-color: white; color: var(--primary-dark-blue); }
 
 /* --- Seção de Apresentação (Intro) --- */
-.intro-section { padding: 60px 0; } /* Espaçamento vertical reduzido */
-.intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-.intro-card { background-color: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 8px 25px var(--shadow-color); border: 1px solid var(--border-color); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.intro-section { padding: 60px 0; }
+.intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+.intro-card { 
+    background-color: white; 
+    border-radius: 12px; 
+    padding: 40px; 
+    text-align: center; 
+    box-shadow: 0 8px 25px var(--shadow-color); 
+    border: 1px solid var(--border-color); 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+}
 .intro-card .icon { width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; margin-left: auto; margin-right: auto; }
 .intro-card h3 { font-size: 1.6em; color: var(--primary-dark-blue); }
 .intro-card p { color: var(--text-color-light); }
@@ -86,7 +102,7 @@ section { padding: 60px 0; } /* Espaçamento vertical reduzido */
 .intro-details .cta-button:hover { background-color: var(--accent-bright-blue); }
 
 /* --- Seção de Serviços Detalhada --- */
-.services-grid-detailed { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; } /* Layout com 4 colunas */
+.services-grid-detailed { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
 .service-card-detailed { background-color: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; text-align: center; }
 .service-card-detailed:hover { transform: translateY(-5px); box-shadow: 0 12px 35px var(--shadow-color); }
 .service-card-detailed .icon { background-color: var(--card-icon-bg); border-radius: 8px; width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary-vibrant-blue); margin-left: auto; margin-right: auto; }
@@ -100,7 +116,7 @@ section { padding: 60px 0; } /* Espaçamento vertical reduzido */
 .service-card-detailed .cta-button-small:hover { background-color: var(--primary-dark-blue); color: white; border-color: var(--primary-dark-blue); }
 
 /* --- Seção de CTA (Call to Action) --- */
-.cta-section { background: linear-gradient(to right, var(--primary-vibrant-blue-darker), var(--primary-vibrant-blue)); color: white; padding: 60px 20px; text-align: center; } /* Degradê e espaçamento reduzido */
+.cta-section { background: linear-gradient(to right, var(--primary-vibrant-blue-darker), var(--primary-vibrant-blue)); color: white; padding: 60px 20px; text-align: center; }
 .cta-section h2 { font-size: 2.8em; font-weight: 700; margin-bottom: 15px; }
 .cta-section p { font-size: 1.2em; max-width: 650px; margin: 0 auto 30px auto; opacity: 0.95; line-height: 1.7; }
 .cta-section .hero-buttons .cta-button { background-color: white; color: var(--primary-dark-blue); padding: 15px 35px; font-size: 1.1em; }
@@ -108,7 +124,7 @@ section { padding: 60px 0; } /* Espaçamento vertical reduzido */
 .cta-section .hero-buttons .cta-button.secondary:hover { background-color: white; color: var(--primary-dark-blue); border-color: white; }
 
 /* --- Seção de Contato na Home --- */
-.contact-section-home { padding: 80px 0; background-color: var(--light-gray); } /* Espaçamento reduzido */
+.contact-section-home { padding: 80px 0; background-color: var(--light-gray); }
 .section-header { text-align: center; margin-bottom: 40px; }
 .contact-form-container { max-width: 750px; margin: 0 auto; background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border: 1px solid var(--border-color); }
 .contact-form-container form .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -146,7 +162,9 @@ footer { padding: 0; margin: 0; }
 }
 @media (max-width: 992px) {
     .intro-grid { grid-template-columns: 1fr; }
+    .intro-details { text-align: center; }
     .intro-details h2 { text-align: center; }
+    .credentials-grid { justify-content: center; }
     .services-grid-detailed { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
