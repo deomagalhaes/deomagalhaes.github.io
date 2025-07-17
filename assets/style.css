@@ -66,7 +66,10 @@ section { padding: 60px 0; }
 .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
 .cta-button { background-color: white; color: var(--primary-dark-blue); padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1em; transition: all 0.3s; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 2px solid transparent; }
 .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
-.cta-button.secondary { background-color: transparent; border: 2px solid white; color: white; }
+.cta-button.secondary {
+    background-color: white; /* Fundo branco */
+    border: 2px solid white;
+    color: var(--primary-dark-blue); /* Texto azul escuro */
 .cta-button.secondary:hover { background-color: white; color: var(--primary-dark-blue); }
 
 /* --- Seção de Apresentação (Intro) --- */
