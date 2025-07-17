@@ -223,32 +223,45 @@ footer a { color: white; text-decoration: none; }
     transform: translateY(-2px);
 }
 
+/* --- ESTILOS CORRIGIDOS PARA O RODAPÉ --- */
+
 /* Rodapé Principal */
 .main-footer {
     background-color: var(--primary-dark-blue);
     color: #e2e8f0;
-    padding-top: 60px;
+    padding-top: 60px; /* Mantém o espaçamento superior */
     font-size: 1.05em;
 }
+
 .footer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 40px;
     padding-bottom: 40px;
 }
+
 .footer-column h4 {
     color: white;
     font-size: 1.3em;
     margin-bottom: 20px;
     font-weight: 600;
+    /* A correção de alinhamento é feita implicitamente pela estrutura do grid,
+       garantindo que o título siga o container pai. */
 }
-.footer-column ul { list-style: none; padding: 0; }
+
+.footer-column ul {
+    list-style: none;
+    padding: 0; /* Garante que não haja padding padrão da lista */
+    margin: 0;  /* Garante que não haja margem padrão da lista */
+}
+
 .footer-column li {
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
 }
+
 .footer-column a {
     color: #e2e8f0;
     text-decoration: none;
@@ -257,19 +270,41 @@ footer a { color: white; text-decoration: none; }
     align-items: center;
     gap: 8px;
 }
-.footer-column a:hover { color: var(--primary-vibrant-blue); }
+
+.footer-column a:hover {
+    color: var(--primary-vibrant-blue);
+}
+
 .footer-bottom {
-    border-top: 1px solid #3e5266;
-    padding: 25px 0;
+    /* A linha divisória agora é um pseudo-elemento para controle de comprimento */
+    position: relative; /* Necessário para o pseudo-elemento */
+    padding: 25px 0 20px 0; /* Diminuído o padding inferior (era 25px) */
     text-align: center;
     font-size: 0.9em;
     color: #94a3b8;
 }
-.footer-bottom p { margin: 5px 0; }
+
+/* CORREÇÃO 3: Linha divisória mais curta */
+.footer-bottom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 5%; /* Começa a 5% da borda esquerda */
+    width: 90%; /* Ocupa 90% da largura, deixando 5% de cada lado */
+    height: 1px;
+    background-color: #3e5266; /* Cor da linha */
+}
+
+.footer-bottom p {
+    margin: 5px 0;
+}
 
 /* Ajustes de Responsividade */
 @media (max-width: 768px) {
-    .contact-form-container form .form-grid { grid-template-columns: 1fr; }
-    .footer-grid { text-align: center; }
-    .footer-column li, .footer-column a { justify-content: center; }
+    .footer-grid {
+        text-align: center;
+    }
+    .footer-column li, .footer-column a {
+        justify-content: center;
+    }
 }
