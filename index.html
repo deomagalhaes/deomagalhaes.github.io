@@ -7,9 +7,7 @@
     <meta name="description" content="Deo Magalhães (CRP 04/42784) é Neuropsicólogo e Neurocientista. Atua em avaliação e intervenção neuropsicológica para todas as idades.">
     <link rel="icon" type="image/png" href="assets/favicon2.png">
     <!-- Link para o CSS do Swiper.js -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- Link para o JavaScript do Swiper.js (coloque antes do fechamento de </body> ) -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="assets/style.css">
 
 </head>
@@ -293,19 +291,11 @@
             </div>
         </div>
     </footer>
-
-        <!-- SCRIPT PARA O MENU MOBILE - COPIE E COLE ANTES DE </body> -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function( ) {
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const mainNav = document.querySelector('#main-nav');
-
-            if (mobileMenuBtn && mainNav) {
-                mobileMenuBtn.addEventListener('click', function() {
-                    mainNav.classList.toggle('active');
-                });
-            }
-        });
-    </script>
+    
+<!-- 1. Primeiro, a biblioteca Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- 2. Depois, o seu script personalizado que usa a biblioteca -->
+    <script src="assets/script.js"></script> 
 </body>
 </html>
