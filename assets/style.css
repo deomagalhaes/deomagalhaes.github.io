@@ -276,3 +276,54 @@ footer.main-footer {
         display: block; /* Mostra o botão do menu em telas pequenas */
     }
 }
+/* =================================== */
+/*  ESTILOS PARA O CARROSSEL (SWIPER )  */
+/* =================================== */
+
+/* Remove a grade original e prepara o contêiner */
+.services-carousel {
+    overflow: hidden; /* Essencial para o Swiper */
+    padding: 10px 0 40px 0; /* Espaço para os cards não cortarem e para a paginação */
+    position: relative;
+}
+
+/* Garante que os cards dentro dos slides ocupem toda a altura */
+.swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+.swiper-slide .service-card-detailed {
+    width: 100%; /* O card ocupa todo o espaço do slide */
+    height: 100%; /* O card se estica para ter a mesma altura dos outros */
+}
+
+/* Estilização dos botões de navegação (setas) */
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--primary-dark-blue); /* Cor das setas */
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background-color: var(--primary-dark-blue);
+    color: white;
+}
+
+/* Ajusta o tamanho dos ícones dentro das setas */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+/* Remove a grade da classe original para não conflitar */
+.services-grid-detailed {
+    display: block; /* Sobrescreve o 'grid' original */
+}
