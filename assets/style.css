@@ -327,3 +327,204 @@ footer.main-footer {
 .services-grid-detailed {
     display: block; /* Sobrescreve o 'grid' original */
 }
+/* =================================================================== */
+/* ||                ESTILOS PARA PÁGINA DE SERVIÇOS                || */
+/* =================================================================== */
+
+/* Estilos básicos para o layout da página de serviços */
+body {
+    font-family: 'Inter', sans-serif; /* Usando uma fonte moderna e legível */
+    background-color: #f8f9fa; /* Um cinza muito claro para o fundo */
+    color: #343a40; /* Cor de texto principal (quase preto) */
+}
+
+/* Estilos para o conteúdo principal e seções */
+main {
+    padding: 40px 0;
+}
+
+/* O container principal do conteúdo */
+main .container {
+    max-width: 960px; /* Um pouco mais contido para melhor legibilidade */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+main .section-title {
+    font-size: 2.8em;
+    color: #212529; /* Preto forte para o título principal */
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+main .main-page-subtitle {
+    text-align: center;
+    font-size: 1.2em;
+    color: #6c757d; /* Cinza para o subtítulo principal */
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.page-section {
+    background-color: #ffffff;
+    padding: 40px;
+    margin-bottom: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #e9ecef;
+}
+
+.page-section h2 {
+    color: #343a40;
+    font-size: 2.2em;
+    margin-top: 0;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.page-section > p:first-of-type {
+    font-size: 1.1em;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.page-section .section-subtitle {
+    font-style: italic;
+    color: #6c757d;
+    margin-top: -15px;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+/* Estrutura interna das seções */
+.subsection-container {
+    background-color: #f8f9fa;
+    border-left: 4px solid #0d6efd; /* Azul como cor de destaque */
+    padding: 20px 25px;
+    margin-top: 25px;
+    border-radius: 8px;
+}
+
+.subsection-container h3 {
+    color: #0d6efd;
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.subsection-container p, .subsection-container ul, .subsection-container ol {
+    line-height: 1.7;
+}
+
+.subsection-container ul li, .subsection-container ol li {
+    margin-bottom: 8px;
+}
+
+/* Caixas de destaque: "Para quem é" e "Resultado prático" */
+.target-audience-box, .how-it-works-box {
+    background-color: #e9f3ff; /* Azul bem claro */
+    padding: 25px;
+    margin-top: 30px;
+    border-radius: 8px;
+    border: 1px solid #cce0ff;
+}
+
+.target-audience-box h4, .how-it-works-box h4 {
+    color: #0a58ca; /* Azul mais escuro */
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.target-audience-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.target-audience-box ul li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 25px;
+    line-height: 1.6;
+}
+
+.target-audience-box ul li::before {
+    content: '✓';
+    color: #0a58ca;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.how-it-works-box p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Botões de Ação (CTA) */
+.cta-button-container {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #0d6efd;
+    color: white;
+    padding: 15px 35px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1em;
+    margin: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
+    border: 1px solid transparent;
+}
+
+.cta-button:hover {
+    background-color: #0b5ed7;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.3);
+}
+
+.cta-button.secondary {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+    box-shadow: none;
+}
+
+.cta-button.secondary:hover {
+    background-color: #e9f3ff;
+    color: #0a58ca;
+    border-color: #0a58ca;
+    transform: translateY(-3px);
+}
+
+/* Responsividade para as novas seções */
+@media (max-width: 768px) {
+    main .section-title {
+        font-size: 2.2em;
+    }
+    .page-section {
+        padding: 25px;
+    }
+    .page-section h2 {
+        font-size: 1.8em;
+    }
+    .cta-button {
+        width: calc(100% - 20px);
+        margin: 10px 0;
+    }
+}
+
+/* =================================================================== */
+/* ||              FIM DOS ESTILOS PARA PÁGINA DE SERVIÇOS          || */
+/* =================================================================== */
