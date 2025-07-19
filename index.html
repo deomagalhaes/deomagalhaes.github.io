@@ -114,22 +114,20 @@
 </section>
 
 
-        <!-- NOVA SEÇÃO DE SERVIÇOS -->
-        <section class="section-light" style="background-color: var(--light-gray );">
-            <div class="container">
-                <h2 class="section-title">Serviços</h2>
-                <p class="section-subtitle">Uma gama completa de serviços especializados para todas as fases do desenvolvimento humano, com foco científico e personalizado.</p>
-                
-                <div class="services-grid-detailed">
-                    <!-- Card 1: Avaliação -->
+<!-- NOVA SEÇÃO DE SERVIÇOS COM CARROSSEL -->
+<section class="section-light" style="background-color: var(--light-gray );">
+    <div class="container">
+        <h2 class="section-title">Serviços</h2>
+        <p class="section-subtitle">Uma gama completa de serviços especializados para todas as fases do desenvolvimento humano, com foco científico e personalizado.</p>
+        
+        <!-- Estrutura do Carrossel Swiper.js -->
+        <div class="swiper-container services-carousel">
+            <div class="swiper-wrapper">
+                <!-- Slide 1: Avaliação -->
+                <div class="swiper-slide">
                     <div class="service-card-detailed">
                         <div class="icon">
-                            <!-- Ícone Cérebro -->
-                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19.036 44.0001C18.0561 40.8045 16.5778 38.4222 14.6011 36.8532C11.636 34.4997 6.92483 35.9624 5.18458 33.5349C3.44433 31.1073 6.40382 26.6431 7.44234 24.009C8.48086 21.375 3.46179 20.4436 4.04776 19.6958C4.43842 19.1973 6.97471 17.7587 11.6567 15.3801C12.987 7.79346 17.9008 4.00014 26.3982 4.00014C39.1441 4.00014 44 14.8061 44 21.679C44 28.552 38.1201 35.9563 29.7441 37.5528C28.9951 38.6436 30.0754 40.7927 32.9848 44.0001" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M19.4997 14.5C18.8464 17.0342 19.0408 18.8138 20.0829 19.838C21.1251 20.8623 22.6458 21.3741 27.4109 21.8484C26.5559 26.7514 29.4939 26.4484 32.4309 24.3084C32.8239 25.5984 37.4139 26.8884 37.7989 23.4384C38.1839 19.9884 36.3239 17.2374 35.5609 17.2374C34.7979 17.2374 32.8229 17.1444 32.8229 16.0894C32.8229 15.0344 30.5149 14.4394 28.4319 14.4394C26.3489 14.4394 27.6019 13.0344 23.9419 13.5894C20.2819 14.1444 19.4997 14.5 19.4997 14.5Z" fill="#2F88FF" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-                                    <path d="M30.4997 25.5C29.4827 26.131 28.0877 27.18 27.4997 28C26.0307 30.05 24.8397 31.297 24.5797 32.608" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-                                </svg>
+                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.036 44.0001C18.0561 40.8045 16.5778 38.4222 14.6011 36.8532C11.636 34.4997 6.92483 35.9624 5.18458 33.5349C3.44433 31.1073 6.40382 26.6431 7.44234 24.009C8.48086 21.375 3.46179 20.4436 4.04776 19.6958C4.43842 19.1973 6.97471 17.7587 11.6567 15.3801C12.987 7.79346 17.9008 4.00014 26.3982 4.00014C39.1441 4.00014 44 14.8061 44 21.679C44 28.552 38.1201 35.9563 29.7441 37.5528C28.9951 38.6436 30.0754 40.7927 32.9848 44.0001" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4997 14.5C18.8464 17.0342 19.0408 18.8138 20.0829 19.838C21.1251 20.8623 22.6458 21.3741 27.4109 21.8484C26.5559 26.7514 29.4939 26.4484 32.4309 24.3084C32.8239 25.5984 37.4139 26.8884 37.7989 23.4384C38.1839 19.9884 36.3239 17.2374 35.5609 17.2374C34.7979 17.2374 32.8229 17.1444 32.8229 16.0894C32.8229 15.0344 30.5149 14.4394 28.4319 14.4394C26.3489 14.4394 27.6019 13.0344 23.9419 13.5894C20.2819 14.1444 19.4997 14.5 19.4997 14.5Z" fill="#2F88FF" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M30.4997 25.5C29.4827 26.131 28.0877 27.18 27.4997 28C26.0307 30.05 24.8397 31.297 24.5797 32.608" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
                         </div>
                         <h3>Avaliação Neuropsicológica</h3>
                         <p class="description">Investigação detalhada das funções cognitivas, emocionais e comportamentais utilizando instrumentos psicométricos reconhecidos.</p>
@@ -141,8 +139,10 @@
                         </ul>
                         <a href="servicos.html#avaliacao" class="cta-button-small">Saiba Mais</a>
                     </div>
+                </div>
 
-                    <!-- Card 2: Acompanhamento -->
+                <!-- Slide 2: Acompanhamento -->
+                <div class="swiper-slide">
                     <div class="service-card-detailed">
                         <div class="icon">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -157,8 +157,10 @@
                         </ul>
                         <a href="servicos.html#acompanhamento" class="cta-button-small">Saiba Mais</a>
                     </div>
+                </div>
 
-                    <!-- Card 3: Orientação -->
+                <!-- Slide 3: Orientação -->
+                <div class="swiper-slide">
                     <div class="service-card-detailed">
                         <div class="icon">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -173,8 +175,10 @@
                         </ul>
                         <a href="servicos.html#orientacao" class="cta-button-small">Saiba Mais</a>
                     </div>
+                </div>
 
-                    <!-- Card 4: Consultoria -->
+                <!-- Slide 4: Consultoria -->
+                <div class="swiper-slide">
                     <div class="service-card-detailed">
                         <div class="icon">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -191,8 +195,14 @@
                     </div>
                 </div>
             </div>
-        </section>
-               <!-- ... (conteúdo existente da página) ... -->
+            
+            <!-- Botões de Navegação -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
 
         <!-- SEÇÃO CTA (CALL TO ACTION) - VERSÃO CORRIGIDA -->
         <section class="cta-section">
