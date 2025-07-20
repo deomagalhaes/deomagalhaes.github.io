@@ -155,7 +155,7 @@ section { padding: 60px 0; }
 .service-card-detailed .cta-button-small:hover { background-color: var(--primary-dark-blue); color: white; border-color: var(--primary-dark-blue); }
 
 /* --- Seção de CTA (Call to Action) --- */
-.cta-section { background: linear-gradient(to right, var(--primary-vibrant-blue-darker), var(--primary-vibrant-blue)); color: white; padding: 60px 20px; text-align: center; }
+.hero { background: linear-gradient(to right, var(--primary-dark-blue), var(--primary-vibrant-blue)); color: white; text-align: center; padding: 80px 20px; }
 .cta-section h2 { font-size: 2.8em; font-weight: 700; margin-bottom: 15px; }
 .cta-section p { font-size: 1.2em; max-width: 650px; margin: 0 auto 30px auto; opacity: 0.95; line-height: 1.7; }
 .cta-section .hero-buttons .cta-button { background-color: white; color: var(--primary-dark-blue); padding: 15px 35px; font-size: 1.1em; }
