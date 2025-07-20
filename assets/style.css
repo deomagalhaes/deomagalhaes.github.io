@@ -458,45 +458,6 @@ main .main-page-subtitle {
     line-height: 1.6;
 }
 
-/* Botões de Ação (CTA) */
-.cta-button-container {
-    text-align: center;
-    margin-top: 60px;
-    margin-bottom: 40px;
-}
-
-.cta-button {
-    display: inline-block;
-    background-color: #0d6efd;
-    padding: 15px 35px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1em;
-    margin: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
-    border: 1px solid transparent;
-}
-
-.cta-button:hover {
-    background-color: #0b5ed7;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.3);
-}
-
-.cta-button.secondary {
-    background-color: #f8f9fa;
-    border: 1px solid #0d6efd;
-    box-shadow: none;
-}
-
-.cta-button.secondary:hover {
-    background-color: #e9f3ff;
-    border-color: #0a58ca;
-    transform: translateY(-3px);
-}
-
 /* Responsividade para as novas seções */
 @media (max-width: 768px) {
     main .section-title {
