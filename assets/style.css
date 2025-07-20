@@ -431,3 +431,7 @@ main .main-page-subtitle {
 /* =================================================================== */
 /* ||              FIM DOS ESTILOS PARA PÁGINA DE SERVIÇOS          || */
 /* =================================================================== */
+/* Compensar altura do cabeçalho fixo nas âncoras */
+section[id] {
+    scroll-margin-top: 120px;
+}
