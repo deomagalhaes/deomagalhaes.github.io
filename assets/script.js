@@ -1,4 +1,4 @@
-// Script para funcionalidades do site
+// Script para funcionalidades do site - VERSÃO CORRIGIDA
 document.addEventListener('DOMContentLoaded', function() {
     
     // ==================================================
@@ -18,15 +18,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==================================================
-    // 2. MENU MOBILE (BOTÃO HAMBÚRGUER)
+    // 2. MENU MOBILE (BOTÃO HAMBÚRGUER) - CORRIGIDO
     // ==================================================
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.getElementById('main-nav');
 
     if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
-            // A classe 'mobile-open' é mais semântica que 'active' para esta função
-            nav.classList.toggle('mobile-open');
+            // CORREÇÃO: Mudança de 'mobile-open' para 'active' para coincidir com o CSS
+            nav.classList.toggle('active');
         });
     }
 
