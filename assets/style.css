@@ -433,5 +433,5 @@ main .main-page-subtitle {
 /* =================================================================== */
 /* Compensar altura do cabeçalho fixo nas âncoras */
 section[id] {
-    scroll-margin-top: 120px;
+    scroll-margin-top: 90px;
 }
