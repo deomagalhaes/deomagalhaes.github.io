@@ -222,6 +222,19 @@ footer.main-footer {
     .services-grid-detailed { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
+    /* --- AJUSTES DE FONTE PARA ARTIGOS EM TELAS PEQUENAS --- */
+.article-header h1 {
+    font-size: 1.8em; /* Tamanho do título principal no mobile (reduzido de 2.8em) */
+    line-height: 1.3; /* Melhora o espaçamento entre linhas do título */
+}
+
+.article-body h2 {
+    font-size: 1.4em; /* Tamanho do subtítulo no mobile (reduzido de 2em) */
+}
+
+.article-body h3 {
+    font-size: 1.2em; /* Ajuste opcional para o h3 também, mantendo a hierarquia */
+}
     .logo-text .name { font-size: 1.5em; }
     .hero h1 { font-size: 2.5em; }
     .mobile-menu-btn { display: block; }
