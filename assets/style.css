@@ -227,7 +227,7 @@ footer.main-footer {
     .mobile-menu-btn { display: block; }
     .header-content { position: relative; }
     nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 20px; box-shadow: 0 4px 12px var(--shadow-color); border-top: 1px solid var(--border-color); }
-    nav.mobile-open { display: flex; }
+    #main-nav.active { display: flex; }
     .top-bar-content { justify-content: space-between; }
     .contact-form-container form .form-grid { grid-template-columns: 1fr; }
     .footer-grid { text-align: center; }
