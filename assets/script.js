@@ -5,13 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // 1. CABEÇALHO DINÂMICO (ENCOLHE AO ROLAR)
     // ==================================================
     const header = document.getElementById('main-header');
-    // Verifica se o elemento existe na página antes de adicionar o evento
     if (header) {
         window.addEventListener('scroll', function() {
-            // Usa pageYOffset para compatibilidade com navegadores mais antigos
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > 80) { // Um valor um pouco menor para a transição ser mais suave
+            if (scrollTop > 80) {
                 header.classList.add('header-scrolled');
             } else {
                 header.classList.remove('header-scrolled');
@@ -24,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================================================
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.getElementById('main-nav');
-
-    // Verifica se ambos os elementos existem
+    
+    // Verifica se ambos os elementos (botão e menu) existem na página
     if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
-            // Adiciona ou remove a classe 'active' para mostrar/esconder o menu
+            // Adiciona ou remove a classe 'active' do menu de navegação
             nav.classList.toggle('active'); 
         });
     }
@@ -36,15 +33,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================================================
     // 3. DESTACAR LINK ATIVO NA NAVEGAÇÃO
     // ==================================================
-    // Pega o nome do arquivo da URL atual (ex: "sobre.html")
+    // Pega o nome do arquivo da página atual (ex: "index.html", "sobre.html")
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('#main-nav a');
     
     navLinks.forEach(link => {
-        const linkPage = link.getAttribute('href');
-        // Remove a classe 'active' de todos os links primeiro
+        // Pega o href do link (ex: "/sobre.html")
+        const linkPage = link.getAttribute('href').split('/').pop();
+        
+        // Limpa a classe 'active' de todos os links primeiro
         link.classList.remove('active');
-        // Adiciona a classe 'active' apenas se o href do link for igual à página atual
+        
+        // Adiciona a classe 'active' apenas se o link corresponder à página atual
         if (linkPage === currentPage) {
             link.classList.add('active');
         }
@@ -53,18 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================================================
     // 4. INICIALIZAÇÃO DO CARROSSEL DE SERVIÇOS (SWIPER.JS)
     // ==================================================
-    // Verifica se a classe do carrossel existe na página e se a biblioteca Swiper foi carregada
+    // Verifica se a biblioteca Swiper está carregada e se o elemento do carrossel existe
     if (typeof Swiper !== 'undefined' && document.querySelector('.services-carousel')) {
         const servicesSwiper = new Swiper('.services-carousel', {
             slidesPerView: 1,
             spaceBetween: 30,
-            
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
-    
-            // Breakpoints para responsividade
             breakpoints: {
                 576: { slidesPerView: 2, spaceBetween: 20 },
                 992: { slidesPerView: 3, spaceBetween: 30 },
