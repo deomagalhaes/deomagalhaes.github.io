@@ -342,13 +342,6 @@ main {
     padding: 40px 0;
 }
 
-/* O container principal do conteúdo */
-main .container {
-    max-width: 960px; /* Um pouco mais contido para melhor legibilidade */
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 main .section-title {
     font-size: 2.8em;
     text-align: center;
