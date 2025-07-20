@@ -237,46 +237,6 @@ footer.main-footer {
     .services-grid-detailed { grid-template-columns: 1fr; }
 }
 /* =================================== */
-/*  ESTILOS PARA O MENU MOBILE (FALTANTE) */
-/* =================================== */
-
-/* Por padrão, o menu de navegação fica escondido em telas pequenas */
-@media (max-width: 768px) {
-    #main-nav {
-        display: none; /* Esconde o menu */
-        position: absolute;
-        top: 100%; /* Posiciona abaixo do cabeçalho */
-        left: 0;
-        width: 100%;
-        background-color: #ffffff; /* Fundo branco para o menu */
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra para destaque */
-        padding: 1rem 0;
-        border-top: 1px solid #eee;
-    }
-
-    /* Quando a classe .active é adicionada pelo JavaScript, o menu aparece */
-    #main-nav.active {
-        display: flex; /* Mostra o menu */
-    }
-
-    #main-nav a {
-        padding: 1rem 0;
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    #main-nav a:last-child {
-        border-bottom: none;
-    }
-
-    .mobile-menu-btn {
-        display: block; /* Mostra o botão do menu em telas pequenas */
-    }
-}
-/* =================================== */
 /*  ESTILOS PARA O CARROSSEL (SWIPER )  */
 /* =================================== */
 
