@@ -35,12 +35,12 @@ body {
 .top-bar svg { width: 20px; height: 20px; }
 
 /* --- Cabeçalho Principal --- */
-header { background-color: white; padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px var(--shadow-color); transition: padding 0.3s ease-in-out; }
+#main-header { background-color: white; padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px var(--shadow-color); transition: padding 0.3s ease-in-out; }
 header.header-scrolled { padding: 5px 0; box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15); }
 .header-content { display: flex; justify-content: space-between; align-items: center; }
 .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit; }
 .logo-container img { height: 70px; width: auto; transition: height 0.3s ease-in-out; }
-header.header-scrolled .logo-container img { height: 55px; }
+#main-header.header-scrolled .logo-container img { height: 55px; }
 .logo-text { display: flex; flex-direction: column; }
 .logo-text .name { font-family: "Georgia", "Times New Roman", serif; font-size: 1.8em; font-weight: 600; color: var(--primary-dark-blue); line-height: 1.1; }
 .logo-text .subtitle { font-size: 0.9em; color: var(--text-color-light); font-weight: 400; }
