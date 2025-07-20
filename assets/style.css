@@ -435,3 +435,152 @@ main .main-page-subtitle {
 section[id] {
     scroll-margin-top: 90px;
 }
+
+/* ================================================= */
+/* || ESTILOS ADAPTADOS PARA PÁGINA DE ARTIGOS    || */
+/* ================================================= */
+
+/* --- Seção de Categorias --- */
+.category-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.category-card-custom {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px var(--shadow-color);
+}
+
+.category-card-custom .icon-container {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-icon-bg);
+    color: var(--primary-vibrant-blue);
+    border-radius: 8px;
+}
+
+.category-card-custom .icon-container svg {
+    width: 28px;
+    height: 28px;
+}
+
+.category-card-custom .text-container h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.2em;
+    color: var(--primary-dark-blue);
+}
+
+.category-card-custom .text-container p {
+    margin: 0;
+    font-size: 0.95em;
+    color: var(--text-color-light);
+}
+
+/* --- Lista de Artigos Recentes --- */
+.article-list-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.article-item-custom {
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.article-item-custom:hover {
+    background-color: var(--light-gray);
+    border-color: #d1d9e3;
+}
+
+.article-item-custom h3 {
+    font-size: 1.5em;
+    color: var(--primary-dark-blue);
+    margin: 0 0 10px 0;
+}
+
+.article-item-custom p {
+    font-size: 1.05em;
+    color: var(--text-color-light);
+    margin: 0 0 20px 0;
+}
+
+.article-meta-custom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 25px;
+    font-size: 0.9em;
+    color: var(--text-color-light);
+}
+
+.article-meta-custom span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Grade de Recursos Educativos --- */
+.resource-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.resource-card-custom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.resource-card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px var(--shadow-color);
+}
+
+.resource-card-custom .icon-container {
+    margin-bottom: 20px;
+}
+
+.resource-card-custom h3 {
+    font-size: 1.2em;
+    color: var(--primary-dark-blue);
+    margin: 0 0 5px 0;
+    flex-grow: 1; /* Ajuda a alinhar verticalmente quando os textos têm tamanhos diferentes */
+}
+
+.resource-card-custom p {
+    font-size: 0.95em;
+    color: var(--text-color-light);
+    margin: 0;
+}
