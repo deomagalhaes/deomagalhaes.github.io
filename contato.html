@@ -47,47 +47,48 @@
         <div class="container" style="padding-top: 40px;">
             <h1 class="section-title" style="font-size: 3em;">Contato</h1>
             <p class="section-subtitle">Entre em contato para tirar dúvidas, solicitar informações ou agendar uma consulta.</p>
-
-            <section class="page-section">
-                <h2>Formulário de Contato</h2>
-                <form action="https://formspree.io/f/xpwzgqpz" method="POST" style="max-width: 600px;">
-                    <div style="margin-bottom: 20px;">
-                        <label for="name" style="display: block; margin-bottom: 5px; font-weight: 500;">Nome Completo:</label>
-                        <input type="text" id="name" name="name" required style="width: 100%; padding: 12px; border: 1px solid var(--border-color ); border-radius: 6px; font-size: 16px;">
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <label for="email" style="display: block; margin-bottom: 5px; font-weight: 500;">E-mail:</label>
-                        <input type="email" id="email" name="email" required style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px;">
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <label for="phone" style="display: block; margin-bottom: 5px; font-weight: 500;">Telefone:</label>
-                        <input type="tel" id="phone" name="phone" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px;">
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <label for="subject" style="display: block; margin-bottom: 5px; font-weight: 500;">Assunto:</label>
-                        <select id="subject" name="subject" required style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px;">
-                            <option value="">Selecione um assunto</option>
-                            <option value="Agendamento">Agendamento de consulta</option>
-                            <option value="Informações">Informações sobre serviços</option>
-                            <option value="Dúvidas">Dúvidas gerais</option>
-                            <option value="Outros">Outros</option>
-                        </select>
-                    </div>
-
-                    <div style="margin-bottom: 30px;">
-                        <label for="message" style="display: block; margin-bottom: 5px; font-weight: 500;">Mensagem:</label>
-                        <textarea id="message" name="message" rows="5" required placeholder="Descreva sua necessidade ou dúvida. Inclua informações relevantes como idade, principais dificuldades observadas, etc." style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px; resize: vertical;"></textarea>
-                    </div>
-
-                    <input type="hidden" name="_next" value="https://deomagalhaes.com.br/obrigado.html">
-                    <input type="hidden" name="_subject" value="Novo Contato - Site Deo Magalhães">
-
-                    <button type="submit" class="cta-button" style="border: none; cursor: pointer;">Enviar Mensagem</button>
-                </form>
-            </section>
+            <!-- SEÇÃO DO FORMULÁRIO ATUAL -->
+<section class="contact-section-home" style="background-color: transparent; padding-top: 20px;">
+    <div class="contact-form-container">
+        <div class="section-header" style="margin-bottom: 20px;">
+            <h2 class="section-title" style="font-size: 2.2em; text-align: left;">Formulário de Contato</h2>
+        </div>
+        <form action="https://formspree.io/f/xpwzgqpz" method="POST">
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="subject">Assunto</label>
+                <select id="subject" name="subject" required>
+                    <option value="">Selecione um assunto</option>
+                    <option value="Agendamento">Agendamento de consulta</option>
+                    <option value="Informações">Informações sobre serviços</option>
+                    <option value="Dúvidas">Dúvidas gerais</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="message">Mensagem</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Descreva sua necessidade ou dúvida. Inclua informações relevantes como idade, principais dificuldades observadas, etc."></textarea>
+            </div>
+            <input type="hidden" name="_next" value="https://deomagalhaes.com.br/obrigado.html">
+            <input type="hidden" name="_subject" value="Novo Contato - Site Deo Magalhães">
+            <button type="submit" class="cta-button" style="width: 100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                Enviar Mensagem
+            </button>
+        </form>
+    </div>
+</section>
 
             <section class="page-section">
                 <h2>Informações de Contato</h2>
