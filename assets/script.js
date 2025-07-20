@@ -1,15 +1,17 @@
-// Script para funcionalidades do site - VERSÃO CORRIGIDA
+// Espera o documento HTML estar completamente carregado e pronto
 document.addEventListener('DOMContentLoaded', function() {
     
     // ==================================================
     // 1. CABEÇALHO DINÂMICO (ENCOLHE AO ROLAR)
     // ==================================================
     const header = document.getElementById('main-header');
+    // Verifica se o elemento existe na página antes de adicionar o evento
     if (header) {
         window.addEventListener('scroll', function() {
+            // Usa pageYOffset para compatibilidade com navegadores mais antigos
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
-            if (scrollTop > 100) {
+            if (scrollTop > 80) { // Um valor um pouco menor para a transição ser mais suave
                 header.classList.add('header-scrolled');
             } else {
                 header.classList.remove('header-scrolled');
@@ -18,28 +20,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==================================================
-    // 2. MENU MOBILE (BOTÃO HAMBÚRGUER) - CORRIGIDO
+    // 2. MENU MOBILE (BOTÃO HAMBÚRGUER)
     // ==================================================
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.getElementById('main-nav');
 
+    // Verifica se ambos os elementos existem
     if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
-            // CORREÇÃO: Mudança de 'mobile-open' para 'active' para coincidir com o CSS
-            nav.classList.toggle('active');
+            // Adiciona ou remove a classe 'active' para mostrar/esconder o menu
+            nav.classList.toggle('active'); 
         });
     }
 
     // ==================================================
     // 3. DESTACAR LINK ATIVO NA NAVEGAÇÃO
     // ==================================================
+    // Pega o nome do arquivo da URL atual (ex: "sobre.html")
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('nav a');
+    const navLinks = document.querySelectorAll('#main-nav a');
     
     navLinks.forEach(link => {
-        // Garante que a comparação funcione corretamente
-        const linkPage = link.getAttribute('href').split('/').pop() || 'index.html';
+        const linkPage = link.getAttribute('href');
+        // Remove a classe 'active' de todos os links primeiro
         link.classList.remove('active');
+        // Adiciona a classe 'active' apenas se o href do link for igual à página atual
         if (linkPage === currentPage) {
             link.classList.add('active');
         }
@@ -48,38 +53,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================================================
     // 4. INICIALIZAÇÃO DO CARROSSEL DE SERVIÇOS (SWIPER.JS)
     // ==================================================
-    // Verifica se o elemento do carrossel existe na página antes de tentar inicializá-lo
-    if (document.querySelector('.services-carousel')) {
+    // Verifica se a classe do carrossel existe na página e se a biblioteca Swiper foi carregada
+    if (typeof Swiper !== 'undefined' && document.querySelector('.services-carousel')) {
         const servicesSwiper = new Swiper('.services-carousel', {
-            // Quantidade de slides visíveis por padrão (telas pequenas)
             slidesPerView: 1,
-            // Espaço entre os slides
             spaceBetween: 30,
             
-            // Configurações de navegação (setas)
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
     
-            // Configurações responsivas (breakpoints) para mostrar mais cards em telas maiores
+            // Breakpoints para responsividade
             breakpoints: {
-                // Quando a largura da tela for 576px ou mais
-                576: {
-                    slidesPerView: 2,
-                    spaceBetween: 20
-                },
-                // Quando a largura da tela for 992px ou mais
-                992: {
-                    slidesPerView: 3,
-                    spaceBetween: 30
-                },
-                // Quando a largura da tela for 1200px ou mais
-                1200: {
-                    slidesPerView: 4,
-                    spaceBetween: 30
-                }
+                576: { slidesPerView: 2, spaceBetween: 20 },
+                992: { slidesPerView: 3, spaceBetween: 30 },
+                1200: { slidesPerView: 4, spaceBetween: 30 }
             }
         });
     }
-});
+
+}); // Fim do 'DOMContentLoaded'
