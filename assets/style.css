@@ -1429,5 +1429,43 @@ textarea:focus {
         max-width: none;
     }
 }
+/* ===================================================================== */
+/* ||          AJUSTE AUTOMÁTICO DE CONTAINER PARA SEÇÕES           || */
+/* ===================================================================== */
+
+/* 
+  Esta regra aplica o layout de 'container' a todas as seções
+  dentro do <main>, EXCETO a seção com a classe .hero.
+*/
+main > section:not(.hero) {
+    max-width: 1200px;   /* Mesma largura máxima do seu .container */
+    margin-left: auto;   /* Para centralizar */
+    margin-right: auto;  /* Para centralizar */
+    padding-left: 20px;  /* Espaçamento lateral */
+    padding-right: 20px; /* Espaçamento lateral */
+}
+
+/*
+  Esta regra é para seções que têm um fundo colorido (como .section-light).
+  Ela garante que a COR de fundo ocupe a tela inteira, mas o CONTEÚDO
+  interno continue respeitando o container.
+*/
+main > section.section-light:not(.hero)::before,
+main > section.contact-section-home:not(.hero)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit; /* Herda a cor de fundo da seção */
+    z-index: -1; /* Coloca o fundo atrás do conteúdo */
+}
+
+main > section.section-light:not(.hero),
+main > section.contact-section-home:not(.hero) {
+    position: relative; /* Necessário para o pseudo-elemento ::before funcionar */
+    background-color: transparent !important; /* A seção em si fica transparente */
+}
 
 /* --- Fim do CSS --- */
