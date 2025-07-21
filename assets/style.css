@@ -1089,7 +1089,7 @@ footer.main-footer {
         z-index: 1001;
     }
     
-    nav.nav-open {
+  nav.active {
         display: flex;
     }
     
@@ -1247,7 +1247,6 @@ footer.main-footer {
     
     /* Top bar móvel */
     .top-bar-content {
-        flex-direction: column;
         gap: 10px;
         text-align: center;
     }
