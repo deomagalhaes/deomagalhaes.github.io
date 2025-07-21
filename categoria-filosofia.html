@@ -101,22 +101,41 @@
             const categoryToLoad = 'filosofia'; // Define qual categoria esta página deve mostrar
             const container = document.getElementById('article-container');
 
-            fetch('_cards-artigos.html') // 1. Busca o arquivo mestre de cards
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const allArticles = doc.querySelectorAll('.article-item-custom');
-                    
-                    allArticles.forEach(article => {
-                        const categories = article.getAttribute('data-categories');
-                        if (categories && categories.includes(categoryToLoad)) {
-                            container.appendChild(article); // 2. Adiciona o card à página se a categoria corresponder
-                        }
-                    });
+            // CORREÇÃO: Adicionamos a "/" para garantir que o caminho seja absoluto
+        fetch('/_cards-artigos.html') 
+            .then(response => {
+                if (!response.ok) {
+                    // Adiciona uma mensagem de erro se o arquivo não for encontrado
+                    console.error('Erro: Não foi possível encontrar o arquivo _cards-artigos.html. Verifique o caminho.');
+                    return;
+                }
+                return response.text();
+            })
+            .then(html => {
+                if (!html) return;
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const allArticles = doc.querySelectorAll('.article-item-custom');
+                
+                let articlesFound = 0;
+                allArticles.forEach(article => {
+                    const categories = article.getAttribute('data-categories');
+                    if (categories && categories.includes(categoryToLoad)) {
+                        container.appendChild(article);
+                        articlesFound++;
+                    }
                 });
-        });
-    </script>
+
+                if (articlesFound === 0) {
+                    container.innerHTML = '<p>Nenhum artigo encontrado para esta categoria.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar os artigos:', error);
+                container.innerHTML = '<p>Ocorreu um erro ao carregar os artigos.</p>';
+            });
+    });
+</script>
     <script src="assets/script.js"></script>
 </body>
 </html>
