@@ -385,7 +385,7 @@ section[id] {
 }
 
 .intro-details {
-    text-align: left;
+    text-align: center;
 }
 
 .intro-details h2 {
@@ -1166,9 +1166,15 @@ footer.main-footer {
     }
     
     .credentials-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-sm);
-    }
+    /* Remove a regra que força uma única coluna */
+    grid-template-columns: repeat(2, 1fr); /* Mantém duas colunas como no desktop */
+    
+    /* Centraliza o conteúdo dentro da área do grid */
+    justify-items: center; 
+    
+    /* Adiciona um espaço maior para melhor visualização */
+    gap: 20px; 
+}
     
     /* Grade de serviços */
     .services-grid-detailed {
@@ -1466,22 +1472,6 @@ main > section.section-light:not(.hero),
 main > section.contact-section-home:not(.hero) {
     position: relative; /* Necessário para o pseudo-elemento ::before funcionar */
     background-color: transparent !important; /* A seção em si fica transparente */
-}
-/* --- Centralização das Credenciais no Mobile --- */
-
-@media (max-width: 768px) {
-  .credentials-grid {
-    justify-content: center; 
-    margin-top: 20px; 
-  }
-  /* Opcional: Ajusta o alinhamento do botão "Conhecer Formação" 
-     para que ele também fique centralizado na mesma seção. */
-  .intro-details .cta-button {
-    margin-left: auto;
-    margin-right: auto;
-    display: block; /* Garante que as margens automáticas funcionem */
-    max-width: 300px; /* Evita que o botão ocupe a tela inteira */
-  }
 }
 
 /* --- Fim do CSS --- */
