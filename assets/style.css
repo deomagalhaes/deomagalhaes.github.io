@@ -1162,18 +1162,12 @@ footer.main-footer {
     }
     
     .intro-details {
-        text-align: center;
+        text-align: left;
     }
     
     .credentials-grid {
-    /* Remove a regra que força uma única coluna */
-    grid-template-columns: repeat(2, 1fr); /* Mantém duas colunas como no desktop */
-    
-    /* Centraliza o conteúdo dentro da área do grid */
-    justify-items: center; 
-    
-    /* Adiciona um espaço maior para melhor visualização */
-    gap: 20px; 
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
 }
     
     /* Grade de serviços */
@@ -1472,6 +1466,39 @@ main > section.section-light:not(.hero),
 main > section.contact-section-home:not(.hero) {
     position: relative; /* Necessário para o pseudo-elemento ::before funcionar */
     background-color: transparent !important; /* A seção em si fica transparente */
+}
+/* ===================================================================== */
+/* ||          CORREÇÃO FINAL PARA CENTRALIZAÇÃO MOBILE             || */
+/* ===================================================================== */
+
+/* Aplica-se apenas a telas com largura máxima de 768px */
+@media (max-width: 768px) {
+
+  /* 1. Centraliza o texto na coluna de detalhes (título, bio) */
+  .intro-details {
+    text-align: center;
+  }
+
+  /* 2. Altera o grid de credenciais para centralizar os itens */
+  .credentials-grid {
+    /* Muda para display: flex para ter controle total do alinhamento */
+    display: flex;
+    
+    /* Permite que os itens quebrem a linha em telas muito estreitas */
+    flex-wrap: wrap;
+    
+    /* ESTA É A PROPRIEDADE CHAVE: Alinha os itens no centro do contêiner */
+    justify-content: center;
+    
+    /* Mantém um espaçamento consistente */
+    gap: 15px 20px; /* 15px vertical, 20px horizontal */
+  }
+
+  /* 3. Garante que o botão também fique centralizado */
+  .intro-details .cta-button {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* --- Fim do CSS --- */
