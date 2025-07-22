@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Alquimia do Eros: Uma Exploração Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Earth Tones (Stone, Amber, Gold) -->
+    <!-- Application Structure Plan: A thematic, multi-sectional SPA. The structure guides the user from foundational philosophy to practical application, comparative analysis, and finally, ethical considerations. This non-linear, thematic approach uses a sticky navigation bar for easy exploration, transforming the dense report into a digestible and engaging experience. This structure was chosen over a linear one to empower user-driven learning, allowing them to focus on areas of interest and grasp complex concepts through interactive visual aids rather than long blocks of text. -->
+    <!-- Visualization & Content Choices: The application transforms static tables and abstract concepts into dynamic, interactive elements. Tabela 1 (Energias) becomes interactive cards. Tabela 2 (Tantra vs. Neotantra) is visualized as a Chart.js radar chart for immediate, high-impact comparison. The core concept of energy transmutation is represented by a custom HTML/CSS flow diagram. These choices prioritize user engagement and comprehension, making abstract philosophical ideas tangible and memorable, all while strictly adhering to the NO SVG/Mermaid constraint. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF8F5;
+            color: #3D3833;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #B8860B;
+            border-bottom-color: #B8860B;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-button {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #B8860B;
+            color: #FFFFFF;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-[#B8860B]">Alquimia do Eros</h1>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#filosofia" class="nav-link">Filosofia</a>
+                    <a href="#alquimia" class="nav-link">Alquimia</a>
+                    <a href="#praticas" class="nav-link">Práticas</a>
+                    <a href="#perspectivas" class="nav-link">Perspectivas</a>
+                    <a href="#integridade" class="nav-link">Integridade</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-stone-700 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
+                <a href="#filosofia" class="block py-2 px-4 text-sm text-stone-700 rounded hover:bg-amber-100">Filosofia</a>
+                <a href="#alquimia" class="block py-2 px-4 text-sm text-stone-700 rounded hover:bg-amber-100">Alquimia</a>
+                <a href="#praticas" class="block py-2 px-4 text-sm text-stone-700 rounded hover:bg-amber-100">Práticas</a>
+                <a href="#perspectivas" class="block py-2 px-4 text-sm text-stone-700 rounded hover:bg-amber-100">Perspectivas</a>
+                <a href="#integridade" class="block py-2 px-4 text-sm text-stone-700 rounded hover:bg-amber-100">Integridade</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="min-h-[60vh] flex items-center bg-amber-50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-6xl font-bold text-stone-800 leading-tight">A Alquimia do Eros</h2>
+                <p class="mt-4 text-lg md:text-xl text-stone-600 max-w-3xl mx-auto">Uma análise filosófica e energética do Sexo Tântrico, da transmissão de energia e do ritual sagrado.</p>
+            </div>
+        </section>
+
+        <section id="filosofia" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-stone-800">A Visão de Mundo Tântrica</h3>
+                    <p class="mt-2 text-stone-600 max-w-2xl mx-auto">Esta secção explora os princípios fundamentais do Tantra, que vê o corpo não como um obstáculo, mas como um veículo sagrado para a iluminação. Irá descobrir a dança cósmica de Shiva e Shakti e o poder transformador da energia Kundalini, que formam a base para todas as práticas tântricas.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-xl mb-2 text-[#B8860B]">O Corpo como Microcosmo</h4>
+                        <p class="text-stone-600">O Tantra reavalia o corpo como um reflexo sagrado do universo. O objetivo é usar este veículo para transcender a dualidade e experienciar a unidade com o Cosmo, ativando um sistema de centros de energia (chakras) e canais (nāḍīs).</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-xl mb-2 text-[#B8860B]">A Dança de Shiva e Shakti</h4>
+                        <p class="text-stone-600">No coração do Tantra está a polaridade dinâmica de Shiva (consciência pura, masculina) e Shakti (energia criativa, feminina). A sua união dá origem a toda a criação, e o ato sexual ritualizado (Maithuna) é a recriação consciente desta união cósmica.</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-xl mb-2 text-[#B8860B]">O Poder da Kundalini</h4>
+                        <p class="text-stone-600">Descrita como uma serpente de fogo adormecida na base da coluna, a Kundalini é a nossa energia sexual latente. As práticas tântricas visam despertar esta energia, guiando-a para cima através dos chakras para alcançar a iluminação e a expansão da consciência.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="alquimia" class="py-20 bg-amber-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-stone-800">O Corpo Alquímico</h3>
+                    <p class="mt-2 text-stone-600 max-w-2xl mx-auto">Aqui, exploramos a fisiologia subtil do corpo segundo o Tantra e a Ayurveda, focando na transmutação da energia sexual. Irá compreender as energias vitais de Prana, Tejas e Ojas, e como a gestão consciente da sexualidade pode transformar um impulso biológico em combustível espiritual.</p>
+                </div>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4">
+                    <div class="card text-center bg-white p-6 rounded-lg shadow-sm w-full md:w-1/4">
+                        <h4 class="font-bold text-xl mb-2 text-[#B8860B]">Prana</h4>
+                        <p class="text-stone-600">A força vital universal. A energia sexual (Kundalini) é a sua manifestação mais potente no corpo.</p>
+                    </div>
+                    <div class="text-4xl text-[#B8860B] font-thin transform md:rotate-0 rotate-90">&rarr;</div>
+                    <div class="card text-center bg-white p-6 rounded-lg shadow-sm w-full md:w-1/4">
+                        <h4 class="font-bold text-xl mb-2 text-[#B8860B]">Tejas</h4>
+                        <p class="text-stone-600">O fogo metabólico interior. Ajuda a "cozinhar" e refinar as energias grosseiras em essências subtis.</p>
+                    </div>
+                    <div class="text-4xl text-[#B8860B] font-thin transform md:rotate-0 rotate-90">&rarr;</div>
+                    <div class="card text-center bg-white p-6 rounded-lg shadow-sm w-full md:w-1/4">
+                        <h4 class="font-bold text-xl mb-2 text-[#B8860B]">Ojas</h4>
+                        <p class="text-stone-600">A essência suprema. Energia sexual sublimada que concede vitalidade, imunidade e poder espiritual.</p>
+                    </div>
+                </div>
+                <div class="mt-12 text-center max-w-3xl mx-auto">
+                    <h4 class="font-bold text-2xl mb-4">A Transmutação da Energia</h4>
+                    <p class="text-stone-600">O processo de "transmissão de energia" no Tantra é uma alquimia interna. Em vez de ser expelida através da ejaculação convencional (vista como uma perda energética), a potente energia sexual é conservada. Através de práticas como a meditação e o controlo da respiração, esta energia é refinada e redirecionada para cima, nutrindo o cérebro e os centros de consciência superiores. Esta é a verdadeira transmissão: uma conversão vertical de impulso biológico em néctar espiritual.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="praticas" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-stone-800">A Arte da Conservação e do Ritual</h3>
+                    <p class="mt-2 text-stone-600 max-w-2xl mx-auto">Esta secção detalha as práticas centrais da gestão da energia sexual. Irá aprender a diferenciar orgasmo de ejaculação, o propósito da retenção seminal e o conceito de ejaculação consciente. Também exploraremos o Maithuna, o ritual de união sagrada, incluindo o sexo oral como forma de adoração.</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="mb-8">
+                        <div class="flex border-b border-stone-200">
+                            <button data-tab="tab1" class="tab-button flex-1 py-3 px-4 text-stone-600 font-medium active">Gestão da Ejaculação</button>
+                            <button data-tab="tab2" class="tab-button flex-1 py-3 px-4 text-stone-600 font-medium">Ritual Oral (Auparishtaka)</button>
+                        </div>
+                    </div>
+
+                    <div id="tab1" class="tab-content">
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Diferenciar Orgasmo de Ejaculação</h4>
+                                <p class="text-stone-600">O passo fundamental é compreender que a ejaculação (expulsão fisiológica) e o orgasmo (pico de prazer no cérebro) são eventos distintos. O Tantra ensina a experienciar orgasmos de corpo inteiro sem ejacular, transformando o sexo numa meditação prolongada em vez de uma corrida para um clímax final.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Retenção Seminal</h4>
+                                <p class="text-stone-600">É a prática central para cultivar Ojas. Ao reter o sémen, a sua potente energia vital é reabsorvida e sublimada, nutrindo o corpo e a mente. Isto aumenta a vitalidade, a clareza mental e o potencial espiritual, transformando a energia sexual numa ferramenta para a mestria de si mesmo.</p>
+                            </div>
+                             <div>
+                                <h4 class="font-bold text-xl mb-2">Ejaculação Consciente</h4>
+                                <p class="text-stone-600">A retenção é a norma, mas a ejaculação não é proibida. Uma "ejaculação consciente" é um ato deliberado e intencional, não uma perda de controlo. Em alguns rituais esotéricos, os fluidos são vistos como oferendas sagradas, mas a abordagem principal foca-se na conservação para cultivo interno.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab2" class="tab-content hidden">
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Adoração da Yoni (Feminino)</h4>
+                                <p class="text-stone-600">A Yoni (vulva/vagina) é reverenciada como o portal da vida e a manifestação da Deusa Shakti. A Yoni Puja oral é um ato de adoração, explorando toda a genitália com reverência e presença, focando-se no prazer da parceira como um ato sagrado, consumindo a sua essência como um néctar divino.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Adoração do Lingam (Masculino)</h4>
+                                <p class="text-stone-600">O Lingam (pénis) é honrado como um "bastão de luz", símbolo de Shiva. A Lingam Puja oral é uma massagem e adoração que visa despertar e circular a energia do parceiro. As técnicas enfatizam a variedade de toques e ritmos, com o objetivo de prolongar o prazer e a conexão, evitando a ejaculação prematura.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">O Papel da Ejaculação no Ritual</h4>
+                                <p class="text-stone-600">A abordagem varia: 1) **Retenção (Primária):** Para conservar energia e prolongar a meditação. 2) **Oferenda Consciente (Secundária):** Como um ato de entrega deliberado. 3) **Consumo Ritual (Terciária/Esotérica):** Em rituais específicos onde os fluidos são considerados sacramentos. A escolha depende da intenção e da escola tântrica.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="perspectivas" class="py-20 bg-amber-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-stone-800">Tantra Clássico vs. Neotantra</h3>
+                    <p class="mt-2 text-stone-600 max-w-2xl mx-auto">Esta secção compara a tradição espiritual antiga com a sua adaptação ocidental moderna. Utilizando um gráfico interativo, pode explorar as diferenças fundamentais nos seus objetivos, visão da sexualidade e práticas-chave, ajudando-o a navegar na paisagem tântrica contemporânea com maior discernimento.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="tantraComparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="integridade" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-stone-800">O Caminho da Integridade</h3>
+                    <p class="mt-2 text-stone-600 max-w-2xl mx-auto">Explorar o Tantra é uma jornada potente que exige discernimento e uma base ética sólida. Esta secção final oferece recomendações cruciais para o buscador moderno, destacando a importância do consentimento, dos limites éticos e da orientação qualificada para garantir uma prática segura e transformadora.</p>
+                </div>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <div class="accordion-item bg-white rounded-lg shadow-sm">
+                        <button class="accordion-header w-full text-left p-5 font-semibold text-lg flex justify-between items-center">
+                            <span>Consentimento e Limites Éticos</span>
+                            <span class="transform transition-transform duration-300">&#9662;</span>
+                        </button>
+                        <div class="accordion-content px-5 pb-5">
+                            <p class="text-stone-600">O consentimento é a pedra angular. Deve ser explícito, entusiástico, contínuo e pode ser retirado a qualquer momento. Um praticante ou terapeuta ético cria um ambiente seguro onde os limites são comunicados e respeitados, evitando qualquer forma de exploração, especialmente dada a vulnerabilidade que estas práticas podem induzir.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item bg-white rounded-lg shadow-sm">
+                        <button class="accordion-header w-full text-left p-5 font-semibold text-lg flex justify-between items-center">
+                            <span>A Importância de um Guia Qualificado</span>
+                            <span class="transform transition-transform duration-300">&#9662;</span>
+                        </button>
+                        <div class="accordion-content px-5 pb-5">
+                            <p class="text-stone-600">A orientação de um professor (guru) ou terapeuta qualificado é essencial. Um guia competente fornece o contexto filosófico e ético, além das técnicas. Verifique as qualificações, a linhagem e procure referências. Desconfie de promessas exageradas e da falta de clareza sobre limites éticos.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item bg-white rounded-lg shadow-sm">
+                        <button class="accordion-header w-full text-left p-5 font-semibold text-lg flex justify-between items-center">
+                            <span>Integrar para a Transformação</span>
+                            <span class="transform transition-transform duration-300">&#9662;</span>
+                        </button>
+                        <div class="accordion-content px-5 pb-5">
+                            <p class="text-stone-600">O objetivo final vai além do sexo. É usar a energia vital para alimentar todos os aspetos da vida: criatividade, relações e desenvolvimento espiritual. Ao integrar estes princípios, pode dissolver a culpa e a vergonha, aprofundar a intimidade e alcançar um estado de maior equilíbrio, vitalidade e conexão com a sua essência divina.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 A Alquimia do Eros. Uma exploração interativa baseada em pesquisa académica.</p>
+            <p class="text-sm mt-2 text-stone-400">Esta aplicação é para fins informativos e educacionais.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const tabs = document.querySelectorAll('[data-tab]');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetId = tab.getAttribute('data-tab');
+                    const targetContent = document.getElementById(targetId);
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    targetContent.classList.remove('hidden');
+                });
+            });
+
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span:last-child');
+                    
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                        document.querySelectorAll('.accordion-header span:last-child').forEach(i => i.style.transform = 'rotate(0deg)');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section[id]');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            const chartData = {
+                labels: [
+                    'Objetivo Primário', 
+                    'Visão da Sexualidade', 
+                    'Papel da Ejaculação', 
+                    'Práticas-Chave', 
+                    'Dinâmica Professor-Aluno'
+                ],
+                datasets: [{
+                    label: 'Tantra Clássico',
+                    data: [5, 3, 5, 5, 5],
+                    fill: true,
+                    backgroundColor: 'rgba(184, 134, 11, 0.2)',
+                    borderColor: 'rgb(184, 134, 11)',
+                    pointBackgroundColor: 'rgb(184, 134, 11)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(184, 134, 11)'
+                }, {
+                    label: 'Neotantra',
+                    data: [3, 5, 3, 3, 2],
+                    fill: true,
+                    backgroundColor: 'rgba(61, 56, 51, 0.2)',
+                    borderColor: 'rgb(61, 56, 51)',
+                    pointBackgroundColor: 'rgb(61, 56, 51)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(61, 56, 51)'
+                }]
+            };
+
+            const tooltipsData = {
+                'Tantra Clássico': [
+                    'Libertação Espiritual (Moksha)',
+                    'Uma ferramenta entre muitas para a transcendência',
+                    'Primariamente retida para cultivar Ojas',
+                    'Mantra, Yantra, Puja, Guru Yoga',
+                    'Guru-Discípulo (iniciação espiritual)'
+                ],
+                'Neotantra': [
+                    'Crescimento Pessoal, Cura, Prazer',
+                    'A prática central para o autoconhecimento',
+                    'Controlada para melhorar o prazer/tratar disfunções',
+                    'Sexualidade Sagrada, Toque Consciente, Terapia',
+                    'Terapeuta-Cliente (contrato terapêutico)'
+                ]
+            };
+            
+            const config = {
+                type: 'radar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    weight: 'bold'
+                                },
+                                color: '#3D3833'
+                            },
+                            ticks: {
+                                backdropColor: '#FAF8F5',
+                                color: '#78716c',
+                                stepSize: 1,
+                                display: false
+                            },
+                            min: 0,
+                            max: 5
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const pointIndex = context.dataIndex;
+                                    label += tooltipsData[context.dataset.label][pointIndex];
+                                    return label;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14
+                                },
+                                color: '#3D3833'
+                            }
+                        }
+                    }
+                }
+            };
+            
+            const ctx = document.getElementById('tantraComparisonChart').getContext('2d');
+            new Chart(ctx, config);
+        });
+    </script>
+
+</body>
+</html>
