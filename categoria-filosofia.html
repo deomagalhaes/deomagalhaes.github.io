@@ -97,24 +97,51 @@
     </div>
 </footer>
 
-// SCRIPT CORRIGIDO PARA PÁGINAS DE CATEGORIA
+<!-- SCRIPT CORRIGIDO E COMPLETO PARA PÁGINAS DE CATEGORIA -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const categoryToLoad = 'filosofia';
+        const categoryToLoad = 'filosofia'; // Define a categoria para esta página
         const container = document.getElementById('article-container');
 
-        // CORREÇÃO: Usando caminho relativo e o novo nome do arquivo
-        fetch('cards-artigos.html') 
+        if (!container) {
+            console.error('Erro: O container com id "article-container" não foi encontrado.');
+            return;
+        }
+
+        fetch('cards-artigos.html')
             .then(response => {
                 if (!response.ok) {
                     console.error('Erro ao carregar cards-artigos.html. Status: ' + response.status);
                     container.innerHTML = '<p>Não foi possível carregar os artigos no momento.</p>';
-                    return;
+                    return null; // Retorna nulo para parar a execução
                 }
                 return response.text();
             })
             .then(html => {
-                // ... o resto do script continua igual ...
+                if (html === null) return; // Para se o fetch falhou
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const allArticles = doc.querySelectorAll('.article-item-custom');
+                
+                let articlesFound = 0;
+                allArticles.forEach(article => {
+                    const categories = article.getAttribute('data-categories');
+                    if (categories && categories.includes(categoryToLoad)) {
+                        // Adiciona o card encontrado ao container da página
+                        container.appendChild(article);
+                        articlesFound++;
+                    }
+                });
+
+                // Se, após verificar todos, nenhum for encontrado, exibe uma mensagem.
+                if (articlesFound === 0) {
+                    container.innerHTML = '<p>Nenhum artigo encontrado para esta categoria.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar os artigos:', error);
+                container.innerHTML = '<p>Ocorreu um erro ao carregar os artigos.</p>';
             });
     });
 </script>
