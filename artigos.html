@@ -219,30 +219,30 @@
         </div>
     </div>
 </footer>
-<!-- SCRIPT PARA CARREGAR TODOS OS ARTIGOS -->
+// SCRIPT CORRIGIDO PARA A PÁGINA PRINCIPAL DE ARTIGOS
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const container = document.getElementById('article-container');
 
-        fetch('/_cards-artigos.html') // Busca o arquivo mestre
+        // CORREÇÃO: Usando caminho relativo e o novo nome do arquivo
+        fetch('cards-artigos.html') 
             .then(response => {
                 if (!response.ok) {
-                    console.error('Erro: Não foi possível encontrar o arquivo _cards-artigos.html.');
+                    console.error('Erro ao carregar cards-artigos.html. Status: ' + response.status);
                     return;
                 }
                 return response.text();
             })
             .then(html => {
                 if (!html) return;
-                // Simplesmente injeta todo o conteúdo do arquivo mestre no container
                 container.innerHTML = html;
             })
             .catch(error => {
-                console.error('Erro ao carregar os artigos:', error);
-                container.innerHTML = '<p>Ocorreu um erro ao carregar os artigos.</p>';
+                console.error('Erro ao processar os artigos:', error);
             });
     });
 </script>
+
     <script src="assets/script.js"></script>
 </body>
 </html>
