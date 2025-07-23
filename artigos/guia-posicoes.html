@@ -1,0 +1,294 @@
+import React, { useState } from 'react';
+import { Heart, Sun, Moon, Star, Info, ArrowLeft, ArrowRight, Flower2 } from 'lucide-react';
+
+const TantraApp = () => {
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const positions = [
+    {
+      id: 1,
+      name: "Yab-Yum (União Sagrada)",
+      sanskrit: "यब्युम्",
+      icon: <Flower2 className="w-8 h-8" />,
+      description: "A posição fundamental do tantra, representando a união do masculino e feminino divinos.",
+      benefits: [
+        "Promove conexão espiritual profunda",
+        "Facilita a respiração sincronizada",
+        "Estimula os chakras do coração",
+        "Permite contato visual constante"
+      ],
+      technique: "Parceiros sentam-se de frente, com as pernas entrelaçadas. A respiração deve ser lenta e sincronizada. Mantenham contato visual e foquem na energia circulando entre vocês.",
+      chakras: ["Coração", "Sacral", "Raiz"],
+      duration: "15-30 minutos",
+      difficulty: "Iniciante",
+      illustration: "🧘‍♀️🧘‍♂️"
+    },
+    {
+      id: 2,
+      name: "Maithuna Sagrada",
+      sanskrit: "मैथुन",
+      icon: <Heart className="w-8 h-8" />,
+      description: "Prática de união consciente que transcende o físico para alcançar estados elevados de consciência.",
+      benefits: [
+        "Desperta a energia Kundalini",
+        "Harmoniza polaridades internas",
+        "Desenvolve presença mindful",
+        "Fortalece vínculo emocional"
+      ],
+      technique: "Movimento lento e consciente, mantendo foco na respiração e sensações energéticas. A intenção é de reverência mútua e conexão sagrada.",
+      chakras: ["Todos os chakras"],
+      duration: "30-60 minutos",
+      difficulty: "Intermediário",
+      illustration: "💞"
+    },
+    {
+      id: 3,
+      name: "Posição do Lótus Duplo",
+      sanskrit: "पद्मासन द्विगुण",
+      icon: <Sun className="w-8 h-8" />,
+      description: "Adaptação da posição de meditação clássica para práticas tântricas de casal.",
+      benefits: [
+        "Alinhamento energético dos chakras",
+        "Estabilidade e grounding",
+        "Facilita meditação conjunta",
+        "Promove equilíbrio interior"
+      ],
+      technique: "Ambos em posição de lótus, de frente um para o outro. Sincronizem a respiração e visualizem energia dourada circulando entre vocês.",
+      chakras: ["Raiz", "Sacral", "Plexo Solar"],
+      duration: "20-45 minutos",
+      difficulty: "Avançado",
+      illustration: "🪷"
+    },
+    {
+      id: 4,
+      name: "Embrace Shiva-Shakti",
+      sanskrit: "शिव शक्ति आलिंगन",
+      icon: <Moon className="w-8 h-8" />,
+      description: "Representa a dança eterna entre as energias masculina (Shiva) e feminina (Shakti).",
+      benefits: [
+        "Equilibra energias opostas",
+        "Intensifica intimidade emocional",
+        "Desenvolve sensibilidade energética",
+        "Cultiva presença no momento"
+      ],
+      technique: "Abraço prolongado com respiração consciente. Sintam as energias se mesclando e criando harmonia. Permitam que o movimento seja natural e intuitivo.",
+      chakras: ["Coração", "Garganta", "Terceiro Olho"],
+      duration: "10-25 minutos",
+      difficulty: "Iniciante",
+      illustration: "🫂"
+    },
+    {
+      id: 5,
+      name: "Bandha Conjunta",
+      sanskrit: "बन्ध युग्म",
+      icon: <Star className="w-8 h-8" />,
+      description: "Prática avançada que combina contrações musculares (bandhas) com conexão íntima.",
+      benefits: [
+        "Fortalece músculos do core",
+        "Intensifica sensações energéticas",
+        "Melhora controle respiratório",
+        "Eleva consciência corporal"
+      ],
+      technique: "Contraiam e relaxem os músculos pélvicos em sincronia, mantendo respiração profunda. Foquem na energia subindo pela coluna.",
+      chakras: ["Raiz", "Sacral", "Plexo Solar"],
+      duration: "15-30 minutos",
+      difficulty: "Avançado",
+      illustration: "⚡"
+    }
+  ];
+
+  const nextPosition = () => {
+    setCurrentIndex((prev) => (prev + 1) % positions.length);
+  };
+
+  const prevPosition = () => {
+    setCurrentIndex((prev) => (prev - 1 + positions.length) % positions.length);
+  };
+
+  if (selectedPosition) {
+    const position = positions.find(p => p.id === selectedPosition);
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6">
+        <div className="max-w-4xl mx-auto">
+          <button 
+            onClick={() => setSelectedPosition(null)}
+            className="flex items-center gap-2 text-white mb-6 hover:text-rose-200 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Voltar ao menu
+          </button>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="text-center mb-8">
+              <div className="text-6xl mb-4">{position.illustration}</div>
+              <h1 className="text-4xl font-bold text-white mb-2">{position.name}</h1>
+              <p className="text-2xl text-rose-200 mb-4">{position.sanskrit}</p>
+              <div className="flex justify-center gap-4 mb-6">
+                <span className="bg-white/20 px-4 py-2 rounded-full text-white text-sm">
+                  {position.difficulty}
+                </span>
+                <span className="bg-white/20 px-4 py-2 rounded-full text-white text-sm">
+                  {position.duration}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Descrição</h3>
+                  <p className="text-rose-100">{position.description}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Técnica</h3>
+                  <p className="text-rose-100">{position.technique}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-3">Chakras Ativados</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {position.chakras.map((chakra, index) => (
+                      <span key={index} className="bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1 rounded-full text-white text-sm">
+                        {chakra}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-3">Benefícios</h3>
+                <ul className="space-y-2">
+                  {position.benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-start gap-2 text-rose-100">
+                      <Heart className="w-4 h-4 mt-1 text-rose-300 flex-shrink-0" />
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4">
+            🕉️ Guia Tântrico
+          </h1>
+          <p className="text-xl text-rose-200 mb-8">
+            Explore as práticas sagradas do tantra com respeito e consciência
+          </p>
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Info className="w-5 h-5 text-rose-300" />
+              <span className="text-rose-200 font-semibold">Aviso Importante</span>
+            </div>
+            <p className="text-rose-100 text-sm leading-relaxed">
+              O tantra é uma prática espiritual milenar que busca a união entre corpo, mente e espírito. 
+              Este guia é educativo e deve ser praticado com respeito, consentimento mútuo e consciência espiritual.
+            </p>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="flex items-center justify-between mb-6">
+              <button 
+                onClick={prevPosition}
+                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+              >
+                <ArrowLeft className="w-6 h-6 text-white" />
+              </button>
+              
+              <div className="text-center flex-1">
+                <div className="text-8xl mb-4">{positions[currentIndex].illustration}</div>
+                <h2 className="text-3xl font-bold text-white mb-2">{positions[currentIndex].name}</h2>
+                <p className="text-xl text-rose-200">{positions[currentIndex].sanskrit}</p>
+              </div>
+
+              <button 
+                onClick={nextPosition}
+                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+              >
+                <ArrowRight className="w-6 h-6 text-white" />
+              </button>
+            </div>
+
+            <div className="text-center">
+              <p className="text-rose-100 mb-6 max-w-2xl mx-auto">
+                {positions[currentIndex].description}
+              </p>
+              <button 
+                onClick={() => setSelectedPosition(positions[currentIndex].id)}
+                className="bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg"
+              >
+                Explorar Esta Posição
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {positions.map((position) => (
+            <div 
+              key={position.id}
+              onClick={() => setSelectedPosition(position.id)}
+              className="bg-white/10 backdrop-blur-md rounded-2xl p-6 cursor-pointer hover:bg-white/20 transition-all transform hover:scale-105 border border-white/20"
+            >
+              <div className="text-center">
+                <div className="text-4xl mb-3">{position.illustration}</div>
+                <div className="flex justify-center mb-3 text-rose-300">
+                  {position.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">{position.name}</h3>
+                <p className="text-rose-200 text-sm mb-4">{position.sanskrit}</p>
+                <div className="flex justify-center gap-2 mb-4">
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-white text-xs">
+                    {position.difficulty}
+                  </span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-white text-xs">
+                    {position.duration}
+                  </span>
+                </div>
+                <p className="text-rose-100 text-sm">
+                  {position.description.substring(0, 80)}...
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+          <h3 className="text-2xl font-bold text-white mb-4 text-center">Princípios do Tantra</h3>
+          <div className="grid md:grid-cols-3 gap-6 text-center">
+            <div>
+              <Flower2 className="w-8 h-8 mx-auto mb-3 text-rose-300" />
+              <h4 className="text-lg font-semibold text-white mb-2">Consciência</h4>
+              <p className="text-rose-100 text-sm">Presença total no momento presente</p>
+            </div>
+            <div>
+              <Heart className="w-8 h-8 mx-auto mb-3 text-rose-300" />
+              <h4 className="text-lg font-semibold text-white mb-2">Conexão</h4>
+              <p className="text-rose-100 text-sm">União sagrada entre parceiros</p>
+            </div>
+            <div>
+              <Star className="w-8 h-8 mx-auto mb-3 text-rose-300" />
+              <h4 className="text-lg font-semibold text-white mb-2">Transcendência</h4>
+              <p className="text-rose-100 text-sm">Elevação espiritual através da prática</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TantraApp;
