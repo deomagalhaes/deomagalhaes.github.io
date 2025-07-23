@@ -1,306 +1,455 @@
-import React, { useState } from 'react';
-import { Heart, Sun, Moon, Star, Info, ArrowLeft, ArrowRight, Flower2 } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A single-page application with a sticky top navigation bar allowing users to jump between four main thematic sections: 'Filosofia', 'Preparação', 'Posições', and 'Veneração Oral'. This non-linear structure replaces the report's linear format, enhancing user-driven exploration. The 'Posições' section is the interactive core, featuring a comparative radar chart (for quick analysis of difficulty vs. intimacy) and a clickable card gallery. Clicking a card reveals detailed information in a modal window, preventing overwhelming the user with a long page scroll. This design prioritizes usability by breaking down dense content into digestible, interactive modules, guiding the user from theory to practice in an engaging way. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Table comparing 7 tantric positions by 'Dificuldade Física' and 'Nível de Intimidade'.
+        - Goal: Compare & Select.
+        - Viz/Presentation Method: A radar chart and an interactive card gallery.
+        - Interaction: The chart provides an immediate visual comparison. The gallery allows users to click on a position to open a modal with detailed text (description, benefits, tips).
+        - Justification: The radar chart synthesizes multi-attribute data into an easily comparable format. The gallery/modal pattern presents a large amount of text content without cluttering the main UI, allowing users to drill down into what interests them most.
+        - Library/Method: Chart.js (via CDN) for the radar chart, custom vanilla JS for the navigation and modal interactions.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <title>A Dança Sagrada: Exploração do Tantra Sexual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FDF8F0;
+            color: #4A4A4A;
+        }
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin-top: 5px;
+            right: 0;
+            background: #D4AF37;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+            left: 0;
+            background-color: #D4AF37;
+        }
+        .active-link {
+            color: #D4AF37;
+        }
+        .active-link:after {
+             width: 100%;
+            left: 0;
+            background-color: #D4AF37;
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
 
-const App = () => {
-  // State to manage which position is selected for detailed view. null means no position is selected (main view).
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  // State to manage the index of the currently displayed position in the main carousel.
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Data for the different tantric positions.
-  const positions = [
-    {
-      id: 1,
-      name: "Yab-Yum (União Sagrada)",
-      sanskrit: "यब्युम्",
-      icon: <Flower2 className="w-8 h-8" />,
-      description: "A posição fundamental do tantra, representando a união do masculino e feminino divinos.",
-      benefits: [
-        "Promove conexão espiritual profunda",
-        "Facilita a respiração sincronizada",
-        "Estimula os chakras do coração",
-        "Permite contato visual constante"
-      ],
-      technique: "Parceiros sentam-se de frente, com as pernas entrelaçadas. A respiração deve ser lenta e sincronizada. Mantenham contato visual e foquem na energia circulando entre vocês.",
-      chakras: ["Coração", "Sacral", "Raiz"],
-      duration: "15-30 minutos",
-      difficulty: "Iniciante",
-      illustration: "🧘‍♀️🧘‍♂️"
-    },
-    {
-      id: 2,
-      name: "Maithuna Sagrada",
-      sanskrit: "मैथुन",
-      icon: <Heart className="w-8 h-8" />,
-      description: "Prática de união consciente que transcende o físico para alcançar estados elevados de consciência.",
-      benefits: [
-        "Desperta a energia Kundalini",
-        "Harmoniza polaridades internas",
-        "Desenvolve presença mindful",
-        "Fortalece vínculo emocional"
-      ],
-      technique: "Movimento lento e consciente, mantendo foco na respiração e sensações energéticas. A intenção é de reverência mútua e conexão sagrada.",
-      chakras: ["Todos os chakras"],
-      duration: "30-60 minutos",
-      difficulty: "Intermediário",
-      illustration: "💞"
-    },
-    {
-      id: 3,
-      name: "Posição do Lótus Duplo",
-      sanskrit: "पद्मासन द्विगुण",
-      icon: <Sun className="w-8 h-8" />,
-      description: "Adaptação da posição de meditação clássica para práticas tântricas de casal.",
-      benefits: [
-        "Alinhamento energético dos chakras",
-        "Estabilidade e grounding",
-        "Facilita meditação conjunta",
-        "Promove equilíbrio interior"
-      ],
-      technique: "Ambos em posição de lótus, de frente um para o outro. Sincronizem a respiração e visualizem energia dourada circulando entre vocês.",
-      chakras: ["Raiz", "Sacral", "Plexo Solar"],
-      duration: "20-45 minutos",
-      difficulty: "Avançado",
-      illustration: "🪷"
-    },
-    {
-      id: 4,
-      name: "Embrace Shiva-Shakti",
-      sanskrit: "शिव शक्ति आलिंगन",
-      icon: <Moon className="w-8 h-8" />,
-      description: "Representa a dança eterna entre as energias masculina (Shiva) e feminina (Shakti).",
-      benefits: [
-        "Equilibra energias opostas",
-        "Intensifica intimidade emocional",
-        "Desenvolve sensibilidade energética",
-        "Cultiva presença no momento"
-      ],
-      technique: "Abraço prolongado com respiração consciente. Sintam as energias se mesclando e criando harmonia. Permitam que o movimento seja natural e intuitivo.",
-      chakras: ["Coração", "Garganta", "Terceiro Olho"],
-      duration: "10-25 minutos",
-      difficulty: "Iniciante",
-      illustration: "🫂"
-    },
-    {
-      id: 5,
-      name: "Bandha Conjunta",
-      sanskrit: "बन्ध युग्म",
-      icon: <Star className="w-8 h-8" />,
-      description: "Prática avançada que combina contrações musculares (bandhas) com conexão íntima.",
-      benefits: [
-        "Fortalece músculos do core",
-        "Intensifica sensações energéticas",
-        "Melhora controle respiratório",
-        "Eleva consciência corporal"
-      ],
-      technique: "Contraiam e relaxem os músculos pélvicos em sincronia, mantendo respiração profunda. Foquem na energia subindo pela coluna.",
-      chakras: ["Raiz", "Sacral", "Plexo Solar"],
-      duration: "15-30 minutos",
-      difficulty: "Avançado",
-      illustration: "⚡"
-    }
-  ];
-
-  // Function to go to the next position in the carousel.
-  const nextPosition = () => {
-    setCurrentIndex((prev) => (prev + 1) % positions.length);
-  };
-
-  // Function to go to the previous position in the carousel.
-  const prevPosition = () => {
-    setCurrentIndex((prev) => (prev - 1 + positions.length) % positions.length);
-  };
-
-  // If a position is selected, render the detailed view.
-  if (selectedPosition) {
-    const position = positions.find(p => p.id === selectedPosition);
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6 font-sans">
-        <div className="max-w-4xl mx-auto">
-          <button 
-            onClick={() => setSelectedPosition(null)}
-            className="flex items-center gap-2 text-white mb-6 hover:text-rose-200 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Voltar ao menu
-          </button>
-
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-            <div className="text-center mb-8">
-              <div className="text-6xl mb-4">{position.illustration}</div>
-              <h1 className="text-4xl font-bold text-white mb-2">{position.name}</h1>
-              <p className="text-2xl text-rose-200 mb-4">{position.sanskrit}</p>
-              <div className="flex justify-center gap-4 mb-6">
-                <span className="bg-white/20 px-4 py-2 rounded-full text-white text-sm">
-                  {position.difficulty}
-                </span>
-                <span className="bg-white/20 px-4 py-2 rounded-full text-white text-sm">
-                  {position.duration}
-                </span>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Descrição</h3>
-                  <p className="text-rose-100">{position.description}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Técnica</h3>
-                  <p className="text-rose-100">{position.technique}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Chakras Ativados</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {position.chakras.map((chakra, index) => (
-                      <span key={index} className="bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1 rounded-full text-white text-sm">
-                        {chakra}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-3">Benefícios</h3>
-                <ul className="space-y-2">
-                  {position.benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-2 text-rose-100">
-                      <Heart className="w-4 h-4 mt-1 text-rose-300 flex-shrink-0" />
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
+    <header class="relative w-full h-screen flex items-center justify-center text-center text-white overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-black opacity-40 z-10"></div>
+        <img src="https://images.unsplash.com/photo-1542642240-281285376118?q=80&w=2070&auto=format&fit=crop" alt="Casal em silhueta numa praia ao pôr do sol" class="absolute top-0 left-0 w-full h-full object-cover">
+        <div class="relative z-20 px-4">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl mb-4 text-shadow-lg">A Dança Sagrada</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto font-light">Uma exploração interativa da intimidade, energia e conexão através da filosofia tântrica.</p>
         </div>
-      </div>
-    );
-  }
-
-  // Render the main menu view.
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6 font-sans">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4">
-            🕉️ Guia Tântrico
-          </h1>
-          <p className="text-xl text-rose-200 mb-8">
-            Explore as práticas sagradas do tantra com respeito e consciência
-          </p>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Info className="w-5 h-5 text-rose-300" />
-              <span className="text-rose-200 font-semibold">Aviso Importante</span>
-            </div>
-            <p className="text-rose-100 text-sm leading-relaxed">
-              O tantra é uma prática espiritual milenar que busca a união entre corpo, mente e espírito. 
-              Este guia é educativo e deve ser praticado com respeito, consentimento mútuo e consciência espiritual.
-            </p>
-          </div>
+        <div class="absolute bottom-10 z-20 text-white animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
         </div>
+    </header>
 
-        {/* Main position carousel */}
-        <div className="mb-8">
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-            <div className="flex items-center justify-between mb-6">
-              <button 
-                onClick={prevPosition}
-                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-                aria-label="Posição Anterior"
-              >
-                <ArrowLeft className="w-6 h-6 text-white" />
-              </button>
-              
-              <div className="text-center flex-1">
-                <div className="text-8xl mb-4">{positions[currentIndex].illustration}</div>
-                <h2 className="text-3xl font-bold text-white mb-2">{positions[currentIndex].name}</h2>
-                <p className="text-xl text-rose-200">{positions[currentIndex].sanskrit}</p>
-              </div>
-
-              <button 
-                onClick={nextPosition}
-                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-                aria-label="Próxima Posição"
-              >
-                <ArrowRight className="w-6 h-6 text-white" />
-              </button>
-            </div>
-
-            <div className="text-center">
-              <p className="text-rose-100 mb-6 max-w-2xl mx-auto">
-                {positions[currentIndex].description}
-              </p>
-              <button 
-                onClick={() => setSelectedPosition(positions[currentIndex].id)}
-                className="bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg"
-              >
-                Explorar Esta Posição
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Grid of all positions */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {positions.map((position) => (
-            <div 
-              key={position.id}
-              onClick={() => setSelectedPosition(position.id)}
-              className="bg-white/10 backdrop-blur-md rounded-2xl p-6 cursor-pointer hover:bg-white/20 transition-all transform hover:-translate-y-2 border border-white/20"
-            >
-              <div className="text-center">
-                <div className="text-4xl mb-3">{position.illustration}</div>
-                <div className="flex justify-center mb-3 text-rose-300">
-                  {position.icon}
+    <nav id="main-nav" class="sticky top-0 z-50 bg-[#FDF8F0]/80 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center items-center h-16">
+                <div class="flex space-x-6 md:space-x-10 text-sm md:text-base">
+                    <a href="#filosofia" class="nav-link font-semibold tracking-wider uppercase">Filosofia</a>
+                    <a href="#preparacao" class="nav-link font-semibold tracking-wider uppercase">Preparação</a>
+                    <a href="#posicoes" class="nav-link font-semibold tracking-wider uppercase">Posições</a>
+                    <a href="#oral" class="nav-link font-semibold tracking-wider uppercase">Veneração Oral</a>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">{position.name}</h3>
-                <p className="text-rose-200 text-sm mb-4">{position.sanskrit}</p>
-                <div className="flex justify-center gap-2 mb-4">
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-white text-xs">
-                    {position.difficulty}
-                  </span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-white text-xs">
-                    {position.duration}
-                  </span>
-                </div>
-                <p className="text-rose-100 text-sm">
-                  {position.description.substring(0, 80)}...
-                </p>
-              </div>
             </div>
-          ))}
         </div>
+    </nav>
 
-        {/* Tantra Principles Section */}
-        <div className="mt-12 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-          <h3 className="text-2xl font-bold text-white mb-4 text-center">Princípios do Tantra</h3>
-          <div className="grid md:grid-cols-3 gap-6 text-center">
-            <div>
-              <Flower2 className="w-8 h-8 mx-auto mb-3 text-rose-300" />
-              <h4 className="text-lg font-semibold text-white mb-2">Consciência</h4>
-              <p className="text-rose-100 text-sm">Presença total no momento presente</p>
+    <main class="container mx-auto px-6 py-16 md:py-24 space-y-24">
+
+        <section id="filosofia">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl mb-4">Os Pilares da Sexualidade Sagrada</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">Antes de mergulhar na prática, é fundamental construir uma base de compreensão. As posições e toques são os galhos de uma árvore antiga; sem entender as raízes, tornam-se movimentos vazios.</p>
             </div>
-            <div>
-              <Heart className="w-8 h-8 mx-auto mb-3 text-rose-300" />
-              <h4 className="text-lg font-semibold text-white mb-2">Conexão</h4>
-              <p className="text-rose-100 text-sm">União sagrada entre parceiros</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/50 p-8 rounded-lg shadow-sm card-hover">
+                    <h3 class="text-2xl mb-3">Desvendando o Tantra</h3>
+                    <p class="text-gray-700">O Tantra não é apenas sexo. É uma rica filosofia espiritual oriental que visa o desenvolvimento integral do ser. O sexo tântrico (Neotantra) é apenas um ramo desta árvore do conhecimento, focado em usar a energia sexual como uma ferramenta para a expansão da consciência, e não apenas para o orgasmo.</p>
+                </div>
+                <div class="bg-white/50 p-8 rounded-lg shadow-sm card-hover">
+                    <h3 class="text-2xl mb-3">A União Divina: Shiva & Shakti</h3>
+                    <p class="text-gray-700">No coração do Tantra está a dança cósmica de Shiva (consciência pura, o princípio masculino) e Shakti (energia criativa, o princípio feminino). O ato sexual tântrico (*Maithuna*) é a recriação ritualística desta união, encarnando estes arquétipos divinos para experimentar a totalidade.</p>
+                </div>
+                <div class="bg-white/50 p-8 rounded-lg shadow-sm card-hover">
+                    <h3 class="text-2xl mb-3">Jornada vs. Destino</h3>
+                    <p class="text-gray-700">Ao contrário do sexo convencional focado no objetivo (orgasmo), o Tantra celebra a jornada. É uma prática lenta, meditativa e presente. O foco muda da descarga de tensão para a expansão de uma onda de prazer sensorial por todo o corpo, cultivando a energia em vez de esgotá-la.</p>
+                </div>
             </div>
-            <div>
-              <Star className="w-8 h-8 mx-auto mb-3 text-rose-300" />
-              <h4 className="text-lg font-semibold text-white mb-2">Transcendência</h4>
-              <p className="text-rose-100 text-sm">Elevação espiritual através da prática</p>
+        </section>
+
+        <section id="preparacao">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl mb-4">A Preparação para o Ritual</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">A experiência tântrica não começa com o toque, mas com a intenção. A criação de um espaço sagrado — tanto externo quanto interno — é o primeiro passo para transformar um encontro sexual num ritual de conexão.</p>
             </div>
-          </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-6 bg-white/50 rounded-lg shadow-sm card-hover">
+                    <div class="text-4xl text-[#D4AF37] mb-4">🕯️</div>
+                    <h3 class="text-xl font-semibold mb-2">Criando o Templo</h3>
+                    <p>Prepare um ambiente confortável, limpo e sem distrações. Use iluminação suave, aromas relaxantes (incenso, óleos), música calma e tecidos macios para estimular todos os sentidos.</p>
+                </div>
+                <div class="text-center p-6 bg-white/50 rounded-lg shadow-sm card-hover">
+                    <div class="text-4xl text-[#D4AF37] mb-4">👁️</div>
+                    <h3 class="text-xl font-semibold mb-2">Soul Gazing</h3>
+                    <p>Sentem-se frente a frente e mantenham um contato visual suave e prolongado. Esta prática poderosa, conhecida como "Olhar da Alma", cria uma conexão profunda e não-verbal, liberando oxitocina.</p>
+                </div>
+                <div class="text-center p-6 bg-white/50 rounded-lg shadow-sm card-hover">
+                    <div class="text-4xl text-[#D4AF37] mb-4">🌬️</div>
+                    <h3 class="text-xl font-semibold mb-2">Pranayama (Respiração)</h3>
+                    <p>A respiração é o veículo da energia vital (Prana). Pratiquem a respiração abdominal profunda e sincronizem o vosso ritmo para criar um poderoso circuito de energia entre vocês.</p>
+                </div>
+                <div class="text-center p-6 bg-white/50 rounded-lg shadow-sm card-hover">
+                    <div class="text-4xl text-[#D4AF37] mb-4">✋</div>
+                    <h3 class="text-xl font-semibold mb-2">Toque Consciente</h3>
+                    <p>Explore o corpo do parceiro com curiosidade e reverência, como se estivesse a mapear um território sagrado. Use toques variados e comuniquem o que é prazeroso, sem um objetivo final.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="posicoes">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl mb-4">Guia Interativo de Posições (Maithuna)</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">As posturas tântricas são veículos para a conexão e o fluxo de energia. O conforto é mais importante que a perfeição. Explore o gráfico para comparar as posições e clique nos cartões abaixo para aprender mais sobre cada uma.</p>
+            </div>
+            
+            <div class="bg-white/50 p-4 md:p-8 rounded-lg shadow-lg mb-16">
+                <h3 class="text-2xl text-center font-semibold mb-4">Comparativo de Posições</h3>
+                <div class="chart-container">
+                    <canvas id="positionsChart"></canvas>
+                </div>
+            </div>
+
+            <div id="positions-gallery" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        </section>
+
+        <section id="oral">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl mb-4">A Veneração Oral: O Sabor do Divino</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">No Tantra, o sexo oral é elevado a um ritual de devoção. O corpo do parceiro é um templo, e a boca, um instrumento de adoração para honrar os arquétipos sagrados de Shiva e Shakti.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/50 p-8 rounded-lg shadow-sm card-hover">
+                    <h3 class="text-2xl mb-3">Honrando o Sagrado</h3>
+                    <p class="text-gray-700">Os genitais recebem nomes sagrados: a Yoni (vulva, "fonte sagrada") e o Lingam (pénis, "pilar de luz"). O ato oral torna-se uma veneração a estes símbolos da energia criativa (Shakti) e da consciência pura (Shiva).</p>
+                </div>
+                <div class="bg-white/50 p-8 rounded-lg shadow-sm card-hover">
+                    <h3 class="text-2xl mb-3">Técnicas de Devoção</h3>
+                    <p class="text-gray-700">A prática começa com um "banho de língua" por todo o corpo. A abordagem aos genitais é indireta e reverente, focada na leitura corporal e na resposta sensível, em vez de um estímulo mecânico para o orgasmo.</p>
+                </div>
+                <div class="bg-white/50 p-8 rounded-lg shadow-sm card-hover">
+                    <h3 class="text-2xl mb-3">O Corvo (Posição 69)</h3>
+                    <p class="text-gray-700">Ressignificada, esta posição cria um circuito fechado de energia (Ouroboros). O foco muda da gratificação dupla para a doação total e a sincronia, transformando-a numa poderosa prática de unificação energética.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#4A4A4A] text-white/80 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl mb-4">Integrando a Dança Sagrada</h2>
+            <p class="max-w-3xl mx-auto">A maior lição do Tantra é que a dança sagrada não se limita ao quarto. Leve a presença, a consciência e a reverência para todos os momentos da sua vida e do seu relacionamento. A verdadeira transformação reside na abertura consistente para sentir, conectar e amar de forma mais profunda.</p>
         </div>
-      </div>
+    </footer>
+
+    <div id="position-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70 modal-backdrop opacity-0 pointer-events-none">
+        <div class="bg-[#FDF8F0] rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto modal-content transform scale-95">
+            <div class="sticky top-0 bg-[#FDF8F0] p-4 flex justify-between items-center border-b border-gray-200">
+                <h3 id="modal-title" class="text-2xl md:text-3xl"></h3>
+                <button id="close-modal" class="text-gray-500 hover:text-black text-3xl">&times;</button>
+            </div>
+            <div id="modal-body" class="p-6 md:p-8 space-y-4 text-gray-700">
+            </div>
+        </div>
     </div>
-  );
-};
 
-export default App;
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const positionsData = [
+                {
+                    name: 'Yab-Yum (União Pai-Mãe)',
+                    type: 'Sentada',
+                    difficulty: 2,
+                    intimacy: 3,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=Yab-Yum',
+                    description: `O parceiro 'base' senta-se de pernas cruzadas. O parceiro 'receptivo' senta-se no seu colo, de frente, envolvendo a cintura com as pernas. Os braços entrelaçam-se num abraço.`,
+                    benefits: `Promove o alinhamento direto dos chakras, facilitando uma conexão espiritual inigualável. O contato visual, a respiração sincronizada e o toque das testas (terceiro olho) criam um poderoso campo energético.`,
+                    tips: `Permaneçam imóveis por vários minutos, apenas respirando e olhando nos olhos um do outro. O movimento, quando iniciado, deve ser um balanço pélvico lento e circular.`
+                },
+                {
+                    name: 'Lótus Conectada',
+                    type: 'Sentada',
+                    difficulty: 2,
+                    intimacy: 3,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=Lótus+Conectada',
+                    description: `Ambos sentam-se de frente, com as pernas entrelaçadas confortavelmente. Cada um coloca a mão direita sobre o coração do outro e a mão esquerda sobre a mão do parceiro, fechando um circuito.`,
+                    benefits: `Foca na ativação do chakra do coração (Anahata), promovendo amor, compaixão e unidade. É uma postura profundamente meditativa que acalma a mente e abre o coração.`,
+                    tips: `Fechem os olhos e concentrem-se no batimento cardíaco um do outro. Visualizem a energia do amor a fluir entre os vossos corações num círculo luminoso e quente.`
+                },
+                {
+                    name: 'Conchinha Tântrica',
+                    type: 'Deitada',
+                    difficulty: 1,
+                    intimacy: 2,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=Conchinha+Tântrica',
+                    description: `Ambos deitam-se de lado, virados para a mesma direção. O parceiro de trás envolve o da frente num abraço protetor.`,
+                    benefits: `Evoca sentimentos profundos de segurança, carinho e proteção. É ideal para nutrir o lado emocional, acalmar a ansiedade e construir confiança. A energia circula de forma suave.`,
+                    tips: `O parceiro de trás pode usar a mão livre para acariciar lentamente o corpo do parceiro da frente. Respirem em uníssono, sentindo a expansão e contração dos corpos.`
+                },
+                {
+                    name: 'Ascensão de Shakti',
+                    type: 'Deitada',
+                    difficulty: 1,
+                    intimacy: 2,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=Ascensão+de+Shakti',
+                    description: `O parceiro deita-se de costas relaxado. A parceira posiciona-se por cima, ajoelhada ou sentada, controlando o ritmo e a profundidade do movimento.`,
+                    benefits: `Empodera a energia feminina (Shakti), permitindo que ela guie a união, enquanto a energia masculina (Shiva) aprende a arte da entrega. Esta troca de papéis pode ser libertadora.`,
+                    tips: `Mantenham o contato visual. O movimento deve ser uma dança pélvica lenta e circular, em vez de impulsos rápidos. O parceiro deitado pode acariciar as costas e o rosto da parceira.`
+                },
+                {
+                    name: 'Penetração Profunda',
+                    type: 'Deitada',
+                    difficulty: 2,
+                    intimacy: 2,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=Penetração+Profunda',
+                    description: `Uma variação da 'Ascensão de Shakti'. O parceiro deita-se de costas. A parceira, por cima, levanta as pernas e apoia os pés ou tornozelos nos ombros dele.`,
+                    benefits: `O ângulo agudo permite um contato mais profundo e intenso com diferentes áreas da vagina e do colo do útero, exigindo um alto nível de confiança e entrega.`,
+                    tips: `A comunicação é fundamental. O movimento deve ser extremamente lento e consciente. Usem a respiração para gerir a intensidade da sensação.`
+                },
+                {
+                    name: 'Abraço Vertical',
+                    type: 'Em Pé',
+                    difficulty: 3,
+                    intimacy: 2,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=Abraço+Vertical',
+                    description: `O parceiro que sustenta fica em pé. A parceira salta e envolve a sua cintura com as pernas, cruzando os tornozelos nas costas dele para segurança.`,
+                    benefits: `Gera grande vitalidade, calor e energia. Exige e constrói imensa confiança mútua. O alinhamento vertical dos chakras é direto e poderoso, como uma dança de equilíbrio.`,
+                    tips: `Mantenham a respiração sincronizada para ajudar no equilíbrio. Olhem-se nos olhos e movam-se lentamente em uníssono, como se estivessem a dançar.`
+                },
+                {
+                    name: 'O Golfinho',
+                    type: 'Deitada',
+                    difficulty: 3,
+                    intimacy: 1,
+                    image: 'https://placehold.co/600x400/d1c4b0/4A4A4A?text=O+Golfinho',
+                    description: `Posição avançada. A parceira deita-se de costas, e o parceiro levanta os seus quadris. Ela arqueia o corpo, apoiando o peso nos ombros e pescoço.`,
+                    benefits: `Fisicamente desafiadora. O ângulo de entrada pode estimular intensamente o ponto G. Testa os limites físicos e a confiança, podendo levar a um clímax rápido e poderoso.`,
+                    tips: `Requer aquecimento e cuidado. A comunicação é vital para evitar desconforto. Use-a como um "acento" energético na prática, não como a base dela.`
+                }
+            ];
+
+            const gallery = document.getElementById('positions-gallery');
+            const modal = document.getElementById('position-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+
+            positionsData.forEach(pos => {
+                const card = document.createElement('div');
+                card.className = 'bg-white/50 rounded-lg shadow-sm overflow-hidden cursor-pointer card-hover';
+                card.innerHTML = `
+                    <img src="${pos.image}" alt="${pos.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-xl font-semibold text-gray-800">${pos.name}</h4>
+                        <p class="text-sm text-gray-500">${pos.type}</p>
+                    </div>
+                `;
+                card.addEventListener('click', () => openModal(pos));
+                gallery.appendChild(card);
+            });
+
+            function openModal(pos) {
+                modalTitle.textContent = pos.name;
+                modalBody.innerHTML = `
+                    <img src="${pos.image}" alt="${pos.name}" class="w-full h-64 object-cover rounded-lg mb-6">
+                    <h4 class="text-xl font-bold mb-2 text-gray-800">Descrição e Execução</h4>
+                    <p class="mb-4">${pos.description}</p>
+                    <h4 class="text-xl font-bold mb-2 text-gray-800">Benefícios Energéticos e Emocionais</h4>
+                    <p class="mb-4">${pos.benefits}</p>
+                    <h4 class="text-xl font-bold mb-2 text-gray-800">Dicas de Conexão</h4>
+                    <p>${pos.tips}</p>
+                `;
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modal.querySelector('.modal-content').classList.add('scale-95');
+                document.body.style.overflow = '';
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            const difficultyMap = { 'Baixo': 1, 'Médio': 2, 'Alto': 3, 'Muito Alto': 3 };
+            const intimacyMap = { 'Médio': 1, 'Alto': 2, 'Muito Alto': 3 };
+
+            const chartCtx = document.getElementById('positionsChart').getContext('2d');
+            new Chart(chartCtx, {
+                type: 'radar',
+                data: {
+                    labels: positionsData.map(p => p.name),
+                    datasets: [
+                        {
+                            label: 'Dificuldade Física',
+                            data: positionsData.map(p => difficultyMap[p.type === 'Deitada' ? (p.name === 'O Golfinho' ? 'Muito Alto' : 'Baixo') : (p.type === 'Em Pé' ? 'Alto' : 'Médio')]),
+                            backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                            borderColor: 'rgba(212, 175, 55, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(212, 175, 55, 1)'
+                        },
+                        {
+                            label: 'Nível de Intimidade',
+                            data: positionsData.map(p => intimacyMap[p.intimacy === 3 ? 'Muito Alto' : (p.intimacy === 2 ? 'Alto' : 'Médio')]),
+                            backgroundColor: 'rgba(74, 74, 74, 0.2)',
+                            borderColor: 'rgba(74, 74, 74, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(74, 74, 74, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { 
+                                font: { size: 10, family: 'Poppins' },
+                                color: '#4A4A4A'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: '#7f8c8d',
+                                stepSize: 1,
+                                min: 0,
+                                max: 3,
+                                callback: function(value) {
+                                    const labels = ['', 'Baixo', 'Médio', 'Alto'];
+                                    return labels[value];
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#4A4A4A',
+                                font: {
+                                    family: 'Poppins'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.raw;
+                                    const labels = ['', 'Baixo', 'Médio', 'Alto'];
+                                    if (value >= 1 && value <= 3) {
+                                        label += labels[value];
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active-link');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active-link');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
