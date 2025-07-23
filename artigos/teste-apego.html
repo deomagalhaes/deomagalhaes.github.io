@@ -1,1 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
+    <!-- ================================================== -->
+    <!-- ||        ÁREA DE CONFIGURAÇÃO DA PÁGINA        || -->
+    <!-- ================================================== -->
+
+    <!-- 1. TÍTULO DA PÁGINA (MUITO IMPORTANTE PARA O GOOGLE) -->
+    <title>Teste de Estilo de Apego: Descubra Seus Padrões de Relacionamento – Deo Magalhães</title>
+    
+    <!-- 2. DESCRIÇÃO DA PÁGINA (MUITO IMPORTANTE PARA O GOOGLE) -->
+    <meta name="description" content="Faça nosso teste baseado na Teoria do Apego e receba uma análise personalizada sobre como seus padrões de relacionamento influenciam sua vida.">
+    
+    <!-- ================================================== -->
+
+    <!-- CAMINHOS DOS ARQUIVOS (ASSUMINDO A MESMA ESTRUTURA DO SEU SITE) -->
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <!-- Estilos específicos para o teste -->
+    <style>
+        .quiz-container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid #eee;
+        }
+
+        .question-block {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .option-item label {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: #fff;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 1rem;
+            width: 18px;
+            height: 18px;
+            accent-color: #005f73;
+        }
+
+        .option-item label:hover {
+            background-color: #f0f8ff;
+        }
+
+        .option-item input[type="radio"]:checked + span {
+            font-weight: 600;
+            color: #005f73;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: #005f73; /* Cor primária do seu site */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 2rem;
+        }
+
+        .submit-button:hover {
+            background-color: #003e4d;
+            transform: translateY(-2px);
+        }
+        
+        .submit-button:disabled {
+            background-color: #a9a9a9;
+            cursor: not-allowed;
+        }
+
+        #results-container {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #eef7fa;
+            border-radius: 8px;
+            border-left: 5px solid #005f73;
+            display: none; /* Começa oculto */
+        }
+
+        #results-container h2 {
+            margin-top: 0;
+            color: #003e4d;
+        }
+        
+        .loading-spinner {
+            display: none; /* Começa oculto */
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #005f73;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .disclaimer-box {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            color: #8a6d3b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bloco de Cabeçalho Padrão (copiado da sua referência) -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos & Testes</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Teste de Estilo de Apego Adulto</h1>
+                <p class="article-author-date">
+                    Uma ferramenta de autoconhecimento baseada na Teoria do Apego de John Bowlby.
+                </p>
+            </header>
+
+            <article class="article-body">
+                <p>Os laços que formamos na infância com nossos cuidadores criam um "mapa" interno que guia a forma como nos relacionamos na vida adulta. Este mapa, conhecido como nosso <strong>estilo de apego</strong>, influencia como percebemos a intimidade, lidamos com conflitos e buscamos apoio emocional.</p>
+                <p>Este teste foi projetado para ajudá-lo a identificar seus padrões de apego predominantes. Responda às perguntas abaixo com base em como você geralmente se sente e se comporta em seus relacionamentos íntimos. Não há respostas certas ou erradas. Seja honesto(a) consigo mesmo(a) para obter a análise mais precisa.</p>
+
+                <div class="quiz-container">
+                    <form id="attachment-quiz">
+                        <!-- As perguntas serão inseridas aqui pelo JavaScript -->
+                    </form>
+                    <button id="submit-btn" class="submit-button" type="button">Ver minha análise personalizada</button>
+                    <div id="loading" class="loading-spinner"></div>
+                </div>
+
+                <div id="results-container">
+                    <h2>Sua Análise de Apego Personalizada</h2>
+                    <div id="analysis-content">
+                        <!-- O resultado da análise da IA será inserido aqui -->
+                    </div>
+                     <div class="disclaimer-box">
+                        <strong>Atenção:</strong> Este teste é uma ferramenta de autoconhecimento e não substitui um diagnóstico clínico. Os resultados são baseados em padrões gerais e servem como um ponto de partida para a reflexão. Para uma avaliação aprofundada, procure um profissional de saúde mental qualificado.
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão (copiado da sua referência) -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script principal do site (assumindo que ele lida com o menu mobile, etc) -->
+    <script src="/assets/script.js"></script>
+    
+    <!-- Script do Teste de Apego -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizForm = document.getElementById('attachment-quiz');
+            const submitButton = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const analysisContent = document.getElementById('analysis-content');
+            const loadingSpinner = document.getElementById('loading');
+
+            const questions = [
+                {
+                    question: "Quando penso em intimidade emocional, eu...",
+                    options: [
+                        { text: "Sinto-me à vontade e valorizo a conexão próxima.", value: "secure" },
+                        { text: "Preocupo-me que meu parceiro(a) não queira ser tão próximo(a) quanto eu gostaria.", value: "anxious" },
+                        { text: "Sinto-me um pouco desconfortável e prefiro manter certa independência.", value: "avoidant" },
+                        { text: "Desejo muito a intimidade, mas ao mesmo tempo tenho medo de me machucar.", value: "disorganized" }
+                    ]
+                },
+                {
+                    question: "Se meu parceiro(a) precisa de um tempo sozinho(a), minha reação inicial é:",
+                    options: [
+                        { text: "Respeitar sua necessidade, confiando que isso não afeta nosso vínculo.", value: "secure" },
+                        { text: "Sentir ansiedade e medo de que seja um sinal de que ele(a) está se afastando.", value: "anxious" },
+                        { text: "Sentir um certo alívio e aproveitar a oportunidade para ter meu próprio espaço.", value: "avoidant" },
+                        { text: "Ficar confuso(a) e inseguro(a), sem saber se devo me aproximar ou me afastar.", value: "disorganized" }
+                    ]
+                },
+                {
+                    question: "Em uma discussão, eu tendo a...",
+                    options: [
+                        { text: "Tentar comunicar meus sentimentos e entender o ponto de vista do outro para resolver o problema.", value: "secure" },
+                        { text: "Ficar muito reativo(a) emocionalmente e ter medo de que o conflito leve ao abandono.", value: "anxious" },
+                        { text: "Me fechar ou me afastar para evitar o confronto direto.", value: "avoidant" },
+                        { text: "Reagir de forma imprevisível, às vezes com raiva, outras vezes me retraindo completamente.", value: "disorganized" }
+                    ]
+                },
+                {
+                    question: "Sobre depender dos outros e ter outros dependendo de mim:",
+                    options: [
+                        { text: "Sinto-me confortável com a interdependência mútua em um relacionamento.", value: "secure" },
+                        { text: "Gosto quando os outros dependem de mim, mas me preocupo se posso depender deles.", value: "anxious" },
+                        { text: "Prefiro ser autossuficiente e não gosto da ideia de depender de alguém.", value: "avoidant" },
+                        { text: "É uma ideia que me assusta e me atrai ao mesmo tempo; é complicado.", value: "disorganized" }
+                    ]
+                },
+                {
+                    question: "Quando estou estressado(a) ou chateado(a), eu...",
+                    options: [
+                        { text: "Procuro meu parceiro(a) ou amigos próximos para obter conforto e apoio.", value: "secure" },
+                        { text: "Busco intensamente o apoio dos outros, mas me preocupo em ser um fardo.", value: "anxious" },
+                        { text: "Prefiro lidar com meus problemas sozinho(a), sem envolver outras pessoas.", value: "avoidant" },
+                        { text: "Hesito em procurar apoio, pois não sei que tipo de reação vou receber.", value: "disorganized" }
+                    ]
+                },
+                {
+                    question: "Minha visão geral sobre relacionamentos amorosos é que eles são...",
+                    options: [
+                        { text: "Uma fonte de segurança, crescimento e felicidade, apesar dos desafios.", value: "secure" },
+                        { text: "O centro da minha vida, mas também uma fonte constante de preocupação e insegurança.", value: "anxious" },
+                        { text: "Importantes, mas não devem comprometer minha liberdade e individualidade.", value: "avoidant" },
+                        { text: "Confusos, imprevisíveis e potencialmente dolorosos.", value: "disorganized" }
+                    ]
+                },
+                 {
+                    question: "Quando um relacionamento termina, eu geralmente...",
+                    options: [
+                        { text: "Sinto a dor, mas confio na minha capacidade de me recuperar e encontrar a felicidade novamente.", value: "secure" },
+                        { text: "Sinto-me devastado(a) e questiono meu próprio valor, demorando muito para superar.", value: "anxious" },
+                        { text: "Sinto-me mais aliviado(a) do que triste e foco rapidamente em outras áreas da minha vida.", value: "avoidant" },
+                        { text: "Sinto uma montanha-russa de emoções intensas e contraditórias, demorando a encontrar estabilidade.", value: "disorganized" }
+                    ]
+                },
+                {
+                    question: "Expressar minhas necessidades e desejos em um relacionamento é algo que...",
+                    options: [
+                        { text: "Faço de forma aberta e direta, esperando que sejam considerados.", value: "secure" },
+                        { text: "Faço, mas com receio de parecer carente ou exigente demais.", value: "anxious" },
+                        { text: "Tenho dificuldade em fazer; prefiro não 'incomodar' ou criar expectativas.", value: "avoidant" },
+                        { text: "Não tenho clareza sobre minhas próprias necessidades, ou tenho medo de expressá-las.", value: "disorganized" }
+                    ]
+                }
+            ];
+
+            function renderQuestions() {
+                let quizHTML = '';
+                questions.forEach((q, index) => {
+                    quizHTML += `
+                        <div class="question-block" id="question-${index}">
+                            <p class="question-text">${index + 1}. ${q.question}</p>
+                            <ul class="options-list">
+                    `;
+                    q.options.forEach((option, optionIndex) => {
+                        quizHTML += `
+                            <li class="option-item">
+                                <label>
+                                    <input type="radio" name="question-${index}" value="${option.value}" required>
+                                    <span>${option.text}</span>
+                                </label>
+                            </li>
+                        `;
+                    });
+                    quizHTML += `</ul></div>`;
+                });
+                quizForm.innerHTML = quizHTML;
+            }
+
+            async function handleSubmit() {
+                const formData = new FormData(quizForm);
+                const answers = [];
+                let allAnswered = true;
+
+                for (let i = 0; i < questions.length; i++) {
+                    const answer = formData.get(`question-${i}`);
+                    if (!answer) {
+                        allAnswered = false;
+                        document.getElementById(`question-${i}`).style.border = '1px solid red';
+                    } else {
+                         document.getElementById(`question-${i}`).style.border = '';
+                         const questionText = questions[i].question;
+                         const answerText = questions[i].options.find(opt => opt.value === answer).text;
+                         answers.push({ question: questionText, answer: answerText, value: answer });
+                    }
+                }
+
+                if (!allAnswered) {
+                    alert('Por favor, responda a todas as perguntas para continuar.');
+                    return;
+                }
+
+                submitButton.disabled = true;
+                loadingSpinner.style.display = 'block';
+                resultsContainer.style.display = 'none';
+
+                // Tally scores
+                const scores = { secure: 0, anxious: 0, avoidant: 0, disorganized: 0 };
+                answers.forEach(ans => {
+                    scores[ans.value]++;
+                });
+
+                // Generate prompt for AI
+                const prompt = createPrompt(answers, scores);
+                
+                try {
+                    // Gemini API Call
+                    const apiKey = ""; // Leave empty, handled by the environment
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const payload = {
+                        contents: [{
+                            role: "user",
+                            parts: [{ text: prompt }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            topP: 0.95,
+                            topK: 40
+                        }
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    let analysisText = 'Não foi possível gerar a análise no momento. Tente novamente mais tarde.';
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        analysisText = result.candidates[0].content.parts[0].text;
+                    }
+                    
+                    // Format the response with Markdown-like bolding and paragraphs
+                    let formattedText = analysisText
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                        .replace(/\n/g, '<br>'); // New lines
+
+                    analysisContent.innerHTML = formattedText;
+
+                } catch (error) {
+                    console.error("Error fetching analysis:", error);
+                    analysisContent.innerHTML = "<p>Ocorreu um erro ao gerar sua análise. Por favor, verifique sua conexão com a internet e tente novamente. Se o problema persistir, o serviço pode estar temporariamente indisponível.</p>";
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                    resultsContainer.style.display = 'block';
+                    submitButton.disabled = false;
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            function createPrompt(answers, scores) {
+                let detailedAnswers = answers.map(a => `- Pergunta: "${a.question}"\n  - Resposta: "${a.answer}" (Reflete traços de apego ${a.value})`).join('\n\n');
+
+                return `
+                    Aja como um neuropsicólogo brasileiro chamado Deo Magalhães, com um tom acolhedor, profissional e analítico.
+                    O usuário acabou de completar um questionário sobre estilos de apego. Sua tarefa é gerar uma síntese analítica personalizada com base nas respostas dele. Não use uma linguagem determinística; use frases como "suas respostas sugerem", "parece que você tende a", "isso pode indicar".
+
+                    Contexto Teórico:
+                    - Apego Seguro: Visão positiva de si e dos outros. Confortável com intimidade e autonomia.
+                    - Apego Ansioso (Preocupado): Visão negativa de si, positiva dos outros. Busca alta intimidade, teme abandono.
+                    - Apego Evitativo (Distante): Visão positiva de si, negativa dos outros. Evita intimidade, valoriza a independência.
+                    - Apego Desorganizado (Temeroso): Visão negativa de si e dos outros. Deseja e teme a intimidade. Comportamentos contraditórios.
+
+                    Dados do Usuário:
+                    - Contagem de Respostas: Seguro: ${scores.secure}, Ansioso: ${scores.anxious}, Evitativo: ${scores.avoidant}, Desorganizado: ${scores.disorganized}.
+                    - Respostas Detalhadas:
+                    ${detailedAnswers}
+
+                    Instruções para a Análise:
+                    1.  **Parágrafo de Abertura:** Comece de forma acolhedora, agradecendo pela participação e explicando que a análise a seguir é um reflexo dos padrões que emergiram de suas respostas.
+                    2.  **Identificação do Padrão Principal:** Com base na maior pontuação, identifique o estilo de apego predominante. Se houver um empate ou uma pontuação secundária muito próxima, mencione isso como um "padrão misto" ou "traços secundários significativos".
+                    3.  **Análise Detalhada:** Esta é a parte mais importante. Conecte as respostas específicas do usuário à teoria. Por exemplo: "Ao responder que você tende a se fechar durante uma discussão, isso se alinha com uma característica do apego evitativo, que é a tendência de se retrair para evitar conflitos." ou "Sua preocupação com o afastamento do parceiro quando ele precisa de espaço é um indicador clássico do estilo de apego ansioso, enraizado no medo da separação." Analise 2 ou 3 respostas-chave para ilustrar o padrão.
+                    4.  **Forças e Desafios:** Descreva brevemente as forças e os possíveis desafios associados ao(s) estilo(s) identificado(s). Mantenha um tom construtivo.
+                    5.  **Parágrafo de Encerramento:** Conclua com uma nota de esperança. Enfatize que os estilos de apego não são sentenças fixas, mas padrões que podem ser compreendidos e trabalhados. Incentive a auto-reflexão e sugira que, para um aprofundamento, a psicoterapia é um caminho valioso.
+                    
+                    Formate a saída usando parágrafos e use asteriscos duplos (**) para texto em negrito (ex: **Apego Seguro**). Não inclua o disclaimer, ele já está na página.
+                `;
+            }
+
+            renderQuestions();
+            submitButton.addEventListener('click', handleSubmit);
+        });
+    </script>
+</body>
+</html>
