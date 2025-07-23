@@ -1500,5 +1500,32 @@ main > section.contact-section-home:not(.hero) {
     margin-right: auto;
   }
 }
-
+/* Responsividade para o card do Teste de Apego */
+.highlight-card-section .highlight-card {
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+@media (max-width: 700px) {
+  .highlight-card-section .highlight-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.2rem 1rem;
+    gap: 1.2rem;
+    text-align: center;
+  }
+  .highlight-card-section .highlight-card-icon {
+    margin: 0 auto;
+  }
+  .highlight-card-section .highlight-card-content h2 {
+    font-size: 1.2rem;
+  }
+  .highlight-card-section .highlight-card-content p {
+    font-size: 1rem;
+  }
+  .highlight-card-section .cta-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.7rem 0;
+  }
+}
 /* --- Fim do CSS --- */
