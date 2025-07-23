@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Heart, Sun, Moon, Star, Info, ArrowLeft, ArrowRight, Flower2 } from 'lucide-react';
 
-const TantraApp = () => {
+const App = () => {
+  // State to manage which position is selected for detailed view. null means no position is selected (main view).
   const [selectedPosition, setSelectedPosition] = useState(null);
+  // State to manage the index of the currently displayed position in the main carousel.
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Data for the different tantric positions.
   const positions = [
     {
       id: 1,
@@ -98,18 +101,21 @@ const TantraApp = () => {
     }
   ];
 
+  // Function to go to the next position in the carousel.
   const nextPosition = () => {
     setCurrentIndex((prev) => (prev + 1) % positions.length);
   };
 
+  // Function to go to the previous position in the carousel.
   const prevPosition = () => {
     setCurrentIndex((prev) => (prev - 1 + positions.length) % positions.length);
   };
 
+  // If a position is selected, render the detailed view.
   if (selectedPosition) {
     const position = positions.find(p => p.id === selectedPosition);
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6 font-sans">
         <div className="max-w-4xl mx-auto">
           <button 
             onClick={() => setSelectedPosition(null)}
@@ -176,8 +182,9 @@ const TantraApp = () => {
     );
   }
 
+  // Render the main menu view.
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-rose-800 to-orange-700 p-6 font-sans">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-white mb-4">
@@ -186,7 +193,7 @@ const TantraApp = () => {
           <p className="text-xl text-rose-200 mb-8">
             Explore as práticas sagradas do tantra com respeito e consciência
           </p>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Info className="w-5 h-5 text-rose-300" />
               <span className="text-rose-200 font-semibold">Aviso Importante</span>
@@ -198,12 +205,14 @@ const TantraApp = () => {
           </div>
         </div>
 
+        {/* Main position carousel */}
         <div className="mb-8">
           <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
             <div className="flex items-center justify-between mb-6">
               <button 
                 onClick={prevPosition}
                 className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                aria-label="Posição Anterior"
               >
                 <ArrowLeft className="w-6 h-6 text-white" />
               </button>
@@ -217,6 +226,7 @@ const TantraApp = () => {
               <button 
                 onClick={nextPosition}
                 className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                aria-label="Próxima Posição"
               >
                 <ArrowRight className="w-6 h-6 text-white" />
               </button>
@@ -236,12 +246,13 @@ const TantraApp = () => {
           </div>
         </div>
 
+        {/* Grid of all positions */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {positions.map((position) => (
             <div 
               key={position.id}
               onClick={() => setSelectedPosition(position.id)}
-              className="bg-white/10 backdrop-blur-md rounded-2xl p-6 cursor-pointer hover:bg-white/20 transition-all transform hover:scale-105 border border-white/20"
+              className="bg-white/10 backdrop-blur-md rounded-2xl p-6 cursor-pointer hover:bg-white/20 transition-all transform hover:-translate-y-2 border border-white/20"
             >
               <div className="text-center">
                 <div className="text-4xl mb-3">{position.illustration}</div>
@@ -266,6 +277,7 @@ const TantraApp = () => {
           ))}
         </div>
 
+        {/* Tantra Principles Section */}
         <div className="mt-12 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
           <h3 className="text-2xl font-bold text-white mb-4 text-center">Princípios do Tantra</h3>
           <div className="grid md:grid-cols-3 gap-6 text-center">
@@ -291,4 +303,4 @@ const TantraApp = () => {
   );
 };
 
-export default TantraApp;
+export default App;
