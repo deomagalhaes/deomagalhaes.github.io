@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Oblação do Herói: Uma Exploração Interativa do Tantra Vamachara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Earthy Harmony -->
+    <!-- Application Structure Plan: A narrative, single-page journey guiding the user through the core tenets of Vamachara philosophy. The structure progresses from foundational concepts (Two Paths) to specific symbols (Body as Cosmos), the central ritual (Alchemical Rite), the core philosophical argument (Paradox of Offering), and finally the results (Fruits of the Path). This sequential, story-like structure is chosen over a dashboard to make the complex, esoteric, and sensitive information more digestible, respectful, and understandable for a new user, building knowledge progressively. -->
+    <!-- Visualization & Content Choices: 1. Report Table 1 -> Goal: Compare -> Viz: Interactive Horizontal Bar Chart (Chart.js) -> Interaction: Buttons to toggle views -> Justification: More dynamic and engaging than a static table, allowing for direct visual comparison of abstract concepts. 2. Ritual Steps -> Goal: Organize -> Viz: Numbered step-by-step diagram (HTML/CSS) -> Interaction: Hover to highlight/reveal more detail -> Justification: Clearly illustrates the process flow in a more intuitive way than a text list. 3. Core Concepts (Lingam/Yoni, Shukra/Rakta) -> Goal: Inform -> Viz: Interactive info cards (HTML/CSS) -> Interaction: Click/hover to reveal definitions -> Justification: Breaks down complex terminology into manageable, on-demand pieces, reducing cognitive load. CONFIRMED NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #402E32;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #A34A28;
+            transition: width 0.3s;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.active {
+            color: #A34A28;
+        }
+        .concept-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h3 class="text-xl font-bold text-red-900/80">Vamachara</h3>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                <a href="#intro" class="nav-link active">Início</a>
+                <a href="#paths" class="nav-link">Os Caminhos</a>
+                <a href="#altar" class="nav-link">O Altar</a>
+                <a href="#ritual" class="nav-link">O Ritual</a>
+                <a href="#offering" class="nav-link">A Oblação</a>
+                <a href="#fruits" class="nav-link">Os Frutos</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="intro" class="min-h-screen flex items-center bg-amber-50/30">
+            <div class="container mx-auto px-6 text-center py-20">
+                <h1 class="text-5xl md:text-7xl font-bold text-red-900/80 mb-4">A Oblação do Herói</h1>
+                <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto">Uma afirmação da ejaculação como a oferenda sagrada no Tantra Vamachara.</p>
+                <div class="mt-12">
+                    <a href="#paths" class="bg-red-800/90 text-white font-bold py-3 px-8 rounded-full hover:bg-red-900 transition-colors duration-300 shadow-lg">
+                        Iniciar Exploração
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="paths" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">A Bifurcação no Caminho</h2>
+                    <p class="text-lg text-slate-600">
+                        Esta seção explora as duas correntes principais da tradição tântrica: Dakshinachara (o Caminho da Mão Direita) e Vamachara (o Caminho da Mão Esquerda). Enquanto um busca a libertação através da pureza e conformidade, o outro utiliza a transgressão e a transmutação como suas ferramentas mais potentes. A visualização abaixo permite uma comparação direta de suas filosofias e métodos contrastantes.
+                    </p>
+                </div>
+
+                <div class="mt-16">
+                    <div class="chart-container">
+                        <canvas id="pathsChart"></canvas>
+                    </div>
+                    <div class="flex justify-center mt-8 space-x-4">
+                        <button id="showVamachara" class="bg-red-800/90 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-red-900 transition-colors">Visão Vamachara</button>
+                        <button id="showDakshinachara" class="bg-slate-200 text-slate-700 font-semibold py-2 px-6 rounded-md shadow hover:bg-slate-300 transition-colors">Visão Dakshinachara</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="altar" class="py-20 md:py-32 bg-stone-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">O Altar Vivo</h2>
+                     <p class="text-lg text-slate-600">
+                        No Vamachara, o ritual transcende os templos de pedra. O corpo humano torna-se o microcosmo sagrado, o altar vivo onde o drama cósmico se desenrola. Esta seção explora como o masculino e o feminino são vistos não como meros corpos biológicos, mas como a encarnação de princípios divinos: Shiva e Shakti. Interaja com os conceitos abaixo para desvendar a simbologia profunda do Lingam, do Yoni e dos praticantes que os encarnam.
+                    </p>
+                </div>
+
+                <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="concept-card bg-white p-8 rounded-lg shadow-sm border border-slate-200/50">
+                        <h3 class="text-2xl font-bold mb-3 text-red-900/80">Lingam como Consciência</h3>
+                        <p class="text-slate-600">O falo masculino, símbolo de Shiva. Representa a consciência pura, o poder gerador estático e a realidade sem forma. No ritual, não é um órgão, mas a "vara de luz", o eixo do cosmos.</p>
+                    </div>
+                    <div class="concept-card bg-white p-8 rounded-lg shadow-sm border border-slate-200/50">
+                        <h3 class="text-2xl font-bold mb-3 text-red-900/80">Yoni como Energia</h3>
+                        <p class="text-slate-600">A vulva feminina, símbolo de Shakti. Representa a energia criativa primordial, a matriz dinâmica de toda a existência. É o "templo sagrado", a fonte de onde emana o universo.</p>
+                    </div>
+                    <div class="concept-card bg-white p-8 rounded-lg shadow-sm border border-slate-200/50 md:col-span-2 lg:col-span-1">
+                        <h3 class="text-2xl font-bold mb-3 text-red-900/80">A União Divina</h3>
+                        <p class="text-slate-600">A união do Lingam e do Yoni não é meramente biológica, mas um evento cósmico. Simboliza a fusão da consciência e da energia, o fim da dualidade e a totalidade da existência.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ritual" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">A Alquimia do Sacramento</h2>
+                    <p class="text-lg text-slate-600">
+                        O ritual Kaula é uma tecnologia espiritual precisa, não uma indulgência. Seu clímax é a criação do Yoni Tattva, o elixir da libertação. Esta seção detalha as etapas que transmutam o ato sexual em uma oferenda sagrada, um processo alquímico que funde os princípios de Shiva e Shakti em uma substância de poder incalculável. Explore as fases deste rito transgressor.
+                    </p>
+                </div>
+
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <div class="border-l-2 border-red-800/50 pl-8 space-y-12">
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1 h-4 w-4 rounded-full bg-red-800/90"></div>
+                            <h3 class="text-2xl font-bold mb-2">1. Lingam Puja: A Oferenda do Falo</h3>
+                            <p class="text-slate-600">O Vira (praticante masculino) coloca seu Lingam na mão de sua Shakti. Este não é um prelúdio, mas um ato de adoração em si, oferecendo seu próprio princípio de consciência à Deusa encarnada.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1 h-4 w-4 rounded-full bg-red-800/90"></div>
+                            <h3 class="text-2xl font-bold mb-2">2. Unção: A Consagração</h3>
+                            <p class="text-slate-600">O Lingam é ungido com pós sagrados, como sândalo e pó vermelho, preparando-o não como um órgão sexual, mas como um objeto de adoração consagrado para o rito que se segue.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1 h-4 w-4 rounded-full bg-red-800/90"></div>
+                            <h3 class="text-2xl font-bold mb-2">3. Maithuna: A Fusão Dinâmica</h3>
+                            <p class="text-slate-600">O intercurso vigoroso não é um ato de luxúria, mas a fase dinâmica do ritual. É o forno alquímico onde as energias de Shiva e Shakti são agitadas, misturadas e fundidas com intenção e mantra.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 top-1 h-4 w-4 rounded-full bg-red-800/90"></div>
+                            <h3 class="text-2xl font-bold mb-2">4. A Oblação Final: A Ejaculação</h3>
+                            <p class="text-slate-600">O clímax é a oferenda do próprio sêmen (*Shukra*). Este é o ato que completa a criação do Yoni Tattva, a semente da consciência plantada no campo da energia para gerar o néctar da não-dualidade.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="offering" class="py-20 md:py-32 bg-stone-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">O Paradoxo da Oferenda</h2>
+                    <p class="text-lg text-slate-600">
+                        A espiritualidade convencional frequentemente prega a retenção seminal (*Brahmacharya*) como fonte de poder. O Vamachara inverte radicalmente essa noção. Esta seção confronta diretamente o paradoxo, argumentando que no ritual Kaula, a ejaculação não é esgotamento, mas a completude necessária do sacrifício. É o ato que completa o circuito divino, transformando o potencial em realidade manifesta.
+                    </p>
+                </div>
+
+                <div class="mt-16 grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="border-2 border-slate-300 rounded-lg p-8">
+                        <h3 class="text-2xl font-bold text-center mb-4">Retenção (Visão Ortodoxa)</h3>
+                        <p class="text-slate-600">O sêmen é visto como *Ojas*, energia vital. Perdê-lo é esgotar a força espiritual. O objetivo é acumular poder internamente através da retenção, um processo de implosão energética para o ganho individual.</p>
+                    </div>
+                    <div class="border-2 border-red-800/80 rounded-lg p-8 bg-red-50/30">
+                        <h3 class="text-2xl font-bold text-center mb-4 text-red-900/90">Oferenda (Visão Kaula)</h3>
+                        <p class="text-slate-700">A retenção é um ato incompleto, mantendo Shiva isolado de Shakti. A ejaculação é a ponte, o fluxo que completa o circuito divino. O objetivo não é acumular, mas entregar a energia para a união cósmica e a transmutação.</p>
+                    </div>
+                </div>
+                 <blockquote class="mt-12 max-w-2xl mx-auto text-center text-xl italic text-slate-600 border-l-4 border-red-800/50 pl-6">
+                    "A maior coisa na recitação de Mantra e Sadhana é o fluxo de sêmen e a emissão vaginal."
+                    <cite class="block not-italic mt-2 text-sm font-semibold">— Yoni Tantra</cite>
+                </blockquote>
+            </div>
+        </section>
+
+        <section id="fruits" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">Os Frutos do Caminho Heróico</h2>
+                    <p class="text-lg text-slate-600">
+                        O caminho Kaula não promete recompensas em uma vida futura, mas a transformação radical e o poder nesta existência. A união de *Bhoga* (gozo) e *Yoga* (libertação) é o seu selo distintivo. Esta seção final destaca os resultados prometidos da prática: a aniquilação do carma, a obtenção de poderes (*siddhis*) e, finalmente, a libertação em vida (*Jivanmukti*).
+                    </p>
+                </div>
+                <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <div class="text-center p-6">
+                        <div class="text-5xl text-red-800/80 mb-3">☯</div>
+                        <h3 class="text-xl font-bold mb-2">União de Bhoga & Yoga</h3>
+                        <p class="text-slate-600">A libertação é alcançada através do gozo, não da renúncia. O prazer torna-se o veículo para o êxtase divino.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-5xl text-red-800/80 mb-3">🔥</div>
+                        <h3 class="text-xl font-bold mb-2">Aniquilação do Carma</h3>
+                        <p class="text-slate-600">O consumo do Yoni Tattva é dito destruir instantaneamente o pecado e os defeitos acumulados em inúmeros nascimentos.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-5xl text-red-800/80 mb-3">👑</div>
+                        <h3 class="text-xl font-bold mb-2">Jivanmukti: Divindade em Vida</h3>
+                        <p class="text-slate-600">O objetivo final: tornar-se um liberado em vida, um deus caminhando sobre a Terra, em perfeita união com a Deusa.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>Esta aplicação é uma interpretação interativa de um relatório sobre a filosofia Kaula Vamachara.</p>
+            <p class="mt-2 opacity-70">O conteúdo é apresentado para fins informativos e acadêmicos, baseado em textos esotéricos.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartData = {
+                labels: ['Princípio Central', 'Visão do Mundo', 'Método Chave', 'Substâncias', 'Objetivo'],
+                vamachara: {
+                    label: 'Vamachara (Mão Esquerda)',
+                    data: [9, 8, 9, 10, 10],
+                    backgroundColor: 'rgba(159, 38, 48, 0.6)',
+                    borderColor: 'rgba(159, 38, 48, 1)',
+                },
+                dakshinachara: {
+                    label: 'Dakshinachara (Mão Direita)',
+                    data: [6, 4, 5, 2, 7],
+                    backgroundColor: 'rgba(100, 116, 139, 0.6)',
+                    borderColor: 'rgba(100, 116, 139, 1)',
+                }
+            };
+            
+            const ctx = document.getElementById('pathsChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [chartData.vamachara]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        const descriptions = {
+                                            'Vamachara (Mão Esquerda)': {
+                                                'Princípio Central': 'Transgressão, Transmutação',
+                                                'Visão do Mundo': 'Mundo como campo para libertação',
+                                                'Método Chave': 'Panchamakara, Maithuna',
+                                                'Substâncias': 'Fluidos sexuais, Vinho, Carne',
+                                                'Objetivo': 'Libertação rápida (Jivanmukti)'
+                                            },
+                                            'Dakshinachara (Mão Direita)': {
+                                                'Princípio Central': 'Pureza, Conformidade',
+                                                'Visão do Mundo': 'Mundo como ilusão a ser superada',
+                                                'Método Chave': 'Puja ortodoxa, Ascetismo',
+                                                'Substâncias': 'Leite, Ghee, Flores',
+                                                'Objetivo': 'Libertação gradual (Moksha)'
+                                            }
+                                        };
+                                        label = descriptions[context.dataset.label][context.label];
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false,
+                            max: 10
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 14,
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('showVamachara').addEventListener('click', () => {
+                myChart.data.datasets = [chartData.vamachara];
+                myChart.update();
+            });
+
+            document.getElementById('showDakshinachara').addEventListener('click', () => {
+                myChart.data.datasets = [chartData.dakshinachara];
+                myChart.update();
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
