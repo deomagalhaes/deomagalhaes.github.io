@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Atenção (DSM-5-TR) – Deo Magalhães</title>
+  <meta name="description" content="Autoavaliação baseada nos critérios do DSM-5-TR para sintomas de desatenção.">
+  <link rel="icon" type="image/png" href="/assets/favicon2.png">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .quiz-container { background: #f9f9f9; border-radius: 8px; padding: 2rem; margin: 2rem auto; border: 1px solid #eee; max-width: 650px; }
+    .question-block { margin-bottom: 2rem; }
+    .question-text { font-weight: 600; margin-bottom: 1rem; }
+    .options-list { list-style: none; padding: 0; }
+    .option-item { margin-bottom: 0.75rem; }
+    .option-item label { display: flex; align-items: center; background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 0.8rem 1rem; cursor: pointer; transition: background 0.2s, border 0.2s; }
+    .option-item input[type="radio"] { margin-right: 1rem; accent-color: #005f73; }
+    .option-item label:hover { background: #f0f8ff; }
+    .submit-button { width: 100%; padding: 1rem; font-size: 1.1rem; font-weight: 700; color: #fff; background: #005f73; border: none; border-radius: 8px; cursor: pointer; margin-top: 1.5rem; transition: background 0.3s; }
+    .submit-button:hover { background: #003e4d; }
+    #results-container { margin-top: 2rem; padding: 2rem; background: #eef7fa; border-radius: 8px; border-left: 5px solid #005f73; display: none; }
+    #results-container h2 { color: #003e4d; }
+    .result-feedback { font-size: 1.1rem; margin-top: 1rem; }
+    .disclaimer-box { background: #fffbe6; border: 1px solid #ffe58f; color: #8a6d3b; padding: 1rem; border-radius: 8px; margin-top: 2rem; font-size: 0.95rem; }
+    #attentionRadarChart { max-width: 400px; margin: 2rem auto 0 auto; display: block; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"><div class="container top-bar-content"></div></div>
+  <header id="main-header">
+    <div class="header-content container">
+      <a href="/index.html" class="logo-container"></a>
+      <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+      <nav id="main-nav"></nav>
+    </div>
+  </header>
+  <main>
+    <div class="container article-container">
+      <header class="article-header">
+        <h1>Como está sua Atenção?</h1>
+        <p class="article-author-date">Autoavaliação baseada no DSM-5-TR – resultado imediato</p>
+      </header>
+      <article class="article-body">
+        <div class="quiz-container" id="quiz-container">
+          <form id="quiz-form">
+            <div class="question-block">
+              <div class="question-text">1. Com que frequência você comete erros por descuido em tarefas do dia a dia?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q1" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q1" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q1" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">2. Tem dificuldade para manter a atenção em tarefas ou atividades?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q2" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q2" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q2" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">3. Parece não escutar quando falam diretamente com você?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q3" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q3" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q3" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">4. Não segue instruções ou não termina tarefas?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q4" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q4" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q4" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">5. Tem dificuldade para organizar tarefas e atividades?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q5" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q5" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q5" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">6. Evita ou se sente relutante em se envolver em tarefas que exigem esforço mental prolongado?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q6" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q6" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q6" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">7. Perde objetos necessários para tarefas (chaves, celular, etc)?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q7" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q7" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q7" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <div class="question-block">
+              <div class="question-text">8. Distrai-se facilmente com estímulos externos?</div>
+              <ul class="options-list">
+                <li class="option-item"><label><input type="radio" name="q8" value="3"><span>Frequentemente</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q8" value="2"><span>Às vezes</span></label></li>
+                <li class="option-item"><label><input type="radio" name="q8" value="1"><span>Raramente</span></label></li>
+              </ul>
+            </div>
+            <button type="submit" class="submit-button">Ver Resultado</button>
+          </form>
+          <div id="results-container">
+            <h2>Seu Resultado</h2>
+            <canvas id="attentionRadarChart" width="400" height="400"></canvas>
+            <div class="result-feedback" id="result-feedback"></div>
+            <div class="disclaimer-box">
+              Este teste é apenas um instrumento de autopercepção e não substitui avaliação profissional. Se você sente prejuízos importantes, procure um neuropsicólogo.
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="main-footer">
+    <div class="container footer-grid"></div>
+    <div class="footer-bottom"></div>
+  </footer>
+  <script src="/assets/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('quiz-form');
+      const results = document.getElementById('results-container');
+      const feedback = document.getElementById('result-feedback');
+      let radarChart = null;
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Coleta respostas
+        let total = 0;
+        let answers = [];
+        for (let i = 1; i <= 8; i++) {
+          const val = form['q'+i].value;
+          if (!val) return alert('Responda todas as perguntas!');
+          answers.push(parseInt(val));
+          total += parseInt(val);
+        }
+        // Mapeamento para domínios (DSM-5-TR)
+        const domains = {
+          "Atenção Sustentada": (answers[1] + answers[3] + answers[7]) / 3,
+          "Organização": (answers[4] + answers[5]) / 2,
+          "Memória de Trabalho": (answers[0] + answers[6]) / 2,
+          "Escuta Ativa": answers[2],
+        };
+        results.style.display = 'block';
+        // Radar Chart
+        const ctx = document.getElementById('attentionRadarChart').getContext('2d');
+        if (radarChart) radarChart.destroy();
+        radarChart = new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: Object.keys(domains),
+            datasets: [{
+              label: 'Nível de Dificuldade (quanto maior, mais dificuldade)',
+              data: Object.values(domains),
+              backgroundColor: 'rgba(86,172,224,0.2)',
+              borderColor: '#005f73',
+              pointBackgroundColor: '#005f73',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            scales: {
+              r: {
+                min: 1,
+                max: 3,
+                ticks: { stepSize: 1, color: '#333' },
+                pointLabels: { font: { size: 14 } }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+        // Feedback
+        let msg = '';
+        if (total <= 12) {
+          msg = 'Sua atenção está muito boa! Poucos sinais de desatenção.';
+        } else if (total <= 18) {
+          msg = 'Atenção moderada: alguns sintomas de desatenção, fique atento ao impacto no dia a dia.';
+        } else {
+          msg = 'Atenção baixa: sintomas frequentes de desatenção. Considere buscar avaliação profissional.';
+        }
+        feedback.textContent = msg;
+        results.scrollIntoView({behavior: 'smooth'});
+      });
+    });
+  </script>
+</body>
+</html>

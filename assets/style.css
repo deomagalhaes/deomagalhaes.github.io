@@ -1528,4 +1528,20 @@ main > section.contact-section-home:not(.hero) {
     padding: 0.7rem 0;
   }
 }
+/* Cards lado a lado na versão desktop */
+.highlight-cards-flex {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+.highlight-cards-flex .highlight-card {
+  min-width: 320px;
+  max-width: 100%;
+}
+@media (max-width: 900px) {
+  .highlight-cards-flex {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
 /* --- Fim do CSS --- */
