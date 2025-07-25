@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Memória Visual – Deo Magalhães</title>
+  <meta name="description" content="Exercício prático de memória visual para estimular atenção e raciocínio.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .exercise-area { background:#f9f6ee; border-radius:14px; box-shadow:0 2px 12px #005f731a; padding:1.5rem 1.5rem; max-width:600px; margin:auto; margin-top:2rem;}
+    #memory-game { display:grid; grid-template-columns:repeat(4,60px); gap:10px; justify-content:center; margin-bottom:1rem;}
+    .exercise-area h2 { color:#005f73; font-size:1.5rem; margin-bottom:0.5rem;}
+    .exercise-area p { color:#194f82; margin-bottom:1rem;}
+    #memory-ranking { margin-bottom:0.7rem; color:#005f73;}
+    .cta-button { background:#005f73; color:#fff; font-weight:600; padding:0.5rem 1.2rem; border-radius:6px; font-size:1rem;}
+  </style>
+</head>
+<body>
+  <div class="exercise-area">
+    <h2>Exercício Prático: Jogo de Memória Visual</h2>
+    <p>Teste sua atenção e memória! Clique nos pares de cartas iguais. Tente terminar com o menor número de movimentos possível.</p>
+    <div id="memory-game"></div>
+    <div style="margin-bottom:0.7rem;">
+      <span>Movimentos: <span id="moves-count">0</span></span> |
+      <span>Pontuação: <span id="score-count">0</span></span>
+    </div>
+    <div id="memory-ranking"></div>
+    <button id="restart-memory" class="cta-button">Jogar Novamente</button>
+    <br><br>
+    <a href="../index.html" class="cta-button secondary" style="background:#eee; color:#005f73;">Voltar à Página Inicial</a>
+  </div>
+  <script>
+    (function(){
+      const cards = ['🍎','🍎','🍌','🍌','🍇','🍇','🍉','🍉'];
+      let gameCards = [], moves = 0, score = 0, flipped = [], matched = 0;
+      const gameDiv = document.getElementById('memory-game');
+      const movesSpan = document.getElementById('moves-count');
+      const scoreSpan = document.getElementById('score-count');
+      const rankingDiv = document.getElementById('memory-ranking');
+      const restartBtn = document.getElementById('restart-memory');
+
+      function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+      function renderGame() {
+        gameDiv.innerHTML = '';
+        gameCards.forEach((card, i) => {
+          const btn = document.createElement('button');
+          btn.setAttribute('data-idx', i);
+          btn.style.width = '60px';
+          btn.style.height = '60px';
+          btn.style.fontSize = '2rem';
+          btn.style.background = flipped.includes(i) || matchedCards.includes(i) ? '#fff' : '#56ACE0';
+          btn.style.border = '1px solid #005f73';
+          btn.style.borderRadius = '8px';
+          btn.style.cursor = 'pointer';
+          btn.textContent = flipped.includes(i) || matchedCards.includes(i) ? card : '';
+          btn.onclick = () => flipCard(i);
+          gameDiv.appendChild(btn);
+        });
+        movesSpan.textContent = moves;
+        scoreSpan.textContent = score;
+      }
+      let matchedCards = [];
+      function flipCard(idx) {
+        if (flipped.length === 2 || flipped.includes(idx) || matchedCards.includes(idx)) return;
+        flipped.push(idx);
+        renderGame();
+        if (flipped.length === 2) {
+          moves++;
+          if (gameCards[flipped[0]] === gameCards[flipped[1]]) {
+            matchedCards.push(flipped[0], flipped[1]);
+            score += 10;
+            setTimeout(() => {
+              flipped = [];
+              matched += 2;
+              renderGame();
+              if (matched === cards.length) endGame();
+            }, 700);
+          } else {
+            setTimeout(() => {
+              flipped = [];
+              renderGame();
+            }, 700);
+          }
+        }
+      }
+      function endGame() {
+        let best = localStorage.getItem('memoryBest');
+        if (!best || moves < best) {
+          localStorage.setItem('memoryBest', moves);
+          rankingDiv.textContent = `Novo recorde! Seu melhor: ${moves} movimentos.`;
+        } else {
+          rankingDiv.textContent = `Seu melhor: ${best} movimentos.`;
+        }
+      }
+      function startGame() {
+        gameCards = shuffle([...cards]);
+        moves = 0; score = 0; flipped = []; matched = 0; matchedCards = [];
+        rankingDiv.textContent = '';
+        renderGame();
+      }
+      restartBtn.onclick = startGame;
+      startGame();
+    })();
+  </script>
+</body>
+</html>

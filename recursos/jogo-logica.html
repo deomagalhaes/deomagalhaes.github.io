@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Lógica – Deo Magalhães</title>
+  <meta name="description" content="Exercício prático de lógica para estimular raciocínio e atenção.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .exercise-area { background:#f9f6ee; border-radius:14px; box-shadow:0 2px 12px #005f731a; padding:1.5rem 1.5rem; max-width:600px; margin:auto; margin-top:2rem;}
+    .logic-seq { font-size:1.3rem; margin-bottom:1rem; color:#005f73;}
+    .logic-input { font-size:1.1rem; padding:0.5rem; border-radius:6px; border:1px solid #56ACE0; width:80px; margin-right:0.5rem;}
+    .cta-button { background:#005f73; color:#fff; font-weight:600; padding:0.5rem 1.2rem; border-radius:6px; font-size:1rem;}
+    #logic-ranking { margin-top:0.7rem; color:#005f73;}
+  </style>
+</head>
+<body>
+  <div class="exercise-area">
+    <h2>Exercício Prático: Jogo de Lógica</h2>
+    <p>Descubra o próximo número da sequência lógica. Teste seu raciocínio e tente bater seu próprio recorde!</p>
+    <div id="logic-sequence" class="logic-seq"></div>
+    <input type="number" id="logic-answer" class="logic-input" placeholder="Resposta">
+    <button id="logic-submit" class="cta-button">Responder</button>
+    <div id="logic-feedback" style="margin:0.7rem 0; color:#194f82;"></div>
+    <div>Pontuação: <span id="logic-score">0</span></div>
+    <div id="logic-ranking"></div>
+    <button id="logic-restart" class="cta-button" style="margin-top:1rem;">Novo Desafio</button>
+    <br><br>
+    <a href="../index.html" class="cta-button secondary" style="background:#eee; color:#005f73;">Voltar à Página Inicial</a>
+  </div>
+  <script>
+    (function(){
+      // Sequências lógicas simples
+      const sequences = [
+        { seq: [2, 4, 6, 8, '?'], answer: 10, tip: 'Progressão de +2' },
+        { seq: [1, 4, 9, 16, '?'], answer: 25, tip: 'Quadrados perfeitos' },
+        { seq: [3, 6, 12, 24, '?'], answer: 48, tip: 'Multiplica por 2' },
+        { seq: [5, 10, 20, 40, '?'], answer: 80, tip: 'Multiplica por 2' },
+        { seq: [7, 14, 21, 28, '?'], answer: 35, tip: 'Soma 7' },
+        { seq: [2, 3, 5, 8, '?'], answer: 13, tip: 'Soma anterior' },
+        { seq: [1, 2, 4, 7, '?'], answer: 11, tip: 'Soma anterior +1' },
+        { seq: [10, 7, 4, 1, '?'], answer: -2, tip: 'Subtrai 3' },
+        { seq: [1, 1, 2, 3, 5, '?'], answer: 8, tip: 'Fibonacci' },
+        { seq: [100, 90, 80, 70, '?'], answer: 60, tip: 'Subtrai 10' }
+      ];
+      let score = 0, best = localStorage.getItem('logicBest') || 0;
+      let current = 0;
+      const seqDiv = document.getElementById('logic-sequence');
+      const answerInput = document.getElementById('logic-answer');
+      const submitBtn = document.getElementById('logic-submit');
+      const feedbackDiv = document.getElementById('logic-feedback');
+      const scoreSpan = document.getElementById('logic-score');
+      const rankingDiv = document.getElementById('logic-ranking');
+      const restartBtn = document.getElementById('logic-restart');
+
+      function showSequence() {
+        const s = sequences[current];
+        seqDiv.textContent = `Sequência: ${s.seq.join(', ')}`;
+        answerInput.value = '';
+        feedbackDiv.textContent = '';
+      }
+      function checkAnswer() {
+        const val = parseInt(answerInput.value);
+        if (isNaN(val)) {
+          feedbackDiv.textContent = 'Digite um número!';
+          return;
+        }
+        if (val === sequences[current].answer) {
+          score += 10;
+          feedbackDiv.textContent = 'Correto! ' + sequences[current].tip;
+          nextSequence();
+        } else {
+          feedbackDiv.textContent = 'Tente novamente!';
+          score = Math.max(0, score - 2);
+        }
+        scoreSpan.textContent = score;
+      }
+      function nextSequence() {
+        setTimeout(() => {
+          current++;
+          if (current >= sequences.length) {
+            endGame();
+          } else {
+            showSequence();
+          }
+        }, 900);
+      }
+      function endGame() {
+        feedbackDiv.textContent = 'Fim do desafio!';
+        if (score > best) {
+          localStorage.setItem('logicBest', score);
+          rankingDiv.textContent = `Novo recorde! Seu melhor: ${score} pontos.`;
+        } else {
+          rankingDiv.textContent = `Seu melhor: ${best} pontos.`;
+        }
+      }
+      function startGame() {
+        score = 0; current = 0; scoreSpan.textContent = score;
+        rankingDiv.textContent = '';
+        showSequence();
+      }
+      submitBtn.onclick = checkAnswer;
+      restartBtn.onclick = startGame;
+      startGame();
+    })();
+  </script>
+</body>
+</html>
