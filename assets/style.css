@@ -1544,4 +1544,31 @@ main > section.contact-section-home:not(.hero) {
     gap: 1.5rem;
   }
 }
+/* ===================================================================== */
+/* ||          AJUSTE PARA CARDS DE TESTE (ÍCONE EM CIMA)           || */
+/* ===================================================================== */
+
+.highlight-card {
+    /* Muda a direção do flex para coluna (vertical) */
+    flex-direction: column;
+    
+    /* Centraliza o conteúdo horizontalmente */
+    align-items: center;
+    
+    /* Alinha o texto no centro */
+    text-align: center;
+    
+    /* Adiciona um espaçamento maior entre o ícone e o texto */
+    gap: 1.5rem; 
+}
+
+/* Garante que o ícone não tenha margem desnecessária */
+.highlight-card .highlight-card-icon {
+    margin: 0;
+}
+
+/* Centraliza o botão de ação dentro do card */
+.highlight-card .cta-button {
+    margin-top: auto; /* Empurra o botão para o final do card */
+}
 /* --- Fim do CSS --- */
