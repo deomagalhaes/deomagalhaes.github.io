@@ -1500,75 +1500,56 @@ main > section.contact-section-home:not(.hero) {
     margin-right: auto;
   }
 }
-/* Responsividade para o card do Teste de Apego */
-.highlight-card-section .highlight-card {
-  flex-wrap: wrap;
-  flex-direction: row;
-}
-@media (max-width: 700px) {
-  .highlight-card-section .highlight-card {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1.2rem 1rem;
-    gap: 1.2rem;
-    text-align: center;
-  }
-  .highlight-card-section .highlight-card-icon {
-    margin: 0 auto;
-  }
-  .highlight-card-section .highlight-card-content h2 {
-    font-size: 1.2rem;
-  }
-  .highlight-card-section .highlight-card-content p {
-    font-size: 1rem;
-  }
-  .highlight-card-section .cta-button {
-    width: 100%;
-    font-size: 1rem;
-    padding: 0.7rem 0;
-  }
-}
-/* Cards lado a lado na versão desktop */
+/* ===================================================================== */
+/* ||      ESTILO COMPLETO E CORRIGIDO PARA OS CARDS DE DESTAQUE     || */
+/* ===================================================================== */
+
+/* --- Contêiner dos Cards (Desktop e Mobile) --- */
 .highlight-cards-flex {
   display: flex;
-  gap: 2.5rem;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Permite que os cards quebrem a linha */
+  gap: 2.5rem;     /* Espaçamento padrão entre os cards */
+  width: 100%;     /* Garante que o contêiner ocupe todo o espaço */
 }
-.highlight-cards-flex .highlight-card {
-  min-width: 320px;
-  max-width: 100%;
+
+/* --- Estilo de Cada Card Individual (Desktop) --- */
+.highlight-card {
+  /* Layout interno do card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  /* Comportamento no layout flex */
+  flex-grow: 1;         /* Permite que o card cresça */
+  flex-basis: 320px;    /* Largura base ideal */
+  
+  /* Estilo visual */
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 95, 115, 0.1);
 }
+
+.highlight-card .highlight-card-icon {
+  margin-bottom: 1.5rem; /* Espaço abaixo do ícone */
+}
+
+.highlight-card .cta-button {
+  margin-top: auto; /* Alinha os botões na base */
+}
+
+/* --- Correção Específica e Final para Mobile --- */
 @media (max-width: 900px) {
   .highlight-cards-flex {
-    flex-direction: column;
-    gap: 1.5rem;
+    flex-direction: column; /* Empilha os cards verticalmente */
+    align-items: stretch;   /* Força os cards a ocupar 100% da largura */
+    gap: 1.5rem;            /* Espaçamento vertical no mobile */
   }
-}
-/* ===================================================================== */
-/* ||          AJUSTE PARA CARDS DE TESTE (ÍCONE EM CIMA)           || */
-/* ===================================================================== */
 
-.highlight-card {
-    /* Muda a direção do flex para coluna (vertical) */
-    flex-direction: column;
-    
-    /* Centraliza o conteúdo horizontalmente */
-    align-items: center;
-    
-    /* Alinha o texto no centro */
-    text-align: center;
-    
-    /* Adiciona um espaçamento maior entre o ícone e o texto */
-    gap: 1.5rem; 
-}
-
-/* Garante que o ícone não tenha margem desnecessária */
-.highlight-card .highlight-card-icon {
-    margin: 0;
-}
-
-/* Centraliza o botão de ação dentro do card */
-.highlight-card .cta-button {
-    margin-top: auto; /* Empurra o botão para o final do card */
+  .highlight-card {
+    /* Garante que o card ocupe 100% da largura e reseta o comportamento de crescimento */
+    flex-basis: 100%;
+    flex-grow: 0;
+  }
 }
 /* --- Fim do CSS --- */

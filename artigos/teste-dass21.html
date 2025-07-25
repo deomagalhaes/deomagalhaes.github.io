@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste DASS-21: Escala de Ansiedade, Depressão e Estresse – Deo Magalhães</title>
+    <meta name="description" content="Avalie gratuitamente seus níveis de ansiedade, depressão e estresse com a Escala DASS-21. Resultado imediato, gráfico e orientações.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    
+    <!-- Seu CSS Principal -->
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <!-- Estilos Específicos para a Página de Teste -->
+    <style>
+        /* --- Estilos para a Página de Teste --- */
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-lg) 20px;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: var(--spacing-md);
+        }
+
+        .test-header h1 {
+            font-size: 2.8em;
+            color: var(--primary-dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .test-header p {
+            font-size: 1.2em;
+            color: var(--text-color-light);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .test-question-block {
+            margin-bottom: var(--spacing-md);
+            background-color: #fdfdfd;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-md);
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .test-question-block.answered {
+            border-left: 5px solid var(--primary-vibrant-blue);
+        }
+
+        .test-question-block p {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--text-color-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .test-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .test-options label {
+            display: block;
+            padding: 12px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+
+        .test-options input[type="radio"] {
+            display: none; /* Esconde o botão de rádio padrão */
+        }
+
+        .test-options input[type="radio"]:checked + label {
+            background-color: var(--primary-dark-blue);
+            color: white;
+            border-color: var(--primary-dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-options label:hover {
+            background-color: #f1f5f9;
+            border-color: var(--primary-vibrant-blue);
+        }
+
+        .test-submit-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: white;
+            background-color: var(--primary-vibrant-blue);
+            border: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            margin-top: var(--spacing-lg);
+            transition: background-color 0.2s ease;
+        }
+
+        .test-submit-button:hover {
+            background-color: var(--primary-vibrant-blue-darker);
+        }
+        
+        .test-submit-button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        /* --- Estilos para a Seção de Resultados --- */
+        #test-results {
+            display: none; /* Começa escondido */
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+        }
+        
+        #test-results h2 {
+            font-size: 2.2em;
+            color: var(--primary-dark-blue);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .result-card {
+            background-color: white;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .result-card h3 {
+            font-size: 1.3em;
+            color: var(--primary-dark-blue);
+            margin-bottom: 10px;
+        }
+
+        .result-card .score {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result-card .level {
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 50px;
+            color: white;
+        }
+        
+        .disclaimer {
+            font-style: italic;
+            color: var(--text-color-light);
+            margin-top: var(--spacing-lg);
+            font-size: 0.9em;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: var(--spacing-md);
+            text-decoration: none;
+            color: var(--primary-dark-blue);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .test-header h1 { font-size: 2.2em; }
+            .test-header p { font-size: 1.1em; }
+            .test-options { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Use o mesmo cabeçalho do seu site para consistência -->
+    <header id="main-header">
+        <!-- Cole o código do seu cabeçalho aqui -->
+    </header>
+
+    <main>
+        <div class="test-container">
+            <div class="test-header">
+                <h1>Escala de Ansiedade, Depressão e Estresse (DASS-21)</h1>
+                <p>Responda a cada item indicando o quanto ele se aplicou a você durante a **última semana**. Não há respostas certas ou erradas.</p>
+            </div>
+
+            <form id="dass21-form">
+                <!-- As 21 questões serão inseridas aqui pelo JavaScript -->
+                <div id="questions-wrapper"></div>
+
+                <button type="submit" id="submit-btn" class="test-submit-button" disabled>Ver Resultado</button>
+            </form>
+
+            <div id="test-results">
+                <h2>Seu Resultado</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Depressão</h3>
+                        <p class="score" id="depression-score">0</p>
+                        <p class="level" id="depression-level">Normal</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>Ansiedade</h3>
+                        <p class="score" id="anxiety-score">0</p>
+                        <p class="level" id="anxiety-level">Normal</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>Estresse</h3>
+                        <p class="score" id="stress-score">0</p>
+                        <p class="level" id="stress-level">Normal</p>
+                    </div>
+                </div>
+                <div id="interpretation">
+                    <!-- Interpretação dos resultados será inserida aqui -->
+                </div>
+                <p class="disclaimer">
+                    <strong>Atenção:</strong> Este teste é uma ferramenta de rastreio e não substitui uma avaliação diagnóstica realizada por um profissional qualificado. Os resultados servem como um indicador e um ponto de partida para o autoconhecimento. Se seus resultados indicam níveis elevados de sofrimento, considere buscar ajuda profissional.
+                </p>
+                <a href="../index.html" class="back-button">← Voltar para a Home</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Use o mesmo rodapé do seu site -->
+    <footer class="main-footer">
+        <!-- Cole o código do seu rodapé aqui -->
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const questions = [
+            { text: "Achei difícil me acalmar.", scale: 'A' },
+            { text: "Senti minha boca seca.", scale: 'A' },
+            { text: "Não consegui sentir nenhum sentimento positivo.", scale: 'D' },
+            { text: "Tive dificuldade em respirar (ex: respiração ofegante, falta de ar sem ter feito esforço físico).", scale: 'A' },
+            { text: "Achei difícil ter a iniciativa para fazer as coisas.", scale: 'D' },
+            { text: "Tendi a reagir de forma exagerada às situações.", scale: 'S' },
+            { text: "Senti tremores (ex: nas mãos).", scale: 'A' },
+            { text: "Senti que estava usando muita energia nervosa.", scale: 'S' },
+            { text: "Preocupei-me com situações em que eu pudesse entrar em pânico e parecer ridículo(a).", scale: 'A' },
+            { text: "Senti que não tinha nada a esperar do futuro.", scale: 'D' },
+            { text: "Senti-me agitado(a).", scale: 'S' },
+            { text: "Achei difícil relaxar.", scale: 'S' },
+            { text: "Senti-me triste e deprimido(a).", scale: 'D' },
+            { text: "Fui intolerante com coisas que me impediam de continuar o que eu estava fazendo.", scale: 'S' },
+            { text: "Senti que estava prestes a entrar em pânico.", scale: 'A' },
+            { text: "Não consegui me entusiasmar com nada.", scale: 'D' },
+            { text: "Senti que não tinha valor como pessoa.", scale: 'D' },
+            { text: "Senti que estava um pouco emotivo(a) demais.", scale: 'S' },
+            { text: "Eu estava ciente das batidas do meu coração na ausência de esforço físico (ex: sensação de aumento da frequência cardíaca, ou de pular uma batida).", scale: 'A' },
+            { text: "Senti-me assustado(a) sem motivo.", scale: 'A' },
+            { text: "Senti que a vida não tinha sentido.", scale: 'D' }
+        ];
+
+        const options = [
+            { text: "Não se aplicou a mim", value: 0 },
+            { text: "Aplicou-se em algum grau", value: 1 },
+            { text: "Aplicou-se consideravelmente", value: 2 },
+            { text: "Aplicou-se muito, ou na maioria das vezes", value: 3 }
+        ];
+
+        const form = document.getElementById('dass21-form');
+        const questionsWrapper = document.getElementById('questions-wrapper');
+        const submitBtn = document.getElementById('submit-btn');
+        let answeredCount = 0;
+
+        // Gerar as questões no HTML
+        questions.forEach((q, index) => {
+            const questionBlock = document.createElement('div');
+            questionBlock.className = 'test-question-block';
+            questionBlock.id = `q-block-${index}`;
+            
+            let optionsHTML = options.map(opt => `
+                <input type="radio" id="q${index}_opt${opt.value}" name="q${index}" value="${opt.value}" data-scale="${q.scale}" required>
+                <label for="q${index}_opt${opt.value}">${opt.text}</label>
+            `).join('');
+
+            questionBlock.innerHTML = `
+                <p>${index + 1}. ${q.text}</p>
+                <div class="test-options">${optionsHTML}</div>
+            `;
+            questionsWrapper.appendChild(questionBlock);
+        });
+        
+        // Monitorar respostas para habilitar o botão
+        form.addEventListener('change', (e) => {
+            if (e.target.type === 'radio') {
+                const questionBlock = document.getElementById(`q-block-${e.target.name.substring(1)}`);
+                if (!questionBlock.classList.contains('answered')) {
+                    questionBlock.classList.add('answered');
+                    answeredCount++;
+                }
+                if (answeredCount === questions.length) {
+                    submitBtn.disabled = false;
+                }
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let scores = { D: 0, A: 0, S: 0 };
+            const formData = new FormData(form);
+
+            for (let i = 0; i < questions.length; i++) {
+                const value = parseInt(formData.get(`q${i}`), 10);
+                const scale = questions[i].scale;
+                scores[scale] += value;
+            }
+
+            // Os escores da DASS-21 são multiplicados por 2 para se equiparar à DASS-42
+            scores.D *= 2;
+            scores.A *= 2;
+            scores.S *= 2;
+
+            displayResults(scores);
+            
+            // Esconder o formulário e mostrar os resultados
+            form.style.display = 'none';
+            document.getElementById('test-results').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('test-results').offsetTop - 100, behavior: 'smooth' });
+        });
+
+        function getLevel(score, type) {
+            const thresholds = {
+                D: { normal: 9, leve: 13, moderado: 20, severo: 27, extremo: Infinity },
+                A: { normal: 7, leve: 9, moderado: 14, severo: 19, extremo: Infinity },
+                S: { normal: 14, leve: 18, moderado: 25, severo: 33, extremo: Infinity }
+            };
+            const t = thresholds[type];
+            if (score <= t.normal) return { level: 'Normal', color: '#2ecc71' };
+            if (score <= t.leve) return { level: 'Leve', color: '#f1c40f' };
+            if (score <= t.moderado) return { level: 'Moderado', color: '#e67e22' };
+            if (score <= t.severo) return { level: 'Severo', color: '#e74c3c' };
+            return { level: 'Extremamente Severo', color: '#c0392b' };
+        }
+
+        function displayResults(scores) {
+            const depressionResult = getLevel(scores.D, 'D');
+            const anxietyResult = getLevel(scores.A, 'A');
+            const stressResult = getLevel(scores.S, 'S');
+
+            document.getElementById('depression-score').textContent = scores.D;
+            document.getElementById('depression-level').textContent = depressionResult.level;
+            document.getElementById('depression-level').style.backgroundColor = depressionResult.color;
+
+            document.getElementById('anxiety-score').textContent = scores.A;
+            document.getElementById('anxiety-level').textContent = anxietyResult.level;
+            document.getElementById('anxiety-level').style.backgroundColor = anxietyResult.color;
+
+            document.getElementById('stress-score').textContent = scores.S;
+            document.getElementById('stress-level').textContent = stressResult.level;
+            document.getElementById('stress-level').style.backgroundColor = stressResult.color;
+        }
+    });
+    </script>
+</body>
+</html>

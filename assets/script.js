@@ -70,4 +70,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-}); // Fim do 'DOMContentLoaded'
+}); 
+/* ===================================================================== */
+/* ||                 INICIALIZAÇÃO DO CARROSSEL DE TESTES            || */
+/* ===================================================================== */
+document.addEventListener('DOMContentLoaded', function () {
+    // Verifica se o elemento do carrossel de testes existe na página
+    if (document.querySelector('.tests-carousel')) {
+        const testsSwiper = new Swiper('.tests-carousel', {
+            // Configurações do carrossel
+            loop: true, // Faz o carrossel voltar ao início após o último slide
+            slidesPerView: 1, // Mostra 1 slide por vez
+            spaceBetween: 30, // Espaço entre os slides
+            
+            // Navegação por setas
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // Paginação por bolinhas
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true, // Permite clicar nas bolinhas para navegar
+            },
+            
+            // Autoplay (opcional, descomente para ativar)
+            /*
+            autoplay: {
+              delay: 5000, // Tempo em milissegundos (5 segundos)
+              disableOnInteraction: false,
+            },
+            */
+        });
+    }
+});
+// Fim do 'DOMContentLoaded'
