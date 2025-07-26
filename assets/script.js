@@ -1,20 +1,32 @@
 // Espera o documento HTML estar completamente carregado e pronto
 document.addEventListener('DOMContentLoaded', function() {
     
-    // ==================================================
-    // 1. CABEÇALHO DINÂMICO (ENCOLHE AO ROLAR)
-    // ==================================================
-    const header = document.getElementById('main-header');
-    if (header) {
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > 80) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-        });
-    }
+// ==================================================
+// 1. CABEÇALHO DINÂMICO (OTIMIZADO COM DEBOUNCE)
+// ==================================================
+const header = document.getElementById('main-header');
+if (header) {
+    let scrollTimeout; // Variável para guardar o timer
+
+    const handleScroll = function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > 10) {
+            header.classList.add('header-scrolled');
+        } else {
+            header.classList.remove('header-scrolled');
+        }
+    };
+
+    window.addEventListener('scroll', function() {
+        // Limpa o timer anterior sempre que um novo evento de scroll acontece
+        clearTimeout(scrollTimeout);
+
+        // Configura um novo timer para executar a função após 15ms
+        scrollTimeout = setTimeout(handleScroll, 15);
+    });
+}
+
+
 
     // ==================================================
     // 2. MENU MOBILE (BOTÃO HAMBÚRGUER)

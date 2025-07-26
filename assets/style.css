@@ -113,20 +113,28 @@ body {
     height: 20px;
 }
 
+/* ===================================================================== */
+/* ||      CABEÇALHO COM ENCOLHIMENTO REAL E SEM TRAVAMENTO           || */
+/* ===================================================================== */
+
 /* --- Cabeçalho Principal --- */
 #main-header {
     background-color: white;
-    padding: var(--spacing-sm) 0;
-    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 4px var(--shadow-color);
-    transition: padding var(--transition-normal);
+    border-bottom: 1px solid var(--border-color);
+    
+    /* A altura do cabeçalho é controlada pelo padding. */
+    padding: 15px 0;
+    
+    /* TRANSIÇÃO SELETIVA: Apenas o box-shadow será animado.
+       A mudança de 'padding' será instantânea para não travar a rolagem. */
+    transition: box-shadow var(--transition-normal);
 }
 
 #main-header.header-scrolled {
-    padding: 5px 0;
+    padding: 5px 0; /* Padding menor para encolher o cabeçalho */
     box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
 }
 
@@ -147,13 +155,14 @@ body {
 }
 
 .logo-container img {
-    height: 70px;
+    height: 70px; /* Altura inicial da logo */
     width: auto;
+    /* A transição na altura da logo cria o efeito suave de encolhimento. */
     transition: height var(--transition-normal);
 }
 
 #main-header.header-scrolled .logo-container img {
-    height: 55px;
+    height: 55px; /* Altura final da logo */
 }
 
 .logo-text {
@@ -187,6 +196,7 @@ nav a {
     font-weight: 500;
     padding: var(--spacing-xs) 16px;
     border-radius: var(--border-radius-sm);
+    /* A transição aqui garante que a mudança de cor de fundo seja suave. */
     transition: all var(--transition-normal);
 }
 
@@ -207,6 +217,7 @@ nav a.active {
     color: var(--primary-dark-blue);
     cursor: pointer;
 }
+
 
 /* --- Seções Principais --- */
 main {
