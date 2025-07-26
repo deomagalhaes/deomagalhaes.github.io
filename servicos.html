@@ -7,7 +7,8 @@
     <meta name="description" content="Conheça em detalhes os serviços oferecidos: Avaliação Neuropsicológica, Psicoterapias, Orientação Parental, Workshops e Consultoria.">
     <link rel="icon" type="image/png" href="assets/favicon2.png">
       <!-- ... outras tags meta, title, etc. ... -->
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+      <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
     <!-- Bloco de Cabeçalho Padrão -->
@@ -48,6 +49,187 @@
        <h1>Serviços</h1>
         <p>Explore em detalhes cada um dos serviços oferecidos, pensados para atender às necessidades específicas de cada indivíduo, família ou instituição.</p>
 </section>
+ <!-- Seção de Serviços com Carrossel -->
+        <section class="section-light" style="background-color: var(--light-gray);">
+            <div class="container">
+               
+                <!-- Estrutura do Carrossel Swiper -->
+                <div class="swiper services-carousel">
+                    <div class="swiper-wrapper">
+                      <!-- Slide 1: Avaliação Neuropsicológica (com novo ícone) -->
+<div class="swiper-slide">
+    <div class="service-card-detailed">
+        <div class="icon">
+            <!-- NOVO CÓDIGO SVG INSERIDO AQUI -->
+            <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 260 235">
+  <path fill="currentColor" d="M255 147c-5-3-15-9-23-16l20-11a5 5 0 0 0-4-10l-27 16h-17c-6 0-12-1-17-3-14-7-23-22-21-37 0-6 2-12 5-17l6-9c14-2 28-7 39-15 2-2 3-5 2-7-2-3-5-3-7-2-6 5-15 10-27 12l8-14c2-2 1-5-1-7-2-1-6-1-7 2l-22 36c-3 5-6 9-11 12-13 10-30 10-43 0-4-3-8-7-11-12L86 46c2-12 0-32-2-40-1-3-4-5-6-4-3 1-5 4-4 6 2 7 4 23 3 33-8-2-15-5-19-8-2-2-5-2-7 0-2 3-2 6 1 8 6 4 19 9 26 10l11 19 5 16c1 15-7 30-22 37-5 2-10 3-16 3H43l-11-16a5 5 0 0 0-8 6l7 10H7c-2 0-5 2-5 5s2 5 5 5h23l-19 17c-2 1-2 4-1 6 1 3 5 4 7 2 10-7 20-18 26-25h13c6 0 11 1 16 4 15 6 23 21 22 37l-5 16-10 17c-17 3-32 12-32 13-3 1-3 4-2 7 2 3 6 2 7 1 1 0 9-6 20-9l-2 4c-1 2 0 5 2 6 2 2 6 1 7-1l7-13 11-20 11-13c13-9 30-9 43 0 5 4 10 9 13 15l15 30a5 5 0 1 0 9-4l-9-18c7 2 17 5 24 11 3 2 6 1 7-1 2-2 2-5 0-7a79 79 0 0 0-37-14l-3-8c-2-3-4-8-4-12-2-16 7-31 21-37 5-3 11-4 17-4h19c9 9 22 17 28 20 2 1 5 0 6-2 2-2 1-5-2-7zm-142-2c-9 0-17-6-17-14s8-14 17-14 17 7 17 14-8 14-17 14z"/>
+</svg>
+        </div>
+        <h3>Avaliação Neuropsicológica</h3>
+        <p class="description">Investigação detalhada das funções cognitivas, emocionais e comportamentais utilizando instrumentos psicométricos reconhecidos.</p>
+        <ul>
+            <li>Avaliação cognitiva completa</li>
+            <li>Instrumentos psicométricos validados</li>
+            <li>Relatórios técnicos detalhados</li>
+            <li>Orientações personalizadas</li>
+        </ul>
+        <a href="servicos.html#avaliacao" class="cta-button-small">Saiba Mais</a>
+    </div>
+</div>
+
+<!-- Slide 2: Acompanhamento Neuropsicológico (CORRIGIDO com a lista) -->
+<div class="swiper-slide">
+    <div class="service-card-detailed">
+        <div class="icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.036 44.0001C18.0561 40.8045 16.5778 38.4222 14.6011 36.8532C11.636 34.4997 6.92483 35.9624 5.18458 33.5349C3.44433 31.1073 6.40382 26.6431 7.44234 24.009C8.48086 21.375 3.46179 20.4436 4.04776 19.6958C4.43842 19.1973 6.97471 17.7587 11.6567 15.3801C12.987 7.79346 17.9008 4.00014 26.3982 4.00014C39.1441 4.00014 44 14.8061 44 21.679C44 28.552 38.1201 35.9563 29.7441 37.5528C28.9951 38.6436 30.0754 40.7927 32.9848 44.0001" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.4997 14.5C18.8464 17.0342 19.0408 18.8138 20.0829 19.838C21.1251 20.8623 22.6458 21.3741 27.4109 21.8484C26.5559 26.7514 29.4939 26.4484 32.4309 24.3084C32.8239 25.5984 37.4139 26.8884 37.7989 23.4384C38.1839 19.9884 36.3239 17.2374 35.5609 17.2374C34.7979 17.2374 32.8229 17.1444 32.8229 16.0894C32.8229 15.0344 30.5149 14.4394 28.4319 14.4394C26.3489 14.4394 27.6019 13.0344 23.9419 13.5894C20.2819 14.1444 19.4997 14.5 19.4997 14.5Z" fill="#2F88FF" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M30.4997 25.5C29.4827 26.131 28.0877 27.18 27.4997 28C26.0307 30.05 24.8397 31.297 24.5797 32.608" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h3>Acompanhamento Neuropsicológico</h3>
+        <p class="description">Intervenção focada na reabilitação e estimulação de habilidades cognitivas para superar desafios e potencializar o desempenho.</p>
+        <!-- LISTA ADICIONADA DE VOLTA -->
+        <ul>
+            <li>Reabilitação cognitiva</li>
+            <li>Estratégias personalizadas</li>
+            <li>Acompanhamento contínuo</li>
+            <li>Monitoramento de progresso</li>
+        </ul>
+        <a href="servicos.html#acompanhamento" class="cta-button-small">Saiba Mais</a>
+    </div>
+</div>
+
+
+<!-- Slide 3: Psicoterapia TCC (com o novo ícone de diálogo) -->
+<div class="swiper-slide">
+    <div class="service-card-detailed">
+        <div class="icon">
+            <!-- NOVO SVG INSERIDO E OTIMIZADO -->
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490" fill="currentColor">
+                <g>
+                    <path d="M425,139.393h-75v-55c0-35.841-29.159-65-65-65H65c-35.841,0-65,29.159-65,65v100c0,34.159,26.486,62.248,60,64.81v101.404l80-80v33.787c0,35.841,29.159,65,65,65h123.787L430,470.607V369.203c33.514-2.562,60-30.651,60-64.81v-100C490,168.552,460.841,139.393,425,139.393z M140,204.393v23.787l-50,50v-58.787H65c-19.299,0-35-15.701-35-35v-100c0-19.299,15.701-35,35-35h220c19.299,0,35,15.701,35,35v55H205C169.159,139.393,140,168.552,140,204.393z M460,304.393c0,19.299-15.701,35-35,35h-25v58.787l-58.787-58.787H205c-19.299,0-35-15.701-35-35v-100c0-19.299,15.701-35,35-35h220c19.299,0,35,15.701,35,35V304.393z"/>
+                    <rect x="215" y="209.393" width="200" height="30"/>
+                    <rect x="215" y="269.393" width="200" height="30"/>
+                </g>
+            </svg>
+        </div>
+        <h3>Terapia Cognitivo Comportamental (TCC)</h3>
+        <p class="description">Abordagem terapêutica focada e prática para transformar padrões de pensamento e comportamento que geram sofrimento.</p>
+        <ul>
+            <li>Identificação de pensamentos automáticos</li>
+            <li>Reestruturação de crenças disfuncionais</li>
+            <li>Modificação de comportamentos</li>
+            <li>Foco em resolver problemas atuais</li>
+        </ul>
+        <a href="servicos.html#psicoterapia-tcc" class="cta-button-small">Saiba Mais</a>
+    </div>
+</div>
+
+
+<!-- Slide 4: Esquizoanálise Expandida (com o novo ícone de bisturi) -->
+<div class="swiper-slide">
+    <div class="service-card-detailed">
+        <div class="icon">
+            <!-- NOVO SVG INSERIDO E OTIMIZADO -->
+            <svg 
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 12l-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 010-3L12 9" />
+              <path d="M17.64 15L22 10.64" />
+              <path d="M20.91 11.7l-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 00-3.94-1.64H9l.92.82A6.18 6.18 0 0112 8.4v1.56l2 2h2.47l2.26 1.91" />
+            </svg>
+        </div>
+        <h3>Esquizoanálise Expandida</h3>
+        <p class="description">Intervenção filosófico-clínica para produção de si, deslocamento de normatividades e emergência de novos modos de existir.</p>
+        <ul>
+            <li>Desejo como força de produção</li>
+            <li>Crítica à moral e afirmação da potência</li>
+            <li>Análise das relações de poder</li>
+            <li>Criação de novos modos de existir</li>
+        </ul>
+        <a href="servicos.html#esquizoanalise" class="cta-button-small">Saiba Mais</a>
+    </div>
+</div>
+
+                        <!-- Slide 5: Orientação -->
+                        <div class="swiper-slide">
+                            <div class="service-card-detailed">
+                                <div class="icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                </div>
+                                <h3>Orientação a Pais e Profissionais</h3>
+                                <p class="description">Apoio técnico para escolas, famílias e equipes multidisciplinares promovendo compreensão do funcionamento neuropsicológico.</p>
+                                <ul>
+                                    <li>Orientação familiar</li>
+                                    <li>Capacitação de profissionais</li>
+                                    <li>Estratégias para o cotidiano</li>
+                                    <li>Suporte multidisciplinar</li>
+                                </ul>
+<a href="servicos.html#orientacao-parental" class="cta-button-small">Saiba Mais</a>
+                            </div>
+                        </div>
+
+<!-- Slide 7: Workshops e Palestras (Revisado com novo ícone) -->
+<div class="swiper-slide">
+    <div class="service-card-detailed">
+        <div class="icon">
+            <!-- NOVO CÓDIGO SVG INSERIDO AQUI -->
+            <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 24 24">
+  <path fill="currentColor" d="M24 17h-4v-2h2V3H4v2H2V1h22z"/>
+  <path fill="currentColor" d="M10 0h6v4h-6zM13 24H0v-5a6 6 0 0 1 3.3-5.4A4.4 4.4 0 0 1 2 10.5C2 8 4 6 6.5 6S11 8 11 10.5c0 .7-.1 1.3-.4 1.8 1.4-.6 3.4-1.8 5.7-4.1l2-2 1.4 1.4L18.4 9l1.8 1.8-.3.6c-.1.2-2.4 5.5-6.6 7.2-.2.1-.3.2-.3.4v5zM2 22h9v-3c0-1 .6-1.9 1.5-2.3 2.7-1.1 4.6-4.2 5.3-5.5l-.8-.8C12.1 15 8.4 15 8 15H6a4 4 0 0 0-4 4v3zm4.5-9C7.9 13 9 11.9 9 10.5S7.9 8 6.5 8 4 9.1 4 10.5 5.1 13 6.5 13z"/>
+</svg>
+        </div>
+        <h3>Workshops e Palestras</h3>
+        <p class="description">Conhecimento aplicado para transformar ambientes, capacitar equipes e promover uma cultura de desenvolvimento e bem-estar.</p>
+        <ul>
+            <li>Conteúdo baseado em evidências</li>
+            <li>Temas para escolas e empresas</li>
+            <li>Foco em estratégias práticas</li>
+            <li>Eventos customizados</li>
+        </ul>
+        <a href="servicos.html#workshops" class="cta-button-small">Saiba Mais</a>
+    </div>
+</div>
+
+<!-- Slide 8: Consultoria (Revisado com traços engrossados) -->
+<div class="swiper-slide">
+    <div class="service-card-detailed">
+        <div class="icon">
+            <!-- SVG REVISADO E COMPLETO -->
+            <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new 0 0 489.709 489.709" viewBox="0 0 489.7 489.7">
+  <g fill="currentColor" stroke="currentColor">
+    <path stroke-width="20" d="M90 424c0 2 2 5 5 5h295a5 5 0 1 0 0-10H95c-3 0-5 2-5 5zM390 437H95a5 5 0 1 0 0 10h295a5 5 0 1 0 0-10z"/>
+    <path stroke-width="15" d="M438 0H92C67 0 46 20 46 45v387c0 43 30 58 55 58h337c3 0 5-3 5-5V5c0-3-2-5-5-5zM101 480c-7 0-45-3-45-48V45c0-19 16-35 36-35h4v313a5 5 0 1 0 10 0V10h327v367H106v-16a5 5 0 1 0-10 0v16h-2c-7 0-16 3-24 8a5 5 0 0 0 6 9c6-5 13-7 18-7h339v10H103a35 35 0 0 0 0 70h310c2 0 5-2 5-5v-55h15v73H101zm290-73h17v50H103a25 25 0 0 1 0-50h288z"/>
+    <path stroke-width="15" d="M211 125h7l1 3v2c2 26 4 51 32 54v37h-7a5 5 0 1 0 0 10h25a5 5 0 1 0 0-10h-8v-37c30-2 32-27 34-53v-3l1-3h7a5 5 0 1 0 0-10h-7c-6 0-11 5-11 12v3c-3 28-5 42-24 44v-49h8a5 5 0 1 0 0-10h-13c-1 0 0 0 0 0h-12a5 5 0 1 0 0 10h7v49c-18-3-20-17-22-44v-3c0-7-5-12-11-12h-7a5 5 0 0 0 0 10z"/>
+    <path stroke-width="15" d="M179 325c0 3 2 5 5 5h97a5 5 0 0 0 4-6l-8-54h62c11 0 20-8 20-20v-40h23a5 5 0 0 0 4-7l-25-46a105 105 0 1 0-182 80v88zm76-255h1c50 0 92 39 95 88l1 3 21 39h-19c-2 0-5 3-5 5v45c0 6-4 10-10 10h-83c-13 0-27-2-39-8a5 5 0 1 0-4 9c14 6 28 9 43 9h11l8 50h-86v-87h-1v-2h-1a96 96 0 0 1 68-161z"/>
+  </g>
+</svg>
+        </div>
+        <h3>Consultoria Institucional</h3>
+        <p class="description">Suporte técnico e estratégico para elevar a qualidade de projetos, capacitar equipes e fortalecer práticas baseadas em evidências.</p>
+        <ul>
+            <li>Supervisão de casos clínicos</li>
+            <li>Capacitação de equipes</li>
+            <li>Desenvolvimento de programas</li>
+            <li>Consultoria para pesquisas</li>
+        </ul>
+        <a href="servicos.html#consultoria" class="cta-button-small">Saiba Mais</a>
+    </div>
+</div>
+</div>                 
+                    <!-- Botões de Navegação -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
      <main>
             <!-- Seção 1: Avaliação Neuropsicológica -->
             <section id="avaliacao" class="page-section">
@@ -500,7 +682,11 @@
             </div>
         </div>
     </footer>
+      <!-- Scripts -->
+<!-- 1. PRIMEIRO, CARREGUE A BIBLIOTECA DO CARROSSEL -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <script src="assets/script.js"></script>
+<!-- 2. DEPOIS, CARREGUE O SEU SCRIPT QUE USA A BIBLIOTECA -->
+<script src="assets/script.js"></script> 
 </body>
 </html>
