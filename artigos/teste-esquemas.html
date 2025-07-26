@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- ================================================== -->
+    <!-- ||        ÁREA DE CONFIGURAÇÃO DA PÁGINA        || -->
+    <!-- ================================================== -->
+
+    <!-- 1. TÍTULO DA PÁGINA (MUITO IMPORTANTE PARA O GOOGLE ) -->
+    <title>Teste de Esquemas Emocionais – Deo Magalhães</title>
+    
+    <!-- 2. DESCRIÇÃO DA PÁGINA (MUITO IMPORTANTE PARA O GOOGLE) -->
+    <meta name="description" content="Descubra suas 'armadilhas mentais' com este teste de rastreio baseado na Terapia do Esquema de Jeffrey Young. Identifique padrões emocionais que se repetem em sua vida.">
+    
+    <!-- ================================================== -->
+
+    <!-- CAMINHOS DOS ARQUIVOS (ASSUMINDO A MESMA ESTRUTURA DO SEU SITE) -->
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <!-- Estilos específicos para o teste (idênticos aos outros testes para consistência) -->
+    <style>
+        .quiz-container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid #eee;
+        }
+        .question-block {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            transition: border-left 0.3s, padding-left 0.3s;
+        }
+        .question-block:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 0.75rem;
+        }
+        .option-item label {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: #fff;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-item input[type="radio"] {
+            margin-right: 1rem;
+            width: 18px;
+            height: 18px;
+            accent-color: #005f73;
+        }
+        .option-item label:hover {
+            background-color: #f0f8ff;
+        }
+        .option-item input[type="radio"]:checked + span {
+            font-weight: 600;
+            color: #005f73;
+        }
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: #005f73;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 2rem;
+        }
+        .submit-button:hover {
+            background-color: #003e4d;
+            transform: translateY(-2px);
+        }
+        .submit-button:disabled {
+            background-color: #a9a9a9;
+            cursor: not-allowed;
+        }
+        #results-container {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #eef7fa;
+            border-radius: 8px;
+            border-left: 5px solid #005f73;
+            display: none;
+        }
+        #results-container h2 {
+            margin-top: 0;
+            color: #003e4d;
+        }
+        .loading-spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #005f73;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .disclaimer-box {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            color: #8a6d3b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+        .validation-message {
+            color: #c0392b;
+            text-align: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background-color: #fbeae5;
+            border: 1px solid #e74c3c;
+            border-radius: 6px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bloco de Cabeçalho Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos & Testes</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Teste de Esquemas Emocionais</h1>
+                <p class="article-author-date">
+                    Uma ferramenta de rastreio baseada na Terapia do Esquema de Jeffrey Young.
+                </p>
+            </header>
+
+            <article class="article-body">
+                <p>Os <strong>Esquemas Emocionais</strong>, também conhecidos como "armadilhas mentais", são padrões de pensamentos, sentimentos e comportamentos que começam na infância e se repetem ao longo da vida. Eles funcionam como lentes através das quais vemos a nós mesmos, os outros e o mundo, muitas vezes nos levando a situações e relacionamentos que reforçam essas crenças centrais, mesmo que sejam dolorosas.</p>
+                <p>Este questionário foi projetado para ajudá-lo a identificar quais esquemas podem estar mais ativos em sua vida. Para cada afirmação, escolha a opção que melhor descreve o quanto ela se aplica a você. Seja o mais honesto(a ) possível para uma análise mais precisa.</p>
+
+                <div class="quiz-container">
+                    <form id="schema-quiz">
+                        <!-- As perguntas serão inseridas aqui pelo JavaScript -->
+                    </form>
+                    <div id="validation-message" class="validation-message"></div>
+                    <button id="submit-btn" class="submit-button" type="button">Ver minha análise de esquemas</button>
+                    <div id="loading" class="loading-spinner"></div>
+                </div>
+
+                <div id="results-container">
+                    <h2>Sua Análise de Esquemas Emocionais</h2>
+                    <div id="analysis-content">
+                        <!-- O resultado da análise da IA será inserido aqui -->
+                    </div>
+                     <div class="disclaimer-box">
+                        <strong>Atenção:</strong> Este teste é uma ferramenta de autoconhecimento e não substitui um diagnóstico clínico. Os resultados indicam possíveis esquemas ativos e servem como ponto de partida para a reflexão. A Terapia do Esquema é um processo complexo que deve ser conduzido por um profissional qualificado.
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script principal do site -->
+    <script src="/assets/script.js"></script>
+    
+    <!-- Script do Teste de Esquemas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function( ) {
+            const quizForm = document.getElementById('schema-quiz');
+            const submitButton = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const analysisContent = document.getElementById('analysis-content');
+            const loadingSpinner = document.getElementById('loading');
+            const validationMessage = document.getElementById('validation-message');
+
+            if (!quizForm || !submitButton) {
+                console.error("Erro Crítico: Elementos essenciais do teste não foram encontrados.");
+                return;
+            }
+
+            const questions = [
+                { question: "Sinto que as pessoas importantes na minha vida não serão capazes de continuar me oferecendo apoio e proteção.", schema: "Abandono" },
+                { question: "Sinto que as pessoas vão se aproveitar de mim.", schema: "Desconfiança/Abuso" },
+                { question: "Sinto que não pertenço a lugar nenhum; sou diferente dos outros.", schema: "Isolamento Social" },
+                { question: "Sinto que sou fundamentalmente defeituoso(a) ou que, se os outros me conhecerem de verdade, não vão gostar de mim.", schema: "Defectividade/Vergonha" },
+                { question: "Sinto que sou um fracasso em comparação com os outros.", schema: "Fracasso" },
+                { question: "Sinto que não consigo dar conta das minhas responsabilidades do dia a dia sozinho(a).", schema: "Dependência/Incompetência" },
+                { question: "Tenho um medo constante de que uma catástrofe (financeira, médica, etc.) aconteça a qualquer momento.", schema: "Vulnerabilidade ao Dano" },
+                { question: "Sinto que não consigo me separar da minha família ou de um parceiro(a) e ter uma identidade própria.", schema: "Emaranhamento" },
+                { question: "Frequentemente coloco as necessidades dos outros acima das minhas, a ponto de esquecer o que eu mesmo(a) quero.", schema: "Autossacrifício" },
+                { question: "Sinto uma pressão enorme para suprimir meus sentimentos e necessidades para evitar a desaprovação dos outros.", schema: "Subjugação" },
+                { question: "Sinto que preciso ser o(a) melhor em tudo que faço; não me permito errar.", schema: "Padrões Inflexíveis" },
+                { question: "Sinto que sou especial e que as regras normais não se aplicam a mim.", schema: "Arrogo/Grandiosidade" },
+                { question: "Tenho grande dificuldade em aceitar 'não' como resposta e em tolerar frustrações para atingir meus objetivos.", schema: "Autocontrole Insuficiente" }
+            ];
+
+            const options = [
+                { text: "Não tem nada a ver comigo", value: 1 },
+                { text: "Parece um pouco comigo", value: 2 },
+                { text: "Parece muito comigo", value: 3 }
+            ];
+
+            function renderQuestions() {
+                let quizHTML = '';
+                questions.forEach((q, index) => {
+                    quizHTML += `<div class="question-block" id="question-${index}"><p class="question-text">${index + 1}. ${q.question}</p><ul class="options-list">`;
+                    options.forEach((option) => {
+                        quizHTML += `<li class="option-item"><label><input type="radio" name="question-${index}" value="${option.value}" required><span>${option.text}</span></label></li>`;
+                    });
+                    quizHTML += `</ul></div>`;
+                });
+                quizForm.innerHTML = quizHTML;
+            }
+
+            async function handleSubmit() {
+                validationMessage.style.display = 'none';
+                const formData = new FormData(quizForm);
+                const answers = [];
+                let allAnswered = true;
+
+                for (let i = 0; i < questions.length; i++) {
+                    const questionBlock = document.getElementById(`question-${i}`);
+                    const answerValue = formData.get(`question-${i}`);
+                    if (!answerValue) {
+                        allAnswered = false;
+                        questionBlock.style.borderLeft = '3px solid #e74c3c';
+                        questionBlock.style.paddingLeft = '1rem';
+                    } else {
+                        questionBlock.style.borderLeft = '';
+                        questionBlock.style.paddingLeft = '';
+                        answers.push({ question: questions[i].question, schema: questions[i].schema, value: parseInt(answerValue) });
+                    }
+                }
+
+                if (!allAnswered) {
+                    validationMessage.textContent = 'Por favor, responda a todas as perguntas para continuar.';
+                    validationMessage.style.display = 'block';
+                    const firstUnanswered = quizForm.querySelector('[style*="border-left"]');
+                    if (firstUnanswered) {
+                        firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+
+                submitButton.disabled = true;
+                loadingSpinner.style.display = 'block';
+                resultsContainer.style.display = 'none';
+
+                const prompt = createPrompt(answers);
+                
+                try {
+                    const apiKey = "AIzaSyDZYzXl9GLvRIQjp7_qxRz0UCW0sMH0log"; // Lembre-se de substituir pela sua chave real
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.7, topP: 0.95, topK: 40 }
+                    };
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload )
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    let analysisText = 'Não foi possível gerar a análise no momento.';
+                    if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
+                        analysisText = result.candidates[0].content.parts[0].text;
+                    }
+                    
+                    let formattedText = analysisText.replace(/\n/g, '  ');
+                    analysisContent.innerHTML = formattedText;
+
+                } catch (error) {
+                    console.error("Erro durante a chamada da API:", error);
+                    analysisContent.innerHTML = `<p>Ocorreu um erro ao gerar sua análise. Por favor, tente novamente mais tarde.</p>`;
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                    resultsContainer.style.display = 'block';
+                    submitButton.disabled = false;
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            function createPrompt(answers) {
+                // Filtra apenas as respostas que indicam uma possível presença do esquema (valor > 1)
+                const relevantAnswers = answers.filter(a => a.value > 1);
+                
+                // Ordena as respostas da mais relevante para a menos
+                relevantAnswers.sort((a, b) => b.value - a.value);
+
+                // Pega os 2 ou 3 esquemas mais prováveis para focar a análise
+                const topSchemas = {};
+                relevantAnswers.forEach(ans => {
+                    if (!topSchemas[ans.schema]) {
+                        topSchemas[ans.schema] = 0;
+                    }
+                    topSchemas[ans.schema] += ans.value;
+                });
+
+                const sortedSchemas = Object.entries(topSchemas).sort(([,a],[,b]) => b-a).slice(0, 3);
+
+                let detailedAnswers = relevantAnswers.map(a => `- Pergunta sobre '${a.schema}': "${a.question}" -> Resposta: ${a.value === 2 ? 'Parece um pouco comigo' : 'Parece muito comigo'}`).join('\n');
+
+                return `
+                    Aja como um neuropsicólogo brasileiro chamado Deo Magalhães, especialista em Terapia do Esquema. Seu tom deve ser acolhedor, validante e psicoeducativo.
+                    O usuário respondeu a um questionário de rastreio de esquemas emocionais. Sua tarefa é gerar uma análise personalizada. Evite linguagem diagnóstica; use frases como "suas respostas sugerem que o esquema de...", "parece haver uma sensibilidade na área de...", "um padrão que pode estar ativo é...".
+
+                    Dados do Usuário:
+                    - Esquemas mais pontuados (em ordem de relevância): ${sortedSchemas.map(s => s[0]).join(', ')}
+                    - Respostas detalhadas que indicaram a presença de esquemas:
+                    ${detailedAnswers}
+
+                    Instruções para a Análise:
+                    1.  **Parágrafo de Abertura:** Agradeça pela vulnerabilidade e explique que os esquemas são como "mapas" antigos que guiam nossa vida e que identificá-los é o primeiro passo para a mudança.
+                    2.  **Análise dos Esquemas Principais:** Foque nos 2 esquemas com maior pontuação. Para cada um:
+                        a.  Use o nome do esquema como um título em negrito (ex: **Esquema de Abandono/Instabilidade**).
+                        b.  Explique o que é esse esquema em termos simples: qual é a crença central e o sentimento principal associado a ele.
+                        c.  Conecte com as respostas do usuário. Ex: "Sua resposta de que sente que pessoas importantes não conseguirão continuar lhe oferecendo apoio é a manifestação clássica deste esquema. É o medo constante de que os vínculos importantes serão perdidos."
+                        d.  Mencione brevemente como esse esquema pode se manifestar na vida adulta (ex: ciúme excessivo, dificuldade em confiar, escolha de parceiros indisponíveis).
+                    3.  **Como os Esquemas se Mantêm:** Explique brevemente que, sem perceber, muitas vezes nos comportamos de maneiras que confirmam nossas "armadilhas mentais" (ex: uma pessoa com esquema de fracasso pode procrastinar, levando a um resultado ruim, o que confirma sua crença de ser um fracasso).
+                    4.  **Parágrafo de Encerramento e Caminho a Seguir:** Conclua de forma esperançosa. Enfatize que os esquemas não são uma sentença, mas sim padrões que podem ser compreendidos e flexibilizados. Recomende a Terapia do Esquema como uma abordagem terapêutica poderosa para trabalhar essas questões de raiz e sugira a busca por um profissional qualificado.
+
+                    Formate a saída usando parágrafos e use asteriscos duplos (**) para texto em negrito. Não inclua o disclaimer, ele já está na página.
+                `;
+            }
+
+            renderQuestions();
+            submitButton.addEventListener('click', handleSubmit);
+        });
+    </script>
+</body>
+</html>

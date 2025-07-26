@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- ================================================== -->
+    <!-- ||        ÁREA DE CONFIGURAÇÃO DA PÁGINA        || -->
+    <!-- ================================================== -->
+
+    <!-- 1. TÍTULO DA PÁGINA (MUITO IMPORTANTE PARA O GOOGLE ) -->
+    <title>Teste de Funções Executivas (BRIEF-A) – Deo Magalhães</title>
+    
+    <!-- 2. DESCRIÇÃO DA PÁGINA (MUITO IMPORTANTE PARA O GOOGLE) -->
+    <meta name="description" content="Avalie suas habilidades de planejamento, organização, memória de trabalho e controle inibitório com este teste de rastreio baseado no BRIEF-A. Resultado imediato.">
+    
+    <!-- ================================================== -->
+
+    <!-- CAMINHOS DOS ARQUIVOS (ASSUMINDO A MESMA ESTRUTURA DO SEU SITE) -->
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <!-- Estilos específicos para o teste (idênticos ao outro teste para consistência) -->
+    <style>
+        .quiz-container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid #eee;
+        }
+
+        .question-block {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            transition: border-left 0.3s, padding-left 0.3s;
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .option-item label {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: #fff;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 1rem;
+            width: 18px;
+            height: 18px;
+            accent-color: #005f73;
+        }
+
+        .option-item label:hover {
+            background-color: #f0f8ff;
+        }
+
+        .option-item input[type="radio"]:checked + span {
+            font-weight: 600;
+            color: #005f73;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: #005f73; /* Cor primária do seu site */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 2rem;
+        }
+
+        .submit-button:hover {
+            background-color: #003e4d;
+            transform: translateY(-2px);
+        }
+        
+        .submit-button:disabled {
+            background-color: #a9a9a9;
+            cursor: not-allowed;
+        }
+
+        #results-container {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #eef7fa;
+            border-radius: 8px;
+            border-left: 5px solid #005f73;
+            display: none; /* Começa oculto */
+        }
+
+        #results-container h2 {
+            margin-top: 0;
+            color: #003e4d;
+        }
+        
+        .loading-spinner {
+            display: none; /* Começa oculto */
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #005f73;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .disclaimer-box {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            color: #8a6d3b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .validation-message {
+            color: #c0392b;
+            text-align: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background-color: #fbeae5;
+            border: 1px solid #e74c3c;
+            border-radius: 6px;
+            display: none; /* Começa oculto */
+        }
+    </style>
+</head>
+<body>
+    <!-- Bloco de Cabeçalho Padrão (copiado da sua referência) -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos & Testes</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Rastreio de Funções Executivas (BRIEF-A )</h1>
+                <p class="article-author-date">
+                    Uma ferramenta de autoavaliação para identificar possíveis desafios no dia a dia.
+                </p>
+            </header>
+
+            <article class="article-body">
+                <p>As <strong>Funções Executivas</strong> são um conjunto de habilidades mentais que nos ajudam a gerenciar nossos pensamentos, emoções e ações para atingir objetivos. Elas incluem planejamento, organização, controle de impulsos, memória de trabalho e flexibilidade mental. Dificuldades nessas áreas podem impactar o desempenho acadêmico, profissional e as relações sociais.</p>
+                <p>Este questionário é uma versão de rastreio adaptada do <strong>BRIEF-A (Behavior Rating Inventory of Executive Function - Adult Version)</strong>, um instrumento amplamente utilizado na neuropsicologia. Ele foi projetado para ajudar a identificar comportamentos do dia a dia que podem indicar desafios nas funções executivas. Responda com base em como você se percebeu nos <strong>últimos 30 dias</strong>.</p>
+
+                <div class="quiz-container">
+                    <form id="executive-quiz">
+                        <!-- As perguntas serão inseridas aqui pelo JavaScript -->
+                    </form>
+                    <div id="validation-message" class="validation-message"></div>
+                    <button id="submit-btn" class="submit-button" type="button">Ver minha análise de resultados</button>
+                    <div id="loading" class="loading-spinner"></div>
+                </div>
+
+                <div id="results-container">
+                    <h2>Sua Análise de Funções Executivas</h2>
+                    <div id="analysis-content">
+                        <!-- O resultado da análise da IA será inserido aqui -->
+                    </div>
+                     <div class="disclaimer-box">
+                        <strong>Atenção:</strong> Este teste é uma ferramenta de rastreio e não substitui um diagnóstico clínico realizado por um profissional qualificado. Os resultados indicam áreas de possível dificuldade que podem merecer uma investigação mais aprofundada. Para uma avaliação neuropsicológica completa, procure um especialista.
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão (copiado da sua referência) -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script principal do site (assumindo que ele lida com o menu mobile, etc ) -->
+    <script src="/assets/script.js"></script>
+    
+   <!-- Script do Teste de Funções Executivas (VERSÃO FINALÍSSIMA E CORRIGIDA) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quizForm = document.getElementById('executive-quiz');
+        const submitButton = document.getElementById('submit-btn');
+        const resultsContainer = document.getElementById('results-container');
+        const analysisContent = document.getElementById('analysis-content');
+        const loadingSpinner = document.getElementById('loading');
+        const validationMessage = document.getElementById('validation-message');
+
+        if (!quizForm || !submitButton) {
+            console.error("Erro Crítico: Elementos essenciais do teste não foram encontrados. O script será interrompido.");
+            return;
+        }
+
+        const questions = [
+            { question: "Tenho dificuldade em resistir a impulsos (ex: compras, comida, interrupções).", domain: "Inibitório" },
+            { question: "Falo ou ajo sem pensar e depois me arrependo.", domain: "Inibitório" },
+            { question: "Fico facilmente irritado(a) com pequenas coisas.", domain: "Inibitório" },
+            { question: "Tenho dificuldade em mudar de uma tarefa para outra.", domain: "Flexibilidade" },
+            { question: "Fico preso(a) em uma única maneira de resolver um problema.", domain: "Flexibilidade" },
+            { question: "Fico chateado(a) com mudanças inesperadas nos planos.", domain: "Flexibilidade" },
+            { question: "Minhas reações emocionais são, às vezes, mais intensas do que a situação justifica.", domain: "Emocional" },
+            { question: "Tenho dificuldade em me acalmar depois de ficar chateado(a).", domain: "Emocional" },
+            { question: "Tenho dificuldade para começar tarefas, mesmo as importantes (procrastinação).", domain: "Iniciação" },
+            { question: "Preciso de um empurrão para começar a fazer as coisas.", domain: "Iniciação" },
+            { question: "Esqueço o que ia fazer ou dizer no meio de uma ação.", domain: "Memória de Trabalho" },
+            { question: "Tenho que reler a mesma página várias vezes para entender.", domain: "Memória de Trabalho" },
+            { question: "Perco a linha de raciocínio durante conversas.", domain: "Memória de Trabalho" },
+            { question: "Minha mesa, quarto ou local de trabalho são desorganizados.", domain: "Organização" },
+            { question: "Tenho dificuldade em dividir uma tarefa grande em passos menores.", domain: "Planejamento" },
+            { question: "Perco coisas com frequência (chaves, celular, documentos).", domain: "Organização" },
+            { question: "Subestimo o tempo necessário para completar uma tarefa.", domain: "Planejamento" },
+            { question: "Não percebo como meu comportamento afeta os outros até que alguém me diga.", domain: "Monitoramento" },
+            { question: "Cometo erros por descuido em tarefas que sei fazer bem.", domain: "Monitoramento" },
+            { question: "Só percebo que cometi um erro depois que já é tarde demais.", domain: "Monitoramento" }
+        ];
+
+        const options = [
+            { text: "Nunca", value: 1 },
+            { text: "Às vezes", value: 2 },
+            { text: "Frequentemente", value: 3 }
+        ];
+
+        function renderQuestions() {
+            let quizHTML = '';
+            questions.forEach((q, index) => {
+                quizHTML += `<div class="question-block" id="question-${index}"><p class="question-text">${index + 1}. ${q.question}</p><ul class="options-list">`;
+                options.forEach((option) => {
+                    quizHTML += `<li class="option-item"><label><input type="radio" name="question-${index}" value="${option.value}" required><span>${option.text}</span></label></li>`;
+                });
+                quizHTML += `</ul></div>`;
+            });
+            quizForm.innerHTML = quizHTML;
+        }
+
+        async function handleSubmit() {
+            validationMessage.style.display = 'none';
+            const formData = new FormData(quizForm);
+            const answers = [];
+            let allAnswered = true;
+
+            for (let i = 0; i < questions.length; i++) {
+                const questionBlock = document.getElementById(`question-${i}`);
+                const answerValue = formData.get(`question-${i}`);
+                if (!answerValue) {
+                    allAnswered = false;
+                    questionBlock.style.borderLeft = '3px solid #e74c3c';
+                    questionBlock.style.paddingLeft = '1rem';
+                } else {
+                     questionBlock.style.borderLeft = '';
+                     questionBlock.style.paddingLeft = '';
+                     answers.push({ question: questions[i].question, domain: questions[i].domain, value: parseInt(answerValue) });
+                }
+            }
+
+            if (!allAnswered) {
+                validationMessage.textContent = 'Por favor, responda a todas as perguntas para continuar.';
+                validationMessage.style.display = 'block';
+                const firstUnanswered = quizForm.querySelector('[style*="border-left"]');
+                if(firstUnanswered) {
+                    firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+
+            submitButton.disabled = true;
+            loadingSpinner.style.display = 'block';
+            resultsContainer.style.display = 'none';
+
+            const prompt = createPrompt(answers);
+            
+            try {
+                const apiKey = "AIzaSyDZYzXl9GLvRIQjp7_qxRz0UCW0sMH0log"; // Lembre-se de substituir pela sua chave real
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }],
+                    generationConfig: { temperature: 0.7, topP: 0.95, topK: 40 }
+                };
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload )
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                let analysisText = 'Não foi possível gerar a análise no momento.';
+                if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
+                    analysisText = result.candidates[0].content.parts[0].text;
+                }
+                
+                // ===== A LINHA CORRETA E SEM ERROS =====
+                let formattedText = analysisText.replace(/\n/g, '  ');
+
+                analysisContent.innerHTML = formattedText;
+
+            } catch (error) {
+                console.error("Erro durante a chamada da API:", error);
+                analysisContent.innerHTML = `<p>Ocorreu um erro ao gerar sua análise. Por favor, tente novamente mais tarde.</p>`;
+            } finally {
+                loadingSpinner.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                submitButton.disabled = false;
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function createPrompt(answers) {
+            const domainScores = {};
+            const domainCounts = {};
+            answers.forEach(ans => {
+                if (!domainScores[ans.domain]) {
+                    domainScores[ans.domain] = 0;
+                    domainCounts[ans.domain] = 0;
+                }
+                domainScores[ans.domain] += ans.value;
+                domainCounts[ans.domain]++;
+            });
+            const domainAverages = {};
+            for (const domain in domainScores) {
+                domainAverages[domain] = (domainScores[domain] / domainCounts[domain]).toFixed(2);
+            }
+            let sortedDomains = Object.entries(domainAverages).sort(([,a],[,b]) => b-a);
+            let highestDomain = sortedDomains[0][0];
+            let secondHighestDomain = sortedDomains[1] ? sortedDomains[1][0] : null;
+            let detailedAnswers = answers.map(a => `- Pergunta: "${a.question}" (Domínio: ${a.domain}) -> Resposta: ${a.value === 1 ? 'Nunca' : a.value === 2 ? 'Às vezes' : 'Frequentemente'}`).join('\n');
+            return `
+                Aja como um neuropsicólogo brasileiro chamado Deo Magalhães, com um tom acolhedor, profissional e educativo.
+                O usuário respondeu a um questionário de rastreio de funções executivas (baseado no BRIEF-A). Sua tarefa é gerar uma análise personalizada. Use uma linguagem que evite diagnósticos, como "suas respostas sugerem", "parece haver uma tendência a", "um ponto de atenção pode ser".
+                Contexto dos Domínios:
+                - Inibitório: Capacidade de controlar impulsos e respostas automáticas.
+                - Flexibilidade: Habilidade de mudar de perspectiva ou de tarefa.
+                - Emocional: Capacidade de regular as respostas emocionais.
+                - Iniciação: Habilidade de começar tarefas de forma autônoma.
+                - Memória de Trabalho: Habilidade de manter e manipular informações na mente por um curto período.
+                - Planejamento/Organização: Capacidade de gerenciar tarefas atuais e futuras, organizar materiais e informações.
+                - Monitoramento: Habilidade de checar o próprio trabalho e avaliar o impacto do seu comportamento nos outros.
+                Dados do Usuário:
+                - Média de Pontuação por Domínio (1=pouca dificuldade, 3=muita dificuldade): ${JSON.stringify(domainAverages)}
+                - Domínio com maior pontuação (principal área de atenção): ${highestDomain}
+                - Segundo domínio com maior pontuação: ${secondHighestDomain || 'N/A'}
+                - Respostas detalhadas:
+                ${detailedAnswers}
+                Instruções para a Análise:
+                1.  **Parágrafo de Abertura:** Agradeça pela participação e explique brevemente que a análise destacará tanto os pontos fortes quanto as áreas que podem merecer mais atenção, com base nas respostas fornecidas.
+                2.  **Análise Geral:** Com base nas médias de pontuação, forneça um panorama. Se a maioria das pontuações for baixa (próxima de 1), destaque isso como um indicador de bom funcionamento executivo geral. Se houver pontuações mais altas (acima de 2), indique que há áreas de desafio.
+                3.  **Análise por Domínio (Foco nos Desafios):** Identifique os 1 ou 2 domínios com as maiores médias de pontuação. Para cada um:
+                    a.  Dê um título em negrito para o domínio (ex: **Controle Inibitório e de Impulsos**).
+                    b.  Explique o que é esse domínio em termos simples.
+                    c.  Conecte as respostas específicas do usuário. Ex: "Suas respostas indicando que você frequentemente age sem pensar e se arrepende depois sugerem que o controle inibitório pode ser um desafio. Isso significa que pode ser difícil 'pisar no freio' antes de agir."
+                    d.  Dê um exemplo prático de como essa dificuldade pode se manifestar no dia a dia.
+                4.  **Análise dos Pontos Fortes:** Identifique um domínio com pontuação baixa e mencione-o como um ponto forte. Ex: "Por outro lado, suas respostas no domínio de **Planejamento e Organização** foram consistentemente baixas, o que sugere que você provavelmente tem facilidade em estruturar tarefas e gerenciar seu tempo."
+                5.  **Parágrafo de Encerramento e Recomendações:** Conclua de forma encorajadora. Enfatize que este é um rastreio, não um diagnóstico. Sugira que, se as dificuldades apontadas causam prejuízo significativo, a busca por uma avaliação neuropsicológica completa é o caminho recomendado para entender a fundo essas questões e desenvolver estratégias personalizadas.
+                Formate a saída usando parágrafos e use asteriscos duplos (**) para texto em negrito. Não inclua o disclaimer, ele já está na página.
+            `;
+        }
+
+        renderQuestions();
+        submitButton.addEventListener('click', handleSubmit);
+    });
+</script>
+
+</body>
+</html>

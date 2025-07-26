@@ -218,7 +218,7 @@ section {
 }
 
 section[id] {
-    scroll-margin-top: 90px;
+    scroll-margin-top: 30px;
 }
 
 .section-title {
@@ -815,7 +815,7 @@ footer.main-footer {
 /* --- Carrossel (Swiper) --- */
 .services-carousel {
     overflow: hidden;
-    padding: 10px 0 var(--spacing-lg) 0;
+    padding: 10px 0;
     position: relative;
 }
 

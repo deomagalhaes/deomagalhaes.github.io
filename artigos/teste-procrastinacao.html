@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- ================================================== -->
+    <!-- ||        ÁREA DE CONFIGURAÇÃO DA PÁGINA        || -->
+    <!-- ================================================== -->
+
+    <title>Escala de Nível de Procrastinação – Deo Magalhães</title>
+    <meta name="description" content="O hábito de 'deixar para depois' está impactando sua vida? Faça este teste rápido para medir seu nível de procrastinação e entender seus padrões.">
+    
+    <!-- ================================================== -->
+
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <!-- Estilos específicos para o teste -->
+    <style>
+        .quiz-container { background-color: #f9f9f9; border-radius: 8px; padding: 2rem; margin-top: 2rem; border: 1px solid #eee; }
+        .question-block { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e0e0e0; transition: border-left 0.3s, padding-left 0.3s; }
+        .question-block:last-of-type { border-bottom: none; margin-bottom: 0; }
+        .question-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; color: #333; }
+        .options-list { list-style: none; padding: 0; margin: 0; }
+        .option-item { margin-bottom: 0.75rem; }
+        .option-item label { display: flex; align-items: center; padding: 0.8rem 1rem; background-color: #fff; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-item input[type="radio"] { margin-right: 1rem; width: 18px; height: 18px; accent-color: #005f73; }
+        .option-item label:hover { background-color: #f0f8ff; }
+        .option-item input[type="radio"]:checked + span { font-weight: 600; color: #005f73; }
+        .submit-button { display: block; width: 100%; padding: 1rem; font-size: 1.2rem; font-weight: 700; color: #fff; background-color: #005f73; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; margin-top: 2rem; }
+        .submit-button:hover { background-color: #003e4d; transform: translateY(-2px ); }
+        .submit-button:disabled { background-color: #a9a9a9; cursor: not-allowed; }
+        #results-container { margin-top: 3rem; padding: 2rem; background-color: #eef7fa; border-radius: 8px; border-left: 5px solid #005f73; display: none; }
+        #results-container h2 { margin-top: 0; color: #003e4d; }
+        .loading-spinner { display: none; width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #005f73; border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .disclaimer-box { background-color: #fffbe6; border: 1px solid #ffe58f; color: #8a6d3b; padding: 1rem; border-radius: 8px; margin-top: 2rem; font-size: 0.9rem; }
+        .validation-message { color: #c0392b; text-align: center; margin-top: 1.5rem; margin-bottom: 1rem; padding: 0.75rem; background-color: #fbeae5; border: 1px solid #e74c3c; border-radius: 6px; display: none; }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho e Rodapé Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos & Testes</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Nível de Procrastinação</h1>
+                <p class="article-author-date">
+                    Uma ferramenta de autoavaliação para entender o impacto do adiamento em sua vida.
+                </p>
+            </header>
+
+            <article class="article-body">
+                <p>A <strong>procrastinação</strong> é o ato de adiar ou prolongar uma tarefa, substituindo-a por atividades menos relevantes ou mais prazerosas, apesar das consequências negativas. Embora todos procrastinem de vez em quando, para algumas pessoas, esse comportamento se torna crônico e pode gerar estresse, ansiedade e prejuízos reais no trabalho, nos estudos e na vida pessoal.</p>
+                <p>Esta escala foi projetada para ajudá-lo(a ) a avaliar em que medida a procrastinação é um problema para você. Responda às perguntas pensando em seus hábitos e sentimentos nas <strong>últimas semanas</strong>.</p>
+
+                <div class="quiz-container">
+                    <form id="procrastination-quiz">
+                        <!-- As perguntas serão inseridas aqui pelo JavaScript -->
+                    </form>
+                    <div id="validation-message" class="validation-message"></div>
+                    <button id="submit-btn" class="submit-button" type="button">Calcular meu nível de procrastinação</button>
+                    <div id="loading" class="loading-spinner"></div>
+                </div>
+
+                <div id="results-container">
+                    <h2>Sua Análise de Procrastinação</h2>
+                    <div id="analysis-content">
+                        <!-- O resultado da análise da IA será inserido aqui -->
+                    </div>
+                     <div class="disclaimer-box">
+                        <strong>Atenção:</strong> Esta escala é uma ferramenta de autoavaliação e não um diagnóstico. Ela serve para aumentar sua autoconsciência sobre o comportamento de procrastinar. Se os resultados indicam um nível elevado de sofrimento, considere buscar a ajuda de um profissional de saúde mental.
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function( ) {
+            const quizForm = document.getElementById('procrastination-quiz');
+            const submitButton = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const analysisContent = document.getElementById('analysis-content');
+            const loadingSpinner = document.getElementById('loading');
+            const validationMessage = document.getElementById('validation-message');
+
+            if (!quizForm || !submitButton) {
+                console.error("Erro Crítico: Elementos essenciais do teste não foram encontrados.");
+                return;
+            }
+
+            const questions = [
+                { question: "Eu adio o início de tarefas que preciso fazer.", type: "behavior" },
+                { question: "Muitas vezes, me pego realizando tarefas de baixa prioridade em vez daquelas que realmente importam.", type: "behavior" },
+                { question: "Quando tenho um prazo, costumo esperar até o último minuto para começar.", type: "behavior" },
+                { question: "Mesmo quando começo uma tarefa, me distraio facilmente com outras coisas.", type: "behavior" },
+                { question: "Eu me sinto culpado(a) ou ansioso(a) por não estar fazendo as tarefas que deveria.", type: "emotion" },
+                { question: "Eu digo a mim mesmo(a) 'farei isso amanhã', mesmo sabendo que seria melhor fazer hoje.", type: "cognition" },
+                { question: "A procrastinação já me causou problemas (ex: notas mais baixas, estresse no trabalho, conflitos).", type: "consequence" },
+                { question: "Tenho dificuldade em tomar decisões, e isso me leva a adiar as coisas.", type: "cognition" },
+                { question: "Eu evito tarefas porque tenho medo de não fazê-las bem o suficiente (perfeccionismo).", type: "cognition" },
+                { question: "Eu evito tarefas porque as acho chatas ou desagradáveis.", type: "emotion" },
+                { question: "Minha produtividade é muito inconsistente; tenho picos de atividade e longos períodos de inércia.", type: "behavior" },
+                { question: "Eu me sinto sobrecarregado(a) com a quantidade de coisas que tenho para fazer, e isso me paralisa.", type: "emotion" }
+            ];
+
+            const options = [
+                { text: "Raramente ou nunca", value: 1 },
+                { text: "Às vezes", value: 2 },
+                { text: "Frequentemente", value: 3 },
+                { text: "Quase sempre", value: 4 }
+            ];
+
+            function renderQuestions() {
+                let quizHTML = '';
+                questions.forEach((q, index) => {
+                    quizHTML += `<div class="question-block" id="question-${index}"><p class="question-text">${index + 1}. ${q.question}</p><ul class="options-list">`;
+                    options.forEach((option) => {
+                        quizHTML += `<li class="option-item"><label><input type="radio" name="question-${index}" value="${option.value}" required><span>${option.text}</span></label></li>`;
+                    });
+                    quizHTML += `</ul></div>`;
+                });
+                quizForm.innerHTML = quizHTML;
+            }
+
+            async function handleSubmit() {
+                validationMessage.style.display = 'none';
+                const formData = new FormData(quizForm);
+                const answers = [];
+                let allAnswered = true;
+                let totalScore = 0;
+
+                for (let i = 0; i < questions.length; i++) {
+                    const questionBlock = document.getElementById(`question-${i}`);
+                    const answerValue = formData.get(`question-${i}`);
+                    if (!answerValue) {
+                        allAnswered = false;
+                        questionBlock.style.borderLeft = '3px solid #e74c3c';
+                        questionBlock.style.paddingLeft = '1rem';
+                    } else {
+                        questionBlock.style.borderLeft = '';
+                        questionBlock.style.paddingLeft = '';
+                        const score = parseInt(answerValue);
+                        totalScore += score;
+                        answers.push({ question: questions[i].question, type: questions[i].type, value: score });
+                    }
+                }
+
+                if (!allAnswered) {
+                    validationMessage.textContent = 'Por favor, responda a todas as perguntas para continuar.';
+                    validationMessage.style.display = 'block';
+                    const firstUnanswered = quizForm.querySelector('[style*="border-left"]');
+                    if (firstUnanswered) {
+                        firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+
+                submitButton.disabled = true;
+                loadingSpinner.style.display = 'block';
+                resultsContainer.style.display = 'none';
+
+                const prompt = createPrompt(answers, totalScore);
+                
+                try {
+                    const apiKey = "AIzaSyDZYzXl9GLvRIQjp7_qxRz0UCW0sMH0log"; // Lembre-se de substituir pela sua chave real
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.7, topP: 0.95, topK: 40 }
+                    };
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload )
+                    });
+
+                    if (!response.ok) { throw new Error(`API Error: ${response.status}`); }
+
+                    const result = await response.json();
+                    let analysisText = 'Não foi possível gerar a análise no momento.';
+                    if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
+                        analysisText = result.candidates[0].content.parts[0].text;
+                    }
+                    
+                    let formattedText = analysisText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '  ');
+                    analysisContent.innerHTML = formattedText;
+
+                } catch (error) {
+                    console.error("Erro durante a chamada da API:", error);
+                    analysisContent.innerHTML = `<p>Ocorreu um erro ao gerar sua análise. Por favor, tente novamente mais tarde.</p>`;
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                    resultsContainer.style.display = 'block';
+                    submitButton.disabled = false;
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            function createPrompt(answers, totalScore) {
+                let level;
+                if (totalScore <= 20) level = "Baixo";
+                else if (totalScore <= 32) level = "Moderado";
+                else if (totalScore <= 40) level = "Alto";
+                else level = "Muito Alto";
+
+                const highScoringAnswers = answers.filter(a => a.value >= 3).map(a => `- ${a.question} (Tipo: ${a.type})`).join('\n');
+
+                return `
+                    Aja como um neuropsicólogo brasileiro, Deo Magalhães, com um tom empático, prático e encorajador.
+                    O usuário respondeu a uma escala de procrastinação. Sua tarefa é gerar uma análise personalizada.
+
+                    Dados do Usuário:
+                    - Pontuação Total: ${totalScore} (de um máximo de 48)
+                    - Nível de Procrastinação Calculado: ${level}
+                    - Comportamentos mais frequentes (respostas 'Frequentemente' ou 'Quase Sempre'):
+                    ${highScoringAnswers}
+
+                    Instruções para a Análise:
+                    1.  **Título e Nível:** Comece com um título claro. Ex: "**Análise do seu Nível de Procrastinação: ${level}**".
+                    2.  **Interpretação do Nível:** Explique o que o nível calculado significa em termos práticos.
+                        - **Baixo:** "Isso sugere que a procrastinação não é um problema significativo em sua vida. Você provavelmente tem bons hábitos de organização e autodisciplina."
+                        - **Moderado:** "Isso indica que você procrastina ocasionalmente e, embora possa causar algum estresse, provavelmente não está causando prejuízos graves. É uma área que pode ser otimizada."
+                        - **Alto:** "Este nível sugere que a procrastinação é um padrão de comportamento frequente e que provavelmente está causando estresse, ansiedade e impactos negativos em áreas importantes da sua vida."
+                        - **Muito Alto:** "Este resultado indica que a procrastinação é um padrão crônico e severo, que muito provavelmente está gerando sofrimento emocional significativo e prejuízos importantes em seus objetivos e bem-estar."
+                    3.  **Análise Qualitativa (O "Porquê" você procrastina):** Olhe os tipos ('type') das respostas com pontuação alta. Identifique o padrão principal.
+                        - Se houver muitas respostas do tipo 'cognition' e 'emotion' (especialmente sobre perfeccionismo e medo), foque nisso: "Suas respostas, como o medo de não fazer bem o suficiente, sugerem que sua procrastinação pode estar ligada ao **perfeccionismo ou à ansiedade de desempenho**. Muitas vezes, o medo de entregar algo imperfeito é tão grande que se torna mais fácil não começar."
+                        - Se as respostas forem mais do tipo 'emotion' (tarefas chatas) e 'behavior', foque na regulação emocional e hábitos: "Parece que sua procrastinação está mais ligada à **dificuldade em tolerar o desconforto** de tarefas chatas ou difíceis. O adiamento funciona como uma fuga temporária do tédio ou da frustração."
+                        - Se a resposta sobre sobrecarga se destacar: "A sensação de estar sobrecarregado(a) que você relatou é um gatilho poderoso para a paralisia. Quando a montanha de tarefas parece grande demais, o cérebro busca refúgio no adiamento."
+                    4.  **Dica Prática e Acionável:** Ofereça UMA estratégia concreta baseada na análise.
+                        - Para perfeccionismo: "Uma estratégia útil é a **'Regra dos 5 Minutos'**: comprometa-se a trabalhar na tarefa por apenas 5 minutos. A parte mais difícil é começar. Depois de 5 minutos, a resistência inicial geralmente diminui."
+                        - Para fuga do desconforto: "Tente a técnica de **'combinar tentações'** (temptation bundling): combine a tarefa desagradável com algo que você gosta. Por exemplo, só ouvir seu podcast favorito enquanto organiza a papelada."
+                    5.  **Parágrafo de Encerramento:** Conclua de forma positiva, afirmando que a procrastinação é um comportamento que pode ser modificado com autoconhecimento e estratégias corretas. Recomende a busca por terapia (especialmente a TCC) se o problema estiver causando muito sofrimento.
+
+                    Formate a saída usando parágrafos e negrito (**). Não inclua o disclaimer.
+                `;
+            }
+
+            renderQuestions();
+            submitButton.addEventListener('click', handleSubmit);
+        });
+    </script>
+</body>
+</html>

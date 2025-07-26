@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- ================================================== -->
+    <!-- ||        ÁREA DE CONFIGURAÇÃO DA PÁGINA        || -->
+    <!-- ================================================== -->
+
+    <title>Teste de Regulação Emocional (ERQ ) – Deo Magalhães</title>
+    <meta name="description" content="Descubra como você lida com suas emoções. Este teste, baseado no ERQ, avalia suas tendências de reavaliação cognitiva e supressão emocional.">
+    
+    <!-- ================================================== -->
+
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <!-- Estilos específicos para o teste -->
+    <style>
+        .quiz-container { background-color: #f9f9f9; border-radius: 8px; padding: 2rem; margin-top: 2rem; border: 1px solid #eee; }
+        .question-block { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e0e0e0; transition: border-left 0.3s, padding-left 0.3s; }
+        .question-block:last-of-type { border-bottom: none; margin-bottom: 0; }
+        .question-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; color: #333; }
+        .options-list { list-style: none; padding: 0; margin: 0; }
+        .option-item { margin-bottom: 0.75rem; }
+        .option-item label { display: flex; align-items: center; padding: 0.8rem 1rem; background-color: #fff; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-item input[type="radio"] { margin-right: 1rem; width: 18px; height: 18px; accent-color: #005f73; }
+        .option-item label:hover { background-color: #f0f8ff; }
+        .option-item input[type="radio"]:checked + span { font-weight: 600; color: #005f73; }
+        .submit-button { display: block; width: 100%; padding: 1rem; font-size: 1.2rem; font-weight: 700; color: #fff; background-color: #005f73; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; margin-top: 2rem; }
+        .submit-button:hover { background-color: #003e4d; transform: translateY(-2px); }
+        .submit-button:disabled { background-color: #a9a9a9; cursor: not-allowed; }
+        #results-container { margin-top: 3rem; padding: 2rem; background-color: #eef7fa; border-radius: 8px; border-left: 5px solid #005f73; display: none; }
+        #results-container h2 { margin-top: 0; color: #003e4d; }
+        .loading-spinner { display: none; width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #005f73; border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .disclaimer-box { background-color: #fffbe6; border: 1px solid #ffe58f; color: #8a6d3b; padding: 1rem; border-radius: 8px; margin-top: 2rem; font-size: 0.9rem; }
+        .validation-message { color: #c0392b; text-align: center; margin-top: 1.5rem; margin-bottom: 1rem; padding: 0.75rem; background-color: #fbeae5; border: 1px solid #e74c3c; border-radius: 6px; display: none; }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho e Rodapé Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos & Testes</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Teste de Regulação Emocional (ERQ)</h1>
+                <p class="article-author-date">
+                    Baseado no Questionário de Regulação Emocional (ERQ) de James Gross.
+                </p>
+            </header>
+
+            <article class="article-body">
+                <p>A <strong>regulação emocional</strong> é a nossa capacidade de gerenciar e influenciar quais emoções sentimos, quando as sentimos e como as expressamos. Lidar com as emoções é uma habilidade fundamental para o bem-estar e para a qualidade dos nossos relacionamentos. Este questionário, baseado no ERQ, avalia duas estratégias principais que as pessoas usam para regular suas emoções:</p>
+                <ul>
+                    <li><strong>Reavaliação Cognitiva:</strong> Mudar a forma como pensamos sobre uma situação para alterar seu impacto emocional.</li>
+                    <li><strong>Supressão Emocional:</strong> Inibir a expressão externa de uma emoção que já estamos sentindo.</li>
+                </ul>
+                <p>Indique o quanto você concorda com cada uma das afirmações a seguir.</p>
+
+                <div class="quiz-container">
+                    <form id="erq-quiz">
+                        <!-- As perguntas serão inseridas aqui pelo JavaScript -->
+                    </form>
+                    <div id="validation-message" class="validation-message"></div>
+                    <button id="submit-btn" class="submit-button" type="button">Ver meu estilo de regulação</button>
+                    <div id="loading" class="loading-spinner"></div>
+                </div>
+
+                <div id="results-container">
+                    <h2>Sua Análise de Regulação Emocional</h2>
+                    <div id="analysis-content">
+                        <!-- O resultado da análise da IA será inserido aqui -->
+                    </div>
+                     <div class="disclaimer-box">
+                        <strong>Atenção:</strong> Este questionário é uma ferramenta de autoconhecimento e não um diagnóstico. Ele oferece um panorama sobre suas tendências de regulação emocional. Estratégias diferentes podem ser úteis em contextos diferentes, e um profissional pode ajudá-lo a desenvolver maior flexibilidade emocional.
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function( ) {
+            const quizForm = document.getElementById('erq-quiz');
+            const submitButton = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const analysisContent = document.getElementById('analysis-content');
+            const loadingSpinner = document.getElementById('loading');
+            const validationMessage = document.getElementById('validation-message');
+
+            if (!quizForm || !submitButton) {
+                console.error("Erro Crítico: Elementos essenciais do teste não foram encontrados.");
+                return;
+            }
+
+            const questions = [
+                { question: "Quando quero sentir mais emoções positivas (como alegria ou diversão), eu mudo a maneira como estou pensando sobre a situação.", type: "reappraisal" },
+                { question: "Eu controlo minhas emoções não as expressando.", type: "suppression" },
+                { question: "Quando estou diante de uma situação estressante, eu me faço pensar sobre ela de uma forma que me ajude a ficar calmo(a).", type: "reappraisal" },
+                { question: "Quando sinto emoções positivas, eu tenho o cuidado de não expressá-las.", type: "suppression" },
+                { question: "Quando quero sentir menos emoções negativas (como tristeza ou raiva), eu mudo a maneira como estou pensando sobre a situação.", type: "reappraisal" },
+                { question: "Eu controlo minhas emoções mudando a forma como penso sobre a situação em que estou.", type: "reappraisal" },
+                { question: "Quando sinto emoções negativas, eu me certifico de não as demonstrar.", type: "suppression" },
+                { question: "Quando quero sentir mais emoções positivas, eu mudo o que estou pensando.", type: "reappraisal" },
+                { question: "Eu guardo minhas emoções para mim mesmo(a).", type: "suppression" },
+                { question: "Quando quero sentir menos emoções negativas, eu mudo o que estou pensando.", type: "reappraisal" }
+            ];
+
+            const options = [
+                { text: "Discordo totalmente", value: 1 },
+                { text: "Discordo", value: 2 },
+                { text: "Discordo um pouco", value: 3 },
+                { text: "Neutro", value: 4 },
+                { text: "Concordo um pouco", value: 5 },
+                { text: "Concordo", value: 6 },
+                { text: "Concordo totalmente", value: 7 }
+            ];
+
+            function renderQuestions() {
+                let quizHTML = '';
+                questions.forEach((q, index) => {
+                    quizHTML += `<div class="question-block" id="question-${index}"><p class="question-text">${index + 1}. ${q.question}</p><ul class="options-list">`;
+                    options.forEach((option) => {
+                        quizHTML += `<li class="option-item"><label><input type="radio" name="question-${index}" value="${option.value}" required><span>${option.text}</span></label></li>`;
+                    });
+                    quizHTML += `</ul></div>`;
+                });
+                quizForm.innerHTML = quizHTML;
+            }
+
+            async function handleSubmit() {
+                validationMessage.style.display = 'none';
+                const formData = new FormData(quizForm);
+                const answers = [];
+                let allAnswered = true;
+                let reappraisalScore = 0;
+                let suppressionScore = 0;
+
+                for (let i = 0; i < questions.length; i++) {
+                    const questionBlock = document.getElementById(`question-${i}`);
+                    const answerValue = formData.get(`question-${i}`);
+                    if (!answerValue) {
+                        allAnswered = false;
+                        questionBlock.style.borderLeft = '3px solid #e74c3c';
+                        questionBlock.style.paddingLeft = '1rem';
+                    } else {
+                        questionBlock.style.borderLeft = '';
+                        questionBlock.style.paddingLeft = '';
+                        const score = parseInt(answerValue);
+                        if (questions[i].type === 'reappraisal') {
+                            reappraisalScore += score;
+                        } else {
+                            suppressionScore += score;
+                        }
+                    }
+                }
+
+                if (!allAnswered) {
+                    validationMessage.textContent = 'Por favor, responda a todas as perguntas para continuar.';
+                    validationMessage.style.display = 'block';
+                    const firstUnanswered = quizForm.querySelector('[style*="border-left"]');
+                    if (firstUnanswered) {
+                        firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+
+                submitButton.disabled = true;
+                loadingSpinner.style.display = 'block';
+                resultsContainer.style.display = 'none';
+
+                const prompt = createPrompt(reappraisalScore, suppressionScore);
+                
+                try {
+                    const apiKey = "AIzaSyDZYzXl9GLvRIQjp7_qxRz0UCW0sMH0log"; // Lembre-se de substituir pela sua chave real
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.7, topP: 0.95, topK: 40 }
+                    };
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload )
+                    });
+
+                    if (!response.ok) { throw new Error(`API Error: ${response.status}`); }
+
+                    const result = await response.json();
+                    let analysisText = 'Não foi possível gerar a análise no momento.';
+                    if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
+                        analysisText = result.candidates[0].content.parts[0].text;
+                    }
+                    
+                    let formattedText = analysisText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '  ');
+                    analysisContent.innerHTML = formattedText;
+
+                } catch (error) {
+                    console.error("Erro durante a chamada da API:", error);
+                    analysisContent.innerHTML = `<p>Ocorreu um erro ao gerar sua análise. Por favor, tente novamente mais tarde.</p>`;
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                    resultsContainer.style.display = 'block';
+                    submitButton.disabled = false;
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            function createPrompt(reappraisalScore, suppressionScore) {
+                // Médias: Reavaliação (6 itens, max 42), Supressão (4 itens, max 28)
+                const reappraisalAvg = (reappraisalScore / 6).toFixed(1);
+                const suppressionAvg = (suppressionScore / 4).toFixed(1);
+
+                return `
+                    Aja como um neuropsicólogo brasileiro, Deo Magalhães, com um tom claro, informativo e equilibrado.
+                    O usuário respondeu ao Questionário de Regulação Emocional (ERQ). Sua tarefa é gerar uma análise personalizada sobre as duas estratégias avaliadas: Reavaliação Cognitiva e Supressão Emocional.
+
+                    Dados do Usuário:
+                    - Pontuação Média em Reavaliação Cognitiva: ${reappraisalAvg} (de 7)
+                    - Pontuação Média em Supressão Emocional: ${suppressionAvg} (de 7)
+
+                    Instruções para a Análise:
+                    1.  **Parágrafo de Abertura:** Comece explicando brevemente que todos nós usamos diferentes estratégias para lidar com as emoções e que este teste avalia duas das mais comuns.
+                    2.  **Análise da Reavaliação Cognitiva:**
+                        - Dê o título: **Reavaliação Cognitiva**.
+                        - Explique o que é: "Esta estratégia envolve mudar a forma como você pensa sobre uma situação para alterar como se sente. É como 'mudar a lente' pela qual você vê um problema."
+                        - Interprete a pontuação do usuário:
+                            - Se a média for alta (acima de 5.0): "Sua pontuação sugere que você utiliza a reavaliação cognitiva com frequência. Esta é geralmente uma estratégia muito adaptativa, associada a maior bem-estar, melhores relações sociais e mais emoções positivas."
+                            - Se a média for moderada (3.5 a 5.0): "Suas respostas indicam um uso moderado da reavaliação. Você a utiliza em algumas situações, mas pode haver oportunidades para aplicá-la de forma mais consistente e colher mais benefícios."
+                            - Se a média for baixa (abaixo de 3.5): "Sua pontuação sugere que você raramente usa a reavaliação cognitiva. Isso pode significar que, diante de uma dificuldade, você tende a aceitar seu primeiro pensamento sobre ela, o que pode manter ou intensificar emoções negativas."
+                    3.  **Análise da Supressão Emocional:**
+                        - Dê o título: **Supressão Emocional**.
+                        - Explique o que é: "Esta estratégia envolve esconder ou inibir suas emoções, impedindo que os outros (e às vezes você mesmo) percebam o que você está sentindo."
+                        - Interprete a pontuação do usuário:
+                            - Se a média for alta (acima de 4.5): "Sua pontuação sugere que você frequentemente suprime ou esconde suas emoções. Embora isso possa parecer útil em alguns contextos sociais, o uso crônico da supressão está associado a maior estresse, menor bem-estar e pode criar uma sensação de distância nos relacionamentos."
+                            - Se a média for moderada (3.0 a 4.5): "Suas respostas indicam que você usa a supressão de vez em quando. É importante observar em quais situações você mais recorre a ela e se isso está sendo útil ou prejudicial a longo prazo."
+                            - Se a média for baixa (abaixo de 3.0): "Sua pontuação sugere que você não tem o hábito de suprimir suas emoções. Isso geralmente é positivo, indicando que você se permite sentir e, possivelmente, expressar o que sente de forma mais autêntica."
+                    4.  **Parágrafo de Encerramento (Flexibilidade Psicológica):** Conclua enfatizando que o objetivo não é eliminar uma estratégia, mas desenvolver **flexibilidade psicológica** – a capacidade de usar a melhor estratégia para cada situação. Mencione que a terapia pode ser um excelente caminho para ampliar o repertório de estratégias de regulação emocional.
+
+                    Formate a saída usando parágrafos e negrito (**). Não inclua o disclaimer.
+                `;
+            }
+
+            renderQuestions();
+            submitButton.addEventListener('click', handleSubmit);
+        });
+    </script>
+</body>
+</html>
