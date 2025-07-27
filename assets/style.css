@@ -1563,4 +1563,82 @@ main > section.contact-section-home:not(.hero) {
     flex-grow: 0;
   }
 }
+/* ================================================== */
+/* ||       ESTILOS DO BANNER PARA CAPTURA DE LEADS      || */
+/* ================================================== */
+
+.lead-capture-banner {
+    background-color: #eaf2f8; /* Um azul bem claro, derivado da sua paleta */
+    padding: 40px 0;
+    border-top: 1px solid #d6eaf8;
+    border-bottom: 1px solid #d6eaf8;
+    margin-top: 60px;
+}
+
+.lead-capture-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.lead-capture-icon {
+    flex-shrink: 0; /* Impede que o ícone encolha */
+}
+
+.lead-capture-icon svg {
+    width: 60px;
+    height: 60px;
+    color: var(--primary-vibrant-blue); /* Usa a variável de cor do seu site */
+}
+
+.lead-capture-text {
+    flex-grow: 1; /* Faz o texto ocupar o espaço disponível */
+}
+
+.lead-capture-text h2 {
+    font-size: 1.8em;
+    color: var(--primary-dark-blue); /* Usa a variável de cor do seu site */
+    margin: 0 0 5px 0;
+    font-weight: 700;
+}
+
+.lead-capture-text p {
+    font-size: 1.1em;
+    color: var(--text-color-light); /* Usa a variável de cor do seu site */
+    margin: 0;
+    line-height: 1.5;
+}
+
+.lead-capture-action .cta-button {
+    background-color: var(--primary-vibrant-blue);
+    color: white;
+    white-space: nowrap; /* Impede que o texto do botão quebre linha */
+}
+
+.lead-capture-action .cta-button:hover {
+    background-color: var(--primary-vibrant-blue-darker);
+}
+
+/* --- Responsividade para Dispositivos Móveis --- */
+@media (max-width: 768px) {
+    .lead-capture-content {
+        flex-direction: column; /* Empilha os itens verticalmente */
+        text-align: center;
+        gap: 20px;
+    }
+
+    .lead-capture-text h2 {
+        font-size: 1.5em;
+    }
+
+    .lead-capture-text p {
+        font-size: 1em;
+    }
+
+    .lead-capture-action .cta-button {
+        width: 100%;
+        max-width: 320px; /* Limita a largura do botão em telas maiores */
+    }
+}
+
 /* --- Fim do CSS --- */
