@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico Neuropsicológico: Gabriel do Prado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flowchart-arrow {
+            font-size: 2rem;
+            line-height: 1;
+            color: #FFD166;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-[#073B4C]">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-black text-[#073B4C] mb-2">Avaliação Neuropsicológica</h1>
+            <h2 class="text-2xl md:text-3xl font-bold text-[#118AB2]">Gabriel do Prado</h2>
+        </header>
+
+        <main class="space-y-12">
+
+            <section id="intro">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 text-center">
+                    <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto">Gabriel, aos 12 anos, apresenta um perfil complexo e fascinante. A pedido da escola e dos pais, esta avaliação busca compreender as razões por trás de suas dificuldades. O que emerge é a história de um menino com um potencial intelectual brilhante, que enfrenta desafios significativos na forma como processa o mundo, gerando frustração e impactando seu bem-estar emocional e social.</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="bg-[#FF6B6B] text-white font-bold py-2 px-4 rounded-full text-sm md:text-base">Timidez Acentuada</div>
+                        <div class="bg-[#FF6B6B] text-white font-bold py-2 px-4 rounded-full text-sm md:text-base">Surtos de Raiva</div>
+                        <div class="bg-[#FF6B6B] text-white font-bold py-2 px-4 rounded-full text-sm md:text-base">Dificuldade na Escola</div>
+                        <div class="bg-[#FF6B6B] text-white font-bold py-2 px-4 rounded-full text-sm md:text-base">Baixa Tolerância à Frustração</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="paradoxo">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold text-[#073B4C]">O Paradoxo Cognitivo</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mt-2">O cerne do perfil de Gabriel está na grande diferença entre seu potencial de raciocínio e a eficiência com que ele usa esse potencial. Este é o principal fator que explica suas frustrações.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-xl font-bold text-center mb-4 text-[#06D6A0]">Alto Potencial de Raciocínio (GAI)</h4>
+                        <div class="text-center">
+                            <p class="text-6xl font-black text-[#06D6A0]">99</p>
+                            <p class="text-lg font-semibold">Percentil</p>
+                            <p class="text-gray-500 mt-2">Capacidade de raciocinar verbalmente e resolver problemas visuais abstratos é classificada como **Muito Superior**.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-xl font-bold text-center mb-4 text-[#FF6B6B]">Baixa Eficiência Cognitiva (CPI)</h4>
+                        <div class="text-center">
+                            <p class="text-6xl font-black text-[#FF6B6B]">18</p>
+                            <p class="text-lg font-semibold">Percentil</p>
+                            <p class="text-gray-500 mt-2">Habilidades que suportam o raciocínio (memória e velocidade) operam de forma menos eficiente, na faixa **Média Inferior**.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="habilidades">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold text-[#073B4C]">Análise Detalhada das Habilidades</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mt-2">Vamos mergulhar nos resultados dos testes para ver onde Gabriel brilha e onde encontra obstáculos.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                    
+                    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                        <h4 class="text-xl font-bold text-center mb-4">Índices de Inteligência (WISC-IV)</h4>
+                        <p class="text-center text-gray-600 mb-4">O gráfico mostra a notável variação entre as habilidades de Gabriel. Enquanto seu raciocínio é de elite, a velocidade com que processa informações é um grande desafio.</p>
+                        <div class="chart-container h-80 md:h-96">
+                            <canvas id="wiscChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                        <h4 class="text-xl font-bold text-center mb-4">Atenção e Controle Inibitório</h4>
+                        <p class="text-center text-gray-600 mb-4">O perfil atencional de Gabriel é complexo. Ele é capaz de se concentrar, mas sua performance cai com o aumento da complexidade, e ele tende a ser "lento e impulsivo": demora para responder, mas ainda comete erros.</p>
+                        <div class="chart-container h-80 md:h-96">
+                            <canvas id="attentionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                        <h4 class="text-xl font-bold text-center mb-4">Organização Visuoespacial: Outro Paradoxo</h4>
+                        <p class="text-center text-gray-600 mb-4">Gabriel demonstra uma capacidade excepcional para entender relações espaciais abstratas, mas falha ao tentar organizar e planejar uma tarefa visual complexa sem estrutura prévia.</p>
+                        <div class="flex flex-col md:flex-row justify-around items-center mt-8 gap-6">
+                            <div class="text-center">
+                                <p class="text-6xl">🧠✨</p>
+                                <p class="font-bold text-lg text-[#06D6A0]">Raciocínio de Elite</p>
+                                <p class="text-sm text-gray-500">(Subteste Cubos - WISC-IV)</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-6xl">📝❌</p>
+                                <p class="font-bold text-lg text-[#FF6B6B]">Planejamento Pobre</p>
+                                <p class="text-sm text-gray-500">(Cópia da Figura de Rey)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                        <h4 class="text-xl font-bold text-center mb-4">Velocidade de Processamento: O Gargalo</h4>
+                        <p class="text-center text-gray-600 mb-4">A baixa velocidade de processamento é uma fraqueza central. Tarefas que exigem rapidez, especialmente com escrita, são um desafio, explicando suas dificuldades em terminar provas e copiar do quadro.</p>
+                        <div class="chart-container h-80 md:h-96">
+                            <canvas id="speedChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="emocional">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold text-[#073B4C]">O Impacto Emocional</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mt-2">As dificuldades cognitivas têm um custo emocional. Gabriel sente a discrepância entre seu potencial e seu desempenho, o que gera um sofrimento interno significativo.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <h4 class="text-xl font-bold text-center mb-4">Sentimentos e Autopercepção (HUMOR-IJ)</h4>
+                    <p class="text-center text-gray-600 mb-4">Os resultados do auto-relato mostram como Gabriel se sente. Ele vivencia níveis elevados de sentimentos negativos e, crucialmente, tem uma baixa crença em sua própria capacidade de ser bem-sucedido.</p>
+                    <div class="chart-container h-96">
+                        <canvas id="emotionalChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ciclo">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold text-[#073B4C]">O Ciclo Vicioso da Frustração</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mt-2">O perfil de Gabriel cria um ciclo que se autoalimenta. Compreender este ciclo é o primeiro passo para quebrá-lo.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+                        <div class="p-4 bg-blue-50 rounded-lg border-2 border-[#118AB2]">
+                            <p class="font-bold">1. Alto Potencial</p>
+                            <p class="text-sm">Capacidade de raciocínio elevada.</p>
+                        </div>
+                        <div class="flowchart-arrow">➔</div>
+                        <div class="p-4 bg-red-50 rounded-lg border-2 border-[#FF6B6B]">
+                            <p class="font-bold">2. Baixa Eficiência</p>
+                            <p class="text-sm">Déficits de atenção e velocidade.</p>
+                        </div>
+                        <div class="flowchart-arrow">➔</div>
+                        <div class="p-4 bg-red-50 rounded-lg border-2 border-[#FF6B6B]">
+                            <p class="font-bold">3. Falhas</p>
+                            <p class="text-sm">Dificuldades acadêmicas e sociais.</p>
+                        </div>
+                        <div class="flowchart-arrow">➔</div>
+                        <div class="p-4 bg-yellow-50 rounded-lg border-2 border-[#FFD166]">
+                            <p class="font-bold">4. Sofrimento</p>
+                            <p class="text-sm">Frustração, ansiedade e raiva.</p>
+                        </div>
+                        <div class="flowchart-arrow">↺</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recomendacoes">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold text-[#073B4C]">Um Caminho a Seguir: Recomendações</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mt-2">Com base nesta compreensão, um plano de intervenção multifacetado pode ajudar Gabriel a usar suas fortalezas para superar seus desafios.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-xl font-bold mb-3 text-[#118AB2]">🏠 Para a Família</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Psicoeducação:</strong> Entender que o comportamento de Gabriel vem de "não consigo", não de "não quero".</li>
+                            <li><strong>Manejo Comportamental:</strong> Criar rotinas previsíveis e validar seus sentimentos de frustração antes de buscar soluções.</li>
+                            <li><strong>Foco nas Fortalezas:</strong> Incentivar atividades que explorem seu raciocínio lógico e verbal (jogos de estratégia, debates).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-xl font-bold mb-3 text-[#118AB2]">🏫 Para a Escola</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Tempo Estendido:</strong> Conceder mais tempo para provas e trabalhos escritos.</li>
+                            <li><strong>Uso de Tecnologia:</strong> Priorizar o uso de computador para escrita, minimizando a dificuldade motora.</li>
+                            <li><strong>Instruções Claras:</strong> Dividir tarefas complexas em etapas menores e fornecer instruções verbais e visuais.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h4 class="text-xl font-bold mb-3 text-[#118AB2]">❤️ Intervenções Terapêuticas</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Psicoterapia Individual:</strong> Para desenvolver regulação emocional e lidar com a ansiedade.</li>
+                            <li><strong>Treino de Habilidades Sociais:</strong> Para aprender a interpretar pistas não-verbais e interagir com colegas.</li>
+                            <li><strong>Consulta com Psiquiatra:</strong> Avaliar a possibilidade de tratamento medicamentoso para os sintomas de TDAH.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-12 pt-8 border-t border-gray-300">
+            <p class="text-sm text-gray-500">Este infográfico é uma representação visual dos resultados da avaliação neuropsicológica de Gabriel do Prado, realizada em Junho de 2025. As informações devem ser usadas em conjunto com o laudo completo.</p>
+            <p class="text-sm text-gray-500 mt-1">Profissional Responsável: Deo S. O. Magalhães - Neuropsicólogo - CRP 04/42784</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const energeticPlayful = {
+                red: '#FF6B6B',
+                yellow: '#FFD166',
+                green: '#06D6A0',
+                blue: '#118AB2',
+                darkBlue: '#073B4C',
+                gray: '#CCCCCC'
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+            
+            const wrapLabels = (label, maxWidth) => {
+                const words = label.split(' ');
+                let lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + word).length > maxWidth) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                });
+                lines.push(currentLine.trim());
+                return lines;
+            };
+
+            const createWiscChart = () => {
+                const ctx = document.getElementById('wiscChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            wrapLabels('Raciocínio Perceptual', 16),
+                            wrapLabels('Compreensão Verbal', 16),
+                            wrapLabels('Memória Operacional', 16),
+                            wrapLabels('Velocidade de Processamento', 16)
+                        ],
+                        datasets: [{
+                            label: 'Escore de Índice (Percentil)',
+                            data: [134, 114, 91, 83],
+                            backgroundColor: [
+                                energeticPlayful.green,
+                                energeticPlayful.blue,
+                                energeticPlayful.yellow,
+                                energeticPlayful.red
+                            ],
+                            borderColor: [
+                                energeticPlayful.green,
+                                energeticPlayful.blue,
+                                energeticPlayful.yellow,
+                                energeticPlayful.red
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                suggestedMax: 140,
+                                title: { display: true, text: 'Escore Composto' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: tooltipTitleCallback,
+                                    label: (context) => {
+                                        const percentiles = { 134: 99, 114: 82, 91: 27, 83: 13 };
+                                        const value = context.raw;
+                                        return `Escore: ${value} (Percentil ${percentiles[value]})`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const createAttentionChart = () => {
+                const ctx = document.getElementById('attentionChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Atenção Simples', 'Atenção Seletiva', 'Atenção Alternada', 'Controle Inibitório (Precisão)', 'Velocidade de Resposta'],
+                        datasets: [{
+                            label: 'Desempenho de Gabriel (Normalizado)',
+                            data: [99, 25, 2, 21, 27],
+                            backgroundColor: 'rgba(255, 107, 107, 0.2)',
+                            borderColor: energeticPlayful.red,
+                            pointBackgroundColor: energeticPlayful.red,
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: energeticPlayful.red
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { backdropColor: 'transparent' },
+                                pointLabels: { font: { size: 10 } },
+                                angleLines: { color: energeticPlayful.gray }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: tooltipTitleCallback,
+                                    label: (context) => `Percentil: ${context.raw}`
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const createSpeedChart = () => {
+                const ctx = document.getElementById('speedChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Outros da mesma idade', 'Gabriel'],
+                        datasets: [{
+                            data: [87, 13],
+                            backgroundColor: [
+                                energeticPlayful.gray,
+                                energeticPlayful.red
+                            ],
+                            borderColor: '#fff',
+                            borderWidth: 4,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            title: { display: true, text: 'Percentil de Velocidade de Processamento' },
+                            tooltip: {
+                                callbacks: {
+                                    title: tooltipTitleCallback,
+                                    label: (context) => `${context.label}: ${context.raw}%`
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            const createEmotionalChart = () => {
+                const ctx = document.getElementById('emotionalChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            wrapLabels('Desamparo', 16),
+                            wrapLabels('Sintomas Depressivos', 16),
+                            wrapLabels('Afetividade Negativa', 16),
+                            wrapLabels('Isolamento Social', 16),
+                            wrapLabels('Autoeficácia', 16)
+                        ],
+                        datasets: [{
+                            label: 'Percentil',
+                            data: [70, 67, 62, 61, 31],
+                            backgroundColor: [
+                                energeticPlayful.red,
+                                energeticPlayful.red,
+                                energeticPlayful.yellow,
+                                energeticPlayful.yellow,
+                                energeticPlayful.red
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: { display: true, text: 'Percentil' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: tooltipTitleCallback,
+                                    label: (context) => `Percentil: ${context.raw}`
+                                }
+                            }
+                        }
+                    }
+                });
+            };
+
+            createWiscChart();
+            createAttentionChart();
+            createSpeedChart();
+            createEmotionalChart();
+        });
+    </script>
+</body>
+</html>
