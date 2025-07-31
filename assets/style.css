@@ -1511,58 +1511,7 @@ main > section.contact-section-home:not(.hero) {
     margin-right: auto;
   }
 }
-/* ===================================================================== */
-/* ||      ESTILO COMPLETO E CORRIGIDO PARA OS CARDS DE DESTAQUE     || */
-/* ===================================================================== */
 
-/* --- Contêiner dos Cards (Desktop e Mobile) --- */
-.highlight-cards-flex {
-  display: flex;
-  flex-wrap: wrap; /* Permite que os cards quebrem a linha */
-  gap: 2.5rem;     /* Espaçamento padrão entre os cards */
-  width: 100%;     /* Garante que o contêiner ocupe todo o espaço */
-}
-
-/* --- Estilo de Cada Card Individual (Desktop) --- */
-.highlight-card {
-  /* Layout interno do card */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  
-  /* Comportamento no layout flex */
-  flex-grow: 1;         /* Permite que o card cresça */
-  flex-basis: 320px;    /* Largura base ideal */
-  
-  /* Estilo visual */
-  padding: 2rem;
-  border-radius: 14px;
-  box-shadow: 0 4px 15px rgba(0, 95, 115, 0.1);
-}
-
-.highlight-card .highlight-card-icon {
-  margin-bottom: 1.5rem; /* Espaço abaixo do ícone */
-}
-
-.highlight-card .cta-button {
-  margin-top: auto; /* Alinha os botões na base */
-}
-
-/* --- Correção Específica e Final para Mobile --- */
-@media (max-width: 900px) {
-  .highlight-cards-flex {
-    flex-direction: column; /* Empilha os cards verticalmente */
-    align-items: stretch;   /* Força os cards a ocupar 100% da largura */
-    gap: 1.5rem;            /* Espaçamento vertical no mobile */
-  }
-
-  .highlight-card {
-    /* Garante que o card ocupe 100% da largura e reseta o comportamento de crescimento */
-    flex-basis: 100%;
-    flex-grow: 0;
-  }
-}
 /* ================================================== */
 /* ||       ESTILOS DO BANNER PARA CAPTURA DE LEADS      || */
 /* ================================================== */
@@ -1640,5 +1589,56 @@ main > section.contact-section-home:not(.hero) {
         max-width: 320px; /* Limita a largura do botão em telas maiores */
     }
 }
+/* ===================================================================== */
+/* ||      ESTILO COMPLETO E CORRIGIDO PARA OS CARDS DE DESTAQUE     || */
+/* ===================================================================== */
 
+/* --- Contêiner dos Cards (Desktop e Mobile) --- */
+.highlight-cards-flex {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os cards quebrem a linha */
+  gap: 2.5rem;     /* Espaçamento padrão entre os cards */
+  width: 100%;     /* Garante que o contêiner ocupe todo o espaço */
+}
+
+/* --- Estilo de Cada Card Individual (Desktop) --- */
+.highlight-card {
+  /* Layout interno do card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  /* Comportamento no layout flex */
+  flex-grow: 1;         /* Permite que o card cresça */
+  flex-basis: 320px;    /* Largura base ideal */
+  
+  /* Estilo visual */
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 95, 115, 0.1);
+}
+
+.highlight-card .highlight-card-icon {
+  margin-bottom: 1.5rem; /* Espaço abaixo do ícone */
+}
+
+.highlight-card .cta-button {
+  margin-top: auto; /* Alinha os botões na base */
+}
+
+/* --- Correção Específica e Final para Mobile --- */
+@media (max-width: 900px) {
+  .highlight-cards-flex {
+    flex-direction: column; /* Empilha os cards verticalmente */
+    align-items: stretch;   /* Força os cards a ocupar 100% da largura */
+    gap: 1.5rem;            /* Espaçamento vertical no mobile */
+  }
+
+  .highlight-card {
+    /* Garante que o card ocupe 100% da largura e reseta o comportamento de crescimento */
+    flex-basis: 100%;
+    flex-grow: 0;
+  }
+}
 /* --- Fim do CSS --- */
