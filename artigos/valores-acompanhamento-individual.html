@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos de Acompanhamento Individual e Orientação Parental – Deo Magalhães</title>
+    <meta name="description" content="Conheça nossos planos para terapia individual, orientação parental e o pacote integral que combina ambos os serviços com o melhor custo-benefício.">
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+    <style>
+        /* Estilos para a tabela de preços comparativa */
+        .pricing-table-compare {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2em 0;
+            font-size: 0.95em;
+            table-layout: fixed;
+            border: 1px solid #e0e0e0;
+        }
+        .pricing-table-compare th, .pricing-table-compare td {
+            padding: 15px;
+            text-align: center;
+            vertical-align: top;
+            border-left: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .pricing-table-compare th:first-child, .pricing-table-compare td:first-child {
+            text-align: left;
+            font-weight: 600;
+            background-color: #f9f9f9;
+        }
+        .pricing-table-compare thead th {
+            background-color: #f8f8f8;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+        }
+        .pricing-table-compare .plan-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .pricing-table-compare .price {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+        .pricing-table-compare .price-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .pricing-table-compare .old-price {
+            text-decoration: line-through;
+            color: #95a5a6;
+            font-size: 0.9em;
+        }
+        .pricing-table-compare .check-mark {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        /* Destaque para o plano recomendado */
+        .pricing-table-compare .highlight-plan {
+            background-color: #f0f9ff;
+            border: 2px solid #3498db;
+        }
+        .pricing-table-compare .highlight-plan .plan-name,
+        .pricing-table-compare .highlight-plan .price {
+            color: #3498db;
+        }
+        .pricing-table-compare .highlight-plan .highlight-badge {
+            display: inline-block;
+            background-color: #3498db;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Estilos para o card de agendamento (mantidos) */
+        .cta-card {
+            background-color: #f9f9f9;
+            border-left: 5px solid #3498db;
+            padding: 25px;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border-radius: 5px;
+        }
+        .cta-card .icon { font-size: 40px; color: #3498db; }
+        .cta-card .content h4 { margin: 0 0 10px 0; font-size: 1.2em; }
+        .cta-card .content p { margin: 0 0 15px 0; color: #555; }
+        .cta-card .cta-btn { display: inline-block; background-color: #3498db; color: #fff; padding: 12px 22px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: background-color 0.3s; }
+        .cta-card .cta-btn:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+    <!-- Bloco de Cabeçalho Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html" class="active">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Planos de Cuidado: Acompanhamento Individual e Orientação Parental</h1>
+                <p class="article-author-date">
+                    <strong>Por Deo Magalhães</strong> - Neuropsicólogo e Neurocientista  
+                    Última atualização: 31 de Julho, 2025
+                </p>
+            </header>
+
+            <article class="article-body">
+                <p><em>O bem-estar de um indivíduo, especialmente de crianças e adolescentes, está profundamente conectado ao seu ambiente familiar. Por isso, ofereço diferentes modalidades de cuidado que podem focar no desenvolvimento pessoal do paciente, no suporte estratégico aos pais, ou na combinação poderosa de ambos.</em></p>
+
+                <h2>Encontrando o Plano Ideal para Sua Família</h2>
+                <p>Cada família tem uma necessidade única. Seja para um processo de autoconhecimento e desenvolvimento de habilidades socioemocionais na terapia individual, para buscar orientação prática sobre os desafios da parentalidade, ou para integrar as duas frentes, há um plano de cuidado desenhado para seus objetivos. A tabela abaixo apresenta as opções de forma clara para ajudar na sua decisão.</p>
+                
+                <table class="pricing-table-compare">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Nossos Planos</th>
+                            <th style="width: 25%;"><span class="plan-name">Plano Foco</span>Individual</th>
+                            <th style="width: 25%;"><span class="plan-name">Plano Essencial</span>Parental</th>
+                            <th style="width: 25%;" class="highlight-plan"><span class="plan-name">Plano Integral</span>Completo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ideal para</strong></td>
+                            <td>Desenvolvimento pessoal e autoconhecimento do paciente.</td>
+                            <td>Pais que buscam estratégias e suporte para desafios específicos.</td>
+                            <td class="highlight-plan">Cuidado completo, alinhando a terapia do paciente com o suporte familiar.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sessões Individuais</strong></td>
+                            <td>4 por mês</td>
+                            <td>-</td>
+                            <td class="highlight-plan"><span class="check-mark">✔</span> 4 por mês</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Orientação Parental</strong></td>
+                            <td>-</td>
+                            <td>2 por mês</td>
+                            <td class="highlight-plan"><span class="check-mark">✔</span> 2 por mês</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Valor Avulso Total</strong></td>
+                            <td>R$ 720</td>
+                            <td>R$ 360</td>
+                            <td class="highlight-plan">R$ 1.080</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Investimento Mensal</strong></td>
+                            <td>
+                                <div class="price">R$ 576</div>
+                                <div class="price-details"><span class="old-price">R$ 720</span> (20% de desconto )</div>
+                            </td>
+                            <td>
+                                <div class="price">R$ 324</div>
+                                <div class="price-details"><span class="old-price">R$ 360</span> (10% de desconto)</div>
+                            </td>
+                            <td class="highlight-plan">
+                                <div class="price">R$ 810</div>
+                                <div class="price-details"><span class="old-price">R$ 1.080</span> (25% de desconto)</div>
+                                <div class="highlight-badge">Melhor Custo-Benefício</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>A Vantagem do Cuidado Integrado</h2>
+                <p>O **Plano Integral** é a nossa modalidade mais recomendada por um motivo fundamental: ele cria uma ponte entre o mundo interno do paciente e seu ambiente familiar. Enquanto o paciente desenvolve novas habilidades e insights na terapia, os pais recebem o suporte e as ferramentas necessárias para compreender, apoiar e reforçar esse progresso em casa. Essa abordagem sistêmica potencializa os resultados e promove mudanças mais rápidas e duradouras para toda a família.</p>
+                
+                <hr class="article-divider">
+
+                <!-- Card de Agendamento -->
+                <div class="cta-card">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m16 14-4 4-2-2"></path></svg>
+                    </div>
+                    <div class="content">
+                        <h4>Vamos Conversar Sobre Suas Metas?</h4>
+                        <p>O primeiro passo é entender suas necessidades. Agende uma conversa inicial para que possamos definir juntos o melhor plano de cuidado para você e sua família.</p>
+                        <a href="/agendamento.html" class="cta-btn">Agendar uma Conversa</a>
+                    </div>
+                </div>
+
+                <hr class="article-divider">
+                <p class="article-disclaimer"><em>Valores referentes ao ano de 2025, baseados em um custo de R$ 180 por sessão avulsa. Pagamentos dos pacotes são realizados de forma antecipada.</em></p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 93300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+</body>
+</html>
