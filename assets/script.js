@@ -81,6 +81,40 @@ if (header) {
             }
         });
     }
+// ==================================================
+// 5. INICIALIZAÇÃO DO CARROSSEL HERO (SWIPER.JS)
+// ==================================================
+// Verifica se a biblioteca Swiper está carregada e se o elemento do carrossel existe
+if (typeof Swiper !== 'undefined' && document.querySelector('.hero-carousel')) {
+    const heroSwiper = new Swiper('.hero-carousel', {
+        // Efeito de transição (fade é uma boa opção para seções hero)
+        effect: 'fade',
+        fadeEffect: {
+            crossFade: true
+        },
+        
+        // Loop infinito
+        loop: true,
+
+        // Autoplay (opcional, mas recomendado para hero)
+        autoplay: {
+            delay: 7000, // 7 segundos por slide
+            disableOnInteraction: false, // Não para o autoplay após interação do usuário
+        },
+
+        // Paginação (as bolinhas)
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+
+        // Navegação (as setas)
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+}
 
 }); 
 // Fim do 'DOMContentLoaded'

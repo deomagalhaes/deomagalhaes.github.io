@@ -250,11 +250,13 @@ section[id] {
 
 /* --- Seção Hero --- */
 .hero {
+    /* Adicionando de volta o fundo de gradiente para as páginas internas */
     background: linear-gradient(to right, var(--primary-dark-blue), var(--primary-vibrant-blue));
     color: white;
     text-align: center;
     padding: 80px 20px;
 }
+
 
 .hero h1 {
     font-size: 3.5em;
@@ -524,7 +526,6 @@ section[id] {
 
 /* --- Seção CTA --- */
 .cta-section {
-    background: linear-gradient(to right, var(--primary-dark-blue), var(--primary-vibrant-blue));
     color: white;
     text-align: center;
     padding: 80px 20px;
@@ -1448,7 +1449,7 @@ textarea:focus {
   Esta regra aplica o layout de 'container' a todas as seções
   dentro do <main>, EXCETO a seção com a classe .hero.
 */
-main > section:not(.hero) {
+main > section:not(.hero):not(.hero-carousel-section) {
     max-width: 1200px;   /* Mesma largura máxima do seu .container */
     margin-left: auto;   /* Para centralizar */
     margin-right: auto;  /* Para centralizar */
@@ -1640,5 +1641,196 @@ main > section.contact-section-home:not(.hero) {
     flex-basis: 100%;
     flex-grow: 0;
   }
+}
+/* =================================================================== */
+/* ||         CÓDIGO COMPLETO E CORRIGIDO PARA O HERO CAROUSEL        || */
+/* =================================================================== */
+
+/* --- 1. Container Principal da Seção --- */
+/* Removemos qualquer cor de fundo daqui para evitar conflitos. */
+.hero-carousel-section {
+    width: 100%;
+    color: white;
+    position: relative;
+    padding: 0;
+}
+
+/* --- 2. Estrutura do Slide --- */
+/* Cada slide é um contêiner posicionado que ocupa toda a área. */
+.hero-carousel .swiper-slide {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    display: flex; /* Usamos flex para centralizar o conteúdo verticalmente */
+    align-items: center;
+    justify-content: center;
+    min-height: 500px; /* Altura mínima para garantir espaço */
+}
+
+/* --- 3. Camada da Imagem de Fundo --- */
+/* Esta é a camada mais ao fundo (z-index: 1). */
+.hero-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1; /* Camada 1: A imagem */
+}
+
+/* --- 4. Camada de Sobreposição (Overlay) --- */
+/* Esta camada fica EM CIMA da imagem (z-index: 2). */
+.hero-background-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(44, 62, 80, 0.7), rgba(52, 152, 219, 0.5));
+    z-index: 2; /* Camada 2: O gradiente escuro */
+}
+
+/* --- 5. Conteúdo do Slide (Texto e Botões) --- */
+/* Este é o conteúdo visível, que fica na frente de tudo (z-index: 3). */
+.hero-slide-content {
+    position: relative;
+    z-index: 3; /* Camada 3: O texto e botões */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.hero-slide-content h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.hero-slide-content h1 .highlight {
+    display: block;
+    color: var(--hero-highlight-blue);
+}
+
+.hero-slide-content p {
+    font-size: 1.3em;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+    opacity: 0.95;
+}
+
+/* --- 6. Controles do Swiper (Setas e Paginação) --- */
+.hero-carousel .swiper-pagination-bullet {
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 10px;
+    height: 10px;
+    transition: all 0.3s ease;
+}
+
+.hero-carousel .swiper-pagination-bullet-active {
+    background-color: white;
+    transform: scale(1.2);
+}
+
+.hero-carousel .swiper-button-next,
+.hero-carousel .swiper-button-prev {
+    color: white;
+}
+
+/* --- 7. Animações (Opcional, mas recomendado) --- */
+/* Estado inicial dos elementos (invisíveis) */
+.hero-slide-content h1,
+.hero-slide-content p,
+.hero-slide-content .hero-buttons {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Estado final quando o slide está ativo */
+.swiper-slide-active .hero-slide-content h1,
+.swiper-slide-active .hero-slide-content p,
+.swiper-slide-active .hero-slide-content .hero-buttons {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efeito escalonado */
+.swiper-slide-active .hero-slide-content p { transition-delay: 0.2s; }
+.swiper-slide-active .hero-slide-content .hero-buttons { transition-delay: 0.4s; }
+
+/* Efeito Ken Burns (zoom na imagem) */
+@keyframes kenburns-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+.swiper-slide-active .hero-background-image {
+    animation: kenburns-zoom 7.5s ease-out forwards;
+}
+
+
+/* --- 8. Ajustes para Telas Menores (Mobile) --- */
+@media (max-width: 768px) {
+    .hero-carousel .swiper-slide {
+        min-height: 450px; /* Ajusta a altura mínima para mobile */
+    }
+    .hero-slide-content {
+        padding: 40px 20px;
+    }
+    .hero-slide-content h1 {
+        font-size: 2.2em;
+    }
+    .hero-slide-content p {
+        font-size: 1.1em;
+    }
+    /* Mantém as setas ocultas no mobile, como combinado */
+    .hero-carousel .swiper-button-next,
+    .hero-carousel .swiper-button-prev {
+        display: none;
+    }
+}
+/* ================================================== */
+/* ||   ESTILO DE FUNDO PARA O HERO DA PÁGINA SOBRE  || */
+/* ================================================== */
+
+/* 1. Prepara a seção para receber um fundo e um overlay */
+.hero.hero-sobre {
+    position: relative;
+    background: none !important; /* Adicionado !important para garantir a sobreposição */
+    z-index: 1;
+}
+
+/* 2. Aplica a imagem de fundo */
+.hero.hero-sobre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* CAMINHO CORRIGIDO */
+    background-image: url('../assets/imagens/foto-deo.jpg');
+    
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+}
+
+/* 3. Aplica a camada de cor (overlay) por cima da imagem */
+.hero.hero-sobre::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(44, 62, 80, 0.7), rgba(52, 152, 219, 0.5));
+    z-index: -1;
 }
 /* --- Fim do CSS --- */
