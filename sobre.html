@@ -2,20 +2,127 @@
 <html lang="pt-br">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-9X4VW4FNZZ');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag( ){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre Deo Magalhães – Neuropsicólogo</title>
-    <meta name="description" content="Conheça a formação e experiência de Deo Magalhães, Neuropsicólogo especializado em avaliação e intervenção neuropsicológica.">
-    <link rel="icon" type="image/png" href="assets/favicon2.png">
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Jardim das Emoções – Deo Magalhães</title>
+    <meta name="description" content="Uma ferramenta interativa para explorar e registrar memórias e emoções.">
+    
+    <!-- CAMINHOS CORRIGIDOS -->
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <!-- Estilo específico do jogo -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap' );
+        :root {
+            --garden-bg: #D2E8D0;
+            --panel-bg: #FFFFFF;
+            --text-color-game: #333;
+            --shadow-color: rgba(0,0,0,0.1);
+            --button-joy: #FFD700;
+            --button-adventure: #8B4513;
+            --button-love: #FF69B4;
+            --button-wisdom: #87CEEB;
+            --button-fear: #9370DB;
+            --button-longing: #A9A9A9;
+            --button-sadness: #4682B4;
+            --button-anger: #DC143C;
+        }
+        .game-section { padding: 40px 0; background-color: #f9f9f9; }
+        .game-container {
+            width: 95%;
+            max-width: 1000px;
+            height: 85vh;
+            max-height: 650px;
+            background-color: var(--panel-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 0 auto;
+            font-family: 'Nunito', sans-serif;
+        }
+        .game-container header { padding: 15px 25px; text-align: center; border-bottom: 2px solid #eee; }
+        .game-container header h1 { margin: 0; font-size: 1.8em; color: #5A8D57; }
+        .game-container header p { margin: 5px 0 0; font-size: 1em; color: #666; }
+        .main-content { display: flex; flex-grow: 1; overflow: hidden; }
+        #garden {
+            flex-grow: 1;
+            background-color: var(--garden-bg);
+            background-image: linear-gradient(to bottom, #A8D3A5, #C8E6C9);
+            position: relative;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'><text y='24'>💧</text></svg>" ) 16 16, auto;
+            overflow: hidden;
+        }
+        #seed-panel {
+            width: 250px;
+            background-color: #F8F9FA;
+            padding: 20px;
+            border-left: 2px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow-y: auto;
+        }
+        #seed-panel h2 { margin-top: 0; margin-bottom: 10px; font-size: 1.2em; }
+        #seed-panel p { font-size: 0.9em; margin-bottom: 20px; }
+        .seed-button {
+            width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: none;
+            font-size: 1em; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .seed-button:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .seed-button.selected { outline: 4px solid #4CAF50; transform: translateY(0); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        #joy-seed { background-color: var(--button-joy); color: #504200; }
+        #adventure-seed { background-color: var(--button-adventure); color: white; }
+        #love-seed { background-color: var(--button-love); color: white; }
+        #wisdom-seed { background-color: var(--button-wisdom); color: #00334e; }
+        #fear-seed { background-color: var(--button-fear); color: white; }
+        #longing-seed { background-color: var(--button-longing); color: white; }
+        #sadness-seed { background-color: var(--button-sadness); color: white; }
+        #anger-seed { background-color: var(--button-anger); color: white; }
+        .plant {
+            position: absolute; font-size: 3rem; cursor: pointer;
+            transition: transform 0.3s ease-in-out; user-select: none; animation: grow 0.5s ease-out;
+        }
+        @keyframes grow { from { transform: scale(0); } to { transform: scale(1); } }
+        .plant:hover { transform: scale(1.2); }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);
+            display: flex; justify-content: center; align-items: center; z-index: 1001;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content {
+            background-color: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px;
+            text-align: center; transform: scale(0.9); transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-content h3 { margin-top: 0; margin-bottom: 15px; }
+        .modal-content textarea {
+            width: 100%; height: 100px; border-radius: 8px; border: 1px solid #ccc; padding: 10px;
+            font-family: 'Nunito', sans-serif; font-size: 1em; margin-bottom: 20px; box-sizing: border-box;
+        }
+        .modal-content button {
+            padding: 12px 25px; border: none; border-radius: 8px; background-color: #4CAF50;
+            color: white; font-size: 1em; cursor: pointer; transition: background-color 0.2s;
+        }
+        .modal-content button:hover { background-color: #45a049; }
+        .tooltip {
+            position: absolute; background-color: rgba(0,0,0,0.75); color: white; padding: 10px 15px;
+            border-radius: 8px; font-size: 0.9em; z-index: 1002; pointer-events: none;
+            opacity: 0; transition: opacity 0.2s; max-width: 200px; text-align: center;
+        }
+    </style>
 </head>
 <body>
     <!-- Bloco de Cabeçalho Padrão -->
@@ -33,8 +140,9 @@
     </div>
     <header id="main-header">
         <div class="header-content container">
-            <a href="index.html" class="logo-container">
-                <img src="assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+            <!-- CAMINHOS CORRIGIDOS -->
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
                 <div class="logo-text">
                     <span class="name">Deo Magalhães</span>
                     <span class="subtitle">Neurociência e Comportamento</span>
@@ -42,108 +150,152 @@
             </a>
             <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
             <nav id="main-nav">
-                <a href="index.html">Home</a>
-                <a href="sobre.html">Sobre</a>
-                <a href="servicos.html">Serviços</a>
-                <a href="agendamento.html">Agendamento</a>
-                <a href="artigos.html">Artigos</a>
-                <a href="contato.html">Contato</a>
+                <!-- CAMINHOS CORRIGIDOS -->
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../contato.html">Contato</a>
             </nav>
         </div>
     </header>
-  <!-- Seção Hero da Página Sobre -->
-<section class="hero hero-sobre">
-    <div class="container">
-       <h1>Quem é<span class="highlight">Deo Magalhães</span></h1>
-        <p>Conheça a formação acadêmica e as áreas de estudo que impulsionam o trabalho de excelência oferecido em um lugar entre a escuta e a análise, entre o cuidado e o rigor, buscando compreender para intervir e intervir para transformar.</p>
-        <div class="hero-buttons">
-            <a href="servicos.html" class="cta-button">Meus Serviços</a>
-            <a href="contato.html" class="cta-button secondary">Entrar em Contato</a>
-        </div>
-    </div>
-</section>
     
-<main>
-        <section class="page-section">
-            <h2>Formação Acadêmica</h2>
-                <p>Graduado em Psicologia pela PUC Minas. Pós graduado em Neuropsicologia, Neurociências do Desenvolvimento, ABA no TEA, ABA na Clínica e em Filosofia também pela PUC Minas. Com formação acadêmica sólida e experiência prática na área de avaliação e intervenção neuropsicológica, sua trajetória é pautada pelo compromisso com a excelência técnica e o cuidado humanizado.</p>
-                
-                <p>Com registro no Conselho Regional de Psicologia (região 04 ) e membro ativo da Sociedade Brasileira de Neuropsicologia (SBNp), se mantem sempre atualizado com as mais recentes descobertas e práticas da área.</p>
-            </section>
-
-            <section class="page-section">
-                <h2>Especialização e Experiência</h2>
-                <p>Com uma trajetória dedicada a compreender a complexa relação entre cérebro e comportamento, sua especialização se aprofunda em áreas que se complementam para oferecer um cuidado completo e integrado. A atuação profissional é focada em:</p>
-                
-                <ul>
-                    <li><strong>Neuropsicologia Clínica e Neurociências do Desenvolvimento:</strong> Realização de avaliações detalhadas para o diagnóstico de transtornos cognitivos e comportamentais, sempre considerando as etapas do desenvolvimento cerebral e suas particularidades, desde a infância até a vida adulta.</li>
-                    <li><strong>Análise do Comportamento Aplicada (ABA):</strong> Utilização de intervenções baseadas em evidências, com foco especial no Transtorno do Espectro Autista (TEA), no TDAH e em outros desafios clínicos, para promover habilidades e autonomia.</li>
-                    <li><strong>Fundamentos Filosóficos:</strong> A formação em Filosofia enriquece a prática clínica, permitindo uma reflexão aprofundada sobre as questões humanas e éticas que permeiam o cuidado em saúde mental.</li>
-                </ul>
-
-                <p>Essa abordagem multidisciplinar permite a construção de um plano terapêutico que não apenas identifica desafios, mas que também cria pontes entre o diagnóstico e a aplicação de estratégias eficazes para o dia a dia.</p>
-            </section>
-
-            <section class="page-section">
-                <h2>Filosofia de Trabalho</h2>
-                <p>A prática clínica é guiada pela convicção de que a ciência e a humanidade devem caminhar juntas. Por trás de cada diagnóstico, existe uma história de vida única, com suas potencialidades, desafios e anseios. Por isso, o trabalho se baseia em três pilares:</p>
-                
-                <ol style="list-style-type: none; padding-left: 0;">
-                    <li style="margin-bottom: 1em;"><strong>1. Rigor Científico:</strong> Todas as avaliações e intervenções são fundamentadas nas mais sólidas evidências científicas disponíveis.</li>
-                    <li style="margin-bottom: 1em;"><strong>2. Cuidado Humanizado:</strong> A técnica nunca se sobrepõe à escuta. Valoriza-se uma relação terapêutica baseada no respeito, na empatia e na colaboração com o indivíduo e sua família.</li>
-                    <li style="margin-bottom: 1em;"><strong>3. Foco na Funcionalidade:</strong> Mais do que entregar um laudo, o objetivo é traduzir o conhecimento neuropsicológico em estratégias práticas que promovam a autonomia, melhorem a qualidade de vida e permitam que cada pessoa alcance seu pleno potencial.</li>
-                </ol>
-            </section>
-
-            <section class="page-section">
-                <h2>Compromisso com a Qualidade</h2>
-                <p>A neurociência é um campo em constante evolução, e o compromisso com a excelência exige uma atualização contínua. A qualidade do trabalho é garantida através da participação ativa em congressos, cursos de aprimoramento e da imersão constante na literatura científica mais recente.</p>
-                
-                <p>Como membro da Sociedade Brasileira de Neuropsicologia (SBNp) e profissional registrado no Conselho Regional de Psicologia, são seguidos rigorosamente os mais altos padrões éticos e técnicos da profissão. O compromisso é oferecer um serviço que não apenas atenda, mas que transforme positivamente a vida das pessoas e famílias que confiam neste trabalho.</p>
-
-            <div style="text-align: center; margin-top: 60px;">
-                <a href="agendamento.html" class="cta-button">Agendar Consulta</a>
-                
-                <a href="servicos.html" class="cta-button secondary light-bg-variant">Conhecer Serviços</a>
+    <main>
+        <section class="game-section">
+            <div class="game-container">
+                <header>
+                    <h1>Jardim das Emoções</h1>
+                    <p>Plante uma semente para cada lembrança e emoção florescer.</p>
+                </header>
+                <div class="main-content">
+                    <div id="garden"></div>
+                    <div id="seed-panel">
+                        <h2>Sementes</h2>
+                        <p>Escolha uma semente e clique no jardim para plantar.</p>
+                        <button class="seed-button" id="joy-seed" data-emoji="🌻" data-type="Alegria">🌻 Alegria</button>
+                        <button class="seed-button" id="adventure-seed" data-emoji="🌳" data-type="Aventura">🌳 Aventura</button>
+                        <button class="seed-button" id="love-seed" data-emoji="🌹" data-type="Carinho">🌹 Carinho</button>
+                        <button class="seed-button" id="wisdom-seed" data-emoji="🕊️" data-type="Paz">🕊️ Paz</button>
+                        <hr style="width:80%; border-top: 1px solid #ccc; margin: 10px 0;">
+                        <button class="seed-button" id="fear-seed" data-emoji="👻" data-type="Medo">👻 Medo</button>
+                        <button class="seed-button" id="longing-seed" data-emoji="💧" data-type="Saudade">💧 Saudade</button>
+                        <button class="seed-button" id="sadness-seed" data-emoji="🥀" data-type="Tristeza">🥀 Tristeza</button>
+                        <button class="seed-button" id="anger-seed" data-emoji="🌵" data-type="Raiva">🌵 Raiva</button>
+                    </div>
+                </div>
             </div>
-            </section>
+        </section>
     </main>
 
-<!-- RODAPÉ PADRÃO - Copie e cole este bloco em todas as páginas -->
-<footer class="main-footer">
-    <div class="container footer-grid">
-        <div class="footer-column">
-            <h4>Contato</h4>
-            <ul>
-                <li><a href="https://wa.me/5535933003807" target="_blank">(35  ) 9 3300-3807</a></li>
-                <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
-                <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
-            </ul>
+    <!-- Rodapé Padrão -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-column">
-            <h4>Informações Profissionais</h4>
-            <ul>
-                <li>CRP 04/42784</li>
-                <li>Neuropsicólogo Clínico</li>
-                <li>Especialista em Neurociências</li>
-                <li>Membro da SBNp</li>
-            </ul>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
         </div>
-        <div class="footer-column">
-            <h4>Redes Sociais</h4>
-            <ul>
-                <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div class="container">
-            <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
-            <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
-        </div>
-    </div>
-</footer>
+    </footer>
 
-    <script src="assets/script.js"></script>
+    <!-- Modal e Tooltip do Jogo -->
+    <div class="modal-overlay" id="memory-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">Qual lembrança você quer plantar?</h3>
+            <textarea id="memory-input" placeholder="Escreva aqui uma lembrança de..."></textarea>
+            <button id="save-memory-button">Plantar</button>
+        </div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- CAMINHO CORRIGIDO -->
+    <script src="../assets/script.js"></script>
+
+    <!-- Script do Jogo -->
+    <script>
+        const garden = document.getElementById('garden' );
+        const seedButtons = document.querySelectorAll('.seed-button');
+        const modal = document.getElementById('memory-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const memoryInput = document.getElementById('memory-input');
+        const saveMemoryButton = document.getElementById('save-memory-button');
+        const tooltip = document.getElementById('tooltip');
+        let selectedSeed = null;
+        let plantPosition = { x: 0, y: 0 };
+        seedButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currentSelected = document.querySelector('.seed-button.selected');
+                if (currentSelected) { currentSelected.classList.remove('selected'); }
+                button.classList.add('selected');
+                selectedSeed = { emoji: button.dataset.emoji, type: button.dataset.type };
+            });
+        });
+        garden.addEventListener('click', (event) => {
+            if (!selectedSeed) { alert('Por favor, escolha uma semente primeiro!'); return; }
+            const rect = garden.getBoundingClientRect();
+            plantPosition.x = event.clientX - rect.left;
+            plantPosition.y = event.clientY - rect.top;
+            modalTitle.textContent = `Qual lembrança de ${selectedSeed.type.toLowerCase()} você quer plantar?`;
+            memoryInput.placeholder = `Escreva aqui uma lembrança de ${selectedSeed.type.toLowerCase()}...`;
+            memoryInput.value = '';
+            modal.classList.add('visible');
+            memoryInput.focus();
+        });
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) { modal.classList.remove('visible'); }
+        });
+        saveMemoryButton.addEventListener('click', () => {
+            const memoryText = memoryInput.value.trim();
+            if (memoryText === '') { alert('Por favor, escreva uma memória para plantar.'); return; }
+            createPlant(plantPosition.x, plantPosition.y, selectedSeed.emoji, memoryText);
+            modal.classList.remove('visible');
+            const currentSelected = document.querySelector('.seed-button.selected');
+            if (currentSelected) { currentSelected.classList.remove('selected'); }
+            selectedSeed = null;
+        });
+        function createPlant(x, y, emoji, memory) {
+            const plant = document.createElement('div');
+            plant.classList.add('plant');
+            plant.textContent = emoji;
+            plant.style.left = `${x - 24}px`;
+            plant.style.top = `${y - 24}px`;
+            plant.dataset.memory = memory;
+            plant.addEventListener('mouseenter', (e) => {
+                tooltip.textContent = plant.dataset.memory;
+                tooltip.style.opacity = '1';
+                const plantRect = e.target.getBoundingClientRect();
+                const gardenRect = garden.getBoundingClientRect();
+                tooltip.style.left = `${plantRect.left - gardenRect.left + plantRect.width / 2 - tooltip.offsetWidth / 2}px`;
+                tooltip.style.top = `${plantRect.top - gardenRect.top - tooltip.offsetHeight - 10}px`;
+            });
+            plant.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
+            garden.appendChild(plant);
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,391 @@
+<!-- Arquivo: /recursos/jogo-regulacao-emocional.html (Versão de Código Único) -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag( ){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura na Ilha das Emoções – Deo Magalhães</title>
+    <meta name="description" content="Um jogo interativo para ajudar crianças a praticar a regulação emocional.">
+    
+    <!-- 1. CSS Principal do Site (caminho corrigido) -->
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <!-- 2. CSS Específico e Isolado para o Jogo -->
+    <style>
+        /* Importa a fonte do jogo */
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap' );
+
+        /* Container principal do jogo para isolar os estilos */
+        #game-wrapper {
+            font-family: 'Baloo 2', cursive; /* Define a fonte apenas para o jogo */
+            background-color: #E0F7FA;
+            background-image: linear-gradient(to bottom, #80DEEA, #E0F7FA);
+            padding: 40px 20px;
+        }
+
+        #game-wrapper .game-panel {
+            width: 100%;
+            max-width: 800px;
+            background-color: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            padding: 25px;
+            text-align: center;
+            color: #004D40;
+            transition: transform 0.5s ease;
+            margin: 0 auto; /* Centraliza o painel do jogo */
+        }
+
+        #game-wrapper .hidden {
+            display: none !important;
+        }
+
+        #game-wrapper h1 {
+            font-size: 2.2em;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-family: 'Baloo 2', cursive; /* Garante a fonte correta */
+        }
+
+        #game-wrapper p {
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-family: 'Baloo 2', cursive; /* Garante a fonte correta */
+        }
+
+        #game-wrapper .character-display {
+            margin-bottom: 20px;
+        }
+
+        #game-wrapper .character-display img {
+            height: 150px;
+            animation: game-bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes game-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        #game-wrapper .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        #game-wrapper .option-button {
+            background-color: #fff;
+            border: 3px solid #FFCA28;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #5D4037;
+        }
+
+        #game-wrapper .option-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #game-wrapper .option-button.selected {
+            background-color: #FFCA28;
+        }
+
+        #game-wrapper .option-button img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 5px;
+        }
+
+        #game-wrapper .action-button {
+            background-color: #FFCA28;
+            color: #5D4037;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 40px;
+            font-size: 1.4em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        #game-wrapper .action-button:hover {
+            background-color: #FFB300;
+        }
+
+        #game-wrapper .feedback-panel {
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        #game-wrapper .feedback-panel.correct {
+            background-color: #C8E6C9;
+        }
+
+        #game-wrapper .final-screen {
+            animation: game-fadeIn 0.5s;
+        }
+
+        @keyframes game-fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho Padrão do Site -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Container do Jogo -->
+        <div id="game-wrapper">
+            <div id="game-container" class="game-panel">
+                <!-- Tela 1: Identificar a Emoção -->
+                <div id="screen-identify">
+                    <h1 id="emotion-title">O macaquinho está se sentindo...</h1>
+                    <div class="character-display">
+                        <img id="character-emotion" src="https://i.imgur.com/3g2z1hG.png" alt="Personagem com emoção">
+                    </div>
+                    <p>O que aconteceu para ele se sentir assim?</p>
+                    <div class="options-grid" id="cause-options"></div>
+                    <button class="action-button" id="next-to-regulate">Próximo</button>
+                </div>
+
+                <!-- Tela 2: Escolher Estratégia -->
+                <div id="screen-regulate" class="hidden">
+                    <h1>O que pode ajudar o macaquinho a se sentir melhor?</h1>
+                    <p>Escolha uma coisa que ele pode fazer!</p>
+                    <div class="options-grid" id="strategy-options"></div>
+                    <div id="feedback" class="feedback-panel hidden"></div>
+                </div>
+
+                <!-- Tela 3: Final -->
+                <div id="screen-final" class="hidden final-screen">
+                    <h1>Parabéns!</h1>
+                    <div class="character-display">
+                        <img src="https://i.imgur.com/4k3sJ9L.png" alt="Personagem feliz">
+                    </div>
+                    <p>Você ajudou o macaquinho a entender sua emoção e a se acalmar. Você é um ótimo amigo!</p>
+                    <button class="action-button" id="play-again">Jogar de Novo</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão do Site -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script principal do site (caminho corrigido ) -->
+    <script src="../assets/script.js"></script>
+
+    <!-- Script do Jogo -->
+    <script>
+        const scenarios = [
+            {
+                emotion: 'Triste',
+                image: 'https://i.imgur.com/3g2z1hG.png',
+                causes: [
+                    { text: 'Seu castelo de areia quebrou', correct: true },
+                    { text: 'Ele ganhou um sorvete', correct: false },
+                    { text: 'Um amigo não quis brincar', correct: true },
+                ],
+                strategies: [
+                    { text: 'Respirar fundo 3 vezes', icon: '🌬️' },
+                    { text: 'Pedir um abraço', icon: '🤗' },
+                    { text: 'Desenhar o que sentiu', icon: '🎨' },
+                ]
+            },
+            {
+                emotion: 'Bravo',
+                image: 'https://i.imgur.com/dZ9yQ8r.png',
+                causes: [
+                    { text: 'Pegaram seu brinquedo sem pedir', correct: true },
+                    { text: 'Ele vai passear no parque', correct: false },
+                    { text: 'Ele não conseguiu montar o quebra-cabeça', correct: true },
+                ],
+                strategies: [
+                    { text: 'Pular no lugar para gastar a energia', icon: '🤸' },
+                    { text: 'Apertar uma massinha ou almofada', icon: ' подушка' },
+                    { text: 'Falar "estou bravo" com uma voz firme', icon: '🗣️' },
+                ]
+            },
+            {
+                emotion: 'Assustado',
+                image: 'https://i.imgur.com/yO3wA8W.png',
+                causes: [
+                    { text: 'Ele ouviu um barulho alto e estranho', correct: true },
+                    { text: 'Ele está comendo sua fruta favorita', correct: false },
+                    { text: 'Ele teve um pesadelo', correct: true },
+                ],
+                strategies: [
+                    { text: 'Procurar um adulto de confiança', icon: '👨‍👩‍👧' },
+                    { text: 'Abraçar seu bicho de pelúcia favorito', icon: '🧸' },
+                    { text: 'Acender uma luz fraquinha', icon: '💡' },
+                ]
+            }
+        ];
+
+        let currentScenario;
+        let selectedCause = null;
+
+        const screenIdentify = document.getElementById('screen-identify' );
+        const screenRegulate = document.getElementById('screen-regulate');
+        const screenFinal = document.getElementById('screen-final');
+
+        const emotionTitle = document.getElementById('emotion-title');
+        const characterEmotionImg = document.getElementById('character-emotion');
+        const causeOptionsContainer = document.getElementById('cause-options');
+        const strategyOptionsContainer = document.getElementById('strategy-options');
+        const feedbackPanel = document.getElementById('feedback');
+
+        const nextButton = document.getElementById('next-to-regulate');
+        const playAgainButton = document.getElementById('play-again');
+
+        function selectOption(button, container) {
+            const buttons = container.querySelectorAll('.option-button');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+        }
+
+        function loadScenario(scenario) {
+            emotionTitle.textContent = `O macaquinho está se sentindo... ${scenario.emotion}!`;
+            characterEmotionImg.src = scenario.image;
+            characterEmotionImg.alt = `Personagem se sentindo ${scenario.emotion}`;
+            
+            causeOptionsContainer.innerHTML = '';
+            scenario.causes.forEach(cause => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = cause.text;
+                button.onclick = () => {
+                    selectOption(button, causeOptionsContainer);
+                    selectedCause = cause;
+                };
+                causeOptionsContainer.appendChild(button);
+            });
+
+            strategyOptionsContainer.innerHTML = '';
+            scenario.strategies.forEach(strategy => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.innerHTML = `${strategy.icon}  
+${strategy.text}`;
+                button.onclick = () => {
+                    feedbackPanel.classList.remove('hidden');
+                    feedbackPanel.className = 'feedback-panel correct';
+                    feedbackPanel.textContent = `Ótima ideia! ${strategy.text} pode ajudar muito.`;
+                    setTimeout(() => {
+                        screenRegulate.classList.add('hidden');
+                        screenFinal.classList.remove('hidden');
+                    }, 2000);
+                };
+                strategyOptionsContainer.appendChild(button);
+            });
+        }
+
+        function startGame() {
+            currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            loadScenario(currentScenario);
+            
+            selectedCause = null;
+            feedbackPanel.classList.add('hidden');
+            screenIdentify.classList.remove('hidden');
+            screenRegulate.classList.add('hidden');
+            screenFinal.classList.add('hidden');
+        }
+
+        nextButton.addEventListener('click', () => {
+            if (!selectedCause) {
+                alert('Por favor, escolha o que aconteceu com o macaquinho!');
+                return;
+            }
+            screenIdentify.classList.add('hidden');
+            screenRegulate.classList.remove('hidden');
+        });
+
+        playAgainButton.addEventListener('click', startGame);
+
+        startGame();
+    </script>
+</body>
+</html>
