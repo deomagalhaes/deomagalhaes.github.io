@@ -117,4 +117,5 @@ if (typeof Swiper !== 'undefined' && document.querySelector('.hero-carousel')) {
 }
 
 }); 
+
 // Fim do 'DOMContentLoaded'
