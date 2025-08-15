@@ -1,4 +1,3 @@
-<!-- Arquivo: /recursos/jogo-regulacao-emocional.html (Versão de Código Único) -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,7 +5,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag( ){dataLayer.push(arguments);}
+      function gtag(   ){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-9X4VW4FNZZ');
     </script>
@@ -15,23 +14,17 @@
     <title>Aventura na Ilha das Emoções – Deo Magalhães</title>
     <meta name="description" content="Um jogo interativo para ajudar crianças a praticar a regulação emocional.">
     
-    <!-- 1. CSS Principal do Site (caminho corrigido) -->
     <link rel="icon" type="image/png" href="../assets/favicon2.png">
     <link rel="stylesheet" href="../assets/style.css">
 
-    <!-- 2. CSS Específico e Isolado para o Jogo -->
     <style>
-        /* Importa a fonte do jogo */
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap' );
-
-        /* Container principal do jogo para isolar os estilos */
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap'  );
         #game-wrapper {
-            font-family: 'Baloo 2', cursive; /* Define a fonte apenas para o jogo */
+            font-family: 'Baloo 2', cursive;
             background-color: #E0F7FA;
             background-image: linear-gradient(to bottom, #80DEEA, #E0F7FA);
             padding: 40px 20px;
         }
-
         #game-wrapper .game-panel {
             width: 100%;
             max-width: 800px;
@@ -42,48 +35,36 @@
             text-align: center;
             color: #004D40;
             transition: transform 0.5s ease;
-            margin: 0 auto; /* Centraliza o painel do jogo */
+            margin: 0 auto;
         }
-
-        #game-wrapper .hidden {
-            display: none !important;
-        }
-
+        #game-wrapper .hidden { display: none !important; }
         #game-wrapper h1 {
             font-size: 2.2em;
             margin-top: 0;
             margin-bottom: 10px;
-            font-family: 'Baloo 2', cursive; /* Garante a fonte correta */
+            font-family: 'Baloo 2', cursive;
         }
-
         #game-wrapper p {
             font-size: 1.2em;
             margin-top: 0;
             margin-bottom: 25px;
-            font-family: 'Baloo 2', cursive; /* Garante a fonte correta */
+            font-family: 'Baloo 2', cursive;
         }
-
-        #game-wrapper .character-display {
-            margin-bottom: 20px;
-        }
-
+        #game-wrapper .character-display { margin-bottom: 20px; }
         #game-wrapper .character-display img {
             height: 150px;
             animation: game-bounce 2s infinite ease-in-out;
         }
-
         @keyframes game-bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
-
         #game-wrapper .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
-
         #game-wrapper .option-button {
             background-color: #fff;
             border: 3px solid #FFCA28;
@@ -96,22 +77,16 @@
             font-weight: 700;
             color: #5D4037;
         }
-
         #game-wrapper .option-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        #game-wrapper .option-button.selected {
-            background-color: #FFCA28;
-        }
-
+        #game-wrapper .option-button.selected { background-color: #FFCA28; }
         #game-wrapper .option-button img {
             width: 60px;
             height: 60px;
             margin-bottom: 5px;
         }
-
         #game-wrapper .action-button {
             background-color: #FFCA28;
             color: #5D4037;
@@ -124,25 +99,14 @@
             transition: background-color 0.2s;
             font-family: 'Baloo 2', cursive;
         }
-
-        #game-wrapper .action-button:hover {
-            background-color: #FFB300;
-        }
-
+        #game-wrapper .action-button:hover { background-color: #FFB300; }
         #game-wrapper .feedback-panel {
             padding: 20px;
             border-radius: 15px;
             margin-top: 20px;
         }
-
-        #game-wrapper .feedback-panel.correct {
-            background-color: #C8E6C9;
-        }
-
-        #game-wrapper .final-screen {
-            animation: game-fadeIn 0.5s;
-        }
-
+        #game-wrapper .feedback-panel.correct { background-color: #C8E6C9; }
+        #game-wrapper .final-screen { animation: game-fadeIn 0.5s; }
         @keyframes game-fadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
@@ -150,7 +114,7 @@
     </style>
 </head>
 <body>
-    <!-- Cabeçalho Padrão do Site -->
+    <!-- Cabeçalho Padrão do Site (sem alterações) -->
     <div class="top-bar">
         <div class="container top-bar-content">
             <div class="top-bar-left">
@@ -185,21 +149,18 @@
     </header>
     
     <main>
-        <!-- Container do Jogo -->
         <div id="game-wrapper">
             <div id="game-container" class="game-panel">
-                <!-- Tela 1: Identificar a Emoção -->
                 <div id="screen-identify">
                     <h1 id="emotion-title">O macaquinho está se sentindo...</h1>
                     <div class="character-display">
-                        <img id="character-emotion" src="assets/imagens/hero-5.jpg" alt="Personagem com emoção">
+                        <img id="character-emotion" src="" alt="Personagem com emoção">
                     </div>
                     <p>O que aconteceu para ele se sentir assim?</p>
                     <div class="options-grid" id="cause-options"></div>
                     <button class="action-button" id="next-to-regulate">Próximo</button>
                 </div>
 
-                <!-- Tela 2: Escolher Estratégia -->
                 <div id="screen-regulate" class="hidden">
                     <h1>O que pode ajudar o macaquinho a se sentir melhor?</h1>
                     <p>Escolha uma coisa que ele pode fazer!</p>
@@ -207,11 +168,10 @@
                     <div id="feedback" class="feedback-panel hidden"></div>
                 </div>
 
-                <!-- Tela 3: Final -->
                 <div id="screen-final" class="hidden final-screen">
                     <h1>Parabéns!</h1>
                     <div class="character-display">
-                        <img src="assets/imagens/hero-5.jpg" alt="Personagem feliz">
+                        <img id="final-character" src="../assets/imagens/macaquinho-feliz.png" alt="Personagem feliz">
                     </div>
                     <p>Você ajudou o macaquinho a entender sua emoção e a se acalmar. Você é um ótimo amigo!</p>
                     <button class="action-button" id="play-again">Jogar de Novo</button>
@@ -220,13 +180,13 @@
         </div>
     </main>
 
-    <!-- Rodapé Padrão do Site -->
+    <!-- Rodapé Padrão do Site (sem alterações  ) -->
     <footer class="main-footer">
         <div class="container footer-grid">
             <div class="footer-column">
                 <h4>Contato</h4>
                 <ul>
-                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35  ) 9 3300-3807</a></li>
                     <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
                     <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
                 </ul>
@@ -250,20 +210,18 @@
         <div class="footer-bottom">
             <div class="container">
                 <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
-                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Script principal do site (caminho corrigido ) -->
     <script src="../assets/script.js"></script>
 
-    <!-- Script do Jogo -->
+    <!-- Script do Jogo com mais cenários -->
     <script>
         const scenarios = [
             {
                 emotion: 'Triste',
-                image: 'https://i.imgur.com/3g2z1hG.png',
+                image: '../assets/imagens/macaquinho-triste.png',
                 causes: [
                     { text: 'Seu castelo de areia quebrou', correct: true },
                     { text: 'Ele ganhou um sorvete', correct: false },
@@ -276,31 +234,73 @@
                 ]
             },
             {
-                emotion: 'Bravo',
-                image: 'https://i.imgur.com/dZ9yQ8r.png',
+                emotion: 'Feliz',
+                image: '../assets/imagens/macaquinho-feliz.png',
                 causes: [
-                    { text: 'Pegaram seu brinquedo sem pedir', correct: true },
-                    { text: 'Ele vai passear no parque', correct: false },
-                    { text: 'Ele não conseguiu montar o quebra-cabeça', correct: true },
+                    { text: 'Ele vai passear no parque', correct: true },
+                    { text: 'Ele ganhou um presente', correct: true },
+                    { text: 'Ele perdeu seu brinquedo', correct: false },
                 ],
                 strategies: [
+                    { text: 'Dar um sorriso bem grande', icon: '😄' },
+                    { text: 'Contar para um amigo', icon: '💬' },
+                    { text: 'Pular de alegria', icon: '🤸' },
+                ]
+            },
+            {
+                emotion: 'Com Raiva',
+                image: '../assets/imagens/macaquinho-raiva.png',
+                causes: [
+                    { text: 'Pegaram seu brinquedo sem pedir', correct: true },
+                    { text: 'Ele não conseguiu montar um quebra-cabeça', correct: true },
+                    { text: 'Ele comeu sua fruta favorita', correct: false },
+                ],
+                strategies: [
+                    { text: 'Apertar uma massinha', icon: '✊' },
                     { text: 'Pular no lugar para gastar a energia', icon: '🤸' },
-                    { text: 'Apertar uma massinha ou almofada', icon: ' подушка' },
-                    { text: 'Falar "estou bravo" com uma voz firme', icon: '🗣️' },
+                    { text: 'Falar "estou com raiva" com uma voz forte', icon: '🗣️' },
                 ]
             },
             {
                 emotion: 'Assustado',
-                image: 'https://i.imgur.com/yO3wA8W.png',
+                image: '../assets/imagens/macaquinho-assustado.png',
                 causes: [
-                    { text: 'Ele ouviu um barulho alto e estranho', correct: true },
-                    { text: 'Ele está comendo sua fruta favorita', correct: false },
+                    { text: 'Ele ouviu um barulho muito alto', correct: true },
                     { text: 'Ele teve um pesadelo', correct: true },
+                    { text: 'Ele viu um passarinho voando', correct: false },
                 ],
                 strategies: [
-                    { text: 'Procurar um adulto de confiança', icon: '👨‍👩‍👧' },
+                    { text: 'Procurar um adulto para se sentir seguro', icon: '👨‍👩‍👧' },
                     { text: 'Abraçar seu bicho de pelúcia favorito', icon: '🧸' },
-                    { text: 'Acender uma luz fraquinha', icon: '💡' },
+                    { text: 'Acender uma luz', icon: '💡' },
+                ]
+            },
+            {
+                emotion: 'Agitado',
+                image: '../assets/imagens/macaquinho-agitado.png',
+                causes: [
+                    { text: 'Ele está muito animado para uma festa', correct: true },
+                    { text: 'Ele comeu muito doce', correct: true },
+                    { text: 'Ele acabou de acordar de uma soneca', correct: false },
+                ],
+                strategies: [
+                    { text: 'Ouvir uma música calma', icon: '🎶' },
+                    { text: 'Beber um copo de água devagar', icon: '💧' },
+                    { text: 'Fazer um alongamento de tartaruga', icon: '🐢' },
+                ]
+            },
+            {
+                emotion: 'Surpreso',
+                image: '../assets/imagens/macaquinho-surpreso.png',
+                causes: [
+                    { text: 'Ele ganhou uma festa surpresa', correct: true },
+                    { text: 'Ele viu um mágico fazendo um truque', correct: true },
+                    { text: 'Ele foi dormir na sua cama', correct: false },
+                ],
+                strategies: [
+                    { text: 'Dizer "Uau!" bem alto', icon: '😮' },
+                    { text: 'Bater palmas de alegria', icon: '👏' },
+                    { text: 'Perguntar "O que é isso?" para entender', icon: '❓' },
                 ]
             }
         ];
@@ -348,16 +348,22 @@
             scenario.strategies.forEach(strategy => {
                 const button = document.createElement('button');
                 button.className = 'option-button';
-                button.innerHTML = `${strategy.icon}  
-${strategy.text}`;
+                button.innerHTML = `${strategy.icon}   
+ ${strategy.text}`;
                 button.onclick = () => {
                     feedbackPanel.classList.remove('hidden');
                     feedbackPanel.className = 'feedback-panel correct';
-                    feedbackPanel.textContent = `Ótima ideia! ${strategy.text} pode ajudar muito.`;
+                    
+                    if (currentScenario.emotion === 'Feliz' || currentScenario.emotion === 'Surpreso') {
+                        feedbackPanel.textContent = `Que legal! "${strategy.text}" é uma ótima forma de reagir.`;
+                    } else {
+                        feedbackPanel.textContent = `Ótima ideia! "${strategy.text}" pode ajudar muito a se sentir melhor.`;
+                    }
+
                     setTimeout(() => {
                         screenRegulate.classList.add('hidden');
                         screenFinal.classList.remove('hidden');
-                    }, 2000);
+                    }, 2500);
                 };
                 strategyOptionsContainer.appendChild(button);
             });
@@ -367,6 +373,12 @@ ${strategy.text}`;
             currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
             loadScenario(currentScenario);
             
+            if (currentScenario.emotion === 'Feliz' || currentScenario.emotion === 'Surpreso') {
+                document.querySelector('#screen-regulate h1').textContent = 'Como o macaquinho pode reagir a isso?';
+            } else {
+                document.querySelector('#screen-regulate h1').textContent = 'O que pode ajudar o macaquinho a se sentir melhor?';
+            }
+
             selectedCause = null;
             feedbackPanel.classList.add('hidden');
             screenIdentify.classList.remove('hidden');
