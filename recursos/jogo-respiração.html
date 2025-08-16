@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Metadados e links -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Respiração (Inspire, Segure, Expire) - Deo Magalhães</title>
+    <meta name="description" content="Um exercício de respiração guiado e contínuo para ajudar a acalmar a mente e o corpo.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <!-- Link para a folha de estilo principal, como no segundo arquivo -->
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ESTILOS GERAIS E PADRÃO DO SITE (herdado de style.css ) */
+        /* Os estilos do cabeçalho e rodapé agora vêm do style.css, garantindo consistência */
+        
+        /* ESTILOS ESPECÍFICOS DO GUIA DE RESPIRAÇÃO */
+        #breathing-tool-wrapper {
+            /* Fundo da ferramenta mantido, mas o fundo geral do body foi alterado */
+            background: linear-gradient(135deg, #e0f7fa 0%, #fbe9e7 100%);
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow: hidden;
+        }
+        .breathing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .instruction-text {
+            font-size: 2.2em;
+            font-weight: 600;
+            color: #345;
+            margin-bottom: 60px;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .circle-animation {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #87CEEB, #4682B4);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(70, 130, 180, 0.4);
+            animation: breathe-3-phases 12s ease-in-out infinite;
+        }
+        
+        @keyframes breathe-3-phases {
+            0% { transform: scale(0.8); }
+            33.3% { transform: scale(1.5); }
+            66.6% { transform: scale(1.5); }
+            100% { transform: scale(0.8); }
+        }
+        
+        @media (max-width: 768px) {
+            .instruction-text { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- BARRA SUPERIOR (adicionada para consistência) -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CABEÇALHO (ajustado para consistência ) -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <div id="breathing-tool-wrapper">
+            <div class="breathing-container">
+                <div id="instruction" class="instruction-text">Prepare-se...</div>
+                <div id="circle" class="circle-animation"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RODAPÉ (ajustado para consistência) -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', ( ) => {
+            const instructionText = document.getElementById('instruction');
+            const phaseTime = 4000; // 4 segundos por fase
+            
+            const instructions = ['Inspire...', 'Segure...', 'Expire...'];
+            let currentPhase = 0;
+
+            function updateInstruction() {
+                instructionText.textContent = instructions[currentPhase];
+                currentPhase = (currentPhase + 1) % instructions.length;
+            }
+
+            setTimeout(() => {
+                updateInstruction(); 
+                setInterval(updateInstruction, phaseTime);
+            }, 100);
+        });
+    </script>
+</body>
+</html>
