@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário das Emoções</title>
+    <style>
+        /* Estilos Gerais */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap' );
+
+        :root {
+            --cor-fundo: #f0f4f8;
+            --cor-texto: #333;
+            --cor-primaria: #3a7d44;
+            --cor-sombra: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Contêiner Principal */
+        #container-jogo {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--cor-sombra);
+            padding: 25px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--cor-primaria);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        /* Diário */
+        #diário {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 12px;
+            min-height: 200px;
+        }
+
+        .planta {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .planta:hover {
+            transform: scale(1.1);
+        }
+
+        .planta-icone {
+            font-size: 50px;
+            filter: grayscale(80%); /* Emoções não sentidas ficam cinzas */
+            transition: filter 0.5s ease, font-size 0.3s ease;
+        }
+
+        .planta.ativa .planta-icone {
+            filter: grayscale(0%);
+            font-size: 60px; /* Destaca a emoção ativa */
+        }
+
+        .planta-nome {
+            margin-top: 8px;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        /* Painel de Ações */
+        #painel-acoes {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        #painel-acoes h2 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 100px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .botoes-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--cor-primaria);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2e6b37;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button#btn-exportar {
+            background-color: #6c757d;
+        }
+        button#btn-exportar:hover {
+            background-color: #5a6268;
+        }
+
+        /* Modal (para exportação) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 12px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container-jogo">
+        <h1>Meu Diário das Emoções</h1>
+        <p>Clique em uma emoção para cultivá-la. Reflita sobre o que você sentiu hoje.</p>
+
+        <div id="diário">
+            <!-- As plantas (emoções) serão inseridas aqui pelo JavaScript -->
+        </div>
+
+        <div id="painel-acoes" style="display: none;">
+            <h2 id="titulo-reflexao">Cultivando a Alegria...</h2>
+            <p>O que despertou esse sentimento em você hoje?</p>
+            <textarea id="diário-entrada" placeholder="Escreva aqui sua reflexão..."></textarea>
+            <div class="botoes-container">
+                <button id="btn-salvar">Salvar Reflexão</button>
+            </div>
+        </div>
+        
+        <div class="botoes-container">
+             <button id="btn-exportar">Ver e Exportar Histórico</button>
+        </div>
+    </div>
+
+    <!-- Modal para exibir e exportar o histórico -->
+    <div id="modal-historico" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Histórico de Emoções</h2>
+            <div id="conteudo-historico" style="max-height: 300px; overflow-y: auto; border: 1px solid #eee; padding: 10px; margin-top: 10px; border-radius: 8px;"></div>
+            <div class="botoes-container">
+                <button id="btn-download-pdf">Baixar como PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biblioteca para gerar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', ( ) => {
+            const diário = document.getElementById('diário');
+            const painelAcoes = document.getElementById('painel-acoes');
+            const tituloReflexao = document.getElementById('titulo-reflexao');
+            const diárioEntrada = document.getElementById('diário-entrada');
+            const btnSalvar = document.getElementById('btn-salvar');
+            const btnExportar = document.getElementById('btn-exportar');
+            const modal = document.getElementById('modal-historico');
+            const closeModal = document.querySelector('.close-button');
+            const conteudoHistorico = document.getElementById('conteudo-historico');
+            const btnDownloadPdf = document.getElementById('btn-download-pdf');
+
+            // Emoções e seus ícones
+            const emocoes = {
+                alegria: { nome: 'Alegria', icone: '😊' },
+                tristeza: { nome: 'Tristeza', icone: '😢' },
+                raiva: { nome: 'Raiva', icone: '😠' },
+                medo: { nome: 'Medo', icone: '😨' },
+                surpresa: { nome: 'Surpresa', icone: '😮' },
+                gratidao: { nome: 'Gratidão', icone: '🙏' }
+            };
+
+            let estadoDiário = JSON.parse(localStorage.getItem('diárioDasEmocoes')) || {};
+            let emocaoAtiva = null;
+
+            // Função para renderizar o diário
+            function renderizarDiário() {
+                diário.innerHTML = '';
+                for (const key in emocoes) {
+                    const emocao = emocoes[key];
+                    const plantaDiv = document.createElement('div');
+                    plantaDiv.classList.add('planta');
+                    plantaDiv.dataset.emocao = key;
+
+                    const hoje = new Date().toISOString().split('T')[0];
+                    if (estadoDiário[hoje] && estadoDiário[hoje][key]) {
+                        plantaDiv.classList.add('ativa');
+                    }
+
+                    plantaDiv.innerHTML = `
+                        <div class="planta-icone">${emocao.icone}</div>
+                        <div class="planta-nome">${emocao.nome}</div>
+                    `;
+                    plantaDiv.addEventListener('click', () => selecionarEmocao(key));
+                    diário.appendChild(plantaDiv);
+                }
+            }
+
+            // Função para selecionar uma emoção
+            function selecionarEmocao(key) {
+                emocaoAtiva = key;
+                const hoje = new Date().toISOString().split('T')[0];
+
+                // Atualiza a interface
+                document.querySelectorAll('.planta').forEach(p => p.classList.remove('ativa'));
+                const plantaSelecionada = document.querySelector(`.planta[data-emocao="${key}"]`);
+                if (plantaSelecionada) {
+                    plantaSelecionada.classList.add('ativa');
+                }
+
+                tituloReflexao.textContent = `Cultivando a ${emocoes[key].nome}...`;
+                diárioEntrada.value = (estadoDiário[hoje] && estadoDiário[hoje][key]) ? estadoDiário[hoje][key].reflexao : '';
+                painelAcoes.style.display = 'block';
+                diárioEntrada.focus();
+            }
+
+            // Salvar a reflexão
+            btnSalvar.addEventListener('click', () => {
+                if (!emocaoAtiva) return;
+
+                const hoje = new Date().toISOString().split('T')[0];
+                if (!estadoDiário[hoje]) {
+                    estadoDiário[hoje] = {};
+                }
+
+                estadoDiário[hoje][emocaoAtiva] = {
+                    nome: emocoes[emocaoAtiva].nome,
+                    reflexao: diárioEntrada.value
+                };
+
+                localStorage.setItem('DiárioDasEmocoes', JSON.stringify(estadoDiário));
+                alert('Reflexão salva com sucesso!');
+                painelAcoes.style.display = 'none';
+                emocaoAtiva = null;
+                renderizarDiário();
+            });
+
+            // Lógica do Modal de Histórico
+            btnExportar.addEventListener('click', () => {
+                conteudoHistorico.innerHTML = '';
+                const datas = Object.keys(estadoDiário).sort().reverse(); // Mais recentes primeiro
+
+                if (datas.length === 0) {
+                    conteudoHistorico.innerHTML = '<p>Nenhuma reflexão salva ainda.</p>';
+                } else {
+                    datas.forEach(data => {
+                        const dataFormatada = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                        const entradaDiv = document.createElement('div');
+                        entradaDiv.innerHTML = `<h3>${dataFormatada}</h3>`;
+                        
+                        const emocoesDoDia = estadoDiário[data];
+                        for (const key in emocoesDoDia) {
+                            const registro = emocoesDoDia[key];
+                            entradaDiv.innerHTML += `
+                                <p><strong>${registro.nome}:</strong> ${registro.reflexao}</p>
+                            `;
+                        }
+                        conteudoHistorico.appendChild(entradaDiv);
+                    });
+                }
+                modal.style.display = 'block';
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Lógica para exportar PDF
+            btnDownloadPdf.addEventListener('click', () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text("Meu Histórico do Diário das Emoções", 20, 20);
+                
+                doc.setFont('helvetica', 'normal');
+                let y = 30;
+
+                const datas = Object.keys(estadoDiário).sort().reverse();
+                datas.forEach(data => {
+                    if (y > 270) { // Nova página
+                        doc.addPage();
+                        y = 20;
+                    }
+                    const dataFormatada = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(dataFormatada, 20, y);
+                    y += 7;
+
+                    const emocoesDoDia = estadoDiário[data];
+                    for (const key in emocoesDoDia) {
+                        const registro = emocoesDoDia[key];
+                        doc.setFont('helvetica', 'normal');
+                        const texto = `${registro.nome}: ${registro.reflexao}`;
+                        const linhas = doc.splitTextToSize(texto, 170); // Quebra de linha automática
+                        doc.text(linhas, 25, y);
+                        y += (linhas.length * 5) + 5;
+                    }
+                });
+
+                doc.save('meu-diário-das-emocoes.pdf');
+            });
+
+            // Renderização inicial
+            renderizarDiário();
+        });
+    </script>
+
+</body>
+</html>
+
+

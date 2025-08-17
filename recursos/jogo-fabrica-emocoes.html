@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fábrica de Emoções 9.0 - Edição Imersiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; overflow: hidden; }
+        .pixel-font { font-family: 'Press Start 2P', cursive; }
+        .potion-bottle { transition: transform 0.2s ease-in-out, filter 0.2s, box-shadow 0.3s; cursor: pointer; }
+        .potion-bottle:hover { transform: scale(1.1 ); filter: brightness(1.2); }
+        .potion-bottle:active { transform: scale(1.05); }
+        .potion-bottle.disabled, button:disabled { cursor: not-allowed; filter: grayscale(80%) brightness(0.8); }
+        #cauldron-liquid { transition: all 0.5s ease; }
+        .bubble { position: absolute; background-color: rgba(255, 255, 255, 0.3); border-radius: 50%; animation: rise 4s infinite ease-in; opacity: 0; }
+        @keyframes rise { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-150px); opacity: 0; } }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .hidden { display: none; }
+        .flying-potion { position: absolute; font-size: 3rem; z-index: 100; pointer-events: none; animation: fly-to-cauldron 0.7s ease-in-out forwards; }
+        @keyframes fly-to-cauldron { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: var(--tx-end) scale(0.3); opacity: 0; } }
+        
+        /* Conquistas */
+        #achievement-toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            transition: bottom 0.5s ease-in-out;
+            z-index: 100;
+        }
+        .achievement-unlocked { filter: none !important; }
+        .achievement-locked { filter: grayscale(1) brightness(0.6); }
+    </style>
+</head>
+<body class="bg-slate-800 text-white flex flex-col items-center justify-center min-h-screen p-4">
+
+    <!-- Áudio -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-click"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/ui/ui_generic_button_click.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-mix"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/items/clarity.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-success"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/ui/ui_reward_reveal_01.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-failure"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/ui/ui_button_disabled.mp3" type="audio/mpeg"></audio>
+
+    <div id="start-screen" class="w-full max-w-2xl mx-auto text-center fade-in">
+        <h1 class="text-5xl font-bold text-cyan-400 mb-4 pixel-font">Fábrica de Emoções</h1>
+        <p class="text-xl text-slate-300 mb-8">Os robôs precisam de ajuda para sentir! Misture as emoções primárias e crie emoções complexas para eles.</p>
+        <div class="text-8xl mb-8">🤖🧪❤️</div>
+        <div id="start-buttons-container" class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button id="start-new-game-button" class="pixel-font bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg transition-colors text-xl">Começar Novo Jogo</button>
+            <button id="continue-game-button" class="pixel-font bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-lg transition-colors text-xl hidden">Continuar Jogo</button>
+        </div>
+    </div>
+
+    <div id="game-container" class="w-full max-w-5xl mx-auto bg-slate-700 rounded-2xl shadow-2xl p-4 sm:p-8 border-4 border-purple-500 hidden relative">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-cyan-400 pixel-font">Fábrica de Emoções</h1>
+            <div class="flex items-center gap-4 text-3xl">
+                <div id="progress-tracker" class="pixel-font text-base sm:text-lg text-yellow-300"></div>
+                <button id="achievements-button" class="hover:scale-110 transition-transform" title="Conquistas">🏆</button>
+                <button id="grimoire-button" class="hover:scale-110 transition-transform" title="Grimório">📖</button>
+                <button id="restart-game-button" class="hover:scale-110 transition-transform" title="Reiniciar Jogo">🔄</button>
+            </div>
+        </div>
+        <div id="robot-area" class="bg-slate-900/50 rounded-xl p-4 min-h-[180px] flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 border-2 border-slate-600">
+            <div id="robot-sprite" class="text-7xl transition-transform duration-500"></div>
+            <div id="robot-dialogue" class="bg-white text-gray-800 rounded-lg p-4 relative shadow-lg text-center sm:text-left">
+                <p id="robot-intro" class="text-md font-semibold"></p>
+                <h2 id="emotion-name" class="text-3xl font-bold pixel-font"></h2>
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row items-center justify-around gap-6">
+            <div id="potions-container" class="flex justify-center gap-2 sm:gap-3 flex-wrap"></div>
+            <div class="text-center flex-shrink-0">
+                <div id="cauldron" class="relative w-40 h-32 bg-slate-900 rounded-t-full rounded-b-lg border-4 border-slate-500 overflow-hidden mx-auto">
+                    <div id="cauldron-liquid" class="absolute bottom-0 left-0 w-full h-0 bg-transparent"></div>
+                    <div id="bubbles-container"></div>
+                </div>
+                <div class="flex justify-center gap-2 mt-4">
+                    <button id="mix-button" class="pixel-font bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm" disabled>Misturar</button>
+                    <button id="clear-button" class="pixel-font bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm" disabled>Limpar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modais -->
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-slate-600 rounded-2xl shadow-2xl p-8 max-w-sm text-center border-4 border-purple-500 fade-in">
+            <p id="message-text" class="text-2xl mb-6 font-bold"></p>
+            <div id="modal-buttons-container" class="flex flex-col gap-4">
+                <button id="modal-main-button" class="pixel-font bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-colors">Ok</button>
+                <button id="modal-confirm-button" class="pixel-font bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors hidden">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="grimoire-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-slate-600 rounded-2xl shadow-2xl p-8 max-w-md w-full text-center border-4 border-yellow-400 fade-in">
+            <h2 class="pixel-font text-3xl text-yellow-300 mb-6">Grimório de Emoções</h2>
+            <div id="grimoire-content" class="max-h-64 overflow-y-auto space-y-4 text-left pr-2"></div>
+            <button id="grimoire-close-button" class="pixel-font bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-colors mt-6">Fechar</button>
+        </div>
+    </div>
+
+    <div id="achievements-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-slate-600 rounded-2xl shadow-2xl p-8 max-w-lg w-full text-center border-4 border-yellow-400 fade-in">
+            <h2 class="pixel-font text-3xl text-yellow-300 mb-6">Conquistas</h2>
+            <div id="achievements-content" class="max-h-80 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4 text-left pr-2"></div>
+            <button id="achievements-close-button" class="pixel-font bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-colors mt-6">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Toast de Conquista -->
+    <div id="achievement-toast" class="bg-green-500 text-white p-4 rounded-lg shadow-lg flex items-center gap-4">
+        <span class="text-2xl">🏆</span>
+        <span id="toast-text" class="font-bold"></span>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', ( ) => {
+        // --- Configuração e Dados ---
+        const POTIONS = {
+            alegria: { name: 'Alegria', color: '#FBBF24', emoji: '😄' },
+            tristeza: { name: 'Tristeza', color: '#60A5FA', emoji: '😢' },
+            raiva: { name: 'Raiva', color: '#F87171', emoji: '😠' },
+            medo: { name: 'Medo', color: '#A855F7', emoji: '😨' },
+            surpresa: { name: 'Surpresa', color: '#34D399', emoji: '😮' },
+        };
+
+        const EMOTIONS = {
+            'OTIMISMO': { ingredients: ['alegria', 'medo'], robot: '😎', dialogue: "Tenho uma grande apresentação e minhas engrenagens estão tremendo! Preciso de um incentivo!" },
+            'AMOR': { ingredients: ['alegria', 'tristeza'], robot: '🥰', dialogue: "Vi outro robô e meus circuitos se aqueceram... O que é isso que estou sentindo?" },
+            'DECEPÇÃO': { ingredients: ['tristeza', 'surpresa'], robot: '😑', dialogue: "Achei que ia ganhar um upgrade de memória, mas era só uma limpeza de disco." },
+            'REMORSO': { ingredients: ['tristeza', 'raiva'], robot: '😔', dialogue: "Eu não deveria ter dito que a lógica dele era falha. Agora me sinto mal e irritado comigo mesmo." },
+            'DESPREZO': { ingredients: ['raiva', 'surpresa'], robot: '😒', dialogue: "Ele realmente programou isso? É tão básico que chega a ser ofensivo." },
+            'INVEJA': { ingredients: ['raiva', 'medo'], robot: '😏', dialogue: "O novo robô tem um processador mais rápido... e eu aqui. Não é justo!" },
+            'SUSTO': { ingredients: ['medo', 'surpresa'], robot: '😱', dialogue: "Um gato pulou na minha frente do nada! Meu sensor de áudio quase explodiu!" },
+            'CURIOSIDADE': { ingredients: ['surpresa', 'alegria'], robot: '🤔', dialogue: "O que tem dentro daquela caixa? Preciso saber, é tão fascinante!" },
+        };
+
+        const ACHIEVEMENTS = {
+            'beginner': { name: 'Alquimista Iniciante', desc: 'Crie 3 emoções diferentes.', unlocked: false },
+            'perfect': { name: 'Perfeccionista', desc: 'Ajude 3 robôs seguidos sem errar.', unlocked: false },
+            'grimoire_master': { name: 'Mestre do Grimório', desc: 'Descubra todas as receitas.', unlocked: false },
+            'quick_thinker': { name: 'Pensador Rápido', desc: 'Crie uma emoção em menos de 5 segundos.', unlocked: false },
+            'first_mix': { name: 'Primeira Mistura', desc: 'Crie sua primeira emoção com sucesso.', unlocked: false },
+        };
+
+        const SAVE_KEY = 'emotionFactorySave_v3';
+        const GRIMOIRE_KEY = 'emotionFactoryGrimoire_v3';
+        const ACHIEVEMENTS_KEY = 'emotionFactoryAchievements_v3';
+
+        const dom = {
+            startScreen: document.getElementById('start-screen'), gameContainer: document.getElementById('game-container'),
+            startNewGameButton: document.getElementById('start-new-game-button'), continueGameButton: document.getElementById('continue-game-button'),
+            emotionName: document.getElementById('emotion-name'), robotSprite: document.getElementById('robot-sprite'),
+            robotIntro: document.getElementById('robot-intro'), potionsContainer: document.getElementById('potions-container'),
+            mixButton: document.getElementById('mix-button'), clearButton: document.getElementById('clear-button'),
+            cauldron: document.getElementById('cauldron'), cauldronLiquid: document.getElementById('cauldron-liquid'),
+            bubblesContainer: document.getElementById('bubbles-container'), progressTracker: document.getElementById('progress-tracker'),
+            // Modais
+            modal: document.getElementById('message-modal'), messageText: document.getElementById('message-text'),
+            modalMainButton: document.getElementById('modal-main-button'), modalConfirmButton: document.getElementById('modal-confirm-button'),
+            grimoireModal: document.getElementById('grimoire-modal'), grimoireContent: document.getElementById('grimoire-content'),
+            grimoireCloseButton: document.getElementById('grimoire-close-button'),
+            achievementsModal: document.getElementById('achievements-modal'), achievementsContent: document.getElementById('achievements-content'),
+            achievementsCloseButton: document.getElementById('achievements-close-button'),
+            // Botões do Header
+            grimoireButton: document.getElementById('grimoire-button'), restartGameButton: document.getElementById('restart-game-button'),
+            achievementsButton: document.getElementById('achievements-button'),
+            // Toast
+            achievementToast: document.getElementById('achievement-toast'), toastText: document.getElementById('toast-text'),
+            // Áudio
+            bgMusic: document.getElementById('bg-music'), sfx: {
+                click: document.getElementById('sfx-click'), mix: document.getElementById('sfx-mix'),
+                success: document.getElementById('sfx-success'), failure: document.getElementById('sfx-failure'),
+            }
+        };
+
+        let state = {
+            emotionOrder: [], currentEmotionIndex: 0, cauldronPotions: [],
+            discoveredEmotions: new Set(), achievements: JSON.parse(JSON.stringify(ACHIEVEMENTS)),
+            stats: { consecutiveSuccess: 0, startTime: 0 }
+        };
+        let modalCallback = null;
+
+        // --- Lógica de Áudio ---
+        const playSound = (sound) => {
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Interação do usuário necessária para tocar som."));
+        };
+
+        const startMusic = () => {
+            dom.bgMusic.volume = 0.1;
+            dom.bgMusic.play().catch(e => console.log("A música precisa de interação do usuário para começar."));
+        };
+
+        // --- Lógica do Jogo ---
+        const loadGame = (continueProgress = false) => {
+            startMusic();
+            const savedData = JSON.parse(localStorage.getItem(SAVE_KEY));
+            if (continueProgress && savedData) {
+                state = { ...state, ...savedData };
+            } else {
+                localStorage.removeItem(SAVE_KEY);
+                state.emotionOrder = Object.keys(EMOTIONS).sort(() => 0.5 - Math.random());
+                state.currentEmotionIndex = 0;
+                state.stats = { consecutiveSuccess: 0, startTime: 0 };
+            }
+            dom.startScreen.classList.add('hidden');
+            dom.gameContainer.classList.remove('hidden');
+            dom.gameContainer.classList.add('fade-in');
+            setupCurrentEmotion();
+        };
+
+        const setupCurrentEmotion = () => {
+            const emotionKey = state.emotionOrder[state.currentEmotionIndex];
+            const emotionData = EMOTIONS[emotionKey];
+            dom.emotionName.textContent = emotionKey;
+            dom.emotionName.style.color = POTIONS[emotionData.ingredients[0]].color;
+            dom.robotSprite.textContent = '🤖';
+            dom.robotIntro.textContent = emotionData.dialogue;
+            state.stats.startTime = Date.now();
+            updateProgress();
+            clearCauldron();
+            saveProgress();
+        };
+
+        const addPotion = (potionId, element) => {
+            if (state.cauldronPotions.length >= 2 || state.cauldronPotions.includes(potionId)) return;
+            playSound(dom.sfx.click);
+            animatePotionFlight(element);
+            setTimeout(() => {
+                state.cauldronPotions.push(potionId);
+                updateCauldronVisuals();
+                updateButtons();
+            }, 300);
+        };
+
+        const mixPotions = () => {
+            playSound(dom.sfx.mix);
+            const currentEmotionKey = state.emotionOrder[state.currentEmotionIndex];
+            const correctRecipe = [...EMOTIONS[currentEmotionKey].ingredients].sort();
+            const userRecipe = [...state.cauldronPotions].sort();
+            const isCorrect = JSON.stringify(correctRecipe) === JSON.stringify(userRecipe);
+            animateMixing();
+            setTimeout(() => {
+                if (isCorrect) {
+                    playSound(dom.sfx.success);
+                    const duration = (Date.now() - state.stats.startTime) / 1000;
+                    state.stats.consecutiveSuccess++;
+                    dom.cauldronLiquid.style.backgroundColor = EMOTIONS[currentEmotionKey].resultColor;
+                    showMessage(`Sucesso! Você criou ${currentEmotionKey}!`, nextLevel);
+                    dom.robotSprite.textContent = EMOTIONS[currentEmotionKey].robot;
+                    dom.robotSprite.style.transform = 'scale(1.2) rotate(10deg)';
+                    addDiscoveredEmotion(currentEmotionKey);
+                    checkAchievements({ success: true, duration: duration });
+                } else {
+                    playSound(dom.sfx.failure);
+                    state.stats.consecutiveSuccess = 0;
+                    dom.cauldronLiquid.style.backgroundColor = '#374151';
+                    showMessage('Oops! A mistura não deu certo. Tente de novo!', clearCauldron);
+                    checkAchievements({ success: false });
+                }
+                saveAchievements();
+            }, 1000);
+        };
+
+        const nextLevel = () => {
+            state.currentEmotionIndex++;
+            if (state.currentEmotionIndex >= state.emotionOrder.length) {
+                endGame();
+            } else {
+                setupCurrentEmotion();
+            }
+        };
+
+        const endGame = () => {
+            showMessage("Parabéns! Você ajudou todos os robôs!", () => resetFullGame(true));
+        };
+
+        const resetFullGame = (fromEndGame = false) => {
+            localStorage.removeItem(SAVE_KEY);
+            localStorage.removeItem(GRIMOIRE_KEY);
+            localStorage.removeItem(ACHIEVEMENTS_KEY);
+            state.discoveredEmotions = new Set();
+            state.achievements = JSON.parse(JSON.stringify(ACHIEVEMENTS));
+            closeModal();
+            dom.gameContainer.classList.add('hidden');
+            dom.startScreen.classList.remove('hidden');
+            checkForSavedGame();
+            if (fromEndGame) loadGame(false);
+        };
+
+        const confirmResetFullGame = () => {
+            showMessage("Tem certeza que quer reiniciar? Todo o seu progresso (jogo e conquistas) será perdido.", resetFullGame, true);
+        };
+
+        // --- Lógica de Conquistas e Grimório ---
+        const checkAchievements = (result) => {
+            if (result.success) {
+                if (!state.achievements.first_mix.unlocked) unlockAchievement('first_mix');
+                if (state.stats.consecutiveSuccess >= 3 && !state.achievements.perfect.unlocked) unlockAchievement('perfect');
+                if (state.discoveredEmotions.size >= 3 && !state.achievements.beginner.unlocked) unlockAchievement('beginner');
+                if (state.discoveredEmotions.size === Object.keys(EMOTIONS).length && !state.achievements.grimoire_master.unlocked) unlockAchievement('grimoire_master');
+                if (result.duration < 5 && !state.achievements.quick_thinker.unlocked) unlockAchievement('quick_thinker');
+            }
+        };
+
+        const unlockAchievement = (id) => {
+            if (!state.achievements[id] || state.achievements[id].unlocked) return;
+            state.achievements[id].unlocked = true;
+            showToast(`Conquista Desbloqueada: ${state.achievements[id].name}`);
+        };
+
+        const showToast = (text) => {
+            dom.toastText.textContent = text;
+            dom.achievementToast.style.bottom = '20px';
+            setTimeout(() => {
+                dom.achievementToast.style.bottom = '-100px';
+            }, 4000);
+        };
+
+        const loadAchievements = () => {
+            const saved = JSON.parse(localStorage.getItem(ACHIEVEMENTS_KEY));
+            if (saved) state.achievements = saved;
+        };
+        const saveAchievements = () => localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(state.achievements));
+
+        const showAchievements = () => {
+            dom.achievementsContent.innerHTML = '';
+            Object.values(state.achievements).forEach(ach => {
+                const isUnlocked = ach.unlocked;
+                const entry = document.createElement('div');
+                entry.className = `bg-slate-700 p-3 rounded-lg flex items-center gap-4 ${isUnlocked ? 'achievement-unlocked' : 'achievement-locked'}`;
+                entry.innerHTML = `
+                    <span class="text-4xl">🏆</span>
+                    <div>
+                        <h3 class="font-bold text-lg ${isUnlocked ? 'text-yellow-300' : ''}">${ach.name}</h3>
+                        <p class="text-sm text-slate-300">${ach.desc}</p>
+                    </div>
+                `;
+                dom.achievementsContent.appendChild(entry);
+            });
+            dom.achievementsModal.classList.remove('hidden');
+        };
+
+        const loadDiscoveredEmotions = () => {
+            const saved = JSON.parse(localStorage.getItem(GRIMOIRE_KEY));
+            if (saved) state.discoveredEmotions = new Set(saved);
+        };
+        const addDiscoveredEmotion = (emotionKey) => {
+            state.discoveredEmotions.add(emotionKey);
+            localStorage.setItem(GRIMOIRE_KEY, JSON.stringify([...state.discoveredEmotions]));
+        };
+        const showGrimoire = () => {
+            dom.grimoireContent.innerHTML = '';
+            if (state.discoveredEmotions.size === 0) {
+                dom.grimoireContent.innerHTML = '<p class="text-center text-slate-300">Nenhuma receita descoberta ainda.</p>';
+            } else {
+                [...state.discoveredEmotions].sort().forEach(key => {
+                    const emotion = EMOTIONS[key];
+                    const recipeHtml = emotion.ingredients.map(id => `<span class="text-2xl" title="${POTIONS[id].name}">${POTIONS[id].emoji}</span>`).join(' + ');
+                    const entry = document.createElement('div');
+                    entry.className = 'bg-slate-700 p-3 rounded-lg flex items-center justify-between';
+                    entry.innerHTML = `<span class="font-bold text-lg">${key}</span><div class="flex items-center gap-2">${recipeHtml}</div>`;
+                    dom.grimoireContent.appendChild(entry);
+                });
+            }
+            dom.grimoireModal.classList.remove('hidden');
+        };
+
+        // --- Lógica de UI e Animações ---
+        const saveProgress = () => {
+            if (state.currentEmotionIndex < state.emotionOrder.length) {
+                const dataToSave = {
+                    emotionOrder: state.emotionOrder, currentEmotionIndex: state.currentEmotionIndex,
+                    discoveredEmotions: [...state.discoveredEmotions], stats: state.stats,
+                };
+                localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave));
+            } else {
+                localStorage.removeItem(SAVE_KEY);
+            }
+        };
+
+        const clearCauldron = () => {
+            state.cauldronPotions = [];
+            updateCauldronVisuals();
+            updateButtons();
+            dom.robotSprite.style.transform = 'scale(1) rotate(0deg)';
+        };
+
+        const animatePotionFlight = (potionElement) => {
+            const rect = potionElement.getBoundingClientRect();
+            const cauldronRect = dom.cauldron.getBoundingClientRect();
+            const flyingEl = document.createElement('div');
+            flyingEl.className = 'flying-potion';
+            flyingEl.textContent = potionElement.querySelector('.text-5xl').textContent;
+            flyingEl.style.position = 'fixed';
+            flyingEl.style.left = `${rect.left + rect.width / 4}px`;
+            flyingEl.style.top = `${rect.top}px`;
+            const endX = cauldronRect.left + cauldronRect.width / 2 - rect.left;
+            const endY = cauldronRect.top + cauldronRect.height / 4 - rect.top;
+            flyingEl.style.setProperty('--tx-end', `translate(${endX}px, ${endY}px)`);
+            document.body.appendChild(flyingEl);
+            setTimeout(() => flyingEl.remove(), 700);
+        };
+
+        const createPotionButtons = () => {
+            dom.potionsContainer.innerHTML = '';
+            for (const [id, data] of Object.entries(POTIONS)) {
+                const potionEl = document.createElement('button');
+                potionEl.className = 'potion-bottle text-center p-2 rounded-lg';
+                potionEl.dataset.potionId = id;
+                potionEl.innerHTML = `<div class="text-5xl">${data.emoji}</div><span class="font-semibold text-sm" style="color:${data.color};">${data.name}</span>`;
+                potionEl.onclick = () => addPotion(id, potionEl);
+                dom.potionsContainer.appendChild(potionEl);
+            }
+        };
+
+        const updateButtons = () => {
+            document.querySelectorAll('#potions-container .potion-bottle').forEach(p => {
+                p.disabled = state.cauldronPotions.length >= 2 || state.cauldronPotions.includes(p.dataset.potionId);
+            });
+            dom.mixButton.disabled = state.cauldronPotions.length !== 2;
+            dom.clearButton.disabled = state.cauldronPotions.length === 0;
+        };
+
+            const updateCauldronVisuals = () => {
+            const numPotions = state.cauldronPotions.length;
+            if (numPotions === 0) {
+                dom.cauldronLiquid.style.background = 'transparent';
+                dom.cauldronLiquid.style.height = '0%';
+            } else if (numPotions === 1) {
+                dom.cauldronLiquid.style.background = POTIONS[state.cauldronPotions[0]].color;
+                dom.cauldronLiquid.style.height = '50%';
+            } else {
+                const color1 = POTIONS[state.cauldronPotions[0]].color;
+                const color2 = POTIONS[state.cauldronPotions[1]].color;
+                dom.cauldronLiquid.style.background = `linear-gradient(to right, ${color1}, ${color2})`;
+                dom.cauldronLiquid.style.height = '75%';
+            }
+        };
+
+        const animateMixing = () => {
+            dom.bubblesContainer.innerHTML = '';
+            for (let i = 0; i < 15; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.width = `${Math.random() * 15 + 5}px`;
+                bubble.style.height = bubble.style.width;
+                bubble.style.left = `${Math.random() * 90}%`;
+                bubble.style.animationDelay = `${Math.random() * 2}s`;
+                bubble.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                dom.bubblesContainer.appendChild(bubble);
+            }
+        };
+
+        const updateProgress = () => {
+            dom.progressTracker.textContent = `Robô ${state.currentEmotionIndex + 1} / ${state.emotionOrder.length}`;
+        };
+
+        const showMessage = (text, callback, showConfirm = false) => {
+            dom.messageText.textContent = text;
+            dom.modalMainButton.textContent = showConfirm ? "Cancelar" : "Ok";
+            dom.modalConfirmButton.classList.toggle('hidden', !showConfirm);
+            modalCallback = callback;
+            dom.modal.classList.remove('hidden');
+        };
+
+        const closeModal = () => {
+            dom.modal.classList.add('hidden');
+            if (dom.modalConfirmButton.classList.contains('hidden') && modalCallback) {
+                modalCallback();
+            }
+            modalCallback = null;
+        };
+
+        const confirmModal = () => {
+            if (modalCallback) {
+                modalCallback();
+            }
+            modalCallback = null;
+            dom.modal.classList.add('hidden');
+        };
+
+        const checkForSavedGame = () => {
+            dom.continueGameButton.classList.toggle('hidden', !localStorage.getItem(SAVE_KEY));
+        };
+
+        // --- Inicialização ---
+        const init = () => {
+            createPotionButtons();
+            checkForSavedGame();
+            loadDiscoveredEmotions();
+            loadAchievements();
+
+            // Event Listeners
+            dom.startNewGameButton.onclick = () => loadGame(false);
+            dom.continueGameButton.onclick = () => loadGame(true);
+            dom.mixButton.onclick = mixPotions;
+            dom.clearButton.onclick = clearCauldron;
+            dom.restartGameButton.onclick = confirmResetFullGame;
+            
+            // Modais
+            dom.modalMainButton.onclick = closeModal;
+            dom.modalConfirmButton.onclick = confirmModal;
+            dom.grimoireButton.onclick = showGrimoire;
+            dom.grimoireCloseButton.onclick = () => dom.grimoireModal.classList.add('hidden');
+            dom.achievementsButton.onclick = showAchievements;
+            dom.achievementsCloseButton.onclick = () => dom.achievementsModal.classList.add('hidden');
+
+            // Iniciar música com qualquer clique para contornar políticas de autoplay
+            document.body.addEventListener('click', startMusic, { once: true });
+        };
+
+        init();
+    });
+    </script>
+</body>
+</html>

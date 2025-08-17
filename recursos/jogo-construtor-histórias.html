@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag( ){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construtor de Histórias Mágicas – Deo Magalhães</title>
+    <meta name="description" content="Crie sua própria aventura mágica ou uma história relaxante para dormir. Uma ferramenta divertida e interativa.">
+    
+    <!-- Links do Site Principal -->
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <!-- Scripts e Fontes do Jogo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Estilos CSS do Jogo -->
+    <style>
+        #game-wrapper {
+            font-family: 'Poppins', sans-serif;
+            background-image: linear-gradient(to bottom, #80DEEA, #E0F7FA );
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 40px 20px;
+        }
+        .font-brand {
+            font-family: 'Fredoka One', cursive;
+        }
+        .choice-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .choice-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .stage {
+            animation: slideInUp 0.6s ease-out;
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .story-result {
+             animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        #story-box {
+            background-color: #E0F7FA !important;
+            border-color: #4DD0E1 !important;
+        }
+        #story-result-area h2 {
+            color: #00796B !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho Padrão do Site -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="construtor-de-historias.html">Jogo das Histórias</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <div id="game-wrapper">
+            <div id="game-container" class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 sm:p-10">
+                <h1 class="text-4xl sm:text-5xl font-brand text-center text-cyan-700 mb-2">Construtor de Histórias</h1>
+                <p class="text-center text-gray-500 mb-8">Crie sua própria aventura escolhendo uma opção de cada vez!</p>
+
+                <!-- ETAPA 0: Escolha o Tipo e Tamanho da História -->
+                <div id="stage-type" class="stage">
+                    <h2 class="text-2xl font-bold text-center text-indigo-600 mb-6">Primeiro, escolha o tipo de história:</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
+                        <div class="choice-card bg-indigo-100 rounded-xl p-6 text-center" onclick="chooseType('short' )">
+                            <div class="text-6xl mb-2">📜</div>
+                            <p class="font-semibold text-indigo-800 text-xl">Aventura Curta</p>
+                            <p class="text-indigo-600">Rápida e divertida.</p>
+                        </div>
+                        <div class="choice-card bg-indigo-100 rounded-xl p-6 text-center" onclick="chooseType('long')">
+                            <div class="text-6xl mb-2">📚</div>
+                            <p class="font-semibold text-indigo-800 text-xl">Aventura Longa</p>
+                            <p class="text-indigo-600">Com mais detalhes.</p>
+                        </div>
+                        <div class="choice-card bg-slate-100 rounded-xl p-6 text-center" onclick="chooseType('bedtime')">
+                            <div class="text-6xl mb-2">🌙</div>
+                            <p class="font-semibold text-slate-800 text-xl">História para Dormir</p>
+                            <p class="text-slate-600">Calma e relaxante.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etapa 1: Herói -->
+                <div id="stage-hero" class="stage hidden">
+                    <h2 class="text-2xl font-bold text-center text-sky-600 mb-6">1. Escolha seu herói:</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                        <div class="choice-card bg-sky-100 rounded-xl p-4 text-center" onclick="makeChoice('hero', { text: 'O cavaleiro corajoso', emoji: '⚔️' })">
+                            <div class="text-6xl mb-2">🤺</div>
+                            <p class="font-semibold text-sky-800">Cavaleiro Corajoso</p>
+                        </div>
+                        <div class="choice-card bg-sky-100 rounded-xl p-4 text-center" onclick="makeChoice('hero', { text: 'A astronauta curiosa', emoji: '👩‍🚀' })">
+                            <div class="text-6xl mb-2">👩‍🚀</div>
+                            <p class="font-semibold text-sky-800">Astronauta Curiosa</p>
+                        </div>
+                        <div class="choice-card bg-sky-100 rounded-xl p-4 text-center" onclick="makeChoice('hero', { text: 'A fada mágica', emoji: '🧚' })">
+                            <div class="text-6xl mb-2">🧚</div>
+                            <p class="font-semibold text-sky-800">Fada Mágica</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etapa 2: Lugar -->
+                <div id="stage-place" class="stage hidden">
+                    <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">2. Agora, escolha um lugar:</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                        <div class="choice-card bg-cyan-100 rounded-xl p-4 text-center" onclick="makeChoice('place', { text: 'numa floresta encantada', emoji: '🌳' })">
+                            <div class="text-6xl mb-2">🌳</div>
+                            <p class="font-semibold text-cyan-800">Floresta Encantada</p>
+                        </div>
+                        <div class="choice-card bg-cyan-100 rounded-xl p-4 text-center" onclick="makeChoice('place', { text: 'num planeta distante', emoji: '🪐' })">
+                            <div class="text-6xl mb-2">🪐</div>
+                            <p class="font-semibold text-cyan-800">Planeta Distante</p>
+                        </div>
+                        <div class="choice-card bg-cyan-100 rounded-xl p-4 text-center" onclick="makeChoice('place', { text: 'num castelo misterioso', emoji: '🏰' })">
+                            <div class="text-6xl mb-2">🏰</div>
+                            <p class="font-semibold text-cyan-800">Castelo Misterioso</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etapa 3: Ação -->
+                <div id="stage-action" class="stage hidden">
+                    <h2 class="text-2xl font-bold text-center text-teal-600 mb-6">3. O que vai acontecer?</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                        <div class="choice-card bg-teal-100 rounded-xl p-4 text-center" onclick="makeChoice('action', { text: 'encontrou um tesouro brilhante', emoji: '💎' })">
+                            <div class="text-6xl mb-2">💎</div>
+                            <p class="font-semibold text-teal-800">Encontrar um Tesouro</p>
+                        </div>
+                        <div class="choice-card bg-teal-100 rounded-xl p-4 text-center" onclick="makeChoice('action', { text: 'fez um novo amigo dinossauro', emoji: '🦖' })">
+                            <div class="text-6xl mb-2">🦖</div>
+                            <p class="font-semibold text-teal-800">Fazer um Amigo</p>
+                        </div>
+                        <div class="choice-card bg-teal-100 rounded-xl p-4 text-center" onclick="makeChoice('action', { text: 'resolveu um grande enigma', emoji: '🧩' })">
+                            <div class="text-6xl mb-2">🧩</div>
+                            <p class="font-semibold text-teal-800">Resolver um Enigma</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resultado Final -->
+                <div id="story-result-area" class="hidden text-center">
+                     <h2 class="text-3xl font-brand mb-6">Sua História Mágica!</h2>
+                     <div id="story-box" class="story-result rounded-xl p-6 min-h-[150px] flex items-center justify-center">
+                        <!-- O conteúdo da história (ou loading) será inserido aqui -->
+                     </div>
+                     
+                     <div class="mt-8 flex justify-center items-center gap-4 flex-wrap">
+                        <button id="listen-button" onclick="speakStory()" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-lg transition-colors font-brand text-lg flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            Ouvir
+                        </button>
+                        <button onclick="resetGame( )" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg transition-colors font-brand text-lg">Criar Outra História</button>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão do Site -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script do Site Principal -->
+    <script src="../assets/script.js"></script>
+
+    <!-- Script do Jogo -->
+    <script>
+        // --- Estado do Jogo ---
+        let story = { hero: null, place: null, action: null };
+        let storyType = 'short'; // 'short', 'long', ou 'bedtime'
+        let currentStage = 'type'; // O jogo agora começa na etapa 'type'
+
+        // --- Script para Leitura de Texto ---
+        const synth = window.speechSynthesis;
+        let storyTextToSpeak = "";
+
+        // --- Elementos do DOM ---
+        const stages = {
+            type: document.getElementById('stage-type' ),
+            hero: document.getElementById('stage-hero'),
+            place: document.getElementById('stage-place'),
+            action: document.getElementById('stage-action')
+        };
+        const resultArea = document.getElementById('story-result-area');
+        const storyBoxEl = document.getElementById('story-box');
+
+        // --- Funções do Jogo ---
+        function chooseType(type) {
+            storyType = type;
+            advanceStage();
+        }
+
+        function makeChoice(stage, choice) {
+            story[stage] = choice;
+            advanceStage();
+        }
+
+        function advanceStage() {
+            stages[currentStage].classList.add('hidden');
+            let nextStage = null;
+            if (currentStage === 'type') nextStage = 'hero';
+            else if (currentStage === 'hero') nextStage = 'place';
+            else if (currentStage === 'place') nextStage = 'action';
+            if (nextStage) {
+                currentStage = nextStage;
+                stages[currentStage].classList.remove('hidden');
+            } else {
+                showStory();
+            }
+        }
+
+        async function showStory() {
+            const { hero, place, action } = story;
+            resultArea.classList.remove('hidden');
+            storyBoxEl.innerHTML = `
+                <div class="flex justify-center items-center flex-col">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500"></div>
+                    <p class="mt-4 text-lg text-gray-600">Criando sua história mágica...</p>
+                </div>
+            `;
+            
+            let prompt = '';
+            if (storyType === 'bedtime') {
+                prompt = `
+                    Crie uma história para dormir para crianças, com cerca de 500 a 600 palavras.
+                    A história é sobre: ${hero.text} que está em ${place.text} e vai ${action.text}.
+                    **Instruções essenciais para o tom e conteúdo:**
+                    1.  **Ritmo Lento e Repetitivo:** Use frases curtas, um ritmo calmo e repita palavras e conceitos relaxantes (ex: "respirando fundo e devagar", "sentindo o corpo pesado e confortável", "flutuando suavemente").
+                    2.  **PNL e Autoindução:** Incorpore linguagem que induza ao relaxamento. Use comandos embutidos como "enquanto você ouve, você pode começar a relaxar ainda mais" e "você se sente seguro e tranquilo". Use metáforas de relaxamento, como se transformar em uma nuvem fofa ou derreter como gelo ao sol.
+                    3.  **Foco Sensorial:** Descreva sensações calmantes: o calor de um cobertor, a brisa suave, o som de folhas, o cheiro de um jardim tranquilo.
+                    4.  **Final Aberto e Relaxante:** A história não precisa de um clímax. Ela deve terminar de forma suave, guiando a criança para o sono. Termine com uma sugestão direta para dormir, como "E assim, o herói fechou os olhos, pronto para sonhos maravilhosos. E você também pode... bons sonhos."
+                `;
+            } else {
+                const wordCount = storyType === 'long' ? '1080 a 1100 palavras' : '180 a 200 palavras';
+                prompt = `Crie uma história infantil mágica e divertida, com cerca de ${wordCount}. A história é sobre ${hero.text} que, ${place.text}, ${action.text}. Use uma linguagem simples, com detalhes, e termine com um final feliz e empolgante.`;
+            }
+
+            try {
+                const generatedText = await makeApiCallWithRetry(prompt);
+                const formattedText = generatedText.replace(/\*/g, '').trim();
+                storyTextToSpeak = formattedText;
+                storyBoxEl.innerHTML = `<p class="text-lg sm:text-xl text-gray-700 leading-relaxed">${formattedText}</p>`;
+                storyBoxEl.classList.remove('story-result');
+                void storyBoxEl.offsetWidth;
+                storyBoxEl.classList.add('story-result');
+            } catch (error) {
+                console.error("Falha ao gerar a história:", error);
+                storyBoxEl.innerHTML = `<p class="text-xl text-red-500">Oops! Ocorreu um erro ao criar a história. (${error.message}). Por favor, verifique sua chave de API e tente novamente.</p>`;
+            }
+        }
+
+        async function makeApiCallWithRetry(prompt, maxRetries = 3) {
+            const apiKey = "AIzaSyD1CG09OzB3G4kAznrhOg5bNQ_mgNi8N_4"; // Sua chave de API
+            if (!apiKey || apiKey === "SUA_CHAVE_API_VALIDA_AQUI") {
+                 throw new Error("Chave de API não configurada");
+            }
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+            for (let i = 0; i < maxRetries; i++ ) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        const errorBody = await response.json().catch(() => ({}));
+                        const errorMessage = errorBody?.error?.message || `Erro HTTP: ${response.status}`;
+                        throw new Error(errorMessage);
+                    }
+                    const result = await response.json();
+                    if (result.promptFeedback && result.promptFeedback.blockReason) {
+                        throw new Error(`Conteúdo bloqueado pela API: ${result.promptFeedback.blockReason}`);
+                    }
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error("Formato de resposta da API inesperado.");
+                    }
+                } catch (error) {
+                    console.error(`Tentativa ${i + 1} falhou:`, error.message);
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(res => setTimeout(res, Math.pow(2, i) * 1000));
+                }
+            }
+        }
+
+        function resetGame() {
+            synth.cancel();
+            storyTextToSpeak = "";
+            story = { hero: null, place: null, action: null };
+            storyType = 'short';
+            currentStage = 'type';
+            resultArea.classList.add('hidden');
+            stages.hero.classList.add('hidden');
+            stages.place.classList.add('hidden');
+            stages.action.classList.add('hidden');
+            stages.type.classList.remove('hidden');
+        }
+
+        function speakStory() {
+            if (synth.speaking) {
+                synth.cancel();
+                return;
+            }
+            if (storyTextToSpeak !== "") {
+                const utterance = new SpeechSynthesisUtterance(storyTextToSpeak);
+                utterance.lang = 'pt-BR';
+                utterance.pitch = 1;
+                utterance.rate = 1;
+                const setVoice = () => {
+                    const voices = synth.getVoices();
+                    const maleVoice = voices.find(voice => voice.lang === 'pt-BR' && (voice.name.toLowerCase().includes('masculino') || voice.name.includes('Google português do Brasil')));
+                    utterance.voice = maleVoice || voices.find(voice => voice.lang === 'pt-BR');
+                    synth.speak(utterance);
+                };
+                if (synth.getVoices().length !== 0) {
+                    setVoice();
+                } else {
+                    synth.onvoiceschanged = setVoice;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

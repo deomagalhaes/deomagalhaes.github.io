@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Bem-Estar | Seu Espaço de Autoconhecimento</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js para Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- jsPDF para Exportação -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f8fc;
+        }
+        /* Animações e transições suaves */
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px ); } to { opacity: 1; transform: translateY(0); } }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .emotion-btn.selected {
+            box-shadow: 0 0 0 3px #3b82f6; /* Azul */
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- Tela de Login (Simulada) -->
+    <div id="login-view" class="min-h-screen flex items-center justify-center bg-gray-100">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg text-center">
+            <h1 class="text-3xl font-bold text-gray-800">Painel de Bem-Estar</h1>
+            <p>Faça login para acessar seus registros emocionais.</p>
+            <button id="login-button" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:-translate-y-0.5">
+                Entrar (Modo Demonstração)
+            </button>
+            <p class="text-xs text-gray-500">Este é um protótipo. Seus dados são salvos apenas no seu navegador.</p>
+        </div>
+    </div>
+
+    <!-- Painel Principal (Oculto inicialmente) -->
+    <div id="app-view" class="hidden">
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-600">Painel de Bem-Estar</h1>
+            <div>
+                <span class="mr-4">Olá, <span id="username" class="font-semibold">Usuário(a)</span>!</span>
+                <button id="logout-button" class="text-sm text-gray-500 hover:text-red-600">Sair</button>
+            </div>
+        </header>
+
+        <main class="p-4 md:p-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Coluna da Esquerda: Gráfico e Ações -->
+                <div class="lg:col-span-1 space-y-8">
+                    <!-- Card de Novo Registro -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+                        <h2 class="text-2xl font-bold mb-4">Como você se sente agora?</h2>
+                        <button id="new-entry-btn" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition-transform transform hover:-translate-y-0.5">
+                            + Adicionar Novo Registro
+                        </button>
+                    </div>
+
+                    <!-- Card de Análise Semanal -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 text-center">Resumo da Semana</h3>
+                        <canvas id="emotion-chart"></canvas>
+                        <p id="chart-placeholder" class="text-center text-gray-500 mt-4">Registre suas emoções para ver a análise.</p>
+                    </div>
+
+                    <!-- Card de Exportação -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 text-center">Exportar Relatório</h3>
+                        <button id="export-pdf-btn" class="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
+                            Baixar Relatório em PDF
+                        </button>
+                        <p id="export-feedback" class="text-center text-sm text-gray-500 mt-2 h-4"></p>
+                    </div>
+                </div>
+
+                <!-- Coluna da Direita: Histórico -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-6">Sua Linha do Tempo Emocional</h2>
+                    <div id="history-container" class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+                        <p id="history-placeholder" class="text-center text-gray-500 py-10">Seus registros aparecerão aqui.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Novo Registro (Oculto inicialmente) -->
+    <div id="entry-modal" class="modal-overlay hidden fade-in">
+        <div class="modal-content">
+            <form id="entry-form">
+                <h2 class="text-2xl font-bold mb-6 text-center">Novo Registro Emocional</h2>
+                
+                <!-- 1. Seleção de Emoção -->
+                <div class="mb-6">
+                    <label class="block font-semibold mb-2">1. Qual a emoção principal?</label>
+                    <div id="emotion-selector" class="flex flex-wrap justify-center gap-3">
+                        <!-- Botões de emoção inseridos via JS -->
+                    </div>
+                </div>
+
+                <!-- 2. Intensidade -->
+                <div class="mb-6">
+                    <label for="emotion-intensity" class="block font-semibold mb-2">2. Qual a intensidade? <span id="intensity-label" class="font-normal text-blue-600">(5)</span></label>
+                    <input type="range" id="emotion-intensity" min="1" max="10" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <!-- 3. Gatilhos -->
+                <div class="mb-6">
+                    <label class="block font-semibold mb-2">3. O que estava acontecendo? (Gatilhos)</label>
+                    <div id="trigger-selector" class="flex flex-wrap gap-2">
+                        <!-- Gatilhos inseridos via JS -->
+                    </div>
+                </div>
+
+                <!-- 4. Notas -->
+                <div class="mb-4">
+                    <label for="journal-notes" class="block font-semibold mb-2">4. Descreva o que aconteceu e quais pensamentos surgiram:</label>
+                    <textarea id="journal-notes" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Ex: Tive uma discussão no trabalho e pensei que a culpa era minha..."></textarea>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="flex justify-end gap-4 mt-8">
+                    <button type="button" id="cancel-btn" class="py-2 px-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition">Cancelar</button>
+                    <button type="submit" id="save-entry-btn" class="py-2 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition">Salvar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const App = {
+            // --- ELEMENTOS DO DOM ---
+            els: {
+                loginView: document.getElementById('login-view'),
+                appView: document.getElementById('app-view'),
+                loginButton: document.getElementById('login-button'),
+                logoutButton: document.getElementById('logout-button'),
+                newEntryBtn: document.getElementById('new-entry-btn'),
+                modal: document.getElementById('entry-modal'),
+                cancelBtn: document.getElementById('cancel-btn'),
+                saveEntryBtn: document.getElementById('save-entry-btn'),
+                entryForm: document.getElementById('entry-form'),
+                emotionSelector: document.getElementById('emotion-selector'),
+                intensitySlider: document.getElementById('emotion-intensity'),
+                intensityLabel: document.getElementById('intensity-label'),
+                triggerSelector: document.getElementById('trigger-selector'),
+                journalNotes: document.getElementById('journal-notes'),
+                historyContainer: document.getElementById('history-container'),
+                historyPlaceholder: document.getElementById('history-placeholder'),
+                chartCanvas: document.getElementById('emotion-chart').getContext('2d'),
+                chartPlaceholder: document.getElementById('chart-placeholder'),
+                exportPdfBtn: document.getElementById('export-pdf-btn'),
+                exportFeedback: document.getElementById('export-feedback'),
+            },
+
+            // --- ESTADO DA APLICAÇÃO ---
+            state: {
+                isLoggedIn: false,
+                entries: [],
+                selectedEmotion: null,
+                selectedTriggers: [],
+                emotionChart: null,
+            },
+
+            // --- CONFIGURAÇÕES ---
+            config: {
+                storageKey: 'wellbeingDashboardEntries',
+                emotions: [
+                    { name: 'Alegria', emoji: '😊', color: '#4ade80' }, { name: 'Tristeza', emoji: '😢', color: '#60a5fa' },
+                    { name: 'Raiva', emoji: '😠', color: '#f87171' }, { name: 'Medo', emoji: '😨', color: '#c084fc' },
+                    { name: 'Calma', emoji: '😌', color: '#34d399' }, { name: 'Ansiedade', emoji: '😟', color: '#facc15' },
+                    { name: 'Gratidão', emoji: '🙏', color: '#f472b6' }, { name: 'Cansaço', emoji: '😴', color: '#9ca3af' }
+                ],
+                triggers: ['Trabalho', 'Família', 'Relacionamentos', 'Saúde', 'Finanças', 'Social', 'Outro'],
+            },
+
+            // --- INICIALIZAÇÃO ---
+            init() {
+                this.bindEvents();
+                this.populateStaticContent();
+                // Simula verificação de login
+                if (sessionStorage.getItem('isLoggedIn')) {
+                    this.showAppView();
+                }
+            },
+
+            // --- MANIPULADORES DE EVENTOS ---
+            bindEvents() {
+                this.els.loginButton.addEventListener('click', () => this.login());
+                this.els.logoutButton.addEventListener('click', () => this.logout());
+                this.els.newEntryBtn.addEventListener('click', () => this.openModal());
+                this.els.cancelBtn.addEventListener('click', () => this.closeModal());
+                this.els.modal.addEventListener('click', (e) => { if (e.target === this.els.modal) this.closeModal(); });
+                this.els.entryForm.addEventListener('submit', (e) => this.saveEntry(e));
+                this.els.intensitySlider.addEventListener('input', (e) => {
+                    this.els.intensityLabel.textContent = `(${e.target.value})`;
+                });
+                this.els.exportPdfBtn.addEventListener('click', () => this.exportToPDF());
+            },
+
+            // --- LÓGICA DA APLICAÇÃO ---
+            login() {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                this.showAppView();
+            },
+
+            logout() {
+                sessionStorage.removeItem('isLoggedIn');
+                this.els.appView.classList.add('hidden');
+                this.els.loginView.classList.remove('hidden');
+            },
+
+            showAppView() {
+                this.els.loginView.classList.add('hidden');
+                this.els.appView.classList.remove('hidden');
+                this.loadEntries();
+                this.renderHistory();
+                this.renderChart();
+            },
+
+            populateStaticContent() {
+                // Emoções
+                this.config.emotions.forEach(emotion => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'emotion-btn text-3xl p-3 bg-gray-100 rounded-full transition-transform transform hover:scale-110';
+                    button.textContent = emotion.emoji;
+                    button.dataset.emotionName = emotion.name;
+                    button.onclick = () => this.selectEmotion(button, emotion);
+                    this.els.emotionSelector.appendChild(button);
+                });
+                // Gatilhos
+                this.config.triggers.forEach(trigger => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'px-3 py-1 border border-gray-300 rounded-full text-sm hover:bg-blue-100 hover:border-blue-500';
+                    button.textContent = trigger;
+                    button.onclick = () => this.toggleTrigger(button, trigger);
+                    this.els.triggerSelector.appendChild(button);
+                });
+            },
+
+            selectEmotion(button, emotion) {
+                this.els.emotionSelector.querySelectorAll('.emotion-btn').forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                this.state.selectedEmotion = emotion;
+            },
+
+            toggleTrigger(button, trigger) {
+                button.classList.toggle('bg-blue-500');
+                button.classList.toggle('text-white');
+                button.classList.toggle('border-blue-500');
+                if (this.state.selectedTriggers.includes(trigger)) {
+                    this.state.selectedTriggers = this.state.selectedTriggers.filter(t => t !== trigger);
+                } else {
+                    this.state.selectedTriggers.push(trigger);
+                }
+            },
+
+            openModal() {
+                this.els.modal.classList.remove('hidden');
+            },
+
+            closeModal() {
+                this.els.modal.classList.add('hidden');
+                this.resetForm();
+            },
+
+            resetForm() {
+                this.els.entryForm.reset();
+                this.els.intensityLabel.textContent = '(5)';
+                this.els.emotionSelector.querySelectorAll('.selected').forEach(b => b.classList.remove('selected'));
+                this.els.triggerSelector.querySelectorAll('.bg-blue-500').forEach(b => {
+                    b.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
+                });
+                this.state.selectedEmotion = null;
+                this.state.selectedTriggers = [];
+            },
+
+            saveEntry(event) {
+                event.preventDefault();
+                if (!this.state.selectedEmotion) {
+                    alert('Por favor, selecione uma emoção.');
+                    return;
+                }
+                const newEntry = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    emotion: this.state.selectedEmotion,
+                    intensity: this.els.intensitySlider.value,
+                    triggers: this.state.selectedTriggers,
+                    notes: this.els.journalNotes.value.trim(),
+                };
+                this.state.entries.push(newEntry);
+                this.persistEntries();
+                this.renderHistory();
+                this.renderChart();
+                this.closeModal();
+            },
+
+            loadEntries() {
+                const data = localStorage.getItem(this.config.storageKey);
+                this.state.entries = data ? JSON.parse(data) : [];
+            },
+
+            persistEntries() {
+                localStorage.setItem(this.config.storageKey, JSON.stringify(this.state.entries));
+            },
+
+            deleteEntry(id) {
+                if (confirm('Tem certeza que deseja excluir este registro?')) {
+                    this.state.entries = this.state.entries.filter(entry => entry.id !== id);
+                    this.persistEntries();
+                    this.renderHistory();
+                    this.renderChart();
+                }
+            },
+
+            renderHistory() {
+                if (this.state.entries.length === 0) {
+                    this.els.historyPlaceholder.style.display = 'block';
+                    this.els.historyContainer.innerHTML = '';
+                    this.els.historyContainer.appendChild(this.els.historyPlaceholder);
+                    return;
+                }
+
+                this.els.historyPlaceholder.style.display = 'none';
+                this.els.historyContainer.innerHTML = '';
+                const sortedEntries = [...this.state.entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                sortedEntries.forEach(entry => {
+                    const card = document.createElement('div');
+                    card.className = 'fade-in border-l-4 p-4 rounded-r-lg rounded-l-md bg-gray-50 relative';
+                    card.style.borderLeftColor = entry.emotion.color;
+
+                    const date = new Date(entry.date);
+                    const formattedDate = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+                    const formattedTime = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                    card.innerHTML = `
+                        <button class="absolute top-2 right-2 text-gray-400 hover:text-red-600 transition-colors delete-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                        <div class="flex items-start gap-4">
+                            <span class="text-4xl">${entry.emotion.emoji}</span>
+                            <div class="flex-grow">
+                                <p class="font-bold text-lg">${entry.emotion.name} <span class="text-sm font-normal text-gray-500">(Intensidade: ${entry.intensity}/10 )</span></p>
+                                <p class="text-sm text-gray-500 mb-2">${formattedDate} às ${formattedTime}</p>
+                                ${entry.triggers.length > 0 ? `<div class="flex flex-wrap gap-2 my-2">${entry.triggers.map(t => `<span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">${t}</span>`).join('')}</div>` : ''}
+                                ${entry.notes ? `<p class="mt-2 text-gray-600 bg-white p-3 rounded-md border border-gray-200 whitespace-pre-wrap">${entry.notes}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    card.querySelector('.delete-btn').onclick = () => this.deleteEntry(entry.id);
+                    this.els.historyContainer.appendChild(card);
+                });
+            },
+
+            renderChart() {
+                if (this.state.entries.length === 0) {
+                    this.els.chartPlaceholder.style.display = 'block';
+                    if (this.state.emotionChart) this.state.emotionChart.destroy();
+                    return;
+                }
+                this.els.chartPlaceholder.style.display = 'none';
+
+                const emotionCounts = this.config.emotions.map(emo => {
+                    const count = this.state.entries.filter(entry => entry.emotion.name === emo.name).length;
+                    return { name: emo.name, count: count, color: emo.color };
+                }).filter(item => item.count > 0);
+
+                const labels = emotionCounts.map(e => e.name);
+                const data = emotionCounts.map(e => e.count);
+                const colors = emotionCounts.map(e => e.color);
+
+                if (this.state.emotionChart) {
+                    this.state.emotionChart.destroy();
+                }
+
+                this.state.emotionChart = new Chart(this.els.chartCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Frequência de Emoções',
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: false }
+                        }
+                    }
+                });
+            },
+
+            exportToPDF() {
+                if (this.state.entries.length === 0) {
+                    this.els.exportFeedback.textContent = 'Nenhum registro para exportar.';
+                    setTimeout(() => this.els.exportFeedback.textContent = '', 3000);
+                    return;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const sortedEntries = [...this.state.entries].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                // Título
+                doc.setFontSize(22);
+                doc.text("Relatório de Bem-Estar Emocional", 105, 20, { align: 'center' });
+                doc.setFontSize(12);
+                doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 105, 28, { align: 'center' });
+
+                // Tabela de Registros
+                const tableColumn = ["Data", "Emoção", "Intensidade", "Gatilhos", "Notas"];
+                const tableRows = [];
+
+                sortedEntries.forEach(entry => {
+                    const entryDate = new Date(entry.date);
+                    const formattedDate = entryDate.toLocaleDateString('pt-BR') + ' ' + entryDate.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                    const rowData = [
+                        formattedDate,
+                        `${entry.emotion.emoji} ${entry.emotion.name}`,
+                        `${entry.intensity}/10`,
+                        entry.triggers.join(', '),
+                        entry.notes || '-'
+                    ];
+                    tableRows.push(rowData);
+                });
+
+                doc.autoTable({
+                    head: [tableColumn],
+                    body: tableRows,
+                    startY: 40,
+                    theme: 'grid',
+                    headStyles: { fillColor: [22, 160, 133] },
+                    styles: { font: 'Poppins', cellPadding: 3 }, // jsPDF não suporta Poppins por padrão, usará fallback
+                });
+
+                doc.save('Relatorio_Bem-Estar.pdf');
+                this.els.exportFeedback.textContent = 'Relatório gerado!';
+                setTimeout(() => this.els.exportFeedback.textContent = '', 3000);
+            }
+        };
+
+        App.init();
+    });
+    </script>
+</body>
+</html>
