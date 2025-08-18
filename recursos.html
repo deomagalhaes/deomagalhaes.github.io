@@ -2,18 +2,18 @@
 <html lang="pt-br">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag( ){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-9X4VW4FNZZ');
-</script>
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artigos sobre Filosofia – Deo Magalhães</title>
-    <meta name="description" content="Artigos e conteúdo educativo sobre neuropsicologia, desenvolvimento e comportamento.">
+    <title>Recursos Educativos – Deo Magalhães</title>
+    <meta name="description" content="Recursos educativos para download, como checklists, storybooks e jogos terapêuticos.">
     <link rel="icon" type="image/png" href="assets/favicon2.png">
     <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -47,32 +47,75 @@
                 <a href="servicos.html">Serviços</a>
                 <a href="agendamento.html">Agendamento</a>
                 <a href="artigos.html">Artigos</a>
-                <a href="recursos.html">Recursos</a>
+                <a href="recursos.html" class="active">Recursos</a> <!-- Link Ativo -->
                 <a href="contato.html">Contato</a>
             </nav>
         </div>
     </header>
 
-  <main>
-        <section class="hero">
-            <div class="container">
-                <!-- Título específico da categoria -->
-                <h1>Categoria: Filosofia</h1>
-                <p>Artigos e reflexões sobre a realidade, a existência e a busca por uma vida mais examinada.</p>
+   <main>
+    <!-- Seção Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Recursos Educativos</h1>
+            <p>Materiais práticos para download que auxiliam no dia a dia, incluindo checklists, storybooks e jogos terapêuticos.</p>
+            <div class="hero-buttons">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" class="cta-button secondary">Ver Novidades no Instagram</a>
+                <a href="contato.html" class="cta-button">Sugerir Recursos</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="page-section">
-            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Artigos sobre Filosofia</h2>
+    <!-- Seção de Recursos -->
+    <section class="page-section">
+        <div class="container">
+            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Nossos Materiais</h2>
+            <p style="text-align: left; margin-top: -15px; margin-bottom: 25px;">Explore e baixe os recursos disponíveis para auxiliar no desenvolvimento e bem-estar.</p>
             
-            <!-- ESTE É O CONTAINER ONDE OS CARDS SERÃO INSERIDOS -->
-            <div class="article-list-custom" id="article-container">
-                <!-- Os cards serão carregados aqui pelo JavaScript -->
+            <div class="resource-grid-custom">
+                <!-- Card 1 -->
+                <a href="https://mailchi.mp/685f6f79341c/guia-gratuito-os-principais-marcos-do-desenvolvimento-infantil" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-3.jpg' );" download>
+                    <div class="card-content">
+                        <h3>Checklist de Desenvolvimento Infantil</h3>
+                        <p>PDF Gratuito</p>
+                    </div>
+                </a>
+                <!-- Card 2 -->
+                <a href="storybooks.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-10.jpg');">
+                    <div class="card-content">
+                        <h3>Storybooks Terapêuticos</h3>
+                        <p>Acesse a coleção de histórias</p>
+                    </div>
+                </a>
+                <!-- Card 3 -->
+                <a href="jogos.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-9.jpg');">
+                    <div class="card-content">
+                        <h3>Jogos Terapêuticos</h3>
+                        <p>Acesse a coleção de jogos</p>
+                    </div>
+                </a>
+                <!-- Card 4 -->
+                <a href="#" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-16.jpg');">
+                    <div class="card-content">
+                        <h3>Exercício de Respiração</h3>
+                        <p>Técnica de controle da ansiedade</p>
+                    </div>
+                </a>
+                <!-- Adicione mais cards aqui conforme necessário -->
+                <!-- Exemplo de novo card:
+                <a href="link-para-o-recurso.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/nova-imagem.jpg');">
+                    <div class="card-content">
+                        <h3>Nome do Novo Recurso</h3>
+                        <p>Descrição breve do recurso</p>
+                    </div>
+                </a>
+                -->
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
 
-  <!-- RODAPÉ PADRÃO - Copie e cole este bloco em todas as páginas -->
+<!-- RODAPÉ PADRÃO -->
 <footer class="main-footer">
     <div class="container footer-grid">
         <div class="footer-column">
@@ -95,7 +138,7 @@
         <div class="footer-column">
             <h4>Redes Sociais</h4>
             <ul>
-                <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
             </ul>
         </div>
     </div>
@@ -107,55 +150,18 @@
     </div>
 </footer>
 
-<!-- SCRIPT CORRIGIDO E COMPLETO PARA PÁGINAS DE CATEGORIA -->
+<!-- SCRIPT PARA MENU MOBILE -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const categoryToLoad = 'filosofia'; // Define a categoria para esta página
-        const container = document.getElementById('article-container');
-
-        if (!container) {
-            console.error('Erro: O container com id "article-container" não foi encontrado.');
-            return;
-        }
-
-        fetch('cards-artigos.html')
-            .then(response => {
-                if (!response.ok) {
-                    console.error('Erro ao carregar cards-artigos.html. Status: ' + response.status);
-                    container.innerHTML = '<p>Não foi possível carregar os artigos no momento.</p>';
-                    return null; // Retorna nulo para parar a execução
-                }
-                return response.text();
-            })
-            .then(html => {
-                if (html === null) return; // Para se o fetch falhou
-
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const allArticles = doc.querySelectorAll('.article-item-custom');
-                
-                let articlesFound = 0;
-                allArticles.forEach(article => {
-                    const categories = article.getAttribute('data-categories');
-                    if (categories && categories.includes(categoryToLoad)) {
-                        // Adiciona o card encontrado ao container da página
-                        container.appendChild(article);
-                        articlesFound++;
-                    }
-                });
-
-                // Se, após verificar todos, nenhum for encontrado, exibe uma mensagem.
-                if (articlesFound === 0) {
-                    container.innerHTML = '<p>Nenhum artigo encontrado para esta categoria.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao processar os artigos:', error);
-                container.innerHTML = '<p>Ocorreu um erro ao carregar os artigos.</p>';
-            });
-    });
+document.addEventListener("DOMContentLoaded", function( ) {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mainNav = document.getElementById('main-nav');
+    if (mobileMenuBtn && mainNav) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+    }
+});
 </script>
-    
-    <script src="assets/script.js"></script>
+
 </body>
 </html>
