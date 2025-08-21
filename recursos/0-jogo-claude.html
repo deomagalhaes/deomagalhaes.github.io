@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardim das Sementes - Cultivando o Futuro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --secondary: #FF9800;
+            --accent: #2196F3;
+            --success: #8BC34A;
+            --danger: #F44336;
+            --earth: #8D6E63;
+            --sky: linear-gradient(135deg, #87CEEB 0%, #98D8E8 50%, #B0E0E6 100%);
+            --grass: #7CB342;
+            --sun: #FFC107;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: var(--sky);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Elementos de fundo animados */
+        .background-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50px;
+            right: 80px;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, var(--sun) 0%, #FFD54F 70%);
+            border-radius: 50%;
+            animation: sunshine 4s ease-in-out infinite alternate;
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+        }
+
+        .sun::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(circle, transparent 60px, rgba(255, 193, 7, 0.1) 80px);
+            border-radius: 50%;
+            animation: sunRays 6s linear infinite;
+        }
+
+        @keyframes sunshine {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        @keyframes sunRays {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            animation: drift 20s infinite linear;
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+        }
+
+        .cloud:nth-child(2) {
+            width: 80px;
+            height: 40px;
+            top: 15%;
+            animation-duration: 25s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 100px;
+            height: 50px;
+            top: 35%;
+            animation-duration: 30s;
+            animation-delay: -10s;
+        }
+
+        @keyframes drift {
+            from { transform: translateX(-150px); }
+            to { transform: translateX(calc(100vw + 150px)); }
+        }
+
+        /* Interface principal */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg, var(--primary), var(--grass));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        /* Painel de progresso */
+        .progress-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .progress-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .progress-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Seleção de cultivo */
+        .plant-selection {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .plant-selection h2 {
+            text-align: center;
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .plant-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .plant-option {
+            background: rgba(255, 255, 255, 0.8);
+            border: 3px solid transparent;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .plant-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+            border-color: var(--primary);
+        }
+
+        .plant-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .plant-preview {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .plant-name {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .plant-benefit {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Jardim - área do jogo */
+        .garden-area {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(180deg, var(--sky) 0%, rgba(139, 195, 74, 0.3) 60%, var(--earth) 100%);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: inset 0 -50px 100px rgba(141, 110, 99, 0.3);
+            border: 3px solid rgba(76, 175, 80, 0.4);
+            margin-bottom: 25px;
+        }
+
+        .garden-ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, rgba(141, 110, 99, 0.8) 0%, var(--earth) 100%);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(101, 67, 33, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(101, 67, 33, 0.2) 0%, transparent 50%);
+        }
+
+        .planting-spot {
+            position: absolute;
+            bottom: 100px;
+            width: 80px;
+            height: 80px;
+            background: rgba(101, 67, 33, 0.6);
+            border: 3px dashed rgba(76, 175, 80, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .planting-spot:hover {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .planting-spot.occupied {
+            background: rgba(76, 175, 80, 0.2);
+            border: 3px solid var(--success);
+        }
+
+        /* Plantas crescendo */
+        .growing-plant {
+            position: absolute;
+            bottom: 100px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: plantGrow 2s ease-out;
+            cursor: pointer;
+        }
+
+        @keyframes plantGrow {
+            0% { transform: scale(0) translateY(20px); opacity: 0; }
+            50% { transform: scale(1.2) translateY(-10px); opacity: 0.8; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .plant-growth-stage {
+            animation: growthStage 0.5s ease-out;
+        }
+
+        @keyframes growthStage {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Barra de crescimento */
+        .growth-bar {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .growth-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        /* Ferramentas de jardinagem */
+        .garden-tools {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tool {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .tool.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Controles principais */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            color: white;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #9E9E9E, #757575);
+            color: white;
+            box-shadow: 0 8px 20px rgba(158, 158, 158, 0.3);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #1976D2);
+            color: white;
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+        }
+
+        /* Modal de conquistas */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 3px solid rgba(76, 175, 80, 0.3);
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.8) translateY(50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* Sistema de conquistas */
+        .achievement {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+
+        .achievement:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            min-width: 50px;
+        }
+
+        .achievement-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .achievement-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .achievement.completed {
+            background: rgba(76, 175, 80, 0.1);
+            border-left-color: var(--success);
+        }
+
+        /* Mensagens do jogo */
+        .game-message {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Efeitos especiais */
+        .sparkle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, var(--sun) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: sparkleEffect 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes sparkleEffect {
+            0% { 
+                transform: scale(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(2) rotate(180deg); 
+                opacity: 0; 
+            }
+        }
+
+        .celebration {
+            animation: celebrate 0.6s ease-out;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Weather effects */
+        .rain-drop {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background: linear-gradient(180deg, transparent 0%, #4FC3F7 100%);
+            animation: rainfall 1s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rainfall {
+            0% { transform: translateY(-20px); opacity: 1; }
+            100% { transform: translateY(520px); opacity: 0; }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .garden-area {
+                height: 400px;
+            }
+            
+            .progress-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .plant-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .garden-tools {
+                flex-wrap: wrap;
+            }
+
+            .tool {
+                font-size: 1.2rem;
+                padding: 12px 20px;
+            }
+        }
+
+        /* Sistema de dicas */
+        .tip-bubble {
+            position: absolute;
+            background: rgba(33, 150, 243, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            max-width: 200px;
+            z-index: 100;
+            animation: tipShow 0.3s ease-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tip-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(33, 150, 243, 0.9);
+        }
+
+        @keyframes tipShow {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos de fundo -->
+    <div class="background-elements">
+        <div class="sun"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <h1>🌱 Jardim das Sementes 🌱</h1>
+            <p>Plante, cultive e aprenda sobre responsabilidade e paciência!</p>
+        </div>
+
+        <!-- Painel de progresso -->
+        <div class="progress-panel">
+            <div class="progress-card">
+                <div class="progress-label">Plantas Cultivadas</div>
+                <div class="progress-value" id="plantsGrown">0</div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-label">Pontos de Experiência</div>
+                <div class="progress-value" id="experience">0 XP</div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-label">Conquistas</div>
+                <div class="progress-value" id="achievements">0/10</div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-label">Nível do Jardineiro</div>
+                <div class="progress-value" id="gardenerLevel">Iniciante</div>
+            </div>
+        </div>
+
+        <!-- Seleção de plantas -->
+        <div class="plant-selection" id="plantSelection">
+            <h2>Escolha o que Plantar</h2>
+            <div class="plant-options">
+                <div class="plant-option selected" data-plant="girassol" data-growth-time="8000" data-xp="50">
+                    <div class="plant-preview" style="background: #FFE082;">🌻</div>
+                    <div class="plant-name">Girassol</div>
+                    <div class="plant-benefit">Ensina otimismo e perseverança</div>
+                </div>
+                <div class="plant-option" data-plant="tomate" data-growth-time="12000" data-xp="75">
+                    <div class="plant-preview" style="background: #FFCDD2;">🍅</div>
+                    <div class="plant-name">Tomate</div>
+                    <div class="plant-benefit">Desenvolve paciência e cuidado</div>
+                </div>
+                <div class="plant-option" data-plant="cenoura" data-growth-time="10000" data-xp="60">
+                    <div class="plant-preview" style="background: #FFB74D;">🥕</div>
+                    <div class="plant-name">Cenoura</div>
+                    <div class="plant-benefit">Estimula alimentação saudável</div>
+                </div>
+                <div class="plant-option" data-plant="rosa" data-growth-time="15000" data-xp="100">
+                    <div class="plant-preview" style="background: #F8BBD9;">🌹</div>
+                    <div class="plant-name">Rosa</div>
+                    <div class="plant-benefit">Cultiva beleza e delicadeza</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ferramentas de jardinagem -->
+        <div class="garden-tools">
+            <button class="tool active" id="plantTool" data-tool="plant" title="Plantar sementes">🌰</button>
+            <button class="tool" id="waterTool" data-tool="water" title="Regar plantas">💧</button>
+            <button class="tool" id="fertilizerTool" data-tool="fertilizer" title="Adubar (acelera crescimento)">🧪</button>
+            <button class="tool" id="harvestTool" data-tool="harvest" title="Colher plantas maduras">✂️</button>
+        </div>
+
+        <!-- Mensagem do jogo -->
+        <div class="game-message" id="gameMessage">
+            Bem-vindo ao seu jardim! Escolha uma planta e clique nos espaços marrons para plantar. Cada planta ensina uma lição importante!
+        </div>
+
+        <!-- Área do jardim -->
+        <div class="garden-area" id="gardenArea">
+            <div class="garden-ground"></div>
+            <!-- Espaços para plantio serão gerados dinamicamente -->
+        </div>
+
+        <!-- Controles principais -->
+        <div class="controls">
+            <button class="btn btn-primary" id="autoWaterBtn">Ativar Rega Automática</button>
+            <button class="btn btn-accent" id="achievementsBtn">🏆 Conquistas</button>
+            <button class="btn btn-secondary" id="resetBtn">Novo Jardim</button>
+        </div>
+    </div>
+
+    <!-- Modal de conquistas -->
+    <div class="modal" id="achievementsModal">
+        <div class="modal-content">
+            <h2 style="text-align: center; color: #333; margin-bottom: 25px;">🏆 Suas Conquistas</h2>
+            <div id="achievementsList"></div>
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn btn-secondary" onclick="closeAchievements()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado do jogo
+        const gameState = {
+            selectedPlant: 'girassol',
+            selectedTool: 'plant',
+            plantsGrown: 0,
+            experience: 0,
+            level: 1,
+            plants: new Map(),
+            plantCounter: 0,
+            autoWater: false,
+            achievementsUnlocked: new Set(),
+            gardens: [],
+            currentWeather: 'sunny',
+            timeOfDay: 'day',
+            lastActionTime: 0
+        };
+
+        // Configurações das plantas
+        const plantConfig = {
+            girassol: {
+                emoji: '🌻',
+                stages: ['🌰', '🌱', '🌿', '🌻'],
+                xp: 50,
+                growthTime: 8000,
+                lesson: 'O girassol sempre busca a luz do sol. Como ele, devemos sempre buscar o lado positivo das situações!'
+            },
+            tomate: {
+                emoji: '🍅',
+                stages: ['🌰', '🌱', '🍃', '🍅'],
+                xp: 75,
+                growthTime: 12000,
+                lesson: 'O tomate precisa de cuidado constante. A paciência e o cuidado diário nos ajudam a crescer!'
+            },
+            cenoura: {
+                emoji: '🥕',
+                stages: ['🌰', '🌱', '🥬', '🥕'],
+                xp: 60,
+                growthTime: 10000,
+                lesson: 'A cenoura cresce embaixo da terra. Às vezes o que não vemos também é importante!'
+            },
+            rosa: {
+                emoji: '🌹',
+                stages: ['🌰', '🌱', '🌿', '🌹'],
+                xp: 100,
+                growthTime: 15000,
+                lesson: 'A rosa é delicada mas forte. Beleza e força podem andar juntas!'
+            }
+        };
+
+        // Sistema de conquistas
+        const achievements = {
+            firstPlant: {
+                id: 'firstPlant',
+                name: 'Primeiro Jardineiro',
+                description: 'Plante sua primeira semente',
+                icon: '🌱',
+                xp: 25,
+                condition: () => gameState.plantsGrown >= 1
+            },
+            fivePlants: {
+                id: 'fivePlants',
+                name: 'Jardineiro Dedicado',
+                description: 'Cultive 5 plantas com sucesso',
+                icon: '🌿',
+                xp: 100,
+                condition: () => gameState.plantsGrown >= 5
+            },
+            patient: {
+                id: 'patient',
+                name: 'Mestre da Paciência',
+                description: 'Cultive uma rosa (a planta mais demorada)',
+                icon: '🌹',
+                xp: 150,
+                condition: () => Array.from(gameState.plants.values()).some(p => p.type === 'rosa' && p.stage === 3)
+            },
+            autoWater: {
+                id: 'autoWater',
+                name: 'Tecnologia do Bem',
+                description: 'Use a rega automática',
+                icon: '🤖',
+                xp: 75,
+                condition: () => gameState.autoWater
+            },
+            rainbow: {
+                id: 'rainbow',
+                name: 'Jardim Arco-íris',
+                description: 'Tenha todos os tipos de planta no jardim ao mesmo tempo',
+                icon: '🌈',
+                xp: 200,
+                condition: () => {
+                    const plantTypes = new Set();
+                    gameState.plants.forEach(plant => {
+                        if (plant.stage >= 0) plantTypes.add(plant.type);
+                    });
+                    return plantTypes.size >= 4;
+                }
+            },
+            speedGardener: {
+                id: 'speedGardener',
+                name: 'Jardineiro Rápido',
+                description: 'Plante 3 sementes em menos de 10 segundos',
+                icon: '⚡',
+                xp: 125,
+                condition: () => false // Será ativada dinamicamente
+            },
+            waterMaster: {
+                id: 'waterMaster',
+                name: 'Mestre das Águas',
+                description: 'Regue 10 plantas',
+                icon: '💧',
+                xp: 100,
+                condition: () => false // Será ativada dinamicamente
+            },
+            nightOwl: {
+                id: 'nightOwl',
+                name: 'Jardineiro Noturno',
+                description: 'Cuide do jardim durante a noite',
+                icon: '🌙',
+                xp: 75,
+                condition: () => gameState.timeOfDay === 'night' && gameState.plantsGrown > 0
+            },
+            weatherMaster: {
+                id: 'weatherMaster',
+                name: 'Mestre do Clima',
+                description: 'Jardine em diferentes condições climáticas',
+                icon: '⛈️',
+                xp: 150,
+                condition: () => false // Será ativada dinamicamente
+            },
+            fullGarden: {
+                id: 'fullGarden',
+                name: 'Jardim Completo',
+                description: 'Tenha plantas em todos os espaços do jardim',
+                icon: '🏡',
+                xp: 300,
+                condition: () => gameState.plants.size >= 8
+            }
+        };
+
+        // Elementos DOM
+        const elements = {
+            plantsGrown: document.getElementById('plantsGrown'),
+            experience: document.getElementById('experience'),
+            achievements: document.getElementById('achievements'),
+            gardenerLevel: document.getElementById('gardenerLevel'),
+            gameMessage: document.getElementById('gameMessage'),
+            gardenArea: document.getElementById('gardenArea'),
+            plantSelection: document.getElementById('plantSelection'),
+            achievementsBtn: document.getElementById('achievementsBtn'),
+            achievementsModal: document.getElementById('achievementsModal'),
+            achievementsList: document.getElementById('achievementsList'),
+            autoWaterBtn: document.getElementById('autoWaterBtn'),
+            resetBtn: document.getElementById('resetBtn')
+        };
+
+        // Níveis do jardineiro
+        const levels = [
+            { name: 'Iniciante', xp: 0 },
+            { name: 'Aprendiz', xp: 200 },
+            { name: 'Jardineiro', xp: 500 },
+            { name: 'Especialista', xp: 1000 },
+            { name: 'Mestre', xp: 2000 },
+            { name: 'Sábio das Plantas', xp: 3500 }
+        ];
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGame();
+            setupEventListeners();
+            createPlantingSpots();
+            updateDisplay();
+            startDayNightCycle();
+            loadGameState();
+        });
+
+        function initializeGame() {
+            // Resetar estado se necessário
+            updateDisplay();
+            showTip('Clique nos espaços marrons para plantar suas sementes!');
+        }
+
+        function setupEventListeners() {
+            // Seleção de plantas
+            document.querySelectorAll('.plant-option').forEach(option => {
+                option.addEventListener('click', () => selectPlant(option.dataset.plant));
+            });
+
+            // Seleção de ferramentas
+            document.querySelectorAll('.tool').forEach(tool => {
+                tool.addEventListener('click', () => selectTool(tool.dataset.tool));
+            });
+
+            // Botões principais
+            elements.autoWaterBtn.addEventListener('click', toggleAutoWater);
+            elements.achievementsBtn.addEventListener('click', showAchievements);
+            elements.resetBtn.addEventListener('click', resetGarden);
+
+            // Fechar modal
+            elements.achievementsModal.addEventListener('click', (e) => {
+                if (e.target === elements.achievementsModal) {
+                    closeAchievements();
+                }
+            });
+
+            // Salvar estado periodicamente
+            setInterval(saveGameState, 30000); // A cada 30 segundos
+        }
+
+        function createPlantingSpots() {
+            const positions = [
+                { left: '10%' }, { left: '25%' }, { left: '40%' }, { left: '55%' },
+                { left: '70%' }, { left: '85%' }, { left: '17%' }, { left: '62%' }
+            ];
+
+            positions.forEach((pos, index) => {
+                const spot = document.createElement('div');
+                spot.className = 'planting-spot';
+                spot.id = `spot-${index}`;
+                spot.style.left = pos.left;
+                spot.addEventListener('click', () => handleSpotClick(index));
+                elements.gardenArea.appendChild(spot);
+            });
+        }
+
+        function selectPlant(plantType) {
+            gameState.selectedPlant = plantType;
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.plant-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-plant="${plantType}"]`).classList.add('selected');
+            
+            showMessage(`${plantConfig[plantType].emoji} ${plantType.charAt(0).toUpperCase() + plantType.slice(1)} selecionado!`);
+        }
+
+        function selectTool(toolType) {
+            gameState.selectedTool = toolType;
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.tool').forEach(tool => {
+                tool.classList.remove('active');
+            });
+            document.getElementById(`${toolType}Tool`).classList.add('active');
+            
+            const toolNames = {
+                plant: 'Plantar',
+                water: 'Regar',
+                fertilizer: 'Adubar',
+                harvest: 'Colher'
+            };
+            
+            showMessage(`Ferramenta: ${toolNames[toolType]}`);
+        }
+
+        function handleSpotClick(spotIndex) {
+            const spot = document.getElementById(`spot-${spotIndex}`);
+            const plant = gameState.plants.get(spotIndex);
+
+            switch (gameState.selectedTool) {
+                case 'plant':
+                    if (!plant) {
+                        plantSeed(spotIndex);
+                    } else {
+                        showMessage('Este espaço já tem uma planta!');
+                    }
+                    break;
+                    
+                case 'water':
+                    if (plant && plant.stage < 3) {
+                        waterPlant(spotIndex);
+                    } else if (plant && plant.stage === 3) {
+                        showMessage('Esta planta já está totalmente crescida!');
+                    } else {
+                        showMessage('Não há planta para regar aqui!');
+                    }
+                    break;
+                    
+                case 'fertilizer':
+                    if (plant && plant.stage < 3) {
+                        fertilizePlant(spotIndex);
+                    } else if (plant && plant.stage === 3) {
+                        showMessage('Esta planta já está totalmente crescida!');
+                    } else {
+                        showMessage('Não há planta para adubar aqui!');
+                    }
+                    break;
+                    
+                case 'harvest':
+                    if (plant && plant.stage === 3) {
+                        harvestPlant(spotIndex);
+                    } else if (plant) {
+                        showMessage('Esta planta ainda não está pronta para colher!');
+                    } else {
+                        showMessage('Não há planta para colher aqui!');
+                    }
+                    break;
+            }
+        }
+
+        function plantSeed(spotIndex) {
+            const config = plantConfig[gameState.selectedPlant];
+            const plant = {
+                id: gameState.plantCounter++,
+                type: gameState.selectedPlant,
+                stage: 0,
+                plantedTime: Date.now(),
+                lastWatered: Date.now(),
+                wateredCount: 0,
+                fertilized: false
+            };
+            
+            gameState.plants.set(spotIndex, plant);
+            
+            // Criar elemento visual
+            const plantElement = document.createElement('div');
+            plantElement.className = 'growing-plant';
+            plantElement.id = `plant-${spotIndex}`;
+            plantElement.style.left = document.getElementById(`spot-${spotIndex}`).style.left;
+            plantElement.innerHTML = `
+                ${config.stages[0]}
+                <div class="growth-bar">
+                    <div class="growth-progress" style="width: 25%"></div>
+                </div>
+            `;
+            
+            elements.gardenArea.appendChild(plantElement);
+            document.getElementById(`spot-${spotIndex}`).classList.add('occupied');
+            
+            // Iniciar crescimento
+            startPlantGrowth(spotIndex);
+            
+            // Efeitos visuais
+            createSparkles(plantElement);
+            showMessage(`${config.emoji} Plantado! ${config.lesson}`);
+            
+            // Verificar conquista de primeira planta
+            checkAchievements();
+            
+            // Verificar conquista de jardineiro rápido
+            checkSpeedPlanting();
+        }
+
+        function startPlantGrowth(spotIndex) {
+            const plant = gameState.plants.get(spotIndex);
+            const config = plantConfig[plant.type];
+            const growthInterval = config.growthTime / 3; // Dividido em 3 estágios
+            
+            const growthTimer = setInterval(() => {
+                const currentPlant = gameState.plants.get(spotIndex);
+                if (!currentPlant || currentPlant.stage >= 3) {
+                    clearInterval(growthTimer);
+                    return;
+                }
+                
+                // Verificar se a planta precisa de água
+                const timeSinceWatered = Date.now() - currentPlant.lastWatered;
+                if (timeSinceWatered > 20000 && !gameState.autoWater) { // 20 segundos sem água
+                    showMessage(`${config.emoji} Sua ${plant.type} precisa de água!`);
+                    return;
+                }
+                
+                // Crescer se tiver água suficiente ou se for rega automática
+                if (timeSinceWatered < 25000 || gameState.autoWater) {
+                    if (gameState.autoWater) {
+                        currentPlant.lastWatered = Date.now();
+                    }
+                    
+                    currentPlant.stage++;
+                    updatePlantVisual(spotIndex);
+                    
+                    if (currentPlant.stage === 3) {
+                        // Planta totalmente crescida
+                        clearInterval(growthTimer);
+                        showMessage(`🎉 Sua ${plant.type} cresceu completamente!`);
+                        addExperience(config.xp);
+                        createCelebration(document.getElementById(`plant-${spotIndex}`));
+                    }
+                }
+            }, plant.fertilized ? growthInterval / 2 : growthInterval);
+        }
+
+        function waterPlant(spotIndex) {
+            const plant = gameState.plants.get(spotIndex);
+            plant.lastWatered = Date.now();
+            plant.wateredCount++;
+            
+            // Efeito visual de água
+            createWaterEffect(document.getElementById(`plant-${spotIndex}`));
+            showMessage('💧 Planta regada!');
+            
+            // Verificar conquista
+            if (plant.wateredCount >= 10) {
+                unlockAchievement('waterMaster');
+            }
+        }
+
+        function fertilizePlant(spotIndex) {
+            const plant = gameState.plants.get(spotIndex);
+            if (!plant.fertilized) {
+                plant.fertilized = true;
+                showMessage('🧪 Adubo aplicado! A planta crescerá mais rápido.');
+                
+                // Efeito visual
+                createFertilizerEffect(document.getElementById(`plant-${spotIndex}`));
+            } else {
+                showMessage('Esta planta já foi adubada!');
+            }
+        }
+
+        function harvestPlant(spotIndex) {
+            const plant = gameState.plants.get(spotIndex);
+            const config = plantConfig[plant.type];
+            
+            // Adicionar experiência
+            addExperience(config.xp * 1.5); // Bônus por colher
+            gameState.plantsGrown++;
+            
+            // Remover planta
+            gameState.plants.delete(spotIndex);
+            document.getElementById(`plant-${spotIndex}`).remove();
+            document.getElementById(`spot-${spotIndex}`).classList.remove('occupied');
+            
+            // Efeitos visuais
+            createHarvestEffect(document.getElementById(`spot-${spotIndex}`));
+            showMessage(`✂️ ${config.emoji} Colhido! +${Math.floor(config.xp * 1.5)} XP`);
+            
+            updateDisplay();
+            checkAchievements();
+        }
+
+        function updatePlantVisual(spotIndex) {
+            const plant = gameState.plants.get(spotIndex);
+            const config = plantConfig[plant.type];
+            const plantElement = document.getElementById(`plant-${spotIndex}`);
+            
+            if (plantElement) {
+                const progressPercent = ((plant.stage + 1) / 4) * 100;
+                plantElement.innerHTML = `
+                    ${config.stages[plant.stage]}
+                    <div class="growth-bar">
+                        <div class="growth-progress" style="width: ${progressPercent}%"></div>
+                    </div>
+                `;
+                plantElement.classList.add('plant-growth-stage');
+                setTimeout(() => plantElement.classList.remove('plant-growth-stage'), 500);
+            }
+        }
+
+        function toggleAutoWater() {
+            gameState.autoWater = !gameState.autoWater;
+            
+            if (gameState.autoWater) {
+                elements.autoWaterBtn.textContent = 'Desativar Rega Automática';
+                elements.autoWaterBtn.style.background = 'linear-gradient(135deg, #F44336, #D32F2F)';
+                showMessage('🤖 Rega automática ativada!');
+                unlockAchievement('autoWater');
+                
+                // Iniciar rega automática
+                startAutoWater();
+            } else {
+                elements.autoWaterBtn.textContent = 'Ativar Rega Automática';
+                elements.autoWaterBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--success))';
+                showMessage('Rega automática desativada');
+            }
+        }
+
+        function startAutoWater() {
+            if (!gameState.autoWater) return;
+            
+            gameState.plants.forEach((plant, spotIndex) => {
+                if (plant.stage < 3) {
+                    plant.lastWatered = Date.now();
+                }
+            });
+            
+            setTimeout(() => {
+                if (gameState.autoWater) startAutoWater();
+            }, 15000); // Regar a cada 15 segundos
+        }
+
+        function addExperience(xp) {
+            gameState.experience += xp;
+            updateGardenerLevel();
+            updateDisplay();
+        }
+
+        function updateGardenerLevel() {
+            for (let i = levels.length - 1; i >= 0; i--) {
+                if (gameState.experience >= levels[i].xp) {
+                    if (gameState.level !== i + 1) {
+                        gameState.level = i + 1;
+                        showMessage(`🎉 Parabéns! Você é agora um ${levels[i].name}!`);
+                    }
+                    break;
+                }
+            }
+        }
+
+        function checkAchievements() {
+            Object.values(achievements).forEach(achievement => {
+                if (!gameState.achievementsUnlocked.has(achievement.id) && achievement.condition()) {
+                    unlockAchievement(achievement.id);
+                }
+            });
+        }
+
+        function unlockAchievement(achievementId) {
+            if (gameState.achievementsUnlocked.has(achievementId)) return;
+            
+            gameState.achievementsUnlocked.add(achievementId);
+            const achievement = achievements[achievementId];
+            
+            addExperience(achievement.xp);
+            showAchievementUnlock(achievement);
+            updateDisplay();
+        }
+
+        function showAchievementUnlock(achievement) {
+            const notification = document.createElement('div');
+            notification.className = 'achievement-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--success), var(--primary));
+                color: white;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 1001;
+                animation: slideIn 0.5s ease-out;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="font-size: 2rem;">${achievement.icon}</div>
+                    <div>
+                        <div style="font-weight: 700; margin-bottom: 5px;">Conquista Desbloqueada!</div>
+                        <div style="font-size: 1.1rem; margin-bottom: 3px;">${achievement.name}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">${achievement.description}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-in forwards';
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+            
+            // Adicionar animações CSS
+            if (!document.getElementById('achievement-animations')) {
+                const style = document.createElement('style');
+                style.id = 'achievement-animations';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function checkSpeedPlanting() {
+            const now = Date.now();
+            if (now - gameState.lastActionTime < 10000) { // Menos de 10 segundos
+                const recentPlants = Array.from(gameState.plants.values()).filter(
+                    plant => now - plant.plantedTime < 10000
+                );
+                
+                if (recentPlants.length >= 3) {
+                    unlockAchievement('speedGardener');
+                }
+            }
+            gameState.lastActionTime = now;
+        }
+
+        function startDayNightCycle() {
+            setInterval(() => {
+                gameState.timeOfDay = gameState.timeOfDay === 'day' ? 'night' : 'day';
+                
+                if (gameState.timeOfDay === 'night') {
+                    document.body.style.filter = 'brightness(0.7) hue-rotate(240deg)';
+                    showMessage('🌙 A noite chegou. Suas plantas descansam...');
+                    
+                    if (gameState.plants.size > 0) {
+                        unlockAchievement('nightOwl');
+                    }
+                } else {
+                    document.body.style.filter = 'brightness(1) hue-rotate(0deg)';
+                    showMessage('☀️ Um novo dia no jardim!');
+                }
+                
+                // Chance de mudança climática
+                if (Math.random() < 0.3) {
+                    changeWeather();
+                }
+            }, 45000); // Ciclo de 45 segundos
+        }
+
+        function changeWeather() {
+            const weathers = ['sunny', 'rainy', 'cloudy'];
+            const newWeather = weathers[Math.floor(Math.random() * weathers.length)];
+            
+            if (newWeather !== gameState.currentWeather) {
+                gameState.currentWeather = newWeather;
+                
+                // Remover efeitos anteriores
+                document.querySelectorAll('.rain-drop').forEach(drop => drop.remove());
+                
+                switch (newWeather) {
+                    case 'rainy':
+                        createRainEffect();
+                        showMessage('🌧️ Chuva! Suas plantas ficarão bem hidratadas.');
+                        // Regar todas as plantas automaticamente
+                        gameState.plants.forEach(plant => {
+                            plant.lastWatered = Date.now();
+                        });
+                        break;
+                    case 'cloudy':
+                        showMessage('☁️ Dia nublado. Um tempo perfeito para jardinagem!');
+                        break;
+                    case 'sunny':
+                        showMessage('☀️ Sol brilhante! Suas plantas estão felizes.');
+                        break;
+                }
+                
+                unlockAchievement('weatherMaster');
+            }
+        }
+
+        function createRainEffect() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const drop = document.createElement('div');
+                    drop.className = 'rain-drop';
+                    drop.style.left = Math.random() * 100 + '%';
+                    drop.style.animationDelay = Math.random() * 1 + 's';
+                    elements.gardenArea.appendChild(drop);
+                    
+                    setTimeout(() => drop.remove(), 1000);
+                }, i * 200);
+            }
+        }
+
+        // Efeitos visuais
+        function createSparkles(element) {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = (Math.random() * 80) + 'px';
+                    sparkle.style.top = (Math.random() * 80) + 'px';
+                    element.appendChild(sparkle);
+                    
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 100);
+            }
+        }
+
+        function createCelebration(element) {
+            element.classList.add('celebration');
+            setTimeout(() => element.classList.remove('celebration'), 600);
+            createSparkles(element);
+        }
+
+        function createWaterEffect(element) {
+            const water = document.createElement('div');
+            water.style.cssText = `
+                position: absolute;
+                top: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 20px;
+                height: 20px;
+                background: radial-gradient(circle, #4FC3F7, transparent);
+                border-radius: 50%;
+                animation: waterDrop 0.8s ease-out forwards;
+                pointer-events: none;
+            `;
+            element.appendChild(water);
+            
+            if (!document.getElementById('water-animation')) {
+                const style = document.createElement('style');
+                style.id = 'water-animation';
+                style.textContent = `
+                    @keyframes waterDrop {
+                        0% { transform: translateX(-50%) translateY(-20px) scale(0); opacity: 1; }
+                        50% { transform: translateX(-50%) translateY(0) scale(1.2); opacity: 0.8; }
+                        100% { transform: translateX(-50%) translateY(10px) scale(0); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            setTimeout(() => water.remove(), 800);
+        }
+
+        function createFertilizerEffect(element) {
+            const fertilizer = document.createElement('div');
+            fertilizer.style.cssText = `
+                position: absolute;
+                top: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 30px;
+                height: 30px;
+                background: radial-gradient(circle, #8BC34A, transparent);
+                border-radius: 50%;
+                animation: fertilizerEffect 1s ease-out forwards;
+                pointer-events: none;
+            `;
+            element.appendChild(fertilizer);
+            
+            setTimeout(() => fertilizer.remove(), 1000);
+        }
+
+        function createHarvestEffect(element) {
+            const rect = element.getBoundingClientRect();
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    left: ${rect.left + rect.width/2}px;
+                    top: ${rect.top + rect.height/2}px;
+                    width: 8px;
+                    height: 8px;
+                    background: #FFD54F;
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: harvestParticle 1s ease-out forwards;
+                    z-index: 1000;
+                `;
+                
+                const angle = (i / 8) * Math.PI * 2;
+                particle.style.setProperty('--dx', Math.cos(angle) * 50 + 'px');
+                particle.style.setProperty('--dy', Math.sin(angle) * 50 + 'px');
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+            
+            if (!document.getElementById('harvest-animation')) {
+                const style = document.createElement('style');
+                style.id = 'harvest-animation';
+                style.textContent = `
+                    @keyframes harvestParticle {
+                        0% { transform: translate(0, 0) scale(1); opacity: 1; }
+                        100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function showTip(message) {
+            const tip = document.createElement('div');
+            tip.className = 'tip-bubble';
+            tip.textContent = message;
+            tip.style.top = '100px';
+            tip.style.left = '50%';
+            tip.style.transform = 'translateX(-50%)';
+            
+            elements.gardenArea.appendChild(tip);
+            
+            setTimeout(() => tip.remove(), 4000);
+        }
+
+        function showMessage(message) {
+            elements.gameMessage.textContent = message;
+            elements.gameMessage.classList.add('pulse');
+            setTimeout(() => elements.gameMessage.classList.remove('pulse'), 1000);
+        }
+
+        function updateDisplay() {
+            elements.plantsGrown.textContent = gameState.plantsGrown;
+            elements.experience.textContent = gameState.experience + ' XP';
+            elements.achievements.textContent = `${gameState.achievementsUnlocked.size}/${Object.keys(achievements).length}`;
+            
+            const currentLevel = levels[gameState.level - 1];
+            elements.gardenerLevel.textContent = currentLevel ? currentLevel.name : 'Mestre Supremo';
+        }
+
+        function showAchievements() {
+            const achievementsList = elements.achievementsList;
+            achievementsList.innerHTML = '';
+            
+            Object.values(achievements).forEach(achievement => {
+                const isUnlocked = gameState.achievementsUnlocked.has(achievement.id);
+                const achievementEl = document.createElement('div');
+                achievementEl.className = `achievement ${isUnlocked ? 'completed' : ''}`;
+                achievementEl.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-info">
+                        <h3>${achievement.name}</h3>
+                        <p>${achievement.description}</p>
+                        ${isUnlocked ? '<p style="color: var(--success); font-weight: 700;">✓ Conquistado</p>' : ''}
+                    </div>
+                `;
+                achievementsList.appendChild(achievementEl);
+            });
+            
+            elements.achievementsModal.style.display = 'flex';
+        }
+
+        function closeAchievements() {
+            elements.achievementsModal.style.display = 'none';
+        }
+
+        function resetGarden() {
+            if (confirm('Tem certeza que quer começar um novo jardim? Todo o progresso será perdido!')) {
+                // Salvar estatísticas antes de resetar
+                const totalPlants = gameState.plantsGrown;
+                const totalXP = gameState.experience;
+                
+                // Resetar estado
+                gameState.plants.clear();
+                gameState.plantsGrown = 0;
+                gameState.experience = 0;
+                gameState.level = 1;
+                gameState.autoWater = false;
+                gameState.plantCounter = 0;
+                
+                // Limpar elementos visuais
+                document.querySelectorAll('.growing-plant').forEach(el => el.remove());
+                document.querySelectorAll('.planting-spot').forEach(el => {
+                    el.classList.remove('occupied');
+                });
+                
+                // Resetar botão de rega automática
+                elements.autoWaterBtn.textContent = 'Ativar Rega Automática';
+                elements.autoWaterBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--success))';
+                
+                updateDisplay();
+                showMessage(`Novo jardim criado! (Jardim anterior: ${totalPlants} plantas, ${totalXP} XP)`);
+            }
+        }
+
+        function saveGameState() {
+            const saveData = {
+                ...gameState,
+                plants: Array.from(gameState.plants.entries()),
+                achievementsUnlocked: Array.from(gameState.achievementsUnlocked),
+                saveTime: Date.now()
+            };
+            
+            localStorage.setItem('garden-seeds-save', JSON.stringify(saveData));
+        }
+
+        function loadGameState() {
+            const saveData = localStorage.getItem('garden-seeds-save');
+            
+            if (saveData) {
+                try {
+                    const parsed = JSON.parse(saveData);
+                    
+                    // Verificar se o save não é muito antigo (mais de 7 dias)
+                    const daysSinceSave = (Date.now() - parsed.saveTime) / (1000 * 60 * 60 * 24);
+                    if (daysSinceSave > 7) {
+                        showMessage('Save muito antigo foi resetado para um novo começo!');
+                        return;
+                    }
+                    
+                    // Restaurar estado básico
+                    gameState.plantsGrown = parsed.plantsGrown || 0;
+                    gameState.experience = parsed.experience || 0;
+                    gameState.level = parsed.level || 1;
+                    gameState.plantCounter = parsed.plantCounter || 0;
+                    gameState.autoWater = parsed.autoWater || false;
+                    
+                    // Restaurar conquistas
+                    if (parsed.achievementsUnlocked) {
+                        gameState.achievementsUnlocked = new Set(parsed.achievementsUnlocked);
+                    }
+                    
+                    // Restaurar plantas (com verificação de tempo)
+                    if (parsed.plants) {
+                        parsed.plants.forEach(([spotIndex, plant]) => {
+                            const timePassed = Date.now() - plant.plantedTime;
+                            const config = plantConfig[plant.type];
+                            
+                            // Se passou muito tempo, a planta pode ter crescido ou morrido
+                            if (timePassed > config.growthTime * 2) {
+                                // Planta morreu por falta de cuidado
+                                return;
+                            }
+                            
+                            // Calcular estágio baseado no tempo passado
+                            const expectedStage = Math.min(3, Math.floor(timePassed / (config.growthTime / 3)));
+                            plant.stage = Math.max(plant.stage, expectedStage);
+                            
+                            gameState.plants.set(spotIndex, plant);
+                            
+                            // Recriar elemento visual
+                            const spot = document.getElementById(`spot-${spotIndex}`);
+                            if (spot) {
+                                spot.classList.add('occupied');
+                                
+                                const plantElement = document.createElement('div');
+                                plantElement.className = 'growing-plant';
+                                plantElement.id = `plant-${spotIndex}`;
+                                plantElement.style.left = spot.style.left;
+                                
+                                const progressPercent = ((plant.stage + 1) / 4) * 100;
+                                plantElement.innerHTML = `
+                                    ${config.stages[plant.stage]}
+                                    <div class="growth-bar">
+                                        <div class="growth-progress" style="width: ${progressPercent}%"></div>
+                                    </div>
+                                `;
+                                
+                                elements.gardenArea.appendChild(plantElement);
+                                
+                                // Continuar crescimento se não estiver completa
+                                if (plant.stage < 3) {
+                                    startPlantGrowth(spotIndex);
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Atualizar interface
+                    if (gameState.autoWater) {
+                        elements.autoWaterBtn.textContent = 'Desativar Rega Automática';
+                        elements.autoWaterBtn.style.background = 'linear-gradient(135deg, #F44336, #D32F2F)';
+                        startAutoWater();
+                    }
+                    
+                    updateDisplay();
+                    showMessage('Jardim restaurado! Continue cuidando das suas plantas.');
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar save:', error);
+                    showMessage('Erro ao carregar progresso anterior. Começando um novo jardim!');
+                }
+            }
+        }
+
+        // Adicionar CSS para animações que faltaram
+        const additionalStyles = document.createElement('style');
+        additionalStyles.textContent = `
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+            
+            .pulse {
+                animation: pulse 1s ease-in-out;
+            }
+            
+            @keyframes fertilizerEffect {
+                0% { 
+                    transform: translateX(-50%) scale(0); 
+                    opacity: 1; 
+                }
+                50% { 
+                    transform: translateX(-50%) scale(1.2); 
+                    opacity: 0.8; 
+                }
+                100% { 
+                    transform: translateX(-50%) scale(0); 
+                    opacity: 0; 
+                }
+            }
+        `;
+        document.head.appendChild(additionalStyles);
+
+        // Sistema de dicas contextuais
+        function showContextualTips() {
+            const tips = [
+                'Plantas regadas regularmente crescem mais rápido!',
+                'O adubo faz suas plantas crescerem em metade do tempo!',
+                'Diferentes plantas ensinam lições diferentes sobre a vida!',
+                'A rega automática ajuda quando você não pode cuidar do jardim!',
+                'Colher plantas dá mais experiência que apenas deixá-las crescer!',
+                'Experimente plantar durante a noite para uma conquista especial!',
+                'Tente ter todos os tipos de planta ao mesmo tempo!'
+            ];
+            
+            // Mostrar dica aleatória a cada 2 minutos
+            setInterval(() => {
+                if (gameState.plants.size > 0) {
+                    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                    showTip(randomTip);
+                }
+            }, 120000);
+        }
+
+        // Iniciar sistema de dicas após um tempo
+        setTimeout(showContextualTips, 30000);
+
+        // Sistema de autosave mais frequente quando há plantas crescendo
+        setInterval(() => {
+            if (gameState.plants.size > 0) {
+                saveGameState();
+            }
+        }, 15000); // Salvar a cada 15 segundos quando há atividade
+
+        // Prevenir perda de dados ao fechar a página
+        window.addEventListener('beforeunload', () => {
+            saveGameState();
+        });
+
+        // Easter egg - código especial
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
+                // Easter egg ativado
+                addExperience(500);
+                showMessage('🎮 Código secreto ativado! +500 XP bonus!');
+                createRainbowEffect();
+                konamiCode = [];
+            }
+        });
+
+        function createRainbowEffect() {
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
+            let colorIndex = 0;
+            
+            const rainbowInterval = setInterval(() => {
+                document.querySelectorAll('.growing-plant').forEach((plant, index) => {
+                    plant.style.filter = `hue-rotate(${(colorIndex + index * 60) % 360}deg) saturate(1.5)`;
+                });
+                colorIndex += 30;
+            }, 200);
+            
+            setTimeout(() => {
+                clearInterval(rainbowInterval);
+                document.querySelectorAll('.growing-plant').forEach(plant => {
+                    plant.style.filter = '';
+                });
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

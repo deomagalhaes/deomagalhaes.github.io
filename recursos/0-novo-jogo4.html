@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio dos Padrões Cognitivos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #4a90e2;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .phase-indicator {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3ffe7 0%, #d9e7ff 100%);
+            border-radius: 15px;
+        }
+
+        .pattern-item {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+        }
+
+        .pattern-item:hover {
+            transform: scale(1.05);
+            border-color: #4a90e2;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .pattern-item.correct {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            border-color: #2ecc71;
+            animation: correctAnswer 0.6s ease;
+        }
+
+        .pattern-item.wrong {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border-color: #e74c3c;
+            animation: wrongAnswer 0.6s ease;
+        }
+
+        .pattern-item.question {
+            background: linear-gradient(135deg, #ffd93d 0%, #ff6b35 100%);
+            border-color: #f39c12;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wrongAnswer {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #c3cfe2 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .result-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .result-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .result-stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .clear-results {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .game-board {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .pattern-item {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .game-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🧩 Desafio dos Padrões Cognitivos</h1>
+            <p class="subtitle">Descubra qual símbolo completa o padrão!</p>
+        </div>
+
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">Pontuação</div>
+                <div class="info-value" id="score">0</div>
+            </div>
+            <div class="phase-indicator">
+                <span id="phase-display">Fase 1/10</span>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Acertos</div>
+                <div class="info-value" id="correct-count">0</div>
+            </div>
+        </div>
+
+        <div class="instructions" id="instructions">
+            Observe o padrão e clique no símbolo que completa a sequência!
+        </div>
+
+        <div class="game-board" id="game-board">
+            <!-- Padrão será gerado aqui -->
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="startGame()">Iniciar Jogo</button>
+            <button class="btn btn-secondary" onclick="nextPattern()">Próximo Padrão</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="results-section">
+            <h2 class="results-title">📊 Histórico de Resultados</h2>
+            <div id="results-container">
+                <!-- Resultados serão exibidos aqui -->
+            </div>
+            <div style="text-align: center;">
+                <button class="btn clear-results" onclick="clearResults()">Limpar Histórico</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log(`
+🧩 DESAFIO DOS PADRÕES COGNITIVOS 🧩
+
+FUNÇÕES COGNITIVAS ESTIMULADAS:
+✅ Raciocínio Lógico-Matemático
+✅ Reconhecimento de Padrões
+✅ Memória de Trabalho
+✅ Atenção Seletiva
+✅ Flexibilidade Cognitiva
+✅ Resolução de Problemas
+
+BENEFÍCIOS TERAPÊUTICOS:
+• Desenvolvimento do pensamento abstrato
+• Melhora na capacidade de generalização
+• Fortalecimento da memória visual
+• Estimulação do córtex pré-frontal
+• Desenvolvimento de estratégias cognitivas
+• Aumento da persistência e foco
+
+INDICAÇÕES CLÍNICAS:
+→ Crianças com dificuldades de aprendizagem
+→ Estimulação cognitiva geral
+→ Desenvolvimento do raciocínio lógico
+→ Preparação para conceitos matemáticos
+→ Terapia ocupacional cognitiva
+        `);
+
+        class PatternCognitiveGame {
+            constructor() {
+                this.score = 0;
+                this.currentPhase = 1;
+                this.maxPhases = 10;
+                this.correctCount = 0;
+                this.totalQuestions = 0;
+                this.gameStartTime = null;
+                this.symbols = ['🔴', '🔵', '⭐', '🟢', '🟡', '🔶', '🔺', '⚫', '🟣', '🔸'];
+                this.currentPattern = [];
+                this.correctAnswer = '';
+                this.gameActive = false;
+                this.loadResults();
+            }
+
+            startGame() {
+                this.score = 0;
+                this.currentPhase = 1;
+                this.correctCount = 0;
+                this.totalQuestions = 0;
+                this.gameStartTime = new Date();
+                this.gameActive = true;
+                this.updateDisplay();
+                this.generatePattern();
+                this.updateInstructions('Observe o padrão e clique no símbolo que completa a sequência!');
+            }
+
+            generatePattern() {
+                if (this.currentPhase > this.maxPhases) {
+                    this.endGame();
+                    return;
+                }
+
+                const difficulty = Math.floor((this.currentPhase - 1) / 2) + 1;
+                const patternLength = Math.min(3 + difficulty, 6);
+                
+                // Tipos de padrões baseados na dificuldade
+                const patternType = this.currentPhase <= 3 ? 'sequence' : 
+                                  this.currentPhase <= 6 ? 'alternating' : 'complex';
+
+                this.currentPattern = [];
+                const usedSymbols = this.symbols.slice(0, Math.min(4 + difficulty, this.symbols.length));
+
+                if (patternType === 'sequence') {
+                    // Padrão sequencial simples
+                    const baseSymbol = usedSymbols[Math.floor(Math.random() * usedSymbols.length)];
+                    const secondSymbol = usedSymbols.find(s => s !== baseSymbol);
+                    
+                    for (let i = 0; i < patternLength - 1; i++) {
+                        this.currentPattern.push(i % 2 === 0 ? baseSymbol : secondSymbol);
+                    }
+                    this.correctAnswer = (patternLength - 1) % 2 === 0 ? baseSymbol : secondSymbol;
+
+                } else if (patternType === 'alternating') {
+                    // Padrão alternado com 3 símbolos
+                    const symbols = usedSymbols.slice(0, 3);
+                    for (let i = 0; i < patternLength - 1; i++) {
+                        this.currentPattern.push(symbols[i % symbols.length]);
+                    }
+                    this.correctAnswer = symbols[(patternLength - 1) % symbols.length];
+
+                } else {
+                    // Padrão complexo
+                    const symbols = usedSymbols.slice(0, 4);
+                    const sequence = [0, 1, 0, 2, 0, 1, 0, 3];
+                    for (let i = 0; i < patternLength - 1; i++) {
+                        this.currentPattern.push(symbols[sequence[i % sequence.length]]);
+                    }
+                    this.correctAnswer = symbols[sequence[(patternLength - 1) % sequence.length]];
+                }
+
+                this.renderPattern();
+            }
+
+            renderPattern() {
+                const board = document.getElementById('game-board');
+                board.innerHTML = '';
+
+                // Renderizar padrão conhecido
+                this.currentPattern.forEach((symbol, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'pattern-item';
+                    item.textContent = symbol;
+                    board.appendChild(item);
+                });
+
+                // Adicionar slot de pergunta
+                const questionItem = document.createElement('div');
+                questionItem.className = 'pattern-item question';
+                questionItem.textContent = '?';
+                board.appendChild(questionItem);
+
+                // Gerar opções (incluindo a resposta correta)
+                const options = [this.correctAnswer];
+                const wrongOptions = this.symbols.filter(s => 
+                    s !== this.correctAnswer && !this.currentPattern.includes(s)
+                ).slice(0, 3);
+                options.push(...wrongOptions);
+
+                // Embaralhar opções
+                const shuffledOptions = options.sort(() => Math.random() - 0.5);
+
+                // Renderizar opções
+                shuffledOptions.forEach(symbol => {
+                    const item = document.createElement('div');
+                    item.className = 'pattern-item';
+                    item.textContent = symbol;
+                    item.onclick = () => this.handleAnswer(symbol, item);
+                    board.appendChild(item);
+                });
+            }
+
+            handleAnswer(selectedSymbol, element) {
+                if (!this.gameActive) return;
+
+                this.totalQuestions++;
+                const isCorrect = selectedSymbol === this.correctAnswer;
+
+                if (isCorrect) {
+                    element.classList.add('correct');
+                    this.score += 10 + (this.currentPhase * 2);
+                    this.correctCount++;
+                    this.updateInstructions('🎉 Correto! Excelente raciocínio!');
+                    
+                    setTimeout(() => {
+                        this.currentPhase++;
+                        this.updateDisplay();
+                        if (this.currentPhase <= this.maxPhases) {
+                            this.generatePattern();
+                            this.updateInstructions('Observe o novo padrão!');
+                        }
+                    }, 1500);
+                } else {
+                    element.classList.add('wrong');
+                    this.updateInstructions('❌ Ops! Tente observar melhor o padrão.');
+                    
+                    // Destacar resposta correta
+                    const correctElements = Array.from(document.querySelectorAll('.pattern-item')).filter(
+                        el => el.textContent === this.correctAnswer && !el.classList.contains('question')
+                    );
+                    correctElements.forEach(el => {
+                        setTimeout(() => el.classList.add('correct'), 500);
+                    });
+
+                    setTimeout(() => {
+                        this.currentPhase++;
+                        this.updateDisplay();
+                        if (this.currentPhase <= this.maxPhases) {
+                            this.generatePattern();
+                            this.updateInstructions('Vamos para o próximo padrão!');
+                        }
+                    }, 2500);
+                }
+
+                this.updateDisplay();
+
+                // Desabilitar cliques nas opções
+                document.querySelectorAll('.pattern-item').forEach(item => {
+                    if (item.onclick) item.onclick = null;
+                });
+            }
+
+            nextPattern() {
+                if (!this.gameActive || this.currentPhase > this.maxPhases) return;
+                this.generatePattern();
+                this.updateInstructions('Novo padrão! Qual símbolo completa a sequência?');
+            }
+
+            updateDisplay() {
+                document.getElementById('score').textContent = this.score;
+                document.getElementById('phase-display').textContent = `Fase ${this.currentPhase}/${this.maxPhases}`;
+                document.getElementById('correct-count').textContent = this.correctCount;
+            }
+
+            updateInstructions(text) {
+                document.getElementById('instructions').textContent = text;
+            }
+
+            endGame() {
+                this.gameActive = false;
+                const gameEndTime = new Date();
+                const duration = Math.round((gameEndTime - this.gameStartTime) / 1000);
+                const accuracy = Math.round((this.correctCount / this.totalQuestions) * 100) || 0;
+
+                const result = {
+                    date: gameEndTime.toLocaleDateString('pt-BR'),
+                    time: gameEndTime.toLocaleTimeString('pt-BR'),
+                    score: this.score,
+                    accuracy: accuracy,
+                    correctAnswers: this.correctCount,
+                    totalQuestions: this.totalQuestions,
+                    duration: duration,
+                    phases: this.maxPhases
+                };
+
+                this.saveResult(result);
+                this.updateInstructions(`🏆 Jogo concluído! Pontuação final: ${this.score} pontos (${accuracy}% de acertos)`);
+                this.displayResults();
+            }
+
+            saveResult(result) {
+                let results = JSON.parse(localStorage.getItem('patternGameResults')) || [];
+                results.push(result);
+                
+                // Manter apenas os últimos 10 resultados
+                if (results.length > 10) {
+                    results = results.slice(-10);
+                }
+                
+                localStorage.setItem('patternGameResults', JSON.stringify(results));
+            }
+
+            loadResults() {
+                this.displayResults();
+            }
+
+            displayResults() {
+                const results = JSON.parse(localStorage.getItem('patternGameResults')) || [];
+                const container = document.getElementById('results-container');
+
+                if (results.length === 0) {
+                    container.innerHTML = '<div class="no-results">Nenhum resultado encontrado. Jogue para ver seu progresso!</div>';
+                    return;
+                }
+
+                const resultsGrid = document.createElement('div');
+                resultsGrid.className = 'results-grid';
+
+                results.reverse().forEach((result, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'result-card';
+                    
+                    card.innerHTML = `
+                        <div class="result-date">${result.date} - ${result.time}</div>
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <div class="result-stat-label">Pontos</div>
+                                <div class="result-stat-value">${result.score}</div>
+                            </div>
+                            <div class="result-stat">
+                                <div class="result-stat-label">Precisão</div>
+                                <div class="result-stat-value">${result.accuracy}%</div>
+                            </div>
+                            <div class="result-stat">
+                                <div class="result-stat-label">Tempo</div>
+                                <div class="result-stat-value">${result.duration}s</div>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                            ${result.correctAnswers}/${result.totalQuestions} acertos - ${result.phases} fases
+                        </div>
+                    `;
+                    
+                    resultsGrid.appendChild(card);
+                });
+
+                container.innerHTML = '';
+                container.appendChild(resultsGrid);
+            }
+
+            clearResults() {
+                if (confirm('Tem certeza que deseja limpar todo o histórico de resultados?')) {
+                    localStorage.removeItem('patternGameResults');
+                    this.displayResults();
+                }
+            }
+        }
+
+        const game = new PatternCognitiveGame();
+
+        function startGame() {
+            game.startGame();
+        }
+
+        function nextPattern() {
+            game.nextPattern();
+        }
+
+        function clearResults() {
+            game.clearResults();
+        }
+
+        // Inicializar exibição de resultados
+        document.addEventListener('DOMContentLoaded', () => {
+            game.displayResults();
+        });
+    </script>
+</body>
+</html>

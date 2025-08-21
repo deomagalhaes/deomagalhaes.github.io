@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Sequência dos Animais - Memória de Trabalho</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #2d3748;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .animal-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 3rem;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .animal-card.show {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-color: #f6ad55;
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        .animal-card.correct {
+            background: linear-gradient(135deg, #d4edc8 0%, #a8e6cf 100%);
+            border-color: #68d391;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .animal-card.wrong {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            border-color: #fc8181;
+            animation: shake 0.6s ease-in-out;
+        }
+
+        .animal-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .controls {
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #d4edc8 0%, #a8e6cf 100%);
+            color: #2f855a;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            color: #c53030;
+        }
+
+        .message.info {
+            background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
+            color: #2c5282;
+        }
+
+        .phase-indicator {
+            background: linear-gradient(135deg, #fbb6ce 0%, #f687b3 100%);
+            color: #97266d;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .animals-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .animal-card {
+                font-size: 2.5rem;
+                padding: 15px;
+            }
+            
+            .game-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .instructions {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            color: #4a5568;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎯 Sequência dos Animais</h1>
+        <p class="subtitle">Exercite sua memória de trabalho!</p>
+        
+        <div class="instructions">
+            <h3>📋 Como Jogar:</h3>
+            <ul>
+                <li>Observe a sequência de animais que vai aparecer</li>
+                <li>Memorize a ordem em que aparecem</li>
+                <li>Clique nos animais na mesma sequência</li>
+                <li>A dificuldade aumenta a cada acerto!</li>
+            </ul>
+        </div>
+
+        <div class="phase-indicator" id="phaseIndicator">
+            Fase 1 - Sequência de 2 animais
+        </div>
+
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">Acertos</div>
+                <div class="info-value" id="score">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Sequência</div>
+                <div class="info-value" id="sequenceLength">2</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Nível</div>
+                <div class="info-value" id="level">1/10</div>
+            </div>
+        </div>
+
+        <div class="message" id="message">
+            Clique em "Iniciar" para começar!
+        </div>
+
+        <div class="animals-grid" id="animalsGrid">
+            <div class="animal-card" data-animal="cat">🐱</div>
+            <div class="animal-card" data-animal="dog">🐶</div>
+            <div class="animal-card" data-animal="rabbit">🐰</div>
+            <div class="animal-card" data-animal="bear">🐻</div>
+            <div class="animal-card" data-animal="frog">🐸</div>
+            <div class="animal-card" data-animal="pig">🐷</div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="startBtn" onclick="startGame()">🎮 Iniciar</button>
+            <button class="btn" id="resetBtn" onclick="resetGame()">🔄 Reiniciar</button>
+        </div>
+    </div>
+
+    <script>
+        const MAX_LEVEL = 10;
+        
+        let gameState = {
+            sequence: [],
+            playerSequence: [],
+            currentStep: 0,
+            sequenceLength: 2,
+            level: 1,
+            score: 0,
+            isPlaying: false,
+            isShowingSequence: false,
+            phase: 1
+        };
+
+        const animals = ['cat', 'dog', 'rabbit', 'bear', 'frog', 'pig'];
+        const animalCards = document.querySelectorAll('.animal-card');
+        const messageEl = document.getElementById('message');
+        const scoreEl = document.getElementById('score');
+        const sequenceLengthEl = document.getElementById('sequenceLength');
+        const levelEl = document.getElementById('level');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const phaseIndicator = document.getElementById('phaseIndicator');
+
+        // Sons usando Web Audio API
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(frequency, duration = 200) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration / 1000);
+        }
+
+        function generateSequence() {
+            gameState.sequence = [];
+            for (let i = 0; i < gameState.sequenceLength; i++) {
+                const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+                gameState.sequence.push(randomAnimal);
+            }
+        }
+
+        function showSequence() {
+            gameState.isShowingSequence = true;
+            disableCards(true);
+            
+            messageEl.textContent = 'Observe a sequência...';
+            messageEl.className = 'message info';
+            
+            gameState.sequence.forEach((animal, index) => {
+                setTimeout(() => {
+                    const card = document.querySelector(`[data-animal="${animal}"]`);
+                    card.classList.add('show');
+                    
+                    // Som baseado no animal
+                    const soundFreq = {
+                        cat: 440,
+                        dog: 330,
+                        rabbit: 550,
+                        bear: 220,
+                        frog: 660,
+                        pig: 350
+                    };
+                    playSound(soundFreq[animal], 300);
+                    
+                    setTimeout(() => {
+                        card.classList.remove('show');
+                        
+                        if (index === gameState.sequence.length - 1) {
+                            setTimeout(() => {
+                                gameState.isShowingSequence = false;
+                                disableCards(false);
+                                messageEl.textContent = 'Agora clique na mesma sequência!';
+                                messageEl.className = 'message info';
+                            }, 500);
+                        }
+                    }, 600);
+                }, (index + 1) * 1000);
+            });
+        }
+
+        function disableCards(disabled) {
+            animalCards.forEach(card => {
+                if (disabled) {
+                    card.classList.add('disabled');
+                } else {
+                    card.classList.remove('disabled');
+                }
+            });
+        }
+
+        function handleCardClick(animal) {
+            if (gameState.isShowingSequence || !gameState.isPlaying) return;
+            
+            const card = document.querySelector(`[data-animal="${animal}"]`);
+            
+            if (animal === gameState.sequence[gameState.currentStep]) {
+                // Resposta correta
+                card.classList.add('correct');
+                playSound(523, 200); // Nota C5
+                
+                setTimeout(() => {
+                    card.classList.remove('correct');
+                }, 600);
+                
+                gameState.playerSequence.push(animal);
+                gameState.currentStep++;
+                
+                if (gameState.currentStep === gameState.sequence.length) {
+                    // Sequência completa correta
+                    setTimeout(() => {
+                        handleCorrectSequence();
+                    }, 700);
+                }
+            } else {
+                // Resposta incorreta
+                card.classList.add('wrong');
+                playSound(150, 400); // Som de erro
+                
+                setTimeout(() => {
+                    card.classList.remove('wrong');
+                }, 600);
+                
+                handleIncorrectAnswer();
+            }
+        }
+
+        function handleCorrectSequence() {
+            gameState.score++;
+            gameState.level++;
+            
+            scoreEl.textContent = gameState.score;
+            levelEl.textContent = `${gameState.level}/${MAX_LEVEL}`;
+            
+            messageEl.textContent = `🎉 Parabéns! Acertou a sequência!`;
+            messageEl.className = 'message success';
+            
+            // Aumenta dificuldade gradualmente
+            if (gameState.level % 3 === 0 && gameState.sequenceLength < 7) {
+                gameState.sequenceLength++;
+                gameState.phase++;
+                sequenceLengthEl.textContent = gameState.sequenceLength;
+                phaseIndicator.textContent = `Fase ${gameState.phase} - Sequência de ${gameState.sequenceLength} animais`;
+                
+                setTimeout(() => {
+                    messageEl.textContent = `🆙 Nível subiu! Agora são ${gameState.sequenceLength} animais!`;
+                    messageEl.className = 'message success';
+                }, 1500);
+            }
+            
+            setTimeout(() => {
+                startNewRound();
+            }, 2500);
+        }
+
+        function handleIncorrectAnswer() {
+            gameState.isPlaying = false;
+            disableCards(true);
+            
+            messageEl.textContent = `❌ Ops! A sequência era: ${gameState.sequence.map(animal => {
+                const emojis = {
+                    cat: '🐱', dog: '🐶', rabbit: '🐰',
+                    bear: '🐻', frog: '🐸', pig: '🐷'
+                };
+                return emojis[animal];
+            }).join(' → ')}`;
+            messageEl.className = 'message error';
+            
+            setTimeout(() => {
+                messageEl.textContent = 'Tente novamente! Clique em "Iniciar" para continuar.';
+                messageEl.className = 'message info';
+                startBtn.textContent = '🎮 Tentar Novamente';
+                startBtn.disabled = false;
+            }, 3000);
+        }
+
+        function startNewRound() {
+            gameState.playerSequence = [];
+            gameState.currentStep = 0;
+            generateSequence();
+            showSequence();
+        }
+
+        function startGame() {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            gameState.isPlaying = true;
+            startBtn.disabled = true;
+            startBtn.textContent = '🎮 Jogando...';
+            
+            startNewRound();
+        }
+
+        function resetGame() {
+            gameState = {
+                sequence: [],
+                playerSequence: [],
+                currentStep: 0,
+                sequenceLength: 2,
+                level: 1,
+                score: 0,
+                isPlaying: false,
+                isShowingSequence: false,
+                phase: 1
+            };
+            
+            scoreEl.textContent = '0';
+            sequenceLengthEl.textContent = '2';
+            levelEl.textContent = '1/10';
+            phaseIndicator.textContent = 'Fase 1 - Sequência de 2 animais';
+            
+            messageEl.textContent = 'Clique em "Iniciar" para começar!';
+            messageEl.className = 'message';
+            
+            startBtn.textContent = '🎮 Iniciar';
+            startBtn.disabled = false;
+            
+            disableCards(false);
+            
+            // Remove todas as classes de estado dos cards
+            animalCards.forEach(card => {
+                card.classList.remove('show', 'correct', 'wrong', 'disabled');
+            });
+        }
+
+        // Event listeners para os cards
+        animalCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const animal = card.getAttribute('data-animal');
+                handleCardClick(animal);
+            });
+        });
+
+        // Inicialização
+        disableCards(false);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival de Pipas - Corrida dos Céus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: hsl(210, 100%, 50%);
+            --primary-dark: hsl(210, 100%, 40%);
+            --secondary: hsl(45, 100%, 60%);
+            --accent: hsl(330, 100%, 60%);
+            --success: hsl(120, 60%, 50%);
+            --danger: hsl(0, 80%, 60%);
+            --background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 30%, #B0E0E6 60%, #E0F6FF 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --glow: 0 0 30px rgba(74, 144, 226, 0.5);
+        }
+
+        body {
+            font-family: 'Fredoka', cursive;
+            background: var(--background);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Nuvens animadas de fundo */
+        .clouds-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .cloud-bg {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 100px;
+            animation: drift 25s infinite linear;
+        }
+
+        .cloud-bg::before, .cloud-bg::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 100px;
+        }
+
+        .cloud-bg:nth-child(1) {
+            width: 120px;
+            height: 60px;
+            top: 10%;
+            animation-duration: 30s;
+        }
+
+        .cloud-bg:nth-child(2) {
+            width: 80px;
+            height: 40px;
+            top: 30%;
+            animation-duration: 25s;
+            animation-delay: -8s;
+        }
+
+        .cloud-bg:nth-child(3) {
+            width: 100px;
+            height: 50px;
+            top: 60%;
+            animation-duration: 35s;
+            animation-delay: -15s;
+        }
+
+        @keyframes drift {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        /* Interface principal */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Painel de status */
+        .status-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .status-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .status-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Seleção de pipa */
+        .kite-selection {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .kite-selection h2 {
+            text-align: center;
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .kite-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .kite-option {
+            background: rgba(255, 255, 255, 0.7);
+            border: 3px solid transparent;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kite-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .kite-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .kite-option.selected {
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .kite-option.selected::before {
+            opacity: 0.1;
+        }
+
+        .kite-preview {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            position: relative;
+        }
+
+        .kite-mini {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .kite-tradicional {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+        }
+
+        .kite-peixe {
+            background: linear-gradient(45deg, #FFD93D, #FF6B6B);
+            border-radius: 50px 10px 50px 10px;
+        }
+
+        .kite-flecha {
+            background: linear-gradient(45deg, #6C5CE7, #A29BFE);
+            clip-path: polygon(50% 0%, 0% 100%, 50% 75%, 100% 100%);
+        }
+
+        .kite-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .kite-stats {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Área do jogo */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 50%, #B0E0E6 100%);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 25px;
+        }
+
+        .race-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 48px,
+                    rgba(255, 255, 255, 0.1) 48px,
+                    rgba(255, 255, 255, 0.1) 50px
+                );
+        }
+
+        .player-kite {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            width: 50px;
+            height: 50px;
+            z-index: 10;
+            transition: all 0.2s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .obstacle-kite {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transition: all 0.1s linear;
+            filter: drop-shadow(0 3px 10px rgba(0,0,0,0.2));
+        }
+
+        .explosion {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #FF6B6B, #FF8E53, transparent);
+            animation: explode 0.5s ease-out forwards;
+            z-index: 15;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* Controles */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 10px 25px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95A5A6, #7F8C8D);
+            color: white;
+            box-shadow: 0 10px 25px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(149, 165, 166, 0.4);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #E91E63);
+            color: white;
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(233, 30, 99, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.8) translateY(50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .rank {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 40px;
+        }
+
+        .record-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .record-level {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .record-score {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Mensagens */
+        .message {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .game-area {
+                height: 400px;
+            }
+            
+            .status-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .kite-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animações especiais */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .bounce {
+            animation: bounce 0.6s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Efeitos de partículas */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle 1s ease-out forwards;
+        }
+
+        @keyframes particle {
+            0% { 
+                transform: scale(1) translateY(0); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(0) translateY(-50px); 
+                opacity: 0; 
+            }
+        }
+
+        /* Indicador de progresso da fase */
+        .progress-indicator {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* Controles do jogo */
+        .game-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Audio controls */
+        .audio-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        .audio-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-btn.muted {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nuvens de fundo -->
+    <div class="clouds-bg">
+        <div class="cloud-bg"></div>
+        <div class="cloud-bg"></div>
+        <div class="cloud-bg"></div>
+    </div>
+
+    <!-- Controles de áudio -->
+    <div class="audio-controls">
+        <button class="audio-btn" id="musicToggle" title="Música">🎵</button>
+        <button class="audio-btn" id="soundToggle" title="Efeitos">🔊</button>
+    </div>
+
+    <div class="app-container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <h1>🪁 Festival de Pipas 🪁</h1>
+            <p>Corrida dos Céus - Desvie dos obstáculos e chegue ao fim!</p>
+        </div>
+
+        <!-- Painel de status -->
+        <div class="status-panel">
+            <div class="status-card">
+                <div class="status-label">Nível</div>
+                <div class="status-value" id="levelDisplay">1/10</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Pontuação</div>
+                <div class="status-value" id="scoreDisplay">0</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Distância</div>
+                <div class="status-value" id="distanceDisplay">0m</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Recorde</div>
+                <div class="status-value" id="recordDisplay">-</div>
+            </div>
+        </div>
+
+        <!-- Seleção de pipa -->
+        <div class="kite-selection" id="kiteSelection">
+            <h2>Escolha sua Pipa</h2>
+            <div class="kite-options">
+                <div class="kite-option" data-type="mini">
+                    <div class="kite-preview kite-mini"></div>
+                    <div class="kite-name">Mini</div>
+                    <div class="kite-stats">Velocidade: ⭐⭐⭐⭐⭐<br>Resistência: ⭐⭐</div>
+                </div>
+                <div class="kite-option selected" data-type="tradicional">
+                    <div class="kite-preview kite-tradicional"></div>
+                    <div class="kite-name">Tradicional</div>
+                    <div class="kite-stats">Velocidade: ⭐⭐⭐⭐<br>Resistência: ⭐⭐⭐</div>
+                </div>
+                <div class="kite-option" data-type="peixe">
+                    <div class="kite-preview kite-peixe"></div>
+                    <div class="kite-name">Peixe</div>
+                    <div class="kite-stats">Velocidade: ⭐⭐⭐<br>Resistência: ⭐⭐⭐⭐</div>
+                </div>
+                <div class="kite-option" data-type="flecha">
+                    <div class="kite-preview kite-flecha"></div>
+                    <div class="kite-name">Flecha</div>
+                    <div class="kite-stats">Velocidade: ⭐⭐⭐⭐⭐<br>Resistência: ⭐⭐⭐⭐⭐</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progresso da fase -->
+        <div class="progress-indicator">
+            <div class="progress-bar" id="phaseProgress"></div>
+        </div>
+
+        <!-- Mensagem -->
+        <div class="message" id="gameMessage">
+            Escolha sua pipa e clique em "Iniciar Corrida" para começar!
+        </div>
+
+        <!-- Área do jogo -->
+        <div class="game-area" id="gameArea">
+            <div class="race-track"></div>
+            <div class="player-kite kite-tradicional" id="playerKite"></div>
+            
+            <!-- Controles do jogo -->
+            <div class="game-controls" id="gameControls" style="display: none;">
+                <button class="control-btn" id="moveUp">⬆️</button>
+                <button class="control-btn" id="moveDown">⬇️</button>
+            </div>
+        </div>
+
+        <!-- Controles principais -->
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">Iniciar Corrida</button>
+            <button class="btn btn-secondary" id="pauseBtn" style="display: none;">Pausar</button>
+            <button class="btn btn-accent" id="leaderboardBtn">🏆 Classificações</button>
+            <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+        </div>
+    </div>
+
+    <!-- Modal de classificações -->
+    <div class="modal" id="leaderboardModal">
+        <div class="modal-content">
+            <h2>🏆 Classificações</h2>
+            <div id="leaderboardList">
+                <p style="text-align: center; color: #666;">Nenhum recorde ainda. Jogue para estabelecer suas marcas!</p>
+            </div>
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn btn-secondary" onclick="closeLeaderboard()">Fechar</button>
+                <button class="btn btn-accent" onclick="clearRecords()" style="margin-left: 10px;">Limpar Recordes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Áudios -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- Música de fundo seria carregada aqui -->
+    </audio>
+    <audio id="moveSound" preload="auto">
+        <!-- Som de movimento seria carregado aqui -->
+    </audio>
+    <audio id="crashSound" preload="auto">
+        <!-- Som de colisão seria carregado aqui -->
+    </audio>
+    <audio id="levelUpSound" preload="auto">
+        <!-- Som de nível completado seria carregado aqui -->
+    </audio>
+
+    <script>
+        // Estado do jogo
+        const gameState = {
+            level: 1,
+            maxLevel: 10,
+            score: 0,
+            distance: 0,
+            isPlaying: false,
+            isPaused: false,
+            selectedKite: 'tradicional',
+            playerY: 250,
+            obstacles: [],
+            gameSpeed: 2,
+            obstacleSpawnRate: 0.02,
+            frameCount: 0,
+            phaseDistance: 0,
+            targetDistance: 1000,
+            musicEnabled: true,
+            soundEnabled: true
+        };
+
+        // Configurações por nível
+        const levelConfigs = {
+            1: { speed: 2, spawnRate: 0.015, targetDistance: 800, obstacleSpeed: 1.5 },
+            2: { speed: 2.2, spawnRate: 0.018, targetDistance: 900, obstacleSpeed: 1.7 },
+            3: { speed: 2.5, spawnRate: 0.022, targetDistance: 1000, obstacleSpeed: 2 },
+            4: { speed: 2.8, spawnRate: 0.025, targetDistance: 1100, obstacleSpeed: 2.2 },
+            5: { speed: 3, spawnRate: 0.028, targetDistance: 1200, obstacleSpeed: 2.5 },
+            6: { speed: 3.2, spawnRate: 0.032, targetDistance: 1300, obstacleSpeed: 2.7 },
+            7: { speed: 3.5, spawnRate: 0.035, targetDistance: 1400, obstacleSpeed: 3 },
+            8: { speed: 3.8, spawnRate: 0.038, targetDistance: 1500, obstacleSpeed: 3.2 },
+            9: { speed: 4, spawnRate: 0.042, targetDistance: 1600, obstacleSpeed: 3.5 },
+            10: { speed: 4.5, spawnRate: 0.045, targetDistance: 2000, obstacleSpeed: 4 }
+        };
+
+        // Elementos DOM
+        const elements = {
+            levelDisplay: document.getElementById('levelDisplay'),
+            scoreDisplay: document.getElementById('scoreDisplay'),
+            distanceDisplay: document.getElementById('distanceDisplay'),
+            recordDisplay: document.getElementById('recordDisplay'),
+            gameMessage: document.getElementById('gameMessage'),
+            gameArea: document.getElementById('gameArea'),
+            playerKite: document.getElementById('playerKite'),
+            startBtn: document.getElementById('startBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            leaderboardBtn: document.getElementById('leaderboardBtn'),
+            kiteSelection: document.getElementById('kiteSelection'),
+            gameControls: document.getElementById('gameControls'),
+            phaseProgress: document.getElementById('phaseProgress'),
+            leaderboardModal: document.getElementById('leaderboardModal'),
+            musicToggle: document.getElementById('musicToggle'),
+            soundToggle: document.getElementById('soundToggle'),
+            bgMusic: document.getElementById('bgMusic'),
+            moveSound: document.getElementById('moveSound'),
+            crashSound: document.getElementById('crashSound'),
+            levelUpSound: document.getElementById('levelUpSound')
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGame();
+            setupEventListeners();
+            loadRecords();
+            updateDisplay();
+            
+            // Simular áudios com Web Audio API (já que não temos arquivos reais)
+            createSynthAudio();
+        });
+
+        function initializeGame() {
+            gameState.level = 1;
+            gameState.score = 0;
+            gameState.distance = 0;
+            gameState.isPlaying = false;
+            gameState.isPaused = false;
+            gameState.playerY = 250;
+            gameState.obstacles = [];
+            gameState.frameCount = 0;
+            gameState.phaseDistance = 0;
+            
+            const config = levelConfigs[gameState.level];
+            gameState.gameSpeed = config.speed;
+            gameState.obstacleSpawnRate = config.spawnRate;
+            gameState.targetDistance = config.targetDistance;
+            
+            elements.playerKite.style.bottom = '225px';
+            elements.gameControls.style.display = 'none';
+            elements.pauseBtn.style.display = 'none';
+            elements.startBtn.style.display = 'inline-block';
+            elements.kiteSelection.style.display = 'block';
+        }
+
+        function setupEventListeners() {
+            // Seleção de pipa
+            document.querySelectorAll('.kite-option').forEach(option => {
+                option.addEventListener('click', () => selectKite(option.dataset.type));
+            });
+
+            // Botões principais
+            elements.startBtn.addEventListener('click', startGame);
+            elements.pauseBtn.addEventListener('click', togglePause);
+            elements.resetBtn.addEventListener('click', resetGame);
+            elements.leaderboardBtn.addEventListener('click', showLeaderboard);
+
+            // Controles do jogo
+            elements.gameArea.addEventListener('click', handleGameClick);
+            document.getElementById('moveUp').addEventListener('click', () => movePlayer(-1));
+            document.getElementById('moveDown').addEventListener('click', () => movePlayer(1));
+
+            // Controles de teclado
+            document.addEventListener('keydown', handleKeyDown);
+
+            // Controles de áudio
+            elements.musicToggle.addEventListener('click', toggleMusic);
+            elements.soundToggle.addEventListener('click', toggleSound);
+
+            // Fechar modal clicando fora
+            elements.leaderboardModal.addEventListener('click', (e) => {
+                if (e.target === elements.leaderboardModal) {
+                    closeLeaderboard();
+                }
+            });
+        }
+
+        function selectKite(type) {
+            gameState.selectedKite = type;
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.kite-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+            
+            // Atualizar pipa do jogador
+            elements.playerKite.className = `player-kite kite-${type}`;
+            
+            playSound('move');
+        }
+
+        function startGame() {
+            if (gameState.isPlaying) return;
+            
+            gameState.isPlaying = true;
+            gameState.isPaused = false;
+            gameState.frameCount = 0;
+            gameState.phaseDistance = 0;
+            gameState.obstacles = [];
+            
+            elements.startBtn.style.display = 'none';
+            elements.pauseBtn.style.display = 'inline-block';
+            elements.kiteSelection.style.display = 'none';
+            elements.gameControls.style.display = 'flex';
+            elements.gameMessage.textContent = `Nível ${gameState.level} - Desvie dos obstáculos!`;
+            
+            // Iniciar música de fundo
+            if (gameState.musicEnabled) {
+                playBackgroundMusic();
+            }
+            
+            gameLoop();
+        }
+
+        function gameLoop() {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            gameState.frameCount++;
+            gameState.phaseDistance += gameState.gameSpeed;
+            gameState.distance += gameState.gameSpeed;
+            gameState.score += Math.floor(gameState.gameSpeed);
+            
+            // Atualizar progresso
+            const progress = (gameState.phaseDistance / gameState.targetDistance) * 100;
+            elements.phaseProgress.style.width = `${Math.min(progress, 100)}%`;
+            
+            // Spawnar obstáculos
+            if (Math.random() < gameState.obstacleSpawnRate) {
+                spawnObstacle();
+            }
+            
+            // Atualizar obstáculos
+            updateObstacles();
+            
+            // Verificar colisões
+            if (checkCollisions()) {
+                gameOver();
+                return;
+            }
+            
+            // Verificar se completou a fase
+            if (gameState.phaseDistance >= gameState.targetDistance) {
+                levelComplete();
+                return;
+            }
+            
+            // Atualizar display
+            updateDisplay();
+            
+            // Efeitos visuais
+            if (gameState.frameCount % 30 === 0) {
+                createSpeedLines();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnObstacle() {
+            const obstacle = {
+                x: elements.gameArea.offsetWidth,
+                y: Math.random() * (elements.gameArea.offsetHeight - 100) + 50,
+                type: ['mini', 'tradicional', 'peixe', 'flecha'][Math.floor(Math.random() * 4)],
+                speed: levelConfigs[gameState.level].obstacleSpeed
+            };
+            
+            gameState.obstacles.push(obstacle);
+            
+            // Criar elemento visual
+            const obstacleEl = document.createElement('div');
+            obstacleEl.className = `obstacle-kite kite-${obstacle.type}`;
+            obstacleEl.style.left = `${obstacle.x}px`;
+            obstacleEl.style.top = `${obstacle.y}px`;
+            obstacleEl.dataset.obstacleId = gameState.obstacles.length - 1;
+            elements.gameArea.appendChild(obstacleEl);
+        }
+
+        function updateObstacles() {
+            gameState.obstacles = gameState.obstacles.filter((obstacle, index) => {
+                obstacle.x -= obstacle.speed;
+                
+                const obstacleEl = document.querySelector(`[data-obstacle-id="${index}"]`);
+                if (obstacleEl) {
+                    obstacleEl.style.left = `${obstacle.x}px`;
+                    
+                    // Remover obstáculos que saíram da tela
+                    if (obstacle.x < -50) {
+                        obstacleEl.remove();
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+        }
+
+        function checkCollisions() {
+            const playerRect = {
+                x: 50,
+                y: gameState.playerY,
+                width: 50,
+                height: 50
+            };
+            
+            for (let obstacle of gameState.obstacles) {
+                const obstacleRect = {
+                    x: obstacle.x,
+                    y: obstacle.y,
+                    width: 40,
+                    height: 40
+                };
+                
+                if (isColliding(playerRect, obstacleRect)) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        function isColliding(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        function movePlayer(direction) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            const moveAmount = 30;
+            const newY = gameState.playerY + (direction * moveAmount);
+            const minY = 20;
+            const maxY = elements.gameArea.offsetHeight - 70;
+            
+            if (newY >= minY && newY <= maxY) {
+                gameState.playerY = newY;
+                elements.playerKite.style.bottom = `${elements.gameArea.offsetHeight - gameState.playerY - 50}px`;
+                
+                // Efeito visual
+                elements.playerKite.classList.add('bounce');
+                setTimeout(() => elements.playerKite.classList.remove('bounce'), 600);
+                
+                playSound('move');
+                createParticles(75, gameState.playerY + 25);
+            }
+        }
+
+        function handleGameClick(e) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            const rect = elements.gameArea.getBoundingClientRect();
+            const clickY = e.clientY - rect.top;
+            const currentY = gameState.playerY + 25;
+            
+            const direction = clickY < currentY ? -1 : 1;
+            movePlayer(direction);
+        }
+
+        function handleKeyDown(e) {
+            switch(e.key) {
+                case 'ArrowUp':
+                case 'w':
+                case 'W':
+                    e.preventDefault();
+                    movePlayer(-1);
+                    break;
+                case 'ArrowDown':
+                case 's':
+                case 'S':
+                    e.preventDefault();
+                    movePlayer(1);
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    if (gameState.isPlaying) {
+                        togglePause();
+                    } else {
+                        startGame();
+                    }
+                    break;
+            }
+        }
+
+        function levelComplete() {
+            gameState.isPlaying = false;
+            playSound('levelUp');
+            
+            // Salvar recorde
+            saveRecord();
+            
+            elements.gameMessage.textContent = `🎉 Nível ${gameState.level} completo! Pontuação: ${gameState.score}`;
+            elements.gameMessage.classList.add('pulse');
+            
+            setTimeout(() => {
+                elements.gameMessage.classList.remove('pulse');
+                
+                if (gameState.level < gameState.maxLevel) {
+                    gameState.level++;
+                    nextLevel();
+                } else {
+                    gameComplete();
+                }
+            }, 2000);
+        }
+
+        function nextLevel() {
+            // Configurar próximo nível
+            const config = levelConfigs[gameState.level];
+            gameState.gameSpeed = config.speed;
+            gameState.obstacleSpawnRate = config.spawnRate;
+            gameState.targetDistance = config.targetDistance;
+            gameState.phaseDistance = 0;
+            
+            // Limpar obstáculos
+            clearObstacles();
+            
+            // Resetar interface
+            elements.startBtn.style.display = 'inline-block';
+            elements.pauseBtn.style.display = 'none';
+            elements.kiteSelection.style.display = 'block';
+            elements.gameControls.style.display = 'none';
+            elements.phaseProgress.style.width = '0%';
+            
+            elements.gameMessage.textContent = `Nível ${gameState.level}/10 - Escolha sua pipa e prepare-se!`;
+            
+            updateDisplay();
+        }
+
+        function gameComplete() {
+            elements.gameMessage.textContent = `🏆 PARABÉNS! Você completou todos os níveis! Pontuação final: ${gameState.score}`;
+            resetGameInterface();
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            playSound('crash');
+            
+            // Efeito de explosão
+            createExplosion(75, gameState.playerY + 25);
+            
+            // Efeito de shake
+            elements.gameArea.classList.add('shake');
+            setTimeout(() => elements.gameArea.classList.remove('shake'), 500);
+            
+            elements.gameMessage.textContent = `💥 Colisão! Pontuação: ${gameState.score} - Tente novamente!`;
+            
+            setTimeout(() => {
+                resetGameInterface();
+            }, 2000);
+        }
+
+        function resetGame() {
+            stopBackgroundMusic();
+            clearObstacles();
+            initializeGame();
+            updateDisplay();
+            elements.gameMessage.textContent = 'Escolha sua pipa e clique em "Iniciar Corrida" para começar!';
+        }
+
+        function resetGameInterface() {
+            elements.startBtn.style.display = 'inline-block';
+            elements.pauseBtn.style.display = 'none';
+            elements.kiteSelection.style.display = 'block';
+            elements.gameControls.style.display = 'none';
+            elements.phaseProgress.style.width = '0%';
+            clearObstacles();
+        }
+
+        function togglePause() {
+            gameState.isPaused = !gameState.isPaused;
+            
+            if (gameState.isPaused) {
+                elements.pauseBtn.textContent = 'Continuar';
+                elements.gameMessage.textContent = 'Jogo pausado - Clique em "Continuar" para retomar';
+                stopBackgroundMusic();
+            } else {
+                elements.pauseBtn.textContent = 'Pausar';
+                elements.gameMessage.textContent = `Nível ${gameState.level} - Desvie dos obstáculos!`;
+                if (gameState.musicEnabled) {
+                    playBackgroundMusic();
+                }
+                gameLoop();
+            }
+        }
+
+        function clearObstacles() {
+            gameState.obstacles = [];
+            document.querySelectorAll('.obstacle-kite').forEach(el => el.remove());
+        }
+
+        function updateDisplay() {
+            elements.levelDisplay.textContent = `${gameState.level}/${gameState.maxLevel}`;
+            elements.scoreDisplay.textContent = gameState.score.toLocaleString();
+            elements.distanceDisplay.textContent = `${Math.floor(gameState.distance)}m`;
+            
+            // Atualizar recorde exibido
+            const bestScore = getBestScore();
+            elements.recordDisplay.textContent = bestScore ? bestScore.toLocaleString() : '-';
+        }
+
+        // Efeitos visuais
+        function createExplosion(x, y) {
+            const explosion = document.createElement('div');
+            explosion.className = 'explosion';
+            explosion.style.left = `${x - 50}px`;
+            explosion.style.top = `${y - 50}px`;
+            elements.gameArea.appendChild(explosion);
+            
+            setTimeout(() => explosion.remove(), 500);
+        }
+
+        function createParticles(x, y) {
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${x + (Math.random() - 0.5) * 20}px`;
+                particle.style.top = `${y + (Math.random() - 0.5) * 20}px`;
+                elements.gameArea.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        function createSpeedLines() {
+            const line = document.createElement('div');
+            line.style.position = 'absolute';
+            line.style.right = '0';
+            line.style.top = `${Math.random() * elements.gameArea.offsetHeight}px`;
+            line.style.width = '30px';
+            line.style.height = '2px';
+            line.style.background = 'rgba(255, 255, 255, 0.5)';
+            line.style.animation = 'drift 0.5s linear forwards';
+            elements.gameArea.appendChild(line);
+            
+            setTimeout(() => line.remove(), 500);
+        }
+
+        // Sistema de recordes
+        function saveRecord() {
+            const records = getRecords();
+            const newRecord = {
+                level: gameState.level,
+                score: gameState.score,
+                distance: gameState.distance,
+                kite: gameState.selectedKite,
+                date: new Date().toLocaleDateString('pt-BR')
+            };
+            
+            records.push(newRecord);
+            records.sort((a, b) => b.score - a.score);
+            records.splice(10); // Manter apenas top 10
+            
+            localStorage.setItem('kite-festival-records', JSON.stringify(records));
+        }
+
+        function getRecords() {
+            const stored = localStorage.getItem('kite-festival-records');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function getBestScore() {
+            const records = getRecords();
+            return records.length > 0 ? records[0].score : 0;
+        }
+
+        function loadRecords() {
+            // Carrega recordes do localStorage na inicialização
+            getRecords();
+        }
+
+        function showLeaderboard() {
+            const records = getRecords();
+            const listEl = document.getElementById('leaderboardList');
+            
+            if (records.length === 0) {
+                listEl.innerHTML = '<p style="text-align: center; color: #666;">Nenhum recorde ainda. Jogue para estabelecer suas marcas!</p>';
+            } else {
+                listEl.innerHTML = records.map((record, index) => `
+                    <div class="leaderboard-item">
+                        <div class="rank">#${index + 1}</div>
+                        <div class="record-info">
+                            <div class="record-level">Nível ${record.level} - ${record.kite}</div>
+                            <div class="record-score">${record.score.toLocaleString()} pts • ${record.distance}m • ${record.date}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            elements.leaderboardModal.style.display = 'flex';
+        }
+
+        function closeLeaderboard() {
+            elements.leaderboardModal.style.display = 'none';
+        }
+
+        function clearRecords() {
+            if (confirm('Tem certeza que deseja limpar todos os recordes?')) {
+                localStorage.removeItem('kite-festival-records');
+                showLeaderboard();
+                updateDisplay();
+            }
+        }
+
+        // Sistema de áudio
+        function createSynthAudio() {
+            // Criar contexto de áudio sintético para simular sons
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                window.synthAudio = {
+                    playMove: () => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                        oscillator.start();
+                        oscillator.stop(audioContext.currentTime + 0.1);
+                    },
+                    
+                    playCrash: () => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        oscillator.type = 'sawtooth';
+                        oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.5);
+                        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                        oscillator.start();
+                        oscillator.stop(audioContext.currentTime + 0.5);
+                    },
+                    
+                    playLevelUp: () => {
+                        const notes = [523.25, 659.25, 783.99, 1046.50];
+                        notes.forEach((freq, index) => {
+                            setTimeout(() => {
+                                const oscillator = audioContext.createOscillator();
+                                const gainNode = audioContext.createGain();
+                                oscillator.connect(gainNode);
+                                gainNode.connect(audioContext.destination);
+                                oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                                oscillator.start();
+                                oscillator.stop(audioContext.currentTime + 0.3);
+                            }, index * 100);
+                        });
+                    }
+                };
+            } catch (e) {
+                console.log('Áudio sintético não disponível');
+            }
+        }
+
+        function playSound(type) {
+            if (!gameState.soundEnabled || !window.synthAudio) return;
+            
+            switch(type) {
+                case 'move':
+                    window.synthAudio.playMove();
+                    break;
+                case 'crash':
+                    window.synthAudio.playCrash();
+                    break;
+                case 'levelUp':
+                    window.synthAudio.playLevelUp();
+                    break;
+            }
+        }
+
+        function playBackgroundMusic() {
+            // Simular música de fundo com áudio sintético
+            if (!gameState.musicEnabled) return;
+            
+            // Implementaria aqui a lógica de música de fundo
+            // Por enquanto, apenas um placeholder
+        }
+
+        function stopBackgroundMusic() {
+            // Parar música de fundo
+        }
+
+        function toggleMusic() {
+            gameState.musicEnabled = !gameState.musicEnabled;
+            elements.musicToggle.classList.toggle('muted', !gameState.musicEnabled);
+            
+            if (gameState.musicEnabled && gameState.isPlaying && !gameState.isPaused) {
+                playBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+        }
+
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            elements.soundToggle.classList.toggle('muted', !gameState.soundEnabled);
+        }
+    </script>
+</body>
+</html>

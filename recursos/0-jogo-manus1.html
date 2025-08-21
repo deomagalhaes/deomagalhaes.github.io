@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter Moderno</title>
+    <style>
+        /* Estilos para garantir que o jogo ocupe a tela inteira e tenha uma aparência limpa */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Evita barras de rolagem */
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            background-color: #0a0a1a; /* Fundo do espaço profundo */
+            display: block; /* Remove espaço extra abaixo do canvas */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        /* Estilos para a interface do usuário sobreposta ao canvas */
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            pointer-events: none; /* Permite cliques através da UI para o canvas */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        #game-over-screen, #start-screen {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+        #game-over-screen h1, #start-screen h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #ff4d4d;
+        }
+        #start-screen h1 {
+            color: #4d94ff;
+        }
+        #game-over-screen p, #start-screen p {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 20px;
+            color: #fff;
+            background-color: #4d94ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .button:hover {
+            background-color: #66a3ff;
+            transform: scale(1.05);
+        }
+        #game-over-screen .button {
+            background-color: #ff4d4d;
+        }
+        #game-over-screen .button:hover {
+            background-color: #ff6666;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemento Canvas onde o jogo será renderizado -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Interface do Usuário (Pontuação e Vidas) -->
+    <div id="ui-container">
+        <div id="score">Pontuação: 0</div>
+        <div id="lives">Vidas: 3</div>
+    </div>
+
+    <!-- Tela de Início -->
+    <div id="start-screen">
+        <h1>Space Shooter</h1>
+        <p>Use as setas (← →) para mover e a barra de espaço para atirar.</p>
+        <button id="startButton" class="button">Iniciar Jogo</button>
+    </div>
+
+    <!-- Tela de Fim de Jogo -->
+    <div id="game-over-screen" class="hidden">
+        <h1>Fim de Jogo</h1>
+        <p id="finalScore">Sua pontuação foi: 0</p>
+        <button id="restartButton" class="button">Jogar Novamente</button>
+    </div>
+
+    <script>
+        // Aguarda o carregamento completo do DOM para iniciar o jogo
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Elementos da UI
+            const scoreElement = document.getElementById('score');
+            const livesElement = document.getElementById('lives');
+            const startScreen = document.getElementById('start-screen');
+            const gameOverScreen = document.getElementById('game-over-screen');
+            const startButton = document.getElementById('startButton');
+            const restartButton = document.getElementById('restartButton');
+            const finalScoreElement = document.getElementById('finalScore');
+
+            let game; // Variável para a instância principal do jogo
+
+            // --- CONFIGURAÇÕES INICIAIS ---
+            function setupCanvas() {
+                // Ajusta o tamanho do canvas para ser responsivo, mantendo uma proporção
+                const aspectRatio = 16 / 9;
+                let newWidth = window.innerWidth * 0.9;
+                let newHeight = window.innerHeight * 0.9;
+
+                if (newWidth / newHeight > aspectRatio) {
+                    newWidth = newHeight * aspectRatio;
+                } else {
+                    newHeight = newWidth / aspectRatio;
+                }
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                
+                // Se o jogo já estiver rodando, atualiza as dimensões
+                if (game) {
+                    game.width = canvas.width;
+                    game.height = canvas.height;
+                }
+            }
+
+            // --- CLASSES DO JOGO ---
+
+            // Classe para o Jogador (Nave)
+            class Player {
+                constructor(game) {
+                    this.game = game;
+                    this.width = 50;
+                    this.height = 40;
+                    this.x = (this.game.width - this.width) / 2;
+                    this.y = this.game.height - this.height - 20;
+                    this.speed = 7;
+                    this.lives = 3;
+                }
+
+                update(input) {
+                    // Movimentação horizontal
+                    if (input.keys.includes('ArrowLeft')) this.x -= this.speed;
+                    if (input.keys.includes('ArrowRight')) this.x += this.speed;
+
+                    // Limita o movimento dentro do canvas
+                    if (this.x < 0) this.x = 0;
+                    if (this.x > this.game.width - this.width) this.x = this.game.width - this.width;
+                }
+
+                draw(context) {
+                    context.fillStyle = '#4d94ff';
+                    context.beginPath();
+                    context.moveTo(this.x + this.width / 2, this.y);
+                    context.lineTo(this.x, this.y + this.height);
+                    context.lineTo(this.x + this.width, this.y + this.height);
+                    context.closePath();
+                    context.fill();
+                    context.strokeStyle = '#fff';
+                    context.lineWidth = 2;
+                    context.stroke();
+                }
+
+                shoot() {
+                    // Cria um novo projétil
+                    this.game.projectiles.push(new Projectile(this.game, this.x + this.width / 2, this.y));
+                }
+            }
+
+            // Classe para os Projéteis
+            class Projectile {
+                constructor(game, x, y) {
+                    this.game = game;
+                    this.width = 5;
+                    this.height = 15;
+                    this.x = x - this.width / 2;
+                    this.y = y;
+                    this.speed = 10;
+                    this.markedForDeletion = false;
+                }
+
+                update() {
+                    this.y -= this.speed;
+                    if (this.y < 0) this.markedForDeletion = true;
+                }
+
+                draw(context) {
+                    context.fillStyle = '#ffeb3b';
+                    context.fillRect(this.x, this.y, this.width, this.height);
+                }
+            }
+
+            // Classe para os Inimigos
+            class Enemy {
+                constructor(game) {
+                    this.game = game;
+                    this.width = 40;
+                    this.height = 30;
+                    this.x = Math.random() * (this.game.width - this.width);
+                    this.y = -this.height;
+                    this.speedY = Math.random() * 2 + 1;
+                    this.markedForDeletion = false;
+                }
+
+                update() {
+                    this.y += this.speedY;
+                    if (this.y > this.game.height) this.markedForDeletion = true;
+                }
+
+                draw(context) {
+                    context.fillStyle = '#ff4d4d';
+                    context.fillRect(this.x, this.y, this.width, this.height);
+                    context.strokeStyle = '#fff';
+                    context.lineWidth = 1;
+                    context.strokeRect(this.x, this.y, this.width, this.height);
+                }
+            }
+
+            // Classe para gerenciar as entradas do teclado
+            class InputHandler {
+                constructor() {
+                    this.keys = [];
+                    window.addEventListener('keydown', e => {
+                        if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') && !this.keys.includes(e.key)) {
+                            this.keys.push(e.key);
+                        }
+                    });
+                    window.addEventListener('keyup', e => {
+                        if (this.keys.includes(e.key)) {
+                            this.keys.splice(this.keys.indexOf(e.key), 1);
+                        }
+                    });
+                }
+            }
+
+            // Classe principal que orquestra o jogo
+            class Game {
+                constructor(width, height) {
+                    this.width = width;
+                    this.height = height;
+                    this.input = new InputHandler();
+                    this.player = new Player(this);
+                    this.projectiles = [];
+                    this.enemies = [];
+                    this.enemyTimer = 0;
+                    this.enemyInterval = 1000; // Adiciona um inimigo a cada 1000ms (1 segundo)
+                    this.score = 0;
+                    this.gameOver = false;
+                    this.lastShotTime = 0;
+                    this.shotCooldown = 250; // 250ms de cooldown entre tiros
+                }
+
+                update(deltaTime) {
+                    if (this.gameOver) return;
+
+                    this.player.update(this.input);
+
+                    // Lógica de tiro com cooldown
+                    if (this.input.keys.includes(' ') && (Date.now() - this.lastShotTime > this.shotCooldown)) {
+                        this.player.shoot();
+                        this.lastShotTime = Date.now();
+                    }
+
+                    // Atualiza projéteis
+                    this.projectiles.forEach(p => p.update());
+                    this.projectiles = this.projectiles.filter(p => !p.markedForDeletion);
+
+                    // Adiciona e atualiza inimigos
+                    if (this.enemyTimer > this.enemyInterval) {
+                        this.enemies.push(new Enemy(this));
+                        this.enemyTimer = 0;
+                    } else {
+                        this.enemyTimer += deltaTime;
+                    }
+                    this.enemies.forEach(e => e.update());
+                    this.enemies = this.enemies.filter(e => !e.markedForDeletion);
+
+                    // Detecção de colisão
+                    this.checkCollisions();
+                }
+
+                draw(context) {
+                    // Limpa o canvas a cada frame
+                    context.clearRect(0, 0, this.width, this.height);
+                    
+                    this.player.draw(context);
+                    this.projectiles.forEach(p => p.draw(context));
+                    this.enemies.forEach(e => e.draw(context));
+                }
+
+                checkCollisions() {
+                    // Colisão: Projétil vs Inimigo
+                    this.projectiles.forEach(projectile => {
+                        this.enemies.forEach(enemy => {
+                            if (
+                                projectile.x < enemy.x + enemy.width &&
+                                projectile.x + projectile.width > enemy.x &&
+                                projectile.y < enemy.y + enemy.height &&
+                                projectile.y + projectile.height > enemy.y
+                            ) {
+                                // Colisão detectada
+                                projectile.markedForDeletion = true;
+                                enemy.markedForDeletion = true;
+                                this.score += 10;
+                                scoreElement.textContent = `Pontuação: ${this.score}`;
+                            }
+                        });
+                    });
+
+                    // Colisão: Inimigo vs Jogador
+                    this.enemies.forEach(enemy => {
+                        if (
+                            this.player.x < enemy.x + enemy.width &&
+                            this.player.x + this.player.width > enemy.x &&
+                            this.player.y < enemy.y + enemy.height &&
+                            this.player.y + this.player.height > enemy.y
+                        ) {
+                            // Colisão detectada
+                            enemy.markedForDeletion = true;
+                            this.player.lives--;
+                            livesElement.textContent = `Vidas: ${this.player.lives}`;
+                            if (this.player.lives <= 0) {
+                                this.endGame();
+                            }
+                        }
+                    });
+                }
+
+                endGame() {
+                    this.gameOver = true;
+                    finalScoreElement.textContent = `Sua pontuação foi: ${this.score}`;
+                    gameOverScreen.classList.remove('hidden');
+                }
+
+                reset() {
+                    this.player = new Player(this);
+                    this.projectiles = [];
+                    this.enemies = [];
+                    this.score = 0;
+                    this.gameOver = false;
+                    scoreElement.textContent = `Pontuação: 0`;
+                    livesElement.textContent = `Vidas: 3`;
+                    gameOverScreen.classList.add('hidden');
+                    animate(0); // Reinicia o loop de animação
+                }
+            }
+
+            // --- LOOP PRINCIPAL DO JOGO ---
+            let lastTime = 0;
+            function animate(timestamp) {
+                const deltaTime = timestamp - lastTime;
+                lastTime = timestamp;
+
+                if (!game.gameOver) {
+                    game.update(deltaTime);
+                    game.draw(ctx);
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            // --- INICIALIZAÇÃO E CONTROLES DE ESTADO ---
+            function startGame() {
+                setupCanvas();
+                game = new Game(canvas.width, canvas.height);
+                startScreen.classList.add('hidden');
+                animate(0);
+            }
+
+            // Event Listeners
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', () => {
+                game.reset();
+            });
+            window.addEventListener('resize', setupCanvas);
+
+            // Configuração inicial do canvas ao carregar a página
+            setupCanvas();
+        });
+    </script>
+</body>
+</html>

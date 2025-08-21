@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js), meta tags, etc. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag( ){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Memória Espacial – Deo Magalhães</title>
+    <meta name="description" content="Exercício prático de memória espacial para estimular atenção e capacidade de memorização.">
+    
+    <!-- Caminhos para assets do modelo original -->
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <!-- Estilos específicos do Jogo de Memória Espacial -->
+    <style>
+        /* Estilos do Jogo (Anexo 2) aplicados dentro do main-content */
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 95, 115, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            margin: 2rem auto; /* Centraliza no layout */
+        }
+
+        .game-title {
+            color: #005f73; /* Cor do modelo */
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .game-subtitle {
+            color: #007f8f; /* Cor secundária do modelo */
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-item {
+            background: #005f73; /* Cor principal do modelo */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            min-width: 120px;
+        }
+
+        .phase-display {
+            background: #007f8f; /* Cor secundária */
+            font-size: 1.3em;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 15px;
+            background: #f9f6ee; /* Fundo do modelo */
+            border-radius: 15px;
+        }
+
+        .grid-cell {
+            width: 100%; /* Ajuste para responsividade */
+            padding-bottom: 100%; /* Mantém a proporção quadrada */
+            position: relative;
+            background: #e2e8f0;
+            border: 3px solid #cbd5e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .grid-cell-content {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .grid-cell:hover {
+            background: #f7fafc;
+            transform: scale(1.05);
+        }
+
+        .grid-cell.highlight {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border-color: #0ea5e9;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .grid-cell.correct {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            border-color: #16a34a;
+            color: white;
+        }
+
+        .grid-cell.incorrect {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            border-color: #dc2626;
+            color: white;
+        }
+
+        .instructions {
+            background: #f9f6ee;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            color: #005f73;
+            font-size: 1.1em;
+            line-height: 1.6;
+            border: 1px solid #e0dcd1;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #005f73; /* Cor do botão do modelo */
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px; /* Borda do modelo */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: #007f8f;
+        }
+
+        .btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-panel {
+            background: #f9f6ee;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid #e0dcd1;
+        }
+
+        .results-title {
+            color: #005f73;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: #007f8f;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #e0dcd1;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .celebration.show {
+            display: flex;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            animation: celebrate 0.5s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Bloco de Cabeçalho Padrão (do seu modelo) -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../recursos.html" class="active">Recursos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal com o Jogo de Memória Espacial -->
+    <main>
+        <div class="game-container">
+            <h1 class="game-title">🧠 Memória Espacial</h1>
+            <p class="game-subtitle">Memorize a sequência de posições!</p>
+            
+            <div class="game-info">
+                <div class="info-item phase-display" id="phaseDisplay">Fase 1/10</div>
+                <div class="info-item" id="scoreDisplay">Pontos: 0</div>
+                <div class="info-item" id="sequenceDisplay">Sequência: 2</div>
+            </div>
+            
+            <div class="instructions" id="instructions">
+                <strong>Como Jogar:</strong> Observe atentamente a sequência de células que se iluminam e depois clique nas mesmas células na ordem correta. A sequência aumenta a cada fase!
+            </div>
+            
+            <div class="game-grid" id="gameGrid">
+                <!-- Células do grid serão geradas pelo JavaScript -->
+            </div>
+            
+            <div class="control-buttons">
+                <button class="btn" id="startBtn" onclick="startGame( )">Iniciar Jogo</button>
+                <button class="btn" id="showSequenceBtn" onclick="showSequence()" disabled>Ver Sequência</button>
+                <button class="btn" id="resetBtn" onclick="resetGame()">Reiniciar</button>
+            </div>
+
+            <div class="results-panel" id="resultsPanel">
+                <h3 class="results-title">📊 Seus Resultados</h3>
+                <div class="stats-grid">
+                    <div class="stat-item"><div class="stat-value" id="totalGames">0</div><div class="stat-label">Jogos</div></div>
+                    <div class="stat-item"><div class="stat-value" id="bestScore">0</div><div class="stat-label">Melhor Pontuação</div></div>
+                    <div class="stat-item"><div class="stat-value" id="avgScore">0</div><div class="stat-label">Média</div></div>
+                    <div class="stat-item"><div class="stat-value" id="maxPhase">0</div><div class="stat-label">Melhor Fase</div></div>
+                </div>
+                <h4 style="margin: 20px 0 10px 0; color: #005f73;">📈 Histórico Recente</h4>
+                <div class="history-list" id="historyList"><p style="text-align: center; color: #718096;">Nenhum jogo ainda</p></div>
+            </div>
+            <a href="../recursos.html" class="cta-button secondary" style="background:#eee; color:#005f73; margin-top: 20px; display: inline-block;">Voltar para Recursos</a>
+        </div>
+    </main>
+
+    <!-- RODAPÉ PADRÃO (do seu modelo) -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/neuropsiguaranesia" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @neuropsiguaranesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Overlay de Celebração (do Jogo ) -->
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2 style="color: #4ade80; margin-bottom: 20px;">🎉 Parabéns!</h2>
+            <p style="font-size: 1.2em; color: #4a5568;" id="celebrationText"></p>
+            <button class="btn" onclick="hideCelebration()" style="margin-top: 20px;">Continuar</button>
+        </div>
+    </div>
+
+    <!-- Script do Menu Mobile (do seu modelo) -->
+    <script src="../assets/script.js"></script>
+
+    <!-- Script do Jogo de Memória Espacial -->
+    <script>
+        class SpatialMemoryGame {
+            constructor() {
+                this.gridSize = 16;
+                this.currentPhase = 1;
+                this.maxPhases = 10;
+                this.score = 0;
+                this.sequence = [];
+                this.playerSequence = [];
+                this.sequenceLength = 2;
+                this.isShowingSequence = false;
+                this.isPlayerTurn = false;
+                this.gameStarted = false;
+                this.initializeGrid();
+                this.loadResults();
+                this.updateDisplay();
+            }
+            initializeGrid() {
+                const grid = document.getElementById('gameGrid');
+                grid.innerHTML = '';
+                for (let i = 0; i < this.gridSize; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.id = `cell-${i}`;
+                    
+                    const cellContent = document.createElement('div');
+                    cellContent.className = 'grid-cell-content';
+                    cellContent.textContent = i + 1;
+                    cell.appendChild(cellContent);
+
+                    cell.addEventListener('click', () => this.handleCellClick(i));
+                    grid.appendChild(cell);
+                }
+            }
+            generateSequence() {
+                this.sequence = [];
+                const availableCells = Array.from({ length: this.gridSize }, (_, i) => i);
+                for (let i = 0; i < this.sequenceLength; i++) {
+                    const randomIndex = Math.floor(Math.random() * availableCells.length);
+                    this.sequence.push(availableCells.splice(randomIndex, 1)[0]);
+                }
+            }
+            async showSequence() {
+                this.isShowingSequence = true;
+                this.isPlayerTurn = false;
+                this.updateButtons();
+                document.getElementById('instructions').innerHTML = '<strong>📖 Observe:</strong> Memorize a sequência de células que se iluminam!';
+                for (let i = 0; i < this.sequence.length; i++) {
+                    await this.highlightCell(this.sequence[i]);
+                    await this.wait(600);
+                }
+                this.isShowingSequence = false;
+                this.isPlayerTurn = true;
+                this.playerSequence = [];
+                this.updateButtons();
+                document.getElementById('instructions').innerHTML = '<strong>🎯 Sua vez:</strong> Clique nas células na mesma ordem que foram mostradas!';
+            }
+            async highlightCell(index) {
+                const cell = document.getElementById(`cell-${index}`);
+                cell.classList.add('highlight');
+                this.playSound('highlight');
+                await this.wait(400);
+                cell.classList.remove('highlight');
+            }
+            handleCellClick(index) {
+                if (!this.isPlayerTurn || this.isShowingSequence) return;
+                this.playerSequence.push(index);
+                const currentStep = this.playerSequence.length - 1;
+                if (this.playerSequence[currentStep] === this.sequence[currentStep]) {
+                    this.showCellFeedback(index, 'correct');
+                    this.playSound('correct');
+                    if (this.playerSequence.length === this.sequence.length) {
+                        this.score += this.sequenceLength * 10;
+                        this.updateDisplay();
+                        this.nextPhase();
+                    }
+                } else {
+                    this.showCellFeedback(index, 'incorrect');
+                    this.playSound('incorrect');
+                    this.gameOver();
+                }
+            }
+            showCellFeedback(index, type) {
+                const cell = document.getElementById(`cell-${index}`);
+                cell.classList.add(type);
+                setTimeout(() => {
+                    cell.classList.remove(type);
+                }, 500);
+            }
+            nextPhase() {
+                if (this.currentPhase >= this.maxPhases) {
+                    this.showCelebration(`🏆 Você completou todas as fases! Pontuação final: ${this.score}`);
+                    this.saveResult();
+                    this.resetGame();
+                    return;
+                }
+                this.currentPhase++;
+                this.sequenceLength = Math.min(2 + Math.floor(this.currentPhase / 2), 8);
+                this.isPlayerTurn = false;
+                this.updateDisplay();
+                setTimeout(() => {
+                    this.showCelebration(`🎉 Fase ${this.currentPhase - 1} concluída! Preparando fase ${this.currentPhase}...`);
+                    setTimeout(() => {
+                        this.hideCelebration();
+                        this.startNewRound();
+                    }, 2000);
+                }, 500);
+            }
+            startNewRound() {
+                this.generateSequence();
+                setTimeout(() => this.showSequence(), 1000);
+            }
+            gameOver() {
+                this.isPlayerTurn = false;
+                this.gameStarted = false;
+                this.updateButtons();
+                document.getElementById('instructions').innerHTML = '<strong>😔 Fim de jogo!</strong> Você errou a sequência. Tente novamente!';
+                this.saveResult();
+                this.showCelebration(`🎮 Fim de jogo! Você chegou até a fase ${this.currentPhase} com ${this.score} pontos.`);
+            }
+            startGame() {
+                this.gameStarted = true;
+                this.currentPhase = 1;
+                this.score = 0;
+                this.sequenceLength = 2;
+                this.isPlayerTurn = false;
+                this.updateDisplay();
+                this.updateButtons();
+                document.getElementById('instructions').innerHTML = '<strong>🚀 Jogo iniciado!</strong> Prepare-se para ver a primeira sequência...';
+                setTimeout(() => {
+                    this.startNewRound();
+                }, 1500);
+            }
+            resetGame() {
+                this.gameStarted = false;
+                this.currentPhase = 1;
+                this.score = 0;
+                this.sequenceLength = 2;
+                this.sequence = [];
+                this.playerSequence = [];
+                this.isShowingSequence = false;
+                this.isPlayerTurn = false;
+                this.updateDisplay();
+                this.updateButtons();
+                document.getElementById('instructions').innerHTML = '<strong>Como Jogar:</strong> Observe atentamente a sequência de células que se iluminam e depois clique nas mesmas células na ordem correta. A sequência aumenta a cada fase!';
+            }
+            updateDisplay() {
+                document.getElementById('phaseDisplay').textContent = `Fase ${this.currentPhase}/${this.maxPhases}`;
+                document.getElementById('scoreDisplay').textContent = `Pontos: ${this.score}`;
+                document.getElementById('sequenceDisplay').textContent = `Sequência: ${this.sequenceLength}`;
+            }
+            updateButtons() {
+                const startBtn = document.getElementById('startBtn');
+                const showBtn = document.getElementById('showSequenceBtn');
+                startBtn.disabled = this.gameStarted;
+                showBtn.disabled = !this.gameStarted || this.isShowingSequence || this.isPlayerTurn;
+            }
+            saveResult() {
+                const results = JSON.parse(localStorage.getItem('spatialMemoryResults') || '[]');
+                const now = new Date();
+                const result = {
+                    date: now.toLocaleDateString('pt-BR'),
+                    time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                    score: this.score,
+                    phase: this.currentPhase,
+                    sequenceLength: this.sequenceLength
+                };
+                results.unshift(result);
+                if (results.length > 10) {
+                    results.splice(10);
+                }
+                localStorage.setItem('spatialMemoryResults', JSON.stringify(results));
+                this.loadResults();
+            }
+            loadResults() {
+                const results = JSON.parse(localStorage.getItem('spatialMemoryResults') || '[]');
+                if (results.length === 0) {
+                    document.getElementById('totalGames').textContent = '0';
+                    document.getElementById('bestScore').textContent = '0';
+                    document.getElementById('avgScore').textContent = '0';
+                    document.getElementById('maxPhase').textContent = '0';
+                    document.getElementById('historyList').innerHTML = '<p style="text-align: center; color: #718096;">Nenhum jogo ainda</p>';
+                    return;
+                }
+                const totalGames = results.length;
+                const bestScore = Math.max(...results.map(r => r.score));
+                const avgScore = Math.round(results.reduce((sum, r) => sum + r.score, 0) / totalGames);
+                const maxPhase = Math.max(...results.map(r => r.phase));
+                document.getElementById('totalGames').textContent = totalGames;
+                document.getElementById('bestScore').textContent = bestScore;
+                document.getElementById('avgScore').textContent = avgScore;
+                document.getElementById('maxPhase').textContent = maxPhase;
+                const historyHtml = results.map(result => `
+                    <div class="history-item">
+                        <span>${result.date} ${result.time}</span>
+                        <span><strong>${result.score}</strong> pts (Fase ${result.phase})</span>
+                    </div>
+                `).join('');
+                document.getElementById('historyList').innerHTML = historyHtml;
+            }
+            showCelebration(message) {
+                document.getElementById('celebrationText').textContent = message;
+                document.getElementById('celebration').classList.add('show');
+            }
+            hideCelebration() {
+                document.getElementById('celebration').classList.remove('show');
+            }
+            playSound(type) {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    let frequency;
+                    switch (type) {
+                        case 'highlight': frequency = 800; break;
+                        case 'correct': frequency = 1000; break;
+                        case 'incorrect': frequency = 400; break;
+                        default: frequency = 500;
+                    }
+                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (e) {
+                    console.error("Web Audio API não é suportada ou falhou.", e);
+                }
+            }
+            wait(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+        let game;
+        window.addEventListener('load', () => {
+            game = new SpatialMemoryGame();
+        });
+        function startGame() { game.startGame(); }
+        function showSequence() {
+            if (game.sequence.length === 0) {
+                game.startNewRound();
+            } else {
+                game.showSequence();
+            }
+        }
+        function resetGame() { game.resetGame(); }
+        function hideCelebration() { game.hideCelebration(); }
+    </script>
+</body>
+</html>

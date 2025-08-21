@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura na Floresta Mágica</title>
+    <style>
+        /* Estilos Gerais e Animações */
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap' );
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #8B4513; --secondary: #228B22; --accent: #FFD700;
+            --background: linear-gradient(180deg, #87CEEB 0%, #90EE90 100%);
+            --card-bg: rgba(255, 255, 255, 0.9); --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        body { font-family: 'Baloo 2', cursive; background: var(--background); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .app-container { max-width: 800px; width: 100%; background: var(--card-bg); border-radius: 25px; padding: 25px; box-shadow: var(--shadow); border: 2px solid rgba(255, 255, 255, 0.5); }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: var(--primary); font-size: 2.5rem; }
+        .header p { color: #555; font-size: 1.1rem; }
+        .status-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .status-card { background: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .status-label { font-size: 0.9rem; color: #666; }
+        .status-value { font-size: 1.8rem; font-weight: 700; color: var(--secondary); }
+        .game-area { position: relative; width: 100%; height: 400px; background: linear-gradient(90deg, #90EE90, #3CB371); border-radius: 20px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.1); border: 2px solid white; }
+        .player { position: absolute; width: 50px; height: 50px; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🐿️</text></svg>' ) no-repeat center center; background-size: contain; top: 175px; left: 50px; transition: transform 0.1s linear; cursor: grab; user-select: none; }
+        .player:active { cursor: grabbing; }
+        .collectible, .obstacle { position: absolute; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .collectible { width: 35px; height: 35px; background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌰</text></svg>' ); }
+        .obstacle { width: 45px; height: 45px; }
+        .obstacle.rock { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🪨</text></svg>' ); }
+        .obstacle.branch { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌿</text></svg>' ); }
+        .controls { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .btn { padding: 12px 25px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-family: inherit; }
+        .btn-primary { background: var(--secondary); color: white; box-shadow: 0 5px 15px rgba(34, 139, 34, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(34, 139, 34, 0.4); }
+        .btn-secondary { background: #A9A9A9; color: white; }
+        .message { text-align: center; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 15px; min-height: 25px; }
+        .effect { position: absolute; border-radius: 50%; animation: fadeOut 0.5s forwards; }
+        .collect-effect { background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,215,0,0) 70%); }
+        .crash-effect { background: radial-gradient(circle, rgba(255,0,0,0.7) 0%, rgba(255,0,0,0) 70%); }
+        @keyframes fadeOut { from { transform: scale(0); opacity: 1; } to { transform: scale(2); opacity: 0; } }
+        .pulse { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🐿️ Aventura na Floresta Mágica 🌰</h1>
+            <p>Ajude o esquilo a coletar nozes para o inverno!</p>
+        </div>
+        <div class="status-panel">
+            <div class="status-card">
+                <div class="status-label">Nível</div>
+                <div class="status-value" id="levelDisplay">1</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Nozes</div>
+                <div class="status-value" id="scoreDisplay">0</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Recorde</div>
+                <div class="status-value" id="recordDisplay">0</div>
+            </div>
+        </div>
+        <div class="game-area" id="gameArea">
+            <div class="player" id="player"></div>
+        </div>
+        <div class="message" id="gameMessage">Clique em "Iniciar" para começar a aventura!</div>
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">Iniciar</button>
+            <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const elements = {
+            gameArea: document.getElementById('gameArea'),
+            player: document.getElementById('player'),
+            startBtn: document.getElementById('startBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            levelDisplay: document.getElementById('levelDisplay'),
+            scoreDisplay: document.getElementById('scoreDisplay'),
+            recordDisplay: document.getElementById('recordDisplay'),
+            gameMessage: document.getElementById('gameMessage'),
+        };
+
+        // Estado do Jogo
+        const gameState = {
+            isPlaying: false,
+            level: 1,
+            score: 0,
+            gameSpeed: 2,
+            playerY: 175,
+            isDragging: false,
+            items: [],
+            gameLoopId: null,
+            spawnInterval: 1500,
+        };
+
+        // Configurações dos Níveis
+        const levelConfigs = {
+            1: { speed: 2, spawn: 1500 }, 2: { speed: 2.5, spawn: 1300 },
+            3: { speed: 3, spawn: 1100 }, 4: { speed: 3.5, spawn: 1000 },
+            5: { speed: 4, spawn: 900 },  6: { speed: 4.5, spawn: 800 },
+            7: { speed: 5, spawn: 700 },  8: { speed: 5.5, spawn: 650 },
+            9: { speed: 6, spawn: 600 },  10: { speed: 6.5, spawn: 550 },
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            loadRecord();
+            updateDisplay();
+        });
+
+        function setupEventListeners() {
+            elements.startBtn.addEventListener('click', startGame);
+            elements.resetBtn.addEventListener('click', resetGame);
+
+            // Controles de Arrastar (Mouse)
+            elements.player.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', handleDrag);
+            document.addEventListener('mouseup', stopDrag);
+
+            // Controles de Arrastar (Toque)
+            elements.player.addEventListener('touchstart', startDrag, { passive: false });
+            document.addEventListener('touchmove', handleDrag, { passive: false });
+            document.addEventListener('touchend', stopDrag);
+        }
+
+        function startGame() {
+            if (gameState.isPlaying) return;
+            gameState.isPlaying = true;
+            elements.startBtn.style.display = 'none';
+            elements.resetBtn.style.display = 'inline-block';
+            elements.gameMessage.textContent = `Nível ${gameState.level} - Boa sorte!`;
+            elements.gameMessage.classList.remove('pulse');
+            
+            gameState.gameLoopId = setInterval(gameLoop, 1000 / 60); // 60 FPS
+            spawnItems();
+        }
+
+        function gameLoop() {
+            if (!gameState.isPlaying) return;
+            moveItems();
+            checkCollisions();
+            checkLevelUp();
+        }
+
+        function spawnItems() {
+            if (!gameState.isPlaying) return;
+            
+            const itemType = Math.random() > 0.3 ? 'collectible' : 'obstacle';
+            const itemEl = document.createElement('div');
+            itemEl.className = itemType;
+            
+            if (itemType === 'obstacle') {
+                itemEl.classList.add(Math.random() > 0.5 ? 'rock' : 'branch');
+            }
+
+            const item = {
+                el: itemEl,
+                x: elements.gameArea.offsetWidth,
+                y: Math.random() * (elements.gameArea.offsetHeight - 45),
+                type: itemType,
+            };
+
+            item.el.style.transform = `translate(${item.x}px, ${item.y}px)`;
+            elements.gameArea.appendChild(item.el);
+            gameState.items.push(item);
+
+            setTimeout(spawnItems, gameState.spawnInterval);
+        }
+
+        function moveItems() {
+            for (let i = gameState.items.length - 1; i >= 0; i--) {
+                const item = gameState.items[i];
+                item.x -= gameState.gameSpeed;
+                item.el.style.transform = `translate(${item.x}px, ${item.y}px)`;
+
+                if (item.x < -50) {
+                    item.el.remove();
+                    gameState.items.splice(i, 1);
+                }
+            }
+        }
+
+        function checkCollisions() {
+            const playerRect = elements.player.getBoundingClientRect();
+            for (let i = gameState.items.length - 1; i >= 0; i--) {
+                const item = gameState.items[i];
+                const itemRect = item.el.getBoundingClientRect();
+
+                if (isRectColliding(playerRect, itemRect)) {
+                    if (item.type === 'collectible') {
+                        gameState.score++;
+                        createEffect(item.x, item.y, 'collect');
+                        item.el.remove();
+                        gameState.items.splice(i, 1);
+                        updateDisplay();
+                    } else {
+                        gameOver();
+                    }
+                }
+            }
+        }
+        
+        function isRectColliding(rect1, rect2) {
+            return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+        }
+
+        function checkLevelUp() {
+            const scoreForNextLevel = gameState.level * 10;
+            if (gameState.score >= scoreForNextLevel && levelConfigs[gameState.level + 1]) {
+                gameState.level++;
+                const config = levelConfigs[gameState.level];
+                gameState.gameSpeed = config.speed;
+                gameState.spawnInterval = config.spawn;
+                elements.gameMessage.textContent = `🎉 Nível ${gameState.level}! Mais rápido!`;
+                updateDisplay();
+            }
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            clearInterval(gameState.gameLoopId);
+            createEffect(60, gameState.playerY, 'crash');
+            elements.gameMessage.textContent = `💥 Fim de Jogo! Pontuação: ${gameState.score}`;
+            elements.gameMessage.classList.add('pulse');
+            updateRecord();
+            elements.startBtn.style.display = 'none';
+        }
+
+        function resetGame() {
+            gameOver(); // Para parar tudo
+            gameState.isPlaying = false;
+            gameState.level = 1;
+            gameState.score = 0;
+            const config = levelConfigs[1];
+            gameState.gameSpeed = config.speed;
+            gameState.spawnInterval = config.spawn;
+            gameState.playerY = 175;
+            elements.player.style.transform = `translateY(${gameState.playerY - 175}px)`;
+
+            // Limpar itens
+            gameState.items.forEach(item => item.el.remove());
+            gameState.items = [];
+
+            elements.startBtn.style.display = 'inline-block';
+            elements.gameMessage.textContent = 'Clique em "Iniciar" para uma nova aventura!';
+            elements.gameMessage.classList.remove('pulse');
+            updateDisplay();
+        }
+
+        // Funções de controle do jogador
+        function startDrag(e) {
+            if (!gameState.isPlaying) return;
+            e.preventDefault();
+            gameState.isDragging = true;
+            elements.player.style.cursor = 'grabbing';
+        }
+
+        function handleDrag(e) {
+            if (!gameState.isDragging || !gameState.isPlaying) return;
+            e.preventDefault();
+            const event = e.touches ? e.touches[0] : e;
+            const gameAreaRect = elements.gameArea.getBoundingClientRect();
+            const newY = event.clientY - gameAreaRect.top - 25; // 25 é metade da altura do jogador
+            
+            // Limitar o movimento dentro da área de jogo
+            const minY = 0;
+            const maxY = elements.gameArea.offsetHeight - 50; // 50 é a altura do jogador
+            gameState.playerY = Math.max(minY, Math.min(newY, maxY));
+            
+            elements.player.style.transform = `translateY(${gameState.playerY - 175}px)`; // 175 é a posição inicial
+        }
+
+        function stopDrag() {
+            gameState.isDragging = false;
+            elements.player.style.cursor = 'grab';
+        }
+
+        // Funções de UI e Efeitos
+        function updateDisplay() {
+            elements.levelDisplay.textContent = gameState.level;
+            elements.scoreDisplay.textContent = gameState.score;
+        }
+
+        function createEffect(x, y, type) {
+            const effect = document.createElement('div');
+            effect.className = `effect ${type}-effect`;
+            effect.style.width = '80px';
+            effect.style.height = '80px';
+            effect.style.left = `${x - 20}px`;
+            effect.style.top = `${y - 20}px`;
+            elements.gameArea.appendChild(effect);
+            setTimeout(() => effect.remove(), 500);
+        }
+
+        // Funções de Recorde
+        function loadRecord() {
+            const record = localStorage.getItem('forestAdventureRecord') || 0;
+            elements.recordDisplay.textContent = record;
+        }
+
+        function updateRecord() {
+            const currentRecord = parseInt(localStorage.getItem('forestAdventureRecord') || 0);
+            if (gameState.score > currentRecord) {
+                localStorage.setItem('forestAdventureRecord', gameState.score);
+                elements.recordDisplay.textContent = gameState.score;
+                elements.gameMessage.textContent += " Novo Recorde!";
+            }
+        }
+
+    </script>
+</body>
+</html>

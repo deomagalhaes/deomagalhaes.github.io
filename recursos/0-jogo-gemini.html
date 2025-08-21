@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Jornada do Crescimento</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: hsl(260, 80%, 60%); --primary-dark: hsl(260, 80%, 50%); --secondary: hsl(45, 100%, 60%);
+            --accent: hsl(330, 100%, 60%); --success: hsl(120, 60%, 50%); --danger: hsl(0, 80%, 60%);
+            --background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            --card-bg: rgba(255, 255, 255, 0.95); --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --glow: 0 0 30px rgba(161, 196, 253, 0.8);
+        }
+        body { font-family: 'Fredoka', cursive; background: var(--background); min-height: 100vh; overflow-x: hidden; position: relative; }
+        .clouds-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
+        .cloud-bg { position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 100px; animation: drift 35s infinite linear; }
+        .cloud-bg::before, .cloud-bg::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 100px; }
+        .cloud-bg:nth-child(1) { width: 120px; height: 60px; top: 10%; animation-duration: 40s; }
+        .cloud-bg:nth-child(2) { width: 80px; height: 40px; top: 30%; animation-duration: 30s; animation-delay: -8s; }
+        .cloud-bg:nth-child(3) { width: 100px; height: 50px; top: 60%; animation-duration: 45s; animation-delay: -15s; }
+        @keyframes drift { from { transform: translateX(-200px); } to { transform: translateX(calc(100vw + 200px)); } }
+
+        .app-container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 20px; }
+        .header { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 25px; padding: 30px; text-align: center; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .header h1 { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 3rem; font-weight: 700; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header p { color: #666; font-size: 1.2rem; font-weight: 500; }
+        
+        .status-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .status-card { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255, 255, 255, 0.3); transition: all 0.3s ease; }
+        .status-card:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+        .status-label { font-size: 0.9rem; color: #666; margin-bottom: 8px; font-weight: 500; }
+        .status-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        
+        .avatar-selection { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 25px; padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .avatar-selection h2 { text-align: center; color: #333; font-size: 1.8rem; margin-bottom: 20px; font-weight: 600; }
+        .avatar-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .avatar-option { background: rgba(255, 255, 255, 0.7); border: 3px solid transparent; border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .avatar-option:hover { transform: translateY(-5px); box-shadow: var(--glow); }
+        .avatar-option.selected { border-color: var(--primary); box-shadow: var(--glow); }
+        .avatar-preview { font-size: 4rem; margin-bottom: 15px; transition: transform 0.3s ease; }
+        .avatar-option:hover .avatar-preview { transform: scale(1.1) rotate(5deg); }
+        .avatar-name { font-weight: 600; color: #333; margin-bottom: 5px; }
+        .avatar-desc { font-size: 0.9rem; color: #666; }
+        
+        .game-area { position: relative; width: 100%; height: 500px; background: linear-gradient(180deg, #b3e5fc 0%, #e1f5fe 100%); border-radius: 25px; overflow: hidden; box-shadow: inset 0 10px 30px rgba(0,0,0,0.1); border: 3px solid rgba(255, 255, 255, 0.3); margin-bottom: 25px; }
+        .player-avatar { position: absolute; top: 0; left: 50px; width: 60px; height: 60px; z-index: 10; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); cursor: grab; user-select: none; will-change: transform; font-size: 3.5rem; display: flex; align-items: center; justify-content: center; }
+        .player-avatar:active { cursor: grabbing; }
+        .game-item { position: absolute; width: 50px; height: 50px; will-change: transform; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.2)); font-size: 2.5rem; display: flex; align-items: center; justify-content: center; }
+        
+        .effect-burst { position: absolute; z-index: 15; pointer-events: none; }
+        .particle { position: absolute; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; animation: burst 0.7s ease-out forwards; }
+        .particle.p2 { background: var(--accent); animation-delay: 0.05s; }
+        @keyframes burst { 0% { transform: scale(1) translate(0, 0); opacity: 1; } 100% { transform: scale(0) translate(var(--tx), var(--ty)); opacity: 0; } }
+        
+        .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 15px 30px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-family: inherit; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s; }
+        .btn:hover::before { left: 100%; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 10px 25px rgba(126, 87, 194, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(126, 87, 194, 0.4); }
+        .btn-secondary { background: linear-gradient(135deg, #95A5A6, #7F8C8D); color: white; box-shadow: 0 10px 25px rgba(149, 165, 166, 0.3); }
+        .btn-secondary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(149, 165, 166, 0.4); }
+        .btn-accent { background: linear-gradient(135deg, var(--accent), #E91E63); color: white; box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3); }
+        .btn-accent:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(233, 30, 99, 0.4); }
+        
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 1000; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 25px; padding: 40px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); border: 1px solid rgba(255, 255, 255, 0.3); animation: modalIn 0.3s ease-out; }
+        @keyframes modalIn { from { transform: scale(0.8) translateY(50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal h2 { text-align: center; color: #333; margin-bottom: 25px; font-size: 2rem; font-weight: 700; }
+        .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(255, 255, 255, 0.7); border-radius: 15px; margin-bottom: 10px; transition: all 0.3s ease; }
+        .leaderboard-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .rank { font-size: 1.5rem; font-weight: 700; color: var(--primary); min-width: 40px; }
+        .record-info { flex: 1; margin-left: 15px; }
+        .record-phase { font-weight: 600; color: #333; }
+        .record-score { font-size: 0.9rem; color: #666; }
+        
+        .message { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; margin: 20px 0; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255, 255, 255, 0.3); font-size: 1.1rem; font-weight: 500; color: #333; }
+        
+        .progress-indicator { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.3); border-radius: 5px; margin: 10px 0 20px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--success)); transition: width 0.3s ease; border-radius: 5px; }
+        
+        .shake { animation: shake 0.5s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+        
+        .pulse { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+        
+        @media (max-width: 768px) { .app-container { padding: 15px; } .header h1 { font-size: 2.2rem; } .game-area { height: 400px; } .status-panel { grid-template-columns: repeat(2, 1fr); } .avatar-options { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="clouds-bg">
+        <div class="cloud-bg"></div>
+        <div class="cloud-bg"></div>
+        <div class="cloud-bg"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="header">
+            <h1>🌱 A Jornada do Crescimento 🌱</h1>
+            <p>Ajude Gema a coletar itens bons e desviar dos desafios!</p>
+        </header>
+
+        <div class="status-panel">
+            <div class="status-card">
+                <div class="status-label">Fase</div>
+                <div class="status-value" id="phaseDisplay">1/5</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Pontos</div>
+                <div class="status-value" id="scoreDisplay">0</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Energia</div>
+                <div class="status-value" id="energyDisplay">❤️❤️❤️</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Recorde</div>
+                <div class="status-value" id="recordDisplay">-</div>
+            </div>
+        </div>
+
+        <div class="avatar-selection" id="avatarSelection">
+            <h2>Escolha seu Amigo para a Jornada</h2>
+            <div class="avatar-options">
+                <div class="avatar-option selected" data-type="gema">
+                    <div class="avatar-preview">😊</div>
+                    <div class="avatar-name">Gema Curiosa</div>
+                    <div class="avatar-desc">Equilibrada e pronta para aprender.</div>
+                </div>
+                <div class="avatar-option" data-type="sabi">
+                    <div class="avatar-preview">🤓</div>
+                    <div class="avatar-name">Sabi, o Sábio</div>
+                    <div class="avatar-desc">Ganha mais pontos com livros.</div>
+                </div>
+                <div class="avatar-option" data-type="viva">
+                    <div class="avatar-preview">🤸</div>
+                    <div class="avatar-name">Viva, a Atleta</div>
+                    <div class="avatar-desc">Começa com uma energia extra.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-indicator">
+            <div class="progress-bar" id="phaseProgress"></div>
+        </div>
+
+        <div class="message" id="gameMessage">
+            Escolha um amigo e clique em "Iniciar Jornada"!
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <div class="player-avatar" id="playerAvatar">😊</div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">Iniciar Jornada</button>
+            <button class="btn btn-secondary" id="pauseBtn" style="display: none;">Pausar</button>
+            <button class="btn btn-accent" id="leaderboardBtn">🏆 Classificações</button>
+            <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+        </div>
+    </div>
+
+    <div class="modal" id="leaderboardModal">
+        <div class="modal-content">
+            <h2>🏆 Classificações</h2>
+            <div id="leaderboardList"></div>
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn btn-secondary" onclick="closeLeaderboard()">Fechar</button>
+                <button class="btn btn-accent" onclick="clearRecords()" style="margin-left: 10px;">Limpar Recordes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameState = {
+            phase: 1, maxPhase: 5, score: 0, energy: 3, maxEnergy: 3,
+            isPlaying: false, isPaused: false, selectedAvatar: 'gema',
+            playerY: 220, items: [], itemElements: new Map(),
+            phaseProgress: 0, phaseGoal: 1000,
+            frameCount: 0, gameStarted: false, lastUpdateTime: 0,
+        };
+
+        const phaseConfigs = {
+            1: { goal: 1000, speed: 2.5, spawnRate: 0.030 },
+            2: { goal: 1500, speed: 2.8, spawnRate: 0.035 },
+            3: { goal: 2000, speed: 3.2, spawnRate: 0.040 },
+            4: { goal: 2500, speed: 3.6, spawnRate: 0.045 },
+            5: { goal: 3000, speed: 4.0, spawnRate: 0.050 }
+        };
+
+        const itemTypes = {
+            good: [
+                { id: 'book', emoji: '📚', points: 100, type: 'knowledge' },
+                { id: 'apple', emoji: '🍎', points: 50, type: 'health' },
+                { id: 'ball', emoji: '⚽', points: 70, type: 'health' },
+                { id: 'heart', emoji: '💖', points: 80, type: 'social' }
+            ],
+            bad: [
+                { id: 'virus', emoji: '🦠', damage: 1 },
+                { id: 'storm', emoji: '⛈️', damage: 1 },
+                { id: 'junk', emoji: '🍔', damage: 1 }
+            ]
+        };
+
+        const elements = {
+            phaseDisplay: document.getElementById('phaseDisplay'),
+            scoreDisplay: document.getElementById('scoreDisplay'),
+            energyDisplay: document.getElementById('energyDisplay'),
+            recordDisplay: document.getElementById('recordDisplay'),
+            gameMessage: document.getElementById('gameMessage'),
+            gameArea: document.getElementById('gameArea'),
+            playerAvatar: document.getElementById('playerAvatar'),
+            startBtn: document.getElementById('startBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            leaderboardBtn: document.getElementById('leaderboardBtn'),
+            avatarSelection: document.getElementById('avatarSelection'),
+            phaseProgress: document.getElementById('phaseProgress'),
+            leaderboardModal: document.getElementById('leaderboardModal'),
+        };
+
+        let audioContext;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn("Web Audio API is not supported in this browser.");
+            }
+            initializeGame();
+            setupEventListeners();
+            loadRecords();
+            updateDisplay();
+        });
+
+        function initializeGame() {
+            Object.assign(gameState, {
+                phase: 1, score: 0, energy: 3, maxEnergy: 3, isPlaying: false, isPaused: false,
+                playerY: 220, items: [], itemElements: new Map(), phaseProgress: 0, frameCount: 0, 
+                gameStarted: false, lastUpdateTime: 0
+            });
+            
+            const config = phaseConfigs[gameState.phase];
+            gameState.phaseGoal = config.goal;
+
+            if (gameState.selectedAvatar === 'viva') {
+                gameState.energy = 4;
+                gameState.maxEnergy = 4;
+            }
+
+            elements.playerAvatar.style.transform = `translateY(${gameState.playerY}px)`;
+            elements.pauseBtn.style.display = 'none';
+            elements.startBtn.style.display = 'inline-block';
+            elements.avatarSelection.style.display = 'block';
+            clearItems();
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.addEventListener('click', () => selectAvatar(option.dataset.type));
+            });
+            elements.startBtn.addEventListener('click', startGame);
+            elements.pauseBtn.addEventListener('click', togglePause);
+            elements.resetBtn.addEventListener('click', resetGame);
+            elements.leaderboardBtn.addEventListener('click', showLeaderboard);
+            elements.gameArea.addEventListener('mousemove', handleDrag);
+            elements.gameArea.addEventListener('touchmove', handleDragTouch, { passive: false });
+            document.addEventListener('keydown', handleKeyDown);
+            elements.leaderboardModal.addEventListener('click', (e) => { 
+                if (e.target === elements.leaderboardModal) closeLeaderboard(); 
+            });
+        }
+        
+        function selectAvatar(type) {
+            gameState.selectedAvatar = type;
+            document.querySelectorAll('.avatar-option').forEach(option => option.classList.remove('selected'));
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+            const avatarEmoji = document.querySelector(`[data-type="${type}"] .avatar-preview`).textContent;
+            elements.playerAvatar.textContent = avatarEmoji;
+            
+            // Reset energy based on selection
+            if(type === 'viva') {
+                gameState.energy = 4;
+                gameState.maxEnergy = 4;
+            } else {
+                gameState.energy = 3;
+                gameState.maxEnergy = 3;
+            }
+            updateDisplay();
+            playSound('select');
+        }
+
+        function startGame() {
+            if (gameState.isPlaying) return;
+            gameState.isPlaying = true;
+            gameState.isPaused = false;
+            gameState.gameStarted = true;
+            gameState.lastUpdateTime = performance.now();
+            elements.startBtn.style.display = 'none';
+            elements.pauseBtn.style.display = 'inline-block';
+            elements.avatarSelection.style.display = 'none';
+            elements.gameMessage.textContent = `Fase ${gameState.phase} - Vamos lá!`;
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function gameLoop(currentTime) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+
+            const deltaTime = currentTime - gameState.lastUpdateTime;
+            gameState.lastUpdateTime = currentTime;
+            
+            gameState.frameCount++;
+
+            const config = phaseConfigs[gameState.phase];
+            if (Math.random() < config.spawnRate) {
+                spawnItem();
+            }
+
+            updateItems(config.speed);
+            checkItemInteraction();
+
+            if (gameState.frameCount % 10 === 0) {
+                updateDisplay();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnItem() {
+            const itemId = `item_${Date.now()}_${Math.random()}`;
+            const isGood = Math.random() > 0.3; // 70% chance of good item
+            const itemData = isGood 
+                ? itemTypes.good[Math.floor(Math.random() * itemTypes.good.length)]
+                : itemTypes.bad[Math.floor(Math.random() * itemTypes.bad.length)];
+
+            const item = {
+                id: itemId,
+                x: elements.gameArea.offsetWidth,
+                y: Math.random() * (elements.gameArea.offsetHeight - 50),
+                data: itemData,
+                isGood: isGood
+            };
+            gameState.items.push(item);
+            
+            const itemEl = document.createElement('div');
+            itemEl.className = 'game-item';
+            itemEl.id = itemId;
+            itemEl.textContent = itemData.emoji;
+            itemEl.style.transform = `translateX(${item.x}px) translateY(${item.y}px)`;
+            gameState.itemElements.set(itemId, itemEl);
+            elements.gameArea.appendChild(itemEl);
+        }
+        
+        function updateItems(speed) {
+            for (let i = gameState.items.length - 1; i >= 0; i--) {
+                const item = gameState.items[i];
+                item.x -= speed;
+                const itemEl = gameState.itemElements.get(item.id);
+                if (itemEl) {
+                    itemEl.style.transform = `translateX(${item.x}px) translateY(${item.y}px)`;
+                    if (item.x < -50) {
+                        itemEl.remove();
+                        gameState.itemElements.delete(item.id);
+                        gameState.items.splice(i, 1);
+                    }
+                }
+            }
+        }
+        
+        function checkItemInteraction() {
+            const playerRect = { x: 50, y: gameState.playerY, width: 60, height: 60 };
+            for (let i = gameState.items.length - 1; i >= 0; i--) {
+                const item = gameState.items[i];
+                const itemRect = { x: item.x, y: item.y, width: 50, height: 50 };
+                
+                if (isColliding(playerRect, itemRect)) {
+                    if (item.isGood) {
+                        let points = item.data.points;
+                        if (gameState.selectedAvatar === 'sabi' && item.data.type === 'knowledge') {
+                            points *= 2; // Bonus for Sabi
+                        }
+                        gameState.score += points;
+                        gameState.phaseProgress += points;
+                        playSound('collect');
+                        createBurstEffect(item.x, item.y);
+
+                        if (gameState.phaseProgress >= gameState.phaseGoal) {
+                            phaseComplete();
+                        }
+
+                    } else {
+                        gameState.energy -= item.data.damage;
+                        playSound('hit');
+                        elements.gameArea.classList.add('shake');
+                        setTimeout(() => elements.gameArea.classList.remove('shake'), 500);
+                        if (gameState.energy <= 0) {
+                            gameOver();
+                            return; 
+                        }
+                    }
+                    
+                    // Remove item after collision
+                    const itemEl = gameState.itemElements.get(item.id);
+                    if (itemEl) itemEl.remove();
+                    gameState.itemElements.delete(item.id);
+                    gameState.items.splice(i, 1);
+                }
+            }
+        }
+        
+        function isColliding(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        function handleDrag(e) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            const rect = elements.gameArea.getBoundingClientRect();
+            updatePlayerPosition(e.clientY - rect.top);
+        }
+
+        function handleDragTouch(e) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            e.preventDefault();
+            const rect = elements.gameArea.getBoundingClientRect();
+            updatePlayerPosition(e.touches[0].clientY - rect.top);
+        }
+        
+        function updatePlayerPosition(targetY) {
+            const playerHeight = 60;
+            const minY = 0;
+            const maxY = elements.gameArea.offsetHeight - playerHeight;
+            gameState.playerY = Math.max(minY, Math.min(maxY, targetY - playerHeight / 2));
+            elements.playerAvatar.style.transform = `translateY(${gameState.playerY}px)`;
+        }
+        
+        function handleKeyDown(e) {
+            if (!gameState.isPlaying) return;
+            const moveAmount = 25;
+            switch(e.key) {
+                case 'ArrowUp': case 'w':
+                    e.preventDefault();
+                    updatePlayerPosition(gameState.playerY - moveAmount);
+                    break;
+                case 'ArrowDown': case 's':
+                    e.preventDefault();
+                    updatePlayerPosition(gameState.playerY + 60 + moveAmount);
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    togglePause();
+                    break;
+            }
+        }
+        
+        function phaseComplete() {
+            gameState.isPlaying = false;
+            playSound('levelUp');
+            elements.gameMessage.textContent = `🎉 Fase ${gameState.phase} completa!`;
+            elements.gameMessage.classList.add('pulse');
+            setTimeout(() => {
+                elements.gameMessage.classList.remove('pulse');
+                if (gameState.phase < gameState.maxPhase) {
+                    gameState.phase++;
+                    gameState.phaseProgress = 0;
+                    const config = phaseConfigs[gameState.phase];
+                    gameState.phaseGoal = config.goal;
+                    clearItems();
+                    showPhaseTransition();
+                } else {
+                    gameComplete();
+                }
+            }, 2500);
+        }
+
+        function gameComplete() {
+            saveRecord();
+            elements.gameMessage.textContent = `🏆 PARABÉNS! Você completou a jornada! Pontuação final: ${gameState.score}`;
+            resetGameInterface();
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            gameState.energy = 0;
+            updateDisplay();
+            playSound('gameOver');
+            elements.gameMessage.textContent = `💥 Oh não! Tente novamente! Pontuação: ${gameState.score}`;
+            setTimeout(resetGameInterface, 2500);
+        }
+
+        function resetGame() {
+            clearItems();
+            initializeGame();
+            updateDisplay();
+            elements.gameMessage.textContent = 'Escolha um amigo e clique em "Iniciar Jornada"!';
+        }
+
+        function resetGameInterface() {
+            elements.startBtn.style.display = 'inline-block';
+            elements.pauseBtn.style.display = 'none';
+            elements.avatarSelection.style.display = 'block';
+            gameState.gameStarted = false;
+            clearItems();
+        }
+        
+        function togglePause() {
+            if (!gameState.gameStarted) return;
+            gameState.isPaused = !gameState.isPaused;
+            if (gameState.isPaused) {
+                elements.pauseBtn.textContent = 'Continuar';
+                elements.gameMessage.textContent = 'Jogo pausado';
+            } else {
+                elements.pauseBtn.textContent = 'Pausar';
+                elements.gameMessage.textContent = `Fase ${gameState.phase} - Vamos lá!`;
+                gameState.lastUpdateTime = performance.now();
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        function clearItems() {
+            gameState.items = [];
+            gameState.itemElements.forEach(el => el.remove());
+            gameState.itemElements.clear();
+        }
+        
+        function updateDisplay() {
+            elements.phaseDisplay.textContent = `${gameState.phase}/${gameState.maxPhase}`;
+            elements.scoreDisplay.textContent = gameState.score.toLocaleString();
+            elements.energyDisplay.textContent = '❤️'.repeat(gameState.energy) + '🤍'.repeat(Math.max(0, gameState.maxEnergy - gameState.energy));
+            elements.phaseProgress.style.width = `${Math.min(100, (gameState.phaseProgress / gameState.phaseGoal) * 100)}%`;
+            const bestScore = getBestScore();
+            elements.recordDisplay.textContent = bestScore ? bestScore.toLocaleString() : '-';
+        }
+
+        function createBurstEffect(x, y) {
+            const burstContainer = document.createElement('div');
+            burstContainer.className = 'effect-burst';
+            burstContainer.style.left = `${x}px`;
+            burstContainer.style.top = `${y}px`;
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                const angle = Math.random() * 360;
+                const distance = Math.random() * 40 + 20;
+                particle.className = `particle ${i % 2 === 0 ? 'p1' : 'p2'}`;
+                particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+                burstContainer.appendChild(particle);
+            }
+            elements.gameArea.appendChild(burstContainer);
+            setTimeout(() => burstContainer.remove(), 700);
+        }
+
+        function saveRecord() {
+            const records = getRecords();
+            const newRecord = {
+                score: gameState.score,
+                phase: gameState.phase,
+                avatar: gameState.selectedAvatar,
+                date: new Date().toLocaleDateString('pt-BR'),
+                complete: gameState.phase >= gameState.maxPhase
+            };
+            records.push(newRecord);
+            records.sort((a, b) => b.score - a.score);
+            localStorage.setItem('growth-journey-records', JSON.stringify(records.slice(0, 10)));
+        }
+
+        function getRecords() {
+            const stored = localStorage.getItem('growth-journey-records');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function getBestScore() {
+            const records = getRecords();
+            return records.length > 0 ? records[0].score : 0;
+        }
+
+        function loadRecords() {
+            updateDisplay();
+        }
+
+        function showLeaderboard() {
+            const records = getRecords();
+            const listEl = document.getElementById('leaderboardList');
+            if (records.length === 0) {
+                listEl.innerHTML = '<p style="text-align: center; color: #666;">Nenhum recorde ainda. Jogue para marcar seu nome!</p>';
+            } else {
+                listEl.innerHTML = records.map((record, index) => `
+                    <div class="leaderboard-item">
+                        <div class="rank">#${index + 1}</div>
+                        <div class="record-info">
+                            <div class="record-phase">${record.complete ? '🏆 Jornada Completa' : `Fase ${record.phase}`} - ${record.avatar}</div>
+                            <div class="record-score">${record.score.toLocaleString()} pts • ${record.date}</div>
+                        </div>
+                    </div>`).join('');
+            }
+            elements.leaderboardModal.style.display = 'flex';
+        }
+        
+        function closeLeaderboard() {
+            elements.leaderboardModal.style.display = 'none';
+        }
+        
+        function clearRecords() {
+            if (confirm('Tem certeza de que quer apagar todos os seus recordes?')) {
+                localStorage.removeItem('growth-journey-records');
+                showLeaderboard();
+                updateDisplay();
+            }
+        }
+        
+        function showPhaseTransition() {
+            let countdown = 3;
+            elements.gameMessage.textContent = `Preparando Fase ${gameState.phase}... ${countdown}`;
+            elements.gameMessage.classList.add('pulse');
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    elements.gameMessage.textContent = `Preparando Fase ${gameState.phase}... ${countdown}`;
+                } else {
+                    elements.gameMessage.textContent = `Fase ${gameState.phase} - COMEÇOU!`;
+                    elements.gameMessage.classList.remove('pulse');
+                    clearInterval(countdownInterval);
+                    setTimeout(() => {
+                        gameState.isPlaying = true;
+                        gameState.isPaused = false;
+                        gameState.lastUpdateTime = performance.now();
+                        requestAnimationFrame(gameLoop);
+                    }, 500);
+                }
+            }, 1000);
+        }
+
+        function playSound(type) {
+            if (!audioContext) return;
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            switch(type) {
+                case 'select':
+                    osc.type = 'triangle';
+                    gain.gain.setValueAtTime(0.2, now);
+                    osc.frequency.setValueAtTime(300, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.frequency.exponentialRampToValueAtTime(600, now + 0.3);
+                    break;
+                case 'collect':
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0.3, now);
+                    osc.frequency.setValueAtTime(880, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.2);
+                    break;
+                case 'hit':
+                    osc.type = 'square';
+                    gain.gain.setValueAtTime(0.3, now);
+                    osc.frequency.setValueAtTime(200, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                    break;
+                case 'levelUp':
+                    const notes = [523, 659, 783, 1046]; // C5, E5, G5, C6
+                    notes.forEach((freq, i) => {
+                        const noteOsc = audioContext.createOscillator();
+                        const noteGain = audioContext.createGain();
+                        noteOsc.connect(noteGain);
+                        noteGain.connect(audioContext.destination);
+                        noteOsc.type = 'triangle';
+                        noteOsc.frequency.setValueAtTime(freq, now + i * 0.15);
+                        noteGain.gain.setValueAtTime(0.2, now + i * 0.15);
+                        noteGain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.1);
+                        noteOsc.start(now + i * 0.15);
+                        noteOsc.stop(now + i * 0.15 + 0.1);
+                    });
+                    return; // a função já fez o seu trabalho
+                case 'gameOver':
+                    osc.type = 'sawtooth';
+                    gain.gain.setValueAtTime(0.4, now);
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+                    osc.frequency.exponentialRampToValueAtTime(50, now + 1.0);
+                    break;
+            }
+            osc.start(now);
+            osc.stop(now + 1);
+        }
+    </script>
+</body>
+</html>

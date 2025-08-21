@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jornada do Cérebro – Funções Executivas</title>
+  <meta name="description" content="Jogo educativo sobre desenvolvimento infantil: atenção, memória de trabalho, inibição e planejamento. Público-alvo: 10 anos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: hsl(200 100% 45%);
+      --primary-2: hsl(220 90% 55%);
+      --accent: hsl(330 90% 60%);
+      --success: hsl(145 60% 45%);
+      --warning: hsl(40 100% 55%);
+      --bg1: #b3e5fc; /* céu */
+      --bg2: #e1f5fe;
+      --panel: rgba(255 255 255 / 0.9);
+      --shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: "Fredoka", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(160deg, var(--bg1), var(--bg2));
+      color: #123;
+      overflow-x: hidden;
+    }
+
+    /* Fundo animado com neurônios e sinapses */
+    .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+    .axon { position: absolute; width: 140px; height: 6px; border-radius: 6px; background: linear-gradient(90deg, rgba(255,255,255,.0), rgba(255,255,255,.7), rgba(255,255,255,.0)); filter: blur(0.5px); animation: pulse 4s linear infinite; }
+    .axon:nth-child(odd){ width: 220px; opacity: .6; animation-duration: 6s; }
+    @keyframes pulse { from { transform: translateX(-20vw) rotate(5deg); } to { transform: translateX(120vw) rotate(5deg);} }
+
+    .container { position: relative; z-index: 1; max-width: 980px; margin: 20px auto 80px; padding: 20px; }
+
+    .header { background: var(--panel); border: 1px solid rgba(255,255,255,.6); border-radius: 24px; padding: 28px; box-shadow: var(--shadow); text-align: center; }
+    .title { font-weight: 700; font-size: clamp(28px, 4vw, 44px); background: linear-gradient(120deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .subtitle { margin-top: 6px; font-weight: 500; color: #345; }
+
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(140px,1fr)); gap: 14px; margin: 18px 0; }
+    @media (max-width: 840px){ .grid{ grid-template-columns: repeat(2,1fr);} }
+
+    .card { background: var(--panel); border: 1px solid rgba(255,255,255,.6); border-radius: 18px; padding: 16px; text-align: center; box-shadow: var(--shadow); }
+    .label { font-size: 13px; color: #567; }
+    .value { font-size: 28px; font-weight: 700; color: var(--primary); }
+
+    .module { background: var(--panel); border: 1px solid rgba(255,255,255,.6); border-radius: 22px; padding: 20px; box-shadow: var(--shadow); margin-top: 14px; }
+    .module h2 { text-align: center; font-size: 22px; margin-bottom: 14px; color: #234; }
+
+    .skills { display: grid; grid-template-columns: repeat(4, minmax(140px,1fr)); gap: 12px; }
+    @media (max-width: 840px){ .skills{ grid-template-columns: repeat(2,1fr);} }
+    .skill { border-radius: 18px; padding: 14px; border: 2px dashed rgba(0,0,0,.06); background: rgba(255,255,255,.6); cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+    .skill:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+    .skill.selected { border-style: solid; border-color: var(--primary); box-shadow: 0 0 0 6px rgba(0, 128, 255, .12); }
+    .skill .icon { font-size: 28px; }
+    .skill .name { font-weight: 700; margin-top: 6px; }
+    .skill .desc { font-size: 12px; color: #456; margin-top: 4px; min-height: 30px; }
+
+    .message { background: var(--panel); border: 1px solid rgba(255,255,255,.6); border-radius: 16px; padding: 14px; margin: 14px 0; text-align: center; font-weight: 600; }
+
+    /* Área do jogo */
+    .game { position: relative; height: 520px; border-radius: 26px; overflow: hidden; border: 3px solid rgba(255,255,255,.6); box-shadow: inset 0 8px 30px rgba(0,0,0,.12); background: linear-gradient(180deg, #c6ecff 0%, #d9f4ff 50%, #effbff 100%); }
+    .lane { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 54px, rgba(255,255,255,.28) 54px, rgba(255,255,255,.28) 56px); }
+
+    .avatar { position: absolute; left: 56px; width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-2)); box-shadow: 0 8px 22px rgba(0,0,0,.25); display: grid; place-items: center; color: white; font-size: 28px; user-select: none; cursor: grab; }
+    .avatar:active { cursor: grabbing; }
+
+    .token, .distractor { position: absolute; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 26px; filter: drop-shadow(0 4px 12px rgba(0,0,0,.25)); }
+    .token { background: linear-gradient(135deg, #34d399, #10b981); color: #fff; }
+    .distractor { background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: #fff; }
+
+    .spark { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: .9; animation: spark .8s ease-out forwards; }
+    @keyframes spark { from { transform: translateY(0) scale(1); opacity: 1;} to { transform: translateY(-40px) scale(0); opacity: 0;} }
+
+    .controls { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .btn { padding: 14px 22px; border: 0; border-radius: 999px; font-weight: 700; font-family: inherit; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; position: relative; overflow: hidden; }
+    .btn::before{ content: ""; position: absolute; inset: 0; background: radial-gradient(120px 60px at 10% 0%, rgba(255,255,255,.45), transparent 45%); opacity: 0; transition: opacity .2s ease; }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.15); }
+    .btn:hover::before{ opacity: 1; }
+    .primary { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; }
+    .secondary { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
+    .accent { background: linear-gradient(135deg, var(--accent), #e11d48); color: white; }
+
+    .audio { position: fixed; top: 18px; right: 18px; z-index: 10; display: flex; gap: 8px; }
+    .audio button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); cursor: pointer; box-shadow: 0 10px 18px rgba(0,0,0,.12); }
+    .audio button.muted { opacity: .55; }
+
+    .progress { height: 8px; background: rgba(255,255,255,.5); border-radius: 8px; overflow: hidden; margin-top: 10px; }
+    .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .25s linear; }
+
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); z-index: 30; }
+    .modal .box { background: var(--panel); border: 1px solid rgba(255,255,255,.6); border-radius: 20px; padding: 24px; width: min(520px, 92vw); max-height: 80vh; overflow: auto; box-shadow: var(--shadow); }
+    .row { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+    .lb-item{ display: flex; gap: 10px; align-items: center; background: rgba(255,255,255,.7); padding: 10px 12px; border-radius: 12px; }
+    .rank{ font-weight: 800; color: var(--primary); min-width: 28px; text-align: right; }
+
+    /* Acessibilidade e preferências reduzidas */
+    @media (prefers-reduced-motion: reduce){
+      .axon{ animation: none; }
+      .btn:hover{ transform: none; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="axon" style="top:8%; left:-10%"></div>
+    <div class="axon" style="top:22%; left:-20%"></div>
+    <div class="axon" style="top:48%; left:-30%"></div>
+    <div class="axon" style="top:72%; left:-25%"></div>
+  </div>
+
+  <div class="audio" role="group" aria-label="Controles de áudio">
+    <button id="musicBtn" title="Música">🎵</button>
+    <button id="sfxBtn" title="Efeitos">🔊</button>
+  </div>
+
+  <main class="container">
+    <section class="header" aria-labelledby="t1">
+      <h1 id="t1" class="title">Jornada do Cérebro</h1>
+      <p class="subtitle">Colete habilidades e desvie das distrações. Treine <strong>atenção</strong>, <strong>memória de trabalho</strong>, <strong>inibição</strong> e <strong>planejamento</strong>.</p>
+    </section>
+
+    <section class="grid" aria-label="Painel de status">
+      <div class="card"><div class="label">Nível</div><div class="value" id="level">1/10</div></div>
+      <div class="card"><div class="label">Pontos</div><div class="value" id="score">0</div></div>
+      <div class="card"><div class="label">Metros</div><div class="value" id="meters">0m</div></div>
+      <div class="card"><div class="label">Recorde</div><div class="value" id="best">-</div></div>
+    </section>
+
+    <section class="module" aria-labelledby="t2">
+      <h2 id="t2">Escolha a Habilidade Principal</h2>
+      <div class="skills" id="skills">
+        <button class="skill selected" data-skill="atencao" aria-pressed="true">
+          <div class="icon">🎯</div>
+          <div class="name">Atenção Sustentada</div>
+          <div class="desc">Move-se com precisão e ganha combo ao manter-se sem colisões.</div>
+        </button>
+        <button class="skill" data-skill="memoria">
+          <div class="icon">🧩</div>
+          <div class="name">Memória de Trabalho</div>
+          <div class="desc">Colete pares na sequência correta para bônus extra.</div>
+        </button>
+        <button class="skill" data-skill="inibicao">
+          <div class="icon">🛑</div>
+          <div class="name">Inibição</div>
+          <div class="desc">Janela de "foco total" torna distrações inofensivas por 3s.</div>
+        </button>
+        <button class="skill" data-skill="planejamento">
+          <div class="icon">🗺️</div>
+          <div class="name">Planejamento</div>
+          <div class="desc">Pré-visualiza por 1s a rota dos próximos objetos.</div>
+        </button>
+      </div>
+    </section>
+
+    <div class="progress" aria-label="Progresso do nível"><div id="bar" class="bar"></div></div>
+
+    <div id="msg" class="message" role="status">Toque em "Iniciar". Arraste o avatar ou use ↑/↓.</div>
+
+    <section class="game" id="game" aria-label="Área do jogo">
+      <div class="lane"></div>
+      <div id="avatar" class="avatar" aria-label="Seu avatar" role="button" tabindex="0">🧠</div>
+    </section>
+
+    <div class="controls" role="group" aria-label="Controles de jogo">
+      <button id="start" class="btn primary">Iniciar</button>
+      <button id="pause" class="btn secondary" style="display:none">Pausar</button>
+      <button id="reset" class="btn secondary">Reiniciar</button>
+      <button id="lb" class="btn accent">🏆 Classificações</button>
+    </div>
+  </main>
+
+  <div id="modal" class="modal" aria-modal="true" role="dialog" aria-label="Classificações">
+    <div class="box">
+      <h3 style="text-align:center; font-size:22px; margin-bottom:10px">🏆 Classificações</h3>
+      <div id="lbList" style="display:grid; gap:8px;">
+        <p style="text-align:center; color:#567">Sem recordes. Jogue para registrar!</p>
+      </div>
+      <div class="row">
+        <button id="closeLb" class="btn secondary">Fechar</button>
+        <button id="clearLb" class="btn accent">Limpar Recordes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Estado ----------
+    const S= {
+      level:1, maxLevel:10, score:0, meters:0,
+      playing:false, paused:false, started:false,
+      y: 232, drag:false, frame:0,
+      speed:2.2, spawn:0.018, duration:20000, phaseStart:0, lastT:0,
+      skill:'atencao',
+      tokens:[], els:new Map(), distractors:[], sparkCount:0, sparkMax:18,
+      music:true, sfx:true,
+      combo:0, focusUntil:0, previewUntil:0, needPair:null
+    };
+
+    const LVL={
+      1:{speed:2.2, spawn:0.018, duration:20000, objSpeed:1.6},
+      2:{speed:2.4, spawn:0.020, duration:20000, objSpeed:1.8},
+      3:{speed:2.7, spawn:0.022, duration:20000, objSpeed:2.0},
+      4:{speed:3.0, spawn:0.024, duration:20000, objSpeed:2.2},
+      5:{speed:3.3, spawn:0.027, duration:20000, objSpeed:2.5},
+      6:{speed:3.6, spawn:0.030, duration:20000, objSpeed:2.8},
+      7:{speed:3.9, spawn:0.033, duration:20000, objSpeed:3.1},
+      8:{speed:4.2, spawn:0.036, duration:20000, objSpeed:3.4},
+      9:{speed:4.6, spawn:0.040, duration:20000, objSpeed:3.7},
+      10:{speed:5.0, spawn:0.044, duration:20000, objSpeed:4.1},
+    };
+
+    // ---------- DOM ----------
+    const E={
+      level: byId('level'), score: byId('score'), meters: byId('meters'), best: byId('best'),
+      msg: byId('msg'), game: byId('game'), avatar: byId('avatar'), bar: byId('bar'),
+      start: byId('start'), pause: byId('pause'), reset: byId('reset'), lb: byId('lb'),
+      modal: byId('modal'), lbList: byId('lbList'), closeLb: byId('closeLb'), clearLb: byId('clearLb'),
+      musicBtn: byId('musicBtn'), sfxBtn: byId('sfxBtn')
+    };
+
+    function byId(id){ return document.getElementById(id); }
+
+    // ---------- Inicialização ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+      bind();
+      loadBest();
+      ui();
+      makeSynth();
+    });
+
+    function init(){
+      const cfg=LVL[S.level];
+      S.speed=cfg.speed; S.spawn=cfg.spawn; S.duration=cfg.duration; S.tokens=[]; S.distractors=[];
+      S.els.clear(); S.frame=0; S.phaseStart=0; S.started=false; S.paused=false; S.playing=false; S.meters=0; S.score=0; S.combo=0; S.focusUntil=0; S.previewUntil=0; S.needPair=null;
+      S.y = (E.game.clientHeight-56)/2; E.avatar.style.transform = `translateY(${S.y}px)`;
+      clearObjects();
+      setMsg('Toque em "Iniciar". Arraste o avatar ou use ↑/↓.');
+      E.pause.style.display='none'; S.started=false;
+    }
+
+    function bind(){
+      document.querySelectorAll('.skill').forEach(btn=>{
+        btn.addEventListener('click',()=>selectSkill(btn.dataset.skill, btn));
+      });
+      E.start.addEventListener('click',start);
+      E.pause.addEventListener('click',togglePause);
+      E.reset.addEventListener('click',()=>{ stopMusic(); init(); ui(); });
+      E.lb.addEventListener('click',showLB);
+      E.closeLb.addEventListener('click',()=>E.modal.style.display='none');
+      E.clearLb.addEventListener('click',clearLB);
+
+      // Drag e toque
+      E.avatar.addEventListener('mousedown', beginDrag);
+      E.game.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup', endDrag);
+      E.avatar.addEventListener('touchstart', beginTouch, {passive:false});
+      E.game.addEventListener('touchmove', onTouch, {passive:false});
+      document.addEventListener('touchend', endDrag);
+
+      // Teclado
+      document.addEventListener('keydown', keyMove);
+      E.avatar.addEventListener('keydown', keyMove);
+
+      // Áudio
+      E.musicBtn.addEventListener('click',()=>{ S.music=!S.music; E.musicBtn.classList.toggle('muted', !S.music); if(!S.music) stopMusic(); else if(S.playing && !S.paused) playMusic(); });
+      E.sfxBtn.addEventListener('click',()=>{ S.sfx=!S.sfx; E.sfxBtn.classList.toggle('muted', !S.sfx); });
+
+      // Fecha modal ao clicar fora
+      E.modal.addEventListener('click', (e)=>{ if(e.target===E.modal) E.modal.style.display='none'; });
+    }
+
+    function selectSkill(skill, el){
+      S.skill=skill;
+      document.querySelectorAll('.skill').forEach(b=>{ b.classList.toggle('selected', b===el); b.setAttribute('aria-pressed', b===el ? 'true':'false'); });
+      beep('move');
+    }
+
+    function start(){
+      if(S.playing) return;
+      S.playing=true; S.paused=false; S.started=true; S.phaseStart=Date.now(); S.lastT=performance.now();
+      E.start.style.display='none'; E.pause.style.display='inline-block';
+      setMsg(`Nível ${S.level}/${S.maxLevel} — colete habilidades, evite distrações.`);
+      if(S.music) playMusic();
+      requestAnimationFrame(loop);
+    }
+
+    function loop(t){
+      if(!S.playing || S.paused) return;
+      const dt=t - S.lastT; S.lastT=t; S.frame++;
+      const elapsed = Date.now() - S.phaseStart; const left = Math.max(0, S.duration - elapsed);
+
+      // Progresso, metros e pontos passivos
+      S.meters += S.speed; S.score += Math.floor(S.speed/2) + (S.combo>0 ? 1:0);
+      E.bar.style.width = `${(elapsed / S.duration) * 100}%`;
+
+      // Spawns
+      if(Math.random() < S.spawn) spawnObject();
+      updateObjects();
+
+      // Colisões
+      if(hitTest()){ onCrash(); return; }
+
+      // Fim de nível
+      if(left<=0){ onLevelClear(); return; }
+
+      // UI periódica
+      if(S.frame % 10 === 0) ui();
+      if(S.frame % 36 === 0) speedLines();
+
+      requestAnimationFrame(loop);
+    }
+
+    // ---------- Objetos ----------
+    function spawnObject(){
+      const isToken = Math.random() < 0.55; // mais tokens que distrações
+      const id = `${isToken ? 'T':'D'}_${Date.now()}_${Math.random().toString(16).slice(2,7)}`;
+      const y = Math.random() * (E.game.clientHeight - 90) + 30;
+      const x = E.game.clientWidth + 20;
+      const el = document.createElement('div');
+      el.id=id; el.style.transform = `translate(${x}px, ${y}px)`;
+      el.className = isToken ? 'token' : 'distractor';
+      el.textContent = isToken ? pickTokenIcon() : pickDistractorIcon();
+      if(isToken && S.skill==='planejamento') el.style.outline = '2px dashed rgba(0,0,0,.25)';
+      E.game.appendChild(el);
+      const obj = { id, x, y, v: LVL[S.level].objSpeed, token:isToken };
+      if(isToken) S.tokens.push(obj); else S.distractors.push(obj);
+      S.els.set(id, el);
+    }
+    function pickTokenIcon(){
+      const icons = ['🎯','🧩','⏱️','🧠','📚','💡'];
+      return icons[Math.floor(Math.random()*icons.length)];
+    }
+    function pickDistractorIcon(){
+      const icons = ['📱','🍭','🕹️','💬','📺','😴'];
+      return icons[Math.floor(Math.random()*icons.length)];
+    }
+    function updateObjects(){
+      const all=[...S.tokens, ...S.distractors];
+      for(let i=all.length-1;i>=0;i--){
+        const o=all[i]; o.x -= o.v; const el=S.els.get(o.id); if(el){ el.style.transform = `translate(${o.x}px, ${o.y}px)`; }
+        if(o.x < -60){ removeObj(o); }
+      }
+    }
+    function removeObj(o){ const el=S.els.get(o.id); if(el) el.remove(); S.els.delete(o.id); if(o.token){ S.tokens = S.tokens.filter(t=>t.id!==o.id);} else { S.distractors=S.distractors.filter(d=>d.id!==o.id);} }
+
+    // ---------- Interação do avatar ----------
+    function beginDrag(e){ if(!S.playing||S.paused) return; e.preventDefault(); S.drag=true; beep('move'); }
+    function onDrag(e){ if(!S.drag||!S.playing||S.paused) return; const r=E.game.getBoundingClientRect(); moveTo(e.clientY - r.top); }
+    function beginTouch(e){ if(!S.playing||S.paused) return; e.preventDefault(); S.drag=true; beep('move'); }
+    function onTouch(e){ if(!S.drag||!S.playing||S.paused) return; e.preventDefault(); const r=E.game.getBoundingClientRect(); moveTo(e.touches[0].clientY - r.top); }
+    function endDrag(){ if(!S.drag) return; S.drag=false; }
+
+    function moveTo(yTarget){
+      const min=10, max=E.game.clientHeight-10; const y = clamp(yTarget, min, max); S.y = y-28; E.avatar.style.transform = `translateY(${S.y}px)`; if(S.sparkCount < S.sparkMax) sparks(86, y);
+    }
+    function keyMove(e){
+      const k=e.key; if(['ArrowUp','w','W'].includes(k)){ e.preventDefault(); moveDelta(-30);} else if(['ArrowDown','s','S'].includes(k)){ e.preventDefault(); moveDelta(30);} else if(k===' '){ e.preventDefault(); if(S.started) togglePause(); else start(); }
+    }
+    function moveDelta(dy){ if(!S.playing||S.paused) return; S.y = clamp(S.y + dy, 0, E.game.clientHeight-56); E.avatar.style.transform = `translateY(${S.y}px)`; if(S.sparkCount < S.sparkMax) sparks(86, S.y+28); beep('move'); }
+
+    // ---------- Colisões e sistemas de habilidade ----------
+    function hitTest(){
+      const A = {x:56,y:S.y,w:56,h:56};
+      // Distrações colidem apenas se não estiver em foco total
+      const now=Date.now();
+      for(const d of S.distractors){
+        const B={x:d.x,y:d.y,w:44,h:44};
+        if(rectHit(A,B)){
+          if(S.skill==='inibicao' && now < S.focusUntil){ removeObj(d); score(10); continue; }
+          return true;
+        }
+      }
+      // Tokens coletáveis
+      for(const t of [...S.tokens]){
+        const B={x:t.x,y:t.y,w:44,h:44};
+        if(rectHit(A,B)){
+          collect(t);
+        }
+      }
+      return false;
+    }
+
+    function collect(t){
+      removeObj(t); score(25 + S.combo*2); S.combo = Math.min(S.combo+1, 20); setMsg(`Combo x${S.combo}`);
+      // Efeitos por habilidade
+      if(S.skill==='atencao') { /* combo já favorece */ }
+      if(S.skill==='inibicao') { S.focusUntil = Date.now()+3000; flashBorder('#22c55e'); }
+      if(S.skill==='planejamento') { S.previewUntil = Date.now()+1000; outlineNext(); }
+      if(S.skill==='memoria') { memoryPair(); }
+      beep('token');
+    }
+
+    function outlineNext(){
+      S.tokens.concat(S.distractors).forEach(o=>{ const el=S.els.get(o.id); if(el) el.style.outline = '2px dashed rgba(0,0,0,.28)'; });
+      setTimeout(()=>{ S.tokens.concat(S.distractors).forEach(o=>{ const el=S.els.get(o.id); if(el) el.style.outline = ''; }); }, 1000);
+    }
+
+    function memoryPair(){
+      // Requer coletar dois tokens seguidos da mesma categoria de ícone simples: alvo/peça/relógio/lâmpada
+      const cats={ '🎯':'A','🧩':'B','⏱️':'C','💡':'D','🧠':'E','📚':'F' };
+      const nowCat = Object.keys(cats).includes(lastTokenIcon) ? cats[lastTokenIcon] : null;
+      if(S.needPair===null){ S.needPair = nowCat; setMsg('Memorize: colete outro igual para bônus.'); }
+      else if(S.needPair===nowCat){ score(60); setMsg('Par correto! +60'); S.needPair=null; flashBorder('#06b6d4'); }
+      else { setMsg('Sequência reiniciada.'); S.needPair=null; }
+    }
+
+    let lastTokenIcon='🎯';
+
+    // ---------- Pontuação, níveis e fim ----------
+    function score(v){ S.score += v; ui(); }
+
+    function onLevelClear(){
+      S.playing=false; beep('level'); setMsg(`Nível ${S.level} concluído. Pontos: ${S.score}`);
+      setTimeout(()=>{
+        if(S.level < S.maxLevel){ S.level++; nextLevel(); } else { onWin(); }
+      }, 1200);
+    }
+
+    function nextLevel(){
+      const cfg=LVL[S.level]; S.speed=cfg.speed; S.spawn=cfg.spawn; S.duration=cfg.duration; clearObjects(); E.pause.style.display='none'; E.bar.style.width='0%';
+      countdown(`Preparando Nível ${S.level}...`, ()=>{ S.playing=true; S.paused=false; S.phaseStart=Date.now(); S.lastT=performance.now(); E.pause.style.display='inline-block'; if(S.music) playMusic(); requestAnimationFrame(loop); });
+      ui();
+    }
+
+    function onWin(){
+      saveRecord(true); setMsg(`🏁 Você completou a jornada! Pontos finais: ${S.score}`); resetUI();
+    }
+
+    function onCrash(){
+      S.playing=false; beep('crash'); explode(86, S.y+28); flashBorder('#ef4444'); setMsg(`💥 Distração! Pontos: ${S.score}. Tente de novo.`);
+      setTimeout(()=>{ resetUI(); }, 1200);
+    }
+
+    function resetUI(){ E.start.style.display='inline-block'; E.pause.style.display='none'; clearObjects(); S.started=false; stopMusic(); }
+
+    function togglePause(){
+      S.paused=!S.paused;
+      if(S.paused){ E.pause.textContent='Continuar'; setMsg('Pausado'); stopMusic(); }
+      else { E.pause.textContent='Pausar'; setMsg(`Nível ${S.level} em andamento.`); if(S.music) playMusic(); S.lastT=performance.now(); requestAnimationFrame(loop); }
+    }
+
+    function clearObjects(){ S.tokens=[]; S.distractors=[]; S.els.forEach(el=>el.remove()); S.els.clear(); document.querySelectorAll('.spark').forEach(el=>el.remove()); S.sparkCount=0; }
+
+    function ui(){ E.level.textContent=`${S.level}/${S.maxLevel}`; E.score.textContent=S.score.toLocaleString('pt-BR'); E.meters.textContent=`${Math.floor(S.meters)}m`; const b=bestScore(); E.best.textContent=b? b.toLocaleString('pt-BR'):'-'; }
+    function setMsg(text){ E.msg.textContent=text; }
+
+    function countdown(text, cb){ let n=3; setMsg(`${text} ${n}`); const id=setInterval(()=>{ n--; if(n>0) setMsg(`${text} ${n}`); else { clearInterval(id); setMsg('Começou!'); cb(); } }, 1000); }
+
+    // ---------- Leaderboard ----------
+    function records(){ const raw=localStorage.getItem('brain-journey-records'); return raw? JSON.parse(raw):[]; }
+    function bestScore(){ const r=records(); return r.length? r[0].score:0; }
+    function saveRecord(complete=false){ const r=records(); r.push({ level: S.level, score:S.score, meters:S.meters, skill:S.skill, date: new Date().toLocaleDateString('pt-BR'), complete}); r.sort((a,b)=>b.score-a.score); r.splice(10); localStorage.setItem('brain-journey-records', JSON.stringify(r)); }
+    function loadBest(){ ui(); }
+    function showLB(){ const r=records(); E.lbList.innerHTML = r.length? r.map((rec,i)=>`<div class="lb-item"><div class="rank">#${i+1}</div><div><div><strong>${rec.complete? '🏆 Jornada Completa':`Nível ${rec.level}`}</strong> • ${rec.skill}</div><div>${rec.score.toLocaleString('pt-BR')} pts • ${Math.floor(rec.meters)}m • ${rec.date}</div></div></div>`).join('') : '<p style="text-align:center; color:#567">Sem recordes.</p>'; E.modal.style.display='flex'; }
+    function clearLB(){ if(confirm('Limpar todos os recordes?')){ localStorage.removeItem('brain-journey-records'); showLB(); ui(); } }
+
+    // ---------- Utilidades visuais ----------
+    function sparks(x,y){ for(let i=0;i<3;i++){ if(S.sparkCount>=S.sparkMax) break; const s=document.createElement('div'); s.className='spark'; s.style.left=`${x + (Math.random()-0.5)*22}px`; s.style.top=`${y + (Math.random()-0.5)*22}px`; E.game.appendChild(s); S.sparkCount++; setTimeout(()=>{ s.remove(); S.sparkCount--; }, 700); } }
+    function speedLines(){ const d=document.createElement('div'); d.style.position='absolute'; d.style.right='0'; d.style.top=`${Math.random()*E.game.clientHeight}px`; d.style.width='34px'; d.style.height='2px'; d.style.background='rgba(255,255,255,.55)'; d.style.animation='sl 0.5s linear forwards'; E.game.appendChild(d); setTimeout(()=>d.remove(), 500); }
+    function explode(x,y){ const e=document.createElement('div'); e.style.position='absolute'; e.style.left=`${x-50}px`; e.style.top=`${y-50}px`; e.style.width='100px'; e.style.height='100px'; e.style.borderRadius='50%'; e.style.background='radial-gradient(circle, #ff6b6b, #ff8e53, transparent)'; e.style.animation='ex .45s ease-out forwards'; e.style.zIndex=5; E.game.appendChild(e); setTimeout(()=>e.remove(), 500); }
+    function flashBorder(color){ E.game.style.boxShadow = `inset 0 0 0 6px ${color}`; setTimeout(()=>{ E.game.style.boxShadow = 'inset 0 8px 30px rgba(0,0,0,.12)'; }, 350); }
+    function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+    function rectHit(a,b){ return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
+
+    // ---------- Áudio por síntese ----------
+    let AC=null; function makeSynth(){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); } catch{ AC=null; } }
+    function beep(type){ if(!S.sfx||!AC) return; if(type==='level'){ seq([523.25,659.25,783.99,1046.5]); return; } if(type==='crash'){ tone(200, 0.25, 'sawtooth', 0.18); tone(90, 0.22, 'triangle', 0.12); return; } if(type==='token'){ tone(740, 0.12, 'sine', 0.12); tone(880, 0.08, 'sine', 0.1); return; } if(type==='move'){ tone(600, 0.06, 'square', 0.05); return; } }
+    function tone(freq, dur, type='sine', vol=0.12){ const o=AC.createOscillator(); const g=AC.createGain(); o.type=type; o.frequency.setValueAtTime(freq, AC.currentTime); g.gain.setValueAtTime(vol, AC.currentTime); g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime+dur); o.connect(g); g.connect(AC.destination); o.start(); o.stop(AC.currentTime+dur); }
+    function seq(ns){ ns.forEach((n,i)=>setTimeout(()=>tone(n,0.12,'sine',0.09), i*100)); }
+
+    // Música de fundo simples
+    let musicId=null; function playMusic(){ if(!AC||!S.music) return; stopMusic(); const pattern=[261.63, 329.63, 392.00, 523.25, 392.00, 329.63]; let i=0; musicId=setInterval(()=>{ tone(pattern[i%pattern.length], 0.18, 'triangle', 0.05); i++; }, 300); }
+    function stopMusic(){ if(musicId){ clearInterval(musicId); musicId=null; } }
+
+    // ---------- Observadores auxiliares ----------
+    // Observa última coleta para memória de trabalho
+    const obs = new MutationObserver(()=>{}); // placeholder para evitar warnings em alguns navegadores
+    // intercepta alterações de tokens para salvar último ícone coletado
+    const _appendChild = Node.prototype.appendChild; Node.prototype.appendChild = function(){ return _appendChild.apply(this, arguments); };
+    const _remove = Element.prototype.remove; Element.prototype.remove = function(){ return _remove.apply(this, arguments); };
+
+    // Hook simples: sempre que coletamos, setamos lastTokenIcon no próprio collect()
+    // lastTokenIcon é atualizado antes de memoryPair()
+
+    // Sobrescreve collect para registrar ícone
+    const _collect = collect;
+    collect = function(t){ const el=S.els.get(t.id); if(el){ lastTokenIcon = el.textContent; } _collect(t); }
+  </script>
+</body>
+</html>

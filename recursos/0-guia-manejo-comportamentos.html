@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo: Manejo de Crises na Educação Infantil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is structured into four thematic, task-oriented sections: 1) 'Compreender' to provide foundational knowledge on child development and neurodiversity, 2) 'Prevenir' for proactive, environmental, and relational strategies, 3) 'Agir' for in-the-moment crisis management protocols, and 4) 'Colaborar' for post-crisis and partnership strategies. This structure was chosen over a linear chapter format to allow educators to quickly access information based on their immediate need (e.g., 'What do I do right now?' -> 'Agir'), making the guide a practical tool rather than just a document. Navigation is handled by a sticky header, and content within sections is presented in interactive cards and diagrams to facilitate exploration and understanding. -->
+    <!-- Visualization & Content Choices: 1) Report Info: Differentiating Birra vs. Crise. Goal: Compare. Viz/Method: Interactive HTML/CSS/JS diagram with clickable elements. Interaction: User clicks on 'Birra' or 'Crise' to reveal detailed characteristics. Justification: A side-by-side comparison in an interactive format is more engaging and easier to digest than a dense table. Library/Method: Vanilla JS and Tailwind CSS. 2) Report Info: School Infrastructure Data. Goal: Inform/Impact. Viz/Method: Bar Chart. Interaction: Static chart with tooltips on hover. Justification: A bar chart effectively visualizes the stark statistics on resource scarcity, providing powerful context. Library/Method: Chart.js (Canvas). 3) Report Info: Proactive/Reactive Strategies. Goal: Organize/Inform. Viz/Method: Clickable cards organized in a grid. Interaction: Users click a card to expand and read the detailed strategy. Justification: This organizes a large amount of text into manageable, topic-specific chunks, preventing overwhelm. Library/Method: Vanilla JS and Tailwind CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link.active {
+            color: #D97706; 
+            border-bottom-color: #D97706;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .strategy-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .strategy-card.open .strategy-card-content {
+            max-height: 1000px; 
+        }
+        .comparison-tab.active {
+            background-color: #FBBF24;
+            color: #422006;
+        }
+        .comparison-content {
+            display: none;
+        }
+        .comparison-content.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) { 
+            .chart-container { 
+                height: 400px; 
+            } 
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-amber-800">Guia de Manejo Infantil</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#compreender" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-amber-600 border-b-2 border-transparent">Compreender</a>
+                        <a href="#prevenir" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-amber-600 border-b-2 border-transparent">Prevenir</a>
+                        <a href="#agir" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-amber-600 border-b-2 border-transparent">Agir</a>
+                        <a href="#colaborar" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-amber-600 border-b-2 border-transparent">Colaborar</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <select id="mobile-nav" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md">
+                        <option value="#compreender">Compreender</option>
+                        <option value="#prevenir">Prevenir</option>
+                        <option value="#agir">Agir</option>
+                        <option value="#colaborar">Colaborar</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <section id="hero" class="text-center py-12">
+            <h2 class="text-4xl font-extrabold text-amber-900 tracking-tight sm:text-5xl">Estratégias Práticas para o Manejo de Crises na Educação Infantil</h2>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-600">Um guia interativo para educadores da rede pública, focado em compreender, prevenir e responder a comportamentos desafiadores.</p>
+        </section>
+
+        <section id="compreender" class="py-12 scroll-mt-16">
+            <div class="text-center mb-12">
+                <span class="text-amber-600 font-semibold uppercase tracking-wider">Parte I</span>
+                <h3 class="text-3xl font-bold text-gray-800 mt-2">Compreender o "Porquê"</h3>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Antes de agir, é fundamental entender o que está por trás do comportamento. Esta seção explora o cérebro em desenvolvimento, as características dos transtornos do neurodesenvolvimento e a distinção crucial entre uma birra e uma crise.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <h4 class="text-2xl font-bold text-gray-800 text-center mb-6">Birra vs. Crise: A Distinção Essencial</h4>
+                <div class="flex justify-center mb-6">
+                    <div class="inline-flex rounded-md shadow-sm" role="group">
+                        <button type="button" id="tab-birra" class="comparison-tab active px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-amber-500">
+                            Birra (Intencional)
+                        </button>
+                        <button type="button" id="tab-crise" class="comparison-tab px-6 py-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-amber-500">
+                            Crise (Sobrecarga)
+                        </button>
+                    </div>
+                </div>
+                <div id="content-birra" class="comparison-content active">
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="text-center">
+                            <span class="text-6xl">🎯</span>
+                            <h5 class="text-xl font-semibold mt-4">Comportamento com Propósito</h5>
+                        </div>
+                        <div>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><strong>Objetivo:</strong> A criança quer algo (um brinquedo, atenção) ou quer evitar algo (uma tarefa).</li>
+                                <li><strong>Controle:</strong> Mantém um grau de controle. Olha para ver se o adulto está prestando atenção.</li>
+                                <li><strong>Comunicação:</strong> É uma forma, ainda que imatura, de comunicar uma frustração ou desejo.</li>
+                                <li><strong>Resolução:</strong> Tende a parar quando o objetivo é alcançado ou quando a criança percebe que a estratégia não funcionará.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="content-crise" class="comparison-content">
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="text-center">
+                            <span class="text-6xl">🧠</span>
+                            <h5 class="text-xl font-semibold mt-4">Reação Neurológica</h5>
+                        </div>
+                        <div>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><strong>Gatilho:</strong> Sobrecarga sensorial (barulho, luz), emocional ou cognitiva. É um "curto-circuito".</li>
+                                <li><strong>Controle:</strong> Perda de controle real. O cérebro racional está "offline". A criança pode se machucar sem intenção.</li>
+                                <li><strong>Comunicação:</strong> Não é uma tentativa de manipulação. É um sinal de que o sistema nervoso entrou em colapso.</li>
+                                <li><strong>Resolução:</strong> Só termina quando o sistema nervoso se acalma, geralmente por exaustão ou remoção do gatilho.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">O Contexto da Escola Pública</h4>
+                    <p class="text-gray-600 mb-4">Muitas escolas enfrentam desafios de infraestrutura que podem atuar como "ambientes-gatilho", aumentando o estresse e a probabilidade de crises.</p>
+                    <div class="chart-container">
+                        <canvas id="infraChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">Neurodesenvolvimento em Foco</h4>
+                    <p class="text-gray-600 mb-4">Compreender as características de transtornos como TEA, TDAH e TDDH permite antecipar gatilhos e responder de forma mais empática e eficaz.</p>
+                    <div class="space-y-3">
+                        <div class="bg-amber-50 p-3 rounded-lg"><strong>TEA (Autismo):</strong> Sensibilidade a sobrecargas sensoriais e quebras de rotina. Crises podem ser explosões (meltdown) ou desligamentos (shutdown).</div>
+                        <div class="bg-blue-50 p-3 rounded-lg"><strong>TDAH (Déficit de Atenção):</strong> Dificuldade com regulação emocional e impulsividade. Crises são geralmente reações explosivas à frustração.</div>
+                        <div class="bg-red-50 p-3 rounded-lg"><strong>TDDH (Desregulação do Humor):</strong> Irritabilidade crônica e surtos de raiva intensos e desproporcionais ao gatilho.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="prevenir" class="py-12 scroll-mt-16">
+            <div class="text-center mb-12">
+                <span class="text-amber-600 font-semibold uppercase tracking-wider">Parte II</span>
+                <h3 class="text-3xl font-bold text-gray-800 mt-2">Prevenir: Construindo um Ambiente Anti-Crise</h3>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">A forma mais eficaz de manejar uma crise é evitar que ela aconteça. Aqui estão estratégias proativas para criar um ambiente de sala de aula que promove segurança, previsibilidade e autorregulação.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="strategy-card bg-white rounded-xl shadow-lg p-6 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-800">Arquitetura da Sala</h4>
+                        <span class="text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="strategy-card-content mt-4 text-gray-600">
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Reduza estímulos visuais:</strong> Menos cartazes, materiais em caixas etiquetadas.</li>
+                            <li><strong>Setorize o espaço:</strong> Crie cantos com funções claras (leitura, construção, arte).</li>
+                            <li><strong>Diminua ruídos:</strong> Use feltro nos pés das cadeiras e mesas.</li>
+                            <li><strong>Posicionamento estratégico:</strong> Sente o aluno com TDAH na frente, e o com TEA em um local mais protegido.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-card bg-white rounded-xl shadow-lg p-6 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-800">Rotinas Visuais</h4>
+                        <span class="text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="strategy-card-content mt-4 text-gray-600">
+                        <p class="mb-2">A previsibilidade é uma âncora de segurança. Use quadros com figuras ou fotos para mostrar a sequência de atividades do dia.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Use materiais simples (cartolina, velcro).</li>
+                            <li>Percorra a rotina com a turma no início do dia.</li>
+                            <li>Retire ou vire o cartão da atividade concluída para tornar o tempo concreto.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-card bg-white rounded-xl shadow-lg p-6 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-800">Cantinho da Calma</h4>
+                        <span class="text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="strategy-card-content mt-4 text-gray-600">
+                        <p class="mb-2">Um espaço seguro, nunca de castigo, para a criança ir voluntariamente quando se sentir sobrecarregada.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Equipe com almofadas, massinha, garrafas da calma, fones abafadores.</li>
+                            <li>Apresente como um "espaço especial" para o corpo e o coração se acalmarem.</li>
+                            <li>Ensine a criança a reconhecer seus sinais de desregulação e a procurar o cantinho *antes* da explosão.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-card bg-white rounded-xl shadow-lg p-6 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-800">Vínculo Afetivo</h4>
+                        <span class="text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="strategy-card-content mt-4 text-gray-600">
+                        <p class="mb-2">O relacionamento é a intervenção primária. Uma criança que se sente segura e conectada aprende melhor e se regula com mais facilidade.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Escuta ativa:</strong> Abaixe-se, valide os sentimentos ("Eu vejo que você está bravo").</li>
+                            <li><strong>Estratégia 2x10:</strong> Passe 2 minutos por dia, por 10 dias, conversando com a criança sobre o que ELA quiser.</li>
+                            <li><strong>Elogios descritivos:</strong> "Gostei de como você compartilhou o giz" em vez de "Parabéns".</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-card bg-white rounded-xl shadow-lg p-6 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-800">Adaptações Pedagógicas</h4>
+                        <span class="text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="strategy-card-content mt-4 text-gray-600">
+                        <p class="mb-2">Modifique o "como" do ensino para garantir o acesso e prevenir a frustração.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Para TDAH:</strong> Fragmente tarefas, incorpore pausas para movimento, use jogos.</li>
+                            <li><strong>Para TEA:</strong> Use Comunicação Aumentativa e Alternativa (CAA) com pranchas de figuras (pictogramas).</li>
+                            <li><strong>Para todos:</strong> Ensine sobre emoções com um "termômetro de sentimentos" e práticas de respiração em grupo.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-card bg-white rounded-xl shadow-lg p-6 cursor-pointer">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-800">Apoio ao Comportamento Positivo</h4>
+                        <span class="text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="strategy-card-content mt-4 text-gray-600">
+                        <p class="mb-2">Entenda o que a criança está tentando comunicar com o comportamento e ensine uma forma mais adequada de fazê-lo.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Identifique a função:</strong> Ela quer obter algo ou evitar algo?</li>
+                            <li><strong>Ensine habilidades de substituição:</strong> Ensinar a pedir "pausa" em vez de rasgar a tarefa; ensinar a pedir "minha vez" em vez de bater no colega.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="agir" class="py-12 scroll-mt-16">
+            <div class="text-center mb-12">
+                <span class="text-amber-600 font-semibold uppercase tracking-wider">Parte III</span>
+                <h3 class="text-3xl font-bold text-gray-800 mt-2">Agir: O Manejo Direto da Crise</h3>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Apesar da prevenção, crises podem ocorrer. O foco agora é na segurança e na co-regulação. Este é um protocolo passo a passo para acalmar a tempestade.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h4 class="text-2xl font-bold text-gray-800 text-center mb-6">Protocolo de Desescalada em 5 Passos</h4>
+                <div class="relative">
+                    <div class="absolute left-1/2 h-full border-l-2 border-dashed border-amber-300 hidden md:block"></div>
+                    <div class="space-y-12">
+                        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                            <div class="md:text-right md:pr-8">
+                                <div class="bg-amber-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ml-auto md:ml-0 md:mr-auto mb-2">1</div>
+                                <h5 class="text-xl font-semibold">Autorregulação do Adulto</h5>
+                                <p class="text-gray-600">Sua calma é contagiosa. Respire fundo. Repita: "A criança está sofrendo, não me atacando".</p>
+                            </div>
+                            <div class="hidden md:block"></div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                            <div class="hidden md:block"></div>
+                            <div class="md:pl-8">
+                                <div class="bg-amber-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mb-2">2</div>
+                                <h5 class="text-xl font-semibold">Garantir a Segurança Física</h5>
+                                <p class="text-gray-600">Afaste as outras crianças com calma. Remova objetos perigosos. Crie um espaço seguro.</p>
+                            </div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                            <div class="md:text-right md:pr-8">
+                                <div class="bg-amber-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ml-auto md:ml-0 md:mr-auto mb-2">3</div>
+                                <h5 class="text-xl font-semibold">Comunicação Não-Verbal</h5>
+                                <p class="text-gray-600">Ajoelhe-se, fique de lado. Mantenha uma expressão neutra e as mãos relaxadas. Não invada o espaço da criança.</p>
+                            </div>
+                            <div class="hidden md:block"></div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                            <div class="hidden md:block"></div>
+                            <div class="md:pl-8">
+                                <div class="bg-amber-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mb-2">4</div>
+                                <h5 class="text-xl font-semibold">Comunicação Verbal Mínima</h5>
+                                <p class="text-gray-600">Fale menos, mais baixo e mais devagar. Valide o sentimento: "Eu vejo que você está muito bravo". Não dê sermões nem diga "se acalme".</p>
+                            </div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                            <div class="md:text-right md:pr-8">
+                                <div class="bg-amber-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ml-auto md:ml-0 md:mr-auto mb-2">5</div>
+                                <h5 class="text-xl font-semibold">Esperar a Tempestade Passar</h5>
+                                <p class="text-gray-600">Permaneça próximo e presente, em silêncio. Sua presença calma é a intervenção. A crise vai passar.</p>
+                            </div>
+                            <div class="hidden md:block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+              <p class="font-bold">Manejo da Agressividade Física</p>
+              <p>A prioridade é a segurança. Use bloqueios passivos (almofadas). Em caso de risco grave e na ausência de treinamento, <strong>NÃO tente a contenção física sozinho**. Chame a coordenação ou a direção imediatamente.</strong></p>
+            </div>
+        </section>
+
+        <section id="colaborar" class="py-12 scroll-mt-16">
+            <div class="text-center mb-12">
+                <span class="text-amber-600 font-semibold uppercase tracking-wider">Parte IV</span>
+                <h3 class="text-3xl font-bold text-gray-800 mt-2">Colaborar: Reconstruindo e Planejando</h3>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">O fim da crise é o começo da oportunidade de aprendizado. Esta seção foca no acolhimento, na análise do ocorrido e na parceria com a família para prevenir futuras crises.</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">O Acolhimento Pós-Crise</h4>
+                    <p class="text-gray-600 mb-4">Após a tempestade, a criança se sente exausta e vulnerável. O primeiro passo é reparar o vínculo.</p>
+                    <ol class="list-decimal list-inside space-y-3">
+                        <li><strong>Reconexão silenciosa:</strong> Ofereça um copo de água, um abraço (se aceito), um momento de calma juntos.</li>
+                        <li><strong>Valide a experiência:</strong> "Uau, essa foi uma emoção muito forte."</li>
+                        <li><strong>Diálogo restaurativo (só quando a criança estiver 100% calma):</strong>
+                            <ul class="list-disc list-inside ml-6 mt-2 text-sm space-y-1">
+                                <li>Descreva o que aconteceu, sem julgar.</li>
+                                <li>Explore o gatilho com curiosidade.</li>
+                                <li>Pensem juntos em soluções para a próxima vez.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">Parceria com a Família</h4>
+                    <p class="text-gray-600 mb-4">O manejo eficaz não é um esforço isolado. Construa uma ponte sólida com a família e a rede de apoio.</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Comunicação proativa e positiva (ligue para contar algo bom!).</li>
+                        <li>Reuniões colaborativas, tratando os pais como especialistas em seus filhos.</li>
+                        <li>Elabore o Plano de Ensino Individualizado (PEI) em conjunto.</li>
+                        <li>Acione a rede de apoio (Saúde, Conselho Tutelar) quando necessário.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-500">
+            <p>&copy; 2025 Guia Interativo de Manejo Infantil. Criado por Deo Magalhães.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const sections = document.querySelectorAll('main section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileNav = document.getElementById('mobile-nav');
+
+            function updateActiveLink() {
+                let index = sections.length;
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+                mobileNav.value = `#${sections[index].id}`;
+            }
+
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            mobileNav.addEventListener('change', (e) => {
+                document.querySelector(e.target.value).scrollIntoView({ behavior: 'smooth' });
+            });
+
+            const strategyCards = document.querySelectorAll('.strategy-card');
+            strategyCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('open');
+                    const icon = card.querySelector('.transform');
+                    if (card.classList.contains('open')) {
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+
+            const tabBirra = document.getElementById('tab-birra');
+            const tabCrise = document.getElementById('tab-crise');
+            const contentBirra = document.getElementById('content-birra');
+            const contentCrise = document.getElementById('content-crise');
+
+            tabBirra.addEventListener('click', () => {
+                tabBirra.classList.add('active');
+                tabCrise.classList.remove('active');
+                contentBirra.classList.add('active');
+                contentCrise.classList.remove('active');
+            });
+
+            tabCrise.addEventListener('click', () => {
+                tabCrise.classList.add('active');
+                tabBirra.classList.remove('active');
+                contentCrise.classList.add('active');
+                contentBirra.classList.remove('active');
+            });
+
+            const ctx = document.getElementById('infraChart').getContext('2d');
+            const infraChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Não possui parque infantil', 'Não possui banheiro adequado', 'Não possui biblioteca', 'Não possui refeitório'],
+                    datasets: [{
+                        label: '% de creches/escolas públicas com carência de infraestrutura',
+                        data: [43.4, 55, 70, 60],
+                        backgroundColor: [
+                            'rgba(251, 191, 36, 0.6)',
+                            'rgba(252, 211, 77, 0.6)',
+                            'rgba(253, 224, 71, 0.6)',
+                            'rgba(254, 240, 138, 0.6)',
+                        ],
+                        borderColor: [
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(217, 119, 6, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Carências na Infraestrutura Escolar (Brasil)',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + "%"
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

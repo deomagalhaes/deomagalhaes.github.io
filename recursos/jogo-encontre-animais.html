@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encontre os Animais Escondidos – Deo Magalhães</title>
+    <meta name="description" content="Jogo interativo de atenção e concentração para desenvolvimento infantil.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        /* CSS do Cabeçalho e Rodapé Padrão do Site */
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #004D40;
+            color: white;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar-left,
+        .top-bar-right {
+            display: flex;
+            gap: 15px;
+        }
+
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .top-bar a:hover {
+            opacity: 0.8;
+        }
+
+        .top-bar svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Header */
+        #main-header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-container img {
+            height: 60px;
+            width: auto;
+        }
+
+        .logo-text .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #004D40;
+            display: block;
+        }
+
+        .logo-text .subtitle {
+            font-size: 14px;
+            color: #666;
+            display: block;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #004D40;
+            cursor: pointer;
+        }
+
+        #main-nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        #main-nav a {
+            text-decoration: none;
+            color: #004D40;
+            font-weight: 500;
+            padding: 10px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        #main-nav a:hover {
+            color: #00695C;
+        }
+
+        #main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #00695C;
+            transition: width 0.3s ease;
+        }
+
+        #main-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: #004D40;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h4 {
+            color: #80CBC4;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-column a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-column a:hover {
+            color: #80CBC4;
+        }
+
+        .footer-column svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #00695C;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            color: #B2DFDB;
+            font-size: 14px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Cor de fundo padrão para main */
+        main {
+            background-color: #E0F7FA;
+            background-image: linear-gradient(to bottom, #80DEEA, #E0F7FA);
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ESTILOS ESPECÍFICOS DO JOGO */
+        /* ============================= */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 120px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #744210;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #744210;
+        }
+
+        /* Visualizador de fase */
+        .phase-indicator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .game-board {
+            position: relative;
+            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 400px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .target-animal {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .animals-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .animal {
+            font-size: 3rem;
+            padding: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.7);
+            border: 3px solid transparent;
+            user-select: none;
+        }
+
+        .animal:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #ffd700;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .animal.correct {
+            animation: correctAnswer 0.6s ease;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-color: #48bb78;
+        }
+
+        .animal.wrong {
+            animation: wrongAnswer 0.6s ease;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            border-color: #e53e3e;
+        }
+
+        @keyframes correctAnswer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3) rotate(10deg); }
+        }
+
+        @keyframes wrongAnswer {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #744210;
+            box-shadow: 0 5px 15px rgba(252, 182, 159, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(252, 182, 159, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.6);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: #ffd700;
+            animation: celebrate 2s ease-in-out;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes celebrate {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.5) rotate(180deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); opacity: 0; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Estilos do painel de resultados */
+        .results-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .results-panel.active {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 2.2rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stat-item-value {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-item-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .history-section {
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9em;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        .clear-data-btn {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-data-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            #main-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            
+            #main-nav.active {
+                display: flex;
+            }
+            
+            .top-bar-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .logo-container {
+                gap: 10px;
+            }
+            
+            .logo-container img {
+                height: 50px;
+            }
+            
+            .logo-text .name {
+                font-size: 20px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .game-container, .results-panel {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .game-title, .results-title {
+                font-size: 2rem;
+            }
+
+            .animals-container {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+                gap: 10px;
+            }
+
+            .animal {
+                font-size: 2.5rem;
+                padding: 8px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- CABEÇALHO PADRÃO DO SITE -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                </a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/neuropsiguaranesia" target="_blank" title="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../recursos.html">Recursos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
+    <main>
+        <!-- Painel do Jogo -->
+        <div class="game-container" id="game-panel">
+            <h1 class="game-title">🎯 Encontre os Animais Escondidos</h1>
+            <p class="game-subtitle">Jogo de Atenção e Concentração</p>
+
+            <!-- Visualizador de Fase -->
+            <div class="phase-indicator" id="phaseIndicator">
+                Fase: <span id="currentPhase">1</span>/<span id="maxPhases">10</span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Nível</div>
+                    <div class="stat-value" id="level">1</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Pontuação</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Tempo</div>
+                    <div class="stat-value" id="timer">30s</div>
+                </div>
+            </div>
+
+            <div class="instructions" id="instructions">
+                <strong>🎮 Como Jogar:</strong><br>
+                Encontre e clique nos animais que aparecem na instrução acima do jogo!<br>
+                Seja rápido e preciso para ganhar mais pontos! 🌟
+            </div>
+
+            <div class="game-board" id="gameBoard">
+                <div class="target-animal" id="targetAnimal">
+                    Procure por: <span id="targetEmoji">🐱</span> <span id="targetName">Gatos</span>
+                </div>
+                <div class="animals-container" id="animalsContainer">
+                    <!-- Animais serão inseridos aqui pelo JavaScript -->
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="startGame()">🚀 Iniciar Jogo</button>
+                <button class="btn btn-secondary" onclick="resetGame()">🔄 Reiniciar</button>
+                <button class="btn btn-success" onclick="toggleResults()">📊 Ver Resultados</button>
+            </div>
+        </div>
+
+        <!-- Painel de Resultados -->
+        <div class="results-panel" id="results-panel">
+            <h2 class="results-title">📊 Seus Resultados</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-item-value" id="total-games">0</span>
+                    <span class="stat-item-label">Jogos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-item-value" id="best-score">0</span>
+                    <span class="stat-item-label">Melhor Pontuação</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-item-value" id="best-level">0</span>
+                    <span class="stat-item-label">Melhor Nível</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-item-value" id="avg-score">0</span>
+                    <span class="stat-item-label">Média de Pontos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-item-value" id="total-time">0</span>
+                    <span class="stat-item-label">Tempo Total (min)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-item-value" id="completion-rate">0%</span>
+                    <span class="stat-item-label">Taxa de Conclusão</span>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <h3 class="history-title">Histórico de Jogos</h3>
+                <div class="history-list" id="history-list">
+                    <p style="text-align: center; color: #666;">Nenhum jogo registrado ainda.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="toggleResults()">🎮 Voltar ao Jogo</button>
+                <button class="clear-data-btn" onclick="clearGameData()">🗑️ Limpar Dados</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- RODAPÉ PADRÃO DO SITE -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li>
+                        <a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a>
+                    </li>
+                    <li>
+                        <a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a>
+                    </li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Guaranésia, MG
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li>
+                        <a href="https://instagram.com/neuropsiguaranesia" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                            @neuropsiguaranesia
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/script.js"></script>
+
+    <!-- SCRIPT ESPECÍFICO DO JOGO -->
+    <!-- ========================== -->
+    <script>
+        // Dados do jogo
+        const animals = [
+            { emoji: '🐱', name: 'Gatos', plural: 'Gatos' },
+            { emoji: '🐶', name: 'Cachorros', plural: 'Cachorros' },
+            { emoji: '🐰', name: 'Coelhos', plural: 'Coelhos' },
+            { emoji: '🐻', name: 'Ursos', plural: 'Ursos' },
+            { emoji: '🐼', name: 'Pandas', plural: 'Pandas' },
+            { emoji: '🦊', name: 'Raposas', plural: 'Raposas' },
+            { emoji: '🐸', name: 'Sapos', plural: 'Sapos' },
+            { emoji: '🐵', name: 'Macacos', plural: 'Macacos' },
+            { emoji: '🐷', name: 'Porcos', plural: 'Porcos' },
+            { emoji: '🐮', name: 'Vacas', plural: 'Vacas' },
+            { emoji: '🐯', name: 'Tigres', plural: 'Tigres' },
+            { emoji: '🦁', name: 'Leões', plural: 'Leões' }
+        ];
+
+        let currentTarget = null;
+        let gameActive = false;
+        let score = 0;
+        let level = 1;
+        let timeLeft = 30;
+        let timerInterval = null;
+        let correctCount = 0;
+        let targetCount = 0;
+        let gameStartTime = null;
+        const maxPhases = 10;
+
+        // Elementos DOM
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const timerElement = document.getElementById('timer');
+        const targetEmojiElement = document.getElementById('targetEmoji');
+        const targetNameElement = document.getElementById('targetName');
+        const animalsContainer = document.getElementById('animalsContainer');
+        const progressFill = document.getElementById('progressFill');
+        const currentPhaseElement = document.getElementById('currentPhase');
+        const maxPhasesElement = document.getElementById('maxPhases');
+
+        function getRandomAnimal() {
+            return animals[Math.floor(Math.random() * animals.length)];
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function updatePhaseIndicator() {
+            currentPhaseElement.textContent = level;
+            maxPhasesElement.textContent = maxPhases;
+        }
+
+        function createGameBoard() {
+            animalsContainer.innerHTML = '';
+            
+            // Escolhe animal alvo
+            currentTarget = getRandomAnimal();
+            targetEmojiElement.textContent = currentTarget.emoji;
+            targetNameElement.textContent = currentTarget.plural;
+
+            // Calcula quantos animais mostrar baseado no nível
+            const totalAnimals = Math.min(12 + level * 2, 20);
+            const targetAnimalsCount = Math.max(2, Math.min(level + 1, 6));
+            targetCount = targetAnimalsCount;
+            correctCount = 0;
+
+            // Cria array com animais
+            const gameAnimals = [];
+            
+            // Adiciona animais alvo
+            for (let i = 0; i < targetAnimalsCount; i++) {
+                gameAnimals.push({ ...currentTarget, isTarget: true });
+            }
+
+            // Adiciona animais distratores
+            const otherAnimals = animals.filter(animal => animal.emoji !== currentTarget.emoji);
+            for (let i = 0; i < totalAnimals - targetAnimalsCount; i++) {
+                const randomAnimal = otherAnimals[Math.floor(Math.random() * otherAnimals.length)];
+                gameAnimals.push({ ...randomAnimal, isTarget: false });
+            }
+
+            // Embaralha e cria elementos
+            const shuffledAnimals = shuffleArray(gameAnimals);
+            shuffledAnimals.forEach((animal, index) => {
+                const animalElement = document.createElement('div');
+                animalElement.className = 'animal';
+                animalElement.textContent = animal.emoji;
+                animalElement.onclick = () => handleAnimalClick(animalElement, animal.isTarget);
+                
+                // Adiciona animação de entrada escalonada
+                setTimeout(() => {
+                    animalElement.style.opacity = '1';
+                    animalElement.style.transform = 'scale(1)';
+                }, index * 50);
+                
+                animalElement.style.opacity = '0';
+                animalElement.style.transform = 'scale(0.8)';
+                animalElement.style.transition = 'all 0.3s ease';
+                
+                animalsContainer.appendChild(animalElement);
+            });
+
+            updateProgress();
+            updatePhaseIndicator();
+        }
+
+        function handleAnimalClick(element, isCorrect) {
+            if (!gameActive || element.classList.contains('correct') || element.classList.contains('wrong')) {
+                return;
+            }
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                correctCount++;
+                score += 10 * level;
+                scoreElement.textContent = score;
+                
+                // Efeito de celebração
+                showCelebration('🌟');
+                playSound('correct');
+
+                // Verifica se encontrou todos os animais alvo
+                if (correctCount >= targetCount) {
+                    setTimeout(() => {
+                        nextLevel();
+                    }, 1000);
+                }
+            } else {
+                element.classList.add('wrong');
+                score = Math.max(0, score - 5);
+                scoreElement.textContent = score;
+                playSound('wrong');
+                
+                // Remove a classe após a animação
+                setTimeout(() => {
+                    element.classList.remove('wrong');
+                }, 600);
+            }
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (correctCount / targetCount) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        function nextLevel() {
+            level++;
+            levelElement.textContent = level;
+            timeLeft += 5; // Bonus de tempo
+            
+            showCelebration('🎉');
+
+            // Verifica se completou todas as fases
+            if (level > maxPhases) {
+                setTimeout(() => {
+                    endGame(true); // Jogo completado
+                }, 1500);
+                return;
+            }
+            
+            setTimeout(() => {
+                createGameBoard();
+            }, 1500);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft + 's';
+
+                if (timeLeft <= 0) {
+                    endGame(false); // Tempo esgotado
+                }
+            }, 1000);
+        }
+
+        function startGame() {
+            gameActive = true;
+            score = 0;
+            level = 1;
+            timeLeft = 30;
+            gameStartTime = new Date();
+            
+            scoreElement.textContent = score;
+            levelElement.textContent = level;
+            timerElement.textContent = timeLeft + 's';
+            
+            createGameBoard();
+            startTimer();
+            
+            document.getElementById('instructions').innerHTML = 
+                '<strong>🎯 Encontre todos os animais indicados!</strong><br>Clique rapidamente nos animais corretos para ganhar pontos!';
+        }
+
+        function resetGame() {
+            gameActive = false;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            score = 0;
+            level = 1;
+            timeLeft = 30;
+            correctCount = 0;
+            targetCount = 0;
+            gameStartTime = null;
+            
+            scoreElement.textContent = score;
+            levelElement.textContent = level;
+            timerElement.textContent = timeLeft + 's';
+            progressFill.style.width = '0%';
+            updatePhaseIndicator();
+            
+            animalsContainer.innerHTML = '';
+            document.getElementById('instructions').innerHTML = 
+                '<strong>🎮 Como Jogar:</strong><br>Encontre e clique nos animais que aparecem na instrução acima do jogo!<br>Seja rápido e preciso para ganhar mais pontos! 🌟';
+        }
+
+        function endGame(completed) {
+            gameActive = false;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            showCelebration('🏆');
+            saveGameResult(completed);
+            
+            let message = '';
+            if (completed) {
+                message = '🏆 Parabéns! Você completou todas as fases! Você é um mestre da atenção!';
+            } else if (score >= 200) {
+                message = '🏆 Excelente! Você tem uma atenção incrível!';
+            } else if (score >= 100) {
+                message = '🌟 Muito bem! Continue praticando!';
+            } else {
+                message = '💪 Bom trabalho! Tente novamente para melhorar!';
+            }
+            
+            setTimeout(() => {
+                alert(message + `\n\nPontuação final: ${score} pontos\nNível alcançado: ${level}/${maxPhases}`);
+            }, 1000);
+        }
+
+        function showCelebration(emoji) {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            celebration.textContent = emoji;
+            document.body.appendChild(celebration);
+            
+            setTimeout(() => {
+                document.body.removeChild(celebration);
+            }, 2000);
+        }
+
+        function playSound(type) {
+            // Cria contexto de áudio para feedback sonoro
+            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+                
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                if (type === 'correct') {
+                    oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // Dó
+                    oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // Mi
+                    oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // Sol
+                } else {
+                    oscillator.frequency.setValueAtTime(200, audioCtx.currentTime);
+                    oscillator.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
+                }
+                
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        // Sistema de Registro de Resultados
+        function saveGameResult(completed) {
+            const gameData = {
+                date: new Date().toISOString(),
+                score: score,
+                level: level,
+                maxLevel: maxPhases,
+                completed: completed,
+                duration: gameStartTime ? Math.round((new Date() - gameStartTime) / 1000) : 0
+            };
+
+            let gameHistory = JSON.parse(localStorage.getItem('animalGameHistory') || '[]');
+            gameHistory.unshift(gameData); // Adiciona no início da lista
+            
+            // Mantém apenas os últimos 50 jogos
+            if (gameHistory.length > 50) {
+                gameHistory = gameHistory.slice(0, 50);
+            }
+            
+            localStorage.setItem('animalGameHistory', JSON.stringify(gameHistory));
+            updateResultsDisplay();
+        }
+
+        function loadGameData() {
+            const history = JSON.parse(localStorage.getItem('animalGameHistory') || '[]');
+            return history;
+        }
+
+        function updateResultsDisplay() {
+            const history = loadGameData();
+            
+            if (history.length === 0) {
+                document.getElementById('total-games').textContent = '0';
+                document.getElementById('best-score').textContent = '0';
+                document.getElementById('best-level').textContent = '0';
+                document.getElementById('avg-score').textContent = '0';
+                document.getElementById('total-time').textContent = '0';
+                document.getElementById('completion-rate').textContent = '0%';
+                return;
+            }
+
+            // Estatísticas
+            const totalGames = history.length;
+            const bestScore = Math.max(...history.map(game => game.score));
+            const bestLevel = Math.max(...history.map(game => game.level));
+            const avgScore = Math.round(history.reduce((sum, game) => sum + game.score, 0) / totalGames);
+            const totalTime = Math.round(history.reduce((sum, game) => sum + game.duration, 0) / 60);
+            const completedGames = history.filter(game => game.completed).length;
+            const completionRate = Math.round((completedGames / totalGames) * 100);
+
+            document.getElementById('total-games').textContent = totalGames;
+            document.getElementById('best-score').textContent = bestScore;
+            document.getElementById('best-level').textContent = `${bestLevel}/${maxPhases}`;
+            document.getElementById('avg-score').textContent = avgScore;
+            document.getElementById('total-time').textContent = totalTime;
+            document.getElementById('completion-rate').textContent = completionRate + '%';
+
+            // Histórico
+            const historyList = document.getElementById('history-list');
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #666;">Nenhum jogo registrado ainda.</p>';
+            } else {
+                historyList.innerHTML = history.map(game => {
+                    const date = new Date(game.date);
+                    const dateStr = date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+                    const statusIcon = game.completed ? '🏆' : '⏱️';
+                    const durationStr = game.duration > 0 ? ` (${game.duration}s)` : '';
+                    
+                    return `
+                        <div class="history-item">
+                            <div>
+                                ${statusIcon} Nível ${game.level}/${game.maxLevel} - ${game.score} pontos${durationStr}
+                            </div>
+                            <div class="history-date">${dateStr}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function clearGameData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados salvos? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('animalGameHistory');
+                updateResultsDisplay();
+                alert('Dados limpos com sucesso!');
+            }
+        }
+
+        function toggleResults() {
+            const gamePanel = document.getElementById('game-panel');
+            const resultsPanel = document.getElementById('results-panel');
+            
+            if (resultsPanel.classList.contains('active')) {
+                resultsPanel.classList.remove('active');
+                gamePanel.style.display = 'block';
+            } else {
+                resultsPanel.classList.add('active');
+                gamePanel.style.display = 'none';
+                updateResultsDisplay();
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            resetGame();
+            updateResultsDisplay();
+        });
+
+        // Informações sobre o jogo para neuropsicólogos
+        console.log(`
+        🧠 JOGO ENCONTRE OS ANIMAIS ESCONDIDOS - DESENVOLVIMENTO INFANTIL
+        
+        FUNÇÕES COGNITIVAS ESTIMULADAS:
+        • Atenção Seletiva: Capacidade de focar em estímulos específicos
+        • Atenção Sustentada: Manutenção do foco por períodos prolongados
+        • Discriminação Visual: Diferenciação entre estímulos similares
+        • Velocidade de Processamento: Rapidez na identificação e resposta
+        • Controle Inibitório: Resistir a cliques em alvos incorretos
+        • Flexibilidade Cognitiva: Adaptação a novos alvos a cada nível
+        
+        BENEFÍCIOS TERAPÊUTICOS:
+        • Fortalece redes atencionais do córtex parietal
+        • Melhora capacidade de concentração em tarefas
+        • Desenvolve habilidades de busca visual sistemática
+        • Estimula a coordenação visomotora
+        • Aumenta tolerância à frustração e persistência
+        
+        SISTEMA DE REGISTRO:
+        • Salva automaticamente resultados no navegador
+        • Registra pontuação, nível alcançado e duração
+        • Mantém histórico dos últimos 50 jogos
+        • Calcula estatísticas de desempenho e taxa de conclusão
+        • Permite acompanhamento da evolução
+        
+        PROGRESSÃO DE FASES:
+        • 10 fases com dificuldade crescente
+        • Visualizador de progresso (X/10)
+        • Bônus de tempo a cada nível
+        • Feedback visual e sonoro
+        
+        IDADE RECOMENDADA: 4-10 anos
+        DURAÇÃO SUGERIDA: 10-15 minutos por sessão
+        PROGRESSÃO: Aumenta complexidade automaticamente por nível
+        `);
+    </script>
+</body>
+</html>
+
