@@ -1168,7 +1168,7 @@ class EmissariesGameEngine {
             // Zera a experiência para não acumular infinitamente
             this.gameState.player.experience = 0;
         }
-        
+        this.updateHud();
         // Atualiza o HUD para mostrar o novo nível (se você tiver um campo para isso)
         // Ex: document.getElementById('hud-level').textContent = `Nível ${this.gameState.player.level}`;
     }
