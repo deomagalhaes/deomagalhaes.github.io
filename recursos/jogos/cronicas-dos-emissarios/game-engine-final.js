@@ -142,8 +142,6 @@ class EmissariesGameEngine {
         this.setupMinigame();
         this.setupInventory();
 
-        // >>> NOVA LINHA: Inicia a música tema do menu <<<
-        this.audioManager.playMusic('menu_theme');
         
         console.log('✅ Jogo inicializado com sucesso!');
     }
@@ -186,6 +184,7 @@ class EmissariesGameEngine {
         if (this.DOM.dialogue.backButton) {
             this.DOM.dialogue.backButton.onclick = () => {
                 this.audioManager.playSfx('click');
+                this.audioManager.playMusic('menu_theme');
                 this.showScreen('world');
             };
         }
@@ -717,20 +716,30 @@ class EmissariesGameEngine {
                         this.DOM.dialogue.options.appendChild(button);
                     }
                 });
+// VERSÃO CORRIGIDA
             } else {
+                // Se for um nó final (sem opções de diálogo)
                 if (node.reward) {
+                    // Se o nó final tem uma recompensa, a missão está completa.
                     this.completeQuest(this.currentDialogue.questId);
+                    
+                    // CRUCIAL: Redesenha a cena atual para refletir as mudanças (novo local, checkmark no NPC).
+                    this.renderScene(this.gameState.currentScene); 
+                    this.showScreen('world'); // Mostra a tela do mundo já atualizada.
+
                 } else {
+                    // Se for um nó final sem recompensa (um diálogo simples que termina).
                     const button = document.createElement('button');
                     button.textContent = 'Continuar';
                     button.className = 'dialogue-option text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700';
                     button.onclick = () => {
                         this.audioManager.playSfx('click');
-                        this.showScreen('world');
+                        this.showScreen('world'); // Aqui está correto, pois nada mudou no estado do mundo.
                     };
                     this.DOM.dialogue.options.appendChild(button);
                 }
             }
+
         }
     }
 

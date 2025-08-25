@@ -1324,8 +1324,8 @@ const GAME_DATA = {
     // ===== ÁUDIO E MÚSICA =====
     audio: {
         backgroundMusic: {
-            menu_theme: "https://www.bensound.com/bensound-music/bensound-celtic.mp3",
-            village_theme: "https://www.bensound.com/bensound-music/bensound-celtic.mp3",
+            menu_theme: "https://pixabay.com/pt/music/irlanda-medieval-music-irish-celtic-ireland-knight-king-queen-background-311693/",
+            village_theme: "https://pixabay.com/pt/music/irlanda-medieval-music-irish-celtic-ireland-knight-king-queen-background-311693/",
             forest_theme: "https://www.bensound.com/bensound-music/bensound-relaxing.mp3",
             market_theme: "https://www.bensound.com/bensound-music/bensound-jazzyfrenchy.mp3",
             mountain_theme: "https://www.bensound.com/bensound-music/bensound-epic.mp3",

@@ -1884,5 +1884,70 @@ main > section.contact-section-home:not(.hero) {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
+/* --- Estilos para o Bloco de Formas de Pagamento --- */
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.payment-method-card {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 25px;
+    text-align: center;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.payment-method-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.payment-method-card .payment-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-icon-bg);
+}
+
+.payment-method-card .payment-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--primary-vibrant-blue);
+}
+
+/* Cores específicas para ícones */
+.payment-method-card .payment-icon.pix { background-color: #e0f2f1; color: #26a69a; }
+.payment-method-card .payment-icon.cash { background-color: #e8f5e9; color: #66bb6a; }
+.payment-method-card .payment-icon.card { background-color: #fff3e0; color: #ffa726; }
+.payment-method-card .payment-icon.crypto { background-color: #f3e5f5; color: #ab47bc; }
+
+.payment-method-card .payment-icon.pix svg,
+.payment-method-card .payment-icon.cash svg,
+.payment-method-card .payment-icon.card svg,
+.payment-method-card .payment-icon.crypto svg {
+    color: inherit; /* Herda a cor do container pai */
+}
+
+
+.payment-method-card h3 {
+    font-size: 1.2em;
+    color: var(--primary-dark-blue);
+    margin: 0 0 5px 0;
+}
+
+.payment-method-card p {
+    font-size: 0.9em;
+    color: var(--text-color-light);
+    margin: 0;
+}
+
 
 /* --- Fim do CSS --- */
