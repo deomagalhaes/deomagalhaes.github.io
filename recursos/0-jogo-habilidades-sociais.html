@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventuras Sociais – Jogo Educativo</title>
+    <meta name="description" content="Jogo interativo para desenvolvimento de habilidades sociais em crianças de 6 a 13 anos.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Container principal do jogo */
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 95, 115, 0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            margin: 2rem auto;
+        }
+
+        .game-title {
+            color: #005f73;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .game-subtitle {
+            color: #007f8f;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* Barra de progresso e informações */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .level-info {
+            background: linear-gradient(135deg, #005f73, #007f8f);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+        }
+
+        .score-info {
+            background: linear-gradient(135deg, #007f8f, #0a9396);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.3);
+        }
+
+        .progress-bar {
+            flex: 1;
+            min-width: 200px;
+            margin: 0 20px;
+        }
+
+        .progress-container {
+            background: #e2e8f0;
+            border-radius: 15px;
+            height: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            height: 100%;
+            width: 10%;
+            transition: width 0.5s ease;
+            border-radius: 15px;
+        }
+
+        .progress-text {
+            margin-top: 5px;
+            color: #005f73;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Área principal do jogo */
+        .game-scene {
+            background: linear-gradient(135deg, #f9f6ee, #fff);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 2px solid #e0dcd1;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .character-container {
+            margin-bottom: 30px;
+        }
+
+        .character {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .character:hover {
+            transform: scale(1.05);
+        }
+
+        .emotion-indicator {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #005f73;
+            border: 2px solid #007f8f;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Área de narrativa */
+        .story-text {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #2d3748;
+            margin-bottom: 30px;
+            border-left: 5px solid #007f8f;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+
+        /* Opções de escolha */
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .choice-button {
+            background: linear-gradient(135deg, #005f73, #007f8f);
+            color: white;
+            border: none;
+            padding: 20px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 95, 115, 0.3);
+            background: linear-gradient(135deg, #007f8f, #0a9396);
+        }
+
+        .choice-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Feedback e resultados */
+        .feedback-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #22c55e;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-container.positive {
+            border-color: #22c55e;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(74, 222, 128, 0.1));
+        }
+
+        .feedback-container.neutral {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+        }
+
+        .feedback-container.negative {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(248, 113, 113, 0.1));
+        }
+
+        .feedback-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #005f73;
+        }
+
+        .feedback-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .points-earned {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        /* Controles do jogo */
+        .game-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #005f73, #007f8f);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.2);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #007f8f, #0a9396);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.3);
+        }
+
+        .control-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .control-btn.secondary {
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+        }
+
+        .control-btn.secondary:hover {
+            background: linear-gradient(135deg, #4b5563, #6b7280);
+        }
+
+        /* Painel de estatísticas */
+        .stats-panel {
+            background: #f9f6ee;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid #e0dcd1;
+        }
+
+        .stats-title {
+            color: #005f73;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #007f8f, #0a9396);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Celebração */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .celebration.show {
+            display: flex;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            animation: celebrate 0.5s ease-out;
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        /* Animações */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+                margin: 1rem;
+            }
+
+            .game-title {
+                font-size: 2em;
+            }
+
+            .game-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .progress-bar {
+                margin: 15px 0;
+            }
+
+            .game-scene {
+                padding: 25px;
+                min-height: 300px;
+            }
+
+            .character {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5em;
+            }
+
+            .story-text {
+                font-size: 1.1em;
+                padding: 20px;
+            }
+
+            .choice-button {
+                padding: 18px 25px;
+                font-size: 1em;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 1.8em;
+            }
+
+            .level-info, .score-info {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            .game-scene {
+                padding: 20px;
+            }
+
+            .character {
+                width: 80px;
+                height: 80px;
+                font-size: 2em;
+            }
+
+            .story-text {
+                font-size: 1em;
+                padding: 15px;
+            }
+
+            .choice-button {
+                padding: 15px 20px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-container">
+            <h1 class="game-title">🌟 Aventuras Sociais</h1>
+            <p class="game-subtitle">Desenvolva suas habilidades sociais através de aventuras interativas!</p>
+            
+            <!-- Cabeçalho do jogo com informações -->
+            <div class="game-header">
+                <div class="level-info" id="levelInfo">Nível 1/10</div>
+                <div class="progress-bar">
+                    <div class="progress-container">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Progresso: 10%</div>
+                </div>
+                <div class="score-info" id="scoreInfo">Pontos: 0</div>
+            </div>
+            
+            <!-- Área principal do jogo -->
+            <div class="game-scene" id="gameScene">
+                <div class="character-container">
+                    <div class="character" id="character">😊</div>
+                    <div class="emotion-indicator" id="emotionIndicator">Feliz</div>
+                </div>
+                
+                <div class="story-text" id="storyText">
+                    Bem-vindo às Aventuras Sociais! Você está pronto para uma jornada incrível onde vai aprender a lidar com diferentes situações sociais? Clique em "Iniciar Aventura" para começar!
+                </div>
+                
+                <div class="choices-container" id="choicesContainer">
+                    <!-- Opções de escolha serão inseridas aqui pelo JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Container de feedback -->
+            <div class="feedback-container" id="feedbackContainer">
+                <div class="feedback-title" id="feedbackTitle"></div>
+                <div class="feedback-text" id="feedbackText"></div>
+                <div class="points-earned" id="pointsEarned"></div>
+            </div>
+            
+            <!-- Controles do jogo -->
+            <div class="game-controls">
+                <button class="control-btn" id="startBtn" onclick="startGame()">Iniciar Aventura</button>
+                <button class="control-btn secondary" id="resetBtn" onclick="resetGame()">Reiniciar</button>
+                <button class="control-btn secondary" id="pauseBtn" onclick="pauseGame()" disabled>Pausar</button>
+            </div>
+
+            <!-- Painel de estatísticas -->
+            <div class="stats-panel" id="statsPanel">
+                <h3 class="stats-title">📊 Suas Conquistas</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalLevels">0</div>
+                        <div class="stat-label">Níveis Completos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="bestScore">0</div>
+                        <div class="stat-label">Melhor Pontuação</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalChoices">0</div>
+                        <div class="stat-label">Escolhas Feitas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="skillsLearned">0</div>
+                        <div class="stat-label">Habilidades Aprendidas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Celebração -->
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2 style="color: #22c55e; margin-bottom: 20px;">🎉 Parabéns!</h2>
+            <p style="font-size: 1.2em; color: #4a5568;" id="celebrationText"></p>
+            <button class="control-btn" onclick="hideCelebration()" style="margin-top: 20px;">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        class AventurasSociais {
+            constructor() {
+                this.currentLevel = 1;
+                this.maxLevels = 10;
+                this.score = 0;
+                this.totalChoices = 0;
+                this.skillsLearned = 0;
+                this.gameStarted = false;
+                this.isPaused = false;
+                this.currentScenario = null;
+                
+                // Elementos DOM
+                this.elements = {
+                    levelInfo: document.getElementById('levelInfo'),
+                    progressFill: document.getElementById('progressFill'),
+                    progressText: document.getElementById('progressText'),
+                    scoreInfo: document.getElementById('scoreInfo'),
+                    character: document.getElementById('character'),
+                    emotionIndicator: document.getElementById('emotionIndicator'),
+                    storyText: document.getElementById('storyText'),
+                    choicesContainer: document.getElementById('choicesContainer'),
+                    feedbackContainer: document.getElementById('feedbackContainer'),
+                    feedbackTitle: document.getElementById('feedbackTitle'),
+                    feedbackText: document.getElementById('feedbackText'),
+                    pointsEarned: document.getElementById('pointsEarned'),
+                    startBtn: document.getElementById('startBtn'),
+                    resetBtn: document.getElementById('resetBtn'),
+                    pauseBtn: document.getElementById('pauseBtn'),
+                    celebration: document.getElementById('celebration'),
+                    celebrationText: document.getElementById('celebrationText')
+                };
+                
+                this.initializeGame();
+                this.loadStats();
+            }
+            
+            initializeGame() {
+                this.updateDisplay();
+                this.updateStats();
+            }
+            
+            // Cenários do jogo organizados por nível
+            getScenarios() {
+                return {
+                    1: {
+                        title: "O Brinquedo Perdido",
+                        character: "😊",
+                        emotion: "Curioso",
+                        story: "Você está brincando no parque quando vê uma criança chorando porque perdeu seu brinquedo favorito. O que você faz?",
+                        choices: [
+                            {
+                                text: "Pergunto se posso ajudar a procurar o brinquedo",
+                                points: 10,
+                                feedback: "Excelente! Você mostrou empatia e vontade de ajudar. Isso é uma habilidade social muito importante!",
+                                emotion: "😊",
+                                emotionText: "Empático",
+                                type: "positive"
+                            },
+                            {
+                                text: "Ignoro e continuo brincando",
+                                points: 2,
+                                feedback: "Hmm, você pode fazer melhor! Quando vemos alguém triste, é importante mostrar que nos importamos.",
+                                emotion: "😐",
+                                emotionText: "Indiferente",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Ofereço meu próprio brinquedo para ela brincar",
+                                points: 8,
+                                feedback: "Que gentil! Compartilhar é uma atitude muito bonita, mas também podemos ajudar de outras formas.",
+                                emotion: "😊",
+                                emotionText: "Generoso",
+                                type: "positive"
+                            }
+                        ]
+                    },
+                    2: {
+                        title: "A Discussão na Escola",
+                        character: "😟",
+                        emotion: "Preocupado",
+                        story: "Dois colegas estão brigando no recreio por causa de um jogo. Eles estão gritando um com o outro. Como você reage?",
+                        choices: [
+                            {
+                                text: "Chamo um professor para ajudar",
+                                points: 9,
+                                feedback: "Boa escolha! Às vezes precisamos da ajuda de um adulto para resolver conflitos maiores.",
+                                emotion: "😌",
+                                emotionText: "Responsável",
+                                type: "positive"
+                            },
+                            {
+                                text: "Tento conversar com eles para se acalmarem",
+                                points: 10,
+                                feedback: "Perfeito! Você tentou mediar o conflito de forma pacífica. Essa é uma habilidade muito valiosa!",
+                                emotion: "😊",
+                                emotionText: "Pacificador",
+                                type: "positive"
+                            },
+                            {
+                                text: "Me afasto para não me envolver",
+                                points: 4,
+                                feedback: "É natural querer evitar conflitos, mas às vezes podemos ajudar nossos amigos a se entenderem melhor.",
+                                emotion: "😐",
+                                emotionText: "Cauteloso",
+                                type: "neutral"
+                            }
+                        ]
+                    },
+                    3: {
+                        title: "O Grupo Fechado",
+                        character: "😔",
+                        emotion: "Excluído",
+                        story: "Você quer participar de um jogo, mas o grupo diz que já tem pessoas demais. Você se sente excluído. O que faz?",
+                        choices: [
+                            {
+                                text: "Pergunto se posso esperar para entrar no próximo jogo",
+                                points: 10,
+                                feedback: "Excelente! Você foi educado e mostrou paciência. Essa é uma ótima forma de lidar com a situação!",
+                                emotion: "😊",
+                                emotionText: "Paciente",
+                                type: "positive"
+                            },
+                            {
+                                text: "Fico bravo e vou embora",
+                                points: 3,
+                                feedback: "É normal ficar chateado, mas reagir com raiva pode afastar os amigos. Que tal tentar uma abordagem mais calma?",
+                                emotion: "😠",
+                                emotionText: "Irritado",
+                                type: "negative"
+                            },
+                            {
+                                text: "Sugiro um jogo diferente que todos possam participar",
+                                points: 12,
+                                feedback: "Fantástico! Você transformou um problema em uma oportunidade para incluir todos. Isso é liderança!",
+                                emotion: "😄",
+                                emotionText: "Criativo",
+                                type: "positive"
+                            }
+                        ]
+                    },
+                    4: {
+                        title: "O Colega Novo",
+                        character: "😐",
+                        emotion: "Observador",
+                        story: "Um colega novo chegou na sua turma e está sentado sozinho no recreio. Ele parece tímido e não conhece ninguém. O que você faz?",
+                        choices: [
+                            {
+                                text: "Vou até ele e me apresento, perguntando se quer brincar",
+                                points: 12,
+                                feedback: "Perfeito! Você mostrou iniciativa e acolhimento. Fazer novos amigos se sentirem bem-vindos é uma habilidade social incrível!",
+                                emotion: "😊",
+                                emotionText: "Acolhedor",
+                                type: "positive"
+                            },
+                            {
+                                text: "Espero ele vir falar comigo primeiro",
+                                points: 4,
+                                feedback: "Às vezes é bom dar o primeiro passo! Pessoas tímidas podem precisar de um convite para se sentirem incluídas.",
+                                emotion: "😐",
+                                emotionText: "Passivo",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Chamo meus amigos para conhecê-lo também",
+                                points: 11,
+                                feedback: "Excelente ideia! Apresentar o colega novo para seu grupo de amigos mostra liderança e inclusão!",
+                                emotion: "😄",
+                                emotionText: "Inclusivo",
+                                type: "positive"
+                            }
+                        ]
+                    },
+                    5: {
+                        title: "A Mentira do Amigo",
+                        character: "😕",
+                        emotion: "Confuso",
+                        story: "Seu melhor amigo contou uma mentira para o professor sobre por que não fez a lição de casa. Você sabe a verdade. O que você faz?",
+                        choices: [
+                            {
+                                text: "Converso com meu amigo em particular sobre a importância da honestidade",
+                                points: 12,
+                                feedback: "Excelente! Você escolheu ajudar seu amigo a crescer sem expô-lo. Isso mostra maturidade e lealdade verdadeira!",
+                                emotion: "😌",
+                                emotionText: "Sábio",
+                                type: "positive"
+                            },
+                            {
+                                text: "Conto para o professor imediatamente",
+                                points: 5,
+                                feedback: "A honestidade é importante, mas conversar primeiro com o amigo pode ser uma abordagem mais gentil e eficaz.",
+                                emotion: "😐",
+                                emotionText: "Honesto",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Finjo que não sei de nada",
+                                points: 3,
+                                feedback: "Ignorar não resolve o problema. Às vezes precisamos ajudar nossos amigos a fazer as escolhas certas.",
+                                emotion: "😔",
+                                emotionText: "Omisso",
+                                type: "negative"
+                            }
+                        ]
+                    },
+                    6: {
+                        title: "O Erro na Apresentação",
+                        character: "😰",
+                        emotion: "Nervoso",
+                        story: "Durante uma apresentação em grupo, um colega comete um erro e fica muito envergonhado. Todos estão olhando. Como você reage?",
+                        choices: [
+                            {
+                                text: "Ajudo a corrigir o erro de forma discreta e continuo a apresentação",
+                                points: 12,
+                                feedback: "Perfeito! Você mostrou apoio ao colega sem chamar atenção para o erro. Isso é trabalho em equipe exemplar!",
+                                emotion: "😊",
+                                emotionText: "Solidário",
+                                type: "positive"
+                            },
+                            {
+                                text: "Faço uma piada para quebrar o clima tenso",
+                                points: 7,
+                                feedback: "Humor pode ajudar, mas é importante ter cuidado para não piorar a situação do colega. Apoio direto é melhor!",
+                                emotion: "😅",
+                                emotionText: "Descontraído",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Continuo como se nada tivesse acontecido",
+                                points: 4,
+                                feedback: "Ignorar pode não ser a melhor opção. Seu colega pode precisar de apoio neste momento difícil.",
+                                emotion: "😐",
+                                emotionText: "Indiferente",
+                                type: "neutral"
+                            }
+                        ]
+                    },
+                    7: {
+                        title: "A Fofoca na Escola",
+                        character: "🤔",
+                        emotion: "Pensativo",
+                        story: "Alguns colegas estão espalhando uma fofoca sobre outro estudante que não está presente. Eles querem que você participe da conversa. O que você faz?",
+                        choices: [
+                            {
+                                text: "Digo que não acho certo falar de alguém que não está aqui para se defender",
+                                points: 12,
+                                feedback: "Excelente! Você mostrou integridade e defendeu o que é certo. Isso é coragem moral!",
+                                emotion: "😌",
+                                emotionText: "Íntegro",
+                                type: "positive"
+                            },
+                            {
+                                text: "Mudo de assunto para algo mais positivo",
+                                points: 9,
+                                feedback: "Boa estratégia! Desviar para algo positivo ajuda a parar a fofoca sem criar conflito direto.",
+                                emotion: "😊",
+                                emotionText: "Diplomático",
+                                type: "positive"
+                            },
+                            {
+                                text: "Escuto mas não participo ativamente",
+                                points: 4,
+                                feedback: "Não participar é bom, mas você pode fazer mais! Às vezes precisamos ter coragem de parar comportamentos prejudiciais.",
+                                emotion: "😐",
+                                emotionText: "Passivo",
+                                type: "neutral"
+                            }
+                        ]
+                    },
+                    8: {
+                        title: "A Competição Injusta",
+                        character: "😤",
+                        emotion: "Indignado",
+                        story: "Durante um jogo, você percebe que um colega está trapaceando para ganhar. Ninguém mais notou ainda. Como você lida com isso?",
+                        choices: [
+                            {
+                                text: "Converso com ele discretamente pedindo para jogar de forma justa",
+                                points: 11,
+                                feedback: "Excelente abordagem! Você deu uma chance para ele corrigir o comportamento sem expô-lo publicamente.",
+                                emotion: "😌",
+                                emotionText: "Justo",
+                                type: "positive"
+                            },
+                            {
+                                text: "Chamo a atenção de todos para a trapaça",
+                                points: 6,
+                                feedback: "A honestidade é importante, mas uma abordagem mais discreta pode ser mais eficaz e menos constrangedora.",
+                                emotion: "😠",
+                                emotionText: "Direto",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Começo a trapacear também para igualar o jogo",
+                                points: 2,
+                                feedback: "Duas trapaças não fazem um jogo justo! É melhor resolver o problema de forma honesta e construtiva.",
+                                emotion: "😔",
+                                emotionText: "Confuso",
+                                type: "negative"
+                            }
+                        ]
+                    },
+                    9: {
+                        title: "O Amigo Triste",
+                        character: "😢",
+                        emotion: "Preocupado",
+                        story: "Seu amigo está muito triste porque os pais dele estão se divorciando. Ele não quer falar sobre isso, mas você vê que ele precisa de apoio. O que você faz?",
+                        choices: [
+                            {
+                                text: "Fico por perto, mostro que me importo e espero ele se sentir pronto para conversar",
+                                points: 12,
+                                feedback: "Perfeito! Você respeitou o espaço dele enquanto mostrava apoio. Isso é sensibilidade emocional excepcional!",
+                                emotion: "😊",
+                                emotionText: "Compreensivo",
+                                type: "positive"
+                            },
+                            {
+                                text: "Insisto para ele me contar o que está acontecendo",
+                                points: 4,
+                                feedback: "Sua preocupação é genuína, mas às vezes as pessoas precisam de tempo. Respeitar o ritmo dos outros é importante.",
+                                emotion: "😐",
+                                emotionText: "Insistente",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Faço coisas divertidas para distraí-lo da tristeza",
+                                points: 8,
+                                feedback: "Tentar alegrar é gentil, mas às vezes as pessoas precisam sentir suas emoções. Apoio silencioso pode ser melhor.",
+                                emotion: "😊",
+                                emotionText: "Carinhoso",
+                                type: "positive"
+                            }
+                        ]
+                    },
+                    10: {
+                        title: "A Grande Decisão",
+                        character: "🤯",
+                        emotion: "Determinado",
+                        story: "É o último dia de aula e você precisa escolher como quer ser lembrado pelos colegas. Que tipo de pessoa você quer ser conhecido por ter sido?",
+                        choices: [
+                            {
+                                text: "Alguém que sempre ajudou os outros e foi um bom amigo",
+                                points: 15,
+                                feedback: "Incrível! Você escolheu ser lembrado pelas qualidades que realmente importam. Ser um bom amigo é o maior presente que podemos dar!",
+                                emotion: "😇",
+                                emotionText: "Inspirador",
+                                type: "positive"
+                            },
+                            {
+                                text: "Alguém que foi popular e divertido",
+                                points: 8,
+                                feedback: "Ser divertido é ótimo, mas as amizades mais duradouras são baseadas em confiança, bondade e apoio mútuo.",
+                                emotion: "😄",
+                                emotionText: "Popular",
+                                type: "neutral"
+                            },
+                            {
+                                text: "Alguém que defendeu o que é certo, mesmo quando foi difícil",
+                                points: 14,
+                                feedback: "Fantástico! Ter coragem moral e defender seus valores é uma das qualidades mais admiráveis que alguém pode ter!",
+                                emotion: "😌",
+                                emotionText: "Corajoso",
+                                type: "positive"
+                            }
+                        ]
+                    }
+                };
+            }
+            
+            startGame() {
+                this.gameStarted = true;
+                this.currentLevel = 1;
+                this.score = 0;
+                this.totalChoices = 0;
+                this.skillsLearned = 0;
+                this.isPaused = false;
+                
+                this.updateDisplay();
+                this.updateButtons();
+                this.hideFeedback();
+                
+                this.showCelebration("🚀 Bem-vindo às Aventuras Sociais! Prepare-se para desenvolver suas habilidades sociais através de situações do dia a dia!");
+                
+                setTimeout(() => {
+                    this.hideCelebration();
+                    this.loadLevel(this.currentLevel);
+                }, 3000);
+            }
+            
+            loadLevel(level) {
+                const scenarios = this.getScenarios();
+                this.currentScenario = scenarios[level];
+                
+                if (!this.currentScenario) {
+                    this.completeGame();
+                    return;
+                }
+                
+                // Atualizar personagem e emoção
+                this.elements.character.textContent = this.currentScenario.character;
+                this.elements.emotionIndicator.textContent = this.currentScenario.emotion;
+                
+                // Mostrar história
+                this.elements.storyText.innerHTML = `<strong>${this.currentScenario.title}</strong><br><br>${this.currentScenario.story}`;
+                
+                // Criar botões de escolha
+                this.createChoiceButtons(this.currentScenario.choices);
+                
+                this.updateDisplay();
+                this.hideFeedback();
+            }
+            
+            createChoiceButtons(choices) {
+                this.elements.choicesContainer.innerHTML = '';
+                
+                choices.forEach((choice, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'choice-button';
+                    button.textContent = choice.text;
+                    button.onclick = () => this.makeChoice(choice);
+                    
+                    this.elements.choicesContainer.appendChild(button);
+                });
+            }
+            
+            makeChoice(choice) {
+                this.totalChoices++;
+                this.score += choice.points;
+                
+                // Atualizar personagem baseado na escolha
+                this.elements.character.textContent = choice.emotion;
+                this.elements.emotionIndicator.textContent = choice.emotionText;
+                
+                // Mostrar feedback
+                this.showFeedback(choice);
+                
+                // Remover botões de escolha
+                this.elements.choicesContainer.innerHTML = '';
+                
+                // Adicionar botão para próximo nível
+                const nextButton = document.createElement('button');
+                nextButton.className = 'choice-button';
+                nextButton.textContent = this.currentLevel < this.maxLevels ? 'Próxima Aventura →' : 'Ver Resultado Final';
+                nextButton.onclick = () => this.nextLevel();
+                
+                this.elements.choicesContainer.appendChild(nextButton);
+                
+                this.updateDisplay();
+                this.playSound(choice.type);
+                
+                // Incrementar habilidades aprendidas para escolhas positivas
+                if (choice.type === 'positive') {
+                    this.skillsLearned++;
+                }
+            }
+            
+            showFeedback(choice) {
+                this.elements.feedbackTitle.textContent = this.getFeedbackTitle(choice.type);
+                this.elements.feedbackText.textContent = choice.feedback;
+                this.elements.pointsEarned.textContent = `+${choice.points} pontos`;
+                
+                this.elements.feedbackContainer.className = `feedback-container show ${choice.type}`;
+            }
+            
+            hideFeedback() {
+                this.elements.feedbackContainer.classList.remove('show');
+            }
+            
+            getFeedbackTitle(type) {
+                const titles = {
+                    positive: '🌟 Excelente Escolha!',
+                    neutral: '🤔 Boa Tentativa!',
+                    negative: '💭 Vamos Refletir...'
+                };
+                return titles[type] || '💭 Continue Aprendendo!';
+            }
+            
+            nextLevel() {
+                this.hideFeedback();
+                
+                if (this.currentLevel < this.maxLevels) {
+                    this.playSound('level_complete');
+                    this.currentLevel++;
+                    this.loadLevel(this.currentLevel);
+                } else {
+                    this.completeGame();
+                }
+            }
+            
+            completeGame() {
+                this.gameStarted = false;
+                this.saveStats();
+                
+                const finalScore = this.score;
+                const maxPossibleScore = this.maxLevels * 18;
+                const percentage = Math.round((finalScore / maxPossibleScore) * 100);
+                
+                let message = `🎉 Parabéns! Você completou todas as aventuras!\n\n`;
+                message += `📊 Sua pontuação: ${finalScore} pontos (${percentage}%)\n`;
+                message += `🎯 Níveis completados: ${this.maxLevels}\n`;
+                message += `🧠 Habilidades desenvolvidas: ${this.skillsLearned}\n\n`;
+                
+                if (percentage >= 90) {
+                    message += `🏆 Desempenho EXCEPCIONAL! Você é um mestre das habilidades sociais!`;
+                } else if (percentage >= 75) {
+                    message += `⭐ Desempenho EXCELENTE! Você tem ótimas habilidades sociais!`;
+                } else if (percentage >= 60) {
+                    message += `👍 Desempenho BOM! Continue praticando suas habilidades sociais!`;
+                } else {
+                    message += `🌱 Continue aprendendo! Cada aventura é uma oportunidade de crescer!`;
+                }
+                
+                this.elements.storyText.innerHTML = message.replace(/\n/g, '<br>');
+                this.elements.choicesContainer.innerHTML = '';
+                
+                // Botão para jogar novamente
+                const playAgainButton = document.createElement('button');
+                playAgainButton.className = 'choice-button';
+                playAgainButton.textContent = '🔄 Jogar Novamente';
+                playAgainButton.onclick = () => this.startGame();
+                
+                this.elements.choicesContainer.appendChild(playAgainButton);
+                
+                this.updateButtons();
+                this.updateStats();
+                
+                this.showCelebration(message);
+            }
+            
+            resetGame() {
+                this.gameStarted = false;
+                this.currentLevel = 1;
+                this.score = 0;
+                this.totalChoices = 0;
+                this.isPaused = false;
+                
+                this.elements.character.textContent = '😊';
+                this.elements.emotionIndicator.textContent = 'Feliz';
+                this.elements.storyText.textContent = 'Bem-vindo às Aventuras Sociais! Você está pronto para uma jornada incrível onde vai aprender a lidar com diferentes situações sociais? Clique em "Iniciar Aventura" para começar!';
+                this.elements.choicesContainer.innerHTML = '';
+                
+                this.updateDisplay();
+                this.updateButtons();
+                this.hideFeedback();
+            }
+            
+            pauseGame() {
+                this.isPaused = !this.isPaused;
+                this.updateButtons();
+                
+                if (this.isPaused) {
+                    this.showCelebration("⏸️ Jogo pausado! Clique em 'Continuar' quando estiver pronto.");
+                } else {
+                    this.hideCelebration();
+                }
+            }
+            
+            updateDisplay() {
+                this.elements.levelInfo.textContent = `Nível ${this.currentLevel}/${this.maxLevels}`;
+                this.elements.scoreInfo.textContent = `Pontos: ${this.score}`;
+                
+                const progress = (this.currentLevel / this.maxLevels) * 100;
+                this.elements.progressFill.style.width = `${progress}%`;
+                this.elements.progressText.textContent = `Progresso: ${Math.round(progress)}%`;
+            }
+            
+            updateButtons() {
+                this.elements.startBtn.disabled = this.gameStarted;
+                this.elements.pauseBtn.disabled = !this.gameStarted;
+                this.elements.pauseBtn.textContent = this.isPaused ? 'Continuar' : 'Pausar';
+            }
+            
+            updateStats() {
+                const stats = this.loadStats();
+                
+                document.getElementById('totalLevels').textContent = Math.max(this.currentLevel - 1, stats.totalLevels || 0);
+                document.getElementById('bestScore').textContent = Math.max(this.score, stats.bestScore || 0);
+                document.getElementById('totalChoices').textContent = this.totalChoices + (stats.totalChoices || 0);
+                document.getElementById('skillsLearned').textContent = Math.max(this.skillsLearned, stats.skillsLearned || 0);
+            }
+            
+            saveStats() {
+                const currentStats = this.loadStats();
+                const newStats = {
+                    totalLevels: Math.max(this.currentLevel, currentStats.totalLevels || 0),
+                    bestScore: Math.max(this.score, currentStats.bestScore || 0),
+                    totalChoices: this.totalChoices + (currentStats.totalChoices || 0),
+                    skillsLearned: Math.max(this.skillsLearned, currentStats.skillsLearned || 0),
+                    gamesPlayed: (currentStats.gamesPlayed || 0) + 1,
+                    lastPlayed: new Date().toISOString()
+                };
+                
+                localStorage.setItem('aventurasSociaisStats', JSON.stringify(newStats));
+            }
+            
+            loadStats() {
+                const stats = localStorage.getItem('aventurasSociaisStats');
+                return stats ? JSON.parse(stats) : {};
+            }
+            
+            showCelebration(message) {
+                this.elements.celebrationText.textContent = message;
+                this.elements.celebration.classList.add('show');
+            }
+            
+            hideCelebration() {
+                this.elements.celebration.classList.remove('show');
+            }
+            
+            playSound(type) {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    if (type === 'positive') {
+                        this.playPositiveSound(audioContext);
+                    } else if (type === 'neutral') {
+                        this.playNeutralSound(audioContext);
+                    } else if (type === 'negative') {
+                        this.playNegativeSound(audioContext);
+                    } else if (type === 'level_complete') {
+                        this.playLevelCompleteSound(audioContext);
+                    }
+                } catch (e) {
+                    console.log("Áudio não suportado ou falhou:", e);
+                }
+            }
+            
+            playPositiveSound(audioContext) {
+                const frequencies = [523, 659, 784];
+                frequencies.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime + index * 0.15);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime + index * 0.15);
+                    gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + index * 0.15 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + index * 0.15 + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime + index * 0.15);
+                    oscillator.stop(audioContext.currentTime + index * 0.15 + 0.3);
+                });
+            }
+            
+            playNeutralSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                oscillator.type = 'triangle';
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.4);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.4);
+            }
+            
+            playNegativeSound(audioContext) {
+                const frequencies = [392, 349, 311];
+                frequencies.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime + index * 0.2);
+                    oscillator.type = 'triangle';
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime + index * 0.2);
+                    gainNode.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + index * 0.2 + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + index * 0.2 + 0.5);
+                    
+                    oscillator.start(audioContext.currentTime + index * 0.2);
+                    oscillator.stop(audioContext.currentTime + index * 0.2 + 0.5);
+                });
+            }
+            
+            playLevelCompleteSound(audioContext) {
+                const arpeggio = [261, 329, 392, 523, 659];
+                arpeggio.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime + index * 0.1);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime + index * 0.1);
+                    gainNode.gain.linearRampToValueAtTime(0.12, audioContext.currentTime + index * 0.1 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + index * 0.1 + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime + index * 0.1);
+                    oscillator.stop(audioContext.currentTime + index * 0.1 + 0.3);
+                });
+            }
+        }
+        
+        // Inicializar o jogo quando a página carregar
+        let game;
+        window.addEventListener('load', () => {
+            game = new AventurasSociais();
+        });
+        
+        // Funções globais para os botões
+        function startGame() {
+            game.startGame();
+        }
+        
+        function resetGame() {
+            game.resetGame();
+        }
+        
+        function pauseGame() {
+            game.pauseGame();
+        }
+        
+        function hideCelebration() {
+            game.hideCelebration();
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,742 @@
+/* ===== CRÔNICAS DOS EMISSÁRIOS - ESTILOS CUSTOMIZADOS ===== */
+/* Arquivo CSS adicional para estilos específicos do jogo */
+
+/* ===== VARIÁVEIS CSS PARA FÁCIL CUSTOMIZAÇÃO ===== */
+:root {
+    /* Cores principais do tema */
+    --primary-purple: #8b5cf6;
+    --primary-blue: #3b82f6;
+    --primary-green: #10b981;
+    --primary-gold: #fbbf24;
+    
+    /* Cores de fundo */
+    --bg-dark: #1e293b;
+    --bg-medium: #334155;
+    --bg-light: #475569;
+    
+    /* Cores de texto */
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-accent: #fbbf24;
+    
+    /* Sombras e efeitos */
+    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+    --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.2);
+    --shadow-hard: 0 20px 40px rgba(0, 0, 0, 0.4);
+    
+    /* Transições */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Bordas e raios */
+    --border-radius-small: 0.5rem;
+    --border-radius-medium: 1rem;
+    --border-radius-large: 1.5rem;
+}
+
+/* ===== ESTILOS BASE APRIMORADOS ===== */
+body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+/* ===== EFEITOS DE PARTÍCULAS DE FUNDO ===== */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* ===== TIPOGRAFIA MÁGICA ===== */
+.magical-font {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.medieval-font {
+    font-family: 'MedievalSharp', serif;
+    letter-spacing: 0.02em;
+}
+
+.elegant-font {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.pixel-font {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8em;
+    line-height: 1.4;
+}
+
+/* ===== EFEITOS DE TEXTO MÁGICOS ===== */
+.magical-glow {
+    animation: magicalGlow 3s ease-in-out infinite alternate;
+    text-shadow: 0 0 10px currentColor;
+}
+
+@keyframes magicalGlow {
+    from { 
+        text-shadow: 
+            0 0 10px var(--primary-purple), 
+            0 0 20px var(--primary-purple), 
+            0 0 30px var(--primary-purple);
+        filter: brightness(1);
+    }
+    to { 
+        text-shadow: 
+            0 0 20px var(--primary-blue), 
+            0 0 30px var(--primary-blue), 
+            0 0 40px var(--primary-blue);
+        filter: brightness(1.2);
+    }
+}
+
+.text-shimmer {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b, #d97706, #fbbf24);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* ===== MELHORIAS NO GAME SCREEN ===== */
+.game-screen {
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 
+        var(--shadow-hard),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.game-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.05) 0%, 
+        rgba(59, 130, 246, 0.05) 50%, 
+        rgba(16, 185, 129, 0.05) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.game-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== BOTÕES APRIMORADOS ===== */
+.btn-magical {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-blue) 100%);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-medium);
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-medium);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.btn-magical::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-magical:hover::before {
+    left: 100%;
+}
+
+.btn-magical:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+        0 10px 25px rgba(139, 92, 246, 0.4),
+        0 0 20px rgba(139, 92, 246, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-magical:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ===== CARDS E CONTAINERS APRIMORADOS ===== */
+.scenario-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: var(--border-radius-large);
+    padding: 2rem;
+    transition: all var(--transition-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-purple), var(--primary-blue), var(--primary-green));
+    transform: scaleX(0);
+    transition: transform var(--transition-medium);
+}
+
+.scenario-card:hover::before {
+    transform: scaleX(1);
+}
+
+.scenario-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 
+        0 20px 40px rgba(139, 92, 246, 0.2),
+        0 0 30px rgba(139, 92, 246, 0.1);
+}
+
+/* ===== SISTEMA DE DIÁLOGO APRIMORADO ===== */
+.dialogue-box {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 3px solid var(--primary-blue);
+    border-radius: var(--border-radius-large);
+    padding: 2rem;
+    box-shadow: var(--shadow-hard);
+    position: relative;
+}
+
+.dialogue-box::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 2rem;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid var(--primary-blue);
+}
+
+.dialogue-option {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #4f46e5 100%);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-medium);
+    padding: 1rem 1.5rem;
+    margin: 0.5rem 0;
+    transition: all var(--transition-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.dialogue-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.3s ease;
+}
+
+.dialogue-option:hover::before {
+    left: 100%;
+}
+
+.dialogue-option:hover {
+    transform: translateX(10px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* ===== MINI-GAME APRIMORADO ===== */
+.potion-bottle {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border: 3px solid #cbd5e1;
+    border-radius: var(--border-radius-medium);
+    padding: 1rem;
+    transition: all var(--transition-medium);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.potion-bottle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.potion-bottle:hover::before {
+    transform: translateX(100%);
+}
+
+.potion-bottle:hover {
+    transform: scale(1.1) rotate(5deg);
+    border-color: var(--primary-gold);
+    box-shadow: 
+        0 10px 25px rgba(251, 191, 36, 0.4),
+        0 0 20px rgba(251, 191, 36, 0.2);
+}
+
+.potion-bottle.disabled {
+    filter: grayscale(80%) brightness(0.6);
+    transform: scale(0.9);
+    cursor: not-allowed;
+}
+
+.potion-bottle.disabled:hover {
+    transform: scale(0.9);
+    border-color: #cbd5e1;
+    box-shadow: none;
+}
+
+/* ===== CALDEIRÃO MÁGICO ===== */
+#cauldron {
+    background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+    border: 4px solid var(--primary-purple);
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 
+        inset 0 -20px 40px rgba(0, 0, 0, 0.5),
+        0 10px 30px rgba(139, 92, 246, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+#cauldron::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 60%;
+    background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: cauldronGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes cauldronGlow {
+    from { opacity: 0.3; transform: scale(1); }
+    to { opacity: 0.7; transform: scale(1.1); }
+}
+
+#cauldron-liquid {
+    border-radius: inherit;
+    transition: all 0.8s ease;
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== BOLHAS MÁGICAS ===== */
+.bubble {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 100%);
+    border-radius: 50%;
+    animation: rise 4s infinite ease-in;
+    opacity: 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes rise {
+    0% { 
+        transform: translateY(0) scale(0.5); 
+        opacity: 1; 
+    }
+    50% { 
+        opacity: 0.8; 
+        transform: translateY(-75px) scale(0.8);
+    }
+    100% { 
+        transform: translateY(-150px) scale(1.2); 
+        opacity: 0; 
+    }
+}
+
+/* ===== INVENTÁRIO APRIMORADO ===== */
+.inventory-item {
+    background: linear-gradient(145deg, var(--primary-gold) 0%, #f59e0b 100%);
+    border: 2px solid #d97706;
+    border-radius: var(--border-radius-small);
+    padding: 1rem;
+    transition: all var(--transition-medium);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.inventory-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.inventory-item:hover::before {
+    transform: translateX(100%);
+}
+
+.inventory-item:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+    border-color: #fbbf24;
+}
+
+/* ===== HUD DO JOGADOR ===== */
+#player-hud {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: var(--border-radius-medium);
+    padding: 1rem;
+    transition: all var(--transition-medium);
+}
+
+#player-hud:hover {
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+}
+
+/* ===== SISTEMA DE NOTIFICAÇÕES ===== */
+.notification {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-blue) 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-soft);
+    z-index: 1000;
+    max-width: 300px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.notification.success {
+    background: linear-gradient(135deg, var(--primary-green) 0%, #059669 100%);
+}
+
+.notification.warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.notification.error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* ===== ANIMAÇÕES DE ENTRADA ===== */
+@keyframes slideInRight {
+    from { 
+        transform: translateX(100%); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateX(0); 
+        opacity: 1; 
+    }
+}
+
+@keyframes slideOutRight {
+    from { 
+        transform: translateX(0); 
+        opacity: 1; 
+    }
+    to { 
+        transform: translateX(100%); 
+        opacity: 0; 
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    70% {
+        transform: scale(0.9);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===== RESPONSIVIDADE APRIMORADA ===== */
+@media (max-width: 768px) {
+    .game-screen {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+    
+    .dialogue-box {
+        padding: 1.5rem;
+    }
+    
+    .scenario-card {
+        padding: 1.5rem;
+    }
+    
+    .magical-font {
+        font-size: 0.9em;
+    }
+    
+    .potion-bottle {
+        padding: 0.75rem;
+    }
+    
+    #cauldron {
+        width: 120px !important;
+        height: 100px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-screen {
+        margin: 0.25rem;
+        padding: 0.75rem;
+    }
+    
+    .btn-magical {
+        padding: 0.5rem 1rem;
+        font-size: 0.9em;
+    }
+    
+    .dialogue-option {
+        padding: 0.75rem 1rem;
+        font-size: 0.9em;
+    }
+    
+    .notification {
+        max-width: 250px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9em;
+    }
+}
+
+/* ===== MODO ESCURO APRIMORADO ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-dark: #0f172a;
+        --bg-medium: #1e293b;
+        --bg-light: #334155;
+    }
+}
+
+/* ===== ACESSIBILIDADE ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .magical-glow {
+        animation: none;
+        text-shadow: 0 0 5px currentColor;
+    }
+}
+
+/* ===== ESTADOS DE FOCO PARA ACESSIBILIDADE ===== */
+button:focus,
+.btn-magical:focus,
+.dialogue-option:focus,
+.potion-bottle:focus,
+.inventory-item:focus {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+/* ===== LOADING E ESTADOS ===== */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ===== EFEITOS ESPECIAIS ===== */
+.sparkle {
+    position: relative;
+}
+
+.sparkle::before {
+    content: '✨';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.2em;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { 
+        opacity: 0; 
+        transform: scale(0.5) rotate(0deg); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1) rotate(180deg); 
+    }
+}
+
+/* ===== SCROLLBAR CUSTOMIZADA ===== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .game-screen {
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+        border: 1px solid black !important;
+    }
+    
+    .magical-glow,
+    .text-shimmer {
+        animation: none !important;
+        text-shadow: none !important;
+        color: black !important;
+    }
+}
+
+/* ===== OTIMIZAÇÕES PARA DISPOSITIVOS MÓVEIS ===== */
+
+/* Para telas com largura máxima de 768px (tablets e celulares grandes) */
+@media (max-width: 768px) {
+    /* Diminui o título principal do jogo na tela de início */
+    #start-screen h1 {
+        font-size: 2.5rem; /* Era 3.75rem (text-6xl) */
+        line-height: 1.2;
+    }
+
+    /* Diminui os títulos das telas (Criação de Personagem, etc.) */
+    .game-screen h2 {
+        font-size: 2rem; /* Era 2.25rem (text-4xl) */
+    }
+
+    /* Diminui o emoji da cena para não ocupar tanto espaço */
+    #scene-image {
+        font-size: 4rem; /* Era 4.5rem (text-8xl) */
+    }
+
+    /* Diminui o emoji do NPC no diálogo */
+    #dialogue-npc-sprite {
+        font-size: 3rem; /* Era 3.75rem (text-6xl) */
+    }
+}
+
+/* Para telas com largura máxima de 480px (celulares menores) */
+@media (max-width: 480px) {
+    #start-screen h1 {
+        font-size: 2rem; /* Ainda menor para telas bem pequenas */
+    }
+
+    .game-screen h2 {
+        font-size: 1.75rem; /* text-3xl */
+    }
+
+    /* Ajusta o padding dos botões de ação para não ficarem enormes */
+    .magical-font.py-3 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    .magical-font.px-6 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+/* ===== FIM DO ARQUIVO game-styles.css ===== */
+

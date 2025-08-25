@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crônicas dos Emissários - Protótipo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos do site original mantidos e expandidos */
+        body { font-family: 'Poppins', sans-serif; }
+        .pixel-font { font-family: 'Press Start 2P', cursive; }
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95 ); } to { opacity: 1; transform: scale(1); } }
+
+        /* Estilos do Jogo */
+        .game-screen {
+            width: 100%;
+            max-width: 1024px; /* Aumentado para acomodar layout de RPG */
+            margin: auto;
+            background-color: #334155; /* bg-slate-700 */
+            border-radius: 1.5rem; /* rounded-2xl */
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            padding: 1rem 2rem;
+            border: 4px solid #8b5cf6; /* border-purple-500 */
+        }
+        .dialogue-box {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1f2937; /* text-gray-800 */
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: 4px solid #4b5563; /* border-gray-600 */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+        }
+        .dialogue-option {
+            background-color: #3b82f6; /* bg-blue-500 */
+            transition: background-color 0.2s;
+        }
+        .dialogue-option:hover { background-color: #2563eb; }
+
+        /* Estilos do Mini-game (Fábrica de Emoções) */
+        .potion-bottle { transition: transform 0.2s ease-in-out, filter 0.2s; cursor: pointer; }
+        .potion-bottle:hover { transform: scale(1.1); filter: brightness(1.2); }
+        .potion-bottle.disabled { cursor: not-allowed; filter: grayscale(80%) brightness(0.8); }
+        #cauldron-liquid { transition: all 0.5s ease; }
+        .bubble { position: absolute; background-color: rgba(255, 255, 255, 0.3); border-radius: 50%; animation: rise 4s infinite ease-in; opacity: 0; }
+        @keyframes rise { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-150px); opacity: 0; } }
+    </style>
+</head>
+<body class="bg-slate-800 text-white flex flex-col min-h-screen p-4">
+
+    <!-- CABEÇALHO DO SITE (Idêntico ao modelo) -->
+    <header class="w-full max-w-5xl mx-auto mb-4 text-center">
+        <h1 class="text-3xl sm:text-4xl font-bold text-cyan-400 pixel-font">As Crônicas dos Emissários</h1>
+        <p class="text-slate-300">Uma aventura sobre empatia e compreensão.</p>
+    </header>
+
+    <!-- ÁREA PRINCIPAL DO JOGO -->
+    <main id="game-viewport" class="flex-grow flex items-center justify-center">
+
+        <!-- TELA 1: INÍCIO -->
+        <div id="start-screen" class="text-center fade-in">
+            <div class="text-8xl mb-8">⚔️🛡️❤️</div>
+            <p class="text-xl text-slate-300 mb-8">O reino de Elara precisa de heróis que lutem com palavras, não com espadas.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button id="start-new-game-button" class="pixel-font bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg transition-colors text-xl">Novo Jogo</button>
+                <button id="continue-game-button" class="pixel-font bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-lg transition-colors text-xl hidden">Continuar Aventura</button>
+            </div>
+        </div>
+
+        <!-- TELA 2: CRIAÇÃO DE PERSONAGEM -->
+        <div id="character-creation-screen" class="game-screen hidden">
+            <h2 class="pixel-font text-2xl text-yellow-300 mb-6 text-center">Crie seu Emissário</h2>
+            <div class="flex flex-col items-center gap-6">
+                <div class="w-full">
+                    <label for="player-name" class="pixel-font text-lg mb-2 block">Seu Nome:</label>
+                    <input type="text" id="player-name" class="w-full p-3 rounded bg-slate-800 border-2 border-slate-500 focus:border-cyan-400 outline-none" placeholder="Digite seu nome...">
+                </div>
+                <div class="w-full">
+                    <p class="pixel-font text-lg mb-4">Escolha seu Avatar:</p>
+                    <div id="avatar-selection" class="flex justify-center gap-6 text-6xl">
+                        <div class="p-4 rounded-lg cursor-pointer transition-all duration-200" data-avatar="🧝">🧝</div>
+                        <div class="p-4 rounded-lg cursor-pointer transition-all duration-200" data-avatar="🧙">🧙</div>
+                        <div class="p-4 rounded-lg cursor-pointer transition-all duration-200" data-avatar="🧑‍🚀">🧑‍🚀</div>
+                    </div>
+                </div>
+                <button id="confirm-character-button" class="pixel-font bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg mt-4" disabled>Iniciar Aventura</button>
+            </div>
+        </div>
+
+        <!-- TELA 3: MUNDO DO JOGO (MAPA/CENA) -->
+        <div id="world-screen" class="game-screen hidden">
+            <div class="flex justify-between items-center mb-4">
+                <div id="player-hud" class="flex items-center gap-3">
+                    <span id="hud-avatar" class="text-4xl"></span>
+                    <span id="hud-name" class="pixel-font text-xl"></span>
+                </div>
+                <button id="main-menu-button" class="pixel-font bg-gray-500 hover:bg-gray-600 text-sm py-2 px-4 rounded">Menu</button>
+            </div>
+            <div id="scene-container" class="bg-slate-900/50 rounded-xl p-4 min-h-[400px] border-2 border-slate-600 text-center">
+                <h3 id="scene-title" class="pixel-font text-2xl text-yellow-300 mb-4"></h3>
+                <div id="scene-image" class="text-8xl mb-6"></div>
+                <p id="scene-description" class="text-slate-300 mb-6"></p>
+                <div id="scene-actions" class="flex flex-wrap justify-center gap-4"></div>
+            </div>
+        </div>
+
+        <!-- TELA 4: DIÁLOGO -->
+        <div id="dialogue-screen" class="game-screen hidden">
+             <div id="dialogue-npc-info" class="flex items-center gap-4 mb-4">
+                <div id="dialogue-npc-sprite" class="text-7xl"></div>
+                <h3 id="dialogue-npc-name" class="pixel-font text-3xl text-cyan-400"></h3>
+            </div>
+            <div class="dialogue-box">
+                <p id="dialogue-text" class="text-lg mb-6"></p>
+                <div id="dialogue-options" class="flex flex-col gap-3"></div>
+            </div>
+        </div>
+
+        <!-- TELA 5: MINI-GAME (FÁBRICA DE EMOÇÕES) -->
+        <div id="minigame-screen" class="game-screen hidden">
+            <h2 class="pixel-font text-2xl text-yellow-300 mb-2 text-center">Alquimia Emocional</h2>
+            <p id="minigame-goal" class="text-center text-slate-300 mb-6"></p>
+            <div class="flex flex-col lg:flex-row items-center justify-around gap-6">
+                <div id="potions-container" class="flex justify-center gap-2 sm:gap-3 flex-wrap"></div>
+                <div class="text-center flex-shrink-0">
+                    <div id="cauldron" class="relative w-40 h-32 bg-slate-900 rounded-t-full rounded-b-lg border-4 border-slate-500 overflow-hidden mx-auto">
+                        <div id="cauldron-liquid" class="absolute bottom-0 left-0 w-full h-0 bg-transparent"></div>
+                        <div id="bubbles-container"></div>
+                    </div>
+                    <div class="flex justify-center gap-2 mt-4">
+                        <button id="mix-button" class="pixel-font bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg" disabled>Misturar</button>
+                        <button id="clear-button" class="pixel-font bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" disabled>Limpar</button>
+                    </div>
+                </div>
+            </div>
+            <div id="minigame-result" class="text-center mt-6"></div>
+        </div>
+
+    </main>
+
+    <!-- RODAPÉ DO SITE (Idêntico ao modelo) -->
+    <footer class="w-full max-w-5xl mx-auto mt-4 text-center text-slate-400 text-sm">
+        <p>&copy; 2025 Seu Site. Todos os direitos reservados.</p>
+        <p>Desenvolvido com ❤️ para ensinar habilidades sociais.</p>
+    </footer>
+
+    <!-- Áudio -->
+    <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-click"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/ui/ui_generic_button_click.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-mix"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/items/clarity.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-success"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/ui/ui_reward_reveal_01.mp3" type="audio/mpeg"></audio>
+    <audio id="sfx-failure"><source src="https://cdn.jsdelivr.net/gh/krsnik93/dota-2-sound-effects/sounds/ui/ui_button_disabled.mp3" type="audio/mpeg"></audio>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', ( ) => {
+        // --- CONFIGURAÇÃO E DADOS DO JOGO ---
+        const SAVE_KEY = 'emissariesChroniclesSave_v1';
+
+        const POTIONS = {
+            alegria: { name: 'Alegria', color: '#FBBF24', emoji: '😄' },
+            tristeza: { name: 'Tristeza', color: '#60A5FA', emoji: '😢' },
+            raiva: { name: 'Raiva', color: '#F87171', emoji: '😠' },
+            medo: { name: 'Medo', color: '#A855F7', emoji: '😨' },
+            surpresa: { name: 'Surpresa', color: '#34D399', emoji: '😮' },
+            calma: { name: 'Calma', color: '#818CF8', emoji: '😌' },
+        };
+
+        const RECIPES = {
+            'EMPATIA': { ingredients: ['tristeza', 'calma'], emoji: '🤝' },
+            'PACIÊNCIA': { ingredients: ['raiva', 'calma'], emoji: '🧘' },
+            'CORAGEM': { ingredients: ['medo', 'alegria'], emoji: '🦁' },
+        };
+
+        const DOM = {
+            viewport: document.getElementById('game-viewport'),
+            screens: {
+                start: document.getElementById('start-screen'),
+                characterCreation: document.getElementById('character-creation-screen'),
+                world: document.getElementById('world-screen'),
+                dialogue: document.getElementById('dialogue-screen'),
+                minigame: document.getElementById('minigame-screen'),
+            },
+            startNewGameButton: document.getElementById('start-new-game-button'),
+            continueGameButton: document.getElementById('continue-game-button'),
+            // Criação de Personagem
+            playerNameInput: document.getElementById('player-name'),
+            avatarSelection: document.getElementById('avatar-selection'),
+            confirmCharacterButton: document.getElementById('confirm-character-button'),
+            // HUD
+            playerHud: {
+                avatar: document.getElementById('hud-avatar'),
+                name: document.getElementById('hud-name'),
+            },
+            // Cena
+            scene: {
+                title: document.getElementById('scene-title'),
+                image: document.getElementById('scene-image'),
+                description: document.getElementById('scene-description'),
+                actions: document.getElementById('scene-actions'),
+            },
+            // Diálogo
+            dialogue: {
+                npcSprite: document.getElementById('dialogue-npc-sprite'),
+                npcName: document.getElementById('dialogue-npc-name'),
+                text: document.getElementById('dialogue-text'),
+                options: document.getElementById('dialogue-options'),
+            },
+            // Mini-game
+            minigame: {
+                goal: document.getElementById('minigame-goal'),
+                potionsContainer: document.getElementById('potions-container'),
+                cauldronLiquid: document.getElementById('cauldron-liquid'),
+                bubblesContainer: document.getElementById('bubbles-container'),
+                mixButton: document.getElementById('mix-button'),
+                clearButton: document.getElementById('clear-button'),
+                result: document.getElementById('minigame-result'),
+            },
+            mainMenuButton: document.getElementById('main-menu-button'),
+            sfx: {
+                click: document.getElementById('sfx-click'),
+                mix: document.getElementById('sfx-mix'),
+                success: document.getElementById('sfx-success'),
+                failure: document.getElementById('sfx-failure'),
+            }
+        };
+
+        let gameState = {};
+        let cauldronPotions = [];
+
+        // --- LÓGICA DE NAVEGAÇÃO E ESTADO ---
+
+        function saveGame() {
+            localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
+        }
+
+        function loadGame() {
+            const savedData = localStorage.getItem(SAVE_KEY);
+            if (savedData) {
+                gameState = JSON.parse(savedData);
+                return true;
+            }
+            return false;
+        }
+
+        function showScreen(screenName) {
+            Object.values(DOM.screens).forEach(s => s.classList.add('hidden'));
+            if (DOM.screens[screenName]) {
+                DOM.screens[screenName].classList.remove('hidden');
+                DOM.screens[screenName].classList.add('fade-in');
+            }
+        }
+
+        function newGame() {
+            gameState = {
+                player: { name: '', avatar: '' },
+                currentScene: 'VilaDaForja',
+                quests: {
+                    ferreiro: { status: 'intro' } // intro, talked, minigame, solved
+                }
+            };
+            showScreen('characterCreation');
+        }
+
+        function continueGame() {
+            if (loadGame()) {
+                updateHud();
+                renderScene(gameState.currentScene);
+                showScreen('world');
+            }
+        }
+
+        function goToMainMenu() {
+            showScreen('start');
+            checkForSavedGame();
+        }
+
+        function checkForSavedGame() {
+            DOM.continueGameButton.classList.toggle('hidden', !localStorage.getItem(SAVE_KEY));
+        }
+
+        // --- LÓGICA DE CRIAÇÃO DE PERSONAGEM ---
+
+        function setupCharacterCreation() {
+            let selectedAvatar = null;
+            DOM.avatarSelection.addEventListener('click', (e) => {
+                const avatarDiv = e.target.closest('[data-avatar]');
+                if (!avatarDiv) return;
+
+                // Remove a seleção anterior
+                DOM.avatarSelection.querySelectorAll('.selected-avatar').forEach(el => {
+                    el.classList.remove('selected-avatar', 'bg-cyan-500/50');
+                });
+
+                // Adiciona a nova seleção
+                avatarDiv.classList.add('selected-avatar', 'bg-cyan-500/50');
+                selectedAvatar = avatarDiv.dataset.avatar;
+                gameState.player.avatar = selectedAvatar;
+                checkCharacterConfirmation();
+            });
+
+            DOM.playerNameInput.addEventListener('input', (e) => {
+                gameState.player.name = e.target.value.trim();
+                checkCharacterConfirmation();
+            });
+
+            DOM.confirmCharacterButton.addEventListener('click', () => {
+                if (gameState.player.name && gameState.player.avatar) {
+                    saveGame();
+                    updateHud();
+                    renderScene(gameState.currentScene);
+                    showScreen('world');
+                }
+            });
+        }
+
+        function checkCharacterConfirmation() {
+            DOM.confirmCharacterButton.disabled = !(gameState.player.name && gameState.player.avatar);
+        }
+
+        function updateHud() {
+            DOM.playerHud.avatar.textContent = gameState.player.avatar;
+            DOM.playerHud.name.textContent = gameState.player.name;
+        }
+
+        // --- LÓGICA DE CENAS E MUNDO ---
+
+        const SCENES = {
+            'VilaDaForja': {
+                title: "Vila da Forja",
+                image: "🏘️",
+                description: "Uma vila movimentada, famosa por seus artesãos. O som de martelos batendo em metal ecoa pelas ruas, mas hoje, um silêncio estranho vem da forja.",
+                actions: [
+                    { text: "Visitar a Forja", target: 'Forja', condition: () => true },
+                    { text: "Ir para a Floresta (Em breve)", target: null, condition: () => true }
+                ]
+            }
+        };
+
+        function renderScene(sceneId) {
+            const scene = SCENES[sceneId];
+            if (!scene) return;
+
+            DOM.scene.title.textContent = scene.title;
+            DOM.scene.image.textContent = scene.image;
+            DOM.scene.description.textContent = scene.description;
+            DOM.scene.actions.innerHTML = '';
+
+            scene.actions.forEach(action => {
+                if (action.condition()) {
+                    const button = document.createElement('button');
+                    button.className = "pixel-font bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-5 rounded-lg transition-colors";
+                    button.textContent = action.text;
+                    if (action.target) {
+                        button.onclick = () => startDialogue(action.target);
+                    } else {
+                        button.disabled = true;
+                        button.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
+                    DOM.scene.actions.appendChild(button);
+                }
+            });
+            gameState.currentScene = sceneId;
+            saveGame();
+        }
+
+        // --- LÓGICA DE DIÁLOGO ---
+
+        const DIALOGUES = {
+            'Forja': {
+                npc: { name: "Balthazar", sprite: "👨‍🏭" },
+                nodes: {
+                    'start': {
+                        text: () => gameState.quests.ferreiro.status === 'solved' ? "Obrigado pela ajuda, Emissário! O trabalho flui muito melhor agora." : "Grrr... Não consigo acertar esta liga! Tudo dá errado hoje!",
+                        options: () => gameState.quests.ferreiro.status === 'solved' ? [{ text: "De nada! Até mais.", nextNode: 'end' }] : [
+                            { text: "O que há de errado?", nextNode: 'problem' },
+                            { text: "Pare de reclamar e trabalhe!", nextNode: 'angry_reply' }
+                        ]
+                    },
+                    'problem': {
+                        text: "Esta encomenda é para o capitão da guarda, mas minha frustração está me fazendo errar cada martelada. Sinto uma raiva e uma calma brigando dentro de mim. Não consigo me concentrar!",
+                        onEnter: () => { gameState.quests.ferreiro.status = 'talked'; },
+                        options: [
+                            { text: "Talvez eu possa ajudar com isso.", nextNode: 'start_minigame' },
+                            { text: "Parece difícil. Boa sorte.", nextNode: 'end' }
+                        ]
+                    },
+                    'angry_reply': {
+                        text: "O quê?! Você não entende! Saia da minha forja!",
+                        options: [{ text: "Desculpe, vou embora.", nextNode: 'end' }]
+                    },
+                    'start_minigame': {
+                        text: "Você... pode? Por favor, eu preciso de algo para me dar... Paciência!",
+                        onEnter: () => {
+                            gameState.quests.ferreiro.status = 'minigame';
+                            startMinigame('PACIÊNCIA', 'Forja');
+                        },
+                        options: []
+                    },
+                    'minigame_success': {
+                        text: "Incrível! Esta poção... sinto a raiva se acalmando, a mente clareando. É Paciência! Agora consigo focar. Muito obrigado!",
+                        onEnter: () => { gameState.quests.ferreiro.status = 'solved'; },
+                        options: [{ text: "Fico feliz em ajudar!", nextNode: 'end' }]
+                    },
+                    'minigame_fail': {
+                        text: "Isso não ajudou... a sensação ainda está aqui. Tente de novo, por favor.",
+                        options: [{ text: "Vou tentar outra mistura.", nextNode: 'start_minigame' }]
+                    },
+                    'end': {
+                        onEnter: () => {
+                            renderScene(gameState.currentScene);
+                            showScreen('world');
+                        }
+                    }
+                }
+            }
+        };
+
+        function startDialogue(dialogueId) {
+            gameState.currentDialogue = dialogueId;
+            const dialogue = DIALOGUES[dialogueId];
+            DOM.dialogue.npcSprite.textContent = dialogue.npc.sprite;
+            DOM.dialogue.npcName.textContent = dialogue.npc.name;
+            
+            let startNode = 'start';
+            // Se o jogador já falou com o ferreiro, mas não resolveu, ele vai direto para o pedido de ajuda.
+            if (gameState.quests.ferreiro.status === 'talked') {
+                startNode = 'problem';
+            }
+
+            renderDialogueNode(startNode);
+            showScreen('dialogue');
+        }
+
+        function renderDialogueNode(nodeId) {
+            const dialogue = DIALOGUES[gameState.currentDialogue];
+            const node = dialogue.nodes[nodeId];
+
+            if (node.onEnter) node.onEnter();
+            saveGame();
+
+            if (!node.text && !node.options) return;
+
+            DOM.dialogue.text.textContent = typeof node.text === 'function' ? node.text() : node.text;
+            DOM.dialogue.options.innerHTML = '';
+
+            const options = typeof node.options === 'function' ? node.options() : node.options;
+            options.forEach(opt => {
+                const button = document.createElement('button');
+                button.className = "dialogue-option w-full text-left p-3 rounded-lg text-white pixel-font text-sm";
+                button.textContent = opt.text;
+                button.onclick = () => renderDialogueNode(opt.nextNode);
+                DOM.dialogue.options.appendChild(button);
+            });
+        }
+
+        // --- LÓGICA DO MINI-GAME ---
+
+        function startMinigame(recipeName, returnDialogueId) {
+            gameState.minigame = {
+                targetRecipe: recipeName,
+                returnDialogue: returnDialogueId
+            };
+            DOM.minigame.goal.textContent = `O ferreiro precisa de: ${recipeName}`;
+            DOM.minigame.result.textContent = '';
+            clearCauldron();
+            showScreen('minigame');
+        }
+
+        function createPotionButtons() {
+            DOM.minigame.potionsContainer.innerHTML = '';
+            for (const [id, data] of Object.entries(POTIONS)) {
+                const potionEl = document.createElement('button');
+                potionEl.className = 'potion-bottle text-center p-2 rounded-lg';
+                potionEl.dataset.potionId = id;
+                potionEl.innerHTML = `<div class="text-5xl">${data.emoji}</div><span class="font-semibold text-sm" style="color:${data.color};">${data.name}</span>`;
+                potionEl.onclick = () => addPotion(id);
+                DOM.minigame.potionsContainer.appendChild(potionEl);
+            }
+        }
+
+        function addPotion(potionId) {
+            if (cauldronPotions.length >= 2 || cauldronPotions.includes(potionId)) return;
+            playSound(DOM.sfx.click);
+            cauldronPotions.push(potionId);
+            updateCauldronVisuals();
+            updateMinigameButtons();
+        }
+
+        function mixPotions() {
+            playSound(DOM.sfx.mix);
+            const targetRecipe = RECIPES[gameState.minigame.targetRecipe];
+            const isCorrect = cauldronPotions.length === targetRecipe.ingredients.length &&
+                              targetRecipe.ingredients.every(ing => cauldronPotions.includes(ing));
+
+            animateMixing();
+            setTimeout(() => {
+                if (isCorrect) {
+                    playSound(DOM.sfx.success);
+                    DOM.minigame.result.innerHTML = `<p class="text-green-400 text-xl pixel-font">Sucesso! Você criou ${gameState.minigame.targetRecipe}!</p>`;
+                    setTimeout(() => {
+                        startDialogue(gameState.minigame.returnDialogue);
+                        renderDialogueNode('minigame_success');
+                    }, 2000);
+                } else {
+                    playSound(DOM.sfx.failure);
+                    DOM.minigame.result.innerHTML = `<p class="text-red-400 text-xl pixel-font">Oops! A mistura não deu certo.</p>`;
+                    setTimeout(() => {
+                        startDialogue(gameState.minigame.returnDialogue);
+                        renderDialogueNode('minigame_fail');
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        function clearCauldron() {
+            cauldronPotions = [];
+            updateCauldronVisuals();
+            updateMinigameButtons();
+        }
+
+        function updateMinigameButtons() {
+            document.querySelectorAll('#potions-container .potion-bottle').forEach(p => {
+                p.disabled = cauldronPotions.length >= 2 || cauldronPotions.includes(p.dataset.potionId);
+            });
+            DOM.minigame.mixButton.disabled = cauldronPotions.length !== 2;
+            DOM.minigame.clearButton.disabled = cauldronPotions.length === 0;
+        }
+
+        function updateCauldronVisuals() {
+            const numPotions = cauldronPotions.length;
+            if (numPotions === 0) {
+                DOM.minigame.cauldronLiquid.style.background = 'transparent';
+                DOM.minigame.cauldronLiquid.style.height = '0%';
+            } else if (numPotions === 1) {
+                DOM.minigame.cauldronLiquid.style.background = POTIONS[cauldronPotions[0]].color;
+                DOM.minigame.cauldronLiquid.style.height = '50%';
+            } else {
+                const color1 = POTIONS[cauldronPotions[0]].color;
+                const color2 = POTIONS[cauldronPotions[1]].color;
+                DOM.minigame.cauldronLiquid.style.background = `linear-gradient(to right, ${color1}, ${color2})`;
+                DOM.minigame.cauldronLiquid.style.height = '75%';
+            }
+        }
+
+        function animateMixing() {
+            DOM.minigame.bubblesContainer.innerHTML = '';
+            for (let i = 0; i < 15; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.width = `${Math.random() * 15 + 5}px`;
+                bubble.style.height = bubble.style.width;
+                bubble.style.left = `${Math.random() * 90}%`;
+                bubble.style.animationDelay = `${Math.random() * 2}s`;
+                bubble.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                DOM.minigame.bubblesContainer.appendChild(bubble);
+            }
+        }
+        
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => {});
+        }
+
+                // --- INICIALIZAÇÃO ---
+        function init() {
+            // Event Listeners Principais
+            DOM.startNewGameButton.onclick = newGame;
+            DOM.continueGameButton.onclick = continueGame;
+            DOM.mainMenuButton.onclick = goToMainMenu;
+            DOM.minigame.mixButton.onclick = mixPotions;
+            DOM.minigame.clearButton.onclick = clearCauldron;
+
+            // Configuração das telas interativas
+            setupCharacterCreation();
+            createPotionButtons();
+
+            // Checa se existe um jogo salvo para mostrar o botão "Continuar"
+            checkForSavedGame();
+            
+            // Inicia a música com qualquer clique para contornar políticas de autoplay
+            document.body.addEventListener('click', () => {
+                const music = document.getElementById('bg-music');
+                if (music.paused) {
+                    music.volume = 0.1;
+                    music.play().catch(e => console.log("Interação do usuário necessária para tocar som."));
+                }
+            }, { once: true });
+        }
+
+        // Inicia o jogo quando o DOM estiver pronto
+        init();
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1888 @@
+/* ===================================================================== */
+/* ||                    CSS OTIMIZADO E REFINADO                      || */
+/* ===================================================================== */
+
+/* --- Variáveis CSS Organizadas --- */
+:root {
+    /* Cores Principais */
+    --primary-dark-blue: #2c3e50;
+    --primary-vibrant-blue: #3498db;
+    --primary-vibrant-blue-darker: #2a8cce;
+    --accent-bright-blue: #5dade2;
+    --hero-highlight-blue: #aed6f1;
+    
+    /* Cores de Texto */
+    --text-color-dark: #2c3e50;
+    --text-color-light: #566573;
+    
+    /* Cores de Fundo */
+    --background-color: #ffffff;
+    --light-gray: #f8fafc;
+    --input-bg: #f1f5f9;
+    --card-icon-bg: #eaf2f8;
+    
+    /* Cores de Borda e Sombra */
+    --border-color: #e2e8f0;
+    --shadow-color: rgba(44, 62, 80, 0.1);
+    
+    /* Espaçamentos Padrão */
+    --spacing-xs: 8px;
+    --spacing-sm: 15px;
+    --spacing-md: 25px;
+    --spacing-lg: 40px;
+    --spacing-xl: 60px;
+    
+    /* Bordas Arredondadas */
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    
+    /* Transições */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* --- Reset e Base --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Utilitários de Layout --- */
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-center { text-align: center; }
+
+/* --- Barra Superior --- */
+.top-bar {
+    background-color: var(--primary-dark-blue);
+    padding: var(--spacing-xs) 0;
+}
+
+.top-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar-left,
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.top-bar a {
+    color: white;
+    text-decoration: none;
+    transition: opacity var(--transition-normal);
+    display: flex;
+    align-items: center;
+}
+
+.top-bar a:hover {
+    opacity: 0.8;
+}
+
+.top-bar svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ===================================================================== */
+/* ||      CABEÇALHO COM ENCOLHIMENTO REAL E SEM TRAVAMENTO           || */
+/* ===================================================================== */
+
+/* --- Cabeçalho Principal --- */
+#main-header {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+    
+    /* A altura do cabeçalho é controlada pelo padding. */
+    padding: 15px 0;
+    
+    /* TRANSIÇÃO SELETIVA: Apenas o box-shadow será animado.
+       A mudança de 'padding' será instantânea para não travar a rolagem. */
+    transition: box-shadow var(--transition-normal);
+}
+
+#main-header.header-scrolled {
+    padding: 5px 0; /* Padding menor para encolher o cabeçalho */
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+/* --- Logo --- */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-container img {
+    height: 70px; /* Altura inicial da logo */
+    width: auto;
+    /* A transição na altura da logo cria o efeito suave de encolhimento. */
+    transition: height var(--transition-normal);
+}
+
+#main-header.header-scrolled .logo-container img {
+    height: 55px; /* Altura final da logo */
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text .name {
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: var(--primary-dark-blue);
+    line-height: 1.1;
+}
+
+.logo-text .subtitle {
+    font-size: 0.9em;
+    color: var(--text-color-light);
+    font-weight: 400;
+}
+
+/* --- Navegação --- */
+nav {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--primary-dark-blue);
+    font-weight: 500;
+    padding: var(--spacing-xs) 16px;
+    border-radius: var(--border-radius-sm);
+    /* A transição aqui garante que a mudança de cor de fundo seja suave. */
+    transition: all var(--transition-normal);
+}
+
+nav a:hover {
+    background-color: #e2e8f0;
+}
+
+nav a.active {
+    background-color: var(--primary-dark-blue);
+    color: white;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--primary-dark-blue);
+    cursor: pointer;
+}
+
+
+/* --- Seções Principais --- */
+main {
+    padding-top: 0;
+}
+
+section {
+    padding: var(--spacing-xl) 0;
+}
+
+section[id] {
+    scroll-margin-top: 30px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+    font-size: 2.5em;
+    color: var(--primary-dark-blue);
+    font-weight: 700;
+}
+
+.section-subtitle {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-lg) auto;
+    color: var(--text-color-light);
+    font-size: 1.1em;
+}
+
+/* --- Seção Hero --- */
+.hero {
+    /* Adicionando de volta o fundo de gradiente para as páginas internas */
+    background: linear-gradient(to right, var(--primary-dark-blue), var(--primary-vibrant-blue));
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+
+.hero h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+}
+
+.hero h1 .highlight {
+    display: block;
+    color: var(--hero-highlight-blue);
+}
+
+.hero p {
+    font-size: 1.3em;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg) auto;
+    opacity: 0.95;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* --- Botões CTA --- */
+.cta-button {
+    background-color: white;
+    color: var(--primary-dark-blue);
+    padding: var(--spacing-sm) 30px;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    font-size: 1.1em;
+    transition: all var(--transition-normal);
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 2px solid transparent;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* Variações do botão */
+.cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.cta-button.secondary:hover {
+    background-color: white;
+    color: var(--primary-dark-blue);
+}
+
+.cta-button.secondary.light-bg-variant {
+    background-color: transparent;
+    color: var(--primary-dark-blue);
+    border-color: var(--primary-dark-blue);
+}
+
+.cta-button.secondary.light-bg-variant:hover {
+    background-color: var(--primary-dark-blue);
+    color: white;
+}
+
+.cta-button-small {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--primary-dark-blue);
+    padding: 10px;
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+}
+
+.cta-button-small:hover {
+    background-color: var(--primary-dark-blue);
+    color: white;
+    border-color: var(--primary-dark-blue);
+}
+
+/* --- Seção de Apresentação --- */
+.intro-section {
+    padding: var(--spacing-xl) 0;
+}
+
+.intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.intro-card {
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    box-shadow: 0 8px 25px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.intro-card .icon {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+}
+
+.intro-card .icon svg {
+    width: 100%;
+    height: auto;
+}
+
+.intro-card h3 {
+    font-size: 1.6em;
+    color: var(--primary-dark-blue);
+    margin-bottom: 10px;
+}
+
+.intro-card p {
+    color: var(--text-color-light);
+}
+
+.intro-details {
+    text-align: center;
+}
+
+.intro-details h2 {
+    font-size: 2.2em;
+    margin-bottom: var(--spacing-sm);
+}
+
+.intro-details .bio {
+    color: var(--text-color-light);
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.credentials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm) 20px;
+    margin-bottom: 30px;
+}
+
+.credential-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-color-dark);
+}
+
+.credential-item svg {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-vibrant-blue);
+    flex-shrink: 0;
+}
+
+.intro-details .cta-button {
+    background-color: var(--primary-vibrant-blue);
+    color: white;
+    display: inline-block;
+}
+
+.intro-details .cta-button:hover {
+    background-color: var(--accent-bright-blue);
+}
+
+/* --- Grade de Serviços --- */
+.services-grid-detailed {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.service-card-detailed {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    text-align: center;
+}
+
+.service-card-detailed:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px var(--shadow-color);
+}
+
+.service-card-detailed .icon {
+    background-color: var(--card-icon-bg);
+    border-radius: var(--border-radius-md);
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    color: var(--primary-vibrant-blue);
+}
+
+.service-card-detailed .icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.service-card-detailed h3 {
+    font-size: 1.3em;
+    color: var(--primary-dark-blue);
+    margin-bottom: 10px;
+}
+
+.service-card-detailed .description {
+    color: var(--text-color-light);
+    font-size: 0.95em;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.service-card-detailed ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.service-card-detailed li {
+    color: var(--text-color-light);
+    font-size: 0.95em;
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    align-items: flex-start;
+}
+
+.service-card-detailed li::before {
+    content: '●';
+    color: var(--primary-vibrant-blue);
+    margin-right: 10px;
+    font-size: 0.8em;
+    line-height: 1.6;
+}
+
+.service-card-detailed .cta-button-small {
+    margin-top: auto;
+}
+
+/* --- Seção CTA --- */
+.cta-section {
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cta-section h2 {
+    font-size: 2.8em;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.cta-section p {
+    font-size: 1.2em;
+    max-width: 650px;
+    margin: 0 auto 30px auto;
+    opacity: 0.95;
+    line-height: 1.7;
+}
+
+.cta-section .hero-buttons .cta-button {
+    background-color: white;
+    color: var(--primary-dark-blue);
+    padding: var(--spacing-sm) 35px;
+    font-size: 1.1em;
+}
+
+.cta-section .hero-buttons .cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    color: white;
+}
+
+.cta-section .hero-buttons .cta-button.secondary:hover {
+    background-color: white;
+    color: var(--primary-dark-blue);
+    border-color: white;
+}
+
+/* --- Seção de Contato --- */
+.contact-section-home {
+    padding: 80px 0;
+    background-color: var(--light-gray);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.contact-form-container {
+    max-width: 750px;
+    margin: 0 auto;
+    background-color: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+}
+
+.contact-form-container form .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.contact-form-container form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form-container form label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    font-size: 0.95em;
+    color: var(--text-color-dark);
+}
+
+.contact-form-container form input,
+.contact-form-container form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: var(--border-radius-md);
+    font-size: 1em;
+    background-color: var(--light-gray);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.contact-form-container form input:focus,
+.contact-form-container form textarea:focus {
+    outline: none;
+    border-color: var(--primary-vibrant-blue);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.contact-form-container form button {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 16px;
+    border-radius: var(--border-radius-md);
+    background-color: var(--primary-dark-blue);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color var(--transition-normal), transform var(--transition-fast);
+}
+
+.contact-form-container form button:hover {
+    background-color: var(--primary-vibrant-blue);
+    transform: translateY(-2px);
+}
+
+/* --- Páginas Internas --- */
+.page-section {
+    padding: var(--spacing-xl) 0;
+    border-bottom: 1px solid var(--border-color);
+    background-color: white;
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.page-section:last-child {
+    border-bottom: none;
+}
+
+.page-section h2 {
+    text-align: left;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: var(--spacing-sm);
+}
+
+.page-section p,
+.page-section ul {
+    font-size: 1.1em;
+    color: var(--text-color-light);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.7;
+}
+
+.page-section ul {
+    list-style-position: inside;
+}
+
+/* Elementos específicos para páginas de serviços */
+.main-page-subtitle {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: var(--spacing-xl);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.subsection-container {
+    background-color: var(--light-gray);
+    border-left: 4px solid var(--primary-vibrant-blue);
+    padding: 20px var(--spacing-md);
+    margin-top: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+}
+
+.subsection-container h3 {
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.target-audience-box,
+.how-it-works-box {
+    background-color: #e9f3ff;
+    padding: var(--spacing-md);
+    margin-top: 30px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid #cce0ff;
+}
+
+.target-audience-box h4,
+.how-it-works-box h4 {
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+}
+
+.target-audience-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.target-audience-box ul li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: var(--spacing-md);
+    line-height: 1.6;
+}
+
+.target-audience-box ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: var(--primary-vibrant-blue);
+}
+
+.how-it-works-box p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* --- Rodapé --- */
+footer.main-footer {
+    background-color: var(--primary-dark-blue);
+    color: #e2e8f0;
+    padding-top: 50px;
+    font-size: 1.05em;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding-bottom: 30px;
+}
+
+.footer-column {
+    padding: 0 10px;
+}
+
+.footer-column h4 {
+    color: white;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.footer-column li svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.footer-column a {
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: color var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.footer-column a:hover {
+    color: var(--primary-vibrant-blue);
+}
+
+.footer-bottom {
+    position: relative;
+    padding: 20px 0 var(--spacing-sm) 0;
+    text-align: center;
+    font-size: 0.9em;
+    color: #94a3b8;
+}
+
+.footer-bottom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 90%;
+    height: 1px;
+    background-color: #3e5266;
+}
+
+.footer-bottom p {
+    margin: 5px 0;
+}
+
+/* --- Carrossel (Swiper) --- */
+.services-carousel {
+    overflow: hidden;
+    padding: 10px 0;
+    position: relative;
+}
+
+.swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+.swiper-slide .service-card-detailed {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--primary-dark-blue);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background-color: var(--primary-dark-blue);
+    color: white;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+/* --- Estilos para Artigos --- */
+.category-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: 20px;
+}
+
+.category-card-custom {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.category-card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px var(--shadow-color);
+}
+
+.category-card-custom .icon-container {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-icon-bg);
+    color: var(--primary-vibrant-blue);
+    border-radius: var(--border-radius-md);
+}
+
+.category-card-custom .icon-container svg {
+    width: 28px;
+    height: 28px;
+}
+
+.category-card-custom .text-container h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.2em;
+    color: var(--primary-dark-blue);
+}
+
+.category-card-custom .text-container p {
+    margin: 0;
+    font-size: 0.95em;
+    color: var(--text-color-light);
+}
+
+.article-list-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.article-item-custom {
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.article-item-custom:hover {
+    background-color: var(--light-gray);
+    border-color: #d1d9e3;
+}
+
+.article-item-custom h3 {
+    font-size: 1.5em;
+    color: var(--primary-dark-blue);
+    margin: 0 0 10px 0;
+}
+
+.article-item-custom p {
+    font-size: 1.05em;
+    color: var(--text-color-light);
+    margin: 0 0 20px 0;
+}
+
+.article-meta-custom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px var(--spacing-md);
+    font-size: 0.9em;
+    color: var(--text-color-light);
+}
+
+.article-meta-custom span {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.resource-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.resource-card-custom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.resource-card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px var(--shadow-color);
+}
+
+.resource-card-custom .icon-container {
+    margin-bottom: 20px;
+}
+
+.resource-card-custom h3 {
+    font-size: 1.2em;
+    color: var(--primary-dark-blue);
+    margin: 0 0 5px 0;
+    flex-grow: 1;
+}
+
+.resource-card-custom p {
+    font-size: 0.95em;
+    color: var(--text-color-light);
+    margin: 0;
+}
+
+/* --- Páginas Individuais de Artigo --- */
+.article-container {
+    max-width: 800px;
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-xl);
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 30px;
+}
+
+.article-header h1 {
+    font-size: 2.8em;
+    color: var(--primary-dark-blue);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.article-author-date {
+    font-size: 1.1em;
+    color: var(--text-color-light);
+}
+
+.article-body h2 {
+    font-size: 2em;
+    color: var(--primary-dark-blue);
+    margin-top: var(--spacing-lg);
+    margin-bottom: 20px;
+}
+
+.article-body p {
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: var(--text-color-dark);
+}
+
+.references-list {
+    padding-left: 20px;
+    font-size: 1em;
+    color: var(--text-color-light);
+}
+
+.references-list li {
+    margin-bottom: 10px;
+}
+
+.article-divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-lg) 0;
+}
+
+.article-disclaimer {
+    font-style: italic;
+    color: var(--text-color-light);
+    text-align: center;
+    font-size: 1em;
+}
+
+/* --- Responsividade --- */
+@media screen and (max-width: 768px) {
+    /* Container e espaçamentos gerais */
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+    
+    section {
+        padding: var(--spacing-lg) 0;
+    }
+    
+    /* Cabeçalho móvel */
+    .header-content {
+        padding: 0 var(--spacing-sm);
+    }
+    
+    nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        border-top: 1px solid var(--border-color);
+        z-index: 1001;
+    }
+    
+  nav.active {
+        display: flex;
+    }
+    
+    nav a {
+        padding: var(--spacing-sm) 20px;
+        border-radius: 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    
+    nav a:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    /* Logo móvel */
+    .logo-container img {
+        height: 50px;
+    }
+    
+    .logo-text .name {
+        font-size: 1.5em;
+    }
+    
+    .logo-text .subtitle {
+        font-size: 0.8em;
+    }
+    
+    /* Hero móvel */
+    .hero {
+        padding: var(--spacing-xl) 20px;
+    }
+    
+    .hero h1 {
+        font-size: 2.5em;
+    }
+    
+    .hero p {
+        font-size: 1.1em;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+    
+    /* Seções */
+    .section-title {
+        font-size: 2em;
+    }
+    
+    .section-subtitle {
+        font-size: 1em;
+        padding: 0 10px;
+    }
+    
+    /* Grade de introdução */
+    .intro-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .intro-details {
+        text-align: left;
+    }
+    
+    .credentials-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+}
+    
+    /* Grade de serviços */
+    .services-grid-detailed {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    /* Formulário de contato */
+    .contact-form-container {
+        padding: var(--spacing-md);
+        margin: 0 10px;
+    }
+    
+    .contact-form-container form .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    /* CTA móvel */
+    .cta-section {
+        padding: var(--spacing-xl) 20px;
+    }
+    
+    .cta-section h2 {
+        font-size: 2.2em;
+    }
+    
+    .cta-section p {
+        font-size: 1.1em;
+    }
+    
+    /* Rodapé móvel */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .footer-column {
+        text-align: center;
+    }
+    
+    /* Páginas internas móveis */
+    .page-section h2 {
+        font-size: 1.8em;
+    }
+    
+    .main-page-subtitle {
+        font-size: 1.1em;
+        padding: 0 10px;
+    }
+    
+    /* Artigos móveis */
+    .article-container {
+        padding: 0 var(--spacing-sm);
+    }
+    
+    .article-header h1 {
+        font-size: 2.2em;
+    }
+    
+    .article-body h2 {
+        font-size: 1.6em;
+    }
+    
+    /* Grids de categoria e recursos */
+    .category-grid-custom,
+    .resource-grid-custom {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-card-custom {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+    
+    /* Top bar móvel */
+    .top-bar-content {
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .top-bar-left,
+    .top-bar-right {
+        gap: var(--spacing-sm);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Ajustes para telas muito pequenas */
+    .hero h1 {
+        font-size: 2em;
+    }
+    
+    .section-title {
+        font-size: 1.8em;
+    }
+    
+    .cta-section h2 {
+        font-size: 1.8em;
+    }
+    
+    .service-card-detailed,
+    .intro-card {
+        padding: 20px;
+    }
+    
+    .contact-form-container {
+        padding: 20px;
+    }
+    
+    .article-header h1 {
+        font-size: 1.8em;
+    }
+    
+    .logo-text .name {
+        font-size: 1.3em;
+    }
+    
+    .page-section {
+        padding: var(--spacing-md) 0;
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+/* --- Tablet específico --- */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .services-grid-detailed {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .intro-grid {
+        gap: 40px;
+    }
+    
+    .credentials-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-grid-custom,
+    .resource-grid-custom {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .contact-form-container form .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Melhorias de Acessibilidade --- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visível para navegação por teclado */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+    outline: 2px solid var(--primary-vibrant-blue);
+    outline-offset: 2px;
+}
+
+/* Skip links para acessibilidade */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--primary-dark-blue);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 9999;
+    border-radius: 4px;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* --- Utilitários Adicionais --- */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+/* --- Estados de Carregamento --- */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--primary-vibrant-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Print Styles --- */
+@media print {
+    .top-bar,
+    #main-header,
+    nav,
+    .mobile-menu-btn,
+    .cta-section,
+    .contact-section-home,
+    footer.main-footer,
+    .swiper-button-next,
+    .swiper-button-prev {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .container {
+        max-width: none;
+        padding: 0;
+    }
+    
+    section {
+        page-break-inside: avoid;
+        padding: 20pt 0;
+    }
+    
+    .article-container {
+        max-width: none;
+    }
+}
+/* ===================================================================== */
+/* ||          AJUSTE AUTOMÁTICO DE CONTAINER PARA SEÇÕES           || */
+/* ===================================================================== */
+
+/* 
+  Esta regra aplica o layout de 'container' a todas as seções
+  dentro do <main>, EXCETO a seção com a classe .hero.
+*/
+main > section:not(.hero):not(.hero-carousel-section) {
+    max-width: 1200px;   /* Mesma largura máxima do seu .container */
+    margin-left: auto;   /* Para centralizar */
+    margin-right: auto;  /* Para centralizar */
+    padding-left: 20px;  /* Espaçamento lateral */
+    padding-right: 20px; /* Espaçamento lateral */
+}
+
+/*
+  Esta regra é para seções que têm um fundo colorido (como .section-light).
+  Ela garante que a COR de fundo ocupe a tela inteira, mas o CONTEÚDO
+  interno continue respeitando o container.
+*/
+main > section.section-light:not(.hero)::before,
+main > section.contact-section-home:not(.hero)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit; /* Herda a cor de fundo da seção */
+    z-index: -1; /* Coloca o fundo atrás do conteúdo */
+}
+
+main > section.section-light:not(.hero),
+main > section.contact-section-home:not(.hero) {
+    position: relative; /* Necessário para o pseudo-elemento ::before funcionar */
+    background-color: transparent !important; /* A seção em si fica transparente */
+}
+/* ===================================================================== */
+/* ||          CORREÇÃO FINAL PARA CENTRALIZAÇÃO MOBILE             || */
+/* ===================================================================== */
+
+/* Aplica-se apenas a telas com largura máxima de 768px */
+@media (max-width: 768px) {
+
+  /* 1. Centraliza o texto na coluna de detalhes (título, bio) */
+  .intro-details {
+    text-align: center;
+  }
+
+  /* 2. Altera o grid de credenciais para centralizar os itens */
+  .credentials-grid {
+    /* Muda para display: flex para ter controle total do alinhamento */
+    display: flex;
+    
+    /* Permite que os itens quebrem a linha em telas muito estreitas */
+    flex-wrap: wrap;
+    
+    /* ESTA É A PROPRIEDADE CHAVE: Alinha os itens no centro do contêiner */
+    justify-content: center;
+    
+    /* Mantém um espaçamento consistente */
+    gap: 15px 20px; /* 15px vertical, 20px horizontal */
+  }
+
+  /* 3. Garante que o botão também fique centralizado */
+  .intro-details .cta-button {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* ================================================== */
+/* ||       ESTILOS DO BANNER PARA CAPTURA DE LEADS      || */
+/* ================================================== */
+
+.lead-capture-banner {
+    background-color: #eaf2f8; /* Um azul bem claro, derivado da sua paleta */
+    padding: 40px 0;
+    border-top: 1px solid #d6eaf8;
+    border-bottom: 1px solid #d6eaf8;
+    margin-top: 60px;
+}
+
+.lead-capture-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.lead-capture-icon {
+    flex-shrink: 0; /* Impede que o ícone encolha */
+}
+
+.lead-capture-icon svg {
+    width: 60px;
+    height: 60px;
+    color: var(--primary-vibrant-blue); /* Usa a variável de cor do seu site */
+}
+
+.lead-capture-text {
+    flex-grow: 1; /* Faz o texto ocupar o espaço disponível */
+}
+
+.lead-capture-text h2 {
+    font-size: 1.8em;
+    color: var(--primary-dark-blue); /* Usa a variável de cor do seu site */
+    margin: 0 0 5px 0;
+    font-weight: 700;
+}
+
+.lead-capture-text p {
+    font-size: 1.1em;
+    color: var(--text-color-light); /* Usa a variável de cor do seu site */
+    margin: 0;
+    line-height: 1.5;
+}
+
+.lead-capture-action .cta-button {
+    background-color: var(--primary-vibrant-blue);
+    color: white;
+    white-space: nowrap; /* Impede que o texto do botão quebre linha */
+}
+
+.lead-capture-action .cta-button:hover {
+    background-color: var(--primary-vibrant-blue-darker);
+}
+
+/* --- Responsividade para Dispositivos Móveis --- */
+@media (max-width: 768px) {
+    .lead-capture-content {
+        flex-direction: column; /* Empilha os itens verticalmente */
+        text-align: center;
+        gap: 20px;
+    }
+
+    .lead-capture-text h2 {
+        font-size: 1.5em;
+    }
+
+    .lead-capture-text p {
+        font-size: 1em;
+    }
+
+    .lead-capture-action .cta-button {
+        width: 100%;
+        max-width: 320px; /* Limita a largura do botão em telas maiores */
+    }
+}
+/* ===================================================================== */
+/* ||      ESTILO COMPLETO E CORRIGIDO PARA OS CARDS DE DESTAQUE     || */
+/* ===================================================================== */
+
+/* --- Contêiner dos Cards (Desktop e Mobile) --- */
+.highlight-cards-flex {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os cards quebrem a linha */
+  gap: 2.5rem;     /* Espaçamento padrão entre os cards */
+  width: 100%;     /* Garante que o contêiner ocupe todo o espaço */
+}
+
+/* --- Estilo de Cada Card Individual (Desktop) --- */
+.highlight-card {
+  /* Layout interno do card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  /* Comportamento no layout flex */
+  flex-grow: 1;         /* Permite que o card cresça */
+  flex-basis: 320px;    /* Largura base ideal */
+  
+  /* Estilo visual */
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 95, 115, 0.1);
+}
+
+.highlight-card .highlight-card-icon {
+  margin-bottom: 1.5rem; /* Espaço abaixo do ícone */
+}
+
+.highlight-card .cta-button {
+  margin-top: auto; /* Alinha os botões na base */
+}
+
+/* --- Correção Específica e Final para Mobile --- */
+@media (max-width: 900px) {
+  .highlight-cards-flex {
+    flex-direction: column; /* Empilha os cards verticalmente */
+    align-items: stretch;   /* Força os cards a ocupar 100% da largura */
+    gap: 1.5rem;            /* Espaçamento vertical no mobile */
+  }
+
+  .highlight-card {
+    /* Garante que o card ocupe 100% da largura e reseta o comportamento de crescimento */
+    flex-basis: 100%;
+    flex-grow: 0;
+  }
+}
+/* =================================================================== */
+/* ||         CÓDIGO COMPLETO E CORRIGIDO PARA O HERO CAROUSEL        || */
+/* =================================================================== */
+
+/* --- 1. Container Principal da Seção --- */
+/* Removemos qualquer cor de fundo daqui para evitar conflitos. */
+.hero-carousel-section {
+    width: 100%;
+    color: white;
+    position: relative;
+    padding: 0;
+}
+
+/* --- 2. Estrutura do Slide --- */
+/* Cada slide é um contêiner posicionado que ocupa toda a área. */
+.hero-carousel .swiper-slide {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    display: flex; /* Usamos flex para centralizar o conteúdo verticalmente */
+    align-items: center;
+    justify-content: center;
+    min-height: 500px; /* Altura mínima para garantir espaço */
+}
+
+/* --- 3. Camada da Imagem de Fundo --- */
+/* Esta é a camada mais ao fundo (z-index: 1). */
+.hero-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1; /* Camada 1: A imagem */
+}
+
+/* --- 4. Camada de Sobreposição (Overlay) --- */
+/* Esta camada fica EM CIMA da imagem (z-index: 2). */
+.hero-background-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(44, 62, 80, 0.7), rgba(52, 152, 219, 0.5));
+    z-index: 2; /* Camada 2: O gradiente escuro */
+}
+
+/* --- 5. Conteúdo do Slide (Texto e Botões) --- */
+/* Este é o conteúdo visível, que fica na frente de tudo (z-index: 3). */
+.hero-slide-content {
+    position: relative;
+    z-index: 3; /* Camada 3: O texto e botões */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.hero-slide-content h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.hero-slide-content h1 .highlight {
+    display: block;
+    color: var(--hero-highlight-blue);
+}
+
+.hero-slide-content p {
+    font-size: 1.3em;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+    opacity: 0.95;
+}
+
+/* --- 6. Controles do Swiper (Setas e Paginação) --- */
+.hero-carousel .swiper-pagination-bullet {
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 10px;
+    height: 10px;
+    transition: all 0.3s ease;
+}
+
+.hero-carousel .swiper-pagination-bullet-active {
+    background-color: white;
+    transform: scale(1.2);
+}
+
+.hero-carousel .swiper-button-next,
+.hero-carousel .swiper-button-prev {
+    color: white;
+}
+
+/* --- 7. Animações (Opcional, mas recomendado) --- */
+/* Estado inicial dos elementos (invisíveis) */
+.hero-slide-content h1,
+.hero-slide-content p,
+.hero-slide-content .hero-buttons {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Estado final quando o slide está ativo */
+.swiper-slide-active .hero-slide-content h1,
+.swiper-slide-active .hero-slide-content p,
+.swiper-slide-active .hero-slide-content .hero-buttons {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efeito escalonado */
+.swiper-slide-active .hero-slide-content p { transition-delay: 0.2s; }
+.swiper-slide-active .hero-slide-content .hero-buttons { transition-delay: 0.4s; }
+
+/* Efeito Ken Burns (zoom na imagem) */
+@keyframes kenburns-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+.swiper-slide-active .hero-background-image {
+    animation: kenburns-zoom 7.5s ease-out forwards;
+}
+
+
+/* --- 8. Ajustes para Telas Menores (Mobile) --- */
+@media (max-width: 768px) {
+    .hero-carousel .swiper-slide {
+        min-height: 450px; /* Ajusta a altura mínima para mobile */
+    }
+    .hero-slide-content {
+        padding: 40px 20px;
+    }
+    .hero-slide-content h1 {
+        font-size: 2.2em;
+    }
+    .hero-slide-content p {
+        font-size: 1.1em;
+    }
+    /* Mantém as setas ocultas no mobile, como combinado */
+    .hero-carousel .swiper-button-next,
+    .hero-carousel .swiper-button-prev {
+        display: none;
+    }
+}
+/* ================================================== */
+/* ||   ESTILO DE FUNDO PARA O HERO DA PÁGINA SOBRE  || */
+/* ================================================== */
+
+/* 1. Prepara a seção para receber um fundo e um overlay */
+.hero.hero-sobre {
+    position: relative;
+    background: none !important; /* Adicionado !important para garantir a sobreposição */
+    z-index: 1;
+}
+
+/* 2. Aplica a imagem de fundo */
+.hero.hero-sobre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* CAMINHO CORRIGIDO */
+    background-image: url('../assets/imagens/foto-deo.jpg');
+    
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+}
+
+/* 3. Aplica a camada de cor (overlay) por cima da imagem */
+.hero.hero-sobre::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(44, 62, 80, 0.7), rgba(52, 152, 219, 0.5));
+    z-index: -1;
+}
+
+/* estilos arquivos */
+.resource-card-bg-image {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    min-height: 250px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.3s ease;
+}
+.resource-card-bg-image:hover {
+    transform: scale(1.03);
+}
+.resource-card-bg-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
+    z-index: 1;
+    transition: background 0.3s ease;
+}
+.resource-card-bg-image:hover::before {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.0));
+}
+.resource-card-bg-image .card-content {
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem;
+}
+.resource-card-bg-image h3 {
+    font-size: 1.4em;
+    margin: 0 0 0.25rem 0;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+.resource-card-bg-image p {
+    font-size: 1em;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+
+/* --- Fim do CSS --- */
