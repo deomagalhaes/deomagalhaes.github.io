@@ -1324,16 +1324,16 @@ const GAME_DATA = {
     // ===== ÁUDIO E MÚSICA =====
     audio: {
         backgroundMusic: {
-            menu_theme: "https://pixabay.com/pt/music/irlanda-medieval-music-irish-celtic-ireland-knight-king-queen-background-311693/",
-            village_theme: "https://pixabay.com/pt/music/irlanda-medieval-music-irish-celtic-ireland-knight-king-queen-background-311693/",
-            forest_theme: "https://www.bensound.com/bensound-music/bensound-relaxing.mp3",
-            market_theme: "https://www.bensound.com/bensound-music/bensound-jazzyfrenchy.mp3",
-            mountain_theme: "https://www.bensound.com/bensound-music/bensound-epic.mp3",
-            lake_theme: "https://www.bensound.com/bensound-music/bensound-peaceful.mp3",
-            floating_theme: "https://www.bensound.com/bensound-music/bensound-dreams.mp3",
-            desert_theme: "https://www.bensound.com/bensound-music/bensound-oriental.mp3",
-            cave_theme: "https://www.bensound.com/bensound-music/bensound-deepblue.mp3",
-            wisdom_theme: "https://www.bensound.com/bensound-music/bensound-inspire.mp3"
+            menu_theme: "assets/audio/village_theme.mp3",
+            village_theme: "assets/audio/village_theme.mp3",
+            forest_theme: "assets/audio/forest_theme.mp3",
+            market_theme: "assets/audio/market_theme.mp3",
+            mountain_theme: "assets/audio/mountain_theme.mp3",
+            lake_theme: "assets/audio/lake_theme.mp3",
+            floating_theme: "assets/audio/floating_theme.mp3",
+            desert_theme: "assets/audio/lake_theme.mp3",
+            cave_theme: "assets/audio/cave_theme.mp3",
+            wisdom_theme: "assets/audio/wisdom_theme.mp3"
         }
     },
 
