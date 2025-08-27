@@ -90,8 +90,15 @@ const GAME_DATA = {
             description: 'O equilíbrio perfeito entre todas as forças',
             effect: 'Restaura o equilíbrio natural e a paz interior',
             hint: 'Dica: A harmonia nasce da união entre CALMA e COMPAIXÃO.'
-        }
-    },
+        },
+    
+        'CONTEMPLACAO_SOLIDARIEDADE': {
+    ingredients: ['contemplacao', 'solidariedade'],
+    emoji: '🤔',
+    description: 'Uma poção que combina contemplacao e solidariedade para criar o estado de reflexão profunda sobre a existência',
+    effect: 'Permite ao usuário experimentar uma síntese harmoniosa de contemplacao e solidariedade',
+    hint: 'Dica: A verdadeira contemplacao surge quando contemplacao encontra solidariedade.'
+},},
 
     // ===== ITENS E FERRAMENTAS =====
     items: {
@@ -1358,3 +1365,782 @@ const GAME_DATA = {
         ]
     }
 };
+
+
+// ===== SISTEMA DE GRIMÓRIO - CRÔNICAS DOS EMISSÁRIOS =====
+
+// Estrutura HTML do Grimório
+const GRIMOIRE_HTML = `
+<div id="grimoire-modal" class="modal hidden">
+    <div class="modal-content grimoire-content">
+        <div class="modal-header">
+            <h2>📚 Grimório de Poções Empáticas</h2>
+            <button class="close-btn" onclick="closeGrimoire()">&times;</button>
+        </div>
+        
+        <div class="grimoire-body">
+            <div class="grimoire-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Receitas Descobertas:</span>
+                    <span class="stat-value" id="discovered-count">0</span>
+                    <span class="stat-total">/ 0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Progresso:</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="grimoire-progress"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grimoire-controls">
+                <input type="text" id="recipe-search" placeholder="🔍 Buscar receitas..." />
+                <select id="recipe-filter">
+                    <option value="all">Todas as Receitas</option>
+                    <option value="discovered">Descobertas</option>
+                    <option value="undiscovered">Não Descobertas</option>
+                    <option value="basic">Básicas</option>
+                    <option value="advanced">Avançadas</option>
+                </select>
+            </div>
+            
+            <div class="recipe-grid" id="recipe-grid">
+                <!-- Receitas serão inseridas aqui -->
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+// Estilos CSS do Grimório
+const GRIMOIRE_CSS = `
+.grimoire-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 1000px;
+}
+
+.grimoire-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.grimoire-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 100%);
+    border-radius: 10px;
+    border: 2px solid #8B4513;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #8B4513;
+}
+
+.stat-value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2F4F4F;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 20px;
+    background: #E6E6FA;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #8B4513;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #32CD32, #228B22);
+    transition: width 0.3s ease;
+}
+
+.grimoire-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#recipe-search, #recipe-filter {
+    padding: 0.5rem;
+    border: 2px solid #8B4513;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+#recipe-search {
+    flex: 1;
+}
+
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.recipe-card {
+    border: 2px solid #8B4513;
+    border-radius: 10px;
+    padding: 1rem;
+    background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 100%);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.recipe-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.recipe-discovered {
+    opacity: 1;
+}
+
+.recipe-undiscovered {
+    opacity: 0.6;
+    filter: blur(1px);
+    background: linear-gradient(135deg, #D3D3D3 0%, #A9A9A9 100%);
+}
+
+.recipe-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-emoji {
+    font-size: 2em;
+}
+
+.recipe-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2F4F4F;
+}
+
+.recipe-description {
+    color: #4F4F4F;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.recipe-ingredients {
+    margin-bottom: 1rem;
+}
+
+.ingredients-title {
+    font-weight: bold;
+    color: #8B4513;
+    margin-bottom: 0.5rem;
+}
+
+.ingredient-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ingredient {
+    background: #E6E6FA;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.9em;
+    border: 1px solid #8B4513;
+}
+
+.recipe-effect {
+    background: #F0F8FF;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border-left: 4px solid #4169E1;
+    font-size: 0.9em;
+}
+
+.recipe-hint {
+    background: #FFF8DC;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border-left: 4px solid #DAA520;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+}
+
+.discovery-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #32CD32;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.mystery-text {
+    color: #888;
+    font-style: italic;
+}
+`;
+
+// Classe principal do Grimório
+class GrimoireSystem {
+    constructor() {
+        this.discoveredRecipes = gameState.discoveredRecipes || [];
+        this.allRecipes = GAME_DATA.recipes || {};
+        this.filteredRecipes = this.allRecipes;
+        this.init();
+    }
+    
+    init() {
+        // Adicionar HTML e CSS
+        this.injectStyles();
+        this.injectHTML();
+        this.bindEvents();
+        this.updateStats();
+    }
+    
+    injectStyles() {
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = GRIMOIRE_CSS;
+        document.head.appendChild(styleSheet);
+    }
+    
+    injectHTML() {
+        const grimoireContainer = document.createElement('div');
+        grimoireContainer.innerHTML = GRIMOIRE_HTML;
+        document.body.appendChild(grimoireContainer);
+    }
+    
+    bindEvents() {
+        // Busca
+        const searchInput = document.getElementById('recipe-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => this.filterRecipes(e.target.value));
+        }
+        
+        // Filtro
+        const filterSelect = document.getElementById('recipe-filter');
+        if (filterSelect) {
+            filterSelect.addEventListener('change', (e) => this.applyFilter(e.target.value));
+        }
+    }
+    
+    open() {
+        const modal = document.getElementById('grimoire-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            this.loadRecipes();
+            this.updateStats();
+        }
+    }
+    
+    close() {
+        const modal = document.getElementById('grimoire-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    }
+    
+    loadRecipes() {
+        const grid = document.getElementById('recipe-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = '';
+        
+        Object.entries(this.filteredRecipes).forEach(([name, recipe]) => {
+            const discovered = this.discoveredRecipes.includes(name);
+            const card = this.createRecipeCard(name, recipe, discovered);
+            grid.appendChild(card);
+        });
+    }
+    
+    createRecipeCard(name, recipe, discovered) {
+        const card = document.createElement('div');
+        card.className = `recipe-card ${discovered ? 'recipe-discovered' : 'recipe-undiscovered'}`;
+        
+        const ingredients = recipe.ingredients || [];
+        const emoji = recipe.emoji || '🧪';
+        const description = discovered ? recipe.description : 'Receita misteriosa ainda não descoberta...';
+        const effect = discovered ? recipe.effect : 'Efeitos desconhecidos';
+        const hint = discovered ? recipe.hint : 'Continue explorando para descobrir esta receita';
+        
+        card.innerHTML = `
+            ${discovered ? '<div class="discovery-badge">✓</div>' : ''}
+            
+            <div class="recipe-header">
+                <span class="recipe-emoji">${emoji}</span>
+                <span class="recipe-name">${discovered ? name : '???'}</span>
+            </div>
+            
+            <div class="recipe-description ${!discovered ? 'mystery-text' : ''}">
+                ${description}
+            </div>
+            
+            ${discovered ? `
+                <div class="recipe-ingredients">
+                    <div class="ingredients-title">Ingredientes:</div>
+                    <div class="ingredient-list">
+                        ${ingredients.map(ing => `<span class="ingredient">${ing}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="recipe-effect">
+                    <strong>Efeito:</strong> ${effect}
+                </div>
+                
+                <div class="recipe-hint">
+                    ${hint}
+                </div>
+            ` : `
+                <div class="recipe-effect mystery-text">
+                    ${effect}
+                </div>
+                
+                <div class="recipe-hint mystery-text">
+                    ${hint}
+                </div>
+            `}
+        `;
+        
+        return card;
+    }
+    
+    updateStats() {
+        const discoveredCount = document.getElementById('discovered-count');
+        const progressBar = document.getElementById('grimoire-progress');
+        
+        if (discoveredCount) {
+            discoveredCount.textContent = this.discoveredRecipes.length;
+        }
+        
+        if (progressBar) {
+            const progress = (this.discoveredRecipes.length / Object.keys(this.allRecipes).length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+    }
+    
+    filterRecipes(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        this.filteredRecipes = Object.fromEntries(
+            Object.entries(this.allRecipes).filter(([name, recipe]) => {
+                const discovered = this.discoveredRecipes.includes(name);
+                if (!discovered) return false; // Só mostrar receitas descobertas na busca
+                
+                return name.toLowerCase().includes(term) ||
+                       (recipe.description && recipe.description.toLowerCase().includes(term)) ||
+                       (recipe.ingredients && recipe.ingredients.some(ing => ing.toLowerCase().includes(term)));
+            })
+        );
+        
+        this.loadRecipes();
+    }
+    
+    applyFilter(filterType) {
+        switch(filterType) {
+            case 'discovered':
+                this.filteredRecipes = Object.fromEntries(
+                    Object.entries(this.allRecipes).filter(([name]) => 
+                        this.discoveredRecipes.includes(name)
+                    )
+                );
+                break;
+            case 'undiscovered':
+                this.filteredRecipes = Object.fromEntries(
+                    Object.entries(this.allRecipes).filter(([name]) => 
+                        !this.discoveredRecipes.includes(name)
+                    )
+                );
+                break;
+            case 'basic':
+                this.filteredRecipes = Object.fromEntries(
+                    Object.entries(this.allRecipes).filter(([name, recipe]) => 
+                        recipe.ingredients && recipe.ingredients.length <= 2
+                    )
+                );
+                break;
+            case 'advanced':
+                this.filteredRecipes = Object.fromEntries(
+                    Object.entries(this.allRecipes).filter(([name, recipe]) => 
+                        recipe.ingredients && recipe.ingredients.length > 2
+                    )
+                );
+                break;
+            default:
+                this.filteredRecipes = this.allRecipes;
+        }
+        
+        this.loadRecipes();
+    }
+    
+    discoverRecipe(recipeName) {
+        if (!this.discoveredRecipes.includes(recipeName)) {
+            this.discoveredRecipes.push(recipeName);
+            gameState.discoveredRecipes = this.discoveredRecipes;
+            saveGameState();
+            
+            // Mostrar notificação
+            showMessage(`📚 Nova receita descoberta: ${recipeName}!`, 'success');
+            
+            // Atualizar estatísticas
+            this.updateStats();
+        }
+    }
+}
+
+// Funções globais
+function openGrimoire() {
+    if (window.grimoireSystem) {
+        window.grimoireSystem.open();
+    }
+}
+
+function closeGrimoire() {
+    if (window.grimoireSystem) {
+        window.grimoireSystem.close();
+    }
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    window.grimoireSystem = new GrimoireSystem();
+    
+    // Adicionar botão do grimório ao menu principal
+    addGrimoireButton();
+});
+
+function addGrimoireButton() {
+    const menuContainer = document.querySelector('.game-menu') || document.querySelector('.menu-container');
+    if (menuContainer) {
+        const grimoireBtn = document.createElement('button');
+        grimoireBtn.className = 'menu-btn grimoire-btn';
+        grimoireBtn.innerHTML = '📚 Grimório';
+        grimoireBtn.onclick = openGrimoire;
+        menuContainer.appendChild(grimoireBtn);
+    }
+}
+
+// Integração com sistema de poções
+const originalCreatePotion = window.createPotion;
+if (originalCreatePotion) {
+    window.createPotion = function(ingredients) {
+        const result = originalCreatePotion(ingredients);
+        
+        // Se a poção foi criada com sucesso, descobrir a receita
+        if (result && result.success && result.potionName) {
+            window.grimoireSystem.discoverRecipe(result.potionName);
+        }
+        
+        return result;
+    };
+}
+
+
+
+
+// ===== UTILIDADE PARA ITEMS: SISTEMA DE DICAS =====
+
+// Função principal da utilidade
+function activate_items_hint_system(target = null) {
+    console.log('Ativando Sistema de Dicas para items');
+    
+    // Verificar se o jogador possui o item
+    if (!gameState.inventory.includes('items')) {
+        showMessage('Você precisa do item items para usar esta função.');
+        return false;
+    }
+    
+    // Implementar lógica específica
+    switch('hint_system') {
+        case 'information_reveal':
+            return revealHiddenInformation(target);
+        case 'dialogue_enhancement':
+            return enhanceDialogueOptions(target);
+        case 'emotional_indicator':
+            return showEmotionalState(target);
+        case 'progress_tracker':
+            return displayProgressInfo(target);
+        case 'hint_system':
+            return provideContextualHint(target);
+        default:
+            return executeGenericUtility(target);
+    }
+}
+
+// Funções auxiliares específicas
+function revealHiddenInformation(target) {
+    if (target && target.hiddenInfo) {
+        showModal({
+            title: 'Informação Revelada',
+            content: target.hiddenInfo,
+            type: 'info'
+        });
+        return true;
+    }
+    return false;
+}
+
+function enhanceDialogueOptions(npc) {
+    if (npc && npc.specialDialogues) {
+        // Adicionar opções especiais de diálogo
+        npc.currentDialogues = [...npc.currentDialogues, ...npc.specialDialogues];
+        showMessage('Novas opções de diálogo disponíveis!');
+        return true;
+    }
+    return false;
+}
+
+function showEmotionalState(npc) {
+    if (npc && npc.emotionalState) {
+        const emotionDisplay = document.createElement('div');
+        emotionDisplay.className = 'emotion-indicator';
+        emotionDisplay.innerHTML = `
+            <div class="emotion-badge">
+                <span class="emotion-emoji">${npc.emotionalState.emoji}</span>
+                <span class="emotion-name">${npc.emotionalState.name}</span>
+            </div>
+        `;
+        
+        // Adicionar à interface
+        const npcContainer = document.querySelector('.npc-container');
+        if (npcContainer) {
+            npcContainer.appendChild(emotionDisplay);
+        }
+        return true;
+    }
+    return false;
+}
+
+function displayProgressInfo(quest) {
+    if (quest) {
+        const progress = calculateQuestProgress(quest);
+        showModal({
+            title: 'Progresso da Quest',
+            content: `
+                <div class="progress-info">
+                    <h3>${quest.title}</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <p>Progresso: ${progress}%</p>
+                    <ul>
+                        ${quest.objectives.map((obj, i) => 
+                            `<li class="${quest.completedObjectives.includes(i) ? 'completed' : 'pending'}">
+                                ${obj}
+                            </li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `,
+            type: 'progress'
+        });
+        return true;
+    }
+    return false;
+}
+
+function provideContextualHint(context) {
+    const hints = {
+        'dialogue_difficulty': 'Tente uma abordagem mais empática.',
+        'potion_creation': 'Considere as emoções opostas para criar equilíbrio.',
+        'npc_interaction': 'Observe as pistas visuais e emocionais do personagem.',
+        'quest_objective': 'Releia os objetivos e considere diferentes perspectivas.'
+    };
+    
+    const contextType = determineContextType(context);
+    const hint = hints[contextType] || 'Observe seu entorno e confie em sua intuição.';
+    
+    showMessage(hint, 'hint');
+    return true;
+}
+
+// Integração com o sistema de itens
+if (typeof GAME_DATA !== 'undefined' && GAME_DATA.items && GAME_DATA.items['items']) {
+    GAME_DATA.items['items'].utility = {
+        name: 'Sistema de Dicas',
+        description: 'Fornece dicas contextuais',
+        activate: activate_items_hint_system
+    };
+}
+
+// Adicionar botão de utilidade na interface do inventário
+function addUtilityButton_items() {
+    const inventoryItem = document.querySelector(`[data-item="items"]`);
+    if (inventoryItem) {
+        const utilityBtn = document.createElement('button');
+        utilityBtn.className = 'utility-btn';
+        utilityBtn.textContent = 'Usar';
+        utilityBtn.onclick = () => activate_items_hint_system(getCurrentContext());
+        inventoryItem.appendChild(utilityBtn);
+    }
+}
+
+// Auto-inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    addUtilityButton_items();
+});
+
+
+
+
+// ===== UTILIDADE PARA LENTE_COMPREENSAO: SISTEMA DE DICAS =====
+
+// Função principal da utilidade
+function activate_lente_compreensao_hint_system(target = null) {
+    console.log('Ativando Sistema de Dicas para lente_compreensao');
+    
+    // Verificar se o jogador possui o item
+    if (!gameState.inventory.includes('lente_compreensao')) {
+        showMessage('Você precisa do item lente_compreensao para usar esta função.');
+        return false;
+    }
+    
+    // Implementar lógica específica
+    switch('hint_system') {
+        case 'information_reveal':
+            return revealHiddenInformation(target);
+        case 'dialogue_enhancement':
+            return enhanceDialogueOptions(target);
+        case 'emotional_indicator':
+            return showEmotionalState(target);
+        case 'progress_tracker':
+            return displayProgressInfo(target);
+        case 'hint_system':
+            return provideContextualHint(target);
+        default:
+            return executeGenericUtility(target);
+    }
+}
+
+// Funções auxiliares específicas
+function revealHiddenInformation(target) {
+    if (target && target.hiddenInfo) {
+        showModal({
+            title: 'Informação Revelada',
+            content: target.hiddenInfo,
+            type: 'info'
+        });
+        return true;
+    }
+    return false;
+}
+
+function enhanceDialogueOptions(npc) {
+    if (npc && npc.specialDialogues) {
+        // Adicionar opções especiais de diálogo
+        npc.currentDialogues = [...npc.currentDialogues, ...npc.specialDialogues];
+        showMessage('Novas opções de diálogo disponíveis!');
+        return true;
+    }
+    return false;
+}
+
+function showEmotionalState(npc) {
+    if (npc && npc.emotionalState) {
+        const emotionDisplay = document.createElement('div');
+        emotionDisplay.className = 'emotion-indicator';
+        emotionDisplay.innerHTML = `
+            <div class="emotion-badge">
+                <span class="emotion-emoji">${npc.emotionalState.emoji}</span>
+                <span class="emotion-name">${npc.emotionalState.name}</span>
+            </div>
+        `;
+        
+        // Adicionar à interface
+        const npcContainer = document.querySelector('.npc-container');
+        if (npcContainer) {
+            npcContainer.appendChild(emotionDisplay);
+        }
+        return true;
+    }
+    return false;
+}
+
+function displayProgressInfo(quest) {
+    if (quest) {
+        const progress = calculateQuestProgress(quest);
+        showModal({
+            title: 'Progresso da Quest',
+            content: `
+                <div class="progress-info">
+                    <h3>${quest.title}</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <p>Progresso: ${progress}%</p>
+                    <ul>
+                        ${quest.objectives.map((obj, i) => 
+                            `<li class="${quest.completedObjectives.includes(i) ? 'completed' : 'pending'}">
+                                ${obj}
+                            </li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `,
+            type: 'progress'
+        });
+        return true;
+    }
+    return false;
+}
+
+function provideContextualHint(context) {
+    const hints = {
+        'dialogue_difficulty': 'Tente uma abordagem mais empática.',
+        'potion_creation': 'Considere as emoções opostas para criar equilíbrio.',
+        'npc_interaction': 'Observe as pistas visuais e emocionais do personagem.',
+        'quest_objective': 'Releia os objetivos e considere diferentes perspectivas.'
+    };
+    
+    const contextType = determineContextType(context);
+    const hint = hints[contextType] || 'Observe seu entorno e confie em sua intuição.';
+    
+    showMessage(hint, 'hint');
+    return true;
+}
+
+// Integração com o sistema de itens
+if (typeof GAME_DATA !== 'undefined' && GAME_DATA.items && GAME_DATA.items['lente_compreensao']) {
+    GAME_DATA.items['lente_compreensao'].utility = {
+        name: 'Sistema de Dicas',
+        description: 'Fornece dicas contextuais',
+        activate: activate_lente_compreensao_hint_system
+    };
+}
+
+// Adicionar botão de utilidade na interface do inventário
+function addUtilityButton_lente_compreensao() {
+    const inventoryItem = document.querySelector(`[data-item="lente_compreensao"]`);
+    if (inventoryItem) {
+        const utilityBtn = document.createElement('button');
+        utilityBtn.className = 'utility-btn';
+        utilityBtn.textContent = 'Usar';
+        utilityBtn.onclick = () => activate_lente_compreensao_hint_system(getCurrentContext());
+        inventoryItem.appendChild(utilityBtn);
+    }
+}
+
+// Auto-inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    addUtilityButton_lente_compreensao();
+});
+
