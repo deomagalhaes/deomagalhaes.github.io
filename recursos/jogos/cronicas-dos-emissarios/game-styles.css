@@ -738,5 +738,460 @@ button:focus,
         padding-right: 1rem;
     }
 }
+/* ===== ESTILOS PARA O ATO 2: SISTEMA DE REPUTAÇÃO E FACÇÕES ===== */
+
+/* ===== PAINEL DE REPUTAÇÃO ===== */
+#reputation-panel {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#reputation-panel h3 {
+    margin: 0 0 16px 0;
+    color: #1e293b;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.reputation-section {
+    margin-bottom: 16px;
+}
+
+.reputation-section h4 {
+    margin: 0 0 8px 0;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.reputation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    border-left: 4px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.reputation-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reputation-item span:first-child {
+    font-weight: 500;
+    color: #334155;
+}
+
+.reputation-item span:last-child {
+    font-weight: 600;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* ===== ESTILOS PARA FACÇÕES ===== */
+.faction-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+    border: 1px solid #a78bfa;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #5b21b6;
+    margin: 4px;
+    transition: all 0.3s ease;
+}
+
+.faction-badge:hover {
+    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
+    color: #4c1d95;
+    transform: scale(1.05);
+}
+
+.faction-rank {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #f59e0b;
+    color: #92400e;
+}
+
+.faction-rank.aspirante {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.faction-rank.iniciado {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #3b82f6;
+    color: #1e40af;
+}
+
+.faction-rank.guardiao {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-color: #10b981;
+    color: #047857;
+}
+
+.faction-rank.mestre {
+    background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    border-color: #ec4899;
+    color: #be185d;
+}
+
+/* ===== ESTILOS PARA O SANTUÁRIO DOS GUARDIÕES ===== */
+.scenario.santuario-guardioes {
+    background: linear-gradient(135deg, #E6E6FA 0%, #DDA0DD 30%, #98FB98 70%, #F0F8FF 100%);
+    border: 3px solid #9370db;
+    position: relative;
+    overflow: hidden;
+}
+
+.scenario.santuario-guardioes::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(221, 160, 221, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(152, 251, 152, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(240, 248, 255, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.scenario.santuario-guardioes .scenario-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== CRISTAIS EMOCIONAIS ANIMADOS ===== */
+.emotional-crystal {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 4px;
+    animation: crystalPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+}
+
+@keyframes crystalPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+.crystal-empathy {
+    background: radial-gradient(circle, #ff69b4, #ff1493);
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+}
+
+.crystal-wisdom {
+    background: radial-gradient(circle, #9370db, #663399);
+    box-shadow: 0 0 15px rgba(147, 112, 219, 0.6);
+}
+
+.crystal-courage {
+    background: radial-gradient(circle, #ffd700, #ff8c00);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+/* ===== DIÁLOGOS AVANÇADOS ===== */
+.dialogue-option.empathy {
+    background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    border-left: 4px solid #ec4899;
+    color: #be185d;
+}
+
+.dialogue-option.wisdom {
+    background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+    border-left: 4px solid #8b5cf6;
+    color: #5b21b6;
+}
+
+.dialogue-option.courage {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+}
+
+.dialogue-option.faction {
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    border-left: 4px solid #0ea5e9;
+    color: #0c4a6e;
+    position: relative;
+}
+
+.dialogue-option.faction::before {
+    content: '⚔️';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+/* ===== NOTIFICAÇÕES DE REPUTAÇÃO ===== */
+.reputation-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    z-index: 1000;
+    animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-in 3s forwards;
+    font-weight: 500;
+}
+
+.reputation-notification.negative {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* ===== MEDIDOR DE INFLUÊNCIA ===== */
+.influence-meter {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+    position: relative;
+}
+
+.influence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+    border-radius: 4px;
+    transition: width 0.8s ease-in-out;
+    position: relative;
+}
+
+.influence-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* ===== JARDIM DE CRISTAIS (FEATURE ESPECIAL) ===== */
+.crystal-garden {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 12px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: 12px;
+    margin: 16px 0;
+    border: 2px solid #22c55e;
+}
+
+.garden-crystal {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.garden-crystal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.garden-crystal:hover::before {
+    transform: translateX(100%);
+}
+
+.garden-crystal:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== RESPONSIVIDADE PARA DISPOSITIVOS MÓVEIS ===== */
+@media (max-width: 768px) {
+    #reputation-panel {
+        padding: 12px;
+        margin: 8px 0;
+    }
+    
+    .reputation-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .faction-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+    
+    .crystal-garden {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    .garden-crystal {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .reputation-notification {
+        right: 10px;
+        left: 10px;
+        top: 10px;
+        text-align: center;
+    }
+}
+
+/* ===== ANIMAÇÕES DE TRANSIÇÃO ENTRE CENÁRIOS ===== */
+.scenario-transition.sanctuary {
+    animation: sanctuaryEntrance 1.5s ease-in-out;
+}
+
+@keyframes sanctuaryEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+        filter: blur(10px);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+/* ===== EFEITOS ESPECIAIS PARA ITENS DE FACÇÃO ===== */
+.inventory-item.faction-item {
+    position: relative;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+    border: 2px solid #d97706;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.inventory-item.faction-item::after {
+    content: '⭐';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    animation: starPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/*
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.map-button:hover {
+    transform: translateY(-3px) !important;
+}
+
+.territory-card:hover {
+    transform: translateY(-5px) scale(1.02) !important;
+}
+*/
+
 /* ===== FIM DO ARQUIVO game-styles.css ===== */
 

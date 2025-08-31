@@ -1254,6 +1254,174 @@ class EmissariesGameEngine {
     }
 }
 
+// 1. ADICIONAR ESTA FUNÇÃO AO game-engine-final.js:
+
+function checkAndShowMapButton() {
+    // Verificar se o Ato 1 foi concluído
+    const act1Completed = localStorage.getItem('act1Completed') === 'true';
+    
+    // Verificar se todas as quests principais do Ato 1 foram completadas
+    const completedQuests = JSON.parse(localStorage.getItem('completedQuests') || '[]');
+    const mainQuests = ['primeira_missao', 'conflito_elena', 'sabedoria_lyra', 'harmonia_balthasar', 'transformacao_kael', 'equilibrio_final'];
+    const allMainQuestsCompleted = mainQuests.every(quest => completedQuests.includes(quest));
+    
+    // Se o Ato 1 foi concluído OU todas as quests principais foram completadas, mostrar botão
+    if (act1Completed || allMainQuestsCompleted) {
+        showMapButton();
+        
+        // Garantir que o flag está salvo
+        if (!act1Completed) {
+            localStorage.setItem('act1Completed', 'true');
+        }
+    }
+}
+
+function showMapButton() {
+    // Verificar se o botão já existe para evitar duplicatas
+    if (document.getElementById('world-map-button')) {
+        return;
+    }
+    
+    // Criar o botão mapa-mundi
+    const mapButton = document.createElement('button');
+    mapButton.id = 'world-map-button';
+    mapButton.className = 'map-button';
+    mapButton.innerHTML = '🗺️ Mapa-Mundi';
+    mapButton.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #2E8B57, #3CB371);
+        border: 3px solid #228B22;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+    `;
+    
+    // Adicionar efeitos hover
+    mapButton.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-3px)';
+        this.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4)';
+    });
+    
+    mapButton.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
+    });
+    
+    // Adicionar funcionalidade do clique
+    mapButton.addEventListener('click', function() {
+        showWorldMap();
+    });
+    
+    // Adicionar ao body
+    document.body.appendChild(mapButton);
+    
+    // Mostrar notificação
+    showNotification('🗺️ Mapa-Mundi desbloqueado! Explore novos territórios.', 'success');
+}
+
+function showWorldMap() {
+    // Criar interface do mapa-mundi
+    const mapInterface = document.createElement('div');
+    mapInterface.id = 'world-map-interface';
+    mapInterface.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.5s ease-out;
+    `;
+    
+    mapInterface.innerHTML = `
+        <div style="text-align: center; color: white; max-width: 800px; padding: 20px;">
+            <h1 style="font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                🗺️ Mapa-Mundi de Elara
+            </h1>
+            <p style="font-size: 1.2em; margin-bottom: 30px; opacity: 0.9;">
+                Você completou o Ato 1 das Crônicas dos Emissários! Novos territórios e desafios aguardam.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                <div class="territory-card" data-territory="act1" style="background: linear-gradient(45deg, #228B22, #32CD32); padding: 20px; border-radius: 15px; cursor: pointer; transition: transform 0.3s ease;">
+                    <h3>🏰 Reino da Empatia</h3>
+                    <p>Ato 1 - Concluído</p>
+                    <small>Revisitar suas aventuras iniciais</small>
+                </div>
+                
+                <div class="territory-card" data-territory="act2" style="background: linear-gradient(45deg, #4169E1, #6495ED); padding: 20px; border-radius: 15px; cursor: pointer; transition: transform 0.3s ease;">
+                    <h3>⚖️ Terras do Conflito</h3>
+                    <p>Ato 2 - Em Breve</p>
+                    <small>Novos desafios de mediação</small>
+                </div>
+                
+                <div class="territory-card" data-territory="act3" style="background: linear-gradient(45deg, #8A2BE2, #9370DB); padding: 20px; border-radius: 15px; cursor: not-allowed; opacity: 0.6;">
+                    <h3>🌟 Domínios da Sabedoria</h3>
+                    <p>Ato 3 - Bloqueado</p>
+                    <small>Complete o Ato 2 para desbloquear</small>
+                </div>
+            </div>
+            
+            <button id="close-world-map" style="
+                background: linear-gradient(45deg, #DC143C, #B22222);
+                border: 2px solid #FF6347;
+                color: white;
+                padding: 12px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                margin-top: 20px;
+                transition: all 0.3s ease;
+            ">
+                Fechar Mapa
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(mapInterface);
+    
+    // Adicionar eventos
+    document.getElementById('close-world-map').addEventListener('click', function() {
+        mapInterface.remove();
+    });
+    
+    // Adicionar efeitos hover nos territórios
+    document.querySelectorAll('.territory-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            if (this.style.cursor !== 'not-allowed') {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        card.addEventListener('click', function() {
+            const territory = this.dataset.territory;
+            if (territory === 'act1') {
+                mapInterface.remove();
+                // Voltar ao jogo normal
+            } else if (territory === 'act2') {
+                showNotification('🚧 Ato 2 em desenvolvimento! Em breve disponível.', 'info');
+            }
+        });
+    });
+}
+
 // ===== INICIALIZAÇÃO GLOBAL =====
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎮 Carregando Crônicas dos Emissários...');
@@ -1268,6 +1436,30 @@ document.addEventListener('DOMContentLoaded', () => {
     window.gameEngine = new EmissariesGameEngine();
     
     console.log('✅ Jogo carregado com sucesso!');
+setTimeout(checkAndShowMapButton, 1000);
+
+// 3. MODIFICAR A FUNÇÃO QUE COMPLETA O ATO 1:
+
+function completeAct1() {
+    // Código existente para completar o Ato 1...
+    
+    // ADICIONAR ESTAS LINHAS:
+    localStorage.setItem('act1Completed', 'true');
+    showMapButton();
+    
+    // Mostrar mensagem de conclusão
+    showNotification('🎉 Parabéns! Você completou o Ato 1! O Mapa-Mundi foi desbloqueado.', 'success');
+}
+
+// 4. ADICIONAR AO EVENTO DE CARREGAMENTO DA PÁGINA:
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Código de inicialização existente...
+    
+    // ADICIONAR ESTA LINHA:
+    setTimeout(checkAndShowMapButton, 1000); // Aguardar 1 segundo para garantir que tudo carregou
+});
+
 });
 
 // ===== ESTILOS CSS ADICIONAIS PARA ANIMAÇÕES =====
@@ -1359,6 +1551,467 @@ const additionalStyles = `
         margin-top: 1rem;
     }
 `;
+
+// ===== SISTEMA DE REPUTAÇÃO =====
+class ReputationSystem {
+    constructor() {
+        this.reputation = GAME_DATA.reputation;
+    }
+
+    // Modifica reputação baseada em ação
+    modifyReputation(action, scenario = null, faction = null) {
+        const modifier = this.reputation.modifiers[action] || 0;
+        
+        if (scenario && this.reputation.scenarios[scenario] !== undefined) {
+            this.reputation.scenarios[scenario] = Math.max(0, Math.min(100, 
+                this.reputation.scenarios[scenario] + modifier));
+            
+            // Propaga influência para cenários conectados
+            this.propagateInfluence(scenario, modifier * 0.3);
+        }
+        
+        if (faction && this.reputation.factions[faction] !== undefined) {
+            this.reputation.factions[faction] = Math.max(-100, Math.min(100, 
+                this.reputation.factions[faction] + modifier));
+        }
+        
+        // Atualiza interface
+        this.updateReputationDisplay();
+        
+        // Verifica desbloqueios
+        this.checkUnlocks();
+        
+        console.log(`Reputação modificada: ${action} (${modifier > 0 ? '+' : ''}${modifier})`);
+    }
+
+    // Propaga influência entre cenários conectados
+    propagateInfluence(sourceScenario, influence) {
+        const scenario = GAME_DATA.scenarios[sourceScenario];
+        if (!scenario || !scenario.connections) return;
+        
+        scenario.connections.forEach(connectedScenario => {
+            if (this.reputation.scenarios[connectedScenario] !== undefined) {
+                this.reputation.scenarios[connectedScenario] = Math.max(0, Math.min(100,
+                    this.reputation.scenarios[connectedScenario] + influence));
+            }
+        });
+    }
+
+    // Obtém nível de reputação em texto
+    getReputationLevel(value) {
+        if (value >= 80) return { level: 'Herói', color: '#10B981' };
+        if (value >= 60) return { level: 'Respeitado', color: '#3B82F6' };
+        if (value >= 40) return { level: 'Neutro', color: '#6B7280' };
+        if (value >= 20) return { level: 'Desconfiado', color: '#F59E0B' };
+        return { level: 'Hostil', color: '#EF4444' };
+    }
+
+    // Verifica se o jogador pode acessar conteúdo baseado em reputação
+    canAccess(requirements) {
+        if (!requirements) return true;
+        
+        // Verifica reputação de cenário
+        if (requirements.scenario) {
+            for (const [scenario, minRep] of Object.entries(requirements.scenario)) {
+                if (this.reputation.scenarios[scenario] < minRep) return false;
+            }
+        }
+        
+        // Verifica reputação de facção
+        if (requirements.faction) {
+            for (const [faction, minRep] of Object.entries(requirements.faction)) {
+                if (this.reputation.factions[faction] < minRep) return false;
+            }
+        }
+        
+        return true;
+    }
+
+    // Atualiza display de reputação na interface
+    updateReputationDisplay() {
+        const reputationPanel = document.getElementById('reputation-panel');
+        if (!reputationPanel) return;
+        
+        let html = '<h3>🏆 Reputação</h3>';
+        
+        // Reputação por cenário
+        html += '<div class="reputation-section"><h4>Comunidades</h4>';
+        for (const [scenario, value] of Object.entries(this.reputation.scenarios)) {
+            const level = this.getReputationLevel(value);
+            const scenarioData = GAME_DATA.scenarios[scenario];
+            if (scenarioData) {
+                html += `
+                    <div class="reputation-item">
+                        <span>${scenarioData.emoji} ${scenarioData.name}</span>
+                        <span style="color: ${level.color}">${level.level} (${value})</span>
+                    </div>
+                `;
+            }
+        }
+        html += '</div>';
+        
+        // Reputação por facção
+        html += '<div class="reputation-section"><h4>Facções</h4>';
+        for (const [faction, value] of Object.entries(this.reputation.factions)) {
+            const level = this.getReputationLevel(Math.abs(value));
+            const factionData = GAME_DATA.factions[faction];
+            if (factionData) {
+                html += `
+                    <div class="reputation-item">
+                        <span>⚔️ ${factionData.name}</span>
+                        <span style="color: ${level.color}">${level.level} (${value})</span>
+                    </div>
+                `;
+            }
+        }
+        html += '</div>';
+        
+        reputationPanel.innerHTML = html;
+    }
+
+    // Verifica desbloqueios baseados em reputação
+    checkUnlocks() {
+        // Verifica ranks de facção
+        for (const [factionId, factionData] of Object.entries(GAME_DATA.factions)) {
+            const currentRep = this.reputation.factions[factionId];
+            const currentRank = this.getFactionRank(factionId);
+            
+            factionData.ranks.forEach(rank => {
+                if (currentRep >= rank.minReputation && !gameState.unlockedRanks.includes(`${factionId}_${rank.name}`)) {
+                    this.unlockFactionRank(factionId, rank);
+                }
+            });
+        }
+    }
+
+    // Obtém rank atual em uma facção
+    getFactionRank(factionId) {
+        const reputation = this.reputation.factions[factionId];
+        const faction = GAME_DATA.factions[factionId];
+        if (!faction) return null;
+        
+        let currentRank = null;
+        faction.ranks.forEach(rank => {
+            if (reputation >= rank.minReputation) {
+                currentRank = rank;
+            }
+        });
+        
+        return currentRank;
+    }
+
+    // Desbloqueia novo rank de facção
+    unlockFactionRank(factionId, rank) {
+        const rankId = `${factionId}_${rank.name}`;
+        if (gameState.unlockedRanks.includes(rankId)) return;
+        
+        gameState.unlockedRanks.push(rankId);
+        
+        // Aplica benefícios do rank
+        rank.benefits.forEach(benefit => {
+            this.applyRankBenefit(benefit);
+        });
+        
+        // Mostra notificação
+        showNotification(`🎉 Novo Rank Desbloqueado: ${rank.name} nos ${GAME_DATA.factions[factionId].name}!`);
+    }
+
+    // Aplica benefício de rank
+    applyRankBenefit(benefit) {
+        switch (benefit) {
+            case 'acesso_biblioteca_basica':
+                gameState.unlockedFeatures.push('biblioteca_basica');
+                break;
+            case 'receitas_avancadas':
+                gameState.unlockedFeatures.push('receitas_avancadas');
+                break;
+            case 'meditacao_guiada':
+                gameState.unlockedFeatures.push('meditacao_guiada');
+                break;
+            case 'visao_emocional':
+                gameState.unlockedFeatures.push('visao_emocional');
+                break;
+            case 'influencia_comunitaria':
+                gameState.unlockedFeatures.push('influencia_comunitaria');
+                break;
+            case 'harmonia_perfeita':
+                gameState.unlockedFeatures.push('harmonia_perfeita');
+                break;
+            case 'lideranca_facção':
+                gameState.unlockedFeatures.push('lideranca_facção');
+                break;
+        }
+    }
+}
+
+// ===== SISTEMA DE INFLUÊNCIA ENTRE CENÁRIOS =====
+class InfluenceSystem {
+    constructor() {
+        this.influences = new Map();
+    }
+
+    // Registra uma influência entre cenários
+    addInfluence(sourceScenario, targetScenario, type, strength) {
+        const key = `${sourceScenario}_${targetScenario}`;
+        this.influences.set(key, { type, strength, timestamp: Date.now() });
+    }
+
+    // Calcula efeitos de influência
+    calculateInfluenceEffects(scenario) {
+        let effects = {
+            economicBoost: 0,
+            socialHarmony: 0,
+            culturalExchange: 0,
+            conflictSpillover: 0
+        };
+
+        for (const [key, influence] of this.influences.entries()) {
+            const [source, target] = key.split('_');
+            if (target === scenario) {
+                switch (influence.type) {
+                    case 'positive_resolution':
+                        effects.economicBoost += influence.strength * 0.1;
+                        effects.socialHarmony += influence.strength * 0.15;
+                        break;
+                    case 'cultural_exchange':
+                        effects.culturalExchange += influence.strength * 0.2;
+                        break;
+                    case 'conflict_spillover':
+                        effects.conflictSpillover += influence.strength * 0.1;
+                        effects.socialHarmony -= influence.strength * 0.1;
+                        break;
+                }
+            }
+        }
+
+        return effects;
+    }
+}
+
+// ===== SISTEMA DE DIÁLOGOS AVANÇADOS =====
+class AdvancedDialogueSystem {
+    constructor() {
+        this.dialogueHistory = new Map();
+        this.emotionalStates = new Map();
+    }
+
+    // Processa diálogo com base na reputação e estado emocional
+    processDialogue(npcId, dialogueOption, context = {}) {
+        const npc = GAME_DATA.characters[npcId];
+        if (!npc) return null;
+
+        // Verifica reputação com o NPC
+        const reputation = reputationSystem.reputation.scenarios[context.scenario] || 50;
+        const factionRep = context.faction ? reputationSystem.reputation.factions[context.faction] : 0;
+
+        // Calcula modificadores de diálogo
+        let dialogueModifiers = {
+            trust: this.calculateTrust(npcId, reputation, factionRep),
+            empathy: this.calculateEmpathy(context),
+            wisdom: this.calculateWisdom(context)
+        };
+
+        // Gera resposta baseada nos modificadores
+        return this.generateResponse(npc, dialogueOption, dialogueModifiers, context);
+    }
+
+    // Calcula nível de confiança do NPC
+    calculateTrust(npcId, reputation, factionRep) {
+        let trust = reputation / 100; // Base na reputação do cenário
+        
+        // Ajusta baseado na reputação de facção se relevante
+        if (factionRep !== 0) {
+            trust += (factionRep / 100) * 0.3;
+        }
+
+        // Considera histórico de interações
+        const history = this.dialogueHistory.get(npcId) || [];
+        const positiveInteractions = history.filter(h => h.outcome === 'positive').length;
+        const negativeInteractions = history.filter(h => h.outcome === 'negative').length;
+        
+        trust += (positiveInteractions - negativeInteractions) * 0.1;
+
+        return Math.max(0, Math.min(1, trust));
+    }
+
+    // Calcula nível de empatia demonstrada
+    calculateEmpathy(context) {
+        let empathy = 0.5; // Base neutra
+
+        // Verifica se o jogador tem itens que aumentam empatia
+        if (gameState.inventory.includes('cristal_empatia')) {
+            empathy += 0.3;
+        }
+
+        // Verifica habilidades desbloqueadas
+        if (gameState.unlockedFeatures.includes('visao_emocional')) {
+            empathy += 0.2;
+        }
+
+        return Math.max(0, Math.min(1, empathy));
+    }
+
+    // Calcula nível de sabedoria demonstrada
+    calculateWisdom(context) {
+        let wisdom = 0.3; // Base baixa
+
+        // Verifica se o jogador tem itens de sabedoria
+        if (gameState.inventory.includes('pergaminho_mediacao')) {
+            wisdom += 0.4;
+        }
+
+        // Verifica quests completadas que demonstram sabedoria
+        const wisdomQuests = ['conhecimento_supremo', 'teste_sabedoria', 'harmonia_perdida'];
+        const completedWisdomQuests = wisdomQuests.filter(q => gameState.completedQuests.includes(q));
+        wisdom += completedWisdomQuests.length * 0.1;
+
+        return Math.max(0, Math.min(1, wisdom));
+    }
+
+    // Gera resposta do NPC baseada nos modificadores
+    generateResponse(npc, dialogueOption, modifiers, context) {
+        // Registra interação no histórico
+        const history = this.dialogueHistory.get(npc.name) || [];
+        history.push({
+            option: dialogueOption,
+            modifiers: modifiers,
+            timestamp: Date.now(),
+            outcome: this.determineOutcome(modifiers)
+        });
+        this.dialogueHistory.set(npc.name, history);
+
+        // Retorna dados para o sistema de diálogo processar
+        return {
+            npc: npc,
+            modifiers: modifiers,
+            availableOptions: this.getAvailableOptions(npc, modifiers, context),
+            emotionalState: this.getEmotionalState(npc.name)
+        };
+    }
+
+    // Determina resultado da interação
+    determineOutcome(modifiers) {
+        const average = (modifiers.trust + modifiers.empathy + modifiers.wisdom) / 3;
+        if (average >= 0.7) return 'positive';
+        if (average >= 0.4) return 'neutral';
+        return 'negative';
+    }
+
+    // Obtém opções de diálogo disponíveis baseadas nos modificadores
+    getAvailableOptions(npc, modifiers, context) {
+        let options = ['standard_greeting'];
+
+        // Opções baseadas em confiança
+        if (modifiers.trust >= 0.6) {
+            options.push('personal_question', 'offer_help');
+        }
+
+        // Opções baseadas em empatia
+        if (modifiers.empathy >= 0.7) {
+            options.push('emotional_support', 'deep_understanding');
+        }
+
+        // Opções baseadas em sabedoria
+        if (modifiers.wisdom >= 0.6) {
+            options.push('wise_counsel', 'philosophical_discussion');
+        }
+
+        // Opções especiais de facção
+        if (context.faction && reputationSystem.reputation.factions[context.faction] >= 25) {
+            options.push('faction_business', 'faction_knowledge');
+        }
+
+        return options;
+    }
+
+    // Obtém estado emocional atual do NPC
+    getEmotionalState(npcId) {
+        return this.emotionalStates.get(npcId) || 'neutral';
+    }
+
+    // Define estado emocional do NPC
+    setEmotionalState(npcId, state) {
+        this.emotionalStates.set(npcId, state);
+    }
+}
+
+// ===== INICIALIZAÇÃO DOS NOVOS SISTEMAS =====
+// Adicionar no final do arquivo, antes do export:
+
+// Instancia os novos sistemas
+let reputationSystem;
+let influenceSystem;
+let advancedDialogueSystem;
+
+// Função para inicializar os novos sistemas
+function initializeAct2Systems() {
+    reputationSystem = new ReputationSystem();
+    influenceSystem = new InfluenceSystem();
+    advancedDialogueSystem = new AdvancedDialogueSystem();
+    
+    // Adiciona campos necessários ao gameState se não existirem
+    if (!gameState.unlockedRanks) {
+        gameState.unlockedRanks = [];
+    }
+    if (!gameState.unlockedFeatures) {
+        gameState.unlockedFeatures = [];
+    }
+    
+    console.log('Sistemas do Ato 2 inicializados com sucesso!');
+}
+
+// Função para salvar dados dos novos sistemas
+function saveAct2Data() {
+    const act2Data = {
+        reputation: reputationSystem.reputation,
+        influences: Array.from(influenceSystem.influences.entries()),
+        dialogueHistory: Array.from(advancedDialogueSystem.dialogueHistory.entries()),
+        emotionalStates: Array.from(advancedDialogueSystem.emotionalStates.entries()),
+        unlockedRanks: gameState.unlockedRanks,
+        unlockedFeatures: gameState.unlockedFeatures
+    };
+    
+    localStorage.setItem('act2_data', JSON.stringify(act2Data));
+}
+
+// Função para carregar dados dos novos sistemas
+function loadAct2Data() {
+    const savedData = localStorage.getItem('act2_data');
+    if (!savedData) return;
+    
+    try {
+        const act2Data = JSON.parse(savedData);
+        
+        if (act2Data.reputation) {
+            reputationSystem.reputation = act2Data.reputation;
+        }
+        
+        if (act2Data.influences) {
+            influenceSystem.influences = new Map(act2Data.influences);
+        }
+        
+        if (act2Data.dialogueHistory) {
+            advancedDialogueSystem.dialogueHistory = new Map(act2Data.dialogueHistory);
+        }
+        
+        if (act2Data.emotionalStates) {
+            advancedDialogueSystem.emotionalStates = new Map(act2Data.emotionalStates);
+        }
+        
+        if (act2Data.unlockedRanks) {
+            gameState.unlockedRanks = act2Data.unlockedRanks;
+        }
+        
+        if (act2Data.unlockedFeatures) {
+            gameState.unlockedFeatures = act2Data.unlockedFeatures;
+        }
+        
+        console.log('Dados do Ato 2 carregados com sucesso!');
+    } catch (error) {
+        console.error('Erro ao carregar dados do Ato 2:', error);
+    }
+}
+
 
 // Adicionar estilos ao documento
 const styleSheet = document.createElement('style');

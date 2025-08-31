@@ -100,6 +100,61 @@ const GAME_DATA = {
     hint: 'Dica: A verdadeira contemplacao surge quando contemplacao encontra solidariedade.'
 },},
 
+// ===== SISTEMA DE REPUTAÇÃO =====
+reputation: {
+    // Reputação por cenário (0-100)
+    scenarios: {
+        'VilaDaForja': 50,
+        'FlorestasSussurrantes': 50,
+        'MercadoCentral': 50,
+        'MontanhasCristalinas': 50,
+        'LagoReflexos': 50,
+        'CidadeFlutuante': 50,
+        'DesertIlusoes': 50,
+        'CavernasEcoantes': 50,
+        'TorreSabedoria': 50,
+        'SantuarioGuardioes': 50
+    },
+    
+    // Reputação por facção
+    factions: {
+        'GuardioesHarmonia': 0,
+        'ComerciantesLivres': 0,
+        'SabiosAntigos': 0
+    },
+    
+    // Modificadores de reputação baseados em ações
+    modifiers: {
+        'resolucao_pacifica': 10,
+        'uso_violencia': -15,
+        'mentira_descoberta': -20,
+        'ajuda_desinteressada': 15,
+        'quebra_promessa': -25,
+        'mediacao_sucesso': 20,
+        'empatia_demonstrada': 12,
+        'sabedoria_compartilhada': 8
+    }
+},
+
+// ===== NOVA FACÇÃO: GUARDIÕES DA HARMONIA =====
+factions: {
+    GuardioesHarmonia: {
+        name: 'Guardiões da Harmonia',
+        description: 'Uma ordem antiga dedicada a manter o equilíbrio emocional entre as comunidades de Elara',
+        philosophy: 'Através da compreensão profunda das emoções humanas, podemos prevenir conflitos antes que nasçam',
+        headquarters: 'SantuarioGuardioes',
+        leader: 'mestra_serenity',
+        members: ['guardiao_empatia', 'guardiao_sabedoria', 'guardiao_coragem'],
+        ranks: [
+            { name: 'Aspirante', minReputation: 0, benefits: ['acesso_biblioteca_basica'] },
+            { name: 'Iniciado', minReputation: 25, benefits: ['receitas_avancadas', 'meditacao_guiada'] },
+            { name: 'Guardião', minReputation: 50, benefits: ['visao_emocional', 'influencia_comunitaria'] },
+            { name: 'Mestre', minReputation: 75, benefits: ['harmonia_perfeita', 'lideranca_facção'] }
+        ],
+        questLine: ['teste_empatia', 'mediacao_conflito', 'harmonia_perdida', 'guardiao_supremo']
+    }
+},
+
     // ===== ITENS E FERRAMENTAS =====
     items: {
         diario_empatia: {
@@ -145,6 +200,39 @@ const GAME_DATA = {
             effect: 'Simboliza a renovação e o crescimento após conflitos resolvidos'
         }
     },
+
+// ===== NOVOS ITENS RELACIONADOS À FACÇÃO =====
+// Adicionar na seção items:
+
+cristal_empatia: {
+    name: 'Cristal da Empatia',
+    emoji: '💎',
+    description: 'Um cristal que pulsa suavemente com luz rosada, permitindo sentir as emoções dos outros com maior clareza e compaixão.',
+    type: 'tool',
+    effect: 'Revela o estado emocional verdadeiro dos NPCs e melhora opções de diálogo empáticas',
+    rarity: 'rare',
+    factionItem: 'GuardioesHarmonia'
+},
+
+pergaminho_mediacao: {
+    name: 'Pergaminho da Mediação',
+    emoji: '📜',
+    description: 'Contém técnicas avançadas de mediação e resolução de conflitos baseadas em princípios de Comunicação Não-Violenta.',
+    type: 'knowledge',
+    effect: 'Desbloqueia opções especiais de diálogo para resolver conflitos complexos',
+    rarity: 'epic',
+    factionItem: 'GuardioesHarmonia'
+},
+
+insignia_guardiao: {
+    name: 'Insígnia de Guardião',
+    emoji: '🏅',
+    description: 'Um símbolo de reconhecimento dos Guardiões da Harmonia, mostrando seu compromisso com a paz e o equilíbrio emocional.',
+    type: 'badge',
+    effect: 'Aumenta a reputação inicial com NPCs e facções aliadas',
+    rarity: 'legendary',
+    factionItem: 'GuardioesHarmonia'
+},
 
     // ===== CENÁRIOS E LOCAIS =====
     scenarios: {
@@ -274,6 +362,24 @@ const GAME_DATA = {
             firstVisit: false
         }
     },
+
+    // ===== NOVO CENÁRIO: SANTUÁRIO DOS GUARDIÕES =====
+// Adicionar na seção scenarios, após TorreSabedoria:
+
+SantuarioGuardioes: {
+    name: 'Santuário dos Guardiões',
+    mapId: 'elara',
+    level: 7,
+    emoji: '🏛️',
+    description: 'Um templo sereno construído em harmonia com a natureza, onde cristais emocionais crescem em jardins cuidadosamente cultivados. O ar vibra com uma energia pacífica que acalma até os corações mais perturbados.',
+    background: 'linear-gradient(135deg, #E6E6FA 0%, #DDA0DD 30%, #98FB98 70%, #F0F8FF 100%)',
+    music: 'sanctuary_theme',
+    connections: ['TorreSabedoria', 'CidadeFlutuante'],
+    npcs: ['mestra_serenity', 'guardiao_empatia', 'guardiao_sabedoria', 'guardiao_coragem'],
+    quests: ['teste_empatia', 'mediacao_conflito'],
+    firstVisit: false,
+    specialFeatures: ['jardim_cristais', 'fonte_serenidade', 'biblioteca_emocional']
+},
 
     // ===== PERSONAGENS (NPCs) =====
     characters: {
@@ -413,6 +519,53 @@ const GAME_DATA = {
         }
     },
 
+    // ===== NOVOS NPCs DA FACÇÃO =====
+// Adicionar na seção characters, após os NPCs existentes:
+
+mestra_serenity: {
+    name: 'Serenity',
+    title: 'Mestra dos Guardiões',
+    emoji: '🧘‍♀️',
+    description: 'Uma mulher de meia-idade com olhos que refletem profunda sabedoria emocional. Sua presença irradia calma e seus movimentos são deliberados e graciosos.',
+    personality: 'Serena, empática e profundamente sábia. Ela vê além das palavras e compreende as verdadeiras necessidades emocionais das pessoas.',
+    background: 'Fundadora dos Guardiões da Harmonia, ela dedicou sua vida a estudar as conexões entre emoções individuais e harmonia coletiva.',
+    currentProblem: 'Preocupa-se com o crescimento de conflitos em Elara e busca novos Guardiões capazes de restaurar o equilíbrio.',
+    questId: 'teste_empatia'
+},
+
+guardiao_empatia: {
+    name: 'Lysander',
+    title: 'Guardião da Empatia',
+    emoji: '💝',
+    description: 'Um jovem de olhar gentil que parece sentir as emoções dos outros como se fossem suas próprias. Suas mãos brilham suavemente quando toca cristais emocionais.',
+    personality: 'Altamente empático, às vezes sobrecarregado pelas emoções alheias. Dedicado a ajudar outros a encontrar compreensão mútua.',
+    background: 'Descobriu seus dons empáticos na adolescência e foi treinado pelos Guardiões para canalizar essa habilidade construtivamente.',
+    currentProblem: 'Luta para manter suas próprias emoções equilibradas enquanto ajuda outros com seus conflitos.',
+    questId: 'mediacao_conflito'
+},
+
+guardiao_sabedoria: {
+    name: 'Athena',
+    title: 'Guardiã da Sabedoria',
+    emoji: '📚',
+    description: 'Uma mulher madura com cabelos prateados e olhos que brilham com conhecimento ancestral. Carrega sempre um pergaminho com anotações sobre padrões emocionais.',
+    personality: 'Analítica, paciente e profundamente conhecedora da natureza humana. Prefere ensinar através de perguntas reflexivas.',
+    background: 'Ex-bibliotecária da Torre da Sabedoria que se juntou aos Guardiões para aplicar conhecimento teórico na prática.',
+    currentProblem: 'Busca documentar novos padrões de conflito emocional que surgiram recentemente em Elara.',
+    questId: 'harmonia_perdida'
+},
+
+guardiao_coragem: {
+    name: 'Marcus',
+    title: 'Guardião da Coragem',
+    emoji: '🛡️',
+    description: 'Um homem robusto com cicatrizes que contam histórias de conflitos resolvidos. Seus olhos mostram determinação inabalável e compaixão profunda.',
+    personality: 'Corajoso, protetor e determinado. Não hesita em enfrentar situações difíceis para proteger a harmonia.',
+    background: 'Ex-soldado que descobriu que a verdadeira coragem está em resolver conflitos sem violência.',
+    currentProblem: 'Enfrenta o desafio de convencer outros de que força e gentileza podem coexistir.',
+    questId: 'guardiao_supremo'
+},
+
     // ===== MISSÕES (QUESTS) =====
     quests: {
         ferreiro_sobrecarregado: {
@@ -481,6 +634,81 @@ const GAME_DATA = {
                 }
             }
         },
+
+        // ===== NOVAS MISSÕES DA FACÇÃO =====
+// Adicionar na seção quests:
+
+teste_empatia: {
+    id: 'teste_empatia',
+    title: 'O Teste da Empatia',
+    description: 'Mestra Serenity deseja avaliar sua capacidade de compreender e conectar-se com as emoções dos outros.',
+    giver: 'mestra_serenity',
+    location: 'SantuarioGuardioes',
+    type: 'faction_initiation',
+    difficulty: 'medium',
+    requirements: {
+        reputation: { 'GuardioesHarmonia': 0 },
+        items: [],
+        completedQuests: ['conhecimento_supremo']
+    },
+    objectives: [
+        {
+            type: 'emotional_reading',
+            target: 'guardiao_empatia',
+            description: 'Identifique corretamente as emoções ocultas de Lysander',
+            hint: 'Observe não apenas suas palavras, mas sua linguagem corporal e energia'
+        },
+        {
+            type: 'empathy_demonstration',
+            description: 'Demonstre compreensão genuína das lutas emocionais de outro',
+            hint: 'A empatia verdadeira vai além da simpatia - é sentir com, não apenas por'
+        }
+    ],
+    rewards: {
+        reputation: { 'GuardioesHarmonia': 15 },
+        items: ['cristal_empatia'],
+        experience: 200,
+        unlocks: ['mediacao_conflito']
+    }
+},
+
+mediacao_conflito: {
+    id: 'mediacao_conflito',
+    title: 'A Arte da Mediação',
+    description: 'Dois grupos em conflito precisam de um mediador habilidoso para encontrar uma solução pacífica.',
+    giver: 'guardiao_empatia',
+    location: 'MercadoCentral',
+    type: 'faction_quest',
+    difficulty: 'hard',
+    requirements: {
+        reputation: { 'GuardioesHarmonia': 15 },
+        items: ['cristal_empatia'],
+        completedQuests: ['teste_empatia']
+    },
+    objectives: [
+        {
+            type: 'conflict_analysis',
+            description: 'Identifique as necessidades reais por trás das posições de cada grupo',
+            hint: 'Posições são o que as pessoas dizem querer; necessidades são o que realmente precisam'
+        },
+        {
+            type: 'mediation_process',
+            description: 'Conduza uma sessão de mediação usando princípios de CNV',
+            hint: 'Observação, sentimentos, necessidades, pedidos - siga esta sequência'
+        },
+        {
+            type: 'solution_implementation',
+            description: 'Ajude os grupos a implementar uma solução mutuamente benéfica',
+            hint: 'Soluções duradouras atendem às necessidades de todos os envolvidos'
+        }
+    ],
+    rewards: {
+        reputation: { 'GuardioesHarmonia': 25, 'MercadoCentral': 20 },
+        items: ['pergaminho_mediacao'],
+        experience: 350,
+        unlocks: ['harmonia_perdida']
+    }
+},
 
                 conhecimento_supremo: {
             id: 'conhecimento_supremo',
