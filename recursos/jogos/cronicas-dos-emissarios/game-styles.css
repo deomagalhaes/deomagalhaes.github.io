@@ -1193,5 +1193,208 @@ button:focus,
 }
 */
 
+/* ===== SISTEMA DE FACÇÕES E REPUTAÇÃO ===== */
+
+.faction-reputation-panel {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    border: 2px solid #4f46e5;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.faction-reputation-panel h3 {
+    color: #e5e7eb;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.faction-status-item {
+    background: rgba(31, 41, 55, 0.8);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.faction-status-item:hover {
+    background: rgba(31, 41, 55, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.faction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.faction-emoji {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.faction-name {
+    color: #e5e7eb;
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+.reputation-level {
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.reputation-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.reputation-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+    border-radius: 4px;
+}
+
+.reputation-value {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* Estilos para cenários das facções */
+.scenario-cristalinos {
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+    border: 2px solid #6366f1;
+}
+
+.scenario-fluidos {
+    background: linear-gradient(45deg, #a7f3d0 0%, #6ee7b7 30%, #34d399 70%, #10b981 100%);
+    border: 2px solid #059669;
+}
+
+.scenario-equilibristas {
+    background: radial-gradient(circle, #fde68a 0%, #fcd34d 40%, #f59e0b 80%);
+    border: 2px solid #d97706;
+}
+
+/* Notificações */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    background: rgba(31, 41, 55, 0.95);
+    color: #e5e7eb;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #4f46e5;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+    max-width: 300px;
+}
+
+.notification-success {
+    border-left-color: #10b981;
+}
+
+.notification-warning {
+    border-left-color: #f59e0b;
+}
+
+.notification-error {
+    border-left-color: #ef4444;
+}
+
+.notification-info {
+    border-left-color: #3b82f6;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Estilos para diálogos com impacto em facções */
+.dialogue-choice-faction {
+    position: relative;
+}
+
+.dialogue-choice-faction::after {
+    content: '🏛️';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+}
+
+/* Indicadores de reputação em NPCs */
+.npc-faction-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.npc-faction-cristalinos {
+    background: #e0e7ff;
+}
+
+.npc-faction-fluidos {
+    background: #a7f3d0;
+}
+
+.npc-faction-equilibristas {
+    background: #fde68a;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .faction-reputation-panel {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .faction-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .reputation-level {
+        align-self: flex-end;
+    }
+    
+    .notification {
+        max-width: calc(100vw - 40px);
+        right: 20px;
+    }
+}
+
 /* ===== FIM DO ARQUIVO game-styles.css ===== */
 

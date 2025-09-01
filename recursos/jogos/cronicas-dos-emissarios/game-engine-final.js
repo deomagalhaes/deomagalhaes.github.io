@@ -197,6 +197,177 @@ class EmissariesGameEngine {
             this.DOM.closeMapButton.onclick = () => this.showScreen('world');
         }
 
+        // ===== SISTEMA DE FACÇÕES E REPUTAÇÃO =====
+
+// Função para inicializar o sistema de facções
+function initializeFactionSystem() {
+    if (!gameState.factionReputation) {
+        gameState.factionReputation = {
+            cristalinos: 0,
+            fluidos: 0,
+            equilibristas: 0
+        };
+    }
+}
+
+// Função para atualizar reputação com facção
+function updateFactionReputation(factionId, change, reason = '') {
+    if (!gameState.factionReputation) {
+        initializeFactionSystem();
+    }
+    
+    const oldRep = gameState.factionReputation[factionId];
+    gameState.factionReputation[factionId] = Math.max(-100, Math.min(100, oldRep + change));
+    const newRep = gameState.factionReputation[factionId];
+    
+    // Log da mudança de reputação
+    if (change !== 0) {
+        const factionName = GAME_DATA.factions[factionId].name;
+        const changeText = change > 0 ? `+${change}` : `${change}`;
+        const emoji = GAME_DATA.factions[factionId].emoji;
+        
+        showNotification(`${emoji} ${factionName}: ${changeText} reputação`, 
+                        change > 0 ? 'success' : 'warning');
+        
+        // Verificar mudanças de nível de reputação
+        const oldLevel = getReputationLevel(oldRep);
+        const newLevel = getReputationLevel(newRep);
+        
+        if (oldLevel !== newLevel) {
+            showNotification(`Status com ${factionName}: ${newLevel}`, 'info');
+        }
+    }
+    
+    saveGameState();
+    updateFactionDisplay();
+}
+
+// Função para obter nível de reputação
+function getReputationLevel(reputation) {
+    if (reputation >= 81) return 'Venerado';
+    if (reputation >= 51) return 'Aliado';
+    if (reputation >= 21) return 'Amigável';
+    if (reputation >= -20) return 'Neutro';
+    if (reputation >= -50) return 'Desconfiado';
+    return 'Hostil';
+}
+
+// Função para obter cor do nível de reputação
+function getReputationColor(reputation) {
+    if (reputation >= 81) return '#10B981'; // Verde escuro
+    if (reputation >= 51) return '#34D399'; // Verde
+    if (reputation >= 21) return '#6EE7B7'; // Verde claro
+    if (reputation >= -20) return '#9CA3AF'; // Cinza
+    if (reputation >= -50) return '#F59E0B'; // Laranja
+    return '#EF4444'; // Vermelho
+}
+
+// Função para verificar se pode interagir com facção
+function canInteractWithFaction(factionId) {
+    const reputation = gameState.factionReputation[factionId] || 0;
+    return reputation > -100; // Apenas "Hostil" completo bloqueia interação
+}
+
+// Função para atualizar display das facções
+function updateFactionDisplay() {
+    const factionContainer = document.getElementById('faction-status');
+    if (!factionContainer) return;
+    
+    let html = '<div class="faction-reputation-panel">';
+    html += '<h3>🏛️ Status das Facções</h3>';
+    
+    Object.keys(GAME_DATA.factions).forEach(factionId => {
+        const faction = GAME_DATA.factions[factionId];
+        const reputation = gameState.factionReputation[factionId] || 0;
+        const level = getReputationLevel(reputation);
+        const color = getReputationColor(reputation);
+        
+        html += `
+            <div class="faction-status-item" style="border-left: 4px solid ${color}">
+                <div class="faction-header">
+                    <span class="faction-emoji">${faction.emoji}</span>
+                    <span class="faction-name">${faction.name}</span>
+                    <span class="reputation-level" style="color: ${color}">${level}</span>
+                </div>
+                <div class="reputation-bar">
+                    <div class="reputation-fill" style="width: ${(reputation + 100) / 2}%; background-color: ${color}"></div>
+                </div>
+                <div class="reputation-value">${reputation > 0 ? '+' : ''}${reputation}</div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    factionContainer.innerHTML = html;
+}
+
+// Função para processar escolhas de diálogo com impacto em facções
+function processDialogueChoice(choice, questId) {
+    // Processar mudanças de reputação
+    if (choice.factionChange) {
+        Object.keys(choice.factionChange).forEach(factionId => {
+            updateFactionReputation(factionId, choice.factionChange[factionId], 
+                                  `Escolha de diálogo em ${questId}`);
+        });
+    }
+    
+    // Continuar com processamento normal de diálogo
+    if (choice.next) {
+        const quest = GAME_DATA.quests[questId];
+        if (quest && quest.dialogueTree && quest.dialogueTree[choice.next]) {
+            displayDialogue(quest.dialogueTree[choice.next], questId);
+        }
+    }
+}
+
+// Função para mostrar notificações
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    const container = document.getElementById('notification-container') || document.body;
+    container.appendChild(notification);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 3000);
+}
+
+// Modificar função de inicialização do jogo para incluir facções
+const originalInitializeGame = initializeGame;
+function initializeGame() {
+    originalInitializeGame();
+    initializeFactionSystem();
+    updateFactionDisplay();
+}
+
+// Modificar função de carregamento de cenário para verificar acesso por facção
+function canAccessScenario(scenarioId) {
+    const scenario = GAME_DATA.scenarios[scenarioId];
+    if (!scenario) return false;
+    
+    // Verificar se o cenário pertence a uma facção
+    const factionScenarios = {
+        'LaboratorioCristalino': 'cristalinos',
+        'JardimFluido': 'fluidos',
+        'SalaoEquilibrio': 'equilibristas'
+    };
+    
+    const requiredFaction = factionScenarios[scenarioId];
+    if (requiredFaction) {
+        const reputation = gameState.factionReputation[requiredFaction] || 0;
+        if (reputation < -50) { // Desconfiado ou pior
+            showNotification(`${GAME_DATA.factions[requiredFaction].emoji} Acesso negado: reputação insuficiente com ${GAME_DATA.factions[requiredFaction].name}`, 'error');
+            return false;
+        }
+    }
+    
+    return true;
+}
         
         // Música de fundo (ativar com interação do usuário)
         document.body.addEventListener('click', () => {
