@@ -183,8 +183,11 @@ function loadExpansion1() {
                 }
             }
         }
-        // Futuramente, as missões 'perfeicao_flexivel', 'fluidez_constante' e 'decisao_equilibrada' seriam adicionadas aqui.
+
+        // Futuramente, as novas missões 'perfeicao_flexivel', 'fluidez_constante' e 'decisao_equilibrada' seriam adicionadas aqui.
     });
+
+    
 
     console.log("✅ Expansão 1 carregada com sucesso!");
 }

@@ -1178,6 +1178,29 @@ button:focus,
     }
 }
 
+/* ===== Estilo para textos de descrição ===== */
+.description-text {
+    color: #1e3a8a; /* Azul escuro */
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Aplicação nos cenários */
+#scene-description {
+    color: #1e3a8a; /* Azul escuro */
+}
+
+/* Aplicação nas missões */
+.quest-description {
+    color: #1e3a8a; /* Azul escuro */
+}
+
+/* Aplicação em diálogos */
+.dialogue-box p {
+    color: #1e3a8a; /* Azul escuro */
+}
+
 /*
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -1565,6 +1588,201 @@ button:focus,
     background: #fcd34d;
 }
 
+/* ===== SISTEMA DE COMBATE EMOCIONAL ===== */
+.emotional-combat {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.emotional-states {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.player-states, .opponent-states {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.player-states h3, .opponent-states h3 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.emotion-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.emotion-bar span:first-child {
+    min-width: 120px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.emotion-bar span:last-child {
+    min-width: 60px;
+    color: #fff;
+    font-size: 0.9em;
+}
+
+.bar {
+    flex: 1;
+    height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.fill {
+    height: 100%;
+    transition: width 0.5s ease;
+    border-radius: 8px;
+}
+
+.fill.calma {
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.fill.empatia {
+    background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+}
+
+.fill.assertividade {
+    background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.fill.resiliencia {
+    background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.dialogue-container {
+    background: rgba(255,255,255,0.95);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dialogue-text {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+}
+
+.actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dialogue-option {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dialogue-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.action-info {
+    font-size: 0.9em;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.feedback-container {
+    margin-top: 15px;
+    min-height: 30px;
+}
+
+.action-feedback {
+    background: rgba(255,255,255,0.9);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 0;
+    font-style: italic;
+    color: #555;
+    border-left: 4px solid #667eea;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .emotional-states {
+        flex-direction: column;
+    }
+    
+    .emotion-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+    }
+    
+    .emotion-bar span:first-child,
+    .emotion-bar span:last-child {
+        min-width: auto;
+        text-align: center;
+    }
+    
+    .dialogue-option {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 5px;
+    }
+}
+
+/* Animações para feedback visual */
+@keyframes emotionChange {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.fill {
+    animation: emotionChange 0.5s ease when width changes;
+}
+
+/* Indicadores de estado emocional */
+.emotion-bar.critical .fill {
+    animation: pulse 1s infinite;
+}
+
+.emotion-bar.excellent .fill {
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
 
 /* ===== FIM DO ARQUIVO game-styles.css ===== */
 

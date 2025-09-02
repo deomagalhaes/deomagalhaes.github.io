@@ -9,6 +9,7 @@ class EmissariesGameEngine {
         this.currentMinigame = null;
         this.audioManager = null;
         this.failedAttempts = 0; // Contador para dicas
+        this.emotionalCombat = new EmotionalCombatSystem(this);
         
         // Elementos DOM
         this.DOM = {
@@ -1425,212 +1426,322 @@ function canAccessScenario(scenarioId) {
     }
 }
 
-// 1. ADICIONAR ESTA FUNÇÃO AO game-engine-final.js:
-
-function checkAndShowMapButton() {
-    // Verificar se o Ato 1 foi concluído
-    const act1Completed = localStorage.getItem('act1Completed') === 'true';
-    
-    // Verificar se todas as quests principais do Ato 1 foram completadas
-    const completedQuests = JSON.parse(localStorage.getItem('completedQuests') || '[]');
-    const mainQuests = ['primeira_missao', 'conflito_elena', 'sabedoria_lyra', 'harmonia_balthasar', 'transformacao_kael', 'equilibrio_final'];
-    const allMainQuestsCompleted = mainQuests.every(quest => completedQuests.includes(quest));
-    
-    // Se o Ato 1 foi concluído OU todas as quests principais foram completadas, mostrar botão
-    if (act1Completed || allMainQuestsCompleted) {
-        showMapButton();
-        
-        // Garantir que o flag está salvo
-        if (!act1Completed) {
-            localStorage.setItem('act1Completed', 'true');
-        }
+// ===== SISTEMA DE COMBATE EMOCIONAL =====
+class EmotionalCombatSystem {
+    constructor(gameEngine) {
+        this.gameEngine = gameEngine;
+        this.isActive = false;
+        this.currentOpponent = null;
+        this.playerStates = null;
+        this.opponentStates = null;
+        this.actionCount = 0;
+        this.aggressiveActionCount = 0;
+        this.hintCount = 0;
     }
-}
 
-function showMapButton() {
-    // Verificar se o botão já existe para evitar duplicatas
-    if (document.getElementById('world-map-button')) {
+    // ADICIONAR ESTES MÉTODOS NA CLASSE EmotionalCombatSystem:
+
+showDialogue(dialogueNode) {
+    const dialogueContainer = document.getElementById('emotional-dialogue');
+    const actionsContainer = document.getElementById('emotional-actions');
+    
+    dialogueContainer.innerHTML = `<p class="dialogue-text">${dialogueNode.text}</p>`;
+    
+    if (dialogueNode.isEnd) {
+        this.endEmotionalCombat(dialogueNode.outcome);
         return;
     }
-    
-    // Criar o botão mapa-mundi
-    const mapButton = document.createElement('button');
-    mapButton.id = 'world-map-button';
-    mapButton.className = 'map-button';
-    mapButton.innerHTML = '🗺️ Mapa-Mundi';
-    mapButton.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: linear-gradient(45deg, #2E8B57, #3CB371);
-        border: 3px solid #228B22;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 16px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    `;
-    
-    // Adicionar efeitos hover
-    mapButton.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-3px)';
-        this.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4)';
-    });
-    
-    mapButton.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-        this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-    });
-    
-    // Adicionar funcionalidade do clique
-    mapButton.addEventListener('click', function() {
-        showWorldMap();
-    });
-    
-    // Adicionar ao body
-    document.body.appendChild(mapButton);
-    
-    // Mostrar notificação
-    showNotification('🗺️ Mapa-Mundi desbloqueado! Explore novos territórios.', 'success');
-}
 
-function showWorldMap() {
-    // Criar interface do mapa-mundi
-    const mapInterface = document.createElement('div');
-    mapInterface.id = 'world-map-interface';
-    mapInterface.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        z-index: 2000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        animation: fadeIn 0.5s ease-out;
-    `;
-    
-    mapInterface.innerHTML = `
-        <div style="text-align: center; color: white; max-width: 800px; padding: 20px;">
-            <h1 style="font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
-                🗺️ Mapa-Mundi de Elara
-            </h1>
-            <p style="font-size: 1.2em; margin-bottom: 30px; opacity: 0.9;">
-                Você completou o Ato 1 das Crônicas dos Emissários! Novos territórios e desafios aguardam.
-            </p>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
-                <div class="territory-card" data-territory="act1" style="background: linear-gradient(45deg, #228B22, #32CD32); padding: 20px; border-radius: 15px; cursor: pointer; transition: transform 0.3s ease;">
-                    <h3>🏰 Reino da Empatia</h3>
-                    <p>Ato 1 - Concluído</p>
-                    <small>Revisitar suas aventuras iniciais</small>
-                </div>
-                
-                <div class="territory-card" data-territory="act2" style="background: linear-gradient(45deg, #4169E1, #6495ED); padding: 20px; border-radius: 15px; cursor: pointer; transition: transform 0.3s ease;">
-                    <h3>⚖️ Terras do Conflito</h3>
-                    <p>Ato 2 - Em Breve</p>
-                    <small>Novos desafios de mediação</small>
-                </div>
-                
-                <div class="territory-card" data-territory="act3" style="background: linear-gradient(45deg, #8A2BE2, #9370DB); padding: 20px; border-radius: 15px; cursor: not-allowed; opacity: 0.6;">
-                    <h3>🌟 Domínios da Sabedoria</h3>
-                    <p>Ato 3 - Bloqueado</p>
-                    <small>Complete o Ato 2 para desbloquear</small>
-                </div>
-            </div>
-            
-            <button id="close-world-map" style="
-                background: linear-gradient(45deg, #DC143C, #B22222);
-                border: 2px solid #FF6347;
-                color: white;
-                padding: 12px 25px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-weight: bold;
-                margin-top: 20px;
-                transition: all 0.3s ease;
-            ">
-                Fechar Mapa
+    const optionsHTML = dialogueNode.options.map((option, index) => {
+        const action = GAME_DATA.emotionalActions[option.action];
+        const actionInfo = action ? `<span class="action-info">${action.emoji} ${action.name}</span>` : '';
+        return `
+            <button class="dialogue-option" onclick="gameEngine.emotionalCombat.selectOption(${index})">
+                ${option.text}
+                ${actionInfo}
             </button>
-        </div>
-    `;
+        `;
+    }).join('');
     
-    document.body.appendChild(mapInterface);
-    
-    // Adicionar eventos
-    document.getElementById('close-world-map').addEventListener('click', function() {
-        mapInterface.remove();
-    });
-    
-    // Adicionar efeitos hover nos territórios
-    document.querySelectorAll('.territory-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            if (this.style.cursor !== 'not-allowed') {
-                this.style.transform = 'translateY(-5px) scale(1.02)';
-            }
-        });
+    actionsContainer.innerHTML = optionsHTML;
+}
+
+updateEmotionalBars() {
+    ['calma', 'empatia', 'assertividade', 'resiliencia'].forEach(emotion => {
+        const playerBar = document.querySelector(`.player-states .${emotion}`);
+        const opponentBar = document.querySelector(`.opponent-states .${emotion}`);
         
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
+        if (playerBar) {
+            playerBar.style.width = `${this.playerStates[emotion]}%`;
+            playerBar.parentElement.nextElementSibling.textContent = `${this.playerStates[emotion]}/100`;
+        }
         
-        card.addEventListener('click', function() {
-            const territory = this.dataset.territory;
-            if (territory === 'act1') {
-                mapInterface.remove();
-                // Voltar ao jogo normal
-            } else if (territory === 'act2') {
-                showNotification('🚧 Ato 2 em desenvolvimento! Em breve disponível.', 'info');
-            }
-        });
+        if (opponentBar) {
+            opponentBar.style.width = `${this.opponentStates[emotion]}%`;
+            opponentBar.parentElement.nextElementSibling.textContent = `${this.opponentStates[emotion]}/100`;
+        }
     });
 }
 
-// ===== INICIALIZAÇÃO GLOBAL =====
+showActionFeedback(message) {
+    const feedbackContainer = document.getElementById('emotional-feedback');
+    feedbackContainer.innerHTML = `<p class="action-feedback">${message}</p>`;
+    
+    setTimeout(() => {
+        feedbackContainer.innerHTML = '';
+    }, 3000);
+}
+
+checkLoseConditions() {
+    const quest = GAME_DATA.quests.conflito_cristalino;
+    const conditions = quest.emotionalCombat.loseConditions;
+    
+    return this.playerStates.calma <= conditions.selfCalma ||
+           this.opponentStates.assertividade >= conditions.opponentAssertividade ||
+           this.aggressiveActionCount >= conditions.aggressiveActions;
+}
+
+getCurrentDialogueNode() {
+    // Implementar lógica para rastrear nó atual do diálogo
+    return GAME_DATA.quests.conflito_cristalino.dialogueTree.start;
+}
+
+    startEmotionalCombat(questId, opponentId) {
+        const quest = GAME_DATA.quests[questId];
+        if (!quest || quest.type !== 'emotional_combat') return false;
+
+        this.isActive = true;
+        this.currentOpponent = opponentId;
+        this.playerStates = { ...GAME_DATA.emotionalStates.akari };
+        this.opponentStates = { ...GAME_DATA.emotionalStates[opponentId] };
+        this.actionCount = 0;
+        this.aggressiveActionCount = 0;
+        this.hintCount = 0;
+        this.emotionalCombat = new EmotionalCombatSystem(this);
+
+
+        this.renderEmotionalCombatUI();
+        this.showDialogue(quest.dialogueTree.start);
+        return true;
+    }
+
+    renderEmotionalCombatUI() {
+        const combatHTML = `
+            <div id="emotional-combat-container" class="emotional-combat">
+                <div class="emotional-states">
+                    <div class="player-states">
+                        <h3>🧙 Akari</h3>
+                        <div class="emotion-bar">
+                            <span>🧘 Calma:</span>
+                            <div class="bar"><div class="fill calma" style="width: ${this.playerStates.calma}%"></div></div>
+                            <span>${this.playerStates.calma}/100</span>
+                        </div>
+                        <div class="emotion-bar">
+                            <span>💙 Empatia:</span>
+                            <div class="bar"><div class="fill empatia" style="width: ${this.playerStates.empatia}%"></div></div>
+                            <span>${this.playerStates.empatia}/100</span>
+                        </div>
+                        <div class="emotion-bar">
+                            <span>⚡ Assertividade:</span>
+                            <div class="bar"><div class="fill assertividade" style="width: ${this.playerStates.assertividade}%"></div></div>
+                            <span>${this.playerStates.assertividade}/100</span>
+                        </div>
+                        <div class="emotion-bar">
+                            <span>🛡️ Resiliência:</span>
+                            <div class="bar"><div class="fill resiliencia" style="width: ${this.playerStates.resiliencia}%"></div></div>
+                            <span>${this.playerStates.resiliencia}/100</span>
+                        </div>
+                    </div>
+                    <div class="opponent-states">
+                        <h3>💎 ${GAME_DATA.characters[this.currentOpponent].name}</h3>
+                        <div class="emotion-bar">
+                            <span>🧘 Calma:</span>
+                            <div class="bar"><div class="fill calma" style="width: ${this.opponentStates.calma}%"></div></div>
+                            <span>${this.opponentStates.calma}/100</span>
+                        </div>
+                        <div class="emotion-bar">
+                            <span>💙 Empatia:</span>
+                            <div class="bar"><div class="fill empatia" style="width: ${this.opponentStates.empatia}%"></div></div>
+                            <span>${this.opponentStates.empatia}/100</span>
+                        </div>
+                        <div class="emotion-bar">
+                            <span>⚡ Assertividade:</span>
+                            <div class="bar"><div class="fill assertividade" style="width: ${this.opponentStates.assertividade}%"></div></div>
+                            <span>${this.opponentStates.assertividade}/100</span>
+                        </div>
+                        <div class="emotion-bar">
+                            <span>🛡️ Resiliência:</span>
+                            <div class="bar"><div class="fill resiliencia" style="width: ${this.opponentStates.resiliencia}%"></div></div>
+                            <span>${this.opponentStates.resiliencia}/100</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="emotional-dialogue" class="dialogue-container"></div>
+                <div id="emotional-actions" class="actions-container"></div>
+                <div id="emotional-feedback" class="feedback-container"></div>
+            </div>
+        `;
+        
+        this.gameEngine.DOM.dialogue.innerHTML = combatHTML;
+    }
+
+    selectOption(optionIndex) {
+        const currentQuest = GAME_DATA.quests.conflito_cristalino;
+        const currentNode = this.getCurrentDialogueNode();
+        const selectedOption = currentNode.options[optionIndex];
+        
+        this.actionCount++;
+        
+        if (selectedOption.action === 'attack') {
+            this.aggressiveActionCount++;
+        }
+        
+        // Aplicar efeitos da ação
+        if (selectedOption.action !== 'attack') {
+            this.applyEmotionalAction(selectedOption.action);
+        }
+        
+        // Verificar condições de vitória/derrota
+        if (this.checkWinConditions()) {
+            this.endEmotionalCombat('success');
+            return;
+        }
+        
+        if (this.checkLoseConditions()) {
+            this.endEmotionalCombat('failure');
+            return;
+        }
+        
+        // Mostrar dicas após duas tentativas falhadas
+        if (this.actionCount >= 2 && this.hintCount === 0) {
+            this.showHint();
+            this.hintCount++;
+        }
+        
+        // Continuar para próximo diálogo
+        const nextNodeId = selectedOption.next;
+        const nextNode = currentQuest.dialogueTree[nextNodeId];
+        this.showDialogue(nextNode);
+    }
+
+    applyEmotionalAction(actionId) {
+        const action = GAME_DATA.emotionalActions[actionId];
+        if (!action) return;
+        
+        // Aplicar efeitos no jogador
+        Object.keys(action.effects.self).forEach(emotion => {
+            this.playerStates[emotion] = Math.max(0, Math.min(100, 
+                this.playerStates[emotion] + action.effects.self[emotion]
+            ));
+        });
+        
+        // Aplicar efeitos no oponente
+        Object.keys(action.effects.opponent).forEach(emotion => {
+            this.opponentStates[emotion] = Math.max(0, Math.min(100, 
+                this.opponentStates[emotion] + action.effects.opponent[emotion]
+            ));
+        });
+        
+        // Atualizar UI
+        this.updateEmotionalBars();
+        
+        // Mostrar feedback da ação
+        this.showActionFeedback(action.message);
+    }
+
+    showHint() {
+        const hintMessage = "💡 Dica: Tente usar ações que demonstrem empatia e compreensão. Evite respostas agressivas que podem escalar o conflito.";
+        this.showActionFeedback(hintMessage);
+    }
+
+    checkWinConditions() {
+        const quest = GAME_DATA.quests.conflito_cristalino;
+        const conditions = quest.emotionalCombat.winConditions;
+        
+        return this.playerStates.calma >= conditions.selfCalma &&
+               this.opponentStates.empatia >= conditions.opponentEmpatia;
+    }
+
+    endEmotionalCombat(outcome) {
+        this.isActive = false;
+        
+        if (outcome === 'success') {
+            this.gameEngine.completeQuest('conflito_cristalino');
+            this.showActionFeedback("🎉 Conflito resolvido com sucesso! Você demonstrou excelente inteligência emocional.");
+        } else {
+            this.showActionFeedback("😔 O conflito não foi resolvido. Tente uma abordagem mais empática na próxima vez.");
+        }
+        
+        setTimeout(() => {
+            this.gameEngine.showScene(this.gameEngine.currentScene);
+        }, 3000);
+    }
+}
+
+// Adicionar ao construtor da EmissariesGameEngine
+// (Já existe um construtor na classe EmissariesGameEngine, então adicione a linha abaixo dentro do construtor da classe EmissariesGameEngine)
+this.emotionalCombat = new EmotionalCombatSystem(this);
+
+// Adicionar método para iniciar combate emocional
+// (Adicione este método dentro da classe EmissariesGameEngine)
+// Adicionar método ao protótipo da classe EmissariesGameEngine
+EmissariesGameEngine.prototype.startEmotionalCombat = function(questId, opponentId) {
+    return this.emotionalCombat.startEmotionalCombat(questId, opponentId);
+};
+
+// Função para verificar e exibir o botão do mapa-múndi
+function checkAndShowMapButton() {
+    // Verificar se o progresso do jogador permite exibir o botão
+    const act1Completed = localStorage.getItem('act1Completed') === 'true';
+
+    // Se o progresso permitir, exibir o botão
+    if (act1Completed) {
+        showMapButton();
+    }
+}
+
+// Função para exibir o botão do mapa-múndi (sempre visível)
+function showMapButton() {
+    const mapButton = document.getElementById('world-map-button');
+    if (mapButton) {
+        mapButton.classList.remove('hidden');
+        mapButton.style.display = 'block';
+    }
+}
+
+// Função para verificar se o jogador pode acessar a expansão
+function canAccessExpansion() {
+    const act1Completed = localStorage.getItem('act1Completed') === 'true';
+    if (!act1Completed) {
+        alert('⚠️ Você precisa concluir o Ato 1 para acessar a expansão!');
+        return false;
+    }
+    return true;
+}
+
+// Adicionar evento ao botão do mapa-múndi para verificar acesso à expansão
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎮 Carregando Crônicas dos Emissários...');
     
-    // Verificar se os dados do jogo estão carregados
-    if (typeof GAME_DATA === 'undefined') {
-        console.error('❌ Dados do jogo não carregados! Verifique se game-data.js está incluído.');
-        return;
-    }
-    
     // Inicializar o motor do jogo
     window.gameEngine = new EmissariesGameEngine();
-    
-    console.log('✅ Jogo carregado com sucesso!');
-setTimeout(checkAndShowMapButton, 1000);
 
-// 3. MODIFICAR A FUNÇÃO QUE COMPLETA O ATO 1:
-
-function completeAct1() {
-    // Código existente para completar o Ato 1...
-    
-    // ADICIONAR ESTAS LINHAS:
-    localStorage.setItem('act1Completed', 'true');
+    // Garantir que o botão do mapa-múndi esteja sempre visível
     showMapButton();
-    
-    // Mostrar mensagem de conclusão
-    showNotification('🎉 Parabéns! Você completou o Ato 1! O Mapa-Mundi foi desbloqueado.', 'success');
-}
 
-// 4. ADICIONAR AO EVENTO DE CARREGAMENTO DA PÁGINA:
+    // Adicionar lógica ao botão para verificar acesso à expansão
+    const mapButton = document.getElementById('world-map-button');
+    if (mapButton) {
+        mapButton.addEventListener('click', () => {
+            if (!canAccessExpansion()) {
+                // Impedir acesso à expansão se o Ato 1 não foi concluído
+                return;
+            }
+            console.log('🌍 Acessando o mapa-múndi...');
+        });
+    }   
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Código de inicialização existente...
-    
-    // ADICIONAR ESTA LINHA:
-    setTimeout(checkAndShowMapButton, 1000); // Aguardar 1 segundo para garantir que tudo carregou
-});
-
+    console.log('✅ Jogo carregado com sucesso!');
 });
 
 // ===== ESTILOS CSS ADICIONAIS PARA ANIMAÇÕES =====
