@@ -3,6 +3,49 @@
 function loadExpansion1() {
     console.log("📜 Carregando Expansão 1: As Terras de Akari...");
 
+    // Adicione estes objetos ao seu GAME_DATA principal
+
+// Estados emocionais base para o jogador e NPCs
+GAME_DATA.emotionalStates = {
+    // Estado inicial do jogador
+    akari: { calma: 70, empatia: 60, assertividade: 50, resiliencia: 60 },
+    // Estado do oponente
+    mediador_anciao: { calma: 80, empatia: 40, assertividade: 70, resiliencia: 85 }
+};
+
+// Definição do que cada ação faz no combate
+GAME_DATA.emotionalActions = {
+    empathize: {
+        name: "Empatizar",
+        emoji: "💙",
+        message: "Você tenta entender o ponto de vista dele, diminuindo a tensão.",
+        effects: {
+            self: { calma: 5, empatia: 10, assertividade: -5, resiliencia: 0 },
+            opponent: { calma: 10, empatia: 5, assertividade: -10, resiliencia: 0 }
+        }
+    },
+    reason: {
+        name: "Argumentar",
+        emoji: "🧠",
+        message: "Você apresenta um argumento lógico, mas ele parece mais focado no sentimento.",
+        effects: {
+            self: { calma: 0, empatia: -5, assertividade: 10, resiliencia: 0 },
+            opponent: { calma: -5, empatia: -5, assertividade: 5, resiliencia: 0 }
+        }
+    },
+    attack: {
+        name: "Atacar",
+        emoji: "💥",
+        message: "Sua agressividade aumenta a hostilidade dele e desestabiliza você!",
+        effects: { // Agressão tem um custo alto
+            self: { calma: -15, empatia: -10, assertividade: 5, resiliencia: -5 },
+            opponent: { calma: -10, empatia: -15, assertividade: 15, resiliencia: 0 }
+        }
+    }
+};
+
+
+
     // ===== NOVOS CENÁRIOS (MAPA: AKARI) =====
     Object.assign(GAME_DATA.scenarios, {
         PracaConvergencia: {
@@ -149,7 +192,8 @@ function loadExpansion1() {
                     text: "Emissário, que bom vê-lo. As energias em Akari estão dissonantes. As facções, que antes se complementavam, agora se repelem. Preciso de sua ajuda para encontrar a harmonia novamente.",
                     options: [
                         { text: "Qual é a raiz do conflito?", next: "conflict_explanation" },
-                        { text: "Farei o que puder para ajudar.", next: "offer_help" }
+                        { text: "Farei o que puder para ajudar.", next: "offer_help" },
+                        { text: "Isso é perda de tempo. Eles precisam de uma lição, não de conversa.", choiceId: "iniciar_conflito", next: "confrontation_start" }
                     ]
                 },
                 conflict_explanation: {
@@ -164,6 +208,13 @@ function loadExpansion1() {
                         { text: "Sim, vou preparar a poção da Harmonia.", next: "minigame_start" }
                     ]
                 },
+
+                confrontation_start: {
+    text: "Sua impaciência é um reflexo da própria dissonância que busco curar! Se acredita que o confronto é o caminho, então sinta o peso do desequilíbrio que você mesmo provoca!",
+    options: [{text: "Batalha!", next: "confrontation_start"}
+    ]
+},
+
                 minigame_trigger: {
                     text: "Para mediar esta conversa, precisaremos de uma poção que inspire a Harmonia. Ela nos ajudará a encontrar o ponto de equilíbrio entre ordem, caos e ponderação.",
                     options: [
@@ -182,7 +233,75 @@ function loadExpansion1() {
                     reward: true
                 }
             }
-        }
+        },
+
+        // Adicione este objeto dentro de GAME_DATA.quests, junto com 'diplomacia_convergente'
+
+    conflito_cristalino: {
+    id: 'conflito_cristalino',
+    title: 'Conflito Cristalino',
+    description: 'Um confronto direto com o Ancião Harmonius sobre a melhor forma de resolver o impasse.',
+    type: 'emotional_combat', // TIPO CORRETO!
+    npc: 'mediador_anciao',
+    status: 'hidden', // Missão não visível na lista normal
+    emotionalCombat: {
+        winConditions: { selfCalma: 80, opponentEmpatia: 60 },
+        loseConditions: { selfCalma: 20, opponentAssertividade: 90, aggressiveActions: 3 }
+    },
+    // ===== SUBSTITUA ESTE BLOCO INTEIRO NA MISSÃO 'conflito_cristalino' =====
+
+dialogueTree: {
+    start: {
+        text: "Você sente a tensão aumentar. Harmonius parece desapontado, mas firme. 'A impaciência raramente constrói pontes, Emissário. Mostre-me como sua abordagem pode trazer um resultado melhor.'",
+        options: [
+            { text: "Tentar acalmar a situação.", action: "empathize", next: "round_2_calm" },
+            { text: "Argumentar logicamente.", action: "reason", next: "round_2_logic" },
+            { text: "Insistir que seu método é o certo.", action: "attack", next: "round_2_aggressive" }
+        ]
+    },
+
+    // --- NÓS DA SEGUNDA RODADA (PREENCHIDOS) ---
+    round_2_calm: {
+        text: "Harmonius respira fundo, a tensão em seus ombros diminui um pouco. 'Acalmar é o primeiro passo, mas e a solução? O que propõe?'",
+        options: [
+            { text: "Sugerir uma mediação com um novo foco.", action: "empathize", next: "final_empathy" },
+            { text: "Apontar as falhas de cada facção.", action: "reason", next: "final_logic" }
+        ]
+    },
+    round_2_logic: {
+        text: "Seus argumentos são precisos, mas Harmonius balança a cabeça. 'A lógica não cura corações divididos. Eles não precisam de mais razões, precisam de um terreno comum.'",
+        options: [
+            { text: "Concordar e focar na empatia.", action: "empathize", next: "final_empathy" },
+            { text: "Dobrar a aposta na lógica.", action: "attack", next: "final_aggressive" }
+        ]
+    },
+    round_2_aggressive: {
+        text: "A expressão de Harmonius endurece. 'A força só gera resistência. Você está se tornando parte do problema, não da solução.' A assertividade dele aumenta drasticamente.",
+        options: [
+            { text: "Recuar e pedir desculpas.", action: "empathize", next: "round_2_calm" },
+            { text: "Continuar a pressionar.", action: "attack", next: "final_aggressive" }
+        ]
+    },
+
+    // --- NÓS FINAIS (RESULTADOS) ---
+    final_empathy: {
+        text: "Você sente a conexão se restabelecer. Harmonius assente. 'Sim... é disso que precisamos. Um novo começo, guiado pela compreensão.'",
+        isEnd: true, // Propriedade para indicar o fim do combate
+        outcome: 'success' // Resultado da batalha
+    },
+    final_logic: {
+        text: "Ao focar apenas nos erros, você aprofunda as feridas. O conflito se torna insuperável.",
+        isEnd: true,
+        outcome: 'failure'
+    },
+    final_aggressive: {
+        text: "Sua insistência quebrou qualquer chance de diálogo. Harmonius se retira, e o peso do fracasso recai sobre você.",
+        isEnd: true,
+        outcome: 'failure'
+    }
+}
+    }
+
 
         // Futuramente, as novas missões 'perfeicao_flexivel', 'fluidez_constante' e 'decisao_equilibrada' seriam adicionadas aqui.
     });

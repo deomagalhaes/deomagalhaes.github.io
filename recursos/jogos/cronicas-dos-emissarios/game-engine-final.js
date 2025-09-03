@@ -681,38 +681,52 @@ function canAccessScenario(scenarioId) {
     }
 
     
-    renderSceneActions(scenario) {
-        if (!this.DOM.scene.actions) return;
-        
-        this.DOM.scene.actions.innerHTML = '';
-        
-        // Ações de NPCs disponíveis
-        if (scenario.npcs) {
-            scenario.npcs.forEach(npcId => {
-                const character = GAME_DATA.characters[npcId];
-                if (character) {
-                    let buttonText = `${character.emoji} Conversar com ${character.name}`;
-                    const isQuestCompleted = this.gameState.completedQuests.includes(character.questId);
+renderSceneActions(scenario) {
+    if (!this.DOM.scene.actions) return;
+    
+    this.DOM.scene.actions.innerHTML = '';
+    
+    // Ações de NPCs disponíveis
+    if (scenario.npcs) {
+        scenario.npcs.forEach(npcId => {
+            const character = GAME_DATA.characters[npcId];
+            if (!character) return;
 
-                    if (isQuestCompleted) {
-                        buttonText += " ✅";
-                    }
+            const quest = GAME_DATA.quests[character.questId];
+            let canShow = true;
 
-                    const button = this.createActionButton(
-                        buttonText,
-                        () => this.startDialogue(npcId),
-                        'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
-                    );
-
-                    if (isQuestCompleted) {
-                        button.classList.add('opacity-70', 'hover:opacity-100');
-                        button.title = "Você já ajudou este personagem.";
-                    }
-
-                    this.DOM.scene.actions.appendChild(button);
+            // ===== LÓGICA ADICIONADA AQUI =====
+            // Se a missão do NPC requer que outra missão esteja completa, verificamos.
+            if (quest && quest.requiredCompletedQuest) {
+                if (!this.gameState.completedQuests.includes(quest.requiredCompletedQuest)) {
+                    canShow = false; // Não mostre este NPC ainda.
                 }
-            });
-        }
+            }
+            // ===================================
+
+            if (canShow) {
+                let buttonText = `${character.emoji} Conversar com ${character.name}`;
+                const isQuestCompleted = this.gameState.completedQuests.includes(character.questId);
+
+                if (isQuestCompleted) {
+                    buttonText += " ✅";
+                }
+
+                const button = this.createActionButton(
+                    buttonText,
+                    () => this.startDialogue(npcId),
+                    'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
+                );
+
+                if (isQuestCompleted) {
+                    button.classList.add('opacity-70', 'hover:opacity-100');
+                    button.title = "Você já ajudou este personagem.";
+                }
+
+                this.DOM.scene.actions.appendChild(button);
+            }
+        });
+    }
         
         // Ações de exploração (Lógica de Nível)
         if (scenario.connections) {
@@ -918,6 +932,27 @@ function canAccessScenario(scenarioId) {
 
     
     handleDialogueChoice(option) {
+        
+            if (option.choiceId) {
+        const questId = this.currentDialogue.questId;
+
+        // Verificação específica para iniciar o combate emocional
+        if (questId === 'diplomacia_convergente' && option.choiceId === 'iniciar_conflito') {
+            console.log("🚦 Reconhecida escolha de iniciar conflito. Chamando sistema de combate...");
+            
+            // Chama o método para iniciar o combate emocional
+            // O 'true' como retorno indica que a ação foi tratada e o fluxo normal deve parar.
+            const combatStarted = this.emotionalCombat.startEmotionalCombat('conflito_cristalino', 'mediador_anciao');
+            
+            if (combatStarted) {
+                // Se o combate iniciou, não prossiga para o próximo nó de diálogo.
+                return; 
+            } else {
+                console.error("❌ Falha ao iniciar o combate emocional. Verifique a questId e o tipo.");
+            }
+        }
+    }
+
         if (option.next) {
             // Verificar se precisa de mini-game
             if (option.next === 'minigame_trigger' || option.next === 'minigame_start') {
@@ -1437,6 +1472,8 @@ class EmotionalCombatSystem {
         this.actionCount = 0;
         this.aggressiveActionCount = 0;
         this.hintCount = 0;
+        this.currentQuestId = null; // << ADICIONAR: Para saber qual quest de combate está ativa
+        this.currentNodeId = null;  // << ADICIONAR: Para rastrear o diálogo
     }
 
     // ADICIONAR ESTES MÉTODOS NA CLASSE EmotionalCombatSystem:
@@ -1445,9 +1482,17 @@ showDialogue(dialogueNode) {
     const dialogueContainer = document.getElementById('emotional-dialogue');
     const actionsContainer = document.getElementById('emotional-actions');
     
+    if (!dialogueNode) {
+        console.error("Nó de diálogo inválido. Encerrando combate.");
+        this.endEmotionalCombat('failure');
+        return;
+    }
+
     dialogueContainer.innerHTML = `<p class="dialogue-text">${dialogueNode.text}</p>`;
     
     if (dialogueNode.isEnd) {
+        // Limpa os botões de opção antes de encerrar.
+        actionsContainer.innerHTML = ''; 
         this.endEmotionalCombat(dialogueNode.outcome);
         return;
     }
@@ -1508,7 +1553,10 @@ getCurrentDialogueNode() {
 
     startEmotionalCombat(questId, opponentId) {
         const quest = GAME_DATA.quests[questId];
-        if (!quest || quest.type !== 'emotional_combat') return false;
+         if (!quest || quest.type !== 'emotional_combat' || !GAME_DATA.emotionalStates || !GAME_DATA.emotionalActions) {
+            console.error("❌ Combate não pode iniciar. Verifique se a quest, emotionalStates e emotionalActions estão definidos em GAME_DATA.");
+            return false;
+         }
 
         this.isActive = true;
         this.currentOpponent = opponentId;
@@ -1517,6 +1565,8 @@ getCurrentDialogueNode() {
         this.actionCount = 0;
         this.aggressiveActionCount = 0;
         this.hintCount = 0;
+        this.currentQuestId = questId; // << ADICIONAR
+        this.currentNodeId = 'start';  // << ADICIONAR
         this.emotionalCombat = new EmotionalCombatSystem(this);
 
 
@@ -1526,6 +1576,7 @@ getCurrentDialogueNode() {
     }
 
     renderEmotionalCombatUI() {
+        this.gameEngine.showScreen('dialogue'); // Garante que a tela de diálogo está visível!
         const combatHTML = `
             <div id="emotional-combat-container" class="emotional-combat">
                 <div class="emotional-states">
@@ -1581,19 +1632,26 @@ getCurrentDialogueNode() {
                 <div id="emotional-feedback" class="feedback-container"></div>
             </div>
         `;
-        
-        this.gameEngine.DOM.dialogue.innerHTML = combatHTML;
+
+        // O elemento correto para modificar é o 'viewport' da tela de diálogo, não a tela inteira.
+    const dialogueScreenContent = document.getElementById('dialogue-screen').querySelector('.dialogue-viewport');
+    if (dialogueScreenContent) {
+        dialogueScreenContent.innerHTML = combatHTML;
+    } else {
+        // Fallback caso a estrutura seja diferente
+        this.gameEngine.DOM.screens.dialogue.innerHTML = combatHTML;
     }
+}
 
     selectOption(optionIndex) {
         const currentQuest = GAME_DATA.quests.conflito_cristalino;
-        const currentNode = this.getCurrentDialogueNode();
+        const currentNode = currentQuest.dialogueTree[this.currentNodeId];
         const selectedOption = currentNode.options[optionIndex];
         
         this.actionCount++;
         
-        if (selectedOption.action === 'attack') {
-            this.aggressiveActionCount++;
+        if (selectedOption.action) { // << CORRIGIDO: Verifica se a ação existe
+            this.applyEmotionalAction(selectedOption.action);
         }
         
         // Aplicar efeitos da ação
@@ -1618,10 +1676,15 @@ getCurrentDialogueNode() {
             this.hintCount++;
         }
         
-        // Continuar para próximo diálogo
         const nextNodeId = selectedOption.next;
-        const nextNode = currentQuest.dialogueTree[nextNodeId];
-        this.showDialogue(nextNode);
+        if (nextNodeId && currentQuest.dialogueTree[nextNodeId]) {
+            this.currentNodeId = nextNodeId; // << ATUALIZA O RASTREADOR
+            const nextNode = currentQuest.dialogueTree[nextNodeId];
+            this.showDialogue(nextNode); // << CORRIGIDO: Chama o método correto
+        } else {
+            console.log("Fim do ramo de diálogo do combate.");
+            // Potencialmente encerrar o combate se não houver próximo nó
+        }
     }
 
     applyEmotionalAction(actionId) {
@@ -1662,26 +1725,49 @@ getCurrentDialogueNode() {
                this.opponentStates.empatia >= conditions.opponentEmpatia;
     }
 
-    endEmotionalCombat(outcome) {
-        this.isActive = false;
+    // ===== DENTRO DA CLASSE EmotionalCombatSystem =====
+
+endEmotionalCombat(outcome) {
+    this.isActive = false;
+    
+    // 1. Processar o resultado da missão (sucesso ou falha)
+    if (outcome === 'success') {
+        // Mostra a notificação de sucesso
+        this.showActionFeedback("🎉 Conflito resolvido com sucesso! Você demonstrou excelente inteligência emocional.");
         
-        if (outcome === 'success') {
-            this.gameEngine.completeQuest('conflito_cristalino');
-            this.showActionFeedback("🎉 Conflito resolvido com sucesso! Você demonstrou excelente inteligência emocional.");
-        } else {
-            this.showActionFeedback("😔 O conflito não foi resolvido. Tente uma abordagem mais empática na próxima vez.");
-        }
+        // Completa a missão e aplica as recompensas (positivas)
+        // Usamos a questId que salvamos no início do combate
+        this.gameEngine.completeQuest(this.currentQuestId); 
         
-        setTimeout(() => {
-            this.gameEngine.showScene(this.gameEngine.currentScene);
-        }, 3000);
+    } else { // 'failure'
+        // Mostra a notificação de falha
+        this.showActionFeedback("😔 O conflito não foi resolvido. Tente uma abordagem mais empática na próxima vez.");
+        
+        // Aqui você pode aplicar penalidades se quiser, como perder reputação.
+        // Exemplo: this.gameEngine.updateReputation('equilibristas', -10);
+        // Por enquanto, apenas falhar é suficiente.
     }
+    
+    // 2. Agendar o retorno ao mundo do jogo após um breve atraso para o jogador ler o feedback.
+    setTimeout(() => {
+        // Limpa qualquer resquício da UI de combate da tela de diálogo.
+        // Isso evita que a UI antiga reapareça se o jogador entrar em outro diálogo.
+        const dialogueScreenContent = document.getElementById('dialogue-screen').querySelector('.dialogue-viewport');
+        if (dialogueScreenContent) {
+            dialogueScreenContent.innerHTML = ''; // Limpa o conteúdo
+        }
+
+        // CRUCIAL: Renderiza a cena do mundo ATUALIZADA.
+        // Isso vai mostrar o checkmark de "missão completa" no NPC, se for o caso.
+        this.gameEngine.renderScene(this.gameEngine.gameState.currentScene);
+        
+        // FINALMENTE: Mostra a tela do mundo, escondendo a tela de diálogo.
+        this.gameEngine.showScreen('world');
+
+    }, 3500); // Aumentei um pouco o tempo para 3.5 segundos para dar tempo de ler a mensagem final.
 }
 
-// Adicionar ao construtor da EmissariesGameEngine
-// (Já existe um construtor na classe EmissariesGameEngine, então adicione a linha abaixo dentro do construtor da classe EmissariesGameEngine)
-this.emotionalCombat = new EmotionalCombatSystem(this);
-
+}
 // Adicionar método para iniciar combate emocional
 // (Adicione este método dentro da classe EmissariesGameEngine)
 // Adicionar método ao protótipo da classe EmissariesGameEngine
