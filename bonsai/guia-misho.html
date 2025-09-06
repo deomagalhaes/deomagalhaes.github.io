@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo de Bonsai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Zen Garden -->
+    <!-- Application Structure Plan: A single-page application using a top, sticky navigation bar to switch between content sections (Início, Formação, Refinamento, Manejo, Calendário). This task-oriented, non-linear structure allows users to quickly access the information they need, which is more effective for a guide than a long linear scroll. Key interactions include a filter for recommended species, a doughnut chart visualizing the substrate recipe, and an interactive bar chart for the seasonal calendar that updates a text area with details on click. This design prioritizes usability and makes complex information more digestible. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Species List -> Goal: Inform/Organize -> Viz/Presentation: Interactive HTML/CSS card grid -> Interaction: Buttons to filter between 'Nativas' and 'Tradicionais'. The grid updates via JS. Justification: Filtering allows users to focus on specific plant types, improving clarity. -> Library/Method: Vanilla JS, Tailwind.
+        - Report Info: Substrate Recipe -> Goal: Inform/Organize -> Viz/Presentation: Chart.js Doughnut Chart -> Interaction: Hover to see ingredient name and percentage. Justification: A chart visually represents the proportions of the mix more effectively and immediately than text alone. -> Library/Method: Chart.js/Canvas.
+        - Report Info: Seasonal Calendar Table -> Goal: Organize/Compare -> Viz/Presentation: Chart.js Bar Chart -> Interaction: Click on a season's bars to highlight them and display detailed text for that season's tasks below the chart. Justification: Transforms a static table into an interactive dashboard, allowing for visual exploration and dynamic retrieval of detailed information, which is more engaging and efficient. -> Library/Method: Chart.js/Canvas.
+        - Report Info: Step-by-step processes -> Goal: Inform -> Viz/Presentation: Styled, numbered HTML lists. -> Interaction: None. Justification: For procedural instructions, clarity and readability are paramount, and a well-formatted list is the most direct method. -> Library/Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #166534; /* green-800 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white shadow-md py-6">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-green-900">Jornada do Bonsai</h1>
+            <p class="text-lg text-stone-600 mt-2">Um guia interativo para cultivar sua arte viva, de Guaranésia para o mundo.</p>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 bg-stone-200/80 backdrop-blur-md z-10 shadow-sm py-3 my-8">
+        <div class="container mx-auto px-4 flex flex-wrap justify-center gap-2 md:gap-4">
+            <button data-target="inicio" class="nav-button active text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white text-stone-700 hover:bg-green-700 hover:text-white">🌱 Início</button>
+            <button data-target="formacao" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white text-stone-700 hover:bg-green-700 hover:text-white">🌳 Formação</button>
+            <button data-target="refinamento" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white text-stone-700 hover:bg-green-700 hover:text-white">✂️ Refinamento</button>
+            <button data-target="manejo" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white text-stone-700 hover:bg-green-700 hover:text-white">💧 Manejo</button>
+            <button data-target="calendario" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white text-stone-700 hover:bg-green-700 hover:text-white">📅 Calendário</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 pb-12">
+
+        <section id="inicio" class="content-section active space-y-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Etapa 1: O Início - Da Semente à Muda (Misho)</h2>
+                <p class="text-stone-700 leading-relaxed">Cultivar um bonsai a partir da semente é a forma mais pura e recompensadora de praticar esta arte. Embora seja um caminho longo, ele oferece controle total sobre o desenvolvimento da árvore, permitindo moldar seu caráter desde o primeiro dia. Esta seção aborda os passos fundamentais para começar sua jornada: a escolha das espécies certas para nosso clima e o processo de germinação.</p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-stone-800 mb-4">1.1. Escolha das Sementes e Espécies</h3>
+                <p class="text-stone-600 mb-6">Para o clima de Guaranésia, devemos priorizar espécies que se adaptem bem ao calor e não necessitem de um inverno rigoroso.</p>
+                <div class="flex justify-center gap-4 mb-6">
+                    <button class="species-filter-btn active-filter font-semibold py-2 px-5 rounded-full bg-green-700 text-white" data-filter="all">Todas</button>
+                    <button class="species-filter-btn font-semibold py-2 px-5 rounded-full bg-stone-200 text-stone-700" data-filter="nativa">Nativas</button>
+                    <button class="species-filter-btn font-semibold py-2 px-5 rounded-full bg-stone-200 text-stone-700" data-filter="tradicional">Tradicionais</button>
+                </div>
+                <div id="species-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="species-card border border-stone-200 p-4 rounded-lg" data-category="nativa">
+                        <h4 class="font-bold text-lg text-green-800">Pitangueira</h4>
+                        <p class="text-sm text-stone-600 italic">Eugenia uniflora</p>
+                        <p class="text-sm mt-2">Perfeitamente adaptada, muito resistente e produz pequenos frutos.</p>
+                    </div>
+                    <div class="species-card border border-stone-200 p-4 rounded-lg" data-category="nativa">
+                        <h4 class="font-bold text-lg text-green-800">Jabuticabeira</h4>
+                        <p class="text-sm text-stone-600 italic">Myrciaria cauliflora</p>
+                        <p class="text-sm mt-2">Nativa icônica, com tronco ornamental e frutos deliciosos.</p>
+                    </div>
+                    <div class="species-card border border-stone-200 p-4 rounded-lg" data-category="tradicional">
+                        <h4 class="font-bold text-lg text-green-800">Ficus</h4>
+                        <p class="text-sm text-stone-600 italic">Ficus retusa</p>
+                        <p class="text-sm mt-2">Extremamente versátil e de crescimento rápido, ideal para iniciantes.</p>
+                    </div>
+                    <div class="species-card border border-stone-200 p-4 rounded-lg" data-category="nativa">
+                        <h4 class="font-bold text-lg text-green-800">Ipê</h4>
+                        <p class="text-sm text-stone-600 italic">Tabebuia</p>
+                        <p class="text-sm mt-2">Famoso por sua floração exuberante, um símbolo do Brasil.</p>
+                    </div>
+                    <div class="species-card border border-stone-200 p-4 rounded-lg" data-category="tradicional">
+                        <h4 class="font-bold text-lg text-green-800">Ulmus Chinês</h4>
+                        <p class="text-sm text-stone-600 italic">Ulmus parvifolia</p>
+                        <p class="text-sm mt-2">Possui folhas pequenas e uma bela casca, adaptando-se bem.</p>
+                    </div>
+                     <div class="species-card border border-stone-200 p-4 rounded-lg" data-category="tradicional">
+                        <h4 class="font-bold text-lg text-green-800">Pinheiro Negro</h4>
+                        <p class="text-sm text-stone-600 italic">Pinus thunbergii</p>
+                        <p class="text-sm mt-2">Clássico do bonsai, exige mais cuidado com a drenagem no verão.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                 <h3 class="text-2xl font-semibold text-stone-800 mb-4">1.2. Germinação (Final do Inverno/Início da Primavera)</h3>
+                 <ol class="list-decimal list-inside space-y-4 text-stone-700">
+                    <li><strong class="font-semibold text-stone-800">Estratificação:</strong> Se necessário (para Pinheiros, Bordo), simule o inverno colocando as sementes na geladeira com areia úmida por 4-8 semanas. Para espécies tropicais, pule este passo.</li>
+                    <li><strong class="font-semibold text-stone-800">Plantio:</strong> Use um substrato leve (50% areia grossa, 50% terra vegetal) em uma sementeira com boa drenagem.</li>
+                    <li><strong class="font-semibold text-stone-800">Profundidade:</strong> Plante as sementes a uma profundidade de duas vezes o seu diâmetro.</li>
+                    <li><strong class="font-semibold text-stone-800">Cuidados Iniciais:</strong> Mantenha o substrato úmido (não encharcado) e em local iluminado, sem sol direto. Uma miniestufa de plástico ajuda a reter a umidade.</li>
+                 </ol>
+            </div>
+        </section>
+
+        <section id="formacao" class="content-section space-y-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Etapa 2: A Formação - Da Muda ao Pré-Bonsai (1 a 3 anos)</h2>
+                <p class="text-stone-700 leading-relaxed">Esta é a fase de "engorda", um período crucial onde o foco principal é o desenvolvimento de uma base sólida para o seu futuro bonsai. Aqui, incentivamos o crescimento vigoroso para engrossar o tronco e estabelecer a estrutura primária das raízes. As decisões tomadas nesta fase definirão a conicidade e o movimento do tronco, características essenciais de uma árvore madura.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800 mb-4">2.2. Substrato para Desenvolvimento</h3>
+                    <p class="text-stone-600 mb-4">A mistura ideal para nossa região deve ser nutritiva e ter excelente drenagem para suportar as chuvas de verão.</p>
+                    <div class="chart-container">
+                        <canvas id="substrateChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-stone-800 mb-2">2.1. Primeiro Vaso</h3>
+                        <p class="text-stone-700">Quando a muda tiver 10-15 cm, transplante-a para um vaso de treinamento maior (pote plástico) para dar espaço ao crescimento das raízes e do tronco.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-stone-800 mb-2">2.3. Poda de Raiz Inicial</h3>
+                        <p class="text-stone-700">No primeiro transplante, corte a raiz principal (pivotante). Isso estimula as raízes laterais, que formarão o futuro *nebari* (raízes de superfície).</p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-stone-800 mb-2">2.4. Arame e Movimento Inicial</h3>
+                        <p class="text-stone-700">No segundo ano, use arame de alumínio para criar as primeiras curvas no tronco, enquanto ele ainda é jovem e flexível. Enrole em um ângulo de 45° sem apertar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="refinamento" class="content-section space-y-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Etapa 3: O Refinamento - Do Pré-Bonsai ao Bonsai</h2>
+                <p class="text-stone-700 leading-relaxed">Com a estrutura básica estabelecida, entramos na fase artística do refinamento. É aqui que a visão do artista começa a tomar forma através de técnicas precisas de poda, aramação e transplante. O objetivo é desenvolver a ramificação fina, definir a silhueta da copa e preparar a árvore para seu primeiro vaso de bonsai, transformando o pré-bonsai em uma verdadeira obra de arte viva.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800 mb-4">3.1. Poda Estrutural e de Manutenção</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <strong class="block font-semibold text-lg text-green-800">Poda Drástica (Final do Inverno)</strong>
+                            <p class="text-stone-700">Define os galhos principais e remove os desnecessários. Use ferramentas de corte côncavo para uma cicatrização limpa.</p>
+                        </li>
+                        <li>
+                            <strong class="block font-semibold text-lg text-green-800">Pinçagem (Primavera/Verão)</strong>
+                            <p class="text-stone-700">Corte as pontas dos novos brotos para forçar a ramificação secundária, adensando a copa e mantendo a forma.</p>
+                        </li>
+                    </ul>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800 mb-4">3.2. Aramação para Refinamento</h3>
+                    <p class="text-stone-700 mb-4">A melhor época é no outono/inverno. Arame do tronco para os galhos, e dos mais grossos para os mais finos. Verifique a cada 2-3 meses para não marcar a casca.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-stone-800 mb-4">3.3. Transplante e Poda de Raízes</h3>
+                <p class="text-stone-600 mb-4">A frequência varia: 1-2 anos para plantas jovens, 3-5 para maduras. A época ideal em Guaranésia é do final de agosto a setembro.</p>
+                <ol class="list-decimal list-inside space-y-3 text-stone-700">
+                    <li>Retire a planta do vaso com cuidado.</li>
+                    <li>Com um gancho, desfaça 1/3 a 1/2 do torrão para expor as raízes.</li>
+                    <li>Corte as raízes expostas, removendo as mais grossas e preservando as mais finas.</li>
+                    <li>Reenvase com substrato novo, garantindo que preencha todos os espaços.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="manejo" class="content-section space-y-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Etapa 4: O Manejo Contínuo (Hojo)</h2>
+                <p class="text-stone-700 leading-relaxed">Um bonsai nunca está "pronto". Ele é uma escultura viva que requer cuidados constantes para se manter saudável e belo. Esta seção detalha as rotinas essenciais de manejo — rega, adubação e localização — que são a base para a longevidade e vitalidade da sua árvore. Aprender a observar e responder às necessidades do seu bonsai é a essência da prática diária.</p>
+            </div>
+            <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800 mb-4">💧 4.1. Rega (Mizu-Yari)</h3>
+                    <ul class="space-y-3 text-stone-700">
+                        <li><strong class="font-semibold">Verão:</strong> Regue diariamente, ou até duas vezes nos dias mais quentes.</li>
+                        <li><strong class="font-semibold">Inverno:</strong> Reduza a frequência. Verifique a umidade do solo antes de regar.</li>
+                        <li><strong class="font-semibold">Qualidade da Água:</strong> Prefira água da chuva. Se usar da torneira, deixe-a descansar por 24h.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800 mb-4">🌿 4.2. Adubação (Hi-Yari)</h3>
+                     <ul class="space-y-3 text-stone-700">
+                        <li><strong class="font-semibold">Período:</strong> Adube apenas na primavera e verão.</li>
+                        <li><strong class="font-semibold">Orgânico:</strong> Use torta de mamona + farinha de osso a cada 30-45 dias.</li>
+                        <li><strong class="font-semibold">Químico:</strong> Use formulações balanceadas (10-10-10) a cada 15 dias, com metade da dose.</li>
+                        <li><strong class="font-semibold">Atenção:</strong> Não adube após transplante ou se a planta estiver doente.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800 mb-4">☀️ 4.3. Localização</h3>
+                     <ul class="space-y-3 text-stone-700">
+                        <li><strong class="font-semibold">Luz Solar:</strong> Mínimo de 4-6 horas de sol direto por dia.</li>
+                        <li><strong class="font-semibold">Proteção no Verão:</strong> Evite o sol forte da tarde para espécies sensíveis. Prefira o sol da manhã.</li>
+                        <li><strong class="font-semibold">Ventilação:</strong> Um local arejado é crucial para prevenir fungos e pragas.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="calendario" class="content-section space-y-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold text-green-800 mb-4">Calendário do Bonsaísta em Guaranésia</h2>
+                <p class="text-stone-700 leading-relaxed mb-6">A arte do bonsai segue o ritmo da natureza. Cada estação traz consigo tarefas específicas que são cruciais para a saúde e o desenvolvimento da sua árvore. Este calendário interativo foi projetado para visualizar as principais atividades ao longo do ano em nossa região. Clique nas barras de cada estação para ver um resumo das atividades recomendadas, ajudando você a planejar e executar os cuidados no momento certo.</p>
+                <div class="chart-container h-96 max-h-[50vh]">
+                     <canvas id="calendarChart"></canvas>
+                </div>
+                <div id="calendar-details" class="mt-8 bg-stone-100 p-6 rounded-lg min-h-[100px]">
+                     <p class="text-stone-700 text-center">Clique em uma estação no gráfico para ver os detalhes das atividades.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navButtons = document.querySelectorAll('.nav-button');
+        const contentSections = document.querySelectorAll('.content-section');
+        const speciesFilterBtns = document.querySelectorAll('.species-filter-btn');
+        const speciesCards = document.querySelectorAll('.species-card');
+
+        const calendarDetails = {
+            primavera: {
+                title: "Primavera (Set a Nov) - Crescimento Intenso",
+                description: "É a estação de maior atividade. A planta está cheia de energia. Realize a pinçagem regular dos novos brotos para manter a forma e adensar a copa. Inicie a adubação quinzenal para suportar o crescimento vigoroso. É também um bom momento para começar as aramações em coníferas."
+            },
+            verão: {
+                title: "Verão (Dez a Fev) - Calor e Chuvas",
+                description: "Com o calor intenso e as chuvas, a rega deve ser diária e atenta. Proteja as plantas do sol forte do meio-dia. Fique atento ao controle de pragas, que se proliferam nesta época. Continue com a adubação regular para manter a nutrição da planta."
+            },
+            outono: {
+                title: "Outono (Mar a Mai) - Crescimento Reduz",
+                description: "O ritmo de crescimento diminui. Reduza a frequência da adubação gradualmente. É a melhor época para aramar árvores de folhas caducas, pois a ausência de folhas facilita a visualização da estrutura. Comece a planejar as podas de inverno."
+            },
+            inverno: {
+                title: "Inverno (Jun a Ago) - Dormência/Repouso",
+                description: "Período de descanso para muitas espécies. É o momento ideal para a poda de estrutura, removendo galhos grossos e definindo a silhueta. Realize o transplante no final da estação (agosto), antes que os novos brotos surjam. As regas devem ser bem mais espaçadas."
+            }
+        };
+
+        const setActiveNav = (targetId) => {
+            navButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.target === targetId);
+            });
+            contentSections.forEach(section => {
+                section.classList.toggle('active', section.id === targetId);
+            });
+        };
+        
+        setActiveNav('inicio');
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                setActiveNav(button.dataset.target);
+            });
+        });
+
+        speciesFilterBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+
+                speciesFilterBtns.forEach(btn => btn.classList.remove('active-filter', 'bg-green-700', 'text-white'));
+                speciesFilterBtns.forEach(btn => btn.classList.add('bg-stone-200', 'text-stone-700'));
+                
+                button.classList.add('active-filter', 'bg-green-700', 'text-white');
+                button.classList.remove('bg-stone-200', 'text-stone-700');
+
+                speciesCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        const substrateCtx = document.getElementById('substrateChart').getContext('2d');
+        new Chart(substrateCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Caco de Tijolo ou Telha (40%)', 'Terra Vermelha (40%)', 'Matéria Orgânica (20%)'],
+                datasets: [{
+                    data: [40, 40, 20],
+                    backgroundColor: ['#A8A29E', '#a16207', '#166534'],
+                    borderColor: '#F5F5F4',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const calendarCtx = document.getElementById('calendarChart').getContext('2d');
+        const calendarChart = new Chart(calendarCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Primavera', 'Verão', 'Outono', 'Inverno'],
+                datasets: [
+                    {
+                        label: 'Rega',
+                        data: [2, 3, 2, 1],
+                        backgroundColor: '#0ea5e9',
+                    },
+                    {
+                        label: 'Adubação',
+                        data: [3, 3, 1, 0],
+                        backgroundColor: '#16a34a',
+                    },
+                    {
+                        label: 'Poda/Pinçagem',
+                        data: [3, 2, 1, 2],
+                        backgroundColor: '#f97316',
+                    },
+                     {
+                        label: 'Aramação',
+                        data: [1, 0, 3, 2],
+                        backgroundColor: '#78716c',
+                    },
+                    {
+                        label: 'Transplante',
+                        data: [0, 0, 0, 3],
+                        backgroundColor: '#7e22ce',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                const labels = {0: 'Nenhuma', 1: 'Baixa', 2: 'Média', 3: 'Alta'};
+                                return labels[value];
+                            }
+                        },
+                         title: {
+                            display: true,
+                            text: 'Intensidade da Atividade'
+                        }
+                    }
+                },
+                plugins: {
+                   tooltip: {
+                        enabled: false
+                   }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const elementIndex = elements[0].index;
+                        const seasonKey = calendarChart.data.labels[elementIndex].toLowerCase();
+                        const details = calendarDetails[seasonKey];
+                        const detailsContainer = document.getElementById('calendar-details');
+                        detailsContainer.innerHTML = `
+                            <h3 class="font-bold text-xl text-green-800 mb-2">${details.title}</h3>
+                            <p class="text-stone-700">${details.description}</p>
+                        `;
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+

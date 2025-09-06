@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Diário de Bonsai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f1e9; /* Um tom de papel antigo */
+        }
+        h1, h2, h3 {
+            font-family: 'Noto Serif', serif;
+        }
+        .modal {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #386641; /* Verde escuro */
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #2a4c30;
+        }
+        .btn-secondary {
+            background-color: #a7c957; /* Verde claro */
+            color: #333333;
+        }
+        .btn-secondary:hover {
+            background-color: #8ab042;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 12px;
+            bottom: 0;
+            width: 2px;
+            background-color: #bc6c25; /* Marrom-terra */
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 12px;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #fefae0;
+            border: 3px solid #bc6c25; /* Marrom-terra */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Cabeçalho -->
+    <header class="bg-[#283618] text-white shadow-lg p-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold tracking-wider">Meu Diário de Bonsai</h1>
+            <p class="text-lg mt-2 text-gray-300">Registro de cuidados e evolução das minhas árvores</p>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto p-4 md:p-8">
+        <!-- Controles -->
+        <div class="flex flex-wrap gap-4 justify-center mb-8">
+            <button id="addPlantBtn" class="btn-primary font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                Adicionar Nova Planta
+            </button>
+            <div class="flex gap-2">
+                 <button id="exportDataBtn" class="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">Exportar Dados</button>
+                <label for="importDataInput" class="bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
+                    Importar Dados
+                    <input type="file" id="importDataInput" class="hidden" accept=".json">
+                </label>
+            </div>
+        </div>
+        <p class="text-center text-sm text-gray-600 mb-8 max-w-2xl mx-auto">
+            <strong>Bem-vindo ao seu diário de Bonsai!</strong> As informações são salvas localmente no seu navegador. Para garantir a segurança dos seus dados, utilize os botões "Exportar" e "Importar" para fazer backups regulares.
+        </p>
+
+
+        <!-- Lista de Plantas -->
+        <div id="plantList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Os cards das plantas serão inseridos aqui via JavaScript -->
+        </div>
+        <div id="noPlantsMessage" class="hidden text-center text-gray-500 mt-16">
+            <p class="text-2xl">Nenhuma planta cadastrada ainda.</p>
+            <p>Clique em "Adicionar Nova Planta" para começar seu diário.</p>
+        </div>
+
+    </main>
+
+    <!-- Modal Adicionar/Editar Planta -->
+    <div id="plantModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-[#fefae0] rounded-2xl shadow-2xl w-full max-w-lg p-8 transform scale-95">
+            <h2 id="plantModalTitle" class="text-3xl font-bold mb-6 text-center text-[#606c38]">Adicionar Nova Planta</h2>
+            <form id="plantForm">
+                <input type="hidden" id="plantId">
+                <div class="mb-4">
+                    <label for="species" class="block text-gray-700 text-sm font-bold mb-2">Espécie:</label>
+                    <input type="text" id="species" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#a7c957]" required>
+                </div>
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nome / Apelido:</label>
+                    <input type="text" id="name" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#a7c957]">
+                </div>
+                <div class="mb-4">
+                    <label for="acquisitionDate" class="block text-gray-700 text-sm font-bold mb-2">Data de Aquisição:</label>
+                    <input type="date" id="acquisitionDate" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#a7c957]">
+                </div>
+                <div class="mb-4">
+                    <label for="plantPhoto" class="block text-gray-700 text-sm font-bold mb-2">Foto da Planta:</label>
+                    <input type="file" id="plantPhoto" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#a7c957] file:text-gray-800 hover:file:bg-[#8ab042]">
+                </div>
+                <div class="flex items-center justify-end gap-4 mt-8">
+                    <button type="button" id="cancelPlant" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Cancelar</button>
+                    <button type="submit" class="btn-primary font-bold py-2 px-4 rounded-lg transition-colors">Salvar Planta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar/Editar Intervenção -->
+    <div id="interventionModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-[#fefae0] rounded-2xl shadow-2xl w-full max-w-lg p-8 transform scale-95">
+            <h2 id="interventionModalTitle" class="text-3xl font-bold mb-6 text-center text-[#606c38]">Adicionar Intervenção</h2>
+            <form id="interventionForm">
+                <input type="hidden" id="interventionPlantId">
+                <input type="hidden" id="interventionId">
+                <div class="mb-4">
+                    <label for="interventionDate" class="block text-gray-700 text-sm font-bold mb-2">Data:</label>
+                    <input type="date" id="interventionDate" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#a7c957]" required>
+                </div>
+                <div class="mb-4">
+                    <label for="interventionType" class="block text-gray-700 text-sm font-bold mb-2">Tipo de Intervenção:</label>
+                    <select id="interventionType" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#a7c957]" required>
+                        <option value="Poda">Poda</option>
+                        <option value="Transplante">Transplante</option>
+                        <option value="Aramação">Aramação</option>
+                        <option value="Adubação">Adubação</option>
+                        <option value="Tratamento">Tratamento (pragas/doenças)</option>
+                        <option value="Observação">Observação Geral</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="interventionDescription" class="block text-gray-700 text-sm font-bold mb-2">Descrição:</label>
+                    <textarea id="interventionDescription" rows="4" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#a7c957]"></textarea>
+                </div>
+                 <div class="mb-4">
+                    <label for="interventionPhoto" class="block text-gray-700 text-sm font-bold mb-2">Foto da Intervenção:</label>
+                    <input type="file" id="interventionPhoto" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#a7c957] file:text-gray-800 hover:file:bg-[#8ab042]">
+                </div>
+                <div class="flex items-center justify-end gap-4 mt-8">
+                    <button type="button" id="cancelIntervention" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Cancelar</button>
+                    <button type="submit" class="btn-primary font-bold py-2 px-4 rounded-lg transition-colors">Salvar Intervenção</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const plantList = document.getElementById('plantList');
+        const addPlantBtn = document.getElementById('addPlantBtn');
+        const plantModal = document.getElementById('plantModal');
+        const plantForm = document.getElementById('plantForm');
+        const cancelPlant = document.getElementById('cancelPlant');
+        const plantModalTitle = document.getElementById('plantModalTitle');
+        const noPlantsMessage = document.getElementById('noPlantsMessage');
+
+        const interventionModal = document.getElementById('interventionModal');
+        const interventionForm = document.getElementById('interventionForm');
+        const cancelIntervention = document.getElementById('cancelIntervention');
+        const interventionModalTitle = document.getElementById('interventionModalTitle');
+        
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataInput = document.getElementById('importDataInput');
+
+        let plants = JSON.parse(localStorage.getItem('bonsaiDiary')) || [];
+
+        // --- Funções de Modal ---
+        const openModal = (modal) => {
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+                modal.querySelector('.modal-content').classList.add('scale-100');
+            }, 10);
+        };
+
+        const closeModal = (modal) => {
+            modal.querySelector('.modal-content').classList.remove('scale-100');
+            modal.querySelector('.modal-content').classList.add('scale-95');
+            modal.classList.remove('opacity-100');
+            setTimeout(() => modal.style.display = 'none', 300);
+        };
+        
+        const fileToBase64 = (file) => new Promise((resolve, reject) => {
+            if (!file) {
+                resolve(null);
+                return;
+            }
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        // --- Funções de Renderização ---
+        const renderPlants = () => {
+            plantList.innerHTML = '';
+            if (plants.length === 0) {
+                noPlantsMessage.classList.remove('hidden');
+            } else {
+                noPlantsMessage.classList.add('hidden');
+                // Ordenar plantas por data de aquisição mais recente
+                plants.sort((a, b) => new Date(b.acquisitionDate) - new Date(a.acquisitionDate));
+                plants.forEach(plant => {
+                    const plantCard = document.createElement('div');
+                    plantCard.className = 'bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transition-transform duration-300 hover:shadow-2xl hover:-translate-y-2';
+                    plantCard.innerHTML = `
+                        <img src="${plant.photo || 'https://placehold.co/600x400/386641/fefae0?text=' + encodeURIComponent(plant.species)}" alt="${plant.name}" class="w-full h-56 object-cover">
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-2xl font-bold text-[#283618]">${plant.name || 'Sem nome'}</h3>
+                            <p class="text-lg text-gray-600 mb-2">${plant.species}</p>
+                            <p class="text-sm text-gray-500 mb-4">Adquirida em: ${new Date(plant.acquisitionDate).toLocaleDateString('pt-BR', {timeZone: 'UTC'})}</p>
+                            <div class="flex-grow mb-4">
+                                <h4 class="font-bold mb-2 border-b-2 border-[#bc6c25] pb-1">Histórico de Intervenções:</h4>
+                                <div class="relative pl-6" id="interventions-${plant.id}">
+                                    ${renderInterventions(plant)}
+                                </div>
+                            </div>
+                            <div class="mt-auto pt-4 flex flex-wrap gap-2 justify-end border-t">
+                                <button class="add-intervention-btn btn-secondary text-sm font-bold py-2 px-4 rounded-lg" data-id="${plant.id}">+ Intervenção</button>
+                                <button class="edit-plant-btn bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold py-2 px-4 rounded-lg" data-id="${plant.id}">Editar</button>
+                                <button class="delete-plant-btn bg-red-500 hover:bg-red-600 text-white text-sm font-bold py-2 px-4 rounded-lg" data-id="${plant.id}">Remover</button>
+                            </div>
+                        </div>
+                    `;
+                    plantList.appendChild(plantCard);
+                });
+            }
+            addEventListenersToButtons();
+        };
+
+        const renderInterventions = (plant) => {
+            if (!plant.interventions || plant.interventions.length === 0) {
+                return '<p class="text-sm text-gray-500 italic">Nenhuma intervenção registrada.</p>';
+            }
+             // Ordenar intervenções por data mais recente
+            plant.interventions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            return plant.interventions.map(inter => `
+                <div class="timeline-item mb-6">
+                    <div class="timeline-dot">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#bc6c25]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <div class="pl-4">
+                        <p class="font-bold text-md">${inter.type} - <span class="font-normal text-sm">${new Date(inter.date).toLocaleDateString('pt-BR', {timeZone: 'UTC'})}</span></p>
+                        <p class="text-sm text-gray-600">${inter.description || ''}</p>
+                        ${inter.photo ? `<img src="${inter.photo}" class="mt-2 rounded-lg max-h-48 cursor-pointer" onclick="window.open(this.src)">` : ''}
+                    </div>
+                </div>
+            `).join('');
+        };
+        
+        // --- Funções de Eventos ---
+        const addEventListenersToButtons = () => {
+            document.querySelectorAll('.add-intervention-btn').forEach(btn => btn.addEventListener('click', handleAddIntervention));
+            document.querySelectorAll('.edit-plant-btn').forEach(btn => btn.addEventListener('click', handleEditPlant));
+            document.querySelectorAll('.delete-plant-btn').forEach(btn => btn.addEventListener('click', handleDeletePlant));
+        };
+
+        // --- Handlers de Plantas ---
+        addPlantBtn.addEventListener('click', () => {
+            plantModalTitle.textContent = 'Adicionar Nova Planta';
+            plantForm.reset();
+            document.getElementById('plantId').value = '';
+            openModal(plantModal);
+        });
+
+        cancelPlant.addEventListener('click', () => closeModal(plantModal));
+
+        plantForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('plantId').value;
+            const photoFile = document.getElementById('plantPhoto').files[0];
+            const photoBase64 = await fileToBase64(photoFile);
+
+            const plantData = {
+                species: document.getElementById('species').value,
+                name: document.getElementById('name').value,
+                acquisitionDate: document.getElementById('acquisitionDate').value,
+            };
+            
+            if(id) { // Editando
+                const plant = plants.find(p => p.id == id);
+                Object.assign(plant, plantData);
+                if (photoBase64) {
+                    plant.photo = photoBase64;
+                }
+            } else { // Novo
+                 plantData.id = Date.now();
+                 plantData.interventions = [];
+                 if(photoBase64) plantData.photo = photoBase64;
+                 plants.push(plantData);
+            }
+
+            saveAndRender();
+            closeModal(plantModal);
+        });
+
+        const handleEditPlant = (e) => {
+            const id = e.target.dataset.id;
+            const plant = plants.find(p => p.id == id);
+            if(plant) {
+                plantModalTitle.textContent = 'Editar Planta';
+                document.getElementById('plantId').value = plant.id;
+                document.getElementById('species').value = plant.species;
+                document.getElementById('name').value = plant.name;
+                document.getElementById('acquisitionDate').value = plant.acquisitionDate;
+                openModal(plantModal);
+            }
+        };
+
+        const handleDeletePlant = (e) => {
+            const id = e.target.dataset.id;
+            if (confirm('Tem certeza que deseja remover esta planta e todo o seu histórico? Esta ação não pode ser desfeita.')) {
+                plants = plants.filter(p => p.id != id);
+                saveAndRender();
+            }
+        };
+
+        // --- Handlers de Intervenções ---
+        const handleAddIntervention = (e) => {
+            const plantId = e.target.dataset.id;
+            interventionForm.reset();
+            document.getElementById('interventionPlantId').value = plantId;
+            document.getElementById('interventionId').value = '';
+            interventionModalTitle.textContent = "Adicionar Intervenção";
+            // Preencher data com hoje por padrão
+            document.getElementById('interventionDate').valueAsDate = new Date();
+            openModal(interventionModal);
+        };
+        
+        cancelIntervention.addEventListener('click', () => closeModal(interventionModal));
+        
+        interventionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const plantId = document.getElementById('interventionPlantId').value;
+            const interventionId = document.getElementById('interventionId').value;
+            const plant = plants.find(p => p.id == plantId);
+            
+            const photoFile = document.getElementById('interventionPhoto').files[0];
+            const photoBase64 = await fileToBase64(photoFile);
+
+            if(plant) {
+                 const interventionData = {
+                    date: document.getElementById('interventionDate').value,
+                    type: document.getElementById('interventionType').value,
+                    description: document.getElementById('interventionDescription').value,
+                };
+                if(photoBase64) interventionData.photo = photoBase64;
+                
+                if(interventionId){ //Editando - não implementado na UI por simplicidade
+                     const intervention = plant.interventions.find(i => i.id == interventionId);
+                     Object.assign(intervention, interventionData);
+                } else { //Novo
+                    interventionData.id = Date.now();
+                    plant.interventions.push(interventionData);
+                }
+                saveAndRender();
+                closeModal(interventionModal);
+            }
+        });
+        
+        // --- Funções de Dados (Salvar, Exportar, Importar) ---
+        const saveAndRender = () => {
+            localStorage.setItem('bonsaiDiary', JSON.stringify(plants));
+            renderPlants();
+        };
+
+        exportDataBtn.addEventListener('click', () => {
+            if (plants.length === 0) {
+                alert("Não há dados para exportar.");
+                return;
+            }
+            const dataStr = JSON.stringify(plants, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = `bonsai_diary_backup_${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        });
+
+        importDataInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                return;
+            }
+            if (plants.length > 0 && !confirm("Isso substituirá todos os dados atuais. Deseja continuar?")) {
+                e.target.value = ''; // Limpa o input
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const importedPlants = JSON.parse(event.target.result);
+                    if (Array.isArray(importedPlants)) {
+                        plants = importedPlants;
+                        saveAndRender();
+                        alert("Dados importados com sucesso!");
+                    } else {
+                        alert("Arquivo de importação inválido. Deve ser um array de plantas.");
+                    }
+                } catch (error) {
+                    alert("Erro ao ler o arquivo. Verifique se é um arquivo JSON válido.");
+                    console.error("Erro na importação:", error);
+                } finally {
+                    e.target.value = ''; // Limpa o input
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Inicialização
+        renderPlants();
+    });
+</script>
+</body>
+</html>
