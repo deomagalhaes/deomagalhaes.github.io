@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Coleção de Bonsai</title>
+    <link rel="stylesheet" href="../style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Neuropsicologia & Bonsai</h1>
+        <p>Um espaço para a mente e para a natureza</p>
+    </header>
+
+    <main class="container">
+        
+        <h2>Minha Coleção de Bonsai</h2>
+        <p>Bem-vindo à minha área pessoal dedicada a esta arte milenar.</p>
+        
+        <div id="auth-section">
+            <p>Para ver o conteúdo, por favor, faça login.</p>
+            <button id="login-button" class="btn">Entrar com o Google</button>
+        </div>
+
+        <hr>
+
+        <div id="content-section" style="display:none;">
+            <h3>Navegação</h3>
+            <div class="card-container">
+                
+                <a href="guia-misho.html" class="card">
+                    <h4>Guia Misho</h4>
+                    <p>Um guia completo sobre o cultivo de bonsai a partir de sementes (Misho).</p>
+                </a>
+
+                <a href="registro-manejo.html" class="card">
+                    <h4>Registro de Manejo</h4>
+                    <p>Acompanhe aqui o desenvolvimento, transplantes e podas das suas árvores.</p>
+                </a>
+                
+                <a href="#" class="card disabled-card">
+                    <h4>Galeria (Em breve)</h4>
+                    <p>Uma galeria de fotos da evolução das minhas plantas.</p>
+                </a>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Seu Nome</p>
+    </footer>
+
+    <script src="auth.js"></script>
+</body>
+</html>
