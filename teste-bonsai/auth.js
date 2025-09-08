@@ -76,25 +76,3 @@ function updateUserInterface(user) {
         document.getElementById('login-button').addEventListener('click', signInWithGoogle);
     }
 }
-
-
-// ===================================================================
-// EVENT LISTENER PRINCIPAL (VERSÃO DE DEPURAÇÃO)
-// ===================================================================
-
-// Ouve as mudanças no estado de autenticação (login, logout)
-_supabase.auth.onAuthStateChange((event, session) => {
-    // --- NOSSO ESPIÃO ---
-    // Isto vai mostrar-nos na consola exatamente qual evento está a acontecer.
-    console.log('EVENTO DE AUTENTICAÇÃO DETETADO:', event);
-    // -------------------
-
-    if (event === 'SIGNED_IN') {
-        console.log('Evento SIGNED_IN detetado, a tentar redirecionar...');
-        window.location.href = 'registro-manejo.html';
-        return; 
-    }
-
-    const user = session ? session.user : null;
-    updateUserInterface(user);
-});
