@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Meu Canto do Bonsai</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+		<link rel="stylesheet" href="../assets/style.css"/>
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css"/></noscript>
+		<style>
+			/* Estilo simples para centralizar o botão de login */
+			#login-section {
+				text-align: center;
+				padding: 2em 0;
+			}
+			/* Oculta o conteúdo principal por padrão */
+			#main-content {
+				display: none;
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<div id="wrapper">
+
+				<section id="main">
+						<header>
+							<span class="avatar"><img src="../assets/logo-deo.png" alt="" /></span>
+							<h1>Meu Canto do Bonsai</h1>
+							<p>Um espaço para registrar e aprender</p>
+						</header>
+
+						<section id="login-section">
+							<h2>Acesso Restrito</h2>
+							<p>Faça login com sua conta Google para continuar.</p>
+							<button id="login-button" class="button">Login com Google</button>
+						</section>
+						
+						<section id="main-content">
+							<hr />
+							<h2>Navegação</h2>
+							<p>Escolha uma das opções abaixo para começar.</p>
+							<div class="features">
+								<article>
+									<a href="guia-misho.html" class="icon solid fa-seedling">
+										<h3 class="major">Guia de Misho</h3>
+										<p>Aprenda a cultivar bonsais a partir de sementes (Misho).</p>
+									</a>
+								</article>
+								<article>
+									<a href="registro-manejo.html" class="icon solid fa-book">
+										<h3 class="major">Registro de Manejo</h3>
+										<p>Acompanhe o desenvolvimento e os cuidados de cada um dos seus bonsais.</p>
+									</a>
+								</article>
+								<article>
+									<a href="#" class="icon solid fa-images">
+										<h3 class="major">Galeria (Futuro)</h3>
+										<p>Uma galeria com a evolução das suas plantas.</p>
+									</a>
+								</article>
+							</div>
+							<hr />
+							<button id="logout-button" class="button">Sair (Logout)</button>
+						</section>
+						
+						<footer id="footer">
+							<ul class="icons">
+								<li><a href="#" class="icon brands fa-twitter">Twitter</a></li>
+								<li><a href="#" class="icon brands fa-instagram">Instagram</a></li>
+								<li><a href="#" class="icon brands fa-facebook-f">Facebook</a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; Jane Doe</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</footer>
+
+					</section>
+
+			</div>
+
+		<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+			
+			<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+			
+			<script>
+				// 1. Configuração do Cliente Supabase
+				const SUPABASE_URL = 'https://wtrusyinemekhlvceiqs.supabase.co'; 
+				const SUPABASE_ANON_KEY = 'sb_publishable_q-rhMUzt8jmR_dEX0e8uCA_wVhr7hwL';
+
+				const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+				// 2. Seleciona os elementos da página
+				const loginSection = document.getElementById('login-section');
+				const mainContent = document.getElementById('main-content');
+				const loginButton = document.getElementById('login-button');
+				const logoutButton = document.getElementById('logout-button');
+
+				// 3. O "VIGIA": Escuta as mudanças no estado de autenticação
+				supabaseClient.auth.onAuthStateChange((event, session) => {
+					console.log(event, session); // Ótimo para depurar! Mostra o que está acontecendo.
+					
+					if (session) {
+						// Se existe uma sessão (usuário está logado):
+						loginSection.style.display = 'none';
+						mainContent.style.display = 'block';
+						console.log('Sessão detectada, usuário logado:', session.user.email);
+					} else {
+						// Se NÃO existe uma sessão (usuário deslogado):
+						loginSection.style.display = 'block';
+						mainContent.style.display = 'none';
+						console.log('Nenhuma sessão detectada.');
+					}
+				});
+
+				// 4. Função para fazer login com Google
+				const signInWithGoogle = async () => {
+					await supabaseClient.auth.signInWithOAuth({
+						provider: 'google',
+						options: {
+							redirectTo: window.location.href
+						}
+					});
+				};
+
+				// 5. Função para fazer logout
+				const signOut = async () => {
+					await supabaseClient.auth.signOut();
+				};
+
+				// 6. Adiciona os eventos aos botões
+				loginButton.addEventListener('click', signInWithGoogle);
+				logoutButton.addEventListener('click', signOut);
+
+			</script>
+	</body>
+</html>
