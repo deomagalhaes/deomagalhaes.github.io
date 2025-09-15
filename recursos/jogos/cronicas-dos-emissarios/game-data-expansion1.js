@@ -303,10 +303,375 @@ dialogueTree: {
     }
 
 
-        // Futuramente, as novas missões 'perfeicao_flexivel', 'fluidez_constante' e 'decisao_equilibrada' seriam adicionadas aqui.
+        perfeicao_flexivel: {
+            id: 'perfeicao_flexivel',
+            title: 'A Perfeição Flexível',
+            description: 'Ajude a Mestra Livia a compreender que a verdadeira perfeição pode incluir imperfeições que trazem beleza e funcionalidade.',
+            scenario: 'LaboratorioCristalino',
+            npc: 'arquiteta_cristal',
+            type: 'perfectionism_balance',
+            difficulty: 'intermediate',
+            requiredPotion: 'FLEXIBILIDADE',
+            status: 'available',
+            objectives: [
+                'Converse com Mestra Livia sobre sua obsessão pela perfeição.',
+                'Demonstre como pequenas imperfeições podem ser valiosas.',
+                'Crie a poção da FLEXIBILIDADE.',
+                'Ajude-a a aceitar um design "imperfeito" mas funcional.'
+            ],
+            rewards: {
+                experience: 500,
+                items: ['cristal_harmonico'],
+                factionReputation: { cristalinos: 15, equilibristas: 5 }
+            },
+            dialogueTree: {
+                start: {
+                    text: "Emissário, observe este cristal. Há uma minúscula imperfeição na estrutura molecular. É inaceitável! Como posso usar algo falho no projeto da Convergência?",
+                    options: [
+                        { text: "Essa imperfeição pode ser única e valiosa.", next: "challenge_perfection" },
+                        { text: "Você tem razão, a perfeição é essencial.", next: "agree_perfection" },
+                        { text: "E se essa 'falha' trouxer uma qualidade especial?", next: "reframe_flaw" }
+                    ]
+                },
+                challenge_perfection: {
+                    text: "Única? Valiosa? Impossível! A perfeição é matemática, é absoluta. Não há espaço para... para... caos em minha obra!",
+                    options: [
+                        { text: "Vou mostrar como a flexibilidade pode ser perfeita.", next: "minigame_start" },
+                        { text: "Talvez devêssemos repensar o conceito de perfeição.", next: "philosophy_discussion" }
+                    ]
+                },
+                agree_perfection: {
+                    text: "Finalmente alguém que compreende! Mas então, como resolver este impasse? Não posso usar materiais imperfeitos, mas os Fluidos insistem em suas 'variações orgânicas'.",
+                    options: [
+                        { text: "E se houvesse uma forma de unir ordem e variação?", next: "bridge_concepts" }
+                    ]
+                },
+                reframe_flaw: {
+                    text: "Qualidade especial? Explique-se. Como uma falha pode ser... benéfica?",
+                    options: [
+                        { text: "Vou criar uma poção para demonstrar.", next: "minigame_start" },
+                        { text: "Pense nas veias de uma folha - imperfeitas, mas funcionais.", next: "nature_analogy" }
+                    ]
+                },
+                philosophy_discussion: {
+                    text: "Repensar a perfeição? Isso é... perturbador. Minha vida inteira foi dedicada à precisão absoluta. Como posso questionar isso agora?",
+                    options: [
+                        { text: "A verdadeira perfeição inclui adaptabilidade.", next: "minigame_start" }
+                    ]
+                },
+                bridge_concepts: {
+                    text: "Unir ordem e variação... isso soa contraditório. Mas... talvez haja uma lógica que eu não esteja vendo.",
+                    options: [
+                        { text: "Deixe-me preparar algo que pode ajudar.", next: "minigame_start" }
+                    ]
+                },
+                nature_analogy: {
+                    text: "As veias de uma folha... nunca pensei nisso. Elas são irregulares, mas cada uma tem uma função. Interessante...",
+                    options: [
+                        { text: "Exato! Vou criar uma poção da Flexibilidade.", next: "minigame_start" }
+                    ]
+                },
+                minigame_success: {
+                    text: "Esta poção... sinto uma clareza diferente. Como se pudesse ver a beleza na variação. Talvez... talvez a perfeição não seja rigidez, mas harmonia entre ordem e adaptação.",
+                    options: [
+                        { text: "Agora você compreende a verdadeira perfeição.", next: "quest_complete" }
+                    ]
+                },
+                quest_complete: {
+                    text: "Obrigada, Emissário. Vou redesenhar o Cristal de Foco para incluir essas 'imperfeições funcionais'. Talvez isso seja exatamente o que o projeto precisa.",
+                    options: [],
+                    reward: true
+                }
+            }
+        },
+
+        fluidez_constante: {
+            id: 'fluidez_constante',
+            title: 'A Fluidez Constante',
+            description: 'Ajude Kael a encontrar um equilíbrio entre sua natureza fluida e a necessidade de compromissos duradouros.',
+            scenario: 'JardimFluido',
+            npc: 'dancarino_correntes',
+            type: 'commitment_balance',
+            difficulty: 'intermediate',
+            requiredPotion: 'COMPROMISSO',
+            status: 'available',
+            objectives: [
+                'Converse com Kael sobre sua dificuldade com compromissos.',
+                'Mostre como a constância pode coexistir com a fluidez.',
+                'Crie a poção do COMPROMISSO.',
+                'Ajude-o a se comprometer com um design para o projeto.'
+            ],
+            rewards: {
+                experience: 500,
+                items: ['semente_adaptavel'],
+                factionReputation: { fluidos: 15, equilibristas: 5 }
+            },
+            dialogueTree: {
+                start: {
+                    text: "Ah, Emissário! Que bom que chegou! Tenho dezessete novas ideias para o projeto hoje! Ou talvez dezoito... ou seria melhor começar do zero? O que acha?",
+                    options: [
+                        { text: "Suas ideias são valiosas, mas precisamos escolher uma.", next: "choice_anxiety" },
+                        { text: "Que tal explorarmos todas elas primeiro?", next: "enable_chaos" },
+                        { text: "E se combinássemos as melhores partes de cada uma?", next: "synthesis_approach" }
+                    ]
+                },
+                choice_anxiety: {
+                    text: "Escolher uma? Mas e se eu escolher errado? E se houver algo melhor amanhã? Não posso me prender a uma única ideia - isso vai contra minha natureza!",
+                    options: [
+                        { text: "Compreendo seu medo. Vamos trabalhar nisso juntos.", next: "empathy_approach" },
+                        { text: "Às vezes, escolher é um ato de coragem.", next: "courage_discussion" }
+                    ]
+                },
+                enable_chaos: {
+                    text: "Sim! Você entende! Vamos explorar tudo! Podemos fazer um design que muda a cada dia, ou talvez a cada hora! Seria revolucionário!",
+                    options: [
+                        { text: "Mas como os outros vão trabalhar com algo sempre mudando?", next: "reality_check" }
+                    ]
+                },
+                synthesis_approach: {
+                    text: "Combinar... isso é interessante. Mas como manter a essência fluida se tudo ficar fixo em uma forma final?",
+                    options: [
+                        { text: "E se a forma final incluísse capacidade de adaptação?", next: "adaptive_design" }
+                    ]
+                },
+                empathy_approach: {
+                    text: "Você realmente compreende... A maioria das pessoas não entende que para mim, cada escolha é como uma pequena morte. Mata todas as outras possibilidades.",
+                    options: [
+                        { text: "Vou preparar algo que pode ajudar com isso.", next: "minigame_start" }
+                    ]
+                },
+                courage_discussion: {
+                    text: "Coragem? Nunca pensei nisso dessa forma. Sempre vi as escolhas como limitações, não como atos corajosos...",
+                    options: [
+                        { text: "Deixe-me mostrar uma nova perspectiva.", next: "minigame_start" }
+                    ]
+                },
+                reality_check: {
+                    text: "Os outros... sim, eles precisam de algo estável para trabalhar. Mas como posso dar estabilidade sem trair minha natureza?",
+                    options: [
+                        { text: "Vamos encontrar um meio termo.", next: "minigame_start" }
+                    ]
+                },
+                adaptive_design: {
+                    text: "Capacidade de adaptação... como um rio que mantém seu curso mas se adapta às pedras... Isso faz sentido!",
+                    options: [
+                        { text: "Exato! Vou preparar uma poção para fortalecer essa ideia.", next: "minigame_start" }
+                    ]
+                },
+                minigame_success: {
+                    text: "Esta poção... sinto uma força estranha. Como se pudesse me comprometer sem me perder. Talvez... talvez eu possa criar algo duradouro que ainda seja verdadeiramente meu.",
+                    options: [
+                        { text: "Agora você pode ser fluido E constante.", next: "quest_complete" }
+                    ]
+                },
+                quest_complete: {
+                    text: "Obrigado, Emissário. Vou me comprometer com um design base para o projeto - mas um que pode evoluir com o tempo. Isso é... libertador!",
+                    options: [],
+                    reward: true
+                }
+            }
+        },
+
+        decisao_equilibrada: {
+            id: 'decisao_equilibrada',
+            title: 'A Decisão Equilibrada',
+            description: 'Ajude Mestre Ponderon a superar sua paralisia decisória e encontrar coragem para tomar decisões importantes.',
+            scenario: 'SalaoEquilibrio',
+            npc: 'sabio_equilibrio',
+            type: 'decision_courage',
+            difficulty: 'intermediate',
+            requiredPotion: 'DECISAO',
+            status: 'available',
+            objectives: [
+                'Converse com Mestre Ponderon sobre sua indecisão.',
+                'Ajude-o a compreender que nem toda decisão precisa ser perfeita.',
+                'Crie a poção da DECISÃO.',
+                'Encoraje-o a tomar uma posição no projeto da Convergência.'
+            ],
+            rewards: {
+                experience: 500,
+                items: ['balanca_sabedoria'],
+                factionReputation: { equilibristas: 15, cristalinos: 5, fluidos: 5 }
+            },
+            dialogueTree: {
+                start: {
+                    text: "Emissário, que dilema terrível! Cada facção apresenta argumentos válidos. Os Cristalinos têm razão sobre a precisão, os Fluidos sobre a adaptabilidade... Como posso escolher sem causar injustiça?",
+                    options: [
+                        { text: "Nem toda decisão precisa ser perfeita.", next: "perfection_pressure" },
+                        { text: "Qual é o seu maior medo ao decidir?", next: "fear_exploration" },
+                        { text: "E se não decidir também for uma escolha?", next: "inaction_consequence" }
+                    ]
+                },
+                perfection_pressure: {
+                    text: "Não perfeita? Mas uma decisão errada pode causar tanto sofrimento! Lembro-me de quando era jovem... uma escolha precipitada levou ao desastre. Não posso repetir isso.",
+                    options: [
+                        { text: "Conte-me sobre essa experiência passada.", next: "trauma_exploration" },
+                        { text: "Você aprendeu desde então. Não é mais aquela pessoa.", next: "growth_recognition" }
+                    ]
+                },
+                fear_exploration: {
+                    text: "Meu maior medo? Causar dor desnecessária. Cada decisão afeta vidas, e eu... eu carrego o peso de todas as consequências possíveis.",
+                    options: [
+                        { text: "Mas a indecisão também causa sofrimento.", next: "inaction_pain" },
+                        { text: "Você não pode controlar todas as consequências.", next: "control_illusion" }
+                    ]
+                },
+                inaction_consequence: {
+                    text: "Não decidir... sim, isso também é uma escolha, não é? E talvez seja a pior de todas, pois mantém todos em suspense e impede o progresso.",
+                    options: [
+                        { text: "Exato. Às vezes, uma decisão imperfeita é melhor que nenhuma.", next: "action_courage" }
+                    ]
+                },
+                trauma_exploration: {
+                    text: "Foi há décadas... Eu era jovem e confiante. Tomei uma decisão rápida sobre a distribuição de recursos, e isso levou a conflitos que duraram anos. Desde então, questiono cada escolha.",
+                    options: [
+                        { text: "Mas você também evitou muitos conflitos com sua sabedoria.", next: "wisdom_recognition" },
+                        { text: "Vamos trabalhar para curar essa ferida antiga.", next: "healing_approach" }
+                    ]
+                },
+                growth_recognition: {
+                    text: "Não sou mais aquela pessoa... isso é verdade. Aprendi muito, desenvolvi sabedoria. Talvez... talvez seja hora de confiar nesse crescimento.",
+                    options: [
+                        { text: "Sua sabedoria atual pode guiar suas decisões.", next: "minigame_start" }
+                    ]
+                },
+                inaction_pain: {
+                    text: "Você tem razão. Vejo o sofrimento nos olhos dos outros enquanto esperam. Minha indecisão se tornou uma fonte de dor que eu queria evitar.",
+                    options: [
+                        { text: "Vamos encontrar coragem para agir.", next: "minigame_start" }
+                    ]
+                },
+                control_illusion: {
+                    text: "Controlar todas as consequências... isso é impossível, não é? Talvez minha busca por controle total seja o que me paralisa.",
+                    options: [
+                        { text: "A sabedoria está em aceitar a incerteza.", next: "minigame_start" }
+                    ]
+                },
+                action_courage: {
+                    text: "Uma decisão imperfeita... isso requer coragem que não sei se possuo. Mas talvez seja hora de encontrá-la.",
+                    options: [
+                        { text: "Vou ajudá-lo a encontrar essa coragem.", next: "minigame_start" }
+                    ]
+                },
+                wisdom_recognition: {
+                    text: "É verdade... minha cautela evitou muitos problemas. Talvez eu possa usar essa mesma sabedoria para tomar decisões construtivas.",
+                    options: [
+                        { text: "Sua sabedoria é um dom. Vamos usá-la.", next: "minigame_start" }
+                    ]
+                },
+                healing_approach: {
+                    text: "Curar essa ferida... nunca pensei nisso dessa forma. Talvez seja hora de perdoar meu eu mais jovem e seguir em frente.",
+                    options: [
+                        { text: "Vou preparar algo para ajudar nessa cura.", next: "minigame_start" }
+                    ]
+                },
+                minigame_success: {
+                    text: "Esta poção... sinto uma clareza que não tinha há décadas. A coragem de decidir, mesmo na incerteza. Posso fazer isso... posso escolher um caminho para o bem de todos.",
+                    options: [
+                        { text: "Sua decisão será sábia e necessária.", next: "quest_complete" }
+                    ]
+                },
+                quest_complete: {
+                    text: "Obrigado, Emissário. Tomarei uma decisão sobre o projeto. Não será perfeita, mas será feita com sabedoria e amor. Isso é suficiente.",
+                    options: [],
+                    reward: true
+                }
+            }
+        }
     });
 
-    
+    // ===== NOVAS RECEITAS DE POÇÕES =====
+    Object.assign(GAME_DATA.recipes, {
+        'FLEXIBILIDADE': {
+            ingredients: ['rigidez', 'adaptacao'],
+            emoji: '🌿',
+            description: 'A capacidade de manter a essência enquanto se adapta às circunstâncias',
+            effect: 'Permite ver a beleza na imperfeição e encontrar força na adaptabilidade'
+        },
+        'COMPROMISSO': {
+            ingredients: ['liberdade', 'responsabilidade'],
+            emoji: '🤝',
+            description: 'O equilíbrio entre autonomia pessoal e responsabilidade coletiva',
+            effect: 'Fortalece a capacidade de fazer promessas duradouras sem perder a identidade'
+        },
+        'DECISAO': {
+            ingredients: ['sabedoria', 'coragem'],
+            emoji: '⚡',
+            description: 'A força para escolher um caminho mesmo na incerteza',
+            effect: 'Dissolve a paralisia decisória e fortalece a confiança nas próprias escolhas'
+        },
+        'HARMONIA': {
+            ingredients: ['ordem', 'caos'],
+            emoji: '☯️',
+            description: 'O equilíbrio perfeito entre estrutura e flexibilidade',
+            effect: 'Permite mediar conflitos e encontrar pontos de convergência entre opostos'
+        }
+    });
+
+    // ===== NOVOS INGREDIENTES EMOCIONAIS =====
+    Object.assign(GAME_DATA.potions, {
+        rigidez: {
+            name: 'Rigidez',
+            color: '#6B7280',
+            emoji: '🗿',
+            description: 'A tendência de manter estruturas fixas e resistir à mudança'
+        },
+        adaptacao: {
+            name: 'Adaptação',
+            color: '#10B981',
+            emoji: '🌱',
+            description: 'A capacidade natural de se ajustar a novas circunstâncias'
+        },
+        liberdade: {
+            name: 'Liberdade',
+            color: '#3B82F6',
+            emoji: '🕊️',
+            description: 'O impulso de manter autonomia e evitar limitações'
+        },
+        responsabilidade: {
+            name: 'Responsabilidade',
+            color: '#F59E0B',
+            emoji: '⚖️',
+            description: 'O senso de dever e compromisso com outros e com objetivos maiores'
+        },
+        ordem: {
+            name: 'Ordem',
+            color: '#8B5CF6',
+            emoji: '📐',
+            description: 'A busca por estrutura, previsibilidade e organização'
+        },
+        caos: {
+            name: 'Caos',
+            color: '#EF4444',
+            emoji: '🌪️',
+            description: 'A energia da mudança, criatividade e imprevisibilidade'
+        }
+    });
+
+    // ===== NOVOS ITENS DE RECOMPENSA =====
+    Object.assign(GAME_DATA.items, {
+        cristal_harmonico: {
+            name: 'Cristal Harmônico',
+            emoji: '💎',
+            description: 'Um cristal que vibra em perfeita harmonia, unindo ordem e beleza natural',
+            type: 'tool',
+            effect: 'Revela a beleza oculta nas imperfeições aparentes'
+        },
+        semente_adaptavel: {
+            name: 'Semente Adaptável',
+            emoji: '🌰',
+            description: 'Uma semente que cresce de forma diferente em cada solo, mas sempre floresce',
+            type: 'tool',
+            effect: 'Inspira flexibilidade mantendo a essência pessoal'
+        },
+        balanca_sabedoria: {
+            name: 'Balança da Sabedoria',
+            emoji: '⚖️',
+            description: 'Uma balança que pesa não apenas prós e contras, mas também a coragem necessária para decidir',
+            type: 'tool',
+            effect: 'Facilita a tomada de decisões equilibradas e corajosas'
+        }
+    });
 
     console.log("✅ Expansão 1 carregada com sucesso!");
 }
