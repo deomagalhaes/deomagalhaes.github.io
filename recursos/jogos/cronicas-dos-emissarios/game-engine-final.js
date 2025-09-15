@@ -520,7 +520,7 @@ function canAccessScenario(scenarioId) {
             this.gameState.achievements[achievementId] = false;
         });
         
-        this.showScreen('characterCreation');
+         this.showScreen('worldMap');
     }
     
     continueGame() {
