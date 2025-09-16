@@ -221,17 +221,22 @@ GAME_DATA.emotionalActions = {
                         { text: "Vou criá-la agora mesmo.", next: "minigame_start" }
                     ]
                 },
-                minigame_success: {
-                    text: "Excelente. Com esta poção, podemos iniciar a mediação. Sua tarefa agora é visitar cada líder de facção. Ouça-os, compreenda-os, e então os traga para a Praça para conversarmos.",
-                    options: [
-                        { text: "Considera feito. A harmonia prevalecerá.", next: "quest_complete" }
-                    ]
-                },
-                quest_complete: {
-                    text: "Você preparou o terreno para a paz, Emissário. A jornada será longa, mas o primeiro passo foi dado. Você ganhou o respeito das três facções.",
-                    options: [],
-                    reward: true
-                }
+minigame_success: {
+    text: "Excelente. Com esta poção, podemos iniciar a mediação. Sua tarefa agora é visitar cada líder de facção...",
+    // ADICIONE A PROPRIEDADE 'reward' AQUI
+    reward: true, 
+    options: [
+        { text: "Entendido. Vou conversar com eles.", next: "end_dialogue" } 
+    ]
+},
+
+// O nó 'quest_complete' será usado mais tarde.
+quest_complete: {
+    text: "Você uniu as facções e restaurou a harmonia. Akari está em dívida com você, Emissário.",
+    options: [],
+    reward: true
+}
+
             }
         },
 
@@ -300,7 +305,7 @@ dialogueTree: {
         outcome: 'failure'
     }
 }
-    }
+    },
 
 
         perfeicao_flexivel: {
@@ -312,6 +317,7 @@ dialogueTree: {
             type: 'perfectionism_balance',
             difficulty: 'intermediate',
             requiredPotion: 'FLEXIBILIDADE',
+            requiredCompletedQuest: 'diplomacia_convergente',
             status: 'available',
             objectives: [
                 'Converse com Mestra Livia sobre sua obsessão pela perfeição.',
@@ -394,6 +400,7 @@ dialogueTree: {
             type: 'commitment_balance',
             difficulty: 'intermediate',
             requiredPotion: 'COMPROMISSO',
+            requiredCompletedQuest: 'diplomacia_convergente',
             status: 'available',
             objectives: [
                 'Converse com Kael sobre sua dificuldade com compromissos.',
@@ -481,6 +488,7 @@ dialogueTree: {
             type: 'decision_courage',
             difficulty: 'intermediate',
             requiredPotion: 'DECISAO',
+            requiredCompletedQuest: 'diplomacia_convergente',
             status: 'available',
             objectives: [
                 'Converse com Mestre Ponderon sobre sua indecisão.',

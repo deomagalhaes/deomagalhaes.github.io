@@ -24,6 +24,26 @@ class EmissariesGameEngine {
                 worldMap: document.getElementById('world-map-screen')
             },
             
+            // Adicione este novo método em qualquer lugar dentro da classe EmissariesGameEngine
+checkMainQuestCompletion() {
+    // IDs das três missões das facções
+    const factionQuests = ['perfeicao_flexivel', 'fluidez_constante', 'decisao_equilibrada'];
+    
+    // Verifica se todas as missões das facções estão na lista de missões completas do jogador
+    const allFactionQuestsDone = factionQuests.every(quest => this.gameState.completedQuests.includes(quest));
+
+    // Se todas foram feitas E a missão principal ainda não foi completada
+    if (allFactionQuestsDone && !this.gameState.completedQuests.includes('diplomacia_convergente')) {
+        console.log("🏆 Todas as missões de facção completas! Finalizando a quest principal...");
+        
+        // Mostra uma notificação ou diálogo final
+        this.showTip("Você uniu as facções! Volte para a Praça da Convergência para ver o resultado.");
+        
+        // Marca a missão principal como concluída
+        this.completeQuest('diplomacia_convergente');
+    }
+},
+
             // Botões principais
             worldMapButton: document.getElementById('world-map-button'), // << ADICIONAR
             closeMapButton: document.getElementById('close-map-button'), // << ADICIONAR
@@ -834,118 +854,116 @@ renderSceneActions(scenario) {
         this.showScreen('dialogue');
     }
     
-    renderDialogueNode(nodeId) {
-        // Se o nó for para encerrar o diálogo, simplesmente volte para o mundo.
-        if (nodeId === 'end_dialogue') {
-            this.showScreen('world');
-            return;
-        }
+renderDialogueNode(nodeId) {
+    // Se o nó for para encerrar o diálogo, a lógica de retorno ao mundo é tratada aqui.
+    if (nodeId === 'end_dialogue') {
+        // ======================= INÍCIO DA CORREÇÃO =======================
+        // CRUCIAL: Em vez de apenas mostrar a tela, nós redesenhamos a cena.
+        // Isso força a reavaliação de quais NPCs e ações devem aparecer.
+        this.renderScene(this.gameState.currentScene);
+        // ======================== FIM DA CORREÇÃO =========================
+        
+        this.showScreen('world'); // Agora mostramos a tela do mundo JÁ ATUALIZADA.
+        return;
+    }
 
-        const quest = GAME_DATA.quests[this.currentDialogue.questId];
-        if (!quest || !quest.dialogueTree || !quest.dialogueTree[nodeId]) {
-            console.error(`❌ Nó de diálogo não encontrado: ${nodeId}`);
-            return;
-        }
-        
-        const node = quest.dialogueTree[nodeId];
-        
-        if (this.DOM.dialogue.text) {
-            this.DOM.dialogue.text.textContent = node.text;
-        }
-        
-        if (this.DOM.dialogue.options) {
-            this.DOM.dialogue.options.innerHTML = '';
-        
-            if (node.options && node.options.length > 0) {
-                node.options.forEach((option, index) => {
-                    let showOption = true;
-                    let buttonText = option.text;
-                    let effectiveNext = option.next;
+    const quest = GAME_DATA.quests[this.currentDialogue.questId];
+    if (!quest || !quest.dialogueTree || !quest.dialogueTree[nodeId]) {
+        console.error(`❌ Nó de diálogo não encontrado: ${nodeId}`);
+        this.showScreen('world'); // Medida de segurança
+        return;
+    }
+    
+    const node = quest.dialogueTree[nodeId];
+    
+    if (this.DOM.dialogue.text) {
+        this.DOM.dialogue.text.textContent = node.text;
+    }
+    
+    if (this.DOM.dialogue.options) {
+        this.DOM.dialogue.options.innerHTML = '';
+    
+        if (node.options && node.options.length > 0) {
+            node.options.forEach((option, index) => {
+                let showOption = true;
+                let buttonText = option.text;
+                let effectiveNext = option.next;
 
-                    // Lógica de verificação de item
-                    if (option.requiresItem) {
-                        if (this.hasItem(option.requiresItem)) {
-                            // O jogador TEM o item.
-                            if (option.hiddenText) {
-                                buttonText += option.hiddenText;
-                            }
-                            // Se esta opção é para quem TEM o item, não mostre a opção de falha.
-                            if (option.requirementFails) {
-                                showOption = false;
-                            }
-                        } else {
-                            // O jogador NÃO TEM o item.
-                            // Se esta opção é para quem NÃO TEM o item, mostre-a.
-                            if (option.requirementFails) {
-                                effectiveNext = option.next;
-                            } else {
-                                // Se não for a opção de falha, esconda-a.
-                                showOption = false;
-                            }
-                        }
+                // Lógica de verificação de item (seu código original, mantido)
+                if (option.requiresItem) {
+                    if (this.hasItem(option.requiresItem)) {
+                        if (option.hiddenText) buttonText += option.hiddenText;
+                        if (option.requirementFails) showOption = false;
+                    } else {
+                        if (option.requirementFails) effectiveNext = option.next;
+                        else showOption = false;
                     }
+                }
 
-                    if (showOption) {
-                        const button = document.createElement('button');
-                        button.textContent = buttonText;
-                        button.className = 'dialogue-option text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 w-full text-left bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 mb-2';
-                        
-                        if (option.requiresItem && !option.requirementFails) {
-                            button.classList.add('magical-glow', 'text-yellow-300');
-                        }
-
-                        button.onclick = () => {
-                            this.audioManager.playSfx('click');
-                            // Usamos a variável effectiveNext que foi determinada pela lógica
-                            this.handleDialogueChoice({ ...option, next: effectiveNext });
-                        };
-                        this.DOM.dialogue.options.appendChild(button);
-                    }
-                });
-// VERSÃO CORRIGIDA
-            } else {
-                // Se for um nó final (sem opções de diálogo)
-                if (node.reward) {
-                    // Se o nó final tem uma recompensa, a missão está completa.
-                    this.completeQuest(this.currentDialogue.questId);
-                    
-                    // CRUCIAL: Redesenha a cena atual para refletir as mudanças (novo local, checkmark no NPC).
-                    this.renderScene(this.gameState.currentScene); 
-                    this.showScreen('world'); // Mostra a tela do mundo já atualizada.
-
-                } else {
-                    // Se for um nó final sem recompensa (um diálogo simples que termina).
+                if (showOption) {
                     const button = document.createElement('button');
-                    button.textContent = 'Continuar';
-                    button.className = 'dialogue-option text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700';
+                    button.textContent = buttonText;
+                    button.className = 'dialogue-option text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 w-full text-left bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 mb-2';
+                    
+                    if (option.requiresItem && !option.requirementFails) {
+                        button.classList.add('magical-glow', 'text-yellow-300');
+                    }
+
                     button.onclick = () => {
                         this.audioManager.playSfx('click');
-                        this.showScreen('world'); // Aqui está correto, pois nada mudou no estado do mundo.
+                        this.handleDialogueChoice({ ...option, next: effectiveNext });
                     };
                     this.DOM.dialogue.options.appendChild(button);
                 }
+            });
+        } else {
+            // Se for um nó final (sem opções de diálogo)
+            if (node.reward) {
+                this.completeQuest(this.currentDialogue.questId);
+                this.renderScene(this.gameState.currentScene); 
+                this.showScreen('world');
+            } else {
+                const button = document.createElement('button');
+                button.textContent = 'Continuar';
+                button.className = 'dialogue-option text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700';
+                button.onclick = () => {
+                    this.audioManager.playSfx('click');
+                    this.renderScene(this.gameState.currentScene); // Boa prática redesenhar sempre
+                    this.showScreen('world');
+                };
+                this.DOM.dialogue.options.appendChild(button);
             }
-
         }
     }
+}
+
 
 
     
-    handleDialogueChoice(option) {
-        
-            if (option.choiceId) {
+handleDialogueChoice(option) {
+    // ======================= INÍCIO DA CORREÇÃO =======================
+    // Pega o nó de diálogo ATUAL (de onde o jogador clicou) para verificar suas propriedades.
+    const quest = GAME_DATA.quests[this.currentDialogue.questId];
+    const currentNode = quest.dialogueTree[this.currentDialogue.currentNode];
+
+    // Se o NÓ ATUAL (o que está sendo exibido) tiver a propriedade 'reward: true',
+    // complete a missão associada a ele.
+    // Isso é crucial para marcar 'diplomacia_convergente' como concluída e liberar as outras missões.
+    if (currentNode && currentNode.reward) {
+        this.completeQuest(this.currentDialogue.questId);
+    }
+    // ======================== FIM DA CORREÇÃO =========================
+
+    // Seu código original para combate emocional (mantido intacto)
+    if (option.choiceId) {
         const questId = this.currentDialogue.questId;
 
-        // Verificação específica para iniciar o combate emocional
         if (questId === 'diplomacia_convergente' && option.choiceId === 'iniciar_conflito') {
             console.log("🚦 Reconhecida escolha de iniciar conflito. Chamando sistema de combate...");
             
-            // Chama o método para iniciar o combate emocional
-            // O 'true' como retorno indica que a ação foi tratada e o fluxo normal deve parar.
             const combatStarted = this.emotionalCombat.startEmotionalCombat('conflito_cristalino', 'mediador_anciao');
             
             if (combatStarted) {
-                // Se o combate iniciou, não prossiga para o próximo nó de diálogo.
                 return; 
             } else {
                 console.error("❌ Falha ao iniciar o combate emocional. Verifique a questId e o tipo.");
@@ -953,18 +971,22 @@ renderSceneActions(scenario) {
         }
     }
 
-        if (option.next) {
-            // Verificar se precisa de mini-game
-            if (option.next === 'minigame_trigger' || option.next === 'minigame_start') {
-                this.startMinigameFromDialogue();
-            } else {
-                this.renderDialogueNode(option.next);
-            }
+    // Seu código original para navegação (com uma pequena melhoria)
+    if (option.next) {
+        if (option.next === 'minigame_trigger' || option.next === 'minigame_start') {
+            this.startMinigameFromDialogue();
         } else {
-            // Voltar ao mundo
-            this.showScreen('world');
+            // ATUALIZA o estado interno do diálogo para o próximo nó
+            this.currentDialogue.currentNode = option.next;
+            // RENDERIZA o próximo nó
+            this.renderDialogueNode(option.next);
         }
+    } else {
+        // Se não houver 'next', volta para o mundo do jogo
+        this.showScreen('world');
     }
+}
+
     
     startMinigameFromDialogue() {
         const quest = GAME_DATA.quests[this.currentDialogue.questId];
@@ -1320,6 +1342,10 @@ renderSceneActions(scenario) {
             // Conquistas
             if (quest.rewards.achievement) {
                 this.unlockAchievement(quest.rewards.achievement);
+
+                // No final de completeQuest(questId), antes de fechar o método.
+            this.checkMainQuestCompletion();
+
             }
 
             // >>> NOVO BLOCO PARA DESBLOQUEIOS ESPECIAIS <<<
@@ -1774,6 +1800,8 @@ endEmotionalCombat(outcome) {
 EmissariesGameEngine.prototype.startEmotionalCombat = function(questId, opponentId) {
     return this.emotionalCombat.startEmotionalCombat(questId, opponentId);
 };
+
+
 
 // Função para verificar e exibir o botão do mapa-múndi
 function checkAndShowMapButton() {
