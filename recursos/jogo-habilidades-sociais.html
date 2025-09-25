@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Turbinando suas Habilidades Sociais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .quiz-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        .btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .answer-btn.correct {
+            background-color: #22c55e !important; /* green-500 */
+            color: white !important;
+            border-color: #16a34a !important; /* green-600 */
+        }
+        .answer-btn.incorrect {
+            background-color: #ef4444 !important; /* red-500 */
+            color: white !important;
+            border-color: #dc2626 !important; /* red-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4" style="background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);">
+
+    <main id="quiz-container" class="w-full max-w-2xl mx-auto">
+        
+        <!-- Tela Inicial -->
+        <div id="start-screen" class="quiz-card p-8 rounded-2xl shadow-xl text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Quiz de Habilidades Sociais</h1>
+            <p class="text-gray-600 mb-6">Teste seus conhecimentos sobre como interagir melhor, com base na psicologia e na neurociência.</p>
+            <button id="start-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md">
+                Começar o Jogo!
+            </button>
+        </div>
+
+        <!-- Tela do Quiz -->
+        <div id="quiz-screen" class="hidden quiz-card p-6 md:p-8 rounded-2xl shadow-xl">
+            <div id="progress-container" class="mb-4">
+                <p class="text-sm text-gray-600 text-right">Pergunta <span id="current-question-number">1</span> de <span id="total-questions"></span></p>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-blue-500 h-2.5 rounded-full" style="width: 0%;"></div>
+                </div>
+            </div>
+            <h2 id="question" class="text-xl md:text-2xl font-bold text-gray-800 mb-6">Carregando pergunta...</h2>
+            <div id="answers" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- As opções de resposta serão inseridas aqui via JS -->
+            </div>
+            <div id="explanation-container" class="hidden mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg">
+                <h3 class="font-bold text-blue-800">A Ciência por Trás</h3>
+                <p id="explanation" class="text-blue-700 text-sm"></p>
+            </div>
+            <div class="flex justify-end mt-6">
+                <button id="next-btn" class="hidden btn bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg">
+                    Próxima
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Resultados -->
+        <div id="results-screen" class="hidden quiz-card p-8 rounded-2xl shadow-xl text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Quiz Finalizado!</h2>
+            <p class="text-gray-600 mb-4">Seu resultado foi:</p>
+            <p class="text-6xl font-bold text-blue-500 mb-4"><span id="score">0</span>/<span id="total">0</span></p>
+            <p id="feedback" class="text-gray-700 mb-6 font-medium"></p>
+            <button id="restart-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md">
+                Jogar Novamente
+            </button>
+        </div>
+        
+        <!-- Seção de Histórico de Resultados -->
+        <div id="history-section" class="mt-8 p-6 bg-white rounded-2xl shadow-lg max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-700">Seu Histórico de Resultados</h3>
+                <button id="clear-history-btn" class="text-sm text-red-500 hover:text-red-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed" disabled>Limpar Histórico</button>
+            </div>
+            <ul id="history-list" class="space-y-2 text-gray-600">
+                <!-- Histórico será inserido aqui -->
+            </ul>
+        </div>
+
+    </main>
+
+    <script>
+        const quizData = [
+            {
+                question: "Seu amigo parece chateado, mas não quer falar. O que a 'escuta ativa' sugere que você faça?",
+                answers: [
+                    { text: "Insistir até ele contar o que aconteceu.", correct: false },
+                    { text: "Dizer 'tudo bem, estou aqui se precisar' e dar espaço.", correct: true },
+                    { text: "Falar dos seus próprios problemas para distraí-lo.", correct: false },
+                    { text: "Adivinhar o que aconteceu e oferecer uma solução.", correct: false }
+                ],
+                explanation: "A neurociência mostra que forçar alguém a falar pode ativar o centro de 'ameaça' no cérebro. Dar espaço e mostrar disponibilidade cria segurança e fortalece a confiança."
+            },
+            {
+                question: "Ao conhecer alguém, qual gesto demonstra mais confiança e abertura?",
+                answers: [
+                    { text: "Ficar de braços cruzados.", correct: false },
+                    { text: "Evitar contato visual.", correct: false },
+                    { text: "Manter postura ereta e contato visual amigável.", correct: true },
+                    { text: "Falar muito rápido para mostrar que sabe do assunto.", correct: false }
+                ],
+                explanation: "O cérebro processa a linguagem corporal mais rápido que as palavras. Uma postura aberta e contato visual ativam 'neurônios-espelho' na outra pessoa, criando uma sensação de conexão."
+            },
+            {
+                question: "Você discorda de um colega num trabalho em grupo. Qual a melhor forma de expressar sua opinião?",
+                answers: [
+                    { text: "'Sua ideia é ruim, a minha é melhor.'", correct: false },
+                    { text: "'Entendi seu ponto, mas que tal se considerarmos outra perspectiva?'", correct: true },
+                    { text: "Ficar quieto para não criar briga.", correct: false },
+                    { text: "Falar mal da ideia dele para outros colegas.", correct: false }
+                ],
+                explanation: "Usar a abordagem 'Eu entendi, mas...' valida a opinião do outro antes de apresentar a sua. Isso diminui a defensividade do cérebro dele e abre espaço para colaboração."
+            },
+            {
+                question: "Você sente uma onda de raiva durante uma discussão. O que a neurociência recomenda fazer no momento?",
+                answers: [
+                    { text: "Gritar para colocar a raiva para fora.", correct: false },
+                    { text: "Respirar fundo contando até 10 antes de responder.", correct: true },
+                    { text: "Guardar a raiva e não falar mais nada.", correct: false },
+                    { text: "Responder imediatamente com a primeira coisa que vier à cabeça.", correct: false }
+                ],
+                explanation: "A raiva ativa a amígdala (cérebro emocional). Respirar fundo ativa o córtex pré-frontal (cérebro racional), ajudando você a retomar o controle e a pensar com mais clareza."
+            },
+            {
+                question: "Por que aprender a pedir ajuda é importante para o cérebro social?",
+                answers: [
+                    { text: "Porque mostra que você é fraco.", correct: false },
+                    { text: "Porque sobrecarrega seus amigos.", correct: false },
+                    { text: "Porque fortalece laços e mostra confiança nos outros.", correct: true },
+                    { text: "Porque é um jeito de fazer os outros resolverem seus problemas.", correct: false }
+                ],
+                explanation: "Pedir ajuda ativa no cérebro da outra pessoa os circuitos de recompensa, pois ela se sente útil e valorizada. Isso cria uma conexão mais forte e mútua, um pilar das habilidades sociais."
+            }
+        ];
+
+        // Elementos do DOM
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionEl = document.getElementById('question');
+        const answersEl = document.getElementById('answers');
+        const explanationContainer = document.getElementById('explanation-container');
+        const explanationEl = document.getElementById('explanation');
+        
+        const scoreEl = document.getElementById('score');
+        const totalEl = document.getElementById('total');
+        const feedbackEl = document.getElementById('feedback');
+
+        const progressBar = document.getElementById('progress-bar');
+        const currentQuestionNumberEl = document.getElementById('current-question-number');
+        const totalQuestionsEl = document.getElementById('total-questions');
+
+        const historySection = document.getElementById('history-section');
+        const historyList = document.getElementById('history-list');
+        const clearHistoryBtn = document.getElementById('clear-history-btn');
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questions = [];
+
+        // Função para embaralhar perguntas e respostas
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startGame() {
+            startScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            // Embaralha as perguntas e as respostas de cada pergunta
+            questions = [...quizData];
+            shuffleArray(questions);
+            questions.forEach(q => shuffleArray(q.answers));
+
+            totalQuestionsEl.innerText = questions.length;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            questionEl.innerText = currentQuestion.question;
+            currentQuestionNumberEl.innerText = currentQuestionIndex + 1;
+            progressBar.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('btn', 'answer-btn', 'w-full', 'p-4', 'border-2', 'border-gray-300', 'rounded-lg', 'text-left', 'hover:bg-gray-100', 'hover:border-blue-400', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-400');
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener('click', selectAnswer);
+                answersEl.appendChild(button);
+            });
+        }
+
+        function resetState() {
+            nextBtn.classList.add('hidden');
+            explanationContainer.classList.add('hidden');
+            while (answersEl.firstChild) {
+                answersEl.removeChild(answersEl.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            const selectedBtn = e.target;
+            const isCorrect = selectedBtn.dataset.correct === 'true';
+
+            if (isCorrect) {
+                score++;
+            }
+
+            Array.from(answersEl.children).forEach(button => {
+                setStatusClass(button, button.dataset.correct === 'true');
+                button.disabled = true; // Desabilita todos os botões após a escolha
+            });
+
+            if(!isCorrect) {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            // Mostra a explicação
+            explanationEl.innerText = questions[currentQuestionIndex].explanation;
+            explanationContainer.classList.remove('hidden');
+
+            if (questions.length > currentQuestionIndex + 1) {
+                nextBtn.classList.remove('hidden');
+            } else {
+                showResults();
+            }
+        }
+        
+        function setStatusClass(element, correct) {
+            if (correct) {
+                element.classList.add('correct');
+            }
+        }
+
+        function showNextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+        
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            
+            scoreEl.innerText = score;
+            totalEl.innerText = questions.length;
+
+            const percentage = (score / questions.length) * 100;
+            if (percentage >= 80) {
+                feedbackEl.innerText = "Excelente! Você tem uma ótima base sobre interações sociais. Continue assim!";
+            } else if (percentage >= 50) {
+                feedbackEl.innerText = "Bom trabalho! Você está no caminho certo para aprimorar suas habilidades sociais.";
+            } else {
+                feedbackEl.innerText = "Não se preocupe! Este é um ótimo ponto de partida para aprender mais e praticar suas habilidades.";
+            }
+            saveResult();
+            loadHistory();
+        }
+        
+        // --- Lógica de Armazenamento Local ---
+        
+        function saveResult() {
+            const history = JSON.parse(localStorage.getItem('quizSocialSkillsResults')) || [];
+            const newResult = {
+                score: score,
+                total: questions.length,
+                date: new Date().toLocaleString('pt-BR')
+            };
+            history.push(newResult);
+            localStorage.setItem('quizSocialSkillsResults', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('quizSocialSkillsResults')) || [];
+            historyList.innerHTML = ''; // Limpa a lista antes de carregar
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<li><p class="text-center text-gray-500">Nenhum resultado registrado ainda. Jogue uma partida!</p></li>';
+                clearHistoryBtn.disabled = true;
+            } else {
+                history.reverse().forEach(result => { // Mostra os mais recentes primeiro
+                    const li = document.createElement('li');
+                    li.classList.add('flex', 'justify-between', 'items-center', 'p-2', 'bg-gray-50', 'rounded-md');
+                    li.innerHTML = `
+                        <span>Acertos: <strong class="text-blue-600">${result.score}/${result.total}</strong></span>
+                        <span class="text-sm text-gray-500">${result.date}</span>
+                    `;
+                    historyList.appendChild(li);
+                });
+                clearHistoryBtn.disabled = false;
+            }
+        }
+
+        function clearHistory() {
+            if (confirm('Tem certeza que deseja apagar todo o seu histórico?')) {
+                localStorage.removeItem('quizSocialSkillsResults');
+                loadHistory();
+            }
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        nextBtn.addEventListener('click', showNextQuestion);
+        restartBtn.addEventListener('click', startGame);
+        clearHistoryBtn.addEventListener('click', clearHistory);
+        
+        // Carrega o histórico quando a página é aberta
+        window.addEventListener('load', loadHistory);
+
+    </script>
+</body>
+</html>
