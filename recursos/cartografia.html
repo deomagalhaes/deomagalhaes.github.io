@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topologia Esquizoanalítica</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (Necessário para JSX) -->
+    <script src="https://unpkg.com/@babel/standalone@7.23.6/babel.min.js"></script>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@100;400&display=swap');
+
+        :root {
+            --bg-color: #070709;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: #e2e8f0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .font-philosophical { font-family: 'Cinzel', serif; }
+        .font-code { font-family: 'JetBrains Mono', monospace; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+        .svg-container { width: 100%; height: 100%; cursor: crosshair; }
+        .map-node { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .map-node:hover { filter: brightness(1.5) drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
+        .map-node.active { stroke: #fff; stroke-width: 2px; filter: brightness(1.8) drop-shadow(0 0 20px currentColor); }
+        .map-node.completed { fill-opacity: 0.8 !important; }
+
+        .pulse-slow { animation: pulse-slow 4s infinite alternate ease-in-out; }
+        .rotate-slow { animation: rotate-slow 60s linear infinite; transform-origin: center; }
+        .rotate-slow-reverse { animation: rotate-slow-reverse 80s linear infinite; transform-origin: center; }
+
+        @keyframes pulse-slow {
+            0% { opacity: 0.3; transform: scale(0.98); }
+            100% { opacity: 0.6; transform: scale(1.02); }
+        }
+        @keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes rotate-slow-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+
+        .grid-bg {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        .glass-panel {
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(12px);
+            border-left: 1px solid rgba(255,255,255,0.05);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="root" class="w-full h-screen"></div>
+
+    <script type="text/babel" data-presets="react,env">
+        const { useState, useEffect, useMemo } = React;
+
+        // ==========================================
+        // CONFIGURAÇÃO DA INTELIGÊNCIA ARTIFICIAL
+        // A chave é inserida pelo usuário na interface e salva apenas no navegador (localStorage).
+        const DEFAULT_GOOGLE_API_KEY = ""; 
+        // ==========================================
+
+        const CONCEPTS = [
+            { id: 'organismo', layer: 'strata', title: 'O Organismo', subtitle: 'A Estratificação Biológica', cx: 400, cy: 400, r: 40, color: '#475569', theory: 'O organismo não é o corpo. O organismo é o corpo aprisionado por uma organização imposta, hierarquizado e submetido a funções úteis (reprodução, trabalho). Deleuze nos diz que o corpo está roubado pela organização biológica estratificada.', question: 'Como o seu corpo está sendo disciplinado pela rotina, pelo trabalho ou pelas expectativas biológicas e de produtividade? Onde você se sente reduzido a uma "função" orgânica útil?', svgShape: 'circle' },
+            { id: 'rostidade', layer: 'strata', title: 'A Máquina de Rostidade', subtitle: 'Significância e Subjetivação', cx: 400, cy: 300, r: 35, color: '#64748b', theory: 'O sistema Muro-Branco (Significância) e Buraco-Negro (Subjetivação). A rostidade é a operação do poder (Capitalismo, Estado, Psicanálise) que te obriga a ter um "rosto" decifrável: normal, desviante, homem, mulher, louco, são. É uma grade que captura as intensidades.', question: 'Quais identidades, rótulos ou "rostos" o sistema exige que você vista hoje? Como você sente a pressão para ser legível, compreendido e catalogado pela sociedade?', svgShape: 'polygon', points: "365,300 400,265 435,300 400,335" },
+            { id: 'estado', layer: 'strata', title: 'O Aparelho de Estado', subtitle: 'A Captura dos Fluxos', cx: 300, cy: 400, r: 35, color: '#334155', theory: 'A interioridade do pensamento, a lei, a representação. O Estado sobrecodifica os territórios, criando classes, leis e fronteiras. Ele captura as máquinas de guerra e os fluxos nômades para transformá-los em instituições administráveis.', question: 'Onde estão as leis inquebráveis, as hierarquias e as burocracias na sua vida? O que te governa e cobra obediência moral ou financeira de forma inescapável?', svgShape: 'rect', width: 60, height: 60, x: 270, y: 370 },
+            { id: 'ritornelo', layer: 'assemblage', title: 'O Ritornelo', subtitle: 'A Invenção do Território', cx: 400, cy: 180, r: 45, color: '#d97706', theory: 'Na escuridão, a criança canta para se acalmar. O pássaro canta para marcar seu espaço. O ritornelo é a repetição de um padrão que traça um círculo no caos e cria uma casa. É o princípio da arte e do território.', question: 'Qual é o seu "canto no escuro"? Que hábitos, rotinas, playlists, trajetos ou manias você repete para criar uma zona de conforto e estabilidade em meio à ansiedade do mundo?', svgShape: 'circle' },
+            { id: 'maquinas', layer: 'assemblage', title: 'Máquinas Desejantes', subtitle: 'Produção Inconsciente', cx: 580, cy: 520, r: 50, color: '#b45309', theory: 'O desejo não é falta (como em Freud ou Lacan). O desejo é produção, construtivismo. Tudo é máquina conectada a máquina: a máquina-boca acoplada à máquina-seio; a máquina-olho à máquina-tela. Cortes e fluxos.', question: 'Com quais objetos, pessoas, ideias ou tecnologias o seu desejo está se acoplando ativamente? O que essas conexões estão produzindo em você de forma automática e intensa?', svgShape: 'gear' },
+            { id: 'micropolitica', layer: 'assemblage', title: 'Linhas Moleculares', subtitle: 'Micropolítica do Desejo', cx: 220, cy: 220, r: 40, color: '#f59e0b', theory: 'Abaixo das linhas duras (carreira, classe, identidade), existem as linhas flexíveis, moleculares. São os fluxos imperceptíveis de afeto, as pequenas fissuras, as mudanças de humor, os contágios e alianças sutis.', question: 'Que pequenos deslocamentos invisíveis estão acontecendo em você? Que afetos, encontros ou leituras estão alterando suavemente sua percepção de mundo sem que ninguém note ainda?', svgShape: 'path', d: "M 190 220 Q 205 180 220 220 T 250 220 Q 235 260 220 220 T 190 220" },
+            { id: 'cso', layer: 'consistency', title: 'Corpo Sem Órgãos (CsO)', subtitle: 'A Matéria Não Formada', cx: 400, cy: 650, r: 55, color: '#9333ea', theory: 'O CsO não é um corpo morto, é um corpo vivo esvaziado de sua organização ("órgãos" não físicos, mas funções). É o Ovo, o grau zero de intensidade. Um plano liso por onde deslizam intensidades não estratificadas, sem sujeito e sem destino.', question: 'Como você desarticula seu eu? Em que momentos você consegue se esvaziar de suas obrigações de "ser alguém" e experimenta apenas intensidades puras (na meditação, no esgotamento, na dança, etc.)?', svgShape: 'egg' },
+            { id: 'devir', layer: 'consistency', title: 'O Devir', subtitle: 'O Contágio e a Aliança', cx: 650, cy: 300, r: 50, color: '#a855f7', theory: 'Devir não é imitar, nem progredir, nem evoluir. É entrar em zona de vizinhança com o outro (animal, mulher, imperceptível), extraindo partículas conjuntas. A orquídea e a vespa desterritorializam-se mutuamente.', question: 'Você está entrando em contágio com o quê? Que fronteiras do seu eu estão borrando ao se aliar com o não-humano, o menor, ou o irreconhecível?', svgShape: 'star' },
+            { id: 'fuga', layer: 'consistency', title: 'Linha de Fuga Absoluta', subtitle: 'A Fenda no Mundo', cx: 150, cy: 600, r: 45, color: '#c084fc', theory: 'A linha criadora por excelência. Não é fugir das responsabilidades para o imaginário, mas fazer vazar o real. É a ruptura onde as coisas perdem seu sentido opressivo e uma nova arma é forjada do lado de fora.', question: 'Onde está o seu ponto de ruptura inevitável? Por onde o seu sistema vaza para criar um mundo completamente novo e imprevisível?', svgShape: 'polygon', points: "110,600 190,600 150,550" },
+            { id: 'espaco_liso', layer: 'consistency', title: 'O Espaço Liso', subtitle: 'A Navegação Nômade', cx: 700, cy: 700, r: 40, color: '#d8b4fe', theory: 'O espaço estriado é quadriculado, cheio de fronteiras e caminhos fixos (o xadrez). O espaço liso é direcional, tátil, aberto, sem caminhos predeterminados (o Go, o deserto, o oceano).', question: 'Onde você se permite vagar sem um mapa? Quais áreas da sua vida funcionam como um deserto criativo, onde você traça o caminho enquanto caminha?', svgShape: 'circle' }
+        ];
+
+        const getGearPath = (cx, cy, r) => {
+            const teeth = 8; const ir = r * 0.7; let path = "";
+            for(let i=0; i<teeth; i++) {
+                const angle = (i * Math.PI * 2) / teeth; const nextAngle = ((i + 0.5) * Math.PI * 2) / teeth;
+                const p1x = cx + Math.cos(angle) * r; const p1y = cy + Math.sin(angle) * r;
+                const p2x = cx + Math.cos(nextAngle) * r; const p2y = cy + Math.sin(nextAngle) * r;
+                const p3x = cx + Math.cos(nextAngle) * ir; const p3y = cy + Math.sin(nextAngle) * ir;
+                const nextI = (i+1)%teeth; const nextIAngle = (nextI * Math.PI * 2) / teeth;
+                const p4x = cx + Math.cos(nextIAngle) * ir; const p4y = cy + Math.sin(nextIAngle) * ir;
+                if(i===0) path += `M ${p3x} ${p3y} L ${p1x} ${p1y} L ${p2x} ${p2y} L ${p3x} ${p3y} `;
+                else path += `L ${p1x} ${p1y} L ${p2x} ${p2y} L ${p3x} ${p3y} `;
+                path += `L ${p4x} ${p4y} `;
+            } return path + "Z";
+        };
+
+        const getStarPath = (cx, cy, r) => {
+            let path = ""; const points = 5;
+            for(let i=0; i<points*2; i++) {
+                const radius = i%2===0 ? r : r/2.5; const angle = (i * Math.PI) / points - Math.PI/2;
+                const x = cx + Math.cos(angle) * radius; const y = cy + Math.sin(angle) * radius;
+                if(i===0) path += `M ${x} ${y} `; else path += `L ${x} ${y} `;
+            } return path + "Z";
+        };
+
+        const TopologicalMap = ({ concepts, activeId, answers, onNodeClick }) => {
+            return (
+                <div className="absolute inset-0 z-0 bg-[#070709] grid-bg flex items-center justify-center overflow-hidden">
+                    <svg viewBox="0 0 800 800" className="w-full h-full max-w-[1200px] max-h-[1200px] svg-container preserve-3d">
+                        <defs>
+                            <filter id="glow-strata" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                            <filter id="glow-assemblage" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                            <filter id="glow-consistency" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="15" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>
+                            <radialGradient id="strata-bg"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.4" /><stop offset="100%" stopColor="#0f172a" stopOpacity="0" /></radialGradient>
+                            <radialGradient id="assemblage-bg"><stop offset="0%" stopColor="#9a3412" stopOpacity="0.1" /><stop offset="100%" stopColor="#78350f" stopOpacity="0" /></radialGradient>
+                            <radialGradient id="consistency-bg"><stop offset="0%" stopColor="#6b21a8" stopOpacity="0.05" /><stop offset="100%" stopColor="#3b0764" stopOpacity="0" /></radialGradient>
+                        </defs>
+                        <g className="rotate-slow-reverse">
+                            <circle cx="400" cy="400" r="380" fill="url(#consistency-bg)" stroke="#4c1d95" strokeWidth="1" strokeDasharray="5,15" className="opacity-50" />
+                            <circle cx="400" cy="400" r="340" fill="none" stroke="#6b21a8" strokeWidth="0.5" className="opacity-30 pulse-slow" />
+                            <circle cx="400" cy="400" r="240" fill="url(#assemblage-bg)" stroke="#9a3412" strokeWidth="1" strokeDasharray="10,5" className="opacity-70" />
+                            <circle cx="400" cy="400" r="180" fill="none" stroke="#ea580c" strokeWidth="0.5" className="opacity-40" />
+                            <circle cx="400" cy="400" r="120" fill="url(#strata-bg)" stroke="#475569" strokeWidth="2" />
+                            <circle cx="400" cy="400" r="70" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="2,2" />
+                        </g>
+                        <g>
+                            <path d="M 400 400 L 400 300 L 300 400 Z" fill="none" stroke="#475569" strokeWidth="1" opacity="0.4" />
+                            <path d="M 400 300 Q 450 200 400 180" fill="none" stroke="#d97706" strokeWidth="2" strokeDasharray="5,5" opacity="0.6" />
+                            <path d="M 400 400 Q 450 500 580 520" fill="none" stroke="#b45309" strokeWidth="2" opacity="0.6" />
+                            <path d="M 300 400 Q 250 300 220 220" fill="none" stroke="#f59e0b" strokeWidth="1" strokeDasharray="2,4" />
+                            <path d="M 580 520 C 600 600, 600 700, 700 700" fill="none" stroke="#c084fc" strokeWidth="2" strokeDasharray="10,10" className="pulse-slow" />
+                            <path d="M 220 220 C 150 300, 100 450, 150 600" fill="none" stroke="#a855f7" strokeWidth="2" className="pulse-slow" />
+                            <path d="M 400 400 C 350 550, 400 600, 400 650" fill="none" stroke="#9333ea" strokeWidth="1" strokeDasharray="3,3" />
+                            <path d="M 400 180 C 500 150, 600 200, 650 300" fill="none" stroke="#d8b4fe" strokeWidth="1.5" strokeDasharray="4,8" />
+                        </g>
+                        {concepts.map(c => {
+                            const isActive = activeId === c.id;
+                            const isCompleted = !!answers[c.id] && answers[c.id].trim() !== '';
+                            const filterId = c.layer === 'strata' ? 'glow-strata' : c.layer === 'assemblage' ? 'glow-assemblage' : 'glow-consistency';
+                            const fillColor = isCompleted ? c.color : 'transparent';
+                            const strokeColor = isActive ? '#ffffff' : c.color;
+                            const elementProps = {
+                                className: `map-node ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`,
+                                fill: fillColor, stroke: strokeColor, strokeWidth: isActive ? 3 : 2,
+                                opacity: (isActive || isCompleted) ? 1 : 0.4,
+                                onClick: () => onNodeClick(c.id),
+                                filter: (isActive || isCompleted) ? `url(#${filterId})` : 'none'
+                            };
+
+                            let shapeElement = null;
+                            if (c.svgShape === 'circle') shapeElement = <circle cx={c.cx} cy={c.cy} r={c.r} {...elementProps} />;
+                            else if (c.svgShape === 'rect') shapeElement = <rect x={c.x} y={c.y} width={c.width} height={c.height} rx="4" {...elementProps} />;
+                            else if (c.svgShape === 'polygon') shapeElement = <polygon points={c.points} {...elementProps} />;
+                            else if (c.svgShape === 'egg') shapeElement = <ellipse cx={c.cx} cy={c.cy} rx={c.r} ry={c.r * 1.3} {...elementProps} />;
+                            else if (c.svgShape === 'gear') shapeElement = <path d={getGearPath(c.cx, c.cy, c.r)} {...elementProps} />;
+                            else if (c.svgShape === 'star') shapeElement = <path d={getStarPath(c.cx, c.cy, c.r)} {...elementProps} />;
+                            else if (c.svgShape === 'path') shapeElement = <path d={c.d} {...elementProps} fill="none" strokeWidth={isActive ? 4 : 3} strokeLinecap="round" />;
+
+                            return (
+                                <g key={c.id}>
+                                    {shapeElement}
+                                    <text x={c.cx} y={c.cy + c.r + 20} textAnchor="middle" fill={isActive ? '#fff' : '#cbd5e1'} className="font-code text-xs pointer-events-none" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }} opacity={isActive || isCompleted ? 1 : 0.6}>{c.title}</text>
+                                </g>
+                            );
+                        })}
+                    </svg>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [view, setView] = useState('intro');
+            const [activeNodeId, setActiveNodeId] = useState(null);
+            const [answers, setAnswers] = useState({});
+            const [isAnalyzing, setIsAnalyzing] = useState(false);
+            const [synthesis, setSynthesis] = useState(null);
+            const [apiKey, setApiKey] = useState(() => localStorage.getItem('gemini_api_key') || DEFAULT_GOOGLE_API_KEY || '');
+            const [showKeyModal, setShowKeyModal] = useState(false);
+
+            const activeNode = useMemo(() => CONCEPTS.find(c => c.id === activeNodeId), [activeNodeId]);
+            const handleNodeClick = (id) => setActiveNodeId(id);
+            const handleTextChange = (e) => setAnswers(prev => ({ ...prev, [activeNodeId]: e.target.value }));
+            const handleApiKeyChange = (val) => {
+                setApiKey(val);
+                localStorage.setItem('gemini_api_key', val.trim());
+            };
+
+            const generateInterpretation = async () => {
+                const currentKey = (apiKey || '').trim();
+                // Previne tentativa se a chave não foi configurada
+                if (!currentKey || currentKey === "COLE_SUA_CHAVE_AQUI") {
+                    setShowKeyModal(true);
+                    return;
+                }
+
+                setIsAnalyzing(true);
+                setView('synthesis');
+
+                const filledAnswers = Object.entries(answers).filter(([id, text]) => text.trim() !== '');
+                let userPrompt = "Aqui estão as anotações cartográficas:\n\n";
+                filledAnswers.forEach(([id, text]) => {
+                    const concept = CONCEPTS.find(c => c.id === id);
+                    userPrompt += `[${concept.title} (${concept.layer})]\nResposta: "${text}"\n\n`;
+                });
+
+                const systemPrompt = `Você é um esquizoanalista deleuze-guattariano clínico e filosófico.
+Sua função é ler as anotações fornecidas e devolver uma síntese cartográfica do agenciamento atual do usuário.
+Analise os estratos (captura), máquinas desejantes e linhas de fuga.
+Seja profundo, poético, libertador e clínico. Não faça julgamentos morais.
+Formate a resposta em HTML simples (use <h3>, <p>, <ul>, <li>, <strong>) sem markdown (\`\`\`). Empregue um tom sério.`;
+
+                const combinedPrompt = systemPrompt + "\n\n---\n\n" + userPrompt;
+
+                // SISTEMA DE FALLBACK AUTOMÁTICO
+                // Ele tenta do modelo mais comum até modelos legados, sempre usando a v1 oficial
+                const modelsToTry = [
+                    'gemini-1.5-flash',
+                    'gemini-2.0-flash',
+                    'gemini-1.5-pro',
+                    'gemini-pro'
+                ];
+
+                const payload = { contents: [{ parts: [{ text: combinedPrompt }] }] };
+                const safeKey = encodeURIComponent(currentKey); 
+                
+                let success = false;
+                let lastErrorMessage = "";
+
+                for (const model of modelsToTry) {
+                    try {
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${safeKey}`;
+                        
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        const result = await response.json();
+
+                        if (response.ok && result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                            let htmlText = result.candidates[0].content.parts[0].text;
+                            htmlText = htmlText.replace(/```html/g, '').replace(/```/g, '');
+                            setSynthesis(htmlText);
+                            success = true;
+                            break; // Se deu certo, sai do loop imediatamente!
+                        } else if (!response.ok) {
+                            lastErrorMessage = result.error?.message || `Erro no modelo ${model}`;
+                        }
+                    } catch (error) {
+                        lastErrorMessage = error.message;
+                    }
+                }
+
+                if (!success) {
+                    setSynthesis(`
+                        <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 15px; margin-top: 20px;">
+                            <h3 style="color: #ef4444; margin-top: 0; font-size: 1.2rem;">Falha na Conexão com o Oráculo</h3>
+                            <p style="color: #fca5a5; font-family: monospace; font-size: 0.9rem;">
+                                Testamos 4 modelos diferentes na sua chave, mas todos falharam.
+                            </p>
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin-top: 10px;">
+                                <b>Último erro capturado:</b> ${lastErrorMessage}
+                            </p>
+                        </div>
+                    `);
+                }
+                
+                setIsAnalyzing(false);
+            };
+
+            const exportToWord = () => {
+                const content = `
+                    \x3Chtml xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                    \x3Chead><meta charset='utf-8'><title>Cartografia Esquizoanalítica\x3C/title>
+                    \x3Cstyle>body { font-family: 'Segoe UI', Arial, sans-serif; color: #111827; line-height: 1.6; padding: 20px; } h1 { color: #4c1d95; text-align: center; border-bottom: 2px solid #d8b4fe; padding-bottom: 10px; } h2 { color: #6b21a8; margin-top: 40px; font-size: 18pt; } h3 { color: #4c1d95; font-size: 14pt; margin-top: 20px; margin-bottom: 10px; } p { text-align: justify; margin-bottom: 15px; } .answers-section { background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 40px; border: 1px solid #e2e8f0; } .answer-box { margin-bottom: 25px; border-left: 4px solid #d8b4fe; padding-left: 15px; } .answer-box h3 { color: #9a3412; font-size: 12pt; margin-top: 0; } .answer-box p { color: #334155; font-style: italic; }\x3C/style>\x3C/head>
+                    \x3Cbody>\x3Ch1>Diagnóstico Esquizoanalítico\x3C/h1>${synthesis}
+                    \x3Cdiv class="answers-section">\x3Ch2>Registro Cartográfico Original\x3C/h2>
+                    ${Object.entries(answers).filter(([id, text]) => text.trim() !== '').map(([id, text]) => {
+                        const concept = CONCEPTS.find(c => c.id === id);
+                        return `\x3Cdiv class="answer-box">\x3Ch3>${concept.title}\x3C/h3>\x3Cp>${text.replace(/\n/g, '<br/>')}\x3C/p>\x3C/div>`;
+                    }).join('')}
+                    \x3C/div>\x3C/body>\x3C/html>
+                `;
+                const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url; link.download = 'Cartografia_Esquizoanalitica.doc';
+                document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
+            };
+
+            if (view === 'intro') {
+                return (
+                    <div className="flex flex-col items-center justify-center h-full p-6 text-center z-10 relative bg-[#070709]">
+                        <div className="absolute inset-0 grid-bg opacity-30"></div>
+                        <div className="max-w-3xl z-10">
+                            <h1 className="text-5xl md:text-7xl font-bold mb-6 font-philosophical tracking-widest text-transparent bg-clip-text bg-gradient-to-br from-slate-400 via-purple-300 to-amber-500">
+                                TOPOLOGIA<br/>ESQUIZOANALÍTICA
+                            </h1>
+                            <p className="text-xl text-slate-400 mb-8 font-light leading-relaxed max-w-2xl mx-auto">
+                                Bem-vindo ao Plano. Isto não é um questionário linear, mas um mapa espacial de intensidades. 
+                            </p>
+                            <button onClick={() => { setView('map'); setActiveNodeId(CONCEPTS[0].id); }} className="px-10 py-4 bg-slate-800/50 hover:bg-slate-700 border border-slate-600 rounded text-white font-code uppercase tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(148,163,184,0.3)]">
+                                Adentrar a Cartografia
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (view === 'synthesis') {
+                return (
+                    <div className="flex flex-col items-center justify-start h-full p-6 z-10 relative bg-[#070709] overflow-y-auto">
+                        <div className="absolute inset-0 grid-bg opacity-20 fixed pointer-events-none"></div>
+                        <div className="max-w-4xl w-full z-10 bg-[#0a0a0f]/90 backdrop-blur-xl border border-purple-900/30 p-8 md:p-12 rounded-xl shadow-2xl my-10 relative">
+                            <h2 className="text-3xl md:text-4xl font-philosophical text-purple-300 mb-8 text-center tracking-wider border-b border-white/5 pb-8">Diagnóstico Esquizoanalítico</h2>
+                            
+                            {isAnalyzing ? (
+                                <div className="flex flex-col items-center justify-center py-32">
+                                    <div className="w-20 h-20 relative flex justify-center items-center mb-8">
+                                        <div className="absolute w-full h-full border-2 border-purple-500/20 rounded-full"></div>
+                                        <div className="absolute w-full h-full border-t-2 border-l-2 border-purple-400 rounded-full animate-[spin_1.5s_linear_infinite]"></div>
+                                        <div className="absolute w-12 h-12 border-b-2 border-r-2 border-amber-500 rounded-full animate-[spin_1s_linear_infinite_reverse]"></div>
+                                    </div>
+                                    <p className="text-slate-400 font-code text-sm animate-pulse tracking-widest uppercase">Acessando a máquina abstrata...</p>
+                                </div>
+                            ) : (
+                                <div className="animate-[fadeIn_1s_ease-out]">
+                                    <div className="synthesis-content text-slate-300 font-light leading-relaxed space-y-6" dangerouslySetInnerHTML={{ __html: synthesis }} />
+                                    <div className="mt-16 flex flex-col md:flex-row justify-center items-center gap-4 border-t border-white/5 pt-8">
+                                        <button onClick={exportToWord} className="px-8 py-3 bg-purple-900/40 hover:bg-purple-800/60 border border-purple-500/50 rounded text-purple-200 hover:text-white font-code text-sm transition-all duration-300 flex items-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                            Baixar Cartografia (Word)
+                                        </button>
+                                        <button onClick={() => setView('map')} className="px-8 py-3 bg-slate-800/50 hover:bg-slate-700/80 border border-slate-600/50 rounded text-slate-300 hover:text-white font-code text-sm transition-all duration-300">
+                                            ← Voltar à Topologia
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <style>{`
+                            .synthesis-content h3 { color: #d8b4fe; font-family: 'Cinzel', serif; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(216, 180, 254, 0.1); padding-bottom: 0.5rem; }
+                            .synthesis-content p { margin-bottom: 1.25rem; font-family: 'Inter', sans-serif; text-align: justify; line-height: 1.8; color: #cbd5e1; }
+                            .synthesis-content strong { color: #f8fafc; font-weight: 600; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+                            .synthesis-content ul { list-style-type: none; padding-left: 0; margin-bottom: 1.5rem; color: #94a3b8; }
+                            .synthesis-content li { margin-bottom: 0.75rem; position: relative; padding-left: 1.5rem; }
+                            .synthesis-content li::before { content: '►'; position: absolute; left: 0; color: #a855f7; font-size: 0.7rem; top: 0.3rem; }
+                            @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+                        `}</style>
+                    </div>
+                );
+            }
+
+            const completedCount = Object.values(answers).filter(v => v.trim() !== '').length;
+            const progressPercent = (completedCount / CONCEPTS.length) * 100;
+
+            return (
+                <div className="w-full h-full relative flex">
+                    <div className="flex-1 relative">
+                        <TopologicalMap concepts={CONCEPTS} activeId={activeNodeId} answers={answers} onNodeClick={handleNodeClick} />
+                        <div className="absolute top-6 left-6 pointer-events-none">
+                            <h2 className="text-2xl font-philosophical text-slate-200">Cartografia em Curso</h2>
+                            <div className="w-48 h-1 bg-slate-800 mt-3 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-slate-500 via-amber-500 to-purple-500 transition-all duration-700" style={{ width: `${progressPercent}%` }}></div>
+                            </div>
+                        </div>
+
+                        {/* Botão de Chave API */}
+                        <div className="absolute top-6 right-6 z-20">
+                            <button onClick={() => setShowKeyModal(true)} title="Configurar Chave Google Gemini" className="flex items-center gap-2 px-3 py-2 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 rounded-lg text-xs font-code text-slate-300 hover:text-white transition-all shadow-lg">
+                                <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                                {apiKey ? 'Chave IA Configurada' : 'Configurar Chave IA'}
+                            </button>
+                        </div>
+
+                        {completedCount > 0 && (
+                            <div className="absolute bottom-8 left-8">
+                                <button onClick={generateInterpretation} className="group relative px-6 py-3 bg-purple-900/30 hover:bg-purple-800/50 border border-purple-500/50 rounded-lg text-purple-200 font-code text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-amber-600 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                                    <span className="relative flex items-center gap-2">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                        Sintetizar Fluxos ({completedCount}/{CONCEPTS.length})
+                                    </span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    <div className="w-full md:w-[450px] h-full glass-panel flex flex-col z-10 overflow-hidden shadow-2xl transition-all duration-300">
+                        {activeNode ? (
+                            <div className="flex flex-col h-full animate-[fadeIn_0.3s_ease-out]">
+                                <div className="p-8 border-b border-white/5 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-2xl rounded-full" style={{ backgroundColor: activeNode.color }}></div>
+                                    <div className="text-[10px] font-code tracking-widest uppercase mb-2" style={{ color: activeNode.color }}>
+                                        {activeNode.layer === 'strata' ? 'Estrato (Molar)' : activeNode.layer === 'assemblage' ? 'Agenciamento (Molecular)' : 'Consistência (Fuga)'}
+                                    </div>
+                                    <h3 className="text-3xl font-philosophical text-white mb-1">{activeNode.title}</h3>
+                                    <h4 className="text-sm text-slate-400 font-medium">{activeNode.subtitle}</h4>
+                                </div>
+                                <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
+                                    <div>
+                                        <div className="text-xs text-slate-500 font-code mb-2 flex items-center gap-2">
+                                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeNode.color }}></span> Referencial Teórico
+                                        </div>
+                                        <p className="text-sm text-slate-300 leading-relaxed text-justify">{activeNode.theory}</p>
+                                    </div>
+                                    <hr className="border-white/5" />
+                                    <div className="flex-1 flex flex-col">
+                                        <div className="text-xs text-slate-500 font-code mb-3 uppercase tracking-wider">Inquérito Crítico</div>
+                                        <p className="text-sm text-white font-medium mb-4 italic">"{activeNode.question}"</p>
+                                        <textarea key={activeNode.id} defaultValue={answers[activeNode.id] || ''} onChange={handleTextChange} placeholder="Trace suas linhas aqui..." className="w-full flex-1 min-h-[150px] p-4 bg-slate-900/50 border border-slate-700/50 rounded-lg text-slate-200 text-sm font-light leading-relaxed resize-none focus:outline-none focus:border-opacity-100 transition-colors" style={{ borderBottomColor: activeNode.color, borderBottomWidth: '2px' }}></textarea>
+                                    </div>
+                                </div>
+                                <div className="p-6 bg-black/20 border-t border-white/5 flex justify-between items-center">
+                                    <button className="text-xs text-slate-400 hover:text-white transition-colors" onClick={() => { const i = CONCEPTS.findIndex(c => c.id === activeNodeId); setActiveNodeId(CONCEPTS[(i - 1 + CONCEPTS.length) % CONCEPTS.length].id); }}>← ANTERIOR</button>
+                                    <button className="text-xs font-bold transition-colors" style={{ color: activeNode.color }} onClick={() => { const i = CONCEPTS.findIndex(c => c.id === activeNodeId); setActiveNodeId(CONCEPTS[(i + 1) % CONCEPTS.length].id); }}>PRÓXIMO →</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex-1 flex items-center justify-center text-slate-500 text-sm font-code">Selecione um nó no mapa topológico.</div>
+                        )}
+                    </div>
+
+                    {/* MODAL PARA INSERIR CHAVE GOOGLE AI */}
+                    {showKeyModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
+                            <div className="bg-[#0f1117] border border-slate-700 rounded-xl p-6 md:p-8 max-w-md w-full shadow-2xl relative">
+                                <h3 className="text-xl font-philosophical text-purple-300 mb-2">Chave do Google Gemini (IA)</h3>
+                                <p className="text-xs text-slate-400 mb-4 leading-relaxed font-light">
+                                    Para gerar sua síntese esquizoanalítica, insira sua chave gratuita do <strong>Google AI Studio</strong>. Ela fica gravada apenas no navegador do seu computador.
+                                </p>
+                                <input 
+                                    type="password" 
+                                    placeholder="Cole aqui sua API Key (AIzaSy...)" 
+                                    defaultValue={apiKey} 
+                                    onChange={(e) => handleApiKeyChange(e.target.value)}
+                                    className="w-full p-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-200 text-sm font-mono mb-3 focus:outline-none focus:border-purple-500"
+                                />
+                                <div className="text-[11px] text-slate-500 mb-6 flex justify-between">
+                                    <span>Não tem chave?</span>
+                                    <a href="https://aistudio.google.com/app/apikey" target="_blank" className="text-purple-400 hover:underline">Obter gratuitamente no Google AI Studio &rarr;</a>
+                                </div>
+                                <div className="flex justify-end gap-3">
+                                    <button onClick={() => setShowKeyModal(false)} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs font-code">
+                                        Fechar
+                                    </button>
+                                    <button onClick={() => { setShowKeyModal(false); if (completedCount > 0) generateInterpretation(); }} className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded text-xs font-code font-bold">
+                                        Salvar e Continuar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
