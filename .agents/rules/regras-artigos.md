@@ -1,0 +1,50 @@
+# Regras de Publicação de Artigos — Deo Magalhães
+
+Sempre que você for solicitado a criar, revisar ou publicar um artigo para o site de Deo Magalhães (`deomagalhaes.github.io`), siga estritamente estas diretrizes:
+
+## 1. Identidade e Tom de Voz
+- **Autor:** Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784, Especialista em Neurociências, Membro da SBNp).
+- **Tom:** Acadêmico-clínico, profundo, humanista, existencial e acessível. Nunca raso ou sensacionalista. Evite jargões de autoajuda barata.
+- **Estrutura teórica:** Sempre integre neurociência comportamental/cognitiva com psicologia clínica (TCC, Logoterapia, Psicanálise, Sistêmica) e filosofia (existencialismo, estoicismo, teoria crítica).
+- **Referências bibliográficas:** Obrigatórias no final de todo artigo, no formato ABNT, com autores consagrados (livros e periódicos científicos com ano).
+
+## 2. Template HTML Obrigatório dos Artigos (`artigos/slug-do-artigo.html`)
+- O arquivo deve residir na pasta `deomagalhaes.github.io/artigos/`.
+- **`<head>`**:
+  - Google Analytics: `G-9X4VW4FNZZ`.
+  - `<title>`: `Título do Artigo – Deo Magalhães`.
+  - `<meta name="description">`: Resumo chamativo para SEO (140-160 caracteres).
+  - Favicon: `/assets/favicon2.png`.
+  - CSS: `/assets/style.css`.
+- **Cabeçalho padrão do site**: Top bar com ícones de contato (WhatsApp, E-mail, Instagram, Localização) e `header#main-header` com menu de navegação onde `a[href="/artigos.html"]` possui a classe `active`.
+- **Corpo (`main > .article-container`)**:
+  - `header.article-header`: `h1` com o título e `p.article-author-date` com "Por Deo Magalhães - Neuropsicólogo e Neurocientista - Publicado em [Data Atual]".
+  - `article.article-body`: Introdução em itálico (`<p><em>...</em></p>`), seções com `<h2>` (e `<h3>`), listas explicativas, referências com `<ol class="references-list">`, divisor `<hr class="article-divider">` e disclaimer padrão:
+    `Este artigo tem caráter reflexivo e educacional. Para orientações específicas sobre diagnóstico e tratamento, consulte sempre um profissional de saúde qualificado.`
+- **Rodapé padrão**: `footer.main-footer` com dados do CRP 04/42784, Guaranésia - MG e direitos reservados.
+- **Script final**: `<script src="/assets/script.js"></script>`.
+
+## 3. Centralizador de Cards (`cards-artigos.html`)
+Sempre que um novo artigo for criado:
+- Insira o card no TOPO de `cards-artigos.html` logo abaixo de `<!-- ARQUIVO: _cards-artigos.html -->`.
+- O elemento raiz deve ser `<a href="artigos/slug-do-artigo.html" class="article-item-custom" data-categories="...">`.
+- O atributo `data-categories` DEVE usar apenas os slugs de categoria oficiais do site:
+  - `desenvolvimento-infantil`
+  - `tdah-tea`
+  - `orientacao-familiar`
+  - `reabilitacao-cognitiva`
+  - `filosofia`
+  - `saude-mental`
+  - `tecnologia`
+  - `desenvolvimento-pessoal`
+- Inclua data atual e de 1 a 3 tags no formato `<span class="tag-item">...</span>`.
+
+## 4. Fluxo de Publicação e Git
+1. Ler o arquivo `pautas.md` e selecionar o primeiro item pendente `[ ]`.
+2. Criar o arquivo HTML do artigo em `deomagalhaes.github.io/artigos/slug.html`.
+3. Inserir o card no topo de `cards-artigos.html`.
+4. Atualizar o `pautas.md` marcando a pauta como `[x]` com a data da publicação.
+5. Executar:
+   - `git add cards-artigos.html pautas.md artigos/slug.html`
+   - `git commit -m "Publica artigo: Nome do Artigo"`
+   - `git push origin main`
