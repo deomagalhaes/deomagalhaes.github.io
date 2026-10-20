@@ -1,225 +1,265 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <!-- Google tag (gtag.js) -->
+    <meta charset="UTF-8">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-9X4VW4FNZZ');
     </script>
-
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quando o Amor Vira um Campo de Batalha: Entendendo o Borderline na Vida a Dois (Guia Prático e Acessível) – Deo Magalhães</title>
-    <meta name="description" content="Guia em linguagem simples e acessível para entender como o Transtorno Borderline afeta o casamento, por que acontecem mudanças bruscas de humor e como estabelecer limites saudáveis.">
+    <title>Por Que Eu Reajo Assim Quando Amo? Entendendo a Intensidade Emocional e o Borderline – Deo Magalhães</title>
+    <meta name="description" content="Um guia em linguagem simples e acolhedora para quem sente emoções intensas ou vive com o Transtorno da Personalidade Borderline (TPB): entenda como seu cérebro funciona nas crises e aprenda passos práticos para retomar o controle.">
     <link rel="icon" type="image/png" href="/assets/favicon2.png">
     <link rel="stylesheet" href="/assets/style.css">
+    <style>
+        .article-banner-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2f6 100%);
+            border-left: 4px solid #334155;
+            padding: 1.1rem 1.4rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0 2.2rem 0;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .article-banner-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .article-banner-link strong {
+            display: block;
+            color: #0f172a;
+            font-size: 1.02rem;
+            margin-bottom: 0.2rem;
+        }
+        .article-banner-link span {
+            font-size: 0.92rem;
+            color: #475569;
+        }
+        .article-banner-arrow {
+            font-weight: 700;
+            color: #334155;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            margin: 1.8rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+        .comparison-table th {
+            background: #1a2a3a;
+            color: #ffffff;
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+            color: #334155;
+        }
+        .comparison-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+        .comparison-table td:first-child {
+            font-weight: 600;
+            color: #1e293b;
+            width: 24%;
+        }
+        @media (max-width: 640px) {
+            .article-banner-link {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Bloco de Cabeçalho Padrão -->
-    <div class="top-bar">
-        <div class="container top-bar-content">
-            <div class="top-bar-left">
-                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
-                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+    <div class="bloco-principal">
+        <header class="cabecalho-principal">
+            <div class="container cabecalho-container">
+                <a href="/index.html" class="logo-Labirinto">
+                    <img src="/assets/logo-deo-magalhaes.png" alt="Logotipo Deo Magalhães">
+                </a>
+                <button class="menu-hamburguer" aria-label="Abrir menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="navegacao-principal">
+                    <ul>
+                        <li><a href="/index.html">Início</a></li>
+                        <li><a href="/sobre.html">Sobre</a></li>
+                        <li><a href="/servicos.html">Serviços</a></li>
+                        <li><a href="/artigos.html" class="ativo">Artigos</a></li>
+                        <li><a href="/recursos.html">Recursos</a></li>
+                        <li><a href="/contato.html">Contato</a></li>
+                    </ul>
+                </nav>
             </div>
-            <div class="top-bar-right">
-                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
-            </div>
-        </div>
-    </div>
-    <header id="main-header">
-        <div class="header-content container">
-            <a href="/index.html" class="logo-container">
-                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
-                <div class="logo-text">
-                    <span class="name">Deo Magalhães</span>
-                    <span class="subtitle">Neurociência e Comportamento</span>
+        </header>
+
+        <main>
+            <article class="pagina-artigo">
+                <div class="container container-artigo">
+                    <div class="cabecalho-artigo">
+                        <span class="categoria-artigo">Saúde Mental</span>
+                        <h1>Por Que Eu Reajo Assim Quando Amo? Entendendo a Intensidade Emocional e o Borderline nas Relações</h1>
+                        <p class="subtitulo-artigo">Um guia acolhedor e prático para quem vive no limite das emoções: descubra o que acontece no seu cérebro durante uma crise afetiva e aprenda passos reais para se acalmar sem ferir quem você ama.</p>
+
+                        <a href="/artigos/borderline-relacoes-intimas-mecanismos-desregulacao.html" class="article-banner-link">
+                            <div>
+                                <strong>🔬 Quer se aprofundar na ciência por trás disso?</strong>
+                                <span>Clique aqui para ler a versão técnico-científica completa deste artigo, com detalhamento neurobiológico e referências clínicas.</span>
+                            </div>
+                            <span class="article-banner-arrow">Ler versão científica →</span>
+                        </a>
+                    </div>
+
+                    <div class="corpo-artigo">
+                        <p>Se você se identifica com o <strong>Transtorno da Personalidade Borderline (TPB)</strong> ou sente que suas emoções nos relacionamentos têm uma intensidade avassaladora, provavelmente já viveu uma dor muito difícil de explicar para os outros: o pavor silencioso de ser deixado de lado e a sensação de que uma pequena frustração dói como uma queimadura na pele.</p>
+
+                        <p>Talvez você já tenha explodido de raiva, dito coisas duras que não queria dizer, ameaçado terminar tudo ou se trancado no quarto no silêncio e no celular — e, horas depois, tenha sentido uma mistura sufocante de culpa, vergonha e medo de ter estragado sua relação. Quando isso acontece, é comum se perguntar: <em>"Por que eu faço isso se eu amo essa pessoa?"</em>.</p>
+
+                        <p>A resposta não é que você seja "uma pessoa ruim" ou "louca". A resposta está na forma como o seu cérebro aprendeu a se defender da dor. E a melhor notícia é: <strong>quando você entende os bastidores da sua mente, você ganha o poder de assumir o volante das suas escolhas.</strong></p>
+
+                        <h2>1. O Alarme Hipersensível e o Freio que Falha na Hora da Dor</h2>
+                        <p>Imagine que todos nós temos um "detector de fumaça" emocional dentro do cérebro (uma região chamada <strong>amígdala cerebral</strong>). Ele serve para nos avisar quando corremos o risco de sermos rejeitados ou abandonados. Em quem tem funcionamento borderline, esse detector é extremamente sensível: qualquer faísca do dia a dia dispara a sirene no volume máximo.</p>
+
+                        <p>Na prática, duas coisas acontecem ao mesmo tempo dentro de você durante um desentendimento:</p>
+                        <ul>
+                            <li><strong>O alarme dispara por coisas pequenas:</strong> Quando o seu parceiro(a) está com uma expressão séria de cansaço, quando diz que hoje não dá para gastar dinheiro com algo ou quando fecha a porta do escritório porque precisa trabalhar, o seu cérebro não lê isso como "rotina". O seu alarme interno grita: <em>"Você está sendo deixado(a) de lado! Você não é importante!"</em>.</li>
+                            <li><strong>O freio racional desliga temporariamente:</strong> A parte do cérebro responsável por respirar fundo, lembrar do contexto e frear o impulso (o <strong>córtex pré-frontal</strong>) perde força exatamente quando a dor emocional sobe.</li>
+                        </ul>
+
+                        <p>É por isso que surge uma <strong>urgência desesperada de aliviar a dor</strong> naquele exato segundo. Sem o freio funcionando bem, você acaba gritando, cobrando, acusando ou querendo chutar o balde — não porque planejou fazer o mal, mas porque seu corpo está tentando apagar um incêndio emocional interno imediatamente.</p>
+
+                        <h2>2. A Armadilha do "Tudo ou Nada" e do "Se Eu Senti, É Verdade"</h2>
+                        <p>Quando esse incêndio emocional começa, a sua mente costuma cair em duas armadilhas automáticas que distorcem a forma como você enxerga o seu parceiro(a):</p>
+
+                        <h3>A Chave do "Tudo ou Nada" (Clivagem)</h3>
+                        <p>Quando você está sob forte estresse, seu cérebro tem muita dificuldade de guardar duas verdades ao mesmo tempo na memória: a verdade de que <em>"meu parceiro me ama"</em> e a verdade de que <em>"hoje ele me disse não ou me frustrou"</em>.</p>
+                        <p>Por isso, uma chave vira na sua cabeça. Enquanto a pessoa concorda com tudo e está totalmente disponível, você sente que ela é maravilhosa. Mas, no minuto em que ela coloca um limite, parece que todas as coisas boas que ela já fez por você somem da sua memória. Naquele momento de raiva, você sente como se estivesse diante de alguém frio, egoísta ou inimigo.</p>
+
+                        <h3>A Armadilha do "Se Eu Senti, Então É Fato"</h3>
+                        <p>Os psicólogos chamam isso de <strong>equivalência psíquica</strong>. É quando a dor dentro do peito é tão real e tão forte que o seu cérebro conclui que a sua interpretação só pode ser a verdade absoluta.</p>
+                        <p>Por exemplo: se você <em>se sentiu</em> rejeitado(a) porque o parceiro pediu silêncio para descansar, a sua mente transforma esse sentimento em uma certeza inquestionável: <em>"Ele(a) não se importa comigo"</em>. Você deixa de conseguir imaginar que o outro pode estar apenas exausto, preocupado com as contas ou precisando de meia hora de silêncio — e que isso não diminui em nada o amor que ele sente por você.</p>
+
+                        <h2>3. Como a Sua Dor Acaba Virando Ataque ou Boicote Silencioso</h2>
+                        <p>Para não sentir a vulnerabilidade assustadora de pensar <em>"estou com medo de não ser amado(a)"</em>, a sua mente muitas vezes veste uma armadura de ataque ou de punição silenciosa. Reconhecer esses comportamentos em si mesmo(a), com honestidade e sem se chicotear, é o passo mais corajoso para mudar:</p>
+
+                        <ul>
+                            <li><strong>Ameaçar terminar ou descartar a relação no calor da briga:</strong> Dizer <em>"então vamos separar"</em> ou ameaçar excluir o parceiro de compromissos importantes quase nunca é o que você realmente quer. No fundo, funciona como um grito de protesto para testar se o outro vai correr atrás de você ou para ferir primeiro antes de ser ferido. O problema é que isso destrói a segurança do casal.</li>
+                            <li><strong>A "greve silenciosa" e o refúgio nas telas:</strong> Depois da briga, em vez de conversar, é muito comum se trancar no quarto por horas rolando o celular (usando a dopamina rápida das telas para anestesiar a angústia), deixar de fazer as tarefas da casa, preparar comida só para si ou interromper o descanso do outro com cobranças pequenas. É uma forma indireta de dizer <em>"você vai pagar por ter me frustrado"</em>, mas que só prolonga o sofrimento dos dois.</li>
+                            <li><strong>Colocar os filhos no meio da tensão:</strong> Quando há crianças em casa, a raiva acumulada pode fazer você mandar recados indiretos através dos filhos, perder a paciência com a criança por estar irritado(a) com o cônjuge ou forçar uma alegria exagerada só com os filhos para fazer o parceiro se sentir excluído.</li>
+                        </ul>
+
+                        <h2>4. Mapa de Autoconsciência: O Piloto Automático vs. A Sua Escolha Consciente</h2>
+                        <p>Veja abaixo como diferenciar quando é a <strong>crise emocional</strong> falando por você e quando é a <strong>sua parte saudável e madura</strong> assumindo a direção:</p>
+
+                        <div class="comparison-table-wrapper">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Situação do Dia a Dia</th>
+                                        <th>Reação no Piloto Automático da Crise</th>
+                                        <th>Escolha Consciente e Autorregulada</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>O parceiro diz "não" ou pede um tempo sozinho</td>
+                                        <td>Sinto como abandono ou desamor; tenho certeza de que ele(a) está sendo egoísta comigo.</td>
+                                        <td>Respiro e me lembro: <em>"Um limite de rotina ou de cansaço não significa que deixaram de me amar"</em>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Memória afetiva durante uma frustração</td>
+                                        <td>Esqueço tudo de bom que já vivemos; enxergo o outro apenas pelos defeitos daquele instante.</td>
+                                        <td>Forço minha mente a lembrar do histórico de cuidado: <em>"Estamos discordando agora, mas somos parceiros"</em>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vontade de explodir ou ameaçar terminar</td>
+                                        <td>Grito, cobro na hora ou ameaço romper a relação para aliviar minha angústia imediatamente.</td>
+                                        <td>Paro por 20 minutos antes de falar ou digitar; espero a onda de raiva baixar no meu corpo.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>O dia seguinte após uma discussão</td>
+                                        <td>Me isolo na cama com o celular, faço greve nas tarefas da casa ou excluo o outro nas refeições.</td>
+                                        <td>Saio do isolamento, mantenho minha rotina funcionando e expresso o que senti sem punir o outro.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Presença dos filhos durante o conflito</td>
+                                        <td>Uso as crianças para mandar indiretas ou desconto minha tensão conjugal no ambiente delas.</td>
+                                        <td>Protejo os filhos totalmente das brigas de casal e resolvo os assuntos de adulto diretamente com o parceiro.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h2>5. Quatro Passos Práticos Para Retomar o Controle Quando a Crise Subir</h2>
+                        <p>Você não escolheu ter um alarme emocional hipersensível, mas <strong>você pode aprender a desligar a sirene antes de destruir o que é importante para você</strong>. As terapias mais eficazes do mundo para o TPB (como a Terapia Comportamental Dialética — DBT) ensinam quatro ferramentas práticas que você pode começar a treinar hoje:</p>
+
+                        <h3>Passo 1: Acalme o Corpo Antes de Tentar Discutir a Relação</h3>
+                        <p>Quando o coração dispara, o rosto esquenta e dá vontade de gritar ou mandar dez mensagens seguidas, <strong>não tente resolver o problema naquela hora</strong>. Com a amígdala em chamas, qualquer conversa vai virar guerra. Avise: <em>"Estou muito ativado(a) agora e preciso de 20 minutos para me acalmar antes de conversarmos"</em>. Lave o rosto com água bem fria, solte o ar devagar (expirando pelo dobro do tempo que inspira) e espere a química da adrenalina baixar no sangue.</p>
+
+                        <h3>Passo 2: Desconfie das Certezas Que Nascem na Raiva</h3>
+                        <p>Sempre que surgir um pensamento absoluto do tipo <em>"Ele(a) nunca liga para mim"</em> ou <em>"Ele(a) fez isso de propósito para me machucar"</em>, pare e faça um <strong>cheque de realidade</strong>. Pergunte a si mesmo(a): <em>"Quais são os fatos concretos e qual é a história que o meu medo de abandono está contando? Existe outra explicação mais simples para o meu parceiro ter agido assim (como cansaço, trabalho ou preocupação financeira)?"</em>.</p>
+
+                        <h3>Passo 3: Pratique a "Ação Oposta" ao Boicote</h3>
+                        <p>Quando a mágoa pedir para você se fechar no quarto com o celular, parar de cooperar em casa ou fazer greve de silêncio, experimente fazer exatamente o oposto do impulso punitivo: levante-se, cumpra sua parte na rotina e mantenha a dignidade do ambiente. Ao não alimentar o boicote, você ensina ao seu cérebro que é capaz de atravessar uma frustração sem precisar destruir o seu dia e o seu relacionamento.</p>
+
+                        <h3>Passo 4: Busque Psicoterapia Especializada e Troque o Ataque pelo Pedido Claro</h3>
+                        <p>Quando o seu corpo já estiver calmo, substitua acusações (<em>"Você é um egoísta!"</em>) pela expressão honesta da sua necessidade (<em>"Eu me senti inseguro(a) quando você fechou a porta; podemos combinar um horário para ficarmos juntos mais tarde?"</em>). Além disso, buscar psicoterapia focada em regulação emocional (como a <strong>DBT</strong> ou a <strong>Terapia Baseada em Mentalização</strong>) é um ato profundo de amor-próprio: é lá que você constrói a segurança interna que nenhuma outra pessoa poderia fabricar no seu lugar.</p>
+
+                        <hr style="margin: 2.5rem 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+                        <a href="/artigos/borderline-relacoes-intimas-mecanismos-desregulacao.html" class="article-banner-link">
+                            <div>
+                                <strong>📖 Deseja ler o estudo técnico-científico completo?</strong>
+                                <span>Acesse a versão aprofundada com toda a fundamentação neuropsicológica, mecanismos de clivagem e referências bibliográficas.</span>
+                            </div>
+                            <span class="article-banner-arrow">Ir para o artigo técnico →</span>
+                        </a>
+                    </div>
                 </div>
-            </a>
-            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
-            <nav id="main-nav">
-                <a href="/index.html">Home</a>
-                <a href="/sobre.html">Sobre</a>
-                <a href="/servicos.html">Serviços</a>
-                <a href="/agendamento.html">Agendamento</a>
-                <a href="/artigos.html" class="active">Artigos</a>
-                <a href="/recursos.html">Recursos</a>
-                <a href="/contato.html">Contato</a>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <div class="container article-container">
-            <!-- Cabeçalho do Artigo -->
-            <header class="article-header">
-                <h1>Quando o Amor Vira um Campo de Batalha: Entendendo o Borderline na Vida a Dois (Guia Prático e Acessível)</h1>
-                <p class="article-author-date">
-                    <strong>Por Deo Magalhães</strong> - Neuropsicólogo e Neurocientista - 
-                    Publicado em 20 de Outubro, 2026
-                </p>
-
-                <!-- Link clicável de volta para o Artigo Técnico-Científico Original -->
-                <div style="background: rgba(15, 23, 42, 0.05); border: 1px solid #cbd5e1; border-left: 4px solid #0f172a; padding: 16px 20px; margin-top: 22px; border-radius: 8px; text-align: left;">
-                    <p style="margin: 0 0 6px 0; font-size: 0.95em; color: #1e293b;">
-                        🔬 <strong>Esta é a versão simplificada para o público geral.</strong>
-                    </p>
-                    <a href="/artigos/borderline-relacoes-intimas-mecanismos-desregulacao.html" style="font-weight: 700; color: #2F88FF; text-decoration: underline; font-size: 1.02em;">
-                        Clique aqui para ler o Artigo Técnico-Científico Completo (com terminologia clínica e referências) &rarr;
-                    </a>
-                </div>
-            </header>
-
-            <!-- Corpo do Artigo -->
-            <article class="article-body">
-                <p><em>Conviver intimamente com alguém que apresenta o Transtorno da Personalidade Borderline (TPB) — ou fortes traços desse funcionamento — muitas vezes é descrito pelos parceiros como a sensação de "pisar em ovos" dentro da própria casa. Em um momento, você é tratado como o amor da vida da pessoa; minutos depois, por causa de uma discordância simples sobre contas ou por precisar fechar a porta para trabalhar, você passa a ser tratado como o pior dos inimigos.</em></p>
-
-                <p>Este guia foi preparado em linguagem direta e descomplicada para traduzir o que a neurociência e a psicologia explicam sobre esse comportamento: por que essas explosões acontecem, como elas aparecem na rotina da casa e, acima de tudo, como você pode se proteger e agir com firmeza sem entrar em brigas intermináveis.</p>
-
-                <hr class="article-divider" style="margin: 30px 0;">
-
-                <h2>1. O Cérebro com "Alarme Hipersensível" e "Sem Freio"</h2>
-                <p>Para entender o que acontece na hora de uma briga, imagine que o nosso cérebro funciona como um carro que possui dois sistemas principais: um <strong>alarme de perigo</strong> (a chamada <em>amígdala cerebral</em>, que dispara as emoções de medo e raiva) e um <strong>pedal de freio racional</strong> (o <em>córtex pré-frontal</em>, que nos faz respirar fundo, pensar antes de falar e acalmar o alarme).</p>
-                <p>Nas pessoas com funcionamento Borderline, exames do cérebro mostram que duas coisas acontecem ao mesmo tempo durante momentos de estresse no relacionamento:</p>
-                <ol>
-                    <li><strong>O Alarme Dispara por Qualquer Coisa:</strong> O detector de ameaças do cérebro é extremamente sensível. Uma cara séria de cansaço, um "não podemos gastar com isso agora" ou o simples fato de você querer ficar meia hora em silêncio descansando não são vistos como coisas normais da rotina. O cérebro da pessoa interpreta isso como: <em>"Estou sendo rejeitado e abandonado!"</em>.</li>
-                    <li><strong>O Freio Racional Falha na Hora da Raiva:</strong> Quando a dor da frustração bate, a área racional do cérebro simplesmente "desliga". Sem esse freio, a pessoa sente uma urgência desesperada de aliviar a dor interna. É aí que surgem os gritos, ofensas, acusações injustas ou ameaças impulsivas de terminar tudo — ela joga a dor para fora no impulso do momento, sem conseguir medir o estrago que isso faz no casamento.</li>
-                </ol>
-
-                <h2>2. Do "Amor da Minha Vida" ao "Meu Pior Inimigo" em Segundos</h2>
-                <p>Quem convive com esse quadro costuma ficar muito confuso com a rapidez com que o parceiro muda de opinião. Na psicologia, isso envolve dois mecanismos muito claros:</p>
-
-                <h3>O Efeito "Tudo ou Nada" (<em>Splitting</em> ou Clivagem)</h3>
-                <p>Em um relacionamento maduro, mesmo quando estamos chateados com o parceiro, nosso cérebro continua lembrando que aquela pessoa é boa, trabalha pela família e cuida de nós. No funcionamento Borderline, o cérebro tem muita dificuldade de juntar o "bom" e o "ruim" ao mesmo tempo:</p>
-                <ul>
-                    <li><strong>Quando você concorda com tudo (Idealização):</strong> Enquanto você diz "sim", atende aos pedidos na hora e está 100% disponível, você é colocado num pedestal como perfeito.</li>
-                    <li><strong>Quando você diz um "Não" necessário (Desvalorização):</strong> Basta você impor um limite justo para que toda a memória das coisas boas que você já fez desapareça naquele momento. Na cabeça da pessoa, você vira alguém cruel, egoísta e frio.</li>
-                </ul>
-
-                <h3>"Se Eu Senti, Então É Verdade!" (Equivalência Psíquica)</h3>
-                <p>Quando estamos calmos, conseguimos nos colocar no lugar do outro (por exemplo: <em>"Meu marido fechou a porta porque precisa se concentrar no trabalho, não porque está com raiva de mim"</em>). Mas quando a pessoa com traços borderline se frustra, ela perde essa capacidade. Ela entra num modo em que <strong>o sentimento dela vira uma certeza absoluta</strong>: se ela se sentiu deixada de lado, nada do que você diga vai convencê-la de que você só estava ocupado. Para ela, o sentimento de rejeição é a prova definitiva de que você não se importa.</p>
-
-                <h2>3. O "Castigo Silencioso" e o Envolvimento dos Filhos</h2>
-                <p>Nem sempre a crise aparece só na forma de gritos. Muitas vezes, depois da discussão, começa uma fase de punição indireta dentro de casa:</p>
-                <ul>
-                    <li><strong>Ameaças de Descarte no Calor do Momento:</strong> Frases como <em>"Vamos separar!"</em> ou <em>"Vou chamar outra pessoa para ir no seu lugar!"</em> quase nunca são decisões pensadas de verdade. São uma forma infantil de protesto para chocar você, ferir seu orgulho e ver se você recua e faz a vontade dela.</li>
-                    <li><strong>Boicote e Greve na Rotina (Passivo-Agressividade):</strong> Como forma de "dar o troco" sem parecer que está começando outra briga, a pessoa se tranca no quarto horas a fio mexendo no celular, deixa de fazer combinados simples da casa, faz comida só para si mesma ou interrompe seu descanso com pedidos bobos só para incomodar.</li>
-                    <li><strong>Usar os Filhos no Meio do Conflito (Triangulação):</strong> Quando há crianças em casa, é comum que a pessoa desregulada use o filho para mandar recados indiretos ao parceiro, desconte a impaciência na criança ou, ao contrário, finja uma alegria exagerada só com o filho para fazer o parceiro se sentir excluído dentro da própria casa.</li>
-                </ul>
-
-                <h2>4. Resumo Visual: O Que É Saudável vs. O Que Acontece na Crise</h2>
-                <div style="overflow-x: auto; margin: 25px 0;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.95em; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden;">
-                        <thead>
-                            <tr style="background-color: #2F88FF; color: #ffffff; text-align: left;">
-                                <th style="padding: 14px 16px;">Situação do Dia a Dia</th>
-                                <th style="padding: 14px 16px;">Reação Saudável e Madura</th>
-                                <th style="padding: 14px 16px;">Reação na Crise Borderline</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 16px; font-weight: 700; color: #1e293b;">Quando o parceiro precisa dizer "Não"</td>
-                                <td style="padding: 14px 16px; color: #334155;">Entende que faz parte da organização financeira ou do tempo da família.</td>
-                                <td style="padding: 14px 16px; color: #334155;">Sente como rejeição, abandono ou falta de amor.</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
-                                <td style="padding: 14px 16px; font-weight: 700; color: #1e293b;">Lembrança de quem o parceiro é</td>
-                                <td style="padding: 14px 16px; color: #334155;">Lembra que o parceiro é alguém parceiro e cuidadoso, mesmo durante uma discordância.</td>
-                                <td style="padding: 14px 16px; color: #334155;">Apaga tudo de bom que o parceiro já fez e o enxerga como um inimigo egoísta.</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 16px; font-weight: 700; color: #1e293b;">Na hora da frustração</td>
-                                <td style="padding: 14px 16px; color: #334155;">Respira, conversa com respeito e busca um meio-termo.</td>
-                                <td style="padding: 14px 16px; color: #334155;">Explode no impulso, ofende, ameaça terminar ou se fecha para punir.</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
-                                <td style="padding: 14px 16px; font-weight: 700; color: #1e293b;">No dia seguinte à discussão</td>
-                                <td style="padding: 14px 16px; color: #334155;">Conversa para resolver ou mantém os cuidados normais da casa.</td>
-                                <td style="padding: 14px 16px; color: #334155;">Faz "greve" de tarefas, isola-se no celular no quarto e exclui o parceiro das refeições.</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 14px 16px; font-weight: 700; color: #1e293b;">Cuidado com os filhos</td>
-                                <td style="padding: 14px 16px; color: #334155;">Protege as crianças da briga de casal e resolve os assuntos entre adultos.</td>
-                                <td style="padding: 14px 16px; color: #334155;">Usa a criança para mandar recados ou desconta o estresse no ambiente infantil.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h2>5. O Que Fazer? Por Que Tentar "Explicar com Lógica" Não Funciona</h2>
-                <p>Se você é uma pessoa organizada, calma e lógica, seu primeiro instinto provavelmente é tentar sentar, explicar ponto por ponto onde a pessoa está exagerando ou dar uma "bronca" mostrando os fatos. <strong>Mas na prática, isso só joga gasolina no incêndio.</strong> Veja o porquê:</p>
-                <ol>
-                    <li><strong>Não Adianta Argumentar com um Cérebro em Pânico:</strong> Quando a pessoa está no pico da crise, a área racional do cérebro dela está desligada. Textos longos, sermões ou provas lógicas só deixam o cérebro dela mais sobrecarregado e agressivo.</li>
-                    <li><strong>O Perigo de Virar "Pai/Mãe" do Seu Cônjuge:</strong> Quando você começa a dar broncas ou cobrar tarefas como se fosse um professor corrigindo um aluno, a relação deixa de ser entre dois adultos. O resultado é que o outro se rebela ainda mais (fazendo birra e boicote) ou se acomoda de vez.</li>
-                    <li><strong>Brigar Também Dá Atenção:</strong> Para quem sente um vazio emocional constante, até uma briga feia serve como uma descarga de adrenalina e atenção intensa. Sem perceber, discutir toda semana acaba alimentando o ciclo.</li>
-                </ol>
-
-                <h3>4 Passos Práticos para Proteger Sua Paz e Sua Família</h3>
-                <p>Em vez de gastar sua saúde tentando convencer o outro no grito ou no debate, mude sua postura para **ações calmas, curtas e firmes**:</p>
-                <ul>
-                    <li><strong>1. Fale Pouco, com Calma e Sem Entrar na Provocação:</strong> Quando começarem as acusações ou ameaças, não bata boca nem tente se justificar por horas. Diga apenas o necessário de forma curta e tranquila (ex.: <em>"Vejo que você está muito irritada agora. Não vou discutir nesse tom, depois conversamos com calma"</em>) e encerre o assunto.</li>
-                    <li><strong>2. Não Dê Plateia para o Boicote:</strong> Se a pessoa decidir fazer "greve de silêncio", trancar-se no celular ou não fazer comida para punir você, não vá atrás tirar satisfação. Prepare sua própria refeição, cuide da sua rotina com serenidade e mostre, na prática, que a chantagem emocional não desestabiliza você.</li>
-                    <li><strong>3. Blinde a Rotina dos Filhos:</strong> Garanta que a alimentação, os horários de sono e a paz das crianças funcionem bem, independentemente do humor do parceiro. Se a pessoa tentar mandar recados pela criança, corte com educação e leveza, sem brigar na frente do filho.</li>
-                    <li><strong>4. Busque Tratamento Especializado:</strong> Esse padrão não muda apenas com "força de vontade" ou promessas de fim de semana. O tratamento que realmente funciona para o Transtorno Borderline envolve psicoterapia especializada — especialmente a <strong>Terapia Comportamental Dialética (DBT)</strong> e o <strong>Tratamento Baseado na Mentalização</strong> — além de acompanhamento médico psiquiátrico para ajudar a equilibrar a impulsividade e a irritabilidade.</li>
-                </ul>
-
-                <h2>Conclusão</h2>
-                <p>Entender que o seu parceiro ou parceira tem uma dificuldade real no cérebro para lidar com frustrações ajuda você a não levar cada ofensa para o lado pessoal. Mas lembre-se: <strong>compreender a causa não significa aceitar abusos ou abrir mão da sua paz</strong>. Estabelecer limites firmes, proteger as crianças e cuidar da sua própria saúde mental é o maior gesto de maturidade e respeito que você pode ter por si mesmo e pela sua família.</p>
-
-                <!-- Caixa de retorno para o artigo técnico -->
-                <div style="background: rgba(15, 23, 42, 0.05); border-left: 4px solid #0f172a; padding: 20px 24px; margin: 35px 0; border-radius: 6px;">
-                    <h3 style="margin-top: 0; font-size: 1.2em; color: #0f172a;">🔬 Quer Aprofundar na Base Científica?</h3>
-                    <p style="margin-bottom: 12px; color: #334155; line-height: 1.6;">Leia a versão técnico-científica completa deste estudo, com o detalhamento das vias neurobiológicas frontolímbicas e todas as referências bibliográficas da literatura médica e psicológica:</p>
-                    <a href="/artigos/borderline-relacoes-intimas-mecanismos-desregulacao.html" style="font-weight: 600; color: #2F88FF; text-decoration: underline; font-size: 1.05em;">Ler Artigo Técnico Completo: Entre a Clivagem e a Hostilidade Reativa &rarr;</a>
-                </div>
-
-                <hr class="article-divider">
-                <p class="article-disclaimer"><em>Este guia tem caráter educativo e informativo. Para diagnóstico e tratamento, procure sempre o acompanhamento de um psicólogo e de um médico psiquiatra.</em></p>
             </article>
-        </div>
-    </main>
+        </main>
 
-    <!-- Rodapé Padrão -->
-    <footer class="main-footer">
-        <div class="container footer-grid">
-            <div class="footer-column">
-                <h4>Contato</h4>
-                <ul>
-                    <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
-                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
-                </ul>
+        <footer class="rodape-principal">
+            <div class="container rodape-container">
+                <div class="rodape-info">
+                    <p><strong>Deo Magalhães</strong> – Psicólogo e Neuropsicólogo</p>
+                    <p>CRP 04/42784</p>
+                </div>
+                <div class="rodape-links">
+                    <a href="/politica-de-privacidade.html">Política de Privacidade</a>
+                    <a href="/termos-de-uso.html">Termos de Uso</a>
+                    <a href="/contato.html">Contato</a>
+                </div>
             </div>
-            <div class="footer-column">
-                <h4>Informações Profissionais</h4>
-                <ul>
-                    <li>CRP 04/42784</li>
-                    <li>Neuropsicólogo Clínico</li>
-                    <li>Especialista em Neurociências</li>
-                    <li>Membro da SBNp</li>
-                </ul>
+            <div class="rodape-direitos">
+                <p>&copy; 2025 Deo Magalhães. Todos os direitos reservados.</p>
             </div>
-            <div class="footer-column">
-                <h4>Redes Sociais</h4>
-                <ul>
-                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
-                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
-            </div>
-        </div>
-    </footer>
-
+        </footer>
+    </div>
     <script src="/assets/script.js"></script>
 </body>
 </html>
