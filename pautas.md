@@ -29,6 +29,8 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **Entre a Clivagem e a Hostilidade Reativa: Mecanismos de Desregulação Afetiva no Transtorno da Personalidade Borderline nas Relações Íntimas** (Publicado em 20/10/2026)
+- [x] **Quando o Amor Vira um Campo de Batalha: Entendendo o Borderline na Vida a Dois (Guia Prático e Acessível)** (Publicado em 20/10/2026)
 - [x] **A Teoria do Apego na Vida Adulta: Por Que Repetimos Padrões Afetivos Disfuncionais?** (Publicado em 20/10/2026)
 - [x] **A Neurobiologia da Polarização Política: Por Que Viramos Inimigos ao Discutir?** (Publicado em 19/10/2026)
 - [x] **Entre o Leviatã Tutelar e a Ilusão Meritocrática: Uma Genealogia Psíquica da Dependência Estatal e da Fé Liberal** (Publicado em 19/10/2026)
