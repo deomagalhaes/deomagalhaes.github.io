@@ -13,10 +13,6 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
   - *Abordagem:* Neurobiologia dos receptores D2, dessensibilização estriatal, déficit atencional induzido, procrastinação e a necessidade de "jejum de dopamina" sob perspectiva clínica séria.
   - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `tecnologia`.
 
-- [ ] **A Teoria do Apego na Vida Adulta: Por Que Repetimos Padrões Afetivos Tóxicos?**
-  - *Abordagem:* De John Bowlby e Mary Ainsworth à neurobiologia do vínculo afetivo. Como o apego ansioso e o apego evitativo sabotam relacionamentos adultos e como construir uma base segura interior.
-  - *Categorias:* `saude-mental`, `orientacao-familiar`, `desenvolvimento-pessoal`.
-
 - [ ] **Regulação Emocional vs. Supressão: O Custo Fisiológico de "Engolir o Choro"**
   - *Abordagem:* James Gross e a neurociência dos afetos. A diferença entre reavaliação cognitiva e supressão expressiva, o impacto da inibição forçada no sistema imune e cardiovascular e estratégias de manejo somático.
   - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`.
@@ -33,6 +29,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Teoria do Apego na Vida Adulta: Por Que Repetimos Padrões Afetivos Disfuncionais?** (Publicado em 20/10/2026)
 - [x] **A Neurobiologia da Polarização Política: Por Que Viramos Inimigos ao Discutir?** (Publicado em 19/10/2026)
 - [x] **Entre o Leviatã Tutelar e a Ilusão Meritocrática: Uma Genealogia Psíquica da Dependência Estatal e da Fé Liberal** (Publicado em 19/10/2026)
 - [x] **A Sociedade do Cansaço e a Tirania da Autoexploração: Como a Ideologia do Desempenho Colonizou a Psique** (Publicado em 19/10/2026)
