@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desenvolvimento do Controle Inibitório no Cotidiano: Guia Prático para Pais de Crianças com TDAH | Deo Magalhães</title>
+    <meta name="description"
+        content="Guia clínico prático baseado em evidências neurocientíficas para pais de crianças com TDAH desenvolverem o controle inibitório e o autocontrole no cotidiano familiar.">
+    <meta name="author" content="Deo S. O. Magalhães - Neuropsicólogo CRP 04/42784">
+    <link rel="icon" type="image/png" href="assets/favicon2.png">
+
+    <!-- CSS Padrão do Site -->
+    <link rel="stylesheet" href="assets/style.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN para os componentes e diagramas clínicos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        sage: {
+                            50: '#f4f7f5',
+                            100: '#e5ece7',
+                            200: '#ccdcd1',
+                            300: '#a7c2b0',
+                            400: '#7fa48c',
+                            500: '#5f876e',
+                            600: '#4a6d57',
+                            700: '#3c5646',
+                            800: '#32463a',
+                            900: '#2a3a31',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03)',
+                        'card': '0 10px 30px -4px rgba(30, 41, 59, 0.06), 0 4px 8px -2px rgba(30, 41, 59, 0.03)',
+                        'floating': '0 20px 40px -6px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.06)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS para micro-interações do guia e acordeão -->
+    <style>
+        /* Preservar tipografia e estilo geral */
+        .guide-body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* FAQ Accordion Transitions */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 600px;
+            opacity: 1;
+        }
+
+        .faq-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Pulse badge subtle animation */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+
+        .animate-subtle-pulse {
+            animation: subtlePulse 4s infinite ease-in-out;
+        }
+
+        /* Acessibilidade de foco */
+        .guide-body a:focus-visible, 
+        .guide-body button:focus-visible {
+            outline: 2px solid #5f876e;
+            outline-offset: 3px;
+        }
+    </style>
+
+    <!-- Structured Data (JSON-LD) para Autoridade Clínica e SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "MedicalWebPage",
+          "@id": "https://deomagalhaes.com.br/controle-inibitorio-tdah.html#webpage",
+          "url": "https://deomagalhaes.com.br/controle-inibitorio-tdah.html",
+          "name": "Desenvolvimento do Controle Inibitório no Cotidiano: Guia Prático para Pais de Crianças com TDAH",
+          "description": "Psicoeducação e manejo comportamental baseado em evidências para o desenvolvimento do autocontrole em crianças com TDAH no ambiente doméstico.",
+          "author": {
+            "@type": "Person",
+            "name": "Deo S. O. Magalhães",
+            "jobTitle": "Neuropsicólogo",
+            "identifier": "CRP 04/42784"
+          },
+          "about": [
+            {
+              "@type": "MedicalCondition",
+              "name": "Transtorno do Déficit de Atenção com Hiperatividade",
+              "alternateName": "TDAH",
+              "code": {
+                "@type": "MedicalCode",
+                "code": "F90",
+                "codingSystem": "CID-11"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://deomagalhaes.com.br/controle-inibitorio-tdah.html#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Meu filho vai deixar de ser agitado com esse treino?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Não necessariamente, e esse não é o objetivo clínico primário. A hiperatividade motora é uma manifestação neurobiológica intrínseca do TDAH. O foco do treino do controle inibitório não é transformar a criança em uma estátua passiva, mas sim fortalecer a capacidade de pausar antes de agir em situações que exigem segurança, cooperação ou tomada de decisão."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "A escola reclama que ele não para quieto, como o treino ajuda?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "O treino doméstico fortalece a latência de resposta e a tolerância à espera, criando pontes comportamentais. Quando a criança exercita a pausa lúdica em casa e a família alinha essas pistas visuais com a equipe pedagógica, a criança transfere progressivamente a habilidade de frear impulsos para a sala de aula."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "E se ele fizer birra na hora de esperar os 5 segundos?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A frustração inicial é natural porque o cérebro com TDAH opera na urgência do 'agora'. Se houver resistência ou choro, não aumente o castigo nem entre em disputa de poder. Valide o sentimento com calma, reduza o tempo para 2 segundos e use suporte visual."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Apenas o treino em casa substitui a psicoterapia ou a medicação?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Não. Conforme as diretrizes internacionais da Academia Americana de Pediatria e do consenso de especialistas em TDAH, o padrão-ouro de tratamento é multimodal: psicoeducação/treino parental, psicoterapia cognitivo-comportamental/neuropsicológica e avaliação médica para medicação quando indicada."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+
+<body class="guide-body bg-white text-slate-800 antialiased selection:bg-sage-200 selection:text-slate-900 flex flex-col min-h-screen">
+
+    <!-- ========================================== -->
+    <!-- CABEÇALHO PADRÃO DO SITE                   -->
+    <!-- ========================================== -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                </a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="index.html" class="logo-container">
+                <img src="assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="index.html">Home</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="servicos.html">Serviços</a>
+                <a href="agendamento.html">Agendamento</a>
+                <a href="artigos.html" class="active">Artigos</a>
+                <a href="recursos.html">Recursos</a>
+                <a href="contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- ========================================== -->
+        <!-- 2. HERO SECTION (FOCO PSICOEDUCATIVO)      -->
+        <!-- ========================================== -->
+        <section id="hero"
+            class="relative pt-12 pb-16 lg:pt-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-slate-50/70 via-white to-white">
+            <!-- Decorative subtle background accents -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none opacity-40 blur-3xl -z-10"
+                aria-hidden="true">
+                <div class="absolute top-10 left-10 w-72 h-72 rounded-full bg-sage-200/60"></div>
+                <div class="absolute top-20 right-10 w-80 h-80 rounded-full bg-slate-200/50"></div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+                    <!-- Left Hero Copy -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <!-- Tagline Badge -->
+                        <div
+                            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage-50 border border-sage-200/80 text-sage-800 text-xs sm:text-sm font-semibold tracking-wide shadow-sm animate-subtle-pulse">
+                            <svg class="w-4 h-4 text-sage-600 flex-shrink-0" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>Guia Clínico &bull; Manejo Comportamental Baseado em Evidências</span>
+                        </div>
+
+                        <!-- H1 Principal -->
+                        <h1
+                            class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15] text-balance">
+                            O motor é potente, mas os freios precisam de treino: <span
+                                class="text-slate-700 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">Desenvolvendo
+                                o Controle Inibitório do seu filho em casa.</span>
+                        </h1>
+
+                        <!-- Subtitle -->
+                        <p
+                            class="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto lg:mx-0">
+                            Por que cobranças e castigos falham com a impulsividade do TDAH e como pequenas mudanças na
+                            rotina doméstica criam o autocontrole que a escola e o dia a dia exigem.
+                        </p>
+
+                        <!-- Highlights Quick Badges -->
+                        <div
+                            class="pt-2 flex flex-wrap justify-center lg:justify-start gap-4 text-xs sm:text-sm text-slate-600 font-medium">
+                            <span
+                                class="flex items-center gap-1.5 bg-slate-100/80 px-3 py-1.5 rounded-lg border border-slate-200/60">
+                                <svg class="w-4 h-4 text-sage-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Sem castigos ineficazes
+                            </span>
+                            <span
+                                class="flex items-center gap-1.5 bg-slate-100/80 px-3 py-1.5 rounded-lg border border-slate-200/60">
+                                <svg class="w-4 h-4 text-sage-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Modelo Barkley &amp; ABA
+                            </span>
+                            <span
+                                class="flex items-center gap-1.5 bg-slate-100/80 px-3 py-1.5 rounded-lg border border-slate-200/60">
+                                <svg class="w-4 h-4 text-sage-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Prática no cotidiano vivo
+                            </span>
+                        </div>
+
+                        <!-- Botões de Navegação do Guia (Sem Agendamento) -->
+                        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                            <a href="#metodo"
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm sm:text-base transition-all duration-200 shadow-card hover:shadow-floating hover:-translate-y-0.5 group">
+                                <span>Explorar a Metáfora &amp; O Método</span>
+                                <svg class="w-4 h-4 text-sage-300 transition-transform group-hover:translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                            </a>
+
+                            <a href="#pilares"
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm sm:text-base border border-slate-300 transition-all duration-200 shadow-sm hover:border-slate-400">
+                                <span>Ir Direto para os 4 Pilares</span>
+                                <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Visual Card -->
+                    <div class="lg:col-span-5">
+                        <div
+                            class="relative bg-white rounded-3xl p-4 sm:p-6 shadow-card border border-slate-200/90 transition-all hover:shadow-floating">
+
+                            <!-- Badges Sobre a Imagem -->
+                            <div
+                                class="relative overflow-hidden rounded-2xl bg-slate-50 aspect-[4/3] flex items-center justify-center border border-slate-100">
+                                <img src="assets/imagens/tdah-controle-inibitorio.jpg"
+                                    alt="Ilustração clínica de funções executivas no TDAH e controle inibitório cerebral"
+                                    class="w-full h-full object-cover rounded-2xl" loading="eager">
+
+                                <div
+                                    class="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-slate-200/70 shadow-sm flex items-center justify-between text-xs">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-sage-500 animate-ping"></div>
+                                        <span class="font-semibold text-slate-800">Córtex Pré-Frontal em
+                                            Maturação</span>
+                                    </div>
+                                    <span class="text-slate-500 font-medium">Atraso Executivo ~30%</span>
+                                </div>
+                            </div>
+
+                            <!-- Mini Metaphor Visual Card Footer -->
+                            <div class="mt-5 space-y-3">
+                                <div
+                                    class="flex items-center justify-between text-xs text-slate-500 font-medium pb-2 border-b border-slate-100">
+                                    <span>Analogia do Dr. Russell Barkley</span>
+                                    <span class="text-sage-700 font-semibold">Neurodesenvolvimento</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3 text-left">
+                                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                                        <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                            <span class="text-base">⚡</span> Motor Potente
+                                        </div>
+                                        <p class="text-xs text-slate-600 mt-1">Raciocínio ágil, alta curiosidade e
+                                            energia constante.</p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-sage-50/70 border border-sage-200/70">
+                                        <div class="text-xs font-bold text-sage-900 flex items-center gap-1.5">
+                                            <span class="text-base">🛑</span> Freios em Treino
+                                        </div>
+                                        <p class="text-xs text-slate-600 mt-1">Déficit temporal na inibição da resposta
+                                            imediata.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. SEÇÃO 1: A METÁFORA CLÍNICA             -->
+        <!-- ========================================== -->
+        <section id="metodo" class="py-16 sm:py-24 bg-slate-50/60 border-t border-slate-200/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+                    <span class="text-sage-700 font-semibold text-xs sm:text-sm tracking-wider uppercase">
+                        A Metáfora Clínica &bull; O Choque de Realidade
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
+                        Seu filho não é desobediente por escolha. Ele sofre de um atraso biológico nos freios da ação.
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg">
+                        Compreender a diferença entre <em>saber o que fazer</em> e <em>conseguir fazer no momento
+                            exato</em> transforma a culpa parental em estratégia eficaz.
+                    </p>
+                </div>
+
+                <!-- Deep Clinical Explanation Cards -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+
+                    <!-- Card 1: O Choque de Realidade do Ponto de Desempenho -->
+                    <div
+                        class="lg:col-span-7 bg-white rounded-3xl p-7 sm:p-9 shadow-card border border-slate-200/80 flex flex-col justify-between">
+                        <div class="space-y-6">
+                            <div
+                                class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-100 text-slate-700 font-semibold text-xs">
+                                <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                                <span>Conceito Central da Neuropsicologia</span>
+                            </div>
+
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900">
+                                O TDAH não é um problema de saber: é um problema de fazer no "Ponto de Desempenho".
+                            </h3>
+
+                            <p class="text-slate-600 leading-relaxed">
+                                Se você perguntar para uma criança com TDAH no sofá da sala: <em>"Pode bater a porta com
+                                    força quando fica chateado?"</em> ou <em>"Pode correr no meio da rua?"</em>, ela
+                                responderá perfeitamente: <strong>"Não, é errado"</strong>. Ela domina a regra moral.
+                            </p>
+
+                            <p class="text-slate-600 leading-relaxed">
+                                No entanto, segundos depois, no calor do momento, ela bate a porta ou pula no sofá.
+                                <strong>Isso não é afronta, cinismo ou deboche.</strong> O controle inibitório é a
+                                capacidade biológica de criar uma fração de segundo entre o impulso interno e a resposta
+                                motora. No cérebro com TDAH, esse sinal de freio sofre um retardo neurológico. A ação
+                                acontece antes que a consciência da consequência consiga intervir.
+                            </p>
+
+                            <div
+                                class="p-4 sm:p-5 rounded-2xl bg-sage-50 border border-sage-200/70 text-slate-700 text-sm space-y-2">
+                                <div class="font-bold text-sage-900 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-sage-700" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                    <span>Alívio da Culpa Familiar</span>
+                                </div>
+                                <p class="text-slate-600">
+                                    A impulsividade não é fruto de má criação, falta de limites ou negligência
+                                    materna/paterna. Trata-se de um neurodesenvolvimento assimétrico entre os circuitos
+                                    subcorticais de recompensa (rápidos) e os feixes frontoestriatais inibitórios (que
+                                    maturam cerca de 30% mais devagar).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Mini Callout -->
+                        <div class="mt-6 pt-5 border-t border-slate-100 flex items-center gap-3 text-xs text-slate-500">
+                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                            <span>Referência: Barkley, R. A. (2015). Attention-Deficit Hyperactivity Disorder: A
+                                Handbook for Diagnosis and Treatment.</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Por Que Treinos Formais de Mesa Falham -->
+                    <div
+                        class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-7 sm:p-9 shadow-card flex flex-col justify-between">
+                        <div class="space-y-6">
+                            <div
+                                class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs border border-slate-700">
+                                <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                    <line x1="12" y1="9" x2="12" y2="13" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                <span>Por Que a Prática Tradicional Falha</span>
+                            </div>
+
+                            <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                                Por que treinos formais de mesa em casa só geram atrito e exaustão?
+                            </h3>
+
+                            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                                Muitos pais compram cadernos de atividades cognitivas ou tentam "sentar para conversar e
+                                treinar disciplina". O resultado quase sempre é choro, desespero e gritaria. Por quê?
+                            </p>
+
+                            <ul class="space-y-3.5 text-sm text-slate-300">
+                                <li class="flex items-start gap-3">
+                                    <div
+                                        class="w-5 h-5 rounded-full bg-slate-800 text-amber-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-slate-700">
+                                        1</div>
+                                    <span><strong>Falta de Transferência Ecológica:</strong> O cérebro não generaliza
+                                        folhas estáticas de papel para a hora de desligar o videogame ou esperar a vez
+                                        de falar.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div
+                                        class="w-5 h-5 rounded-full bg-slate-800 text-amber-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-slate-700">
+                                        2</div>
+                                    <span><strong>Dreno Dopaminérgico:</strong> Tarefas artificiais desprovidas de
+                                        contexto aumentam a aversão ao esforço mental sustentado, disparando o modo de
+                                        luta ou fuga.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div
+                                        class="w-5 h-5 rounded-full bg-slate-800 text-amber-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-slate-700">
+                                        3</div>
+                                    <span><strong>Erosão do Vínculo Afetivo:</strong> O pai e a mãe deixam de ser
+                                        figuras de acolhimento seguro e se tornam fiscais frustrados.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="mt-8 p-4 rounded-2xl bg-slate-800/90 border border-slate-700/80 text-xs text-slate-300">
+                            <span class="text-sage-300 font-bold block mb-1">A Solução Clínica:</span>
+                            Treinar o controle inibitório <strong>dentro da ecologia da casa</strong>, em brincadeiras
+                            motoras rápidas, micro-rotinas e pausas de 5 segundos incorporadas ao fluxo diário.
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Comparativo Visual Dinâmico -->
+                <div class="mt-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-soft">
+                    <h4 class="text-center font-bold text-slate-900 text-lg mb-6">Comparativo Clínico: Abordagem
+                        Tradicional vs. Manejo Neurofuncional</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Coluna 1: O que não funciona -->
+                        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
+                            <div class="flex items-center gap-2 text-slate-800 font-bold text-sm">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold">✕</span>
+                                <span>Abordagem Tradicional Punitiva (Ineficaz)</span>
+                            </div>
+                            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 pl-2">
+                                <li>• Sermões longos e explicações morais detalhadas quando a criança está desregulada.
+                                </li>
+                                <li>• Castigos demorados ("1 mês sem videogame") que perdem contingência temporal.</li>
+                                <li>• Exigir autocontrole contínuo por força de vontade pura em ambientes caóticos.</li>
+                                <li>• Esperar que a criança "aprenda a lição" após uma bronca enérgica.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Coluna 2: O que funciona -->
+                        <div class="p-5 rounded-2xl bg-sage-50/80 border border-sage-200/90 space-y-3">
+                            <div class="flex items-center gap-2 text-sage-900 font-bold text-sm">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-sage-200 text-sage-800 flex items-center justify-center text-xs font-bold">✓</span>
+                                <span>Manejo Neurofuncional no Cotidiano (Eficaz)</span>
+                            </div>
+                            <ul class="text-xs sm:text-sm text-slate-700 space-y-2 pl-2">
+                                <li>• Pistas visuais concretas, timers físicos e instruções curtas de 1 comando por vez.
+                                </li>
+                                <li>• Fracionamento do esforço e reforço contingente imediato com elogio descritivo.
+                                </li>
+                                <li>• Treino dos freios por gamificação e regras de latência corporal (Regra dos 5s).
+                                </li>
+                                <li>• Proteção do ambiente (redução de gatilhos concorrentes de alta estimulação).</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. SEÇÃO 2: OS 4 PILARES DO MANEJO EM CASA -->
+        <!-- ========================================== -->
+        <section id="pilares" class="py-16 sm:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+                    <span class="text-sage-700 font-semibold text-xs sm:text-sm tracking-wider uppercase">
+                        Protocolo Aplicado &bull; Rotina Doméstica
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
+                        Os 4 Pilares do Manejo Inibitório no Cotidiano
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg">
+                        Microintervenções estruturadas para transformar o ambiente da casa em uma academia natural de
+                        freios executivos, sem brigas ou esgotamento.
+                    </p>
+                </div>
+
+                <!-- 4 Pillars Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                    <!-- PILAR 1 -->
+                    <div
+                        class="group bg-white rounded-3xl p-7 sm:p-8 border border-slate-200 shadow-soft hover:shadow-card hover:border-slate-300 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-bold text-xs tracking-wider">
+                                    PILAR 01
+                                </span>
+                                <div
+                                    class="w-10 h-10 rounded-2xl bg-sage-50 text-sage-700 flex items-center justify-center">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <h3
+                                class="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-slate-700 transition-colors">
+                                A Regra dos 5 Segundos
+                            </h3>
+                            <p class="text-xs sm:text-sm text-sage-800 font-medium mt-1 mb-4">
+                                Adiar a gratificação imediata antes de entregar pedidos
+                            </p>
+
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                Toda vez que a criança pedir algo com urgência intensa (um copo de suco, o controle
+                                remoto, um brinquedo ou abrir uma embalagem), os pais não devem responder de pronto nem
+                                repreender a urgência. Introduz-se um atraso intencional e amigável de 5 segundos.
+                            </p>
+
+                            <!-- Clinical Rationale Box -->
+                            <div
+                                class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-2 mb-4">
+                                <span class="font-bold text-slate-800 block">Mecanismo Neurobiológico:</span>
+                                O atraso programado obriga o lobo frontal a modular o disparo do sistema motor. A
+                                criança vivencia que o desconforto de "esperar" não a destrói e que o prêmio realmente
+                                chega ao término do intervalo.
+                            </div>
+
+                            <!-- Practical Script -->
+                            <div
+                                class="text-xs text-slate-700 bg-sage-50/60 p-3.5 rounded-xl border border-sage-200/60">
+                                <strong>Script para os pais:</strong> "Eu vou pegar o suco com prazer para você! Mas
+                                antes, vamos colocar as duas mãos na mesa e contar até 5 bem devagar juntos? 1... 2...
+                                3... 4... 5! Excelente espera. Aqui está!"
+                            </div>
+                        </div>
+
+                        <!-- Mini Interactive Widget: Teste dos 5 Segundos -->
+                        <div class="mt-6 pt-5 border-t border-slate-100">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-slate-500">Simulador de Prática:</span>
+                                <button type="button" onclick="runFiveSecondDemo(this)"
+                                    class="text-xs font-semibold text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-sage-600" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <polygon points="5 3 19 12 5 21 5 3" />
+                                    </svg>
+                                    <span>Testar Contagem de 5s</span>
+                                </button>
+                            </div>
+                            <div
+                                class="demo-timer-box hidden mt-3 p-3 bg-slate-900 text-white rounded-xl text-center text-xs space-y-1">
+                                <div class="timer-countdown text-lg font-mono font-bold text-sage-300">5</div>
+                                <div class="timer-caption text-slate-400">Respire fundo... segurando o impulso...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PILAR 2 -->
+                    <div
+                        class="group bg-white rounded-3xl p-7 sm:p-8 border border-slate-200 shadow-soft hover:shadow-card hover:border-slate-300 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-bold text-xs tracking-wider">
+                                    PILAR 02
+                                </span>
+                                <div
+                                    class="w-10 h-10 rounded-2xl bg-sage-50 text-sage-700 flex items-center justify-center">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <h3
+                                class="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-slate-700 transition-colors">
+                                Brincadeiras de Ação e Parada
+                            </h3>
+                            <p class="text-xs sm:text-sm text-sage-800 font-medium mt-1 mb-4">
+                                Gamificação motora da inibição comportamental (Go / No-Go)
+                            </p>
+
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                Em vez de pedir "fique quieto" de maneira abstrata, a família brinca 5 a 10 minutos por
+                                dia com jogos corporais que demandam interrupção brusca do movimento diante de uma regra
+                                lúdica.
+                            </p>
+
+                            <!-- Games List -->
+                            <div class="space-y-2 mb-4">
+                                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                                    <strong class="text-slate-900">1. Estátua Musical com Pose Específica:</strong> Não
+                                    basta parar; ao parar a música, deve congelar imitando um animal ou uma forma
+                                    geométrica.
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                                    <strong class="text-slate-900">2. Mestre Mandou Invertido:</strong> Se o mestre diz
+                                    "abaixa", a criança precisa levantar. Estimula a flexibilidade cognitiva e inibe a
+                                    resposta automatizada imediata.
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                                    <strong class="text-slate-900">3. Semáforo em Casa:</strong> Cartão verde (anda
+                                    rápido), amarelo (câmera lenta), vermelho (congelamento absoluto).
+                                </div>
+                            </div>
+
+                            <div
+                                class="p-3.5 rounded-xl bg-sage-50/60 border border-sage-200/60 text-xs text-slate-700">
+                                <strong>Ponto de Ouro:</strong> Comemore e dê feedback preciso: <em>"Você sentiu seus
+                                    pés parando na hora que ouviu o 'Vermelho'? Isso é seu freio mental ficando mais
+                                    forte!"</em>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                            <span>Dose Diária Recomendada:</span>
+                            <span class="font-semibold text-slate-800">5 a 10 min antes do banho</span>
+                        </div>
+                    </div>
+
+                    <!-- PILAR 3 -->
+                    <div
+                        class="group bg-white rounded-3xl p-7 sm:p-8 border border-slate-200 shadow-soft hover:shadow-card hover:border-slate-300 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-bold text-xs tracking-wider">
+                                    PILAR 03
+                                </span>
+                                <div
+                                    class="w-10 h-10 rounded-2xl bg-sage-50 text-sage-700 flex items-center justify-center">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <h3
+                                class="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-slate-700 transition-colors">
+                                Microfracionamento do Dever de Casa
+                            </h3>
+                            <p class="text-xs sm:text-sm text-sage-800 font-medium mt-1 mb-4">
+                                Blocos curtos de 10-15 minutos contra a fadiga executiva
+                            </p>
+
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                O cérebro com TDAH volta da escola com seus estoques de energia executiva e dopamina
+                                exauridos pelo esforço de inibição em sala. Obrigar a criança a fazer 1 hora contínua de
+                                lição é a receita certa para colapso e resistência violenta.
+                            </p>
+
+                            <!-- The Protocol -->
+                            <div
+                                class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs space-y-2 mb-4 text-slate-700">
+                                <div class="font-bold text-slate-900">Como fracionar na prática:</div>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-5 h-5 rounded-md bg-sage-200 text-sage-800 flex items-center justify-center font-bold">1</span>
+                                    <span><strong>Foco Puro (10 a 15 min):</strong> Um único exercício ou página por
+                                        vez. Esconda as outras folhas com um papel em branco para evitar poluição
+                                        visual.</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-5 h-5 rounded-md bg-slate-200 text-slate-800 flex items-center justify-center font-bold">2</span>
+                                    <span><strong>Pausa Motora Ativa (3 a 5 min):</strong> Beber água, dar 10 pulos,
+                                        abraçar o cachorro. Sem celular ou telas (telas sequestram a dopamina e impedem
+                                        o retorno).</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-5 h-5 rounded-md bg-sage-200 text-sage-800 flex items-center justify-center font-bold">3</span>
+                                    <span><strong>Timer Visual Físico:</strong> A criança precisa <em>enxergar</em> o
+                                        tempo passando, e não apenas ouvir "já deu o tempo".</span>
+                                </div>
+                            </div>
+
+                            <div
+                                class="p-3.5 rounded-xl bg-sage-50/60 border border-sage-200/60 text-xs text-slate-700">
+                                <strong>Resultado Clínico:</strong> Redução imediata de 80% nas discussões de fim de
+                                tarde e preservação da saúde emocional da família.
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                            <span>Regra de Ouro:</span>
+                            <span class="font-semibold text-slate-800">Menos duração, mais consistência</span>
+                        </div>
+                    </div>
+
+                    <!-- PILAR 4 -->
+                    <div
+                        class="group bg-white rounded-3xl p-7 sm:p-8 border border-slate-200 shadow-soft hover:shadow-card hover:border-slate-300 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-bold text-xs tracking-wider">
+                                    PILAR 04
+                                </span>
+                                <div
+                                    class="w-10 h-10 rounded-2xl bg-sage-50 text-sage-700 flex items-center justify-center">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <h3
+                                class="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-slate-700 transition-colors">
+                                Recompensas Seguras e Funcionais
+                            </h3>
+                            <p class="text-xs sm:text-sm text-sage-800 font-medium mt-1 mb-4">
+                                Reforço positivo imediato e contingente, sem negociar necessidades básicas
+                            </p>
+
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                No TDAH, o cérebro tem miopia temporal: prometer um brinquedo no final do mês pelo bom
+                                comportamento é biologicamente ineficaz. O reforço precisa ser <strong>próximo no
+                                    tempo</strong>, claro e motivador.
+                            </p>
+
+                            <!-- Rules of Engagement -->
+                            <div
+                                class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs space-y-2 mb-4 text-slate-700">
+                                <div class="font-bold text-slate-900">O que negociar vs. O que NUNCA negociar:</div>
+                                <div class="flex items-start gap-2">
+                                    <span class="text-red-500 font-bold">⛔</span>
+                                    <span><strong>Nunca negociar:</strong> Itens de integridade física, sono, comida,
+                                        segurança ou demonstrações de afeto e presença dos pais. Afeto não é moeda de
+                                        troca.</span>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <span class="text-sage-700 font-bold">⭐</span>
+                                    <span><strong>Recompensas funcionais:</strong> Privilégios extras de conexão (15
+                                        minutos jogando videogame com o pai, escolher a sobremesa do sábado, ler 2
+                                        histórias em vez de 1).</span>
+                                </div>
+                            </div>
+
+                            <div
+                                class="p-3.5 rounded-xl bg-sage-50/60 border border-sage-200/60 text-xs text-slate-700">
+                                <strong>Elogio de Esforço:</strong> Elogie a pausa e não apenas o acerto: <em>"Eu vi
+                                    como você respirou fundo e segurou a mão antes de responder. Que autocontrole
+                                    incrível!"</em>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                            <span>Princípio de Eficácia:</span>
+                            <span class="font-semibold text-slate-800">Imediato, Contingente e Específico</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Box Terapêutico para Pacientes & Pais (Em substituição ao CTA comercial) -->
+                <div class="mt-12 bg-slate-50 rounded-3xl p-7 sm:p-9 border border-slate-200 shadow-soft">
+                    <div class="flex items-start gap-4 sm:gap-5">
+                        <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-800 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-xs uppercase font-bold tracking-wider text-sage-700">Orientação Terapêutica de Apoio</span>
+                            <h4 class="text-lg sm:text-xl font-bold text-slate-900">Como aplicar este material no seu dia a dia:</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Não tente implementar todos os 4 pilares no mesmo dia. Escolha <strong>um único pilar</strong> por semana para iniciar. Registre em um caderno as situações em que a criança conseguiu usar a pausa dos 5 segundos ou em que o microfracionamento protegeu o final da tarde. Traga essas anotações e dúvidas para as nossas sessões periódicas para calibrarmos juntos os andaimes comportamentais.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 5. SEÇÃO 3: TABELA DE EXPECTATIVAS REAIS   -->
+        <!-- ========================================== -->
+        <section id="expectativas" class="py-16 sm:py-24 bg-slate-50/70 border-t border-slate-200/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+                    <span class="text-sage-700 font-semibold text-xs sm:text-sm tracking-wider uppercase">
+                        Transparência Clínica &bull; Metas Pés no Chão
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
+                        Tabela de Expectativas Reais: O que esperar vs. O que não esperar
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg">
+                        O desenvolvimento neurofuncional não acontece em linha reta. Compreender a linha do tempo
+                        científica evita cobranças desmedidas e acolhe o progresso real da criança.
+                    </p>
+                </div>
+
+                <!-- Responsive Comparative Table / Cards -->
+                <div class="bg-white rounded-3xl shadow-card border border-slate-200 overflow-hidden">
+
+                    <!-- Table Desktop Header -->
+                    <div
+                        class="hidden md:grid grid-cols-12 bg-slate-900 text-white font-semibold text-sm py-4 px-6 border-b border-slate-800">
+                        <div class="col-span-3 text-sage-300">Fase Temporal</div>
+                        <div class="col-span-4 text-sage-200 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-sage-400"></span>
+                            O que ESPERAR (Ganhos Reais)
+                        </div>
+                        <div class="col-span-5 text-slate-300 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                            O que NÃO ESPERAR (Evitar Ilusões)
+                        </div>
+                    </div>
+
+                    <!-- Row 1: Curto Prazo -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 p-6 md:p-6 border-b border-slate-100 hover:bg-slate-50/50 transition-colors gap-4 md:gap-0">
+                        <div
+                            class="md:col-span-3 flex md:flex-col justify-between md:justify-center items-start pr-4 border-b md:border-b-0 pb-3 md:pb-0 border-slate-100">
+                            <div>
+                                <span
+                                    class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-bold text-xs">Fase
+                                    1</span>
+                                <h3 class="text-lg font-bold text-slate-900 mt-1">Curto Prazo</h3>
+                                <p class="text-xs text-slate-500 font-medium">4 a 8 semanas</p>
+                            </div>
+                            <span
+                                class="text-xs text-sage-700 bg-sage-50 px-2.5 py-1 rounded-full font-medium md:mt-2">Instalação
+                                dos Andaimes</span>
+                        </div>
+
+                        <div class="md:col-span-4 md:px-4 space-y-2">
+                            <div class="text-xs font-bold text-sage-800 md:hidden flex items-center gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-sage-500"></span> O que esperar:
+                            </div>
+                            <ul class="text-sm text-slate-700 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Aceitação voluntária da Regra dos 5 Segundos sem colapso imediato.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Diminuição da intensidade e duração das explosões de frustração em
+                                        casa.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Alívio imediato no nível de estresse e sentimento de culpa dos pais.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="md:col-span-5 md:pl-4 space-y-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
+                            <div class="text-xs font-bold text-slate-500 md:hidden flex items-center gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span> O que não esperar:
+                            </div>
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Eliminação completa da impulsividade ou comportamento "perfeito" na
+                                        escola.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Que a criança execute as pausas de forma 100% autônoma, sem que os pais
+                                        precisem mediar e lembrar com gentileza.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Médio Prazo -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 p-6 md:p-6 border-b border-slate-100 hover:bg-slate-50/50 transition-colors gap-4 md:gap-0 bg-slate-50/30">
+                        <div
+                            class="md:col-span-3 flex md:flex-col justify-between md:justify-center items-start pr-4 border-b md:border-b-0 pb-3 md:pb-0 border-slate-100">
+                            <div>
+                                <span
+                                    class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-bold text-xs">Fase
+                                    2</span>
+                                <h3 class="text-lg font-bold text-slate-900 mt-1">Médio Prazo</h3>
+                                <p class="text-xs text-slate-500 font-medium">3 a 6 meses</p>
+                            </div>
+                            <span
+                                class="text-xs text-sage-700 bg-sage-50 px-2.5 py-1 rounded-full font-medium md:mt-2">Consolidação
+                                de Hábitos</span>
+                        </div>
+
+                        <div class="md:col-span-4 md:px-4 space-y-2">
+                            <div class="text-xs font-bold text-sage-800 md:hidden flex items-center gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-sage-500"></span> O que esperar:
+                            </div>
+                            <ul class="text-sm text-slate-700 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Maior tolerância a pequenas negativas e atrasos no ambiente social.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Rotina de dever de casa mais fluida com o uso consolidado do
+                                        microfracionamento.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Redução de queixas na escola quanto a interrupções rudes e atritos no
+                                        recreio.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="md:col-span-5 md:pl-4 space-y-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
+                            <div class="text-xs font-bold text-slate-500 md:hidden flex items-center gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span> O que não esperar:
+                            </div>
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Que a criança mantenha o foco prolongado em tarefas desinteressantes sem
+                                        pistas e supervisão periódica.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Ausência total de recaídas em dias de privação de sono, fome ou sobrecarga
+                                        sensorial.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Longo Prazo -->
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-12 p-6 md:p-6 hover:bg-slate-50/50 transition-colors gap-4 md:gap-0">
+                        <div
+                            class="md:col-span-3 flex md:flex-col justify-between md:justify-center items-start pr-4 border-b md:border-b-0 pb-3 md:pb-0 border-slate-100">
+                            <div>
+                                <span
+                                    class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-bold text-xs">Fase
+                                    3</span>
+                                <h3 class="text-lg font-bold text-slate-900 mt-1">Longo Prazo</h3>
+                                <p class="text-xs text-slate-500 font-medium">1 a 2 anos</p>
+                            </div>
+                            <span
+                                class="text-xs text-sage-700 bg-sage-50 px-2.5 py-1 rounded-full font-medium md:mt-2">Internalização
+                                Metacognitiva</span>
+                        </div>
+
+                        <div class="md:col-span-4 md:px-4 space-y-2">
+                            <div class="text-xs font-bold text-sage-800 md:hidden flex items-center gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-sage-500"></span> O que esperar:
+                            </div>
+                            <ul class="text-sm text-slate-700 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Internalização do diálogo interno ("Para, pensa, age") de forma
+                                        semi-autônoma.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Evolução acadêmica estável e relações interpessoais muito mais saudáveis com
+                                        colegas.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-sage-600 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Autoestima preservada: a criança se enxerga como capaz e não como "o problema
+                                        da turma".</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div
+                            class="md:col-span-5 md:pl-4 space-y-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
+                            <div class="text-xs font-bold text-slate-500 md:hidden flex items-center gap-1.5 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span> O que não esperar:
+                            </div>
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>O desaparecimento da condição neurobiológica. O TDAH não "cura"; ele passa a
+                                        ser plenamente gerenciado e adaptado à vida adulta.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>A dispensa permanente de rotinas estruturadas ou de suporte clínico durante transições de ciclo de desenvolvimento.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 6. SEÇÃO 4: PERGUNTAS FREQUENTES (FAQ)     -->
+        <!-- ========================================== -->
+        <section id="faq" class="py-16 sm:py-24 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="text-center space-y-3 mb-16">
+                    <span class="text-sage-700 font-semibold text-xs sm:text-sm tracking-wider uppercase">
+                        Tira-Dúvidas Clínico &bull; Orientação para a Família
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
+                        Perguntas Frequentes de Mães e Pais
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg">
+                        Respostas acolhedoras e técnicas para os impasses reais que surgem durante o treino do controle
+                        inibitório.
+                    </p>
+                </div>
+
+                <!-- Accordion Container -->
+                <div class="space-y-4" id="faq-accordion">
+
+                    <!-- FAQ Item 1 -->
+                    <div
+                        class="faq-item border border-slate-200 rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:border-slate-300">
+                        <button type="button"
+                            class="faq-trigger w-full flex items-center justify-between text-left gap-4 focus:outline-none"
+                            aria-expanded="false" aria-controls="faq-desc-1">
+                            <span class="text-base sm:text-lg font-bold text-slate-900">
+                                1. Meu filho vai deixar de ser agitado com esse treino?
+                            </span>
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300 faq-chevron">
+                                <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </div>
+                        </button>
+                        <div id="faq-desc-1"
+                            class="faq-answer text-sm sm:text-base text-slate-600 leading-relaxed pt-3">
+                            <p class="mt-2">
+                                <strong>Não necessariamente, e esse não deve ser o objetivo.</strong> A necessidade
+                                motora de se movimentar é uma característica neurobiológica genuína do TDAH,
+                                frequentemente ligada à busca do próprio cérebro por autorregulação dopaminérgica.
+                            </p>
+                            <p class="mt-2">
+                                O treino do controle inibitório não serve para apagar a vitalidade ou engessar a
+                                criança, mas sim para desenvolver a habilidade de <strong>acionar o freio quando é
+                                    indispensável</strong> (por exemplo: antes de atravessar uma rua perigosa, antes de
+                                bater num colega por frustração ou na hora de esperar a professora terminar uma
+                                orientação). Ele continuará sendo uma criança ativa, mas se tornará mais segura e
+                                funcional.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div
+                        class="faq-item border border-slate-200 rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:border-slate-300">
+                        <button type="button"
+                            class="faq-trigger w-full flex items-center justify-between text-left gap-4 focus:outline-none"
+                            aria-expanded="false" aria-controls="faq-desc-2">
+                            <span class="text-base sm:text-lg font-bold text-slate-900">
+                                2. A escola reclama que ele não para quieto, como o treino em casa ajuda?
+                            </span>
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300 faq-chevron">
+                                <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </div>
+                        </button>
+                        <div id="faq-desc-2"
+                            class="faq-answer text-sm sm:text-base text-slate-600 leading-relaxed pt-3">
+                            <p class="mt-2">
+                                O ambiente escolar é de alta exigência inibitória coletiva. Quando a criança não treina
+                                o freio em um ambiente controlado e seguro como a casa, a escola vira um palco constante
+                                de advertências e desgaste de autoestima.
+                            </p>
+                            <p class="mt-2">
+                                O treino doméstico dos 4 pilares constrói <strong>reserva de latência de
+                                    resposta</strong>. Além disso, ao realizar o acompanhamento terapêutico, fornecemos orientações técnicas para compartilhar com a coordenação pedagógica (como o uso de pausas sensoriais de 2 minutos para a criança levar o estojo ou apagar o quadro, e a quebra das folhas de prova em blocos menores), criando uma ponte coerente entre casa e escola.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div
+                        class="faq-item border border-slate-200 rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:border-slate-300">
+                        <button type="button"
+                            class="faq-trigger w-full flex items-center justify-between text-left gap-4 focus:outline-none"
+                            aria-expanded="false" aria-controls="faq-desc-3">
+                            <span class="text-base sm:text-lg font-bold text-slate-900">
+                                3. E se ele fizer birra na hora de esperar os 5 segundos?
+                            </span>
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300 faq-chevron">
+                                <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </div>
+                        </button>
+                        <div id="faq-desc-3"
+                            class="faq-answer text-sm sm:text-base text-slate-600 leading-relaxed pt-3">
+                            <p class="mt-2">
+                                No início, é esperado que a criança proteste, pois ela está acostumada com a resposta
+                                imediata de urgência. Quando houver resistência, a regra básica é: <strong>não aumente a
+                                    punição e não entre em cabo de guerra verbal</strong>.
+                            </p>
+                            <p class="mt-2">
+                                Utilize a técnica da <em>corregulação calma</em>: abaixe-se na altura dos olhos dele,
+                                mantenha sua voz serena e valide o desconforto: <em>"Eu sei que esperar é muito chato e
+                                    parece que o tempo não passa. Mas eu estou com o copo na mão e assim que contarmos
+                                    juntos, ele é seu."</em> Se 5 segundos for muito difícil no primeiro dia, comece com
+                                2 segundos e use pistas visuais com as mãos. Vá aumentando 1 segundo a cada dois dias.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div
+                        class="faq-item border border-slate-200 rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:border-slate-300">
+                        <button type="button"
+                            class="faq-trigger w-full flex items-center justify-between text-left gap-4 focus:outline-none"
+                            aria-expanded="false" aria-controls="faq-desc-4">
+                            <span class="text-base sm:text-lg font-bold text-slate-900">
+                                4. Apenas o treino em casa substitui a psicoterapia ou a medicação?
+                            </span>
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300 faq-chevron">
+                                <svg class="w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </div>
+                        </button>
+                        <div id="faq-desc-4"
+                            class="faq-answer text-sm sm:text-base text-slate-600 leading-relaxed pt-3">
+                            <p class="mt-2">
+                                <strong>Não substitui.</strong> De acordo com os consensos clínicos mundiais (Academia
+                                Americana de Pediatria, NICE e Diretrizes Brasileiras para o TDAH), o padrão-ouro de
+                                eficácia é o <strong>tratamento multimodal</strong>.
+                            </p>
+                            <p class="mt-2">
+                                O treino e a orientação parental no cotidiano formam o alicerce diário (onde a vida real
+                                acontece 24 horas por dia). A psicoterapia/reabilitação neuropsicológica trabalha o
+                                desenvolvimento de estratégias metacognitivas da criança, e a medicação (quando indicada
+                                por médico psiquiatra infantil ou neuropediatra) atua nivelando a química cerebral dos
+                                circuitos frontoestriatais. Os pilares trabalham juntos, em harmonia e nunca isolados.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO DE AUTORIDADE / ESPECIALISTA         -->
+        <!-- ========================================== -->
+        <section class="py-16 sm:py-20 bg-slate-50/80 border-t border-slate-200/80">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div
+                    class="bg-white rounded-3xl p-8 sm:p-10 shadow-card border border-slate-200 flex flex-col md:flex-row items-center gap-8">
+
+                    <div
+                        class="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden flex-shrink-0 border-4 border-sage-100 shadow-md">
+                        <img src="assets/imagens/foto-deo.jpg" alt="Foto do Neuropsicólogo Deo S. O. Magalhães"
+                            class="w-full h-full object-cover"
+                            onerror="this.src='https://ui-avatars.com/api/?name=Deo+Magalhaes&background=1e293b&color=fff&size=200'">
+                    </div>
+
+                    <div class="space-y-4 text-center md:text-left">
+                        <div
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage-50 text-sage-800 font-semibold text-xs border border-sage-200">
+                            <span>Especialista Responsável</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">
+                            Deo S. O. Magalhães
+                        </h3>
+                        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                            Psicólogo e Neuropsicólogo Clínico (CRP 04/42784). Especialista em Neuropsicologia,
+                            Neurociências do Desenvolvimento e Análise do Comportamento Aplicada (ABA). Membro da
+                            Sociedade Brasileira de Neuropsicologia (SBNp).
+                        </p>
+                        <p class="text-slate-500 text-xs sm:text-sm">
+                            Atuação dedicada à avaliação e intervenção neuropsicológica infantojuvenil, reabilitação cognitiva e orientação parental fundamentada na neurociência afetiva e comportamental.
+                        </p>
+
+                        <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-4">
+                            <a href="sobre.html"
+                                class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium text-xs sm:text-sm transition-colors shadow-sm">
+                                <span>Conhecer Trajetória Completa</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- RODAPÉ PADRÃO DO SITE                      -->
+    <!-- ========================================== -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 93300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg> 
+                        Guaranésia, MG
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li>
+                        <a href="https://instagram.com/deomagalhaesneuro" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg> 
+                            @deomagalhaesneuro
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Aviso Ético e Clínico Alinhado -->
+        <div class="container" style="padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; font-size: 0.82em; color: #94a3b8; line-height: 1.5;">
+            <p><strong>Aviso Ético-Legal e Clínico:</strong> Conteúdo psicoeducativo e informativo alinhado às diretrizes do Código de Ética Profissional do Psicólogo (CFP) e aos critérios do DSM-5-TR. Material clínico de apoio ao acompanhamento de pacientes e orientação familiar continuada.</p>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts Padrão do Site -->
+    <script src="assets/script.js"></script>
+
+    <!-- Microinterações Locais (FAQ Acordeão e Timer dos 5s) -->
+    <script>
+        // 1. FAQ Accordion com Acessibilidade ARIA
+        const faqTriggers = document.querySelectorAll('.faq-trigger');
+
+        faqTriggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.closest('.faq-item');
+                const isCurrentActive = item.classList.contains('active');
+
+                // Fecha todos os itens
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    const btn = otherItem.querySelector('.faq-trigger');
+                    if (btn) btn.setAttribute('aria-expanded', 'false');
+                });
+
+                // Alterna o clicado
+                if (!isCurrentActive) {
+                    item.classList.add('active');
+                    trigger.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // 2. Mini-widget interativo: Regra dos 5 Segundos
+        let demoInterval = null;
+        function runFiveSecondDemo(btn) {
+            const container = btn.closest('.border-t');
+            const demoBox = container.querySelector('.demo-timer-box');
+            const countdownEl = demoBox.querySelector('.timer-countdown');
+            const captionEl = demoBox.querySelector('.timer-caption');
+
+            if (demoInterval) {
+                clearInterval(demoInterval);
+            }
+
+            demoBox.classList.remove('hidden');
+            let timeLeft = 5;
+            countdownEl.textContent = timeLeft;
+            captionEl.textContent = "Respire fundo... segurando o impulso...";
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+
+            demoInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    countdownEl.textContent = timeLeft;
+                    if (timeLeft === 3) {
+                        captionEl.textContent = "O cérebro frontal está assumindo o controle...";
+                    } else if (timeLeft === 1) {
+                        captionEl.textContent = "Quase lá... segure firme!";
+                    }
+                } else {
+                    clearInterval(demoInterval);
+                    countdownEl.textContent = "✓ 5 segundos!";
+                    captionEl.textContent = "Excelente! Pedido entregue com vitória inibitória!";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50');
+                    }, 2000);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
