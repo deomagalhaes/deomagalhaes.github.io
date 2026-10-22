@@ -1753,7 +1753,15 @@ main > section.contact-section-home:not(.hero) {
 }
 
 /* --- 7. Animações (Opcional, mas recomendado) --- */
-/* Estado inicial dos elementos (invisíveis) */
+/* Fallback caso Swiper ainda não tenha inicializado */
+.hero-carousel:not(.swiper-initialized) .swiper-slide:first-child .hero-slide-content h1,
+.hero-carousel:not(.swiper-initialized) .swiper-slide:first-child .hero-slide-content p,
+.hero-carousel:not(.swiper-initialized) .swiper-slide:first-child .hero-buttons {
+    opacity: 1;
+    transform: none;
+}
+
+/* Estado inicial dos elementos nos slides inativos */
 .hero-slide-content h1,
 .hero-slide-content p,
 .hero-slide-content .hero-buttons {
@@ -1762,24 +1770,30 @@ main > section.contact-section-home:not(.hero) {
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* Estado final quando o slide está ativo */
+/* Estado final quando o slide está ativo (inclui duplicatas do loop) */
 .swiper-slide-active .hero-slide-content h1,
 .swiper-slide-active .hero-slide-content p,
-.swiper-slide-active .hero-slide-content .hero-buttons {
+.swiper-slide-active .hero-slide-content .hero-buttons,
+.swiper-slide-duplicate-active .hero-slide-content h1,
+.swiper-slide-duplicate-active .hero-slide-content p,
+.swiper-slide-duplicate-active .hero-slide-content .hero-buttons {
     opacity: 1;
     transform: translateY(0);
 }
 
 /* Efeito escalonado */
-.swiper-slide-active .hero-slide-content p { transition-delay: 0.2s; }
-.swiper-slide-active .hero-slide-content .hero-buttons { transition-delay: 0.4s; }
+.swiper-slide-active .hero-slide-content p,
+.swiper-slide-duplicate-active .hero-slide-content p { transition-delay: 0.2s; }
+.swiper-slide-active .hero-slide-content .hero-buttons,
+.swiper-slide-duplicate-active .hero-slide-content .hero-buttons { transition-delay: 0.4s; }
 
 /* Efeito Ken Burns (zoom na imagem) */
 @keyframes kenburns-zoom {
     0% { transform: scale(1); }
     100% { transform: scale(1.1); }
 }
-.swiper-slide-active .hero-background-image {
+.swiper-slide-active .hero-background-image,
+.swiper-slide-duplicate-active .hero-background-image {
     animation: kenburns-zoom 7.5s ease-out forwards;
 }
 
