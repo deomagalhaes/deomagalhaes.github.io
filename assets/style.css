@@ -750,13 +750,23 @@ footer.main-footer {
     color: #e2e8f0;
     padding-top: 50px;
     font-size: 1.05em;
+    width: 100%;
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    padding-bottom: 30px;
+.footer-grid,
+.footer-content {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+    gap: 30px !important;
+    padding-bottom: 30px !important;
+    width: 100% !important;
+}
+
+@media (min-width: 768px) {
+    .footer-grid,
+    .footer-content {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    }
 }
 
 .footer-column {

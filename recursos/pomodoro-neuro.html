@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Neurodivergente & Ruído Marrom – Deo Magalhães</title>
+    <meta name="description" content="Timer Pomodoro adaptado para TDAH e foco profundo com gerador procedural de Ruído Marrom (Brown Noise) sintetizado via Web Audio API. 100% gratuito e privado.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b1320;
+            color: #f1f5f9;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+        .timer-digits {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .pulse-subtle {
+            animation: pulse-border 3s ease-in-out infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 25px rgba(10, 147, 150, 0.2); }
+            50% { box-shadow: 0 0 50px rgba(10, 147, 150, 0.5); }
+        }
+        /* Garantia do Rodapé Lado a Lado */
+        footer.main-footer {
+            background-color: #060b13 !important;
+            color: #cbd5e1 !important;
+            padding-top: 50px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+        footer.main-footer .footer-grid,
+        footer.main-footer .footer-content {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 30px !important;
+            padding-bottom: 30px !important;
+            width: 100% !important;
+        }
+        @media (min-width: 768px) {
+            footer.main-footer .footer-grid,
+            footer.main-footer .footer-content {
+                grid-template-columns: repeat(4, 1fr) !important;
+            }
+        }
+        footer.main-footer .footer-column {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        footer.main-footer .footer-column h4 {
+            color: white !important;
+            font-size: 1.25em !important;
+            margin-bottom: 18px !important;
+            font-weight: 600 !important;
+        }
+        footer.main-footer ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        footer.main-footer li {
+            margin-bottom: 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            color: #cbd5e1 !important;
+        }
+        footer.main-footer a {
+            color: #cbd5e1 !important;
+            text-decoration: none !important;
+            transition: color 0.3s ease !important;
+        }
+        footer.main-footer a:hover {
+            color: #5dade2 !important;
+        }
+        footer.main-footer .footer-bottom {
+            border-top: 1px solid #1e293b !important;
+            padding: 20px 0 !important;
+            text-align: center !important;
+            color: #64748b !important;
+            font-size: 0.9em !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-vh-100">
+
+    <!-- Top Bar -->
+    <div class="top-bar" style="background-color: #060b13;">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Padrão -->
+    <header id="main-header" style="background-color: #0d1829; border-bottom: 1px solid #1e293b;">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name" style="color: #ffffff;">Deo Magalhães</span>
+                    <span class="subtitle" style="color: #94a3b8;">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu" style="color: white;">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html" style="color: #cbd5e1;">Home</a>
+                <a href="../sobre.html" style="color: #cbd5e1;">Sobre</a>
+                <a href="../servicos.html" style="color: #cbd5e1;">Serviços</a>
+                <a href="../agendamento.html" style="color: #cbd5e1;">Agendamento</a>
+                <a href="../artigos.html" style="color: #cbd5e1;">Artigos</a>
+                <a href="../recursos.html" class="active">Recursos</a>
+                <a href="../contato.html" style="color: #cbd5e1;">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow py-10 px-4 sm:px-6 max-w-4xl mx-auto w-full">
+        
+        <!-- Cabeçalho da Ferramenta -->
+        <div class="text-center mb-8">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider bg-teal-950/80 text-teal-300 border border-teal-800/60 mb-3">
+                <span class="w-2 h-2 rounded-full bg-[#0a9396] animate-pulse"></span>
+                Suporte às Funções Executivas
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Timer Neurodivergente & Ruído Marrom
+            </h1>
+            <p class="text-slate-400 mt-2 max-w-xl mx-auto text-sm sm:text-base">
+                Projetado especificamente para cérebros com TDAH e fadiga atencional. Combine blocos flexíveis com sons procedurais de mascaramento acústico.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Coluna Central: O Timer -->
+            <div class="lg:col-span-7 bg-[#131f33] rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xl flex flex-col items-center pulse-subtle">
+                
+                <!-- Seletor de Modo -->
+                <div class="flex flex-wrap justify-center gap-2 mb-6 w-full">
+                    <button onclick="setMode('micro')" id="btn-mode-micro" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+                        ⚡ Micro-Início (10/3m)
+                    </button>
+                    <button onclick="setMode('classic')" id="btn-mode-classic" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#005f73] text-white transition">
+                        🎯 Clássico (25/5m)
+                    </button>
+                    <button onclick="setMode('deep')" id="btn-mode-deep" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+                        🌊 Hiperfoco (50/10m)
+                    </button>
+                </div>
+
+                <!-- Display do Timer com Anel Circular -->
+                <div class="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center my-4">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <!-- Trilha de fundo -->
+                        <circle cx="50" cy="50" r="44" stroke="#1e293b" stroke-width="5" fill="none"></circle>
+                        <!-- Progresso -->
+                        <circle id="timer-progress-ring" cx="50" cy="50" r="44" stroke="#0a9396" stroke-width="5" fill="none" stroke-dasharray="276.46" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000"></circle>
+                    </svg>
+
+                    <!-- Textos Internos -->
+                    <div class="absolute flex flex-col items-center justify-center text-center">
+                        <span id="phase-label" class="text-xs uppercase tracking-widest font-semibold text-teal-400 mb-1">FOCO ATIVO</span>
+                        <div id="timer-display" class="timer-digits text-5xl sm:text-6xl font-bold text-white tracking-wider">
+                            25:00
+                        </div>
+                        <span id="cycles-count" class="text-[11px] text-slate-400 mt-2 bg-slate-800/80 px-2.5 py-0.5 rounded-full">
+                            Ciclo 1 • 0 concluídos hoje
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Controles do Timer -->
+                <div class="flex items-center gap-4 mt-6">
+                    <button id="timer-toggle-btn" onclick="toggleTimer()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-[#005f73] to-[#0a9396] hover:from-[#0a9396] hover:to-[#005f73] text-white font-bold text-base shadow-lg shadow-teal-900/30 transition transform hover:-translate-y-0.5 active:translate-y-0">
+                        Iniciar Foco
+                    </button>
+                    <button onclick="resetTimer()" title="Reiniciar Bloco" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Dica rápida Neuro -->
+                <p id="neuro-tip" class="text-xs text-slate-400 text-center mt-6 max-w-sm italic">
+                    "O primeiro minuto é a maior barreira de dopamina. Apenas sente-se e faça o primeiro clique."
+                </p>
+            </div>
+
+            <!-- Coluna Lateral: Gerador de Áudio Procedural -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Card Gerador de Ruído -->
+                <div class="bg-[#131f33] rounded-2xl p-6 border border-slate-800 shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">🎧</span>
+                            <h3 class="text-base font-bold text-white">Sons de Mascaramento</h3>
+                        </div>
+                        <span class="text-[10px] text-teal-400 uppercase tracking-wider font-semibold bg-teal-950 px-2 py-0.5 rounded border border-teal-800/50">
+                            Web Audio Nativo
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-400 mb-4">
+                        Gerados matematicamente no seu navegador em tempo real. Sem arquivos pesados, sem anúncios e com latência zero.
+                    </p>
+
+                    <!-- Seleção de Ruído -->
+                    <div class="grid grid-cols-2 gap-2 mb-5">
+                        <button onclick="setSoundType('brown')" id="snd-brown" class="sound-btn p-3 rounded-xl border border-teal-600 bg-teal-950/40 text-teal-200 text-left transition flex flex-col">
+                            <span class="text-xs font-bold">Ruído Marrom</span>
+                            <span class="text-[10px] text-slate-400">Grave & Acolhedor (TDAH)</span>
+                        </button>
+                        <button onclick="setSoundType('pink')" id="snd-pink" class="sound-btn p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-slate-300 text-left hover:border-slate-600 transition flex flex-col">
+                            <span class="text-xs font-bold">Ruído Rosa</span>
+                            <span class="text-[10px] text-slate-400">Equilibrado & Chuva Suave</span>
+                        </button>
+                        <button onclick="setSoundType('white')" id="snd-white" class="sound-btn p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-slate-300 text-left hover:border-slate-600 transition flex flex-col">
+                            <span class="text-xs font-bold">Ruído Branco</span>
+                            <span class="text-[10px] text-slate-400">Bloqueio total de ruídos</span>
+                        </button>
+                        <button onclick="setSoundType('binaural')" id="snd-binaural" class="sound-btn p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-slate-300 text-left hover:border-slate-600 transition flex flex-col">
+                            <span class="text-xs font-bold">Tom Alfa (10Hz)</span>
+                            <span class="text-[10px] text-slate-400">Ondas Binaurais (Fone)</span>
+                        </button>
+                    </div>
+
+                    <!-- Botão Play Áudio & Volume -->
+                    <div class="space-y-4 pt-4 border-t border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <button id="sound-toggle-btn" onclick="toggleSound()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span id="sound-btn-text">Ativar Som de Foco</span>
+                            </button>
+                            <label class="flex items-center gap-1.5 text-[11px] text-slate-400 cursor-pointer">
+                                <input type="checkbox" id="auto-sound" checked class="rounded border-slate-700 bg-slate-800 text-teal-500">
+                                Sincronizar com Timer
+                            </label>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                                <span>Volume</span>
+                                <span id="vol-text">40%</span>
+                            </div>
+                            <input type="range" id="volume-slider" min="0" max="100" value="40" oninput="setVolume(this.value)" class="w-full accent-teal-400 bg-slate-800 h-1.5 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Explicação Neurocientífica -->
+                <div class="bg-[#131f33] rounded-2xl p-5 border border-slate-800 text-xs text-slate-400 space-y-2">
+                    <h4 class="font-bold text-slate-200 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Por que o Ruído Marrom funciona no TDAH?
+                    </h4>
+                    <p class="leading-relaxed">
+                        Pelo princípio da <em>Ressonância Estocástica</em>, a introdução de uma quantidade controlada de ruído de baixa frequência no córtex auditivo otimiza a relação sinal-ruído das sinapses do córtex pré-frontal, diminuindo o impulso de buscar distrações imediatas.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="main-footer mt-16" style="background-color: #060b13; border-top: 1px solid #1e293b;">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4 style="color: white;">Deo Magalhães</h4>
+                <p style="color: #94a3b8;">Neuropsicologia Clínica, Avaliação e Manejo de Funções Executivas e TDAH.</p>
+            </div>
+            <div class="footer-column">
+                <h4 style="color: white;">Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank" style="color: #cbd5e1;">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br" style="color: #cbd5e1;">contato@deomagalhaes.com.br</a></li>
+                    <li style="color: #94a3b8;">Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 style="color: white;">Informações</h4>
+                <ul>
+                    <li style="color: #94a3b8;">CRP 04/42784</li>
+                    <li style="color: #94a3b8;">Neuropsicólogo Clínico</li>
+                    <li style="color: #94a3b8;">Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 style="color: white;">Recursos</h4>
+                <ul>
+                    <li><a href="escala-regulacao-emocional.html" style="color: #cbd5e1;">Teste de Regulação Emocional</a></li>
+                    <li><a href="../jogos.html" style="color: #cbd5e1;">Jogos Cognitivos Diários</a></li>
+                    <li><a href="../artigos.html" style="color: #cbd5e1;">Artigos Clínicos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom" style="border-top: 1px solid #1e293b;">
+            <div class="container">
+                <p style="color: #64748b;">&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica de Timer e Web Audio API -->
+    <script>
+        // Configurações dos Modos
+        const modes = {
+            micro: { work: 10 * 60, break: 3 * 60, name: '⚡ Micro-Início' },
+            classic: { work: 25 * 60, break: 5 * 60, name: '🎯 Clássico' },
+            deep: { work: 50 * 60, break: 10 * 60, name: '🌊 Hiperfoco' }
+        };
+
+        let currentMode = 'classic';
+        let isWorkingPhase = true;
+        let timeLeft = modes.classic.work;
+        let totalDuration = modes.classic.work;
+        let timerInterval = null;
+        let isRunning = false;
+        let completedCycles = 0;
+
+        // Elementos DOM
+        const displayEl = document.getElementById('timer-display');
+        const phaseLabel = document.getElementById('phase-label');
+        const toggleBtn = document.getElementById('timer-toggle-btn');
+        const progressRing = document.getElementById('timer-progress-ring');
+        const cyclesEl = document.getElementById('cycles-count');
+        const circumference = 2 * Math.PI * 44; // 276.46
+
+        progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateDisplay() {
+            displayEl.textContent = formatTime(timeLeft);
+            document.title = `${formatTime(timeLeft)} • ${isWorkingPhase ? 'Foco' : 'Pausa'} | Deo Magalhães`;
+            
+            const progress = timeLeft / totalDuration;
+            const offset = circumference - (progress * circumference);
+            progressRing.style.strokeDashoffset = offset;
+        }
+
+        function setMode(modeKey) {
+            currentMode = modeKey;
+            ['micro', 'classic', 'deep'].forEach(k => {
+                const btn = document.getElementById(`btn-mode-${k}`);
+                if (k === modeKey) {
+                    btn.className = "mode-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#005f73] text-white transition";
+                } else {
+                    btn.className = "mode-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                }
+            });
+            resetTimer();
+        }
+
+        function toggleTimer() {
+            if (isRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            toggleBtn.textContent = 'Pausar';
+            toggleBtn.className = "px-8 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-base shadow-lg shadow-amber-900/30 transition transform hover:-translate-y-0.5 active:translate-y-0";
+            
+            if (document.getElementById('auto-sound').checked && isWorkingPhase && !isAudioPlaying) {
+                startAudio();
+            }
+
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    handlePhaseTransition();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            toggleBtn.textContent = 'Continuar Foco';
+            toggleBtn.className = "px-8 py-3 rounded-xl bg-gradient-to-r from-[#005f73] to-[#0a9396] hover:from-[#0a9396] hover:to-[#005f73] text-white font-bold text-base shadow-lg shadow-teal-900/30 transition transform hover:-translate-y-0.5 active:translate-y-0";
+            
+            if (document.getElementById('auto-sound').checked && isAudioPlaying) {
+                stopAudio();
+            }
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            isWorkingPhase = true;
+            totalDuration = modes[currentMode].work;
+            timeLeft = totalDuration;
+            phaseLabel.textContent = 'FOCO ATIVO';
+            phaseLabel.className = 'text-xs uppercase tracking-widest font-semibold text-teal-400 mb-1';
+            progressRing.setAttribute('stroke', '#0a9396');
+            updateDisplay();
+        }
+
+        function handlePhaseTransition() {
+            playTibetanBell();
+            if (isWorkingPhase) {
+                isWorkingPhase = false;
+                completedCycles++;
+                totalDuration = modes[currentMode].break;
+                timeLeft = totalDuration;
+                phaseLabel.textContent = 'PAUSA REGENERATIVA';
+                phaseLabel.className = 'text-xs uppercase tracking-widest font-semibold text-amber-400 mb-1';
+                progressRing.setAttribute('stroke', '#ee9b00');
+                cyclesEl.textContent = `Ciclo ${completedCycles + 1} • ${completedCycles} concluídos hoje`;
+
+                if (document.getElementById('auto-sound').checked && isAudioPlaying) {
+                    stopAudio();
+                }
+            } else {
+                isWorkingPhase = true;
+                totalDuration = modes[currentMode].work;
+                timeLeft = totalDuration;
+                phaseLabel.textContent = 'FOCO ATIVO';
+                phaseLabel.className = 'text-xs uppercase tracking-widest font-semibold text-teal-400 mb-1';
+                progressRing.setAttribute('stroke', '#0a9396');
+
+                if (document.getElementById('auto-sound').checked && !isAudioPlaying) {
+                    startAudio();
+                }
+            }
+            updateDisplay();
+        }
+
+        // ==========================================
+        // SINTETIZADOR WEB AUDIO API PROCEDURAL
+        // ==========================================
+        let audioCtx = null;
+        let noiseNode = null;
+        let gainNode = null;
+        let isAudioPlaying = false;
+        let currentSoundType = 'brown';
+        let currentVolume = 0.4;
+        let binauralOscLeft = null;
+        let binauralOscRight = null;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function createNoiseBuffer(type) {
+            const bufferSize = audioCtx.sampleRate * 2; // 2 segundos de buffer em loop
+            const buffer = audioCtx.createBuffer(2, bufferSize, audioCtx.sampleRate);
+            
+            for (let channel = 0; channel < 2; channel++) {
+                const output = buffer.getChannelData(channel);
+                let lastOut = 0.0;
+                let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+
+                for (let i = 0; i < bufferSize; i++) {
+                    const white = Math.random() * 2 - 1;
+
+                    if (type === 'white') {
+                        output[i] = white * 0.15;
+                    } else if (type === 'brown') {
+                        // Filtro integrador de 6dB/oitava (Brownian noise)
+                        output[i] = (lastOut + (0.02 * white)) / 1.02;
+                        lastOut = output[i];
+                        output[i] *= 1.8;
+                    } else if (type === 'pink') {
+                        // Filtro de Paul Kellet (Pink noise -3dB/oitava)
+                        b0 = 0.99886 * b0 + white * 0.0555179;
+                        b1 = 0.99332 * b1 + white * 0.0750759;
+                        b2 = 0.96900 * b2 + white * 0.1538520;
+                        b3 = 0.86650 * b3 + white * 0.3104856;
+                        b4 = 0.55000 * b4 + white * 0.5329522;
+                        b5 = -0.7616 * b5 - white * 0.0168980;
+                        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.06;
+                        b6 = white * 0.115926;
+                    }
+                }
+            }
+            return buffer;
+        }
+
+        function startAudio() {
+            initAudioContext();
+            stopAudio();
+
+            gainNode = audioCtx.createGain();
+            gainNode.gain.setValueAtTime(currentVolume, audioCtx.currentTime);
+            gainNode.connect(audioCtx.destination);
+
+            if (currentSoundType === 'binaural') {
+                // Binaural Alpha (200Hz esquerdo, 210Hz direito = 10Hz Alpha beat)
+                const merger = audioCtx.createChannelMerger(2);
+                
+                binauralOscLeft = audioCtx.createOscillator();
+                binauralOscRight = audioCtx.createOscillator();
+                
+                binauralOscLeft.type = 'sine';
+                binauralOscLeft.frequency.setValueAtTime(200, audioCtx.currentTime);
+                
+                binauralOscRight.type = 'sine';
+                binauralOscRight.frequency.setValueAtTime(210, audioCtx.currentTime);
+                
+                binauralOscLeft.connect(merger, 0, 0);
+                binauralOscRight.connect(merger, 0, 1);
+                
+                merger.connect(gainNode);
+                binauralOscLeft.start();
+                binauralOscRight.start();
+            } else {
+                const buffer = createNoiseBuffer(currentSoundType);
+                noiseNode = audioCtx.createBufferSource();
+                noiseNode.buffer = buffer;
+                noiseNode.loop = true;
+                noiseNode.connect(gainNode);
+                noiseNode.start();
+            }
+
+            isAudioPlaying = true;
+            document.getElementById('sound-btn-text').textContent = 'Pausar Som';
+            document.getElementById('sound-toggle-btn').className = 'flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition shadow';
+        }
+
+        function stopAudio() {
+            if (noiseNode) {
+                try { noiseNode.stop(); noiseNode.disconnect(); } catch (e) {}
+                noiseNode = null;
+            }
+            if (binauralOscLeft && binauralOscRight) {
+                try { binauralOscLeft.stop(); binauralOscRight.stop(); } catch (e) {}
+                binauralOscLeft = null;
+                binauralOscRight = null;
+            }
+            isAudioPlaying = false;
+            document.getElementById('sound-btn-text').textContent = 'Ativar Som de Foco';
+            document.getElementById('sound-toggle-btn').className = 'flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow';
+        }
+
+        function toggleSound() {
+            if (isAudioPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        }
+
+        function setSoundType(type) {
+            currentSoundType = type;
+            ['brown', 'pink', 'white', 'binaural'].forEach(t => {
+                const btn = document.getElementById(`snd-${t}`);
+                if (t === type) {
+                    btn.className = "sound-btn p-3 rounded-xl border border-teal-600 bg-teal-950/40 text-teal-200 text-left transition flex flex-col";
+                } else {
+                    btn.className = "sound-btn p-3 rounded-xl border border-slate-700 bg-slate-800/40 text-slate-300 text-left hover:border-slate-600 transition flex flex-col";
+                }
+            });
+
+            if (isAudioPlaying) {
+                startAudio();
+            }
+        }
+
+        function setVolume(val) {
+            currentVolume = val / 100;
+            document.getElementById('vol-text').textContent = `${val}%`;
+            if (gainNode && audioCtx) {
+                gainNode.gain.setValueAtTime(currentVolume, audioCtx.currentTime);
+            }
+        }
+
+        function playTibetanBell() {
+            try {
+                initAudioContext();
+                const osc = audioCtx.createOscillator();
+                const bellGain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(528, audioCtx.currentTime); // Frequência suave 528Hz
+                
+                bellGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                bellGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 3.0);
+                
+                osc.connect(bellGain);
+                bellGain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 3.0);
+            } catch (e) {}
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>

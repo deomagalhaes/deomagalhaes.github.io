@@ -17,7 +17,50 @@
     <link rel="icon" type="image/png" href="assets/favicon2.png">
     <link rel="stylesheet" href="assets/style.css">
 
-    <body>
+    <style>
+        .search-container {
+            margin-bottom: 25px;
+            position: relative;
+            max-width: 600px;
+        }
+        .search-input-field {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            font-size: 0.95em;
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .search-input-field:focus {
+            border-color: #0a9396;
+            box-shadow: 0 4px 14px rgba(10, 147, 150, 0.15);
+        }
+        .search-icon-inside {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+        .search-clear-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.1em;
+            display: none;
+        }
+    </style>
+</head>
+<body>
     <!-- Bloco de Cabeçalho Padrão -->
     <div class="top-bar">
         <div class="container top-bar-content">
@@ -46,7 +89,7 @@
                 <a href="sobre.html">Sobre</a>
                 <a href="servicos.html">Serviços</a>
                 <a href="agendamento.html">Agendamento</a>
-                <a href="artigos.html">Artigos</a>
+                <a href="artigos.html" class="active">Artigos</a>
                 <a href="recursos.html">Recursos</a>
                 <a href="contato.html">Contato</a>
             </nav>
@@ -68,124 +111,141 @@
 
         <!-- 2. Seção de Categorias -->
         <section class="page-section">
-            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Categorias</h2>
-            <div class="category-grid-custom">
-                <a href="categoria-desenvolvimento-infantil.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Desenvolvimento Infantil</h3>
-                        <p>Marcos, estratégias e desenvolvimento.</p>
-                    </div>
-                </a>
-                <a href="categoria-tdah-tea.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>TDAH e TEA</h3>
-                        <p>Diagnóstico, manejo e intervenção.</p>
-                    </div>
-                </a>
-                <a href="categoria-orientacao-familiar.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Orientação Familiar</h3>
-                        <p>Dicas para pais, mães e cuidadores.</p>
-                    </div>
-                </a>
-                <a href="categoria-reabilitacao-cognitiva.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.036 44.0001C18.0561 40.8045 16.5778 38.4222 14.6011 36.8532C11.636 34.4997 6.92483 35.9624 5.18458 33.5349C3.44433 31.1073 6.40382 26.6431 7.44234 24.009C8.48086 21.375 3.46179 20.4436 4.04776 19.6958C4.43842 19.1973 6.97471 17.7587 11.6567 15.3801C12.987 7.79346 17.9008 4.00014 26.3982 4.00014C39.1441 4.00014 44 14.8061 44 21.679C44 28.552 38.1201 35.9563 29.7441 37.5528C28.9951 38.6436 30.0754 40.7927 32.9848 44.0001" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4997 14.5C18.8464 17.0342 19.0408 18.8138 20.0829 19.838C21.1251 20.8623 22.6458 21.3741 27.4109 21.8484C26.5559 26.7514 29.4939 26.4484 32.4309 24.3084C32.8239 25.5984 37.4139 26.8884 37.7989 23.4384C38.1839 19.9884 36.3239 17.2374 35.5609 17.2374C34.7979 17.2374 32.8229 17.1444 32.8229 16.0894C32.8229 15.0344 30.5149 14.4394 28.4319 14.4394C26.3489 14.4394 27.6019 13.0344 23.9419 13.5894C20.2819 14.1444 19.4997 14.5 19.4997 14.5Z" fill="#2F88FF" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M30.4997 25.5C29.4827 26.131 28.0877 27.18 27.4997 28C26.0307 30.05 24.8397 31.297 24.5797 32.608" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Reabilitação Cognitiva</h3>
-                        <p>Técnicas e estratégias de intervenção.</p>
-                    </div>
-                </a>
-                <a href="categoria-filosofia.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"></path><path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Filosofia</h3>
-                        <p>Reflexões sobre a mente e a existência.</p>
-                    </div>
-                </a>
-                <a href="categoria-saude-mental.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Saúde Mental</h3>
-                        <p>Bem-estar, ansiedade e regulação emocional.</p>
-                    </div>
-                </a>
-                <a href="categoria-tecnologia.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Tecnologia</h3>
-                        <p>Impacto das telas e da era digital.</p>
-                    </div>
-                </a>
-                <a href="categoria-desenvolvimento-pessoal.html" class="category-card-custom">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-                    </div>
-                    <div class="text-container">
-                        <h3>Desenvolvimento Pessoal</h3>
-                        <p>Hábitos, produtividade e autoconhecimento.</p>
-                    </div>
-                </a>
+            <div class="container">
+                <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Categorias</h2>
+                <div class="category-grid-custom">
+                    <a href="categoria-desenvolvimento-infantil.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Desenvolvimento Infantil</h3>
+                            <p>Marcos, estratégias e desenvolvimento.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-tdah-tea.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>TDAH e TEA</h3>
+                            <p>Diagnóstico, manejo e intervenção.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-orientacao-familiar.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Orientação Familiar</h3>
+                            <p>Dicas para pais, mães e cuidadores.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-reabilitacao-cognitiva.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.036 44.0001C18.0561 40.8045 16.5778 38.4222 14.6011 36.8532C11.636 34.4997 6.92483 35.9624 5.18458 33.5349C3.44433 31.1073 6.40382 26.6431 7.44234 24.009C8.48086 21.375 3.46179 20.4436 4.04776 19.6958C4.43842 19.1973 6.97471 17.7587 11.6567 15.3801C12.987 7.79346 17.9008 4.00014 26.3982 4.00014C39.1441 4.00014 44 14.8061 44 21.679C44 28.552 38.1201 35.9563 29.7441 37.5528C28.9951 38.6436 30.0754 40.7927 32.9848 44.0001" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4997 14.5C18.8464 17.0342 19.0408 18.8138 20.0829 19.838C21.1251 20.8623 22.6458 21.3741 27.4109 21.8484C26.5559 26.7514 29.4939 26.4484 32.4309 24.3084C32.8239 25.5984 37.4139 26.8884 37.7989 23.4384C38.1839 19.9884 36.3239 17.2374 35.5609 17.2374C34.7979 17.2374 32.8229 17.1444 32.8229 16.0894C32.8229 15.0344 30.5149 14.4394 28.4319 14.4394C26.3489 14.4394 27.6019 13.0344 23.9419 13.5894C20.2819 14.1444 19.4997 14.5 19.4997 14.5Z" fill="#2F88FF" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M30.4997 25.5C29.4827 26.131 28.0877 27.18 27.4997 28C26.0307 30.05 24.8397 31.297 24.5797 32.608" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Reabilitação Cognitiva</h3>
+                            <p>Técnicas e estratégias de intervenção.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-filosofia.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"></path><path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Filosofia</h3>
+                            <p>Reflexões sobre a mente e a existência.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-saude-mental.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Saúde Mental</h3>
+                            <p>Bem-estar, ansiedade e regulação emocional.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-tecnologia.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Tecnologia</h3>
+                            <p>Impacto das telas e da era digital.</p>
+                        </div>
+                    </a>
+                    <a href="categoria-desenvolvimento-pessoal.html" class="category-card-custom">
+                        <div class="icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        </div>
+                        <div class="text-container">
+                            <h3>Desenvolvimento Pessoal</h3>
+                            <p>Hábitos, produtividade e autoconhecimento.</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
 
         <!-- 4. Seção de Recursos Educativos -->
         <section class="page-section">
-            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Recursos Educativos</h2>
-            <p style="text-align: left; margin-top: -15px; margin-bottom: 25px;">Materiais práticos para download que auxiliam no dia a dia.</p>
-            <div class="resource-grid-custom">
-                <a href="https://mailchi.mp/685f6f79341c/guia-gratuito-os-principais-marcos-do-desenvolvimento-infantil" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-3.jpg' );" download>
-                    <div class="card-content">
-                        <h3>Checklist de Desenvolvimento Infantil</h3>
-                        <p>PDF Gratuito</p>
-                    </div>
-                </a>
-                <a href="storybooks.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-10.jpg');">
-                    <div class="card-content">
-                        <h3>Storybooks Terapêuticos</h3>
-                        <p>Acesse a coleção de histórias</p>
-                    </div>
-                </a>
-                <a href="jogos.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-9.jpg');">
-                    <div class="card-content">
-                        <h3>Jogos Terapêuticos</h3>
-                        <p>Acesse a coleção de jogos</p>
-                    </div>
-                </a>
-                <a href="#" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-16.jpg');">
-                    <div class="card-content">
-                        <h3>Exercício de Respiração</h3>
-                        <p>Técnica de controle da ansiedade</p>
-                    </div>
-                </a>
+            <div class="container">
+                <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Recursos Educativos</h2>
+                <p style="text-align: left; margin-top: -15px; margin-bottom: 25px;">Materiais práticos para download e ferramentas interativas que auxiliam no dia a dia.</p>
+                <div class="resource-grid-custom">
+                    <a href="recursos/escala-regulacao-emocional.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-2.jpg');">
+                        <div class="card-content">
+                            <h3>Escala de Regulação Emocional</h3>
+                            <p>Teste gratuito do modelo neurocientífico de James Gross</p>
+                        </div>
+                    </a>
+                    <a href="recursos/pomodoro-neuro.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/deg.png');">
+                        <div class="card-content">
+                            <h3>Timer Neurodivergente</h3>
+                            <p>Com Ruído Marrom para TDAH e foco profundo</p>
+                        </div>
+                    </a>
+                    <a href="recursos/leitor-storybooks.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-10.jpg');">
+                        <div class="card-content">
+                            <h3>Leitor de Storybooks</h3>
+                            <p>Com roteiro de perguntas para pais e mediadores</p>
+                        </div>
+                    </a>
+                    <a href="jogos.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-9.jpg');">
+                        <div class="card-content">
+                            <h3>Jogos & Ginástica Cerebral</h3>
+                            <p>Desafio do dia e sequência de treino</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
 
        <!-- 3. Seção de Artigos Recentes -->
         <section class="page-section" id="todos-os-artigos">
-            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Todos os Artigos</h2>
-            <div class="article-list-custom" id="article-container">
-                <!-- Os cards serão carregados aqui pelo JavaScript -->
+            <div class="container">
+                <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Todos os Artigos</h2>
+                <p style="text-align: left; margin-top: -15px; margin-bottom: 20px; color: #64748b;">Navegue pelo nosso acervo de publicações científicas e reflexivas.</p>
+                
+                <!-- Barra de Busca Instantânea -->
+                <div class="search-container">
+                    <svg class="search-icon-inside" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="article-search-input" class="search-input-field" placeholder="Buscar por tema, sintoma ou autor (ex: TDAH, Apego, Borderline, Dopamina)..." autocomplete="off">
+                    <button id="search-clear-btn" class="search-clear-btn" title="Limpar busca">✕</button>
+                </div>
+
+                <div id="search-feedback" style="display: none; font-size: 0.9em; color: #005f73; font-weight: 600; margin-bottom: 20px;"></div>
+
+                <div class="article-list-custom" id="article-container">
+                    <!-- Os cards serão carregados aqui pelo JavaScript -->
+                </div>
+                
+                <!-- Container da Paginação -->
+                <div class="pagination-container" id="pagination-container"></div>
             </div>
-            
-            <!-- Container da Paginação -->
-            <div class="pagination-container" id="pagination-container"></div>
         </section>
 </main>
 
@@ -218,13 +278,13 @@
     </div>
     <div class="footer-bottom">
         <div class="container">
-            <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
             <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
         </div>
     </div>
 </footer>
 
-<!-- SCRIPT UNIFICADO E CORRIGIDO -->
+<!-- SCRIPT DE BUSCA E PAGINAÇÃO INSTANTÂNEA -->
 <script>
 document.addEventListener("DOMContentLoaded", function( ) {
     
@@ -239,26 +299,28 @@ document.addEventListener("DOMContentLoaded", function( ) {
         }
     }
 
-    // Função para controlar a paginação
-    function setupPagination() {
+    // Função para controlar busca e paginação
+    function setupArticles() {
         const articleContainer = document.getElementById('article-container');
         const paginationContainer = document.getElementById('pagination-container');
+        const searchInput = document.getElementById('article-search-input');
+        const searchClearBtn = document.getElementById('search-clear-btn');
+        const searchFeedback = document.getElementById('search-feedback');
         
-        if (!articleContainer || !paginationContainer) {
-            return; // Se não for a página de artigos, não faz nada
-        }
+        if (!articleContainer || !paginationContainer) return;
 
         const itemsPerPage = 6;
         let currentPage = 1;
-        let articles = [];
+        let allArticles = [];
+        let filteredArticles = [];
 
-        function displayPage(page) {
+        function displayPage(page, list) {
             articleContainer.innerHTML = "";
             page--;
 
             const start = itemsPerPage * page;
             const end = start + itemsPerPage;
-            const paginatedItems = articles.slice(start, end);
+            const paginatedItems = list.slice(start, end);
 
             for (let i = 0; i < paginatedItems.length; i++) {
                 articleContainer.appendChild(paginatedItems[i]);
@@ -280,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function( ) {
                 }
                 btn.addEventListener('click', function () {
                     currentPage = i;
-                    displayPage(currentPage);
+                    displayPage(currentPage, filteredArticles);
 
                     let currentActive = document.querySelector('.pagination-button.active');
                     if (currentActive) {
@@ -294,6 +356,58 @@ document.addEventListener("DOMContentLoaded", function( ) {
             }
         }
 
+        function filterArticles(query) {
+            query = query.trim().toLowerCase();
+            
+            if (!query) {
+                searchClearBtn.style.display = 'none';
+                searchFeedback.style.display = 'none';
+                filteredArticles = allArticles;
+                currentPage = 1;
+                displayPage(currentPage, filteredArticles);
+                buildPaginationButtons(filteredArticles);
+                return;
+            }
+
+            searchClearBtn.style.display = 'block';
+
+            filteredArticles = allArticles.filter(card => {
+                const text = card.textContent.toLowerCase();
+                const cats = (card.getAttribute('data-categories') || '').toLowerCase();
+                return text.includes(query) || cats.includes(query);
+            });
+
+            currentPage = 1;
+            searchFeedback.style.display = 'block';
+
+            if (filteredArticles.length > 0) {
+                searchFeedback.textContent = `${filteredArticles.length} artigo(s) encontrado(s) para "${query}":`;
+                displayPage(currentPage, filteredArticles);
+                buildPaginationButtons(filteredArticles);
+            } else {
+                searchFeedback.textContent = `Nenhum artigo encontrado para "${query}".`;
+                articleContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: #64748b; width: 100%;">
+                        <p style="font-size: 1.1em; margin-bottom: 10px;">🔍 Não encontramos publicações com esses termos exatos.</p>
+                        <p style="font-size: 0.9em;">Tente pesquisar por palavras como: <strong>TDAH</strong>, <strong>Borderline</strong>, <strong>Apego</strong>, <strong>Dopamina</strong>, <strong>Gross</strong> ou <strong>Ansiedade</strong>.</p>
+                    </div>
+                `;
+                paginationContainer.innerHTML = "";
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                filterArticles(e.target.value);
+            });
+
+            searchClearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                filterArticles('');
+                searchInput.focus();
+            });
+        }
+
         fetch('cards-artigos.html') 
             .then(response => {
                 if (!response.ok) throw new Error('Erro ao carregar cards-artigos.html');
@@ -303,11 +417,12 @@ document.addEventListener("DOMContentLoaded", function( ) {
                 if (!html) return;
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = html;
-                articles = Array.from(tempDiv.children);
+                allArticles = Array.from(tempDiv.children);
+                filteredArticles = allArticles;
 
-                if (articles.length > 0) {
-                    displayPage(currentPage);
-                    buildPaginationButtons(articles);
+                if (allArticles.length > 0) {
+                    displayPage(currentPage, filteredArticles);
+                    buildPaginationButtons(filteredArticles);
                 } else {
                     articleContainer.innerHTML = "<p>Nenhum artigo encontrado.</p>";
                 }
@@ -318,9 +433,8 @@ document.addEventListener("DOMContentLoaded", function( ) {
             });
     }
 
-    // Executa as duas funções principais
     setupMobileMenu();
-    setupPagination();
+    setupArticles();
 });
 </script>
 

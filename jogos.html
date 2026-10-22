@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="assets/favicon2.png">
     <link rel="stylesheet" href="assets/style.css">
 
-    <!-- Estilo dos cards com imagem de fundo (o mesmo dos storybooks) -->
+    <!-- Estilo dos cards com imagem de fundo e filtros -->
     <style>
         .resource-card-bg-image {
             display: flex;
@@ -30,7 +30,7 @@
             overflow: hidden;
             text-decoration: none;
             color: white;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         .resource-card-bg-image:hover {
@@ -71,6 +71,34 @@
             margin: 0;
             color: rgba(255, 255, 255, 0.9);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .game-filter-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .game-filter-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .game-filter-btn.active-filter {
+            background: #005f73 !important;
+            color: #ffffff !important;
+            border-color: #005f73 !important;
+            box-shadow: 0 2px 8px rgba(0, 95, 115, 0.25);
+        }
+
+        .game-hidden {
+            display: none !important;
         }
     </style>
 
@@ -115,147 +143,199 @@
     <!-- Seção Hero da página de Jogos -->
     <section class="hero">
         <div class="container">
-            <h1>Jogos Terapêuticos</h1>
-            <p>Recursos interativos e lúdicos para estimular habilidades cognitivas e socioemocionais de forma divertida e eficaz.</p>
+            <h1>Jogos Terapêuticos & Ginástica Cerebral</h1>
+            <p>Recursos interativos e lúdicos para estimular o córtex pré-frontal, a memória operacional e a autorregulação emocional.</p>
         </div>
     </section>
 
     <!-- Seção da Galeria de Jogos -->
     <section class="page-section">
-        <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Escolha um jogo para começar</h2>
-        
-        <div class="resource-grid-custom">
-
-
-            <!-- Card da Torre de Hanói -->
-            <a href="recursos/jogo-torre-hanoi.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/torre-hanoi.png');">
-                <div class="card-content">
-                    <h3>Torre de Hanói</h3>
-                    <p>Estimule funções executivas, planejamento antecipatório e flexibilidade mental.</p>
-                </div>
-            </a>
-
-            <a href="recursos/jogo-festival-pipa.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/festival-pipa.png');">
-                <div class="card-content">
-                    <h3>Festival das Pipas</h3>
-                    <p>Um festival, uma corrida, uma aventura feito para um amigo.</p>
-                </div>
-            </a>
-
-            <!-- Card do Jogo da Memória -->
-            <a href="recursos/jogo-sequencia-cores.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/sequencia-cores.png');">
-                <div class="card-content">
-                    <h3>Sequência de Cores</h3>
-                    <p>Estimule memória de trabalho, controle inibitório, coordenação e planejamento.</p>
-                </div>
-            </a>
-
-            <!-- Card do Jogo da Memória -->
-            <a href="recursos/jogo-memoria-espacial.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/memoria-espacial.png');">
-                <div class="card-content">
-                    <h3>Memória Espacial</h3>
-                    <p>Fortalece a capacidade de manter informações em mente através da memória de curto prazo</p>
-                </div>
-            </a>
-
-            <!-- Card do Jogo da Memória -->
-            <a href="recursos/jogo-caca-orbs.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/caca-orbs.png');">
-                <div class="card-content">
-                    <h3>Caça aos Orbs Coloridos</h3>
-                    <p>Um jogo rápido para testar sua atenção, velocidade e precisão. Cace os orbs coloridos e bata seu recorde!</p>
-                </div>
-            </a>
+        <div class="container">
             
-<!-- Card do Jogo da Memória -->
-            <a href="recursos/jogo-encontre-animais.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/encontre-animais.png');">
-                <div class="card-content">
-                    <h3>Encontre os Animais</h3>
-                    <p>Desenvolva velocidade de processamento, atenção e flexibilidade cognitiva</p>
+            <!-- BANNER: DESAFIO COGNITIVO DO DIA & STREAK DIÁRIO -->
+            <div id="daily-challenge-box" style="background: linear-gradient(135deg, #005f73 0%, #0a9396 100%); color: white; border-radius: 16px; padding: 25px 30px; margin-bottom: 35px; box-shadow: 0 10px 25px rgba(0, 95, 115, 0.25); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+                <div style="max-width: 600px;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+                        <span style="font-size: 1.2em;">🔥</span> <span id="challenge-day-label">Desafio Neurocognitivo de Hoje</span>
+                    </div>
+                    <h2 id="daily-game-title" style="color: white; margin: 0 0 8px 0; font-size: 1.8em; font-weight: 700;">Torre de Hanói</h2>
+                    <p id="daily-game-desc" style="color: rgba(255,255,255,0.9); margin: 0; font-size: 0.95em; line-height: 1.5;">
+                        Estimule o planejamento antecipatório, controle inibitório e flexibilidade mental em uma sessão rápida de 5 minutos.
+                    </p>
+                    <div id="daily-game-neuro" style="margin-top: 12px; font-size: 0.85em; color: #94d2bd; display: flex; align-items: center; gap: 6px;">
+                        <span>🧠 Circuito Cerebral:</span> <strong id="daily-game-focus">Córtex Pré-Frontal Dorsolateral & Funções Executivas</strong>
+                    </div>
                 </div>
-            </a>
 
- <!-- Card do Jogo da Memória -->
-            <a href="recursos/jogo-diário-emocoes.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/emocoes.png');">
-                <div class="card-content">
-                    <h3>Diário das Emoções</h3>
-                    <p>Registre seus sentimentos e pensamentos diariamente, salve em PDF.</p>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(0, 18, 25, 0.25); padding: 18px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); min-width: 200px; text-align: center;">
+                    <div style="font-size: 0.8em; color: #e9d8a6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Sua Sequência</div>
+                    <div style="display: flex; align-items: baseline; gap: 4px;">
+                        <span id="streak-count" style="font-size: 2.2em; font-weight: 800; color: #ee9b00; line-height: 1;">1</span>
+                        <span style="font-size: 1em; color: white; font-weight: 600;">dia(s)</span>
+                    </div>
+                    <span id="streak-msg" style="font-size: 0.75em; color: rgba(255,255,255,0.8);">Mente Ativa Hoje</span>
+                    <a id="btn-play-daily" href="recursos/jogo-torre-hanoi.html" onclick="recordDailyPlay()" style="background-color: #ee9b00; color: #001219; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.9em; transition: all 0.2s ease; display: inline-block; box-shadow: 0 4px 12px rgba(238, 155, 0, 0.3);">
+                        Treinar Agora ➔
+                    </a>
                 </div>
-            </a>
+            </div>
 
+            <!-- Filtros Rápidos por Função Cognitiva -->
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; align-items: center;">
+                <span style="font-size: 0.85em; font-weight: 600; color: #64748b;">Filtrar por foco:</span>
+                <button onclick="filterGames('all', this)" class="game-filter-btn active-filter">Todos</button>
+                <button onclick="filterGames('funcoes-executivas', this)" class="game-filter-btn">Funções Executivas</button>
+                <button onclick="filterGames('memoria', this)" class="game-filter-btn">Memória Operacional</button>
+                <button onclick="filterGames('logica', this)" class="game-filter-btn">Lógica & Dedução</button>
+                <button onclick="filterGames('emocional', this)" class="game-filter-btn">Regulação Emocional</button>
+            </div>
 
-            <a href="recursos/jogo-construtor-histórias.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/historias2.png');">
-                <div class="card-content">
-                    <h3>Construtor de Histórias</h3>
-                    <p>Escolha o personagem, o ambiente e a aventura, crie, leia ou ouça em segundos.</p>
-                </div>
-            </a>
+            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Todos os Jogos Terapêuticos</h2>
+            
+            <div class="resource-grid-custom" id="games-grid">
 
-            <!-- Card do Jogo da Memória -->
-            <a href="recursos/jogo-memoria.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/memoria.png');">
-                <div class="card-content">
-                    <h3>Jogo da Memória das Emoções</h3>
-                    <p>Estimule a memória e o reconhecimento facial de emoções.</p>
-                </div>
-            </a>
+                <!-- Card da Torre de Hanói -->
+                <a href="recursos/jogo-torre-hanoi.html" 
+                   class="resource-card-bg-image" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/torre-hanoi.png');">
+                    <div class="card-content">
+                        <h3>Torre de Hanói</h3>
+                        <p>Estimule funções executivas, planejamento antecipatório e flexibilidade mental.</p>
+                    </div>
+                </a>
 
-            <!-- Card do Jogo de Regulação Emocional -->
-            <a href="recursos/jogo-regulacao-emocional.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/macaquinho-feliz2.png');">
-                <div class="card-content">
-                    <h3>Meu Amigo Macaco</h3>
-                    <p>Aprenda a identificar e regular as emoções.</p>
-                </div>
-            </a>
+                <a href="recursos/jogo-festival-pipa.html" 
+                   class="resource-card-bg-image" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/festival-pipa.png');">
+                    <div class="card-content">
+                        <h3>Festival das Pipas</h3>
+                        <p>Um festival, uma corrida, uma aventura feito para um amigo.</p>
+                    </div>
+                </a>
 
-            <!-- Card do Jogo de Lógica -->
-            <a href="recursos/jogo-logica.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/logica-capa.png');">
-                <div class="card-content">
-                    <h3>Desafio Sequencial</h3>
-                    <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
-                </div>
-            </a>
+                <!-- Card do Jogo da Memória -->
+                <a href="recursos/jogo-sequencia-cores.html" 
+                   class="resource-card-bg-image" 
+                   data-category="memoria"
+                   style="background-image: url('assets/imagens/sequencia-cores.png');">
+                    <div class="card-content">
+                        <h3>Sequência de Cores</h3>
+                        <p>Estimule memória de trabalho, controle inibitório, coordenação e planejamento.</p>
+                    </div>
+                </a>
 
-            <!-- Card do Jogo Fábrica de Emoções -->
-            <a href="recursos/jogo-fabrica-emocoes.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/fabrica.png');">
-                <div class="card-content">
-                    <h3>Fábrica de Emoções</h3>
-                    <p>Ajude os robôs a criarem e conhecerem as emoções básicas e complexas.</p>
-                </div>
-            </a>
+                <!-- Card do Jogo da Memória -->
+                <a href="recursos/jogo-memoria-espacial.html" 
+                   class="resource-card-bg-image" 
+                   data-category="memoria"
+                   style="background-image: url('assets/imagens/memoria-espacial.png');">
+                    <div class="card-content">
+                        <h3>Memória Espacial</h3>
+                        <p>Fortalece a capacidade de manter informações em mente através da memória de curto prazo.</p>
+                    </div>
+                </a>
 
-            <!-- Card do Jogo de Lógica 2 -->
-            <a href="recursos/jogo-logica2.html" 
-               class="resource-card-bg-image" 
-               style="background-image: url('assets/imagens/padroes.png');">
-                <div class="card-content">
-                    <h3>Desafio dos Padrões</h3>
-                    <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
-                </div>
-            </a>
+                <!-- Card do Jogo da Memória -->
+                <a href="recursos/jogo-caca-orbs.html" 
+                   class="resource-card-bg-image" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/caca-orbs.png');">
+                    <div class="card-content">
+                        <h3>Caça aos Orbs Coloridos</h3>
+                        <p>Um jogo rápido para testar sua atenção, velocidade e precisão. Cace os orbs coloridos e bata seu recorde!</p>
+                    </div>
+                </a>
+                
+                <!-- Card do Jogo da Memória -->
+                <a href="recursos/jogo-encontre-animais.html" 
+                   class="resource-card-bg-image" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/encontre-animais.png');">
+                    <div class="card-content">
+                        <h3>Encontre os Animais</h3>
+                        <p>Desenvolva velocidade de processamento, atenção e flexibilidade cognitiva.</p>
+                    </div>
+                </a>
 
+                <!-- Card Diário das Emoções -->
+                <a href="recursos/jogo-diário-emocoes.html" 
+                   class="resource-card-bg-image" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/emocoes.png');">
+                    <div class="card-content">
+                        <h3>Diário das Emoções</h3>
+                        <p>Registre seus sentimentos e pensamentos diariamente, salve em PDF.</p>
+                    </div>
+                </a>
+
+                <a href="recursos/jogo-construtor-histórias.html" 
+                   class="resource-card-bg-image" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/historias2.png');">
+                    <div class="card-content">
+                        <h3>Construtor de Histórias</h3>
+                        <p>Escolha o personagem, o ambiente e a aventura, crie, leia ou ouça em segundos.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo da Memória -->
+                <a href="recursos/jogo-memoria.html" 
+                   class="resource-card-bg-image" 
+                   data-category="memoria"
+                   style="background-image: url('assets/imagens/memoria.png');">
+                    <div class="card-content">
+                        <h3>Jogo da Memória das Emoções</h3>
+                        <p>Estimule a memória e o reconhecimento facial de emoções.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo de Regulação Emocional -->
+                <a href="recursos/jogo-regulacao-emocional.html" 
+                   class="resource-card-bg-image" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/macaquinho-feliz2.png');">
+                    <div class="card-content">
+                        <h3>Meu Amigo Macaco</h3>
+                        <p>Aprenda a identificar e regular as emoções.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo de Lógica -->
+                <a href="recursos/jogo-logica.html" 
+                   class="resource-card-bg-image" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/logica-capa.png');">
+                    <div class="card-content">
+                        <h3>Desafio Sequencial</h3>
+                        <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo Fábrica de Emoções -->
+                <a href="recursos/jogo-fabrica-emocoes.html" 
+                   class="resource-card-bg-image" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/fabrica.png');">
+                    <div class="card-content">
+                        <h3>Fábrica de Emoções</h3>
+                        <p>Ajude os robôs a criarem e conhecerem as emoções básicas e complexas.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo de Lógica 2 -->
+                <a href="recursos/jogo-logica2.html" 
+                   class="resource-card-bg-image" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/padroes.png');">
+                    <div class="card-content">
+                        <h3>Desafio dos Padrões</h3>
+                        <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
+                    </div>
+                </a>
+
+            </div>
         </div>
     </section>
 </main>
@@ -289,12 +369,102 @@
     </div>
     <div class="footer-bottom">
         <div class="container">
-            <p>&copy; 2025 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
             <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
         </div>
     </div>
 </footer>
 
+    <!-- Lógica do Desafio Diário e Streak -->
+    <script>
+        const dailySchedule = [
+            { day: 0, name: "Domingo de Integração", title: "Construtor de Histórias", desc: "Estimule imaginação, regulação afetiva e narrativa interna.", link: "recursos/jogo-construtor-histórias.html", focus: "Lobo Temporal & Imaginação Narrativa" },
+            { day: 1, name: "Segunda de Foco Executivo", title: "Torre de Hanói", desc: "Estimule planejamento antecipatório e controle de impulsos.", link: "recursos/jogo-torre-hanoi.html", focus: "Córtex Pré-Frontal Dorsolateral" },
+            { day: 2, name: "Terça de Memória", title: "Sequência de Cores", desc: "Fortaleça a memória operacional e a atenção sustentada.", link: "recursos/jogo-sequencia-cores.html", focus: "Córtex Parietal & Hipocampo" },
+            { day: 3, name: "Quarta de Raciocínio", title: "Desafio dos Padrões", desc: "Treine dedução lógica, relações visuoespaciais e abstração.", link: "recursos/jogo-logica2.html", focus: "Raciocínio Fluido & Lobo Parietal" },
+            { day: 4, name: "Quinta de Velocidade", title: "Caça aos Orbs Coloridos", desc: "Treine reflexo atencional, inibição e precisão visual.", link: "recursos/jogo-caca-orbs.html", focus: "Atenção Seletiva & Gânglios da Base" },
+            { day: 5, name: "Sexta de Memória Espacial", title: "Memória Espacial", desc: "Mantenha coordenadas e retenção rápida sob pressão.", link: "recursos/jogo-memoria-espacial.html", focus: "Memória Visuoespacial & Lobo Frontal" },
+            { day: 6, name: "Sábado de Regulação", title: "Meu Amigo Macaco", desc: "Reconhecimento de estados fisiológicos e respiração.", link: "recursos/jogo-regulacao-emocional.html", focus: "Sistema Límbico & Cíngulo Anterior" }
+        ];
+
+        function initDailyChallenge() {
+            const today = new Date().getDay();
+            const challenge = dailySchedule[today];
+
+            document.getElementById('challenge-day-label').textContent = `Desafio de Hoje (${challenge.name})`;
+            document.getElementById('daily-game-title').textContent = challenge.title;
+            document.getElementById('daily-game-desc').textContent = challenge.desc;
+            document.getElementById('daily-game-focus').textContent = challenge.focus;
+            document.getElementById('btn-play-daily').href = challenge.link;
+
+            updateStreakDisplay();
+        }
+
+        function updateStreakDisplay() {
+            const todayStr = new Date().toISOString().slice(0, 10);
+            let streak = parseInt(localStorage.getItem('deo_game_streak') || '1');
+            const lastPlayed = localStorage.getItem('deo_game_last_played');
+
+            if (lastPlayed) {
+                const lastDate = new Date(lastPlayed);
+                const nowDate = new Date(todayStr);
+                const diffDays = Math.floor((nowDate - lastDate) / (1000 * 60 * 60 * 24));
+
+                if (diffDays > 1) {
+                    streak = 1; // quebrou a sequência
+                    localStorage.setItem('deo_game_streak', '1');
+                }
+            }
+
+            document.getElementById('streak-count').textContent = streak;
+            if (lastPlayed === todayStr) {
+                document.getElementById('streak-msg').textContent = '✅ Treino de hoje concluído!';
+            } else {
+                document.getElementById('streak-msg').textContent = 'Treine hoje para manter o fogo!';
+            }
+        }
+
+        function recordDailyPlay() {
+            const todayStr = new Date().toISOString().slice(0, 10);
+            const lastPlayed = localStorage.getItem('deo_game_last_played');
+            let streak = parseInt(localStorage.getItem('deo_game_streak') || '1');
+
+            if (lastPlayed !== todayStr) {
+                if (lastPlayed) {
+                    const lastDate = new Date(lastPlayed);
+                    const nowDate = new Date(todayStr);
+                    const diffDays = Math.floor((nowDate - lastDate) / (1000 * 60 * 60 * 24));
+                    if (diffDays === 1) {
+                        streak += 1;
+                    } else if (diffDays > 1) {
+                        streak = 1;
+                    }
+                }
+                localStorage.setItem('deo_game_streak', streak.toString());
+                localStorage.setItem('deo_game_last_played', todayStr);
+            }
+        }
+
+        function filterGames(category, btnElement) {
+            const buttons = document.querySelectorAll('.game-filter-btn');
+            buttons.forEach(b => b.classList.remove('active-filter'));
+            if (btnElement) btnElement.classList.add('active-filter');
+
+            const cards = document.querySelectorAll('#games-grid .resource-card-bg-image');
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all' || cardCat === category) {
+                    card.classList.remove('game-hidden');
+                } else {
+                    card.classList.add('game-hidden');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDailyChallenge();
+        });
+    </script>
     <script src="assets/script.js"></script>
 </body>
 </html>
