@@ -1,0 +1,2852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>O Diário de Bordo do Explorador de Dois Mundos</title>
+  <meta name="description" content="Recurso lúdico-terapêutico interativo para regulação emocional, descompressão e resolução de conflitos de lealdade para crianças." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & VARIÁVEIS
+       Paleta: Tons de ardósia, azul profundo, âmbar fosco e toques estelares
+       ========================================================================== */
+    :root {
+      --bg-space: #090d16;
+      --bg-panel: rgba(18, 25, 41, 0.78);
+      --bg-card: rgba(27, 38, 59, 0.65);
+      --bg-card-hover: rgba(36, 50, 78, 0.85);
+      --bg-input: rgba(13, 20, 36, 0.85);
+
+      --border-subtle: rgba(148, 163, 184, 0.14);
+      --border-accent: rgba(56, 189, 248, 0.35);
+      --border-amber: rgba(245, 158, 11, 0.4);
+
+      --color-text-main: #f1f5f9;
+      --color-text-muted: #94a3b8;
+      --color-text-dim: #64748b;
+
+      --accent-cyan: #38bdf8;
+      --accent-cyan-glow: rgba(56, 189, 248, 0.25);
+      --accent-amber: #f59e0b;
+      --accent-amber-light: #fbbf24;
+      --accent-amber-glow: rgba(245, 158, 11, 0.25);
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --accent-indigo: #818cf8;
+
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.45);
+      --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.15);
+      --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-space);
+      color: var(--color-text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Fundo estelar calmo em canvas */
+    #space-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Estrutura Principal */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 3rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       CABEÇALHO E BARRA DE FERRAMENTAS DO DIÁRIO
+       ========================================================================== */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.5rem;
+    }
+
+    .brand-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(245, 158, 11, 0.15));
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.55rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-full);
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: currentColor;
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .btn-ambient-audio, .btn-clear-session {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--color-text-muted);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-ambient-audio:hover, .btn-clear-session:hover {
+      background: var(--bg-card-hover);
+      color: var(--color-text-main);
+      border-color: var(--border-accent);
+    }
+
+    .btn-ambient-audio.active {
+      color: var(--accent-amber);
+      border-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.12);
+    }
+
+    /* ==========================================================================
+       ABAS DE NAVEGAÇÃO
+       ========================================================================== */
+    .tabs-nav {
+      display: flex;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 0.35rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 1.75rem;
+      gap: 0.35rem;
+      position: sticky;
+      top: 0.75rem;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      color: var(--color-text-muted);
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .tab-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2.2;
+    }
+
+    .tab-btn:hover {
+      color: var(--color-text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(30, 41, 59, 0.9));
+      color: #fff;
+      border: 1px solid var(--border-accent);
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Container de Conteúdo das Abas */
+    .tab-panel {
+      display: none;
+      animation: fadeInTab 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeInTab {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       ABA 1: MEDIDOR DE CARGA DA MOCHILA (SOBRECARGA AFETIVA)
+       ========================================================================== */
+    .backpack-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 860px) {
+      .backpack-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+    }
+
+    .card-header-simple {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-title-group h2 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .card-badge-count {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-full);
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    /* Painel do Robô e Estabilidade */
+    .robot-telemetry {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem;
+      background: rgba(11, 17, 30, 0.5);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+      margin-bottom: 1.25rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .robot-stage {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .gravity-field {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 2px dashed rgba(56, 189, 248, 0.3);
+      animation: rotateField 25s linear infinite;
+      transition: var(--transition-smooth);
+    }
+
+    @keyframes rotateField {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .robot-svg-wrap {
+      position: relative;
+      z-index: 2;
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Efeitos de Estabilidade baseados em peso */
+    .robot-stage.stability-light .robot-svg-wrap {
+      transform: translateY(-8px);
+      filter: drop-shadow(0 10px 14px rgba(56, 189, 248, 0.25));
+    }
+
+    .robot-stage.stability-medium .robot-svg-wrap {
+      transform: translateY(3px) rotate(-1.5deg);
+      filter: drop-shadow(0 6px 12px rgba(245, 158, 11, 0.25));
+    }
+
+    .robot-stage.stability-heavy .robot-svg-wrap {
+      transform: translateY(14px) rotate(-3.5deg);
+      filter: drop-shadow(0 4px 8px rgba(244, 63, 94, 0.3));
+    }
+
+    .stability-label-box {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      transition: var(--transition-smooth);
+    }
+
+    .stability-status-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+    }
+
+    .stability-status-desc {
+      font-size: 0.82rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    /* Medidor de Gravidade em Barra */
+    .gravity-gauge {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .gauge-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .gauge-track {
+      height: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      width: 15%;
+      background: linear-gradient(90deg, #38bdf8, #10b981);
+      border-radius: var(--radius-full);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.6s ease;
+    }
+
+    /* Zona da Mochila e do Solo */
+    .drop-zone {
+      min-height: 220px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px dashed rgba(148, 163, 184, 0.22);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-content: flex-start;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .drop-zone.drag-hover {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .drop-zone.backpack-zone {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.04);
+    }
+
+    .zone-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--color-text-dim);
+      font-size: 0.85rem;
+      padding: 2.5rem 1rem;
+      pointer-events: none;
+    }
+
+    .zone-placeholder svg {
+      width: 38px;
+      height: 38px;
+      margin-bottom: 0.6rem;
+      stroke: var(--color-text-dim);
+      opacity: 0.5;
+    }
+
+    /* Pedras de Carga */
+    .stone-item {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.9rem;
+      color: #e2e8f0;
+      font-size: 0.83rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    .stone-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-accent);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+    }
+
+    .stone-item:active {
+      cursor: grabbing;
+      transform: scale(0.97);
+    }
+
+    .stone-item.in-backpack {
+      background: linear-gradient(135deg, rgba(41, 33, 24, 0.9), rgba(27, 24, 18, 0.95));
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+    }
+
+    .stone-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: rgba(148, 163, 184, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    .stone-move-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+
+    .stone-move-btn:hover {
+      color: #fff;
+    }
+
+    /* Formulário de Nova Pedra */
+    .add-stone-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .input-clean {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.9rem;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      transition: var(--transition-smooth);
+    }
+
+    .input-clean:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .btn-action-primary {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 0.65rem 1rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action-primary:hover {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-action-secondary {
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--color-text-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 1rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action-secondary:hover {
+      background: rgba(148, 163, 184, 0.18);
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       ABA 2: A CÂMARA DE DESCOMPRESSÃO (EXTERNALIZAÇÃO E ALÍVIO)
+       ========================================================================== */
+    .decomp-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .decomp-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .submode-switch {
+      display: flex;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 1rem;
+    }
+
+    .submode-btn {
+      flex: 1;
+      padding: 0.5rem 0.8rem;
+      background: transparent;
+      border: none;
+      color: var(--color-text-muted);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: calc(var(--radius-md) - 3px);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: var(--transition-smooth);
+    }
+
+    .submode-btn.active {
+      background: var(--bg-card-hover);
+      color: #fff;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Quadro de Desenho */
+    .canvas-container {
+      position: relative;
+      background: #0d1424;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 0.85rem;
+      touch-action: none;
+    }
+
+    #drawCanvas {
+      display: block;
+      width: 100%;
+      height: 280px;
+      cursor: crosshair;
+    }
+
+    .canvas-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .color-swatches {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .color-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .color-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .color-btn.active {
+      border-color: #fff;
+      transform: scale(1.2);
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    /* Caixa de Texto do Pensamento */
+    .thought-text-wrap {
+      margin-bottom: 0.85rem;
+    }
+
+    .textarea-clean {
+      width: 100%;
+      height: 140px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      resize: vertical;
+      line-height: 1.5;
+      transition: var(--transition-smooth);
+    }
+
+    .textarea-clean:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Ações de Alívio */
+    .decomp-actions-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 500px) {
+      .decomp-actions-bar {
+        flex-direction: column;
+      }
+    }
+
+    .btn-seal-vault {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(71, 85, 105, 0.9), rgba(51, 65, 85, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #f8fafc;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-seal-vault:hover {
+      background: linear-gradient(135deg, rgba(100, 116, 139, 0.95), rgba(71, 85, 105, 0.95));
+      border-color: var(--accent-cyan);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-dissipate-orbit {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.85), rgba(180, 83, 9, 0.85));
+      border: 1px solid var(--border-amber);
+      color: #fff;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-dissipate-orbit:hover {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95));
+      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* O Cofre Criogênico Lateral */
+    .vault-capsule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 0.35rem;
+    }
+
+    .vault-capsule-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .vault-capsule-list::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.2);
+      border-radius: var(--radius-full);
+    }
+
+    .vault-item {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .vault-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-cyan);
+    }
+
+    .vault-item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .vault-item-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .vault-item-time {
+      font-size: 0.7rem;
+      color: var(--color-text-dim);
+    }
+
+    .vault-badge-locked {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    /* Modal de Respiração e Dissipação */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(6, 10, 18, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeInModal 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .breathing-modal-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), var(--shadow-glow);
+      position: relative;
+    }
+
+    .breathing-circle-wrap {
+      width: 200px;
+      height: 200px;
+      margin: 1.5rem auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .breathing-outer-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px dashed rgba(56, 189, 248, 0.3);
+    }
+
+    .breathing-core-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.7), rgba(14, 165, 233, 0.15));
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Animação do Guia Respiratório (4s in / 6s out) */
+    .breathing-core-circle.inhale {
+      transform: scale(1.8);
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.85), rgba(14, 165, 233, 0.3));
+      box-shadow: 0 0 45px rgba(56, 189, 248, 0.65);
+      transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .breathing-core-circle.exhale {
+      transform: scale(1.0);
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.7), rgba(217, 119, 6, 0.15));
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+      border-color: rgba(245, 158, 11, 0.5);
+      transition: transform 6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .breath-phase-text {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+
+    .breath-sub-text {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+      max-width: 380px;
+      margin: 0 auto 1.5rem auto;
+      line-height: 1.45;
+    }
+
+    /* Partículas de dissipação em órbita */
+    #orbitCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* ==========================================================================
+       ABA 3: O RADAR DAS DUAS BASES (CONFLITO DE TERRITÓRIO & NEUTRALIDADE)
+       ========================================================================== */
+    .radar-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .radar-instructions-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85));
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .radar-icon-info {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: var(--radius-md);
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-cyan);
+    }
+
+    .radar-info-text h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .radar-info-text p {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      line-height: 1.45;
+    }
+
+    /* A Tela Principal do Radar */
+    .radar-screen-container {
+      position: relative;
+      width: 100%;
+      height: 440px;
+      background: radial-gradient(circle at center, #101c33 0%, #090e1a 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8), var(--shadow-glow);
+    }
+
+    /* Linhas e Círculos do Radar */
+    .radar-grid-rings {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 380px;
+      height: 380px;
+      pointer-events: none;
+    }
+
+    .radar-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(56, 189, 248, 0.12);
+    }
+
+    .radar-ring.r1 { width: 100px; height: 100px; }
+    .radar-ring.r2 { width: 220px; height: 220px; }
+    .radar-ring.r3 { width: 360px; height: 360px; }
+
+    .radar-sweep-arm {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      transform-origin: top left;
+      background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.25) 0deg, transparent 65deg);
+      pointer-events: none;
+      animation: sweepRadar 8s linear infinite;
+    }
+
+    @keyframes sweepRadar {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* As Três Estações no Radar */
+    .base-node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-smooth);
+      z-index: 5;
+    }
+
+    .base-node:hover {
+      transform: scale(1.06);
+    }
+
+    .base-node-north {
+      top: 14%;
+      left: 20%;
+    }
+
+    .base-node-south {
+      bottom: 14%;
+      right: 20%;
+    }
+
+    .base-node-neutral {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .base-node-neutral:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .base-orb {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: var(--transition-smooth);
+    }
+
+    .base-node-north .base-orb {
+      background: radial-gradient(circle, #38bdf8 20%, #0369a1 80%);
+      border: 2px solid rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
+    }
+
+    .base-node-south .base-orb {
+      background: radial-gradient(circle, #fbbf24 20%, #b45309 80%);
+      border: 2px solid rgba(245, 158, 11, 0.6);
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+    }
+
+    .base-node-neutral .base-orb {
+      width: 82px;
+      height: 82px;
+      background: radial-gradient(circle, #10b981 15%, #064e3b 85%);
+      border: 3px solid rgba(52, 211, 153, 0.8);
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Escudo de Neutralidade em volta do Posto */
+    .neutral-shield-halo {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 2px solid rgba(52, 211, 153, 0.4);
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      animation: shieldPulse 3s ease-in-out infinite;
+      display: none;
+    }
+
+    .neutral-shield-halo.active {
+      display: block;
+    }
+
+    @keyframes shieldPulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 1; border-color: rgba(52, 211, 153, 0.8); }
+    }
+
+    .base-tag {
+      margin-top: 0.4rem;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    /* Linhas de Comunicação no Radar */
+    .comm-path-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* Mensagem Interativa Bloqueada no Radar */
+    .radar-alert-toast {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--accent-cyan);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 1.2rem;
+      font-size: 0.85rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      z-index: 20;
+      animation: slideUpToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpToast {
+      from { transform: translate(-50%, 15px); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    /* Controles e Simulador de Recados no Radar */
+    .radar-controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 820px) {
+      .radar-controls-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Lista de Itens do Posto Seguro */
+    .comfort-items-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .comfort-chip {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      user-select: none;
+      transition: var(--transition-smooth);
+    }
+
+    .comfort-chip:hover {
+      border-color: rgba(52, 211, 153, 0.5);
+      color: #fff;
+    }
+
+    .comfort-chip.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: #10b981;
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    /* Simulador de Mensagem Adulta Interativa */
+    .transmission-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-amber);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .transmission-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--accent-amber-light);
+      font-weight: 600;
+    }
+
+    .transmission-text {
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+      font-style: italic;
+      padding: 0.4rem 0.6rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid var(--accent-amber);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .transmission-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-return-origin {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.3));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.82rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-return-origin:hover {
+      background: rgba(16, 185, 129, 0.3);
+      border-color: #10b981;
+      color: #fff;
+    }
+
+    /* Rodapé Discreto */
+    .app-footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--color-text-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fundo Estelar Dinâmico -->
+  <canvas id="space-backdrop"></canvas>
+
+  <div class="app-container">
+
+    <!-- Cabeçalho Principal -->
+    <header class="header-bar">
+      <div class="brand-meta">
+        <div class="brand-icon-wrap" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">O Diário de Bordo do Explorador</h1>
+          <div class="brand-subtitle">
+            <span>Sessão do Robô Navegador</span>
+            <span>•</span>
+            <span class="badge-status">
+              <span class="pulse-dot"></span> Modo Protegido Ativo
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="audioToggleBtn" class="btn-ambient-audio" title="Sons Calmos do Espaço Profundo" aria-label="Ligar som ambiente">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span id="audioLabel">Som Calmo</span>
+        </button>
+
+        <button id="clearAllBtn" class="btn-clear-session" title="Apagar todos os registros da sessão" aria-label="Esvaziar tudo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Esvaziar Sessão</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Barra de Navegação por Abas -->
+    <nav class="tabs-nav" aria-label="Seções do Diário">
+      <button class="tab-btn active" data-tab="tab-backpack" id="tabBtnBackpack">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="4" width="14" height="17" rx="2"></rect>
+          <path d="M9 4V2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+          <path d="M9 11h6"></path>
+        </svg>
+        <span>1. Status da Carga</span>
+      </button>
+
+      <button class="tab-btn" data-tab="tab-decomp" id="tabBtnDecomp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+        <span>2. Câmara de Descompressão</span>
+      </button>
+
+      <button class="tab-btn" data-tab="tab-radar" id="tabBtnRadar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="2" x2="12" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+        </svg>
+        <span>3. Radar das Duas Bases</span>
+      </button>
+    </nav>
+
+    <!-- ==========================================================================
+         PAINEL 1: O MEDIDOR DE CARGA DA MOCHILA (SOBRECARGA AFETIVA)
+         ========================================================================== -->
+    <section id="tab-backpack" class="tab-panel active">
+      <div class="backpack-grid">
+
+        <!-- Coluna Esquerda: O Robô Navegador & Estabilidade -->
+        <div class="panel-card">
+          <div class="card-header-simple">
+            <div class="card-title-group">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);">
+                <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                <circle cx="12" cy="5" r="2"></circle>
+                <path d="M12 7v4"></path>
+                <line x1="8" y1="16" x2="8" y2="16"></line>
+                <line x1="16" y1="16" x2="16" y2="16"></line>
+              </svg>
+              <h2>Estabilidade do Robô Navegador</h2>
+            </div>
+            <span class="card-badge-count" id="backpackCountBadge">0 Pedras</span>
+          </div>
+
+          <div class="robot-telemetry">
+            <div class="robot-stage stability-light" id="robotStage">
+              <div class="gravity-field" id="gravityField"></div>
+
+              <!-- SVG do Robô Navegador Minimalista e Acolhedor -->
+              <div class="robot-svg-wrap" id="robotGraphic">
+                <svg width="110" height="110" viewBox="0 0 100 100" fill="none">
+                  <!-- Antena -->
+                  <circle cx="50" cy="14" r="5" fill="#38bdf8" />
+                  <path d="M50 19V28" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+
+                  <!-- Cabeça -->
+                  <rect x="25" y="28" width="50" height="34" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" />
+                  <!-- Visor / Olhos Expressivos Calmos -->
+                  <rect x="33" y="36" width="34" height="16" rx="6" fill="#0b1329" />
+                  <circle id="robotEyeL" cx="42" cy="44" r="3.5" fill="#38bdf8" />
+                  <circle id="robotEyeR" cx="58" cy="44" r="3.5" fill="#38bdf8" />
+
+                  <!-- Corpo -->
+                  <rect x="28" y="66" width="44" height="22" rx="7" fill="#1e293b" stroke="#64748b" stroke-width="2" />
+                  <circle cx="50" cy="77" r="4" fill="#38bdf8" opacity="0.8" />
+
+                  <!-- Propulsores / Flutuação -->
+                  <path id="thrusterGlow" d="M42 89C42 89 46 98 50 98C54 98 58 89 58 89" fill="rgba(56, 189, 248, 0.6)" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Caixa de Leitura Neutra (Sem Julgamento Moral) -->
+            <div class="stability-label-box" id="stabilityBox">
+              <div class="stability-status-title" id="stabilityTitle">
+                <span style="color: #38bdf8;">●</span> Carga Leve • Propulsores Livres
+              </div>
+              <p class="stability-status-desc" id="stabilityDesc">
+                O Robô Navegador está deslizando com leveza. Você não precisa carregar pesos que não são seus.
+              </p>
+            </div>
+
+            <!-- Barra Medidora de Gravidade -->
+            <div class="gravity-gauge">
+              <div class="gauge-labels">
+                <span>Pressão de Voo</span>
+                <span id="gaugeValueText">0 / 100 G-Units</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill" id="gaugeFill" style="width: 10%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- A Mochila de Gravidade (Área de Soltura) -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <div style="font-size: 0.88rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.4rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="4" width="14" height="17" rx="2"></rect>
+              </svg>
+              Dentro da Mochila de Gravidade
+            </div>
+            <button id="emptyBackpackBtn" class="btn-action-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" title="Aliviar mochila">
+              Esvaziar para a Plataforma
+            </button>
+          </div>
+
+          <div class="drop-zone backpack-zone" id="backpackDropZone" data-target="backpack">
+            <div class="zone-placeholder" id="backpackPlaceholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+              <span>A mochila está vazia e leve.<br>Arraste ou clique numa pedra abaixo para colocar aqui se quiser observar seu peso.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Plataforma de Pedras & Criação -->
+        <div class="panel-card">
+          <div class="card-header-simple">
+            <div class="card-title-group">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-amber);">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <h2>Plataforma de Descarte / Solo da Estação</h2>
+            </div>
+            <span class="card-badge-count" id="stationCountBadge">6 Disponíveis</span>
+          </div>
+
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.45;">
+            Estas pedras representam coisas pesadas do mundo. O explorador decide o que quer segurar e o que prefere deixar do lado de fora no chão seguro.
+          </p>
+
+          <!-- Solo da Estação (Área de Soltura) -->
+          <div class="drop-zone station-zone" id="stationDropZone" data-target="station">
+            <!-- As pedras serão geradas dinamicamente via JS -->
+          </div>
+
+          <!-- Formulário para Criar Etiqueta Personalizada -->
+          <div style="margin-top: 1.25rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+            <label for="customStoneInput" style="font-size: 0.8rem; font-weight: 600; color: #fff; margin-bottom: 0.35rem; display: block;">
+              Dar nome a uma nova pedra de carga:
+            </label>
+            <form id="addStoneForm" class="add-stone-form" onsubmit="return false;">
+              <input type="text" id="customStoneInput" class="input-clean" placeholder="Ex.: Preocupação com a lição, Briga lá fora..." maxlength="36" />
+              <button type="submit" id="addStoneSubmitBtn" class="btn-action-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Criar</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PAINEL 2: A CÂMARA DE DESCOMPRESSÃO (EXTERNALIZAÇÃO E ALÍVIO)
+         ========================================================================== -->
+    <section id="tab-decomp" class="tab-panel">
+      <div class="decomp-grid">
+
+        <!-- Lado Esquerdo: Área de Externalização (Texto ou Desenho) -->
+        <div class="panel-card">
+          <div class="card-header-simple">
+            <div class="card-title-group">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <h2>Ponto de Externalização</h2>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Expressão Segura</span>
+          </div>
+
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.45;">
+            Quando um pensamento pesado ou o "Monstro da Voz Chata" aparecer, tire-o da sua mente e coloque-o aqui. Ele não tem mais poder sobre você.
+          </p>
+
+          <!-- Alternador: Desenho ou Digitação -->
+          <div class="submode-switch">
+            <button id="modeDrawBtn" class="submode-btn active" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                <path d="M2 2l7.586 7.586"></path>
+                <circle cx="11" cy="11" r="2"></circle>
+              </svg>
+              <span>Desenhar o Monstro / Pensamento</span>
+            </button>
+            <button id="modeTextBtn" class="submode-btn" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                <line x1="9" y1="20" x2="15" y2="20"></line>
+                <line x1="12" y1="4" x2="12" y2="20"></line>
+              </svg>
+              <span>Digitar o que ele sussurra</span>
+            </button>
+          </div>
+
+          <!-- Modo Desenho (HTML5 Canvas Nativo) -->
+          <div id="drawSection">
+            <div class="canvas-container">
+              <canvas id="drawCanvas" width="600" height="280"></canvas>
+            </div>
+            <div class="canvas-toolbar">
+              <div class="color-swatches">
+                <button class="color-btn active" data-color="#f8fafc" style="background: #f8fafc;" title="Branco Estelar"></button>
+                <button class="color-btn" data-color="#38bdf8" style="background: #38bdf8;" title="Ciano Cósmico"></button>
+                <button class="color-btn" data-color="#f59e0b" style="background: #f59e0b;" title="Âmbar"></button>
+                <button class="color-btn" data-color="#818cf8" style="background: #818cf8;" title="Nebulosa Violeta"></button>
+                <button class="color-btn" data-color="#f43f5e" style="background: #f43f5e;" title="Rubi"></button>
+                <button class="color-btn" data-color="#0d1424" style="background: #0d1424; border: 1px solid #475569;" title="Borracha Cósmica"></button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="range" id="brushSize" min="2" max="24" value="5" title="Espessura do Traço" style="accent-color: var(--accent-cyan); width: 80px;" />
+                <button id="clearCanvasBtn" class="btn-action-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;">
+                  Limpar Traço
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modo Texto -->
+          <div id="textSection" style="display: none;">
+            <div class="thought-text-wrap">
+              <textarea id="thoughtText" class="textarea-clean" placeholder="O Monstro do Pensamento Ruim diz coisas como: 'você fez errado', 'tudo vai dar ruim', 'a culpa é sua'..."></textarea>
+            </div>
+          </div>
+
+          <!-- Barra de Ações de Descompressão -->
+          <div class="decomp-actions-bar">
+            <button id="sealVaultBtn" class="btn-seal-vault">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Lacrar no Cofre</span>
+            </button>
+
+            <button id="dissipateOrbitBtn" class="btn-dissipate-orbit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+              </svg>
+              <span>Dissipar no Espaço (Respirar)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lado Direito: O Cofre Temporário Criogênico -->
+        <div class="panel-card">
+          <div class="card-header-simple">
+            <div class="card-title-group">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <h2>Cofre Criogênico Selado</h2>
+            </div>
+            <span class="card-badge-count" id="vaultCountBadge">0 Itens</span>
+          </div>
+
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.45;">
+            Os itens abaixo estão trancados com chave digital. Eles não têm acesso aos controles da nave e não podem te incomodar.
+          </p>
+
+          <div class="vault-capsule-list" id="vaultList">
+            <div style="text-align: center; padding: 2.5rem 1rem; color: var(--color-text-dim); font-size: 0.85rem;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 0.5rem; opacity: 0.5;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <div>Nenhum pensamento precisou ser trancado ainda. O cofre está pronto caso você queira.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         PAINEL 3: O RADAR DAS DUAS BASES (CONFLITO DE TERRITÓRIO & NEUTRALIDADE)
+         ========================================================================== -->
+    <section id="tab-radar" class="tab-panel">
+      <div class="radar-wrapper">
+
+        <!-- Banner de Orientação Clara e Neutra -->
+        <div class="radar-instructions-card">
+          <div class="radar-icon-info">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <shield-icon>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </shield-icon>
+            </svg>
+          </div>
+          <div class="radar-info-text">
+            <h3>Regra Primária de Navegação: Você tem direito à sua própria Base</h3>
+            <p>
+              A <strong>Base Norte</strong> e a <strong>Base Sul</strong> são planetas dos adultos. No meio fica o seu <strong>Posto Neutro</strong>. Você <em>não é carteiro nem mensageiro</em> de nenhuma base. O que acontece nos outros mundos não precisa viajar com você.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tela Principal do Radar -->
+        <div class="radar-screen-container" id="radarScreen">
+          <!-- Canvas de Partículas / Feixes de Radar -->
+          <canvas id="radarPulseCanvas" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none;"></canvas>
+
+          <!-- Grade de Círculos -->
+          <div class="radar-grid-rings">
+            <div class="radar-ring r1"></div>
+            <div class="radar-ring r2"></div>
+            <div class="radar-ring r3"></div>
+            <div class="radar-sweep-arm"></div>
+          </div>
+
+          <!-- SVG de Conexões de Rota (Linhas pontilhadas neutras) -->
+          <svg class="comm-path-svg">
+            <line x1="24%" y1="22%" x2="50%" y2="50%" stroke="rgba(56, 189, 248, 0.25)" stroke-width="2" stroke-dasharray="6,6"></line>
+            <line x1="76%" y1="78%" x2="50%" y2="50%" stroke="rgba(245, 158, 11, 0.25)" stroke-width="2" stroke-dasharray="6,6"></line>
+          </svg>
+
+          <!-- Base Norte (Planeta Aurora / Metáfora Neutra 1) -->
+          <div class="base-node base-node-north" id="baseNorth" title="Base Norte: O mundo deles de lá">
+            <div class="base-orb">
+              <span>🪐</span>
+            </div>
+            <div class="base-tag">Base Norte</div>
+          </div>
+
+          <!-- Base Sul (Planeta Crepúsculo / Metáfora Neutra 2) -->
+          <div class="base-node base-node-south" id="baseSouth" title="Base Sul: O mundo deles de cá">
+            <div class="base-orb">
+              <span>🌙</span>
+            </div>
+            <div class="base-tag">Base Sul</div>
+          </div>
+
+          <!-- Posto Neutro do Explorador (No Centro Seguro) -->
+          <div class="base-node base-node-neutral" id="baseNeutral" title="Seu Posto Seguro e Pessoal">
+            <div class="neutral-shield-halo active" id="shieldHalo"></div>
+            <div class="base-orb">
+              <span>🛸</span>
+            </div>
+            <div class="base-tag" style="border-color: #10b981; color: #34d399; font-weight: 700;">
+              Meu Posto Neutro
+            </div>
+          </div>
+
+          <!-- Notificação Dinâmica de Bloqueio de Transmissão -->
+          <div class="radar-alert-toast" id="radarToast" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #34d399;">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span id="radarToastText">Escudo ativado: Mensagens de adultos não passam por aqui.</span>
+          </div>
+        </div>
+
+        <!-- Grade Inferior: Simulador de Descarte de Recados e Itens do Posto -->
+        <div class="radar-controls-grid">
+
+          <!-- Coluna 1: O Que Pertence ao Meu Posto Seguro -->
+          <div class="panel-card">
+            <div class="card-header-simple">
+              <div class="card-title-group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <h2>Aconchego do Meu Posto</h2>
+              </div>
+              <span style="font-size: 0.75rem; color: var(--color-text-muted);">Coisas só minhas</span>
+            </div>
+
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.45;">
+              No seu posto você pode guardar apenas o que te faz bem e te protege. Toque para ativar na sua estação:
+            </p>
+
+            <div class="comfort-items-wrap" id="comfortItemsList">
+              <button class="comfort-chip active" data-item="musica">🎧 Fone com Minha Música</button>
+              <button class="comfort-chip active" data-item="livro">📚 Livros e Histórias</button>
+              <button class="comfort-chip active" data-item="brinquedo">🧸 Mascote Espacial</button>
+              <button class="comfort-chip" data-item="desenho">🎨 Folhas de Desenho</button>
+              <button class="comfort-chip" data-item="luz">💡 Luz Suave Quentinha</button>
+              <button class="comfort-chip" data-item="silencio">🌌 Momento de Silêncio</button>
+              <button class="comfort-chip" data-item="lanche">🍎 Lanche Favorito</button>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Devolução de Mensagens de Adultos -->
+          <div class="panel-card">
+            <div class="card-header-simple">
+              <div class="card-title-group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-amber);">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                <h2>Devolver Encomendas dos Adultos</h2>
+              </div>
+              <span class="badge-status" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">
+                Não é Seu
+              </span>
+            </div>
+
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 0.85rem; line-height: 1.45;">
+              Tentaram colocar uma mensagem de briga ou cobrança na sua nave? Você pode devolver para a base deles agora mesmo:
+            </p>
+
+            <div class="transmission-card" id="currentTransmissionCard">
+              <div class="transmission-header">
+                <span id="transmissionOriginTag">📡 Transmissão detectada de fora</span>
+                <span style="font-size: 0.7rem; color: var(--color-text-dim);">Recado de Adultos</span>
+              </div>
+              <div class="transmission-text" id="transmissionText">
+                "Diga lá na outra base que eles esqueceram de pagar e que fizeram tudo errado!"
+              </div>
+              <div class="transmission-actions">
+                <button id="returnOriginBtn" class="btn-return-origin">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 14 4 9 9 4"></polyline>
+                    <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+                  </svg>
+                  <span>Devolver para a Base de Origem</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-top: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.78rem; color: var(--color-text-muted);">Outras mensagens para treinar:</span>
+              <button id="nextTransmissionBtn" class="btn-action-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">
+                Próxima Mensagem
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Rodapé Discreto -->
+    <footer class="app-footer">
+      <div class="footer-badge">
+        <span>O Diário de Bordo do Explorador</span> • <span>Ambiente Seguro Volátil</span>
+      </div>
+      <div>Nenhum dado é enviado para servidores. Seus registros pertencem apenas à sua sessão.</div>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================================================
+       MODAL DE DISSIPAÇÃO CÓSMICA & TIMER RESPIRATÓRIO (4s In / 6s Out)
+       ========================================================================== -->
+  <div class="modal-overlay" id="breathingModal" role="dialog" aria-modal="true">
+    <div class="breathing-modal-card">
+      <canvas id="orbitCanvas"></canvas>
+
+      <div style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-cyan); font-weight: 700;">
+        Câmara de Alívio Gravitacional
+      </div>
+
+      <div class="breathing-circle-wrap">
+        <div class="breathing-outer-ring"></div>
+        <div class="breathing-core-circle" id="breathCore">
+          <span id="breathCounter">4</span>
+        </div>
+      </div>
+
+      <div class="breath-phase-text" id="breathPhaseTitle">Inspire ar puro...</div>
+      <p class="breath-sub-text" id="breathPhaseDesc">
+        Puxe o ar suavemente pelo nariz enquanto o círculo se expande (4 segundos).
+      </p>
+
+      <button id="closeBreathingModalBtn" class="btn-action-secondary" style="margin-top: 0.5rem; display: none;">
+        Concluir e Voltar ao Diário
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT EMBUTIDO (SEM DEPENDÊNCIAS EXTERNAS)
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       1. SISTEMA DE ÁUDIO CALMO DO ESPAÇO PROFUNDO (WEB AUDIO API NATIVA)
+       Sem arquivos externos: sintetizador suave de ruído cósmico e sinos calmos
+       ========================================================================== */
+    class SpaceAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.masterGain = null;
+        this.filter = null;
+        this.noiseNode = null;
+      }
+
+      init() {
+        if (this.ctx) return;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioContext();
+
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+        this.masterGain.connect(this.ctx.destination);
+
+        // Filtro passa-baixa ultra suave para simular atmosfera de cabine espacial
+        this.filter = this.ctx.createBiquadFilter();
+        this.filter.type = 'lowpass';
+        this.filter.frequency.setValueAtTime(220, this.ctx.currentTime);
+        this.filter.connect(this.masterGain);
+
+        // Gerador de Ruído Rosa/Marrom Calmo (Deep Brown Noise)
+        const bufferSize = this.ctx.sampleRate * 2;
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+          b6 = white * 0.115926;
+        }
+
+        this.noiseNode = this.ctx.createBufferSource();
+        this.noiseNode.buffer = noiseBuffer;
+        this.noiseNode.loop = true;
+        this.noiseNode.connect(this.filter);
+        this.noiseNode.start();
+      }
+
+      toggle() {
+        if (!this.ctx) {
+          this.init();
+          this.isPlaying = true;
+          return true;
+        }
+
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+          this.isPlaying = true;
+          return true;
+        }
+
+        if (this.isPlaying) {
+          this.masterGain.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 0.6);
+          setTimeout(() => {
+            if (this.ctx && !this.isPlaying) this.ctx.suspend();
+          }, 650);
+          this.isPlaying = false;
+          return false;
+        } else {
+          this.ctx.resume();
+          this.masterGain.gain.linearRampToValueAtTime(0.06, this.ctx.currentTime + 0.6);
+          this.isPlaying = true;
+          return true;
+        }
+      }
+
+      playSealTone() {
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.5);
+          gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.52);
+        } catch (e) {}
+      }
+
+      playChimeTone() {
+        if (!this.ctx) return;
+        try {
+          const freqs = [523.25, 659.25];
+          freqs.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.1);
+            gain.gain.setValueAtTime(0.04, this.ctx.currentTime + idx * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + idx * 0.1 + 0.8);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(this.ctx.currentTime + idx * 0.1);
+            osc.stop(this.ctx.currentTime + idx * 0.1 + 0.85);
+          });
+        } catch (e) {}
+      }
+    }
+
+    const audioEngine = new SpaceAudioEngine();
+
+    /* ==========================================================================
+       2. FUNDO ESTELAR INTERATIVO EM CANVAS
+       ========================================================================== */
+    const spaceCanvas = document.getElementById('space-backdrop');
+    const spaceCtx = spaceCanvas.getContext('2d');
+    let stars = [];
+    const NUM_STARS = 120;
+
+    function resizeSpaceCanvas() {
+      spaceCanvas.width = window.innerWidth;
+      spaceCanvas.height = window.innerHeight;
+      stars = [];
+      for (let i = 0; i < NUM_STARS; i++) {
+        stars.push({
+          x: Math.random() * spaceCanvas.width,
+          y: Math.random() * spaceCanvas.height,
+          size: Math.random() * 1.6 + 0.4,
+          speed: Math.random() * 0.15 + 0.05,
+          alpha: Math.random() * 0.7 + 0.2,
+          pulseSpeed: Math.random() * 0.02 + 0.01
+        });
+      }
+    }
+
+    function animateStars() {
+      spaceCtx.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height);
+      for (let s of stars) {
+        s.y -= s.speed;
+        if (s.y < 0) s.y = spaceCanvas.height;
+        s.alpha += Math.sin(Date.now() * 0.001 * s.pulseSpeed) * 0.01;
+        const clampedAlpha = Math.max(0.1, Math.min(0.9, s.alpha));
+
+        spaceCtx.fillStyle = `rgba(226, 232, 240, ${clampedAlpha})`;
+        spaceCtx.beginPath();
+        spaceCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        spaceCtx.fill();
+      }
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', resizeSpaceCanvas);
+    resizeSpaceCanvas();
+    animateStars();
+
+    /* ==========================================================================
+       3. NAVEGAÇÃO POR ABAS
+       ========================================================================== */
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTabId = btn.getAttribute('data-tab');
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetPanel = document.getElementById(targetTabId);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+          if (targetTabId === 'tab-decomp') {
+            resizeDrawCanvas();
+          }
+        }
+      });
+    });
+
+    /* ==========================================================================
+       4. ESTADO DA APLICAÇÃO & PERSISTÊNCIA VOLÁTIL LOCAL
+       ========================================================================== */
+    const STORAGE_KEY = 'diario_explorador_session_v1';
+
+    const DEFAULT_STONES = [
+      { id: 'st_1', text: 'Barulho dos Adultos', inBackpack: false, icon: '📢' },
+      { id: 'st_2', text: 'Segredo Pesado', inBackpack: false, icon: '🔒' },
+      { id: 'st_3', text: 'Vontade de Sumir', inBackpack: false, icon: '🌫️' },
+      { id: 'st_4', text: 'Pensamento Ruim / Intrusivo', inBackpack: false, icon: '⚡' },
+      { id: 'st_5', text: 'Comida sem Vontade', inBackpack: false, icon: '🥣' },
+      { id: 'st_6', text: 'Bateria Fraca / Cansaço', inBackpack: false, icon: '🔋' }
+    ];
+
+    let appState = {
+      stones: JSON.parse(JSON.stringify(DEFAULT_STONES)),
+      vaultItems: [],
+      comfortItems: ['musica', 'livro', 'brinquedo'],
+      shieldActive: true,
+      currentTransmissionIdx: 0
+    };
+
+    function loadState() {
+      try {
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          appState = Object.assign(appState, parsed);
+        }
+      } catch (e) {}
+    }
+
+    function saveState() {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       5. MECÂNICA DA MOCHILA & ESTABILIDADE DO ROBÔ
+       ========================================================================== */
+    const stationDropZone = document.getElementById('stationDropZone');
+    const backpackDropZone = document.getElementById('backpackDropZone');
+    const backpackPlaceholder = document.getElementById('backpackPlaceholder');
+    const robotStage = document.getElementById('robotStage');
+    const stabilityTitle = document.getElementById('stabilityTitle');
+    const stabilityDesc = document.getElementById('stabilityDesc');
+    const gaugeFill = document.getElementById('gaugeFill');
+    const gaugeValueText = document.getElementById('gaugeValueText');
+    const backpackCountBadge = document.getElementById('backpackCountBadge');
+    const stationCountBadge = document.getElementById('stationCountBadge');
+
+    function renderStones() {
+      stationDropZone.innerHTML = '';
+      const backpackStones = appState.stones.filter(s => s.inBackpack);
+      const stationStones = appState.stones.filter(s => !s.inBackpack);
+
+      backpackCountBadge.textContent = `${backpackStones.length} Pedra${backpackStones.length === 1 ? '' : 's'}`;
+      stationCountBadge.textContent = `${stationStones.length} Disponíveis`;
+
+      // Renderiza pedras na plataforma (solo)
+      stationStones.forEach(stone => {
+        stationDropZone.appendChild(createStoneElement(stone));
+      });
+
+      // Renderiza pedras na mochila
+      const existingInBackpack = backpackDropZone.querySelectorAll('.stone-item');
+      existingInBackpack.forEach(el => el.remove());
+
+      if (backpackStones.length === 0) {
+        backpackPlaceholder.style.display = 'flex';
+      } else {
+        backpackPlaceholder.style.display = 'none';
+        backpackStones.forEach(stone => {
+          backpackDropZone.appendChild(createStoneElement(stone));
+        });
+      }
+
+      updateRobotStability(backpackStones.length);
+      saveState();
+    }
+
+    function createStoneElement(stone) {
+      const el = document.createElement('div');
+      el.className = `stone-item ${stone.inBackpack ? 'in-backpack' : ''}`;
+      el.id = `stone-${stone.id}`;
+      el.setAttribute('draggable', 'true');
+
+      el.innerHTML = `
+        <span class="stone-icon">${stone.icon || '💎'}</span>
+        <span class="stone-text">${stone.text}</span>
+        <button class="stone-move-btn" title="${stone.inBackpack ? 'Tirar da mochila' : 'Colocar na mochila'}" aria-label="Mover pedra">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            ${stone.inBackpack ? '<line x1="5" y1="12" x2="19" y2="12"></line>' : '<polyline points="18 15 12 9 6 15"></polyline>'}
+          </svg>
+        </button>
+      `;
+
+      // Clique para alternar entre mochila e estação com facilidade em celulares/tablets
+      el.addEventListener('click', (e) => {
+        toggleStonePosition(stone.id);
+      });
+
+      // Drag and Drop nativo
+      el.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', stone.id);
+        e.dataTransfer.effectAllowed = 'move';
+        el.style.opacity = '0.5';
+      });
+
+      el.addEventListener('dragend', () => {
+        el.style.opacity = '1';
+      });
+
+      return el;
+    }
+
+    function toggleStonePosition(stoneId) {
+      const stone = appState.stones.find(s => s.id === stoneId);
+      if (stone) {
+        stone.inBackpack = !stone.inBackpack;
+        audioEngine.playChimeTone();
+        renderStones();
+      }
+    }
+
+    function setupDragAndDrop() {
+      const zones = [stationDropZone, backpackDropZone];
+
+      zones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          zone.classList.add('drag-hover');
+        });
+
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('drag-hover');
+        });
+
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          zone.classList.remove('drag-hover');
+          const stoneId = e.dataTransfer.getData('text/plain');
+          const targetIsBackpack = zone.getAttribute('data-target') === 'backpack';
+          const stone = appState.stones.find(s => s.id === stoneId);
+
+          if (stone && stone.inBackpack !== targetIsBackpack) {
+            stone.inBackpack = targetIsBackpack;
+            audioEngine.playChimeTone();
+            renderStones();
+          }
+        });
+      });
+    }
+
+    function updateRobotStability(weightCount) {
+      robotStage.classList.remove('stability-light', 'stability-medium', 'stability-heavy');
+
+      const thruster = document.getElementById('thrusterGlow');
+      const eyeL = document.getElementById('robotEyeL');
+      const eyeR = document.getElementById('robotEyeR');
+
+      if (weightCount === 0) {
+        robotStage.classList.add('stability-light');
+        stabilityTitle.innerHTML = '<span style="color: #38bdf8;">●</span> Carga Zero • Propulsores Livres';
+        stabilityDesc.textContent = 'O Robô Navegador está deslizando com total leveza. Você não precisa carregar pesos que não são seus.';
+        gaugeFill.style.width = '10%';
+        gaugeFill.style.background = 'linear-gradient(90deg, #38bdf8, #10b981)';
+        gaugeValueText.textContent = '10 / 100 G-Units';
+        thruster.setAttribute('fill', 'rgba(56, 189, 248, 0.7)');
+        eyeL.setAttribute('fill', '#38bdf8');
+        eyeR.setAttribute('fill', '#38bdf8');
+      } else if (weightCount <= 2) {
+        robotStage.classList.add('stability-light');
+        stabilityTitle.innerHTML = '<span style="color: #10b981;">●</span> Carga Tranquila • Voo Estável';
+        stabilityDesc.textContent = 'A nave consegue carregar isso com tranquilidade, mas lembre-se: você pode pousar as pedras quando cansar.';
+        gaugeFill.style.width = '35%';
+        gaugeFill.style.background = 'linear-gradient(90deg, #38bdf8, #10b981)';
+        gaugeValueText.textContent = '35 / 100 G-Units';
+        thruster.setAttribute('fill', 'rgba(56, 189, 248, 0.75)');
+        eyeL.setAttribute('fill', '#38bdf8');
+        eyeR.setAttribute('fill', '#38bdf8');
+      } else if (weightCount <= 4) {
+        robotStage.classList.add('stability-medium');
+        stabilityTitle.innerHTML = '<span style="color: #f59e0b;">●</span> Carga Notável • Motores Aquecendo';
+        stabilityDesc.textContent = 'Os sensores mostram esforço extra. Se você estiver sentindo cansaço, retire algumas pedras para descansar.';
+        gaugeFill.style.width = '68%';
+        gaugeFill.style.background = 'linear-gradient(90deg, #10b981, #f59e0b)';
+        gaugeValueText.textContent = '68 / 100 G-Units';
+        thruster.setAttribute('fill', 'rgba(245, 158, 11, 0.85)');
+        eyeL.setAttribute('fill', '#fbbf24');
+        eyeR.setAttribute('fill', '#fbbf24');
+      } else {
+        robotStage.classList.add('stability-heavy');
+        stabilityTitle.innerHTML = '<span style="color: #f43f5e;">●</span> Nave com excesso de peso externo';
+        stabilityDesc.textContent = 'Atenção aos sensores: Não é sua culpa carregar tudo isso. É muito peso para um explorador só. Deixe algumas no solo.';
+        gaugeFill.style.width = '96%';
+        gaugeFill.style.background = 'linear-gradient(90deg, #f59e0b, #f43f5e)';
+        gaugeValueText.textContent = '96 / 100 G-Units';
+        thruster.setAttribute('fill', 'rgba(244, 63, 94, 0.9)');
+        eyeL.setAttribute('fill', '#f43f5e');
+        eyeR.setAttribute('fill', '#f43f5e');
+      }
+    }
+
+    // Adicionar nova pedra personalizada
+    const addStoneForm = document.getElementById('addStoneForm');
+    const customStoneInput = document.getElementById('customStoneInput');
+
+    addStoneForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = customStoneInput.value.trim();
+      if (!text) return;
+
+      const newStone = {
+        id: 'custom_' + Date.now(),
+        text: text,
+        inBackpack: false,
+        icon: '🪨'
+      };
+
+      appState.stones.push(newStone);
+      customStoneInput.value = '';
+      renderStones();
+    });
+
+    document.getElementById('emptyBackpackBtn').addEventListener('click', () => {
+      appState.stones.forEach(s => s.inBackpack = false);
+      audioEngine.playChimeTone();
+      renderStones();
+    });
+
+    /* ==========================================================================
+       6. A CÂMARA DE DESCOMPRESSÃO (CANVAS DE DESENHO, TEXTO & COFRE)
+       ========================================================================== */
+    const drawCanvas = document.getElementById('drawCanvas');
+    const drawCtx = drawCanvas.getContext('2d');
+    let isDrawing = false;
+    let brushColor = '#f8fafc';
+    let brushSize = 5;
+
+    function resizeDrawCanvas() {
+      const rect = drawCanvas.parentElement.getBoundingClientRect();
+      if (rect.width > 0 && drawCanvas.width !== rect.width) {
+        // Salva imagem atual antes de redimensionar
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = drawCanvas.width;
+        tempCanvas.height = drawCanvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(drawCanvas, 0, 0);
+
+        drawCanvas.width = rect.width;
+        drawCanvas.height = 280;
+
+        drawCtx.drawImage(tempCanvas, 0, 0);
+        drawCtx.lineCap = 'round';
+        drawCtx.lineJoin = 'round';
+      }
+    }
+
+    function initDrawCanvas() {
+      resizeDrawCanvas();
+      drawCtx.lineCap = 'round';
+      drawCtx.lineJoin = 'round';
+
+      function getCoords(e) {
+        const rect = drawCanvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function startDraw(e) {
+        isDrawing = true;
+        const { x, y } = getCoords(e);
+        drawCtx.beginPath();
+        drawCtx.moveTo(x, y);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const { x, y } = getCoords(e);
+        drawCtx.strokeStyle = brushColor;
+        drawCtx.lineWidth = brushSize;
+        drawCtx.lineTo(x, y);
+        drawCtx.stroke();
+      }
+
+      function stopDraw() {
+        if (!isDrawing) return;
+        isDrawing = false;
+        drawCtx.closePath();
+      }
+
+      drawCanvas.addEventListener('mousedown', startDraw);
+      drawCanvas.addEventListener('mousemove', draw);
+      window.addEventListener('mouseup', stopDraw);
+
+      drawCanvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startDraw(e);
+      }, { passive: false });
+
+      drawCanvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        draw(e);
+      }, { passive: false });
+
+      window.addEventListener('touchend', stopDraw);
+    }
+
+    // Troca de Cores e Ferramentas do Canvas
+    const colorButtons = document.querySelectorAll('.color-btn');
+    colorButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        colorButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        brushColor = btn.getAttribute('data-color');
+      });
+    });
+
+    const brushSizeInput = document.getElementById('brushSize');
+    brushSizeInput.addEventListener('input', (e) => {
+      brushSize = parseInt(e.target.value, 10);
+    });
+
+    document.getElementById('clearCanvasBtn').addEventListener('click', () => {
+      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    });
+
+    // Alternador Submodo (Desenhar vs Digitar)
+    const modeDrawBtn = document.getElementById('modeDrawBtn');
+    const modeTextBtn = document.getElementById('modeTextBtn');
+    const drawSection = document.getElementById('drawSection');
+    const textSection = document.getElementById('textSection');
+
+    modeDrawBtn.addEventListener('click', () => {
+      modeDrawBtn.classList.add('active');
+      modeTextBtn.classList.remove('active');
+      drawSection.style.display = 'block';
+      textSection.style.display = 'none';
+      resizeDrawCanvas();
+    });
+
+    modeTextBtn.addEventListener('click', () => {
+      modeTextBtn.classList.add('active');
+      modeDrawBtn.classList.remove('active');
+      drawSection.style.display = 'none';
+      textSection.style.display = 'block';
+    });
+
+    // Cofre Criogênico: Lacrar
+    const sealVaultBtn = document.getElementById('sealVaultBtn');
+    const vaultList = document.getElementById('vaultList');
+    const vaultCountBadge = document.getElementById('vaultCountBadge');
+    const thoughtText = document.getElementById('thoughtText');
+
+    function renderVault() {
+      vaultList.innerHTML = '';
+      vaultCountBadge.textContent = `${appState.vaultItems.length} Itens`;
+
+      if (appState.vaultItems.length === 0) {
+        vaultList.innerHTML = `
+          <div style="text-align: center; padding: 2.5rem 1rem; color: var(--color-text-dim); font-size: 0.85rem;">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 0.5rem; opacity: 0.5;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+            <div>Nenhum pensamento precisou ser trancado ainda. O cofre está pronto caso você queira.</div>
+          </div>
+        `;
+        return;
+      }
+
+      appState.vaultItems.slice().reverse().forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'vault-item';
+        itemEl.innerHTML = `
+          <div class="vault-item-meta">
+            <span class="vault-item-title">${escapeHtml(item.summary)}</span>
+            <span class="vault-item-time">Lacrado às ${item.time} • Nível de Segurança Máxima</span>
+          </div>
+          <span class="vault-badge-locked">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Selado
+          </span>
+        `;
+        vaultList.appendChild(itemEl);
+      });
+
+      saveState();
+    }
+
+    sealVaultBtn.addEventListener('click', () => {
+      let summaryText = '';
+      const isDrawingActive = drawSection.style.display !== 'none';
+
+      if (isDrawingActive) {
+        summaryText = 'Registro Visual do Monstro / Desenho Externado';
+        drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+      } else {
+        const raw = thoughtText.value.trim();
+        if (!raw) {
+          summaryText = 'Pensamento Ruim Silenciado';
+        } else {
+          summaryText = raw.length > 45 ? raw.substring(0, 45) + '...' : raw;
+        }
+        thoughtText.value = '';
+      }
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      appState.vaultItems.push({
+        id: 'vault_' + Date.now(),
+        summary: summaryText,
+        time: timeStr
+      });
+
+      audioEngine.playSealTone();
+      renderVault();
+
+      // Feedback visual rápido
+      sealVaultBtn.style.transform = 'scale(0.96)';
+      setTimeout(() => sealVaultBtn.style.transform = '', 200);
+    });
+
+    /* ==========================================================================
+       7. DISSIPAÇÃO CÓSMICA & TIMER RESPIRATÓRIO (4s In / 6s Out)
+       ========================================================================== */
+    const dissipateOrbitBtn = document.getElementById('dissipateOrbitBtn');
+    const breathingModal = document.getElementById('breathingModal');
+    const breathCore = document.getElementById('breathCore');
+    const breathCounter = document.getElementById('breathCounter');
+    const breathPhaseTitle = document.getElementById('breathPhaseTitle');
+    const breathPhaseDesc = document.getElementById('breathPhaseDesc');
+    const closeBreathingModalBtn = document.getElementById('closeBreathingModalBtn');
+    const orbitCanvas = document.getElementById('orbitCanvas');
+    const orbitCtx = orbitCanvas.getContext('2d');
+
+    let breathInterval = null;
+    let breathPhase = 'inhale'; // 'inhale' (4s) ou 'exhale' (6s)
+    let phaseSecondsLeft = 4;
+    let totalCyclesDone = 0;
+    const MAX_CYCLES = 3; // 3 ciclos de respiração guiada (~30 segundos de regulação)
+
+    let particles = [];
+
+    function startBreathingGuide() {
+      breathingModal.classList.add('active');
+      closeBreathingModalBtn.style.display = 'none';
+      totalCyclesDone = 0;
+      breathPhase = 'inhale';
+      phaseSecondsLeft = 4;
+
+      initOrbitParticles();
+      updateBreathUI();
+
+      if (breathInterval) clearInterval(breathInterval);
+
+      breathInterval = setInterval(() => {
+        phaseSecondsLeft--;
+        if (phaseSecondsLeft <= 0) {
+          if (breathPhase === 'inhale') {
+            breathPhase = 'exhale';
+            phaseSecondsLeft = 6;
+          } else {
+            totalCyclesDone++;
+            if (totalCyclesDone >= MAX_CYCLES) {
+              finishBreathingGuide();
+              return;
+            }
+            breathPhase = 'inhale';
+            phaseSecondsLeft = 4;
+          }
+        }
+        updateBreathUI();
+      }, 1000);
+
+      // Limpar o conteúdo anterior (pois foi dissipado)
+      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+      thoughtText.value = '';
+    }
+
+    function updateBreathUI() {
+      breathCounter.textContent = phaseSecondsLeft;
+
+      if (breathPhase === 'inhale') {
+        breathCore.classList.remove('exhale');
+        breathCore.classList.add('inhale');
+        breathPhaseTitle.textContent = 'Inspire o ar fresco do cosmos...';
+        breathPhaseTitle.style.color = 'var(--accent-cyan)';
+        breathPhaseDesc.textContent = 'Puxe o ar suavemente pelo nariz enquanto o círculo se expande (4s). O pensamento está se soltando.';
+      } else {
+        breathCore.classList.remove('inhale');
+        breathCore.classList.add('exhale');
+        breathPhaseTitle.textContent = 'Solte o ar e o peso...';
+        breathPhaseTitle.style.color = 'var(--accent-amber)';
+        breathPhaseDesc.textContent = 'Expire devagar pela boca como quem sopra uma vela mágica (6s). O pensamento virou poeira cósmica.';
+      }
+    }
+
+    function finishBreathingGuide() {
+      clearInterval(breathInterval);
+      breathInterval = null;
+      breathCore.classList.remove('inhale', 'exhale');
+      breathCounter.textContent = '✨';
+      breathPhaseTitle.textContent = 'Pensamento Dissipado no Infinito';
+      breathPhaseTitle.style.color = '#34d399';
+      breathPhaseDesc.textContent = 'Ele se transformou em poeira inofensiva e viajou para além das galáxias. O seu peito está livre.';
+      closeBreathingModalBtn.style.display = 'inline-flex';
+      audioEngine.playChimeTone();
+    }
+
+    function initOrbitParticles() {
+      orbitCanvas.width = breathingModal.clientWidth;
+      orbitCanvas.height = breathingModal.clientHeight;
+      particles = [];
+
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: orbitCanvas.width / 2,
+          y: orbitCanvas.height / 2,
+          vx: (Math.random() - 0.5) * 4,
+          vy: (Math.random() - 0.5) * 4,
+          alpha: 1,
+          size: Math.random() * 3 + 1,
+          color: Math.random() > 0.5 ? '#38bdf8' : '#fbbf24'
+        });
+      }
+      renderOrbitParticles();
+    }
+
+    function renderOrbitParticles() {
+      if (!breathingModal.classList.contains('active')) return;
+      orbitCtx.clearRect(0, 0, orbitCanvas.width, orbitCanvas.height);
+
+      let aliveCount = 0;
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.008;
+
+        if (p.alpha > 0) {
+          aliveCount++;
+          orbitCtx.fillStyle = p.color;
+          orbitCtx.globalAlpha = Math.max(0, p.alpha);
+          orbitCtx.beginPath();
+          orbitCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          orbitCtx.fill();
+        }
+      });
+      orbitCtx.globalAlpha = 1;
+
+      if (aliveCount > 0) {
+        requestAnimationFrame(renderOrbitParticles);
+      }
+    }
+
+    dissipateOrbitBtn.addEventListener('click', startBreathingGuide);
+    closeBreathingModalBtn.addEventListener('click', () => {
+      breathingModal.classList.remove('active');
+      if (breathInterval) clearInterval(breathInterval);
+    });
+
+    /* ==========================================================================
+       8. O RADAR DAS DUAS BASES (CONFLITO DE TERRITÓRIO & NEUTRALIDADE)
+       ========================================================================== */
+    const baseNorth = document.getElementById('baseNorth');
+    const baseSouth = document.getElementById('baseSouth');
+    const baseNeutral = document.getElementById('baseNeutral');
+    const shieldHalo = document.getElementById('shieldHalo');
+    const radarToast = document.getElementById('radarToast');
+    const radarToastText = document.getElementById('radarToastText');
+
+    let toastTimer = null;
+
+    function showRadarToast(message) {
+      radarToastText.textContent = message;
+      radarToast.style.display = 'flex';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        radarToast.style.display = 'none';
+      }, 4500);
+    }
+
+    // Clique nas bases para reforço terapêutico
+    baseNorth.addEventListener('click', () => {
+      showRadarToast('Base Norte: Planeta dos adultos. Você pode amar quem mora lá sem precisar levar recados.');
+      audioEngine.playChimeTone();
+    });
+
+    baseSouth.addEventListener('click', () => {
+      showRadarToast('Base Sul: Planeta dos adultos. Você pode amar quem mora lá sem precisar tomar um lado.');
+      audioEngine.playChimeTone();
+    });
+
+    baseNeutral.addEventListener('click', () => {
+      appState.shieldActive = !appState.shieldActive;
+      if (appState.shieldActive) {
+        shieldHalo.classList.add('active');
+        showRadarToast('Escudo de Proteção Ativado: Este espaço é só seu e 100% seguro.');
+      } else {
+        shieldHalo.classList.remove('active');
+        showRadarToast('Escudo em prontidão.');
+      }
+      audioEngine.playSealTone();
+      saveState();
+    });
+
+    // Itens de Aconchego do Posto
+    const comfortChips = document.querySelectorAll('.comfort-chip');
+    comfortChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const item = chip.getAttribute('data-item');
+        if (chip.classList.contains('active')) {
+          chip.classList.remove('active');
+          appState.comfortItems = appState.comfortItems.filter(i => i !== item);
+        } else {
+          chip.classList.add('active');
+          appState.comfortItems.push(item);
+          audioEngine.playChimeTone();
+        }
+        saveState();
+      });
+    });
+
+    // Simulador de Mensagens e Devolução para a Origem
+    const TRANSMISSIONS = [
+      {
+        origin: 'Base Norte',
+        text: '"Diga lá na outra base que eles esqueceram de pagar a conta e erraram tudo!"'
+      },
+      {
+        origin: 'Base Sul',
+        text: '"De quem você gosta mais? Daqui ou de lá? Seja sincero!"'
+      },
+      {
+        origin: 'Base Norte',
+        text: '"O que eles falaram sobre mim quando você estava lá? Me conte tudo!"'
+      },
+      {
+        origin: 'Base Sul',
+        text: '"Avise que no próximo fim de semana você não vai para lá de jeito nenhum."'
+      }
+    ];
+
+    const currentTransmissionCard = document.getElementById('currentTransmissionCard');
+    const transmissionOriginTag = document.getElementById('transmissionOriginTag');
+    const transmissionText = document.getElementById('transmissionText');
+    const returnOriginBtn = document.getElementById('returnOriginBtn');
+    const nextTransmissionBtn = document.getElementById('nextTransmissionBtn');
+
+    function updateTransmissionUI() {
+      const current = TRANSMISSIONS[appState.currentTransmissionIdx];
+      transmissionOriginTag.textContent = `📡 Recado vindo de fora (${current.origin})`;
+      transmissionText.textContent = current.text;
+    }
+
+    returnOriginBtn.addEventListener('click', () => {
+      const current = TRANSMISSIONS[appState.currentTransmissionIdx];
+      audioEngine.playSealTone();
+
+      // Animação de devolução
+      currentTransmissionCard.style.transition = 'all 0.5s ease';
+      currentTransmissionCard.style.transform = 'scale(0.95)';
+      currentTransmissionCard.style.opacity = '0.4';
+
+      showRadarToast(`Encomenda devolvida para a ${current.origin}! Recados de adultos são resolvidos por adultos. Você está livre.`);
+
+      setTimeout(() => {
+        appState.currentTransmissionIdx = (appState.currentTransmissionIdx + 1) % TRANSMISSIONS.length;
+        updateTransmissionUI();
+        currentTransmissionCard.style.transform = 'scale(1)';
+        currentTransmissionCard.style.opacity = '1';
+        saveState();
+      }, 500);
+    });
+
+    nextTransmissionBtn.addEventListener('click', () => {
+      appState.currentTransmissionIdx = (appState.currentTransmissionIdx + 1) % TRANSMISSIONS.length;
+      updateTransmissionUI();
+      saveState();
+    });
+
+    /* ==========================================================================
+       9. ÁUDIO AMBIENTE & BOTÃO LIMPAR TUDO / SEGURANÇA
+       ========================================================================== */
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    const audioLabel = document.getElementById('audioLabel');
+
+    audioToggleBtn.addEventListener('click', () => {
+      const active = audioEngine.toggle();
+      if (active) {
+        audioToggleBtn.classList.add('active');
+        audioLabel.textContent = 'Som Ligado';
+      } else {
+        audioToggleBtn.classList.remove('active');
+        audioLabel.textContent = 'Som Calmo';
+      }
+    });
+
+    document.getElementById('clearAllBtn').addEventListener('click', () => {
+      if (confirm('Deseja esvaziar todos os registros desta sessão do Diário de Bordo?')) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        appState.stones = JSON.parse(JSON.stringify(DEFAULT_STONES));
+        appState.vaultItems = [];
+        appState.comfortItems = ['musica', 'livro', 'brinquedo'];
+        appState.shieldActive = true;
+        appState.currentTransmissionIdx = 0;
+
+        renderStones();
+        renderVault();
+        updateTransmissionUI();
+        if (drawCtx) drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        thoughtText.value = '';
+        showRadarToast('Sessão redefinida com segurança. Nave limpa.');
+      }
+    });
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    /* ==========================================================================
+       10. INICIALIZAÇÃO
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      initDrawCanvas();
+      setupDragAndDrop();
+      renderStones();
+      renderVault();
+      updateTransmissionUI();
+    });
+  </script>
+</body>
+</html>
