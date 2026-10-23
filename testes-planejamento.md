@@ -1,0 +1,29 @@
+# Planejamento de Testes e Escalas Psicoeducativas — Deo Magalhães
+
+Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e Testes Psicoeducativos Autoaplicáveis** para o site [deomagalhaes.com.br](https://deomagalhaes.com.br).
+
+---
+
+## 📋 Fila e Status de Produção
+
+| ID | Instrumento / Escala | Domínio Clínico / Construto | Arquivo | Status |
+|---|---|---|---|---|
+| **T-01** | **DASS-21 (Depressão, Ansiedade e Estresse)** | Triagem Afetiva e Sintomatologia Emocional | `artigos/teste-dass21.html` | ✅ Concluído |
+| **T-02** | **Estilos de Apego na Vida Adulta** | Vínculos Afetivos, Esquivas e Ansiedade Relacional | `artigos/teste-apego.html` | ✅ Concluído |
+| **T-03** | **Inventário de Esquemas Iniciais Desadaptativos** | Terapia do Esquema e Padrões Psíquicos | `artigos/teste-esquemas.html` | ✅ Concluído |
+| **T-04** | **Escala de Funções Executivas e TDAH** | Córtex Pré-Frontal, Inibição e Atenção | `artigos/teste-funcoes-executivas.html` | ✅ Concluído |
+| **T-05** | **Inventário de Procrastinação e Ação** | Paralisia de Tarefas, Autoeficácia e Motivação | `artigos/teste-procrastinacao.html` | ✅ Concluído |
+| **T-06** | **Escala de Regulação Emocional (ERQ - Gross)** | Reavaliação Cognitiva vs. Supressão Expressiva | `recursos/escala-regulacao-emocional.html` | ✅ Concluído |
+| **T-07** | **Inventário de Sobrecarga e Burnout Clínico** | Exaustão Emocional, Despersonalização e Eficácia | `artigos/teste-burnout.html` | ✅ Concluído |
+| **T-08** | **Escala de Tolerância à Frustração e Impulsividade** | Controle Inibitório e Reatividade Emocional | `artigos/teste-frustracao.html` | ⏳ *Próximo da fila* |
+| **T-09** | **Questionário de Higiene do Sono e Ritmo Circadiano** | Insônia Comportamental e Cronotipo | `artigos/teste-sono.html` | ⏳ Aguardando |
+| **T-10** | **Escala de Ruminação Mental e Pensamentos Intrusivos** | Rede de Modo Padrão (DMN) e Ansiedade Cognitiva | `artigos/teste-ruminacao.html` | ⏳ Aguardando |
+
+---
+
+## 🛠️ Padrão de Implementação dos Testes
+1. **Instrumentação Científica:** Baseado em literatura validada (ex: Maslach Burnout Inventory, DASS-21, ERQ).
+2. **Privacidade Absoluta:** 100% no navegador (Client-side), sem gravação de respostas em servidores externos.
+3. **Cálculo Automático com Feedback Qualitativo:** Pontuação imediata categorizada (Leve, Moderado, Severo) com explicações neuroclínicas sobre cada dimensão.
+4. **Orientações e Encaminhamento:** Recomendações práticas e botão direto para consulta ou agendamento especializado.
+5. **Divulgação:** Inclusão do card em `cards-artigos.html` e atualização do `sitemap.xml`.
