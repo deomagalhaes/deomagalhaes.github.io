@@ -116,6 +116,115 @@ if (typeof Swiper !== 'undefined' && document.querySelector('.hero-carousel')) {
     });
 }
 
+// ==================================================
+// 6. INICIALIZAÇÃO DO CARROSSEL DE NOVIDADES DINÂMICAS (SWIPER.JS)
+// ==================================================
+const recentCarouselEl = document.querySelector('.recent-additions-carousel');
+if (typeof Swiper !== 'undefined' && recentCarouselEl) {
+    let recentSwiper = new Swiper('.recent-additions-carousel', {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        loop: false,
+        grabCursor: true,
+        autoplay: {
+            delay: 6000,
+            pauseOnMouseEnter: true,
+            disableOnInteraction: false
+        },
+        pagination: {
+            el: '.recent-pagination',
+            clickable: true,
+            dynamicBullets: true
+        },
+        navigation: {
+            nextEl: '.recent-next',
+            prevEl: '.recent-prev',
+        },
+        breakpoints: {
+            576: { slidesPerView: 2, spaceBetween: 20 },
+            992: { slidesPerView: 3, spaceBetween: 24 },
+            1200: { slidesPerView: 4, spaceBetween: 24 }
+        }
+    });
+
+    // Opção 1: Fetch dinâmico inteligente dos cards mais recentes em cards-artigos.html
+    const wrapper = document.getElementById('recent-additions-wrapper');
+    if (wrapper) {
+        fetch('cards-artigos.html')
+            .then(res => {
+                if (!res.ok) throw new Error('Falha ao carregar cards-artigos.html');
+                return res.text();
+            })
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const articles = doc.querySelectorAll('.article-item-custom');
+                if (!articles || articles.length === 0) return;
+
+                // Helper para determinar categoria e ícone
+                const getCategoryMeta = (title, cats) => {
+                    const t = title.toLowerCase();
+                    const c = cats.toLowerCase();
+                    if (t.includes('teste') || c.includes('teste')) {
+                        return { badge: '📊 Teste Clínico', bg: '#e0f2fe', color: '#0369a1', iconBg: '#eef6fc', iconColor: '#0a9396', action: 'Realizar Teste →', icon: '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>' };
+                    }
+                    if (t.includes('storybook') || c.includes('storybook')) {
+                        return { badge: '📖 Storybook', bg: '#fef3c7', color: '#92400e', iconBg: '#fffbeb', iconColor: '#d97706', action: 'Ler História →', icon: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>' };
+                    }
+                    if (t.includes('ferramenta') || t.includes('jogo') || c.includes('jogo') || c.includes('ferramenta')) {
+                        return { badge: '🫀 Ferramenta / Jogo', bg: '#e0f7fa', color: '#006064', iconBg: '#e0f2f1', iconColor: '#00796b', action: 'Acessar Recurso →', icon: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>' };
+                    }
+                    return { badge: '🧠 Artigo Clínico', bg: '#ede9fe', color: '#5b21b6', iconBg: '#f5f3ff', iconColor: '#7c3aed', action: 'Ler Artigo →', icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>' };
+                };
+
+                const newSlides = [];
+                const topItems = Array.from(articles).slice(0, 8); // Top 8 adições mais recentes
+
+                topItems.forEach(item => {
+                    const href = item.getAttribute('href') || '#';
+                    const rawTitle = item.querySelector('h3') ? item.querySelector('h3').textContent.trim() : '';
+                    const rawDesc = item.querySelector('p') ? item.querySelector('p').textContent.trim() : '';
+                    const cats = item.getAttribute('data-categories') || '';
+                    
+                    // Extrai data
+                    let dateStr = 'Recente';
+                    const metaSpan = item.querySelector('.article-meta-custom > span:first-child');
+                    if (metaSpan) {
+                        const dateText = metaSpan.textContent.replace(/\s+/g, ' ').trim();
+                        if (dateText) dateStr = dateText;
+                    }
+
+                    const meta = getCategoryMeta(rawTitle, cats);
+
+                    const slideHtml = `
+                    <div class="swiper-slide">
+                        <div class="service-card-detailed" style="display:flex; flex-direction:column; justify-content:space-between; height:100%; text-align:left; padding:24px; position:relative;">
+                            <span style="position:absolute; top:18px; right:18px; font-size:0.75rem; font-weight:700; background:${meta.bg}; color:${meta.color}; padding:3px 9px; border-radius:12px;">${meta.badge}</span>
+                            <div class="icon" style="margin:0 0 15px 0; background:${meta.iconBg}; color:${meta.iconColor};">
+                                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">${meta.icon}</svg>
+                            </div>
+                            <h3 style="font-size:1.12rem; line-height:1.35; margin-bottom:10px; color:var(--primary-dark-blue);">${rawTitle}</h3>
+                            <p class="description" style="font-size:0.9rem; line-height:1.5; color:var(--text-color-light); margin-bottom:15px; flex-grow:1;">${rawDesc}</p>
+                            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f0f0f0; padding-top:12px; margin-top:auto;">
+                                <span style="font-size:0.8rem; color:#888;">${dateStr}</span>
+                                <a href="${href}" class="cta-button-small" style="padding:7px 16px; font-size:0.82rem;">${meta.action}</a>
+                            </div>
+                        </div>
+                    </div>`;
+                    newSlides.push(slideHtml);
+                });
+
+                if (newSlides.length > 0) {
+                    wrapper.innerHTML = newSlides.join('');
+                    recentSwiper.update();
+                }
+            })
+            .catch(err => {
+                console.warn('Carregamento assíncrono de novidades usou fallback estático:', err);
+            });
+    }
+}
+
 }); 
 
 // Fim do 'DOMContentLoaded'
