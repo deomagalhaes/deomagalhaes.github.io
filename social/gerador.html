@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Gerador de Carrosséis Instagram (1080x1080) — Deo Magalhães</title>
+    <meta name="description" content="Pipeline automatizado para converter artigos e storybooks em carrosséis de 1080x1080 para Instagram com paleta institucional e legendas estratégicas.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #001219;
+            --bg-card: rgba(0, 95, 115, 0.15);
+            --bg-panel: #0a1f26;
+            --primary-teal: #005f73;
+            --neural-cyan: #0a9396;
+            --sage-mint: #94d2bd;
+            --amber-gold: #ee9b00;
+            --amber-light: #ca6702;
+            --cream-soft: #e9d8a6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glass: rgba(148, 210, 189, 0.2);
+            --shadow-glow: 0 10px 30px -10px rgba(0, 95, 115, 0.5);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .top-nav {
+            background: rgba(0, 18, 25, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-teal), var(--neural-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: 0 0 15px rgba(10, 147, 150, 0.4);
+        }
+
+        .brand-info h1 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-info span {
+            font-size: 0.75rem;
+            color: var(--neural-cyan);
+            display: block;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-link:hover {
+            color: var(--cream-soft);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .badge-insta {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Main Workspace Grid */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr 380px;
+            flex: 1;
+            gap: 0;
+            height: calc(100vh - 67px);
+        }
+
+        @media (max-width: 1200px) {
+            .workspace-grid {
+                grid-template-columns: 360px 1fr;
+                height: auto;
+            }
+            .sidebar-caption {
+                grid-column: span 2;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-caption {
+                grid-column: span 1;
+            }
+        }
+
+        /* Sidebar Panels */
+        .sidebar {
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border-glass);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-caption {
+            border-right: none;
+            border-left: 1px solid var(--border-glass);
+            background: var(--bg-panel);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neural-cyan);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* Form Controls */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        select, input, textarea {
+            width: 100%;
+            background: rgba(0, 18, 25, 0.7);
+            border: 1px solid rgba(148, 210, 189, 0.3);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--amber-gold);
+            box-shadow: 0 0 0 2px rgba(238, 155, 0, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 85px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary-teal);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--neural-cyan);
+            transform: translateY(-1px);
+        }
+
+        .btn-amber {
+            background: linear-gradient(135deg, var(--amber-gold), var(--amber-light));
+            color: #001219;
+            font-weight: 700;
+        }
+
+        .btn-amber:hover {
+            box-shadow: 0 0 20px rgba(238, 155, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--neural-cyan);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        /* Central Studio Stage */
+        .stage {
+            background: radial-gradient(circle at center, #00222e 0%, #001219 100%);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .stage-header {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .slide-counter-badge {
+            background: rgba(0, 95, 115, 0.4);
+            border: 1px solid var(--border-glass);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cream-soft);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .canvas-container {
+            position: relative;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(148, 210, 189, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 520px;
+            max-height: 520px;
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #000;
+        }
+
+        #carouselCanvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Carousel Navigation Bar */
+        .carousel-nav-bar {
+            width: 100%;
+            max-width: 640px;
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .thumbs-strip {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 6px 2px;
+        }
+
+        .thumb-btn {
+            background: rgba(0, 18, 25, 0.6);
+            border: 2px solid transparent;
+            color: var(--text-muted);
+            border-radius: 10px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-width: 70px;
+        }
+
+        .thumb-btn.active {
+            border-color: var(--amber-gold);
+            background: var(--primary-teal);
+            color: white;
+            box-shadow: 0 0 12px rgba(238, 155, 0, 0.3);
+        }
+
+        .thumb-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .stage-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Toast Feedback */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, var(--neural-cyan), var(--primary-teal));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Tabs */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid var(--border-glass);
+            margin-bottom: 14px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--amber-gold);
+            border-bottom-color: var(--amber-gold);
+        }
+
+        .tab-pane {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .tab-pane.active {
+            display: flex;
+        }
+
+        /* Pre-styled card */
+        .info-pill {
+            background: rgba(10, 147, 150, 0.1);
+            border-left: 3px solid var(--neural-cyan);
+            padding: 10px 12px;
+            font-size: 0.78rem;
+            color: var(--cream-soft);
+            line-height: 1.4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <a href="../index.html" class="brand-box">
+            <div class="brand-logo">DM</div>
+            <div class="brand-info">
+                <h1>Studio Carrosséis Instagram • 1080x1080</h1>
+                <span>Deo Magalhães — Neuropsicólogo e Neurocientista (CRP 04/42784)</span>
+            </div>
+        </a>
+        <div class="nav-actions">
+            <span class="badge-insta">@deomagalhaesneuro</span>
+            <a href="README.md" class="btn-link">Histórico Social</a>
+            <a href="../artigos.html" class="btn-link">Artigos</a>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace-grid">
+        
+        <!-- SIDEBAR ESQUERDA: Ingestão de Conteúdo e Editor de Slides -->
+        <aside class="sidebar">
+            <div class="section-title">
+                <span>📚 1. Fonte do Conteúdo</span>
+            </div>
+
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('tab-presets', this)">Artigos Prontos</button>
+                <button class="tab-btn" onclick="switchTab('tab-custom', this)">Colar Artigo / Texto</button>
+            </div>
+
+            <!-- Tab Presets -->
+            <div id="tab-presets" class="tab-pane active">
+                <div class="control-group">
+                    <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
+                    <select id="articleSelect" onchange="loadPresetArticle(this.value)">
+                        <option value="dopamina">A Epidemia da Dopamina Barata (Algoritmos & Telas)</option>
+                        <option value="cansaso">A Sociedade do Cansaço & A Autoexploração</option>
+                        <option value="borderline">Transtorno Borderline nas Relações Íntimas</option>
+                        <option value="bento">O Camaleão Bento e as Cores do Medo do Escuro (Fábula)</option>
+                        <option value="ansiedade">Ansiedade: Filosofia Existencial & Neurociência</option>
+                        <option value="telas-infantil">O Impacto das Telas no Cérebro Infantil</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tab Custom -->
+            <div id="tab-custom" class="tab-pane">
+                <div class="control-group">
+                    <label class="control-label" for="customTitle">Título do Artigo:</label>
+                    <input type="text" id="customTitle" placeholder="Ex: O Córtex Pré-Frontal e o Autocontrole">
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="customText">Cole o Texto do Artigo ou Roteiro:</label>
+                    <textarea id="customText" style="min-height: 120px;" placeholder="Cole aqui os pontos principais, mecanismos neurais e conclusões..."></textarea>
+                </div>
+                <button class="btn btn-amber btn-sm" onclick="synthesizeCustomText()">
+                    ⚡ Sintetizar em 6 Slides
+                </button>
+            </div>
+
+            <div class="section-title" style="margin-top: 10px;">
+                <span>✏️ 2. Editar Slide Ativo</span>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="editBadge">Badge / Categoria Superior:</label>
+                <input type="text" id="editBadge" oninput="updateCurrentSlideData()">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="editTitle">Título do Slide:</label>
+                <textarea id="editTitle" style="min-height: 55px;" oninput="updateCurrentSlideData()"></textarea>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="editBody">Texto / Desenvolvimento:</label>
+                <textarea id="editBody" style="min-height: 110px;" oninput="updateCurrentSlideData()"></textarea>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="editFooter">Rodapé / Destaque de Ação:</label>
+                <input type="text" id="editFooter" oninput="updateCurrentSlideData()">
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="themeSelect">Paleta de Cor Visual:</label>
+                <select id="themeSelect" onchange="renderCurrentSlide()">
+                    <option value="deep-teal">Petróleo & Âmbar (#005f73 & #ee9b00)</option>
+                    <option value="dark-obsidian">Obsidian Minimal (#001219 & #0a9396)</option>
+                    <option value="clean-light">Editorial Light (#f8fafc & #005f73)</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- PALCO CENTRAL: Renderizador Canvas 1080x1080 Real-Time -->
+        <section class="stage">
+            <div class="stage-header">
+                <div class="slide-counter-badge" id="slideCounterDisplay">
+                    Slide 1 de 6 • Capa / Gancho
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                    Formato: 1080 x 1080 px (1:1 Oficial Instagram)
+                </div>
+            </div>
+
+            <!-- Preview do Canvas -->
+            <div class="canvas-container">
+                <canvas id="carouselCanvas" width="1080" height="1080"></canvas>
+            </div>
+
+            <!-- Navegação e Miniaturas -->
+            <div class="carousel-nav-bar">
+                <div class="thumbs-strip" id="thumbsStrip">
+                    <!-- Gerado dinamicamente -->
+                </div>
+
+                <div class="stage-actions">
+                    <button class="btn btn-outline btn-sm" onclick="prevSlide()">◀ Anterior</button>
+                    <button class="btn btn-outline btn-sm" onclick="nextSlide()">Próximo ▶</button>
+                    <button class="btn btn-amber" onclick="downloadCurrentSlide()">
+                        📥 Baixar Slide Atual (.PNG)
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="downloadAllSlides()">
+                        📦 Baixar Todos (6 Slides)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIDEBAR DIREITA: Legenda Estratégica Pronta com Hashtags -->
+        <aside class="sidebar-caption">
+            <div class="section-title">
+                <span>✍️ 3. Legenda & Hashtags</span>
+            </div>
+
+            <div class="info-pill">
+                Legenda estrategicamente elaborada com gancho de primeira linha, narrativa neurocientífica fluida, chamada para ação e 15 hashtags para alcance orgânico.
+            </div>
+
+            <div class="control-group" style="flex: 1;">
+                <label class="control-label" for="captionBox">Texto para Copiar e Colar:</label>
+                <textarea id="captionBox" style="height: 100%; min-height: 280px; font-size: 0.85rem; line-height: 1.6;"></textarea>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn btn-amber" onclick="copyCaption()">
+                    📋 Copiar Legenda Completa
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="exportMarkdownFile()">
+                    💾 Exportar Roteiro (.md)
+                </button>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- Feedback Toast -->
+    <div id="toast" class="toast">
+        <span>✨ Legenda copiada com sucesso!</span>
+    </div>
+
+    <!-- Script de Lógica do Studio -->
+    <script>
+        // Banco de Dados Pré-Configurado de Artigos Clínicos
+        const PRESETS = {
+            dopamina: {
+                articleSlug: "2026-10-22-dopamina-barata",
+                articleTitle: "A Epidemia da Dopamina Barata: Como os Algoritmos e Telas Reconfiguram a Recompensa",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROBIOLOGIA & COMPORTAMENTO",
+                        title: "Por que você se sente esgotado, mas não consegue largar o celular?",
+                        body: "Não é preguiça nem falta de força de vontade: é a neurobiologia da Dopamina Barata capturando a sua via mesolímbica.",
+                        footer: "Arraste para entender a ciência 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A DOR INVISÍVEL",
+                        title: "O sintoma do qual ninguém fala",
+                        body: "Você para 10 minutos para 'descansar' rolando feeds.\n\n40 minutos depois, você se levanta com um vazio inexplicável, irritabilidade e incapacidade de focar na leitura de uma única página.\n\nPor que o 'descanso digital' cansa tanto?",
+                        footer: "Deslize para ver o mecanismo 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A NEUROCIÊNCIA",
+                        title: "O equívoco sobre a dopamina",
+                        body: "A dopamina NÃO é a molécula do prazer. Ela é a molécula da busca, da antecipação e do desejo.\n\nOs algoritmos funcionam como caça-níqueis: a incerteza do próximo vídeo mantém seus neurônios em alerta contínuo com custo de esforço zero.",
+                        footer: "Dra. Anna Lembke (Stanford) 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A GANGORRA PRAZER-DOR",
+                        title: "A conta que chega depois",
+                        body: "Para se proteger dos picos artificiais de estímulo, seu cérebro desativa (internaliza) os receptores D2 de dopamina.\n\nCom menos receptores, seu nível basal cai para ABAIXO do normal. É por isso que a vida real parece sem cor.",
+                        footer: "Como reverter o quadro? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO PRÁTICO",
+                        title: "3 Passos para recalibrar seu cérebro",
+                        body: "1. Insira Fricção: coloque o celular em escala de cinza e tire apps de dopamina rápida da tela inicial.\n2. Reabilite o Tédio Fértil: espere em filas sem pegar o telefone.\n3. Dopamina de Esforço: troque o rolar por caminhadas e livros reais.",
+                        footer: "Último passo decisivo 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Quer dominar o protocolo clínico de ressensibilização?",
+                        body: "Publiquei um ensaio neurocientífico aprofundado com as bases fisiológicas e estratégias práticas de recalibragem atencional.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já pegou o celular para ver uma mensagem rápida e, de repente, percebeu que perdeu 45 minutos rolando vídeos sem sequer lembrar o que estava assistindo? E o pior: quando finalmente largou o aparelho, não se sentiu descansado, mas sim mais exausto, inquieto e sem foco?
+
+A neurociência explica que isso não é defeito de caráter nem mera "falta de vergonha na cara". É o resultado biológico previsível de um sequestro da nossa via mesolímbica de recompensa.
+
+Ao contrário do mito popular, a dopamina não é a molécula do prazer — é a molécula da busca e da antecipação. Os algoritmos contemporâneos foram desenhados como verdadeiros caça-níqueis comportamentais: a incerteza de não saber o que vem no próximo vídeo mantém seus neurônios estriatais em excitação perpétua.
+
+O problema é a conta que chega depois. Para se proteger dessa enxurrada neuroquímica artificial, o cérebro promove uma *down-regulation* (redução) dos receptores D2 de dopamina. Seu limiar basal cai para um patamar inferior ao normal. O resultado? A vida cotidiana real — que exige paciência, silêncio e tolerância à frustração — parece cinza, desinteressante e pesada.
+
+A boa notícia é que a neuroplasticidade joga a nosso favor. É possível recalibrar a sensibilidade dos seus circuitos dopaminérgicos com ajustes estratégicos de fricção ambiental e recuperação do que chamo de "tédio fértil".
+
+Acabei de publicar um artigo aprofundado com as bases neurobiológicas completas e o protocolo clínico de ressensibilização no meu site.
+
+👉 Leia o artigo na íntegra no link da bio: deomagalhaes.com.br
+
+Como tem sido a sua relação com as telas ultimamente? Você sente que seu foco está fragmentado? Vamos conversar nos comentários.
+
+#neuropsicologia #neurociencias #dopamina #saudemental #foco #tdah #atencao #comportamentohumano #deomagalhaes #psicologiaclinica #bemestar #desenvolvimentopessoal`
+            },
+
+            cansaso: {
+                articleSlug: "2026-10-23-sociedade-do-cansaso",
+                articleTitle: "A Sociedade do Cansaço e a Tirania da Autoexploração",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "FILOSOFIA CLÍNICA & SAÚDE MENTAL",
+                        title: "Por que você sente culpa toda vez que para para descansar?",
+                        body: "A exaustão do século XXI não é fadiga muscular: é o colapso do sujeito na esteira do imperativo da produtividade absoluta.",
+                        footer: "Arraste para decifrar Byung-Chul Han 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O IMPERATIVO DO DESEMPENHO",
+                        title: "Senhor e escravo de si mesmo",
+                        body: "No passado, éramos vigiados por chefes e capatazes (a sociedade disciplinar de Foucault).\n\nHoje, nos autoexploramos na ilusão radiante de que estamos exercendo a máxima liberdade. Você acorda às 5h, toma nootrópicos e monetiza cada minuto da vida.",
+                        footer: "Por que isso adoece a mente? 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A VIOLÊNCIA NEURONAL",
+                        title: "O excesso de positividade que inflama o cérebro",
+                        body: "Byung-Chul Han ensina que a doença do nosso século não é infecciosa, mas neuronal.\n\nO cérebro não aguenta a hipercomunicação contínua e a exigência de disponibilidade perene. O resultado é o infarto psíquico: o Burnout.",
+                        footer: "O colapso do córtex pré-frontal 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A FALÁCIA DO AUTOCUIDADO",
+                        title: "O descanso sequestrado",
+                        body: "A indústria contemporânea transformou até o autocuidado em ferramenta de rendimento.\n\nMedita-se para 'render 30% a mais na reunião'. Dorme-se para 'otimizar o biohacking'.\n\nQuando o descanso vira lubrificante da máquina, a alma perde a paz.",
+                        footer: "Como sair desse labirinto? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "A CURA EXISTENCIAL",
+                        title: "O resgate da Vida Contemplativa",
+                        body: "1. Desvincule sua dignidade de sua utilidade funcional.\n2. Conquiste o Tempo Puro: reserve momentos no dia sem nenhuma finalidade prática.\n3. Tolere o Vazio: aprenda a habitar o silêncio sem fugir imediatamente para o celular.",
+                        footer: "Aprofunde na íntegra 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO PROFUNDO NO SITE",
+                        title: "Quem é você quando não está produzindo nada?",
+                        body: "Publiquei uma análise profunda relacionando Byung-Chul Han, neurobiologia do estresse e a reconquista da serenidade existencial.\n\n👉 Leia o ensaio completo no link da bio:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já reparou na culpa silenciosa que surge quando você decide tirar uma tarde de domingo para absolutamente nada? Aquela inquietação corrosiva sussurrando que você "deveria estar estudando", "adiantando trabalho" ou "otimizando seu tempo"?
+
+O filósofo Byung-Chul Han decifrou esse dilema como ninguém em "A Sociedade do Cansaço". Não vivemos mais sob a coação de mestres externos: nós nos tornamos simultaneamente os capatazes e os escravos de nós mesmos.
+
+Substituímos o verbo "dever" pelo verbo "poder". Acreditamos piamente que podemos tudo — e quem não consegue é rotulado de fracassado ou culpado por falta de disciplina. Até o descanso foi sequestrado pela lógica do rendimento: medita-se para produzir mais, dorme-se para render melhor na segunda-feira.
+
+A exaustão crônica da nossa época não se resolve com mais um aplicativo de produtividade nem com um energético. Ela exige a coragem de resgatar o que Aristóteles e Hannah Arendt chamavam de "vida contemplativa": a capacidade de saborear o tempo desprovido de qualquer utilidade econômica.
+
+Escrevi um ensaio minucioso sobre essa tirania contemporânea e caminhos clínicos para descolonizar a mente.
+
+👉 Leia na íntegra no link da bio: deomagalhaes.com.br
+
+Você tem conseguido descansar em paz ou a culpa sempre aparece? Me conte nos comentários.
+
+#sociedadedocansaco #byungchulhan #burnout #saudemental #psicologiaclinica #produtividade #neuropsicologia #deomagalhaes #desenvolvimentopessoal #filosofia`
+            },
+
+            borderline: {
+                articleSlug: "2026-10-23-borderline-relacoes-intimas",
+                articleTitle: "Entre a Clivagem e a Hostilidade Reativa: Transtorno Borderline nas Relações Íntimas",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "PSICOPATOLOGIA & VÍNCULOS",
+                        title: "Por que no Borderline o amor parece oscilar entre a adoração e o abismo?",
+                        body: "Compreender os mecanismos neurobiológicos da clivagem e da hiperreatividade da amígdala salva relações e cura feridas.",
+                        footer: "Arraste para entender a clínica 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O PADRÃO RELACIONAL",
+                        title: "O terror inconsciente do abandono",
+                        body: "Um atraso de 15 minutos para responder a uma mensagem não é percebido como esquecimento banal.\n\nPara o cérebro com TPB, aciona o alerta de catástrofe iminente: 'Ele não se importa mais comigo, serei abandonado'.",
+                        footer: "O que acontece no cérebro? 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A NEUROBIOLOGIA",
+                        title: "Amígdala hiperativa e freio pré-frontal frágil",
+                        body: "A neuroimagem revela que indivíduos com TPB possuem amígdalas com volume reduzido mas hiper-reativas a microexpressões faciais neutras.\n\nO córtex pré-frontal órbito-frontal falha em inibir o alarme a tempo, disparando defesas de luta ou fuga.",
+                        footer: "O mecanismo de defesa 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A DEFESA PSICOLÓGICA",
+                        title: "A Clivagem: 'Ou é perfeito ou é meu inimigo'",
+                        body: "A mente fragmenta o parceiro em extremos absolutos para tentar se proteger da dor:\n\n* Idealização: 'Você é a única pessoa que me compreende'.\n* Desvalorização: 'Você nunca se importou de verdade comigo'.",
+                        footer: "O caminho da estabilização 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "DIRETRIZES TERAPÊUTICAS",
+                        title: "3 Pilares para a vida a dois",
+                        body: "1. Validação Emocional Antes da Lógica: acolha a dor antes de discutir os fatos.\n2. Pausas Estratégicas Combinadas: crie um código de resfriamento fisiológico.\n3. Terapia Dialética Comportamental (DBT): treino formal de regulação.",
+                        footer: "Artigo completo no site 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "GUIA TÉCNICO COMPLETO",
+                        title: "Quer se aprofundar na regulação do Transtorno Borderline?",
+                        body: "Disponibilizei no site um guia clínico completo para pacientes, familiares e terapeutas sobre manejo afetivo e apego seguro.\n\n👉 Acesse o link da bio:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `No Transtorno da Personalidade Borderline (TPB), amar nunca é uma experiência neutra ou morna. É frequentemente vivido com a intensidade de um furacão emocional: em um momento, o parceiro é o salvador supremo; horas depois, um simples olhar ambíguo pode transformá-lo na representação viva da rejeição.
+
+A neurociência mostra que não se trata de "manipulação" ou "capricho". O cérebro com traços borderline opera sob uma hiperreatividade estrutural da amígdala e um tônus inibitório pré-frontal atenuado. O medo do abandono não é uma metáfora poética: é registrado pelo sistema nervoso como uma ameaça real de aniquilação física.
+
+Para se defender dessa dor lancinante, o psiquismo ativa a "clivagem" (splitting): a incapacidade de integrar qualidades boas e ruins no mesmo objeto afetivo. Ou a pessoa é 100% protetora, ou é 100% perseguidora.
+
+A virada clínica acontece quando o casal aprende a substituir a reação automática pelo acolhimento validante e por pausas de autorregulação fisiológica (baseadas na DBT).
+
+Publiquei uma análise minuciosa sobre a neurobiologia da clivagem e o manejo clínico das relações íntimas no site.
+
+👉 Link completo na bio: deomagalhaes.com.br
+
+Você já vivenciou ou convive com oscilações intensas nos vínculos? Vamos conversar nos comentários.
+
+#borderline #tpb #relacionamento #regulacaoemocional #psicoterapia #neurociencias #dbt #apegoseguro #deomagalhaes #saudemental`
+            },
+
+            bento: {
+                articleSlug: "2026-10-23-storybook-bento-escuro",
+                articleTitle: "O Camaleão Bento e as Cores do Medo do Escuro (Fábula Infantil)",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "DESENVOLVIMENTO INFANTIL & EMOÇÕES",
+                        title: "Seu filho tem medo do escuro? Não diga 'não é nada'.",
+                        body: "A neurociência explica por que minimizar o medo infantil alimenta a ansiedade e como a fábula do Camaleão Bento ajuda a acolher a amígdala dos pequenos.",
+                        footer: "Arraste para ver a abordagem clínica 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O ERRO COMUM",
+                        title: "A resposta que bloqueia o diálogo",
+                        body: "Quando a criança chora à noite e os pais dizem:\n'Não tem monstro nenhum no quarto, seja corajoso e durma!'\n\nA criança aprende que o que sente é errado ou perigoso. O medo não some: ele se torna solidão e vergonha.",
+                        footer: "O que a neurociência ensina? 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A BIOLOGIA INFANTIL",
+                        title: "A amígdala não entende argumentos lógicos",
+                        body: "O cérebro da criança pequena ainda está construindo os circuitos pré-frontais inibitórios.\n\nNa escuridão, a falta de referências visuais faz a imaginação preencher as sombras com perigos ancestrais. O medo é biológico e real.",
+                        footer: "A metáfora do Camaleão Bento 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A FÁBULA DO BENTO",
+                        title: "Bento e a cor que não queria sumir",
+                        body: "Na floresta, o camaleãozinho Bento mudava de cor quando o sol sumia: ficava roxo de medo!\n\nSua mãe não o mandou parar de tremer; ela se deitou ao seu lado e ensinou que 'a coragem não é não ter medo, é saber que tem alguém segurando sua pata'.",
+                        footer: "Como aplicar na hora de dormir? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PASSO A PASSO PARENTAL",
+                        title: "3 Atitudes para a hora de dormir",
+                        body: "1. Valide o Sentimento: 'Eu vejo que você está assustado, e tudo bem sentir medo. Eu estou aqui.'\n2. Crie uma Luz Amiga: abajur âmbar suave (evite telas).\n3. Use Storybooks Terapêuticos para dar nome às sensações físicas.",
+                        footer: "Leia a fábula completa 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "HISTÓRIA ILUSTRADA NO SITE",
+                        title: "Leia a fábula do Camaleão Bento com seus filhos hoje",
+                        body: "Disponibilizei o storybook completo com orientações pedagógicas para pais e educadores no meu portal.\n\n👉 Acesse gratuitamente no link da bio:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Quantas vezes você já ouviu (ou disse) a frase: "Não precisa ter medo do escuro, já é grandinho, não tem nada lá"?
+
+A intenção é acolhedora, mas a neurobiologia infantil nos ensina que a amígdala de uma criança não é acalmada por argumentos lógicos abstratos. Para ela, a escuridão é a perda de pistas visuais de segurança — e os circuitos pré-frontais que poderiam racionalizar isso ainda estão em plena maturação.
+
+Quando dizemos que "não é nada", a criança não deixa de ter medo: ela apenas se sente incompreendida e desamparada com a sensação física que invade seu corpinho.
+
+Foi pensando nisso que escrevi a fábula terapêutica "O Camaleão Bento e as Cores do Medo do Escuro". Por meio de uma linguagem lúdica e visual, Bento aprende que sentir medo faz parte da vida e que a verdadeira coragem nasce do vínculo seguro.
+
+O storybook completo está disponível gratuitamente no site para você ler hoje mesmo com seus filhos ou alunos.
+
+👉 Link na bio: deomagalhaes.com.br
+
+Como seu filho costuma reagir na hora de apagar a luz? Me conte aqui nos comentários.
+
+#desenvolvimentoinfantil #parentalidadeconsciente #medodoescuro #neurocienciainfantil #educacaopositiva #psicologiainfantil #storybooks #deomagalhaes #saudemental`
+            },
+
+            ansiedade: {
+                articleSlug: "2026-10-23-ansiedade-filosofia-neurociencia",
+                articleTitle: "Ansiedade: Entre a Filosofia Existencial e a Neurociência",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROPSICOLOGIA & EXISTÊNCIA",
+                        title: "E se a sua ansiedade não for um defeito biológico?",
+                        body: "O encontro entre Kierkegaard, Frankl e a circuitaria do estresse: como transformar a angústia em bússola de autenticidade.",
+                        footer: "Arraste para refletir 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O MAL-ESTAR",
+                        title: "O corpo em sobressalto",
+                        body: "Taquicardia, respiração curta, a mente prevendo catástrofes futuras que nunca chegam.\n\nA sociedade médica contemporânea rapidamente rotula tudo como 'transtorno químico a ser anestesiado'. Mas o que a ansiedade está tentando te dizer?",
+                        footer: "A visão existencial 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "FILOSOFIA EXISTENCIAL",
+                        title: "'A ansiedade é a vertigem da liberdade'",
+                        body: "Søren Kierkegaard já dizia em 1844: a ansiedade surge quando nos damos conta de que somos livres para escolher o rumo da nossa existência.\n\nEla é o preço de não ser um autômato previsível.",
+                        footer: "O que diz o cérebro? 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A FISIOLOGIA",
+                        title: "O Eixo HPA em hiperalerta",
+                        body: "O hipotálamo ativa a hipófise e as suprarrenais, inundando o sangue de cortisol e adrenalina.\n\nIsso foi desenhado para fugir de predadores reais, mas hoje é disparado por e-mails de trabalho e dúvidas existenciais sobre o futuro.",
+                        footer: "Como canalizar a energia? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "MANEJO EXISTENCIAL",
+                        title: "3 Caminhos de ressignificação",
+                        body: "1. Diferencie Ansiedade Normal de Ansiedade Neurótica (Rollo May).\n2. Encontre um 'Para Quê' que sustente o sofrimento (Viktor Frankl).\n3. Fisiologia Restauradora: respiração 4-7-8 e contato real com a natureza.",
+                        footer: "Artigo na íntegra no portal 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO DISPONÍVEL",
+                        title: "Aprenda a dialogar com a sua ansiedade",
+                        body: "Publiquei uma investigação aprofundada combinando neurociência clínica e filosofia existencial para transformar a angústia em clareza.\n\n👉 Leia no link da bio:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Na cultura contemporânea, a primeira reação diante da ansiedade é o pânico de suprimi-la a qualquer custo: um ansiolítico rápido, uma distração digital ou uma promessa de "eliminar a ansiedade para sempre".
+
+Mas os grandes filósofos existenciais — como Kierkegaard, Heidegger e Viktor Frankl — já nos alertavam: a ansiedade é uma condição intrínseca da condição humana. É a "vertigem da liberdade", o sinal inequívoco de que estamos conscientes da finitude e responsáveis pelas nossas próprias escolhas.
+
+O sofrimento desmedido surge quando a ansiedade normal é transformada em ansiedade neurótica pela falta de sentido e pelo aprisionamento no imediatismo.
+
+Do ponto de vista neurobiológico, podemos regular a tempestade simpática com protocolos fisiológicos concretos, enquanto o trabalho psicoterapêutico ajuda a converter a angústia em clareza de valores e propósito.
+
+Escrevi um ensaio reflexivo integrando essas duas fronteiras no site.
+
+👉 Leia na íntegra no link da bio: deomagalhaes.com.br
+
+Você tem escutado o que a sua ansiedade quer dizer ou tem apenas tentado silenciá-la? Deixe sua reflexão.
+
+#ansiedade #filosofiaexistencial #kierkegaard #viktorfrankl #neuropsicologia #saudemental #psicoterapia #deomagalhaes #existencia #autenticidade`
+            },
+
+            "telas-infantil": {
+                articleSlug: "2026-10-23-impacto-telas-cerebro-infantil",
+                articleTitle: "O Impacto das Telas no Cérebro Infantil: Desenvolvimento e Sono",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROPEDIATRIA & COMPORTAMENTO",
+                        title: "Telas antes dos 2 anos: o que a neurociência realmente descobriu?",
+                        body: "Por que vídeos acelerados prejudicam a mielinização dos circuitos atencionais e como proteger o cérebro das crianças.",
+                        footer: "Arraste para ver os dados clínicos 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A PRÁTICA DO DIA A DIA",
+                        title: "A 'chupeta digital' contemporânea",
+                        body: "No restaurante ou em casa, entregar o tablet para silenciar a birra ou a inquietação parece inofensivo.\n\nContudo, a criança é privada da oportunidade crítica de treinar a própria autorregulação emocional com apoio parental.",
+                        footer: "O que acontece na circuitaria? 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "O MECANISMO NEURAL",
+                        title: "Cortes de câmera a cada 2 segundos",
+                        body: "Desenhos contemporâneos hiperestimulantes disparam reflexos de orientação visual involuntários constantes.\n\nIsso estafa o tronco encefálico e impede que o córtex pré-frontal desenvolva o controle atencional voluntário.",
+                        footer: "E o sono da criança? 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A FISIOLOGIA DO SONO",
+                        title: "Luz azul e supressão da melatonina",
+                        body: "A retina das crianças é muito mais transparente que a dos adultos, recebendo o dobro de radiação azul das telas.\n\nO núcleo supraquiasmático entende que ainda é meio-dia, atrasando a melatonina e prejudicando a consolidação da memória durante a noite.",
+                        footer: "Diretrizes recomendadas 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "GUIA PEDIÁTRICO",
+                        title: "3 Regras de ouro para a família",
+                        body: "1. Zero Telas até os 2 anos (Recomendação OMS e SBP).\n2. Quarto Livre de Telas: nada de tablets ou celulares 2 horas antes de dormir.\n3. Brincar Não-Estruturado: massinha, blocos, terra e corrida ao ar livre.",
+                        footer: "Artigo na íntegra no site 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "GUIA FAMILIAR NO PORTAL",
+                        title: "Guia completo de equilíbrio digital infantil",
+                        body: "Acesse nosso manual prático com substituições criativas para telas e estratégias para lidar com crises e birras sem eletrônicos.\n\n👉 Acesse no link da bio:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Entregar o celular para a criança na hora do almoço ou no restaurante traz silêncio imediato, mas cobra um preço silencioso e cumulativo do neurodesenvolvimento.
+
+Estudos recentes de neuroimagem demonstram que o excesso de telas nos primeiros anos de vida está diretamente associado a uma menor integridade na substância branca cerebral — responsável pela velocidade de processamento da linguagem e das funções executivas.
+
+Além disso, a retina infantil absorve significativamente mais luz de comprimento de onda azul, atrasando a secreção do hormônio do sono (melatonina) e fragmentando o sono REM, fundamental para a consolidação dos aprendizados do dia.
+
+Não se trata de demonizar a tecnologia, mas de reconhecer que o cérebro humano precisa de corpo em movimento, gravidade, toque tridimensional e contato olho no olho para se estruturar de forma saudável.
+
+Publiquei um guia completo sobre o impacto das telas e alternativas práticas para famílias no site.
+
+👉 Link na bio: deomagalhaes.com.br
+
+Como funciona o uso de telas na sua casa? Você tem conseguido estabelecer limites? Compartilhe comigo.
+
+#desenvolvimentoinfantil #neurodesenvolvimento #telasinfantis #pediatria #parentalidadeconsciente #sonoinfantil #funcoesexecutivas #deomagalhaes #psicologiainfantil`
+            }
+        };
+
+        // Estado do Studio
+        let currentPresetKey = "dopamina";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS.dopamina.slides));
+        let currentCaption = PRESETS.dopamina.caption;
+        let currentSlideIndex = 0;
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+            document.getElementById('captionBox').value = currentCaption;
+        });
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function loadPresetArticle(key) {
+            if (!PRESETS[key]) return;
+            currentPresetKey = key;
+            currentSlides = JSON.parse(JSON.stringify(PRESETS[key].slides));
+            currentCaption = PRESETS[key].caption;
+            currentSlideIndex = 0;
+            
+            document.getElementById('captionBox').value = currentCaption;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+            showToast("Artigo '" + PRESETS[key].articleTitle.substring(0, 32) + "...' carregado!");
+        }
+
+        function synthesizeCustomText() {
+            const title = document.getElementById('customTitle').value.trim() || "Nova Análise Clínica";
+            const text = document.getElementById('customText').value.trim();
+
+            if (!text) {
+                alert("Por favor, cole o texto do artigo para sintetizar.");
+                return;
+            }
+
+            // Segmenta de forma inteligente
+            const paragraphs = text.split('\n').filter(p => p.trim().length > 20);
+            
+            currentSlides = [
+                {
+                    type: "cover",
+                    badge: "NEUROCIÊNCIA & CLÍNICA",
+                    title: title,
+                    body: paragraphs[0] ? paragraphs[0].substring(0, 160) + "..." : "Uma investigação profunda sobre o comportamento humano e as bases neurobiológicas.",
+                    footer: "Arraste para o lado 👉"
+                },
+                {
+                    type: "problem",
+                    badge: "A DOR INVISÍVEL",
+                    title: "O Problema Silencioso",
+                    body: paragraphs[1] ? paragraphs[1].substring(0, 220) : "Identificando a manifestação cotidiana da queixa na rotina e nas relações.",
+                    footer: "Veja o que a ciência diz 👉"
+                },
+                {
+                    type: "neuro",
+                    badge: "A NEUROBIOLOGIA",
+                    title: "O Mecanismo no Cérebro",
+                    body: paragraphs[2] ? paragraphs[2].substring(0, 220) : "A circuitaria neural envolvida e como as vias corticais e subcorticais interagem.",
+                    footer: "Compreendendo o impacto 👉"
+                },
+                {
+                    type: "mechanism",
+                    badge: "O CONTRASTE",
+                    title: "A Dinâmica Comportamental",
+                    body: paragraphs[3] ? paragraphs[3].substring(0, 220) : "A balança entre causa biológica e reforço ambiental contínuo.",
+                    footer: "Como agir na prática? 👉"
+                },
+                {
+                    type: "steps",
+                    badge: "SÍNTESE PRÁTICA",
+                    title: "Diretrizes Clínicas de Ação",
+                    body: "1. Consciência dos gatilhos cotidianos.\n2. Reestruturação do ambiente imediato.\n3. Acompanhamento clínico e hábitos restauradores.",
+                    footer: "Leia a íntegra no portal 👉"
+                },
+                {
+                    type: "cta",
+                    badge: "ENSAIO COMPLETO NO SITE",
+                    title: "Aprofunde a leitura com o artigo completo",
+                    body: `Leia a análise integral com todas as referências bibliográficas em:\ndeomagalhaes.com.br\n\nLink direto disponível na bio!`,
+                    footer: "Deo Magalhães • CRP 04/42784"
+                }
+            ];
+
+            currentCaption = `${title}\n\n${paragraphs.slice(0, 3).join('\n\n')}\n\n👉 Leia o artigo na íntegra no link da bio: deomagalhaes.com.br\n\n#neuropsicologia #neurociencias #deomagalhaes #saudemental #comportamentohumano #psicologiaclinica`;
+            
+            document.getElementById('captionBox').value = currentCaption;
+            currentSlideIndex = 0;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+            showToast("Artigo sintetizado em 6 slides!");
+        }
+
+        function renderThumbs() {
+            const strip = document.getElementById('thumbsStrip');
+            strip.innerHTML = "";
+            currentSlides.forEach((slide, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `thumb-btn ${idx === currentSlideIndex ? 'active' : ''}`;
+                btn.onclick = () => goToSlide(idx);
+                btn.innerHTML = `<span>0${idx + 1}</span><span style="font-size: 0.68rem; opacity: 0.85;">${getSlideTypeLabel(slide.type)}</span>`;
+                strip.appendChild(btn);
+            });
+            updateCounterDisplay();
+        }
+
+        function getSlideTypeLabel(type) {
+            switch(type) {
+                case "cover": return "Capa";
+                case "problem": return "Problema";
+                case "neuro": return "Neurociência";
+                case "mechanism": return "Mecanismo";
+                case "steps": return "Prática";
+                case "cta": return "CTA";
+                default: return "Slide";
+            }
+        }
+
+        function updateCounterDisplay() {
+            const el = document.getElementById('slideCounterDisplay');
+            el.innerText = `Slide ${currentSlideIndex + 1} de ${currentSlides.length} • ${getSlideTypeLabel(currentSlides[currentSlideIndex].type)}`;
+        }
+
+        function populateEditorForm() {
+            const s = currentSlides[currentSlideIndex];
+            document.getElementById('editBadge').value = s.badge || "";
+            document.getElementById('editTitle').value = s.title || "";
+            document.getElementById('editBody').value = s.body || "";
+            document.getElementById('editFooter').value = s.footer || "";
+        }
+
+        function updateCurrentSlideData() {
+            const s = currentSlides[currentSlideIndex];
+            s.badge = document.getElementById('editBadge').value;
+            s.title = document.getElementById('editTitle').value;
+            s.body = document.getElementById('editBody').value;
+            s.footer = document.getElementById('editFooter').value;
+            renderCurrentSlide();
+        }
+
+        function goToSlide(idx) {
+            currentSlideIndex = idx;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < currentSlides.length - 1) {
+                goToSlide(currentSlideIndex + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                goToSlide(currentSlideIndex - 1);
+            }
+        }
+
+        // ==========================================
+        // MOTOR DE RENDERIZAÇÃO DO CANVAS (1080x1080)
+        // ==========================================
+        function renderCurrentSlide() {
+            const canvas = document.getElementById('carouselCanvas');
+            const ctx = canvas.getContext('2d');
+            const s = currentSlides[currentSlideIndex];
+            const theme = document.getElementById('themeSelect').value;
+
+            // Cores do tema
+            let colors = {
+                bgGradientTop: "#001219",
+                bgGradientBottom: "#002b36",
+                accent: "#ee9b00",
+                textMain: "#ffffff",
+                textMuted: "#94d2bd",
+                cardBg: "rgba(0, 95, 115, 0.35)",
+                cardBorder: "rgba(148, 210, 189, 0.3)",
+                progressFill: "#ee9b00"
+            };
+
+            if (theme === "dark-obsidian") {
+                colors = {
+                    bgGradientTop: "#0b1320",
+                    bgGradientBottom: "#1c2541",
+                    accent: "#0a9396",
+                    textMain: "#ffffff",
+                    textMuted: "#e9d8a6",
+                    cardBg: "rgba(255, 255, 255, 0.05)",
+                    cardBorder: "rgba(10, 147, 150, 0.4)",
+                    progressFill: "#0a9396"
+                };
+            } else if (theme === "clean-light") {
+                colors = {
+                    bgGradientTop: "#f8fafc",
+                    bgGradientBottom: "#e2e8f0",
+                    accent: "#005f73",
+                    textMain: "#001219",
+                    textMuted: "#475569",
+                    cardBg: "#ffffff",
+                    cardBorder: "#cbd5e1",
+                    progressFill: "#005f73"
+                };
+            }
+
+            // 1. Limpa e desenha Fundo Gradiente
+            const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1080);
+            bgGrad.addColorStop(0, colors.bgGradientTop);
+            bgGrad.addColorStop(1, colors.bgGradientBottom);
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, 1080, 1080);
+
+            // 2. Elementos Gráficos Sutis de Fundo (Padrão de Circuitos Neurais)
+            drawSubtleBackground(ctx, colors);
+
+            // 3. Barra de Progresso no Topo (1080px)
+            const progress = (currentSlideIndex + 1) / currentSlides.length;
+            ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+            ctx.fillRect(70, 48, 940, 8);
+            ctx.fillStyle = colors.progressFill;
+            ctx.fillRect(70, 48, 940 * progress, 8);
+
+            // 4. Header do Slide (Categoria + Contador 01/06)
+            ctx.fillStyle = colors.accent;
+            ctx.font = "bold 26px 'Inter', sans-serif";
+            ctx.textAlign = "left";
+            ctx.fillText((s.badge || "NEUROCIÊNCIA & CLÍNICA").toUpperCase(), 70, 110);
+
+            // Contador de Slide estilo pill no topo direito
+            const counterText = `0${currentSlideIndex + 1} / 0${currentSlides.length}`;
+            ctx.font = "bold 24px 'Inter', sans-serif";
+            ctx.textAlign = "right";
+            ctx.fillStyle = colors.textMuted;
+            ctx.fillText(counterText, 1010, 110);
+
+            // 5. Linha divisória sutil
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(70, 135);
+            ctx.lineTo(1010, 135);
+            ctx.stroke();
+
+            // 6. Título Principal do Slide
+            ctx.textAlign = "left";
+            if (s.type === "cover") {
+                // Capa com destaque âmbar e tipografia de alto impacto
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "bold 64px 'Outfit', 'Inter', sans-serif";
+                wrapText(ctx, s.title, 70, 230, 940, 78);
+
+                // Linha de Destaque
+                ctx.fillStyle = colors.accent;
+                ctx.fillRect(70, 490, 120, 8);
+
+                // Subtítulo em card translúcido
+                drawRoundedRect(ctx, 70, 520, 940, 280, 20, colors.cardBg, colors.cardBorder);
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "400 36px 'Inter', sans-serif";
+                wrapText(ctx, s.body, 115, 600, 850, 54);
+
+            } else if (s.type === "steps") {
+                // Slide de Passos Práticos
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "bold 52px 'Outfit', 'Inter', sans-serif";
+                wrapText(ctx, s.title, 70, 210, 940, 64);
+
+                // Caixa de passos estruturada
+                drawRoundedRect(ctx, 70, 310, 940, 510, 24, colors.cardBg, colors.cardBorder);
+
+                const items = s.body.split('\n').filter(i => i.trim().length > 0);
+                let startY = 380;
+                items.forEach((item, idx) => {
+                    // Ícone numérico
+                    ctx.fillStyle = colors.accent;
+                    ctx.beginPath();
+                    ctx.arc(125, startY + 12, 24, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#001219";
+                    ctx.font = "bold 24px 'Inter', sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(`${idx + 1}`, 125, startY + 20);
+
+                    // Texto do item
+                    ctx.textAlign = "left";
+                    ctx.fillStyle = colors.textMain;
+                    ctx.font = "500 30px 'Inter', sans-serif";
+                    const cleanItem = item.replace(/^\d+[\.\)]\s*/, '');
+                    const lines = wrapText(ctx, cleanItem, 175, startY + 20, 790, 42);
+                    startY += (lines * 42) + 40;
+                });
+
+            } else if (s.type === "cta") {
+                // Slide de Fechamento & Chamada para Ação
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "bold 56px 'Outfit', 'Inter', sans-serif";
+                wrapText(ctx, s.title, 70, 210, 940, 68);
+
+                // Card Central de Chamada
+                drawRoundedRect(ctx, 70, 320, 940, 480, 24, colors.cardBg, colors.cardBorder);
+
+                // Avatar / Monograma no CTA
+                ctx.fillStyle = colors.accent;
+                ctx.beginPath();
+                ctx.arc(150, 420, 45, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = "#001219";
+                ctx.font = "bold 34px 'Outfit', sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("DM", 150, 432);
+
+                ctx.textAlign = "left";
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "bold 34px 'Inter', sans-serif";
+                ctx.fillText("Deo Magalhães", 225, 415);
+                ctx.font = "500 24px 'Inter', sans-serif";
+                ctx.fillStyle = colors.textMuted;
+                ctx.fillText("Neuropsicólogo & Neurocientista • CRP 04/42784", 225, 450);
+
+                // Texto do CTA
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "400 34px 'Inter', sans-serif";
+                wrapText(ctx, s.body, 115, 540, 850, 52);
+
+            } else {
+                // Slides Normais (Problema, Neurociência, Mecanismo)
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "bold 52px 'Outfit', 'Inter', sans-serif";
+                wrapText(ctx, s.title, 70, 220, 940, 65);
+
+                drawRoundedRect(ctx, 70, 330, 940, 490, 24, colors.cardBg, colors.cardBorder);
+                ctx.fillStyle = colors.textMain;
+                ctx.font = "400 36px 'Inter', sans-serif";
+                wrapText(ctx, s.body, 120, 410, 840, 58);
+            }
+
+            // 7. Rodapé Fixo Institucional
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(70, 920);
+            ctx.lineTo(1010, 920);
+            ctx.stroke();
+
+            // Identidade no rodapé esquerdo
+            ctx.textAlign = "left";
+            ctx.fillStyle = colors.accent;
+            ctx.font = "bold 26px 'Inter', sans-serif";
+            ctx.fillText("@deomagalhaesneuro", 70, 975);
+
+            // Ação ou chamada no rodapé direito
+            ctx.textAlign = "right";
+            ctx.fillStyle = colors.textMuted;
+            ctx.font = "600 24px 'Inter', sans-serif";
+            ctx.fillText(s.footer || "deomagalhaes.com.br", 1010, 975);
+        }
+
+        // Funções Gráficas Utilitárias
+        function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) {
+                ctx.fillStyle = fill;
+                ctx.fill();
+            }
+            if (stroke) {
+                ctx.strokeStyle = stroke;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+        }
+
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            const paragraphs = (text || "").split('\n');
+            let currentY = y;
+            let lineCount = 0;
+
+            for (let p of paragraphs) {
+                const words = p.split(' ');
+                let line = '';
+
+                for (let n = 0; n < words.length; n++) {
+                    const testLine = line + words[n] + ' ';
+                    const metrics = ctx.measureText(testLine);
+                    const testWidth = metrics.width;
+                    if (testWidth > maxWidth && n > 0) {
+                        ctx.fillText(line.trim(), x, currentY);
+                        line = words[n] + ' ';
+                        currentY += lineHeight;
+                        lineCount++;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                ctx.fillText(line.trim(), x, currentY);
+                currentY += lineHeight;
+                lineCount++;
+            }
+            return lineCount;
+        }
+
+        function drawSubtleBackground(ctx, colors) {
+            ctx.save();
+            ctx.strokeStyle = "rgba(10, 147, 150, 0.07)";
+            ctx.lineWidth = 1;
+
+            // Arcos neurais sutis no canto superior direito
+            ctx.beginPath();
+            ctx.arc(1080, 0, 320, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(1080, 0, 480, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Arcos no canto inferior esquerdo
+            ctx.beginPath();
+            ctx.arc(0, 1080, 400, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // ==========================================
+        // EXPORTAÇÕES E DOWNLOADS
+        // ==========================================
+        function downloadCurrentSlide() {
+            const canvas = document.getElementById('carouselCanvas');
+            const link = document.createElement('a');
+            const slug = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleSlug : "carrossel";
+            link.download = `${slug}-slide-0${currentSlideIndex + 1}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast(`Slide 0${currentSlideIndex + 1} baixado com sucesso em 1080x1080!`);
+        }
+
+        async function downloadAllSlides() {
+            const originalIndex = currentSlideIndex;
+            showToast("Iniciando download dos 6 slides em 1080x1080...");
+
+            for (let i = 0; i < currentSlides.length; i++) {
+                goToSlide(i);
+                // Pequena pausa para garantir renderização do canvas
+                await new Promise(r => setTimeout(r, 200));
+                
+                const canvas = document.getElementById('carouselCanvas');
+                const link = document.createElement('a');
+                const slug = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleSlug : "carrossel";
+                link.download = `${slug}-slide-0${i + 1}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+
+            goToSlide(originalIndex);
+            showToast("Todos os 6 slides foram baixados!");
+        }
+
+        function copyCaption() {
+            const text = document.getElementById('captionBox').value;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("✨ Legenda e hashtags copiadas para a área de transferência!");
+            }).catch(err => {
+                // Fallback
+                const ta = document.getElementById('captionBox');
+                ta.select();
+                document.execCommand('copy');
+                showToast("✨ Legenda copiada!");
+            });
+        }
+
+        function exportMarkdownFile() {
+            const slug = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleSlug : "2026-10-23-post";
+            const title = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleTitle : "Carrossel de Conteúdo";
+            
+            let md = `# Pílula de Conteúdo: ${title}\n`;
+            md += `**Data:** ${new Date().toLocaleDateString('pt-BR')}\n`;
+            md += `**Autor:** Deo Magalhães — Neuropsicólogo e Neurocientista (CRP 04/42784)\n\n---\n\n`;
+            md += `## 📸 MÓDULO 1: Roteiro de Carrossel para Instagram (${currentSlides.length} Slides)\n\n`;
+
+            currentSlides.forEach((s, idx) => {
+                md += `### [SLIDE ${idx + 1} - ${s.badge}]\n`;
+                md += `* **Título:** ${s.title}\n`;
+                md += `* **Texto:**\n  ${s.body.replace(/\n/g, '\n  ')}\n`;
+                md += `* **Rodapé / Chamada:** ${s.footer}\n\n`;
+            });
+
+            md += `---\n\n## ✍️ MÓDULO 2: Legenda Completa para o Instagram\n\n`;
+            md += document.getElementById('captionBox').value + `\n\n---\n`;
+
+            const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${slug}.md`;
+            link.click();
+            showToast("Roteiro Markdown exportado!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.querySelector('span').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,6 +1,19 @@
-# Central de Pílulas de Conteúdo para Redes Sociais — Deo Magalhães
+# Central de Pílulas de Conteúdo & Studio de Redes Sociais — Deo Magalhães
 
-Este diretório armazena os roteiros de carrosséis, legendas, scripts de Reels e posts gerados automaticamente a partir dos artigos e recursos do site para o perfil [@deomagalhaesneuro](https://instagram.com/deomagalhaesneuro).
+Este diretório gerencia os roteiros de carrosséis, legendas estratégicas, scripts de Reels e posts gerados automaticamente a partir dos ensaios e storybooks do site para o perfil oficial [@deomagalhaesneuro](https://instagram.com/deomagalhaesneuro).
+
+---
+
+## 🎨 Studio Visual de Carrosséis (1080x1080)
+Acesse a aplicação visual interativa diretamente no navegador:
+* **[Abrir Studio Gerador de Carrosséis (social/gerador.html)](gerador.html)**
+
+### Recursos do Studio:
+* **Renderização Real-Time 1080x1080**: gera os slides quadrados oficiais com tipografia refinada e paleta institucional (`#005f73`, `#001219`, `#ee9b00`).
+* **Ingestão Automática**: seletor de ensaios pré-carregados ou campo para colar qualquer texto/artigo novo e sintetizar em 6 slides.
+* **Download em Lote (.PNG)**: baixe o slide ativo ou todos os 6 slides numerados prontos para publicar no carrossel.
+* **Cópia de Legenda com 1 Clique**: gancho, narrativa científica, chamada para ação e 15 hashtags estratégicas.
+* **Exportação Markdown**: baixa o arquivo `.md` padronizado.
 
 ---
 
@@ -8,12 +21,15 @@ Este diretório armazena os roteiros de carrosséis, legendas, scripts de Reels 
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
-| **22/10/2026** | **A Epidemia da Dopamina Barata: Algoritmos e Telas** | `social/2026-10-22-dopamina-barata.md` | ✅ Pronto para postar |
+| **23/10/2026** | **A Sociedade do Cansaço & Autoexploração (Byung-Chul Han)** | [`social/2026-10-23-sociedade-do-cansaso.md`](2026-10-23-sociedade-do-cansaso.md) | ✅ Pronto para postar |
+| **23/10/2026** | **Transtorno Borderline nas Relações Íntimas (Clivagem & Amígdala)** | [`social/2026-10-23-borderline-relacoes-intimas.md`](2026-10-23-borderline-relacoes-intimas.md) | ✅ Pronto para postar |
+| **23/10/2026** | **O Camaleão Bento e as Cores do Medo do Escuro (Fábula Infantil)** | [`social/2026-10-23-storybook-bento-escuro.md`](2026-10-23-storybook-bento-escuro.md) | ✅ Pronto para postar |
+| **22/10/2026** | **A Epidemia da Dopamina Barata: Algoritmos e Telas** | [`social/2026-10-22-dopamina-barata.md`](2026-10-22-dopamina-barata.md) | ✅ Pronto para postar |
 
 ---
 
 ## 📌 Como usar
-1. Abra o arquivo `.md` correspondente.
-2. Copie o texto dos slides para seu editor visual (Canva / Figma) ou use o texto diretamente em carrossel nativo do Instagram.
-3. Copie a legenda com as hashtags e poste.
-4. Use o script de vídeo para gravar um Reels ou sequência de Stories de 60 segundos.
+1. Abra o [Studio Visual (gerador.html)](gerador.html) ou selecione um arquivo `.md`.
+2. Se estiver no Studio, visualize os 6 slides 1080x1080 e clique em **"Baixar Todos (6 Slides)"**.
+3. Clique em **"Copiar Legenda Completa"** e publique direto no Instagram / Threads.
+4. Para novos artigos futuros, use o agente com a skill `@gerador-carrossel` ou cole o texto na aba *Colar Artigo* do Studio.
