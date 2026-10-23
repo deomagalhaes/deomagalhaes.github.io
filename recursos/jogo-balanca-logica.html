@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balança de Equivalências: Raciocínio Algébrico e Lógica – Deo Magalhães</title>
+    <meta name="description" content="Desafie seu raciocínio algébrico visual, dedução e abstração com a Balança de Equivalências. Jogo neurocognitivo desenvolvido pelo neuropsicólogo Deo Magalhães.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --primary-light: #e0f2f1;
+            --accent: #ee9b00;
+            --accent-warm: #ca6702;
+            --bg-page: #f9f6ee;
+            --surface: #ffffff;
+            --text-dark: #1f2937;
+            --text-muted: #4b5563;
+            --brass: #b89758;
+            --brass-dark: #8c6d32;
+            --teal-dark: #003844;
+            --pan-metal: #cbd5e1;
+            --success: #2a9d8f;
+            --danger: #e76f51;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-wrapper {
+            max-width: 980px;
+            margin: 1.5rem auto 3rem auto;
+            padding: 1.5rem;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 95, 115, 0.08);
+        }
+
+        .game-header-box {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-header-box h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin: 0.3rem 0;
+            font-weight: 800;
+        }
+
+        .badge-cognitive {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0f2f1;
+            color: #004d40;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-header-box p {
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Controles HUD */
+        .game-controls-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0f7f8;
+            padding: 0.9rem 1.25rem;
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .level-selector-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .level-selector-box span {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .btn-tier {
+            background: white;
+            border: 2px solid #b2dfdb;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-tier:hover {
+            border-color: var(--primary);
+            background: #e0f2f1;
+        }
+
+        .btn-tier.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.25);
+        }
+
+        .hud-stats-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .hud-stat-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            min-width: 70px;
+        }
+
+        .hud-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .hud-stat-value {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .action-btns-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-ctrl {
+            background: white;
+            border: 1.5px solid #cbd5e1;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-ctrl:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .btn-ctrl:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Seção de Pistas (Balanças de Referência) */
+        .premises-container {
+            background: #f8fafc;
+            border: 1.5px dashed #94a3b8;
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .premises-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .premises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .premise-card {
+            background: white;
+            border-radius: 12px;
+            padding: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .premise-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-height: 42px;
+            min-width: 60px;
+        }
+
+        .premise-equals {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+            user-select: none;
+        }
+
+        /* Área da Balança Ativa Interativa */
+        .active-scale-area {
+            background: linear-gradient(180deg, #f0f7f8 0%, #e6f1f3 100%);
+            border-radius: 18px;
+            padding: 1.5rem 1rem 1rem 1rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+            border: 1px solid #cce5e8;
+            overflow: hidden;
+        }
+
+        .target-goal-banner {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .target-goal-banner h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .target-goal-banner p {
+            margin: 4px 0 0 0;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        /* Balança com Física SVG & CSS */
+        .scale-stage {
+            width: 100%;
+            max-width: 620px;
+            height: 290px;
+            margin: 0 auto;
+            position: relative;
+            user-select: none;
+        }
+
+        .scale-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Eixo e Braço Giratório */
+        .scale-beam {
+            transform-origin: 310px 80px;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Ponteiro Fiel da Balança */
+        .scale-pointer {
+            transform-origin: 310px 80px;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Pratos da Balança */
+        .pan-group-left, .pan-group-right {
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Slots dos Itens nos Pratos */
+        .scale-pan-html-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .pan-dropzone {
+            position: absolute;
+            width: 170px;
+            min-height: 80px;
+            pointer-events: auto;
+            display: flex;
+            flex-wrap: wrap-reverse;
+            align-content: flex-start;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px;
+            transform-origin: center top;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #pan-left-zone {
+            left: 35px;
+            top: 155px;
+        }
+
+        #pan-right-zone {
+            right: 35px;
+            top: 155px;
+            background: rgba(255, 255, 255, 0.65);
+            border: 2px dashed #0a9396;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), background 0.2s, border-color 0.2s;
+        }
+
+        #pan-right-zone:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--primary);
+        }
+
+        .pan-placeholder-tip {
+            font-size: 0.78rem;
+            color: #64748b;
+            text-align: center;
+            width: 100%;
+            font-weight: 600;
+            pointer-events: none;
+            padding: 12px 4px;
+        }
+
+        /* Indicador de Status do Equilíbrio */
+        .equilibrium-status-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            z-index: 5;
+        }
+
+        .status-unbalanced {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .status-balanced {
+            background: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* Itens / Pesos Geométricos */
+        .weight-token {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-weight: 800;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            user-select: none;
+            position: relative;
+        }
+
+        .token-sphere {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #00b4d8 0%, #0077b6 70%, #023e8a 100%);
+            color: white;
+            font-size: 0.85rem;
+            border: 2px solid #90e0ef;
+        }
+
+        .token-cube {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ee9b00 0%, #ca6702 100%);
+            color: white;
+            font-size: 0.85rem;
+            border: 2px solid #ffd166;
+        }
+
+        .token-pyramid {
+            width: 40px;
+            height: 38px;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            background: linear-gradient(180deg, #94d2bd 0%, #0a9396 70%, #005f73 100%);
+            color: white;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 2px;
+            font-size: 0.78rem;
+        }
+
+        .token-star {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e76f51 0%, #d90429 100%);
+            color: white;
+            font-size: 0.95rem;
+            border: 2px solid #ffb4a2;
+        }
+
+        .token-val {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            font-size: 0.95rem;
+        }
+
+        /* Na bandeja de escolha */
+        .token-interactive {
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .token-interactive:hover {
+            transform: translateY(-4px) scale(1.08);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+        }
+
+        .token-interactive:active {
+            transform: scale(0.95);
+        }
+
+        .pan-item-removable {
+            cursor: pointer;
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .pan-item-removable:hover::after {
+            content: '✕';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Bandeja de Pesos para o Jogador */
+        .tray-container {
+            background: white;
+            border-radius: 16px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tray-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tray-header h4 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tray-tokens-list {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .tray-item-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tray-item-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .action-tray-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-validate {
+            background: linear-gradient(135deg, #0a9396 0%, #005f73 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.3);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-validate:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0, 95, 115, 0.4);
+            filter: brightness(1.08);
+        }
+
+        .btn-validate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-clear-pan {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-clear-pan:hover {
+            background: #cbd5e1;
+        }
+
+        /* Seção Neurocognitiva */
+        .neuro-explanation {
+            margin-top: 2rem;
+            background: #f0fdfa;
+            border-left: 4px solid #0d9488;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .neuro-explanation h3 {
+            color: #0f766e;
+            font-size: 1.15rem;
+            margin: 0 0 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .neuro-explanation p {
+            color: #134e4a;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin: 0 0 0.8rem 0;
+        }
+
+        .neuro-pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .pillar-card {
+            background: white;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #ccfbf1;
+        }
+
+        .pillar-card strong {
+            display: block;
+            color: #0f766e;
+            font-size: 0.88rem;
+            margin-bottom: 3px;
+        }
+
+        .pillar-card span {
+            color: #334155;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            display: block;
+        }
+
+        /* Drawer de Regras e Dicas */
+        .rules-drawer {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: #fffbeb;
+            border-radius: 12px;
+            border: 1px solid #fef3c7;
+        }
+
+        .rules-drawer h4 {
+            color: #92400e;
+            font-size: 1rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .rules-drawer ol {
+            margin: 0;
+            padding-left: 1.2rem;
+            color: #78350f;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        /* Modal de Sucesso / Feedback */
+        .feedback-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feedback-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            border-left: 5px solid #10b981;
+            color: #065f46;
+        }
+
+        .toast-error {
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* Modal de Vitória */
+        .victory-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .victory-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .victory-card {
+            background: white;
+            border-radius: 22px;
+            padding: 2.2rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .victory-overlay.active .victory-card {
+            transform: scale(1);
+        }
+
+        .victory-icon {
+            font-size: 3.5rem;
+            margin-bottom: 0.3rem;
+            animation: bounce 0.9s infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        .victory-card h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .victory-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.98rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .res-title {
+            font-size: 0.72rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .res-data {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .btn-victory-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-modal-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-modal-secondary {
+            background: #e2e8f0;
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-modal-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        @media (max-width: 640px) {
+            .game-wrapper {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            .game-header-box h1 {
+                font-size: 1.6rem;
+            }
+            .game-controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .level-selector-box, .hud-stats-group, .action-btns-group {
+                justify-content: center;
+            }
+            .scale-stage {
+                height: 250px;
+            }
+            #pan-left-zone {
+                left: 10px;
+                width: 140px;
+                top: 140px;
+            }
+            #pan-right-zone {
+                right: 10px;
+                width: 140px;
+                top: 140px;
+            }
+            .weight-token {
+                transform: scale(0.9);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top-bar Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Padrão -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../recursos.html">Recursos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main style="padding: 1.5rem 1rem;">
+        <div class="game-wrapper">
+            <!-- Cabeçalho do Jogo -->
+            <div class="game-header-box">
+                <div class="badge-cognitive">
+                    ⚖️ Raciocínio Algébrico Visual & Dedução Lógica
+                </div>
+                <h1>Balança de Equivalências</h1>
+                <p>Observe as relações de equilíbrio das pistas, deduza o valor relativo das formas geométricas e nivele a balança alvo com a combinação exata de pesos!</p>
+            </div>
+
+            <!-- Painel de Controles HUD -->
+            <div class="game-controls-bar">
+                <div class="level-selector-box">
+                    <span>Nível:</span>
+                    <button class="btn-tier active" data-tier="1">1 (Iniciação)</button>
+                    <button class="btn-tier" data-tier="2">2 (Intermediário)</button>
+                    <button class="btn-tier" data-tier="3">3 (Avançado)</button>
+                    <button class="btn-tier" data-tier="4">4 (Mestre)</button>
+                </div>
+
+                <div class="hud-stats-group">
+                    <div class="hud-stat-pill">
+                        <span class="hud-stat-label">Fase</span>
+                        <span class="hud-stat-value" id="hud-stage">1/3</span>
+                    </div>
+                    <div class="hud-stat-pill">
+                        <span class="hud-stat-label">Tentativas</span>
+                        <span class="hud-stat-value" id="hud-moves">0</span>
+                    </div>
+                    <div class="hud-stat-pill">
+                        <span class="hud-stat-label">Pontos</span>
+                        <span class="hud-stat-value" id="hud-score">0</span>
+                    </div>
+                    <div class="hud-stat-pill">
+                        <span class="hud-stat-label">Tempo</span>
+                        <span class="hud-stat-value" id="hud-timer">00:00</span>
+                    </div>
+                </div>
+
+                <div class="action-btns-group">
+                    <button class="btn-ctrl" id="btn-restart" title="Reiniciar fase atual">
+                        🔄 Reiniciar
+                    </button>
+                    <button class="btn-ctrl" id="btn-sound" title="Alternar som">
+                        🔊 Som
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pistas de Equivalência (Premissas) -->
+            <div class="premises-container">
+                <div class="premises-title">
+                    🔍 <span>Pistas em Equilíbrio (Relações Verdadeiras):</span>
+                </div>
+                <div class="premises-grid" id="premises-grid">
+                    <!-- Gerado dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Balança Interativa Principal -->
+            <div class="active-scale-area">
+                <div class="target-goal-banner">
+                    <h3 id="target-title">Desafio: Equilibre a Balança!</h3>
+                    <p id="target-instruction">Adicione pesos no Prato Direito para igualar exatamente a carga do Prato Esquerdo.</p>
+                </div>
+
+                <!-- Palco da Balança Física SVG -->
+                <div class="scale-stage">
+                    <svg class="scale-svg" viewBox="0 0 620 280">
+                        <!-- Base e Pilar Central -->
+                        <path d="M260 270 L360 270 L340 250 L280 250 Z" fill="#003844" />
+                        <rect x="290" y="245" width="40" height="15" rx="3" fill="#8c6d32" />
+                        <rect x="303" y="70" width="14" height="180" rx="3" fill="url(#brass-grad)" />
+                        
+                        <!-- Mostrador e Fiel Central -->
+                        <circle cx="310" cy="80" r="26" fill="#003844" stroke="#b89758" stroke-width="3" />
+                        <circle cx="310" cy="80" r="18" fill="#f8fafc" />
+                        <!-- Marcador central verde -->
+                        <line x1="310" y1="62" x2="310" y2="70" stroke="#10b981" stroke-width="2" />
+                        <line x1="300" y1="65" x2="304" y2="71" stroke="#94a3b8" stroke-width="1.5" />
+                        <line x1="320" y1="65" x2="316" y2="71" stroke="#94a3b8" stroke-width="1.5" />
+
+                        <!-- Fiel / Ponteiro da Balança (gira com o feixe) -->
+                        <g id="scale-pointer" class="scale-pointer">
+                            <line x1="310" y1="80" x2="310" y2="60" stroke="#e63946" stroke-width="2.5" stroke-linecap="round" />
+                            <circle cx="310" cy="80" r="5" fill="#8c6d32" />
+                        </g>
+
+                        <!-- Braço / Feixe Giratório da Balança -->
+                        <g id="scale-beam" class="scale-beam">
+                            <!-- Barra Horizontal -->
+                            <rect x="110" y="76" width="400" height="8" rx="4" fill="url(#brass-grad)" stroke="#8c6d32" stroke-width="1" />
+                            <circle cx="120" cy="80" r="6" fill="#003844" stroke="#b89758" stroke-width="2" />
+                            <circle cx="500" cy="80" r="6" fill="#003844" stroke="#b89758" stroke-width="2" />
+                            
+                            <!-- Correntes de Suspensão Esquerda -->
+                            <line x1="120" y1="80" x2="70" y2="180" stroke="#64748b" stroke-width="1.8" stroke-dasharray="3,2" />
+                            <line x1="120" y1="80" x2="170" y2="180" stroke="#64748b" stroke-width="1.8" stroke-dasharray="3,2" />
+                            
+                            <!-- Prato Esquerdo (Bandeja) -->
+                            <path d="M60 180 Q120 205 180 180 Z" fill="#94a3b8" stroke="#475569" stroke-width="2" />
+
+                            <!-- Correntes de Suspensão Direita -->
+                            <line x1="500" y1="80" x2="450" y2="180" stroke="#64748b" stroke-width="1.8" stroke-dasharray="3,2" />
+                            <line x1="500" y1="80" x2="550" y2="180" stroke="#64748b" stroke-width="1.8" stroke-dasharray="3,2" />
+
+                            <!-- Prato Direito (Bandeja) -->
+                            <path d="M440 180 Q500 205 560 180 Z" fill="#94a3b8" stroke="#475569" stroke-width="2" />
+                        </g>
+
+                        <defs>
+                            <linearGradient id="brass-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#8c6d32" />
+                                <stop offset="40%" stop-color="#e9d8a6" />
+                                <stop offset="70%" stop-color="#b89758" />
+                                <stop offset="100%" stop-color="#735720" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+
+                    <!-- Dropzones HTML Sobrepostas aos Pratos -->
+                    <div class="scale-pan-html-overlay">
+                        <!-- Prato Esquerdo (Carga Fixa do Desafio) -->
+                        <div id="pan-left-zone" class="pan-dropzone"></div>
+
+                        <!-- Prato Direito (Bandeja Interativa do Jogador) -->
+                        <div id="pan-right-zone" class="pan-dropzone" title="Clique nos pesos da bandeja para adicionar. Clique aqui nos itens para remover.">
+                            <div class="pan-placeholder-tip" id="pan-tip">Toque nos pesos abaixo para carregar este prato</div>
+                        </div>
+                    </div>
+
+                    <!-- Selo de Status do Equilíbrio -->
+                    <div class="equilibrium-status-badge status-unbalanced" id="status-badge">
+                        ⚖️ Desbalanceada
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bandeja de Pesos para o Jogador Escolher -->
+            <div class="tray-container">
+                <div class="tray-header">
+                    <h4>📦 <span>Sua Bandeja de Pesos (Toque para colocar na balança):</span></h4>
+                    <span style="font-size: 0.8rem; color: #64748b;">(Dica: toque no item dentro do prato para removê-lo)</span>
+                </div>
+
+                <div class="tray-tokens-list" id="tray-list">
+                    <!-- Injetado dinamicamente -->
+                </div>
+
+                <div class="action-tray-btns">
+                    <button class="btn-clear-pan" id="btn-clear" title="Remover todos os itens do prato direito">
+                        🗑️ Esvaziar Prato
+                    </button>
+                    <button class="btn-validate" id="btn-validate">
+                        ✨ Validar Equilíbrio!
+                    </button>
+                </div>
+            </div>
+
+            <!-- Regras Rápidas -->
+            <div class="rules-drawer">
+                <h4>📌 Como Jogar:</h4>
+                <ol>
+                    <li>Examine as <strong>Pistas em Equilíbrio</strong> no topo. Elas informam quais combinações de pesos possuem a mesma massa.</li>
+                    <li>Observe o que está colocado no <strong>Prato Esquerdo</strong> da balança central.</li>
+                    <li>Use a <strong>Dedução por Substituição</strong> para descobrir quais formas somadas equilibram perfeitamente o prato.</li>
+                    <li>Clique nos pesos da bandeja para adicioná-los ao Prato Direito. A balança inclinará em tempo real conforme você adiciona ou remove itens!</li>
+                    <li>Quando achar que a balança está no fiel (equilibrada em 0°), clique em <strong>Validar Equilíbrio</strong>!</li>
+                </ol>
+            </div>
+
+            <!-- Explicação Neurocognitiva -->
+            <div class="neuro-explanation">
+                <h3>🧠 Por que este exercício é tão poderoso na neuropsicologia?</h3>
+                <p>
+                    A Balança de Equivalências trabalha o <strong>raciocínio algébrico intuitivo</strong> e o <strong>pensamento dedutivo formal</strong>. 
+                    Diferente da simples memorização, este desafio exige que o encéfalo converta símbolos visuais em grandezas relativas desconhecidas, 
+                    realizando operações de substituição mental e eliminação de hipóteses.
+                </p>
+                <div class="neuro-pillars">
+                    <div class="pillar-card">
+                        <strong>Sulco Intraparietal</strong>
+                        <span>Responsável pela representação espacial de quantidades, magnitudes numéricas e senso de paridade física.</span>
+                    </div>
+                    <div class="pillar-card">
+                        <strong>Córtex Pré-Frontal Dorsolateral</strong>
+                        <span>Sustenta a memória de trabalho (manter e manipular as premissas ativas simultaneamente na mente).</span>
+                    </div>
+                    <div class="pillar-card">
+                        <strong>Flexibilidade Cognitiva</strong>
+                        <span>Permite reavaliar caminhos de substituição lógica caso uma hipótese inicial desequilibre a equação.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Link de retorno -->
+            <div style="margin-top: 2rem; text-align: center;">
+                <a href="../jogos.html" class="btn-ctrl" style="display: inline-flex; padding: 10px 20px; font-size: 1rem; color: var(--primary); text-decoration: none;">
+                    ← Voltar para Galeria de Jogos
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast de Feedback -->
+    <div class="feedback-toast" id="feedback-toast">
+        <span id="toast-icon">✨</span>
+        <span id="toast-text">Mensagem</span>
+    </div>
+
+    <!-- Modal de Vitória -->
+    <div class="victory-overlay" id="victory-modal">
+        <div class="victory-card">
+            <div class="victory-icon">⚖️</div>
+            <h2>Equilíbrio Perfeito!</h2>
+            <p id="victory-feedback">Você deduziu com precisão matemática a equivalência lógica das formas!</p>
+
+            <div class="results-grid">
+                <div class="res-box">
+                    <span class="res-title">Fase</span>
+                    <span class="res-data" id="res-stage">1/3</span>
+                </div>
+                <div class="res-box">
+                    <span class="res-title">Tentativas</span>
+                    <span class="res-data" id="res-moves">1</span>
+                </div>
+                <div class="res-box">
+                    <span class="res-title">Tempo</span>
+                    <span class="res-data" id="res-time">00:45</span>
+                </div>
+            </div>
+
+            <div class="btn-victory-group">
+                <button class="btn-modal-secondary" id="btn-replay">
+                    🔄 Jogar Novamente
+                </button>
+                <button class="btn-modal-primary" id="btn-next-stage">
+                    Próximo Desafio ➔
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ PADRÃO -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para estimulação cognitiva.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Lógica do Jogo com Sintetizador de Áudio e Banco de Fases -->
+    <script>
+    (function(){
+        'use strict';
+
+        // --- SISTEMA DE ÁUDIO WEB AUDIO API ---
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) audioCtx = new AudioContextClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+
+                if (type === 'add') {
+                    // Som de peso encaixando (clink suave)
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'remove') {
+                    // Som de retirada (pop invertido)
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(580, now);
+                    osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.09);
+                } else if (type === 'tilt') {
+                    // Som suave de balanço mecânico
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'correct') {
+                    // Acorde celestial em arpejo
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.22, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.35);
+                    });
+                } else if (type === 'error') {
+                    // Tom duplo suave de discordância
+                    [220, 207].forEach((freq) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(freq, now);
+                        gain.gain.setValueAtTime(0.12, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now);
+                        osc.stop(now + 0.25);
+                    });
+                } else if (type === 'victory') {
+                    // Fanfarra triunfal
+                    const fanfare = [
+                        { f: 523.25, t: 0, d: 0.12 },
+                        { f: 659.25, t: 0.12, d: 0.12 },
+                        { f: 783.99, t: 0.24, d: 0.12 },
+                        { f: 1046.50, t: 0.36, d: 0.45 }
+                    ];
+                    fanfare.forEach(item => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(item.f, now + item.t);
+                        gain.gain.setValueAtTime(0.25, now + item.t);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + item.t + item.d);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + item.t);
+                        osc.stop(now + item.t + item.d);
+                    });
+                }
+            } catch(e) {
+                console.warn('Audio error:', e);
+            }
+        }
+
+        // --- DEFINIÇÃO DOS ELEMENTOS GRÁFICOS / PESOS ---
+        const TOKENS = {
+            sphere: { id: 'sphere', name: 'Esfera', htmlClass: 'token-sphere', symbol: '●' },
+            cube: { id: 'cube', name: 'Cubo', htmlClass: 'token-cube', symbol: '■' },
+            pyramid: { id: 'pyramid', name: 'Pirâmide', htmlClass: 'token-pyramid', symbol: '▲' },
+            star: { id: 'star', name: 'Estrela', htmlClass: 'token-star', symbol: '★' },
+            val2: { id: 'val2', name: 'Peso 2', htmlClass: 'token-val', symbol: '2' },
+            val3: { id: 'val3', name: 'Peso 3', htmlClass: 'token-val', symbol: '3' },
+            val4: { id: 'val4', name: 'Peso 4', htmlClass: 'token-val', symbol: '4' },
+            val6: { id: 'val6', name: 'Peso 6', htmlClass: 'token-val', symbol: '6' }
+        };
+
+        // --- BANCO PROGRESSIVO DE NÍVEIS E FASES ---
+        // values: valores numéricos secretos de cada token para cálculo de massa
+        const TIERS_DATA = {
+            1: [ // Iniciação
+                {
+                    title: "Relação Direta",
+                    instruction: "Deduza quanto vale o Cubo a partir do número de Esferas.",
+                    values: { sphere: 1, cube: 2 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] }
+                    ],
+                    targetLeft: ['cube', 'cube'],
+                    availableTray: ['sphere', 'cube'],
+                    maxItemsAllowed: 8
+                },
+                {
+                    title: "Pesagem Numérica",
+                    instruction: "Descubra quantas Esferas equilibram o Peso 4.",
+                    values: { sphere: 2, val4: 4 },
+                    premises: [
+                        { left: ['val4'], right: ['sphere', 'sphere'] }
+                    ],
+                    targetLeft: ['val4', 'sphere'],
+                    availableTray: ['sphere'],
+                    maxItemsAllowed: 6
+                },
+                {
+                    title: "Composição Simples",
+                    instruction: "Equilibre a carga composta usando apenas Esferas.",
+                    values: { sphere: 1, pyramid: 3 },
+                    premises: [
+                        { left: ['pyramid'], right: ['sphere', 'sphere', 'sphere'] }
+                    ],
+                    targetLeft: ['pyramid', 'sphere'],
+                    availableTray: ['sphere', 'pyramid'],
+                    maxItemsAllowed: 6
+                }
+            ],
+            2: [ // Intermediário (Substituição de 2 balanças)
+                {
+                    title: "Substituição Algébrica",
+                    instruction: "Se 1 Cubo = 2 Esferas e 1 Pirâmide = 1 Cubo + 1 Esfera, equilibre 1 Pirâmide!",
+                    values: { sphere: 1, cube: 2, pyramid: 3 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] },
+                        { left: ['pyramid'], right: ['cube', 'sphere'] }
+                    ],
+                    targetLeft: ['pyramid'],
+                    availableTray: ['sphere', 'cube'],
+                    maxItemsAllowed: 6
+                },
+                {
+                    title: "A Soma dos Blocos",
+                    instruction: "Equilibre 1 Cubo e 1 Pirâmide usando apenas Esferas.",
+                    values: { sphere: 2, cube: 4, pyramid: 6 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] },
+                        { left: ['pyramid'], right: ['cube', 'sphere'] }
+                    ],
+                    targetLeft: ['cube', 'pyramid'],
+                    availableTray: ['sphere'],
+                    maxItemsAllowed: 8
+                },
+                {
+                    title: "Dedução Cruzada",
+                    instruction: "Se 2 Esferas = 1 Cubo e 2 Cubos = 1 Pirâmide, quantas Esferas equilibram a Pirâmide?",
+                    values: { sphere: 1, cube: 2, pyramid: 4 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] },
+                        { left: ['pyramid'], right: ['cube', 'cube'] }
+                    ],
+                    targetLeft: ['pyramid', 'cube'],
+                    availableTray: ['sphere', 'cube'],
+                    maxItemsAllowed: 8
+                }
+            ],
+            3: [ // Avançado (3 formas distintas)
+                {
+                    title: "Sistema com Três Variáveis",
+                    instruction: "Deduza o peso relativo de cada símbolo e equilibre a Estrela!",
+                    values: { sphere: 2, cube: 3, pyramid: 5, star: 7 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'val3'] },
+                        { left: ['pyramid'], right: ['cube', 'sphere'] },
+                        { left: ['star'], right: ['pyramid', 'sphere'] }
+                    ],
+                    values: { sphere: 1, cube: 2, pyramid: 3, star: 5 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] },
+                        { left: ['pyramid'], right: ['cube', 'sphere'] },
+                        { left: ['star'], right: ['pyramid', 'cube'] }
+                    ],
+                    targetLeft: ['star'],
+                    availableTray: ['sphere', 'cube', 'pyramid'],
+                    maxItemsAllowed: 8
+                },
+                {
+                    title: "Equação Composta",
+                    instruction: "Deduza quanto pesa o conjunto Estrela + Pirâmide.",
+                    values: { sphere: 1, cube: 2, pyramid: 3, star: 5 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] },
+                        { left: ['pyramid'], right: ['cube', 'sphere'] },
+                        { left: ['star'], right: ['pyramid', 'cube'] }
+                    ],
+                    targetLeft: ['star', 'pyramid'],
+                    availableTray: ['sphere', 'cube'],
+                    maxItemsAllowed: 10
+                },
+                {
+                    title: "Eliminação Transitiva",
+                    instruction: "Encontre a equivalência mínima para equilibrar a balança alvo.",
+                    values: { sphere: 2, cube: 4, pyramid: 6, star: 8 },
+                    premises: [
+                        { left: ['cube'], right: ['sphere', 'sphere'] },
+                        { left: ['star'], right: ['cube', 'cube'] },
+                        { left: ['pyramid', 'sphere'], right: ['star'] }
+                    ],
+                    targetLeft: ['star', 'pyramid'],
+                    availableTray: ['sphere', 'cube'],
+                    maxItemsAllowed: 10
+                }
+            ],
+            4: [ // Mestre (Deduções encadeadas e pesos híbridos)
+                {
+                    title: "Mestre Algébrico: A Constelação",
+                    instruction: "Analise todas as relações simultâneas para nivelar a balança mestre.",
+                    values: { sphere: 2, cube: 3, pyramid: 5, star: 8 },
+                    premises: [
+                        { left: ['cube', 'sphere'], right: ['pyramid'] },
+                        { left: ['star'], right: ['pyramid', 'cube'] },
+                        { left: ['star', 'sphere'], right: ['cube', 'cube', 'cube', 'sphere'] }
+                    ],
+                    targetLeft: ['star', 'sphere'],
+                    availableTray: ['cube', 'pyramid', 'sphere'],
+                    maxItemsAllowed: 10
+                },
+                {
+                    title: "Equilíbrio Supremo",
+                    instruction: "Substitua mentalmente até encontrar os pesos que equilibram 2 Estrelas.",
+                    values: { sphere: 1, cube: 2, pyramid: 3, star: 4 },
+                    premises: [
+                        { left: ['star'], right: ['pyramid', 'sphere'] },
+                        { left: ['cube', 'cube'], right: ['star'] },
+                        { left: ['pyramid'], right: ['cube', 'sphere'] }
+                    ],
+                    targetLeft: ['star', 'star'],
+                    availableTray: ['pyramid', 'cube', 'sphere'],
+                    maxItemsAllowed: 10
+                },
+                {
+                    title: "O Grande Paradoxo Lógico",
+                    instruction: "Desafio final: use sua intuição matemática e capacidade de abstração!",
+                    values: { sphere: 3, cube: 5, pyramid: 8, star: 13 },
+                    premises: [
+                        { left: ['sphere', 'cube'], right: ['pyramid'] },
+                        { left: ['cube', 'pyramid'], right: ['star'] }
+                    ],
+                    targetLeft: ['star'],
+                    availableTray: ['sphere', 'cube'],
+                    maxItemsAllowed: 10
+                }
+            ]
+        };
+
+        // --- ESTADO DO JOGO ---
+        let currentTier = 1;
+        let currentStageIndex = 0;
+        let movesCount = 0;
+        let totalScore = 0;
+        let secondsElapsed = 0;
+        let timerInterval = null;
+        let userRightPan = []; // array com IDs dos tokens no prato direito
+        let isStageActive = true;
+
+        // Elementos DOM
+        const hudStage = document.getElementById('hud-stage');
+        const hudMoves = document.getElementById('hud-moves');
+        const hudScore = document.getElementById('hud-score');
+        const hudTimer = document.getElementById('hud-timer');
+        const premisesGrid = document.getElementById('premises-grid');
+        const targetTitle = document.getElementById('target-title');
+        const targetInstruction = document.getElementById('target-instruction');
+        const panLeftZone = document.getElementById('pan-left-zone');
+        const panRightZone = document.getElementById('pan-right-zone');
+        const panTip = document.getElementById('pan-tip');
+        const statusBadge = document.getElementById('status-badge');
+        const trayList = document.getElementById('tray-list');
+        const scaleBeam = document.getElementById('scale-beam');
+        const scalePointer = document.getElementById('scale-pointer');
+        const btnValidate = document.getElementById('btn-validate');
+        const btnClear = document.getElementById('btn-clear');
+        const btnRestart = document.getElementById('btn-restart');
+        const btnSound = document.getElementById('btn-sound');
+        const feedbackToast = document.getElementById('feedback-toast');
+        const toastText = document.getElementById('toast-text');
+        const toastIcon = document.getElementById('toast-icon');
+        const victoryModal = document.getElementById('victory-modal');
+        const resStage = document.getElementById('res-stage');
+        const resMoves = document.getElementById('res-moves');
+        const resTime = document.getElementById('res-time');
+        const btnReplay = document.getElementById('btn-replay');
+        const btnNextStage = document.getElementById('btn-next-stage');
+
+        // Formatação de Tempo
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = (sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (isStageActive) {
+                    secondsElapsed++;
+                    hudTimer.textContent = formatTime(secondsElapsed);
+                }
+            }, 1000);
+        }
+
+        function showToast(msg, type = 'success', icon = '✨') {
+            toastText.textContent = msg;
+            toastIcon.textContent = icon;
+            feedbackToast.className = `feedback-toast show ${type === 'success' ? 'toast-success' : 'toast-error'}`;
+            setTimeout(() => {
+                feedbackToast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Criar elemento visual de token
+        function createTokenElement(tokenId, isInteractive = false, removable = false, removeIndex = null) {
+            const def = TOKENS[tokenId];
+            if (!def) return document.createElement('div');
+            const el = document.createElement('div');
+            el.className = `weight-token ${def.htmlClass} ${isInteractive ? 'token-interactive' : ''} ${removable ? 'pan-item-removable' : ''}`;
+            el.textContent = def.symbol;
+            el.title = def.name;
+            if (removable && removeIndex !== null) {
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removeItemFromRightPan(removeIndex);
+                });
+            }
+            return el;
+        }
+
+        // Carregar Fase Atual
+        function loadStage(tier, stageIdx) {
+            currentTier = tier;
+            currentStageIndex = stageIdx;
+            const stages = TIERS_DATA[currentTier];
+            const stage = stages[currentStageIndex];
+
+            isStageActive = true;
+            userRightPan = [];
+            movesCount = 0;
+            hudMoves.textContent = movesCount;
+            hudStage.textContent = `${stageIdx + 1}/${stages.length}`;
+            targetTitle.textContent = `${stage.title}`;
+            targetInstruction.textContent = stage.instruction;
+
+            // Renderizar Premissas
+            premisesGrid.innerHTML = '';
+            stage.premises.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = 'premise-card';
+
+                const leftSide = document.createElement('div');
+                leftSide.className = 'premise-side';
+                p.left.forEach(tokenId => leftSide.appendChild(createTokenElement(tokenId)));
+
+                const eq = document.createElement('div');
+                eq.className = 'premise-equals';
+                eq.textContent = '=';
+
+                const rightSide = document.createElement('div');
+                rightSide.className = 'premise-side';
+                p.right.forEach(tokenId => rightSide.appendChild(createTokenElement(tokenId)));
+
+                card.appendChild(leftSide);
+                card.appendChild(eq);
+                card.appendChild(rightSide);
+                premisesGrid.appendChild(card);
+            });
+
+            // Renderizar Prato Esquerdo
+            panLeftZone.innerHTML = '';
+            stage.targetLeft.forEach(tokenId => {
+                panLeftZone.appendChild(createTokenElement(tokenId));
+            });
+
+            // Renderizar Prato Direito
+            renderRightPan();
+
+            // Renderizar Bandeja
+            trayList.innerHTML = '';
+            stage.availableTray.forEach(tokenId => {
+                const def = TOKENS[tokenId];
+                const wrap = document.createElement('div');
+                wrap.className = 'tray-item-wrapper';
+
+                const tokEl = createTokenElement(tokenId, true);
+                tokEl.addEventListener('click', () => {
+                    addItemToRightPan(tokenId);
+                });
+
+                const label = document.createElement('span');
+                label.className = 'tray-item-label';
+                label.textContent = def.name;
+
+                wrap.appendChild(tokEl);
+                wrap.appendChild(label);
+                trayList.appendChild(wrap);
+            });
+
+            updateScalePhysics();
+        }
+
+        // Renderizar Prato Direito e Atualizar Física
+        function renderRightPan() {
+            panRightZone.innerHTML = '';
+            if (userRightPan.length === 0) {
+                panRightZone.appendChild(panTip);
+                panTip.style.display = 'block';
+            } else {
+                panTip.style.display = 'none';
+                userRightPan.forEach((tokenId, idx) => {
+                    const el = createTokenElement(tokenId, false, true, idx);
+                    panRightZone.appendChild(el);
+                });
+            }
+            updateScalePhysics();
+        }
+
+        // Adicionar item ao prato direito
+        function addItemToRightPan(tokenId) {
+            if (!isStageActive) return;
+            const stage = TIERS_DATA[currentTier][currentStageIndex];
+            if (userRightPan.length >= (stage.maxItemsAllowed || 10)) {
+                showToast('Limite de itens no prato atingido!', 'error', '⚠️');
+                playSound('error');
+                return;
+            }
+            userRightPan.push(tokenId);
+            movesCount++;
+            hudMoves.textContent = movesCount;
+            playSound('add');
+            renderRightPan();
+        }
+
+        // Remover item do prato direito
+        function removeItemFromRightPan(idx) {
+            if (!isStageActive) return;
+            if (idx >= 0 && idx < userRightPan.length) {
+                userRightPan.splice(idx, 1);
+                playSound('remove');
+                renderRightPan();
+            }
+        }
+
+        // Calcular peso de uma lista de tokens
+        function calculateWeight(tokenList) {
+            const stage = TIERS_DATA[currentTier][currentStageIndex];
+            let total = 0;
+            tokenList.forEach(id => {
+                total += (stage.values[id] || 1);
+            });
+            return total;
+        }
+
+        // Atualizar inclinação visual e status físico da balança
+        function updateScalePhysics() {
+            const stage = TIERS_DATA[currentTier][currentStageIndex];
+            const leftWeight = calculateWeight(stage.targetLeft);
+            const rightWeight = calculateWeight(userRightPan);
+
+            const diff = rightWeight - leftWeight;
+            // Calcular ângulo de inclinação (clamp entre -14° e +14°)
+            let angle = 0;
+            if (diff !== 0) {
+                angle = Math.max(-14, Math.min(14, diff * 3.5));
+            }
+
+            scaleBeam.style.transform = `rotate(${angle}deg)`;
+            scalePointer.style.transform = `rotate(${angle}deg)`;
+
+            // Ajustar altura das dropzones HTML para acompanhar visualmente os pratos
+            // Braço tem raio aprox. 190px: deslocamento Y ≈ 190 * sin(angle)
+            const rad = (angle * Math.PI) / 180;
+            const dy = Math.sin(rad) * 120;
+
+            panLeftZone.style.transform = `translateY(${-dy}px)`;
+            panRightZone.style.transform = `translateY(${dy}px)`;
+
+            // Atualizar selo de status
+            if (rightWeight === 0) {
+                statusBadge.className = 'equilibrium-status-badge status-unbalanced';
+                statusBadge.innerHTML = '⚖️ Prato Vazio';
+            } else if (diff === 0) {
+                statusBadge.className = 'equilibrium-status-badge status-balanced';
+                statusBadge.innerHTML = '✨ 100% Equilibrada!';
+            } else if (diff < 0) {
+                statusBadge.className = 'equilibrium-status-badge status-unbalanced';
+                statusBadge.innerHTML = `◀ Mais Pesado à Esquerda (-${Math.abs(diff)})`;
+            } else {
+                statusBadge.className = 'equilibrium-status-badge status-unbalanced';
+                statusBadge.innerHTML = `Mais Pesado à Direita (+${diff}) ▶`;
+            }
+
+            if (userRightPan.length > 0) {
+                playSound('tilt');
+            }
+        }
+
+        // Validar Resposta
+        function validateSolution() {
+            if (!isStageActive) return;
+            const stage = TIERS_DATA[currentTier][currentStageIndex];
+            const leftWeight = calculateWeight(stage.targetLeft);
+            const rightWeight = calculateWeight(userRightPan);
+
+            if (userRightPan.length === 0) {
+                showToast('Coloque pesos no prato direito antes de validar!', 'error', '👆');
+                playSound('error');
+                return;
+            }
+
+            if (leftWeight === rightWeight) {
+                // Vitória na fase!
+                isStageActive = false;
+                playSound('correct');
+                totalScore += Math.max(100, 300 - movesCount * 20);
+                hudScore.textContent = totalScore;
+
+                setTimeout(() => {
+                    playSound('victory');
+                    showVictoryModal();
+                }, 500);
+            } else {
+                playSound('error');
+                if (rightWeight < leftWeight) {
+                    showToast('Ainda está leve demais! Faltam pesos no prato direito.', 'error', '⚖️');
+                } else {
+                    showToast('Ficou muito pesado! Remova alguns pesos.', 'error', '⚖️');
+                }
+            }
+        }
+
+        // Exibir Modal de Vitória
+        function showVictoryModal() {
+            const stages = TIERS_DATA[currentTier];
+            resStage.textContent = `${currentStageIndex + 1}/${stages.length}`;
+            resMoves.textContent = movesCount;
+            resTime.textContent = formatTime(secondsElapsed);
+
+            if (currentStageIndex + 1 < stages.length) {
+                btnNextStage.textContent = 'Próximo Desafio ➔';
+                btnNextStage.style.display = 'inline-block';
+            } else if (currentTier < 4) {
+                btnNextStage.textContent = `Avançar para Nível ${currentTier + 1} 🚀`;
+                btnNextStage.style.display = 'inline-block';
+            } else {
+                btnNextStage.textContent = '🏆 Mestre das Balanças Concluído!';
+                btnNextStage.style.display = 'none';
+            }
+
+            victoryModal.classList.add('active');
+        }
+
+        // Event Listeners
+        btnValidate.addEventListener('click', validateSolution);
+
+        btnClear.addEventListener('click', () => {
+            if (!isStageActive) return;
+            if (userRightPan.length > 0) {
+                userRightPan = [];
+                playSound('remove');
+                renderRightPan();
+            }
+        });
+
+        btnRestart.addEventListener('click', () => {
+            loadStage(currentTier, currentStageIndex);
+        });
+
+        btnSound.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            btnSound.textContent = soundEnabled ? '🔊 Som' : '🔇 Mudo';
+        });
+
+        // Troca de Nível (Tiers)
+        document.querySelectorAll('.btn-tier').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.btn-tier').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const tier = parseInt(e.target.getAttribute('data-tier'));
+                loadStage(tier, 0);
+            });
+        });
+
+        btnReplay.addEventListener('click', () => {
+            victoryModal.classList.remove('active');
+            loadStage(currentTier, currentStageIndex);
+        });
+
+        btnNextStage.addEventListener('click', () => {
+            victoryModal.classList.remove('active');
+            const stages = TIERS_DATA[currentTier];
+            if (currentStageIndex + 1 < stages.length) {
+                loadStage(currentTier, currentStageIndex + 1);
+            } else if (currentTier < 4) {
+                currentTier++;
+                document.querySelectorAll('.btn-tier').forEach(b => {
+                    b.classList.toggle('active', parseInt(b.getAttribute('data-tier')) === currentTier);
+                });
+                loadStage(currentTier, 0);
+            }
+        });
+
+        // Iniciar Jogo
+        loadStage(1, 0);
+        startTimer();
+
+    })();
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>
