@@ -2043,4 +2043,69 @@ main > section.contact-section-home:not(.hero) {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* ==================================================
+   CARROSSEL DE NOVIDADES & LANÇAMENTOS RECENTES
+   ================================================== */
+.recent-additions-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.recent-additions-carousel {
+    position: relative;
+    padding: 10px 48px 40px 48px !important;
+}
+
+.recent-additions-carousel .swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+.recent-additions-carousel .service-card-detailed {
+    width: 100%;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+    padding: 26px;
+    position: relative;
+    border-radius: var(--border-radius-lg);
+    background: #ffffff;
+    border: 1px solid rgba(0, 95, 115, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.recent-additions-carousel .swiper-button-next.recent-next,
+.recent-additions-carousel .swiper-button-prev.recent-prev {
+    top: 45%;
+    width: 42px;
+    height: 42px;
+    background-color: #ffffff;
+    color: var(--primary-dark-blue);
+    border: 1px solid rgba(0, 95, 115, 0.2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+}
+
+.recent-additions-carousel .swiper-button-prev.recent-prev {
+    left: 4px;
+}
+
+.recent-additions-carousel .swiper-button-next.recent-next {
+    right: 4px;
+}
+
+.recent-additions-carousel .swiper-button-next.recent-next:hover,
+.recent-additions-carousel .swiper-button-prev.recent-prev:hover {
+    background-color: var(--primary-dark-blue);
+    color: #ffffff;
+}
+
+.recent-additions-carousel .swiper-pagination-bullet-active {
+    background: var(--primary-dark-blue) !important;
+    width: 22px;
+    border-radius: 6px;
+}
+
 /* --- Fim do CSS --- */

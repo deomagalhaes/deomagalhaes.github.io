@@ -186,28 +186,33 @@ if (typeof Swiper !== 'undefined' && recentCarouselEl) {
                     const rawDesc = item.querySelector('p') ? item.querySelector('p').textContent.trim() : '';
                     const cats = item.getAttribute('data-categories') || '';
                     
-                    // Extrai data
+                    // Extrai data limpa
                     let dateStr = 'Recente';
                     const metaSpan = item.querySelector('.article-meta-custom > span:first-child');
                     if (metaSpan) {
-                        const dateText = metaSpan.textContent.replace(/\s+/g, ' ').trim();
-                        if (dateText) dateStr = dateText;
+                        // Clona para remover SVGs e scripts internos antes de ler texto
+                        const cloneSpan = metaSpan.cloneNode(true);
+                        cloneSpan.querySelectorAll('svg, script, style').forEach(el => el.remove());
+                        const textClean = cloneSpan.textContent.replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim();
+                        if (textClean && textClean.length < 40) {
+                            dateStr = textClean;
+                        }
                     }
 
                     const meta = getCategoryMeta(rawTitle, cats);
 
                     const slideHtml = `
                     <div class="swiper-slide">
-                        <div class="service-card-detailed" style="display:flex; flex-direction:column; justify-content:space-between; height:100%; text-align:left; padding:24px; position:relative;">
-                            <span style="position:absolute; top:18px; right:18px; font-size:0.75rem; font-weight:700; background:${meta.bg}; color:${meta.color}; padding:3px 9px; border-radius:12px;">${meta.badge}</span>
-                            <div class="icon" style="margin:0 0 15px 0; background:${meta.iconBg}; color:${meta.iconColor};">
+                        <div class="service-card-detailed">
+                            <span style="position:absolute; top:18px; right:18px; font-size:0.75rem; font-weight:700; background:${meta.bg}; color:${meta.color}; padding:3px 9px; border-radius:12px; z-index:2;">${meta.badge}</span>
+                            <div class="icon" style="margin:0 0 15px 0; background:${meta.iconBg}; color:${meta.iconColor}; flex-shrink:0;">
                                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">${meta.icon}</svg>
                             </div>
                             <h3 style="font-size:1.12rem; line-height:1.35; margin-bottom:10px; color:var(--primary-dark-blue);">${rawTitle}</h3>
                             <p class="description" style="font-size:0.9rem; line-height:1.5; color:var(--text-color-light); margin-bottom:15px; flex-grow:1;">${rawDesc}</p>
-                            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f0f0f0; padding-top:12px; margin-top:auto;">
-                                <span style="font-size:0.8rem; color:#888;">${dateStr}</span>
-                                <a href="${href}" class="cta-button-small" style="padding:7px 16px; font-size:0.82rem;">${meta.action}</a>
+                            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f0f0f0; padding-top:12px; margin-top:auto; width:100%;">
+                                <span style="font-size:0.8rem; color:#888; font-weight:500;">${dateStr}</span>
+                                <a href="${href}" class="cta-button-small" style="padding:7px 16px; font-size:0.82rem; white-space:nowrap;">${meta.action}</a>
                             </div>
                         </div>
                     </div>`;
