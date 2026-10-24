@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **23/10/2026** | **Ansiedade: Filosofia Existencial & Neurociência** | [`social/2026-10-23-ansiedade-filosofia-neurociencia.md`](2026-10-23-ansiedade-filosofia-neurociencia.md) | ✅ Pronto para postar |
 | **23/10/2026** | **A Sociedade do Cansaço & Autoexploração (Byung-Chul Han)** | [`social/2026-10-23-sociedade-do-cansaso.md`](2026-10-23-sociedade-do-cansaso.md) | ✅ Pronto para postar |
 | **23/10/2026** | **Transtorno Borderline nas Relações Íntimas (Clivagem & Amígdala)** | [`social/2026-10-23-borderline-relacoes-intimas.md`](2026-10-23-borderline-relacoes-intimas.md) | ✅ Pronto para postar |
 | **23/10/2026** | **O Camaleão Bento e as Cores do Medo do Escuro (Fábula Infantil)** | [`social/2026-10-23-storybook-bento-escuro.md`](2026-10-23-storybook-bento-escuro.md) | ✅ Pronto para postar |
