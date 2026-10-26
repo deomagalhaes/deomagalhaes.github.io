@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **25/10/2026** | **Entre o Papel de Vítima e a Culpa Induzida (Narcisismo Vulnerável)** | [`social/2026-10-25-narcisismo-vulneravel-relacoes.md`](2026-10-25-narcisismo-vulneravel-relacoes.md) | ✅ Pronto para postar |
 | **25/10/2026** | **O Cérebro em Sobrecarga: Ruminação & Ansiedade Crônica** | [`social/2026-10-25-cerebro-em-sobrecarga-ruminacao.md`](2026-10-25-cerebro-em-sobrecarga-ruminacao.md) | ✅ Pronto para postar |
 | **24/10/2026** | **Regulação Emocional vs. Supressão (Engolir o Choro)** | [`social/2026-10-24-regulacao-emocional-supressao.md`](2026-10-24-regulacao-emocional-supressao.md) | ✅ Pronto para postar |
 | **23/10/2026** | **Ansiedade: Filosofia Existencial & Neurociência** | [`social/2026-10-23-ansiedade-filosofia-neurociencia.md`](2026-10-23-ansiedade-filosofia-neurociencia.md) | ✅ Pronto para postar |

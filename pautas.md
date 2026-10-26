@@ -29,6 +29,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **Entre o Papel de Vítima e a Culpa Induzida: A Dinâmica Oculta do Narcisismo Vulnerável no Amor** (Publicado em 25/10/2026)
 - [x] **O Cérebro em Sobrecarga: Como a Ruminação Mental Constrói a Ansiedade Crônica** (Publicado em 25/10/2026)
 - [x] **Regulação Emocional vs. Supressão: O Custo Fisiológico de "Engolir o Choro"** (Publicado em 24/10/2026)
 - [x] **A Epidemia da Dopamina Barata: Como os Algoritmos e Telas Reconfiguram a Circuitaria de Recompensa de Crianças e Adultos** (Publicado em 22/10/2026)
