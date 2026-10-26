@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **26/10/2026** | **Funções Executivas e TDAH no Adulto: O Mito da Falta de Vontade** | [`social/2026-10-26-funcoes-executivas-tdah-adulto.md`](2026-10-26-funcoes-executivas-tdah-adulto.md) | ✅ Pronto para postar |
 | **25/10/2026** | **Entre o Papel de Vítima e a Culpa Induzida (Narcisismo Vulnerável)** | [`social/2026-10-25-narcisismo-vulneravel-relacoes.md`](2026-10-25-narcisismo-vulneravel-relacoes.md) | ✅ Pronto para postar |
 | **25/10/2026** | **O Cérebro em Sobrecarga: Ruminação & Ansiedade Crônica** | [`social/2026-10-25-cerebro-em-sobrecarga-ruminacao.md`](2026-10-25-cerebro-em-sobrecarga-ruminacao.md) | ✅ Pronto para postar |
 | **24/10/2026** | **Regulação Emocional vs. Supressão (Engolir o Choro)** | [`social/2026-10-24-regulacao-emocional-supressao.md`](2026-10-24-regulacao-emocional-supressao.md) | ✅ Pronto para postar |
