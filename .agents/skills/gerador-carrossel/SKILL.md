@@ -40,6 +40,24 @@ Cada carrossel deve seguir a jornada neurocognitiva:
 
 ---
 
+## 🔄 Pipeline Unificado de Publicação
+
+Sempre que um novo artigo clínico, storybook ou recurso for publicado:
+1. **Página HTML:** Salva em `artigos/` ou `recursos/` com layout responsivo e sem o termo "Dr." antes do nome do profissional.
+2. **Card Central:** Inserido no topo de `cards-artigos.html` e distribuído dinamicamente na Home e nas páginas de categoria.
+3. **Roteiro Canônico de Carrossel:** Criado em `social/<data>-<slug>.md` estruturado no padrão canônico de **6 Slides**:
+   - Slide 1: Capa / Gancho
+   - Slide 2: A Dor Invisível / O Conflito Cotidiano
+   - Slide 3: A Neurociência / Mecanismo Cerebral
+   - Slide 4: O Contraste / A Armadilha Comportamental
+   - Slide 5: Síntese Prática (3 Ações)
+   - Slide 6: Fechamento & CTA para `deomagalhaes.com.br`
+4. **Preset no Studio Visual:** Injetado automaticamente em `social/gerador.html` (`articleSelect` e objeto `PRESETS`) para renderização visual e download dos slides em lote (.PNG).
+5. **SEO & Sitemap:** Atualizado via `scripts/generate-sitemap.ps1`.
+6. **Deploy:** `git add`, `git commit` e `git push origin main`.
+
+---
+
 ## 🛠️ Ferramenta Visual Integrada
 
 O projeto conta com o **Studio Visual de Carrosséis** acessível em:

@@ -9,10 +9,6 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **O Cérebro em Sobrecarga: Como a Ruminação Mental Constrói a Ansiedade Crônica**
-  - *Abordagem:* A Default Mode Network (Rede de Modo Padrão), o ciclo da amígdala e do córtex pré-frontal, e como desarmar pensamentos intrusivos com a TCC e a aceitação estoica.
-  - *Categorias:* `saude-mental`, `filosofia`.
-
 - [ ] **Funções Executivas e TDAH no Adulto: Para Além do Estigma da "Falta de Força de Vontade"**
   - *Abordagem:* Córtex pré-frontal dorso-lateral, memória operacional, controle inibitório e estratégias ambientais práticas de adaptação na vida profissional.
   - *Categorias:* `tdah-tea`, `reabilitacao-cognitiva`, `saude-mental`.
@@ -25,10 +21,15 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
   - *Abordagem:* Desativação da noradrenalina durante o sono de ondas rápidas, reativação do hipocampo e integração afetiva na psicologia e neurociência.
   - *Categorias:* `saude-mental`, `neurociencia`, `desenvolvimento-pessoal`.
 
+- [ ] **Carga Alostática e Burnout: Como o Estresse Contínuo Degrada a Plasticidade Sináptica**
+  - *Abordagem:* O conceito de alostase de Bruce McEwen, atrofia dendrítica no hipocampo, hipertrofia da amígdala e protocolos de restauração do tônus autonômico.
+  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `neurociencia`.
+
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **O Cérebro em Sobrecarga: Como a Ruminação Mental Constrói a Ansiedade Crônica** (Publicado em 25/10/2026)
 - [x] **Regulação Emocional vs. Supressão: O Custo Fisiológico de "Engolir o Choro"** (Publicado em 24/10/2026)
 - [x] **A Epidemia da Dopamina Barata: Como os Algoritmos e Telas Reconfiguram a Circuitaria de Recompensa de Crianças e Adultos** (Publicado em 22/10/2026)
 - [x] **Entre a Clivagem e a Hostilidade Reativa: Mecanismos de Desregulação Afetiva no Transtorno da Personalidade Borderline nas Relações Íntimas** (Publicado em 20/10/2026)
