@@ -156,13 +156,17 @@ body {
 
 .logo-container img {
     height: 70px; /* Altura inicial da logo */
+    max-height: 70px;
     width: auto;
+    max-width: 100%;
+    object-fit: contain;
     /* A transição na altura da logo cria o efeito suave de encolhimento. */
     transition: height var(--transition-normal);
 }
 
 #main-header.header-scrolled .logo-container img {
     height: 55px; /* Altura final da logo */
+    max-height: 55px;
 }
 
 .logo-text {
