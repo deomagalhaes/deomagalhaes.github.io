@@ -25,7 +25,8 @@ Sempre que você for solicitado a criar, revisar ou publicar um artigo para o si
   - `header#main-header` com menu de navegação onde `a[href="/artigos.html"]` possui a classe `active`.
   - Imagem do logo com proporções exatas:
     `<a href="/index.html" class="logo-container"><img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães"><div class="logo-text"><span class="name">Deo Magalhães</span><span class="subtitle">Neurociência e Comportamento</span></div></a>`
-- **Corpo (`main > .article-container`)**:
+- **Corpo (`main > .container.article-container`)**:
+  - **OBRIGATÓRIO:** O container do artigo DEVE conter as duas classes: `<div class="container article-container">`. Isso garante a centralização de margens (`margin: 0 auto;`) e o espaçamento correto em telas de qualquer tamanho, prevenindo que o texto fique encostado ou justificado à esquerda.
   - `header.article-header`: `h1` com o título e `p.article-author-date` com "Por Deo Magalhães - Neuropsicólogo e Neurocientista - Publicado em [Data Atual]".
   - `article.article-body`: Introdução em itálico (`<p><em>...</em></p>`), seções com `<h2>` (e `<h3>`), listas explicativas, referências com `<ol class="references-list">`, divisor `<hr class="article-divider">` e disclaimer padrão:
     `Este artigo tem caráter reflexivo e educacional. Para orientações específicas sobre diagnóstico e tratamento, consulte sempre um profissional de saúde qualificado.`
