@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Ansiedade Social e Evasão Afetiva – Deo Magalhães</title>
+    <meta name="description" content="Avalie seus níveis de ansiedade social, medo do julgamento, timidez paralisante e esquiva relacional com cálculo automático e devolutiva neuropsicológica imediata.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+    
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --surface: #ffffff;
+            --bg-page: #f8fafc;
+            --text-dark: #1f2937;
+            --text-muted: #4b5563;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .test-container {
+            max-width: 860px;
+            margin: 2rem auto 4rem auto;
+            padding: 2.2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 95, 115, 0.08);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .badge-test {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .test-header h1 {
+            color: var(--primary);
+            font-size: 2.3rem;
+            margin: 0 0 0.8rem 0;
+            line-height: 1.2;
+        }
+
+        .test-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .test-intro-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 1.2rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: #166534;
+            line-height: 1.6;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        /* Itens e Perguntas */
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .question-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .question-card.answered {
+            border-left: 4px solid var(--primary);
+            background: #fafaf9;
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .question-num {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4b5563;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #f1f5f9;
+            border-color: var(--primary);
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 3px 10px rgba(0, 95, 115, 0.25);
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            max-width: 320px;
+            margin: 2.5rem auto 1rem auto;
+            padding: 14px 28px;
+            background: var(--primary);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.4);
+        }
+
+        .btn-submit:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Resultado */
+        .result-box {
+            display: none;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 2.2rem;
+            margin-top: 2rem;
+            border: 2px solid #e2e8f0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            color: white;
+            font-weight: 800;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+
+        .score-circle .number {
+            font-size: 2.4rem;
+            line-height: 1;
+        }
+
+        .score-circle .max {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
+        .result-level {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 2rem 0;
+        }
+
+        .subscale-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .subscale-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .subscale-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .recommendation-card {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+        }
+
+        .recommendation-card h3 {
+            color: #166534;
+            margin: 0 0 8px 0;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 2rem 1rem 0 1rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 2rem;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos</a>
+                <a href="/recursos.html">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="test-container">
+            <div class="test-header">
+                <div class="badge-test">⚡ Instrumento Psicoeducativo de Autoavaliação</div>
+                <h1>Escala de Ansiedade Social e Evasão Afetiva (EASE)</h1>
+                <p>Uma ferramenta clínica estruturada baseada no modelo psicométrico do Inventário de Fobia Social (SPIN) e no modelo cognitivo de Clark & Wells. Mapeie sua reatividade fisiológica, o medo do julgamento e os comportamentos de segurança.</p>
+            </div>
+
+            <div class="test-intro-box">
+                <strong>Instruções:</strong> Para cada uma das 15 afirmações abaixo, selecione a opção que melhor descreve como você se sentiu e se comportou nas <strong>últimas duas semanas</strong> diante de situações sociais (reuniões, conversas, apresentações, encontros ou interações com desconhecidos). Seja sincero: não há respostas certas ou erradas.
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="p-bar"></div>
+            </div>
+
+            <form id="scale-form">
+                <!-- DIMENSÃO 1: Reatividade Fisiológica (Itens 1 a 5) -->
+                <div class="question-card" id="qc-1">
+                    <div class="question-title">
+                        <span class="question-num">01.</span>
+                        <span>Sinto meu coração acelerar, garganta seca ou mãos trêmulas quando preciso falar com alguém que não conheço bem.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q1" value="0" onchange="answer(1, 0, 'physio')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q1" value="1" onchange="answer(1, 1, 'physio')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q1" value="2" onchange="answer(1, 2, 'physio')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q1" value="3" onchange="answer(1, 3, 'physio')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q1" value="4" onchange="answer(1, 4, 'physio')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-2">
+                    <div class="question-title">
+                        <span class="question-num">02.</span>
+                        <span>Tenho receio de ficar visivelmente vermelho(a), suar ou demonstrar que estou nervoso(a) diante dos outros.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q2" value="0" onchange="answer(2, 0, 'physio')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q2" value="1" onchange="answer(2, 1, 'physio')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q2" value="2" onchange="answer(2, 2, 'physio')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q2" value="3" onchange="answer(2, 3, 'physio')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q2" value="4" onchange="answer(2, 4, 'physio')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-3">
+                    <div class="question-title">
+                        <span class="question-num">03.</span>
+                        <span>Sinto um aperto no estômago, náusea ou desconforto visceral horas antes de participar de um evento social.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q3" value="0" onchange="answer(3, 0, 'physio')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q3" value="1" onchange="answer(3, 1, 'physio')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q3" value="2" onchange="answer(3, 2, 'physio')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q3" value="3" onchange="answer(3, 3, 'physio')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q3" value="4" onchange="answer(3, 4, 'physio')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-4">
+                    <div class="question-title">
+                        <span class="question-num">04.</span>
+                        <span>Minha voz falha, oscila ou soa trêmula quando preciso expressar uma opinião em grupo.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q4" value="0" onchange="answer(4, 0, 'physio')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q4" value="1" onchange="answer(4, 1, 'physio')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q4" value="2" onchange="answer(4, 2, 'physio')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q4" value="3" onchange="answer(4, 3, 'physio')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q4" value="4" onchange="answer(4, 4, 'physio')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-5">
+                    <div class="question-title">
+                        <span class="question-num">05.</span>
+                        <span>Sinto uma tensão muscular generalizada (mandíbula travada, ombros rígidos) apenas por estar cercado de pessoas.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q5" value="0" onchange="answer(5, 0, 'physio')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q5" value="1" onchange="answer(5, 1, 'physio')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q5" value="2" onchange="answer(5, 2, 'physio')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q5" value="3" onchange="answer(5, 3, 'physio')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q5" value="4" onchange="answer(5, 4, 'physio')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <!-- DIMENSÃO 2: Medo de Avaliação Negativa (Itens 6 a 10) -->
+                <div class="question-card" id="qc-6">
+                    <div class="question-title">
+                        <span class="question-num">06.</span>
+                        <span>Tenho a sensação constante de que as pessoas estão prestando atenção nas minhas falhas ou me avaliando criticamente.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q6" value="0" onchange="answer(6, 0, 'eval')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q6" value="1" onchange="answer(6, 1, 'eval')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q6" value="2" onchange="answer(6, 2, 'eval')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q6" value="3" onchange="answer(6, 3, 'eval')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q6" value="4" onchange="answer(6, 4, 'eval')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-7">
+                    <div class="question-title">
+                        <span class="question-num">07.</span>
+                        <span>Depois de interagir socialmente, fico repassando mentalmente a conversa por horas, punindo-me pelo que disse ou deixei de dizer.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q7" value="0" onchange="answer(7, 0, 'eval')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q7" value="1" onchange="answer(7, 1, 'eval')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q7" value="2" onchange="answer(7, 2, 'eval')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q7" value="3" onchange="answer(7, 3, 'eval')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q7" value="4" onchange="answer(7, 4, 'eval')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-8">
+                    <div class="question-title">
+                        <span class="question-num">08.</span>
+                        <span>Tenho pavor de passar vergonha, parecer ridículo(a) ou dizer algo inadequado em público.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q8" value="0" onchange="answer(8, 0, 'eval')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q8" value="1" onchange="answer(8, 1, 'eval')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q8" value="2" onchange="answer(8, 2, 'eval')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q8" value="3" onchange="answer(8, 3, 'eval')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q8" value="4" onchange="answer(8, 4, 'eval')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-9">
+                    <div class="question-title">
+                        <span class="question-num">09.</span>
+                        <span>Costumo presumir que os outros estão desinteressados ou secretamente entediados quando falo com eles.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q9" value="0" onchange="answer(9, 0, 'eval')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q9" value="1" onchange="answer(9, 1, 'eval')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q9" value="2" onchange="answer(9, 2, 'eval')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q9" value="3" onchange="answer(9, 3, 'eval')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q9" value="4" onchange="answer(9, 4, 'eval')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-10">
+                    <div class="question-title">
+                        <span class="question-num">10.</span>
+                        <span>Sinto que qualquer erro social que eu cometa destruirá de forma irreversível a imagem que as pessoas têm de mim.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q10" value="0" onchange="answer(10, 0, 'eval')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q10" value="1" onchange="answer(10, 1, 'eval')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q10" value="2" onchange="answer(10, 2, 'eval')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q10" value="3" onchange="answer(10, 3, 'eval')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q10" value="4" onchange="answer(10, 4, 'eval')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <!-- DIMENSÃO 3: Evasão e Comportamentos de Segurança (Itens 11 a 15) -->
+                <div class="question-card" id="qc-11">
+                    <div class="question-title">
+                        <span class="question-num">11.</span>
+                        <span>Já cancelei compromissos importantes ou deixei de ir a encontros sociais simplesmente para não ter que interagir.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q11" value="0" onchange="answer(11, 0, 'avoid')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q11" value="1" onchange="answer(11, 1, 'avoid')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q11" value="2" onchange="answer(11, 2, 'avoid')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q11" value="3" onchange="answer(11, 3, 'avoid')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q11" value="4" onchange="answer(11, 4, 'avoid')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-12">
+                    <div class="question-title">
+                        <span class="question-num">12.</span>
+                        <span>Evito sustentar contato visual direto com as pessoas porque sinto que meu olhar me deixa vulnerável ou exposto(a).</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q12" value="0" onchange="answer(12, 0, 'avoid')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q12" value="1" onchange="answer(12, 1, 'avoid')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q12" value="2" onchange="answer(12, 2, 'avoid')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q12" value="3" onchange="answer(12, 3, 'avoid')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q12" value="4" onchange="answer(12, 4, 'avoid')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-13">
+                    <div class="question-title">
+                        <span class="question-num">13.</span>
+                        <span>Prefiro me calar e fingir concordância a expressar uma opinião discordante que possa gerar confronto ou atenção sobre mim.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q13" value="0" onchange="answer(13, 0, 'avoid')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q13" value="1" onchange="answer(13, 1, 'avoid')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q13" value="2" onchange="answer(13, 2, 'avoid')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q13" value="3" onchange="answer(13, 3, 'avoid')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q13" value="4" onchange="answer(13, 4, 'avoid')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-14">
+                    <div class="question-title">
+                        <span class="question-num">14.</span>
+                        <span>Uso o smartphone, fones de ouvido ou fico isolado em cantos de salas para evitar que alguém se aproxime para conversar.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q14" value="0" onchange="answer(14, 0, 'avoid')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q14" value="1" onchange="answer(14, 1, 'avoid')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q14" value="2" onchange="answer(14, 2, 'avoid')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q14" value="3" onchange="answer(14, 3, 'avoid')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q14" value="4" onchange="answer(14, 4, 'avoid')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <div class="question-card" id="qc-15">
+                    <div class="question-title">
+                        <span class="question-num">15.</span>
+                        <span>Deixo de frequentar cursos, oportunidades de trabalho ou lugares que gosto para não ter que interagir com outras pessoas.</span>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q15" value="0" onchange="answer(15, 0, 'avoid')">0<br><small>Nada</small></label>
+                        <label class="option-label"><input type="radio" name="q15" value="1" onchange="answer(15, 1, 'avoid')">1<br><small>Leve</small></label>
+                        <label class="option-label"><input type="radio" name="q15" value="2" onchange="answer(15, 2, 'avoid')">2<br><small>Moderado</small></label>
+                        <label class="option-label"><input type="radio" name="q15" value="3" onchange="answer(15, 3, 'avoid')">3<br><small>Intenso</small></label>
+                        <label class="option-label"><input type="radio" name="q15" value="4" onchange="answer(15, 4, 'avoid')">4<br><small>Extremo</small></label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-submit" id="btn-calc" onclick="calculateResults()" disabled>
+                    Calcular Resultado Neuropsicológico
+                </button>
+            </form>
+
+            <!-- Box de Resultados -->
+            <div class="result-box" id="result-box">
+                <div class="result-header">
+                    <div class="score-circle" id="score-circle">
+                        <span class="number" id="total-score">0</span>
+                        <span class="max">de 60</span>
+                    </div>
+                    <div class="result-level" id="result-level">Calculando...</div>
+                    <p id="result-summary" style="color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto;"></p>
+                </div>
+
+                <h3 style="color: var(--primary); margin-top: 1.5rem;">Perfil por Dimensão Clínica:</h3>
+                
+                <div class="subscales-grid">
+                    <div class="subscale-card">
+                        <h4><span>⚡ Reatividade Fisiológica</span> <span id="score-physio">0/20</span></h4>
+                        <div class="subscale-bar"><div class="subscale-bar-fill" id="bar-physio" style="width: 0%; background: #005f73;"></div></div>
+                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;" id="desc-physio">Ativação adrenérgica visceral, rubor, taquicardia e tremor.</p>
+                    </div>
+
+                    <div class="subscale-card">
+                        <h4><span>👁️ Medo de Avaliação</span> <span id="score-eval">0/20</span></h4>
+                        <div class="subscale-bar"><div class="subscale-bar-fill" id="bar-eval" style="width: 0%; background: #ee9b00;"></div></div>
+                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;" id="desc-eval">Efeito holofote, antecipação catastrófica e ruminação pós-evento.</p>
+                    </div>
+
+                    <div class="subscale-card">
+                        <h4><span>🛡️ Evasão e Segurança</span> <span id="score-avoid">0/20</span></h4>
+                        <div class="subscale-bar"><div class="subscale-bar-fill" id="bar-avoid" style="width: 0%; background: #94d2bd;"></div></div>
+                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;" id="desc-avoid">Isolamento ativo, cancelamento de encontros e esquiva relacional.</p>
+                    </div>
+                </div>
+
+                <div class="recommendation-card">
+                    <h3>🧠 Análise Neurocognitiva e Recomendações:</h3>
+                    <div id="result-feedback" style="color: #1f2937; line-height: 1.7; font-size: 0.95rem;"></div>
+                </div>
+
+                <div class="cta-section">
+                    <h3 style="color: var(--primary); margin-bottom: 8px;">Deseja Aprofundar ou Buscar Acompanhamento Clínico?</h3>
+                    <p style="color: var(--text-muted); max-width: 550px; margin: 0 auto 18px auto; font-size: 0.95rem;">
+                        A fobia social e a evitação afetiva não são traços imutáveis da personalidade. A psicoterapia estruturada (TCC) e a regulação autonômica oferecem caminhos baseados em evidências para recuperar a liberdade relacional.
+                    </p>
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <a href="https://wa.me/5535933003807" target="_blank" class="btn-cta">Conversar no WhatsApp</a>
+                        <a href="neurobiologia-ansiedade-social-vergonha-julgamento.html" class="btn-cta" style="background: var(--primary);">Ler o Artigo Científico</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const answers = {};
+        const categories = {
+            physio: [1, 2, 3, 4, 5],
+            eval: [6, 7, 8, 9, 10],
+            avoid: [11, 12, 13, 14, 15]
+        };
+
+        function answer(qNum, val, cat) {
+            answers[qNum] = { val: val, cat: cat };
+
+            // Efeito visual no card
+            const card = document.getElementById(`qc-${qNum}`);
+            if (card) {
+                card.classList.add('answered');
+                const labels = card.querySelectorAll('.option-label');
+                labels.forEach(lbl => lbl.classList.remove('selected'));
+                const checked = card.querySelector(`input[value="${val}"]`);
+                if (checked && checked.parentElement) {
+                    checked.parentElement.classList.add('selected');
+                }
+            }
+
+            // Atualiza barra de progresso
+            const totalAnswered = Object.keys(answers).length;
+            const progress = (totalAnswered / 15) * 100;
+            document.getElementById('p-bar').style.width = `${progress}%`;
+
+            // Habilita botão se todas respondidas
+            if (totalAnswered === 15) {
+                document.getElementById('btn-calc').disabled = false;
+            }
+        }
+
+        function calculateResults() {
+            let total = 0;
+            let sumPhysio = 0;
+            let sumEval = 0;
+            let sumAvoid = 0;
+
+            for (let i = 1; i <= 15; i++) {
+                const item = answers[i];
+                if (!item) return;
+                total += item.val;
+                if (categories.physio.includes(i)) sumPhysio += item.val;
+                if (categories.eval.includes(i)) sumEval += item.val;
+                if (categories.avoid.includes(i)) sumAvoid += item.val;
+            }
+
+            // Atualiza números
+            document.getElementById('total-score').textContent = total;
+            document.getElementById('score-physio').textContent = `${sumPhysio}/20`;
+            document.getElementById('score-eval').textContent = `${sumEval}/20`;
+            document.getElementById('score-avoid').textContent = `${sumAvoid}/20`;
+
+            // Atualiza barras
+            document.getElementById('bar-physio').style.width = `${(sumPhysio / 20) * 100}%`;
+            document.getElementById('bar-eval').style.width = `${(sumEval / 20) * 100}%`;
+            document.getElementById('bar-avoid').style.width = `${(sumAvoid / 20) * 100}%`;
+
+            const circle = document.getElementById('score-circle');
+            const levelEl = document.getElementById('result-level');
+            const summaryEl = document.getElementById('result-summary');
+            const feedbackEl = document.getElementById('result-feedback');
+
+            let levelText = "";
+            let color = "";
+            let summaryText = "";
+            let feedbackText = "";
+
+            if (total <= 14) {
+                levelText = "Ansiedade Social Mínima / Típica";
+                color = "#2a9d8f";
+                summaryText = "Suas respostas indicam uma resposta adaptativa normal ao contato social. Você tolera o olhar alheio com boa flexibilidade psicológica.";
+                feedbackText = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Seu sistema nervoso autônomo e sua Teoria da Mente operam em equilíbrio. Quando você entra em um grupo ou expõe uma ideia, seu córtex pré-frontal regula eficientemente a amígdala, prevenindo a hipersensibilidade ao julgamento.</p>
+                    <p><strong>Orientação:</strong> Continue cultivando relacionamentos autênticos e expondo-se a novos desafios de comunicação interpessoal como oportunidade contínua de crescimento.</p>
+                `;
+            } else if (total <= 28) {
+                levelText = "Ansiedade Social Leve a Moderada";
+                color = "#ee9b00";
+                summaryText = "Há sinais claros de desconforto em situações de exposição, com autocrítica frequente e esforço para gerenciar a impressão causada nos outros.";
+                feedbackText = `
+                    <p><strong>Perfil Neurocognitivo:</strong> O chamado <em>Efeito Holofote</em> começa a sobrecarregar sua atenção. Seu cérebro superestima o quanto os outros estão atentos a pequenos detalhes do seu comportamento e falhas percebidas.</p>
+                    <p><strong>Recomendações Práticas:</strong></p>
+                    <ul>
+                        <li><strong>Treino Atencional Externo:</strong> Em conversas, desloque conscientemente a atenção do seu próprio corpo (respiração, voz) para os rostos e palavras das outras pessoas.</li>
+                        <li><strong>Desmonte o Tribunal Pós-Evento:</strong> Interrompa o hábito de dissecar mentalmente conversas passadas; trate os pensamentos autocríticos apenas como eventos mentais passageiros.</li>
+                    </ul>
+                `;
+            } else if (total <= 42) {
+                levelText = "Ansiedade Social Substancial (Fobia Social)";
+                color = "#ca6702";
+                summaryText = "Níveis elevados de desconforto autonômico e medo paralisante da avaliação alheia, com impacto perceptível na vida profissional, acadêmica ou amorosa.";
+                feedbackText = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Há uma forte sensibilização da <em>matriz de dor social</em> (córtex cingulado anterior e ínsula dorsal). O cérebro interpreta o julgamento ou a rejeição hipotética com a mesma urgência fisiológica de uma ameaça física à sobrevivência, deflagrando comportamentos de segurança (silenciamento, evitação de olhar nos olhos).</p>
+                    <p><strong>Recomendações Práticas:</strong></p>
+                    <ul>
+                        <li><strong>Hierarquia de Exposição Gradual:</strong> Em vez de se isolar, liste situações de 1 a 10 de desconforto e exponha-se intencionalmente aos primeiros degraus sem usar 'muletas' de segurança.</li>
+                        <li><strong>Respiração de Coerência Vagal:</strong> Antes de interações estressantes, use o ritmo de 4 segundos inspirando e 6 segundos expirando para ativar o freio parassimpático.</li>
+                        <li><strong>Apoio Psicoterápico:</strong> A psicoterapia cognitiva-comportamental (TCC) é o padrão-ouro com eficácia comprovada para reestruturar crenças nucleares de inadequação e desamparo social.</li>
+                    </ul>
+                `;
+            } else {
+                levelText = "Ansiedade Social Severa / Evasão Afetiva";
+                color = "#ae2012";
+                summaryText = "Padrão crônico de esquiva social e sofrimento intenso diante da presença de outras pessoas, caracterizado por evitação sistemática de oportunidades vitais.";
+                feedbackText = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Seu circuito córtico-límbico opera em hiper-reatividade de alarme quase contínua. Para se proteger da dor da vergonha, seu cérebro consolidou a evitação experiencial como estratégia dominante: a vida encolhe para garantir uma segurança que, paradoxalmente, gera profunda solidão e sofrimento.</p>
+                    <p><strong>Recomendações Clínicas Urgentes:</strong></p>
+                    <ul>
+                        <li><strong>Acompanhamento Profissional Especializado:</strong> É fundamental buscar avaliação com um neuropsicólogo ou psiquiatra clínico para um plano terapêutico individualizado.</li>
+                        <li><strong>Desfusão e Terapia de Aceitação e Compromisso (ACT):</strong> Reconstruir o contato com os próprios valores de vida, reaprendendo a agir com a presença do desconforto, sem permitir que o medo dite suas escolhas.</li>
+                    </ul>
+                `;
+            }
+
+            circle.style.backgroundColor = color;
+            levelEl.textContent = levelText;
+            levelEl.style.color = color;
+            summaryEl.textContent = summaryText;
+            feedbackEl.innerHTML = feedbackText;
+
+            const box = document.getElementById('result-box');
+            box.style.display = 'block';
+            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>

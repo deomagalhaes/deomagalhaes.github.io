@@ -9,10 +9,6 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **Neuroinflamação, Microbiota Intestinal e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão**
-  - *Abordagem:* O nervo vago como via de comunicação bidirecional, citocinas pró-inflamatórias (IL-6, TNF-alfa), produção de serotonina entérica e protocolos psicobióticos.
-  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`.
-
 - [ ] **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Desenvolvimento do Sistema Nervoso**
   - *Abordagem:* Estresse tóxico na infância, alterações no corpo caloso e córtex pré-frontal, sensibilização da amígdala e neuroplasticidade na reconstrução da segurança afetiva.
   - *Categorias:* `desenvolvimento-infantil`, `orientacao-familiar`, `saude-mental`.
@@ -24,6 +20,8 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+
+- [x] **Neuroinflamação, Microbiota Intestinal e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão** (Publicado em 27/10/2026)
 
 - [x] **A Neurobiologia da Empatia e a Teoria da Mente: Como o Cérebro Decifra os Sentimentos do Outro** (Publicado em 27/10/2026)
 - [x] **Flexibilidade Psicológica e Neuroplasticidade: Como a Terapia de Aceitação e Compromisso (ACT) Modifica Conexões Cerebrais** (Publicado em 27/10/2026)

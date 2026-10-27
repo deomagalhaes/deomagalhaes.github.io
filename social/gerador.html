@@ -499,6 +499,7 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
+                        <option value="neuroinflamacao">Neuroinflamação e Microbiota (Eixo Intestino-Cérebro)</option>
                         <option value="flexibilidade-act">Flexibilidade Psicológica e ACT (Neuroplasticidade)</option>
                         <option value="ansiedade-social">A Neurobiologia da Ansiedade Social e Vergonha</option>
                         <option value="dmn">A Rede de Modo Padrão (DMN) & Pensamentos Intrusivos</option>
@@ -637,6 +638,56 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "neuroinflamacao": {
+                articleSlug: "2026-10-27-neuroinflamacao-microbiota-eixo-intestino-cerebro",
+                articleTitle: "Neuroinflamação, Microbiota e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROIMUNOLOGIA & COMPORTAMENTO",
+                        title: "Sua ansiedade e desânimo podem estar nascendo no seu intestino?",
+                        body: "Como a microbiota, o nervo vago e a inflamação silenciosa reprogramam suas emoções.",
+                        footer: "Arraste para entender a ciência 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O MITO DO CÉREBRO ISOLADO",
+                        title: "A mente não habita uma ilha",
+                        body: "O trato gastrointestinal possui mais de 500 milhões de neurônios (o Sistema Nervoso Entérico).\n\nMais de 90% da serotonina corporal e uma fração massiva do GABA são produzidos ou modulados no intestino.",
+                        footer: "A via de comunicação 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A AUTOESTRADA: NERVO VAGO",
+                        title: "O nervo vago e a interocepção",
+                        body: "80% a 90% das fibras do nervo vago são AFERENTES: enviam dados DO intestino PARA o cérebro.\n\nQuando o intestino inflama, o nervo vago transmite alarme visceral contínuo à amígdala antes de qualquer pensamento.",
+                        footer: "A tempestade inflamatória 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "LEAKY GUT & QUINURENINA",
+                        title: "A rota da neuroinflamação",
+                        body: "A quebra da barreira intestinal permite a translocação de toxinas (LPS).\n\nO cérebro inflama e desvia o triptofano (que viraria serotonina) para o ácido quinolínico, gerando fadiga mental e anedonia.",
+                        footer: "Como proteger o cérebro? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PILARES CLÍNICOS",
+                        title: "3 Formas de Cuidar do Eixo",
+                        body: "1. Alimentação Anti-inflamatória: polifenóis, fibras prebióticas e ômega-3 produzem butirato neuroprotetor.\n2. Tônus Vagal: respiração diafragmática ativa o reflexo colinérgico anti-inflamatório.\n3. Psicoterapia: regular o estresse protege a integridade epitelial.",
+                        footer: "Ensaio completo no site 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Saúde mental é acolher o corpo como ecossistema.",
+                        body: "Dissecamos os mecanismos moleculares, a rota da quinurenina e protocolos psicobióticos no site.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já percebeu que dias de muita angústia e ansiedade costumam vir acompanhados de desconforto gastrointestinal?\n\nIsso não é mera coincidência: é o Eixo Microbiota-Intestino-Cérebro. Mais de 500 milhões de neurônios habitam o trato gastrointestinal, conversando 24h por dia com o cérebro pelo Nervo Vago.\n\n👉 Leia o ensaio completo no link da bio: deomagalhaes.com.br`
+            },
+
             "flexibilidade-act": {
                 articleSlug: "2026-10-27-flexibilidade-psicologica-act",
                 articleTitle: "Flexibilidade Psicológica e Neuroplasticidade: Como a ACT Modifica Conexões Cerebrais",
