@@ -192,6 +192,14 @@
             box-shadow: 0 0 12px rgba(14, 239, 255, 0.35);
         }
 
+        .cell-tile.start-tile {
+            box-shadow: 0 0 0 2px #0ef, 0 0 10px rgba(14, 239, 255, 0.4);
+        }
+
+        .cell-tile.end-tile {
+            box-shadow: 0 0 0 2px #ee9b00, 0 0 10px rgba(238, 155, 0, 0.4);
+        }
+
         .cell-tile svg {
             width: 85%;
             height: 85%;
@@ -373,7 +381,7 @@
 
             <div class="circuit-board-container">
                 <div class="board-indicators">
-                    <span class="indicator-node active">⚡ Entrada Sináptica (Topo/Esq)</span>
+                    <span class="indicator-node active" id="entryNode">⚡ Entrada Sináptica (Topo/Esq)</span>
                     <span class="indicator-node" id="exitNode">🎯 Resposta Frontal (Base/Dir)</span>
                 </div>
 
@@ -512,17 +520,17 @@
                 name: "Circuito Frontal Simples",
                 size: 3,
                 start: { r: 0, c: 0, entryDir: 0 }, // Entra pelo topo de (0,0)
-                end: { r: 2, c: 2, exitDir: 2 },    // Sai pelo fundo de (2,2)
+                end: { r: 2, c: 2, exitDir: 2 },    // Sai pela base de (2,2)
                 layout: [
-                    { type: 'CORNER', correctRot: 1, rot: 3 }, // (0,0) Curva direita-fundo (1)
-                    { type: 'LINE', correctRot: 1, rot: 0 },   // (0,1) Reta horizontal (1)
-                    { type: 'CORNER', correctRot: 2, rot: 0 }, // (0,2) Curva fundo-esquerda (2)
-                    { type: 'LINE', correctRot: 0, rot: 1 },   // (1,0)
-                    { type: 'CORNER', correctRot: 0, rot: 3 }, // (1,1)
-                    { type: 'LINE', correctRot: 0, rot: 1 },   // (1,2) Reta vertical (0)
-                    { type: 'CORNER', correctRot: 0, rot: 2 }, // (2,0)
-                    { type: 'LINE', correctRot: 1, rot: 0 },   // (2,1)
-                    { type: 'CORNER', correctRot: 0, rot: 3 }  // (2,2) Curva topo-fundo etc.
+                    { type: 'CORNER', correctRot: 0, rot: 3 }, // (0,0) Topo -> Direita
+                    { type: 'LINE', correctRot: 1, rot: 0 },   // (0,1) Esquerda -> Direita
+                    { type: 'CORNER', correctRot: 2, rot: 1 }, // (0,2) Esquerda -> Fundo
+                    { type: 'LINE', correctRot: 0, rot: 1 },   // (1,0) Distrator
+                    { type: 'CORNER', correctRot: 0, rot: 3 }, // (1,1) Distrator
+                    { type: 'LINE', correctRot: 0, rot: 1 },   // (1,2) Topo -> Fundo
+                    { type: 'CORNER', correctRot: 0, rot: 2 }, // (2,0) Distrator
+                    { type: 'LINE', correctRot: 1, rot: 0 },   // (2,1) Distrator
+                    { type: 'LINE', correctRot: 0, rot: 1 }    // (2,2) Topo -> Fundo (Saída na base)
                 ]
             },
             {
@@ -531,52 +539,52 @@
                 start: { r: 0, c: 0, entryDir: 3 }, // Entra pela esquerda de (0,0)
                 end: { r: 3, c: 3, exitDir: 1 },    // Sai pela direita de (3,3)
                 layout: [
-                    { type: 'CORNER', correctRot: 1, rot: 2 },
-                    { type: 'LINE', correctRot: 1, rot: 0 },
-                    { type: 'CORNER', correctRot: 2, rot: 3 },
-                    { type: 'LINE', correctRot: 0, rot: 1 },
+                    { type: 'CORNER', correctRot: 2, rot: 1 },  // (0,0) Esquerda -> Fundo
+                    { type: 'LINE', correctRot: 1, rot: 0 },    // (0,1)
+                    { type: 'CORNER', correctRot: 2, rot: 3 },  // (0,2)
+                    { type: 'LINE', correctRot: 0, rot: 1 },    // (0,3)
 
-                    { type: 'LINE', correctRot: 0, rot: 1 },
-                    { type: 'T_JUNCTION', correctRot: 1, rot: 3 },
-                    { type: 'LINE', correctRot: 0, rot: 1 },
-                    { type: 'CORNER', correctRot: 3, rot: 0 },
+                    { type: 'LINE', correctRot: 0, rot: 1 },    // (1,0) Topo -> Fundo
+                    { type: 'T_JUNCTION', correctRot: 1, rot: 3 }, // (1,1) Fundo -> Direita
+                    { type: 'LINE', correctRot: 1, rot: 0 },    // (1,2) Esquerda -> Direita
+                    { type: 'CORNER', correctRot: 2, rot: 0 },  // (1,3) Esquerda -> Fundo
 
-                    { type: 'CORNER', correctRot: 0, rot: 2 },
-                    { type: 'CROSS', correctRot: 0, rot: 0 },
-                    { type: 'CORNER', correctRot: 1, rot: 3 },
-                    { type: 'LINE', correctRot: 0, rot: 1 },
+                    { type: 'CORNER', correctRot: 0, rot: 2 },  // (2,0) Topo -> Direita
+                    { type: 'CROSS', correctRot: 0, rot: 0 },   // (2,1) Esquerda -> Topo
+                    { type: 'CORNER', correctRot: 1, rot: 3 },  // (2,2)
+                    { type: 'LINE', correctRot: 0, rot: 1 },    // (2,3) Topo -> Fundo
 
-                    { type: 'LINE', correctRot: 1, rot: 0 },
-                    { type: 'CORNER', correctRot: 0, rot: 1 },
-                    { type: 'LINE', correctRot: 1, rot: 0 },
-                    { type: 'CORNER', correctRot: 3, rot: 2 }
+                    { type: 'LINE', correctRot: 1, rot: 0 },    // (3,0)
+                    { type: 'CORNER', correctRot: 0, rot: 1 },  // (3,1)
+                    { type: 'LINE', correctRot: 1, rot: 0 },    // (3,2)
+                    { type: 'CORNER', correctRot: 0, rot: 2 }   // (3,3) Topo -> Direita (Saída na direita)
                 ]
             },
             {
                 name: "Conexão Inter-Hemisférica Avançada",
                 size: 4,
-                start: { r: 0, c: 1, entryDir: 0 },
-                end: { r: 3, c: 2, exitDir: 2 },
+                start: { r: 0, c: 1, entryDir: 0 }, // Entra pelo topo de (0,1)
+                end: { r: 3, c: 2, exitDir: 2 },    // Sai pela base de (3,2)
                 layout: [
-                    { type: 'CORNER', correctRot: 1, rot: 0 },
-                    { type: 'T_JUNCTION', correctRot: 2, rot: 0 },
-                    { type: 'LINE', correctRot: 1, rot: 0 },
-                    { type: 'CORNER', correctRot: 2, rot: 1 },
+                    { type: 'CORNER', correctRot: 1, rot: 0 },     // (0,0)
+                    { type: 'T_JUNCTION', correctRot: 0, rot: 2 }, // (0,1) Topo -> Direita
+                    { type: 'LINE', correctRot: 1, rot: 0 },       // (0,2) Esquerda -> Direita
+                    { type: 'CORNER', correctRot: 2, rot: 1 },     // (0,3) Esquerda -> Fundo
 
-                    { type: 'LINE', correctRot: 0, rot: 1 },
-                    { type: 'LINE', correctRot: 0, rot: 1 },
-                    { type: 'CORNER', correctRot: 0, rot: 3 },
-                    { type: 'LINE', correctRot: 0, rot: 1 },
+                    { type: 'LINE', correctRot: 0, rot: 1 },       // (1,0)
+                    { type: 'LINE', correctRot: 0, rot: 1 },       // (1,1)
+                    { type: 'CORNER', correctRot: 0, rot: 3 },     // (1,2)
+                    { type: 'LINE', correctRot: 0, rot: 1 },       // (1,3) Topo -> Fundo
 
-                    { type: 'CORNER', correctRot: 0, rot: 2 },
-                    { type: 'CROSS', correctRot: 0, rot: 0 },
-                    { type: 'LINE', correctRot: 1, rot: 0 },
-                    { type: 'CORNER', correctRot: 3, rot: 0 },
+                    { type: 'CORNER', correctRot: 0, rot: 2 },     // (2,0)
+                    { type: 'CROSS', correctRot: 0, rot: 0 },      // (2,1) Topo -> Fundo
+                    { type: 'LINE', correctRot: 1, rot: 0 },       // (2,2) Direita -> Esquerda
+                    { type: 'CORNER', correctRot: 3, rot: 0 },     // (2,3) Topo -> Esquerda
 
-                    { type: 'LINE', correctRot: 1, rot: 0 },
-                    { type: 'CORNER', correctRot: 1, rot: 2 },
-                    { type: 'T_JUNCTION', correctRot: 0, rot: 3 },
-                    { type: 'CORNER', correctRot: 0, rot: 1 }
+                    { type: 'LINE', correctRot: 1, rot: 0 },       // (3,0)
+                    { type: 'CORNER', correctRot: 0, rot: 2 },     // (3,1) Topo -> Direita
+                    { type: 'T_JUNCTION', correctRot: 2, rot: 0 }, // (3,2) Esquerda -> Fundo (Saída na base)
+                    { type: 'CORNER', correctRot: 0, rot: 1 }      // (3,3)
                 ]
             }
         ];
@@ -598,6 +606,17 @@
             document.getElementById('hudStatus').textContent = "Incompleto";
             document.getElementById('hudStatus').style.color = "#ee9b00";
             document.getElementById('victoryBanner').style.display = 'none';
+
+            // Atualiza indicadores de entrada e saída
+            const entryNode = document.getElementById('entryNode');
+            const exitNode = document.getElementById('exitNode');
+            const dirNames = ["Topo", "Direita", "Base", "Esquerda"];
+            if (entryNode && lvl.start) {
+                entryNode.innerHTML = `⚡ Entrada (${dirNames[lvl.start.entryDir]} - [${lvl.start.r + 1}, ${lvl.start.c + 1}])`;
+            }
+            if (exitNode && lvl.end) {
+                exitNode.innerHTML = `🎯 Saída (${dirNames[lvl.end.exitDir]} - [${lvl.end.r + 1}, ${lvl.end.c + 1}])`;
+            }
 
             // Clona o layout
             currentGrid = lvl.layout.map(tile => ({ ...tile }));
@@ -621,10 +640,15 @@
             board.innerHTML = '';
             board.style.gridTemplateColumns = `repeat(${lvl.size}, 1fr)`;
 
+            const startIdx = lvl.start.r * lvl.size + lvl.start.c;
+            const endIdx = lvl.end.r * lvl.size + lvl.end.c;
+
             currentGrid.forEach((tile, index) => {
                 const cell = document.createElement('div');
                 cell.className = 'cell-tile';
                 cell.id = `tile-${index}`;
+                if (index === startIdx) cell.classList.add('start-tile');
+                if (index === endIdx) cell.classList.add('end-tile');
                 cell.innerHTML = getTileSvg(tile.type, tile.rot);
 
                 cell.addEventListener('click', () => {
