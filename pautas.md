@@ -9,10 +9,6 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Desenvolvimento do Sistema Nervoso**
-  - *Abordagem:* Estresse tóxico na infância, alterações no corpo caloso e córtex pré-frontal, sensibilização da amígdala e neuroplasticidade na reconstrução da segurança afetiva.
-  - *Categorias:* `desenvolvimento-infantil`, `orientacao-familiar`, `saude-mental`.
-
 - [ ] **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica e o Fim das Metas Frustradas**
   - *Abordagem:* Circuitos de recompensa no estriado ventral, erro de predição de recompensa (RPE), metas intrínsecas e superação do ciclo de euforia e esgotamento.
   - *Categorias:* `desenvolvimento-pessoal`, `neurociencia`, `saude-mental`.
@@ -21,6 +17,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Desenvolvimento do Sistema Nervoso** (Publicado em 27/10/2026)
 - [x] **Neuroinflamação, Microbiota Intestinal e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão** (Publicado em 27/10/2026)
 
 - [x] **A Neurobiologia da Empatia e a Teoria da Mente: Como o Cérebro Decifra os Sentimentos do Outro** (Publicado em 27/10/2026)

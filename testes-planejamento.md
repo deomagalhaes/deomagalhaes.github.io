@@ -19,7 +19,9 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-09** | **Questionário de Higiene do Sono e Ritmo Circadiano** | Insônia Comportamental e Cronotipo | `artigos/teste-sono.html` | ✅ Concluído |
 | **T-10** | **Escala de Ruminação Mental e Pensamentos Intrusivos** | Rede de Modo Padrão (DMN) e Ansiedade Cognitiva | `artigos/teste-ruminacao.html` | ✅ Concluído |
 | **T-11** | **Inventário de Ansiedade Social e Evasão Afetiva** | Medo de Avaliação Negativa e Fobia Social | `artigos/teste-ansiedade-social.html` | ✅ Concluído |
-| **T-12** | **Escala de Flexibilidade Psicológica e Desfusão (ACT)** | Aceitação, Valores e Rigidez Cognitiva | `artigos/teste-flexibilidade-cognitiva.html` | ⏳ *Próximo da fila* |
+| **T-12** | **Escala de Flexibilidade Psicológica e Desfusão (ACT)** | Aceitação, Valores e Rigidez Cognitiva | `artigos/teste-flexibilidade-cognitiva.html` | ✅ Concluído |
+| **T-13** | **Escala de Autoeficácia Geral e Resiliência Psíquica** | Agência Pessoal, Crença de Competência e Resiliência | `artigos/teste-autoeficacia.html` | ⏳ *Próximo da fila* |
+| **T-14** | **Inventário de Sensibilidade Sensorial e Hiper-reatividade** | Integração Sensorial no Adulto e Sobrecarga Ambiental | `artigos/teste-sensibilidade-sensorial.html` | ⏳ Aguardando |
 
 ---
 
