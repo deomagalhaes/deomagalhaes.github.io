@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Autoeficácia Geral e Resiliência (EAGR) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua crença de competência pessoal, agência, perseverança sob adversidades e resiliência psicológica com cálculo automático e devolutiva neurocognitiva.">
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-dark: #001219;
+            --secondary: #0a9396;
+            --accent: #94d2bd;
+            --highlight: #ee9b00;
+            --danger: #ae2012;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+        }
+
+        .test-container {
+            max-width: 860px;
+            margin: 2rem auto 4rem auto;
+            padding: 2.2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 95, 115, 0.08);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .badge-test {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .test-header h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            line-height: 1.25;
+        }
+
+        .test-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .test-intro-box {
+            background: #f0fdf4;
+            border-left: 4px solid #0a9396;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: #0f5132;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary), var(--highlight));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.25s ease;
+        }
+
+        .question-card:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .question-num {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            background: #f8fafc;
+        }
+
+        .option-label:hover {
+            background: #f1f5f9;
+            border-color: var(--secondary);
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.2);
+        }
+
+        .option-val {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+
+        .option-desc {
+            font-size: 0.78rem;
+            line-height: 1.2;
+        }
+
+        .option-label.selected .option-desc {
+            color: #e0f2fe;
+        }
+
+        .actions-box {
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+
+        .btn-calc {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 14px 38px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 95, 115, 0.35);
+        }
+
+        .result-box {
+            display: none;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 2.2rem;
+            margin-top: 2rem;
+            border: 2px solid #e2e8f0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 0 auto 1rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .score-num {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .score-total {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            text-transform: uppercase;
+        }
+
+        .result-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
+        .result-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin: 2rem 0;
+        }
+
+        .subscale-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 6px 0;
+            color: var(--primary);
+            font-size: 0.98rem;
+        }
+
+        .subscale-score {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .subscale-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .subscale-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .subscale-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .clinical-analysis {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .clinical-analysis h4 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .test-container {
+                margin: 1rem;
+                padding: 1.4rem;
+            }
+            .test-header h1 {
+                font-size: 1.6rem;
+            }
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos</a>
+                <a href="/recursos.html">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="test-container">
+            <div class="test-header">
+                <div class="badge-test">⚡ Instrumento Psicoeducativo de Autoavaliação</div>
+                <h1>Escala de Autoeficácia Geral e Resiliência (EAGR)</h1>
+                <p>Baseada na clássica <em>General Self-Efficacy Scale</em> (Schwarzer & Jerusalem) e na teoria sociocognitiva de Albert Bandura. Avalie sua convicção de agência pessoal, capacidade de superar imprevistos e perseverança executiva.</p>
+            </div>
+
+            <div class="test-intro-box">
+                <strong>Instruções:</strong> Para cada uma das 12 afirmações a seguir, assinale a opção que melhor retrata como você realmente se posiciona diante de desafios, metas e momentos de adversidade. O cálculo é 100% privado, imediato e realizado localmente no seu dispositivo.
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="p-bar"></div>
+            </div>
+
+            <form id="efficacyForm">
+                <div id="questionsContainer"></div>
+
+                <div class="actions-box">
+                    <button type="button" class="btn-calc" id="btnSubmit" onclick="calculateEfficacy()">Calcular Meu Índice de Autoeficácia</button>
+                </div>
+            </form>
+
+            <div class="result-box" id="resultCard">
+                <div class="result-header">
+                    <div class="score-circle" id="scoreBadge">
+                        <span class="score-num" id="totalScore">0</span>
+                        <span class="score-total">de 48 pts</span>
+                    </div>
+                    <div class="result-title" id="resultLevel">Calculando...</div>
+                    <div class="result-subtitle" id="resultSubtitle">Mapeamento de agência pessoal e resiliência neurocognitiva</div>
+                </div>
+
+                <h3>Mapeamento dos 3 Pilares da Autoeficácia</h3>
+                <div class="subscales-grid">
+                    <div class="subscale-card">
+                        <h4>1. Agência & Iniciativa Pessoal</h4>
+                        <div class="subscale-score" id="scoreSub1">0/16</div>
+                        <div class="subscale-bar"><div class="subscale-bar-fill" id="barSub1"></div></div>
+                        <p class="subscale-desc">Disposição para dar o primeiro passo, assumir responsabilidade ativa e transformar intenções em ações concretas.</p>
+                    </div>
+
+                    <div class="subscale-card">
+                        <h4>2. Resiliência & Persistência</h4>
+                        <div class="subscale-score" id="scoreSub2">0/16</div>
+                        <div class="subscale-bar"><div class="subscale-bar-fill" id="barSub2"></div></div>
+                        <p class="subscale-desc">Tolerância ao erro, velocidade de recuperação anímica e determinação para continuar quando surgem obstáculos.</p>
+                    </div>
+
+                    <div class="subscale-card">
+                        <h4>3. Resolução Estratégica de Problemas</h4>
+                        <div class="subscale-score" id="scoreSub3">0/16</div>
+                        <div class="subscale-bar"><div class="subscale-bar-fill" id="barSub3"></div></div>
+                        <p class="subscale-desc">Clareza do córtex pré-frontal para manter a calma, encontrar alternativas lógicas e recalcular rotas sob estresse.</p>
+                    </div>
+                </div>
+
+                <div class="clinical-analysis" id="analysisText"></div>
+
+                <div class="cta-box">
+                    <p style="margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 600;">Deseja fortalecer sua segurança cognitiva e desenvolver disciplina sustentável?</p>
+                    <a href="https://wa.me/5535933003807?text=Ol%C3%A1%20Deo,%20fiz%20a%20Escala%20de%20Autoefic%C3%A1cia%20no%20site%20e%20gostaria%20de%20conversar%20sobre%20orienta%C3%A7%C3%A3o%20neuropsicol%C3%B3gica." target="_blank" class="cta-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        Agendar Orientação Especializada
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const QUESTIONS = [
+            // Subescala 1: Agência & Iniciativa Pessoal (Itens 1 a 4)
+            { id: 1, text: "Tenho certeza de que consigo encontrar maneiras de alcançar meus objetivos, mesmo quando os caminhos parecem bloqueados.", sub: 1 },
+            { id: 2, text: "Quando me deparo com uma tarefa totalmente nova, sinto confiança de que sou capaz de aprender e executá-la com competência.", sub: 1 },
+            { id: 3, text: "Costumo tomar a iniciativa para transformar minhas ideias em ações concretas, sem ficar paralisado esperando aprovação alheia.", sub: 1 },
+            { id: 4, text: "Acredito que meu sucesso e bem-estar dependem prioritariamente do meu esforço, planejamento e disciplina diária.", sub: 1 },
+
+            // Subescala 2: Resiliência & Persistência (Itens 5 a 8)
+            { id: 5, text: "Consigo manter o foco e perseverar em meus projetos mesmo quando os resultados demoram muito mais do que o planejado.", sub: 2 },
+            { id: 6, text: "Quando cometo um erro ou sofro uma derrota, consigo me recuperar emocionalmente com relativa rapidez e tentar de novo.", sub: 2 },
+            { id: 7, text: "Se alguém se opõe aos meus planos ou critica minhas decisões, encontro recursos internos para manter minhas convicções construtivas.", sub: 2 },
+            { id: 8, text: "As dificuldades e adversidades da vida funcionam para mim como estímulos de aprendizado, e não como motivos para desistir.", sub: 2 },
+
+            // Subescala 3: Resolução Estratégica de Problemas (Itens 9 a 12)
+            { id: 9, text: "Mesmo diante de situações imprevisíveis ou crises súbitas, sou capaz de manter a calma e pensar em soluções práticas.", sub: 3 },
+            { id: 10, text: "Quando enfrento um problema complexo, consigo dividi-lo em partes menores e resolver uma etapa de cada vez com lucidez.", sub: 3 },
+            { id: 11, text: "Tenho facilidade em pensar em múltiplos planos alternativos (Plano B ou C) caso minha primeira estratégia falhe.", sub: 3 },
+            { id: 12, text: "Confio plenamente na minha habilidade de lidar com o inesperado, pois confio nas minhas capacidades de adaptação cognitiva.", sub: 3 }
+        ];
+
+        const SCALE_OPTIONS = [
+            { val: 1, label: "Discordo Fortemente", desc: "Não se aplica a mim" },
+            { val: 2, label: "Discordo Parcialmente", desc: "Raramente é verdade" },
+            { val: 3, label: "Concordo Parcialmente", desc: "Frequentemente verdade" },
+            { val: 4, label: "Concordo Plenamente", desc: "Exatamente quem sou" }
+        ];
+
+        const container = document.getElementById('questionsContainer');
+
+        QUESTIONS.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `qCard_${q.id}`;
+
+            let optionsHtml = '';
+            SCALE_OPTIONS.forEach(opt => {
+                optionsHtml += `
+                    <label class="option-label" onclick="selectOption(${q.id}, ${opt.val}, this)">
+                        <input type="radio" name="q_${q.id}" value="${opt.val}">
+                        <span class="option-val">${opt.val}</span>
+                        <span class="option-desc">${opt.label}</span>
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="question-title">
+                    <span class="question-num">${index + 1}.</span>
+                    <span>${q.text}</span>
+                </div>
+                <div class="options-grid">
+                    ${optionsHtml}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function selectOption(qId, val, labelEl) {
+            const card = document.getElementById(`qCard_${qId}`);
+            card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+            labelEl.classList.add('selected');
+            labelEl.querySelector('input').checked = true;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            QUESTIONS.forEach(q => {
+                const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (checked) answered++;
+            });
+            const pct = Math.round((answered / QUESTIONS.length) * 100);
+            document.getElementById('p-bar').style.width = pct + '%';
+        }
+
+        function calculateEfficacy() {
+            let answers = {};
+            let missing = [];
+
+            QUESTIONS.forEach(q => {
+                const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (checked) {
+                    answers[q.id] = parseInt(checked.value, 10);
+                } else {
+                    missing.push(q.id);
+                }
+            });
+
+            if (missing.length > 0) {
+                alert(`Por favor, responda todas as questões antes de calcular. Faltam responder ${missing.length} afirmação(ões).`);
+                const firstMissing = document.getElementById(`qCard_${missing[0]}`);
+                if (firstMissing) {
+                    firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstMissing.style.borderColor = '#ae2012';
+                }
+                return;
+            }
+
+            let total = 0;
+            let sub1 = 0; // Agência
+            let sub2 = 0; // Resiliência
+            let sub3 = 0; // Resolução
+
+            QUESTIONS.forEach(q => {
+                const v = answers[q.id];
+                total += v;
+                if (q.sub === 1) sub1 += v;
+                if (q.sub === 2) sub2 += v;
+                if (q.sub === 3) sub3 += v;
+            });
+
+            document.getElementById('totalScore').innerText = total;
+            document.getElementById('scoreSub1').innerText = `${sub1}/16`;
+            document.getElementById('scoreSub2').innerText = `${sub2}/16`;
+            document.getElementById('scoreSub3').innerText = `${sub3}/16`;
+
+            const p1 = (sub1 / 16) * 100;
+            const p2 = (sub2 / 16) * 100;
+            const p3 = (sub3 / 16) * 100;
+
+            const b1 = document.getElementById('barSub1');
+            const b2 = document.getElementById('barSub2');
+            const b3 = document.getElementById('barSub3');
+
+            b1.style.width = p1 + '%';
+            b2.style.width = p2 + '%';
+            b3.style.width = p3 + '%';
+
+            function colorBar(el, p) {
+                if (p >= 75) el.style.background = '#2a9d8f';
+                else if (p >= 50) el.style.background = '#ee9b00';
+                else el.style.background = '#ae2012';
+            }
+
+            colorBar(b1, p1);
+            colorBar(b2, p2);
+            colorBar(b3, p3);
+
+            const badge = document.getElementById('scoreBadge');
+            const title = document.getElementById('resultLevel');
+            const subtitle = document.getElementById('resultSubtitle');
+            const analysis = document.getElementById('analysisText');
+
+            let levelName = "";
+            let badgeBg = "";
+            let htmlAnalysis = "";
+
+            if (total >= 40) {
+                levelName = "Autoeficácia Excepcional & Alta Maestria Pessoal";
+                badgeBg = "linear-gradient(135deg, #10b981, #059669)";
+                subtitle.innerText = "Excelente percepção de agência, tenacidade diante de crises e controle cognitivo.";
+                htmlAnalysis = `
+                    <h4>🏆 Perfil Neurocognitivo de Alta Competência:</h4>
+                    <p>Sua pontuação revela uma estrutura psíquica excepcionalmente resiliente e proativa. Segundo o modelo de Albert Bandura, pessoas com alta autoeficácia percebem desafios não como ameaças paralisantes, mas como problemas solúveis que exigem dedicação estratégica.</p>
+                    <p><strong>Pontos Fortes Identificados:</strong></p>
+                    <ul>
+                        <li><strong>Locus de Controle Interno Sólido:</strong> Você confia no seu protagonismo e não delega o rumo da sua vida à sorte ou à passividade.</li>
+                        <li><strong>Tolerância Sináptica ao Esforço:</strong> Seu Córtex Cingulado Anterior e circuitos pré-frontais sustentam a motivação mesmo quando as recompensas são de longo prazo.</li>
+                    </ul>
+                    <p><em>Orientação:</em> Mantenha-se desafiando em projetos de alto impacto, cuidando sempre para não cair no perfeccionismo ou na sobrecarga alostática por excesso de responsabilidade.</p>
+                `;
+            } else if (total >= 30) {
+                levelName = "Autoeficácia Funcional & Resiliência Moderada";
+                badgeBg = "linear-gradient(135deg, #0a9396, #005f73)";
+                subtitle.innerText = "Boa capacidade executiva, com oscilações pontuais em cenários de alta incerteza.";
+                htmlAnalysis = `
+                    <h4>🌿 Perfil Neurocognitivo em Desenvolvimento:</h4>
+                    <p>Você apresenta uma boa base de recursos executivos e capacidade adaptativa no cotidiano. No entanto, diante de derrotas repetidas ou de tarefas muito distantes da sua zona de conforto, a autocrítica e a dúvida de competência tendem a cobrar um pedágio emocional.</p>
+                    <p><strong>Oportunidades de Fortalecimento:</strong></p>
+                    <ul>
+                        <li><strong>Experiências de Domínio (Mastery Experiences):</strong> Divida grandes metas em micro-etapas de alta previsibilidade de sucesso para abastecer sua dopamina tônica.</li>
+                        <li><strong>Reenquadramento Cognitivo do Fracasso:</strong> Trate o erro como dado neurobiológico informativo de ajuste de rota, e não como atestado de incapacidade pessoal.</li>
+                    </ul>
+                `;
+            } else if (total >= 20) {
+                levelName = "Autoeficácia Fragilizada (Insegurança & Hesitação)";
+                badgeBg = "linear-gradient(135deg, #ee9b00, #ca6702)";
+                subtitle.innerText = "Forte tendência à procrastinação protetiva e medo de não dar conta dos desafios.";
+                htmlAnalysis = `
+                    <h4>⚠️ Atenção aos Padrões de Autossabotagem:</h4>
+                    <p>Sua pontuação sinaliza que você tem duvidado com frequência do seu próprio potencial de ação. Em neuropsicologia, isso costuma refletir um histórico de sobrecarga, frustrações recentes não elaboradas ou padrões de autocrítica severa que desativam a iniciativa antes mesmo de tentar.</p>
+                    <p><strong>Efeitos Comportamentais Típicos:</strong></p>
+                    <ul>
+                        <li><strong>Procrastinação de Auto-proteção:</strong> Deixar para depois para evitar o risco de tentar e falhar.</li>
+                        <li><strong>Desgaste da Linha Basal de Dopamina:</strong> Sensação de desânimo prévio mesmo diante de atividades que você gostaria de realizar.</li>
+                    </ul>
+                    <p><em>Recomendação:</em> Trabalhar a autocompaixão ativa e reconstruir a relação com pequenas vitórias diárias é essencial para recuperar a convicção na sua agência.</p>
+                `;
+            } else {
+                levelName = "Autoeficácia Rebaixada (Desamparo Aprendido)";
+                badgeBg = "linear-gradient(135deg, #ae2012, #9b2226)";
+                subtitle.innerText = "Sentimento crônico de impotência, paralisia de iniciativa e sobrecarga emocional.";
+                htmlAnalysis = `
+                    <h4>🚨 Necessidade de Suporte e Reconstrução de Agência:</h4>
+                    <p>Seus resultados sugerem que você se encontra em um estado de exaustão e desamparo aprendido (Martin Seligman). Quando chegamos a esse nível de rebaixamento de autoeficácia, o cérebro conclui que nenhum esforço surtirá efeito, desligando a motivação motora e cognitiva.</p>
+                    <p><strong>Caminhos Clínicos Urgentes:</strong></p>
+                    <ul>
+                        <li>Não tente resolver tudo de uma vez. Reduza as exigências externas e foque no autocuidado básico (sono, rotina e limites).</li>
+                        <li>Busque apoio psicoterapêutico especializado para restaurar sua narrativa de competência e reprogramar circuitos de recompensa afetados pelo estresse crônico.</li>
+                    </ul>
+                `;
+            }
+
+            badge.style.background = badgeBg;
+            title.innerText = levelName;
+            analysis.innerHTML = htmlAnalysis;
+
+            const resCard = document.getElementById('resultCard');
+            resCard.style.display = 'block';
+            resCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>

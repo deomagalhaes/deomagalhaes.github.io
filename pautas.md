@@ -9,14 +9,19 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica e o Fim das Metas Frustradas**
-  - *Abordagem:* Circuitos de recompensa no estriado ventral, erro de predição de recompensa (RPE), metas intrínsecas e superação do ciclo de euforia e esgotamento.
-  - *Categorias:* `desenvolvimento-pessoal`, `neurociencia`, `saude-mental`.
+- [ ] **O Cérebro Fragmentado: O Custo Oculto da Troca de Tarefas e do Resíduo de Atenção**
+  - *Abordagem:* Alternância executiva no CPF, resíduo atencional (Sophie Leroy), perda de densidade sináptica e estratégias de Deep Work.
+  - *Categorias:* `desenvolvimento-pessoal`, `reabilitacao-cognitiva`, `saude-mental`.
+
+- [ ] **A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse**
+  - *Abordagem:* Ruminação límbica, reatividade da amígdala e cortisol sustentado, vs. a reconfiguração do córtex pré-frontal ventromedial pelo desfecho do perdão.
+  - *Categorias:* `saude-mental`, `filosofia`, `desenvolvimento-pessoal`.
 
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica e o Fim das Metas Frustradas** (Publicado em 27/10/2026)
 - [x] **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Desenvolvimento do Sistema Nervoso** (Publicado em 27/10/2026)
 - [x] **Neuroinflamação, Microbiota Intestinal e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão** (Publicado em 27/10/2026)
 

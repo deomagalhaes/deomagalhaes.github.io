@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **27/10/2026** | **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica** | [`social/2026-10-27-neurobiologia-motivacao-dopamina-tonica-fasica.md`](2026-10-27-neurobiologia-motivacao-dopamina-tonica-fasica.md) | ✅ Pronto para postar |
 | **27/10/2026** | **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Cérebro** | [`social/2026-10-27-mente-hiperalerta-trauma-precoce.md`](2026-10-27-mente-hiperalerta-trauma-precoce.md) | ✅ Pronto para postar |
 | **27/10/2026** | **Neuroinflamação, Microbiota e Saúde Mental (Eixo Intestino-Cérebro)** | [`social/2026-10-27-neuroinflamacao-microbiota-eixo-intestino-cerebro.md`](2026-10-27-neuroinflamacao-microbiota-eixo-intestino-cerebro.md) | ✅ Pronto para postar |
 | **27/10/2026** | **A Neurobiologia da Empatia e a Teoria da Mente** | [`social/2026-10-27-neurobiologia-empatia-teoria-da-mente.md`](2026-10-27-neurobiologia-empatia-teoria-da-mente.md) | ✅ Pronto para postar |
