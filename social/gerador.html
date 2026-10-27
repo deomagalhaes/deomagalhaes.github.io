@@ -499,6 +499,12 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
+                        <option value="flexibilidade-act">Flexibilidade Psicológica e ACT (Neuroplasticidade)</option>
+                        <option value="ansiedade-social">A Neurobiologia da Ansiedade Social e Vergonha</option>
+                        <option value="dmn">A Rede de Modo Padrão (DMN) & Pensamentos Intrusivos</option>
+                        <option value="habitos">A Arquitetura dos Hábitos (Gânglios da Base)</option>
+                        <option value="carga-alostatica">Carga Alostática & Burnout (Degradação Sináptica)</option>
+                        <option value="sono-rem">A Neurobiologia do Sono REM & Digestão de Traumas</option>
                         <option value="narcisismo-vulneravel">Entre o Papel de Vítima e a Culpa Induzida (Narcisismo Vulnerável)</option>
                         <option value="dopamina">A Epidemia da Dopamina Barata (Algoritmos & Telas)</option>
                         <option value="cansaso">A Sociedade do Cansaço & A Autoexploração</option>
@@ -631,6 +637,306 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "flexibilidade-act": {
+                articleSlug: "2026-10-27-flexibilidade-psicologica-act",
+                articleTitle: "Flexibilidade Psicológica e Neuroplasticidade: Como a ACT Modifica Conexões Cerebrais",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DA FLEXIBILIDADE",
+                        title: "Por que lutar contra a ansiedade só aumenta a força dela?",
+                        body: "O paradoxo do controle mental e a revolução da Terapia de Aceitação e Compromisso (ACT).",
+                        footer: "Arraste para entender a ciência 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A DOR INVISÍVEL",
+                        title: "A ilusão do 'conforto antes da ação'",
+                        body: "Você espera a insegurança sumir por completo para dar o próximo passo na carreira ou nos relacionamentos.\n\nEnquanto você tenta anestesiar a vulnerabilidade, sua vida encolhe dia após dia.",
+                        footer: "O mecanismo neural 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "EVITAÇÃO EXPERIENCIAL",
+                        title: "O cérebro em alarme duplo",
+                        body: "Ao tentar expulsar uma emoção dolorosa à força, a amígdala e o córtex cingulado interpretam a própria emoção como uma ameaça letal.\n\nVocê sente o medo original + o pânico de estar sentindo medo.",
+                        footer: "A alternativa clínica 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "O HEXAFLEX DA ACT",
+                        title: "Rigidez vs. Flexibilidade",
+                        body: "Rigidez: 'Só posso agir se não sentir ansiedade'.\n\nFlexibilidade: 'Posso abrir espaço para o desconforto enquanto caminho em direção aos meus valores fundamentais'.",
+                        footer: "Como praticar? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO PRÁTICO",
+                        title: "3 Passos de Flexibilidade",
+                        body: "1. Aceitação Ativa: abra espaço para o desconforto passar sem lutar contra ele.\n2. Desfusão das Palavras: pensamentos não são fatos imperativos da realidade.\n3. Bússola de Valores: tome decisões guiado pelo que importa, não pelo alívio imediato.",
+                        footer: "Dê o próximo passo 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Quem tem um porquê suporta quase qualquer como.",
+                        body: "Publiquei um ensaio completo dissecando a neuroplasticidade da ACT, Viktor Frankl e o Hexaflex.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já passou anos adiando decisões cruciais na sua vida porque estava esperando "o medo passar", "a autoconfiança chegar" ou "a ansiedade sumir por completo"?\n\nA cultura moderna nos vendeu a mentira de que a maturidade psíquica significa viver em anestesia emocional constante. Sob essa ilusão, tratamos qualquer incerteza como um defeito intolerável.\n\nNo entanto, a neurociência e a Terapia de Aceitação e Compromisso (ACT) nos mostram algo libertador: quanto mais energia você gasta tentando controlar e expulsar o que sente, mais você alimenta o alarme da sua amígdala.\n\nA verdadeira saúde mental não é a ausência de desconforto: é a flexibilidade psicológica.\n\n👉 Leia o ensaio completo no link da bio: deomagalhaes.com.br`
+            },
+
+            "ansiedade-social": {
+                articleSlug: "2026-10-27-ansiedade-social-vergonha",
+                articleTitle: "A Neurobiologia da Ansiedade Social e da Vergonha: Por Que Temos Medo do Julgamento",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DAS RELAÇÕES",
+                        title: "Por que a opinião alheia paralisa tanto o seu corpo?",
+                        body: "Não é mera timidez: o cérebro processa o julgamento alheio na mesma área da dor física.",
+                        footer: "Entenda o alarme social 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O HOLOFOTE IMAGINÁRIO",
+                        title: "O tormento da autoexposição",
+                        body: "Ao entrar em uma reunião ou expor uma ideia, o coração dispara, o rosto arde de rubor e a garganta fecha.\n\nVocê tem a certeza absoluta de que todos estão julgando cada fraqueza sua.",
+                        footer: "A explicação evolutiva 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A MATRIZ DA DOR SOCIAL",
+                        title: "O cérebro ancestral na savana",
+                        body: "Estudos de neuroimagem (UCLA) mostram que a rejeição social acende a Ínsula e o Córtex Cingulado Anterior Dorsal — as mesmas áreas de uma queimadura física.\n\nPara o cérebro ancestral, ser rejeitado pelo bando significava morte certa.",
+                        footer: "A armadilha mental 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "COMPORTAMENTOS DE SEGURANÇA",
+                        title: "Atenção hiperfocada em si mesmo",
+                        body: "Você tenta esconder as mãos trêmulas ou ensaiar frases na cabeça.\n\nEsse monitoramento interno consome sua atenção e impede o cérebro de notar que a situação real é segura.",
+                        footer: "Como desarmar o ciclo? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO CLÍNICO",
+                        title: "3 Formas de Reeducar o Medo",
+                        body: "1. Desmonte o Efeito Holofote: as pessoas estão ocupadas demais com as próprias inseguranças.\n2. Mude o Foco para Fora: preste atenção no ambiente e no outro, não no seu corpo.\n3. Abandone as Muletas: tolere o tremor inicial sem fugir.",
+                        footer: "Último passo decisivo 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "A cura da vergonha é a coragem da imperfeição.",
+                        body: "Publiquei uma análise profunda sobre a Teoria Polivagal, o circuito do medo social e protocolos de reeducação relacional.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já sentiu que, ao falar em público ou entrar em uma sala cheia de desconhecidos, um holofote invisível e acusatório se acendeu exclusivamente sobre a sua cabeça?\n\nA neuropsicologia nos mostra que há uma lógica biológica por trás desse sofrimento. O cérebro humano evoluiu em grupos tribais onde ser excluído significava a morte física. Por isso, a evolução atrelou a dor social à mesma rede neural da dor física.\n\n👉 Acesse o artigo completo no link da bio: deomagalhaes.com.br`
+            },
+
+            "dmn": {
+                articleSlug: "2026-10-27-rede-modo-padrao-dmn",
+                articleTitle: "A Rede de Modo Padrão (DMN) e os Pensamentos Intrusivos: Como Desarmar os Ciclos Ruminativos",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DA RUMINAÇÃO",
+                        title: "Por que sua mente fica tão barulhenta quando você tenta descansar?",
+                        body: "Não é fraqueza sua: é a hiperativação da Rede de Modo Padrão (DMN) no seu cérebro.",
+                        footer: "Entenda o sequestro mental 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A DOR INVISÍVEL",
+                        title: "O tribunal da madrugada",
+                        body: "Basta apagar a luz para começar o replay obsessivo: erros de anos atrás, cobranças implacáveis e cenários catastróficos.\n\nQuanto mais você tenta 'não pensar nisso', mais a mente insiste.",
+                        footer: "O circuito neural 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A REDE DE MODO PADRÃO",
+                        title: "O cérebro em modo interno",
+                        body: "A DMN acende sempre que paramos de interagir com o mundo externo.\n\nSob estresse crônico, o Córtex Pré-Frontal Medial se acopla à amígdala, transformando cada pensamento abstrato em alarme somático real.",
+                        footer: "O efeito rebote 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A ARMADILHA DA SUPRESSÃO",
+                        title: "Pensamento não é verdade",
+                        body: "Tentar banir pensamentos intrusivos à força gera o Efeito Rebote de Wegner.\n\nVocê não é a voz dos seus pensamentos: você é a consciência que observa as narrativas passarem.",
+                        footer: "Como desligar o loop? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO PRÁTICO",
+                        title: "3 Ações para Silenciar a DMN",
+                        body: "1. O Interruptor Sensorial (Bottom-Up): jogue água gelada no rosto ou use a técnica 5-4-3-2-1.\n2. Desfusão Cognitiva: rotule: 'Estou notando uma mente produzindo autocrítica'.\n3. Quebra Física: se ruminar por mais de 15 minutos na cama, levante-se.",
+                        footer: "Aprofunde a leitura 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Recupere o controle da sua atenção.",
+                        body: "Dissecamos os estudos de Marcus Raichle, Susan Nolen-Hoeksema e protocolos clínicos no site.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já sentiu que o momento mais exaustivo do seu dia é exatamente quando você finalmente para para descansar?\n\nA neurociência explica que isso decorre da hiperativação da Rede de Modo Padrão (DMN). Quando estressada, essa rede gera ruminação em loop.\n\n👉 Acesse o ensaio completo no link da bio: deomagalhaes.com.br`
+            },
+
+            "habitos": {
+                articleSlug: "2026-10-27-arquitetura-habitos-ganglios",
+                articleTitle: "A Arquitetura dos Hábitos: Como os Gânglios da Base Automatizam o Comportamento",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DO COMPORTAMENTO",
+                        title: "Por que confiar na força de vontade é a maior armadilha para mudar hábitos?",
+                        body: "Não é preguiça: é a arquitetura dos seus Gânglios da Base economizando energia.",
+                        footer: "Descubra a biologia 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A ILUSÃO DA DISCIPLINA",
+                        title: "A promessa de segunda-feira",
+                        body: "Você acorda determinado, mas chega à noite cansado e, sem perceber, sua mão já pegou o doce ou o feed do celular.\n\nPor que o piloto automático é quase impossível de frear quando você está exausto?",
+                        footer: "A ciência do hábito 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "OS GÂNGLIOS DA BASE",
+                        title: "O fenômeno do Chunking",
+                        body: "O córtex pré-frontal gasta 20% da sua energia. Para não entrar em colapso, o cérebro terceiriza rotinas para o Estriado Dorsal.\n\nAções complexas viram arquivos compactados que rodam sem deliberação consciente.",
+                        footer: "A regra de ouro 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A ALÇA DO HÁBITO",
+                        title: "Hábitos não são apagados",
+                        body: "As sinapses consolidadas nunca são deletadas. A neurociência ensina: não tente aniquilar o hábito.\n\nMantenha a mesma Deixa e a mesma Recompensa, mas substitua a Rotina intermediária.",
+                        footer: "Como reprogramar? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO PRÁTICO",
+                        title: "3 Passos de Engenharia",
+                        body: "1. Fricção Ambiental: crie barreiras físicas reais para os hábitos indesejados.\n2. Intenções de Implementação: formule: 'Se X ocorrer, então Y farei'.\n3. Micro-Passos: inicie com metas ridículas de 2 minutos para consolidar o chunking.",
+                        footer: "Dê o próximo passo 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Reprograme seu sistema operacional.",
+                        body: "Publiquei uma análise completa com pesquisas do MIT, Ann Graybiel e Wolfram Schultz.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Quantas vezes você já prometeu que mudaria uma rotina na força de vontade e, diante do primeiro cansaço do dia, voltou exatamente para o mesmo comportamento automático?\n\nA neuropsicologia nos ensina que você está lutando contra o mecanismo de economia de energia mais refinado do encéfalo: os gânglios da base.\n\n👉 Acesse o ensaio completo no link da bio: deomagalhaes.com.br`
+            },
+
+            "carga-alostatica": {
+                articleSlug: "2026-10-27-carga-alostatica-burnout",
+                articleTitle: "Carga Alostática e Burnout: Como o Estresse Contínuo Degrada a Plasticidade Sináptica",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROBIOLOGIA DO BURNOUT",
+                        title: "Por que você não consegue descansar nem mesmo quando tira férias?",
+                        body: "Não é fraqueza: é o peso invisível da Carga Alostática remodelando seu cérebro.",
+                        footer: "Entenda a sobrecarga 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A DOR INVISÍVEL",
+                        title: "A ilusão da bateria comum",
+                        body: "Você acorda exausto após 8 horas na cama. Lapsos de memória frequentes, mente nublada e irritabilidade com quem ama.\n\nVocê tira férias, mas volta com a mesma exaustão. Por quê?",
+                        footer: "O conceito científico 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "O MODELO DE BRUCE MCEWEN",
+                        title: "O que é Carga Alostática?",
+                        body: "Alostase é a adaptação contínua do corpo através do estresse.\n\nA Carga Alostática é o custo biológico cumulativo de manter o sistema de alarme ligado ininterruptamente sem permissão para desligar.",
+                        footer: "O impacto anatômico 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "ALTERAÇÕES FÍSICAS",
+                        title: "A remodelação das sinapses",
+                        body: "📉 Hipocampo e Córtex Pré-Frontal: perdem espinhas dendríticas e BDNF (esquecimentos e brain fog).\n\n📈 Amígdala Basolateral: se hipertrofia, interpretando qualquer e-mail como perigo de morte.",
+                        footer: "Como restaurar? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO DE REABILITAÇÃO",
+                        title: "3 Pilares de Recuperação",
+                        body: "1. Freio Vagal: exercícios de expiração longa para reativar o parassimpático.\n2. Resgate de BDNF: 30 minutos de caminhada rápida diária restauram sinapses.\n3. Fricção Digital: zero notificações profissionais fora do expediente.",
+                        footer: "Aprofunde o estudo 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Recupere o tônus do seu sistema nervoso.",
+                        body: "Publiquei o ensaio completo dissecando a neuroendocrinologia do estresse e a escala Maslach.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Quantas vezes você já disse para si mesmo: 'só preciso aguentar mais esta semana' ou 'quando as férias chegarem, eu me recupero'?\n\nIsso acontece porque o Burnout não é uma bateria comum descarregada. É o que a neurociência chama de Carga Alostática Extrema.\n\n👉 Leia o ensaio completo no link da bio: deomagalhaes.com.br`
+            },
+
+            "sono-rem": {
+                articleSlug: "2026-10-27-neurobiologia-sono-rem",
+                articleTitle: "A Fascinante Neurobiologia do Sono REM: Consolidação da Memória e Digestão Emocional de Traumas",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DO SONO & EMOÇÕES",
+                        title: "Por que uma boa noite de sono acalma suas dores emocionais?",
+                        body: "Não é apenas o tempo: é a química única do sono REM atuando como terapia noturna.",
+                        footer: "Descubra o mecanismo 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O IMPACTO DO TRAUMA",
+                        title: "O peso de reviver o conflito",
+                        body: "Após uma discussão difícil ou humilhação, qualquer lembrança dispara taquicardia e sufoco nas primeiras 48h.\n\nMas por que semanas depois você lembra do fato sem sentir o aperto visceral?",
+                        footer: "A neuroquímica noturna 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "O SANTUÁRIO NOTURNO",
+                        title: "Noradrenalina zero no cérebro",
+                        body: "No sono REM, a noradrenalina (hormônio do estresse e pânico) cai a zero no cérebro, enquanto a acetilcolina atinge níveis máximos.\n\nÉ o único momento do dia em que o cérebro reencena memórias sem nenhum alarme físico.",
+                        footer: "A terapia noturna 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "A TEORIA DE MATTHEW WALKER",
+                        title: "Descolando a emoção do fato",
+                        body: "Vigília: Memória + Noradrenalina Alta = Sofrimento e Taquicardia.\n\nSono REM: Memória + Noradrenalina ZERO = Cicatrização e Integração Mnêmica.\n\nO cérebro salva a lição e dissolve o aguilhão da dor.",
+                        footer: "Como proteger o REM? 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "PROTOCOLO PRÁTICO",
+                        title: "3 Cuidados com o Sono REM",
+                        body: "1. Cuidado com o Álcool: ele ajuda a pegar no sono mas suprime brutalmente o REM da madrugada.\n2. Não Corte as Últimas 2 Horas: os ciclos mais ricos em REM ocorrem entre a 6ª e 8ª hora.\n3. Luz Suave Pré-Cama: evite telas 90 min antes de deitar.",
+                        footer: "Dê o próximo passo 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Permita que seu cérebro termine o turno de reparação.",
+                        body: "Dissecamos os estudos de Matthew Walker, TEPT e a neuroquímica dos sonhos no site.\n\n👉 Toque no link da bio para ler na íntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo Magalhães • CRP 04/42784"
+                    }
+                ],
+                caption: `Você já foi dormir angustiado com uma situação que parecia insolúvel e acordou no dia seguinte sentindo um estranho alívio, como se a carga pesada tivesse diminuído?\n\nTodas as noites, durante o sono REM, nosso cérebro entra no que a ciência chama de 'terapia noturna espontânea'. A noradrenalina é completamente desligada do sistema nervoso central.\n\n👉 Acesse o artigo completo no link da bio: deomagalhaes.com.br`
+            },
+
             "narcisismo-vulneravel": {
                 articleSlug: "2026-10-25-narcisismo-vulneravel-relacoes",
                 articleTitle: "Entre o Papel de Vítima e a Culpa Induzida: A Dinâmica Oculta do Narcisismo Vulnerável no Amor",

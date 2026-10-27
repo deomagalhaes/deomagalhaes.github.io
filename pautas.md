@@ -9,26 +9,30 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **A Neurobiologia da Solidão e a Epidemia do Isolamento Social na Hiperconexão**
-  - *Abordagem:* Circuitos de dor social (córtex cingulado anterior dorsal), eixo HPA ativado cronicamente, inflamação sistêmica e como a psicologia comunitária e o apego seguro reconstroem a ressonância empática.
-  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
+- [ ] **Neuroinflamação, Microbiota Intestinal e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão**
+  - *Abordagem:* O nervo vago como via de comunicação bidirecional, citocinas pró-inflamatórias (IL-6, TNF-alfa), produção de serotonina entérica e protocolos psicobióticos.
+  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`.
 
-- [ ] **A Fascinante Neurobiologia do Sono REM: Consolidação da Memória e Digestão Emocional de Traumas**
-  - *Abordagem:* Desativação da noradrenalina durante o sono de ondas rápidas, reativação do hipocampo e integração afetiva na psicologia e neurociência.
-  - *Categorias:* `saude-mental`, `neurociencia`, `desenvolvimento-pessoal`.
+- [ ] **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Desenvolvimento do Sistema Nervoso**
+  - *Abordagem:* Estresse tóxico na infância, alterações no corpo caloso e córtex pré-frontal, sensibilização da amígdala e neuroplasticidade na reconstrução da segurança afetiva.
+  - *Categorias:* `desenvolvimento-infantil`, `orientacao-familiar`, `saude-mental`.
 
-- [ ] **Carga Alostática e Burnout: Como o Estresse Contínuo Degrada a Plasticidade Sináptica**
-  - *Abordagem:* O conceito de alostase de Bruce McEwen, atrofia dendrítica no hipocampo, hipertrofia da amígdala e protocolos de restauração do tônus autonômico.
-  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `neurociencia`.
-
-- [ ] **A Arquitetura dos Hábitos: Como os Gânglios da Base Automatizam o Comportamento e Como Reprogramá-los**
-  - *Abordagem:* Alça do hábito (deixa, rotina, recompensa), estriado dorsal, neuroplasticidade dependente de uso e micro-passos comportamentais da TCC.
+- [ ] **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica e o Fim das Metas Frustradas**
+  - *Abordagem:* Circuitos de recompensa no estriado ventral, erro de predição de recompensa (RPE), metas intrínsecas e superação do ciclo de euforia e esgotamento.
   - *Categorias:* `desenvolvimento-pessoal`, `neurociencia`, `saude-mental`.
 
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neurobiologia da Empatia e a Teoria da Mente: Como o Cérebro Decifra os Sentimentos do Outro** (Publicado em 27/10/2026)
+- [x] **Flexibilidade Psicológica e Neuroplasticidade: Como a Terapia de Aceitação e Compromisso (ACT) Modifica Conexões Cerebrais** (Publicado em 27/10/2026)
+- [x] **A Neurobiologia da Ansiedade Social e da Vergonha: Por Que Temos Medo do Julgamento e Como Reeducar o Cérebro Relacional** (Publicado em 27/10/2026)
+- [x] **A Rede de Modo Padrão (DMN) e os Pensamentos Intrusivos: Como Desarmar os Ciclos de Autocrítica e Obsessão Mental** (Publicado em 27/10/2026)
+- [x] **A Arquitetura dos Hábitos: Como os Gânglios da Base Automatizam o Comportamento e Como Reprogramá-los** (Publicado em 27/10/2026)
+- [x] **Carga Alostática e Burnout: Como o Estresse Contínuo Degrada a Plasticidade Sináptica** (Publicado em 27/10/2026)
+- [x] **A Fascinante Neurobiologia do Sono REM: Consolidação da Memória e Digestão Emocional de Traumas** (Publicado em 27/10/2026)
+- [x] **A Neurobiologia da Solidão e a Epidemia do Isolamento Social na Hiperconexão** (Publicado em 27/10/2026)
 - [x] **Funções Executivas e TDAH no Adulto: Para Além do Estigma da "Falta de Força de Vontade"** (Publicado em 26/10/2026)
 - [x] **Entre o Papel de Vítima e a Culpa Induzida: A Dinâmica Oculta do Narcisismo Vulnerável no Amor** (Publicado em 25/10/2026)
 - [x] **O Cérebro em Sobrecarga: Como a Ruminação Mental Constrói a Ansiedade Crônica** (Publicado em 25/10/2026)

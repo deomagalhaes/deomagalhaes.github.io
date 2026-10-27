@@ -16,9 +16,9 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-06** | **Escala de Regulação Emocional (ERQ - Gross)** | Reavaliação Cognitiva vs. Supressão Expressiva | `recursos/escala-regulacao-emocional.html` | ✅ Concluído |
 | **T-07** | **Inventário de Sobrecarga e Burnout Clínico** | Exaustão Emocional, Despersonalização e Eficácia | `artigos/teste-burnout.html` | ✅ Concluído |
 | **T-08** | **Escala de Tolerância à Frustração e Impulsividade** | Controle Inibitório e Reatividade Emocional | `artigos/teste-frustracao.html` | ✅ Concluído |
-| **T-09** | **Questionário de Higiene do Sono e Ritmo Circadiano** | Insônia Comportamental e Cronotipo | `artigos/teste-sono.html` | ⏳ *Próximo da fila* |
-| **T-10** | **Escala de Ruminação Mental e Pensamentos Intrusivos** | Rede de Modo Padrão (DMN) e Ansiedade Cognitiva | `artigos/teste-ruminacao.html` | ⏳ Aguardando |
-| **T-11** | **Inventário de Ansiedade Social e Evasão Afetiva** | Medo de Avaliação Negativa e Fobia Social | `artigos/teste-ansiedade-social.html` | ⏳ Aguardando |
+| **T-09** | **Questionário de Higiene do Sono e Ritmo Circadiano** | Insônia Comportamental e Cronotipo | `artigos/teste-sono.html` | ✅ Concluído |
+| **T-10** | **Escala de Ruminação Mental e Pensamentos Intrusivos** | Rede de Modo Padrão (DMN) e Ansiedade Cognitiva | `artigos/teste-ruminacao.html` | ✅ Concluído |
+| **T-11** | **Inventário de Ansiedade Social e Evasão Afetiva** | Medo de Avaliação Negativa e Fobia Social | `artigos/teste-ansiedade-social.html` | ⏳ *Próximo da fila* |
 | **T-12** | **Escala de Flexibilidade Psicológica e Desfusão (ACT)** | Aceitação, Valores e Rigidez Cognitiva | `artigos/teste-flexibilidade-cognitiva.html` | ⏳ Aguardando |
 
 ---

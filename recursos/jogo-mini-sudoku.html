@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Sudoku das Formas e Cores – Deo Magalhães</title>
+    <meta name="description" content="Exercite a atenção sustentada, memória de trabalho e raciocínio lógico dedutivo com o Mini-Sudoku das Formas. Desenvolvido pelo neuropsicólogo Deo Magalhães.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --surface: #ffffff;
+            --bg-page: #f8fafc;
+            --text-dark: #1f2937;
+            --success: #2a9d8f;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-wrapper {
+            max-width: 860px;
+            margin: 2rem auto 4rem auto;
+            padding: 2.2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 95, 115, 0.08);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .badge-game {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .game-header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 0.2rem 0 0.8rem 0;
+            font-weight: 800;
+        }
+
+        .game-header p {
+            color: #64748b;
+            max-width: 660px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #001219;
+            color: white;
+            border-radius: 14px;
+            padding: 14px 22px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hud-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.75rem;
+            color: #94d2bd;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .hud-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: monospace;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .diff-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .diff-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .sudoku-grid {
+            display: grid;
+            gap: 4px;
+            background: #001219;
+            padding: 8px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 95, 115, 0.15);
+        }
+
+        .grid-4x4 {
+            grid-template-columns: repeat(4, 75px);
+        }
+
+        .grid-6x6 {
+            grid-template-columns: repeat(6, 56px);
+        }
+
+        .sudoku-cell {
+            background: #ffffff;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            position: relative;
+        }
+
+        .sudoku-cell:hover:not(.fixed) {
+            background: #f0fdfa;
+        }
+
+        .sudoku-cell.fixed {
+            background: #f1f5f9;
+            cursor: default;
+        }
+
+        .sudoku-cell.selected {
+            background: #ccfbf1 !important;
+            box-shadow: inset 0 0 0 3px var(--primary);
+        }
+
+        .sudoku-cell.conflict {
+            background: #fee2e2 !important;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        /* Bordas de Blocos do Sudoku */
+        .border-r-thick {
+            margin-right: 4px;
+        }
+        .border-b-thick {
+            margin-bottom: 4px;
+        }
+
+        .shape-icon {
+            width: 65%;
+            height: 65%;
+            transition: transform 0.2s ease;
+        }
+
+        .palette-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .palette-btn {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+        }
+
+        .palette-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 95, 115, 0.2);
+        }
+
+        .palette-btn.erase-btn {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .actions-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-ctrl {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-ctrl:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-ctrl.secondary {
+            background: #e2e8f0;
+            color: #334155;
+            box-shadow: none;
+        }
+
+        .btn-ctrl.secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .victory-banner {
+            display: none;
+            background: linear-gradient(135deg, #005f73 0%, #0a9396 100%);
+            color: white;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            margin: 1.5rem 0;
+            animation: popIn 0.4s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .neuro-explanation {
+            background: #f0fdfa;
+            border: 1px solid #ccfbf1;
+            border-left: 4px solid var(--primary-hover);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2.2rem;
+            line-height: 1.6;
+        }
+
+        .neuro-explanation h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .game-wrapper {
+                margin: 1rem;
+                padding: 1.2rem;
+            }
+            .grid-4x4 {
+                grid-template-columns: repeat(4, 62px);
+            }
+            .grid-6x6 {
+                grid-template-columns: repeat(6, 46px);
+            }
+            .palette-btn {
+                width: 48px;
+                height: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/recursos.html" class="active">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-wrapper">
+            <div class="game-header">
+                <span class="badge-game">🧩 Ginástica Cerebral Diária • Dia 6</span>
+                <h1>Mini-Sudoku das Formas e Cores</h1>
+                <p>Preencha os espaços em branco para que nenhuma forma geométrica ou cor se repita na <strong>mesma linha</strong>, <strong>mesma coluna</strong> ou no <strong>mesmo bloco</strong>.</p>
+            </div>
+
+            <div class="difficulty-selector">
+                <button class="diff-btn active" id="btn4x4" onclick="setMode(4)">Modo 4x4 (4 Formas)</button>
+                <button class="diff-btn" id="btn6x6" onclick="setMode(6)">Modo 6x6 (6 Formas • Avançado)</button>
+            </div>
+
+            <div class="hud-bar">
+                <div class="hud-item">
+                    <span class="hud-label">Tempo</span>
+                    <span class="hud-val" id="hudTime">00:00</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Vazios</span>
+                    <span class="hud-val" id="hudRemaining">0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Erros / Conflitos</span>
+                    <span class="hud-val" id="hudErrors" style="color: #94d2bd;">0</span>
+                </div>
+            </div>
+
+            <div class="board-container">
+                <div class="sudoku-grid grid-4x4" id="sudokuGrid">
+                    <!-- Gerado dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Paleta de Seleção de Formas -->
+            <div class="palette-container" id="shapePalette">
+                <!-- Injetado dinamicamente -->
+            </div>
+
+            <div id="victoryBanner" class="victory-banner">
+                <h2 style="margin: 0 0 10px 0;">🎉 Sudoku Concluído sem Conflitos!</h2>
+                <p style="margin: 0 0 16px 0; font-size: 1.05rem;" id="victoryMsg">Excelente dedução e inibição de interferência visuoespacial!</p>
+                <button class="btn-ctrl" onclick="generateNewPuzzle()">Jogar Novo Tabuleiro ⟳</button>
+            </div>
+
+            <div class="actions-row">
+                <button class="btn-ctrl secondary" onclick="generateNewPuzzle()">Novo Tabuleiro</button>
+                <a href="/jogos.html" class="btn-ctrl secondary" style="text-decoration: none; display: inline-flex; align-items: center;">← Todos os Jogos</a>
+            </div>
+
+            <div class="neuro-explanation">
+                <h3>🧠 O que o Mini-Sudoku das Formas estimula?</h3>
+                <p>
+                    Ao remover os algarismos convencionais e utilizar formas geométricas e cores puras, o cérebro é forçado a processar as regras dedutivas diretamente pelos circuitos de <strong>percepção visual e controle inibitório</strong>:
+                </p>
+                <ul>
+                    <li><strong>Memória Operacional Visuoespacial:</strong> Retém ativamente quais 3 ou 5 formas já estão alocadas na linha e no bloco enquanto você examina a coluna candidata.</li>
+                    <li><strong>Eliminação e Dedução Lógica:</strong> O córtex pré-frontal descarta hipóteses sistematicamente ("se o círculo já está nesta linha e neste bloco, esta célula só pode ser o quadrado").</li>
+                    <li><strong>Inibição de Resposta Impulsiva:</strong> Obriga o participante a checar a regra tridimensional (linha, coluna e quadrante) antes de agir, reduzindo a impulsividade cognitiva.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Web Audio API
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+            },
+            playPlace() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(750, this.ctx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.04);
+            },
+            playErase() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(340, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            },
+            playWin() {
+                this.init();
+                if (!this.ctx) return;
+                const chords = [523.25, 659.25, 783.99, 1046.50];
+                chords.forEach((f, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, this.ctx.currentTime + idx * 0.08);
+                    gain.gain.setValueAtTime(0.12, this.ctx.currentTime + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.08 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(this.ctx.currentTime + idx * 0.08);
+                    osc.stop(this.ctx.currentTime + idx * 0.08 + 0.35);
+                });
+            }
+        };
+
+        // Formas e Cores
+        const SHAPES = [
+            // 1: Círculo Âmbar
+            { id: 1, name: "Círculo", color: "#ee9b00", svg: '<svg viewBox="0 0 100 100" class="shape-icon"><circle cx="50" cy="50" r="38" fill="#ee9b00" /></svg>' },
+            // 2: Triângulo Petróleo
+            { id: 2, name: "Triângulo", color: "#005f73", svg: '<svg viewBox="0 0 100 100" class="shape-icon"><polygon points="50,15 88,85 12,85" fill="#005f73" /></svg>' },
+            // 3: Quadrado Ciano
+            { id: 3, name: "Quadrado", color: "#0a9396", svg: '<svg viewBox="0 0 100 100" class="shape-icon"><rect x="18" y="18" width="64" height="64" rx="8" fill="#0a9396" /></svg>' },
+            // 4: Losango Sálvia
+            { id: 4, name: "Losango", color: "#94d2bd", svg: '<svg viewBox="0 0 100 100" class="shape-icon"><polygon points="50,12 88,50 50,88 12,50" fill="#94d2bd" /></svg>' },
+            // 5: Estrela Coral (para 6x6)
+            { id: 5, name: "Estrela", color: "#ca6702", svg: '<svg viewBox="0 0 100 100" class="shape-icon"><polygon points="50,10 61,38 91,38 66,56 76,84 50,67 24,84 34,56 9,38 39,38" fill="#ca6702" /></svg>' },
+            // 6: Hexágono Carmim (para 6x6)
+            { id: 6, name: "Hexágono", color: "#ae2012", svg: '<svg viewBox="0 0 100 100" class="shape-icon"><polygon points="50,12 85,32 85,68 50,88 15,68 15,32" fill="#ae2012" /></svg>' }
+        ];
+
+        // Quebra-cabeças pré-definidos balanceados
+        const PUZZLES = {
+            4: [
+                {
+                    solution: [
+                        1, 2, 3, 4,
+                        3, 4, 1, 2,
+                        2, 1, 4, 3,
+                        4, 3, 2, 1
+                    ],
+                    initial: [
+                        1, 0, 3, 0,
+                        0, 4, 0, 2,
+                        2, 0, 4, 0,
+                        0, 3, 0, 1
+                    ]
+                },
+                {
+                    solution: [
+                        4, 3, 2, 1,
+                        2, 1, 4, 3,
+                        1, 2, 3, 4,
+                        3, 4, 1, 2
+                    ],
+                    initial: [
+                        0, 3, 0, 1,
+                        2, 0, 4, 0,
+                        0, 2, 0, 4,
+                        3, 0, 1, 0
+                    ]
+                }
+            ],
+            6: [
+                {
+                    solution: [
+                        1, 2, 3, 4, 5, 6,
+                        4, 5, 6, 1, 2, 3,
+                        2, 3, 4, 5, 6, 1,
+                        5, 6, 1, 2, 3, 4,
+                        3, 4, 5, 6, 1, 2,
+                        6, 1, 2, 3, 4, 5
+                    ],
+                    initial: [
+                        1, 0, 3, 0, 5, 0,
+                        0, 5, 0, 1, 0, 3,
+                        2, 0, 4, 0, 6, 0,
+                        0, 6, 0, 2, 0, 4,
+                        3, 0, 5, 0, 1, 0,
+                        0, 1, 0, 3, 0, 5
+                    ]
+                }
+            ]
+        };
+
+        let currentSize = 4; // 4 ou 6
+        let currentBoard = [];
+        let initialFixed = [];
+        let selectedCellIdx = null;
+        let timerSeconds = 0;
+        let timerInterval = null;
+        let isGameWon = false;
+
+        function setMode(size) {
+            currentSize = size;
+            document.getElementById('btn4x4').classList.toggle('active', size === 4);
+            document.getElementById('btn6x6').classList.toggle('active', size === 6);
+
+            const gridEl = document.getElementById('sudokuGrid');
+            gridEl.className = size === 4 ? 'sudoku-grid grid-4x4' : 'sudoku-grid grid-6x6';
+
+            generateNewPuzzle();
+        }
+
+        function generateNewPuzzle() {
+            const list = PUZZLES[currentSize];
+            const p = list[Math.floor(Math.random() * list.length)];
+
+            currentBoard = [...p.initial];
+            initialFixed = p.initial.map(v => v !== 0);
+            selectedCellIdx = null;
+            isGameWon = false;
+            document.getElementById('victoryBanner').style.display = 'none';
+
+            renderPalette();
+            renderBoard();
+            updateStats();
+
+            // Reinicia timer
+            timerSeconds = 0;
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+                const s = String(timerSeconds % 60).padStart(2, '0');
+                document.getElementById('hudTime').textContent = `${m}:${s}`;
+            }, 1000);
+        }
+
+        function renderPalette() {
+            const palette = document.getElementById('shapePalette');
+            palette.innerHTML = '';
+
+            for (let i = 0; i < currentSize; i++) {
+                const shape = SHAPES[i];
+                const btn = document.createElement('div');
+                btn.className = 'palette-btn';
+                btn.title = shape.name;
+                btn.innerHTML = shape.svg;
+                btn.onclick = () => fillSelected(shape.id);
+                palette.appendChild(btn);
+            }
+
+            // Botão borracha
+            const eraseBtn = document.createElement('div');
+            eraseBtn.className = 'palette-btn erase-btn';
+            eraseBtn.title = 'Apagar célula';
+            eraseBtn.innerHTML = '✕';
+            eraseBtn.onclick = () => fillSelected(0);
+            palette.appendChild(eraseBtn);
+        }
+
+        function renderBoard() {
+            const gridEl = document.getElementById('sudokuGrid');
+            gridEl.innerHTML = '';
+
+            const subRows = currentSize === 4 ? 2 : 2;
+            const subCols = currentSize === 4 ? 2 : 3;
+
+            currentBoard.forEach((val, idx) => {
+                const r = Math.floor(idx / currentSize);
+                const c = idx % currentSize;
+
+                const cell = document.createElement('div');
+                cell.className = 'sudoku-cell';
+                if (initialFixed[idx]) cell.classList.add('fixed');
+                if (selectedCellIdx === idx) cell.classList.add('selected');
+
+                // Linhas de bloco
+                if ((c + 1) % subCols === 0 && c < currentSize - 1) cell.classList.add('border-r-thick');
+                if ((r + 1) % subRows === 0 && r < currentSize - 1) cell.classList.add('border-b-thick');
+
+                if (val > 0) {
+                    const shape = SHAPES[val - 1];
+                    cell.innerHTML = shape.svg;
+                }
+
+                cell.onclick = () => {
+                    if (isGameWon) return;
+                    if (!initialFixed[idx]) {
+                        selectedCellIdx = idx;
+                        renderBoard();
+                    }
+                };
+
+                gridEl.appendChild(cell);
+            });
+
+            checkConflictsAndVictory();
+        }
+
+        function fillSelected(shapeId) {
+            if (selectedCellIdx === null || isGameWon) return;
+            if (initialFixed[selectedCellIdx]) return;
+
+            currentBoard[selectedCellIdx] = shapeId;
+
+            if (shapeId === 0) {
+                SoundFX.playErase();
+            } else {
+                SoundFX.playPlace();
+            }
+
+            renderBoard();
+            updateStats();
+        }
+
+        function checkConflictsAndVictory() {
+            const gridEl = document.getElementById('sudokuGrid');
+            const cells = gridEl.querySelectorAll('.sudoku-cell');
+
+            let conflictCount = 0;
+            const conflictIndices = new Set();
+
+            const subRows = currentSize === 4 ? 2 : 2;
+            const subCols = currentSize === 4 ? 2 : 3;
+
+            // Checa linhas e colunas
+            for (let i = 0; i < currentSize; i++) {
+                const rowVals = {};
+                const colVals = {};
+
+                for (let j = 0; j < currentSize; j++) {
+                    // Linha i, coluna j
+                    const rIdx = i * currentSize + j;
+                    const rVal = currentBoard[rIdx];
+                    if (rVal > 0) {
+                        if (rowVals[rVal] !== undefined) {
+                            conflictIndices.add(rIdx);
+                            conflictIndices.add(rowVals[rVal]);
+                            conflictCount++;
+                        } else {
+                            rowVals[rVal] = rIdx;
+                        }
+                    }
+
+                    // Coluna i, linha j
+                    const cIdx = j * currentSize + i;
+                    const cVal = currentBoard[cIdx];
+                    if (cVal > 0) {
+                        if (colVals[cVal] !== undefined) {
+                            conflictIndices.add(cIdx);
+                            conflictIndices.add(colVals[cVal]);
+                            conflictCount++;
+                        } else {
+                            colVals[cVal] = cIdx;
+                        }
+                    }
+                }
+            }
+
+            // Checa blocos
+            for (let br = 0; br < currentSize / subRows; br++) {
+                for (let bc = 0; bc < currentSize / subCols; bc++) {
+                    const blockVals = {};
+                    for (let r = 0; r < subRows; r++) {
+                        for (let c = 0; c < subCols; c++) {
+                            const row = br * subRows + r;
+                            const col = bc * subCols + c;
+                            const idx = row * currentSize + col;
+                            const val = currentBoard[idx];
+                            if (val > 0) {
+                                if (blockVals[val] !== undefined) {
+                                    conflictIndices.add(idx);
+                                    conflictIndices.add(blockVals[val]);
+                                    conflictCount++;
+                                } else {
+                                    blockVals[val] = idx;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Destaca conflitos
+            conflictIndices.forEach(idx => {
+                if (cells[idx]) cells[idx].classList.add('conflict');
+            });
+
+            document.getElementById('hudErrors').textContent = conflictIndices.size > 0 ? `${conflictIndices.size} colisões` : "0";
+            document.getElementById('hudErrors').style.color = conflictIndices.size > 0 ? "#e76f51" : "#94d2bd";
+
+            // Checa vitória (tabuleiro cheio e sem conflitos)
+            const remaining = currentBoard.filter(v => v === 0).length;
+            if (remaining === 0 && conflictIndices.size === 0 && !isGameWon) {
+                isGameWon = true;
+                SoundFX.playWin();
+                clearInterval(timerInterval);
+                document.getElementById('victoryBanner').style.display = 'block';
+                document.getElementById('victoryMsg').innerHTML = `🏆 Concluído em <strong>${document.getElementById('hudTime').textContent}</strong> sem nenhum conflito de forma ou cor!`;
+                document.getElementById('victoryBanner').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function updateStats() {
+            const remaining = currentBoard.filter(v => v === 0).length;
+            document.getElementById('hudRemaining').textContent = remaining;
+        }
+
+        // Suporte a teclado
+        window.addEventListener('keydown', (e) => {
+            if (isGameWon) return;
+            const num = parseInt(e.key);
+            if (num >= 1 && num <= currentSize) {
+                fillSelected(num);
+            } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+                fillSelected(0);
+            }
+        });
+
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', () => {
+            setMode(4);
+        });
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>

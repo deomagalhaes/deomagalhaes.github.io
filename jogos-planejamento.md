@@ -11,10 +11,10 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 1** | **Torre de Hanói** | Funções Executivas, Planejamento Antecipatório e Controle Inibitório | `recursos/jogo-torre-hanoi.html` | ✅ **Publicado** |
 | **Dia 2** | **Balança de Equivalências** | Raciocínio Algébrico Visual, Dedução e Abstração | `recursos/jogo-balanca-logica.html` | ✅ **Publicado** |
 | **Dia 3** | **Grid de Dedução (Detetive Lógico)** | Memória Operacional, Inferência e Eliminação de Hipóteses | `recursos/jogo-detetive-logico.html` | ✅ **Publicado** |
-| **Dia 4** | **Matrizes Progressivas de Raven** | Raciocínio Fluido e Relações Visuoespaciais | `recursos/jogo-matrizes-raven.html` | ⏳ *Próximo da fila* |
-| **Dia 5** | **Circuito Neural (Conexão Lógica)** | Flexibilidade Mental, Atenção Focada e Resolução de Problemas | `recursos/jogo-circuito-neural.html` | ⏳ Aguardando |
-| **Dia 6** | **Mini-Sudoku das Formas e Cores** | Atenção Sustentada e Pensamento Algorítmico | `recursos/jogo-mini-sudoku.html` | ⏳ Aguardando |
-| **Dia 7** | **Balança da Verdade (Silogismos)** | Lógica Proposicional, Validação de Premissas e Pensamento Crítico | `recursos/jogo-silogismos.html` | ⏳ Aguardando |
+| **Dia 4** | **Matrizes Progressivas de Raven** | Raciocínio Fluido e Relações Visuoespaciais | `recursos/jogo-matrizes-raven.html` | ✅ **Publicado** |
+| **Dia 5** | **Circuito Neural (Conexão Lógica)** | Flexibilidade Mental, Atenção Focada e Resolução de Problemas | `recursos/jogo-circuito-neural.html` | ✅ **Publicado** |
+| **Dia 6** | **Mini-Sudoku das Formas e Cores** | Atenção Sustentada e Pensamento Algorítmico | `recursos/jogo-mini-sudoku.html` | ✅ **Publicado** |
+| **Dia 7** | **Balança da Verdade (Silogismos)** | Lógica Proposicional, Validação de Premissas e Pensamento Crítico | `recursos/jogo-silogismos.html` | ⏳ *Próximo da fila* |
 | **Dia 8** | **Labirinto Visuoespacial (Planejamento)** | Planejamento Motor, Visuoconstrução e Monitoramento | `recursos/jogo-labirinto-cognitivo.html` | ⏳ Aguardando |
 | **Dia 9** | **Paradoxo das Portas (Monty Hall)** | Probabilidade Intuitiva, Atualização de Crenças e Flexibilidade | `recursos/jogo-monty-hall.html` | ⏳ Aguardando |
 | **Dia 10** | **Circuito Binário (Código Secreto)** | Pensamento Algorítmico, Decomposição e Atenção Alternada | `recursos/jogo-circuito-binario.html` | ⏳ Aguardando |
