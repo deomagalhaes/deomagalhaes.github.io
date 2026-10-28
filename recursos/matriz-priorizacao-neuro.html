@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de Priorização Neurodivergente – Deo Magalhães</title>
+    <meta name="description" content="Ferramenta neurocognitiva adaptada de Eisenhower para TDAH e sobrecarga mental: priorize tarefas pelo custo de dopamina, urgência real e energia cognitiva.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .quadrant-card {
+            border-radius: 16px;
+            padding: 1.25rem;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .task-chip {
+            background: white;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-chip.done span {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        /* Garantia do Rodapé Lado a Lado */
+        footer.main-footer {
+            background-color: #2c3e50 !important;
+            color: #e2e8f0 !important;
+            padding-top: 50px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+        footer.main-footer .footer-grid,
+        footer.main-footer .footer-content {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 30px !important;
+            padding-bottom: 30px !important;
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Principal -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/recursos.html" class="active">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow py-8 px-4 max-w-5xl mx-auto w-full">
+        <div class="text-center mb-8">
+            <span class="bg-teal-50 text-teal-700 text-xs font-bold px-3 py-1.5 rounded-full border border-teal-200 uppercase tracking-wider inline-flex items-center gap-1.5 mb-2">
+                ⚡ Ferramenta Neurocognitiva
+            </span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-[#005f73] mt-2 mb-3">
+                Matriz de Priorização Neurodivergente
+            </h1>
+            <p class="text-slate-600 max-w-2xl mx-auto text-base">
+                Para quem tem TDAH ou sobrecarga, a matriz tradicional falha porque o cérebro enxerga tudo como urgente. Esta matriz recalibra suas prioridades cruzando <strong>Impacto Vital</strong> com <strong>Custo de Energia Cognitiva</strong>.
+            </p>
+        </div>
+
+        <!-- ENTRADA RÁPIDA DE TAREFA -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                <div class="md:col-span-6">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Qual é a tarefa?</label>
+                    <input type="text" id="taskInput" placeholder="Ex: Enviar relatório financeiro, Responder cliente..." 
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0a9396] text-sm">
+                </div>
+                <div class="md:col-span-4">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Quadrante Neurocognitivo</label>
+                    <select id="quadrantSelect" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0a9396] text-sm bg-white">
+                        <option value="q1">🔥 Alta Consequência + Alta Energia (Fazer com Foco)</option>
+                        <option value="q2">🌱 Alto Impacto + Baixa Urgência (Blocos Protegidos)</option>
+                        <option value="q3">⚡ Baixa Complexidade + Rápido (Eliminar em 2 min)</option>
+                        <option value="q4">🗑️ Falso Urgente / Distração (Delegar ou Deletar)</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2 flex items-end">
+                    <button onclick="addTask()" class="w-full bg-[#005f73] hover:bg-[#0a9396] text-white font-bold py-2.5 px-4 rounded-xl transition text-sm shadow-md">
+                        + Adicionar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID DOS 4 QUADRANTES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <!-- Q1: FAZER COM FOCO -->
+            <div class="quadrant-card bg-red-50/70 border border-red-200" id="card-q1">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-red-900 flex items-center gap-2">
+                        <span>🔥</span> 1. Foco Crítico (Prioridade Absoluta)
+                    </h3>
+                    <span class="text-xs bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full" id="count-q1">0</span>
+                </div>
+                <p class="text-xs text-red-700/80 mb-3">Tarefas com prazo inadiável ou alto impacto negativo se não forem feitas hoje.</p>
+                <div class="flex-grow" id="list-q1"></div>
+            </div>
+
+            <!-- Q2: BLOCOS PROTEGIDOS -->
+            <div class="quadrant-card bg-emerald-50/70 border border-emerald-200" id="card-q2">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-emerald-900 flex items-center gap-2">
+                        <span>🌱</span> 2. Construção de Futuro (Sem Pressa)
+                    </h3>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full" id="count-q2">0</span>
+                </div>
+                <p class="text-xs text-emerald-700/80 mb-3">Projetos importantes de longo prazo que o TDAH costuma adiar por falta de pânico.</p>
+                <div class="flex-grow" id="list-q2"></div>
+            </div>
+
+            <!-- Q3: MICROTAREFAS -->
+            <div class="quadrant-card bg-amber-50/70 border border-amber-200" id="card-q3">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-amber-900 flex items-center gap-2">
+                        <span>⚡</span> 3. Micro-Ações de 2 Minutos
+                    </h3>
+                    <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full" id="count-q3">0</span>
+                </div>
+                <p class="text-xs text-amber-700/80 mb-3">Ações rápidas (pagar boleto, responder e-mail sim/não) que liberam RAM cerebral.</p>
+                <div class="flex-grow" id="list-q3"></div>
+            </div>
+
+            <!-- Q4: DRENADORES DE ENERGIA -->
+            <div class="quadrant-card bg-slate-100 border border-slate-300" id="card-q4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span>🗑️</span> 4. Falso Urgente & Drenadores
+                    </h3>
+                    <span class="text-xs bg-slate-200 text-slate-700 font-bold px-2 py-0.5 rounded-full" id="count-q4">0</span>
+                </div>
+                <p class="text-xs text-slate-600 mb-3">Exigências alheias sem relevância real para suas metas. Diga "não" ou delete.</p>
+                <div class="flex-grow" id="list-q4"></div>
+            </div>
+        </div>
+
+        <!-- EXPLICAÇÃO NEUROPSICOLÓGICA -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 leading-relaxed text-slate-700">
+            <h3 class="text-xl font-bold text-[#005f73] mb-3 flex items-center gap-2 font-heading">
+                <span>🧠</span> Por Que o Cérebro com TDAH Sofre Para Priorizar?
+            </h3>
+            <p class="text-sm md:text-base mb-3">
+                Em cérebros neurotípicos, o <strong>Córtex Cingulado Anterior</strong> e o <strong>Córtex Pré-Frontal Ventromedial</strong> calculam automaticamente a relação entre custo de esforço e retorno de recompensa. No TDAH, o déficit basal de dopamina faz com que tarefas sem estímulo imediato ou sem o pânico da véspera sejam percebidas como tendo "custo infinito".
+            </p>
+            <p class="text-sm md:text-base">
+                Ao externalizar suas tarefas visualmente nestes 4 quadrantes, você retira a pressão da <strong>Memória de Trabalho</strong> e combate a cegueira temporal, permitindo escolher com clareza em qual frente gastar sua energia dopaminérgica diária.
+            </p>
+        </div>
+    </main>
+
+    <!-- Rodapé Oficial -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('neuro_tasks_eisenhower') || '[]');
+
+        // ÁUDIO VIA WEB AUDIO API
+        let audioCtx = null;
+        function playCheckSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } catch(e) {}
+        }
+
+        function saveTasks() {
+            localStorage.setItem('neuro_tasks_eisenhower', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const quadrant = document.getElementById('quadrantSelect').value;
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            tasks.push({
+                id: Date.now(),
+                text: text,
+                quadrant: quadrant,
+                done: false
+            });
+
+            input.value = '';
+            input.focus();
+            saveTasks();
+        }
+
+        function toggleTask(id) {
+            const t = tasks.find(item => item.id === id);
+            if (t) {
+                t.done = !t.done;
+                if (t.done) playCheckSound();
+                saveTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(item => item.id !== id);
+            saveTasks();
+        }
+
+        function renderTasks() {
+            ['q1', 'q2', 'q3', 'q4'].forEach(q => {
+                const listEl = document.getElementById(`list-${q}`);
+                const countEl = document.getElementById(`count-${q}`);
+                listEl.innerHTML = '';
+
+                const qTasks = tasks.filter(t => t.quadrant === q);
+                countEl.innerText = qTasks.length;
+
+                if (qTasks.length === 0) {
+                    listEl.innerHTML = '<p class="text-xs text-slate-400 italic py-2">Nenhuma tarefa neste quadrante.</p>';
+                    return;
+                }
+
+                qTasks.forEach(t => {
+                    const chip = document.createElement('div');
+                    chip.className = `task-chip ${t.done ? 'done' : ''}`;
+                    chip.innerHTML = `
+                        <div class="flex items-center gap-2.5 flex-grow cursor-pointer" onclick="toggleTask(${t.id})">
+                            <input type="checkbox" ${t.done ? 'checked' : ''} class="rounded text-[#005f73] focus:ring-0 cursor-pointer">
+                            <span class="text-sm font-medium text-slate-800">${escapeHtml(t.text)}</span>
+                        </div>
+                        <button onclick="deleteTask(${t.id})" class="text-slate-400 hover:text-red-500 text-xs ml-2 px-1 py-0.5 rounded transition">
+                            ✕
+                        </button>
+                    `;
+                    listEl.appendChild(chip);
+                });
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        document.getElementById('taskInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+
+        document.addEventListener('DOMContentLoaded', renderTasks);
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>
