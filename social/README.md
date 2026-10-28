@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **28/10/2026** | **A Neurobiologia do Perdão e da Mágoa: O Custo Biológico do Rancor** | [`social/2026-10-28-neurobiologia-perdao-magoa-ressentimento.md`](2026-10-28-neurobiologia-perdao-magoa-ressentimento.md) | ✅ Pronto para postar |
 | **28/10/2026** | **O Cérebro Fragmentado: Troca de Tarefas e Resíduo de Atenção** | [`social/2026-10-28-cerebro-fragmentado-residuo-atencao.md`](2026-10-28-cerebro-fragmentado-residuo-atencao.md) | ✅ Pronto para postar |
 | **27/10/2026** | **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica** | [`social/2026-10-27-neurobiologia-motivacao-dopamina-tonica-fasica.md`](2026-10-27-neurobiologia-motivacao-dopamina-tonica-fasica.md) | ✅ Pronto para postar |
 | **27/10/2026** | **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Cérebro** | [`social/2026-10-27-mente-hiperalerta-trauma-precoce.md`](2026-10-27-mente-hiperalerta-trauma-precoce.md) | ✅ Pronto para postar |

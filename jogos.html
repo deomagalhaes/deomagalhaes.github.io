@@ -194,6 +194,17 @@
             
             <div class="resource-grid-custom" id="games-grid">
 
+                <!-- Card da Associação Semântica & Conexões -->
+                <a href="recursos/jogo-associacao-semantica.html" 
+                   class="resource-card-bg-image" 
+                   data-category="logica memoria funcoes-executivas"
+                   style="background-image: url('assets/imagens/padroes.png');">
+                    <div class="card-content">
+                        <h3>Associação Semântica & Conexões</h3>
+                        <p>Agrupamento conceitual, flexibilidade cognitiva e recuperação de memória semântica no lobo temporal e pré-frontal.</p>
+                    </div>
+                </a>
+
                 <!-- Card do Efeito Stroop Neurocognitivo -->
                 <a href="recursos/jogo-stroop-neuro.html" 
                    class="resource-card-bg-image" 
@@ -562,8 +573,9 @@
 
             const cards = document.querySelectorAll('#games-grid .resource-card-bg-image');
             cards.forEach(card => {
-                const cardCat = card.getAttribute('data-category');
-                if (category === 'all' || cardCat === category) {
+                const cardCat = (card.getAttribute('data-category') || '').trim();
+                const cats = cardCat.split(/\s+/);
+                if (category === 'all' || cats.includes(category) || cardCat === category) {
                     card.classList.remove('game-hidden');
                 } else {
                     card.classList.add('game-hidden');

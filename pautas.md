@@ -9,18 +9,19 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse**
-  - *Abordagem:* Ruminação límbica, reatividade da amígdala e cortisol sustentado, vs. a reconfiguração do córtex pré-frontal ventromedial pelo desfecho do perdão.
-  - *Categorias:* `saude-mental`, `filosofia`, `desenvolvimento-pessoal`.
-
 - [ ] **O Sistema Glinfático e o Sono Profundo de Ondas Lentas (NREM): A Limpeza Noturna de Toxinas Cerebrais**
   - *Abordagem:* Astrócitos, canais de aquaporina-4 (AQP4), depuração de beta-amiloide e tau, e prevenção de demências.
   - *Categorias:* `saude-mental`, `neurociencia`, `reabilitacao-cognitiva`.
+
+- [ ] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala**
+  - *Abordagem:* O circuito de acolhimento mamífero, liberação de ocitocina e redução de autocrítica tóxica segundo Kristin Neff e Paul Gilbert.
+  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
 
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse** (Publicado em 28/10/2026)
 - [x] **O Cérebro Fragmentado: O Custo Oculto da Troca de Tarefas e do Resíduo de Atenção** (Publicado em 28/10/2026)
 - [x] **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica e o Fim das Metas Frustradas** (Publicado em 27/10/2026)
 - [x] **A Mente em Hiperalerta: O Efeito do Trauma Precoce no Desenvolvimento do Sistema Nervoso** (Publicado em 27/10/2026)
