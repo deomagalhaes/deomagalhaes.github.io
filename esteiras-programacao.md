@@ -39,15 +39,24 @@ Toda esteira deve cumprir rigorosamente as seguintes diretrizes antes de ser com
   - DEVE usar a classe `footer-grid`: `<div class="container footer-grid">`.
   - Conter colunas de Contato, Informações Profissionais (CRP 04/42784) e Redes Sociais.
 
-### 3. Validação Algorítmica dos Jogos
+### 3. Studio Gerador de Redes Sociais (`social/gerador.html`)
+- **OBRIGATÓRIO:** Todo carrossel produzido na esteira deve:
+  1. Gerar o arquivo markdown canônico em `social/YYYY-MM-DD-slug.md` e atualizar o histórico em `social/README.md`.
+  2. Ser **injetado diretamente dentro de `social/gerador.html`**:
+     - Adicionar `<option value="slug-curto" selected>Título do Artigo</option>` no topo do `<select id="articleSelect">`.
+     - Adicionar a estrutura do preset no topo de `const PRESETS = { ... }` contendo `articleSlug`, `articleTitle`, `slides: [...]` (mínimo de 6 slides) e `caption` completa com hashtags.
+     - Definir as variáveis de estado inicial (`currentPresetKey`, `currentSlides`, `currentCaption`) para carregar o novo carrossel por padrão ao abrir o studio visual.
+
+### 4. Validação Algorítmica dos Jogos
 - Todo jogo cognitivo interativo deve ter sua **solubilidade comprovada matematicamente** por meio de simulação prévia em script PowerShell ou JavaScript antes da entrega, garantindo taxa de 100% de estados resolúveis.
 
-### 4. Centralizadores e SEO
+### 5. Centralizadores e SEO
 - Inclusão imediata dos cards no topo de `cards-artigos.html` e `jogos.html`.
 - Adição das novas URLs no `sitemap.xml` com `<lastmod>2026-10-28</lastmod>`.
 - Atualização das filas em `pautas.md`, `testes-planejamento.md` e `jogos-planejamento.md`.
 
-### 5. Git Flow
+### 6. Git Flow
 - Execução de `git add .`
-- Commit semântico padronizado: `feat(esteira): publica [artigo], [teste] e [jogo]`
+- Commit semântico padronizado: `feat(esteira): publica [artigo], [teste], [jogo] e [carrossel visual]`
 - Envio imediato para `origin/main` via `git push origin main`.
+
