@@ -17,9 +17,9 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 7** | **Balança da Verdade (Silogismos)** | Lógica Proposicional, Validação de Premissas e Pensamento Crítico | `recursos/jogo-silogismos.html` | ✅ **Publicado** |
 | **Dia 8** | **Labirinto Visuoespacial (Planejamento)** | Planejamento Motor, Visuoconstrução e Monitoramento | `recursos/jogo-labirinto-cognitivo.html` | ✅ **Publicado** |
 | **Dia 9** | **Paradoxo das Portas (Monty Hall)** | Probabilidade Intuitiva, Atualização de Crenças e Flexibilidade | `recursos/jogo-monty-hall.html` | ✅ **Publicado** |
-| **Dia 10** | **Circuito Binário (Código Secreto)** | Pensamento Algorítmico, Decomposição e Atenção Alternada | `recursos/jogo-circuito-binario.html` | ✅ **Publicado** |
-| **Dia 11** | **Efeito Stroop Neurocognitivo** | Controle Inibitório Frontal, Conflito Cognitivo e Velocidade | `recursos/jogo-stroop-neuro.html` | ⏳ *Próximo da fila* |
-| **Dia 12** | **Matriz de Associação Semântica** | Memória Semântica, Categorização e Raciocínio Verbal | `recursos/jogo-associacao-semantica.html` | ⏳ Aguardando |
+| **Dia 11** | **Efeito Stroop Neurocognitivo** | Controle Inibitório Frontal, Conflito Cognitivo e Velocidade | `recursos/jogo-stroop-neuro.html` | ✅ **Publicado** |
+| **Dia 12** | **Matriz de Associação Semântica** | Memória Semântica, Categorização e Raciocínio Verbal | `recursos/jogo-associacao-semantica.html` | ⏳ *Próximo da fila* |
+| **Dia 13** | **Torre de Londres (Planejamento Motor)** | Funções Executivas e Resolução de Problemas Sequenciais | `recursos/jogo-torre-londres.html` | ⏳ Aguardando |
 
 ---
 
