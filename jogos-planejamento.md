@@ -19,8 +19,8 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 9** | **Paradoxo das Portas (Monty Hall)** | Probabilidade Intuitiva, Atualização de Crenças e Flexibilidade | `recursos/jogo-monty-hall.html` | ✅ **Publicado** |
 | **Dia 11** | **Efeito Stroop Neurocognitivo** | Controle Inibitório Frontal, Conflito Cognitivo e Velocidade | `recursos/jogo-stroop-neuro.html` | ✅ **Publicado** |
 | **Dia 12** | **Matriz de Associação Semântica** | Memória Semântica, Categorização e Raciocínio Verbal | `recursos/jogo-associacao-semantica.html` | ✅ **Publicado** |
-| **Dia 13** | **Torre de Londres (Planejamento Motor)** | Funções Executivas e Resolução de Problemas Sequenciais | `recursos/jogo-torre-londres.html` | ⏳ *Próximo da fila* |
-| **Dia 14** | **Blocos de Corsi (Memória Visuoespacial)** | Memória Operacional Visuoespacial e Span Atencional | `recursos/jogo-blocos-corsi.html` | ⏳ Aguardando |
+| **Dia 13** | **Torre de Londres (Planejamento Motor)** | Funções Executivas e Resolução de Problemas Sequenciais | `recursos/jogo-torre-londres.html` | ✅ **Publicado** |
+| **Dia 14** | **Blocos de Corsi (Memória Visuoespacial)** | Memória Operacional Visuoespacial e Span Atencional | `recursos/jogo-blocos-corsi.html` | ⏳ *Próximo da fila* |
 | **Dia 15** | **N-Back Dual (Atualização de Memória)** | Memória de Trabalho Ativa e Controle Atencional | `recursos/jogo-n-back.html` | ⏳ Aguardando |
 
 ---

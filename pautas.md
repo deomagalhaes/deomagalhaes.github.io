@@ -9,18 +9,23 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **O Sistema Glinfático e o Sono Profundo de Ondas Lentas (NREM): A Limpeza Noturna de Toxinas Cerebrais**
-  - *Abordagem:* Astrócitos, canais de aquaporina-4 (AQP4), depuração de beta-amiloide e tau, e prevenção de demências.
-  - *Categorias:* `saude-mental`, `neurociencia`, `reabilitacao-cognitiva`.
-
 - [ ] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala**
   - *Abordagem:* O circuito de acolhimento mamífero, liberação de ocitocina e redução de autocrítica tóxica segundo Kristin Neff e Paul Gilbert.
+  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
+
+- [ ] **O Fenômeno do Bloqueio Executivo no TDAH: Por Que a Paralisia da Inércia Não É Preguiça**
+  - *Abordagem:* Córtex pré-frontal dorsolateral, estriado ventral, déficit de tônus catecolaminérgico e a neurociência do arranque motor.
+  - *Categorias:* `tdah-tea`, `reabilitacao-cognitiva`, `saude-mental`.
+
+- [ ] **A Fadiga por Decisão e a Depleção do Ego: Como Escolhas Cotidianas Consomem o Córtex Pré-Frontal**
+  - *Abordagem:* Consumo de glicose neuronal, erosão do autocontrole, heurísticas impulsivas e arquitetura de escolhas (Baumeister & Kahneman).
   - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
 
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **O Sistema Glinfático e o Sono Profundo de Ondas Lentas (NREM): A Limpeza Noturna de Toxinas Cerebrais** (Publicado em 28/10/2026)
 - [x] **A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse** (Publicado em 28/10/2026)
 - [x] **O Cérebro Fragmentado: O Custo Oculto da Troca de Tarefas e do Resíduo de Atenção** (Publicado em 28/10/2026)
 - [x] **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica e o Fim das Metas Frustradas** (Publicado em 27/10/2026)

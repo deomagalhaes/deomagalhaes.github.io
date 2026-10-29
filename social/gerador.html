@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="perdao-magoa" selected>A Neurobiologia do PerdÃ£o e da MÃ¡goa: O Custo do Rancor</option>
+                        <option value="sistema-glinfatico" selected>O Sistema GlinfÃ¡tico: A Faxina Noturna de Toxinas Cerebrais</option>
+                        <option value="perdao-magoa">A Neurobiologia do PerdÃ£o e da MÃ¡goa: O Custo do Rancor</option>
                         <option value="cerebro-fragmentado">O CÃ©rebro Fragmentado: Troca de Tarefas e ResÃ­duo de AtenÃ§Ã£o</option>
                         <option value="motivacao-dopamina">Por Que Suas Metas Falham? (Dopamina TÃ´nica vs. FÃ¡sica)</option>
                         <option value="mente-hiperalerta">A Mente em Hiperalerta: O Efeito do Trauma Precoce no CÃ©rebro</option>
@@ -507,21 +508,21 @@
                         <option value="empatia-teoria-mente">A Neurobiologia da Empatia e a Teoria da Mente</option>
                         <option value="funcoes-executivas-tdah">FunÃ§Ãµes Executivas e TDAH no Adulto: O Mito da ForÃ§a de Vontade</option>
                         <option value="regulacao-supressao">RegulaÃ§Ã£o Emocional vs. SupressÃ£o (Engolir o Choro)</option>
-                        <option value="neuroinflamacao">Neuroinflamação e Microbiota (Eixo Intestino-Cérebro)</option>
-                        <option value="flexibilidade-act">Flexibilidade Psicológica e ACT (Neuroplasticidade)</option>
+                        <option value="neuroinflamacao">NeuroinflamaÃ§Ã£o e Microbiota (Eixo Intestino-CÃ©rebro)</option>
+                        <option value="flexibilidade-act">Flexibilidade PsicolÃ³gica e ACT (Neuroplasticidade)</option>
                         <option value="ansiedade-social">A Neurobiologia da Ansiedade Social e Vergonha</option>
-                        <option value="dmn">A Rede de Modo Padrão (DMN) & Pensamentos Intrusivos</option>
-                        <option value="habitos">A Arquitetura dos Hábitos (Gânglios da Base)</option>
-                        <option value="carga-alostatica">Carga Alostática & Burnout (Degradação Sináptica)</option>
-                        <option value="sono-rem">A Neurobiologia do Sono REM & Digestão de Traumas</option>
-                        <option value="narcisismo-vulneravel">Entre o Papel de Vítima e a Culpa Induzida (Narcisismo Vulnerável)</option>
+                        <option value="dmn">A Rede de Modo PadrÃ£o (DMN) & Pensamentos Intrusivos</option>
+                        <option value="habitos">A Arquitetura dos HÃ¡bitos (GÃ¢nglios da Base)</option>
+                        <option value="carga-alostatica">Carga AlostÃ¡tica & Burnout (DegradaÃ§Ã£o SinÃ¡ptica)</option>
+                        <option value="sono-rem">A Neurobiologia do Sono REM & DigestÃ£o de Traumas</option>
+                        <option value="narcisismo-vulneravel">Entre o Papel de VÃ­tima e a Culpa Induzida (Narcisismo VulnerÃ¡vel)</option>
                         <option value="dopamina">A Epidemia da Dopamina Barata (Algoritmos & Telas)</option>
-                        <option value="cansaso">A Sociedade do Cansaço & A Autoexploração</option>
-                        <option value="borderline">Transtorno Borderline nas Relações Íntimas</option>
-                        <option value="bento">O Camaleão Bento e as Cores do Medo do Escuro (Fábula)</option>
-                        <option value="ansiedade">Ansiedade: Filosofia Existencial & Neurociência</option>
-                        <option value="telas-infantil">O Impacto das Telas no Cérebro Infantil</option>
-                        <option value="ruminacao">O Cérebro em Sobrecarga: Ruminação & Ansiedade</option>
+                        <option value="cansaso">A Sociedade do CansaÃ§o & A AutoexploraÃ§Ã£o</option>
+                        <option value="borderline">Transtorno Borderline nas RelaÃ§Ãµes Ãntimas</option>
+                        <option value="bento">O CamaleÃ£o Bento e as Cores do Medo do Escuro (FÃ¡bula)</option>
+                        <option value="ansiedade">Ansiedade: Filosofia Existencial & NeurociÃªncia</option>
+                        <option value="telas-infantil">O Impacto das Telas no CÃ©rebro Infantil</option>
+                        <option value="ruminacao">O CÃ©rebro em Sobrecarga: RuminaÃ§Ã£o & Ansiedade</option>
                     </select>
                 </div>
             </div>
@@ -646,6 +647,55 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "sistema-glinfatico": {
+                articleSlug: "2026-10-28-sistema-glinfatico-sono-profundo",
+                articleTitle: "O Sistema GlinfÃ¡tico e o Sono Profundo: A Faxina Noturna de Toxinas Cerebrais",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROBIOLOGIA DO SONO",
+                        title: "O que acontece quando o cÃ©rebro lava a si mesmo Ã  noite?",
+                        body: "Como o sistema glinfÃ¡tico e o sono profundo de ondas lentas limpam toxinas associadas ao Alzheimer e Ã  nÃ©voa mental.",
+                        footer: "Arraste para entender a ciÃªncia ðŸ‘‰"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O ENIGMA METABÃ“LICO",
+                        title: "O cÃ©rebro nÃ£o tem vasos linfÃ¡ticos comuns",
+                        body: "Consome 20% da nossa energia e gera quilos de subprodutos tÃ³xicos todos os anos.\n\nIsolado pela Barreira HematoencefÃ¡lica, como ele descarta o lixo molecular acumulado ao longo da vigÃ­lia?",
+                        footer: "A rede hidrÃ¡ulica ðŸ‘‰"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "A ENGENHARIA HIDRÃULICA",
+                        title: "AstrÃ³citos e canais de Aquaporina-4",
+                        body: "AstrÃ³citos envolvem vasos cerebrais com poros de Aquaporina-4 (AQP4).\n\nO LÃ­quido Cefalorraquidiano (LCR) Ã© bombeado sob pressÃ£o pulsÃ¡til, lavando o tecido e arrastando placas de beta-amiloide e tau para drenagem venosa profunda.",
+                        footer: "Por que Ã  noite? ðŸ‘‰"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "SONO NREM (ESTÃGIO 3)",
+                        title: "ExpansÃ£o de 60% no sono profundo",
+                        body: "Durante a vigÃ­lia, a noradrenalina mantÃ©m neurÃ´nios inchados e passagens estreitas.\n\nNo sono profundo NREM, a noradrenalina cai, as cÃ©lulas encolhem e o espaÃ§o intersticial expande 60%, permitindo torrentes de limpeza.",
+                        footer: "O perigo da insÃ´nia ðŸ‘‰"
+                    },
+                    {
+                        type: "steps",
+                        badge: "A ESPIRAL DO ACÃšMULO",
+                        title: "3 Passos para Potencializar a Faxina",
+                        body: "1. Durma de Lado (DecÃºbito Lateral): ressonÃ¢ncias mostram mÃ¡xima depuraÃ§Ã£o e retorno venoso nessa postura.\n2. Corte CafeÃ­na 9h Antes: bloqueia a adenosina e impede a chegada ao sono profundo N3.\n3. Regularidade Circadiana: estabiliza a expressÃ£o rÃ­tmica de AQP4.",
+                        footer: "Artigo completo no portal ðŸ‘‰"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Dormir bem Ã© a mais avanÃ§ada higiene neurolÃ³gica.",
+                        body: "Dissecamos os estudos de Nedergaard e Matthew Walker e protocolos prÃ¡ticos no portal.\n\nðŸ‘‰ Toque no link da bio para ler na Ã­ntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo MagalhÃ£es â€¢ CRP 04/42784"
+                    }
+                ],
+                caption: `VocÃª ainda tem o hÃ¡bito de dizer que "dormir Ã© perda de tempo" ou sacrifica horas preciosas da madrugada para trabalhar e rolar telas? ðŸ§ ðŸ’¤\n\nSe vocÃª soubesse o que acontece no seu encÃ©falo durante o sono profundo, nunca mais negligenciaria o seu descanso.\n\nEm 2012, a equipe da neurocientista Maiken Nedergaard na Universidade de Rochester descobriu o Sistema GlinfÃ¡tico: uma verdadeira "estaÃ§Ã£o de tratamento de esgoto" molecular exclusiva do cÃ©rebro.\n\nAo longo do dia, o trabalho sinÃ¡ptico gera toxinas â€” como os peptÃ­deos beta-amiloide e a proteÃ­na tau, diretamente implicados no Alzheimer.\n\nNo sono profundo NREM (ondas lentas), a noradrenalina cai e as cÃ©lulas se contraem: o espaÃ§o entre os neurÃ´nios expande em 60%! Nesse momento, o lÃ­quor cerebrospinal Ã© bombeado pelos canais de Aquaporina-4 (AQP4), varrendo o lixo metabÃ³lico para fora.\n\nDormir nÃ£o Ã© luxo nem fraqueza: Ã© a manutenÃ§Ã£o biolÃ³gica mais refinada da natureza.\n\nðŸ“– Leia o artigo cientÃ­fico completo com todas as referÃªncias no meu site: deomagalhaes.com.br\n\n#NeurociÃªncia #SonoProfundo #SistemaGlinfÃ¡tico #SaÃºdeMental #Alzheimer #PrevenÃ§Ã£o #Biohacking #DeoMagalhaes`
+            },
             "perdao-magoa": {
                 articleSlug: "2026-10-28-neurobiologia-perdao-magoa-ressentimento",
                 articleTitle: "A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse",
@@ -1924,9 +1974,9 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
         };
 
         // Estado do Studio
-        let currentPresetKey = "perdao-magoa";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["perdao-magoa"].slides));
-        let currentCaption = PRESETS["perdao-magoa"].caption;
+        let currentPresetKey = "sistema-glinfatico";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["sistema-glinfatico"].slides));
+        let currentCaption = PRESETS["sistema-glinfatico"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização
@@ -2450,4 +2500,5 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
     </script>
 </body>
 </html>
+
 

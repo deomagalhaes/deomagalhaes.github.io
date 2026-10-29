@@ -14,9 +14,9 @@ Cada **Rodada de Esteira (Lote de Produção)** é uma unidade autônoma e sincr
 
 | Lote / Esteira | Artigo Científico | Roteiro Social Instagram | Teste / Escala Psicométrica | Jogo Cognitivo Diário | Status |
 |:---:|:---|:---|:---|:---|:---:|
-| **Lote 1** *(Atual)* | **A Neurobiologia do Perdão e da Mágoa:** Como o Ressentimento Crônico Danifica o Eixo do Estresse | Carrossel: *O Custo Biológico do Rancor* | **T-14:** Inventário de Sensibilidade Sensorial e Hiper-reatividade | **Dia 12:** Matriz de Associação Semântica | 🚀 **Em Execução** |
-| **Lote 2** | **O Sistema Glinfático e o Sono Profundo (NREM):** A Limpeza Noturna de Toxinas Cerebrais | Carrossel: *A Faxina Noturna do Cérebro* | **T-15:** Inventário de Assertividade e Estabelecimento de Limites | **Dia 13:** Torre de Londres (Planejamento Motor) | ⏳ Na Fila |
-| **Lote 3** | **A Neurobiologia da Autocompaixão:** Como a Gentileza Interna Desativa a Amígdala | Carrossel: *Por Que Ser Gentil Consigo Desinflama o Corpo* | **T-16:** Escala de Autocompaixão Clínica (Neff) | **Dia 14:** Criptografia Neural (Substituição de Padrões) | ⏳ Agendado |
+| **Lote 1** | **A Neurobiologia do Perdão e da Mágoa:** Como o Ressentimento Crônico Danifica o Eixo do Estresse | Carrossel: *O Custo Biológico do Rancor* | **T-14:** Inventário de Sensibilidade Sensorial e Hiper-reatividade | **Dia 12:** Matriz de Associação Semântica | ✅ **Concluído** |
+| **Lote 2** | **O Sistema Glinfático e o Sono Profundo (NREM):** A Limpeza Noturna de Toxinas Cerebrais | Carrossel: *A Faxina Noturna do Cérebro* | **T-15:** Inventário de Assertividade e Estabelecimento de Limites | **Dia 13:** Torre de Londres (Planejamento Motor) | ✅ **Concluído** |
+| **Lote 3** | **A Neurobiologia da Autocompaixão:** Como a Gentileza Interna Desativa a Amígdala | Carrossel: *Por Que Ser Gentil Consigo Desinflama o Corpo* | **T-16:** Escala de Autocompaixão Clínica (Neff) | **Dia 14:** Criptografia Neural (Substituição de Padrões) | ⏳ **Próximo da Fila** |
 | **Lote 4** | **Arquitetura do Pensamento Crítico:** Como Desarmar o Viés de Confirmação | Carrossel: *Por Que Acreditamos no Que Queremos* | **T-17:** Inventário de Rigidez Epistêmica e Crenças | **Dia 15:** Labirinto Hexagonal de Relações Espaciais | ⏳ Agendado |
 | **Lote 5** | **A Neuroquímica do Vínculo Amoroso:** Ocitocina, Vasopressina e Apego Seguro | Carrossel: *A Química do Amor de Longo Prazo* | **T-18:** Escala de Satisfação Conjugal e Segurança Afetiva | **Dia 16:** Balança de Pesos Algébricos 3D | ⏳ Agendado |
 

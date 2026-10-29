@@ -21,9 +21,9 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-11** | **Inventário de Ansiedade Social e Evasão Afetiva** | Medo de Avaliação Negativa e Fobia Social | `artigos/teste-ansiedade-social.html` | ✅ Concluído |
 | **T-12** | **Escala de Flexibilidade Psicológica e Desfusão (ACT)** | Aceitação, Valores e Rigidez Cognitiva | `artigos/teste-flexibilidade-cognitiva.html` | ✅ Concluído |
 | **T-13** | **Escala de Autoeficácia Geral e Resiliência Psíquica** | Agência Pessoal, Crença de Competência e Resiliência | `artigos/teste-autoeficacia.html` | ✅ Concluído |
-| **T-14** | **Inventário de Sensibilidade Sensorial e Hiper-reatividade** | Integração Sensorial no Adulto e Sobrecarga Ambiental | `artigos/teste-sensibilidade-sensorial.html` | ✅ Concluído |
-| **T-15** | **Inventário de Assertividade e Limites Interpessoais** | Comunicação Não-Violenta, Autoestima e Respeito aos Limites | `artigos/teste-assertividade.html` | ⏳ *Próximo da fila* |
-| **T-16** | **Escala de Autocompaixão Clínica (Neff)** | Autocrítica Tóxica vs. Acolhimento e Humanidade Compartilhada | `artigos/teste-autocompaixao.html` | ⏳ Aguardando |
+| **T-15** | **Inventário de Assertividade e Limites Interpessoais** | Comunicação Não-Violenta, Autoestima e Respeito aos Limites | `artigos/teste-assertividade.html` | ✅ Concluído |
+| **T-16** | **Escala de Autocompaixão Clínica (Neff)** | Autocrítica Tóxica vs. Acolhimento e Humanidade Compartilhada | `artigos/teste-autocompaixao.html` | ⏳ *Próximo da fila* |
+| **T-17** | **Inventário de Rigidez Epistêmica e Pensamento Crítico** | Viés de Confirmação, Dogmatismo e Flexibilidade Intelectual | `artigos/teste-rigidez-epistemica.html` | ⏳ Aguardando |
 
 ---
 

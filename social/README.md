@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **28/10/2026** | **O Sistema Glinfático: A Faxina Noturna de Toxinas Cerebrais** | [`social/2026-10-28-sistema-glinfatico-sono-profundo.md`](2026-10-28-sistema-glinfatico-sono-profundo.md) | ✅ Pronto para postar |
 | **28/10/2026** | **A Neurobiologia do Perdão e da Mágoa: O Custo Biológico do Rancor** | [`social/2026-10-28-neurobiologia-perdao-magoa-ressentimento.md`](2026-10-28-neurobiologia-perdao-magoa-ressentimento.md) | ✅ Pronto para postar |
 | **28/10/2026** | **O Cérebro Fragmentado: Troca de Tarefas e Resíduo de Atenção** | [`social/2026-10-28-cerebro-fragmentado-residuo-atencao.md`](2026-10-28-cerebro-fragmentado-residuo-atencao.md) | ✅ Pronto para postar |
 | **27/10/2026** | **A Neurobiologia da Motivação Sustentável: Dopamina Tônica vs. Fásica** | [`social/2026-10-27-neurobiologia-motivacao-dopamina-tonica-fasica.md`](2026-10-27-neurobiologia-motivacao-dopamina-tonica-fasica.md) | ✅ Pronto para postar |
