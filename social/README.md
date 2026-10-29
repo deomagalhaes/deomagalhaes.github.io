@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **29/10/2026** | **A Neuroquímica do Vínculo Amoroso: Ocitocina, Vasopressina e Apego Seguro** | [`social/2026-10-29-neuroquimica-vinculo-amoroso.md`](2026-10-29-neuroquimica-vinculo-amoroso.md) | ✅ Pronto para postar |
 | **29/10/2026** | **Arquitetura do Pensamento Crítico: Por Que Acreditamos no Que Queremos** | [`social/2026-10-29-arquitetura-pensamento-critico.md`](2026-10-29-arquitetura-pensamento-critico.md) | ✅ Pronto para postar |
 | **28/10/2026** | **A Neurobiologia da Autocompaixão: Por Que Ser Gentil Desinflama o Corpo** | [`social/2026-10-28-neurobiologia-autocompaixao.md`](2026-10-28-neurobiologia-autocompaixao.md) | ✅ Pronto para postar |
 | **28/10/2026** | **O Sistema Glinfático: A Faxina Noturna de Toxinas Cerebrais** | [`social/2026-10-28-sistema-glinfatico-sono-profundo.md`](2026-10-28-sistema-glinfatico-sono-profundo.md) | ✅ Pronto para postar |

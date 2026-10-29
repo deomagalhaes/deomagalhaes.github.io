@@ -17,14 +17,11 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
   - *Abordagem:* Consumo de glicose neuronal, erosão do autocontrole, heurísticas impulsivas e arquitetura de escolhas (Baumeister & Kahneman).
   - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
 
-- [ ] **A Neurociência do Vínculo e da Teoria do Apego: Como a Infância Modela o Cérebro Relacional Adulto**
-  - *Abordagem:* Estilos de apego de Bowlby, córtex órbito-frontal, sistema ocitocinérgico e a reparação de esquemas relacionais na clínica.
-  - *Categorias:* `orientacao-familiar`, `saude-mental`, `desenvolvimento-infantil`.
-
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neuroquímica do Vínculo Amoroso: Ocitocina, Vasopressina e Apego Seguro** (Publicado em 29/10/2026)
 - [x] **Arquitetura do Pensamento Crítico: Como Desarmar o Viés de Confirmação** (Publicado em 29/10/2026)
 - [x] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala** (Publicado em 28/10/2026)
 - [x] **O Sistema Glinfático e o Sono Profundo de Ondas Lentas (NREM): A Limpeza Noturna de Toxinas Cerebrais** (Publicado em 28/10/2026)
