@@ -1,4 +1,4 @@
-﻿# Quality Gate Estrito Anti-Mojibake e Conformidade Institucional — Deo Magalhães
+# Quality Gate Estrito Anti-Mojibake e Conformidade Institucional — Deo Magalhães
 $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -98,7 +98,7 @@ if (Test-Path $geradorPath) {
     }
 }
 
-# 5. Blindagem de Taxonomia Estrita de Pastas
+# 5. Blindagem de Taxonomia Estrita de Pastas e Centralizadores
 $artigosDir = Join-Path $repoDir "artigos"
 $artigoTests = Get-ChildItem -Path $artigosDir -Filter "teste-*.html"
 foreach ($at in $artigoTests) {
@@ -116,6 +116,19 @@ foreach ($rj in $recursoJogos) {
         Report-Error "Taxonomia violada: O arquivo $($rj.Name) está em recursos/ mas é um jogo e não um stub de redirecionamento!"
     }
 }
+
+# Verificação de cards-artigos.html: PROIBIDO conter cards apontando para testes/, recursos/ ou jogos/
+$cardsArtigosPath = Join-Path $repoDir "cards-artigos.html"
+if (Test-Path $cardsArtigosPath) {
+    $cardsTxt = [System.IO.File]::ReadAllText($cardsArtigosPath, [System.Text.Encoding]::UTF8)
+    $testesInCards = ([regex]::Matches($cardsTxt, 'href="(testes/[^"]*)"')).Count
+    $recursosInCards = ([regex]::Matches($cardsTxt, 'href="(recursos/[^"]*)"')).Count
+    $jogosInCards = ([regex]::Matches($cardsTxt, 'href="(jogos/[^"]*)"')).Count
+    if ($testesInCards -gt 0 -or $recursosInCards -gt 0 -or $jogosInCards -gt 0) {
+        Report-Error "Taxonomia violada em cards-artigos.html: Encontrados $testesInCards links de testes, $recursosInCards de recursos e $jogosInCards de jogos. Este arquivo deve conter exclusivamente artigos!"
+    }
+}
+
 Report-Success "Blindagem de Taxonomia: Pastas artigos/, testes/, jogos/ e recursos/ estritamente segregadas."
 
 $finalColor = if ($errorCount -eq 0) { "Green" } else { "Red" }

@@ -29,26 +29,28 @@ Todo e qualquer conteúdo criado por agentes, esteiras automáticas ou desenvolv
 
 ---
 
-## 3. Fluxo de Publicação por Tipo
+## 3. Fluxo de Publicação por Tipo (Segregação Estrita de Cards)
 
 ### A. Novo Artigo
 - Criar em `artigos/slug.html`.
-- Adicionar card no topo de `cards-artigos.html`.
+- Adicionar card EXCLUSIVAMENTE no topo de `cards-artigos.html`.
 - Marcar concluído em `pautas.md`.
 
 ### B. Novo Teste / Escala
 - Criar em `testes/teste-slug.html`.
-- Adicionar card na grade de `testes.html`.
-- Adicionar card em `cards-artigos.html` com link `testes/teste-slug.html`.
+- Adicionar card EXCLUSIVAMENTE na grade de `testes.html`.
+- **PROIBIDO:** NUNCA adicionar cards de testes/escalas em `cards-artigos.html`. A página `artigos.html` consome `cards-artigos.html` e deve listar exclusivamente artigos científicos/reflexivos.
 - Marcar concluído em `testes-planejamento.md`.
 
 ### C. Novo Jogo Cognitivo
 - Criar em `jogos/jogo-slug.html`.
 - Validar algoritmo de resolução matemática prévia.
-- Adicionar card na grade de `jogos.html` com link `jogos/jogo-slug.html`.
+- Adicionar card EXCLUSIVAMENTE na grade de `jogos.html` com link `jogos/jogo-slug.html`.
+- **PROIBIDO:** NUNCA adicionar cards de jogos em `cards-artigos.html`.
 - Marcar concluído em `jogos-planejamento.md`.
 
-### D. Nova Ferramenta Clínica
+### D. Nova Ferramenta Clínica / Recurso
 - Criar em `recursos/slug.html`.
-- Adicionar card na grade de `recursos.html`.
+- Adicionar card EXCLUSIVAMENTE na grade de `recursos.html`.
+- **PROIBIDO:** NUNCA adicionar cards de ferramentas ou recursos em `cards-artigos.html`.
 - Marcar concluído em `ferramentas-planejamento.md`.

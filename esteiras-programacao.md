@@ -54,8 +54,11 @@ Toda esteira deve cumprir rigorosamente as seguintes diretrizes antes de ser com
 - Todo jogo cognitivo interativo deve ter sua **solubilidade comprovada matematicamente** por meio de simulação prévia em script PowerShell ou JavaScript antes da entrega, garantindo taxa de 100% de estados resolúveis.
 
 ### 5. Centralizadores, Taxonomia e SEO
-- Segregação de pastas obrigatória: Artigos em `artigos/`, Testes em `testes/` e Jogos em `jogos/`.
-- Inclusão imediata dos cards correspondentes em `cards-artigos.html`, `testes.html` e `jogos.html`.
+- **Segregação estrita de pastas e cards:**
+  - Artigos em `artigos/` e cards **EXCLUSIVAMENTE** em `cards-artigos.html`.
+  - Testes e Escalas em `testes/` e cards **EXCLUSIVAMENTE** na grade de `testes.html`. **PROIBIDO** colocar cards de testes em `cards-artigos.html`.
+  - Jogos em `jogos/` e cards **EXCLUSIVAMENTE** na grade de `jogos.html`.
+  - Ferramentas e Recursos em `recursos/` e cards **EXCLUSIVAMENTE** na grade de `recursos.html`.
 - Adição das novas URLs no `sitemap.xml` via `scripts/generate-sitemap.ps1`.
 - Atualização das filas em `pautas.md`, `testes-planejamento.md` e `jogos-planejamento.md`.
 

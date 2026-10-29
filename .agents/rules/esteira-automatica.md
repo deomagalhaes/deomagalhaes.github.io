@@ -38,5 +38,5 @@ A cada lote de produção, a esteira executa sequencialmente:
 2. **Roteiro Social & Studio:** Redação em `social/YYYY-MM-DD-slug.md`, sincronização no histórico de `social/README.md` e injeção do preset no topo de `social/gerador.html` com UTF-8 garantido.
 3. **Escala Psicométrica / Teste:** Código ESTRITAMENTE em `testes/teste-slug.html` com cálculo instantâneo client-side e devolutiva clínica por faixas.
 4. **Jogo Cognitivo:** Jogo diário ESTRITAMENTE em `jogos/jogo-slug.html` com Web Audio API e validação algorítmica matemática prévia.
-5. **Centralizadores:** Atualização de `cards-artigos.html`, `testes.html`, `jogos.html`, `pautas.md`, `testes-planejamento.md`, `jogos-planejamento.md`, `esteiras-programacao.md` e execução de `scripts/generate-sitemap.ps1`.
+5. **Centralizadores:** Segregação estrita de cards: Artigos exclusivamente em `cards-artigos.html`, Testes exclusivamente na grade de `testes.html` (PROIBIDO adicionar testes em `cards-artigos.html`), Jogos em `jogos.html` e Recursos em `recursos.html`. Atualização de `pautas.md`, `testes-planejamento.md`, `jogos-planejamento.md`, `esteiras-programacao.md` e execução de `scripts/generate-sitemap.ps1`.
 6. **Deploy:** `git add .`, commit semântico e `git push origin main`.
