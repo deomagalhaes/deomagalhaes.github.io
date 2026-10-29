@@ -25,7 +25,9 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 16** | **Criptografia Neural (Substituição de Padrões)** | Atenção Alternada, Velocidade de Codificação e Agilidade Mental | `recursos/jogo-criptografia-neural.html` | ✅ **Publicado** |
 | **Dia 17** | **Labirinto Hexagonal (Relações Espaciais)** | Raciocínio Topológico, Rotação Mental e Flexibilidade Cognitiva | `recursos/jogo-labirinto-hexagonal.html` | ✅ **Publicado** |
 | **Dia 18** | **Balança dos Ponderáveis (Inferência Bayesiana)** | Atualização de Probabilidades, Raciocínio Dedutivo e Evidências | `recursos/jogo-balanca-bayesiana.html` | ✅ **Publicado** |
-| **Dia 19** | **Matriz de Resolução de Conflitos e Custo Cognitivo** | Tomada de Decisão Sob Incerteza, Custo de Troca e Flexibilidade | `recursos/jogo-matriz-conflitos.html` | ⏳ *Próximo da fila* |
+| **Dia 19** | **Matriz de Resolução de Conflitos e Custo Cognitivo** | Tomada de Decisão Sob Incerteza, Custo de Troca e Flexibilidade | `recursos/jogo-matriz-conflitos.html` | ✅ **Publicado** |
+| **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `recursos/jogo-campo-receptivo.html` | ⏳ *Próximo da fila* |
+| **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `recursos/jogo-transitividade-logica.html` | ⏳ Aguardando |
 
 ---
 
