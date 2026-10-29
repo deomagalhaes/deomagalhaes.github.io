@@ -499,6 +499,7 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
+                        <option value="fadiga-decisao" selected>A Fadiga por Decisão e a Depleção do Ego (Baumeister)</option>
                         <option value="bloqueio-executivo" selected>O Bloqueio Executivo no TDAH (Inércia do Arranque)</option>
                         <option value="vinculo-amoroso">A Neuroquímica do Vínculo Amoroso (Ocitocina & Apego)</option>
                         <option value="pensamento-critico">Arquitetura do Pensamento Crítico (Viés de Confirmação)</option>
@@ -641,6 +642,55 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "fadiga-decisao": {
+                articleSlug: "2026-10-29-fadiga-por-decisao",
+                articleTitle: "A Fadiga por Decisão e a Depleção do Ego: Por Que Decidir Cansa Tanto",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DA DECISÃO",
+                        title: "Por que você passa o dia trabalhando sentado, mas chega em casa exausto?",
+                        body: "A ciência por trás da 'fadiga por decisão': como milhares de escolhas banais esgotam a glicose do córtex pré-frontal e sabotam sua força de vontade.",
+                        footer: "Deslize para entender o custo biológico 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A BATALHA DA ENERGIA",
+                        title: "Decidir gasta tanto quanto correr",
+                        body: "O cérebro consome 20% da glicose de todo o organismo.\n\nCada pequena deliberação — responder um e-mail, escolher o almoço, resistir ao celular — queima combustível neuronal finito.",
+                        footer: "O experimento dos juízes 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "CIÊNCIA DO COMPORTAMENTO",
+                        title: "O Efeito Fome e Cansaço na Justiça",
+                        body: "Em 2011, a Columbia analisou 1.100 sentenças de condicional:\n• Início da manhã: 65% de aprovação.\n• Fim da tarde: a taxa despencava para quase 0%.\n\nCom o córtex esgotado, o cérebro escolhia a opção padrão de menor risco: manter o preso detido.",
+                        footer: "As rotas de fuga do cérebro 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "DESCOMPENSAÇÃO PRÉ-FRONTAL",
+                        title: "No fim do dia, seu cérebro escolhe fugir",
+                        body: "Quando a reserva executiva acaba, ocorrem dois colapsos:\n1. Paralisia da Escolha: você gasta 40 minutos rolando telas sem conseguir decidir.\n2. Colapso Inibitório: o freio quebra e você ataca doces, compras impulsivas ou atritos fúteis.",
+                        footer: "4 hábitos para proteger o foco 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "DESIGN AMBIENTAL",
+                        title: "4 Hábitos para Proteger sua Energia",
+                        body: "1. Automatize o Banal: padronize roupas e cardápios como faziam Jobs e Obama.\n2. As Horas de Ouro: tome as decisões cruciais nas primeiras 3 horas do dia.\n3. Regra de 3 Opções: restrinja alternativas para eliminar o atrito.\n4. Pausa Metabólica: 5 minutos de respiração recuperam o córtex.",
+                        footer: "Avalie sua fadiga no portal 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "AUTORREGULAÇÃO & FOCO",
+                        title: "Suas escolhas estão esgotando sua mente?",
+                        body: "Publicamos um ensaio completo dissecando a neurociência da depleção do ego e a arquitetura de escolhas.\n\nE criamos a Escala de Fadiga por Decisão e Depleção do Ego (T-20) para autoavaliação anônima e gratuita.",
+                        footer: "@deomagalhaesneuro • Link na Bio"
+                    }
+                ],
+                caption: Você já teve a sensação de terminar um dia de trabalho sem ter feito nenhum esforço físico pesado, mas sentindo o corpo tão exausto como se tivesse corrido uma maratona?\n\nA neurociência cognitiva explica esse fenômeno: você sofreu de Fadiga por Decisão (ou depleção do ego).\n\nO córtex pré-frontal — a região mais sofisticada e nobre do nosso cérebro — consome uma quantidade absurda de glicose e oxigênio para pesar prós e contras, inibir impulsos e calcular riscos. Quando você passa o dia escolhendo que roupa vestir, qual rota seguir no trânsito, que mensagens responder, o que priorizar na planilha e resistindo a distrações no celular, sua bateria deliberativa vai se esgotando.\n\nO resultado? No fim do dia, seu freio inibitório quebra. É por isso que é à noite que quebramos dietas com comida rápida, compramos itens que não precisamos ou nos sentimos incapazes até de escolher um filme para assistir.\n\nLíderes de alta performance aprenderam há muito tempo que força de vontade não é uma virtude infinita: é um combustível biológico precioso que deve ser protegido com engenharia de rotinas e eliminação de decisões secundárias.\n\n👉 Acesse nosso novo artigo completo e aplique a Escala de Fadiga por Decisão e Depleção do Ego (T-20) no link da bio: deomagalhaes.com.br\n\nQue microdecisão diária você poderia automatizar hoje para salvar sua energia mental? Compartilhe nos comentários!\n\n---\n#Neurociência #FunçõesExecutivas #FadigaPorDecisão #DepleçãoDoEgo #Baumeister #PsicologiaCognitiva #Autocontrole #ProdutividadeSustentável #SaudeMental #Cérebro #DeoMagalhaes #Kahneman #TomadaDeDecisão #Foco #Neuropsicologia
+            },
             "bloqueio-executivo": {
                 articleSlug: "2026-10-29-bloqueio-executivo-tdah",
                 articleTitle: "O Bloqueio Executivo no TDAH: Por Que a Paralisia Não É Preguiça",
@@ -1617,9 +1667,9 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
         };
 
         // Estado do Studio
-        let currentPresetKey = "bloqueio-executivo";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["bloqueio-executivo"].slides));
-        let currentCaption = PRESETS["bloqueio-executivo"].caption;
+        let currentPresetKey = "fadiga-decisao";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["fadiga-decisao"].slides));
+        let currentCaption = PRESETS["fadiga-decisao"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização

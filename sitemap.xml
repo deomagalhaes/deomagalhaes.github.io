@@ -631,6 +631,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/artigos/teste-fadiga-decisao.html</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/artigos/teste-flexibilidade-cognitiva.html</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
@@ -848,6 +854,12 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/recursos/jogo-autonomo.html</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/recursos/jogo-balanca-bayesiana.html</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
