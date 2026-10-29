@@ -1,4 +1,4 @@
-# Quality Gate Estrito Anti-Mojibake e Conformidade Institucional — Deo Magalhães
+﻿# Quality Gate Estrito Anti-Mojibake e Conformidade Institucional — Deo Magalhães
 $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -28,9 +28,9 @@ $filesToScan = Get-ChildItem -Path $repoDir -Include *.html,*.js,*.md -Recurse |
 $mojibakeCount = 0
 foreach ($f in $filesToScan) {
     $txt = [System.IO.File]::ReadAllText($f.FullName, [System.Text.Encoding]::UTF8)
-    $matches = [regex]::Matches($txt, $mojibakePattern)
-    if ($matches.Count -gt 0) {
-        Report-Error "$($f.FullName.Replace($repoDir, '')) contém $($matches.Count) ocorrências de mojibake!"
+    $foundMatches = [regex]::Matches($txt, $mojibakePattern)
+    if ($foundMatches.Count -gt 0) {
+        Report-Error "$($f.FullName.Replace($repoDir, '')) contém $($foundMatches.Count) ocorrências de mojibake!"
         $mojibakeCount++
     }
 }
