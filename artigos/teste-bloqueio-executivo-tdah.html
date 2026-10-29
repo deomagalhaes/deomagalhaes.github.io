@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Inércia Psíquica e Bloqueio Executivo (EIPBE / T-19) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de bloqueio executivo, inércia de arranque e paralisia por sobrecarga com a Escala de Inércia Psíquica baseada nos modelos de Barkley e Brown.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.08em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-calc {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-calc:hover {
+            background: #ca6702;
+            color: white;
+        }
+
+        .results-box {
+            display: none;
+            background: #fdfbf7;
+            border: 2px solid #005f73;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.4em;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .subscales-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .subscale-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 6px 0;
+            font-size: 0.95em;
+            color: #005f73;
+        }
+
+        .subscale-score {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container header-content">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <nav id="navbar">
+                <button id="menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="/index.html">Início</a></li>
+                    <li><a href="/sobre.html">Sobre</a></li>
+                    <li><a href="/servicos.html">Serviços</a></li>
+                    <li><a href="/artigos.html" class="active">Artigos</a></li>
+                    <li><a href="/jogos.html">Jogos</a></li>
+                    <li><a href="/contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Inércia Psíquica e Bloqueio Executivo (EIPBE / T-19)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Publicado em 29 de Outubro de 2026</p>
+            </header>
+
+            <article class="article-body">
+                <p><em>Este instrumento neuropsicoeducativo avalia a severidade da inércia de arranque e da paralisia executiva no cotidiano. Baseado nos modelos contemporâneos de funções executivas de Russell Barkley e Thomas Brown, ele mapeia três dimensões fundamentais: Dificuldade de Iniciação Motora, Cegueira Temporal & Paralisia por Sobrecarga e Custo Energético de Transição.</em></p>
+
+                <div class="quiz-container" id="quizContainer">
+                    <p style="margin-bottom: 20px; font-size: 0.95em; color: #475569;">
+                        <strong>Instruções:</strong> Para cada uma das 15 afirmações abaixo, selecione a frequência com que você vivenciou essa situação nos últimos 6 meses.<br>
+                        <em>Escala: 1 = Nunca / Raramente | 2 = Ocasionalmente | 3 = Frequentemente | 4 = Muito Frequentemente | 5 = Quase Sempre</em>
+                    </p>
+
+                    <form id="eipbeForm">
+                        <div id="questionsList"></div>
+                        <button type="button" class="btn-calc" onclick="calculateEIPBE()">Calcular Meu Nível de Bloqueio Executivo</button>
+                    </form>
+
+                    <div id="resultsBox" class="results-box">
+                        <div class="score-badge" id="totalScoreBadge">Pontuação: -- / 75</div>
+                        <h3 id="resultTitle" style="color: #005f73; margin-top: 0;"></h3>
+                        <p id="resultDesc" style="color: #334155; line-height: 1.7;"></p>
+
+                        <div class="subscales-grid">
+                            <div class="subscale-card">
+                                <h4>Iniciação Motora (Arranque)</h4>
+                                <div class="subscale-score" id="scoreDAIM">-- / 25</div>
+                                <p style="font-size: 0.8em; color: #64748b; margin: 4px 0 0 0;">Dificuldade em transpor a barreira do primeiro passo.</p>
+                            </div>
+                            <div class="subscale-card">
+                                <h4>Cegueira Temporal & Sobrecarga</h4>
+                                <div class="subscale-score" id="scoreCTPS">-- / 25</div>
+                                <p style="font-size: 0.8em; color: #64748b; margin: 4px 0 0 0;">Paralisia diante de listas e prazos não imediatos.</p>
+                            </div>
+                            <div class="subscale-card">
+                                <h4>Custo de Transição & Reatividade</h4>
+                                <div class="subscale-score" id="scoreCETR">-- / 25</div>
+                                <p style="font-size: 0.8em; color: #64748b; margin: 4px 0 0 0;">Exaustão para alternar tarefas e urgência como motor.</p>
+                            </div>
+                        </div>
+
+                        <div style="background: #e2e8f0; padding: 16px; border-radius: 8px; font-size: 0.9em; color: #334155;">
+                            <strong>Direcionamento Clínico:</strong> <span id="therapeuticRec"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="article-divider">
+
+                <p class="article-disclaimer">Este questionário é de natureza autoavaliativa e psicoeducacional, não constituindo laudo neuropsicológico nem substituindo o diagnóstico clínico realizado por profissional especialista em saúde mental.</p>
+
+                <h2>Referências Metodológicas</h2>
+                <ol class="references-list">
+                    <li>BARKLEY, Russell A. <em>Barkley Deficits in Executive Functioning Scale (BDEFS)</em>. New York: Guilford Press, 2011.</li>
+                    <li>BROWN, Thomas E. <em>Brown Executive Function/Attention Scales (Brown EF/A Scales)</em>. San Antonio: Pearson, 2018.</li>
+                    <li>DIAMOND, Adele. Executive Functions. <em>Annual Review of Psychology</em>, v. 64, p. 135-168, 2013.</li>
+                </ol>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        const QUESTIONS = [
+            { id: 1, text: "Sinto uma barreira quase física para iniciar tarefas que considero monótonas ou burocráticas, mesmo sabendo de sua urgência.", sub: "daim" },
+            { id: 2, text: "Tenho dificuldade para perceber a passagem do tempo, subestimando drasticamente o tempo necessário para concluir uma atividade.", sub: "ctps" },
+            { id: 3, text: "Alternar entre duas tarefas diferentes no mesmo dia consome tanta energia mental que me sinto exausto(a) rapidamente.", sub: "cetr" },
+            { id: 4, text: "Fico paralisado(a) diante de uma tela ou folha em branco querendo muito começar, mas sem conseguir dar o primeiro comando motor.", sub: "daim" },
+            { id: 5, text: "Quando olho para uma lista de afazeres com muitos passos, sinto um colapso cognitivo e acabo não fazendo nenhum.", sub: "ctps" },
+            { id: 6, text: "Apenas consigo me mover e produzir sob a adrenalina intensa de um prazo final prestes a estourar.", sub: "cetr" },
+            { id: 7, text: "Passo horas em atividades automáticas (como rolar telas) em estado de ansiedade, querendo parar para trabalhar mas sem conseguir levantar.", sub: "daim" },
+            { id: 8, text: "Tarefas que têm prazos para daqui a semanas parecem simplesmente não existir no meu cérebro até se tornarem emergências.", sub: "ctps" },
+            { id: 9, text: "Interrupções inesperadas no meio de uma tarefa me deixam profundamente desorientado(a) ou irritado(a) para retornar ao foco.", sub: "cetr" },
+            { id: 10, text: "Mesmo descansado(a) fisicamente, sinto que minha 'bateria de arranque' mental está descarregada para tarefas não estimulantes.", sub: "daim" },
+            { id: 11, text: "Tenho a sensação crônica de que o dia passou num piscar de olhos sem que eu tenha conseguido realizar o que planejei.", sub: "ctps" },
+            { id: 12, text: "Recorro a estímulos intensos (cafeína em excesso, urgência artificial, música muito alta) para conseguir fazer meu cérebro engatar.", sub: "cetr" },
+            { id: 13, text: "Costumo me culpar profundamente por 'falta de vergonha' ou 'preguiça', embora sofra intensamente durante a inércia.", sub: "daim" },
+            { id: 14, text: "Perco o fio da meada do meu planejamento se não tiver alarmes visuais ou lembretes táteis na minha frente o tempo todo.", sub: "ctps" },
+            { id: 15, text: "Iniciar uma tarefa é tão desgastante que, quando finalmente começo, prefiro trabalhar sem pausas por horas a fio com medo de travar de novo.", sub: "cetr" }
+        ];
+
+        const OPTIONS_LABELS = [
+            "1 - Nunca / Raro",
+            "2 - Ocasionalmente",
+            "3 - Frequentemente",
+            "4 - Muito Frequente",
+            "5 - Quase Sempre"
+        ];
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsList');
+            container.innerHTML = '';
+
+            QUESTIONS.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+
+                const title = document.createElement('div');
+                title.className = 'question-title';
+                title.innerHTML = `<span class="question-number">Item ${q.id}</span> <span>${q.text}</span>`;
+                card.appendChild(title);
+
+                const optsGroup = document.createElement('div');
+                optsGroup.className = 'options-group';
+
+                for (let v = 1; v <= 5; v++) {
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    label.innerHTML = `
+                        <input type="radio" name="q_${q.id}" value="${v}" onchange="selectOption(${q.id}, this)">
+                        ${OPTIONS_LABELS[v-1]}
+                    `;
+                    optsGroup.appendChild(label);
+                }
+
+                card.appendChild(optsGroup);
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(qid, inputEl) {
+            const parent = inputEl.closest('.options-group');
+            parent.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+            inputEl.closest('.option-label').classList.add('selected');
+        }
+
+        function calculateEIPBE() {
+            let total = 0;
+            let daim = 0;
+            let ctps = 0;
+            let cetr = 0;
+            let answered = 0;
+
+            QUESTIONS.forEach(q => {
+                const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (checked) {
+                    const val = parseInt(checked.value, 10);
+                    total += val;
+                    if (q.sub === 'daim') daim += val;
+                    if (q.sub === 'ctps') ctps += val;
+                    if (q.sub === 'cetr') cetr += val;
+                    answered++;
+                }
+            });
+
+            if (answered < QUESTIONS.length) {
+                alert(`Por favor, responda a todos os ${QUESTIONS.length} itens para obter sua avaliação precisa. Faltam ${QUESTIONS.length - answered} resposta(s).`);
+                return;
+            }
+
+            const resultsBox = document.getElementById('resultsBox');
+            const totalScoreBadge = document.getElementById('totalScoreBadge');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDesc = document.getElementById('resultDesc');
+            const scoreDAIM = document.getElementById('scoreDAIM');
+            const scoreCTPS = document.getElementById('scoreCTPS');
+            const scoreCETR = document.getElementById('scoreCETR');
+            const therapeuticRec = document.getElementById('therapeuticRec');
+
+            totalScoreBadge.textContent = `Pontuação Geral: ${total} / 75`;
+            scoreDAIM.textContent = `${daim} / 25`;
+            scoreCTPS.textContent = `${ctps} / 25`;
+            scoreCETR.textContent = `${cetr} / 25`;
+
+            if (total >= 56) {
+                resultTitle.textContent = "Bloqueio Executivo Severo / Alta Inércia Frontoestriatal";
+                resultDesc.textContent = "Sua pontuação indica um padrão marcante de paralisia da iniciativa, cegueira temporal e dependência crônica de picos de urgência para agir. Este quadro é característico de déficits funcionais nas vias dopaminérgicas do córtex pré-frontal e dos gânglios da base, frequentemente observados no TDAH do adulto.";
+                therapeuticRec.textContent = "Recomenda-se avaliação neuropsicológica das funções executivas e consulta com psiquiatra/psicólogo clínico para suporte em TCC focada em TDAH e engenharia de rotina adaptada.";
+            } else if (total >= 36) {
+                resultTitle.textContent = "Inércia Executiva Moderada / Desregulação Atencional Frequente";
+                resultDesc.textContent = "Você experimenta episódios significativos de congelamento diante de tarefas complexas ou desestimulantes. Embora consiga executar demandas prioritárias, o custo psíquico e a ansiedade gerada pela procrastinação involuntária provocam sobrecarga e fadiga mental acumulada.";
+                therapeuticRec.textContent = "Adote estratégias comportamentais: micropassos de 2 minutos, cronômetros visuais táteis (Time Timer) e técnica de 'body doubling' para reduzir o atrito do arranque.";
+            } else {
+                resultTitle.textContent = "Inércia Executiva Típica / Boa Eficiência de Arranque";
+                resultDesc.textContent = "Suas funções executivas operam dentro da faixa de autorregulação saudável. Você demonstra boa capacidade de iniciar atividades sem depender exclusivamente da pressão de prazos finais, sustentando um ritmo produtivo estável com baixo nível de paralisia por sobrecarga.";
+                therapeuticRec.textContent = "Mantenha a higiene do sono e pausas intencionais durante o trabalho para preservar a homeostase dos circuitos atencionais.";
+            }
+
+            resultsBox.style.display = 'block';
+            resultsBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderQuestions);
+    </script>
+</body>
+</html>

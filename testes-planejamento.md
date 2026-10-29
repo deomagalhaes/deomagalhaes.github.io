@@ -25,7 +25,8 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-16** | **Escala de Autocompaixão Clínica (Neff)** | Autocrítica Tóxica vs. Acolhimento e Humanidade Compartilhada | `artigos/teste-autocompaixao.html` | ✅ Concluído |
 | **T-17** | **Inventário de Rigidez Epistêmica e Pensamento Crítico** | Viés de Confirmação, Dogmatismo e Flexibilidade Intelectual | `artigos/teste-rigidez-epistemica.html` | ✅ Concluído |
 | **T-18** | **Escala de Satisfação Conjugal e Segurança Afetiva (ESCSA)** | Vínculo de Parceria, Ocitocina e Resolução de Conflitos | `artigos/teste-satisfacao-conjugal-apego.html` | ✅ Concluído |
-| **T-19** | **Escala de Inércia Psíquica e Arranque Motor** | Bloqueio Executivo, Tônus Dopaminérgico e TDAH | `artigos/teste-bloqueio-executivo.html` | ⏳ *Próximo da fila* |
+| **T-19** | **Escala de Inércia Psíquica e Bloqueio Executivo (EIPBE)** | Bloqueio Executivo, Tônus Dopaminérgico e TDAH | `artigos/teste-bloqueio-executivo-tdah.html` | ✅ Concluído |
+| **T-20** | **Escala de Fadiga por Decisão e Depleção do Ego** | Esgotamento Pré-Frontal, Autocontrole e Heurísticas Impulsivas | `artigos/teste-fadiga-decisao.html` | ⏳ *Próximo da fila* |
 
 ---
 

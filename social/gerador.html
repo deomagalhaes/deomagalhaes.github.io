@@ -499,6 +499,9 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
+                        <option value="bloqueio-executivo" selected>O Bloqueio Executivo no TDAH (Inércia do Arranque)</option>
+                        <option value="vinculo-amoroso">A Neuroquímica do Vínculo Amoroso (Ocitocina & Apego)</option>
+                        <option value="pensamento-critico">Arquitetura do Pensamento Crítico (Viés de Confirmação)</option>
                         <option value="neuroinflamacao">Neuroinflamação e Microbiota (Eixo Intestino-Cérebro)</option>
                         <option value="flexibilidade-act">Flexibilidade Psicológica e ACT (Neuroplasticidade)</option>
                         <option value="ansiedade-social">A Neurobiologia da Ansiedade Social e Vergonha</option>
@@ -638,6 +641,105 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "bloqueio-executivo": {
+                articleSlug: "2026-10-29-bloqueio-executivo-tdah",
+                articleTitle: "O Bloqueio Executivo no TDAH: Por Que a Paralisia Não É Preguiça",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÊNCIA DO TDAH",
+                        title: "Por que você quer tanto começar, mas seu corpo simplesmente não se mexe?",
+                        body: "A ciência por trás do 'congelamento executivo': por que a paralisia do TDAH não é preguiça, mas uma falha biológica no arranque da dopamina.",
+                        footer: "Deslize para entender a inércia mental 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "DESMISTIFICANDO O ESTIGMA",
+                        title: "Preguiça descansa; o bloqueio executivo tortura",
+                        body: "Na preguiça voluntária, a pessoa relaxa sem culpa.\n\nNo bloqueio executivo, você está em pânico interno: sabe o prazo, quer produzir e sofre a cada minuto parado, gastando enorme energia mental.",
+                        footer: "O motor de ignição dopaminérgico 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "O MOTOR DE IGNIÇÃO",
+                        title: "Dopamina: O Pedal de Partida do Cérebro",
+                        body: "Para converter intenção em ação motora, o cérebro conecta o Córtex Pré-Frontal ao Estriado Ventral.\n\nNo TDAH, a baixa dopamina tônica mantém o pedal travado: o cérebro precisa de um estímulo colossal para engatar o movimento.",
+                        footer: "A cegueira temporal 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "O MODELO DE BARKLEY",
+                        title: "Por que só funciona sob a adrenalina do prazo final?",
+                        body: "Russell Barkley provou que o cérebro com TDAH tem cegueira temporal: existem apenas dois horários, 'AGORA' e 'NÃO-AGORA'.\n\nQuando a entrega vira desespero, a adrenalina inunda as sinapses e destrava o arranque no susto.",
+                        footer: "4 chaves para desarmar o bloqueio 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "ENGENHARIA COMPORTAMENTAL",
+                        title: "4 Chaves para Desarmar o Bloqueio",
+                        body: "1. Regra dos 2 Minutos: decida apenas abrir o arquivo e ler a primeira linha.\n2. Tempo Visível: use cronômetros com disco visual vermelho.\n3. Body Doubling: trabalhe ao lado de alguém focado.\n4. Acoplamento Sensorial: una a tarefa a café aromático e música instrumental rápida.",
+                        footer: "Avalie sua inércia no portal 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "AUTORREGULAÇÃO & SAÚDE",
+                        title: "Você se sente frequentemente travado nessa paralisia?",
+                        body: "Disponibilizamos no portal o ensaio clínico completo sobre a neurofisiologia do bloqueio no TDAH.\n\nE criamos a Escala de Inércia Psíquica e Bloqueio Executivo (T-19) para autoavaliação anônima e gratuita.",
+                        footer: "@deomagalhaesneuro • Link na Bio"
+                    }
+                ],
+                caption: Quantas vezes você já passou horas paralisado diante de uma tela, desesperado para começar uma tarefa, se sentindo a pessoa mais incompetente do mundo por não conseguir dar o primeiro passo?\n\nA sociedade nos ensinou a rotular esse comportamento como preguiça, falta de vergonha ou falta de caráter. Mas a neuropsicologia moderna tem um nome clínico para essa agonia: Bloqueio Executivo (ou executive freeze).\n\nAo contrário de quem está simplesmente descansando, quem está no congelamento executivo vive um inferno mental: a mente grita a importância do prazo, o coração acelera de ansiedade, mas a via motora dos gânglios da base não recebe o sinal químico para começar.\n\nNo cérebro com TDAH, o tônus basal de dopamina e noradrenalina nos circuitos frontoestriatais é cronicamente rebaixado. É como tentar ligar um carro potente com a bateria quase descarregada: você gira a chave, ouve o motor engasgar, mas a ignição não acontece até que o pânico do prazo final libere uma descarga maciça de adrenalina.\n\nTratar essa inércia não é questão de 'ter mais força de vontade', mas de usar engenharia de funções executivas: diminuir radicalmente o tamanho do primeiro passo, externalizar o tempo com pistas visuais e trabalhar com estratégias neuroadaptadas.\n\n👉 Leia nosso artigo aprofundado e responda à Escala de Inércia Psíquica e Bloqueio Executivo (T-19) no link da bio: deomagalhaes.com.br\n\nVocê também passa por esse congelamento na hora de começar as coisas? Conte sua experiência nos comentários!\n\n---\n#TDAH #FunçõesExecutivas #Neurociência #Dopamina #BloqueioExecutivo #Procrastinação #SaudeMental #Neuropsicologia #DeoMagalhaes #Barkley #TDAHAdulto #Foco #Autorregulação #PsicologiaCognitiva #InérciaMental
+            },
+
+            "vinculo-amoroso": {
+                articleSlug: "2026-10-29-neuroquimica-vinculo-amoroso",
+                articleTitle: "A Neuroquímica do Vínculo Amoroso: Ocitocina, Vasopressina e Apego Seguro",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROBIOLOGIA DO AMOR",
+                        title: "Por que a paixão acaba, mas o verdadeiro amor acalma o corpo?",
+                        body: "A ciência de como a dopamina dá lugar à ocitocina e à vasopressina para transformar o encanto inicial em um escudo biológico contra o estresse.",
+                        footer: "Deslize para entender a química do apego 👉"
+                    },
+                    {
+                        type: "problem",
+                        badge: "A ILUSÃO DA NOVIDADE",
+                        title: "Quando a tempestade de dopamina começa a baixar...",
+                        body: "Nos primeiros meses, a dopamina cria euforia obsessiva. Quando esse turbilhão esfria, muitos acham que o amor acabou.\n\nNeurobiologicamente, é a transição onde o cérebro decide se construirá um vínculo profundo ou buscará outra euforia fugaz.",
+                        footer: "Os neuropeptídeos do vínculo 👉"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "OS MOLECULADORES DO APEGO",
+                        title: "Ocitocina e Vasopressina: A Assinatura da Conexão",
+                        body: "• Ocitocina: Ativa o núcleo accumbens e córtex pré-frontal, diminuindo o medo e nutrindo acolhimento e ternura.\n• Vasopressina: No pálido ventral, ancora a memória social, a fidelidade e a proteção recíproca.",
+                        footer: "A copregulação do casal 👉"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "PSICOFISIOLOGIA CONJUGAL",
+                        title: "Segurar a mão de quem você confia altera seus batimentos",
+                        body: "Sob estresse, segurar a mão de um estranho quase nada altera.\n\nSegurar a mão do parceiro com apego seguro silencia a amígdala e o córtex insular na hora: pressão arterial e cortisol caem em sincronia biológica mútua.",
+                        footer: "4 hábitos para o casal 👉"
+                    },
+                    {
+                        type: "steps",
+                        badge: "NUTRIÇÃO NEURAL DIÁRIA",
+                        title: "4 Hábitos para Alimentar a Ocitocina no Casal",
+                        body: "1. Abraço Sustentado (20 segundos): ativa as fibras C-táteis e dispara ocitocina.\n2. Validação Antes da Solução: acolha o sentimento antes de tentar consertar o problema.\n3. Reparação Rápida: casais saudáveis não são os que nunca brigam, mas os que se reconectam rápido.\n4. Presença sem Telas: 15 minutos diários de conversa com contato visual.",
+                        footer: "Avalie sua relação no portal 👉"
+                    },
+                    {
+                        type: "cta",
+                        badge: "RELAÇÕES CONSCIENTES",
+                        title: "Como está a segurança do seu vínculo afetivo hoje?",
+                        body: "Publicamos um ensaio completo dissecando a neurobiologia do apego seguro e a Terapia Focada nas Emoções (EFT).\n\nE criamos a Escala de Satisfação Conjugal e Segurança Afetiva (T-18) para autoaplicação anônima e gratuita.",
+                        footer: "@deomagalhaesneuro • Link na Bio"
+                    }
+                ],
+                caption: Você já reparou que a presença de certas pessoas acalma instantaneamente o seu peito, enquanto outras mantêm seu corpo em alerta constante?\n\nA neurociência afetiva descobriu que o amor maduro de longo prazo não se sustenta no turbilhão de adrenalina e dopamina do início da paixão. Pelo contrário: a paixão é um sequestro atencional evolutivo, enquanto o amor maduro é um sistema neuroquímico de copregulação fisiológica.\n\nQuando um casal constrói segurança afetiva, a simples proximidade física ou o som da voz do outro libera ocitocina e vasopressina no núcleo accumbens e no córtex pré-frontal. O resultado biológico? A amígdala reduz seu alarme de perigo, o eixo do estresse desacelera a produção de cortisol e o coração passa a bater em coerência autonômica.\n\nMas essa segurança não surge do acaso: ela é cultivada dia após dia através de abraços demorados, escuta ativa sem telas, validação emocional e a coragem de pedir desculpas e reparar atritos rapidamente.\n\n👉 Acesse o artigo completo e aplique a Escala de Satisfação Conjugal e Segurança Afetiva (T-18) no link da bio: deomagalhaes.com.br\n\nComo você e seu parceiro costumam se acolher nos dias difíceis? Compartilhe nos comentários!\n\n---\n#Neurociência #Psicologia #ApegoSeguro #Ocitocina #RelacionamentoSaudavel #Casal #TerapiaDeCasal #VínculoAfetivo #SaudeEmocional #Neuropsicologia #DeoMagalhaes #AmorMaduro #PsicologiaClinica #InteligenciaEmocional #ConexaoHumana
+            },
             "neuroinflamacao": {
                 articleSlug: "2026-10-27-neuroinflamacao-microbiota-eixo-intestino-cerebro",
                 articleTitle: "Neuroinflamação, Microbiota e Saúde Mental: O Eixo Intestino-Cérebro na Ansiedade e Depressão",
@@ -1515,9 +1617,9 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
         };
 
         // Estado do Studio
-        let currentPresetKey = "dopamina";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS.dopamina.slides));
-        let currentCaption = PRESETS.dopamina.caption;
+        let currentPresetKey = "bloqueio-executivo";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["bloqueio-executivo"].slides));
+        let currentCaption = PRESETS["bloqueio-executivo"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização

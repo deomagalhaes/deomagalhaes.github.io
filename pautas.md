@@ -9,10 +9,6 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **O Fenômeno do Bloqueio Executivo no TDAH: Por Que a Paralisia da Inércia Não É Preguiça**
-  - *Abordagem:* Córtex pré-frontal dorsolateral, estriado ventral, déficit de tônus catecolaminérgico e a neurociência do arranque motor.
-  - *Categorias:* `tdah-tea`, `reabilitacao-cognitiva`, `saude-mental`.
-
 - [ ] **A Fadiga por Decisão e a Depleção do Ego: Como Escolhas Cotidianas Consomem o Córtex Pré-Frontal**
   - *Abordagem:* Consumo de glicose neuronal, erosão do autocontrole, heurísticas impulsivas e arquitetura de escolhas (Baumeister & Kahneman).
   - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
@@ -21,6 +17,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **O Fenômeno do Bloqueio Executivo no TDAH: Por Que a Paralisia Não É Preguiça** (Publicado em 29/10/2026)
 - [x] **A Neuroquímica do Vínculo Amoroso: Ocitocina, Vasopressina e Apego Seguro** (Publicado em 29/10/2026)
 - [x] **Arquitetura do Pensamento Crítico: Como Desarmar o Viés de Confirmação** (Publicado em 29/10/2026)
 - [x] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala** (Publicado em 28/10/2026)
