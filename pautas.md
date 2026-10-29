@@ -25,6 +25,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **Arquitetura do Pensamento Crítico: Como Desarmar o Viés de Confirmação** (Publicado em 29/10/2026)
 - [x] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala** (Publicado em 28/10/2026)
 - [x] **O Sistema Glinfático e o Sono Profundo de Ondas Lentas (NREM): A Limpeza Noturna de Toxinas Cerebrais** (Publicado em 28/10/2026)
 - [x] **A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse** (Publicado em 28/10/2026)

@@ -23,8 +23,9 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-13** | **Escala de Autoeficácia Geral e Resiliência Psíquica** | Agência Pessoal, Crença de Competência e Resiliência | `artigos/teste-autoeficacia.html` | ✅ Concluído |
 | **T-15** | **Inventário de Assertividade e Limites Interpessoais** | Comunicação Não-Violenta, Autoestima e Respeito aos Limites | `artigos/teste-assertividade.html` | ✅ Concluído |
 | **T-16** | **Escala de Autocompaixão Clínica (Neff)** | Autocrítica Tóxica vs. Acolhimento e Humanidade Compartilhada | `artigos/teste-autocompaixao.html` | ✅ Concluído |
-| **T-17** | **Inventário de Rigidez Epistêmica e Pensamento Crítico** | Viés de Confirmação, Dogmatismo e Flexibilidade Intelectual | `artigos/teste-rigidez-epistemica.html` | ⏳ *Próximo da fila* |
-| **T-18** | **Escala de Satisfação Conjugal e Segurança Afetiva** | Vínculo de Parceria, Ocitocina e Resolução de Conflitos | `artigos/teste-seguranca-afetiva.html` | ⏳ Aguardando |
+| **T-17** | **Inventário de Rigidez Epistêmica e Pensamento Crítico** | Viés de Confirmação, Dogmatismo e Flexibilidade Intelectual | `artigos/teste-rigidez-epistemica.html` | ✅ Concluído |
+| **T-18** | **Escala de Satisfação Conjugal e Segurança Afetiva** | Vínculo de Parceria, Ocitocina e Resolução de Conflitos | `artigos/teste-seguranca-afetiva.html` | ⏳ *Próximo da fila* |
+| **T-19** | **Escala de Inércia Psíquica e Arranque Motor** | Bloqueio Executivo, Tônus Dopaminérgico e TDAH | `artigos/teste-bloqueio-executivo.html` | ⏳ Aguardando |
 
 ---
 

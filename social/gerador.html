@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="autocompaixao" selected>A Neurobiologia da Autocompaixão: Por Que Ser Gentil Desinflama o Corpo</option>
+                        <option value="pensamento-critico" selected>Arquitetura do Pensamento Crítico: Por Que Acreditamos no Que Queremos</option>
+                        <option value="autocompaixao">A Neurobiologia da Autocompaixão: Por Que Ser Gentil Desinflama o Corpo</option>
                         <option value="sistema-glinfatico">O Sistema Glinfático: A Faxina Noturna de Toxinas Cerebrais</option>
                         <option value="perdao-magoa">A Neurobiologia do Perdão e da Mágoa: O Custo do Rancor</option>
                         <option value="cerebro-fragmentado">O Cérebro Fragmentado: Troca de Tarefas e Resíduo de Atenção</option>
@@ -649,6 +650,55 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "pensamento-critico": {
+                "articleSlug":  "2026-10-29-arquitetura-pensamento-critico",
+                "articleTitle":  "Arquitetura do Pensamento Crítico: Por Que Acreditamos no Que Queremos",
+                "slides":  [
+                               {
+                                   "type":  "cover",
+                                   "badge":  "NEUROCIÊNCIA DA DECISÃO",
+                                   "title":  "Por que é tão doloroso admitir que estamos errados?",
+                                   "body":  "Como o cérebro economiza energia com atalhos lógicos, o viés de confirmação e a neurobiologia da rigidez mental.",
+                                   "footer":  "Arraste para entender a ciência 👉"
+                               },
+                               {
+                                   "type":  "problem",
+                                   "badge":  "O CÉREBRO ECONÔMICO",
+                                   "title":  "Seu cérebro prefere estar certo a saber a verdade",
+                                   "body":  "O cérebro consome 20% da glicose corporal. Pensar com rigor deliberativo (Sistema 2) cansa.\n\nPor isso, o Sistema 1 automático busca confirmações rápidas do que já pensava antes.",
+                                   "footer":  "A química do viés 👉"
+                               },
+                               {
+                                   "type":  "neuro",
+                                   "badge":  "DOPAMINA VS. DOR",
+                                   "title":  "Ouvir o que concorda dá prazer físico",
+                                   "body":  "Ser validado libera dopamina no núcleo accumbens.\n\nSer confrontado com fatos contrários ativa a amígdala e a ínsula anterior, registrando o desmentido como dor social.",
+                                   "footer":  "A mente como advogada 👉"
+                               },
+                               {
+                                   "type":  "mechanism",
+                                   "badge":  "TEORIA ARGUMENTATIVA",
+                                   "title":  "A razão evoluiu para convencer na tribo",
+                                   "body":  "Mercier e Sperber provaram que a razão humana não evoluiu para auditar erros com neutralidade, mas para defender o próprio status no grupo social.",
+                                   "footer":  "Os 4 hábitos críticos 👉"
+                               },
+                               {
+                                   "type":  "steps",
+                                   "badge":  "PRÁTICAS METACOGNITIVAS",
+                                   "title":  "Como Treinar a Flexibilidade Intelectual",
+                                   "body":  "1. O Teste de Popper: \u0027Que fato concreto me faria mudar de ideia hoje?\u0027\n2. Princípio da Caridade: reformule a tese alheia da forma mais forte possível antes de refutar.\n3. Regra das Duas Hipóteses: sempre imagine 2 explicações sem malícia.\n4. Humildade Epistêmica: aprenda a dizer \u0027Eu não sei\u0027.",
+                                   "footer":  "Ensaio completo no portal 👉"
+                               },
+                               {
+                                   "type":  "cta",
+                                   "badge":  "ENSAIO COMPLETO NO SITE",
+                                   "title":  "Coragem não é ter razão: é ter a ousadia de aprender.",
+                                   "body":  "Confira o ensaio e o Inventário de Rigidez Epistêmica no portal:\ndeomagalhaes.com.br",
+                                   "footer":  "Deo Magalhães • CRP 04/42784"
+                               }
+                           ],
+                "caption":  "Você já reparou como é reconfortante encontrar alguém ou alguma notícia que valida exatamente o que você já acreditava? E como é irritante quando alguém apresenta dados sólidos que desmentem sua opinião? 🧠⚡\n\nIsso não acontece porque você é uma pessoa má ou teimosa por capricho; é como a neurobiologia da cognição foi moldada pela evolução.\n\nPensar com profundidade, checar fontes e desconstruir preconceitos exige um esforço metabólico descomunal do córtex pré-frontal dorsolateral. Diante desse custo energético alto, o encéfalo humano prefere operar por atalhos heurísticos (o Sistema 1 de Daniel Kahneman).\n\nMais impressionante ainda: quando somos validados, nossos centros de recompensa liberam dopamina real. Mas quando somos desmentidos, a amígdala e o córtex insular registram a contradição como ameaça física ou dor social. Passamos a defender nossa opinião não porque ela seja verdadeira, mas porque nos fundimos emocionalmente a ela.\n\nO verdadeiro pensamento crítico não consiste em ter uma resposta pronta para tudo. Consiste na humildade epistêmica de perguntar: \"E se eu estiver errado? Que dados me fariam mudar de ideia?\".\n\nPubliquei um ensaio detalhado sobre a arquitetura do pensamento crítico e lancei um teste clínico interativo para avaliar o seu grau de flexibilidade intelectual no meu portal.\n\n🔗 Acesse pelo link do perfil ou visite: deomagalhaes.com.br\n\n#PensamentoCrítico #Neurociência #ViésDeConfirmação #DanielKahneman #SaúdeMental #PsicologiaCognitiva #FlexibilidadeMental #DeoMagalhães #MaturidadeEmocional"
+            },
             "autocompaixao": {
                 "articleSlug":  "2026-10-28-neurobiologia-autocompaixao",
                 "articleTitle":  "A Neurobiologia da Autocompaixão: Por Que Ser Gentil Consigo Desinflama o Corpo",
@@ -2016,9 +2066,9 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
         };
 
         // Estado do Studio
-        let currentPresetKey = "autocompaixao";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["autocompaixao"].slides));
-        let currentCaption = PRESETS["autocompaixao"].caption;
+        let currentPresetKey = "pensamento-critico";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["pensamento-critico"].slides));
+        let currentCaption = PRESETS["pensamento-critico"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização

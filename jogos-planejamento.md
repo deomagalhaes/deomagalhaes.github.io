@@ -21,8 +21,8 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 12** | **Matriz de Associação Semântica** | Memória Semântica, Categorização e Raciocínio Verbal | `recursos/jogo-associacao-semantica.html` | ✅ **Publicado** |
 | **Dia 13** | **Torre de Londres (Planejamento Motor)** | Funções Executivas e Resolução de Problemas Sequenciais | `recursos/jogo-torre-londres.html` | ✅ **Publicado** |
 | **Dia 14** | **Blocos de Corsi (Memória Visuoespacial)** | Memória Operacional Visuoespacial e Span Atencional | `recursos/jogo-blocos-corsi.html` | ✅ **Publicado** |
-| **Dia 15** | **N-Back Dual (Atualização de Memória)** | Memória de Trabalho Ativa e Controle Atencional | `recursos/jogo-n-back.html` | ⏳ *Próximo da fila* |
-| **Dia 16** | **Criptografia Neural (Substituição de Padrões)** | Atenção Alternada, Velocidade de Codificação e Agilidade Mental | `recursos/jogo-criptografia-neural.html` | ⏳ Aguardando |
+| **Dia 15** | **N-Back Dual (Atualização de Memória)** | Memória de Trabalho Ativa e Controle Atencional | `recursos/jogo-n-back.html` | ✅ **Publicado** |
+| **Dia 16** | **Criptografia Neural (Substituição de Padrões)** | Atenção Alternada, Velocidade de Codificação e Agilidade Mental | `recursos/jogo-criptografia-neural.html` | ⏳ *Próximo da fila* |
 
 ---
 
