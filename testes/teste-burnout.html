@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Sobrecarga e Burnout Clínico – Deo Magalhães</title>
+    <meta name="description" content="Avalie seus níveis de exaustão emocional, despersonalização e eficácia profissional através deste inventário de rastreamento fundamentado nas dimensões do Burnout.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+    
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --surface: #ffffff;
+            --bg-page: #f8fafc;
+            --text-dark: #1f2937;
+            --text-muted: #4b5563;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .test-container {
+            max-width: 860px;
+            margin: 2rem auto 4rem auto;
+            padding: 2.2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 95, 115, 0.08);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .badge-test {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .test-header h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin: 0.2rem 0 0.8rem 0;
+            font-weight: 800;
+        }
+
+        .test-header p {
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto;
+            font-size: 1.02rem;
+            line-height: 1.55;
+        }
+
+        .instructions-card {
+            background: #f0fdfa;
+            border-left: 4px solid #0d9488;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: #134e4a;
+            line-height: 1.5;
+        }
+
+        /* Questões */
+        .question-block {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .question-block.answered {
+            border-left: 4px solid #0a9396;
+            background: #fafcfc;
+        }
+
+        .question-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .question-number {
+            font-size: 0.85rem;
+            color: #0a9396;
+            font-weight: 800;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .option-item {
+            position: relative;
+        }
+
+        .option-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 8px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            background: white;
+            min-height: 48px;
+        }
+
+        .option-item input[type="radio"]:checked + .option-label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .option-label:hover {
+            border-color: var(--primary-hover);
+            background: #f8fafc;
+        }
+
+        /* Botão Enviar */
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #0a9396 0%, #005f73 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 2rem;
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-submit-test:hover:not(:disabled) {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+
+        .btn-submit-test:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Área de Resultados */
+        .result-panel {
+            display: none;
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background: #fdfbf7;
+            border: 2px solid #fed7aa;
+            border-radius: 18px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-panel.active {
+            display: block;
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .level-low { background: #d1e7dd; color: #0f5132; }
+        .level-moderate { background: #fff3cd; color: #856404; }
+        .level-high { background: #fee2e2; color: #991b1b; }
+
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 1.5rem 0;
+        }
+
+        .dim-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dim-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .dim-score {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .dim-desc {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .clinical-disclaimer {
+            font-size: 0.85rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 640px) {
+            .test-container {
+                padding: 1.2rem;
+                margin: 1rem auto;
+            }
+            .test-header h1 {
+                font-size: 1.6rem;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top-bar Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Padrão -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html" class="active">Artigos</a>
+                <a href="../recursos.html">Recursos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container test-container">
+            <div class="test-header">
+                <div class="badge-test">⚡ Triagem Psicoeducativa de Sobrecarga</div>
+                <h1>Inventário de Sobrecarga e Burnout Clínico</h1>
+                <p>Instrumento estruturado para avaliar sinais de esgotamento físico e mental, despersonalização/cinismo e sensação de ineficácia profissional decorrentes de estresse crônico desregulado.</p>
+            </div>
+
+            <div class="instructions-card">
+                <strong>📌 Como responder:</strong> Indique com que frequência você vivenciou cada uma das sensações abaixo ao longo dos <strong>últimos 3 meses</strong>. Seja o mais espontâneo e sincero possível. Suas respostas são 100% confidenciais e processadas exclusivamente no seu próprio navegador.
+            </div>
+
+            <form id="burnout-form">
+                <!-- Questões geradas via JavaScript para garantir rapidez e organização -->
+                <div id="questions-list"></div>
+
+                <button type="submit" id="btn-submit" class="btn-submit-test">
+                    Calcular Meu Resultado de Sobrecarga ➔
+                </button>
+            </form>
+
+            <!-- Painel de Resultados -->
+            <div id="result-panel" class="result-panel">
+                <div id="result-badge" class="result-badge level-low">Escore Calculado</div>
+                <h2 id="result-title" style="color: var(--primary); margin: 0 0 0.5rem 0;">Interpretação Geral</h2>
+                <p id="result-summary" style="line-height: 1.6; color: #334155;"></p>
+
+                <div class="dimensions-grid">
+                    <div class="dim-card">
+                        <div class="dim-title">1. Exaustão Emocional</div>
+                        <div class="dim-score" id="score-ee">0 / 20</div>
+                        <div class="dim-desc">Sensação de esgotamento de recursos energéticos e emocionais internos.</div>
+                    </div>
+                    <div class="dim-card">
+                        <div class="dim-title">2. Despersonalização / Cinismo</div>
+                        <div class="dim-score" id="score-dp">0 / 20</div>
+                        <div class="dim-desc">Distanciamento afetivo, frieza ou irritação defensiva com colegas e demandas.</div>
+                    </div>
+                    <div class="dim-card">
+                        <div class="dim-title">3. Sobrecarga de Eficácia</div>
+                        <div class="dim-score" id="score-pe">0 / 20</div>
+                        <div class="dim-desc">Dúvida sobre a relevância do próprio esforço e perda do senso de realização.</div>
+                    </div>
+                </div>
+
+                <div id="clinical-guidance" style="background: white; border-radius: 12px; padding: 1.2rem; border: 1px solid #fed7aa;">
+                    <!-- Injetado dinamicamente -->
+                </div>
+
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <a href="../agendamento.html" class="cta-button" style="display: inline-block; padding: 12px 28px; background: var(--primary); color: white; border-radius: 10px; font-weight: 700; text-decoration: none;">
+                        Agendar Avaliação Neuropsicológica
+                    </a>
+                </div>
+
+                <div class="clinical-disclaimer">
+                    ⚠️ <strong>Nota ética e científica:</strong> Este teste é um recurso psicoeducativo de autoavaliação e triagem e <strong>não substitui uma consulta, avaliação neuropsicológica clínica ou diagnóstico médico especializado</strong>. Em caso de sofrimento persistente, procure sempre um profissional de saúde mental registrado.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Instrumento digital para avaliação e monitoramento de saúde psicológica.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Processamento e Escores -->
+    <script>
+    (function(){
+        'use strict';
+
+        const QUESTIONS = [
+            // Exaustão Emocional (EE)
+            { id: 1, dim: 'ee', text: "Sinto-me emocionalmente esgotado e drenado ao final de um dia normal de trabalho." },
+            { id: 2, dim: 'ee', text: "Acordo cansado pela manhã só de pensar em ter que encarar mais uma jornada." },
+            { id: 3, dim: 'ee', text: "Trabalhar em contato direto com pessoas ou demandas tem sido um esforço desgastante além da conta." },
+            { id: 4, dim: 'ee', text: "Sinto que estou operando no meu limite absoluto físico e mental." },
+
+            // Despersonalização / Cinismo (DP)
+            { id: 5, dim: 'dp', text: "Tenho me tornado mais frio, cínico ou insensível em relação aos problemas e pedidos das pessoas." },
+            { id: 6, dim: 'dp', text: "Preocupo-me com o fato de o trabalho estar endurecendo meu caráter e minha empatia." },
+            { id: 7, dim: 'dp', text: "Sinto vontade de me isolar e não responder mensagens profissionais mesmo em horário habitual." },
+            { id: 8, dim: 'dp', text: "Tenho a impressão de que trato algumas pessoas como se fossem meros objetos ou tarefas a liquidar." },
+
+            // Sobrecarga de Eficácia / Perda de Realização (PE)
+            { id: 9, dim: 'pe', text: "Sinto que meu trabalho já não gera impacto real ou significado verdadeiro." },
+            { id: 10, dim: 'pe', text: "Tenho dificuldade para me alegrar genuinamente quando concluo um projeto com sucesso." },
+            { id: 11, dim: 'pe', text: "Duvido cada vez mais do valor e da qualidade daquilo que entrego." },
+            { id: 12, dim: 'pe', text: "Sinto que estou apenas 'apagando incêndios' em vez de construir algo produtivo." }
+        ];
+
+        const SCALE_OPTIONS = [
+            { label: "Nunca", val: 0 },
+            { label: "Raramente", val: 1 },
+            { label: "Às Vezes", val: 2 },
+            { label: "Frequentemente", val: 3 },
+            { label: "Sempre", val: 4 }
+        ];
+
+        const questionsList = document.getElementById('questions-list');
+        const burnoutForm = document.getElementById('burnout-form');
+        const resultPanel = document.getElementById('result-panel');
+        const resultBadge = document.getElementById('result-badge');
+        const resultTitle = document.getElementById('result-title');
+        const resultSummary = document.getElementById('result-summary');
+        const scoreEe = document.getElementById('score-ee');
+        const scoreDp = document.getElementById('score-dp');
+        const scorePe = document.getElementById('score-pe');
+        const clinicalGuidance = document.getElementById('clinical-guidance');
+
+        // Renderizar Questões
+        QUESTIONS.forEach((q, idx) => {
+            const block = document.createElement('div');
+            block.className = 'question-block';
+            block.id = `qblock-${q.id}`;
+
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.innerHTML = `<span class="question-number">${idx + 1}.</span> ${q.text}`;
+            block.appendChild(title);
+
+            const optionsGrid = document.createElement('div');
+            optionsGrid.className = 'options-grid';
+
+            SCALE_OPTIONS.forEach(opt => {
+                const optItem = document.createElement('div');
+                optItem.className = 'option-item';
+
+                const radioId = `q_${q.id}_val_${opt.val}`;
+                optItem.innerHTML = `
+                    <input type="radio" name="question_${q.id}" id="${radioId}" value="${opt.val}" required>
+                    <label for="${radioId}" class="option-label">
+                        <span>${opt.label}</span>
+                    </label>
+                `;
+
+                optItem.querySelector('input').addEventListener('change', () => {
+                    block.classList.add('answered');
+                });
+
+                optionsGrid.appendChild(optItem);
+            });
+
+            block.appendChild(optionsGrid);
+            questionsList.appendChild(block);
+        });
+
+        // Submissão do Teste
+        burnoutForm.addEventListener('submit', function(e){
+            e.preventDefault();
+
+            let eeSum = 0;
+            let dpSum = 0;
+            let peSum = 0;
+
+            QUESTIONS.forEach(q => {
+                const selected = document.querySelector(`input[name="question_${q.id}"]:checked`);
+                const val = selected ? parseInt(selected.value, 10) : 0;
+                if (q.dim === 'ee') eeSum += val;
+                else if (q.dim === 'dp') dpSum += val;
+                else if (q.dim === 'pe') peSum += val;
+            });
+
+            const totalScore = eeSum + dpSum + peSum; // Máximo 48
+
+            scoreEe.textContent = `${eeSum} / 16`;
+            scoreDp.textContent = `${dpSum} / 16`;
+            scorePe.textContent = `${peSum} / 16`;
+
+            let badgeClass = 'level-low';
+            let title = 'Nível de Sobrecarga Baixo / Adaptativo';
+            let summary = '';
+            let guidance = '';
+
+            if (totalScore <= 14) {
+                badgeClass = 'level-low';
+                title = 'Equilíbrio e Sobrecarga Sob Controle';
+                summary = 'Seus escores sugerem que, no momento, seu organismo tem conseguido responder adequadamente às demandas de trabalho sem indícios de esgotamento crônico ou despersonalização severa.';
+                guidance = '<strong>🌱 Recomendações Preventivas:</strong> Continue priorizando suas noites de sono reparador, preserve seus momentos de desconexão nos fins de semana e mantenha a prática de pausas conscientes ao longo do dia.';
+            } else if (totalScore <= 28) {
+                badgeClass = 'level-moderate';
+                title = 'Alerta de Sobrecarga Moderada / Risco de Esgotamento';
+                summary = 'Você apresenta sinais significativos de fadiga emocional e perda de rendimento que merecem atenção clínica. O corpo está emitindo sinais de alerta de que o ritmo atual é insustentável a longo prazo.';
+                guidance = '<strong>⚠️ Recomendações de Manejo:</strong> É fundamental auditar sua rotina: identifique quais demandas podem ser delegadas ou adiadas, institua fronteiras rígidas ao uso de telas e trabalho noturno e considere acompanhamento terapêutico antes que o quadro se cronifique.';
+            } else {
+                badgeClass = 'level-high';
+                title = 'Sinais Elevados de Burnout Clínico / Exaustão Severa';
+                summary = 'Seu perfil indica níveis críticos de exaustão emocional, distanciamento afetivo defensivo e comprometimento da sensação de eficácia. O córtex pré-frontal e o eixo de estresse estão sob sobrecarga contínua.';
+                guidance = '<strong>🛑 Ação Recomendada:</strong> Não normalize este estado de exaustão. É altamente recomendável buscar uma consulta clínica ou avaliação neuropsicológica especializada para estruturar um plano de recuperação, readaptação ambiental e alívio somático imediato.';
+            }
+
+            resultBadge.className = `result-badge ${badgeClass}`;
+            resultBadge.textContent = `Pontuação Geral: ${totalScore} de 48`;
+            resultTitle.textContent = title;
+            resultSummary.textContent = summary;
+            clinicalGuidance.innerHTML = guidance;
+
+            resultPanel.classList.add('active');
+            resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+    })();
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>

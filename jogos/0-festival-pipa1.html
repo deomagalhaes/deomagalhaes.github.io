@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha de Pipas Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-gradient-start: #87CEEB;
+            --sky-gradient-end: #B0E0E6;
+            --container-bg: rgba(255, 255, 255, 0.3);
+            --text-dark: #333;
+            --text-light: #fff;
+            --accent-color: #FF6B6B;
+            --player-color-1: #6C5CE7;
+            --player-color-2: #A29BFE;
+            --robot-color-1: #4ECDC4;
+            --robot-color-2: #44A08D;
+            --spark-color: #FFD700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--sky-gradient-start) 0%, var(--sky-gradient-end) 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        /* Animação de fundo e Nuvens */
+        .sky-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 100px;
+            animation: float 60s infinite linear;
+        }
+        .cloud:before, .cloud:after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 100px;
+        }
+        .cloud1 { width: 200px; height: 60px; top: 10%; animation-duration: 50s; }
+        .cloud1:before { width: 100px; height: 80px; top: -40px; left: 20px; }
+        .cloud1:after { width: 80px; height: 60px; top: -30px; right: 30px; }
+        .cloud2 { width: 120px; height: 40px; top: 30%; animation-duration: 70s; animation-delay: -15s; }
+        .cloud2:before { width: 70px; height: 50px; top: -25px; left: 15px; }
+        .cloud3 { width: 150px; height: 50px; top: 60%; animation-duration: 60s; animation-delay: -25s; }
+        .cloud3:after { width: 90px; height: 70px; top: -35px; right: 25px; }
+
+        @keyframes float {
+            from { transform: translateX(-250px); }
+            to { transform: translateX(calc(100vw + 250px)); }
+        }
+
+        .game-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            width: 100%;
+            padding: 25px;
+            background: var(--container-bg);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .info-label { font-size: 1rem; color: #555; font-weight: 600; }
+        .info-value { font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
+
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            background: linear-gradient(180deg, var(--sky-gradient-start) 0%, #a2dff3 100%);
+            border: 4px solid #fff;
+            border-radius: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: inset 0 6px 20px rgba(0,0,0,0.15);
+            cursor: none;
+        }
+
+        .cursor {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--text-light);
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .kite {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            clip-path: polygon(50% 0%, 100% 40%, 80% 100%, 20% 100%, 0% 40%);
+            will-change: transform, top, left;
+            z-index: 10;
+        }
+        .player-kite { background: linear-gradient(45deg, var(--player-color-1), var(--player-color-2)); }
+        .robot-kite { background: linear-gradient(45deg, var(--robot-color-1), var(--robot-color-2)); }
+
+        .kite-line {
+            position: absolute;
+            background: #222;
+            width: 1.5px;
+            transform-origin: top center;
+            z-index: 5;
+            will-change: transform, height;
+        }
+
+        .cutting-spark {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: var(--spark-color);
+            border-radius: 50%;
+            box-shadow: 0 0 15px 8px var(--spark-color), 0 0 25px 15px rgba(255, 255, 0, 0.7);
+            transform: translate(-50%, -50%) scale(0);
+            animation: spark-animation 0.4s ease-out;
+            z-index: 20;
+        }
+
+        @keyframes spark-animation {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.8); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        }
+        
+        #message-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 50px;
+            text-align: center;
+        }
+        
+        .controls { display: flex; gap: 20px; justify-content: center; }
+        .btn {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .btn:active { transform: translateY(-1px); }
+        .btn-primary { background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; }
+        .btn-secondary { background: linear-gradient(135deg, #95A5A6, #7F8C8D); color: white; }
+        .btn:disabled { background: #BDBDBD; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    </style>
+</head>
+<body>
+    <div class="sky-background">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+    </div>
+
+    <div class="game-container">
+        <header class="header">
+            <h1>🪁 Batalha de Pipas Pro 🪁</h1>
+        </header>
+
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">Nível</div>
+                <div class="info-value" id="level">1</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Vitórias</div>
+                <div class="info-value" id="wins">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Robô</div>
+                <div class="info-value" id="robot-status">Inativo</div>
+            </div>
+        </div>
+
+        <div id="message-box">
+            Mova o mouse para controlar sua pipa. Cruce a linha do robô para vencer!
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <div class="cursor" id="cursor"></div>
+            <div class="kite player-kite" id="playerKite"></div>
+            <div class="kite-line" id="playerLine"></div>
+            <div class="kite robot-kite" id="robotKite"></div>
+            <div class="kite-line" id="robotLine"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">Iniciar Jogo</button>
+            <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO INICIAL E ELEMENTOS DO DOM ---
+        const dom = {
+            level: document.getElementById('level'),
+            wins: document.getElementById('wins'),
+            robotStatus: document.getElementById('robot-status'),
+            messageBox: document.getElementById('message-box'),
+            startBtn: document.getElementById('startBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            gameArea: document.getElementById('gameArea'),
+            cursor: document.getElementById('cursor'),
+            player: {
+                kite: document.getElementById('playerKite'),
+                line: document.getElementById('playerLine'),
+            },
+            robot: {
+                kite: document.getElementById('robotKite'),
+                line: document.getElementById('robotLine'),
+            },
+        };
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // --- ESTADO GLOBAL DO JOGO ---
+        let state = {
+            level: 1,
+            wins: 0,
+            isPlaying: false,
+            gameLoopId: null,
+            gameAreaRect: dom.gameArea.getBoundingClientRect(),
+        };
+
+        // --- OBJETOS DO JOGO (JOGADOR E ROBÔ) ---
+        const createKite = (isPlayer) => ({
+            x: 0, y: 0,
+            vx: 0, vy: 0,
+            targetX: 0, targetY: 0,
+            width: 50, height: 60,
+            lineAnchorX: state.gameAreaRect.width / (isPlayer ? 3 : 1.5),
+            lineAnchorY: state.gameAreaRect.height + 100,
+            angle: 0,
+            physics: {
+                damping: 0.92,
+                stiffness: isPlayer ? 0.08 : 0.02,
+                wind: 0.05,
+            }
+        });
+
+        let player = createKite(true);
+        let robot = createKite(false);
+        robot.ai = {
+            state: 'patrolling', // patrolling, attacking, evading
+            targetSwitchCooldown: 0,
+            attackCooldown: 0,
+        };
+
+        // --- FUNÇÕES DE SOM ---
+        function playSound(type) {
+            if (!audioContext) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+
+            switch (type) {
+                case 'start':
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.2);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    break;
+                case 'win':
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                    setTimeout(() => {
+                        const osc2 = audioContext.createOscillator();
+                        const gain2 = audioContext.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(audioContext.destination);
+                        gain2.gain.setValueAtTime(0.2, audioContext.currentTime);
+                        osc2.type = 'triangle';
+                        osc2.frequency.setValueAtTime(659.25, audioContext.currentTime); // E5
+                        gain2.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                        osc2.start();
+                        osc2.stop(audioContext.currentTime + 0.5);
+                    }, 100);
+                    break;
+                case 'lose':
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.5);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                    break;
+                case 'spark':
+                     oscillator.type = 'square';
+                     oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                     gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                     break;
+            }
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // --- LÓGICA PRINCIPAL DO JOGO ---
+        function startGame() {
+            if (state.isPlaying) return;
+            playSound('start');
+            dom.startBtn.disabled = true;
+            dom.startBtn.textContent = "Em Jogo";
+            startRound();
+        }
+
+        function startRound() {
+            state.isPlaying = true;
+            updateMessage(`Nível ${state.level} - A batalha começa!`);
+            dom.robotStatus.textContent = "Voando";
+            
+            resetKitePositions();
+            
+            if (state.gameLoopId) cancelAnimationFrame(state.gameLoopId);
+            state.gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        function resetKitePositions() {
+            player.x = state.gameAreaRect.width / 4;
+            player.y = state.gameAreaRect.height * 0.6;
+            player.targetX = player.x;
+            player.targetY = player.y;
+            player.vx = player.vy = 0;
+            
+            robot.x = state.gameAreaRect.width * 0.75;
+            robot.y = state.gameAreaRect.height * 0.3;
+            robot.vx = robot.vy = 0;
+            robot.ai.state = 'patrolling';
+            robot.ai.attackCooldown = 180;
+
+            [dom.player, dom.robot].forEach(k => {
+                k.kite.style.transition = 'none';
+                k.kite.style.display = 'block';
+                k.line.style.display = 'block';
+                k.kite.style.transform = 'rotate(0deg)';
+            });
+        }
+
+        function gameLoop() {
+            if (!state.isPlaying) return;
+
+            updateKitePhysics(player);
+            updateRobotAI();
+            updateKitePhysics(robot);
+            
+            renderKite(dom.player, player);
+            renderKite(dom.robot, robot);
+
+            checkCollision();
+
+            state.gameLoopId = requestAnimationFrame(gameLoop);
+        }
+        
+        // --- ATUALIZAÇÕES DE FÍSICA E IA ---
+        function updateKitePhysics(kite) {
+            // Força da linha (mola)
+            const dx = kite.targetX - kite.x;
+            const dy = kite.targetY - kite.y;
+            let ax = dx * kite.physics.stiffness;
+            let ay = dy * kite.physics.stiffness;
+
+            // Força do vento
+            ax += (Math.random() - 0.5) * kite.physics.wind;
+            ay += (Math.random() - 0.5) * kite.physics.wind;
+
+            // Atualiza velocidade
+            kite.vx += ax;
+            kite.vy += ay;
+            kite.vx *= kite.physics.damping;
+            kite.vy *= kite.physics.damping;
+
+            // Atualiza posição
+            kite.x += kite.vx;
+            kite.y += kite.vy;
+
+            // Limites da área de jogo
+            kite.x = Math.max(0, Math.min(state.gameAreaRect.width - kite.width, kite.x));
+            kite.y = Math.max(0, Math.min(state.gameAreaRect.height - kite.height, kite.y));
+
+            // Ângulo da pipa
+            kite.angle = kite.vx * 2;
+        }
+
+        function updateRobotAI() {
+            const ai = robot.ai;
+            const config = {
+                speed: 0.8 + state.level * 0.15,
+                attackRange: 250,
+                evadeRange: 100,
+            };
+
+            const dxPlayer = player.x - robot.x;
+            const dyPlayer = player.y - robot.y;
+            const distPlayer = Math.sqrt(dxPlayer * dxPlayer + dyPlayer * dyPlayer);
+
+            if (ai.attackCooldown > 0) ai.attackCooldown--;
+            if (ai.targetSwitchCooldown > 0) ai.targetSwitchCooldown--;
+
+            // Lógica de mudança de estado
+            if (distPlayer < config.evadeRange && player.vx * dxPlayer > 0) {
+                 ai.state = 'evading';
+            } else if (distPlayer < config.attackRange && ai.attackCooldown <= 0) {
+                ai.state = 'attacking';
+            } else if (ai.state !== 'patrolling' && distPlayer > config.attackRange * 1.5) {
+                ai.state = 'patrolling';
+            }
+            
+            // Ações baseadas no estado
+            switch(ai.state) {
+                case 'attacking':
+                    dom.robotStatus.textContent = "Atacando!";
+                    robot.targetX += (player.x - robot.x) * 0.05;
+                    robot.targetY += (player.y - robot.y) * 0.05;
+                    break;
+                case 'evading':
+                    dom.robotStatus.textContent = "Desviando!";
+                    robot.targetX -= dxPlayer * 0.05;
+                    robot.targetY -= dyPlayer * 0.05;
+                    break;
+                case 'patrolling':
+                default:
+                    dom.robotStatus.textContent = "Voando";
+                    if (ai.targetSwitchCooldown <= 0) {
+                        robot.targetX = Math.random() * state.gameAreaRect.width;
+                        robot.targetY = Math.random() * state.gameAreaRect.height * 0.6;
+                        ai.targetSwitchCooldown = 200 + Math.random() * 100;
+                    }
+                    break;
+            }
+             // Limitar o alvo do robô para evitar que fique preso nos cantos
+            robot.targetX = Math.max(50, Math.min(state.gameAreaRect.width - 50, robot.targetX));
+            robot.targetY = Math.max(50, Math.min(state.gameAreaRect.height - 50, robot.targetY));
+        }
+
+        // --- RENDERIZAÇÃO ---
+        function renderKite(elements, kite) {
+            const kiteCenterX = kite.x + kite.width / 2;
+            const kiteCenterY = kite.y + kite.height / 2;
+
+            // Renderiza Pipa
+            elements.kite.style.transform = `translate(${kite.x}px, ${kite.y}px) rotate(${kite.angle}deg)`;
+
+            // Renderiza Linha
+            const dx = kiteCenterX - kite.lineAnchorX;
+            const dy = kiteCenterY - kite.lineAnchorY;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+            elements.line.style.height = `${length}px`;
+            elements.line.style.transform = `translate(${kite.lineAnchorX}px, ${kite.lineAnchorY}px) rotate(${angle}deg)`;
+        }
+        
+        // --- DETECÇÃO DE COLISÃO E FIM DE RODADA ---
+        function checkCollision() {
+            const dx = player.x - robot.x;
+            const dy = player.y - robot.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < (player.width + robot.width) / 2.5) {
+                // Quem está se movendo mais rápido na direção da colisão?
+                const playerVelocityTowardsRobot = (player.vx * dx + player.vy * dy) / distance;
+                const robotVelocityTowardsPlayer = (robot.vx * -dx + robot.vy * -dy) / distance;
+
+                handleRoundEnd(playerVelocityTowardsRobot > robotVelocityTowardsPlayer);
+            }
+        }
+        
+        function createSpark(x, y) {
+            playSound('spark');
+            const spark = document.createElement('div');
+            spark.className = 'cutting-spark';
+            spark.style.left = `${x}px`;
+            spark.style.top = `${y}px`;
+            dom.gameArea.appendChild(spark);
+            setTimeout(() => spark.remove(), 400);
+        }
+
+        function handleRoundEnd(playerWon) {
+            if (!state.isPlaying) return;
+            state.isPlaying = false;
+            cancelAnimationFrame(state.gameLoopId);
+
+            const collisionPoint = { x: (player.x + robot.x) / 2, y: (player.y + robot.y) / 2 };
+            createSpark(collisionPoint.x, collisionPoint.y);
+
+            if (playerWon) {
+                playSound('win');
+                state.wins++;
+                state.level++;
+                updateMessage(`🎉 <b>Vitória!</b> Você venceu! Preparando Nível ${state.level}...`);
+                dom.robotStatus.textContent = "Cortado!";
+                fallAnimation(dom.robot);
+            } else {
+                playSound('lose');
+                updateMessage(`🤖 <b>Derrota!</b> O robô venceu! A fase será reiniciada.`);
+                dom.robotStatus.textContent = "Venceu!";
+                fallAnimation(dom.player);
+            }
+            
+            updateDisplay();
+            setTimeout(startRound, 3500);
+        }
+        
+        function fallAnimation(kiteElements) {
+            kiteElements.line.style.display = 'none';
+            kiteElements.kite.style.transition = 'transform 2.5s ease-in';
+            const currentTransform = kiteElements.kite.style.transform;
+            const fallY = state.gameAreaRect.height + 150;
+            // Extrai a posição atual do transform para adicionar a queda
+            const match = currentTransform.match(/translate\(([^)]+)\)/);
+            if (match && match[1]) {
+                const currentPosition = match[1].split(', ');
+                kiteElements.kite.style.transform = `translate(${currentPosition[0]}, ${fallY}px) rotate(720deg) scale(0.5)`;
+            } else {
+                // Fallback caso o formato da transformação seja inesperado
+                kiteElements.kite.style.transform = `translate(0px, ${fallY}px) rotate(720deg) scale(0.5)`;
+            }
+        }
+
+        function resetGame() {
+            state.level = 1;
+            state.wins = 0;
+            state.isPlaying = false;
+            if (state.gameLoopId) cancelAnimationFrame(state.gameLoopId);
+            
+            dom.startBtn.disabled = false;
+            dom.startBtn.textContent = "Iniciar Jogo";
+            updateMessage("Jogo reiniciado. Clique em 'Iniciar Jogo' para começar.");
+            dom.robotStatus.textContent = "Inativo";
+            
+            resetKitePositions();
+            updateDisplay();
+        }
+        
+        // --- ATUALIZAÇÕES DE UI ---
+        function updateDisplay() {
+            dom.level.textContent = state.level;
+            dom.wins.textContent = state.wins;
+        }
+
+        function updateMessage(html) {
+            dom.messageBox.innerHTML = html;
+        }
+
+        // --- EVENT LISTENERS ---
+        dom.startBtn.addEventListener('click', startGame);
+        dom.resetBtn.addEventListener('click', resetGame);
+
+        dom.gameArea.addEventListener('mousemove', (e) => {
+            const rect = state.gameAreaRect;
+            player.targetX = e.clientX - rect.left;
+            player.targetY = e.clientY - rect.top;
+            dom.cursor.style.transform = `translate(${e.clientX - rect.left}px, ${e.clientY - rect.top}px)`;
+        });
+        
+        dom.gameArea.addEventListener('mouseenter', () => dom.cursor.style.display = 'block');
+        dom.gameArea.addEventListener('mouseleave', () => dom.cursor.style.display = 'none');
+
+        window.addEventListener('resize', () => {
+            state.gameAreaRect = dom.gameArea.getBoundingClientRect();
+            player.lineAnchorX = state.gameAreaRect.width / 3;
+            player.lineAnchorY = state.gameAreaRect.height + 100;
+            robot.lineAnchorX = state.gameAreaRect.width / 1.5;
+            robot.lineAnchorY = state.gameAreaRect.height + 100;
+        });
+
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDisplay();
+            resetKitePositions();
+            // Renderiza a posição inicial
+            renderKite(dom.player, player);
+            renderKite(dom.robot, robot);
+        });
+    </script>
+</body>
+</html>

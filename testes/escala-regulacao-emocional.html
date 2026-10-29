@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Regulação Emocional (ERQ) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu perfil de Reavaliação Cognitiva vs. Supressão Emocional com base no modelo neurocientífico de James Gross. Relatório instantâneo e gratuito.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    
+    <!-- Tailwind CSS para design moderno e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Institucional -->
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
+        .likert-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .likert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 147, 150, 0.15);
+        }
+        .likert-btn.selected {
+            background-color: #005f73 !important;
+            color: #ffffff !important;
+            border-color: #005f73 !important;
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.35);
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+            .print-clean { box-shadow: none !important; border: 1px solid #ccc !important; }
+        }
+        /* Garantia do Rodapé Lado a Lado */
+        footer.main-footer {
+            background-color: #2c3e50 !important;
+            color: #e2e8f0 !important;
+            padding-top: 50px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+        footer.main-footer .footer-grid,
+        footer.main-footer .footer-content {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 30px !important;
+            padding-bottom: 30px !important;
+            width: 100% !important;
+        }
+        @media (min-width: 768px) {
+            footer.main-footer .footer-grid,
+            footer.main-footer .footer-content {
+                grid-template-columns: repeat(4, 1fr) !important;
+            }
+        }
+        footer.main-footer .footer-column {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        footer.main-footer .footer-column h4 {
+            color: white !important;
+            font-size: 1.25em !important;
+            margin-bottom: 18px !important;
+            font-weight: 600 !important;
+        }
+        footer.main-footer ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        footer.main-footer li {
+            margin-bottom: 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            color: #e2e8f0 !important;
+        }
+        footer.main-footer a {
+            color: #e2e8f0 !important;
+            text-decoration: none !important;
+            transition: color 0.3s ease !important;
+        }
+        footer.main-footer a:hover {
+            color: #5dade2 !important;
+        }
+        footer.main-footer .footer-bottom {
+            border-top: 1px solid #3e5266 !important;
+            padding: 20px 0 !important;
+            text-align: center !important;
+            color: #94a3b8 !important;
+            font-size: 0.9em !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-vh-100">
+
+    <!-- Top Bar Padrão -->
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Padrão -->
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../recursos.html" class="active">Recursos</a>
+                <a href="../contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow py-8 px-4 sm:px-6 max-w-4xl mx-auto w-full">
+        
+        <!-- Badge e Título -->
+        <div class="text-center mb-8">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-teal-50 text-[#005f73] border border-teal-200 mb-3">
+                <span class="w-2 h-2 rounded-full bg-[#0a9396] animate-pulse"></span>
+                Instrumento Psicoeducativo Clínico
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#001219] tracking-tight">
+                Escala de Regulação Emocional (ERQ)
+            </h1>
+            <p class="text-slate-600 mt-2 max-w-2xl mx-auto text-sm sm:text-base">
+                Baseado no modelo neurocientífico de <strong>James Gross (Stanford University)</strong>. Descubra como você lida com suas emoções: através da <em>Reavaliação Cognitiva</em> ou da <em>Supressão Expressiva</em>.
+            </p>
+            
+            <div class="flex items-center justify-center gap-2 mt-3 text-xs text-slate-500">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <span>Privacidade Total: Suas respostas não são enviadas a nenhum servidor. Análise 100% no seu dispositivo.</span>
+            </div>
+        </div>
+
+        <!-- Barra de Progresso Superior -->
+        <div id="quiz-progress-bar" class="mb-6 bg-slate-200 rounded-full h-2 overflow-hidden shadow-inner">
+            <div id="progress-fill" class="bg-gradient-to-r from-[#005f73] to-[#0a9396] h-full transition-all duration-300" style="width: 10%;"></div>
+        </div>
+
+        <!-- Card do Questionário -->
+        <div id="questionnaire-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
+                <span id="question-counter">Pergunta 1 de 10</span>
+                <span class="text-[#0a9396]">Escala de 1 a 7</span>
+            </div>
+
+            <div id="question-container" class="min-h-[140px] flex flex-col justify-center">
+                <h2 id="question-text" class="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+                    Carregando pergunta...
+                </h2>
+                <p id="question-hint" class="text-sm text-slate-500 mt-2">
+                    Indique o quanto você concorda ou discorda da afirmação.
+                </p>
+            </div>
+
+            <!-- Escala Likert de 1 a 7 -->
+            <div class="mt-8">
+                <div class="flex justify-between text-xs font-medium text-slate-500 px-1 mb-2">
+                    <span class="text-rose-600 font-semibold">1 = Discordo Totalmente</span>
+                    <span class="hidden sm:inline text-slate-400">4 = Neutro</span>
+                    <span class="text-emerald-700 font-semibold">7 = Concordo Totalmente</span>
+                </div>
+                <div class="grid grid-cols-7 gap-1.5 sm:gap-2" id="likert-buttons">
+                    <!-- Gerado via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Navegação Inferior -->
+            <div class="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
+                <button id="prev-btn" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition" disabled>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Anterior
+                </button>
+                <span class="text-xs text-slate-400">Selecione uma opção para avançar</span>
+                <button id="next-btn" class="px-5 py-2 text-sm font-semibold text-white bg-[#005f73] hover:bg-[#0a9396] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition shadow-sm" disabled>
+                    Próxima
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Resultados (Inicialmente oculta) -->
+        <div id="results-card" class="hidden space-y-6">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200 gap-4">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+                            Devolutiva Personalizada
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">Seu Perfil Neurocognitivo de Regulação</h2>
+                        <p class="text-sm text-slate-500">Instrumento ERQ (Gross & John, 2003) interpretado sob perspectiva clínica e neuropsicológica.</p>
+                    </div>
+                    <div class="flex gap-2 no-print">
+                        <button onclick="window.print()" class="px-3.5 py-2 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center gap-1.5 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                            Imprimir / Salvar PDF
+                        </button>
+                        <button onclick="restartQuiz()" class="px-3.5 py-2 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">
+                            Refazer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Comparação em Cartões -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    
+                    <!-- Fator 1: Reavaliação Cognitiva -->
+                    <div class="bg-gradient-to-br from-teal-50/60 to-white p-5 rounded-xl border border-teal-200/80">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#005f73]">Estratégia Antecedente</span>
+                            <span id="score-cr-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-teal-100 text-[#005f73]">Média: 0.0</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Reavaliação Cognitiva</h3>
+                        <p class="text-xs text-slate-600 mt-1 mb-4">
+                            Capacidade do córtex pré-frontal de reinterpretar eventos antes que a cascata neurovegetativa estressora se instale.
+                        </p>
+                        
+                        <div class="space-y-1 mb-2">
+                            <div class="flex justify-between text-xs font-medium">
+                                <span>Sua pontuação</span>
+                                <span id="cr-score-text" class="font-bold text-[#005f73]">0 / 7.0</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                <div id="cr-bar" class="h-full bg-gradient-to-r from-[#0a9396] to-[#005f73] transition-all duration-700" style="width: 0%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>Baixa (1.0)</span>
+                                <span>Média Populacional (≈ 4.6)</span>
+                                <span>Alta (7.0)</span>
+                            </div>
+                        </div>
+
+                        <div id="cr-feedback" class="text-xs text-slate-700 mt-3 pt-3 border-t border-teal-100">
+                            <!-- Injetado dinamicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Fator 2: Supressão Emocional -->
+                    <div class="bg-gradient-to-br from-amber-50/60 to-white p-5 rounded-xl border border-amber-200/80">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#ca6702]">Estratégia Consequente</span>
+                            <span id="score-es-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 text-[#ca6702]">Média: 0.0</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Supressão Expressiva</h3>
+                        <p class="text-xs text-slate-600 mt-1 mb-4">
+                            Tentativa de inibir a manifestação visível da emoção após ela já ter sido deflagrada ("engolir o choro", esconder afeto).
+                        </p>
+                        
+                        <div class="space-y-1 mb-2">
+                            <div class="flex justify-between text-xs font-medium">
+                                <span>Sua pontuação</span>
+                                <span id="es-score-text" class="font-bold text-[#ca6702]">0 / 7.0</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                <div id="es-bar" class="h-full bg-gradient-to-r from-[#ee9b00] to-[#ca6702] transition-all duration-700" style="width: 0%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>Baixa (1.0)</span>
+                                <span>Média Populacional (≈ 3.3)</span>
+                                <span>Alta (7.0)</span>
+                            </div>
+                        </div>
+
+                        <div id="es-feedback" class="text-xs text-slate-700 mt-3 pt-3 border-t border-amber-100">
+                            <!-- Injetado dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perfil Clínico Integrado -->
+                <div class="mt-8 p-6 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🧠</span>
+                        <h3 class="text-lg font-bold text-slate-900" id="profile-title">
+                            Análise do Seu Padrão Psicofisiológico
+                        </h3>
+                    </div>
+                    <p class="text-sm text-slate-700 leading-relaxed" id="profile-description">
+                        Calculando análise neurobiológica...
+                    </p>
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-600">
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200/80">
+                            <strong class="text-slate-900 block mb-1">Impacto no Sistema Nervoso Autônomo:</strong>
+                            <span id="somatic-impact">...</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200/80">
+                            <strong class="text-slate-900 block mb-1">Recomendação Neuropsicológica:</strong>
+                            <span id="clinical-recommendation">...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chamada para Ação / Conversão -->
+                <div class="mt-8 p-6 rounded-xl bg-gradient-to-r from-[#005f73] to-[#0a9396] text-white flex flex-col sm:flex-row items-center justify-between gap-4 no-print shadow-md">
+                    <div>
+                        <h4 class="text-lg font-bold text-white">Deseja aprofundar seu autoconhecimento emocional?</h4>
+                        <p class="text-xs text-teal-100 mt-1 max-w-lg">
+                            Dificuldades na regulação afetiva estão na raiz da ansiedade, depressão, burnout e conflitos relacionais. Agende uma avaliação com Deo Magalhães.
+                        </p>
+                    </div>
+                    <a id="whatsapp-share-btn" href="https://wa.me/5535933003807" target="_blank" class="px-5 py-3 rounded-lg bg-white text-[#005f73] hover:bg-teal-50 font-bold text-xs uppercase tracking-wider transition whitespace-nowrap shadow">
+                        Conversar no WhatsApp
+                    </a>
+                </div>
+
+                <!-- Disclaimer Ético -->
+                <div class="mt-6 text-[11px] text-slate-500 text-center leading-relaxed">
+                    <p>
+                        <strong>Aviso Clínico e Ético (CFP):</strong> Este instrumento tem finalidade exclusivamente psicoeducativa e de auto-observação guiada. Não substitui consulta médica, psiquiátrica ou avaliação neuropsicológica formal realizada por profissional habilitado.
+                    </p>
+                    <p class="mt-1">
+                        Deo Magalhães – Neuropsicólogo e Neurocientista • CRP 04/42784 • Membro da SBNp.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Rodapé Padrão -->
+    <footer class="main-footer no-print mt-16">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Deo Magalhães</h4>
+                <p>Neuropsicologia Clínica, Avaliação Neuropsicológica e Reabilitação Cognitiva.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li>Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Recursos</h4>
+                <ul>
+                    <li><a href="pomodoro-neuro.html">Pomodoro & Som Marrom</a></li>
+                    <li><a href="../jogos.html">Jogos Cognitivos</a></li>
+                    <li><a href="../artigos.html">Artigos Clínicos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Lógica do Teste ERQ -->
+    <script>
+        const questions = [
+            { id: 1, text: "Quando quero sentir mais emoções positivas (como alegria ou entusiasmo), eu mudo a forma como penso sobre a situação.", factor: "CR" },
+            { id: 2, text: "Eu guardo minhas emoções para mim mesmo(a).", factor: "ES" },
+            { id: 3, text: "Quando quero sentir menos emoções negativas (como tristeza ou raiva), eu mudo a forma como penso sobre a situação.", factor: "CR" },
+            { id: 4, text: "Quando estou sentindo emoções positivas, tomo cuidado para não demonstrá-las.", factor: "ES" },
+            { id: 5, text: "Quando me deparo com uma situação estressante, eu me forço a pensar nela de uma forma que me ajude a manter a calma.", factor: "CR" },
+            { id: 6, text: "Eu controlo minhas emoções não expressando o que realmente estou sentindo.", factor: "ES" },
+            { id: 7, text: "Quando quero sentir mais emoções positivas, eu mudo o que a situação significa para mim.", factor: "CR" },
+            { id: 8, text: "Eu controlo minhas emoções mudando a maneira como interpreto a situação em que me encontro.", factor: "CR" },
+            { id: 9, text: "Quando estou sentindo emoções negativas, eu me esforço para não deixar transparecer.", factor: "ES" },
+            { id: 10, text: "Quando quero sentir menos emoções negativas, eu tento mudar a forma como penso sobre o evento.", factor: "CR" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = {};
+
+        const questionTextEl = document.getElementById('question-text');
+        const questionCounterEl = document.getElementById('question-counter');
+        const progressFillEl = document.getElementById('progress-fill');
+        const likertButtonsEl = document.getElementById('likert-buttons');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const questionnaireCard = document.getElementById('questionnaire-card');
+        const resultsCard = document.getElementById('results-card');
+
+        function initLikertButtons() {
+            likertButtonsEl.innerHTML = '';
+            for (let i = 1; i <= 7; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'likert-btn py-3 sm:py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 font-bold text-sm sm:text-base hover:bg-slate-100 flex flex-col items-center justify-center gap-0.5';
+                btn.setAttribute('data-value', i);
+                btn.innerHTML = `<span>${i}</span>`;
+                btn.addEventListener('click', () => selectAnswer(i));
+                likertButtonsEl.appendChild(btn);
+            }
+        }
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            questionTextEl.textContent = q.text;
+            questionCounterEl.textContent = `Pergunta ${index + 1} de ${questions.length}`;
+            progressFillEl.style.width = `${((index + 1) / questions.length) * 100}%`;
+
+            prevBtn.disabled = index === 0;
+
+            const selectedValue = answers[q.id];
+            const buttons = likertButtonsEl.querySelectorAll('.likert-btn');
+            buttons.forEach(btn => {
+                const val = parseInt(btn.getAttribute('data-value'));
+                if (selectedValue && val === selectedValue) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            nextBtn.disabled = !selectedValue;
+            if (index === questions.length - 1) {
+                nextBtn.innerHTML = `Ver Resultado <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            } else {
+                nextBtn.innerHTML = `Próxima <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            }
+        }
+
+        function selectAnswer(value) {
+            const currentQ = questions[currentQuestionIndex];
+            answers[currentQ.id] = value;
+
+            const buttons = likertButtonsEl.querySelectorAll('.likert-btn');
+            buttons.forEach(btn => {
+                const val = parseInt(btn.getAttribute('data-value'));
+                if (val === value) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            nextBtn.disabled = false;
+
+            // Auto-avanço com micro-delay suave
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion(currentQuestionIndex);
+                } else {
+                    calculateResults();
+                }
+            }, 250);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                calculateResults();
+            }
+        });
+
+        function calculateResults() {
+            let sumCR = 0, countCR = 0;
+            let sumES = 0, countES = 0;
+
+            questions.forEach(q => {
+                const val = answers[q.id] || 4;
+                if (q.factor === 'CR') {
+                    sumCR += val;
+                    countCR++;
+                } else if (q.factor === 'ES') {
+                    sumES += val;
+                    countES++;
+                }
+            });
+
+            const scoreCR = (sumCR / countCR).toFixed(1);
+            const scoreES = (sumES / countES).toFixed(1);
+
+            displayResults(parseFloat(scoreCR), parseFloat(scoreES));
+        }
+
+        function displayResults(cr, es) {
+            questionnaireCard.classList.add('hidden');
+            document.getElementById('quiz-progress-bar').classList.add('hidden');
+            resultsCard.classList.remove('hidden');
+
+            document.getElementById('cr-score-text').textContent = `${cr} / 7.0`;
+            document.getElementById('es-score-text').textContent = `${es} / 7.0`;
+            document.getElementById('score-cr-badge').textContent = `Média: ${cr}`;
+            document.getElementById('score-es-badge').textContent = `Média: ${es}`;
+
+            // Preenchimento de barras percentuais (escala de 1 a 7)
+            const pctCR = Math.min(100, Math.max(0, ((cr - 1) / 6) * 100));
+            const pctES = Math.min(100, Math.max(0, ((es - 1) / 6) * 100));
+
+            setTimeout(() => {
+                document.getElementById('cr-bar').style.width = `${pctCR}%`;
+                document.getElementById('es-bar').style.width = `${pctES}%`;
+            }, 100);
+
+            // Feedbacks específicos por fator
+            const crFeedbackEl = document.getElementById('cr-feedback');
+            if (cr >= 5.0) {
+                crFeedbackEl.innerHTML = `<strong>Alta Reavaliação:</strong> Você demonstra forte capacidade de flexibilidade cognitiva no córtex pré-frontal, conseguindo ressignificar cenários adversos antes que o estresse domine seu organismo.`;
+            } else if (cr >= 3.8) {
+                crFeedbackEl.innerHTML = `<strong>Reavaliação Moderada:</strong> Você consegue reinterpretar situações com alguma frequência, mas em momentos de sobrecarga ou estresse agudo essa capacidade pode se esgotar rapidamente.`;
+            } else {
+                crFeedbackEl.innerHTML = `<strong>Baixa Reavaliação:</strong> Dificuldade em reenquadrar pensamentos automáticos negativos. As situações tendem a ser assimiladas como ameaças imediatas, gerando alta reatividade límbica.`;
+            }
+
+            const esFeedbackEl = document.getElementById('es-feedback');
+            if (es >= 4.5) {
+                esFeedbackEl.innerHTML = `<strong>Alta Supressão:</strong> Você despende enorme energia fisiológica para "esconder" seus sentimentos. Sob a ótica da neurociência, suprimir a expressão não reduz a ativação da amígdala cerebral e gera sobrecarga cardiovascular.`;
+            } else if (es >= 3.0) {
+                esFeedbackEl.innerHTML = `<strong>Supressão Moderada:</strong> Você filtra suas emoções em contextos sociais específicos, mantendo um equilíbrio funcional, embora possa haver desgaste em relacionamentos íntimos.`;
+            } else {
+                esFeedbackEl.innerHTML = `<strong>Baixa Supressão:</strong> Você tem facilidade para expressar o que sente e raramente força uma máscara de controle artificial, o que preserva sua integridade neurovegetativa.`;
+            }
+
+            // Perfil Integrado
+            const profileTitle = document.getElementById('profile-title');
+            const profileDesc = document.getElementById('profile-description');
+            const somaticImpact = document.getElementById('somatic-impact');
+            const clinicalRec = document.getElementById('clinical-recommendation');
+
+            const isHighCR = cr >= 4.6;
+            const isHighES = es >= 3.5;
+
+            let perfilNome = "";
+            let shareMsg = "";
+
+            if (isHighCR && !isHighES) {
+                perfilNome = "Perfil Adaptativo e Resiliente";
+                profileDesc.textContent = "Você combina alta capacidade de ressignificação pré-frontal com baixa repressão corporal. Quando surge um problema, você redireciona o foco cognitivo em vez de apenas engolir a angústia. Esse padrão é protetor contra episódios depressivos e transtornos somatoformes.";
+                somaticImpact.textContent = "Baixo tônus simpático crônico; excelente modulação do nervo vago e preservação da variabilidade da frequência cardíaca (VFC).";
+                clinicalRec.textContent = "Manter práticas de autorreflexão e continuar utilizando a flexibilidade mental em tomadas de decisão sob pressão.";
+                shareMsg = `Olá Deo! Fiz o Teste ERQ no seu site e obtive Perfil Adaptativo (Reavaliação: ${cr}, Supressão: ${es}). Gostaria de tirar uma dúvida sobre otimização de foco e rotina.`;
+            } else if (isHighCR && isHighES) {
+                perfilNome = "Perfil de Alto Esforço / Hipercontrole";
+                profileDesc.textContent = "Você compreende cognitivamente o que acontece e busca pensar positivo, mas ainda sente forte necessidade de mascarar suas emoções para não parecer vulnerável. Isso indica um padrão perfeccionista ou medo de julgamento social.";
+                somaticImpact.textContent = "Tensão muscular cervical/mandibular, fadiga ao final do dia devido à inibição motora continuada.";
+                clinicalRec.textContent = "Trabalhar a assertividade e a autorização para vivenciar a vulnerabilidade em ambientes seguros (psicoterapia).";
+                shareMsg = `Olá Deo! Fiz a Escala de Regulação Emocional no seu site (Reavaliação: ${cr}, Supressão: ${es}) e identifiquei um padrão de hipercontrole. Gostaria de entender mais sobre o acompanhamento clínico.`;
+            } else if (!isHighCR && isHighES) {
+                perfilNome = "Perfil de Supressão Somatizadora";
+                profileDesc.textContent = "Você tende a 'engolir o choro' e reprimir o que sente, mas tem dificuldade em ressignificar a dor mental. Esse é o padrão de maior custo biológico: a emoção fica retida no corpo, elevando a probabilidade de somatização, insônia e explosões reativas tardias.";
+                somaticImpact.textContent = "Elevação sustentada do cortisol, vasoconstrição periférica, tendência a enxaquecas tensionais e sintomas gastrointestinais.";
+                clinicalRec.textContent = "Indicação prioritária de avaliação neuropsicológica e intervenção em regulação emocional e TCC.";
+                shareMsg = `Olá Deo! Realizei a Escala ERQ no seu site e meu resultado indicou alta supressão emocional (${es}) com baixa reavaliação (${cr}). Gostaria de agendar uma consulta para trabalhar esse padrão.`;
+            } else {
+                perfilNome = "Perfil de Alta Vulnerabilidade Reativa";
+                profileDesc.textContent = "Você não reprime suas emoções, mas também encontra obstáculos para ressignificar pensamentos dolorosos. Diante de contratempos, você pode se sentir invadido por ondas afetivas intensas sem conseguir frear a ruminação mental.";
+                somaticImpact.textContent = "Hiper-reatividade da amígdala cerebral com rápida aceleração cardíaca e dificuldade de retorno ao estado basal de repouso.";
+                clinicalRec.textContent = "Treino em controle inibitório, reestruturação cognitiva e técnicas de ancoragem fisiológica (respiração guiada).";
+                shareMsg = `Olá Deo! Fiz o teste de regulação no site e obtive padrão de vulnerabilidade reativa (Reavaliação: ${cr}, Supressão: ${es}). Gostaria de informações sobre agendamento.`;
+            }
+
+            profileTitle.textContent = `${perfilNome} (CR: ${cr} | ES: ${es})`;
+            document.getElementById('whatsapp-share-btn').href = `https://wa.me/5535933003807?text=${encodeURIComponent(shareMsg)}`;
+
+            window.scrollTo({ top: resultsCard.offsetTop - 40, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            answers = {};
+            currentQuestionIndex = 0;
+            resultsCard.classList.add('hidden');
+            questionnaireCard.classList.remove('hidden');
+            document.getElementById('quiz-progress-bar').classList.remove('hidden');
+            initLikertButtons();
+            loadQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            initLikertButtons();
+            loadQuestion(0);
+        });
+    </script>
+</body>
+</html>

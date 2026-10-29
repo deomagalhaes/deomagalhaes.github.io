@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labirinto Visuoespacial: Planejamento Motor e Cognição – Deo Magalhães</title>
+    <meta name="description" content="Treine planejamento motor, antecipação e rotação visuoespacial no Labirinto Visuoespacial. Jogo cognitivo desenvolvido por Deo Magalhães.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --neural-glow: #0ef;
+            --surface: #ffffff;
+            --bg-page: #f8fafc;
+            --text-dark: #1f2937;
+            --success: #2a9d8f;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-wrapper {
+            max-width: 860px;
+            margin: 2rem auto 4rem auto;
+            padding: 2.2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 95, 115, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .badge-game {
+            display: inline-block;
+            background: rgba(0, 95, 115, 0.1);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .game-header h1 {
+            color: var(--primary);
+            font-size: 2.3rem;
+            margin: 0 0 0.8rem 0;
+            line-height: 1.2;
+        }
+
+        .game-header p {
+            color: #64748b;
+            font-size: 1.05rem;
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* HUD */
+        .hud-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            background: #f1f5f9;
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 2rem;
+            border: 1px solid #cbd5e1;
+        }
+
+        .hud-item {
+            text-align: center;
+        }
+
+        .hud-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .hud-val {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Maze Stage */
+        .maze-board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #001219;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5), 0 10px 25px rgba(0, 95, 115, 0.2);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .board-indicators {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            max-width: 460px;
+            margin-bottom: 14px;
+            color: #94d2bd;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .indicator-node {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .indicator-node.active {
+            background: rgba(14, 239, 255, 0.2);
+            color: #0ef;
+            box-shadow: 0 0 10px rgba(14, 239, 255, 0.5);
+        }
+
+        .maze-grid {
+            display: grid;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 12px;
+            border: 2px solid #005f73;
+            max-width: 90vw;
+        }
+
+        .maze-cell {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            position: relative;
+            user-select: none;
+            transition: background 0.15s ease;
+        }
+
+        @media (max-width: 500px) {
+            .maze-cell {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+        }
+
+        .maze-cell.wall {
+            background: #002b36;
+            border: 1px solid #084c61;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .maze-cell.path {
+            background: #001e26;
+            border: 1px solid rgba(148, 210, 189, 0.15);
+        }
+
+        .maze-cell.visited {
+            background: #003844;
+        }
+
+        .maze-cell.player {
+            background: #0ef;
+            box-shadow: 0 0 16px #0ef, inset 0 0 6px white;
+            border-radius: 50%;
+            transform: scale(0.85);
+            animation: pulse-glow 1.4s infinite alternate;
+        }
+
+        .maze-cell.orb::after {
+            content: "⚡";
+            font-size: 0.9rem;
+            filter: drop-shadow(0 0 4px #ee9b00);
+        }
+
+        .maze-cell.exit {
+            border: 2px dashed #ee9b00;
+            background: rgba(238, 155, 0, 0.2);
+        }
+
+        .maze-cell.exit::before {
+            content: "🎯";
+            font-size: 1.1rem;
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 10px #0ef; transform: scale(0.8); }
+            to { box-shadow: 0 0 20px #0ef; transform: scale(0.92); }
+        }
+
+        /* D-Pad Virtual */
+        .dpad-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .dpad-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dpad-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: #005f73;
+            border: 2px solid #0a9396;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.15s ease;
+        }
+
+        .dpad-btn:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .dpad-btn:active {
+            transform: scale(0.92);
+            background: #ee9b00;
+            border-color: #ee9b00;
+        }
+
+        /* Banner de Vitória */
+        .victory-banner {
+            display: none;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            padding: 24px;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .actions-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-ctrl {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-ctrl:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-ctrl.secondary {
+            background: #f1f5f9;
+            color: #475569;
+            box-shadow: none;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-ctrl.secondary:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        /* Explicação Neuro */
+        .neuro-explanation {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 2rem;
+        }
+
+        .neuro-explanation h3 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .neuro-explanation p {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .neuro-explanation ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .neuro-explanation li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/recursos.html">Recursos</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-wrapper">
+            <div class="game-header">
+                <span class="badge-game">⚡ Ginástica Cerebral Diária • Dia 8</span>
+                <h1>Labirinto Visuoespacial</h1>
+                <p>Navegue pelo circuito neural antecipando rotas mentais, desviando de becos sem saída e coletando impulsos elétricos até alcançar o Córtex Frontal. Use as setas do teclado, deslize no touch ou use o direcional virtual.</p>
+            </div>
+
+            <div class="hud-bar">
+                <div class="hud-item">
+                    <span class="hud-label">Nível Neural</span>
+                    <span class="hud-val" id="hudLevel">1 / 3</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Passos</span>
+                    <span class="hud-val" id="hudSteps">0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Tempo</span>
+                    <span class="hud-val" id="hudTime">00:00</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Impulsos ⚡</span>
+                    <span class="hud-val" id="hudOrbs">0</span>
+                </div>
+            </div>
+
+            <div class="maze-board-container">
+                <div class="board-indicators">
+                    <span class="indicator-node active" id="startIndicator">⚡ Entrada (Raiz)</span>
+                    <span class="indicator-node" id="exitIndicator">🎯 Córtex Frontal (Saída)</span>
+                </div>
+
+                <div class="maze-grid" id="mazeGrid">
+                    <!-- Gerado dinamicamente -->
+                </div>
+
+                <!-- D-Pad Virtual para Mobile e Acessibilidade -->
+                <div class="dpad-container">
+                    <button class="dpad-btn" onclick="movePlayer(-1, 0)" aria-label="Cima">▲</button>
+                    <div class="dpad-row">
+                        <button class="dpad-btn" onclick="movePlayer(0, -1)" aria-label="Esquerda">◀</button>
+                        <button class="dpad-btn" onclick="movePlayer(1, 0)" aria-label="Baixo">▼</button>
+                        <button class="dpad-btn" onclick="movePlayer(0, 1)" aria-label="Direita">▶</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="victoryBanner" class="victory-banner">
+                <h2 style="margin: 0 0 10px 0;">🎉 Rota Concluída com Sucesso!</h2>
+                <p style="margin: 0 0 16px 0; font-size: 1.05rem;" id="victoryMsg">Você planejou antecipadamente e guiou o pulso sem bloqueios!</p>
+                <button class="btn-ctrl" id="btnNextLevel" onclick="nextLevel()">Avançar de Fase ➔</button>
+            </div>
+
+            <div class="actions-row">
+                <button class="btn-ctrl secondary" onclick="resetCurrentLevel()">Reiniciar Labirinto</button>
+                <a href="/jogos.html" class="btn-ctrl secondary" style="text-decoration: none; display: inline-flex; align-items: center;">← Todos os Jogos</a>
+            </div>
+
+            <div class="neuro-explanation">
+                <h3>🧠 O que este Labirinto estimula no cérebro?</h3>
+                <p>
+                    A navegação em labirintos ativa simultaneamente circuitos corticais de alta complexidade:
+                </p>
+                <ul>
+                    <li><strong>Planejamento Antecipatório e Córtex Pré-Frontal Dorsolateral (DLPFC):</strong> Antes de mover o pulso elétrico, o cérebro simula mentalmente as bifurcações adiante, evitando a armadilha de entrar em becos sem saída.</li>
+                    <li><strong>Mapeamento Espacial e Hipocampo:</strong> As células de lugar (<em>place cells</em>) e células de grade (<em>grid cells</em>) constroem um mapa cognitivo interno do território percorrido.</li>
+                    <li><strong>Controle Inibitório e Córtex Parietal Posterior:</strong> Frear a impulsividade de avançar na primeira rota aberta e sustentar o foco na meta final sem perder a orientação espacial.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Web Audio API
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+            },
+            playStep() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(240, this.ctx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.04);
+            },
+            playOrb() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(650, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.08);
+            },
+            playWin() {
+                this.init();
+                if (!this.ctx) return;
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C E G C
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.08);
+                    gain.gain.setValueAtTime(0.14, this.ctx.currentTime + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.08 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(this.ctx.currentTime + idx * 0.08);
+                    osc.stop(this.ctx.currentTime + idx * 0.08 + 0.35);
+                });
+            }
+        };
+
+        // Fases Matemáticas e Solucionáveis (0 = livre, 1 = parede)
+        const MAZES = [
+            {
+                name: "Rede Local (6x6)",
+                rows: 6,
+                cols: 6,
+                start: { r: 0, c: 0 },
+                end: { r: 5, c: 5 },
+                grid: [
+                    [0, 0, 1, 0, 0, 0],
+                    [1, 0, 1, 0, 1, 0],
+                    [0, 0, 0, 0, 1, 0],
+                    [0, 1, 1, 0, 0, 0],
+                    [0, 0, 1, 1, 1, 0],
+                    [1, 0, 0, 0, 0, 0]
+                ],
+                orbs: [
+                    { r: 0, c: 5 },
+                    { r: 2, c: 2 },
+                    { r: 4, c: 1 }
+                ]
+            },
+            {
+                name: "Trato Corticocortical (8x8)",
+                rows: 8,
+                cols: 8,
+                start: { r: 0, c: 0 },
+                end: { r: 7, c: 7 },
+                grid: [
+                    [0, 0, 0, 1, 0, 0, 0, 0],
+                    [1, 1, 0, 1, 0, 1, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 1, 0],
+                    [0, 1, 1, 1, 1, 0, 0, 0],
+                    [0, 0, 0, 0, 1, 1, 1, 0],
+                    [1, 1, 1, 0, 0, 0, 0, 0],
+                    [0, 0, 1, 1, 1, 1, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                orbs: [
+                    { r: 0, c: 7 },
+                    { r: 2, c: 4 },
+                    { r: 5, c: 4 },
+                    { r: 7, c: 1 }
+                ]
+            },
+            {
+                name: "Integração Global (10x10)",
+                rows: 10,
+                cols: 10,
+                start: { r: 0, c: 0 },
+                end: { r: 9, c: 9 },
+                grid: [
+                    [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+                    [1, 0, 1, 0, 1, 1, 0, 1, 0, 1],
+                    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                    [0, 1, 1, 0, 1, 0, 1, 1, 1, 0],
+                    [0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+                    [1, 0, 1, 1, 1, 1, 1, 0, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+                    [0, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+                    [0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+                    [1, 1, 1, 0, 0, 0, 1, 0, 0, 0]
+                ],
+                orbs: [
+                    { r: 0, c: 9 },
+                    { r: 2, c: 3 },
+                    { r: 4, c: 7 },
+                    { r: 6, c: 3 },
+                    { r: 8, c: 7 }
+                ]
+            }
+        ];
+
+        let currentLevel = 0;
+        let playerPos = { r: 0, c: 0 };
+        let steps = 0;
+        let timerSeconds = 0;
+        let timerInterval = null;
+        let isLevelCompleted = false;
+        let collectedOrbs = 0;
+        let remainingOrbs = new Set();
+        let visitedCells = new Set();
+
+        function initLevel(lvlIdx) {
+            currentLevel = lvlIdx;
+            const lvl = MAZES[currentLevel];
+            playerPos = { ...lvl.start };
+            steps = 0;
+            collectedOrbs = 0;
+            isLevelCompleted = false;
+            visitedCells.clear();
+            visitedCells.add(`${playerPos.r},${playerPos.c}`);
+
+            remainingOrbs.clear();
+            lvl.orbs.forEach(orb => remainingOrbs.add(`${orb.r},${orb.c}`));
+
+            document.getElementById('hudLevel').textContent = `${currentLevel + 1} / ${MAZES.length}`;
+            document.getElementById('hudSteps').textContent = steps;
+            document.getElementById('hudOrbs').textContent = `${collectedOrbs} / ${lvl.orbs.length}`;
+            document.getElementById('victoryBanner').style.display = 'none';
+
+            renderBoard();
+
+            if (!timerInterval) {
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+                    const s = String(timerSeconds % 60).padStart(2, '0');
+                    document.getElementById('hudTime').textContent = `${m}:${s}`;
+                }, 1000);
+            }
+        }
+
+        function renderBoard() {
+            const lvl = MAZES[currentLevel];
+            const gridEl = document.getElementById('mazeGrid');
+            gridEl.innerHTML = '';
+            gridEl.style.gridTemplateColumns = `repeat(${lvl.cols}, 1fr)`;
+
+            for (let r = 0; r < lvl.rows; r++) {
+                for (let c = 0; c < lvl.cols; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'maze-cell';
+                    const key = `${r},${c}`;
+
+                    if (lvl.grid[r][c] === 1) {
+                        cell.classList.add('wall');
+                    } else {
+                        cell.classList.add('path');
+                        if (visitedCells.has(key)) cell.classList.add('visited');
+                        if (remainingOrbs.has(key)) cell.classList.add('orb');
+                        if (r === lvl.end.r && c === lvl.end.c) cell.classList.add('exit');
+                    }
+
+                    if (r === playerPos.r && c === playerPos.c) {
+                        cell.classList.add('player');
+                    }
+
+                    gridEl.appendChild(cell);
+                }
+            }
+        }
+
+        function movePlayer(dr, dc) {
+            if (isLevelCompleted) return;
+            const lvl = MAZES[currentLevel];
+            const nr = playerPos.r + dr;
+            const nc = playerPos.c + dc;
+
+            if (nr < 0 || nr >= lvl.rows || nc < 0 || nc >= lvl.cols) return;
+            if (lvl.grid[nr][nc] === 1) return; // Parede
+
+            playerPos.r = nr;
+            playerPos.c = nc;
+            steps++;
+            document.getElementById('hudSteps').textContent = steps;
+            visitedCells.add(`${nr},${nc}`);
+
+            // Checa orbe coletado
+            const orbKey = `${nr},${nc}`;
+            if (remainingOrbs.has(orbKey)) {
+                remainingOrbs.delete(orbKey);
+                collectedOrbs++;
+                document.getElementById('hudOrbs').textContent = `${collectedOrbs} / ${lvl.orbs.length}`;
+                SoundFX.playOrb();
+            } else {
+                SoundFX.playStep();
+            }
+
+            renderBoard();
+
+            // Checa vitória
+            if (nr === lvl.end.r && nc === lvl.end.c) {
+                isLevelCompleted = true;
+                handleWin();
+            }
+        }
+
+        function handleWin() {
+            SoundFX.playWin();
+            const lvl = MAZES[currentLevel];
+            const banner = document.getElementById('victoryBanner');
+            const msg = document.getElementById('victoryMsg');
+            const btn = document.getElementById('btnNextLevel');
+
+            banner.style.display = 'block';
+
+            if (currentLevel < MAZES.length - 1) {
+                msg.innerHTML = `Fase <strong>${lvl.name}</strong> concluída em <strong>${steps} passos</strong>!<br>Impulsos coletados: ${collectedOrbs}/${lvl.orbs.length}. Excelente rota executiva!`;
+                btn.textContent = "Avançar para a Próxima Fase ➔";
+                btn.onclick = nextLevel;
+            } else {
+                msg.innerHTML = `🏆 <strong>Fabuloso!</strong> Você completou todos os labirintos cognitivos!<br>Tempo total: <strong>${document.getElementById('hudTime').textContent}</strong>. Seus circuitos pré-frontais e parietais foram exercitados com excelência.`;
+                btn.textContent = "Jogar Novamente ⟳";
+                btn.onclick = () => initLevel(0);
+            }
+
+            banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextLevel() {
+            if (currentLevel < MAZES.length - 1) {
+                initLevel(currentLevel + 1);
+            }
+        }
+
+        function resetCurrentLevel() {
+            initLevel(currentLevel);
+        }
+
+        // Teclado (Setas e WASD)
+        window.addEventListener('keydown', (e) => {
+            if (["ArrowUp", "KeyW"].includes(e.code)) {
+                e.preventDefault();
+                movePlayer(-1, 0);
+            } else if (["ArrowDown", "KeyS"].includes(e.code)) {
+                e.preventDefault();
+                movePlayer(1, 0);
+            } else if (["ArrowLeft", "KeyA"].includes(e.code)) {
+                e.preventDefault();
+                movePlayer(0, -1);
+            } else if (["ArrowRight", "KeyD"].includes(e.code)) {
+                e.preventDefault();
+                movePlayer(0, 1);
+            }
+        });
+
+        // Inicia jogo
+        window.addEventListener('DOMContentLoaded', () => {
+            initLevel(0);
+        });
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>

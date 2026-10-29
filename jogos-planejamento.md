@@ -8,26 +8,26 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 
 | Dia | Jogo | Foco Neuropsicológico / Cognitivo | Arquivo | Status |
 |---|---|---|---|---|
-| **Dia 1** | **Torre de Hanói** | Funções Executivas, Planejamento Antecipatório e Controle Inibitório | `recursos/jogo-torre-hanoi.html` | ✅ **Publicado** |
-| **Dia 2** | **Balança de Equivalências** | Raciocínio Algébrico Visual, Dedução e Abstração | `recursos/jogo-balanca-logica.html` | ✅ **Publicado** |
-| **Dia 3** | **Grid de Dedução (Detetive Lógico)** | Memória Operacional, Inferência e Eliminação de Hipóteses | `recursos/jogo-detetive-logico.html` | ✅ **Publicado** |
-| **Dia 4** | **Matrizes Progressivas de Raven** | Raciocínio Fluido e Relações Visuoespaciais | `recursos/jogo-matrizes-raven.html` | ✅ **Publicado** |
-| **Dia 5** | **Circuito Neural (Conexão Lógica)** | Flexibilidade Mental, Atenção Focada e Resolução de Problemas | `recursos/jogo-circuito-neural.html` | ✅ **Publicado** |
-| **Dia 6** | **Mini-Sudoku das Formas e Cores** | Atenção Sustentada e Pensamento Algorítmico | `recursos/jogo-mini-sudoku.html` | ✅ **Publicado** |
-| **Dia 7** | **Balança da Verdade (Silogismos)** | Lógica Proposicional, Validação de Premissas e Pensamento Crítico | `recursos/jogo-silogismos.html` | ✅ **Publicado** |
-| **Dia 8** | **Labirinto Visuoespacial (Planejamento)** | Planejamento Motor, Visuoconstrução e Monitoramento | `recursos/jogo-labirinto-cognitivo.html` | ✅ **Publicado** |
-| **Dia 9** | **Paradoxo das Portas (Monty Hall)** | Probabilidade Intuitiva, Atualização de Crenças e Flexibilidade | `recursos/jogo-monty-hall.html` | ✅ **Publicado** |
-| **Dia 11** | **Efeito Stroop Neurocognitivo** | Controle Inibitório Frontal, Conflito Cognitivo e Velocidade | `recursos/jogo-stroop-neuro.html` | ✅ **Publicado** |
-| **Dia 12** | **Matriz de Associação Semântica** | Memória Semântica, Categorização e Raciocínio Verbal | `recursos/jogo-associacao-semantica.html` | ✅ **Publicado** |
-| **Dia 13** | **Torre de Londres (Planejamento Motor)** | Funções Executivas e Resolução de Problemas Sequenciais | `recursos/jogo-torre-londres.html` | ✅ **Publicado** |
-| **Dia 14** | **Blocos de Corsi (Memória Visuoespacial)** | Memória Operacional Visuoespacial e Span Atencional | `recursos/jogo-blocos-corsi.html` | ✅ **Publicado** |
-| **Dia 15** | **N-Back Dual (Atualização de Memória)** | Memória de Trabalho Ativa e Controle Atencional | `recursos/jogo-n-back.html` | ✅ **Publicado** |
-| **Dia 16** | **Criptografia Neural (Substituição de Padrões)** | Atenção Alternada, Velocidade de Codificação e Agilidade Mental | `recursos/jogo-criptografia-neural.html` | ✅ **Publicado** |
-| **Dia 17** | **Labirinto Hexagonal (Relações Espaciais)** | Raciocínio Topológico, Rotação Mental e Flexibilidade Cognitiva | `recursos/jogo-labirinto-hexagonal.html` | ✅ **Publicado** |
-| **Dia 18** | **Balança dos Ponderáveis (Inferência Bayesiana)** | Atualização de Probabilidades, Raciocínio Dedutivo e Evidências | `recursos/jogo-balanca-bayesiana.html` | ✅ **Publicado** |
-| **Dia 19** | **Matriz de Resolução de Conflitos e Custo Cognitivo** | Tomada de Decisão Sob Incerteza, Custo de Troca e Flexibilidade | `recursos/jogo-matriz-conflitos.html` | ✅ **Publicado** |
-| **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `recursos/jogo-campo-receptivo.html` | ⏳ *Próximo da fila* |
-| **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `recursos/jogo-transitividade-logica.html` | ⏳ Aguardando |
+| **Dia 1** | **Torre de Hanói** | Funções Executivas, Planejamento Antecipatório e Controle Inibitório | `jogos/jogo-torre-hanoi.html` | ✅ **Publicado** |
+| **Dia 2** | **Balança de Equivalências** | Raciocínio Algébrico Visual, Dedução e Abstração | `jogos/jogo-balanca-logica.html` | ✅ **Publicado** |
+| **Dia 3** | **Grid de Dedução (Detetive Lógico)** | Memória Operacional, Inferência e Eliminação de Hipóteses | `jogos/jogo-detetive-logico.html` | ✅ **Publicado** |
+| **Dia 4** | **Matrizes Progressivas de Raven** | Raciocínio Fluido e Relações Visuoespaciais | `jogos/jogo-matrizes-raven.html` | ✅ **Publicado** |
+| **Dia 5** | **Circuito Neural (Conexão Lógica)** | Flexibilidade Mental, Atenção Focada e Resolução de Problemas | `jogos/jogo-circuito-neural.html` | ✅ **Publicado** |
+| **Dia 6** | **Mini-Sudoku das Formas e Cores** | Atenção Sustentada e Pensamento Algorítmico | `jogos/jogo-mini-sudoku.html` | ✅ **Publicado** |
+| **Dia 7** | **Balança da Verdade (Silogismos)** | Lógica Proposicional, Validação de Premissas e Pensamento Crítico | `jogos/jogo-silogismos.html` | ✅ **Publicado** |
+| **Dia 8** | **Labirinto Visuoespacial (Planejamento)** | Planejamento Motor, Visuoconstrução e Monitoramento | `jogos/jogo-labirinto-cognitivo.html` | ✅ **Publicado** |
+| **Dia 9** | **Paradoxo das Portas (Monty Hall)** | Probabilidade Intuitiva, Atualização de Crenças e Flexibilidade | `jogos/jogo-monty-hall.html` | ✅ **Publicado** |
+| **Dia 11** | **Efeito Stroop Neurocognitivo** | Controle Inibitório Frontal, Conflito Cognitivo e Velocidade | `jogos/jogo-stroop-neuro.html` | ✅ **Publicado** |
+| **Dia 12** | **Matriz de Associação Semântica** | Memória Semântica, Categorização e Raciocínio Verbal | `jogos/jogo-associacao-semantica.html` | ✅ **Publicado** |
+| **Dia 13** | **Torre de Londres (Planejamento Motor)** | Funções Executivas e Resolução de Problemas Sequenciais | `jogos/jogo-torre-londres.html` | ✅ **Publicado** |
+| **Dia 14** | **Blocos de Corsi (Memória Visuoespacial)** | Memória Operacional Visuoespacial e Span Atencional | `jogos/jogo-blocos-corsi.html` | ✅ **Publicado** |
+| **Dia 15** | **N-Back Dual (Atualização de Memória)** | Memória de Trabalho Ativa e Controle Atencional | `jogos/jogo-n-back.html` | ✅ **Publicado** |
+| **Dia 16** | **Criptografia Neural (Substituição de Padrões)** | Atenção Alternada, Velocidade de Codificação e Agilidade Mental | `jogos/jogo-criptografia-neural.html` | ✅ **Publicado** |
+| **Dia 17** | **Labirinto Hexagonal (Relações Espaciais)** | Raciocínio Topológico, Rotação Mental e Flexibilidade Cognitiva | `jogos/jogo-labirinto-hexagonal.html` | ✅ **Publicado** |
+| **Dia 18** | **Balança dos Ponderáveis (Inferência Bayesiana)** | Atualização de Probabilidades, Raciocínio Dedutivo e Evidências | `jogos/jogo-balanca-bayesiana.html` | ✅ **Publicado** |
+| **Dia 19** | **Matriz de Resolução de Conflitos e Custo Cognitivo** | Tomada de Decisão Sob Incerteza, Custo de Troca e Flexibilidade | `jogos/jogo-matriz-conflitos.html` | ✅ **Publicado** |
+| **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `jogos/jogo-campo-receptivo.html` | ⏳ *Próximo da fila* |
+| **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `jogos/jogo-transitividade-logica.html` | ⏳ Aguardando |
 
 ---
 

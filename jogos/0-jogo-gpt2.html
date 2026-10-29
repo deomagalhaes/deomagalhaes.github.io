@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trilha das Emoções – Autorregulação e Empatia</title>
+  <style>
+    /* ====== Base visual herdada do estilo anterior ====== */
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: hsl(210, 100%, 50%);
+      --primary-dark: hsl(210, 100%, 40%);
+      --secondary: hsl(45, 100%, 60%);
+      --accent: hsl(330, 100%, 60%);
+      --success: hsl(120, 60%, 50%);
+      --danger: hsl(0, 80%, 60%);
+      --background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 30%, #B0E0E6 60%, #E0F6FF 100%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --shadow: 0 20px 40px rgba(0,0,0,0.1);
+      --glow: 0 0 30px rgba(74, 144, 226, 0.5);
+    }
+    body { font-family: 'Fredoka', cursive; background: var(--background); min-height: 100vh; overflow-x: hidden; position: relative; }
+    .clouds-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+    .cloud-bg { position: absolute; background: rgba(255, 255, 255, 0.6); border-radius: 100px; animation: drift 25s infinite linear; }
+    .cloud-bg::before, .cloud-bg::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.6); border-radius: 100px; }
+    .cloud-bg:nth-child(1){ width:120px; height:60px; top:10%; animation-duration:30s; }
+    .cloud-bg:nth-child(2){ width:80px; height:40px; top:30%; animation-duration:25s; animation-delay:-8s; }
+    .cloud-bg:nth-child(3){ width:100px; height:50px; top:60%; animation-duration:35s; animation-delay:-15s; }
+    @keyframes drift { from{ transform: translateX(-200px);} to{ transform: translateX(calc(100vw + 200px));}}
+
+    .app-container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 20px; }
+    .header { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 25px; padding: 30px; text-align: center; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.3); }
+    .header h1 { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 3rem; font-weight: 700; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header p { color: #555; font-size: 1.2rem; font-weight: 500; }
+
+    .status-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .status-card { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.3); transition: transform .3s; }
+    .status-card:hover { transform: translateY(-5px); box-shadow: var(--glow); }
+    .status-label { font-size: .9rem; color: #666; margin-bottom: 8px; font-weight: 500; }
+    .status-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+
+    .avatar-selection { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 25px; padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.3); }
+    .avatar-selection h2 { text-align: center; color: #333; font-size: 1.8rem; margin-bottom: 20px; font-weight: 600; }
+    .avatar-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+    .avatar-option { background: rgba(255,255,255,0.7); border: 3px solid transparent; border-radius: 20px; padding: 18px; text-align: center; cursor: pointer; transition: all .25s; position: relative; overflow: hidden; }
+    .avatar-option:hover { transform: translateY(-5px); box-shadow: var(--glow); }
+    .avatar-option.selected { border-color: var(--primary); box-shadow: var(--glow); }
+    .avatar-emoji { font-size: 42px; margin-bottom: 10px; }
+    .avatar-name { font-weight: 700; color: #333; }
+    .avatar-stats { font-size: .9rem; color: #666; margin-top: 6px; }
+
+    .progress-indicator { width: 100%; height: 6px; background: rgba(255,255,255,0.3); border-radius: 3px; margin: 10px 0 16px; overflow: hidden; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width .3s; border-radius: 3px; }
+
+    .message { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; margin: 12px 0 20px; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.3); font-size: 1.05rem; font-weight: 500; color: #333; }
+
+    .game-area { position: relative; width: 100%; height: 500px; background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 50%, #B0E0E6 100%); border-radius: 25px; overflow: hidden; box-shadow: inset 0 10px 30px rgba(0,0,0,0.1); border: 3px solid rgba(255,255,255,0.3); margin-bottom: 18px; }
+    .race-track { position: absolute; inset: 0; background: repeating-linear-gradient( 90deg, transparent, transparent 48px, rgba(255,255,255,0.12) 48px, rgba(255,255,255,0.12) 50px ); }
+
+    .player { position: absolute; top: 0; left: 50px; width: 56px; height: 56px; z-index: 10; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); cursor: grab; user-select: none; will-change: transform; display: grid; place-items: center; font-size: 34px; border-radius: 16px; background: white; border: 3px solid rgba(0,0,0,0.05); }
+    .player:active { cursor: grabbing; }
+
+    .bubble { position: absolute; width: 48px; height: 48px; will-change: transform; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.2)); border-radius: 50%; display: grid; place-items: center; font-size: 28px; }
+    .bubble.good { background: rgba(76, 209, 55, 0.9); border: 3px solid rgba(255,255,255,0.8); }
+    .bubble.bad  { background: rgba(255, 107, 107, 0.9); border: 3px solid rgba(255,255,255,0.8); }
+    .bubble.neutral { background: rgba(255, 195, 18, 0.9); border: 3px solid rgba(255,255,255,0.8); }
+
+    .energy-wrap { height: 10px; background: rgba(255,255,255,0.5); border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); }
+    .energy-bar { height: 100%; width: 100%; background: linear-gradient(90deg, var(--success), var(--secondary)); transition: width .2s; }
+
+    .game-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 20; }
+    .control-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all .2s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .control-btn:hover { transform: scale(1.1); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+    .control-btn:active { transform: scale(0.95); }
+
+    .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 15px 30px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 50px; cursor: pointer; transition: all .25s; font-family: inherit; position: relative; overflow: hidden; }
+    .btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transition: left .5s; }
+    .btn:hover::before { left: 100%; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 10px 25px rgba(74,144,226,0.3); }
+    .btn-secondary { background: linear-gradient(135deg, #95A5A6, #7F8C8D); color: white; box-shadow: 0 10px 25px rgba(149,165,166,0.3); }
+    .btn-accent { background: linear-gradient(135deg, var(--accent), #E91E63); color: white; box-shadow: 0 10px 25px rgba(233,30,99,0.3); }
+
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: none; align-items: center; justify-content: center; }
+    .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 25px; padding: 40px; max-width: 520px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.3); animation: modalIn .3s ease-out; }
+    @keyframes modalIn { from{ transform: scale(.8) translateY(50px); opacity:0;} to{ transform: scale(1) translateY(0); opacity:1;} }
+    .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(255,255,255,0.7); border-radius: 15px; margin-bottom: 10px; transition: transform .2s; }
+    .leaderboard-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .rank { font-size: 1.5rem; font-weight: 700; color: var(--primary); min-width: 40px; }
+    .record-info { flex: 1; margin-left: 15px; }
+
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.04);} }
+    .shake { animation: shake .5s ease-in-out; }
+    @keyframes shake { 0%,100%{ transform: translateX(0);} 25%{ transform: translateX(-5px);} 75%{ transform: translateX(5px);} }
+    .pop { animation: pop .35s ease-out; }
+    @keyframes pop { 0%{ transform: scale(.6); opacity:.6;} 100%{ transform: scale(1); opacity:1; } }
+
+    @media (max-width: 768px){ .app-container{ padding:15px;} .header h1{ font-size:2.2rem;} .game-area{ height:420px;} .status-panel{ grid-template-columns: repeat(2,1fr);} .avatar-options{ grid-template-columns: repeat(2,1fr);} }
+  </style>
+</head>
+<body>
+  <div class="clouds-bg">
+    <div class="cloud-bg"></div>
+    <div class="cloud-bg"></div>
+    <div class="cloud-bg"></div>
+  </div>
+
+  <div class="app-container">
+    <div class="header">
+      <h1>🎭 Trilha das Emoções</h1>
+      <p>Autorregulação e empatia na prática: identifique a emoção foco e faça escolhas.</p>
+    </div>
+
+    <div class="status-panel">
+      <div class="status-card">
+        <div class="status-label">Nível</div>
+        <div class="status-value" id="levelDisplay">1/8</div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Pontuação</div>
+        <div class="status-value" id="scoreDisplay">0</div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Energia</div>
+        <div class="status-value" id="energyText">100%</div>
+        <div class="energy-wrap" style="margin-top:10px"><div class="energy-bar" id="energyBar"></div></div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Recorde</div>
+        <div class="status-value" id="recordDisplay">-</div>
+      </div>
+    </div>
+
+    <div class="avatar-selection" id="avatarSelection">
+      <h2>Escolha seu Guia</h2>
+      <div class="avatar-options">
+        <div class="avatar-option selected" data-type="coruja" data-emoji="🦉">
+          <div class="avatar-emoji">🦉</div>
+          <div class="avatar-name">Coruja Sábia</div>
+          <div class="avatar-stats">Foco estável • +5% energia por nível</div>
+        </div>
+        <div class="avatar-option" data-type="raposa" data-emoji="🦊">
+          <div class="avatar-emoji">🦊</div>
+          <div class="avatar-name">Raposa Ágil</div>
+          <div class="avatar-stats">Movimento rápido • +10% pontos bons</div>
+        </div>
+        <div class="avatar-option" data-type="panda" data-emoji="🐼">
+          <div class="avatar-emoji">🐼</div>
+          <div class="avatar-name">Panda Calmo</div>
+          <div class="avatar-stats">Penalidade reduzida • -20% dano</div>
+        </div>
+        <div class="avatar-option" data-type="golfinho" data-emoji="🐬">
+          <div class="avatar-emoji">🐬</div>
+          <div class="avatar-name">Golfinho Atento</div>
+          <div class="avatar-stats">Tempo extra • +3s por nível</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-indicator"><div class="progress-bar" id="phaseProgress"></div></div>
+    <div class="message" id="gameMessage">Escolha um guia e clique em "Começar". Em cada nível haverá uma <b>Emoção Foco</b> para identificar.</div>
+
+    <div class="game-area" id="gameArea">
+      <div class="race-track"></div>
+      <div class="player" id="player">🦉</div>
+      <div class="game-controls" id="gameControls" style="display:none">
+        <button class="control-btn" id="moveUp">⬆️</button>
+        <button class="control-btn" id="moveDown">⬇️</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="startBtn">Começar</button>
+      <button class="btn btn-secondary" id="pauseBtn" style="display:none">Pausar</button>
+      <button class="btn btn-accent" id="leaderboardBtn">🏆 Classificações</button>
+      <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+    </div>
+  </div>
+
+  <div class="modal" id="leaderboardModal">
+    <div class="modal-content">
+      <h2>🏆 Classificações</h2>
+      <div id="leaderboardList"><p style="text-align:center;color:#666">Nenhum recorde ainda.</p></div>
+      <div style="text-align:center; margin-top:25px;">
+        <button class="btn btn-secondary" onclick="closeLeaderboard()">Fechar</button>
+        <button class="btn btn-accent" onclick="clearRecords()" style="margin-left:10px">Limpar Recordes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== Estado do jogo ======
+    const EMOTIONS = [
+      { id: 'alegria', emoji: '😊', label: 'Alegria' },
+      { id: 'tristeza', emoji: '😢', label: 'Tristeza' },
+      { id: 'raiva', emoji: '😠', label: 'Raiva' },
+      { id: 'surpresa', emoji: '😲', label: 'Surpresa' },
+      { id: 'calma', emoji: '😌', label: 'Calma' }
+    ];
+
+    const gameState = {
+      level: 1, maxLevel: 8, score: 0, energy: 100,
+      isPlaying: false, isPaused: false, playerY: 222,
+      bubbles: [], bubbleEls: new Map(), frame: 0,
+      target: null, lastUpdateTime: 0, started: false,
+      selectedAvatar: 'coruja', avatarEmoji: '🦉',
+      speed: 2.3, spawnRate: 0.02, duration: 22000,
+      bonus: { score: 1.0, damage: 1.0, time: 0, regen: 0 }
+    };
+
+    const levelCfg = {
+      1:{ speed:2.3, spawn:0.018, dur:20000 },
+      2:{ speed:2.6, spawn:0.020, dur:20000 },
+      3:{ speed:2.9, spawn:0.023, dur:20000 },
+      4:{ speed:3.2, spawn:0.026, dur:20000 },
+      5:{ speed:3.5, spawn:0.030, dur:20000 },
+      6:{ speed:3.9, spawn:0.034, dur:20000 },
+      7:{ speed:4.2, spawn:0.038, dur:20000 },
+      8:{ speed:4.6, spawn:0.042, dur:20000 }
+    };
+
+    const el = {
+      levelDisplay: document.getElementById('levelDisplay'),
+      scoreDisplay: document.getElementById('scoreDisplay'),
+      energyText: document.getElementById('energyText'),
+      energyBar: document.getElementById('energyBar'),
+      recordDisplay: document.getElementById('recordDisplay'),
+      gameMessage: document.getElementById('gameMessage'),
+      gameArea: document.getElementById('gameArea'),
+      player: document.getElementById('player'),
+      startBtn: document.getElementById('startBtn'),
+      pauseBtn: document.getElementById('pauseBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      leaderboardBtn: document.getElementById('leaderboardBtn'),
+      avatarSelection: document.getElementById('avatarSelection'),
+      phaseProgress: document.getElementById('phaseProgress'),
+      gameControls: document.getElementById('gameControls'),
+      leaderboardModal: document.getElementById('leaderboardModal'),
+      leaderboardList: document.getElementById('leaderboardList'),
+      moveUp: document.getElementById('moveUp'),
+      moveDown: document.getElementById('moveDown'),
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+      setup();
+      updateDisplay();
+      createSynth();
+    });
+
+    function init(){
+      gameState.level = 1; gameState.score = 0; gameState.energy = 100;
+      gameState.isPlaying = false; gameState.isPaused = false; gameState.frame = 0;
+      gameState.bubbles = []; gameState.bubbleEls.clear(); gameState.started = false;
+      gameState.playerY = 222; el.player.style.transform = `translateY(${gameState.playerY}px)`;
+      applyLevelCfg();
+      pickTargetEmotion();
+      el.pauseBtn.style.display = 'none'; el.startBtn.style.display = 'inline-block';
+      el.avatarSelection.style.display = 'block'; el.gameControls.style.display = 'none';
+      el.phaseProgress.style.width = '0%';
+    }
+
+    function setup(){
+      document.querySelectorAll('.avatar-option').forEach(op => {
+        op.addEventListener('click', () => selectAvatar(op.dataset.type, op.dataset.emoji));
+      });
+      el.startBtn.addEventListener('click', start);
+      el.pauseBtn.addEventListener('click', togglePause);
+      el.resetBtn.addEventListener('click', reset);
+      el.leaderboardBtn.addEventListener('click', showLeaderboard);
+
+      // Controles
+      el.player.addEventListener('mousedown', dragStart);
+      el.gameArea.addEventListener('mousemove', dragging);
+      document.addEventListener('mouseup', dragEnd);
+      el.player.addEventListener('touchstart', dragStartTouch, { passive:false });
+      el.gameArea.addEventListener('touchmove', draggingTouch, { passive:false });
+      document.addEventListener('touchend', dragEnd);
+      document.addEventListener('keydown', keyControls);
+      el.moveUp.addEventListener('click', () => move(-1));
+      el.moveDown.addEventListener('click', () => move(1));
+
+      el.leaderboardModal.addEventListener('click', e => { if(e.target===el.leaderboardModal) closeLeaderboard(); });
+    }
+
+    function selectAvatar(type, emoji){
+      gameState.selectedAvatar = type; gameState.avatarEmoji = emoji;
+      el.player.textContent = emoji;
+      document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      document.querySelector(`.avatar-option[data-type="${type}"]`).classList.add('selected');
+      // Zera e aplica bônus
+      gameState.bonus = { score: 1.0, damage: 1.0, time: 0, regen: 0 };
+      if(type==='raposa') gameState.bonus.score = 1.10;
+      if(type==='panda') gameState.bonus.damage = 0.8;
+      if(type==='golfinho') gameState.bonus.time = 3000; // +3s
+      if(type==='coruja') gameState.bonus.regen = 0.05; // +5% por nível ao concluir
+      beep('move');
+    }
+
+    function start(){
+      if(gameState.isPlaying) return;
+      gameState.isPlaying = true; gameState.isPaused = false; gameState.frame = 0; gameState.started = true;
+      gameState.lastUpdateTime = performance.now();
+      el.startBtn.style.display = 'none'; el.pauseBtn.style.display = 'inline-block';
+      el.avatarSelection.style.display = 'none'; el.gameControls.style.display = 'flex';
+      el.gameMessage.innerHTML = `Emoção foco: <b>${gameState.target.label} ${gameState.target.emoji}</b> — toque nas <b>bolhas verdes</b> e evite as <b>vermelhas</b>.`;
+      requestAnimationFrame(loop);
+    }
+
+    function applyLevelCfg(){
+      const cfg = levelCfg[gameState.level];
+      gameState.speed = cfg.speed; gameState.spawnRate = cfg.spawn; gameState.duration = cfg.dur + gameState.bonus.time;
+    }
+
+    function pickTargetEmotion(){
+      gameState.target = EMOTIONS[Math.floor(Math.random()*EMOTIONS.length)];
+      el.gameMessage.innerHTML = `Prepare-se. Emoção foco do nível ${gameState.level}: <b>${gameState.target.label} ${gameState.target.emoji}</b>`;
+    }
+
+    function loop(now){
+      if(!gameState.isPlaying || gameState.isPaused) return;
+      const delta = now - gameState.lastUpdateTime; gameState.lastUpdateTime = now;
+      gameState.frame++;
+
+      // progresso temporal
+      if(gameState.frame===1) gameState._phaseStart = performance.now();
+      const elapsed = now - gameState._phaseStart;
+      const timeLeft = Math.max(0, gameState.duration - elapsed);
+      el.phaseProgress.style.width = `${(elapsed / gameState.duration) * 100}%`;
+      if(gameState.frame % 30 === 0){
+        el.gameMessage.textContent = `Foco: ${gameState.target.label} ${gameState.target.emoji} — Tempo: ${Math.ceil(timeLeft/1000)}s`;
+      }
+
+      // spawns
+      if(Math.random() < gameState.spawnRate){ spawnBubble(); }
+      updateBubbles();
+
+      if(timeLeft <= 0){ levelComplete(); return; }
+      if(gameState.energy <= 0){ gameOver(); return; }
+
+      if(gameState.frame % 10 === 0) updateDisplay();
+      requestAnimationFrame(loop);
+    }
+
+    function spawnBubble(){
+      const id = `b_${Date.now()}_${Math.random()}`;
+      const w = el.gameArea.offsetWidth, h = el.gameArea.offsetHeight;
+      const emotion = EMOTIONS[Math.floor(Math.random()*EMOTIONS.length)];
+      // Define tipo: boa se igual à emoção foco, ruim se outra, com chance de neutra
+      const roll = Math.random();
+      const type = emotion.id === gameState.target.id ? 'good' : (roll < 0.15 ? 'neutral' : 'bad');
+      const bubble = { id, x: w, y: Math.random()*(h-96)+48, vx: levelCfg[gameState.level].speed*0.9 + Math.random()*1.4, emotion, type, hit:false };
+      gameState.bubbles.push(bubble);
+      const elb = document.createElement('div');
+      elb.className = `bubble ${type}`;
+      elb.style.transform = `translate(${bubble.x}px, ${bubble.y}px)`;
+      elb.textContent = emotion.emoji;
+      elb.title = emotion.label;
+      gameState.bubbleEls.set(id, elb);
+      el.gameArea.appendChild(elb);
+    }
+
+    function updateBubbles(){
+      const px = 50, py = gameState.playerY, pw = 56, ph = 56;
+      for(let i=gameState.bubbles.length-1; i>=0; i--){
+        const b = gameState.bubbles[i];
+        b.x -= b.vx;
+        const elb = gameState.bubbleEls.get(b.id);
+        if(elb){ elb.style.transform = `translate(${b.x}px, ${b.y}px)`; }
+        if(b.x < -60){ removeBubble(i); continue; }
+        // colisão simples
+        if(!b.hit && rectsOverlap(px, py, pw, ph, b.x, b.y, 48, 48)){
+          b.hit = true;
+          handleHit(b);
+          if(elb){ elb.classList.add('pop'); setTimeout(()=>{ if(elb.parentNode) elb.parentNode.removeChild(elb); }, 250); }
+          gameState.bubbles.splice(i,1); gameState.bubbleEls.delete(b.id);
+        }
+      }
+    }
+
+    function handleHit(b){
+      if(b.type === 'good'){
+        const base = 50; const add = Math.round(base * gameState.bonus.score);
+        gameState.score += add; flashBorder('good'); beep('good');
+      } else if(b.type === 'bad'){
+        const dmg = Math.round(18 * gameState.bonus.damage);
+        gameState.energy = Math.max(0, gameState.energy - dmg);
+        flashBorder('bad'); shake(); beep('bad');
+      } else { // neutral → pequeno bônus de tempo
+        gameState.score += 10; beep('neutral');
+      }
+      updateDisplay();
+    }
+
+    function removeBubble(idx){
+      const b = gameState.bubbles[idx];
+      const elb = gameState.bubbleEls.get(b.id);
+      if(elb && elb.parentNode) elb.parentNode.removeChild(elb);
+      gameState.bubbles.splice(idx,1); gameState.bubbleEls.delete(b.id);
+    }
+
+    function levelComplete(){
+      beep('level');
+      // bônus de conclusão
+      if(gameState.bonus.regen > 0){
+        const gain = Math.round(100 * gameState.bonus.regen);
+        gameState.energy = Math.min(100, gameState.energy + gain);
+      }
+      el.gameMessage.innerHTML = `✅ Nível ${gameState.level} completo. Emoção foco era <b>${gameState.target.label} ${gameState.target.emoji}</b>.`;
+      nextLevel();
+    }
+
+    function nextLevel(){
+      clearBubbles();
+      if(gameState.level < gameState.maxLevel){
+        gameState.level++;
+        applyLevelCfg();
+        pickTargetEmotion();
+        countdown(() => {
+          gameState.isPlaying = true; gameState.isPaused = false; gameState._phaseStart = performance.now(); gameState.lastUpdateTime = performance.now();
+          el.pauseBtn.style.display = 'inline-block'; el.gameControls.style.display = 'flex';
+          requestAnimationFrame(loop);
+        });
+      } else { gameComplete(); }
+    }
+
+    function gameComplete(){
+      saveRecord(true);
+      el.gameMessage.innerHTML = `🏁 Jogo concluído. Pontos: <b>${gameState.score}</b>. Energia final: ${gameState.energy}%`;
+      resetUI();
+    }
+
+    function gameOver(){
+      beep('crash'); shake();
+      el.gameMessage.textContent = `Fim de energia. Pontos: ${gameState.score}. Tente novamente.`;
+      saveRecord(false);
+      resetUI();
+    }
+
+    function reset(){ clearBubbles(); init(); updateDisplay(); el.gameMessage.textContent = 'Escolha um guia e clique em "Começar".'; }
+
+    function resetUI(){
+      el.startBtn.style.display = 'inline-block'; el.pauseBtn.style.display = 'none';
+      el.avatarSelection.style.display = 'block'; el.gameControls.style.display = 'none';
+      el.phaseProgress.style.width = '0%';
+      gameState.isPlaying = false; gameState.isPaused = false; gameState.started = false;
+    }
+
+    function togglePause(){
+      gameState.isPaused = !gameState.isPaused;
+      if(gameState.isPaused){ el.pauseBtn.textContent = 'Continuar'; el.gameMessage.textContent = 'Jogo pausado'; }
+      else { el.pauseBtn.textContent = 'Pausar'; gameState.lastUpdateTime = performance.now(); requestAnimationFrame(loop); }
+    }
+
+    function clearBubbles(){
+      gameState.bubbles = [];
+      gameState.bubbleEls.forEach(e => e.remove());
+      gameState.bubbleEls.clear();
+    }
+
+    function updateDisplay(){
+      el.levelDisplay.textContent = `${gameState.level}/${gameState.maxLevel}`;
+      el.scoreDisplay.textContent = gameState.score.toLocaleString();
+      el.energyText.textContent = `${gameState.energy}%`;
+      el.energyBar.style.width = `${gameState.energy}%`;
+      const best = getBestScore();
+      el.recordDisplay.textContent = best ? best.toLocaleString() : '-';
+    }
+
+    // ====== Interação ======
+    let draggingActive = false, throttle = false;
+    function dragStart(e){ if(!gameState.isPlaying || gameState.isPaused) return; e.preventDefault(); draggingActive = true; el.player.style.cursor='grabbing'; beep('move'); }
+    function dragStartTouch(e){ if(!gameState.isPlaying || gameState.isPaused) return; e.preventDefault(); draggingActive = true; beep('move'); }
+    function dragging(e){ if(!draggingActive || gameState.isPaused || throttle) return; throttle = true; requestAnimationFrame(()=>{ const r = el.gameArea.getBoundingClientRect(); moveTo(e.clientY - r.top); throttle=false; }); }
+    function draggingTouch(e){ if(!draggingActive || gameState.isPaused || throttle) return; e.preventDefault(); throttle = true; requestAnimationFrame(()=>{ const r = el.gameArea.getBoundingClientRect(); moveTo(e.touches[0].clientY - r.top); throttle=false; }); }
+    function dragEnd(){ if(!draggingActive) return; draggingActive = false; el.player.style.cursor='grab'; }
+
+    function move(dir){ if(!gameState.isPlaying || gameState.isPaused) return; const step = 34; moveTo(gameState.playerY + (dir*step) + 28); }
+    function keyControls(e){
+      switch(e.key){
+        case 'ArrowUp': case 'w': case 'W': e.preventDefault(); move(-1); break;
+        case 'ArrowDown': case 's': case 'S': e.preventDefault(); move(1); break;
+        case ' ': e.preventDefault(); if(gameState.started) togglePause(); else start(); break;
+      }
+    }
+    function moveTo(targetY){
+      const minY = 20, maxY = el.gameArea.offsetHeight - 76; // margens
+      const y = Math.max(minY, Math.min(maxY, targetY-28));
+      gameState.playerY = y; el.player.style.transform = `translateY(${y}px)`;
+    }
+
+    function rectsOverlap(x1,y1,w1,h1,x2,y2,w2,h2){
+      return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
+    }
+
+    function flashBorder(type){
+      const c = type==='good' ? 'rgba(76,209,55,0.6)' : 'rgba(255,107,107,0.6)';
+      el.gameArea.style.boxShadow = `inset 0 0 0 4px ${c}, inset 0 10px 30px rgba(0,0,0,0.1)`;
+      setTimeout(()=>{ el.gameArea.style.boxShadow = 'inset 0 10px 30px rgba(0,0,0,0.1)'; }, 180);
+    }
+    function shake(){ el.gameArea.classList.add('shake'); setTimeout(()=> el.gameArea.classList.remove('shake'), 500); }
+
+    // ====== Contagem regressiva entre níveis ======
+    function countdown(cb){
+      let c = 3; el.gameMessage.innerHTML = `Próximo nível em <b>${c}</b>… Foco: <b>${gameState.target.label} ${gameState.target.emoji}</b>`; el.gameMessage.classList.add('pulse');
+      const it = setInterval(()=>{
+        c--; if(c>0){ el.gameMessage.innerHTML = `Próximo nível em <b>${c}</b>… Foco: <b>${gameState.target.label} ${gameState.target.emoji}</b>`; }
+        else { clearInterval(it); el.gameMessage.classList.remove('pulse'); cb(); }
+      }, 1000);
+    }
+
+    // ====== Placar local ======
+    function getRecords(){ const s = localStorage.getItem('emotion-trail-records'); return s? JSON.parse(s): []; }
+    function getBestScore(){ const r = getRecords(); return r.length? r[0].score: 0; }
+    function saveRecord(complete){
+      const recs = getRecords();
+      recs.push({ score: gameState.score, level: gameState.level, energy: gameState.energy, date: new Date().toLocaleDateString('pt-BR'), complete });
+      recs.sort((a,b)=> b.score - a.score); recs.splice(10);
+      localStorage.setItem('emotion-trail-records', JSON.stringify(recs));
+      updateDisplay();
+    }
+    function showLeaderboard(){
+      const recs = getRecords();
+      el.leaderboardList.innerHTML = recs.length? recs.map((r,i)=>
+        `<div class="leaderboard-item"><div class="rank">#${i+1}</div><div class="record-info"><div><b>${r.score.toLocaleString()} pts</b> • Nível ${r.level}${r.complete? ' • 🏁':''}</div><div style="color:#666">Energia ${r.energy}% • ${r.date}</div></div></div>`
+      ).join('') : '<p style="text-align:center;color:#666">Nenhum recorde ainda.</p>';
+      el.leaderboardModal.style.display = 'flex';
+    }
+    function closeLeaderboard(){ el.leaderboardModal.style.display='none'; }
+    function clearRecords(){ if(confirm('Limpar todos os recordes?')){ localStorage.removeItem('emotion-trail-records'); showLeaderboard(); updateDisplay(); } }
+
+    // ====== Áudio simples por síntese ======
+    function createSynth(){
+      try{
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        window.sfx = {
+          tone: (freq=440, dur=0.12, type='sine', vol=0.1) => {
+            const o = ctx.createOscillator(); const g = ctx.createGain();
+            o.type = type; o.frequency.setValueAtTime(freq, ctx.currentTime);
+            o.connect(g); g.connect(ctx.destination);
+            g.gain.setValueAtTime(vol, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+            o.start(); o.stop(ctx.currentTime + dur);
+          },
+          seq: (arr) => arr.forEach((f,i)=> setTimeout(()=> window.sfx.tone(f, 0.12, 'sine', 0.12), i*110))
+        };
+      } catch(e){ window.sfx = null; }
+    }
+    function beep(kind){ if(!window.sfx) return; const map={ move:[660], good:[880], bad:[220], neutral:[520], level:[523,659,783,1046], crash:[196,82] }; const m=map[kind]; if(!m) return; if(m.length>1) window.sfx.seq(m); else window.sfx.tone(m[0]); }
+
+  </script>
+</body>
+</html>

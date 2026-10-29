@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Ruminação Mental e Pensamentos Intrusivos – Deo Magalhães</title>
+    <meta name="description" content="Avalie seus níveis de ruminação cognitiva, pensamentos intrusivos, autocrítica e paralisia mental com cálculo automático e devolutiva neuropsicológica imediata.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <link rel="stylesheet" href="../assets/style.css">
+    
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --surface: #ffffff;
+            --bg-page: #f8fafc;
+            --text-dark: #1f2937;
+            --text-muted: #4b5563;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .test-container {
+            max-width: 860px;
+            margin: 2rem auto 4rem auto;
+            padding: 2.2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 95, 115, 0.08);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .badge-test {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .test-header h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin: 0.2rem 0 0.8rem 0;
+            font-weight: 800;
+        }
+
+        .test-header p {
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto;
+            font-size: 1.02rem;
+            line-height: 1.55;
+        }
+
+        .test-intro-box {
+            background: #f0fdfa;
+            border: 1px solid #ccfbf1;
+            border-left: 4px solid var(--primary-hover);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1.8rem 0 2.2rem 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #134e4a;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #fbfcfd;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1.4rem 1.6rem;
+            margin-bottom: 1.4rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .question-card.answered {
+            border-color: #99f6e4;
+            background: #ffffff;
+        }
+
+        .question-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .q-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: #e2e8f0;
+            color: #475569;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .question-card.answered .q-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .opt-btn:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .opt-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.2);
+            font-weight: 600;
+        }
+
+        .actions-section {
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a9396 100%);
+            color: white;
+            border: none;
+            padding: 14px 38px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 95, 115, 0.35);
+        }
+
+        .btn-submit:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Resultados */
+        .results-box {
+            display: none;
+            margin-top: 2.5rem;
+            padding: 2.2rem;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .res-level-baixo { background: #dcfce7; color: #15803d; }
+        .res-level-moderado { background: #fef9c3; color: #854d0e; }
+        .res-level-elevado { background: #ffedd5; color: #c2410c; }
+        .res-level-severo { background: #fee2e2; color: #b91c1c; }
+
+        .score-display {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 2rem 0;
+        }
+
+        .dim-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .dim-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .dim-score {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .dim-desc {
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%);
+            border: 1px solid #99f6e4;
+            border-radius: 14px;
+            padding: 1.8rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .test-container {
+                margin: 1rem;
+                padding: 1.4rem;
+            }
+            .test-header h1 {
+                font-size: 1.6rem;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos</a>
+                <a href="/recursos.html">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="test-container">
+            <div class="test-header">
+                <span class="badge-test">🧠 Teste Psicoeducativo Autoaplicável</span>
+                <h1>Escala de Ruminação Mental e Pensamentos Intrusivos</h1>
+                <p>Mapeie a tendência da sua mente de reviver mágoas passadas, antecipar catástrofes e criar autocrítica paralisante com devolutiva clínica imediata.</p>
+            </div>
+
+            <div class="test-intro-box">
+                <strong>Instruções:</strong> Indique com que frequência você se percebe reagindo aos seus pensamentos da forma descrita abaixo quando se sente triste, estressado ou sobrecarregado. Responda com base nas <strong>últimas semanas</strong>. Este instrumento é 100% confidencial e calculado localmente.
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="p-bar"></div>
+            </div>
+
+            <div id="questions-wrapper">
+                <!-- Preenchido via JavaScript -->
+            </div>
+
+            <div class="actions-section">
+                <button id="btn-calc" class="btn-submit" disabled onclick="calculateResults()">
+                    Calcular Meu Índice de Ruminação
+                </button>
+            </div>
+
+            <!-- Área de Devolutiva -->
+            <div id="results-area" class="results-box">
+                <div style="text-align: center;">
+                    <span id="badge-level" class="result-header-badge">Classificação</span>
+                    <h2 id="result-title" style="margin: 0.4rem 0; color: #0f172a; font-size: 1.8rem;">Perfil de Ruminação</h2>
+                    <div class="score-display"><span id="score-val">0</span> <span style="font-size: 1.2rem; color: #64748b; font-weight: 500;">/ 64 pts</span></div>
+                    <p id="result-overview" style="color: #475569; max-width: 660px; margin: 0 auto; line-height: 1.6; font-size: 1rem;"></p>
+                </div>
+
+                <div class="dimensions-grid">
+                    <div class="dim-card">
+                        <div class="dim-title">1. Ruminação Depressiva / Sintomas</div>
+                        <div class="dim-score" id="dim1-score">0/16</div>
+                        <div class="dim-desc">Foco hiperconcentrado na própria fadiga, falta de motivação e sensações corporais desconfortáveis.</div>
+                    </div>
+                    <div class="dim-card">
+                        <div class="dim-title">2. Ruminação Causal ("Por que eu?")</div>
+                        <div class="dim-score" id="dim2-score">0/16</div>
+                        <div class="dim-desc">Busca obsessiva por justificativas biográficas, culpas do passado e indignação com as circunstâncias.</div>
+                    </div>
+                    <div class="dim-card">
+                        <div class="dim-title">3. Pensamentos Intrusivos</div>
+                        <div class="dim-score" id="dim3-score">0/16</div>
+                        <div class="dim-desc">Invasão súbita de cenários catastróficos, imagens perturbadoras ou medos sem gatilho aparente.</div>
+                    </div>
+                    <div class="dim-card">
+                        <div class="dim-title">4. Paralisia por Autocrítica</div>
+                        <div class="dim-score" id="dim4-score">0/16</div>
+                        <div class="dim-desc">Julgamentos severos de insuficiência pessoal que impedem a transição da reflexão para a ação prática.</div>
+                    </div>
+                </div>
+
+                <div id="recommendations-box" style="background: #f8fafc; border-left: 4px solid var(--primary); padding: 1.2rem; border-radius: 8px; margin-top: 1.5rem; line-height: 1.6; color: #334155;">
+                    <!-- Preenchido via script -->
+                </div>
+
+                <div class="cta-box">
+                    <h3 style="margin-top: 0; color: var(--primary); font-size: 1.3rem;">Precisa Desacoplar Ciclos Ruminativos Crônicos?</h3>
+                    <p style="color: #475569; font-size: 0.95rem; margin-bottom: 0.5rem;">
+                        A ruminação obsessiva consome enorme energia metabólica e reforça vias sinápticas da ansiedade e da depressão. A psicoterapia clínica fundamentada em TCC, ACT e neurociências comportamentais fornece ferramentas sólidas para recuperar a autonomia da sua atenção.
+                    </p>
+                    <a href="https://wa.me/5535933003807?text=Ol%C3%A1%20Deo,%20realizei%20a%20escala%20de%20rumina%C3%A7%C3%A3o%20mental%20no%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" class="cta-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        Falar com Deo Magalhães via WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const QUESTIONS = [
+            // Dim 1: Ruminação Depressiva / Sintomas (1-4)
+            { id: 1, dim: 1, text: "Fico pensando repetidamente no quanto estou desmotivado, sem energia ou sem forças para cumprir minhas tarefas." },
+            { id: 2, dim: 1, text: "Fico analisando minuciosamente o quanto me sinto triste ou vazio por dentro, esperando o sentimento passar para agir." },
+            { id: 3, dim: 1, text: "Isolo-me fisicamente e passo horas deitado ou sentado apenas repassando o meu estado de cansaço mental." },
+            { id: 4, dim: 1, text: "Penso com frequência: 'É impossível me concentrar quando me sinto tão sobrecarregado assim'." },
+
+            // Dim 2: Ruminação Causal ("Por que eu?") (5-8)
+            { id: 5, dim: 2, text: "Pergunto-me obsessivamente: 'Por que isso sempre acontece comigo e não com as outras pessoas?'" },
+            { id: 6, dim: 2, text: "Fico repassando na mente conversas ou erros de anos atrás, pensando no que eu 'deveria ter dito ou feito'." },
+            { id: 7, dim: 2, text: "Busco incessantemente encontrar 'a causa exata' de uma decepção antes de conseguir seguir em frente." },
+            { id: 8, dim: 2, text: "Sinto revolta e fico repassando mentalmente injustiças que cometeram contra mim no passado." },
+
+            // Dim 3: Pensamentos Intrusivos e Catástrofe (9-12)
+            { id: 9, dim: 3, text: "Cenários de tragédias repentinas ou fracassos humilhantes invadem minha mente sem aviso prévio." },
+            { id: 10, dim: 3, text: "Tenho pensamentos bizarros ou perturbadores e fico assustado achando que eles dizem algo sobre quem eu realmente sou." },
+            { id: 11, dim: 3, text: "Quando tento relaxar ou deitar para dormir, sou bombardeado por imagens ou preocupações incontroláveis." },
+            { id: 12, dim: 3, text: "Tento expulsar à força um pensamento indesejado e noto que ele volta ainda mais forte e frequente." },
+
+            // Dim 4: Paralisia por Autocrítica (13-16)
+            { id: 13, dim: 4, text: "Minha voz interior diz com frequência que não sou bom o bastante, competente o suficiente ou digno de respeito." },
+            { id: 14, dim: 4, text: "Adio decisões importantes porque fico preso antecipando todos os possíveis erros e julgamentos alheios." },
+            { id: 15, dim: 4, text: "Comparo minhas fraquezas ocultas com o sucesso aparente dos outros nas redes sociais, sentindo-me inferior." },
+            { id: 16, dim: 4, text: "Passo tanto tempo analisando os problemas na minha cabeça que não sobra energia executiva para resolvê-los na prática." }
+        ];
+
+        const SCALE_OPTIONS = [
+            { label: "Quase Nunca", val: 1 },
+            { label: "Às Vezes", val: 2 },
+            { label: "Frequentemente", val: 3 },
+            { label: "Quase Sempre / Sempre", val: 4 }
+        ];
+
+        const userAnswers = {};
+
+        function renderQuiz() {
+            const wrapper = document.getElementById('questions-wrapper');
+            wrapper.innerHTML = '';
+
+            QUESTIONS.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `q-card-${q.id}`;
+
+                let optionsHtml = '';
+                SCALE_OPTIONS.forEach(opt => {
+                    optionsHtml += `
+                        <div class="opt-btn" onclick="selectAnswer(${q.id}, ${opt.val}, this)">
+                            ${opt.label}
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="question-title">
+                        <span class="q-number">${idx + 1}</span>
+                        <span>${q.text}</span>
+                    </div>
+                    <div class="options-grid">
+                        ${optionsHtml}
+                    </div>
+                `;
+
+                wrapper.appendChild(card);
+            });
+        }
+
+        function selectAnswer(questionId, val, element) {
+            userAnswers[questionId] = val;
+
+            const card = document.getElementById(`q-card-${questionId}`);
+            card.classList.add('answered');
+
+            const siblings = card.querySelectorAll('.opt-btn');
+            siblings.forEach(s => s.classList.remove('selected'));
+            element.classList.add('selected');
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const total = QUESTIONS.length;
+            const pct = Math.round((answeredCount / total) * 100);
+
+            document.getElementById('p-bar').style.width = pct + '%';
+
+            const btn = document.getElementById('btn-calc');
+            if (answeredCount === total) {
+                btn.disabled = false;
+                btn.innerText = "Ver Meu Resultado e Análise Neuropsicológica";
+            } else {
+                btn.disabled = true;
+                btn.innerText = `Responda todas as perguntas (${answeredCount}/${total})`;
+            }
+        }
+
+        function calculateResults() {
+            let total = 0;
+            let dim1 = 0, dim2 = 0, dim3 = 0, dim4 = 0;
+
+            QUESTIONS.forEach(q => {
+                const val = userAnswers[q.id] || 1;
+                total += val;
+                if (q.dim === 1) dim1 += val;
+                else if (q.dim === 2) dim2 += val;
+                else if (q.dim === 3) dim3 += val;
+                else if (q.dim === 4) dim4 += val;
+            });
+
+            document.getElementById('score-val').innerText = total;
+            document.getElementById('dim1-score').innerText = `${dim1}/16`;
+            document.getElementById('dim2-score').innerText = `${dim2}/16`;
+            document.getElementById('dim3-score').innerText = `${dim3}/16`;
+            document.getElementById('dim4-score').innerText = `${dim4}/16`;
+
+            const badge = document.getElementById('badge-level');
+            const title = document.getElementById('result-title');
+            const overview = document.getElementById('result-overview');
+            const recBox = document.getElementById('recommendations-box');
+
+            badge.className = 'result-header-badge';
+
+            if (total <= 27) {
+                badge.classList.add('res-level-baixo');
+                badge.innerText = "Mente Flexível / Baixa Ruminação";
+                title.innerText = "Excelente Regulação e Desfusão Cognitiva";
+                overview.innerText = "Sua Rede de Modo Padrão opera com boa fluidez e sem aprisionamentos obsessivos. Quando contratempos ocorrem, você consegue desengajar da autocrítica e orientar seus recursos executivos para o mundo real sem se afogar em mágoas passadas.";
+                recBox.innerHTML = `
+                    <h4 style="margin-top:0; color:var(--primary);">💡 Recomendações de Manutenção:</h4>
+                    <ul>
+                        <li>Continue cultivando rituais de presença e hábitos que ancoram seus sentidos no presente.</li>
+                        <li>Mantenha a perspectiva de que pensamentos passageiros não definem seu valor humano.</li>
+                    </ul>
+                `;
+            } else if (total <= 40) {
+                badge.classList.add('res-level-moderado');
+                badge.innerText = "Ruminação Moderada / Foco Interno Elevado";
+                title.innerText = "Tendência a Replay Mental Sob Pressão";
+                overview.innerText = "Em períodos de cansaço ou estresse, você tende a se recolher mentalmente para reviver falhas ou questionar os 'porquês' de situações difíceis. Embora ainda preserve capacidade de ação, esse processo drena sua energia mental diária.";
+                recBox.innerHTML = `
+                    <h4 style="margin-top:0; color:var(--primary);">💡 Estratégias Recomendadas:</h4>
+                    <ul>
+                        <li><strong>Regra dos 5 Minutos:</strong> Se perceber que está pensando em círculos sobre um problema sem chegar a uma ação prática, interrompa-se fisicamente (mude de cômodo ou tome água).</li>
+                        <li><strong>Troque o 'Por quê?' pelo 'Como?':</strong> Perguntas causais ('Por que sou assim?') alimentam o córtex pré-frontal medial; perguntas funcionais ('Como resolvo o próximo passo?') ativam a rede executiva.</li>
+                    </ul>
+                `;
+            } else if (total <= 52) {
+                badge.classList.add('res-level-elevado');
+                badge.innerText = "Hiperativação Ruminativa e Pensamentos Intrusivos";
+                title.innerText = "Sobrecarga Cognitiva e Autocrítica Rigorosa";
+                overview.innerText = "Sua mente opera frequentemente sequestrada pela Rede de Modo Padrão. Há uma forte tendência a confundir reflexão com ruminação, gerando cansaço mental constante, paralisia de tarefas e sensação de incompetência aprendida.";
+                recBox.innerHTML = `
+                    <h4 style="margin-top:0; color:var(--primary);">💡 Intervenções Prioritárias:</h4>
+                    <ul>
+                        <li><strong>Desfusão Linguística:</strong> Sempre que surgir o pensamento 'vou fracassar', rotule-o: 'Estou notando que minha mente está produzindo uma história de fracasso'. Não dispute o conteúdo; afaste-se da literalidade.</li>
+                        <li><strong>Ancoragem Sensorial 5-4-3-2-1:</strong> Utilize estímulos táteis e auditivos externos para forçar a rede de saliência a desligar o foco autorreferencial.</li>
+                        <li><strong>Escrita Terapêutica (Brain Dump):</strong> Coloque as preocupações no papel para descarregar a memória de trabalho antes de tentar descansar.</li>
+                    </ul>
+                `;
+            } else {
+                badge.classList.add('res-level-severo');
+                badge.innerText = "Sobrecarga Severa da DMN e Aprisionamento Mental";
+                title.innerText = "Padrão de Risco para Depressão e Ansiedade Generalizada";
+                overview.innerText = "Sua pontuação indica um estado de aprisionamento cognitivo exaustivo. A ruminação crônica e os pensamentos intrusivos estão operando como verdadeiros parasitas metabólicos, bloqueando a capacidade de usufruir o presente e mantendo o sistema de alarme ligado.";
+                recBox.innerHTML = `
+                    <h4 style="margin-top:0; color:var(--primary);">💡 Conduta Clínica Recomendada:</h4>
+                    <ul>
+                        <li><strong>Acompanhamento Neuropsicológico / Psicoterápico:</strong> É fortemente recomendado buscar avaliação clínica para estruturar protocolos de TCC e Terapia de Aceitação e Compromisso (ACT).</li>
+                        <li><strong>Investigação Afetiva:</strong> Níveis tão elevados de ruminação frequentemente se associam a quadros depressivos ou transtorno obsessivo que se beneficiam de suporte multidisciplinar.</li>
+                    </ul>
+                `;
+            }
+
+            const resultsArea = document.getElementById('results-area');
+            resultsArea.style.display = 'block';
+            resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Inicializar teste
+        renderQuiz();
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>

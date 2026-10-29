@@ -55,16 +55,16 @@ if ($drDeoCount -eq 0) {
 # 3. Checagem de Estrutura dos Artigos e Testes da Esteira Recente
 $esteiraArticles = @(
     "artigos\neurobiologia-autocompaixao-gentileza-amigdala.html",
-    "artigos\teste-autocompaixao.html",
+    "testes\teste-autocompaixao.html",
     "artigos\sistema-glinfatico-sono-profundo-limpeza-cerebral.html",
-    "artigos\teste-assertividade.html",
+    "testes\teste-assertividade.html",
     "artigos\neurobiologia-perdao-magoa-ressentimento-estresse.html",
-    "artigos\teste-sensibilidade-sensorial.html",
+    "testes\teste-sensibilidade-sensorial.html",
     "artigos\cerebro-fragmentado-troca-tarefas-residuo-atencao.html",
     "artigos\neurobiologia-motivacao-dopamina-tonica-fasica.html",
-    "artigos\mente-hiperalerta-trauma-infancia-desenvolvimento.html",
+    "artigos\mente-hiperalerta-trauma-precoce-neurodesenvolvimento.html",
     "artigos\neuroinflamacao-microbiota-eixo-intestino-cerebro.html",
-    "artigos\neurobiologia-empatia-teoria-da-mente.html",
+    "artigos\neurobiologia-empatia-teoria-da-mente-contagio-emocional.html",
     "artigos\flexibilidade-psicologica-neuroplasticidade-act.html",
     "artigos\neurobiologia-ansiedade-social-vergonha-julgamento.html"
 )
@@ -73,15 +73,17 @@ foreach ($relPath in $esteiraArticles) {
     $full = Join-Path $repoDir $relPath
     if (Test-Path $full) {
         $txt = [System.IO.File]::ReadAllText($full, [System.Text.Encoding]::UTF8)
-        if ($txt -notmatch 'class="[^"]*container\s+article-container[^"]*"') {
-            Report-Error "Artigo $relPath não possui 'container article-container'!"
+        if ($relPath -like 'artigos\*') {
+            if ($txt -notmatch 'class="[^"]*container\s+article-container[^"]*"') {
+                Report-Error "Artigo $relPath não possui 'container article-container'!"
+            }
         }
         if ($txt -notmatch 'footer-grid') {
-            Report-Error "Artigo $relPath não possui 'footer-grid' no rodapé!"
+            Report-Error "Arquivo $relPath não possui 'footer-grid' no rodapé!"
         }
     }
 }
-Report-Success "Artigos e Testes da Esteira: Todos os arquivos validados com container centralizado e rodapé em conformidade."
+Report-Success "Artigos e Testes da Esteira: Todos os arquivos validados com container e rodapé em conformidade."
 
 # 4. Checagem de Chaves no Studio Gerador (social/gerador.html)
 $geradorPath = Join-Path $repoDir "social\gerador.html"
@@ -95,6 +97,26 @@ if (Test-Path $geradorPath) {
         Report-Success "social/gerador.html: $openBraces chaves balanceadas com perfeição."
     }
 }
+
+# 5. Blindagem de Taxonomia Estrita de Pastas
+$artigosDir = Join-Path $repoDir "artigos"
+$artigoTests = Get-ChildItem -Path $artigosDir -Filter "teste-*.html"
+foreach ($at in $artigoTests) {
+    $txt = [System.IO.File]::ReadAllText($at.FullName, [System.Text.Encoding]::UTF8)
+    if (-not $txt.Contains('http-equiv="refresh"')) {
+        Report-Error "Taxonomia violada: O arquivo $($at.Name) está em artigos/ mas é um teste e não um stub de redirecionamento!"
+    }
+}
+
+$recursosDir = Join-Path $repoDir "recursos"
+$recursoJogos = Get-ChildItem -Path $recursosDir -Filter "*jogo*.html"
+foreach ($rj in $recursoJogos) {
+    $txt = [System.IO.File]::ReadAllText($rj.FullName, [System.Text.Encoding]::UTF8)
+    if (-not $txt.Contains('http-equiv="refresh"')) {
+        Report-Error "Taxonomia violada: O arquivo $($rj.Name) está em recursos/ mas é um jogo e não um stub de redirecionamento!"
+    }
+}
+Report-Success "Blindagem de Taxonomia: Pastas artigos/, testes/, jogos/ e recursos/ estritamente segregadas."
 
 $finalColor = if ($errorCount -eq 0) { "Green" } else { "Red" }
 Write-Host "Quality Gate Finalizado. Total de Erros: $errorCount" -ForegroundColor $finalColor

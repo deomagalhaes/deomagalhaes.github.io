@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site Incrível</title>
+    <style>
+        /* Estilos básicos para visualização */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        main {
+            flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
+            padding: 20px;
+            text-align: center;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* Empurra o rodapé para o final */
+        }
+        footer p {
+            margin: 5px 0;
+        }
+        footer a {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================= CABEÇALHO ======================= -->
+    <header>
+        <h1>Logo do Meu Site</h1>
+        <nav>
+            <ul>
+                <li><a href="/inicio">Início</a></li>
+                <li><a href="/sobre">Sobre Nós</a></li>
+                <li><a href="/servicos">Serviços</a></li>
+                <li><a href="/contato">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ======================= CONTEÚDO PRINCIPAL ======================= -->
+    <main>
+        <h2>Bem-vindo à Página Principal!</h2>
+        <p>Este é o conteúdo principal do seu site. Ele fica entre o cabeçalho e o rodapé.</p>
+    </main>
+
+    <!-- ======================= RODAPÉ ======================= -->
+    <footer>
+        <p>&copy; 2025 Meu Site Incrível. Todos os direitos reservados.</p>
+        <p>
+            <a href="/politica-de-privacidade">Política de Privacidade</a> | 
+            <a href="/termos-de-uso">Termos de Uso</a>
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testes Psicológicos & Escalas Autoaplicáveis – Deo Magalhães</title>
+    <meta name="description" content="Coleção de instrumentos psicométricos e escalas autoaplicáveis com validação científica. Avalie ansiedade, apego, TDAH, burnout, regulação emocional e autocompaixão com cálculo 100% privado e devolutiva imediata.">
+    <link rel="icon" type="image/png" href="assets/favicon2.png">
+    <link rel="stylesheet" href="assets/style.css">
+
+    <style>
+        .test-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: flex-start;
+        }
+
+        .test-filter-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.88em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .test-filter-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .test-filter-btn.active-filter {
+            background: #005f73 !important;
+            color: #ffffff !important;
+            border-color: #005f73 !important;
+            box-shadow: 0 2px 8px rgba(0, 95, 115, 0.25);
+        }
+
+        .search-container {
+            margin-bottom: 25px;
+            position: relative;
+            max-width: 600px;
+        }
+
+        .search-input-field {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            font-size: 0.95em;
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .search-input-field:focus {
+            border-color: #0a9396;
+            box-shadow: 0 4px 14px rgba(10, 147, 150, 0.15);
+        }
+
+        .search-icon-inside {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .search-clear-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.1em;
+            display: none;
+        }
+
+        .tests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .test-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .test-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0, 95, 115, 0.12);
+            border-color: #0a9396;
+        }
+
+        .test-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .test-badge {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #e0f2fe;
+            color: #0369a1;
+            letter-spacing: 0.5px;
+        }
+
+        .test-badge.badge-tdah {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .test-badge.badge-relacionamento {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .test-badge.badge-saude {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .test-badge.badge-regulacao {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .test-time-est {
+            font-size: 0.8em;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .test-card h3 {
+            font-size: 1.25em;
+            color: #005f73;
+            margin: 0 0 10px 0;
+            line-height: 1.35;
+        }
+
+        .test-card p {
+            font-size: 0.92em;
+            color: #475569;
+            line-height: 1.55;
+            margin: 0 0 18px 0;
+            flex-grow: 1;
+        }
+
+        .test-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .test-btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 0.88em;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .test-card:hover .test-btn-action {
+            background: #0a9396;
+        }
+
+        .test-privacy-tag {
+            font-size: 0.78em;
+            color: #10b981;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .test-hidden {
+            display: none !important;
+        }
+
+        .hero-stats-banner {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 24px 0;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            font-size: 1.6em;
+            color: #005f73;
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .stat-item span {
+            font-size: 0.85em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Principal -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="index.html" class="logo-container">
+                <img src="assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="index.html">Home</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="servicos.html">Serviços</a>
+                <a href="agendamento.html">Agendamento</a>
+                <a href="artigos.html">Artigos</a>
+                <a href="testes.html" class="active">Testes</a>
+                <a href="recursos.html">Recursos</a>
+                <a href="jogos.html">Jogos</a>
+                <a href="contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Seção Hero -->
+        <section class="hero">
+            <div class="container">
+                <h1>Testes Psicológicos & Escalas Clínicas</h1>
+                <p>Instrumentos psicométricos autoaplicáveis fundamentados em neurociência cognitiva e psicologia baseada em evidências. Cálculo instantâneo, devolutiva clínica personalizada e 100% de privacidade no seu navegador.</p>
+                <div class="hero-buttons">
+                    <a href="#catalogo-testes" class="cta-button">Explorar Testes</a>
+                    <a href="agendamento.html" class="cta-button secondary">Agendar Avaliação Clínica</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Faixa de Destaques / Privacy Gate -->
+        <div class="hero-stats-banner">
+            <div class="container">
+                <div class="hero-stats-grid">
+                    <div class="stat-item">
+                        <h4>100% Privado</h4>
+                        <span>Cálculo local no seu dispositivo</span>
+                    </div>
+                    <div class="stat-item">
+                        <h4>Gratuito & Imediato</h4>
+                        <span>Gráfico e devolutiva na hora</span>
+                    </div>
+                    <div class="stat-item">
+                        <h4>Baseado em Evidências</h4>
+                        <span>Literatura e normas psicométricas</span>
+                    </div>
+                    <div class="stat-item">
+                        <h4>20+ Escalas</h4>
+                        <span>Ansiedade, TDAH, Apego, Emoções</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Testes -->
+        <section class="page-section" id="catalogo-testes">
+            <div class="container">
+                <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Catálogo de Escalas e Triagens</h2>
+                <p style="text-align: left; margin-top: -15px; margin-bottom: 25px; color: #64748b;">
+                    Selecione uma categoria abaixo ou pesquise pelo construto clínico desejado.
+                </p>
+
+                <!-- Barra de Busca -->
+                <div class="search-container">
+                    <svg class="search-icon-inside" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="test-search-input" class="search-input-field" placeholder="Buscar escala por sintoma, autor ou construto (ex: Apego, DASS-21, TDAH, Gross, Burnout)..." autocomplete="off">
+                    <button id="search-clear-btn" class="search-clear-btn" title="Limpar busca">✕</button>
+                </div>
+
+                <!-- Filtros de Categoria -->
+                <div class="test-filter-bar">
+                    <button class="test-filter-btn active-filter" data-category="all">Todos os Instrumentos</button>
+                    <button class="test-filter-btn" data-category="saude-mental">Saúde Mental & Afeto</button>
+                    <button class="test-filter-btn" data-category="tdah-cognicao">TDAH & Cognição</button>
+                    <button class="test-filter-btn" data-category="relacionamento">Apego & Relações</button>
+                    <button class="test-filter-btn" data-category="regulacao">Regulação & Autoconhecimento</button>
+                </div>
+
+                <div id="test-search-feedback" style="display: none; font-size: 0.9em; color: #005f73; font-weight: 600; margin-bottom: 20px;"></div>
+
+                <!-- Grid de Cards de Testes -->
+                <div class="tests-grid" id="tests-grid">
+
+                    <!-- T-01: DASS-21 -->
+                    <a href="testes/teste-dass21.html" class="test-card" data-category="saude-mental">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-saude">Saúde Mental</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>DASS-21: Ansiedade, Depressão e Estresse</h3>
+                            <p>Rastreio psicométrico validado internacionalmente para mensurar a severidade de estados afetivos negativos na última semana.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-02: Apego Adulto -->
+                    <a href="testes/teste-apego.html" class="test-card" data-category="relacionamento">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-relacionamento">Apego & Vínculo</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~5 min</span>
+                            </div>
+                            <h3>Inventário de Estilos de Apego na Vida Adulta</h3>
+                            <p>Descubra suas dimensões de Apego Seguro, Ansioso, Evitativo ou Desorganizado nas relações afetivas e de parceria.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-04: Atenção DSM-5 -->
+                    <a href="testes/teste-atencao.html" class="test-card" data-category="tdah-cognicao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-tdah">TDAH & Foco</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Atenção e Desatenção (DSM-5-TR)</h3>
+                            <p>Autoavaliação baseada nos critérios oficiais de desatenção, hiperatividade e impulsividade para o rastreio de TDAH no adulto.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-05: Funções Executivas -->
+                    <a href="testes/teste-funcoes-executivas.html" class="test-card" data-category="tdah-cognicao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-tdah">Córtex Pré-Frontal</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~5 min</span>
+                            </div>
+                            <h3>Escala de Funções Executivas e Autorregulação</h3>
+                            <p>Avalie planejamento antecipatório, memória de trabalho, controle inibitório e flexibilidade mental no cotidiano.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-06: Bloqueio Executivo e Inércia -->
+                    <a href="testes/teste-bloqueio-executivo-tdah.html" class="test-card" data-category="tdah-cognicao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-tdah">TDAH & Paralisia</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Inércia Psíquica e Bloqueio Executivo (EIPBE)</h3>
+                            <p>Compreenda a neurobiologia da paralisia de tarefas, custo de inicialização motora e flutuação do tônus dopaminérgico.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-07: ERQ Gross (Escala de Regulação) -->
+                    <a href="testes/escala-regulacao-emocional.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Regulação Emocional</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3 min</span>
+                            </div>
+                            <h3>Escala de Regulação Emocional (ERQ - James Gross)</h3>
+                            <p>Mensure seu perfil neuropsicológico de Reavaliação Cognitiva vs. Supressão Expressiva com devolutiva qualitativa completa.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-08: Burnout Clínico -->
+                    <a href="testes/teste-burnout.html" class="test-card" data-category="saude-mental">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-saude">Exaustão & Trabalho</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~5 min</span>
+                            </div>
+                            <h3>Inventário de Sobrecarga e Burnout Clínico</h3>
+                            <p>Avalie as 3 dimensões de Maslach: Exaustão Emocional, Despersonalização/Cinismo e Redução da Realização Profissional.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-09: Esquemas Iniciais -->
+                    <a href="testes/teste-esquemas.html" class="test-card" data-category="relacionamento">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-relacionamento">Terapia do Esquema</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~6 min</span>
+                            </div>
+                            <h3>Inventário de Esquemas Iniciais Desadaptativos (YSQ)</h3>
+                            <p>Mapeie padrões de Abandono, Desconfiança, Privação Emocional e Padrões Inflexíveis estabelecidos na infância.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-10: Autocompaixão (Neff) -->
+                    <a href="testes/teste-autocompaixao.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Autocompaixão</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Autocompaixão Clínica (Kristin Neff)</h3>
+                            <p>Avalie a autoflagelação e isolamento versus autoempatia, humanidade compartilhada e mindfulness sob momentos de falha.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-11: Fadiga por Decisão -->
+                    <a href="testes/teste-fadiga-decisao.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Córtex Pré-Frontal</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~3 min</span>
+                            </div>
+                            <h3>Escala de Fadiga por Decisão e Depleção do Ego</h3>
+                            <p>Identifique como o acúmulo de escolhas diárias corrói a força de vontade e leva a impulsividade ou evitação de decisões.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-12: Procrastinação e Ação -->
+                    <a href="testes/teste-procrastinacao.html" class="test-card" data-category="tdah-cognicao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-tdah">Comportamento</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Inventário de Procrastinação e Regulação da Ação</h3>
+                            <p>Investigue os gatilhos emocionais da procrastinação crônica: perfeccionismo, aversão à tarefa e intolerância ao desconforto.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-13: Satisfação Conjugal (ESCSA) -->
+                    <a href="testes/teste-satisfacao-conjugal-apego.html" class="test-card" data-category="relacionamento">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-relacionamento">Casais & Parceria</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~5 min</span>
+                            </div>
+                            <h3>Escala de Satisfação Conjugal e Segurança Afetiva (ESCSA)</h3>
+                            <p>Avalie a sintonia emocional, resolução de conflitos, segurança de apego e satisfação na convivência a dois.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-14: Rigidez Epistêmica -->
+                    <a href="testes/teste-rigidez-epistemica.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Pensamento Crítico</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Inventário de Rigidez Epistêmica e Dogmatismo</h3>
+                            <p>Examine a suscetibilidade ao viés de confirmação, polarização e capacidade de atualizar crenças com base em novas evidências.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-15: Assertividade e Limites -->
+                    <a href="testes/teste-assertividade.html" class="test-card" data-category="relacionamento">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-relacionamento">Comunicação</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Inventário de Assertividade e Estabelecimento de Limites</h3>
+                            <p>Descubra se seu padrão interpessoal é predominantemente passivo, agressivo, passivo-agressivo ou assertivo saudável.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-16: Sensibilidade Sensorial -->
+                    <a href="testes/teste-sensibilidade-sensorial.html" class="test-card" data-category="tdah-cognicao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-tdah">Processamento Sensorial</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Inventário de Sensibilidade Sensorial e Hiper-reatividade</h3>
+                            <p>Rastreie hiper-reatividade a estímulos auditivos, táteis, visuais e sobrecarga ambiental típica do neurodesenvolvimento (TDAH/TEA/PAS).</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-17: Flexibilidade Psicológica ACT -->
+                    <a href="testes/teste-flexibilidade-cognitiva.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Terapia ACT</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Flexibilidade Psicológica e Desfusão (ACT)</h3>
+                            <p>Avalie aceitação emocional, desfusão de pensamentos dolorosos e comprometimento com valores existenciais fundamentais.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-18: Ansiedade Social -->
+                    <a href="testes/teste-ansiedade-social.html" class="test-card" data-category="saude-mental">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-saude">Fobia Social</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Inventário de Ansiedade Social e Evasão Afetiva</h3>
+                            <p>Mensure o medo de julgamento externo, vergonha anticipatória e esquiva de situações sociais ou de exposição.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-19: Ruminação Mental DMN -->
+                    <a href="testes/teste-ruminacao.html" class="test-card" data-category="saude-mental">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-saude">Rede Modo Padrão</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Ruminação Mental e Pensamentos Intrusivos</h3>
+                            <p>Investigue hiperatividade da Rede de Modo Padrão (DMN), autocrítica obsessiva e dificuldade em desligar os pensamentos em repouso.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-20: Higiene do Sono -->
+                    <a href="testes/teste-sono.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Ritmo Circadiano</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Questionário de Higiene do Sono e Arquitetura Noturna</h3>
+                            <p>Avalie fatores comportamentais que afetam a liberação de melatonina, profundidade NREM/REM e limpeza glinfática noturna.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-21: Frustração e Impulsividade -->
+                    <a href="testes/teste-frustracao.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Controle Inibitório</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Tolerância à Frustração e Impulsividade</h3>
+                            <p>Identifique o limiar de desconforto diante de atrasos de recompensa, contrariedades e reatividade autonômica aguda.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                    <!-- T-22: Autoeficácia Geral -->
+                    <a href="testes/teste-autoeficacia.html" class="test-card" data-category="regulacao">
+                        <div>
+                            <div class="test-card-header">
+                                <span class="test-badge badge-regulacao">Resiliência Psíquica</span>
+                                <span class="test-time-est"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ~4 min</span>
+                            </div>
+                            <h3>Escala de Autoeficácia Geral e Agência Pessoal (Bandura)</h3>
+                            <p>Mensure sua crença subjetiva na capacidade de lidar com adversidades, persistir diante de obstáculos e mobilizar recursos.</p>
+                        </div>
+                        <div class="test-card-footer">
+                            <span class="test-privacy-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 100% Anônimo</span>
+                            <span class="test-btn-action">Iniciar Escala →</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé Padrão Institucional -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Busca e Filtros -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mainNav = document.getElementById('main-nav');
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+            });
+        }
+
+        const filterBtns = document.querySelectorAll('.test-filter-btn');
+        const testCards = document.querySelectorAll('.test-card');
+        const searchInput = document.getElementById('test-search-input');
+        const searchClearBtn = document.getElementById('search-clear-btn');
+        const feedback = document.getElementById('test-search-feedback');
+
+        let currentCategory = 'all';
+
+        function applyFilters() {
+            const query = (searchInput.value || '').trim().toLowerCase();
+            let visibleCount = 0;
+
+            if (query.length > 0) {
+                searchClearBtn.style.display = 'block';
+            } else {
+                searchClearBtn.style.display = 'none';
+            }
+
+            testCards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                const cardText = card.textContent.toLowerCase();
+
+                const matchesCategory = (currentCategory === 'all' || cardCat === currentCategory);
+                const matchesSearch = (!query || cardText.includes(query));
+
+                if (matchesCategory && matchesSearch) {
+                    card.classList.remove('test-hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('test-hidden');
+                }
+            });
+
+            if (query.length > 0) {
+                feedback.style.display = 'block';
+                feedback.textContent = `${visibleCount} teste(s) encontrado(s) para "${query}".`;
+            } else {
+                feedback.style.display = 'none';
+            }
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active-filter'));
+                btn.classList.add('active-filter');
+                currentCategory = btn.getAttribute('data-category');
+                applyFilters();
+            });
+        });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', applyFilters);
+        }
+
+        if (searchClearBtn) {
+            searchClearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                applyFilters();
+                searchInput.focus();
+            });
+        }
+    });
+    </script>
+</body>
+</html>

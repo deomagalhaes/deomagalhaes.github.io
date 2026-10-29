@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Autocompaixão Clínica (EAC - Autoavaliação) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de autocompaixão, acolhimento interno e autocrítica tóxica com base no modelo neurocientífico de Kristin Neff e Paul Gilbert.">
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+    <style>
+        .test-container {
+            max-width: 860px;
+            margin: 2rem auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 18, 25, 0.08);
+            padding: 2.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 1.5rem;
+        }
+
+        .badge-test {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .test-header h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.25;
+        }
+
+        .test-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 720px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--secondary);
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .question-num {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            font-size: 0.88rem;
+            color: #475569;
+            user-select: none;
+            min-height: 62px;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 95, 115, 0.25);
+        }
+
+        .option-label input {
+            display: none;
+        }
+
+        .btn-calc-container {
+            text-align: center;
+            margin-top: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-calc {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a9396 100%);
+            color: white;
+            padding: 14px 36px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.25);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.35);
+        }
+
+        /* Resultados */
+        .result-box {
+            display: none;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #e2e8f0;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-display {
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .score-total-label {
+            font-size: 1rem;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .score-level {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .score-subtitle {
+            color: #475569;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .subscores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .subscore-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem;
+        }
+
+        .subscore-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .subscore-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .subscore-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .subscore-desc {
+            font-size: 0.82rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .feedback-section {
+            background: #ffffff;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+            border-left-width: 4px;
+        }
+
+        .feedback-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .feedback-section p {
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cta-box-test {
+            text-align: center;
+            background: linear-gradient(135deg, #001219 0%, #005f73 100%);
+            color: white;
+            padding: 2.2rem;
+            border-radius: 14px;
+            margin-top: 2rem;
+        }
+
+        .cta-box-test h3 {
+            color: #e9d8a6;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .cta-box-test p {
+            color: #e2e8f0;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.6;
+        }
+
+        .cta-btn-test {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            padding: 12px 28px;
+            font-weight: 700;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn-test:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 640px) {
+            .test-container {
+                padding: 1.5rem 1rem;
+            }
+            .test-header h1 {
+                font-size: 1.6rem;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .option-label {
+                min-height: 44px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos</a>
+                <a href="/recursos.html">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container test-container">
+            <header class="test-header">
+                <span class="badge-test">Instrumento Clínico Psicoeducativo</span>
+                <h1>Escala de Autocompaixão Clínica (EAC)</h1>
+                <p>Descubra como você se relaciona consigo mesmo em momentos de sofrimento, falha ou frustração. Este instrumento avalia a presença de acolhimento mamífero vs. autocrítica feroz e isolamento.</p>
+            </header>
+
+            <div class="test-intro-box">
+                <strong>Instruções de Preenchimento:</strong>
+                <p style="margin-top: 6px; margin-bottom: 0;">Leia atentamente cada uma das 15 afirmações abaixo e assinale a opção que melhor reflete como você costuma agir ou sentir <em>na maior parte do tempo</em>. Não há respostas certas ou erradas; a honestidade absoluta garante uma devolutiva clínica precisa. Suas respostas são processadas exclusivamente no seu dispositivo com 100% de privacidade.</p>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="p-bar"></div>
+            </div>
+
+            <form id="compassionForm">
+                <div id="questionsContainer"></div>
+
+                <div class="btn-calc-container">
+                    <button type="button" class="btn-calc" onclick="calculateCompassion()">Calcular Meu Nível de Autocompaixão</button>
+                </div>
+            </form>
+
+            <div class="result-box" id="resultArea">
+                <div class="score-display">
+                    <span class="score-badge" id="scoreBadge">Resultado</span>
+                    <div class="score-number" id="totalScore">0</div>
+                    <div class="score-total-label">Pontos de Autocompaixão (Escala de 15 a 75)</div>
+                    <div class="score-level" id="resultLevel">Classificação</div>
+                    <p class="score-subtitle" id="resultSubtitle">Descrição geral do perfil afetivo.</p>
+                </div>
+
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">Detalhamento das Três Dimensões Clínicas</h3>
+                <div class="subscores-grid">
+                    <div class="subscore-card">
+                        <div class="subscore-title">1. Autobondade vs. Autocrítica</div>
+                        <div class="subscore-bar-bg">
+                            <div class="subscore-bar-fill" id="barSub1" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;" id="scoreSub1">0/25</div>
+                        <div class="subscore-desc">Avalia a capacidade de se apoiar e demonstrar carinho interno durante erros, em oposição ao autoflagelo verbal.</div>
+                    </div>
+
+                    <div class="subscore-card">
+                        <div class="subscore-title">2. Humanidade Compartilhada</div>
+                        <div class="subscore-bar-bg">
+                            <div class="subscore-bar-fill" id="barSub2" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;" id="scoreSub2">0/25</div>
+                        <div class="subscore-desc">Mede a consciência de que falhas e dores conectam você a todos os seres humanos, dissolvendo o isolamento e a vergonha tóxica.</div>
+                    </div>
+
+                    <div class="subscore-card">
+                        <div class="subscore-title">3. Atenção Plena (Mindfulness)</div>
+                        <div class="subscore-bar-bg">
+                            <div class="subscore-bar-fill" id="barSub3" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;" id="scoreSub3">0/25</div>
+                        <div class="subscore-desc">Mensura o equilíbrio ao lidar com afetos dolorosos, sem suprimi-los nem ser devorado pelo drama cognitivo.</div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>Análise Neuropsicológica e Recomendações</h3>
+                    <div id="analysisText"></div>
+                </div>
+
+                <div class="cta-box-test">
+                    <h3>Deseja Construir uma Aliança Interna Saudável?</h3>
+                    <p>O treinamento de autocompaixão baseado em neurociência (CFT e MSC) desativa a hipervigilância da amígdala e fortalece as redes do córtex pré-frontal, permitindo viver com mais paz, coragem e clareza.</p>
+                    <a href="/agendamento.html" class="cta-btn-test">Agendar Consulta com Deo Magalhães</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // 15 Afirmações Científicas adaptadas da Escala de Autocompaixão (SCS - Kristin Neff)
+        // Subescalas:
+        // 1: Autobondade vs. Autocrítica
+        // 2: Humanidade Compartilhada vs. Isolamento
+        // 3: Atenção Plena (Mindfulness) vs. Sobreidentificação
+        // reverse: true significa que a afirmação representa autocrítica/isolamento e a pontuação é invertida (6 - v) para calcular autocompaixão
+        const QUESTIONS = [
+            // Dimensão 1: Autobondade vs. Autocrítica
+            { id: 1, sub: 1, reverse: false, text: "Quando passo por momentos muito difíceis, procuro me dar o carinho, a paciência e a atenção de que preciso." },
+            { id: 2, sub: 1, reverse: true,  text: "Quando cometo um erro ou algo dá errado, sou excessivamente rígido e implacável em meus julgamentos sobre mim mesmo." },
+            { id: 3, sub: 1, reverse: false, text: "Procuro ser tolerante e compreensivo com meus próprios defeitos, limitações e imperfeições." },
+            { id: 4, sub: 1, reverse: true,  text: "Costumo disparar insultos e pensamentos de desqualificação contra mim quando percebo que falhei em algo importante." },
+            { id: 5, sub: 1, reverse: false, text: "Em vez de me punir quando as coisas não saem como planejado, procuro agir como meu próprio aliado protetor." },
+
+            // Dimensão 2: Humanidade Compartilhada vs. Isolamento
+            { id: 6, sub: 2, reverse: true,  text: "Quando estou me sentindo para baixo ou fracassado, costumo achar que todo mundo está feliz e que só eu sou um desastre." },
+            { id: 7, sub: 2, reverse: false, text: "Lembro a mim mesmo que passar por crises, dúvidas e dores emocionais faz parte da vida de qualquer ser humano." },
+            { id: 8, sub: 2, reverse: true,  text: "Tenho uma sensação de profunda vergonha e isolamento quando me deparo com minhas próprias vulnerabilidades." },
+            { id: 9, sub: 2, reverse: false, text: "Procuro encarar minhas dificuldades pessoais como parte natural da condição humana, e não como uma falha moral exclusiva minha." },
+            { id: 10, sub: 2, reverse: true,  text: "Quando algo doloroso acontece comigo, costumo pensar: 'Por que isso sempre tem que acontecer só comigo?'." },
+
+            // Dimensão 3: Atenção Plena (Mindfulness) vs. Sobreidentificação
+            { id: 11, sub: 3, reverse: false, text: "Quando algo me chateia, consigo reconhecer minhas emoções com curiosidade e equilíbrio, sem tentar fingir que nada aconteceu." },
+            { id: 12, sub: 3, reverse: true,  text: "Quando me sinto triste ou frustrado, sou completamente engolido por esses sentimentos a ponto de perder a perspectiva." },
+            { id: 13, sub: 3, reverse: false, text: "Consigo observar uma dor emocional presente como um estado passageiro, sem transformá-la no centro da minha identidade." },
+            { id: 14, sub: 3, reverse: true,  text: "Costumo remoer obsessivamente erros do passado, aumentando a gravidade do problema na minha cabeça." },
+            { id: 15, sub: 3, reverse: false, text: "Mantenho a mente aberta para aceitar que momentos de frustração vão passar, sem me desesperar de imediato." }
+        ];
+
+        const OPTIONS = [
+            { text: "Quase Nunca", val: 1 },
+            { text: "Raramente", val: 2 },
+            { text: "Às Vezes", val: 3 },
+            { text: "Frequentemente", val: 4 },
+            { text: "Quase Sempre", val: 5 }
+        ];
+
+        // Renderização dinâmica das perguntas
+        const container = document.getElementById('questionsContainer');
+        QUESTIONS.forEach((q, idx) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `qCard_${q.id}`;
+
+            let optionsHtml = '';
+            OPTIONS.forEach(opt => {
+                optionsHtml += `
+                    <label class="option-label" onclick="selectOption(${q.id}, ${opt.val}, this)">
+                        <input type="radio" name="q_${q.id}" value="${opt.val}">
+                        <span>${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="question-title">
+                    <span class="question-num">${idx + 1}.</span>
+                    <span>${q.text}</span>
+                </div>
+                <div class="options-grid">
+                    ${optionsHtml}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function selectOption(qId, val, labelEl) {
+            const card = document.getElementById(`qCard_${qId}`);
+            card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+            labelEl.classList.add('selected');
+            labelEl.querySelector('input').checked = true;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            QUESTIONS.forEach(q => {
+                if (document.querySelector(`input[name="q_${q.id}"]:checked`)) {
+                    answered++;
+                }
+            });
+            const pct = (answered / QUESTIONS.length) * 100;
+            document.getElementById('p-bar').style.width = pct + '%';
+        }
+
+        function calculateCompassion() {
+            let answers = {};
+            let missing = [];
+
+            QUESTIONS.forEach(q => {
+                const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (checked) {
+                    answers[q.id] = parseInt(checked.value, 10);
+                } else {
+                    missing.push(q.id);
+                }
+            });
+
+            if (missing.length > 0) {
+                alert(`Por favor, responda todas as perguntas para obter sua análise. Faltam ${missing.length} afirmação(ões).`);
+                const firstMissing = document.getElementById(`qCard_${missing[0]}`);
+                if (firstMissing) {
+                    firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstMissing.style.borderColor = '#ae2012';
+                }
+                return;
+            }
+
+            let total = 0;
+            let sub1 = 0; // Autobondade
+            let sub2 = 0; // Humanidade Compartilhada
+            let sub3 = 0; // Atenção Plena
+
+            QUESTIONS.forEach(q => {
+                let rawVal = answers[q.id];
+                // Inverter pontuação se for item reverso
+                let calculatedVal = q.reverse ? (6 - rawVal) : rawVal;
+
+                total += calculatedVal;
+                if (q.sub === 1) sub1 += calculatedVal;
+                if (q.sub === 2) sub2 += calculatedVal;
+                if (q.sub === 3) sub3 += calculatedVal;
+            });
+
+            document.getElementById('totalScore').innerText = total;
+            document.getElementById('scoreSub1').innerText = `${sub1}/25`;
+            document.getElementById('scoreSub2').innerText = `${sub2}/25`;
+            document.getElementById('scoreSub3').innerText = `${sub3}/25`;
+
+            const p1 = (sub1 / 25) * 100;
+            const p2 = (sub2 / 25) * 100;
+            const p3 = (sub3 / 25) * 100;
+
+            const b1 = document.getElementById('barSub1');
+            const b2 = document.getElementById('barSub2');
+            const b3 = document.getElementById('barSub3');
+
+            b1.style.width = p1 + '%';
+            b2.style.width = p2 + '%';
+            b3.style.width = p3 + '%';
+
+            // Quanto maior a autocompaixão, melhor a cor (verde)
+            function colorBar(el, p) {
+                if (p >= 70) el.style.background = '#2a9d8f';
+                else if (p >= 45) el.style.background = '#ee9b00';
+                else el.style.background = '#ae2012';
+            }
+
+            colorBar(b1, p1);
+            colorBar(b2, p2);
+            colorBar(b3, p3);
+
+            const badge = document.getElementById('scoreBadge');
+            const title = document.getElementById('resultLevel');
+            const subtitle = document.getElementById('resultSubtitle');
+            const analysis = document.getElementById('analysisText');
+
+            let levelName = "";
+            let badgeBg = "";
+            let htmlAnalysis = "";
+
+            if (total <= 35) {
+                levelName = "Autocompaixão Muito Baixa (Predomínio de Autocrítica Severa)";
+                badgeBg = "#ae2012";
+                badge.innerText = "Crítico Interno Severo";
+                subtitle.innerText = "Sua relação consigo mesmo opera sob forte tensão e autoataque, gerando exaustão física e bloqueio emocional.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neuropsicológico:</strong> Seus resultados indicam que o seu <em>Sistema de Ameaça e Defesa</em> (amígdala, eixo HPA e sistema simpático) é disparado com frequência contra si mesmo. Ao menor sinal de erro ou vulnerabilidade, sua mente assume o papel de um juiz implacável, inundando seu corpo com cortisol e adrenalina.</p>
+                    <p><strong>Impacto Clínico:</strong> Essa dinâmica interna está fortemente correlacionada a altos níveis de ansiedade antecipatória, fadiga crônica, procrastinação (medo de falhar) e sentimento frequente de isolamento e vergonha. Você tende a acreditar que apenas você falha e que o erro o torna indigno.</p>
+                    <p><strong>Diretrizes Terapêuticas:</strong> O foco prioritário deve ser o desligamento gradual do autocrítico violento. Práticas corporais de acolhimento (como a respiração com as mãos no peito) e a reestruturação do diálogo interno na psicoterapia são indispensáveis para ensinar o cérebro que você pode estar seguro dentro de si mesmo.</p>
+                `;
+            } else if (total <= 50) {
+                levelName = "Autocompaixão Moderada-Baixa (Acolhimento Condicional)";
+                badgeBg = "#ee9b00";
+                badge.innerText = "Gentileza Condicional";
+                subtitle.innerText = "Você consegue ser gentil consigo quando as coisas vão bem, mas cai na severidade e na ruminação diante de crises.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neuropsicológico:</strong> Você possui lampejos de acolhimento mamífero e boa capacidade cognitiva de relativizar erros, mas a sua autocompaixão ainda é <em>condicional</em> ao seu desempenho. Quando a frustração é intensa ou pública, o autocrítico rapidamente assume o controle.</p>
+                    <p><strong>Impacto Clínico:</strong> É comum oscilar entre períodos de boa autoconfiança e episódios de intensa autodesvalorização e ruminação mental. Essa montanha-russa desgasta a reserva de energia do córtex pré-frontal e dificulta a tomada de decisões criativas.</p>
+                    <p><strong>Diretrizes Terapêuticas:</strong> Fortalecer o pilar da <em>Humanidade Compartilhada</em>. Pratique ativamente a lembrança de que ser imperfeito não é um desvio da norma, mas a própria condição de pertencimento ao mundo.</p>
+                `;
+            } else if (total <= 63) {
+                levelName = "Autocompaixão Saudável (Boa Resiliência e Autorregulação)";
+                badgeBg = "#2a9d8f";
+                badge.innerText = "Aliança Interna Sólida";
+                subtitle.innerText = "Você demonstra boa capacidade de se tratar com empatia e firmeza, desarmando tempestades emocionais.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neuropsicológico:</strong> Seu cérebro faz bom uso do <em>Sistema de Acolhimento e Apego Seguro</em> (vias da ocitocina e do nervo vago ventral). Diante de erros, você consegue manter uma distância equilibrada dos pensamentos, analisando os fatos sem se autodestruir.</p>
+                    <p><strong>Impacto Clínico:</strong> Esse perfil confere elevada resiliência biológica, menor vulnerabilidade ao burnout, maior facilidade para aprender com falhas e relações interpessoais muito mais equilibradas e autênticas.</p>
+                    <p><strong>Diretrizes Terapêuticas:</strong> Continue cultivando práticas de atenção plena diária e expandindo essa postura compassiva para seus círculos profissionais e relacionamentos afetivos.</p>
+                `;
+            } else {
+                levelName = "Autocompaixão Alta (Excelente Sabedoria Emocional)";
+                badgeBg = "#005f73";
+                badge.innerText = "Plenitude e Gentileza";
+                subtitle.innerText = "Você possui um diálogo interno plenamente aliado, com profundo senso de humanidade compartilhada e clareza mental.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neuropsicológico:</strong> Excelente equilíbrio entre o córtex pré-frontal ventromedial e os centros límbicos. O medo de errar não paralisa sua ação porque seu valor essencial não é colocado em julgamento constante.</p>
+                    <p><strong>Impacto Clínico:</strong> Alta estabilidade da Variabilidade da Frequência Cardíaca (VFC), baixa resposta inflamatória frente ao estresse e extraordinária capacidade de coragem e vulnerabilidade madura.</p>
+                    <p><strong>Diretrizes Terapêuticas:</strong> Você pode usar essa sólida inteligência afetiva como suporte para liderança humanizada, projetos de alto impacto e amparo emocional para pessoas queridas ao seu redor.</p>
+                `;
+            }
+
+            badge.style.background = badgeBg;
+            badge.style.color = "#ffffff";
+            title.innerText = levelName;
+            title.style.color = badgeBg;
+            analysis.innerHTML = htmlAnalysis;
+
+            const resArea = document.getElementById('resultArea');
+            resArea.style.display = 'block';
+            resArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>

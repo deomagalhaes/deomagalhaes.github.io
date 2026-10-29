@@ -36,7 +36,7 @@ Para garantir que o Studio Visual (`social/gerador.html`), artigos e testes nunc
 A cada lote de produção, a esteira executa sequencialmente:
 1. **Artigo Científico:** Redação profunda em `artigos/slug.html` com referências ABNT e centralização.
 2. **Roteiro Social & Studio:** Redação em `social/YYYY-MM-DD-slug.md`, sincronização no histórico de `social/README.md` e injeção do preset no topo de `social/gerador.html` com UTF-8 garantido.
-3. **Escala Psicométrica / Teste:** Código em `artigos/teste-slug.html` com cálculo instantâneo client-side e devolutiva clínica por faixas.
-4. **Jogo Cognitivo:** Jogo diário em `recursos/jogo-slug.html` com Web Audio API e validação algorítmica matemática prévia.
-5. **Centralizadores:** Atualização de `cards-artigos.html`, `jogos.html`, `pautas.md`, `testes-planejamento.md`, `jogos-planejamento.md`, `esteiras-programacao.md` e execução de `scripts/generate-sitemap.ps1`.
+3. **Escala Psicométrica / Teste:** Código ESTRITAMENTE em `testes/teste-slug.html` com cálculo instantâneo client-side e devolutiva clínica por faixas.
+4. **Jogo Cognitivo:** Jogo diário ESTRITAMENTE em `jogos/jogo-slug.html` com Web Audio API e validação algorítmica matemática prévia.
+5. **Centralizadores:** Atualização de `cards-artigos.html`, `testes.html`, `jogos.html`, `pautas.md`, `testes-planejamento.md`, `jogos-planejamento.md`, `esteiras-programacao.md` e execução de `scripts/generate-sitemap.ps1`.
 6. **Deploy:** `git add .`, commit semântico e `git push origin main`.

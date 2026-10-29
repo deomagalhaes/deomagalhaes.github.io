@@ -53,9 +53,10 @@ Toda esteira deve cumprir rigorosamente as seguintes diretrizes antes de ser com
 ### 4. Validação Algorítmica dos Jogos
 - Todo jogo cognitivo interativo deve ter sua **solubilidade comprovada matematicamente** por meio de simulação prévia em script PowerShell ou JavaScript antes da entrega, garantindo taxa de 100% de estados resolúveis.
 
-### 5. Centralizadores e SEO
-- Inclusão imediata dos cards no topo de `cards-artigos.html` e `jogos.html`.
-- Adição das novas URLs no `sitemap.xml` com `<lastmod>2026-10-28</lastmod>`.
+### 5. Centralizadores, Taxonomia e SEO
+- Segregação de pastas obrigatória: Artigos em `artigos/`, Testes em `testes/` e Jogos em `jogos/`.
+- Inclusão imediata dos cards correspondentes em `cards-artigos.html`, `testes.html` e `jogos.html`.
+- Adição das novas URLs no `sitemap.xml` via `scripts/generate-sitemap.ps1`.
 - Atualização das filas em `pautas.md`, `testes-planejamento.md` e `jogos-planejamento.md`.
 
 ### 6. Git Flow

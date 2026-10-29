@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Rigidez Epistêmica e Pensamento Crítico (Autoavaliação) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu grau de flexibilidade intelectual, viés de confirmação e apego a crenças com este instrumento psicoeducativo baseado na neurociência cognitiva.">
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+    <link rel="stylesheet" href="/assets/style.css">
+    <style>
+        .test-container {
+            max-width: 860px;
+            margin: 2rem auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 18, 25, 0.08);
+            padding: 2.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 1.5rem;
+        }
+
+        .badge-test {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .test-header h1 {
+            color: var(--primary);
+            font-size: 2.1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.25;
+        }
+
+        .test-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 720px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--secondary);
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .question-num {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            font-size: 0.88rem;
+            color: #475569;
+            user-select: none;
+            min-height: 62px;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 95, 115, 0.25);
+        }
+
+        .option-label input {
+            display: none;
+        }
+
+        .btn-calc-container {
+            text-align: center;
+            margin-top: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-calc {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a9396 100%);
+            color: white;
+            padding: 14px 36px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.25);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.35);
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #e2e8f0;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-display {
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .score-total-label {
+            font-size: 1rem;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .score-level {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .score-subtitle {
+            color: #475569;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .subscores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .subscore-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem;
+        }
+
+        .subscore-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .subscore-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .subscore-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .subscore-desc {
+            font-size: 0.82rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .feedback-section {
+            background: #ffffff;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+            border-left-width: 4px;
+        }
+
+        .feedback-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .feedback-section p {
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cta-box-test {
+            text-align: center;
+            background: linear-gradient(135deg, #001219 0%, #005f73 100%);
+            color: white;
+            padding: 2.2rem;
+            border-radius: 14px;
+            margin-top: 2rem;
+        }
+
+        .cta-box-test h3 {
+            color: #e9d8a6;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .cta-box-test p {
+            color: #e2e8f0;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.6;
+        }
+
+        .cta-btn-test {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            padding: 12px 28px;
+            font-weight: 700;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn-test:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 640px) {
+            .test-container {
+                padding: 1.5rem 1rem;
+            }
+            .test-header h1 {
+                font-size: 1.6rem;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .option-label {
+                min-height: 44px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html" class="active">Artigos</a>
+                <a href="/recursos.html">Recursos</a>
+                <a href="/contato.html">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container test-container">
+            <header class="test-header">
+                <span class="badge-test">Autoavaliação Neurocognitiva • T-17</span>
+                <h1>Inventário de Rigidez Epistêmica e Pensamento Crítico (IREP)</h1>
+                <p>Avalie como sua mente reage quando é contrariada. Este teste mede sua abertura para falsear convicções, a fusão entre ego e crenças e o nível de humildade epistêmica.</p>
+            </header>
+
+            <div class="test-intro-box">
+                <strong>Orientações de Preenchimento:</strong>
+                <p style="margin-top: 6px; margin-bottom: 0;">Responda a cada uma das 15 afirmações indicando o quanto ela representa seu padrão real de pensamento na maior parte das discussões e análises cotidianas. Seja sincero: o objetivo não é ter uma pontuação perfeita, mas identificar potenciais pontos cegos cognitivos. Processamento 100% privado no navegador.</p>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="p-bar"></div>
+            </div>
+
+            <form id="epistemicForm">
+                <div id="questionsContainer"></div>
+
+                <div class="btn-calc-container">
+                    <button type="button" class="btn-calc" onclick="calculateEpistemic()">Avaliar Meu Pensamento Crítico</button>
+                </div>
+            </form>
+
+            <div class="result-box" id="resultArea">
+                <div class="score-display">
+                    <span class="score-badge" id="scoreBadge">Resultado</span>
+                    <div class="score-number" id="totalScore">0</div>
+                    <div class="score-total-label">Pontos de Flexibilidade Intelectual (15 a 75)</div>
+                    <div class="score-level" id="resultLevel">Classificação</div>
+                    <p class="score-subtitle" id="resultSubtitle">Descrição do padrão de raciocínio.</p>
+                </div>
+
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">Detalhamento das Três Dimensões Epistêmicas</h3>
+                <div class="subscores-grid">
+                    <div class="subscore-card">
+                        <div class="subscore-title">1. Busca Ativa de Refutação</div>
+                        <div class="subscore-bar-bg">
+                            <div class="subscore-bar-fill" id="barSub1" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;" id="scoreSub1">0/25</div>
+                        <div class="subscore-desc">Mede o hábito de consultar fontes divergentes e buscar dados que contrariem sua própria hipótese.</div>
+                    </div>
+
+                    <div class="subscore-card">
+                        <div class="subscore-title">2. Desapego e Desfusão do Ego</div>
+                        <div class="subscore-bar-bg">
+                            <div class="subscore-bar-fill" id="barSub2" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;" id="scoreSub2">0/25</div>
+                        <div class="subscore-desc">Avalia se você encara uma correção factual como uma ofensa pessoal ou como uma oportunidade de aprendizado.</div>
+                    </div>
+
+                    <div class="subscore-card">
+                        <div class="subscore-title">3. Humildade Epistêmica</div>
+                        <div class="subscore-bar-bg">
+                            <div class="subscore-bar-fill" id="barSub3" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;" id="scoreSub3">0/25</div>
+                        <div class="subscore-desc">Mensura a facilidade em pronunciar "eu não sei" e a tolerância à complexidade e às incertezas da realidade.</div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>Análise Neuropsicológica e Recomendações</h3>
+                    <div id="analysisText"></div>
+                </div>
+
+                <div class="cta-box-test">
+                    <h3>Deseja Aprimorar sua Tomada de Decisão?</h3>
+                    <p>O treinamento de funções executivas e flexibilidade cognitiva permite desarmar preconceitos inconscientes e tomar decisões mais lúcidas na carreira e nas relações.</p>
+                    <a href="/agendamento.html" class="cta-btn-test">Agendar Consulta com Deo Magalhães</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // 15 Afirmações do Inventário de Rigidez Epistêmica e Pensamento Crítico
+        // Subescalas:
+        // 1: Busca Ativa de Refutação
+        // 2: Desapego e Desfusão do Ego
+        // 3: Humildade Epistêmica
+        // reverse: true significa que a afirmação expressa rigidez/dogmatismo e é invertida (6 - v) para calcular a flexibilidade
+        const QUESTIONS = [
+            // Dimensão 1: Busca Ativa de Refutação
+            { id: 1, sub: 1, reverse: false, text: "Costumo buscar ativamente artigos ou especialistas que discordam da minha opinião antes de formar uma convicção sólida." },
+            { id: 2, sub: 1, reverse: true,  text: "Quando encontro uma notícia ou dado que contradiz o que penso, minha primeira reação é desqualificar a fonte como tendenciosa." },
+            { id: 3, sub: 1, reverse: false, text: "Gosto de me perguntar: 'Qual seria o argumento mais inteligente e justo que meus oponentes usariam contra mim?'." },
+            { id: 4, sub: 1, reverse: true,  text: "Em temas polêmicos, prefiro consumir apenas canais, jornais ou perfis que confirmem o que eu já acredito." },
+            { id: 5, sub: 1, reverse: false, text: "Se alguém me apresenta uma evidência estatística ou científica rigorosa contrária à minha crença, sou capaz de mudar de posição prontamente." },
+
+            // Dimensão 2: Desapego e Desfusão do Ego
+            { id: 6, sub: 2, reverse: true,  text: "Sinto uma pontada física de raiva ou desconforto quando alguém critica duramente uma ideia que defendo com paixão." },
+            { id: 7, sub: 2, reverse: false, text: "Consigo separar com clareza o meu valor como ser humano das teorias ou pontos de vista intelectuais que sustento." },
+            { id: 8, sub: 2, reverse: true,  text: "Admitir que cometi um erro de julgamento em público me causa uma sensação profunda de humilhação e fraqueza." },
+            { id: 9, sub: 2, reverse: false, text: "Para mim, ser corrigido por outra pessoa é um ganho de clareza mental, e não uma derrota moral pessoal." },
+            { id: 10, sub: 2, reverse: true,  text: "Mesmo quando percebo no meio de um debate que estou sem argumentos, continuo defendendo minha tese apenas para não 'dar o braço a torcer'." },
+
+            // Dimensão 3: Humildade Epistêmica
+            { id: 11, sub: 3, reverse: false, text: "Tenho facilidade e tranquilidade em dizer abertamente: 'Eu não sei sobre esse assunto, preciso estudar mais'." },
+            { id: 12, sub: 3, reverse: true,  text: "Tenho tendência a opinar com extrema certeza sobre assuntos complexos de que tive pouco contato aprofundado." },
+            { id: 13, sub: 3, reverse: false, text: "Reconheço que a realidade é cheia de nuances e que a maioria dos problemas não possui respostas simples em preto e branco." },
+            { id: 14, sub: 3, reverse: true,  text: "Acredito sinceramente que quem discorda das minhas posições mais básicas é mal-intencionado ou ingênuo." },
+            { id: 15, sub: 3, reverse: false, text: "Mantenho a curiosidade viva para rever ideias que defendi no passado e atualizar meus modelos mentais." }
+        ];
+
+        const OPTIONS = [
+            { text: "Discordo Totalmente", val: 1 },
+            { text: "Discordo Parcialmente", val: 2 },
+            { text: "Neutro / Às Vezes", val: 3 },
+            { text: "Concordo Parcialmente", val: 4 },
+            { text: "Concordo Totalmente", val: 5 }
+        ];
+
+        const container = document.getElementById('questionsContainer');
+        QUESTIONS.forEach((q, idx) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `qCard_${q.id}`;
+
+            let optionsHtml = '';
+            OPTIONS.forEach(opt => {
+                optionsHtml += `
+                    <label class="option-label" onclick="selectOption(${q.id}, ${opt.val}, this)">
+                        <input type="radio" name="q_${q.id}" value="${opt.val}">
+                        <span>${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="question-title">
+                    <span class="question-num">${idx + 1}.</span>
+                    <span>${q.text}</span>
+                </div>
+                <div class="options-grid">
+                    ${optionsHtml}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function selectOption(qId, val, labelEl) {
+            const card = document.getElementById(`qCard_${qId}`);
+            card.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+            labelEl.classList.add('selected');
+            labelEl.querySelector('input').checked = true;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            QUESTIONS.forEach(q => {
+                if (document.querySelector(`input[name="q_${q.id}"]:checked`)) {
+                    answered++;
+                }
+            });
+            const pct = (answered / QUESTIONS.length) * 100;
+            document.getElementById('p-bar').style.width = pct + '%';
+        }
+
+        function calculateEpistemic() {
+            let answers = {};
+            let missing = [];
+
+            QUESTIONS.forEach(q => {
+                const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (checked) {
+                    answers[q.id] = parseInt(checked.value, 10);
+                } else {
+                    missing.push(q.id);
+                }
+            });
+
+            if (missing.length > 0) {
+                alert(`Por favor, responda todas as afirmações. Faltam ${missing.length} item(ns).`);
+                const firstMissing = document.getElementById(`qCard_${missing[0]}`);
+                if (firstMissing) {
+                    firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstMissing.style.borderColor = '#ae2012';
+                }
+                return;
+            }
+
+            let total = 0;
+            let sub1 = 0; // Busca de Refutação
+            let sub2 = 0; // Desapego do Ego
+            let sub3 = 0; // Humildade Epistêmica
+
+            QUESTIONS.forEach(q => {
+                let rawVal = answers[q.id];
+                let calculatedVal = q.reverse ? (6 - rawVal) : rawVal;
+
+                total += calculatedVal;
+                if (q.sub === 1) sub1 += calculatedVal;
+                if (q.sub === 2) sub2 += calculatedVal;
+                if (q.sub === 3) sub3 += calculatedVal;
+            });
+
+            document.getElementById('totalScore').innerText = total;
+            document.getElementById('scoreSub1').innerText = `${sub1}/25`;
+            document.getElementById('scoreSub2').innerText = `${sub2}/25`;
+            document.getElementById('scoreSub3').innerText = `${sub3}/25`;
+
+            const p1 = (sub1 / 25) * 100;
+            const p2 = (sub2 / 25) * 100;
+            const p3 = (sub3 / 25) * 100;
+
+            const b1 = document.getElementById('barSub1');
+            const b2 = document.getElementById('barSub2');
+            const b3 = document.getElementById('barSub3');
+
+            b1.style.width = p1 + '%';
+            b2.style.width = p2 + '%';
+            b3.style.width = p3 + '%';
+
+            function colorBar(el, p) {
+                if (p >= 70) el.style.background = '#2a9d8f';
+                else if (p >= 45) el.style.background = '#ee9b00';
+                else el.style.background = '#ae2012';
+            }
+
+            colorBar(b1, p1);
+            colorBar(b2, p2);
+            colorBar(b3, p3);
+
+            const badge = document.getElementById('scoreBadge');
+            const title = document.getElementById('resultLevel');
+            const subtitle = document.getElementById('resultSubtitle');
+            const analysis = document.getElementById('analysisText');
+
+            let levelName = "";
+            let badgeBg = "";
+            let htmlAnalysis = "";
+
+            if (total <= 34) {
+                levelName = "Alta Rigidez Dogmática (Forte Resistência à Mudança)";
+                badgeBg = "#ae2012";
+                badge.innerText = "Pensamento Rígido";
+                subtitle.innerText = "Você tende a operar em modo de defesa identitária constante, experimentando contradições como ameaças ao seu valor pessoal.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Seus resultados indicam forte predomínio do Sistema 1 automático de atalhos e uma profunda fusão emocional com suas crenças. Ao encontrar argumentos contrários, seus circuitos límbicos disparam um alarme de defesa, bloqueando a deliberação do córtex pré-frontal dorsolateral.</p>
+                    <p><strong>Impacto Prático:</strong> Essa dinâmica aprisiona o indivíduo em bolhas de confirmação, desgasta relações interpessoais e impede a detecção precoce de erros em projetos profissionais e decisões financeiras.</p>
+                    <p><strong>Recomendações Clínicas:</strong> Treine o princípio de Karl Popper: liste intencionalmente quais fatos fariam você mudar de ideia sobre seus pontos de vista mais caros. Aprenda a dissociar sua identidade das suas conclusões intelectuais.</p>
+                `;
+            } else if (total <= 49) {
+                levelName = "Flexibilidade Seletiva (Abertura Parcial)";
+                badgeBg = "#ee9b00";
+                badge.innerText = "Abertura Seletiva";
+                subtitle.innerText = "Você consegue ser reflexivo em assuntos neutros, mas se fecha rigidamente quando o tema toca em valores ou identidade.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Há uma boa capacidade analítica instalada, porém ela é suscetível ao <em>efeito do tiro pela culatra</em> quando confrontada com crenças nucleares de vida. Nesses momentos, o córtex pré-frontal assume o papel de advogado de defesa em vez de investigador isento.</p>
+                    <p><strong>Impacto Prático:</strong> É comum ter debates calorosos que geram ressentimento e sensação de desgaste mútuo sem aprendizado efetivo.</p>
+                    <p><strong>Recomendações Clínicas:</strong> Pratique o Princípio da Caridade (<em>Steel-manning</em>): tente reformular a tese da pessoa com quem você discorda na versão mais impecável possível antes de formular sua réplica.</p>
+                `;
+            } else if (total <= 62) {
+                levelName = "Pensamento Crítico Maduro (Boa Flexibilidade Epistêmica)";
+                badgeBg = "#2a9d8f";
+                badge.innerText = "Pensamento Crítico Maduro";
+                subtitle.innerText = "Você possui boa tolerância à dúvida, facilidade para admitir falhas e hábito saudável de checagem de premissas.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Ótimo recrutamento do córtex pré-frontal ventromedial e do córtex cingulado anterior. O ego não se sente destruído pelo erro, permitindo atualizar modelos mentais com agilidade e serenidade.</p>
+                    <p><strong>Impacto Prático:</strong> Tomadas de decisão mais acuradas, menor vulnerabilidade a desinformação ou manipulação emocional e excelente habilidade para mediar conflitos interpessoais.</p>
+                    <p><strong>Recomendações Clínicas:</strong> Mantenha essa postura reflexiva aplicando o 'Princípio das Duas Hipóteses' nos relacionamentos pessoais e na interpretação das atitudes alheias.</p>
+                `;
+            } else {
+                levelName = "Pensamento Investigativo Superior (Elevada Humildade Epistêmica)";
+                badgeBg = "#005f73";
+                badge.innerText = "Mente Investigativa Livre";
+                subtitle.innerText = "Extraordinário desapego do ego em relação à verdade, com curiosidade ativa pela refutação e profundo apreço pela complexidade.";
+                htmlAnalysis = `
+                    <p><strong>Perfil Neurocognitivo:</strong> Padrão raro de refinamento cognitivo. A sua dopamina não vem da validação de estar certo, mas do prazer intrínseco de descobrir onde você estava equivocado e aprender com o fato.</p>
+                    <p><strong>Impacto Prático:</strong> Altíssima imunidade a vieses de grupo, capacidade superior de liderança colaborativa e clareza de julgamento mesmo sob intensa pressão social.</p>
+                    <p><strong>Recomendações Clínicas:</strong> Use sua maturidade intelectual para orientar outros indivíduos e promover diálogos construtivos em seus ambientes profissionais e acadêmicos.</p>
+                `;
+            }
+
+            badge.style.background = badgeBg;
+            badge.style.color = "#ffffff";
+            title.innerText = levelName;
+            title.style.color = badgeBg;
+            analysis.innerHTML = htmlAnalysis;
+
+            const resArea = document.getElementById('resultArea');
+            resArea.style.display = 'block';
+            resArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>

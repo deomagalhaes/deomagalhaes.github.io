@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de Conflitos & Custo Cognitivo: Flexibilidade e Troca de Regras – Deo Magalhães</title>
+    <meta name="description" content="Exercite o córtex pré-frontal, o controle inibitório e a flexibilidade de alternância (Task Switching) com a Matriz de Conflitos e Custo Cognitivo.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            max-width: 860px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 18, 25, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 640px) {
+            .game-header-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #005f73;
+            margin-top: 4px;
+        }
+
+        /* Arena do Jogo */
+        .conflict-arena {
+            background: #001219;
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .rule-indicator {
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 1.15em;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .rule-shape {
+            background: rgba(10, 147, 150, 0.25);
+            border: 2px solid #0a9396;
+            color: #94d2bd;
+        }
+
+        .rule-color {
+            background: rgba(238, 155, 0, 0.25);
+            border: 2px solid #ee9b00;
+            color: #e9d8a6;
+        }
+
+        .rule-number {
+            background: rgba(202, 103, 2, 0.25);
+            border: 2px solid #ca6702;
+            color: #f4a261;
+        }
+
+        .stimulus-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 25px 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transform: scale(1);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .stimulus-card.pulse {
+            transform: scale(1.08);
+        }
+
+        .stimulus-icon {
+            font-size: 4rem;
+            line-height: 1;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.15));
+        }
+
+        /* Botões de Decisão */
+        .decision-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .decision-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .decision-btn {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .decision-btn:hover:not(:disabled) {
+            border-color: #005f73;
+            background: #e0f2fe;
+            transform: translateY(-2px);
+        }
+
+        .decision-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .decision-btn.correct {
+            background: #10b981 !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+        }
+
+        .decision-btn.wrong {
+            background: #ef4444 !important;
+            border-color: #dc2626 !important;
+            color: #ffffff !important;
+        }
+
+        /* Barra de Progresso e Timer */
+        .timer-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0a9396, #ee9b00, #ae2012);
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+
+        /* Feedback e Devolutiva */
+        .feedback-toast {
+            font-size: 0.95em;
+            font-weight: 700;
+            height: 24px;
+            margin-top: 10px;
+        }
+
+        .feedback-toast.pos { color: #10b981; }
+        .feedback-toast.neg { color: #ef4444; }
+
+        /* Neuro Explicação */
+        .neuro-card-info {
+            text-align: left;
+            background: #fdfbf7;
+            border-left: 4px solid #005f73;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 35px;
+        }
+
+        .neuro-card-info h3 {
+            color: #005f73;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.25em;
+        }
+
+        .neuro-card-info p {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 10px;
+        }
+
+        /* Modal Fim */
+        .modal-overlay {
+            display: none;
+            background: #ffffff;
+            border: 2px solid #0a9396;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .cta-primary {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .cta-primary:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header">
+        <div class="container header-content">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/index.html">Início</a></li>
+                    <li><a href="/sobre.html">Sobre</a></li>
+                    <li><a href="/servicos.html">Serviços</a></li>
+                    <li><a href="/artigos.html">Artigos</a></li>
+                    <li><a href="/jogos.html" class="active">Jogos</a></li>
+                    <li><a href="/recursos.html">Recursos</a></li>
+                    <li><a href="/contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="game-wrapper">
+            <h1 style="color: #005f73; margin-bottom: 8px;">Matriz de Conflitos & Custo Cognitivo</h1>
+            <p style="color: #64748b; font-size: 1.05em; margin-bottom: 25px;">
+                Paradigma experimental de <strong>Task-Switching</strong> (Alternância de Tarefas). As regras mudam dinamicamente a cada rodada. Seu cérebro precisa inibir o hábito anterior e aplicar a nova diretriz sem hesitar.
+            </p>
+
+            <div class="game-header-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Pontuação</div>
+                    <div class="stat-value" id="valScore">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Sequência</div>
+                    <div class="stat-value" id="valStreak">0 🔥</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Tempo Médio</div>
+                    <div class="stat-value" id="valReaction">-- ms</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Precisão</div>
+                    <div class="stat-value" id="valAccuracy">100%</div>
+                </div>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer-bar" id="timerBar"></div>
+            </div>
+
+            <!-- Arena Principal -->
+            <div id="gamePlayArea">
+                <div class="conflict-arena">
+                    <div class="rule-indicator" id="ruleBadge">REGRA: COR</div>
+                    <div class="stimulus-card" id="stimulusBox">
+                        <span class="stimulus-icon" id="stimulusGraphic">🔺</span>
+                    </div>
+                    <div class="feedback-toast" id="toastMsg"></div>
+                </div>
+
+                <div class="decision-grid" id="optionsGrid">
+                    <!-- Opções geradas via JS -->
+                </div>
+            </div>
+
+            <!-- Modal de Conclusão -->
+            <div class="modal-overlay" id="endModal">
+                <h2 style="color: #005f73; margin-top: 0;">Treino Concluído com Sucesso!</h2>
+                <p id="endSummaryText" style="font-size: 1.1em; color: #334155; line-height: 1.6;"></p>
+                <div style="font-size: 2.2em; font-weight: 800; color: #0a9396; margin: 15px 0;" id="endScoreDisplay">0 PONTOS</div>
+                <p style="color: #64748b; font-size: 0.9em;">Seu custo cognitivo de alternância foi avaliado com base no tempo de reação entre rodadas repetidas vs. alternadas.</p>
+                <button class="cta-primary" onclick="restartTraining()">Novo Desafio Cognitivo</button>
+            </div>
+
+            <!-- Explicação Neuropsicológica -->
+            <div class="neuro-card-info">
+                <h3>🧠 O que este treino estimula no seu Cérebro?</h3>
+                <p><strong>1. Custo de Troca (Switch Cost):</strong> Quando a regra muda (ex: julgar de "Cor" para "Forma"), o cérebro leva cerca de 150 a 300 milissegundos adicionais para reconfigurar o conjunto de tarefas no córtex pré-frontal dorsolateral (DLPFC). Esse atraso biológico é a prova viva de que a mente humana não foi desenhada para a multitarefa simultânea.</p>
+                <p><strong>2. Controle Inibitório e Córtex Cingulado Anterior (ACC):</strong> Para responder corretamente à regra atual, seu cérebro precisa ativamente suprimir a resposta dominante que acabou de ser reforçada na rodada anterior. O ACC monitora esse conflito constante para evitar erros por impulsividade.</p>
+                <p><strong>3. Flexibilidade Cognitiva no Cotidiano:</strong> O fortalecimento dessa rede neural melhora a capacidade de se adaptar a imprevistos de trabalho, interromper ruminações obsessivas e desarmar hábitos automáticos disfuncionais.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Web Audio API
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type = 'sine', duration = 0.15) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // Definição de Dimensões e Estímulos
+        const SHAPES = [
+            { id: 'triangulo', name: 'Triângulo', icon: '▲' },
+            { id: 'circulo', name: 'Círculo', icon: '●' },
+            { id: 'quadrado', name: 'Quadrado', icon: '■' },
+            { id: 'estrela', name: 'Estrela', icon: '★' }
+        ];
+
+        const COLORS = [
+            { id: 'azul', name: 'Azul', hex: '#005f73' },
+            { id: 'laranja', name: 'Laranja', hex: '#ee9b00' },
+            { id: 'verde', name: 'Verde', hex: '#0a9396' },
+            { id: 'vermelho', name: 'Vermelho', hex: '#ae2012' }
+        ];
+
+        const TOTAL_ROUNDS = 20;
+        let currentRound = 0;
+        let score = 0;
+        let streak = 0;
+        let correctAnswers = 0;
+        let reactionTimes = [];
+        let roundStartTime = 0;
+        let currentRule = 'shape'; // 'shape' ou 'color'
+        let currentStimulus = null;
+        let timerInterval = null;
+        let roundActive = false;
+
+        function startRound() {
+            if (currentRound >= TOTAL_ROUNDS) {
+                finishGame();
+                return;
+            }
+
+            roundActive = true;
+            currentRound++;
+
+            // Alternância probabilística de regra (60% de chance de troca para induzir switch cost)
+            const previousRule = currentRule;
+            if (Math.random() < 0.6 && currentRound > 1) {
+                currentRule = previousRule === 'shape' ? 'color' : 'shape';
+            }
+
+            // Seleção de Estímulo
+            const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+            const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+            currentStimulus = { shape: randomShape, color: randomColor };
+
+            // Renderizar Regra
+            const badge = document.getElementById('ruleBadge');
+            if (currentRule === 'shape') {
+                badge.textContent = 'REGRA: IDENTIFIQUE A FORMA';
+                badge.className = 'rule-indicator rule-shape';
+            } else {
+                badge.textContent = 'REGRA: IDENTIFIQUE A COR';
+                badge.className = 'rule-indicator rule-color';
+            }
+
+            // Renderizar Estímulo Visual
+            const graphic = document.getElementById('stimulusGraphic');
+            graphic.textContent = randomShape.icon;
+            graphic.style.color = randomColor.hex;
+
+            const box = document.getElementById('stimulusBox');
+            box.classList.remove('pulse');
+            void box.offsetWidth;
+            box.classList.add('pulse');
+
+            // Gerar Opções de Resposta
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+
+            let options = [];
+            if (currentRule === 'shape') {
+                options = [...SHAPES].sort(() => Math.random() - 0.5);
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'decision-btn';
+                    btn.innerHTML = `<span style="font-size:1.3em;">${opt.icon}</span> ${opt.name}`;
+                    btn.onclick = () => handleChoice(opt.id, 'shape', btn);
+                    grid.appendChild(btn);
+                });
+            } else {
+                options = [...COLORS].sort(() => Math.random() - 0.5);
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'decision-btn';
+                    btn.innerHTML = `<span style="display:inline-block; width:18px; height:18px; border-radius:50%; background:${opt.hex}; border:1px solid #94a3b8;"></span> ${opt.name}`;
+                    btn.onclick = () => handleChoice(opt.id, 'color', btn);
+                    grid.appendChild(btn);
+                });
+            }
+
+            // Iniciar Timer
+            roundStartTime = performance.now();
+            runTimer(3500); // 3.5 segundos por estímulo
+        }
+
+        function runTimer(duration) {
+            clearInterval(timerInterval);
+            const bar = document.getElementById('timerBar');
+            const start = performance.now();
+
+            timerInterval = setInterval(() => {
+                const elapsed = performance.now() - start;
+                const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
+                bar.style.width = `${remaining}%`;
+
+                if (elapsed >= duration) {
+                    clearInterval(timerInterval);
+                    if (roundActive) handleTimeout();
+                }
+            }, 30);
+        }
+
+        function handleChoice(chosenId, ruleType, btnElement) {
+            if (!roundActive) return;
+            roundActive = false;
+            clearInterval(timerInterval);
+
+            const reactionTime = Math.round(performance.now() - roundStartTime);
+            reactionTimes.push(reactionTime);
+
+            const isCorrect = (ruleType === 'shape' && chosenId === currentStimulus.shape.id) ||
+                              (ruleType === 'color' && chosenId === currentStimulus.color.id);
+
+            const toast = document.getElementById('toastMsg');
+
+            if (isCorrect) {
+                correctAnswers++;
+                streak++;
+                const speedBonus = Math.max(10, Math.round((3500 - reactionTime) / 30));
+                const points = 100 + speedBonus + (streak * 10);
+                score += points;
+                btnElement.classList.add('correct');
+                toast.textContent = `+${points} pts (${reactionTime}ms) ✓`;
+                toast.className = 'feedback-toast pos';
+                playTone(600, 'sine', 0.1);
+            } else {
+                streak = 0;
+                btnElement.classList.add('wrong');
+                toast.textContent = `Inibição Quebrada! Resposta incorreta ✗`;
+                toast.className = 'feedback-toast neg';
+                playTone(220, 'sawtooth', 0.2);
+            }
+
+            updateDashboard();
+
+            setTimeout(() => {
+                toast.textContent = '';
+                startRound();
+            }, 600);
+        }
+
+        function handleTimeout() {
+            roundActive = false;
+            streak = 0;
+            const toast = document.getElementById('toastMsg');
+            toast.textContent = `Tempo Esgotado! Hesitação de Troca ⏱️`;
+            toast.className = 'feedback-toast neg';
+            playTone(180, 'triangle', 0.25);
+            updateDashboard();
+
+            setTimeout(() => {
+                toast.textContent = '';
+                startRound();
+            }, 700);
+        }
+
+        function updateDashboard() {
+            document.getElementById('valScore').textContent = score;
+            document.getElementById('valStreak').textContent = `${streak} 🔥`;
+
+            if (reactionTimes.length > 0) {
+                const avg = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+                document.getElementById('valReaction').textContent = `${avg} ms`;
+            }
+
+            const acc = Math.round((correctAnswers / currentRound) * 100);
+            document.getElementById('valAccuracy').textContent = `${acc}%`;
+        }
+
+        function finishGame() {
+            document.getElementById('gamePlayArea').style.display = 'none';
+            const modal = document.getElementById('endModal');
+            modal.style.display = 'block';
+
+            const avgTime = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+            const acc = Math.round((correctAnswers / TOTAL_ROUNDS) * 100);
+
+            document.getElementById('endScoreDisplay').textContent = `${score} PONTOS`;
+            document.getElementById('endSummaryText').innerHTML = `
+                Precisão global de <strong>${acc}%</strong> com tempo médio de resposta de <strong>${avgTime} ms</strong>.<br>
+                Seu córtex pré-frontal completou 20 ciclos de reprogramação atencional com alto recrutamento de controle inibitório!
+            `;
+
+            [523, 659, 784, 1046].forEach((f, idx) => {
+                setTimeout(() => playTone(f, 'sine', 0.2), idx * 100);
+            });
+        }
+
+        function restartTraining() {
+            currentRound = 0;
+            score = 0;
+            streak = 0;
+            correctAnswers = 0;
+            reactionTimes = [];
+            document.getElementById('gamePlayArea').style.display = 'block';
+            document.getElementById('endModal').style.display = 'none';
+            document.getElementById('valScore').textContent = '0';
+            document.getElementById('valStreak').textContent = '0 🔥';
+            document.getElementById('valReaction').textContent = '-- ms';
+            document.getElementById('valAccuracy').textContent = '100%';
+            startRound();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startRound();
+        });
+    </script>
+</body>
+</html>

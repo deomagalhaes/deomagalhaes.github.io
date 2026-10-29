@@ -1,0 +1,196 @@
+<!-- Arquivo: /recursos/jogo-autonomo.html (VERSÃO ATUALIZADA) -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardim das Emoções</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --garden-bg: #D2E8D0; --panel-bg: #FFFFFF; --text-color-game: #333;
+            --shadow-color: rgba(0,0,0,0.1 ); --button-joy: #FFD700; --button-adventure: #8B4513;
+            --button-love: #FF69B4; --button-wisdom: #87CEEB; --button-fear: #9370DB;
+            --button-longing: #A9A9A9; --button-sadness: #4682B4; --button-anger: #DC143C;
+        }
+        html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Nunito', sans-serif; }
+        .game-container {
+            width: 100%; height: 100%; background-color: var(--panel-bg);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .game-container header { padding: 15px 25px; text-align: center; border-bottom: 2px solid #eee; }
+        .game-container header h1 { margin: 0; font-size: 1.8em; color: #5A8D57; }
+        .game-container header p { margin: 5px 0 0; font-size: 1em; color: #666; }
+        .main-content { display: flex; flex-grow: 1; overflow: hidden; }
+        #garden {
+            flex-grow: 1; background-color: var(--garden-bg);
+            background-image: linear-gradient(to bottom, #A8D3A5, #C8E6C9);
+            position: relative; cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'><text y='24'>💧</text></svg>" ) 16 16, auto;
+            overflow: hidden;
+        }
+        #seed-panel {
+            width: 250px; background-color: #F8F9FA; padding: 20px; border-left: 2px solid #eee;
+            display: flex; flex-direction: column; align-items: center; text-align: center; overflow-y: auto;
+        }
+        #seed-panel h2 { margin-top: 0; margin-bottom: 10px; font-size: 1.2em; }
+        #seed-panel p { font-size: 0.9em; margin-bottom: 15px; } /* Margem reduzida */
+        
+        /* ===== AJUSTES NOS BOTÕES ===== */
+        .seed-button {
+            width: 100%;
+            padding: 10px; /* Reduzido */
+            margin-bottom: 8px; /* Reduzido */
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95em; /* Ligeiramente reduzido */
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Reduzido */
+        }
+        /* ============================== */
+
+        .seed-button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .seed-button.selected { outline: 4px solid #4CAF50; transform: translateY(0); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        #joy-seed { background-color: var(--button-joy); color: #504200; }
+        #adventure-seed { background-color: var(--button-adventure); color: white; }
+        #love-seed { background-color: var(--button-love); color: white; }
+        #wisdom-seed { background-color: var(--button-wisdom); color: #00334e; }
+        #fear-seed { background-color: var(--button-fear); color: white; }
+        #longing-seed { background-color: var(--button-longing); color: white; }
+        #sadness-seed { background-color: var(--button-sadness); color: white; }
+        #anger-seed { background-color: var(--button-anger); color: white; }
+        .plant {
+            position: absolute; font-size: 3rem; cursor: pointer;
+            transition: transform 0.3s ease-in-out; user-select: none; animation: grow 0.5s ease-out;
+        }
+        @keyframes grow { from { transform: scale(0); } to { transform: scale(1); } }
+        .plant:hover { transform: scale(1.2); }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);
+            display: flex; justify-content: center; align-items: center; z-index: 1001;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content {
+            background-color: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px;
+            text-align: center; transform: scale(0.9); transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-content h3 { margin-top: 0; margin-bottom: 15px; }
+        .modal-content textarea {
+            width: 100%; height: 100px; border-radius: 8px; border: 1px solid #ccc; padding: 10px;
+            font-family: 'Nunito', sans-serif; font-size: 1em; margin-bottom: 20px; box-sizing: border-box;
+        }
+        .modal-content button {
+            padding: 12px 25px; border: none; border-radius: 8px; background-color: #4CAF50;
+            color: white; font-size: 1em; cursor: pointer; transition: background-color 0.2s;
+        }
+        .modal-content button:hover { background-color: #45a049; }
+        .tooltip {
+            position: absolute; background-color: rgba(0,0,0,0.75); color: white; padding: 10px 15px;
+            border-radius: 8px; font-size: 0.9em; z-index: 1002; pointer-events: none;
+            opacity: 0; transition: opacity 0.2s; max-width: 200px; text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>Jardim das Emoções</h1>
+            <p>Plante uma semente para cada lembrança e emoção florescer.</p>
+        </header>
+        <div class="main-content">
+            <div id="garden"></div>
+            <div id="seed-panel">
+                <h2>Sementes</h2>
+                <p>Escolha uma semente e clique no jardim para plantar.</p>
+                
+                <!-- BOTÕES SEM A LINHA DIVISÓRIA -->
+                <button class="seed-button" id="joy-seed" data-emoji="🌻" data-type="Alegria">🌻 Alegria</button>
+                <button class="seed-button" id="adventure-seed" data-emoji="🌳" data-type="Aventura">🌳 Aventura</button>
+                <button class="seed-button" id="love-seed" data-emoji="🌹" data-type="Carinho">🌹 Carinho</button>
+                <button class="seed-button" id="wisdom-seed" data-emoji="🕊️" data-type="Paz">🕊️ Paz</button>
+                <button class="seed-button" id="fear-seed" data-emoji="👻" data-type="Medo">👻 Medo</button>
+                <button class="seed-button" id="longing-seed" data-emoji="💧" data-type="Saudade">💧 Saudade</button>
+                <button class="seed-button" id="sadness-seed" data-emoji="🥀" data-type="Tristeza">🥀 Tristeza</button>
+                <button class="seed-button" id="anger-seed" data-emoji="🌵" data-type="Raiva">🌵 Raiva</button>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="memory-modal">
+        <div class="modal-content">
+            <h3 id="modal-title">Qual lembrança você quer plantar?</h3>
+            <textarea id="memory-input" placeholder="Escreva aqui uma lembrança de..."></textarea>
+            <button id="save-memory-button">Plantar</button>
+        </div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+    <script>
+        const garden = document.getElementById('garden');
+        const seedButtons = document.querySelectorAll('.seed-button');
+        const modal = document.getElementById('memory-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const memoryInput = document.getElementById('memory-input');
+        const saveMemoryButton = document.getElementById('save-memory-button');
+        const tooltip = document.getElementById('tooltip');
+        let selectedSeed = null;
+        let plantPosition = { x: 0, y: 0 };
+        seedButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currentSelected = document.querySelector('.seed-button.selected');
+                if (currentSelected) { currentSelected.classList.remove('selected'); }
+                button.classList.add('selected');
+                selectedSeed = { emoji: button.dataset.emoji, type: button.dataset.type };
+            });
+        });
+        garden.addEventListener('click', (event) => {
+            if (!selectedSeed) { alert('Por favor, escolha uma semente primeiro!'); return; }
+            const rect = garden.getBoundingClientRect();
+            plantPosition.x = event.clientX - rect.left;
+            plantPosition.y = event.clientY - rect.top;
+            modalTitle.textContent = `Qual lembrança de ${selectedSeed.type.toLowerCase()} você quer plantar?`;
+            memoryInput.placeholder = `Escreva aqui uma lembrança de ${selectedSeed.type.toLowerCase()}...`;
+            memoryInput.value = '';
+            modal.classList.add('visible');
+            memoryInput.focus();
+        });
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) { modal.classList.remove('visible'); }
+        });
+        saveMemoryButton.addEventListener('click', () => {
+            const memoryText = memoryInput.value.trim();
+            if (memoryText === '') { alert('Por favor, escreva uma memória para plantar.'); return; }
+            createPlant(plantPosition.x, plantPosition.y, selectedSeed.emoji, memoryText);
+            modal.classList.remove('visible');
+            const currentSelected = document.querySelector('.seed-button.selected');
+            if (currentSelected) { currentSelected.classList.remove('selected'); }
+            selectedSeed = null;
+        });
+        function createPlant(x, y, emoji, memory) {
+            const plant = document.createElement('div');
+            plant.classList.add('plant');
+            plant.textContent = emoji;
+            plant.style.left = `${x - 24}px`;
+            plant.style.top = `${y - 24}px`;
+            plant.dataset.memory = memory;
+            plant.addEventListener('mouseenter', (e) => {
+                tooltip.textContent = plant.dataset.memory;
+                tooltip.style.opacity = '1';
+                const plantRect = e.target.getBoundingClientRect();
+                const gardenRect = garden.getBoundingClientRect();
+                tooltip.style.left = `${plantRect.left - gardenRect.left + plantRect.width / 2 - tooltip.offsetWidth / 2}px`;
+                tooltip.style.top = `${plantRect.top - gardenRect.top - tooltip.offsetHeight - 10}px`;
+            });
+            plant.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
+            garden.appendChild(plant);
+        }
+    </script>
+</body>
+</html>
