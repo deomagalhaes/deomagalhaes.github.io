@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="sistema-glinfatico" selected>O Sistema GlinfÃ¡tico: A Faxina Noturna de Toxinas Cerebrais</option>
+                        <option value="autocompaixao" selected>A Neurobiologia da AutocompaixÃ£o: Por Que Ser Gentil Desinflama o Corpo</option>
+                        <option value="sistema-glinfatico">O Sistema GlinfÃ¡tico: A Faxina Noturna de Toxinas Cerebrais</option>
                         <option value="perdao-magoa">A Neurobiologia do PerdÃ£o e da MÃ¡goa: O Custo do Rancor</option>
                         <option value="cerebro-fragmentado">O CÃ©rebro Fragmentado: Troca de Tarefas e ResÃ­duo de AtenÃ§Ã£o</option>
                         <option value="motivacao-dopamina">Por Que Suas Metas Falham? (Dopamina TÃ´nica vs. FÃ¡sica)</option>
@@ -647,6 +648,55 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+            "autocompaixao": {
+                articleSlug: "2026-10-28-neurobiologia-autocompaixao",
+                articleTitle: "A Neurobiologia da AutocompaixÃ£o: Por Que Ser Gentil Consigo Desinflama o Corpo",
+                slides: [
+                    {
+                        type: "cover",
+                        badge: "NEUROCIÃŠNCIA DA AUTOCOMPAIXÃƒO",
+                        title: "O que acontece no cÃ©rebro quando vocÃª para de se chicotear?",
+                        body: "Por que a autocrÃ­tica violenta sabota seu foco e como a gentileza interna acalma a amÃ­gdala e restaura o cÃ³rtex prÃ©-frontal.",
+                        footer: "Arraste para entender a ciÃªncia ðŸ‘‰"
+                    },
+                    {
+                        type: "problem",
+                        badge: "O ATAQUE INTERNO",
+                        title: "Seu cÃ©rebro nÃ£o sabe que o predador Ã© vocÃª",
+                        body: "Ao errar e disparar ofensas internas, a amÃ­gdala interpreta os pensamentos como um ataque fÃ­sico real.\n\nO simpÃ¡tico entra em alarme: cortisol elevado, batimentos acelerados e sequestro da atenÃ§Ã£o. VocÃª Ã© o predador e a presa ao mesmo tempo.",
+                        footer: "Os 3 sistemas emocionais ðŸ‘‰"
+                    },
+                    {
+                        type: "neuro",
+                        badge: "MODELO DE PAUL GILBERT",
+                        title: "Os 3 Sistemas de RegulaÃ§Ã£o Afetiva",
+                        body: "1. Sistema de AmeaÃ§a: focado em perigo, luta/fuga, adrenalina e cortisol.\n2. Sistema de Conquista (Drive): metas, dopamina e performance.\n3. Sistema de Acolhimento: ocitocina e opioides endÃ³genos, gerando calma e seguranÃ§a.\n\nA autocompaixÃ£o ativa esse terceiro sistema.",
+                        footer: "O mito da dureza ðŸ‘‰"
+                    },
+                    {
+                        type: "mechanism",
+                        badge: "MITO DA COMPLACÃŠNCIA",
+                        title: "AutocrÃ­tica nÃ£o gera alta performance",
+                        body: "Acreditamos que a dureza nos mantÃ©m na linha. A ciÃªncia mostra o oposto: o pÃ¢nico da autoflagelaÃ§Ã£o Ã© a causa raiz da procrastinaÃ§Ã£o crÃ´nica.\n\nA autocompaixÃ£o remove o terror do erro, aumentando a resiliÃªncia e a responsabilidade real.",
+                        footer: "A trÃ­ade de Neff ðŸ‘‰"
+                    },
+                    {
+                        type: "steps",
+                        badge: "MICROPRÃTICAS CLÃNICAS",
+                        title: "3 Passos para Acalmar a Tempestade",
+                        body: "1. Toque Calmante: mÃ£o espalmada no centro do peito. Fibras tÃ¡teis ativam o nervo vago e liberam ocitocina.\n2. Teste do Melhor Amigo: 'O que eu diria com voz calma para quem amo se errasse isso?'\n3. Pausa Compassiva: 'Isso dÃ³i agora. O erro faz parte da vida. Que eu seja gentil comigo'.",
+                        footer: "Ensaio no portal ðŸ‘‰"
+                    },
+                    {
+                        type: "cta",
+                        badge: "ENSAIO COMPLETO NO SITE",
+                        title: "Trate-se como seu maior aliado incondicional.",
+                        body: "Dissecamos o modelo da CFT, neuroimagem do cÃ³rtex prÃ©-frontal e a Escala ClÃ­nica de AutocompaixÃ£o no portal.\n\nðŸ‘‰ Toque no link da bio para ler na Ã­ntegra:\ndeomagalhaes.com.br",
+                        footer: "Deo MagalhÃ£es â€¢ CRP 04/42784"
+                    }
+                ],
+                caption: `Quantas vezes hoje vocÃª jÃ¡ se insultou em silÃªncio por uma falha boba? ðŸ§ \n\nA maioria de nÃ³s foi ensinada que a Ãºnica forma de atingir a disciplina e o sucesso Ã© atravÃ©s de uma autocrÃ­tica severa e implacÃ¡vel. Mas a neurociÃªncia moderna prova exatamente o contrÃ¡rio.\n\nQuando vocÃª diz para si mesmo â€œeu nÃ£o prestoâ€ ou â€œcomo pude errar isso?â€, a amÃ­gdala cerebral basolateral nÃ£o compreende que se trata de uma metÃ¡fora. Ela interpreta essas palavras como uma agressÃ£o fÃ­sica iminente, disparando o eixo do estresse e bloqueando o cÃ³rtex prÃ©-frontal.\n\nO psicÃ³logo evolutivo Paul Gilbert demonstra que o ser humano possui trÃªs sistemas de regulaÃ§Ã£o afetiva:\n1ï¸âƒ£ Sistema de AmeaÃ§a (foco em defesa e medo);\n2ï¸âƒ£ Sistema de Conquista (foco em dopamina e metas);\n3ï¸âƒ£ Sistema de Acolhimento e Apego Seguro (foco em calma e ocitocina).\n\nA autocompaixÃ£o â€” sistematizada pela pesquisadora Kristin Neff â€” nÃ£o Ã© complacÃªncia nem fraqueza. Ã‰ a habilidade de responder Ã  prÃ³pria vulnerabilidade com acolhimento e dignidade.\n\nðŸ“– Leia o artigo cientÃ­fico completo e faÃ§a o teste no site: deomagalhaes.com.br\n\n#AutocompaixÃ£o #NeurociÃªncia #SaÃºdeMental #PaulGilbert #KristinNeff #PsicologiaClÃ­nica #RegulaÃ§Ã£oEmocional #DeoMagalhÃ£es #Ansiedade #AutocrÃ­tica`
+            },
             "sistema-glinfatico": {
                 articleSlug: "2026-10-28-sistema-glinfatico-sono-profundo",
                 articleTitle: "O Sistema GlinfÃ¡tico e o Sono Profundo: A Faxina Noturna de Toxinas Cerebrais",
@@ -1974,9 +2024,9 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
         };
 
         // Estado do Studio
-        let currentPresetKey = "sistema-glinfatico";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["sistema-glinfatico"].slides));
-        let currentCaption = PRESETS["sistema-glinfatico"].caption;
+        let currentPresetKey = "autocompaixao";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["autocompaixao"].slides));
+        let currentCaption = PRESETS["autocompaixao"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização
@@ -2500,5 +2550,6 @@ Qual é o horário em que sua mente costuma acelerar mais? Compartilhe comigo no
     </script>
 </body>
 </html>
+
 
 

@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **28/10/2026** | **A Neurobiologia da Autocompaixão: Por Que Ser Gentil Desinflama o Corpo** | [`social/2026-10-28-neurobiologia-autocompaixao.md`](2026-10-28-neurobiologia-autocompaixao.md) | ✅ Pronto para postar |
 | **28/10/2026** | **O Sistema Glinfático: A Faxina Noturna de Toxinas Cerebrais** | [`social/2026-10-28-sistema-glinfatico-sono-profundo.md`](2026-10-28-sistema-glinfatico-sono-profundo.md) | ✅ Pronto para postar |
 | **28/10/2026** | **A Neurobiologia do Perdão e da Mágoa: O Custo Biológico do Rancor** | [`social/2026-10-28-neurobiologia-perdao-magoa-ressentimento.md`](2026-10-28-neurobiologia-perdao-magoa-ressentimento.md) | ✅ Pronto para postar |
 | **28/10/2026** | **O Cérebro Fragmentado: Troca de Tarefas e Resíduo de Atenção** | [`social/2026-10-28-cerebro-fragmentado-residuo-atencao.md`](2026-10-28-cerebro-fragmentado-residuo-atencao.md) | ✅ Pronto para postar |

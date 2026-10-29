@@ -9,10 +9,6 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala**
-  - *Abordagem:* O circuito de acolhimento mamífero, liberação de ocitocina e redução de autocrítica tóxica segundo Kristin Neff e Paul Gilbert.
-  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
-
 - [ ] **O Fenômeno do Bloqueio Executivo no TDAH: Por Que a Paralisia da Inércia Não É Preguiça**
   - *Abordagem:* Córtex pré-frontal dorsolateral, estriado ventral, déficit de tônus catecolaminérgico e a neurociência do arranque motor.
   - *Categorias:* `tdah-tea`, `reabilitacao-cognitiva`, `saude-mental`.
@@ -21,10 +17,15 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
   - *Abordagem:* Consumo de glicose neuronal, erosão do autocontrole, heurísticas impulsivas e arquitetura de escolhas (Baumeister & Kahneman).
   - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `filosofia`.
 
+- [ ] **A Neurociência do Vínculo e da Teoria do Apego: Como a Infância Modela o Cérebro Relacional Adulto**
+  - *Abordagem:* Estilos de apego de Bowlby, córtex órbito-frontal, sistema ocitocinérgico e a reparação de esquemas relacionais na clínica.
+  - *Categorias:* `orientacao-familiar`, `saude-mental`, `desenvolvimento-infantil`.
+
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neurobiologia da Autocompaixão: Como a Gentileza Interna Desativa a Amígdala** (Publicado em 28/10/2026)
 - [x] **O Sistema Glinfático e o Sono Profundo de Ondas Lentas (NREM): A Limpeza Noturna de Toxinas Cerebrais** (Publicado em 28/10/2026)
 - [x] **A Neurobiologia do Perdão e da Mágoa: Como o Ressentimento Crônico Danifica o Eixo do Estresse** (Publicado em 28/10/2026)
 - [x] **O Cérebro Fragmentado: O Custo Oculto da Troca de Tarefas e do Resíduo de Atenção** (Publicado em 28/10/2026)
