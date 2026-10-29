@@ -1,4 +1,4 @@
-# Motor de Execução Autônoma de Esteiras Contínuas — Deo Magalhães
+﻿# Motor de Execução Autônoma de Esteiras Contínuas — Deo Magalhães
 # Executado a cada 2 horas via Agendador de Tarefas do Windows (Task Scheduler)
 $ErrorActionPreference = 'Stop'
 
@@ -41,11 +41,10 @@ try {
     $esteiraPath = Join-Path $repoDir "esteiras-programacao.md"
     $esteiraTxt = [System.IO.File]::ReadAllText($esteiraPath, [System.Text.Encoding]::UTF8)
     
-    $proximoMatch = [regex]::Match($esteiraTxt, '\|\s*\*\*Lote (\d+)\*\*\s*\|\s*\*\*([^\*]+)\*\*:?([^\*\|]+)?\|\s*([^\|]+)\|\s*\*\*([^\*]+)\*\*:?([^\|]+)?\|\s*\*\*([^\*]+)\*\*:?([^\|]+)?\|\s*⏳\s*\*\*Próximo da Fila\*\*')
+    $proximoMatch = [regex]::Match($esteiraTxt, '\|\s*\*\*Lote (\d+)\*\*\s*\|([^\|]+)\|([^\|]+)\|([^\|]+)\|([^\|]+)\|\s*⏳\s*\*\*Pr.?ximo da Fila\*\*')
     
     if (-not $proximoMatch.Success) {
-        # Tentar regex mais tolerante
-        $proximoMatch = [regex]::Match($esteiraTxt, '\|\s*\*\*Lote (\d+)\*\*\s*\|([^\|]+)\|([^\|]+)\|([^\|]+)\|([^\|]+)\|\s*⏳\s*\*\*Próximo da Fila\*\*')
+        $proximoMatch = [regex]::Match($esteiraTxt, '\|\s*\*\*Lote (\d+)\*\*.*?⏳\s*\*\*Pr.?ximo da Fila\*\*')
     }
     
     if (-not $proximoMatch.Success) {
