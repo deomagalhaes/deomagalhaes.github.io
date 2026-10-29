@@ -22,7 +22,7 @@ Sempre que você for solicitado a criar, revisar ou publicar um artigo para o si
   - CSS: `/assets/style.css`.
 - **Cabeçalho padrão do site**:
   - Top bar com ícones de contato (WhatsApp, E-mail, Instagram, Localização).
-  - `header#main-header` com menu de navegação onde `a[href="/artigos.html"]` possui a classe `active`.
+  - `header#main-header` com menu de navegação padronizado: `Home`, `Sobre`, `Serviços`, `Agendamento`, `Artigos` (com classe `active`), `Testes`, `Jogos`, `Recursos`. Nunca incluir `Contato` na barra de navegação superior (o contato já está presente na top bar e no rodapé).
   - Imagem do logo com proporções exatas:
     `<a href="/index.html" class="logo-container"><img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães"><div class="logo-text"><span class="name">Deo Magalhães</span><span class="subtitle">Neurociência e Comportamento</span></div></a>`
 - **Corpo (`main > .container.article-container`)**:

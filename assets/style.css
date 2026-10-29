@@ -143,6 +143,7 @@ body {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    gap: 15px;
 }
 
 /* --- Logo --- */
@@ -152,6 +153,7 @@ body {
     gap: var(--spacing-sm);
     text-decoration: none;
     color: inherit;
+    flex-shrink: 0;
 }
 
 .logo-container img {
@@ -172,6 +174,7 @@ body {
 .logo-text {
     display: flex;
     flex-direction: column;
+    white-space: nowrap;
 }
 
 .logo-text .name {
@@ -191,15 +194,18 @@ body {
 /* --- Navegação --- */
 nav {
     display: flex;
-    gap: var(--spacing-md);
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
 }
 
 nav a {
     text-decoration: none;
     color: var(--primary-dark-blue);
     font-weight: 500;
-    padding: var(--spacing-xs) 16px;
+    padding: 6px 12px;
     border-radius: var(--border-radius-sm);
+    white-space: nowrap;
     /* A transição aqui garante que a mudança de cor de fundo seja suave. */
     transition: all var(--transition-normal);
 }
@@ -220,6 +226,24 @@ nav a.active {
     font-size: 28px;
     color: var(--primary-dark-blue);
     cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Telas de notebook / desktop compacto: redução suave de gaps e padding */
+@media screen and (min-width: 1025px) and (max-width: 1240px) {
+    nav {
+        gap: 6px;
+    }
+    nav a {
+        padding: 6px 9px;
+        font-size: 0.9em;
+    }
+    .logo-container img {
+        height: 58px;
+    }
+    .logo-text .name {
+        font-size: 1.5em;
+    }
 }
 
 
@@ -1089,8 +1113,8 @@ footer.main-footer {
     font-size: 1em;
 }
 
-/* --- Responsividade --- */
-@media screen and (max-width: 768px) {
+/* --- Responsividade (Breakpoint expandido para 1024px para blindagem do cabeçalho) --- */
+@media screen and (max-width: 1024px) {
     /* Container e espaçamentos gerais */
     .container {
         padding: 0 var(--spacing-sm);
@@ -1100,7 +1124,7 @@ footer.main-footer {
         padding: var(--spacing-lg) 0;
     }
     
-    /* Cabeçalho móvel */
+    /* Cabeçalho móvel / tablet */
     .header-content {
         padding: 0 var(--spacing-sm);
     }
@@ -1127,6 +1151,7 @@ footer.main-footer {
         padding: var(--spacing-sm) 20px;
         border-radius: 0;
         border-bottom: 1px solid #f1f5f9;
+        width: 100%;
     }
     
     nav a:last-child {
