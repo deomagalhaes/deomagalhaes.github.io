@@ -4,10 +4,10 @@ Este documento estabelece as diretrizes de execução autônoma, persistência d
 
 ---
 
-## 1. Agendamento Contínuo a Cada 2 Horas (Persistente no Windows)
-A produção contínua está automatizada para rodar de 2 em 2 horas de forma 100% autônoma, sem necessidade de intervenção do usuário, mesmo após desligar e ligar o computador:
+## 1. Agendamento Contínuo a Cada 12 Horas (8h e 20h - Persistente)
+A produção contínua está automatizada para rodar de 12 em 12 horas (às 08:00 e às 20h) de forma 100% autônoma, sem necessidade de intervenção do usuário:
 - **Tarefa Agendada do Windows (Task Scheduler):** `DeoMagalhaes_EsteiraContinua`
-  - **Status:** Ativa (`Ready`), disparando a cada 120 minutos.
+  - **Status:** Ativa (`Ready`), disparando diariamente às 08:00 e 20:00.
   - **Script Executor:** `scripts/executar-esteira-autonoma.ps1`
   - **Política de Reinicialização:** `StartWhenAvailable = $true` (se o computador estiver desligado no horário do gatilho, a tarefa roda assim que o sistema inicializa).
   - **Arquivo de Logs:** `logs/esteira-execucoes.log`
