@@ -9,14 +9,12 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **A Neurobiologia da Ruminação Depressiva: A Hiperconectividade da Rede de Modo Padrão (DMN) e a Perda de Controle Pré-Frontal**
-  - *Abordagem:* O loop entre córtex pré-frontal medial e hipocampo, a falha de desengajamento da DMN pela Rede de Controle Executivo (CEN) e intervenções baseadas em mindfulness e ACT.
-  - *Categorias:* `saude-mental`, `desenvolvimento-pessoal`, `reabilitacao-cognitiva`.
-
+*(Nenhuma pauta pendente no momento — adicione novos temas aqui)*
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neurobiologia da Ruminação Depressiva: A Hiperconectividade da Rede de Modo Padrão (DMN) e a Perda de Controle Pré-Frontal** (Publicado em 30/10/2026)
 - [x] **A Fadiga por Decisão e a Depleção do Ego: Como Escolhas Cotidianas Consomem o Córtex Pré-Frontal** (Publicado em 29/10/2026)
 - [x] **O Fenômeno do Bloqueio Executivo no TDAH: Por Que a Paralisia Não É Preguiça** (Publicado em 29/10/2026)
 - [x] **A Neuroquímica do Vínculo Amoroso: Ocitocina, Vasopressina e Apego Seguro** (Publicado em 29/10/2026)
