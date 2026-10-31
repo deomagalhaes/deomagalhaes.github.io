@@ -27,7 +27,8 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-18** | **Escala de Satisfação Conjugal e Segurança Afetiva (ESCSA)** | Vínculo de Parceria, Ocitocina e Resolução de Conflitos | `testes/teste-satisfacao-conjugal-apego.html` | ✅ Concluído |
 | **T-19** | **Escala de Inércia Psíquica e Bloqueio Executivo (EIPBE)** | Bloqueio Executivo, Tônus Dopaminérgico e TDAH | `testes/teste-bloqueio-executivo-tdah.html` | ✅ Concluído |
 | **T-20** | **Escala de Fadiga por Decisão e Depleção do Ego** | Esgotamento Pré-Frontal, Autocontrole e Heurísticas Impulsivas | `testes/teste-fadiga-decisao.html` | ✅ Concluído |
-| **T-21** | **Inventário de Sintomas de Desregulação do Eixo HPA e Estresse Crônico** | Carga Alostática, Reatividade ao Estresse e Esgotamento Fisiológico | `testes/teste-desregulacao-eixo-hpa.html` | ⏳ *Próximo da fila* |
+| **T-21** | **Inventário de Sintomas de Desregulação do Eixo HPA e Estresse Crônico** | Carga Alostática, Reatividade ao Estresse e Esgotamento Fisiológico | `testes/teste-desregulacao-eixo-hpa.html` | ✅ Concluído |
+| **T-22** | **Escala de Disforia Sensível à Rejeição (RSD) e Reatividade Afetiva** | Vulnerabilidade Emocional, Hiper-reatividade Social e TDAH | `testes/teste-disforia-rejeicao.html` | ⏳ *Próximo da fila* |
 
 ---
 

@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="fadiga-decisao" selected>A Fadiga por Decisão e a Depleção do Ego (Baumeister)</option>
+                        <option value="ruminacao-depressiva" selected>A Neurobiologia da Ruminação Depressiva (DMN & Controle Pré-Frontal)</option>
+                        <option value="fadiga-decisao">A Fadiga por Decisão e a Depleção do Ego (Baumeister)</option>
                         <option value="bloqueio-executivo">O Bloqueio Executivo no TDAH (Inércia do Arranque)</option>
                         <option value="vinculo-amoroso">A Neuroquímica do Vínculo Amoroso (Ocitocina & Apego)</option>
                         <option value="pensamento-critico">Arquitetura do Pensamento Crítico (Viés de Confirmação)</option>
@@ -651,6 +652,55 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "ruminacao-depressiva": {
+        "articleSlug": "2026-10-30-ruminacao-depressiva-dmn",
+        "articleTitle": "O Labirinto da Ruminação Mental: Por Que o Cérebro Fica Preso na Autocrítica",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROBIOLOGIA DA MENTE",
+                "title": "Por que quando você deita para dormir, seu cérebro começa a dissecar cada erro do passado?",
+                "body": "A ciência por trás da \"ruminação depressiva\": como a hiperconectividade da Rede de Modo Padrão (DMN) sequestra sua atenção e como destravar o comando pré-frontal.",
+                "footer": "Deslize para entender o circuito 👉"
+            },
+            {
+                "type": "neuro",
+                "badge": "A ILUSÃO DE RESOLUÇÃO",
+                "title": "Ruminar parece que resolve, mas só aprisiona",
+                "body": "Susan Nolen-Hoeksema comprovou que a ruminação é um padrão repetitivo e passivo focado no sofrimento, sem transição para a resolução de problemas.\n\nVocê se pergunta: \"Por que falei aquilo?\", \"O que há de errado comigo?\".\n\nO cérebro cria a ilusão de que dissecar a dor trará alívio. Na prática, cada ciclo reativa memórias autobiográficas negativas e consome sua energia executiva.\n\nRuminar não é reflexão crítica: é uma engrenagem neuronal girando em falso.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "REDES NEURAIS DE GRANDE ESCALA",
+                "title": "Sua Rede de Modo Padrão está hiperconectada",
+                "body": "A Rede de Modo Padrão (DMN) é o circuito ativado no devaneio e na memória autobiográfica do \"Eu\".\n\nEm condições normais, ao focar numa tarefa do mundo real, a Rede Executiva Central (CEN) desliga a DMN.\n\nNa ruminação crônica, o interruptor da Rede de Saliência falha: a DMN fica travada em estado hiperativo e o córtex pré-frontal perde a força de inibição.\n\nSeus pensamentos deixam de ser observados e passam a sequestrar sua consciência.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "neuro",
+                "badge": "NEUROBIOLOGIA DO ESTRESSE",
+                "title": "O custo invisível que o seu corpo paga",
+                "body": "A ruminação não fica restrita ao abstrato: ela hiperativa a amígdala e sobrecarrega o Eixo HPA, liberando cortisol sustentado e citocinas inflamatórias.\n\nEsse estresse biológico contínuo:\n\n• Reduz o BDNF no hipocampo e no córtex pré-frontal.\n• Causa retração dendrítica e perda de plasticidade.\n• Consolida a própria trilha neural da autocrítica.\n\nPensamento repetitivo prolongado gera inflamação fisiológica e esgotamento celular real.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "PROTOCOLO CLÍNICO & ACT",
+                "title": "4 Passos Práticos para Destravar a DMN",
+                "body": "1. Desfusão Cognitiva (ACT): Nomeie o processo: \"Percebo que minha mente está produzindo a narrativa da autocrítica novamente\".\n\n2. Ativação da Rede Executiva: Engaje imediatamente em uma tarefa motora ou sensorial concreta (caminhada, água fria, foco tátil).\n\n3. Janela de Preocupação: Agende 15 minutos à tarde para registrar as angústias no papel e feche o caderno.\n\n4. Ancoragem Exteroceptiva: Descreva 5 objetos que enxerga e 3 sons do ambiente.\n\nVocê desativa a DMN recrutando o corpo e os sentidos.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "closing",
+                "badge": "NEUROPSICOLOGIA & SAÚDE MENTAL",
+                "title": "Sua mente anda presa em labirintos repetitivos?",
+                "body": "Publicamos um ensaio aprofundado com as evidências de neuroimagem sobre a Rede de Modo Padrão, o córtex pré-frontal e a ruminação mental.\n\nE disponibilizamos a nova Escala de Desregulação do Eixo HPA e Estresse Crônico (T-21) para autoavaliação 100% anônima e gratuita.\n\nSalve este post para consultar nos momentos de sobrecarga e compartilhe com quem precisa silenciar o ruído interno.",
+                "footer": "Link na bio ➔ Artigos & Teste Psicométrico T-21"
+            }
+        ],
+        "caption": "Você já teve a experiência de se deitar exausto para dormir e, no minuto em que a cabeça encosta no travesseiro, o cérebro liga uma espécie de projetor mental que repassa detalhadamente cada erro, conversa estranha ou insegurança dos últimos dez anos?\n\nNa neuropsicologia clínica, esse padrão tem nome e assinatura neurobiológica: trata-se da Ruminação Mental.\n\nLonge de ser apenas um \"hábito pessimista\" ou fraqueza de ânimo, a neurociência funcional revelou que a ruminação é fruto de uma desregulação na Rede de Modo Padrão (DMN - Default Mode Network). Esse conjunto de estruturas cerebrais — liderado pelo córtex pré-frontal medial e pelo cíngulo posterior — é responsável pela nossa narrativa sobre nós mesmos e pela recuperação de memórias biográficas.\n\nEm um cérebro neurotípico, quando você precisa realizar uma atividade no mundo real, a Rede Executiva Central assume o controle e \"silencia\" a DMN. No entanto, em períodos de ansiedade crônica e depressão, essa alternância falha. A DMN entra em um estado de hiperconectividade: o cérebro se desconecta da realidade presente e fica confinado em uma espiral autorreferencial autodepreciativa.\n\nO mais perigoso é o custo biológico desse processo. Cada ciclo de ruminação envia sinais de alarme falso para a amígdala, hiperativando o Eixo HPA e encharcando o organismo com cortisol sustentado. A longo prazo, isso desgasta as sinapses do hipocampo e enfraquece o freio do córtex pré-frontal, tornando os pensamentos repetitivos cada vez mais automáticos.\n\nA saída não é \"pensar positivo\" à força — tentar calar a DMN discutindo com ela apenas alimenta o circuito. A saída é recrutar a Rede Executiva por meio de desfusão cognitiva, estímulos sensório-motores exteroceptivos e quebra da inércia física.\n\n👉 Quer entender a fundo a arquitetura neurobiológica da ruminação e aprender a desarmar esse labirinto?\nLeia o novo ensaio científico completo e realize a Escala de Desregulação do Eixo HPA e Estresse Crônico (T-21) gratuitamente no site:\n🔗 Acesse pelo link na bio: deomagalhaes.com.br\n\nVocê se identifica com essa tendência de repassar erros passados à noite? O que costuma ajudá-lo a sair desse ciclo? Compartilhe nos comentários!\n\n#Neurociência #SaúdeMental #Ruminação #DMN #DefaultModeNetwork #PsicologiaClínica #Neuropsicologia #CórtexPréFrontal #EixoHPA #Cortisol #Depressão #Ansiedade #TCC #ACT #Autocompaixão #DeoMagalhães"
+    },
     "fadiga-decisao":  {
                            "articleSlug":  "2026-10-29-fadiga-por-decisao",
                            "articleTitle":  "Fadiga por Decisão: Por Que Escolher Cansa Tanto",
@@ -2152,9 +2202,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "fadiga-decisao";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["fadiga-decisao"].slides));
-        let currentCaption = PRESETS["fadiga-decisao"].caption;
+        let currentPresetKey = "ruminacao-depressiva";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["ruminacao-depressiva"].slides));
+        let currentCaption = PRESETS["ruminacao-depressiva"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta

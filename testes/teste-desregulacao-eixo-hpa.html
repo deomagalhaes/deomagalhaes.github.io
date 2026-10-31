@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Desregulação do Eixo HPA e Estresse Crônico (ISDE-HPA / T-21) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua carga alostática, sintomas de hipo ou hipercortisolemia funcional e exaustão fisiológica do estresse crônico com o inventário neurocientífico ISDE-HPA.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.08em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-calc {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-calc:hover {
+            background: #ca6702;
+            color: white;
+        }
+
+        .results-box {
+            display: none;
+            background: #fdfbf7;
+            border: 2px solid #005f73;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.4em;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .subscales-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .subscale-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 6px 0;
+            font-size: 0.95em;
+            color: #005f73;
+        }
+
+        .subscale-score {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .clinical-alert {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.92em;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container header-content">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <nav id="navbar">
+                <button id="menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="/index.html">Início</a></li>
+                    <li><a href="/sobre.html">Sobre</a></li>
+                    <li><a href="/servicos.html">Serviços</a></li>
+                    <li><a href="/artigos.html">Artigos</a></li>
+                    <li><a href="/testes.html" class="active">Testes</a></li>
+                    <li><a href="/jogos.html">Jogos</a></li>
+                    <li><a href="/recursos.html">Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Inventário de Sintomas de Desregulação do Eixo HPA e Estresse Crônico (ISDE-HPA / T-21)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Publicado em 30 de Outubro de 2026</p>
+            </header>
+
+            <article class="article-body">
+                <p><em>Este instrumento psicoeducativo foi estruturado a partir da Teoria da Carga Alostática de Bruce McEwen e das pesquisas em neuroendocrinologia do estresse (George Chrousos e Robert Sapolsky). O inventário dimensiona a severidade do desgaste neurofisiológico provocado pela ativação crônica do Eixo Hipotálamo-Pituitária-Adrenal (HPA), avaliando três dimensões biológicas críticas: Hipercortisolemia Funcional (Hiperalerta Noturno), Hipocortisolemia e Exaustão Adrenal, e Reatividade Neurovegetativa com Névoa Cognitiva.</em></p>
+
+                <div class="quiz-container" id="quizContainer">
+                    <p style="margin-bottom: 20px; font-size: 0.95em; color: #475569;">
+                        <strong>Instruções:</strong> Avalie com que frequência você experimentou os sintomas descritos a seguir nas últimas 4 semanas.<br>
+                        <em>Escala: 1 = Nunca / Raramente | 2 = Ocasionalmente | 3 = Frequentemente | 4 = Muito Frequente | 5 = Quase Sempre</em>
+                    </p>
+
+                    <form id="isdeForm">
+                        <div id="questionsList"></div>
+                        <button type="button" class="btn-calc" onclick="calculateISDE()">Calcular Minha Sobrecarga Neuroendócrina (Eixo HPA)</button>
+                    </form>
+
+                    <div id="resultsBox" class="results-box">
+                        <div class="score-badge" id="totalScoreBadge">Pontuação: -- / 75</div>
+                        <h3 id="resultTitle" style="color: #005f73; margin-top: 0;"></h3>
+                        <p id="resultDesc" style="color: #334155; line-height: 1.7;"></p>
+
+                        <div class="subscales-grid">
+                            <div class="subscale-card">
+                                <h4>Hiperalerta & Tônus Simpático</h4>
+                                <div class="subscale-score" id="scoreHCF">-- / 25</div>
+                                <p style="font-size: 0.82em; color: #64748b; margin: 4px 0 0 0;">Insônia inicial, sobressalto, taquicardia noturna e tensão mandibular.</p>
+                            </div>
+                            <div class="subscale-card">
+                                <h4>Exaustão Adrenal Funcional</h4>
+                                <div class="subscale-score" id="scoreHEF">-- / 25</div>
+                                <p style="font-size: 0.82em; color: #64748b; margin: 4px 0 0 0;">Inércia matinal severa, queda de energia vespertina e dependência de cafeína.</p>
+                            </div>
+                            <div class="subscale-card">
+                                <h4>Névoa Cognitiva & Reatividade</h4>
+                                <div class="subscale-score" id="scoreRNC">-- / 25</div>
+                                <p style="font-size: 0.82em; color: #64748b; margin: 4px 0 0 0;">Brain fog, irritabilidade desproporcional e intolerância a sobrecarga sensorial.</p>
+                            </div>
+                        </div>
+
+                        <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                            <h4 style="color: #005f73; margin-top: 0; font-size: 1.05em;">Diretriz Clínica de Conduta:</h4>
+                            <p id="therapeuticRec" style="color: #1e293b; font-size: 0.95em; line-height: 1.6; margin-bottom: 0;"></p>
+                        </div>
+
+                        <div class="clinical-alert">
+                            <strong>Aviso Importante:</strong> Este instrumento é uma ferramenta psicoeducativa de autorreflexão e triagem de sintomas de sobrecarga alostática. Ele não substitui a consulta clínica, exames laboratoriais hormonais (como curva de cortisol salivar e DHEA) nem o diagnóstico médico e neuropsicológico individualizado.
+                        </div>
+
+                        <div style="text-align: center; margin-top: 25px;">
+                            <a href="https://wa.me/5535933003807?text=Ol%C3%A1%2C%20Deo.%20Realizei%20o%20Invent%C3%A1rio%20do%20Eixo%20HPA%20(T-21)%20no%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" style="display: inline-block; background: #005f73; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.95em;">
+                                Agendar Avaliação Especializada
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Bases Fisiopatológicas da Carga Alostática</h2>
+                <p>O Eixo HPA é o maestro endócrino responsável por modular a resposta biológica a desafios ambientais. Em face de uma ameaça aguda, o hipotálamo secreta o hormônio liberador de corticotrofina (CRH), induzindo a hipófise a liberar ACTH, o qual estimula o córtex das adrenais a produzir cortisol. Em repouso saudável, o cortisol exerce um retroalimentador negativo (*negative feedback*) sobre o hipocampo e o hipotálamo, desligando o alarme.</p>
+                <p>Contudo, na vigência de estressores psicológicos contínuos, preocupações crônicas e ruminação depressiva, esse circuito entra em pane:</p>
+                <ul>
+                    <li><strong>Fase de Alarme Sustentado (Hipercortisolemia):</strong> Os receptores de glicocorticoides no hipocampo sofrem dessensibilização (*down-regulation*). O cérebro perde a capacidade de frear a secreção hormonal, perpetuando o estado de vigília agressiva, ansiedade noturna e catabolismo tecidual.</li>
+                    <li><strong>Fase de Desgaste e Achatamento do Ritmo Circadiano:</strong> Ocorre perda da curva fisiológica diurna (pico matinal com queda gradual à noite). O indivíduo acorda exausto (*CAR - Cortisol Awakening Response* achatada) e tem picos paradoxais de energia e alerta no meio da noite.</li>
+                    <li><strong>Fase de Exaustão (Hipocortisolemia Funcional):</strong> As glândulas adrenais e o eixo central entram em falha de sinalização. Com baixos níveis de cortisol livre, mediadores pró-inflamatórios (como interleucina-6 e fator de necrose tumoral alfa) deixam de ser contidos, desencadeando dores articulares difusas, hipersensibilidade alimentar e a clássica "névoa cerebral".</li>
+                </ul>
+
+                <hr class="article-divider">
+                <p class="article-disclaimer">Este inventário tem caráter reflexivo e educacional. Para orientações específicas sobre diagnóstico e tratamento de distúrbios neuroendócrinos, consulte sempre profissionais habilitados.</p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Institucional -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Script de Cálculo da Escala -->
+    <script>
+        const QUESTIONS = [
+            // Hipercortisolemia Funcional / Hiperalerta (hcf)
+            { id: 1, sub: 'hcf', text: "Mesmo sentindo cansaço físico intenso, ao me deitar meu cérebro acelera e não consigo 'desligar' o fluxo de pensamentos." },
+            { id: 2, sub: 'hef', text: "Acordo pela manhã com a sensação de 'bateria zerada', sentindo que o sono não restaurou minha energia corporal." },
+            { id: 3, sub: 'rnc', text: "Experimento episódios de 'névoa mental' (brain fog), com dificuldade de concentração e esquecimento de termos simples durante momentos de pressão." },
+            { id: 4, sub: 'hcf', text: "Percebo taquicardia sutil, respiração curta ou aperto no peito mesmo em momentos de descanso ou repouso." },
+            { id: 5, sub: 'hef', text: "Sinto uma queda drástica e incontrolável de energia no meio da tarde (entre 14h e 16h), precisando recorrer a açúcar ou café." },
+            { id: 6, sub: 'rnc', text: "Pequenos imprevistos ou barulhos repentinos no ambiente provocam uma reação de irritação ou sobressalto desproporcional." },
+            { id: 7, sub: 'hcf', text: "Acordo no meio da madrugada (frequentemente entre 2h e 4h) com o corpo em estado de prontidão e dificuldade para retornar ao sono." },
+            { id: 8, sub: 'hef', text: "Sinto um peso físico nos membros e a sensação de que preciso de um esforço hercúleo para iniciar tarefas rotineiras do dia." },
+            { id: 9, sub: 'rnc', text: "Fico sobrecarregado(a) com facilidade em locais com muitos estímulos simultâneos (conversas paralelas, luzes fortes ou telas)." },
+            { id: 10, sub: 'hcf', text: "Noto tensão muscular crônica involuntária, como mandíbula apertada (bruxismo/apertamento), ombros levantados ou mãos cerradas." },
+            { id: 11, sub: 'hef', text: "Mesmo descansando nos finais de semana, a sensação de esgotamento e desânimo persiste logo no primeiro dia útil." },
+            { id: 12, sub: 'rnc', text: "Sinto que minha paciência relacional se esgotou e que minha capacidade de tolerar frustrações mínimas está muito rebaixada." },
+            { id: 13, sub: 'hcf', text: "Sinto uma urgência interna constante de estar sempre fazendo algo ou antecipando o próximo problema, com culpa ao tentar relaxar." },
+            { id: 14, sub: 'hef', text: "Tenho episódios frequentes de tontura leve ao levantar rapidamente ou sensações súbitas de hipoglicemia/fraqueza física." },
+            { id: 15, sub: 'rnc', text: "Apresento desconfortos gástricos ou intestinais (cólicas, digestão lenta, refluxo) que se intensificam visivelmente sob estresse." }
+        ];
+
+        const OPTIONS_LABELS = [
+            "1. Nunca / Raro",
+            "2. Ocasionalmente",
+            "3. Frequentemente",
+            "4. Muito Frequente",
+            "5. Quase Sempre"
+        ];
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsList');
+            container.innerHTML = '';
+
+            QUESTIONS.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+
+                const title = document.createElement('div');
+                title.className = 'question-title';
+                title.innerHTML = `<span class="question-number">Item ${q.id}</span> <span>${q.text}</span>`;
+                card.appendChild(title);
+
+                const optsGroup = document.createElement('div');
+                optsGroup.className = 'options-group';
+
+                for (let v = 1; v <= 5; v++) {
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    label.innerHTML = `
+                        <input type="radio" name="q_${q.id}" value="${v}" onchange="selectOption(${q.id}, this)">
+                        ${OPTIONS_LABELS[v-1]}
+                    `;
+                    optsGroup.appendChild(label);
+                }
+
+                card.appendChild(optsGroup);
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(qid, inputEl) {
+            const parent = inputEl.closest('.options-group');
+            parent.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+            inputEl.closest('.option-label').classList.add('selected');
+        }
+
+        function calculateISDE() {
+            let total = 0;
+            let hcf = 0;
+            let hef = 0;
+            let rnc = 0;
+            let answered = 0;
+
+            QUESTIONS.forEach(q => {
+                const checked = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                if (checked) {
+                    const val = parseInt(checked.value, 10);
+                    total += val;
+                    if (q.sub === 'hcf') hcf += val;
+                    if (q.sub === 'hef') hef += val;
+                    if (q.sub === 'rnc') rnc += val;
+                    answered++;
+                }
+            });
+
+            if (answered < QUESTIONS.length) {
+                alert(`Por favor, responda a todos os ${QUESTIONS.length} itens para obter sua avaliação precisa. Faltam ${QUESTIONS.length - answered} resposta(s).`);
+                return;
+            }
+
+            const resultsBox = document.getElementById('resultsBox');
+            const totalScoreBadge = document.getElementById('totalScoreBadge');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDesc = document.getElementById('resultDesc');
+            const scoreHCF = document.getElementById('scoreHCF');
+            const scoreHEF = document.getElementById('scoreHEF');
+            const scoreRNC = document.getElementById('scoreRNC');
+            const therapeuticRec = document.getElementById('therapeuticRec');
+
+            totalScoreBadge.textContent = `Pontuação Geral: ${total} / 75`;
+            scoreHCF.textContent = `${hcf} / 25`;
+            scoreHEF.textContent = `${hef} / 25`;
+            scoreRNC.textContent = `${rnc} / 25`;
+
+            if (total >= 54) {
+                resultTitle.textContent = "Carga Alostática Severa / Descompensação Avançada do Eixo HPA";
+                resultDesc.textContent = "Seus resultados revelam um nível acentuado de exaustão neuroendócrina. A exposição crônica ao estresse desequilibrou a retroalimentação de cortisol, gerando um estado misto de hiperalerta noturno compensado por esgotamento fisiológico diurno. O sistema nervoso autônomo está operando em regime de sobrecarga simpática sustentada.";
+                therapeuticRec.textContent = "Intervenção prioritária recomendada: Reduza imediatamente a sobrecarga de estímulos, interrompa treinos exaustivos à noite, realize exames médicos para avaliar a curva hormonal (cortisol e tireoide) e adote psicoterapia especializada com foco em regulação parassimpática (treino vagal e biofeedback).";
+            } else if (total >= 34) {
+                resultTitle.textContent = "Desregulação Moderada do Eixo HPA / Fase de Resistência e Alarme";
+                resultDesc.textContent = "Você apresenta sinais típicos da fase de resistência ao estresse crônico. Embora mantenha o funcionamento profissional e pessoal, o custo biológico é alto: o sono não é plenamente reparador, há flutuações perceptíveis de energia e a reatividade emocional está mais sensível.";
+                therapeuticRec.textContent = "Diretriz profilática: Implemente pausas de descompressão de 5 minutos sem telas a cada bloco de 90 minutos de foco, corte estimulantes após as 14h e estabeleça um ritual noturno rigoroso com banho morno e meia luz a partir das 21h.";
+            } else {
+                resultTitle.textContent = "Homeostase Preservada / Resiliência Neuroendócrina";
+                resultDesc.textContent = "Sua pontuação indica um equilíbrio fisiológico saudável no eixo do estresse. O organismo é capaz de responder a desafios agudos e reatar o tônus parassimpático de repouso com eficácia, sem acúmulo patológico de carga alostática.";
+                therapeuticRec.textContent = "Manutenção preventiva: Continue preservando seus hábitos de sono regular, práticas de atividade física moderada e momentos de desconexão e lazer autêntico.";
+            }
+
+            resultsBox.style.display = 'block';
+            resultsBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderQuestions);
+    </script>
+</body>
+</html>

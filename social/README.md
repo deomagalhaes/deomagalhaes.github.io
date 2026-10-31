@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **30/10/2026** | **A Neurobiologia da Ruminação Depressiva: A Hiperconectividade da DMN** | [`social/2026-10-30-ruminacao-depressiva-dmn.md`](2026-10-30-ruminacao-depressiva-dmn.md) | ✅ Pronto para postar |
 | **29/10/2026** | **A Fadiga por Decisão e a Depleção do Ego: Por Que Decidir Cansa Tanto** | [`social/2026-10-29-fadiga-por-decisao.md`](2026-10-29-fadiga-por-decisao.md) | ✅ Pronto para postar |
 | **29/10/2026** | **O Bloqueio Executivo no TDAH: Por Que a Paralisia Não É Preguiça** | [`social/2026-10-29-bloqueio-executivo-tdah.md`](2026-10-29-bloqueio-executivo-tdah.md) | ✅ Pronto para postar |
 | **29/10/2026** | **A Neuroquímica do Vínculo Amoroso: Ocitocina, Vasopressina e Apego Seguro** | [`social/2026-10-29-neuroquimica-vinculo-amoroso.md`](2026-10-29-neuroquimica-vinculo-amoroso.md) | ✅ Pronto para postar |

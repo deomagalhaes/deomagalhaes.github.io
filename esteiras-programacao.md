@@ -21,7 +21,8 @@ Cada **Rodada de Esteira (Lote de Produção)** é uma unidade autônoma e sincr
 | **Lote 5** | **A Neuroquímica do Vínculo Amoroso:** Ocitocina, Vasopressina e Apego Seguro | Carrossel: *A Química do Amor de Longo Prazo* | **T-18:** Escala de Satisfação Conjugal e Segurança Afetiva | **Dia 16:** Criptografia Neural (Substituição de Padrões) | ✅ **Concluído** |
 | **Lote 6** | **O Fenômeno do Bloqueio Executivo no TDAH:** Por Que a Paralisia Não É Preguiça | Carrossel: *A Neurociência do Bloqueio Executivo* | **T-19:** Escala de Inércia Psíquica e Arranque Motor | **Dia 17:** Labirinto Hexagonal de Relações Espaciais | ✅ **Concluído** |
 | **Lote 7** | **A Fadiga por Decisão e a Depleção do Ego:** Como Escolhas Cotidianas Esgotam o Cérebro | Carrossel: *Por Que Decidir Cansa Tanto* | **T-20:** Escala de Fadiga por Decisão e Depleção do Ego | **Dia 18:** Balança dos Ponderáveis (Inferência Bayesiana) | ✅ **Concluído** |
-| **Lote 8** | **A Neurobiologia da Ruminação Depressiva:** A Hiperconectividade da Rede de Modo Padrão (DMN) e a Perda de Controle Pré-Frontal | Carrossel: *O Labirinto da Ruminação Mental* | **T-21:** Inventário de Sintomas de Desregulação do Eixo HPA | **Dia 19:** Matriz de Resolução de Conflitos | ⏳ **Próximo da Fila** |
+| **Lote 8** | **A Neurobiologia da Ruminação Depressiva:** A Hiperconectividade da Rede de Modo Padrão (DMN) e a Perda de Controle Pré-Frontal | Carrossel: *O Labirinto da Ruminação Mental* | **T-21:** Inventário de Sintomas de Desregulação do Eixo HPA | **Dia 19 & Dia 20:** Matriz de Conflitos & Campo Receptivo | ✅ **Concluído** |
+| **Lote 9** | **O Efeito Nocebo e a Neurobiologia da Dor Psigogênica:** Como a Expectativa Negativa Modula as Vias Descendentes da Dor | Carrossel: *Quando o Cérebro Cria a Dor: A Ciência do Efeito Nocebo* | **T-22:** Escala de Disforia Sensível à Rejeição (RSD) e Reatividade Afetiva | **Dia 21:** Balança de Pesos e Medidas Alquímicas | ⏳ **Próximo da Fila** |
 
 ---
 

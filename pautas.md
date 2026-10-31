@@ -9,7 +9,9 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-*(Nenhuma pauta pendente no momento — adicione novos temas aqui)*
+- [ ] **O Efeito Nocebo e a Neurobiologia da Dor Psicogênica: Como a Expectativa Negativa Modula as Vias Descendentes da Dor**
+- [ ] **A Neurobiologia da Insegurança de Apego e o Vício em Validação Externa: A Busca Compulsiva por Dopamina Social**
+- [ ] **Neurobiologia do Trauma Complexo (CPTSD): Fragmentação da Identidade, Dissociação e Disautonomia**
 ---
 
 ## ✅ Pautas Publicadas

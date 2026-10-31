@@ -26,8 +26,8 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 17** | **Labirinto Hexagonal (Relações Espaciais)** | Raciocínio Topológico, Rotação Mental e Flexibilidade Cognitiva | `jogos/jogo-labirinto-hexagonal.html` | ✅ **Publicado** |
 | **Dia 18** | **Balança dos Ponderáveis (Inferência Bayesiana)** | Atualização de Probabilidades, Raciocínio Dedutivo e Evidências | `jogos/jogo-balanca-bayesiana.html` | ✅ **Publicado** |
 | **Dia 19** | **Matriz de Resolução de Conflitos e Custo Cognitivo** | Tomada de Decisão Sob Incerteza, Custo de Troca e Flexibilidade | `jogos/jogo-matriz-conflitos.html` | ✅ **Publicado** |
-| **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `jogos/jogo-campo-receptivo.html` | ⏳ *Próximo da fila* |
-| **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `jogos/jogo-transitividade-logica.html` | ⏳ Aguardando |
+| **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `jogos/jogo-campo-receptivo.html` | ✅ **Publicado** |
+| **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `jogos/jogo-transitividade-logica.html` | ⏳ *Próximo da fila* |
 
 ---
 

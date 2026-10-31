@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 20: Campo Receptivo Visuoatencional (Flanker Task) – Deo Magalhães</title>
+    <meta name="description" content="Exercite a atenção seletiva focal, a inibição lateral e a filtragem de ruído distrator com a tarefa Flanker e busca visual neurocognitiva.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.78em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .stimulus-display {
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #001219;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            padding: 20px;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .flanker-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 3.5em;
+            font-weight: 900;
+            user-select: none;
+            letter-spacing: 2px;
+        }
+
+        .flanker-distractor {
+            color: #94d2bd;
+            transition: color 0.15s;
+        }
+
+        .flanker-target {
+            color: #ee9b00;
+            text-shadow: 0 0 16px rgba(238, 155, 0, 0.6);
+            transform: scale(1.15);
+            display: inline-block;
+        }
+
+        .control-keys {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 480px;
+            margin: 0 auto 25px auto;
+        }
+
+        .btn-direction {
+            background: #005f73;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 18px 24px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.2);
+        }
+
+        .btn-direction:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .btn-direction:active {
+            transform: translateY(1px);
+        }
+
+        .instruction-box {
+            background: #fdfbf7;
+            border-left: 4px solid #ee9b00;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            text-align: left;
+            font-size: 0.95em;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .btn-start {
+            background: #ee9b00;
+            color: #001219;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 28px;
+            font-size: 1.15em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            background: #ca6702;
+            color: white;
+        }
+
+        .results-panel {
+            display: none;
+            background: #f8fafc;
+            border: 2px solid #005f73;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            .flanker-row {
+                font-size: 2.6em;
+                gap: 8px;
+            }
+        }
+
+        .res-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .res-card span {
+            font-size: 0.8em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .res-card h4 {
+            font-size: 1.5em;
+            color: #005f73;
+            margin: 6px 0 0 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="container header-content">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <nav id="navbar">
+                <button id="menu-toggle" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="/index.html">Início</a></li>
+                    <li><a href="/sobre.html">Sobre</a></li>
+                    <li><a href="/servicos.html">Serviços</a></li>
+                    <li><a href="/artigos.html">Artigos</a></li>
+                    <li><a href="/testes.html">Testes</a></li>
+                    <li><a href="/jogos.html" class="active">Jogos</a></li>
+                    <li><a href="/recursos.html">Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 20: Campo Receptivo Visuoatencional (Flanker Task)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Atualizado em 30 de Outubro de 2026</p>
+            </header>
+
+            <article class="article-body">
+                <p><em>Inspirado na célebre tarefa de flanqueadores de Eriksen (Eriksen & Eriksen, 1974), este treino cognitivo avalia e exercita a atenção seletiva focal, a inibição lateral e o controle executivo frontal. Seu objetivo é identificar a direção do estímulo central enquanto seu córtex visual tenta suprimir os distratores laterais concorrentes.</em></p>
+
+                <div class="instruction-box">
+                    <strong>Como Jogar:</strong><br>
+                    • Olhe exclusivamente para a <strong>seta central destacada</strong>.<br>
+                    • Indique se a seta do meio aponta para a <strong>Esquerda (←)</strong> ou para a <strong>Direita (→)</strong>.<br>
+                    • Ignore completamente as setas vizinhas (flanqueadoras), mesmo quando apontarem na direção contrária.<br>
+                    • No teclado, você pode usar as teclas <strong>Seta Esquerda</strong> e <strong>Seta Direita</strong>.
+                </div>
+
+                <div class="game-wrapper">
+                    <div class="game-header-bar">
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Tentativa</span>
+                            <span class="stat-badge-value" id="trialCounter">0 / 20</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Acurácia</span>
+                            <span class="stat-badge-value" id="accuracyDisplay">100%</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Tempo Médio</span>
+                            <span class="stat-badge-value" id="rtDisplay">-- ms</span>
+                        </div>
+                    </div>
+
+                    <div class="stimulus-display" id="stimulusBox">
+                        <div id="startPrompt">
+                            <p style="color: #94d2bd; margin-bottom: 15px; font-size: 1.1em;">Pronto para testar seu controle inibitório?</p>
+                            <button class="btn-start" onclick="startGame()">Iniciar Treino Cognitivo</button>
+                        </div>
+                        <div id="stimulusRow" class="flanker-row" style="display: none;">
+                            <span class="flanker-distractor" id="flankL1">‹</span>
+                            <span class="flanker-distractor" id="flankL2">‹</span>
+                            <span class="flanker-target" id="targetCenter">›</span>
+                            <span class="flanker-distractor" id="flankR1">‹</span>
+                            <span class="flanker-distractor" id="flankR2">‹</span>
+                        </div>
+                    </div>
+
+                    <div class="control-keys" id="controlsArea" style="display: none;">
+                        <button class="btn-direction" onclick="handleResponse('left')">
+                            <span>◀</span> Esquerda
+                        </button>
+                        <button class="btn-direction" onclick="handleResponse('right')">
+                            Direita <span>▶</span>
+                        </button>
+                    </div>
+
+                    <div class="results-panel" id="resultsPanel">
+                        <h3 style="color: #005f73; margin-top: 0;">Relatório de Desempenho Neurocognitivo</h3>
+                        <p style="color: #334155; line-height: 1.6;" id="clinicalFeedback"></p>
+
+                        <div class="results-grid">
+                            <div class="res-card">
+                                <span>Acurácia Global</span>
+                                <h4 id="resAccuracy">--</h4>
+                            </div>
+                            <div class="res-card">
+                                <span>Tempo Congruente</span>
+                                <h4 id="resCongruentRT">-- ms</h4>
+                            </div>
+                            <div class="res-card">
+                                <span>Custo de Interferência</span>
+                                <h4 id="resFlankerCost">-- ms</h4>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn-start" onclick="startGame()">Reiniciar Avaliação</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Bases Neuropsicológicas da Tarefa de Flanqueadores</h2>
+                <p>O paradigma Flanker de Eriksen é um dos instrumentos mais robustos da neurociência experimental para mensurar o <strong>Controle Inibitório e a Resolução de Conflitos</strong>. Ele recruta diretamente o <strong>Córtex Cingulado Anterior Dorsal (dACC)</strong> — responsável por monitorar discrepâncias e erros — e o <strong>Córtex Pré-Frontal Dorsolateral (DLPFC)</strong>, que sustenta o foco na regra da tarefa contra estímulos competitivos.</p>
+                <p>Quando os flanqueadores apontam na mesma direção da seta central (condição congruente: <code>›››››</code>), o tempo de reação é veloz. Entretanto, quando os distratores apontam na direção oposta (condição incongruente: <code>‹‹›‹‹</code>), o cérebro experimenta o fenômeno da <strong>Interferência de Flanco</strong>: o sistema motor pré-frontal prepara involuntariamente a resposta dos distratores e precisa recrutar freios inibitórios adicionais para suprimi-la, gerando um atraso de milissegundos conhecido clinicamente como <em>Custo do Conflito Cognitivo</em>.</p>
+
+                <hr class="article-divider">
+                <p class="article-disclaimer">Este jogo tem objetivo psicoeducativo e de estimulação neurocognitiva. Ele não substitui avaliações neuropsicológicas clínicas estruturadas.</p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Motor do Jogo Flanker -->
+    <script>
+        const TOTAL_TRIALS = 20;
+        let trials = [];
+        let currentTrialIndex = 0;
+        let trialStartTime = 0;
+        let responses = [];
+        let isWaitingResponse = false;
+
+        // Web Audio API Synth
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playTone(freq, type = 'sine', duration = 0.1) {
+            try {
+                if (!audioCtx) audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function generateTrials() {
+            const list = [];
+            // 10 congruentes e 10 incongruentes balanceados matematicamente
+            for (let i = 0; i < 5; i++) {
+                list.push({ target: 'left', flank: 'left', type: 'congruent' });
+                list.push({ target: 'right', flank: 'right', type: 'congruent' });
+                list.push({ target: 'left', flank: 'right', type: 'incongruent' });
+                list.push({ target: 'right', flank: 'left', type: 'incongruent' });
+            }
+            // Algoritmo Fisher-Yates de Embaralhamento
+            for (let i = list.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [list[i], list[j]] = [list[j], list[i]];
+            }
+            return list;
+        }
+
+        function startGame() {
+            trials = generateTrials();
+            responses = [];
+            currentTrialIndex = 0;
+
+            document.getElementById('startPrompt').style.display = 'none';
+            document.getElementById('resultsPanel').style.display = 'none';
+            document.getElementById('stimulusRow').style.display = 'flex';
+            document.getElementById('controlsArea').style.display = 'grid';
+
+            updateStats();
+            nextTrial();
+        }
+
+        function nextTrial() {
+            if (currentTrialIndex >= TOTAL_TRIALS) {
+                finishGame();
+                return;
+            }
+
+            isWaitingResponse = false;
+            const t = trials[currentTrialIndex];
+            const charL = '‹';
+            const charR = '›';
+
+            // Ponto de Fixação breve
+            document.getElementById('flankL1').textContent = '+';
+            document.getElementById('flankL2').textContent = '+';
+            document.getElementById('targetCenter').textContent = '+';
+            document.getElementById('flankR1').textContent = '+';
+            document.getElementById('flankR2').textContent = '+';
+
+            setTimeout(() => {
+                const fChar = t.flank === 'left' ? charL : charR;
+                const cChar = t.target === 'left' ? charL : charR;
+
+                document.getElementById('flankL1').textContent = fChar;
+                document.getElementById('flankL2').textContent = fChar;
+                document.getElementById('targetCenter').textContent = cChar;
+                document.getElementById('flankR1').textContent = fChar;
+                document.getElementById('flankR2').textContent = fChar;
+
+                trialStartTime = performance.now();
+                isWaitingResponse = true;
+            }, 300);
+        }
+
+        function handleResponse(choice) {
+            if (!isWaitingResponse) return;
+            isWaitingResponse = false;
+
+            const rt = Math.round(performance.now() - trialStartTime);
+            const currentTrial = trials[currentTrialIndex];
+            const isCorrect = (choice === currentTrial.target);
+
+            if (isCorrect) {
+                playTone(660, 'sine', 0.08);
+            } else {
+                playTone(220, 'triangle', 0.15);
+            }
+
+            responses.push({
+                type: currentTrial.type,
+                target: currentTrial.target,
+                choice: choice,
+                isCorrect: isCorrect,
+                rt: rt
+            });
+
+            currentTrialIndex++;
+            updateStats();
+
+            // Intervalo inter-tentativas
+            setTimeout(nextTrial, 250);
+        }
+
+        function updateStats() {
+            document.getElementById('trialCounter').textContent = `${currentTrialIndex} / ${TOTAL_TRIALS}`;
+
+            if (responses.length > 0) {
+                const correctCount = responses.filter(r => r.isCorrect).length;
+                const acc = Math.round((correctCount / responses.length) * 100);
+                document.getElementById('accuracyDisplay').textContent = `${acc}%`;
+
+                const totalRT = responses.reduce((acc, curr) => acc + curr.rt, 0);
+                const avgRT = Math.round(totalRT / responses.length);
+                document.getElementById('rtDisplay').textContent = `${avgRT} ms`;
+            }
+        }
+
+        function finishGame() {
+            document.getElementById('stimulusRow').style.display = 'none';
+            document.getElementById('controlsArea').style.display = 'none';
+            document.getElementById('resultsPanel').style.display = 'block';
+
+            const correctResponses = responses.filter(r => r.isCorrect);
+            const acc = Math.round((correctResponses.length / TOTAL_TRIALS) * 100);
+
+            const congCorrect = responses.filter(r => r.type === 'congruent' && r.isCorrect);
+            const incongCorrect = responses.filter(r => r.type === 'incongruent' && r.isCorrect);
+
+            const avgCongRT = congCorrect.length ? Math.round(congCorrect.reduce((a, b) => a + b.rt, 0) / congCorrect.length) : 0;
+            const avgIncongRT = incongCorrect.length ? Math.round(incongCorrect.reduce((a, b) => a + b.rt, 0) / incongCorrect.length) : 0;
+            const flankerCost = Math.max(0, avgIncongRT - avgCongRT);
+
+            document.getElementById('resAccuracy').textContent = `${acc}%`;
+            document.getElementById('resCongruentRT').textContent = `${avgCongRT} ms`;
+            document.getElementById('resFlankerCost').textContent = `+${flankerCost} ms`;
+
+            const feedbackEl = document.getElementById('clinicalFeedback');
+            if (acc >= 90 && flankerCost <= 70) {
+                feedbackEl.textContent = `Excelente controle inibitório e alta resistência à interferência perceptual. Seu córtex cingulado anterior (dACC) filtrou eficientemente os flanqueadores distratores, com um custo de conflito de apenas ${flankerCost}ms e acurácia de ${acc}%.`;
+            } else if (acc >= 80) {
+                feedbackEl.textContent = `Bom desempenho atencional com interferência moderada (+${flankerCost}ms no tempo de resposta incongruente). Esse padrão reflete o esforço do córtex pré-frontal para desacelerar e frear impulsos concorrentes em ambientes com sobrecarga visual.`;
+            } else {
+                feedbackEl.textContent = `Observou-se maior suscetibilidade à interferência dos flanqueadores distratores, com queda de precisão (${acc}%) sob conflito. Práticas de atenção focada e redução de poluição visual nas tarefas diárias fortalecem essa circuitaria.`;
+            }
+
+            playTone(880, 'sine', 0.25);
+        }
+
+        // Teclado Listener
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                handleResponse('left');
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                handleResponse('right');
+            }
+        });
+    </script>
+</body>
+</html>
