@@ -1,4 +1,4 @@
-# Banco de Pautas do Site — Deo Magalhães
+﻿# Banco de Pautas do Site — Deo Magalhães
 
 Este arquivo serve como fila de produção para as publicações automáticas do site.
 O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo completo com base teórica profunda, cadastra o card em `cards-artigos.html`, publica no GitHub e marca a pauta como concluída `[x]`.
@@ -9,13 +9,13 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **O Efeito Nocebo e a Neurobiologia da Dor Psicogênica: Como a Expectativa Negativa Modula as Vias Descendentes da Dor**
 - [ ] **A Neurobiologia da Insegurança de Apego e o Vício em Validação Externa: A Busca Compulsiva por Dopamina Social**
 - [ ] **Neurobiologia do Trauma Complexo (CPTSD): Fragmentação da Identidade, Dissociação e Disautonomia**
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **O Efeito Nocebo e a Neurobiologia da Dor Psicogênica: Como a Expectativa Negativa Modula as Vias Descendentes da Dor** (Publicado em 31/10/2026)
 - [x] **A Neurobiologia da Ruminação Depressiva: A Hiperconectividade da Rede de Modo Padrão (DMN) e a Perda de Controle Pré-Frontal** (Publicado em 30/10/2026)
 - [x] **A Fadiga por Decisão e a Depleção do Ego: Como Escolhas Cotidianas Consomem o Córtex Pré-Frontal** (Publicado em 29/10/2026)
 - [x] **O Fenômeno do Bloqueio Executivo no TDAH: Por Que a Paralisia Não É Preguiça** (Publicado em 29/10/2026)

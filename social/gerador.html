@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="ruminacao-depressiva" selected>A Neurobiologia da Ruminação Depressiva (DMN & Controle Pré-Frontal)</option>
+                        <option value="efeito-nocebo" selected>O Efeito Nocebo e a Dor Psicogênica (Vias Descendentes & CCK)</option>
+                        <option value="ruminacao-depressiva">A Neurobiologia da Ruminação Depressiva (DMN & Controle Pré-Frontal)</option>
                         <option value="fadiga-decisao">A Fadiga por Decisão e a Depleção do Ego (Baumeister)</option>
                         <option value="bloqueio-executivo">O Bloqueio Executivo no TDAH (Inércia do Arranque)</option>
                         <option value="vinculo-amoroso">A Neuroquímica do Vínculo Amoroso (Ocitocina & Apego)</option>
@@ -652,6 +653,55 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "efeito-nocebo": {
+        "articleSlug": "2026-10-31-efeito-nocebo-dor-psicogenica",
+        "articleTitle": "O Efeito Nocebo e a Neurobiologia da Dor: Como a Expectativa Cria o Sofrimento Real",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROCIÊNCIA DA DOR",
+                "title": "Você já sentiu uma dor física intensa, mas todos os seus exames deram normais?",
+                "body": "A ciência por trás do \"efeito nocebo\": como a expectativa negativa e o medo desligam os analgésicos naturais do cérebro e fazem o corpo doer de verdade.",
+                "footer": "Deslize para entender o circuito 👉"
+            },
+            {
+                "type": "neuro",
+                "badge": "O PARADOXO CLÍNICO",
+                "title": "\"Não tem nada nos seus exames, isso é coisa da sua cabeça\"",
+                "body": "Milhares de pessoas convivem com dores crônicas debilitantes enquanto ouvem que seu sofrimento é imaginário ou exagero emocional.\n\nA neurociência moderna comprovou o oposto: a dor é 100% real no cérebro, mesmo quando não existe nenhuma lesão nos tecidos periféricos.\n\nO cérebro não é uma câmera passiva que apenas filma lesões: ele é um órgão preditivo que fabrica sensações dolorosas quando calcula que você está em perigo.\n\nA ausência de lesão tecidual não significa ausência de sofrimento biológico.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "NEUROQUÍMICA DA PERCEPÇÃO",
+                "title": "Como a ansiedade sabota seus analgésicos naturais",
+                "body": "Seu tronco encefálico possui um freio biológico: a Substância Cinzenta Periaquedutal (PAG), que produz opioides endógenos (endorfinas) para abafar a dor.\n\nPorém, quando você teme a dor ou acredita que seu corpo está vulnerável:\n\n• O cérebro secreta Colecistoquinina (CCK) em larga escala.\n• A CCK bloqueia os receptores de opioides endógenos.\n• As vias descendentes facilitatórias aumentam o volume dos sinais na medula.\n\nToques inofensivos e tensões leves passam a ser sentidos como dor aguda.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "neuro",
+                "badge": "DOR NOCIPLÁSTICA",
+                "title": "Quando o alarme de incêndio dispara sem haver fogo",
+                "body": "Dor Nociceptiva: Você sofre uma lesão, os nervos periféricos disparam e o cérebro avisa o dano tecidual.\n\nDor Nociplástica / Nocebo: O tecido cicatrizou, mas o circuito neural continuou sensibilizado e em alerta máximo.\n\nFrases alarmistas de profissionais desatualizados como \"sua coluna está destruída\" ou \"osso raspando no osso\" agem como gatilhos nocebo, gerando hipervigilância e dor contínua.\n\nO problema não está na estrutura mecânica, mas no software de alarme do cérebro.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "PROTOCOLO TERAPÊUTICO",
+                "title": "3 Passos Clínicos para Reeducar a Dor",
+                "body": "1. Educação em Neurociência da Dor (PNE): Entender que dor é alarme protetor, e não necessariamente dano físico, acalma o cíngulo e reativa a analgesia endógena.\n\n2. Desmonte da Catastrofização: Identifique e ressignifique pensamentos de fragilidade corporal. Seu corpo é adaptável, resiliente e plástico.\n\n3. Movimento Gradual Sem Medo: Quebre a cinesiofobia. O movimento progressivo ensina o cérebro que o corpo não está sob ameaça.\n\nO cérebro aprendeu a doer; com neuroplasticidade, ele pode desaprender.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "closing",
+                "badge": "NEUROPSICOLOGIA & SAÚDE INTEGRAL",
+                "title": "Sua dor piora nos dias de estresse e apreensão?",
+                "body": "Publicamos um ensaio aprofundado dissecando a neurobiologia das vias descendentes da dor, o efeito nocebo e a dor nociplástica.\n\nAcesse gratuitamente no site e conheça os protocolos clínicos contemporâneos para reprogramação da dor crônica.\n\nSalve este post para consultar nos momentos de sobrecarga e compartilhe com quem convive com dores persistentes.",
+                "footer": "Link na bio ➔ Artigos Clínicos • deomagalhaes.com.br"
+            }
+        ],
+        "caption": "Você já passou pela experiência de sentir uma dor crônica, queimar ou latejar pelo corpo, realizar uma bateria exaustiva de exames de imagem e ouvir do médico: \"Não tem absolutamente nada de errado na sua coluna/articulação. Isso deve ser coisa da sua cabeça\"?\n\nEssa frase, além de desumana, está cientificamente ultrapassada.\n\nA dor não é \"invenção\" nem fraqueza psíquica. Ela é 100% biológica, neural e tangível. O que a medicina moderna descobriu é que o cérebro não é um mero espectador passivo que apenas recebe sinais de ferimentos periféricos: ele é um órgão preditivo e inferencial.\n\nQuando você acredita que seu corpo está frágil, teme um diagnóstico sombrio ou vive em hipervigilância atencional, seu cérebro desencadeia o chamado EFEITO NOCEBO.\n\nSob o efeito da expectativa negativa e da ansiedade antecipatória, o tronco encefálico libera um neuropeptídeo chamado Colecistoquinina (CCK). A CCK age bloqueando nossos opioides endógenos (as endorfinas que aliviam a dor) e envia comandos pelas vias descendentes para abrir as comportas da medula espinal.\n\nO resultado? Tensões musculares rotineiras ou estímulos mecânicos normais são amplificados e interpretados pelo córtex como uma dor dilacerante. Trata-se da dor nociplástica: o alarme de incêndio continua tocando em volume máximo, mesmo que o fogo já tenha sido apagado há meses ou anos.\n\nA boa notícia da neurociência é clara: assim como o sistema nervoso aprendeu a superproteger e sensibilizar o alarme, ele possui neuroplasticidade para recalibrar o limiar sensorial por meio de Educação em Neurociência da Dor (PNE), reestruturação cognitiva e reinserção gradual do movimento.\n\n👉 Quer compreender em detalhes os circuitos neurobiológicos do efeito nocebo e como reprogramar o alarme da dor?\nLeia o novo artigo científico completo no portal:\n🔗 Link na bio: deomagalhaes.com.br\n\nVocê já percebeu suas dores corporais aumentarem nos períodos em que o estresse e a ansiedade apertam? Como você lida com isso? Deixe sua experiência nos comentários!\n\n#Neurociência #DorCrônica #EfeitoNocebo #Neurobiologia #DorNociplástica #Neuropsicologia #ViasDescendentes #Psicossomática #SaúdeMental #TCC #EducaçãoEmDor #PNE #DeoMagalhães #Fibromialgia #SensibilizaçãoCentral"
+    },
     "ruminacao-depressiva": {
         "articleSlug": "2026-10-30-ruminacao-depressiva-dmn",
         "articleTitle": "O Labirinto da Ruminação Mental: Por Que o Cérebro Fica Preso na Autocrítica",
@@ -2202,9 +2252,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "ruminacao-depressiva";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["ruminacao-depressiva"].slides));
-        let currentCaption = PRESETS["ruminacao-depressiva"].caption;
+        let currentPresetKey = "efeito-nocebo";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["efeito-nocebo"].slides));
+        let currentCaption = PRESETS["efeito-nocebo"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta
