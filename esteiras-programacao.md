@@ -36,6 +36,10 @@ Toda esteira deve cumprir rigorosamente as seguintes diretrizes antes de ser com
 - **Tom:** Acadêmico-clínico, profundo, humanista, integrando neurociência com psicologia baseada em evidências (TCC, ACT, Teoria do Apego) e filosofia existencial.
 
 ### 2. Estrutura HTML Obrigatória
+- **Cabeçalho Institucional Padronizado (Canônico):**
+  - DEVE usar `<header id="main-header"><div class="header-content container">...<button class="mobile-menu-btn" aria-label="Abrir menu">☰</button><nav id="main-nav"><a ...>...</a></nav></div></header>`.
+  - Links oficiais do menu: `Home`, `Sobre`, `Serviços`, `Agendamento`, `Artigos`, `Testes`, `Jogos`, `Recursos`.
+  - **PROIBIDO:** Usar `id="navbar"`, `id="menu-toggle"`, `class="nav-links"`, `Início` (usar `Home`) ou incluir `contato.html` no menu superior.
 - **Artigos:**
   - Container principal: `<div class="container article-container">` (garante centralização responsiva com `margin: 0 auto;`).
   - Referências bibliográficas completas no padrão ABNT ao final.

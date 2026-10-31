@@ -131,6 +131,61 @@ if (Test-Path $cardsArtigosPath) {
 
 Report-Success "Blindagem de Taxonomia: Pastas artigos/, testes/, jogos/ e recursos/ estritamente segregadas."
 
+# 6. Blindagem Estrita de Cabeçalho Canônico (#main-header)
+$htmlFiles = Get-ChildItem -Path $repoDir -Filter "*.html" -Recurse | Where-Object {
+    $_.FullName -notmatch '\\\.git\\' -and 
+    $_.FullName -notmatch '\\node_modules\\' -and
+    $_.FullName -notmatch '\\scratch\\' -and
+    $_.FullName -notmatch '\\assets\\template\\' -and
+    $_.FullName -notmatch '\\bonsai\\' -and
+    $_.FullName -notmatch '\\teste-bonsai\\' -and
+    $_.FullName -notmatch '\\social\\gerador\.html' -and
+    $_.FullName -notmatch '\\social\\index\.html' -and
+    $_.FullName -notmatch '\\relatorios\\' -and
+    $_.FullName -notmatch '\\cards-artigos\.html'
+}
+
+$headerErrorCount = 0
+foreach ($hf in $htmlFiles) {
+    $txt = [System.IO.File]::ReadAllText($hf.FullName, [System.Text.Encoding]::UTF8)
+    if ($txt -match '<header id="main-header"[^>]*>([\s\S]*?)</header>') {
+        $hContent = $matches[1]
+        $rel = $hf.FullName.Replace($repoDir, '')
+        if ($hContent -match 'id="navbar"') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - contém id='navbar' (deve usar id='main-nav')!"
+            $headerErrorCount++
+        }
+        if ($hContent -match 'id="menu-toggle"') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - contém id='menu-toggle' (deve usar class='mobile-menu-btn')!"
+            $headerErrorCount++
+        }
+        if ($hContent -match 'class="nav-links"') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - contém class='nav-links' (deve usar links diretos no #main-nav)!"
+            $headerErrorCount++
+        }
+        if ($hContent -match 'contato\.html') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - contém link para contato.html no menu superior!"
+            $headerErrorCount++
+        }
+        if ($hContent -match '>In[íi]cio<') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - contém 'Início' no menu superior (deve usar 'Home')!"
+            $headerErrorCount++
+        }
+        if ($hContent -notmatch 'class="mobile-menu-btn"') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - não possui button.mobile-menu-btn!"
+            $headerErrorCount++
+        }
+        if ($hContent -notmatch 'id="main-nav"') {
+            Report-Error "Cabeçalho não-canônico em $($rel) - não possui nav#main-nav!"
+            $headerErrorCount++
+        }
+    }
+}
+
+if ($headerErrorCount -eq 0) {
+    Report-Success "Blindagem de Cabeçalho: 100% dos arquivos em conformidade com o menu canônico oficial."
+}
+
 $finalColor = if ($errorCount -eq 0) { "Green" } else { "Red" }
 Write-Host "Quality Gate Finalizado. Total de Erros: $errorCount" -ForegroundColor $finalColor
 exit $errorCount

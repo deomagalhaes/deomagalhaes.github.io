@@ -22,9 +22,31 @@ Sempre que você for solicitado a criar, revisar ou publicar um artigo para o si
   - CSS: `/assets/style.css`.
 - **Cabeçalho padrão do site**:
   - Top bar com ícones de contato (WhatsApp, E-mail, Instagram, Localização).
-  - `header#main-header` com menu de navegação padronizado: `Home`, `Sobre`, `Serviços`, `Agendamento`, `Artigos` (com classe `active`), `Testes`, `Jogos`, `Recursos`. Nunca incluir `Contato` na barra de navegação superior (o contato já está presente na top bar e no rodapé).
-  - Imagem do logo com proporções exatas:
-    `<a href="/index.html" class="logo-container"><img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães"><div class="logo-text"><span class="name">Deo Magalhães</span><span class="subtitle">Neurociência e Comportamento</span></div></a>`
+  - `header#main-header` **CANÔNICO OBRIGATÓRIO** (proibido usar `id="navbar"`, `id="menu-toggle"`, `class="nav-links"`, `Início` ou incluir `Contato`):
+```html
+<header id="main-header">
+    <div class="header-content container">
+        <a href="/index.html" class="logo-container">
+            <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+            <div class="logo-text">
+                <span class="name">Deo Magalhães</span>
+                <span class="subtitle">Neurociência e Comportamento</span>
+            </div>
+        </a>
+        <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+        <nav id="main-nav">
+            <a href="/index.html">Home</a>
+            <a href="/sobre.html">Sobre</a>
+            <a href="/servicos.html">Serviços</a>
+            <a href="/agendamento.html">Agendamento</a>
+            <a href="/artigos.html" class="active">Artigos</a>
+            <a href="/testes.html">Testes</a>
+            <a href="/jogos.html">Jogos</a>
+            <a href="/recursos.html">Recursos</a>
+        </nav>
+    </div>
+</header>
+```
 - **Corpo (`main > .container.article-container`)**:
   - **OBRIGATÓRIO:** O container do artigo DEVE conter as duas classes: `<div class="container article-container">`. Isso garante a centralização de margens (`margin: 0 auto;`) e o espaçamento correto em telas de qualquer tamanho, prevenindo que o texto fique encostado ou justificado à esquerda.
   - `header.article-header`: `h1` com o título e `p.article-author-date` com "Por Deo Magalhães - Neuropsicólogo e Neurocientista - Publicado em [Data Atual]".

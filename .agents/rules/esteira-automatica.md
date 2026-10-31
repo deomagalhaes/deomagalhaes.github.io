@@ -26,6 +26,7 @@ Para garantir que o Studio Visual (`social/gerador.html`), artigos e testes nunc
    - O Quality Gate verifica automaticamente:
      - Zero sequências de codificação corrompida em todo o repositório.
      - Identidade e Autoridade oficial estrita (somente Deo Magalhães - Neuropsicólogo e Neurocientista CRP 04/42784).
+     - Cabeçalho canônico padronizado: presença de `class="header-content container"`, `class="mobile-menu-btn"`, `id="main-nav"`, uso de `Home` e links oficiais; PROIBIDO `id="navbar"`, `id="menu-toggle"`, `class="nav-links"`, `Início` e `contato.html`.
      - Presença obrigatória de `class="container article-container"` nos artigos.
      - Presença obrigatória de `class="container footer-grid"` no rodapé.
      - 100% de balanceamento de chaves `{ }` em `social/gerador.html`.
