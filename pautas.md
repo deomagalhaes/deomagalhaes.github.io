@@ -8,6 +8,14 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 ## 📌 Pautas Pendentes (Próximos Artigos)
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
+- [ ] **Fundamentos da Lógica Clássica: Os Três Princípios do Pensamento, Proposições e Operadores Lógicos**
+  - *Abordagem:* Princípios de Identidade, Não-Contradição e Terceiro Excluído. Sentenças vs. proposições, conectivos de verdade (negação, conjunção, disjunção, condicional, bicondicional), tabelas-verdade e o impacto do raciocínio formal na prevenção de distorções cognitivas.
+  - *Categorias:* `filosofia`, `reabilitacao-cognitiva`, `desenvolvimento-pessoal`.
+
+- [ ] **Lógica Avançada e Filosofia da Linguagem: Da Lógica de Predicados aos Teoremas de Gödel, Semântica e Paradoxos**
+  - *Abordagem:* Cálculo de predicados (quantificadores universal e existencial), lógica modal (necessidade e possibilidade), semântica de Tarski, paradoxos autorreferenciais (Russell, Mentiroso), os Teoremas da Incompletude de Gödel e o rigor dedutivo no pensamento clínico.
+  - *Categorias:* `filosofia`, `reabilitacao-cognitiva`, `desenvolvimento-pessoal`.
+
 
 - [ ] **A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social**
 - [ ] **A Neurociência do Luto e do Vínculo Rompido: Como o Cérebro Processa a Perda e a Ausência**

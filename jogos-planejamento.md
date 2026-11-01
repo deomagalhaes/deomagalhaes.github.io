@@ -29,7 +29,9 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `jogos/jogo-campo-receptivo.html` | ✅ **Publicado** |
 | **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `jogos/jogo-transitividade-logica.html` | ✅ **Publicado** |
 | **Dia 22** | **Labirinto de Rotação Espacial e Perspectiva Mental** | Rotação Mental 3D, Percepção Visuoespacial e Flexibilidade | `jogos/jogo-rotacao-espacial.html` | ✅ **Publicado** |
-| **Dia 23** | **Matriz de Atenção Dividida e Alternância Cognitiva** | Atenção Dividida, Alternância de Tarefas e Controle Inibitório | `jogos/jogo-atencao-dividida.html` | ⏳ *Próximo da fila* |
+| **Dia 23** | **Circuito das Portas da Verdade (Conectivos e Silogismos)** | Lógica Proposicional, Operadores AND/OR/NOT e Tabelas-Verdade | `jogos/jogo-portas-da-verdade.html` | ⏳ *Próximo da fila* |
+| **Dia 24** | **Matriz de Quantificadores e Teoremas Alquímicos** | Lógica de Predicados, Dedução Relacional e Paradoxos | `jogos/jogo-quantificadores-logicos.html` | ⏳ Aguardando |
+| **Dia 25** | **Matriz de Atenção Dividida e Alternância Cognitiva** | Atenção Dividida, Alternância de Tarefas e Controle Inibitório | `jogos/jogo-atencao-dividida.html` | ⏳ Aguardando |
 
 ---
 
