@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 22: Labirinto de Rotação Espacial e Perspectiva Mental – Deo Magalhães</title>
+    <meta name="description" content="Desafie seu córtex parietal posterior com o Labirinto de Rotação Espacial: navegue por eixos angulares rotacionados e exercite a flexibilidade visuoespacial.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.78em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .perspective-panel {
+            background: #fdfbf7;
+            border: 2px dashed #0a9396;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .compass-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: #005f73;
+        }
+
+        .compass-dial {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #005f73;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 2px 8px rgba(0,95,115,0.3);
+        }
+
+        .board-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 25px auto;
+            perspective: 800px;
+            min-height: 320px;
+        }
+
+        .maze-grid {
+            display: grid;
+            gap: 6px;
+            padding: 12px;
+            background: #001219;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 18, 25, 0.25);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cell {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        @media (max-width: 480px) {
+            .cell {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1em;
+            }
+        }
+
+        .cell-path {
+            background: #0a9396;
+            opacity: 0.25;
+        }
+
+        .cell-wall {
+            background: #1e293b;
+            border: 1px solid #334155;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .cell-player {
+            background: #ee9b00 !important;
+            opacity: 1 !important;
+            box-shadow: 0 0 16px #ee9b00, 0 0 28px rgba(238, 155, 0, 0.6);
+            border-radius: 50%;
+            transform: scale(0.92);
+        }
+
+        .cell-goal {
+            background: #94d2bd !important;
+            opacity: 0.9 !important;
+            box-shadow: 0 0 14px #94d2bd;
+            border: 2px solid #ffffff;
+            animation: pulseGoal 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseGoal {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        .dpad-container {
+            display: grid;
+            grid-template-columns: repeat(3, 64px);
+            grid-template-rows: repeat(3, 64px);
+            gap: 8px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .dpad-btn {
+            background: #005f73;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .dpad-btn:active {
+            transform: scale(0.92);
+            background: #0a9396;
+        }
+
+        .dpad-up { grid-column: 2; grid-row: 1; }
+        .dpad-left { grid-column: 1; grid-row: 2; }
+        .dpad-down { grid-column: 2; grid-row: 3; }
+        .dpad-right { grid-column: 3; grid-row: 2; }
+        .dpad-center {
+            grid-column: 2;
+            grid-row: 2;
+            background: #e2e8f0;
+            color: #64748b;
+            font-size: 0.85em;
+            cursor: default;
+            box-shadow: none;
+            border-radius: 50%;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-game {
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+        }
+
+        .btn-reset {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .btn-reset:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-next {
+            background: #ee9b00;
+            color: #001219;
+            display: none;
+        }
+        .btn-next:hover {
+            background: #ca6702;
+            color: white;
+        }
+
+        .feedback-banner {
+            min-height: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 22: Labirinto de Rotação Espacial e Perspectiva Mental</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - CRP 04/42784</p>
+            </header>
+
+            <article class="article-body">
+                <p><em>Treine seu córtex parietal posterior, sulco intraparietal e córtex pré-frontal dorsolateral através da manipulação ativa de eixos visuoespaciais. Conduza o núcleo de energia (laranja) até o portal de convergência (verde). A cada nível, o referencial do labirinto rotaciona em ângulos de 0°, 90°, 180° e 270°, exigindo que sua mente recalibre a direção dos comandos relativos em tempo real.</em></p>
+
+                <div class="game-wrapper">
+                    <!-- Barra de Estatísticas -->
+                    <div class="game-header-bar">
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Nível</span>
+                            <span class="stat-badge-value" id="lvlDisplay">1 / 5</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Movimentos</span>
+                            <span class="stat-badge-value" id="movesDisplay">0</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Tempo</span>
+                            <span class="stat-badge-value" id="timerDisplay">00:00</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-badge-title">Melhor Score</span>
+                            <span class="stat-badge-value" id="bestScoreDisplay">--</span>
+                        </div>
+                    </div>
+
+                    <!-- Bússola e Painel de Perspectiva -->
+                    <div class="perspective-panel">
+                        <div class="compass-box">
+                            <div class="compass-dial" id="compassDial">▲</div>
+                            <span>Perspectiva Rotacional: <strong id="rotAngleDisplay">0° (Padrão)</strong></span>
+                        </div>
+                        <span style="font-size:0.88em; color:#64748b;">Dica: Use as setas do teclado, teclas W/A/S/D ou o D-Pad virtual abaixo.</span>
+                    </div>
+
+                    <div class="feedback-banner" id="feedbackBanner" style="color:#005f73;">
+                        Use os controles para alcançar o portal verde.
+                    </div>
+
+                    <!-- Tabuleiro Dinâmico do Labirinto -->
+                    <div class="board-container">
+                        <div class="maze-grid" id="mazeGrid"></div>
+                    </div>
+
+                    <!-- Controles D-Pad Virtual para Mobile e Desktop -->
+                    <div class="dpad-container">
+                        <button class="dpad-btn dpad-up" id="btnUp" title="Cima">▲</button>
+                        <button class="dpad-btn dpad-left" id="btnLeft" title="Esquerda">◀</button>
+                        <div class="dpad-btn dpad-center">🎮</div>
+                        <button class="dpad-btn dpad-right" id="btnRight" title="Direita">▶</button>
+                        <button class="dpad-btn dpad-down" id="btnDown" title="Baixo">▼</button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-game btn-reset" id="btnReset">Reiniciar Nível</button>
+                        <button class="btn-game btn-next" id="btnNext">Próximo Nível →</button>
+                    </div>
+                </div>
+
+                <hr class="article-divider">
+
+                <h2>Neurociência da Rotação Mental e Perspectiva Espacial</h2>
+                <p>A habilidade de rotacionar mentalmente um objeto no espaço bidimensional ou tridimensional é uma das funções cognitivas mais sofisticadas do cérebro humano. Pioneiramente investigada por Roger Shepard e Jacqueline Metzler (1971), a neurociência demonstrou que o tempo necessário para reconhecer ou navegar por uma forma rotacionada é diretamente proporcional ao ângulo de rotação imposto.</p>
+                <p>Essa operação depende da via visual dorsal — frequentemente chamada de via do <em>"Onde/Como"</em> —, que se estende do córtex visual primário (V1) até o <strong>Córtex Parietal Posterior e o Sulco Intraparietal</strong>. Quando o mapa físico é inclinado em 90°, 180° ou 270°, o cérebro não pode recorrer a rotinas motoras automáticas: ele precisa inibir a resposta óbvia e reconstruir a geometria espacial interna por meio do <strong>Córtex Pré-Frontal Dorsolateral (DLPFC)</strong>.</p>
+                <p>O treino continuado de rotação e perspectivismo cognitivo aprimora a memória de trabalho visuoespacial, a capacidade de resolução de problemas sob incerteza e a flexibilidade mental em cenários cotidianos e profissionais.</p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Web Audio API sintetizada
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+            },
+            play(freq, type = 'sine', duration = 0.1, gainVal = 0.1) {
+                try {
+                    this.init();
+                    if (this.ctx.state === 'suspended') this.ctx.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            },
+            step() {
+                this.play(540, 'triangle', 0.08, 0.08);
+            },
+            bump() {
+                this.play(180, 'sawtooth', 0.12, 0.12);
+            },
+            levelWin() {
+                this.play(523.25, 'triangle', 0.12, 0.12);
+                setTimeout(() => this.play(659.25, 'triangle', 0.12, 0.12), 100);
+                setTimeout(() => this.play(783.99, 'triangle', 0.15, 0.14), 200);
+                setTimeout(() => this.play(1046.50, 'sine', 0.35, 0.15), 320);
+            },
+            gameWin() {
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((f, i) => {
+                    setTimeout(() => this.play(f, 'sine', 0.25, 0.15), i * 140);
+                });
+            }
+        };
+
+        // 5 Níveis Matematicamente Validados via BFS (100% Solúveis)
+        const LEVELS = [
+            {
+                id: 1,
+                title: "Calibração Introdutória",
+                rotation: 0,
+                rows: 5,
+                cols: 5,
+                grid: [
+                    'S0000',
+                    '11110',
+                    '00000',
+                    '01111',
+                    '0000E'
+                ]
+            },
+            {
+                id: 2,
+                title: "Desvio em 90° (Horário)",
+                rotation: 90,
+                rows: 5,
+                cols: 5,
+                grid: [
+                    'S0100',
+                    '00101',
+                    '10001',
+                    '00100',
+                    '0110E'
+                ]
+            },
+            {
+                id: 3,
+                title: "Inversão Total em 180°",
+                rotation: 180,
+                rows: 6,
+                cols: 6,
+                grid: [
+                    'S00100',
+                    '110101',
+                    '000001',
+                    '011100',
+                    '000110',
+                    '11000E'
+                ]
+            },
+            {
+                id: 4,
+                title: "Perspectiva Cruzada em 270°",
+                rotation: 270,
+                rows: 6,
+                cols: 6,
+                grid: [
+                    'S00010',
+                    '011010',
+                    '001000',
+                    '101110',
+                    '000010',
+                    '01100E'
+                ]
+            },
+            {
+                id: 5,
+                title: "Convergência Parietal Master",
+                rotation: 180,
+                rows: 7,
+                cols: 7,
+                grid: [
+                    'S000000',
+                    '1110110',
+                    '0000100',
+                    '0111101',
+                    '0000001',
+                    '1110100',
+                    '000010E'
+                ]
+            }
+        ];
+
+        let currentLevelIdx = 0;
+        let playerPos = { r: 0, c: 0 };
+        let goalPos = { r: 0, c: 0 };
+        let moves = 0;
+        let isLevelCompleted = false;
+        let seconds = 0;
+        let timerInterval = null;
+
+        const DOM = {
+            lvl: document.getElementById('lvlDisplay'),
+            moves: document.getElementById('movesDisplay'),
+            timer: document.getElementById('timerDisplay'),
+            bestScore: document.getElementById('bestScoreDisplay'),
+            compass: document.getElementById('compassDial'),
+            rotText: document.getElementById('rotAngleDisplay'),
+            feedback: document.getElementById('feedbackBanner'),
+            grid: document.getElementById('mazeGrid'),
+            btnReset: document.getElementById('btnReset'),
+            btnNext: document.getElementById('btnNext'),
+            btnUp: document.getElementById('btnUp'),
+            btnDown: document.getElementById('btnDown'),
+            btnLeft: document.getElementById('btnLeft'),
+            btnRight: document.getElementById('btnRight')
+        };
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                if (!isLevelCompleted) {
+                    seconds++;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            DOM.timer.innerText = `${m}:${s}`;
+        }
+
+        function loadSavedScore() {
+            const saved = localStorage.getItem('rotacao_espacial_highscore');
+            if (saved) {
+                DOM.bestScore.innerText = `${saved} pts`;
+            }
+        }
+
+        function initLevel(index) {
+            currentLevelIdx = index;
+            const lvl = LEVELS[currentLevelIdx];
+            moves = 0;
+            isLevelCompleted = false;
+
+            DOM.lvl.innerText = `${lvl.id} / ${LEVELS.length}`;
+            DOM.moves.innerText = moves;
+            DOM.btnNext.style.display = 'none';
+            DOM.feedback.innerText = `Nível ${lvl.id}: ${lvl.title}. Rotacione sua mente!`;
+            DOM.feedback.style.color = '#005f73';
+
+            // Atualiza bússola e rotação do tabuleiro
+            DOM.compass.style.transform = `rotate(${lvl.rotation}deg)`;
+            DOM.rotText.innerText = `${lvl.rotation}° (${lvl.title})`;
+            DOM.grid.style.transform = `rotate(${lvl.rotation}deg)`;
+
+            // Configura o grid CSS
+            DOM.grid.style.gridTemplateColumns = `repeat(${lvl.cols}, 1fr)`;
+            DOM.grid.innerHTML = '';
+
+            for (let r = 0; r < lvl.rows; r++) {
+                for (let c = 0; c < lvl.cols; c++) {
+                    const char = lvl.grid[r][c];
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.id = `cell-${r}-${c}`;
+
+                    if (char === '1') {
+                        cell.classList.add('cell-wall');
+                    } else {
+                        cell.classList.add('cell-path');
+                    }
+
+                    if (char === 'S') {
+                        playerPos = { r, c };
+                        cell.classList.add('cell-player');
+                    } else if (char === 'E') {
+                        goalPos = { r, c };
+                        cell.classList.add('cell-goal');
+                        cell.innerHTML = '★';
+                    }
+
+                    DOM.grid.appendChild(cell);
+                }
+            }
+
+            if (currentLevelIdx === 0) startTimer();
+        }
+
+        function movePlayer(dr, dc) {
+            if (isLevelCompleted) return;
+            const lvl = LEVELS[currentLevelIdx];
+            const nr = playerPos.r + dr;
+            const nc = playerPos.c + dc;
+
+            // Checa limites
+            if (nr < 0 || nr >= lvl.rows || nc < 0 || nc >= lvl.cols) {
+                SoundFX.bump();
+                return;
+            }
+
+            // Checa parede
+            if (lvl.grid[nr][nc] === '1') {
+                SoundFX.bump();
+                return;
+            }
+
+            // Move o jogador
+            const oldCell = document.getElementById(`cell-${playerPos.r}-${playerPos.c}`);
+            if (oldCell) oldCell.classList.remove('cell-player');
+
+            playerPos = { r: nr, c: nc };
+            moves++;
+            DOM.moves.innerText = moves;
+            SoundFX.step();
+
+            const newCell = document.getElementById(`cell-${playerPos.r}-${playerPos.c}`);
+            if (newCell) newCell.classList.add('cell-player');
+
+            // Vitória no nível
+            if (playerPos.r === goalPos.r && playerPos.c === goalPos.c) {
+                handleLevelWin();
+            }
+        }
+
+        function handleLevelWin() {
+            isLevelCompleted = true;
+            SoundFX.levelWin();
+            DOM.feedback.innerText = `Nível ${LEVELS[currentLevelIdx].id} Concluído em ${moves} movimentos!`;
+            DOM.feedback.style.color = '#0a9396';
+
+            if (currentLevelIdx < LEVELS.length - 1) {
+                DOM.btnNext.style.display = 'inline-block';
+            } else {
+                clearInterval(timerInterval);
+                SoundFX.gameWin();
+                const totalScore = Math.max(100, 1000 - (moves * 12) - (seconds * 4));
+                DOM.feedback.innerText = `Parabéns! Desafio concluído! Pontuação Final: ${totalScore} pts!`;
+                DOM.feedback.style.color = '#ee9b00';
+
+                const prevHigh = parseInt(localStorage.getItem('rotacao_espacial_highscore') || '0');
+                if (totalScore > prevHigh) {
+                    localStorage.setItem('rotacao_espacial_highscore', totalScore);
+                    loadSavedScore();
+                }
+            }
+        }
+
+        // Eventos de teclado
+        window.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            if (['arrowup', 'w'].includes(key)) { e.preventDefault(); movePlayer(-1, 0); }
+            if (['arrowdown', 's'].includes(key)) { e.preventDefault(); movePlayer(1, 0); }
+            if (['arrowleft', 'a'].includes(key)) { e.preventDefault(); movePlayer(0, -1); }
+            if (['arrowright', 'd'].includes(key)) { e.preventDefault(); movePlayer(0, 1); }
+        });
+
+        // Eventos D-Pad virtual
+        DOM.btnUp.addEventListener('click', () => movePlayer(-1, 0));
+        DOM.btnDown.addEventListener('click', () => movePlayer(1, 0));
+        DOM.btnLeft.addEventListener('click', () => movePlayer(0, -1));
+        DOM.btnRight.addEventListener('click', () => movePlayer(0, 1));
+
+        DOM.btnReset.addEventListener('click', () => initLevel(currentLevelIdx));
+        DOM.btnNext.addEventListener('click', () => {
+            if (currentLevelIdx < LEVELS.length - 1) {
+                initLevel(currentLevelIdx + 1);
+            }
+        });
+
+        // Inicialização
+        loadSavedScore();
+        initLevel(0);
+    </script>
+</body>
+</html>

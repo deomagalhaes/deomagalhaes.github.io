@@ -9,6 +9,9 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
+- [ ] **A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social**
+- [ ] **A Neurociência do Luto e do Vínculo Rompido: Como o Cérebro Processa a Perda e a Ausência**
+
 ---
 
 ## ✅ Pautas Publicadas

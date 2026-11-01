@@ -28,7 +28,8 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 19** | **Matriz de Resolução de Conflitos e Custo Cognitivo** | Tomada de Decisão Sob Incerteza, Custo de Troca e Flexibilidade | `jogos/jogo-matriz-conflitos.html` | ✅ **Publicado** |
 | **Dia 20** | **Campo Receptivo Visuoatencional (Busca Visual Flanker)** | Atenção Seletiva Focal, Filtragem de Ruído e Inibição Lateral | `jogos/jogo-campo-receptivo.html` | ✅ **Publicado** |
 | **Dia 21** | **Balança de Pesos e Medidas Alquímicas** | Raciocínio Lógico Proposicional e Transitividade | `jogos/jogo-transitividade-logica.html` | ✅ **Publicado** |
-| **Dia 22** | **Labirinto de Rotação Espacial e Perspectiva Mental** | Rotação Mental 3D, Percepção Visuoespacial e Flexibilidade | `jogos/jogo-rotacao-espacial.html` | ⏳ *Próximo da fila* |
+| **Dia 22** | **Labirinto de Rotação Espacial e Perspectiva Mental** | Rotação Mental 3D, Percepção Visuoespacial e Flexibilidade | `jogos/jogo-rotacao-espacial.html` | ✅ **Publicado** |
+| **Dia 23** | **Matriz de Atenção Dividida e Alternância Cognitiva** | Atenção Dividida, Alternância de Tarefas e Controle Inibitório | `jogos/jogo-atencao-dividida.html` | ⏳ *Próximo da fila* |
 
 ---
 
