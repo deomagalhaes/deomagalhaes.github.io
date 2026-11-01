@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Disforia Sensível à Rejeição (RSD / T-22) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua reatividade emocional aguda a críticas, desaprovação ou rejeição percebida com a Escala de Disforia Sensível à Rejeição (RSD).">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-calc {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-calc:hover {
+            background: #ca6702;
+            color: white;
+        }
+
+        .results-box {
+            display: none;
+            background: #fdfbf7;
+            border: 2px solid #005f73;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.4em;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .subscales-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .subscale-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 6px 0;
+            font-size: 0.95em;
+            color: #005f73;
+        }
+
+        .subscale-score {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .clinical-alert {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.92em;
+            color: #991b1b;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #e2e8f0;
+            border-radius: 8px;
+            height: 12px;
+            margin: 15px 0 25px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a9396, #ee9b00);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container article-container">
+        <header class="article-header">
+            <span class="category-badge" style="background:#94d2bd; color:#005f73; font-weight:700; padding:4px 10px; border-radius:6px; font-size:0.85em;">Instrumento Neuropsicológico T-22</span>
+            <h1>Escala de Disforia Sensível à Rejeição (RSD) e Reatividade Afetiva</h1>
+            <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Publicado em 01 de Novembro de 2026</p>
+        </header>
+
+        <section class="test-intro" style="margin-top:20px; line-height:1.7; color:#334155;">
+            <p><em>A <strong>Disforia Sensível à Rejeição (Rejection Sensitive Dysphoria - RSD)</strong> é uma resposta emocional e fisiológica devastadora deflagrada pela percepção real ou imaginada de rejeição, crítica, desaprovação ou fracasso social. Fortemente prevalente em indivíduos com TDAH e cérebros atípicos, a RSD não é fraqueza de caráter, mas uma hiper-reatividade das redes neurais da dor física e da ameaça social.</em></p>
+            <p>Este questionário autoaplicável de 15 itens investiga sua reatividade afetiva em 3 dimensões clínicas: <strong>Hipervigilância ao Julgamento</strong>, <strong>Intensidade da Dor Somática</strong> e <strong>Mecanismos Defensivos (Agradamento Compulsivo vs. Esquiva)</strong>.</p>
+        </section>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+
+        <form id="rsdForm" class="quiz-container">
+            <!-- Dimensão 1 -->
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">01</span> Uma crítica construtiva ou um feedback neutro no trabalho/estudo causa uma sensação imediata de esmagamento ou vergonha profunda?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q1" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q1" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q1" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q1" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q1" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">02</span> Quando percebe que alguém pode estar chateado ou distante com você, sente um aperto físico no peito, nó no estômago ou falta de ar?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q2" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q2" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q2" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q2" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q2" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">03</span> Você se esforça excessivamente para agradar a todos (people-pleasing) para evitar qualquer risco mínimo de rejeição ou desagrado?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q3" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q3" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q3" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q3" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q3" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">04</span> Mensagens de texto não respondidas ou respostas curtas fazem você entrar em espirais de ruminação acreditando que fez algo de errado?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q4" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q4" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q4" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q4" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q4" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">05</span> A intensidade da sua dor emocional diante de um desentendimento interpessoal é tão avassaladora que você a descreve quase como uma dor física insuportável?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q5" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q5" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q5" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q5" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q5" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">06</span> Você já deixou de tentar novas oportunidades profissionais, hobbies ou relacionamentos pelo medo paralisante de falhar ou não ser aceito?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q6" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q6" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q6" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q6" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q6" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">07</span> Você costuma reexaminar conversas passadas na cabeça, caçando pistas invisíveis de que a outra pessoa possa ter se decepcionado com você?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q7" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q7" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q7" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q7" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q7" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">08</span> Momentos de rejeição percebida provocam quedas repentinas de energia, vontade súbita de chorar ou impulsos explosivos de autoagressão verbal?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q8" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q8" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q8" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q8" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q8" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">09</span> Você estabelece padrões de perfeccionismo implacáveis para si mesmo para garantir que ninguém encontre falhas para criticar?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q9" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q9" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q9" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q9" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q9" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">10</span> Tem dificuldade em diferenciar um desentendimento corriqueiro de uma ruptura definitiva do relacionamento ou amizade?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q10" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q10" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q10" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q10" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q10" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">11</span> Diante de desaprovação social, seu humor pode cair instantaneamente de animado e motivado para profundo desespero em questão de segundos?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q11" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q11" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q11" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q11" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q11" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">12</span> Você prefere se isolar socialmente quando se sente vulnerável, temendo que qualquer interação resulte em mais rejeição?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q12" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q12" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q12" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q12" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q12" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">13</span> Você frequentemente assume que o silêncio, a seriedade ou o cansaço dos outros são causados por raiva ou insatisfação com você?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q13" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q13" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q13" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q13" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q13" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">14</span> Sente uma raiva interna intensa ou vergonha tóxica dirigida a si mesmo quando não atinge um padrão de excelência social ou profissional?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q14" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q14" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q14" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q14" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q14" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title"><span class="question-number">15</span> Você evita expor suas verdadeiras opiniões, sentimentos ou projetos criativos por medo antecipatório de ser ridicularizado ou julgado?</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="q15" value="0">0 - Nunca</label>
+                    <label class="option-label"><input type="radio" name="q15" value="1">1 - Raro</label>
+                    <label class="option-label"><input type="radio" name="q15" value="2">2 - Às vezes</label>
+                    <label class="option-label"><input type="radio" name="q15" value="3">3 - Frequente</label>
+                    <label class="option-label"><input type="radio" name="q15" value="4">4 - Quase Sempre</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn-calc" id="btnCalculate">Calcular Minha Reatividade à Rejeição</button>
+        </form>
+
+        <!-- Resultados -->
+        <div id="resultsBox" class="results-box">
+            <h2 style="color:#005f73; margin-top:0;">Resultado da Avaliação</h2>
+            <div id="scoreBadge" class="score-badge">Pontuação: -- / 60</div>
+            <h3 id="resultCategory" style="color:#0f172a; margin: 10px 0;">--</h3>
+            <p id="resultDescription" style="line-height:1.7; color:#334155;">--</p>
+
+            <h3 style="margin-top:25px; color:#005f73;">Perfil por Dimensão Neurocognitiva</h3>
+            <div class="subscales-grid">
+                <div class="subscale-card">
+                    <h4>Hipervigilância ao Julgamento</h4>
+                    <div class="subscale-score" id="subD1">-- / 20</div>
+                    <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Sensibilidade antecipatória a sinais ambíguos de desaprovação social.</p>
+                </div>
+                <div class="subscale-card">
+                    <h4>Intensidade da Dor Somática</h4>
+                    <div class="subscale-score" id="subD2">-- / 20</div>
+                    <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Ativação do córtex cingulado e manifestações corporais agudas à crítica.</p>
+                </div>
+                <div class="subscale-card">
+                    <h4>Defesas & Esquiva Comportamental</h4>
+                    <div class="subscale-score" id="subD3">-- / 20</div>
+                    <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Tendência a people-pleasing, perfeccionismo e evitação de riscos.</p>
+                </div>
+            </div>
+
+            <div class="clinical-alert" id="clinicalAlert">
+                <strong>Orientações Clínicas e Neuroeducacionais:</strong>
+                <p id="alertText" style="margin-top:6px; margin-bottom:0;">--</p>
+            </div>
+
+            <div style="margin-top:25px; text-align:center;">
+                <a href="/agendamento.html" class="btn-calc" style="text-decoration:none; display:inline-block; max-width:380px;">Agendar Consulta / Avaliação Clínica</a>
+            </div>
+        </div>
+
+        <hr class="article-divider" style="margin:40px 0;">
+
+        <p class="article-disclaimer">Este questionário tem caráter autoavaliativo e psicoeducativo. Não substitui uma avaliação diagnóstica clínica individualizada realizada por neuropsicólogo ou psiquiatra.</p>
+
+        <h2>Fundamentação Neurocientífica</h2>
+        <ol class="references-list">
+            <li>DODSON, William W. Rejection Sensitive Dysphoria and ADHD: Clinical Features and Management. <em>ADHD Reports</em>, v. 24, n. 4, p. 1-8, 2016.</li>
+            <li>EISENBERGER, Naomi I.; LIEBERMAN, Matthew D.; WILLIAMS, Kipling D. Does Rejection Hurt? An fMRI Study of Social Exclusion. <em>Science</em>, v. 302, n. 5643, p. 290-292, 2003.</li>
+            <li>KROSS, Ethan et al. Social Rejection Shares Somatosensory Representations with Physical Pain. <em>Proceedings of the National Academy of Sciences (PNAS)</em>, v. 108, n. 15, p. 6270-6275, 2011.</li>
+            <li>SHAW, Philip et al. Emotion Dysregulation in Attention Deficit Hyperactivity Disorder. <em>The American Journal of Psychiatry</em>, v. 171, n. 3, p. 276-293, 2014.</li>
+        </ol>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('rsdForm');
+            const btnCalc = document.getElementById('btnCalculate');
+            const resultsBox = document.getElementById('resultsBox');
+            const progressBar = document.getElementById('progressBar');
+
+            // Feedback visual nos radio buttons
+            const optionLabels = document.querySelectorAll('.option-label');
+            optionLabels.forEach(label => {
+                label.addEventListener('click', () => {
+                    const radio = label.querySelector('input[type="radio"]');
+                    const group = document.querySelectorAll(`input[name="${radio.name}"]`);
+                    group.forEach(r => r.closest('.option-label').classList.remove('selected'));
+                    label.classList.add('selected');
+                    updateProgress();
+                });
+            });
+
+            function updateProgress() {
+                const totalQuestions = 15;
+                let answered = 0;
+                for (let i = 1; i <= totalQuestions; i++) {
+                    if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                        answered++;
+                    }
+                }
+                const pct = (answered / totalQuestions) * 100;
+                progressBar.style.width = pct + '%';
+            }
+
+            btnCalc.addEventListener('click', () => {
+                const totalQuestions = 15;
+                let answers = {};
+                let missing = [];
+
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                    if (selected) {
+                        answers[`q${i}`] = parseInt(selected.value);
+                    } else {
+                        missing.push(i);
+                    }
+                }
+
+                if (missing.length > 0) {
+                    alert(`Por favor, responda a todas as questões antes de calcular. Faltam: ${missing.join(', ')}.`);
+                    return;
+                }
+
+                // Cálculo por dimensões
+                // D1: Hipervigilância ao Julgamento (1, 4, 7, 10, 13)
+                const d1 = answers.q1 + answers.q4 + answers.q7 + answers.q10 + answers.q13;
+                // D2: Dor Somática e Reatividade Emocional (2, 5, 8, 11, 14)
+                const d2 = answers.q2 + answers.q5 + answers.q8 + answers.q11 + answers.q14;
+                // D3: Defesas Comportamentais (3, 6, 9, 12, 15)
+                const d3 = answers.q3 + answers.q6 + answers.q9 + answers.q12 + answers.q15;
+
+                const totalScore = d1 + d2 + d3;
+
+                document.getElementById('subD1').innerText = `${d1} / 20`;
+                document.getElementById('subD2').innerText = `${d2} / 20`;
+                document.getElementById('subD3').innerText = `${d3} / 20`;
+                document.getElementById('scoreBadge').innerText = `Pontuação Total: ${totalScore} / 60`;
+
+                let cat = '';
+                let desc = '';
+                let alertMsg = '';
+
+                if (totalScore <= 18) {
+                    cat = 'Baixa Reatividade à Rejeição (Faixa de Regulação Típica)';
+                    desc = 'Seus resultados indicam uma tolerância interpessoal estável. Diante de desentendimentos, feedbacks críticos ou silêncios, seu córtex pré-frontal mantém a capacidade de contextualizar a situação sem acionar alarmes somáticos desproporcionais.';
+                    alertMsg = 'Seu funcionamento emocional diante de julgamentos aparenta estar preservado. Continue cultivando assertividade e comunicação aberta nas relações interpessoais.';
+                } else if (totalScore <= 35) {
+                    cat = 'Reatividade Afetiva Moderada à Desaprovação';
+                    desc = 'Você apresenta uma sensibilidade perceptível à crítica e à rejeição, com tendência a ruminar sobre interações sociais desafiadoras ou adotar posturas de agrado defensivo em ambientes de alta cobrança.';
+                    alertMsg = 'Embora gerenciável na maior parte do tempo, essa sensibilidade consome energia cognitiva. O treino em reestruturação cognitiva (TCC) e desfusão de pensamentos automáticos pode prevenir o esgotamento relacional.';
+                } else if (totalScore <= 48) {
+                    cat = 'Disforia Sensível à Rejeição Significativa (RSD Elevada)';
+                    desc = 'Seus padrões demonstram uma hiper-reatividade afetiva marcante. A crítica ou a desaprovação percebida ativam intensamente a circuitaria de dor psíquica, gerando respostas somáticas imediatas (nó no estômago, taquicardia) e impulsos fortes de isolamento ou perfeccionismo exaustivo.';
+                    alertMsg = 'Este padrão é altamente característico de cérebros neurodivergentes (especialmente TDAH). Compreender a base neurobiológica dessa dor é o primeiro passo para cessar a autocobrança moral e desenvolver estratégias clínicas de autorregulação.';
+                } else {
+                    cat = 'Disforia Sensível à Rejeição Severa / Paralisante';
+                    desc = 'Nível agudo e frequente de RSD. A dor da rejeição real ou antecipada interfere de forma profunda na sua qualidade de vida, escolhas profissionais e segurança nos relacionamentos íntimos, acarretando sofrimento psíquico expressivo.';
+                    alertMsg = 'Recomenda-se fortemente uma avaliação neuropsicológica e psiquiátrica especializada. Intervenções integradas (psicoeducação neurobiológica, TCC focada em regulação emocional e modulação farmacológica quando indicada) apresentam taxas elevadas de alívio para a RSD.';
+                }
+
+                document.getElementById('resultCategory').innerText = cat;
+                document.getElementById('resultDescription').innerText = desc;
+                document.getElementById('alertText').innerText = alertMsg;
+
+                resultsBox.style.display = 'block';
+                resultsBox.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

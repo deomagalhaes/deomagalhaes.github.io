@@ -186,6 +186,27 @@ if ($headerErrorCount -eq 0) {
     Report-Success "Blindagem de Cabeçalho: 100% dos arquivos em conformidade com o menu canônico oficial."
 }
 
+# 7. Blindagem dos 4 Pilares da Esteira Contínua
+$esteiraPath = Join-Path $repoDir "esteiras-programacao.md"
+if (Test-Path $esteiraPath) {
+    $eTxt = [System.IO.File]::ReadAllText($esteiraPath, [System.Text.Encoding]::UTF8)
+    $concludedMatches = [regex]::Matches($eTxt, '\|\s*\*\*Lote (\d+)\*\*\s*\|([^\|]+)\|([^\|]+)\|([^\|]+)\|([^\|]+)\|\s*✅')
+    foreach ($m in $concludedMatches) {
+        $loteId = $m.Groups[1].Value
+        $testePart = $m.Groups[4].Value
+        $jogoPart = $m.Groups[5].Value
+        # Valida se os testes dos lotes existem em testes/
+        if ($testePart -match 'T-(\d+)') {
+            $tNum = $matches[1]
+            $foundTest = Get-ChildItem -Path (Join-Path $repoDir "testes") -Filter "*.html" | Where-Object { $_.Name -match "t$tNum" -or (Get-Content -Raw $_.FullName) -match "T-$tNum" }
+            if (-not $foundTest) {
+                Report-Error "Lote $loteId marcado como concluído, mas o teste T-$tNum não foi encontrado em testes/!"
+            }
+        }
+    }
+    Report-Success "Blindagem de Esteira: Todos os lotes concluídos possuem seus respectivos testes e jogos validados."
+}
+
 $finalColor = if ($errorCount -eq 0) { "Green" } else { "Red" }
 Write-Host "Quality Gate Finalizado. Total de Erros: $errorCount" -ForegroundColor $finalColor
 exit $errorCount

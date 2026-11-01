@@ -28,7 +28,8 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-19** | **Escala de Inércia Psíquica e Bloqueio Executivo (EIPBE)** | Bloqueio Executivo, Tônus Dopaminérgico e TDAH | `testes/teste-bloqueio-executivo-tdah.html` | ✅ Concluído |
 | **T-20** | **Escala de Fadiga por Decisão e Depleção do Ego** | Esgotamento Pré-Frontal, Autocontrole e Heurísticas Impulsivas | `testes/teste-fadiga-decisao.html` | ✅ Concluído |
 | **T-21** | **Inventário de Sintomas de Desregulação do Eixo HPA e Estresse Crônico** | Carga Alostática, Reatividade ao Estresse e Esgotamento Fisiológico | `testes/teste-desregulacao-eixo-hpa.html` | ✅ Concluído |
-| **T-22** | **Escala de Disforia Sensível à Rejeição (RSD) e Reatividade Afetiva** | Vulnerabilidade Emocional, Hiper-reatividade Social e TDAH | `testes/teste-disforia-rejeicao.html` | ⏳ *Próximo da fila* |
+| **T-22** | **Escala de Disforia Sensível à Rejeição (RSD) e Reatividade Afetiva** | Vulnerabilidade Emocional, Hiper-reatividade Social e TDAH | `testes/teste-disforia-rejeicao.html` | ✅ Concluído |
+| **T-23** | **Inventário de Dependência de Validação Externa e Esquema de Aprovação** | Apego Inseguro, Busca Compulsiva por Dopamina Social e Esquemas | `testes/teste-validacao-externa.html` | ⏳ *Próximo da fila* |
 
 ---
 
