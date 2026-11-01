@@ -31,8 +31,8 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-22** | **Escala de Disforia Sensível à Rejeição (RSD) e Reatividade Afetiva** | Vulnerabilidade Emocional, Hiper-reatividade Social e TDAH | `testes/teste-disforia-rejeicao.html` | ✅ Concluído |
 | **T-23** | **Inventário de Dependência de Validação Externa e Esquema de Aprovação** | Apego Inseguro, Busca Compulsiva por Dopamina Social e Esquemas | `testes/teste-validacao-externa.html` | ✅ Concluído |
 | **T-24** | **Inventário de Validação Proposicional e Raciocínio Lógico Básico** | Lógica Proposicional, Princípios Clássicos e Detecção de Falácias | `testes/teste-validacao-proposicional.html` | ✅ Concluído |
-| **T-25** | **Escala de Rigor Epistêmico e Dedução Avançada** | Lógica de Predicados, Paradoxos e Inferência Formal | `testes/teste-rigor-epistemico-avancado.html` | ⏳ *Próximo da fila* |
-| **T-26** | **Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / ITQ)** | Respostas Traumáticas, Desregulação Afetiva e Alterações do Self | `testes/teste-trauma-complexo-cptsd.html` | ⏳ Aguardando |
+| **T-25** | **Escala de Rigor Epistêmico e Dedução Avançada** | Lógica de Predicados, Paradoxos e Inferência Formal | `testes/teste-rigor-epistemico-avancado.html` | ✅ Concluído |
+| **T-26** | **Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / ITQ)** | Respostas Traumáticas, Desregulação Afetiva e Alterações do Self | `testes/teste-trauma-complexo-cptsd.html` | ⏳ *Próximo da fila* |
 
 ---
 

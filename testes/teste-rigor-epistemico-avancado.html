@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Rigor Epistêmico e Dedução Avançada (T-25) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua destreza na lógica de predicados, raciocínio modal, resolução de paradoxos e tolerância à incompletude com o teste psicométrico T-25.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #0a9396;
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .dimension-header {
+            background: #e0f2fe;
+            border-left: 4px solid #0284c7;
+            padding: 12px 18px;
+            border-radius: 6px;
+            margin: 30px 0 20px 0;
+            font-weight: 700;
+            color: #0369a1;
+            font-size: 1.05em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-calc-container {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .btn-calc {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.3);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 147, 150, 0.4);
+        }
+
+        .results-box {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            margin-top: 40px;
+            border: 2px solid #0a9396;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.3em;
+            font-weight: 800;
+            padding: 10px 24px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .score-bar-bg {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 14px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .score-bar-fill {
+            background: linear-gradient(90deg, #0a9396, #ee9b00, #ca6702);
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .dimensions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .dimension-title {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .dimension-score {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .feedback-section {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 22px;
+            margin: 20px 0;
+            border-left: 4px solid #ee9b00;
+        }
+
+        .feedback-section h3 {
+            margin-top: 0;
+            color: #005f73;
+            font-size: 1.2em;
+        }
+
+        .feedback-section p {
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #001219, #005f73);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .cta-box h4 {
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .cta-box p {
+            color: #94d2bd;
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            line-height: 1.5;
+        }
+
+        .btn-schedule {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-schedule:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Rigor Epistêmico e Dedução Avançada (EREDA — T-25)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - CRP 04/42784</p>
+            </header>
+
+            <div class="test-intro-box">
+                <strong>Objetivo Clínico-Epistêmico:</strong> Esta escala autoaplicável avalia o seu grau de sofisticação lógica, controle inibitório e flexibilidade cognitiva diante de problemas formais complexos. O instrumento mensura três domínios avançados: <em>(1) Domínio dos Quantificadores Universais e Existenciais</em>; <em>(2) Discernimento Modal entre o Possível e o Necessário</em>; e <em>(3) Capacidade de Navegar por Paradoxos Autorreferenciais, Semântica de Tarski e a Incompletude de Gödel</em>.<br><br>
+                🔒 <strong>Privacidade Garantida:</strong> Todo o processamento é executado exclusivamente no seu navegador (100% client-side). Nenhuma resposta é transmitida ou gravada em servidores externos.
+            </div>
+
+            <div class="quiz-container">
+                <form id="scaleForm">
+
+                    <!-- Dimensão 1 -->
+                    <div class="dimension-header">
+                        <span>Dimensão 1: Quantificadores Universais (∀), Existenciais (∃) e Escopo Lógico</span>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">01</span>
+                            <span>Quando uma experiência importante falha, consigo reconhecer que se trata de um evento existencial isolado (∃<em>x</em>), sem transformar isso em uma regra universal punitiva de que "tudo sempre dará errado" (∀<em>x</em>).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q1" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">02</span>
+                            <span>Percebo de imediato que refutar a afirmação universal "todos os membros de um grupo têm a mesma intenção" requer encontrar apenas um único contraexemplo real, e não provar que nenhum deles tem tal intenção.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q2" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">03</span>
+                            <span>Ao debater assuntos controversos, distingo com precisão a diferença entre "alguns dados indicam um padrão" e "o padrão se aplica universalmente a todos os casos observados".</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q3" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">04</span>
+                            <span>Se uma pessoa expressa um descontentamento específico sobre uma atitude minha, consigo delimitar a crítica àquele predicado pontual sem concluir que a relação inteira foi condenada.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q4" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">05</span>
+                            <span>Tenho clareza lógica de que a negação de "nenhuma pessoa me compreende" (¬∀<em>x</em> ¬<em>C</em>(<em>x</em>)) é simplesmente "existe alguém que me compreende" (∃<em>x</em> <em>C</em>(<em>x</em>)), desarmando sentimentos de solidão absoluta.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q5" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2 -->
+                    <div class="dimension-header">
+                        <span>Dimensão 2: Raciocínio Modal — O Contingente, o Possível (◇) e o Necessário (□)</span>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">06</span>
+                            <span>Mesmo quando um cenário negativo é teoricamente possível (◇<em>Risco</em>), consigo evitar o impulso ansioso de reagir emocionalmente como se ele fosse inevitável ou necessário (□<em>Risco</em>).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q6" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">07</span>
+                            <span>Consigo conceber mentalmente realidades alternativas (mundos possíveis contrafactuais) para avaliar com lucidez se minhas escolhas passadas foram razoáveis com as informações que eu dispunha na época.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q7" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">08</span>
+                            <span>Diferencio claramente obrigações lógicas fundamentais (como o Princípio de Não-Contradição) de convenções sociais contingentes que poderiam ser diferentes em outras culturas ou contextos.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q8" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">09</span>
+                            <span>Em momentos de incerteza sobre o futuro, aceito com serenidade a presença de variáveis contingentes fora do meu controle, sem exigir que tudo seja matematicamente determinado a priori.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q9" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">10</span>
+                            <span>Identifico rapidamente quando um argumento retórico tenta me forçar a aceitar uma suposição arbitrária como se ela fosse uma verdade logicamente necessária e imutável.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q10" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3 -->
+                    <div class="dimension-header">
+                        <span>Dimensão 3: Metalinguagem, Paradoxos e Incompletude de Gödel</span>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">11</span>
+                            <span>Consigo subir para a metalinguagem (observar o fato de estar tendo um pensamento) em vez de me fundir imediatamente ao conteúdo do pensamento e tomá-lo como fato objetivo no mundo.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q11" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">12</span>
+                            <span>Percebo a armadilha de paradoxos autorreferenciais como "eu não confio em ninguém, inclusive nesta própria afirmação" e sei que tentar resolver isso no mesmo nível linguístico só gera obsessão mental.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q12" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">13</span>
+                            <span>Reconheço que a incompletude formal provada por Kurt Gödel se aplica à vida humana: nem todas as verdades sobre quem eu sou ou para onde devo ir podem ser provadas antecipadamente por fórmulas mentais fechadas.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q13" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">14</span>
+                            <span>Abandonei a ilusão de perfeccionismo absoluto: sei que exigir de mim mesmo respostas infalíveis para todos os imprevistos da existência é violar os limites matemáticos e biológicos da própria razão.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q14" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q14" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">15</span>
+                            <span>Diante de dilemas profundos e sem resposta pronta, consigo agir com base nos meus valores essenciais em vez de me paralisar em ruminações circulares em busca de uma certeza impossível.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q15" value="0">Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="1">Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="2">Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q15" value="3">Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="4">Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="btn-calc-container">
+                        <button type="button" class="btn-calc" id="btnCalculate">Calcular Rigor Epistêmico & Devolutiva Clínica</button>
+                    </div>
+                </form>
+
+                <!-- Área de Resultados -->
+                <div class="results-box" id="resultsBox">
+                    <div class="score-header">
+                        <span class="score-badge" id="scoreBadge">Pontuação: 0 / 60</span>
+                        <div class="score-bar-bg">
+                            <div class="score-bar-fill" id="progressBar"></div>
+                        </div>
+                        <h2 id="resultCategory" style="color: #005f73; margin-top: 15px;">Categoria de Rigor Epistêmico</h2>
+                        <p id="resultDescription" style="color: #475569; font-size: 1.05em; max-width: 750px; margin: 0 auto; line-height: 1.6;"></p>
+                    </div>
+
+                    <div class="dimensions-grid">
+                        <div class="dimension-card">
+                            <div class="dimension-title">Quantificadores Lógicos (D1)</div>
+                            <div class="dimension-score" id="subD1">0 / 20</div>
+                        </div>
+                        <div class="dimension-card">
+                            <div class="dimension-title">Raciocínio Modal (D2)</div>
+                            <div class="dimension-score" id="subD2">0 / 20</div>
+                        </div>
+                        <div class="dimension-card">
+                            <div class="dimension-title">Metalinguagem & Gödel (D3)</div>
+                            <div class="dimension-score" id="subD3">0 / 20</div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <h3>Interpretação Neuropsicológica e Diretriz Prática</h3>
+                        <p id="alertText"></p>
+                    </div>
+
+                    <div class="cta-box">
+                        <h4>Deseja aprofundar seu autoconhecimento e flexibilidade cognitiva?</h4>
+                        <p>O rigor intelectual aliado à autocompaixão constrói uma mente blindada contra a ansiedade e a paralisia decisória. Agende uma consulta ou avaliação neuropsicológica especializada.</p>
+                        <a href="/agendamento.html" class="btn-schedule">Agendar Consulta com Deo Magalhães</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('scaleForm');
+            const btnCalc = document.getElementById('btnCalculate');
+            const resultsBox = document.getElementById('resultsBox');
+
+            // Feedback visual na seleção das opções
+            form.querySelectorAll('.option-label').forEach(label => {
+                label.addEventListener('click', function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        const name = radio.getAttribute('name');
+                        form.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                            r.closest('.option-label').classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                    }
+                });
+            });
+
+            btnCalc.addEventListener('click', () => {
+                const totalQuestions = 15;
+                let answers = {};
+                let missing = [];
+
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                    if (selected) {
+                        answers[`q${i}`] = parseInt(selected.value);
+                    } else {
+                        missing.push(i);
+                    }
+                }
+
+                if (missing.length > 0) {
+                    alert(`Por favor, responda a todas as 15 questões antes de calcular seu resultado. Faltam responder as questões: ${missing.join(', ')}.`);
+                    return;
+                }
+
+                // Subescalas
+                // D1: Quantificadores Universais e Existenciais (Q1, Q2, Q3, Q4, Q5)
+                const d1 = answers.q1 + answers.q2 + answers.q3 + answers.q4 + answers.q5;
+                // D2: Raciocínio Modal & Contingência (Q6, Q7, Q8, Q9, Q10)
+                const d2 = answers.q6 + answers.q7 + answers.q8 + answers.q9 + answers.q10;
+                // D3: Metalinguagem, Paradoxos & Gödel (Q11, Q12, Q13, Q14, Q15)
+                const d3 = answers.q11 + answers.q12 + answers.q13 + answers.q14 + answers.q15;
+
+                const totalScore = d1 + d2 + d3;
+                const percentage = Math.round((totalScore / 60) * 100);
+
+                document.getElementById('subD1').innerText = `${d1} / 20`;
+                document.getElementById('subD2').innerText = `${d2} / 20`;
+                document.getElementById('subD3').innerText = `${d3} / 20`;
+                document.getElementById('scoreBadge').innerText = `Pontuação Total: ${totalScore} / 60 (${percentage}%)`;
+                document.getElementById('progressBar').style.width = `${percentage}%`;
+
+                let cat = '';
+                let desc = '';
+                let alertMsg = '';
+
+                if (totalScore >= 48) {
+                    cat = 'Rigor Epistêmico Elevado e Flexibilidade Metacognitiva Notável';
+                    desc = 'Seu perfil indica maturidade intelectual e cognitiva excepcional. Você distingue com facilidade eventos existenciais pontuais de regras universais punitivas, compreende que riscos possíveis não são inevitabilidades deterministas e demonstra profunda tolerância à incompletude essencial da vida, navegando por paradoxos com serenidade.';
+                    alertMsg = 'Excelente articulação entre o córtex pré-frontal e a regulação emocional. Seu desafio é continuar utilizando esse discernimento dedutivo para mediar dilemas sem se desconectar da empatia espontânea diante de pessoas presas em crenças rígidas.';
+                } else if (totalScore >= 36) {
+                    cat = 'Raciocínio Dedutivo Sólido com Vulnerabilidades Heurísticas Situacionais';
+                    desc = 'Você possui boa compreensão dos princípios de quantificação e modalidade lógica. Contudo, em cenários de alta pressão afetiva ou cansaço mental, seu cérebro pode cair em atalhos absolutistas, generalizando falhas isoladas ou exigindo certezas inalcançáveis antes de agir.';
+                    alertMsg = 'Atenção aos períodos de sobrecarga: pratique subir conscientemente para a metalinguagem (notar a mente produzindo a narrativa) antes de tomar decisões definitivas sobre relações ou rumos profissionais.';
+                } else if (totalScore >= 24) {
+                    cat = 'Suscetibilidade Moderada a Confusões Modais e Paradoxos Autodestrutivos';
+                    desc = 'Resultados que apontam dificuldade em diferenciar possibilidades remotas de certezas necessárias, gerando estados de alerta desproporcionais. Há também propensão a aceitar crenças autorreferenciais tóxicas ("se eu falhei, logo sou um fracasso") sem separação entre linguagem e fato.';
+                    alertMsg = 'Recomenda-se o treino formal de desfusão cognitiva e reestruturação de quantificadores. Exercitar a busca intencional por contraexemplos reduz expressivamente a ansiedade de catastrofização.';
+                } else {
+                    cat = 'Vulnerabilidade Epistêmica Crítica e Alta Rigidez Cognitiva';
+                    desc = 'Padrão com predomínio marcante de absolutismo ("tudo ou nada", "sempre", "nunca"), forte fusão com pensamentos intrusivos e intolerância severa à incerteza. A tentativa de exercer controle total gera esgotamento mental contínuo.';
+                    alertMsg = 'Sugere-se acompanhamento psicoterapêutico (TCC ou ACT) com foco em aceitação da incompletude, tolerância ao mal-estar e diferenciação entre pensamentos automáticos e realidade objetiva.';
+                }
+
+                document.getElementById('resultCategory').innerText = cat;
+                document.getElementById('resultDescription').innerText = desc;
+                document.getElementById('alertText').innerText = alertMsg;
+
+                resultsBox.style.display = 'block';
+                resultsBox.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

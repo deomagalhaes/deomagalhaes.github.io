@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="logica-classica" selected>Como Pensar com Clareza: Os 3 Princípios da Lógica Clássica</option>
+                        <option value="paradoxos-logica" selected>Além do Óbvio: Paradoxos e os Limites da Lógica</option>
+                        <option value="logica-classica">Como Pensar com Clareza: Os 3 Princípios da Lógica Clássica</option>
                         <option value="trauma-complexo-cptsd">Neurobiologia do Trauma Complexo (CPTSD & Dissociação)</option>
                         <option value="apego-dopamina-social">A Insegurança de Apego e o Vício em Validação Externa (Dopamina Social)</option>
                         <option value="efeito-nocebo">O Efeito Nocebo e a Dor Psicogênica (Vias Descendentes & CCK)</option>
@@ -656,6 +657,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "paradoxos-logica": {
+        "articleSlug": "2026-11-01-paradoxos-e-os-limites-da-logica",
+        "articleTitle": "Além do Óbvio: Paradoxos e os Limites da Lógica",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROCIÊNCIA & EPISTEMOLOGIA",
+                "title": "Por que tentar ter certeza de tudo adoece a sua mente?",
+                "body": "Paradoxos, os Teoremas de Gödel e como a busca obsessiva por controle absoluto gera ansiedade, rigidez cognitiva e colapso emocional.",
+                "footer": "Deslize para entender o limite da razão 👉"
+            },
+            {
+                "type": "neuro",
+                "badge": "A ILUSÃO DE CONTROLE",
+                "title": "O cérebro quer prever tudo para não sofrer",
+                "body": "O córtex pré-frontal humano busca fechar padrões para economizar energia metabólica:\n\n• Buscamos respostas definitivas para dilemas existenciais;\n• Exigimos garantias antes de qualquer escolha;\n• Acreditamos que a dúvida é um sinal de fraqueza.\n\nMas ao transformar a vida em um sistema fechado, caímos no abismo dos paradoxos.",
+                "footer": "Arraste para o lado 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "O CURTO-CIRCUITO AUTORREFERENCIAL",
+                "title": "\"Esta afirmação é falsa\"",
+                "body": "Se a frase for verdadeira, ela é falsa. Se for falsa, ela é verdadeira. A mente entra em loop perpétuo.\n\nNa clínica, o mesmo ocorre com crenças autorreferenciais tóxicas:\n\"Eu sou um fracasso absoluto e nada em mim presta\".\n\nEssa autorreferência negativa sequestra o raciocínio e paralisa a tomada de decisão.",
+                "footer": "Próximo slide 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "O TEOREMA DA INCOMPLETUDE",
+                "title": "A matemática provou: nenhum sistema é completo e seguro",
+                "body": "Em 1931, Kurt Gödel demonstrou matematicamente que em qualquer sistema formal axiomático consistente:\n\nExistem verdades reais que jamais poderão ser provadas internamente por suas próprias regras.\n\nE nenhum sistema prova sua própria consistência sozinho.\n\nA incompletude é uma lei ontológica do universo, não uma falha pessoal.",
+                "footer": "O que isso ensina 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "LINGUAGEM-OBJETO VS METALINGUAGEM",
+                "title": "A saída do labirinto: subir de nível",
+                "body": "O lógico Alfred Tarski mostrou que para não enlouquecer com paradoxos, precisamos separar:\n\n1. Linguagem-Objeto: O que sentimos (\"Sinto medo de errar\").\n2. Metalinguagem: A capacidade de observar o pensamento sem se fundir a ele (\"Noto que minha mente está produzindo medo\").\n\nEssa é a essência da Desfusão Cognitiva na ACT.",
+                "footer": "Aplicação prática 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "SAÚDE MENTAL & PERFECCIONISMO",
+                "title": "Você não precisa ser um sistema formal infalível",
+                "body": "O perfeccionista crônico tenta ser o que nem a matemática mais pura conseguiu: completo, blindado e sem margem de incerteza.\n\nExigir de si garantias absolutas sobre o futuro sobrecarrega o eixo do estresse e esgota o cérebro.\n\nA maturidade psicológica começa onde termina a pretensão de onisciência.",
+                "footer": "Veja o protocolo 👉"
+            },
+            {
+                "type": "action",
+                "badge": "LEIA NA ÍNTEGRA & TESTE T-25",
+                "title": "Aceitar os limites da razão é a porta de entrada para a paz",
+                "body": "Acabei de publicar um ensaio aprofundado sobre Lógica Avançada, Gödel, Tarski e Desfusão Cognitiva.\n\nAlém disso, disponibilizei a Escala de Rigor Epistêmico e Dedução Avançada (EREDA / T-25) gratuita no site.\n\n👉 Acesse agora em:\ndeomagalhaes.com.br (link na bio)\n\nSalve este post para exercitar sua lucidez diante de incertezas.",
+                "footer": "@deomagalhaesneuro • Compartilhe com quem busca clareza"
+            }
+        ],
+        "caption": "Você já sentiu que sua cabeça entra em parafuso toda vez que tenta encontrar uma resposta definitiva para dilemas da sua vida?\n\nMuitas pessoas sofrem de uma condição psicológica silenciosa: a intolerância radical à incerteza e o perfeccionismo epistêmico. Queremos a garantia matemática de que escolhemos a profissão certa, de que nosso relacionamento não vai falhar e de que temos controle absoluto sobre cada variável do amanhã.\n\nMas a ciência e a filosofia trazem uma lição desarmante: a busca pela certeza total é uma impossibilidade formal.\n\nEm 1931, Kurt Gödel provou em seus Teoremas da Incompletude que qualquer sistema formal axiomático consistente contém verdades que não podem ser demonstradas por suas próprias regras internas. Nenhum sistema prova sua própria consistência sozinho.\n\nQuando tentamos transformar a nossa mente em um sistema fechado e perfeito, colapsamos em ansiedade e ruminação.\n\nA saída demonstrada por Alfred Tarski e aplicada na Terapia de Aceitação e Compromisso (ACT) é subir para a metalinguagem: diferenciar a linguagem em que sentimos e vivemos da capacidade consciente de testemunhar nossos pensamentos sem nos fundirmos a eles.\n\nAcabei de disponibilizar no site:\n1. O ensaio completo sobre Lógica de Predicados, Semântica e Gödel.\n2. A Escala de Rigor Epistêmico e Dedução Avançada (T-25), 100% gratuita e privada.\n\n👉 Acesse pelo link na bio ou diretamente em deomagalhaes.com.br.\n\nVocê se considera alguém que aceita bem as dúvidas da vida ou precisa ter certeza absoluta de tudo para relaxar? Deixe sua reflexão nos comentários.\n\n#pensamentocritico #filosofiadalinguagem #teoremasdegodel #logicaavancada #epistemologia #neurociencia #psicologiaclinica #saudemental #perfeccionismo #incerteza #terapiadeaceitacaoecompromisso #desfusaocognitiva #deomagalhaes"
+    },
     "logica-classica": {
     "articleSlug": "2026-11-01-fundamentos-logica-classica",
     "articleTitle": "Como Pensar com Clareza: Os 3 Princípios da Lógica Clássica",
@@ -2410,9 +2467,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "logica-classica";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["logica-classica"].slides));
-        let currentCaption = PRESETS["logica-classica"].caption;
+        let currentPresetKey = "paradoxos-logica";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["paradoxos-logica"].slides));
+        let currentCaption = PRESETS["paradoxos-logica"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta

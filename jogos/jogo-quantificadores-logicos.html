@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 24: Matriz de Quantificadores e Teoremas Alquímicos – Deo Magalhães</title>
+    <meta name="description" content="Exercite a lógica de predicados, quantificadores (∀ e ∃), modalidades e resolução de teoremas no jogo cognitivo Matriz de Quantificadores Alquímicos.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.78em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .oracle-panel {
+            background: #001219;
+            border: 2px solid #0a9396;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            color: white;
+            box-shadow: 0 6px 25px rgba(0, 18, 25, 0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .oracle-badge {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-size: 0.75em;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .theorem-formal {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #94d2bd;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .theorem-natural {
+            font-size: 1.05em;
+            color: #e2e8f0;
+            line-height: 1.5;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .alchemical-chamber {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 25px 20px;
+            margin: 25px 0;
+            border: 1px solid #334155;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .chamber-title {
+            color: #94a3b8;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .glyphs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+            gap: 15px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .glyph-item {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+
+        .glyph-item:hover {
+            transform: translateY(-3px);
+            border-color: #0a9396;
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.3);
+        }
+
+        .glyph-icon {
+            font-size: 2.2em;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .glyph-label {
+            font-size: 0.75em;
+            color: #cbd5e1;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        /* Cores Alquímicas */
+        .color-ouro { color: #facc15; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.6)); }
+        .color-rubi { color: #f87171; filter: drop-shadow(0 0 6px rgba(248, 113, 113, 0.6)); }
+        .color-safira { color: #60a5fa; filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.6)); }
+        .color-esmeralda { color: #4ade80; filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.6)); }
+
+        .decision-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0 15px 0;
+        }
+
+        .btn-decision {
+            padding: 14px 28px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .btn-verdadeiro {
+            background: #0a9396;
+            color: white;
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.3);
+        }
+
+        .btn-verdadeiro:hover {
+            background: #005f73;
+            transform: translateY(-2px);
+        }
+
+        .btn-falso {
+            background: #ae2012;
+            color: white;
+            box-shadow: 0 4px 15px rgba(174, 32, 18, 0.3);
+        }
+
+        .btn-falso:hover {
+            background: #9b2226;
+            transform: translateY(-2px);
+        }
+
+        .btn-indecidivel {
+            background: #ee9b00;
+            color: #001219;
+            box-shadow: 0 4px 15px rgba(238, 155, 0, 0.3);
+        }
+
+        .btn-indecidivel:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .feedback-banner {
+            display: none;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 0.98em;
+            font-weight: 600;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-success {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .feedback-error {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .btn-next-level {
+            display: none;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 15px auto 0 auto;
+            transition: all 0.2s;
+        }
+
+        .btn-next-level:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(10, 147, 150, 0.4);
+        }
+
+        .audio-toggle-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .audio-toggle-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .neuro-explanation {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 35px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .neuro-explanation h3 {
+            color: #005f73;
+            margin-top: 0;
+            font-size: 1.25em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .neuro-explanation p {
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 24: Matriz de Quantificadores e Teoremas Alquímicos</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - CRP 04/42784</p>
+            </header>
+
+            <div class="game-wrapper">
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Fase</span>
+                        <span class="stat-badge-value" id="valLevel">1 / 10</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Pontos</span>
+                        <span class="stat-badge-value" id="valScore">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Sequência (Streak)</span>
+                        <span class="stat-badge-value" id="valStreak">0 🔥</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Recorde</span>
+                        <span class="stat-badge-value" id="valHighScore">0</span>
+                    </div>
+                    <div>
+                        <button type="button" class="audio-toggle-btn" id="btnAudioToggle">
+                            <span id="audioIcon">🔊</span> Som Ativo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel do Oráculo Lógico -->
+                <div class="oracle-panel">
+                    <span class="oracle-badge" id="oracleBadge">Teorema de Predicados</span>
+                    <div class="theorem-formal" id="theoremFormal">∀x (Círculo(x) → Ouro(x))</div>
+                    <div class="theorem-natural" id="theoremNatural">"Todo círculo presente na câmara alquímica é necessariamente de ouro."</div>
+                </div>
+
+                <!-- Câmara Alquímica com os Glifos -->
+                <div class="alchemical-chamber">
+                    <div class="chamber-title">
+                        <span>✦ Elementos Observados na Câmara Alquímica ✦</span>
+                    </div>
+                    <div class="glyphs-grid" id="glyphsGrid">
+                        <!-- Gerado via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Botoes de Decisao -->
+                <div class="decision-buttons">
+                    <button type="button" class="btn-decision btn-verdadeiro" id="btnVerdadeiro">
+                        <span>✓ Verdadeiro (V)</span>
+                    </button>
+                    <button type="button" class="btn-decision btn-falso" id="btnFalso">
+                        <span>✕ Falso (F)</span>
+                    </button>
+                    <button type="button" class="btn-decision btn-indecidivel" id="btnIndecidivel" style="display: none;">
+                        <span>❓ Indecidível / Paradoxo</span>
+                    </button>
+                </div>
+
+                <!-- Feedback Visual -->
+                <div class="feedback-banner" id="feedbackBanner"></div>
+                <button type="button" class="btn-next-level" id="btnNextLevel">Próximo Teorema →</button>
+            </div>
+
+            <!-- Explicacao Neurocognitiva -->
+            <div class="neuro-explanation">
+                <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Estimulação Neurocognitiva: Córtex Pré-Frontal e Lógica Formal</h3>
+                <p><strong>Córtex Pré-Frontal Dorsolateral (dlPFC):</strong> Este jogo exercita diretamente o raciocínio dedutivo formal e a memória de trabalho visual. Para verificar quantificadores universais (∀) e existenciais (∃), o dlPFC precisa sustentar a regra na mente enquanto o córtex parietal posterior varre as características multidimensionais (forma e cor) dos elementos.</p>
+                <p><strong>Área de Broca e Junção Temporo-Parietal:</strong> A tradução da notação formal (símbolos matemáticos) para sentenças em linguagem natural ativa redes de decodificação sintática complexa, fortalecendo a precisão conceitual e inibindo generalizações impulsivas.</p>
+                <p><strong>Flexibilidade e Resolução de Conflitos (dACC):</strong> Ao avançar para teoremas modais (Possibilidade ◇ e Necessidade □) e desafios de indecidibilidade inspirados em Kurt Gödel, o córtex cingulado anterior é estimulado a tolerar a incerteza e frear conclusões precipitadas baseadas em vieses heurísticos.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Web Audio API para Efeitos Sonoros Harmônicos
+        const SoundFX = {
+            ctx: null,
+            enabled: true,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+            },
+            playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.12) {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            },
+            success() {
+                this.playTone(523.25, 'triangle', 0.1, 0.12); // C5
+                setTimeout(() => this.playTone(659.25, 'triangle', 0.1, 0.12), 80); // E5
+                setTimeout(() => this.playTone(783.99, 'triangle', 0.2, 0.15), 160); // G5
+            },
+            error() {
+                this.playTone(220, 'sawtooth', 0.15, 0.1);
+                setTimeout(() => this.playTone(196, 'sawtooth', 0.25, 0.12), 100);
+            },
+            levelUp() {
+                this.playTone(440, 'sine', 0.08, 0.1);
+                setTimeout(() => this.playTone(554.37, 'sine', 0.08, 0.1), 80);
+                setTimeout(() => this.playTone(659.25, 'sine', 0.08, 0.1), 160);
+                setTimeout(() => this.playTone(880, 'sine', 0.3, 0.15), 240);
+            }
+        };
+
+        // Ícones e Formas
+        const SHAPES = {
+            circulo: '●',
+            triangulo: '▲',
+            quadrado: '■',
+            estrela: '★'
+        };
+
+        // Banco de Teoremas Determinísticos (100% Solúveis e Matematicamente Provados)
+        const LEVELS = [
+            {
+                badge: "Fase 1: Quantificador Universal (∀)",
+                formal: "∀x (Círculo(x) → Ouro(x))",
+                natural: "Todo círculo na câmara é necessariamente de ouro.",
+                chamber: [
+                    { shape: 'circulo', color: 'ouro', name: 'Círculo Ouro' },
+                    { shape: 'triangulo', color: 'rubi', name: 'Triângulo Rubi' },
+                    { shape: 'circulo', color: 'ouro', name: 'Círculo Ouro' },
+                    { shape: 'quadrado', color: 'esmeralda', name: 'Quadrado Esmeralda' }
+                ],
+                correctAnswer: 'V',
+                explanation: "Verdadeiro! Todos os círculos observados possuem a essência Ouro. O condicional se mantém consistente."
+            },
+            {
+                badge: "Fase 2: Quantificador Existencial (∃)",
+                formal: "∃x (Quadrado(x) ∧ Rubi(x))",
+                natural: "Existe pelo menos um quadrado que possui a cor Rubi.",
+                chamber: [
+                    { shape: 'quadrado', color: 'safira', name: 'Quadrado Safira' },
+                    { shape: 'triangulo', color: 'rubi', name: 'Triângulo Rubi' },
+                    { shape: 'quadrado', color: 'ouro', name: 'Quadrado Ouro' },
+                    { shape: 'estrela', color: 'rubi', name: 'Estrela Rubi' }
+                ],
+                correctAnswer: 'F',
+                explanation: "Falso! Há elementos rubis e há quadrados, mas nenhum quadrado é simultaneamente rubi."
+            },
+            {
+                badge: "Fase 3: Negação do Existencial (¬∃)",
+                formal: "¬∃x (Estrela(x) ∧ Esmeralda(x))",
+                natural: "Não existe nenhuma estrela de cor Esmeralda na câmara.",
+                chamber: [
+                    { shape: 'estrela', color: 'ouro', name: 'Estrela Ouro' },
+                    { shape: 'circulo', color: 'esmeralda', name: 'Círculo Esmeralda' },
+                    { shape: 'triangulo', color: 'safira', name: 'Triângulo Safira' },
+                    { shape: 'estrela', color: 'rubi', name: 'Estrela Rubi' }
+                ],
+                correctAnswer: 'V',
+                explanation: "Verdadeiro! As estrelas presentes são de Ouro e Rubi; nenhuma é de Esmeralda."
+            },
+            {
+                badge: "Fase 4: De Morgan para Quantificadores",
+                formal: "¬∀x (Triângulo(x) → Safira(x))",
+                natural: "Nem todo triângulo é de cor Safira (existe ao menos um triângulo não-safira).",
+                chamber: [
+                    { shape: 'triangulo', color: 'safira', name: 'Triângulo Safira' },
+                    { shape: 'triangulo', color: 'ouro', name: 'Triângulo Ouro' },
+                    { shape: 'quadrado', color: 'esmeralda', name: 'Quadrado Esmeralda' },
+                    { shape: 'circulo', color: 'rubi', name: 'Círculo Rubi' }
+                ],
+                correctAnswer: 'V',
+                explanation: "Verdadeiro! Pela Lei de De Morgan (¬∀x P(x) ≡ ∃x ¬P(x)), o triângulo de Ouro é o contraexemplo que valida o teorema."
+            },
+            {
+                badge: "Fase 5: Contraexemplo Universal",
+                formal: "∀x (Safira(x) → Quadrado(x))",
+                natural: "Todo elemento de cor Safira é um quadrado.",
+                chamber: [
+                    { shape: 'quadrado', color: 'safira', name: 'Quadrado Safira' },
+                    { shape: 'circulo', color: 'safira', name: 'Círculo Safira' },
+                    { shape: 'triangulo', color: 'rubi', name: 'Triângulo Rubi' },
+                    { shape: 'quadrado', color: 'ouro', name: 'Quadrado Ouro' }
+                ],
+                correctAnswer: 'F',
+                explanation: "Falso! O Círculo Safira viola a regra: ele é safira, mas não é um quadrado."
+            },
+            {
+                badge: "Fase 6: Lógica Modal — Possibilidade (◇)",
+                formal: "◇(∃x (Estrela(x) ∧ Ouro(x)))",
+                natural: "É possível observar ao menos uma estrela de ouro na câmara.",
+                chamber: [
+                    { shape: 'circulo', color: 'rubi', name: 'Círculo Rubi' },
+                    { shape: 'triangulo', color: 'safira', name: 'Triângulo Safira' },
+                    { shape: 'estrela', color: 'ouro', name: 'Estrela Ouro' },
+                    { shape: 'quadrado', color: 'esmeralda', name: 'Quadrado Esmeralda' }
+                ],
+                correctAnswer: 'V',
+                explanation: "Verdadeiro! Uma vez que uma estrela de ouro está factualmente presente, sua possibilidade lógica (◇) é plenamente satisfeita."
+            },
+            {
+                badge: "Fase 7: Condicional Vacuamente Verdadeiro",
+                formal: "∀x (Estrela(x) → Rubi(x))",
+                natural: "Toda estrela é rubi (atenção ao antecedente inexistente).",
+                chamber: [
+                    { shape: 'circulo', color: 'ouro', name: 'Círculo Ouro' },
+                    { shape: 'triangulo', color: 'safira', name: 'Triângulo Safira' },
+                    { shape: 'quadrado', color: 'esmeralda', name: 'Quadrado Esmeralda' },
+                    { shape: 'circulo', color: 'rubi', name: 'Círculo Rubi' }
+                ],
+                correctAnswer: 'V',
+                explanation: "Verdadeiro! Na lógica clássica, um condicional universal é vacuamente verdadeiro quando não existem elementos que satisfaçam o antecedente (não há nenhuma estrela para falsificar a regra)."
+            },
+            {
+                badge: "Fase 8: Conjunção de Predicados Universais",
+                formal: "∀x (Ouro(x) ∨ Esmeralda(x))",
+                natural: "Todos os elementos da câmara são de Ouro OU de Esmeralda.",
+                chamber: [
+                    { shape: 'circulo', color: 'ouro', name: 'Círculo Ouro' },
+                    { shape: 'quadrado', color: 'esmeralda', name: 'Quadrado Esmeralda' },
+                    { shape: 'triangulo', color: 'rubi', name: 'Triângulo Rubi' },
+                    { shape: 'estrela', color: 'ouro', name: 'Estrela Ouro' }
+                ],
+                correctAnswer: 'F',
+                explanation: "Falso! O Triângulo Rubi não é nem de Ouro nem de Esmeralda, quebrando a disjunção universal."
+            },
+            {
+                badge: "Fase 9: Lógica Modal — Necessidade (□)",
+                formal: "□(∀x (Forma(x) → ¬Vazio(x)))",
+                natural: "É necessário que todo glifo presente possua uma forma definida e não seja nulo.",
+                chamber: [
+                    { shape: 'quadrado', color: 'safira', name: 'Quadrado Safira' },
+                    { shape: 'triangulo', color: 'esmeralda', name: 'Triângulo Esmeralda' },
+                    { shape: 'circulo', color: 'rubi', name: 'Círculo Rubi' },
+                    { shape: 'estrela', color: 'ouro', name: 'Estrela Ouro' }
+                ],
+                correctAnswer: 'V',
+                explanation: "Verdadeiro! Todo elemento formalizado na axiomática da câmara possui consistência e identidade não-nula."
+            },
+            {
+                badge: "Fase 10: O Paradoxo de Gödel & Indecidibilidade",
+                formal: "G: \"Esta proposição não pode ser demonstrada apenas pelos glifos observados\"",
+                natural: "A afirmação declara sua própria indemonstrabilidade dentro deste sistema local.",
+                chamber: [
+                    { shape: 'circulo', color: 'ouro', name: 'Círculo Ouro' },
+                    { shape: 'triangulo', color: 'safira', name: 'Triângulo Safira' },
+                    { shape: 'quadrado', color: 'rubi', name: 'Quadrado Rubi' },
+                    { shape: 'estrela', color: 'esmeralda', name: 'Estrela Esmeralda' }
+                ],
+                correctAnswer: 'I',
+                showIndecidivel: true,
+                explanation: "Excelente discernimento epistêmico! Trata-se da sentença gödeliana G: se você provasse internamente que ela é verdadeira, cairia em contradição; se provasse que é falsa, violaria a consistência. É uma proposição indecidível no nível da linguagem-objeto!"
+            }
+        ];
+
+        // Estado do Jogo
+        let currentLevel = 0;
+        let score = 0;
+        let streak = 0;
+        let answered = false;
+
+        const highScoreKey = 'deo_game_quantificadores_highscore';
+        let highScore = parseInt(localStorage.getItem(highScoreKey) || '0');
+
+        // Elementos DOM
+        const elLevel = document.getElementById('valLevel');
+        const elScore = document.getElementById('valScore');
+        const elStreak = document.getElementById('valStreak');
+        const elHighScore = document.getElementById('valHighScore');
+        const elBadge = document.getElementById('oracleBadge');
+        const elFormal = document.getElementById('theoremFormal');
+        const elNatural = document.getElementById('theoremNatural');
+        const elGlyphsGrid = document.getElementById('glyphsGrid');
+        const elFeedback = document.getElementById('feedbackBanner');
+        const btnNext = document.getElementById('btnNextLevel');
+        const btnV = document.getElementById('btnVerdadeiro');
+        const btnF = document.getElementById('btnFalso');
+        const btnI = document.getElementById('btnIndecidivel');
+        const btnAudio = document.getElementById('btnAudioToggle');
+        const audioIcon = document.getElementById('audioIcon');
+
+        function updateUIStats() {
+            elLevel.innerText = `${currentLevel + 1} / ${LEVELS.length}`;
+            elScore.innerText = score;
+            elStreak.innerText = `${streak} 🔥`;
+            elHighScore.innerText = highScore;
+        }
+
+        function renderLevel(lvlIndex) {
+            answered = false;
+            elFeedback.style.display = 'none';
+            btnNext.style.display = 'none';
+
+            const lvl = LEVELS[lvlIndex];
+            elBadge.innerText = lvl.badge;
+            elFormal.innerText = lvl.formal;
+            elNatural.innerText = `"${lvl.natural}"`;
+
+            // Botão de indecidibilidade (ativo na fase 10)
+            if (lvl.showIndecidivel) {
+                btnI.style.display = 'inline-flex';
+            } else {
+                btnI.style.display = 'none';
+            }
+
+            // Renderizar Glifos na Câmara
+            elGlyphsGrid.innerHTML = '';
+            lvl.chamber.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glyph-item';
+                card.innerHTML = `
+                    <div class="glyph-icon color-${item.color}">${SHAPES[item.shape] || '●'}</div>
+                    <div class="glyph-label">${item.name}</div>
+                `;
+                elGlyphsGrid.appendChild(card);
+            });
+
+            updateUIStats();
+        }
+
+        function handleAnswer(ans) {
+            if (answered) return;
+            answered = true;
+
+            const lvl = LEVELS[currentLevel];
+            const isCorrect = (ans === lvl.correctAnswer);
+
+            elFeedback.style.display = 'block';
+
+            if (isCorrect) {
+                SoundFX.success();
+                score += 100 + (streak * 20);
+                streak++;
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem(highScoreKey, highScore.toString());
+                }
+
+                elFeedback.className = 'feedback-banner feedback-success';
+                elFeedback.innerHTML = `<strong>✨ Teorema Validado com Precisão!</strong><br>${lvl.explanation}`;
+            } else {
+                SoundFX.error();
+                streak = 0;
+                elFeedback.className = 'feedback-banner feedback-error';
+                elFeedback.innerHTML = `<strong>✕ Incoerência Lógica Detectada!</strong><br>${lvl.explanation}`;
+            }
+
+            updateUIStats();
+
+            if (currentLevel < LEVELS.length - 1) {
+                btnNext.style.display = 'inline-block';
+                btnNext.innerText = 'Próximo Teorema →';
+            } else {
+                SoundFX.levelUp();
+                btnNext.style.display = 'inline-block';
+                btnNext.innerText = 'Reiniciar Desafio Epistêmico ↺';
+            }
+        }
+
+        // Listeners
+        btnV.addEventListener('click', () => handleAnswer('V'));
+        btnF.addEventListener('click', () => handleAnswer('F'));
+        btnI.addEventListener('click', () => handleAnswer('I'));
+
+        btnNext.addEventListener('click', () => {
+            if (currentLevel < LEVELS.length - 1) {
+                currentLevel++;
+                renderLevel(currentLevel);
+            } else {
+                currentLevel = 0;
+                score = 0;
+                streak = 0;
+                renderLevel(0);
+            }
+        });
+
+        btnAudio.addEventListener('click', () => {
+            SoundFX.enabled = !SoundFX.enabled;
+            audioIcon.innerText = SoundFX.enabled ? '🔊' : '🔇';
+            btnAudio.innerHTML = `<span id="audioIcon">${SoundFX.enabled ? '🔊' : '🔇'}</span> Som ${SoundFX.enabled ? 'Ativo' : 'Mudo'}`;
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLevel(0);
+        });
+    </script>
+</body>
+</html>

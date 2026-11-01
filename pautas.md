@@ -9,9 +9,9 @@ O agente lê a primeira pauta marcada como pendente `[ ]`, produz o artigo compl
 
 Adicione novos temas, referências ou reflexões que você queira abordar:
 
-- [ ] **Lógica Avançada e Filosofia da Linguagem: Da Lógica de Predicados aos Teoremas de Gödel, Semântica e Paradoxos**
-  - *Abordagem:* Cálculo de predicados (quantificadores universal e existencial), lógica modal (necessidade e possibilidade), semântica de Tarski, paradoxos autorreferenciais (Russell, Mentiroso), os Teoremas da Incompletude de Gödel e o rigor dedutivo no pensamento clínico.
-  - *Categorias:* `filosofia`, `reabilitacao-cognitiva`, `desenvolvimento-pessoal`.
+
+
+
 
 
 - [ ] **A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social**
@@ -21,6 +21,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 ## ✅ Pautas Publicadas
 
+- [x] **Lógica Avançada e Filosofia da Linguagem: Da Lógica de Predicados aos Teoremas de Gödel, Semântica e Paradoxos** (Publicado em 01/11/2026)
 - [x] **Fundamentos da Lógica Clássica: Os Três Princípios do Pensamento, Proposições e Operadores Lógicos** (Publicado em 01/11/2026)
 
 - [x] **Neurobiologia do Trauma Complexo (CPTSD): Fragmentação da Identidade, Dissociação e Disautonomia** (Publicado em 01/11/2026)
