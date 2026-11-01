@@ -52,6 +52,14 @@ Sempre que você for solicitado a criar, revisar ou publicar um artigo para o si
   - `header.article-header`: `h1` com o título e `p.article-author-date` com "Por Deo Magalhães - Neuropsicólogo e Neurocientista - Publicado em [Data Atual]".
   - `article.article-body`: Introdução em itálico (`<p><em>...</em></p>`), seções com `<h2>` (e `<h3>`), listas explicativas, referências com `<ol class="references-list">`, divisor `<hr class="article-divider">` e disclaimer padrão:
     `Este artigo tem caráter reflexivo e educacional. Para orientações específicas sobre diagnóstico e tratamento, consulte sempre um profissional de saúde qualificado.`
+  - **PROIBIÇÃO ESTRITA DE LATEX BRUTO EM HTML (Notação Lógica, Matemática e Científica):**
+    - O site **NÃO** utiliza MathJax/KaTeX nas páginas HTML. É **TERMINANTEMENTE PROIBIDO** escrever delimitadores `$ ... $`, `$$ ... $$`, `\(...\)`, `\[...\]` ou comandos LaTeX (`\neg`, `\land`, `\lor`, `\to`, `\leftrightarrow`, `\forall`, `\exists`, `\vdash`, `\models`, `\text{}`, `\Box`, `\Diamond`, etc.) em arquivos `.html`, cards ou presets de `social/gerador.html`.
+    - Utilize **SEMPRE caracteres Unicode nativos combinados com tags HTML semânticas** (`<em>P</em>`, `<sub>`, `<sup>`):
+      - Negação: `¬<em>P</em>` ou `~<em>P</em>`
+      - Conjunção / Disjunção / XOR: `<em>P</em> ∧ <em>Q</em>`, `<em>P</em> ∨ <em>Q</em>`, `<em>P</em> ⊻ <em>Q</em>`, `<em>P</em> ⊕ <em>Q</em>`
+      - Condicional / Bicondicional / Implicação: `<em>P</em> → <em>Q</em>`, `<em>P</em> ↔ <em>Q</em>`, `⇒`, `⇔`
+      - Quantificadores e Modalidade: `∀<em>x</em>`, `∃<em>x</em>`, `□<em>P</em>` (necessário), `◇<em>P</em>` (possível)
+      - Dedução / Consequência Semântica / Pertinência: `⊢`, `⊨`, `∴`, `≡`, `≠`, `≤`, `≥`, `≈`, `∈`, `∉`, `⊂`, `⊆`, `∅`
 - **Rodapé padrão obrigatório do site**: Deve usar a estrutura com classe `footer-grid` (NÃO usar `footer-content` nem `footer-col` com logo grande no rodapé):
 ```html
 <footer class="main-footer">
@@ -107,10 +115,12 @@ Sempre que um novo artigo for criado:
 
 ## 4. Fluxo de Publicação e Git
 1. Ler o arquivo `pautas.md` e selecionar o primeiro item pendente `[ ]`.
-2. Criar o arquivo HTML do artigo em `deomagalhaes.github.io/artigos/slug.html`.
+2. Criar o arquivo HTML do artigo em `deomagalhaes.github.io/artigos/slug.html` (usando exclusivamente Unicode nativo + tags HTML para símbolos lógicos/matemáticos; zero LaTeX `$ ... $`).
 3. Inserir o card no topo de `cards-artigos.html`.
 4. Atualizar o `pautas.md` marcando a pauta como `[x]` com a data da publicação.
-5. Executar:
+5. Executar obrigatoriamente o Quality Gate antes do commit:
+   - `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-quality-gate.ps1`
+6. Executar:
    - `git add cards-artigos.html pautas.md artigos/slug.html`
    - `git commit -m "Publica artigo: Nome do Artigo"`
    - `git push origin main`

@@ -30,6 +30,7 @@ Para garantir que o Studio Visual (`social/gerador.html`), artigos e testes nunc
      - Presença obrigatória de `class="container article-container"` nos artigos.
      - Presença obrigatória de `class="container footer-grid"` no rodapé.
      - 100% de balanceamento de chaves `{ }` em `social/gerador.html`.
+     - **Zero LaTeX bruto em HTML e Social:** Bloqueio automático de delimitadores `$ ... $`, `$$`, `\(...\)` e comandos `\neg`, `\land`, `\lor`, `\to`, `\forall`, `\exists`, etc. (exigindo Unicode nativo + tags HTML `<em>`, `<sub>`, `<sup>`), reforçado por Git Hook `.git/hooks/pre-commit` e fallback client-side em `assets/script.js`.
 
 ---
 

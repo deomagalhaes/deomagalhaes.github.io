@@ -230,6 +230,59 @@ if (typeof Swiper !== 'undefined' && recentCarouselEl) {
     }
 }
 
-}); 
+// ==================================================
+// 7. SANITIZADOR DEFENSIVO ANTI-LATEX (FALLBACK EM TEMPO REAL)
+// ==================================================
+const contentBlocks = document.querySelectorAll('.article-body, .theory-card');
+if (contentBlocks.length > 0) {
+    const latexQuickCheck = /(\$[^$\r\n]{1,120}\$|\\(neg|land|lor|to|leftrightarrow|forall|exists|therefore|sim|veebar|oplus|text|implies|iff|equiv|vdash|models|neq|leq|geq|approx|Box|Diamond)\b)/;
+    const latexSymbols = {
+        '\\neg': '\u00AC', '\\sim': '~', '\\land': '\u2227', '\\lor': '\u2228',
+        '\\veebar': '\u22BB', '\\oplus': '\u2295', '\\to': '\u2192', '\\rightarrow': '\u2192',
+        '\\leftarrow': '\u2190', '\\leftrightarrow': '\u2194', '\\implies': '\u21D2',
+        '\\Rightarrow': '\u21D2', '\\iff': '\u21D4', '\\Leftrightarrow': '\u21D4',
+        '\\forall': '\u2200', '\\exists': '\u2203', '\\therefore': '\u2234',
+        '\\vdash': '\u22A2', '\\models': '\u22A8', '\\equiv': '\u2261',
+        '\\neq': '\u2260', '\\leq': '\u2264', '\\geq': '\u2265', '\\approx': '\u2248',
+        '\\pm': '\u00B1', '\\times': '\u00D7', '\\cdot': '\u00B7',
+        '\\subset': '\u2282', '\\subseteq': '\u2286', '\\in': '\u2208', '\\notin': '\u2209',
+        '\\cup': '\u222A', '\\cap': '\u2229', '\\emptyset': '\u2205',
+        '\\Box': '\u25A1', '\\Diamond': '\u25C7'
+    };
+
+    const sanitizeLatexString = (str) => {
+        let out = str.replace(/\\text\{([^}]*)\}/g, '$1');
+        for (const [cmd, sym] of Object.entries(latexSymbols)) {
+            out = out.split(cmd).join(sym);
+        }
+        out = out.replace(/([\u00AC~\u25A1\u25C7\u2200\u2203])\s+([A-Za-z])/g, '$1$2');
+        out = out.replace(/(?<![A-Za-z])\$([^$\r\n]{1,120})\$/g, (_, inner) => inner.trim());
+        return out;
+    };
+
+    contentBlocks.forEach(block => {
+        const rawText = (block.textContent || '').replace(/(R|US)\$\s*\d/g, '');
+        if (!latexQuickCheck.test(rawText)) return;
+
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT, {
+            acceptNode: (node) => {
+                const parentTag = node.parentElement ? node.parentElement.tagName : '';
+                if (['SCRIPT', 'STYLE', 'CODE', 'PRE', 'TEXTAREA'].includes(parentTag)) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                const cleaned = node.nodeValue.replace(/(R|US)\$\s*\d/g, '');
+                return latexQuickCheck.test(cleaned) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+            }
+        });
+
+        const nodesToFix = [];
+        while (walker.nextNode()) nodesToFix.push(walker.currentNode);
+        nodesToFix.forEach(node => {
+            node.nodeValue = sanitizeLatexString(node.nodeValue);
+        });
+    });
+}
+
+});
 
 // Fim do 'DOMContentLoaded'
