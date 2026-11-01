@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 23: Circuito das Portas da Verdade (Conectivos e Silogismos) – Deo Magalhães</title>
+    <meta name="description" content="Exercite o raciocínio dedutivo, lógica proposicional e tabelas-verdade no Circuito das Portas da Verdade. Conecte proposições e ilumine a saída lógica.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.78em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .level-goal-panel {
+            background: #f0fdf4;
+            border: 2px dashed #0a9396;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .level-goal-panel h3 {
+            margin: 0 0 6px 0;
+            color: #005f73;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .level-goal-panel p {
+            margin: 0;
+            color: #334155;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .circuit-canvas {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 30px 20px;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+            color: white;
+            position: relative;
+        }
+
+        .circuit-section-title {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .switches-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .switch-card {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+            min-width: 110px;
+        }
+
+        .switch-card:hover {
+            transform: translateY(-2px);
+            border-color: #0a9396;
+        }
+
+        .switch-card.active {
+            background: #005f73;
+            border-color: #94d2bd;
+            box-shadow: 0 0 15px rgba(10, 147, 150, 0.5);
+        }
+
+        .switch-var {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #e2e8f0;
+        }
+
+        .switch-val {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .switch-card.active .switch-val {
+            color: #5eead4;
+        }
+
+        .switch-card:not(.active) .switch-val {
+            color: #ef4444;
+        }
+
+        .gates-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 650px;
+            margin: 0 auto 25px auto;
+        }
+
+        .gate-row {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+            font-size: 1.05em;
+        }
+
+        .gate-type-badge {
+            background: #0a9396;
+            color: white;
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .gate-output-pill {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .gate-output-pill.true {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid #10b981;
+        }
+
+        .gate-output-pill.false {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #ef4444;
+        }
+
+        .master-output-box {
+            background: #020617;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 18px;
+            max-width: 400px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .master-output-box.success {
+            border-color: #10b981;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .master-output-label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .master-output-status {
+            font-size: 1.5em;
+            font-weight: 800;
+        }
+
+        .master-output-box.success .master-output-status {
+            color: #34d399;
+        }
+
+        .master-output-box:not(.success) .master-output-status {
+            color: #f87171;
+        }
+
+        .controls-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn-game {
+            background: #005f73;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-game:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .btn-game.secondary {
+            background: #64748b;
+        }
+
+        .btn-game.secondary:hover {
+            background: #475569;
+        }
+
+        .btn-game.success {
+            background: #10b981;
+        }
+
+        .btn-game.success:hover {
+            background: #059669;
+        }
+
+        .feedback-banner {
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            min-height: 28px;
+        }
+
+        .neuro-explanation {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 35px;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .neuro-explanation h3 {
+            color: #005f73;
+            margin: 0 0 12px 0;
+            font-size: 1.3em;
+        }
+
+        .neuro-explanation p {
+            color: #475569;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+            <header class="test-header" style="text-align: center; margin-bottom: 25px;">
+                <span class="test-badge" style="background: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8em; text-transform: uppercase;">Treino Cognitivo Diário • Dia 23</span>
+                <h1 style="color: #005f73; margin-top: 10px; font-size: 2.2em;">Circuito das Portas da Verdade</h1>
+                <p style="color: #64748b; font-size: 1.05em; max-width: 760px; margin: 10px auto;">
+                    Conectivos lógicos, tabelas-verdade e silogismos dedutivos: ative as chaves corretas para energizar o circuito neural e atingir a verdade lógica.
+                </p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status do Jogo -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Nível</span>
+                        <span class="stat-badge-value" id="levelDisplay">1 / 5</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Movimentos</span>
+                        <span class="stat-badge-value" id="movesDisplay">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Tempo</span>
+                        <span class="stat-badge-value" id="timerDisplay">00:00</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Recorde</span>
+                        <span class="stat-badge-value" id="bestScoreDisplay">--</span>
+                    </div>
+                </div>
+
+                <!-- Painel da Meta do Nível -->
+                <div class="level-goal-panel">
+                    <h3 id="levelTitle">Nível 1: Conjunção e Disjunção Elementares</h3>
+                    <p id="levelInstructions">Ajuste os valores de verdade das proposições para que a saída final cumpra os requisitos do circuito.</p>
+                </div>
+
+                <!-- Circuito Neural Interativo -->
+                <div class="circuit-canvas">
+                    <div class="circuit-section-title">Chaves de Proposições (Clique para alternar Verdadeiro / Falso)</div>
+                    <div class="switches-grid" id="switchesContainer"></div>
+
+                    <div class="circuit-section-title">Portas Lógicas em Operação</div>
+                    <div class="gates-container" id="gatesContainer"></div>
+
+                    <div class="master-output-box" id="masterBox">
+                        <div class="master-output-label">Status da Saída do Circuito</div>
+                        <div class="master-output-status" id="masterStatus">PENDENTE</div>
+                    </div>
+                </div>
+
+                <div class="feedback-banner" id="feedbackBanner" style="color: #64748b;">
+                    Clique nas proposições para alterar seus valores lógicos.
+                </div>
+
+                <div class="controls-toolbar">
+                    <button class="btn-game secondary" id="btnReset">Reiniciar Nível</button>
+                    <button class="btn-game success" id="btnNext" style="display: none;">Próximo Desafio ➔</button>
+                </div>
+
+                <!-- Explicação Neuropsicológica -->
+                <div class="neuro-explanation">
+                    <h3>🧠 Neurociência do Raciocínio Proposicional</h3>
+                    <p>
+                        A resolução de problemas baseados em tabelas-verdade e operadores booleanos exige um esforço sustentado do <strong>Córtex Pré-Frontal Dorsolateral (dlPFC)</strong> e do <strong>Sulco Intraparietal</strong>. Essas áreas cerebrais mantêm as variáveis ativas na memória de trabalho operacional enquanto realizam operações de negação, conjunção e dedução condicional.
+                    </p>
+                    <p>
+                        Treinar a manipulação de portas de verdade estimula o controle inibitório sobre o Sistema 1 intuitivo, habituando a mente a verificar se uma conclusão decorre estritamente das premissas antes de aceitá-la como verdade na vida cotidiana.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        // Sistema Web Audio API (Sons Sintetizados Nativos)
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+            },
+            play(freq, type = 'sine', duration = 0.1, gainVal = 0.1) {
+                try {
+                    this.init();
+                    if (this.ctx.state === 'suspended') this.ctx.resume();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            },
+            toggleSwitch(val) {
+                this.play(val ? 580 : 360, 'sine', 0.08, 0.09);
+            },
+            levelWin() {
+                this.play(440, 'triangle', 0.12, 0.12);
+                setTimeout(() => this.play(554.37, 'triangle', 0.12, 0.12), 90);
+                setTimeout(() => this.play(659.25, 'triangle', 0.15, 0.14), 180);
+                setTimeout(() => this.play(880, 'sine', 0.35, 0.15), 290);
+            },
+            gameWin() {
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((f, i) => {
+                    setTimeout(() => this.play(f, 'sine', 0.3, 0.16), i * 130);
+                });
+            }
+        };
+
+        // Definição dos 5 Níveis Validados Matematicamente (100% Solúveis)
+        const LEVELS = [
+            {
+                id: 1,
+                title: "Nível 1: Conjunção (E) e Disjunção (OU)",
+                desc: "Objetivo: Encontre valores para P e Q de forma que a Conjunção (P ∧ Q) seja FALSA e a Disjunção (P ∨ Q) seja VERDADEIRA.",
+                vars: { P: 1, Q: 1 },
+                evaluate(v) {
+                    const and = (v.P === 1 && v.Q === 1) ? 1 : 0;
+                    const or = (v.P === 1 || v.Q === 1) ? 1 : 0;
+                    const gates = [
+                        { name: "Porta 1 (Conjunção E)", expr: "P ∧ Q", val: and, target: 0 },
+                        { name: "Porta 2 (Disjunção OU)", expr: "P ∨ Q", val: or, target: 1 }
+                    ];
+                    const solved = (and === 0 && or === 1);
+                    return { gates, solved };
+                }
+            },
+            {
+                id: 2,
+                title: "Nível 2: Inversão Neural (Porta NÃO e Negação)",
+                desc: "Objetivo: A saída exige que a Negação de P combinada com Q através de uma conjunção resulte em VERDADEIRO (1).",
+                vars: { P: 1, Q: 0 },
+                evaluate(v) {
+                    const notP = (v.P === 0) ? 1 : 0;
+                    const master = (notP === 1 && v.Q === 1) ? 1 : 0;
+                    const gates = [
+                        { name: "Inversor (NÃO)", expr: "¬P", val: notP },
+                        { name: "Porta Principal", expr: "(¬P) ∧ Q", val: master, target: 1 }
+                    ];
+                    const solved = (master === 1);
+                    return { gates, solved };
+                }
+            },
+            {
+                id: 3,
+                title: "Nível 3: O Dilema da Exclusão (Porta XOR e Silogismo)",
+                desc: "Objetivo: A Porta XOR (P ⊕ Q) deve ser verdadeira (exatamente um deles verdadeiro) E a proposição R também deve ser verdadeira.",
+                vars: { P: 1, Q: 1, R: 0 },
+                evaluate(v) {
+                    const xor = ((v.P === 1 && v.Q === 0) || (v.P === 0 && v.Q === 1)) ? 1 : 0;
+                    const master = (xor === 1 && v.R === 1) ? 1 : 0;
+                    const gates = [
+                        { name: "Porta XOR (OU Exclusivo)", expr: "P ⊕ Q", val: xor, target: 1 },
+                        { name: "Porta Principal (E)", expr: "(P ⊕ Q) ∧ R", val: master, target: 1 }
+                    ];
+                    const solved = (master === 1);
+                    return { gates, solved };
+                }
+            },
+            {
+                id: 4,
+                title: "Nível 4: A Regra da Condicional (Modus Ponens: P → Q)",
+                desc: "Objetivo: A condicional P → Q afirma que se P for verdadeiro, Q não pode falhar. Mantenha P Verdadeiro, R Verdadeiro e garanta que o circuito resulte em 1.",
+                vars: { P: 1, Q: 0, R: 1 },
+                evaluate(v) {
+                    const cond = (v.P === 1 && v.Q === 0) ? 0 : 1;
+                    const master = (cond === 1 && v.R === 1 && v.P === 1) ? 1 : 0;
+                    const gates = [
+                        { name: "Implicação Lógica", expr: "P → Q", val: cond, target: 1 },
+                        { name: "Conjunção Final", expr: "(P → Q) ∧ P ∧ R", val: master, target: 1 }
+                    ];
+                    const solved = (master === 1);
+                    return { gates, solved };
+                }
+            },
+            {
+                id: 5,
+                title: "Nível 5: O Grande Circuito Dialético (Silogismo Completo)",
+                desc: "Objetivo: Valide a cadeia de silogismos (A → B) ∧ (B → C) e a disjunção exclusiva (C ⊕ D) com premissa A = Verdadeiro.",
+                vars: { A: 1, B: 0, C: 0, D: 1 },
+                evaluate(v) {
+                    const g1 = (v.A === 1 && v.B === 0) ? 0 : 1;
+                    const g2 = (v.B === 1 && v.C === 0) ? 0 : 1;
+                    const g3 = (g1 === 1 && g2 === 1) ? 1 : 0;
+                    const g4 = ((v.C === 1 && v.D === 0) || (v.C === 0 && v.D === 1)) ? 1 : 0;
+                    const master = (g3 === 1 && g4 === 1 && v.A === 1) ? 1 : 0;
+                    const gates = [
+                        { name: "Passo 1 (A → B)", expr: "A → B", val: g1 },
+                        { name: "Passo 2 (B → C)", expr: "B → C", val: g2 },
+                        { name: "Passo 3 (C ⊕ D)", expr: "C ⊕ D", val: g4 },
+                        { name: "Saída Dialética Master", expr: "[(A→B) ∧ (B→C)] ∧ (C⊕D)", val: master, target: 1 }
+                    ];
+                    const solved = (master === 1);
+                    return { gates, solved };
+                }
+            }
+        ];
+
+        let currentLevelIdx = 0;
+        let currentVars = {};
+        let moves = 0;
+        let isLevelCompleted = false;
+        let seconds = 0;
+        let timerInterval = null;
+
+        const DOM = {
+            level: document.getElementById('levelDisplay'),
+            moves: document.getElementById('movesDisplay'),
+            timer: document.getElementById('timerDisplay'),
+            bestScore: document.getElementById('bestScoreDisplay'),
+            title: document.getElementById('levelTitle'),
+            desc: document.getElementById('levelInstructions'),
+            switches: document.getElementById('switchesContainer'),
+            gates: document.getElementById('gatesContainer'),
+            masterBox: document.getElementById('masterBox'),
+            masterStatus: document.getElementById('masterStatus'),
+            feedback: document.getElementById('feedbackBanner'),
+            btnReset: document.getElementById('btnReset'),
+            btnNext: document.getElementById('btnNext')
+        };
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const secs = String(seconds % 60).padStart(2, '0');
+                DOM.timer.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function loadSavedScore() {
+            const saved = localStorage.getItem('portas_verdade_highscore');
+            if (saved) {
+                DOM.bestScore.innerText = `${saved} pts`;
+            }
+        }
+
+        function initLevel(lvlIdx) {
+            currentLevelIdx = lvlIdx;
+            const lvl = LEVELS[currentLevelIdx];
+            currentVars = JSON.parse(JSON.stringify(lvl.vars));
+            isLevelCompleted = false;
+            DOM.btnNext.style.display = 'none';
+
+            DOM.level.innerText = `${lvl.id} / ${LEVELS.length}`;
+            DOM.title.innerText = lvl.title;
+            DOM.desc.innerText = lvl.desc;
+            DOM.feedback.innerText = 'Alterne as variáveis e observe a propagação lógica.';
+            DOM.feedback.style.color = '#64748b';
+
+            renderSwitches();
+            evaluateCircuit();
+
+            if (lvlIdx === 0 && !timerInterval) {
+                startTimer();
+            }
+        }
+
+        function renderSwitches() {
+            DOM.switches.innerHTML = '';
+            Object.keys(currentVars).forEach(vKey => {
+                const val = currentVars[vKey];
+                const card = document.createElement('div');
+                card.className = `switch-card ${val === 1 ? 'active' : ''}`;
+                card.innerHTML = `
+                    <div class="switch-var">${vKey}</div>
+                    <div class="switch-val">${val === 1 ? 'V (1)' : 'F (0)'}</div>
+                `;
+                card.addEventListener('click', () => {
+                    if (isLevelCompleted) return;
+                    currentVars[vKey] = currentVars[vKey] === 1 ? 0 : 1;
+                    moves++;
+                    DOM.moves.innerText = moves;
+                    SoundFX.toggleSwitch(currentVars[vKey]);
+                    renderSwitches();
+                    evaluateCircuit();
+                });
+                DOM.switches.appendChild(card);
+            });
+        }
+
+        function evaluateCircuit() {
+            const lvl = LEVELS[currentLevelIdx];
+            const result = lvl.evaluate(currentVars);
+
+            DOM.gates.innerHTML = '';
+            result.gates.forEach(g => {
+                const row = document.createElement('div');
+                row.className = 'gate-row';
+                row.innerHTML = `
+                    <div>
+                        <span class="gate-type-badge">${g.name}</span>
+                        <span style="color: #cbd5e1; margin-left: 8px;">${g.expr}</span>
+                    </div>
+                    <span class="gate-output-pill ${g.val === 1 ? 'true' : 'false'}">
+                        ${g.val === 1 ? 'VERDADEIRO (1)' : 'FALSO (0)'}
+                    </span>
+                `;
+                DOM.gates.appendChild(row);
+            });
+
+            if (result.solved) {
+                DOM.masterBox.className = 'master-output-box success';
+                DOM.masterStatus.innerText = 'CONECTADO (VERDADEIRO)';
+                handleLevelWin();
+            } else {
+                DOM.masterBox.className = 'master-output-box';
+                DOM.masterStatus.innerText = 'NÃO SATISFEITO';
+            }
+        }
+
+        function handleLevelWin() {
+            if (isLevelCompleted) return;
+            isLevelCompleted = true;
+            SoundFX.levelWin();
+            DOM.feedback.innerText = `Excelente! Circuito do Nível ${LEVELS[currentLevelIdx].id} validado com sucesso!`;
+            DOM.feedback.style.color = '#0a9396';
+
+            if (currentLevelIdx < LEVELS.length - 1) {
+                DOM.btnNext.style.display = 'inline-block';
+            } else {
+                clearInterval(timerInterval);
+                SoundFX.gameWin();
+                const totalScore = Math.max(100, 1000 - (moves * 15) - (seconds * 3));
+                DOM.feedback.innerText = `Parabéns! Todos os circuitos lógicos foram dominados! Pontuação Final: ${totalScore} pts!`;
+                DOM.feedback.style.color = '#ee9b00';
+
+                const prevHigh = parseInt(localStorage.getItem('portas_verdade_highscore') || '0');
+                if (totalScore > prevHigh) {
+                    localStorage.setItem('portas_verdade_highscore', totalScore);
+                    loadSavedScore();
+                }
+            }
+        }
+
+        DOM.btnReset.addEventListener('click', () => initLevel(currentLevelIdx));
+        DOM.btnNext.addEventListener('click', () => {
+            if (currentLevelIdx < LEVELS.length - 1) {
+                initLevel(currentLevelIdx + 1);
+            }
+        });
+
+        // Inicialização
+        loadSavedScore();
+        initLevel(0);
+    </script>
+</body>
+</html>

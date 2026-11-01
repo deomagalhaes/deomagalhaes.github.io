@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Validação Proposicional e Raciocínio Lógico Básico (T-24) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu rigor inferencial, capacidade de detecção de falácias e domínio dos princípios da lógica clássica com este instrumento psicoeducativo T-24.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #0a9396;
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-calc-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn-calculate {
+            background: #005f73;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.3);
+        }
+
+        .btn-calculate:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .results-box {
+            display: none;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 35px;
+            border: 2px solid #005f73;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .results-header h3 {
+            color: #005f73;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.2em;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .progress-track {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 15px auto;
+            max-width: 500px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #0a9396, #ee9b00);
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .subscale-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+        }
+
+        .subscale-card h4 {
+            color: #005f73;
+            margin: 0 0 6px 0;
+            font-size: 0.95em;
+        }
+
+        .subscale-card .score {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #ee9b00;
+        }
+
+        .clinical-alert {
+            background: #eff6ff;
+            border-left: 4px solid #0284c7;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            color: #1e3a8a;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+            <header class="test-header" style="text-align: center; margin-bottom: 25px;">
+                <span class="test-badge" style="background: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8em; text-transform: uppercase;">Instrumento T-24</span>
+                <h1 style="color: #005f73; margin-top: 10px; font-size: 2.2em;">Inventário de Validação Proposicional e Raciocínio Lógico Básico</h1>
+                <p style="color: #64748b; font-size: 1.05em; max-width: 760px; margin: 10px auto;">
+                    Avalie a sua capacidade de estruturar inferências dedutivas, operar com conectivos de verdade e blindar o raciocínio contra falácias e distorções cognitivas.
+                </p>
+            </header>
+
+            <div class="test-intro-box">
+                <strong>Orientações:</strong> Responda às 15 questões abaixo pensando em como você tipicamente analisa informações, argumentos e decisões na sua rotina pessoal e profissional. Este teste é <strong>100% privado</strong>: os dados são processados localmente no seu navegador e não são transmitidos a servidores externos.
+            </div>
+
+            <div class="quiz-container">
+                <form id="quizForm">
+                    <!-- Q1 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">01</span>
+                            <span>Quando debato ou analiso um tema, garanto que termos fundamentais mantenham o mesmo significado do início ao fim, evitando trocar de sentido no meio da conversa (Princípio de Identidade).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q1" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">02</span>
+                            <span>Compreendo com facilidade a diferença entre uma conjunção ("E") e uma disjunção ("OU"): se um resultado exige duas condições simultâneas, sei que a falta de uma invalida o todo.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q2" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">03</span>
+                            <span>Consigo separar a intensidade emocional (medo, empolgação, raiva) da validade objetiva dos argumentos que estou avaliando.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q3" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">04</span>
+                            <span>Percebo rapidamente quando sustento duas convicções mutuamente contraditórias e busco solucionar a incoerência em vez de usar desculpas (Princípio de Não-Contradição).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q4" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">05</span>
+                            <span>Em uma condicional "Se A, então B", compreendo que o fato de B acontecer não prova obrigatoriamente que A ocorreu (evito a falácia de afirmação do consequente).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q5" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">06</span>
+                            <span>Evito o pensamento dicotômico de "tudo ou nada" (ex: "se não for perfeito, é um desastre"), reconhecendo que a maioria das situações humanas admite gradações.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q6" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">07</span>
+                            <span>Ao analisar sentenças factuais bem definidas, reconheço que uma proposição ou é verdadeira ou é falsa, sem criar subterfúgios para escapar da realidade (Princípio do Terceiro Excluído).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q7" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">08</span>
+                            <span>Reconheço que "Se chover, a rua molha" não autoriza concluir que "Se não chover, a rua estará seca" (evito a falácia da negação do antecedente).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q8" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">09</span>
+                            <span>Quando alguém ataca a pessoa ou o caráter de quem fala em vez de rebater o argumento (falácia ad hominem), percebo a fraqueza lógica da réplica.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q9" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">10</span>
+                            <span>Consigo identificar prontamente a falácia do "espantalho", quando alguém caricature ou exagera o que eu disse para tentar refutar uma ideia que não defendi.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q10" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q11 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">11</span>
+                            <span>Em acordos e tomadas de decisão, diferencio claramente uma disjunção exclusiva ("ou você escolhe A ou B, nunca ambos") de uma inclusiva ("A ou B, podendo ser os dois").</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q11" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q12 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">12</span>
+                            <span>Evito generalizações apressadas: não tomo um caso isolado ou uma experiência negativa específica como uma lei universal e imutável sobre um grupo ou situação.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q12" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q13 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">13</span>
+                            <span>Se evidências empíricas sólidas provam que uma premissa minha estava incorreta, reformulo ou abandono a conclusão sem teimosia desnecessária.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q13" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q14 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">14</span>
+                            <span>Em relacionamentos ou negociações, analiso a estrutura exata das promessas ("Se você fizer X, farei Y") antes de assumir culpas ou cobranças indevidas.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q14" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q14" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q15 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">15</span>
+                            <span>Reconheço que sucessão temporal não implica causa: o fato de um evento ocorrer após outro não significa necessariamente que o primeiro causou o segundo.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q15" value="0"> Raras vezes</label>
+                            <label class="option-label"><input type="radio" name="q15" value="1"> Ocasionalmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"> Quase Sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="btn-calc-container">
+                        <button type="button" id="btnCalculate" class="btn-calculate">Calcular Validação Proposicional →</button>
+                    </div>
+                </form>
+
+                <!-- Área de Resultados -->
+                <div id="resultsBox" class="results-box">
+                    <div class="results-header">
+                        <span class="score-badge" id="scoreBadge">Pontuação: 0 / 60</span>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progressBar"></div>
+                        </div>
+                        <h3 id="resultCategory">Carregando perfil...</h3>
+                        <p id="resultDescription" style="color: #475569; font-size: 1.05em; line-height: 1.6; max-width: 720px; margin: 0 auto;"></p>
+                    </div>
+
+                    <div class="subscales-grid">
+                        <div class="subscale-card">
+                            <h4>Princípios Clássicos & Coerência</h4>
+                            <div class="score" id="subD1">0 / 20</div>
+                            <small style="color: #64748b;">Identidade, Não-Contradição e Terceiro Excluído</small>
+                        </div>
+                        <div class="subscale-card">
+                            <h4>Conectivos & Raciocínio Condicional</h4>
+                            <div class="score" id="subD2">0 / 20</div>
+                            <small style="color: #64748b;">Condicionais, Conjunções e Implicação</small>
+                        </div>
+                        <div class="subscale-card">
+                            <h4>Imunidade a Falácias & Distorções</h4>
+                            <div class="score" id="subD3">0 / 20</div>
+                            <small style="color: #64748b;">Proteção contra atalhos e falácias formais</small>
+                        </div>
+                    </div>
+
+                    <div class="clinical-alert">
+                        <strong>Orientação Neurocognitiva:</strong>
+                        <p id="alertText" style="margin: 6px 0 0 0;"></p>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="/artigos/fundamentos-logica-classica-proposicoes-operadores.html" class="btn-calculate" style="text-decoration: none; display: inline-block; background: #0a9396;">
+                            Ler Ensaio Completo Sobre Lógica Clássica ➔
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const btnCalc = document.getElementById('btnCalculate');
+            const resultsBox = document.getElementById('resultsBox');
+
+            // Feedback visual ao clicar nas opções
+            form.querySelectorAll('.option-label').forEach(label => {
+                label.addEventListener('click', function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        const name = radio.getAttribute('name');
+                        form.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                            r.closest('.option-label').classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                    }
+                });
+            });
+
+            btnCalc.addEventListener('click', () => {
+                const totalQuestions = 15;
+                let answers = {};
+                let missing = [];
+
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                    if (selected) {
+                        answers[`q${i}`] = parseInt(selected.value);
+                    } else {
+                        missing.push(i);
+                    }
+                }
+
+                if (missing.length > 0) {
+                    alert(`Por favor, responda a todas as 15 questões antes de calcular o resultado. Faltam responder as questões: ${missing.join(', ')}.`);
+                    return;
+                }
+
+                // Subescalas
+                // D1: Princípios Clássicos & Coerência (Q1, Q4, Q7, Q10, Q13)
+                const d1 = answers.q1 + answers.q4 + answers.q7 + answers.q10 + answers.q13;
+                // D2: Conectivos & Raciocínio Condicional (Q2, Q5, Q8, Q11, Q14)
+                const d2 = answers.q2 + answers.q5 + answers.q8 + answers.q11 + answers.q14;
+                // D3: Imunidade a Falácias & Distorções Cognitivas (Q3, Q6, Q9, Q12, Q15)
+                const d3 = answers.q3 + answers.q6 + answers.q9 + answers.q12 + answers.q15;
+
+                const totalScore = d1 + d2 + d3;
+                const percentage = Math.round((totalScore / 60) * 100);
+
+                document.getElementById('subD1').innerText = `${d1} / 20`;
+                document.getElementById('subD2').innerText = `${d2} / 20`;
+                document.getElementById('subD3').innerText = `${d3} / 20`;
+                document.getElementById('scoreBadge').innerText = `Pontuação Total: ${totalScore} / 60 (${percentage}%)`;
+                document.getElementById('progressBar').style.width = `${percentage}%`;
+
+                let cat = '';
+                let desc = '';
+                let alertMsg = '';
+
+                if (totalScore >= 48) {
+                    cat = 'Rigor Lógico Elevado e Clareza Analítica (Excelente Discernimento Proposicional)';
+                    desc = 'Seu perfil indica sólida capacidade de pensamento dedutivo formal e alta imunidade a falácias cognitivas. Você opera primordialmente sob o controle do córtex pré-frontal dorsolateral, diferenciando premissas de conclusões e mantendo a coerência lógica mesmo em situações de debate caloroso.';
+                    alertMsg = 'Excelente flexibilidade epistêmica e capacidade de separar fatos de sentimentos viscerais. Continue utilizando esse rigor para desarmar distorções em projetos complexos e para mediar conflitos com assertividade fundamentada.';
+                } else if (totalScore >= 36) {
+                    cat = 'Raciocínio Lógico Consistente com Vulnerabilidades Heurísticas Situacionais';
+                    desc = 'Você demonstra bom domínio dos princípios lógicos fundamentais, mas sob condições de estresse emocional, fadiga decisória ou urgência temporal, o Sistema 1 intuitivo pode introduzir atalhos falaciosos (como pensamento dicotômico ou afirmação do consequente).';
+                    alertMsg = 'Atenção aos momentos de cansaço mental ou envolvimento afetivo intenso: faça pausas estratégicas e explicite no papel as premissas de suas decisões antes de agir impulsivamente.';
+                } else if (totalScore >= 24) {
+                    cat = 'Suscetibilidade Moderada a Falácias e Conectivos Ambíguos';
+                    desc = 'Seus resultados indicam uma tendência expressiva a aceitar argumentos falaciosos por apelo emocional, confundir causa com mera correlação ou aceitar premissas contraditórias sem perceber a dissonância subjacente.';
+                    alertMsg = 'Praticar a decomposição de problemas em tabelas-verdade simples e checar se conclusões decorrem necessariamente das premissas fortalecerá substancialmente suas funções executivas e reduzirá a vulnerabilidade a distorções cognitivas.';
+                } else {
+                    cat = 'Vulnerabilidade Crítica a Distorções Lógicas e Pensamento Emocional';
+                    desc = 'Padrão com forte predomínio de reatividade emocional e atalhos heurísticos não filtrados. É comum saltar para conclusões catastróficas, cair em falsas dicotomias (tudo ou nada) e personificar argumentos, gerando sofrimento psíquico desnecessário.';
+                    alertMsg = 'Recomenda-se treino neurocognitivo de funções executivas e reestruturação cognitiva (TCC). Aprender a formalizar logicamente os pensamentos automáticos é o primeiro passo para resgatar a calma e a clareza decisória.';
+                }
+
+                document.getElementById('resultCategory').innerText = cat;
+                document.getElementById('resultDescription').innerText = desc;
+                document.getElementById('alertText').innerText = alertMsg;
+
+                resultsBox.style.display = 'block';
+                resultsBox.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

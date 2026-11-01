@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **01/11/2026** | **Fundamentos da Lógica Clássica: Os 3 Princípios e Conectivos** | [social/2026-11-01-fundamentos-logica-classica.md](2026-11-01-fundamentos-logica-classica.md) | ✅ Pronto para postar |
 | **01/11/2026** | **Neurobiologia do Trauma Complexo (CPTSD & Dissociação)** | [social/2026-11-01-trauma-complexo-cptsd-dissociacao.md](2026-11-01-trauma-complexo-cptsd-dissociacao.md) | ✅ Pronto para postar |
 | **01/11/2026** | **A Insegurança de Apego e o Vício em Validação Externa** | [social/2026-11-01-inseguranca-apego-dopamina-social.md](2026-11-01-inseguranca-apego-dopamina-social.md) | ✅ Pronto para postar |
 | **31/10/2026** | **O Efeito Nocebo e a Neurobiologia da Dor Psicogênica** | [social/2026-10-31-efeito-nocebo-dor-psicogenica.md](2026-10-31-efeito-nocebo-dor-psicogenica.md) | ✅ Pronto para postar |
