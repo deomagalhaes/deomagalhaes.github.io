@@ -400,46 +400,88 @@
     // =========================================================================
     const STORY_THEMES = {
         frustracao: {
-            label: 'Frustração (Quando algo sai diferente)',
+            label: '1. Frustração (Quando algo sai diferente do plano)',
             defaultMetaphor: 'A semente de ipê-dourado que precisou descansar na terra macia quando a chuva atrasou, descobrindo que raízes calmas florescem mais fortes.',
             defaultQuestion: 'Qual foi uma coisinha que hoje pareceu difícil, mas que o seu coração aprendeu a esperar com calma?',
             challengeAct: 'tentou construir uma ponte de gravetos brilhantes, mas uma brisa travessa soprou três vezes e desmontou o caminho bem no meio da brincadeira. O peito ficou apertado e as mãozinhas quiseram desistir na mesma hora.',
             breathCue: 'inspirou sentindo o cheiro doce da mata por quatro tempos lentos… e soprou devagarinho como quem embala uma folha pousando na água.'
         },
         espera: {
-            label: 'Espera & Paciência (O tempo das coisas boas)',
+            label: '2. Espera & Paciência (O tempo orgânico das coisas boas)',
             defaultMetaphor: 'O casulo dourado na galhada silenciosa, que não pode ser aberto com pressa porque cada minuto quietinho pinta mais uma cor nas asas.',
             defaultQuestion: 'O que será gostoso imaginar crescendo devagarinho enquanto a gente descansa esta noite?',
             challengeAct: 'queria muito ver a flor-da-noite abrir suas pétalas prateadas imediatamente, batendo o pezinho no chão macio porque esperar parecia demorar um século inteiro.',
             breathCue: 'pôs a mão na barriga morna, puxou o ar bem mansinho contando um, dois, três… e soltou num suspiro comprido e tranquilo.'
         },
         coragem: {
-            label: 'Coragem Diante do Novo (Pequenos passos)',
+            label: '3. Coragem Diante do Novo (Passos pequenos e seguros)',
             defaultMetaphor: 'A lanterninha do coração: ela não precisa iluminar a floresta inteira de uma vez, só precisa clarear o próximo passinho bem diante dos pés.',
             defaultQuestion: 'Onde você sente morar a sua lanterninha de coragem quando dá um passo novo?',
             challengeAct: 'chegou diante de uma trilha nova onde as árvores faziam sombras compridas e sons diferentes. Mesmo com curiosidade, deu meio passo para trás sentindo um friozinho na barriga.',
             breathCue: 'encheu o peito de ar fresco como um guardião tranquilo e soltou devagar, percebendo que os pés estavam firmes e seguros.'
         },
         separacao: {
-            label: 'Separação / Transição de Rotina (Fio Invisível)',
+            label: '4. Separação / Transição de Rotina (O Fio Dourado Invisível)',
             defaultMetaphor: 'O fio invisível de luz dourada que liga dois corações que se amam: ele estica por qualquer distância sem nunca arrebentar e sempre traz de volta o abraço.',
             defaultQuestion: 'Se você tocar o seu peito agora, consegue sentir o quentinho do nosso fio dourado guardado aí dentro?',
             challengeAct: 'precisava atravessar para uma clareira diferente na manhã seguinte e sentiu saudade adiantada, querendo guardar todo o carinho dentro do bolso para não faltar.',
             breathCue: 'abraçou os próprios ombros bem macio, puxou o ar sentindo o carinho guardado no peito e soprou suave como uma canção de ninar.'
         },
         raiva: {
-            label: 'Raiva / Vulcão Interno (Sopro que esfria a brasa)',
+            label: '5. Raiva & Vulcão Interno (Sopro que esfria a brasa)',
             defaultMetaphor: 'A pedrinha vulcânica que fica quente demais quando se assusta, mas que ao mergulhar no riacho da respiração longa se transforma num cristal liso e fresquinho.',
             defaultQuestion: 'Como o seu corpo fica gostoso e levinho depois que o vulcãozinho esfria e vira brisa?',
             challengeAct: 'sentiu uma onda muito quente subir da barriga até as bochechas quando nada saía do seu jeito, como se um pequeno vulcão quisesse soltar faíscas para todo lado.',
             breathCue: 'soprou comprido e suave pela boca três vezes seguidas, vendo cada faísca quente virar poeira prateada de estrelas.'
         },
         medo_escuro: {
-            label: 'Medo do Escuro (A noite como manto amigo)',
+            label: '6. Medo do Escuro (A noite como cobertor protetor)',
             defaultMetaphor: 'A noite é apenas o cobertor azul-marinho da natureza: ela apaga as luzes fortes só para as estrelas e os sonhos bonitos conseguirem aparecer.',
             defaultQuestion: 'Qual estrela mansa vai cuidar do seu sono enquanto os seus olhinhos descansam?',
             challengeAct: 'olhou para os cantinhos sombreados quando o sol se escondeu e imaginou formas estranhas nas folhas, querendo que o dia nunca terminasse.',
             breathCue: 'fechou os olhos por um segundo, ouviu a música calma da própria respiração lenta e sentiu o escuro macio abraçar o descanso.'
+        },
+        ciume_partilha: {
+            label: '7. Ciúme / Partilha Afetiva (O coração que estica sem dividir)',
+            defaultMetaphor: 'A luz de uma vela carinhosa: quando ela acende outra vela vizinha, o seu próprio fogo não diminui; pelo contrário, o quarto todo fica duas vezes mais quentinho e iluminado.',
+            defaultQuestion: 'Como o amor cresce ainda mais quando a gente descobre que cabe todo mundo no mesmo abraço?',
+            challengeAct: 'viu os carinhos serem divididos com outro bichinho na clareira e sentiu um aperto cinzento no peito, como se o seu cantinho estivesse ficando pequeno.',
+            breathCue: 'puxou o ar enchendo o peito até sentir que o coração é uma casa gigante sem portas trancadas, soltando o ar com um sorriso sereno.'
+        },
+        perfeccionismo: {
+            label: '8. Perfeccionismo & Medo de Errar (O rascunho de asas)',
+            defaultMetaphor: 'A borboleta que começou com asas pequeninas e dobradas: nenhuma flor no jardim pergunta se uma pétala entortou no vento, porque a beleza está na vida dançando.',
+            defaultQuestion: 'O que o seu coração sentiu de bom quando você se deu conta de que tentar já é uma vitória linda?',
+            challengeAct: 'apagou o desenho de terra três vezes seguidas porque uma linha não ficou reta como queria, com vontade de rasgar a folha e não brincar mais.',
+            breathCue: 'soltou as mãos bem moles ao lado do corpo, respirou fundo deixando a perfeição ir embora e acolheu o desenho com ternura.'
+        },
+        hiperatividade_sono: {
+            label: '9. Desaceleração & Energia no Fim do Dia (O motorzinho do vagalume)',
+            defaultMetaphor: 'O vagalume que correu o dia todo acendendo e apagando sua luzinha dourada, mas que para conseguir brilhar amanhã precisa pousar suave na folha de orvalho e apagar o motor.',
+            defaultQuestion: 'Se o seu corpinho fosse um barquinho chegando na beira da praia, onde ele mais gosta de encostar para relaxar?',
+            challengeAct: 'sentia as perninhas e os pensamentos pulando sem parar de um galho para o outro, como se a noite fosse dia e o descanso não pudesse chegar.',
+            breathCue: 'deitou a cabeça no travesseiro, inspirou contando os pezinhos relaxando… soltou o ar sentindo a gravidade puxar o corpo num abraço fofo.'
+        },
+        tristeza_acolhida: {
+            label: '10. Tristeza & Saudade Suave (A nuvenzinha de chuva boa)',
+            defaultMetaphor: 'A nuvenzinha cinza que chora gotas mansas sobre a terra: depois que a chuva passa devagar, a terra fica perfumada e brotam sementinhas de alegria nova.',
+            defaultQuestion: 'Você sabe que não tem problema nenhum ficar quietinho e com vontade de chorar um pouco no colinho seguro?',
+            challengeAct: 'perdeu uma folhinha dourada especial trazida pelo vento e sentiu uma vontade quieta de não falar com ninguém, com o peito nublado de chuva.',
+            breathCue: 'deixou um suspiro quentinho sair devagarzinho, recebendo um afago nas costas e sentindo a dorzinha virar carinho guardado.'
+        },
+        adaptacao_escola: {
+            label: '11. Adaptação & Pertencimento (O voo e a volta para o ninho)',
+            defaultMetaphor: 'O passarinho que sai do ninho para explorar galhos novos: ele voa pelo céu azul, faz amigos passarinhos e quando a tarde cai, o ninho acolhedor continua exatamente no mesmo lugar.',
+            defaultQuestion: 'Qual foi uma brincadeira ou descoberta diferente que você viu hoje enquanto esteve fora do ninho?',
+            challengeAct: 'ficou na porta da nova escolinha da floresta vendo todos os animais diferentes e sentiu vontade de correr de volta para os braços protetores da manhã.',
+            breathCue: 'respirou fundo sentindo a coragem nas patinhas, tocou o coração para lembrar que o ninho espera por ele ao entardecer, e deu dois passos firmes.'
+        },
+        generosidade_desapego: {
+            label: '12. Apego & Partilha de Brinquedos (O riacho que corre)',
+            defaultMetaphor: 'O riacho transparente que deixa a água correr: a água fica sempre doce e pura porque viaja livre, enquanto poça parada e fechada fica turva.',
+            defaultQuestion: 'Como é gostoso ver a alegria no rostinho de um amigo quando a gente empresta algo com amor?',
+            challengeAct: 'segurou bem forte o barquinho de casca de noz quando outro bichinho se aproximou para ver, com medo de perder seu brinquedo favorito.',
+            breathCue: 'olhou nos olhos gentis do amiguinho, respirou fundo sentindo paz e estendeu a mãozinha aberta com um gesto dócil.'
         }
     };
 
@@ -450,20 +492,32 @@
             guide: 'um Lobo-Guará de passos macios e olhar muito calmo, amigo de uma corujinha-buraqueira sonolenta',
             closing: 'Nas veredas cristalinas, os buritis balançavam devagarinho, o Lobo-Guará se enroscou na relva macia e todo o Cerrado respirou num silêncio doce e profundo.'
         },
-        floresta_aguas: {
-            label: 'Floresta das Águas Calmas',
-            opening: 'À beira de um riacho transparente onde vitórias-régias flutuavam como berços verdes, pequenas gotas de orvalho começavam a brilhar sob o luar prateado.',
-            guide: 'uma Lontra gentil de pelo aveludado e uma tartaruguinha centenária que conhecia o segredo da calma',
-            closing: 'A água morna continuou cantando baixinho entre as pedras redondas, embalando cada folha e cada peixinho num sono sereno até o amanhecer.'
+        pantanal: {
+            label: 'Pantanal & Floresta das Águas Calmas',
+            opening: 'À beira de uma baía espelhada do Pantanal onde vitórias-régias flutuavam como berços verdes gigantes, pequenas gotas de orvalho começavam a brilhar sob o luar prateado.',
+            guide: 'uma Lontra gentil de pelo aveludado e um tuiuiú sábio de bico longo que sabia o momento exato de fechar as asas e dormir',
+            closing: 'A água morna continuou cantando baixinho entre os camalotes, embalando cada peixinho e cada garça num sono sereno até o amanhecer.'
         },
-        folclore: {
-            label: 'Folclore Brasileiro Gentil',
-            opening: 'No coração manso da mata brasileira, vaga-lumes acendiam pequenas lanternas verdes enquanto a brisa da tardinha trazia cheiro de terra úmida e jasmim.',
-            guide: 'um pequeno Vagalume-Guardião de luz âmbar muito dócil e o vento cantador das árvores antigas',
-            closing: 'As luzinhas douradas formaram um caminho tranquilo pelo céu da mata, guardando o sono de todos os bichinhos com ternura e proteção.'
+        mata_atlantica: {
+            label: 'Mata Atlântica & Mico-Leão Dourado',
+            opening: 'Entre bromélias orvalhadas e orquídeas perfumadas nas encostas da Serra do Mar, os vaga-lumes acendiam pequenas lanternas douradas enquanto a brisa da tardinha trazia frescor de terra úmida.',
+            guide: 'um pequeno Mico-Leão Dourado de pelo macio e uma preguiçinha de três dedos que conhecia a arte de não ter pressa nenhuma',
+            closing: 'As folhas compridas das samambaias formaram um teto verde protetor, guardando o sono de todos os bichinhos com ternura e abrigo absoluto.'
+        },
+        amazonia: {
+            label: 'Floresta Amazônica & Rio Manso',
+            opening: 'Debaixo das copas majestosas de sumaúmas milenares, onde o grande rio corria como um espelho de prata escura, o canto de uma juriti sonolenta ecoava mansinho pelas margens.',
+            guide: 'um Boto-Rosa brincalhão que agora descansava na água rasa e um Bicho-Preguiça sereno com sorriso acolhedor',
+            closing: 'O murmúrio das águas profundas e o aroma gostoso de castanheira embalaram a clareira inteira num repouso seguro e tranquilo.'
+        },
+        caatinga: {
+            label: 'Caatinga Serenada & Tatu-Bola Paciente',
+            opening: 'Ao cair da noite no sertão, quando o calor forte do dia deu lugar a uma brisa deliciosa e fresca, os mandacarus abriram suas flores brancas sob uma abóbada de estrelas brilhantes.',
+            guide: 'um Tatu-Bola de passos cuidadosos que sabia como se encolher feito bolinha para descansar em segurança total',
+            closing: 'O luar iluminou as pedras acolhedoras da serra, e o silêncio manso do sertão envolveu cada toca num calorzinho de paz e abrigo.'
         },
         estrelas: {
-            label: 'Viagem pelas Estrelas',
+            label: 'Viagem pelas Estrelas & Cruzeiro do Sul',
             opening: 'Lá no alto, onde as nuvens parecem travesseiros de algodão morno, um barquinho de madeira encantada deslizava silenciosamente pelo céu azul-profundo.',
             guide: 'a Estrela-Guia do Cruzeiro do Sul e uma pequena Lua crescente de sorriso acolhedor',
             closing: 'O barquinho ancorou numa nuvem macia e silenciosa, coberto por um lençol de poeira estelar morna que convidava os olhos a pesarem devagar.'
@@ -473,6 +527,165 @@
     let savedStories = [];
     let currentComposedStory = { title: '', text: '', question: '', theme: '', scenario: '', source: 'Modular Offline' };
     let amberFontSizeRem = 1.25;
+
+    // =========================================================================
+    // SINTETIZADOR ACÚSTICO WEB AUDIO API (RELAXAMENTO PRÉ-SONO 100% OFFLINE)
+    // =========================================================================
+    let audioCtx = null;
+    let soundSourceNode = null;
+    let soundGainNode = null;
+    let isRelaxAudioPlaying = false;
+
+    function getOrCreateAudioContext() {
+        if (!audioCtx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function startRelaxationAudio(mode = 'brown') {
+        const ctx = getOrCreateAudioContext();
+        stopRelaxationAudio();
+
+        const bufferSize = ctx.sampleRate * 2;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+
+        if (mode === 'brown') {
+            // Ruído Marrom Profundo (Brown Noise com filtro integrador)
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.02 * white)) / 1.02;
+                lastOut = output[i];
+                output[i] *= 3.5;
+            }
+        } else if (mode === 'rain') {
+            // Chuva Mansa na Mata (Ruído Rosa com modulação estocástica)
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+                b6 = white * 0.115926;
+            }
+        } else {
+            // Ondas Suaves da Noite (modulação senoidal lenta de baixa frequência)
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.02 * white)) / 1.02;
+                lastOut = output[i];
+                const waveMod = Math.sin((i / bufferSize) * Math.PI * 4) * 0.35 + 0.65;
+                output[i] *= waveMod * 3.0;
+            }
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = noiseBuffer;
+        source.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = mode === 'brown' ? 320 : (mode === 'rain' ? 800 : 420);
+
+        soundGainNode = ctx.createGain();
+        const volSlider = document.getElementById('audio-volume-slider');
+        const volVal = volSlider ? parseInt(volSlider.value, 10) / 100 : 0.3;
+        soundGainNode.gain.setValueAtTime(volVal * 0.22, ctx.currentTime);
+
+        source.connect(filter);
+        filter.connect(soundGainNode);
+        soundGainNode.connect(ctx.destination);
+
+        source.start();
+        soundSourceNode = source;
+        isRelaxAudioPlaying = true;
+        updateAudioControlsUI(true);
+    }
+
+    function stopRelaxationAudio() {
+        if (soundSourceNode) {
+            try { soundSourceNode.stop(); soundSourceNode.disconnect(); } catch (_) {}
+            soundSourceNode = null;
+        }
+        isRelaxAudioPlaying = false;
+        updateAudioControlsUI(false);
+    }
+
+    function setRelaxationVolume(valPercent) {
+        if (!soundGainNode || !audioCtx) return;
+        const norm = Math.max(0, Math.min(1, valPercent / 100));
+        soundGainNode.gain.setValueAtTime(norm * 0.22, audioCtx.currentTime);
+    }
+
+    function updateAudioControlsUI(playing) {
+        const icon = document.getElementById('audio-play-icon');
+        const label = document.getElementById('audio-play-label');
+        if (icon) icon.textContent = playing ? '■' : '▶';
+        if (label) label.textContent = playing ? 'Pausar Som' : 'Áudio Relaxante';
+    }
+
+    // =========================================================================
+    // PALETAS TÉRMICAS LOW-BLUE-LIGHT DO LEITOR NOTURNO
+    // =========================================================================
+    const AMBER_PALETTES = {
+        amber: {
+            bg: '#110b06',
+            text: '#f5d5a3',
+            title: '#fbdca8',
+            boxBg: '#1b1209',
+            boxBorder: 'rgba(146, 64, 14, 0.4)'
+        },
+        red: {
+            bg: '#0c0402',
+            text: '#fca5a5',
+            title: '#f87171',
+            boxBg: '#180806',
+            boxBorder: 'rgba(185, 28, 28, 0.4)'
+        },
+        sage: {
+            bg: '#07100b',
+            text: '#bbf7d0',
+            title: '#86efac',
+            boxBg: '#0c1a11',
+            boxBorder: 'rgba(5, 150, 105, 0.4)'
+        },
+        dark: {
+            bg: '#020617',
+            text: '#cbd5e1',
+            title: '#f1f5f9',
+            boxBg: '#0f172a',
+            boxBorder: 'rgba(51, 65, 85, 0.6)'
+        }
+    };
+
+    function applyAmberThermalPalette(themeKey) {
+        const pal = AMBER_PALETTES[themeKey] || AMBER_PALETTES.amber;
+        const reader = document.getElementById('amber-night-reader');
+        const title = document.getElementById('amber-reader-title');
+        const body = document.getElementById('amber-reader-body');
+        const qBox = document.getElementById('amber-reader-question-box');
+        const qText = document.getElementById('amber-reader-question');
+
+        if (reader) reader.style.backgroundColor = pal.bg;
+        if (title) title.style.color = pal.title;
+        if (body) body.style.color = pal.text;
+        if (qBox) {
+            qBox.style.backgroundColor = pal.boxBg;
+            qBox.style.borderColor = pal.boxBorder;
+        }
+        if (qText) qText.style.color = pal.title;
+    }
 
     function loadStories() {
         const C = global.VaultCore;
@@ -682,6 +895,7 @@
         const overlay = document.getElementById('amber-night-reader');
         if (overlay) overlay.classList.add('hidden');
         document.body.style.overflow = '';
+        stopRelaxationAudio();
     }
 
     function renderSavedStoriesLibrary() {
@@ -958,6 +1172,44 @@
             btnFontDown.addEventListener('click', () => {
                 amberFontSizeRem = Math.max(0.95, amberFontSizeRem - 0.15);
                 document.getElementById('amber-reader-body').style.fontSize = `${amberFontSizeRem}rem`;
+            });
+        }
+
+        // Paletas Térmicas Low-Blue-Light
+        document.querySelectorAll('[data-amber-theme]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const themeKey = btn.getAttribute('data-amber-theme');
+                applyAmberThermalPalette(themeKey);
+            });
+        });
+
+        // Áudio Relaxante Pré-Sono Web Audio
+        const btnAudioToggle = document.getElementById('btn-audio-toggle');
+        const audioModeSelect = document.getElementById('audio-mode-select');
+        const audioVolSlider = document.getElementById('audio-volume-slider');
+
+        if (btnAudioToggle) {
+            btnAudioToggle.addEventListener('click', () => {
+                if (isRelaxAudioPlaying) {
+                    stopRelaxationAudio();
+                } else {
+                    const mode = audioModeSelect ? audioModeSelect.value : 'brown';
+                    startRelaxationAudio(mode);
+                }
+            });
+        }
+
+        if (audioModeSelect) {
+            audioModeSelect.addEventListener('change', () => {
+                if (isRelaxAudioPlaying) {
+                    startRelaxationAudio(audioModeSelect.value);
+                }
+            });
+        }
+
+        if (audioVolSlider) {
+            audioVolSlider.addEventListener('input', (e) => {
+                setRelaxationVolume(parseInt(e.target.value, 10));
             });
         }
     }

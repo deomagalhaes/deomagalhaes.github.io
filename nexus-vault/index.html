@@ -357,22 +357,50 @@
     <!-- 4. MODO TELA CHEIA DE LEITURA NOTURNA ÂMBAR (LOW-BLUE-LIGHT READER)   -->
     <!-- ===================================================================== -->
     <div id="amber-night-reader" class="hidden fixed inset-0 z-50 bg-[#110b06] text-[#f5d5a3] overflow-y-auto">
-        <div class="max-w-2xl mx-auto px-5 sm:px-8 py-8 sm:py-12 space-y-8">
-            <div class="flex items-center justify-between border-b border-amber-800/30 pb-4 sticky top-0 bg-[#110b06]/95 backdrop-blur py-2">
-                <span class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Modo Leitura Noturna Âmbar</span>
-                <div class="flex items-center gap-2">
-                    <button type="button" id="btn-amber-font-down" class="min-h-[40px] px-3 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A−</button>
-                    <button type="button" id="btn-amber-font-up" class="min-h-[40px] px-3 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A+</button>
-                    <button type="button" id="btn-amber-close" class="min-h-[40px] px-4 py-1 rounded-lg bg-amber-800/40 hover:bg-amber-800/60 border border-amber-700/50 text-amber-200 text-xs font-semibold">
-                        Fechar
-                    </button>
+        <div class="max-w-2xl mx-auto px-5 sm:px-8 py-6 sm:py-10 space-y-6">
+            <!-- Barra de Controles Noturnos (Paletas Térmicas + Tipografia + Fechar) -->
+            <div class="border-b border-amber-800/30 pb-3 sticky top-0 bg-[#110b06]/95 backdrop-blur py-2 z-10 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Modo Leitura Noturna Âmbar</span>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" id="btn-amber-font-down" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A−</button>
+                        <button type="button" id="btn-amber-font-up" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A+</button>
+                        <button type="button" id="btn-amber-close" class="min-h-[38px] px-3.5 py-1 rounded-lg bg-amber-800/40 hover:bg-amber-800/60 border border-amber-700/50 text-amber-200 text-xs font-semibold">
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Paletas Térmicas Low-Blue-Light & Áudio Acústico Pré-Sono -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-amber-900/30 text-xs">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[11px] text-amber-600/90 font-mono">Paleta:</span>
+                        <button type="button" data-amber-theme="amber" class="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">Âmbar</button>
+                        <button type="button" data-amber-theme="red" class="px-2 py-0.5 rounded text-[11px] font-mono bg-rose-500/15 text-rose-300 border border-rose-500/30">Vermelho Melatonina</button>
+                        <button type="button" data-amber-theme="sage" class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Sálvia</button>
+                        <button type="button" data-amber-theme="dark" class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800 text-slate-300 border border-slate-700">Dark</button>
+                    </div>
+
+                    <!-- Mini Sintetizador Acústico Web Audio -->
+                    <div class="flex items-center gap-2 bg-amber-950/40 border border-amber-900/50 rounded-lg px-2.5 py-1">
+                        <button type="button" id="btn-audio-toggle" class="text-amber-300 hover:text-amber-200 text-[11px] font-mono flex items-center gap-1">
+                            <span id="audio-play-icon">▶</span>
+                            <span id="audio-play-label">Áudio Relaxante</span>
+                        </button>
+                        <select id="audio-mode-select" class="bg-black/60 border border-amber-900/60 rounded px-1.5 py-0.5 text-[10px] text-amber-200 font-mono focus:outline-none">
+                            <option value="brown">Ruído Marrom Profundo</option>
+                            <option value="rain">Chuva Mansa na Mata</option>
+                            <option value="wave">Ondas Suaves da Noite</option>
+                        </select>
+                        <input type="range" id="audio-volume-slider" min="0" max="100" value="30" class="w-14 accent-amber-500 cursor-pointer" title="Volume do som pré-sono">
+                    </div>
                 </div>
             </div>
 
             <h2 id="amber-reader-title" class="text-2xl sm:text-3xl font-serif font-bold text-[#fbdca8] leading-snug"></h2>
             <article id="amber-reader-body" class="font-serif text-[#f3cfa0]"></article>
 
-            <div class="bg-[#1b1209] border border-amber-800/40 rounded-2xl p-5 space-y-2">
+            <div id="amber-reader-question-box" class="bg-[#1b1209] border border-amber-800/40 rounded-2xl p-5 space-y-2">
                 <div class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Sussurro Final de Boa-Noite</div>
                 <p id="amber-reader-question" class="font-serif italic text-lg text-[#fbe0b4] leading-relaxed"></p>
             </div>

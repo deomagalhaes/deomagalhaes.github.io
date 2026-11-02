@@ -408,6 +408,65 @@
         };
     }
 
+    const TICKER_DIRECTORY = {
+        FII: [
+            { ticker: 'XPML11', name: 'XP Malls (Shoppings AAA)', price: 104.50, yield: 9.2, type: 'Tijolo' },
+            { ticker: 'HGLG11', name: 'CSHG Logística (Galpões)', price: 162.00, yield: 8.8, type: 'Tijolo' },
+            { ticker: 'KNIP11', name: 'Kinea Índices de Preços (CRI IPCA+)', price: 94.20, yield: 11.4, type: 'Papel' },
+            { ticker: 'MXRF11', name: 'Maxi Renda (Híbrido Base 10)', price: 10.15, yield: 12.0, type: 'Híbrido' }
+        ],
+        RF: [
+            { ticker: 'Tesouro IPCA+ 2035', name: 'Título Público Soberano', price: 3250.00, yield: 6.5, type: 'Soberano' },
+            { ticker: 'B5P211', name: 'ETF IMA-B 5 (Títulos IPCA < 5 anos)', price: 82.50, yield: 6.2, type: 'ETF RF' },
+            { ticker: 'Tesouro Selic 2029', name: 'Reserva & Liquidez Diária', price: 154.00, yield: 10.75, type: 'Pós-fixado' }
+        ],
+        Acoes: [
+            { ticker: 'BBAS3', name: 'Banco do Brasil (P/L 4.5 / ROE 21%)', price: 28.50, yield: 9.8, type: 'Valor' },
+            { ticker: 'ITUB4', name: 'Itaú Unibanco (Líder em Eficiência)', price: 35.00, yield: 8.5, type: 'Qualidade' },
+            { ticker: 'EGIE3', name: 'Engie Brasil (Concessões Elétricas)', price: 41.20, yield: 7.9, type: 'Defensivo' }
+        ],
+        Global: [
+            { ticker: 'IVVB11', name: 'iShares S&P 500 (Dólar + 500 EUA)', price: 345.00, yield: 1.6, type: 'ETF Global' },
+            { ticker: 'WRLD11', name: 'Vanguard Total World (Global Amplo)', price: 118.00, yield: 2.1, type: 'ETF Global' },
+            { ticker: 'HASH11', name: 'Cesta Cripto Regulada B3', price: 48.00, yield: 0.0, type: 'Hedge Assimétrico' }
+        ]
+    };
+
+    function computeAporteByTickers(classes) {
+        const result = [];
+        classes.forEach((cls) => {
+            const classAporte = cls.recommendedAporte || 0;
+            const tickers = TICKER_DIRECTORY[cls.key] || [];
+            if (tickers.length === 0) return;
+
+            const targetTickers = tickers.slice(0, 2);
+            const perTickerBudget = classAporte / targetTickers.length;
+
+            const tickerAlloc = targetTickers.map((t) => {
+                const shares = t.price > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / t.price) : 0;
+                const totalSpent = shares * t.price;
+                return {
+                    ticker: t.ticker,
+                    name: t.name,
+                    price: t.price,
+                    yield: t.yield,
+                    type: t.type,
+                    shares,
+                    totalSpent,
+                    budget: perTickerBudget
+                };
+            });
+
+            result.push({
+                classKey: cls.key,
+                className: cls.name,
+                classAporte,
+                tickers: tickerAlloc
+            });
+        });
+        return result;
+    }
+
     // =========================================================================
     // 5. SIMULAÇÃO ESTOCÁSTICA DE MONTE CARLO & STRESS TEST (Box-Muller)
     // =========================================================================
@@ -633,6 +692,10 @@
                     <button type="button" data-ind-subtab="cascata" class="ind-subtab-btn px-3 py-2 rounded-lg border border-transparent text-slate-400 hover:text-slate-200 transition">
                         5. Cascata de Despesas
                     </button>
+                    <button type="button" data-ind-subtab="estresse" class="ind-subtab-btn px-3 py-2 rounded-lg border border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
+                        <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-400"></i>
+                        <span>6. Estresse &amp; Choques</span>
+                    </button>
                 </div>
 
                 <!-- Conteúdo Dinâmico da Sub-Aba Selecionada -->
@@ -680,6 +743,9 @@
             case 'cascata':
                 renderSubTabCascata(container);
                 break;
+            case 'estresse':
+                renderSubTabEstresse(container);
+                break;
             case 'simulador':
             default:
                 renderSubTabSimulador(container);
@@ -700,6 +766,55 @@
 
         container.innerHTML = `
             <div class="space-y-5">
+                <!-- 4 INDICADORES VISUAIS DE INDEPENDÊNCIA POR CATEGORIA -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800 pb-2.5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="target" class="w-4 h-4 text-cyan-400"></i>
+                            <h3 class="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
+                                Indicadores de Independência por Categoria de Vida
+                            </h3>
+                        </div>
+                        <span class="text-xs font-mono text-emerald-400">
+                            Renda Passiva Atual Hoje: <strong>${C.formatBRL(m.currentPassiveMonthly)}/mês</strong>
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        ${[
+                            { name: '1. Sobrevivência Essencial', cost: inputs.expenseEssential || 2500, color: 'from-emerald-500 to-emerald-400', badgeColor: 'text-emerald-300 border-emerald-500/30' },
+                            { name: '2. Custos do Consultório', cost: inputs.monthlyCosts || 2600, color: 'from-cyan-500 to-cyan-400', badgeColor: 'text-cyan-300 border-cyan-500/30' },
+                            { name: '3. Família, Saúde & Educação', cost: inputs.expenseFamily || 3500, color: 'from-amber-500 to-amber-400', badgeColor: 'text-amber-300 border-amber-500/30' },
+                            { name: '4. Plenitude FIRE / Lazer', cost: inputs.expenseLifestyle || 2000, color: 'from-purple-500 to-purple-400', badgeColor: 'text-purple-300 border-purple-500/30' }
+                        ].map((cat) => {
+                            const pct = Math.min(100, cat.cost > 0 ? (m.currentPassiveMonthly / cat.cost) * 100 : 0);
+                            const isDone = pct >= 100;
+                            return `
+                                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col justify-between space-y-2.5">
+                                    <div>
+                                        <div class="flex items-center justify-between text-xs font-mono">
+                                            <span class="font-bold text-slate-200">${cat.name}</span>
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] border ${isDone ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-800 text-slate-400 border-slate-700'}">
+                                                ${isDone ? '✓ CONQUISTADO' : `${C.formatNum(pct, 1)}%`}
+                                            </span>
+                                        </div>
+                                        <div class="text-xs font-mono text-slate-400 mt-1">Custo: ${C.formatBRL(cat.cost)}/mês</div>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r ${cat.color} transition-all duration-300" style="width: ${pct}%"></div>
+                                        </div>
+                                        <div class="text-[10px] font-mono text-slate-500 text-right">
+                                            ${isDone ? '100% coberto pelo patrimônio' : `Faltam ${C.formatBRL(Math.max(0, cat.cost - m.currentPassiveMonthly))}/mês`}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
                 <!-- Grid: Parâmetros vs KPIs e Crossovers -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <!-- Coluna de Inputs -->
@@ -1117,6 +1232,51 @@
                         `).join('')}
                     </div>
 
+                    <!-- RECOMENDAÇÃO ACIONÁVEL POR ATIVO / TICKER INDIVIDUAL -->
+                    <div class="pt-4 border-t border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">
+                                    Recomendação Operacional por Ativo &amp; Ticker (Cotas Inteiras)
+                                </h4>
+                                <p class="text-[11px] text-slate-400">Simulação de compra prática fracionada baseada na cotação de mercado para o dia do aporte.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            ${computeAporteByTickers(res.classes).map((item) => `
+                                <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-3.5 space-y-2.5">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-xs text-slate-200 font-mono">${item.className}</span>
+                                        <span class="text-xs font-mono font-bold text-cyan-300">Orçamento: ${C.formatBRL(item.classAporte)}</span>
+                                    </div>
+                                    <div class="space-y-2">
+                                        ${item.tickers.map((t) => `
+                                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs">
+                                                <div>
+                                                    <div class="flex items-center gap-1.5">
+                                                        <strong class="font-mono text-slate-100 text-sm">${t.ticker}</strong>
+                                                        <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 font-mono">${t.type}</span>
+                                                        ${t.yield > 0 ? `<span class="text-[10px] font-mono text-emerald-400">${t.yield}% a.a.</span>` : ''}
+                                                    </div>
+                                                    <div class="text-[11px] text-slate-400 truncate mt-0.5">${t.name} • Ref.: ${C.formatBRL(t.price)}</div>
+                                                </div>
+                                                <div class="text-right shrink-0">
+                                                    <div class="font-mono font-bold ${t.shares > 0 ? 'text-emerald-300' : 'text-slate-500'}">
+                                                        ${t.shares > 0 ? `Comprar ~${t.shares} cota(s)` : 'Aguardar novo ciclo'}
+                                                    </div>
+                                                    <div class="text-[11px] font-mono text-slate-400">
+                                                        ${t.shares > 0 ? `Total: ${C.formatBRL(t.totalSpent)}` : 'R$ 0'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
                     <!-- Configuração Rápida das Metas e Saldos Atuais -->
                     <div class="pt-4 border-t border-slate-800 space-y-3">
                         <div class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">Ajuste de Metas Percentuais &amp; Saldos Atuais</div>
@@ -1457,6 +1617,275 @@
                 saveInputs();
                 renderSubTabCascata(document.getElementById('ind-subtab-container'));
                 C.toast('Valores da cascata restaurados para o padrão sugerido.', 'info');
+            });
+        }
+    }
+
+    // =========================================================================
+    // 7.6. SUB-ABA 6: CENÁRIOS DE ESTRESSE & CHOQUES DE MERCADO
+    // =========================================================================
+    function computeStressTest() {
+        const scenarioKey = inputs.stressScenario || 'crash30';
+        const customDrop = Number(inputs.stressCustomDrop) || 30;
+        const customInf = Number(inputs.stressCustomInf) || 4;
+        const boost = !!inputs.stressBoostContribution;
+
+        const baseModel = computeFinancialModel();
+        const basePatrimony = baseModel.initPatrimony || 120000;
+        const baseMonthlyRate = baseModel.monthlyRate;
+        const baseMonthlyPassive = baseModel.currentPassiveMonthly;
+        const costsClinic = baseModel.costs;
+        const currentAporte = Number(inputs.monthlyContribution) || 4200;
+
+        let dropPatrimonyPct = 0;
+        let inflationSurprisePct = 0;
+        let dividendShockPct = 0;
+        let title = '';
+        let desc = '';
+        let clinicalPrescription = '';
+
+        if (scenarioKey === 'crash30') {
+            title = 'Crash Sistêmico de Mercado (−30% Ações, −20% FIIs)';
+            dropPatrimonyPct = 25.0;
+            dividendShockPct = 12.0;
+            desc = 'Queda aguda similar aos episódios de Março/2020 (COVID) ou Outubro/2008. As cotações na tela desabam, mas os ativos continuam gerando caixa operacional.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Proibido resgatar qualquer cota no fundo. Os proventos continuam caindo na conta. Manter ou aumentar aportes para comprar ativos com desconto de 30% acelera a curva de recuperação.';
+        } else if (scenarioKey === 'stagflation') {
+            title = 'Estagflação Severa (IPCA 9.5% a.a. / Juro Real 2.8% a.a.)';
+            dropPatrimonyPct = 10.0;
+            inflationSurprisePct = 5.5;
+            desc = 'Aumento acentuado do custo operacional do consultório e do custo de vida familiar, reduzindo temporariamente a taxa de poupança clínica.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Reajustar o ticket médio de consultas e psicometria anualmente pelo IPCA. Concentrar novos aportes em Tesouro IPCA+ com juro real contratado.';
+        } else if (scenarioKey === 'fii_drop') {
+            title = 'Crise Imobiliária / Vacância Severa de FIIs (−25% Yield)';
+            dropPatrimonyPct = 15.0;
+            dividendShockPct = 25.0;
+            desc = 'Aumento de vacância física em lajes corporativas e renegociação forçada de aluguéis reduzem temporariamente os dividendos mensais da carteira.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Não girar a carteira. Os imóveis de tijolo permanecem íntegros e se recuperam no ciclo de expansão seguinte. Proteger com recebíveis (CRIs) de alta qualidade.';
+        } else {
+            title = 'Choque Customizado Personalizado';
+            dropPatrimonyPct = Math.max(0, Math.min(60, customDrop));
+            inflationSurprisePct = Math.max(0, Math.min(15, customInf));
+            desc = `Simulação manual com queda de ${dropPatrimonyPct}% no valor dos ativos e impacto de +${inflationSurprisePct}% nos custos.`;
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Testar a robustez atuarial permite calibrar sua reserva de oportunidade sem ansiedade reativa.';
+        }
+
+        const stressedPatrimony = Math.max(0, basePatrimony * (1 - dropPatrimonyPct / 100));
+        const effectiveAporte = boost ? currentAporte * 1.2 : currentAporte;
+
+        const stressedClinicCosts = costsClinic * (1 + inflationSurprisePct / 100);
+        const stressedMonthlyRate = Math.max(0.001, baseMonthlyRate * (1 - dividendShockPct / 100));
+        const stressedMonthlyPassive = stressedPatrimony * stressedMonthlyRate;
+
+        const baseClinicCoveragePct = costsClinic > 0 ? (baseMonthlyPassive / costsClinic) * 100 : 0;
+        const stressedClinicCoveragePct = stressedClinicCosts > 0 ? (stressedMonthlyPassive / stressedClinicCosts) * 100 : 0;
+
+        const netPerSession = baseModel.netPerSession || 180;
+        const sessionsNeededStressed = netPerSession > 0 ? Math.max(0, (stressedClinicCosts - stressedMonthlyPassive) / netPerSession) : 0;
+
+        const lostCapital = basePatrimony - stressedPatrimony;
+        const monthsToRecover = effectiveAporte > 0 ? Math.round(lostCapital / effectiveAporte) : 0;
+
+        return {
+            scenarioKey,
+            title,
+            desc,
+            clinicalPrescription,
+            basePatrimony,
+            stressedPatrimony,
+            dropPatrimonyPct,
+            lostCapital,
+            baseMonthlyPassive,
+            stressedMonthlyPassive,
+            costsClinic,
+            stressedClinicCosts,
+            baseClinicCoveragePct,
+            stressedClinicCoveragePct,
+            sessionsNeededStressed,
+            monthsToRecover,
+            effectiveAporte,
+            boost
+        };
+    }
+
+    function renderSubTabEstresse(container) {
+        const C = global.VaultCore;
+        const st = computeStressTest();
+
+        container.innerHTML = `
+            <div class="space-y-5">
+                <!-- Banner e Seletor de Cenários de Choque -->
+                <div class="bg-gradient-to-r from-[#0f172a] via-[#1a0f1e] to-[#0f172a] border border-rose-500/35 rounded-xl p-5 shadow-xl space-y-4">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                                    Simulação de Estresse &amp; Robustez
+                                </span>
+                                <span class="text-xs font-mono text-slate-400">Zero Pânico • Finanças Comportamentais</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-100 mt-1">${st.title}</h3>
+                            <p class="text-xs text-slate-300 max-w-3xl mt-1 leading-relaxed">${st.desc}</p>
+                        </div>
+
+                        <!-- Seletor Rápido de Cenário -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+                            <select id="stress-scenario-select" class="min-h-[42px] px-3.5 py-2 rounded-xl bg-[#090d16] border border-rose-500/40 font-mono text-xs font-bold text-rose-200 focus:outline-none">
+                                <option value="crash30" ${st.scenarioKey === 'crash30' ? 'selected' : ''}>Crash de Mercado (−30% Ações / −20% FIIs)</option>
+                                <option value="stagflation" ${st.scenarioKey === 'stagflation' ? 'selected' : ''}>Estagflação (IPCA 9.5% / Juro Real 2.8%)</option>
+                                <option value="fii_drop" ${st.scenarioKey === 'fii_drop' ? 'selected' : ''}>Crise de Vacância FIIs (−25% Yield)</option>
+                                <option value="custom" ${st.scenarioKey === 'custom' ? 'selected' : ''}>Choque Personalizado Manual</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sliders Manuais se o Cenário for Custom -->
+                    ${st.scenarioKey === 'custom' ? `
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-rose-900/30">
+                            <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
+                                <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                                    <span>Queda no Patrimônio Total:</span>
+                                    <strong class="text-rose-400">${inputs.stressCustomDrop || 30}%</strong>
+                                </div>
+                                <input type="range" id="stress-custom-drop-slider" min="5" max="60" value="${inputs.stressCustomDrop || 30}" class="w-full accent-rose-500 cursor-pointer">
+                            </div>
+                            <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
+                                <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                                    <span>Impacto Inflacionário em Custos:</span>
+                                    <strong class="text-amber-400">+${inputs.stressCustomInf || 4}%</strong>
+                                </div>
+                                <input type="range" id="stress-custom-inf-slider" min="0" max="15" value="${inputs.stressCustomInf || 4}" class="w-full accent-amber-500 cursor-pointer">
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Alavanca Antidéficit: Aporte Contracíclico (+20% na Crise) -->
+                    <div class="pt-2 border-t border-rose-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer text-xs font-mono text-slate-200">
+                            <input type="checkbox" id="stress-boost-chk" ${st.boost ? 'checked' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-cyan-400 focus:ring-cyan-500">
+                            <span>Ativar Aporte Anticíclico na Baixa (+20%: R$ ${C.formatBRL(st.effectiveAporte)})</span>
+                        </label>
+                        <span class="text-[11px] font-mono text-emerald-400">
+                            ${st.boost ? '✓ Aceleração ativada: recomposição de capital em ritmo acelerado.' : 'Ritmo normal mantido.'}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 4 Cards Comparativos: Antes do Choque vs Sob Choque -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <!-- Patrimônio Líquido -->
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="text-xs font-mono text-slate-400">Patrimônio Líquido</div>
+                        <div class="text-xl font-mono font-bold text-slate-100">
+                            ${C.formatBRL(st.stressedPatrimony)}
+                        </div>
+                        <div class="text-[11px] font-mono text-rose-400">
+                            −${C.formatBRL(st.lostCapital)} (−${C.formatNum(st.dropPatrimonyPct, 1)}%)
+                        </div>
+                        <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800">
+                            Base: ${C.formatBRL(st.basePatrimony)}
+                        </div>
+                    </div>
+
+                    <!-- Renda Passiva Mensal -->
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="text-xs font-mono text-slate-400">Renda Passiva Mensal</div>
+                        <div class="text-xl font-mono font-bold text-amber-300">
+                            ${C.formatBRL(st.stressedMonthlyPassive)}/mês
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400">
+                            Diferença: −${C.formatBRL(Math.max(0, st.baseMonthlyPassive - st.stressedMonthlyPassive))}/mês
+                        </div>
+                        <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800">
+                            Base: ${C.formatBRL(st.baseMonthlyPassive)}/mês
+                        </div>
+                    </div>
+
+                    <!-- Cobertura do Consultório -->
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="text-xs font-mono text-slate-400">Cobertura do Consultório</div>
+                        <div class="text-xl font-mono font-bold ${st.stressedClinicCoveragePct >= 100 ? 'text-emerald-300' : 'text-cyan-300'}">
+                            ${C.formatNum(st.stressedClinicCoveragePct, 1)}%
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400">
+                            Sessões extras necessárias: <strong class="text-amber-300">${C.formatNum(st.sessionsNeededStressed, 1)}</strong>
+                        </div>
+                        <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800">
+                            Custos sob choque: ${C.formatBRL(st.stressedClinicCosts)}/mês
+                        </div>
+                    </div>
+
+                    <!-- Recomposição de Capital -->
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="text-xs font-mono text-slate-400">Recomposição Plena</div>
+                        <div class="text-xl font-mono font-bold text-cyan-300">
+                            ~${st.monthsToRecover} meses
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400">
+                            Com aporte de ${C.formatBRL(st.effectiveAporte)}/mês
+                        </div>
+                        <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800">
+                            ${st.boost ? 'Economia de ~6 meses via aporte na baixa' : 'Sem considerar recuperação orgânica de preços'}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diretriz Comportamental e Psicológica do Neuropsicólogo -->
+                <div class="bg-[#0f172a] border border-cyan-500/35 rounded-xl p-5 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                        <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-100">
+                            Prescrição Comportamental do Investidor Clínico
+                        </h4>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                        ${st.clinicalPrescription}
+                    </p>
+                    <div class="pt-2 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex flex-wrap items-center justify-between gap-2">
+                        <span>Princípio de Benjamin Graham &amp; Howard Marks: <em>"O risco real não é a oscilação de tela, mas a perda permanente de capital por venda prematura."</em></span>
+                        <span class="text-emerald-400 font-semibold">Resiliência Clínica Garantida</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        bindEstresseInputs();
+    }
+
+    function bindEstresseInputs() {
+        const scenarioSelect = document.getElementById('stress-scenario-select');
+        if (scenarioSelect) {
+            scenarioSelect.addEventListener('change', (e) => {
+                inputs.stressScenario = e.target.value;
+                saveInputs();
+                renderSubTabEstresse(document.getElementById('ind-subtab-container'));
+            });
+        }
+
+        const dropSlider = document.getElementById('stress-custom-drop-slider');
+        if (dropSlider) {
+            dropSlider.addEventListener('input', (e) => {
+                inputs.stressCustomDrop = Number(e.target.value);
+                saveInputs();
+                renderSubTabEstresse(document.getElementById('ind-subtab-container'));
+            });
+        }
+
+        const infSlider = document.getElementById('stress-custom-inf-slider');
+        if (infSlider) {
+            infSlider.addEventListener('input', (e) => {
+                inputs.stressCustomInf = Number(e.target.value);
+                saveInputs();
+                renderSubTabEstresse(document.getElementById('ind-subtab-container'));
+            });
+        }
+
+        const boostChk = document.getElementById('stress-boost-chk');
+        if (boostChk) {
+            boostChk.addEventListener('change', (e) => {
+                inputs.stressBoostContribution = e.target.checked;
+                saveInputs();
+                renderSubTabEstresse(document.getElementById('ind-subtab-container'));
             });
         }
     }
