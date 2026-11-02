@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramentas Clínicas &amp; Utilitários Terapêuticos – Deo Magalhães</title>
+    <meta name="description" content="Ecossistema de instrumentos clínicos gratuitos Zero-Backend (100% LGPD): Registrador Comportamental ABC ABA, Clarificação Existencial, Quadro Infantil de Rotinas e Regulação Autonômica.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        .font-serif-clinical {
+            font-family: 'Merriweather', serif;
+        }
+        main section {
+            padding: 0;
+        }
+        .filter-pill {
+            min-height: 40px;
+            padding: 0.45rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .filter-pill:hover {
+            border-color: #005f73;
+            color: #005f73;
+        }
+        .filter-pill.active {
+            background: #005f73;
+            border-color: #005f73;
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(0, 95, 115, 0.22);
+        }
+        /* Proteção Institucional do Rodapé */
+        footer.main-footer {
+            background-color: #2c3e50 !important;
+            color: #e2e8f0 !important;
+            padding-top: 50px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+        footer.main-footer .footer-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 30px !important;
+            padding-bottom: 30px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .footer-column h4 {
+            color: #ffffff !important;
+            font-size: 1.2em !important;
+            margin-bottom: 16px !important;
+            font-weight: 600 !important;
+        }
+        footer.main-footer ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        footer.main-footer li {
+            margin-bottom: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            color: #e2e8f0 !important;
+        }
+        footer.main-footer a {
+            color: #e2e8f0 !important;
+            text-decoration: none !important;
+        }
+        footer.main-footer .footer-bottom {
+            border-top: 1px solid #3e5266 !important;
+            padding: 20px 0 !important;
+            text-align: center !important;
+            color: #94a3b8 !important;
+            font-size: 0.9em !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html" class="active">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Acadêmico-Clínico -->
+        <div class="bg-gradient-to-br from-slate-900 via-[#13293d] to-[#005f73] text-white py-14 md:py-20 border-b border-slate-800">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex flex-wrap items-center gap-2.5 mb-5">
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-400/15 text-emerald-300 border border-emerald-400/30">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Arquitetura Zero-Backend · 100% Conformidade LGPD
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-cyan-100 border border-white/15">
+                        <i data-lucide="brain-circuit" class="w-3.5 h-3.5"></i> Neuropsicologia · ABA · TCC · Clínica Existencial
+                    </span>
+                </div>
+
+                <h1 class="text-3xl md:text-5xl font-bold tracking-tight font-serif-clinical leading-tight max-w-4xl mb-4">
+                    Ecossistema de Instrumentos Clínicos &amp; Utilitários Terapêuticos
+                </h1>
+                <p class="text-slate-200 text-base md:text-lg max-w-3xl leading-relaxed mb-8">
+                    Ferramentas interativas desenvolvidas por <strong>Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</strong> para apoiar famílias em intervenção comportamental (ABA), estruturação executiva na infância e adultos em processo psicoterápico. Nenhum dado sai do seu dispositivo.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl text-xs">
+                    <div class="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-sm flex items-start gap-3">
+                        <i data-lucide="hard-drive" class="w-5 h-5 text-cyan-300 shrink-0 mt-0.5"></i>
+                        <div>
+                            <div class="font-bold text-white">Processamento 100% Local</div>
+                            <div class="text-slate-300 mt-0.5">Persistência exclusiva no navegador com backup JSON/CSV.</div>
+                        </div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-sm flex items-start gap-3">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-amber-300 shrink-0 mt-0.5"></i>
+                        <div>
+                            <div class="font-bold text-white">Operação Mobile Rápida</div>
+                            <div class="text-slate-300 mt-0.5">Registros comportamentais ágeis, Web Audio API e folhas A4.</div>
+                        </div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-white/10 border border-white/10 backdrop-blur-sm flex items-start gap-3">
+                        <i data-lucide="file-check-2" class="w-5 h-5 text-emerald-300 shrink-0 mt-0.5"></i>
+                        <div>
+                            <div class="font-bold text-white">Ponte com a Sessão Clínica</div>
+                            <div class="text-slate-300 mt-0.5">Relatórios limpos para impressão/PDF e compartilhamento seguro.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro Rápido por Público-Alvo + Destaque Principal -->
+        <div class="max-w-6xl mx-auto px-4 py-12 md:py-16">
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                <div>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-[#005f73]">Instrumentos Principais</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-serif-clinical mt-1">
+                        Suíte Clínica para Pacientes e Famílias
+                    </h2>
+                </div>
+                <div class="flex flex-wrap gap-2" role="tablist" aria-label="Filtrar por público-alvo">
+                    <button type="button" class="filter-pill active" onclick="filterTools('all', this)">Todos (8)</button>
+                    <button type="button" class="filter-pill" onclick="filterTools('aba', this)">Pais &amp; ABA</button>
+                    <button type="button" class="filter-pill" onclick="filterTools('adultos', this)">Pacientes Adultos</button>
+                    <button type="button" class="filter-pill" onclick="filterTools('infantil', this)">Infantil &amp; Funções Executivas</button>
+                    <button type="button" class="filter-pill" onclick="filterTools('regulacao', this)">Foco &amp; Regulação</button>
+                </div>
+            </div>
+
+            <!-- 4 Cards Detalhados Principais -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
+
+                <!-- Card 1: Registrador Comportamental ABC (ABA) -->
+                <article data-audience="aba infantil profissional" class="tool-card bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 p-6 md:p-7 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                                <i data-lucide="users" class="w-3.5 h-3.5"></i> Pais &amp; ABA
+                            </span>
+                            <span class="text-xs font-semibold text-slate-400">Mobile-First · Uma Mão</span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 font-serif-clinical mb-2">
+                            Registrador Comportamental ABC para Pais e Cuidadores
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Interface tátil ultrarrápida para documentar Antecedente (A), Comportamento Observável (B) e Consequência/Manejo (C) no exato momento em que os episódios ocorrem em casa, na escola ou em passeios.
+                        </p>
+
+                        <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Chips rápidos de gatilhos, topografia, duração e intensidade (1 a 5)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Painel automático de frequência por antecedente, turno e contexto</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Envio de resumo estatístico via WhatsApp para o neuropsicólogo + PDF A4</li>
+                        </ul>
+                    </div>
+
+                    <a href="/recursos/registrador-abc-aba.html" class="w-full min-h-[46px] rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-sm flex items-center justify-center gap-2 transition shadow-sm">
+                        Abrir Registrador ABC <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </article>
+
+                <!-- Card 3: Diário de Clarificação Existencial -->
+                <article data-audience="adultos profissional" class="tool-card bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 p-6 md:p-7 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-200">
+                                <i data-lucide="compass" class="w-3.5 h-3.5"></i> Pacientes Adultos
+                            </span>
+                            <span class="text-xs font-semibold text-slate-400">TCC · ACT · Existencial</span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 font-serif-clinical mb-2">
+                            Diário de Clarificação Existencial &amp; Desfusão (Fato vs. Hipótese)
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Percurso socrático guiado em 5 etapas para separar o evento observável da narrativa interpretativa automática, mapear marcadores somáticos, auditar evidências e escolher uma resposta orientada por valores.
+                        </p>
+
+                        <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Detector socrático em tempo real de adjetivos e generalizações</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Medição do Delta de regulação emocional pré e pós-desfusão (0–10)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Relatório A4 limpo para sessão + botão de autodestruição imediata</li>
+                        </ul>
+                    </div>
+
+                    <a href="/recursos/clarificacao-existencial.html" class="w-full min-h-[46px] rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-sm flex items-center justify-center gap-2 transition shadow-sm">
+                        Iniciar Clarificação Guiada <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </article>
+
+                <!-- Card 4: Construtor Visual de Rotina e Economia de Fichas -->
+                <article data-audience="infantil aba" class="tool-card bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 p-6 md:p-7 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-900 border border-sky-200">
+                                <i data-lucide="star" class="w-3.5 h-3.5"></i> Infantil &amp; Funções Executivas
+                            </span>
+                            <span class="text-xs font-semibold text-slate-400">Tela Interativa + Folha A4</span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 font-serif-clinical mb-2">
+                            Construtor Visual de Rotina &amp; Economia de Fichas
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Construa quadros visuais previsíveis por turnos (Manhã, Tarde, Noite) ou semanais (Segunda a Domingo) para apoiar a autorregulação, transições de rotina e autonomia em crianças com TDAH, TEA ou desenvolvimento típico.
+                        </p>
+
+                        <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Biblioteca rápida de cartões lúdicos + cofre interativo de estrelas</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Feedback sonoro suave opcional via sintetizador Web Audio API</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Diagramação A4 pedagógica com caixinhas semanais e combinados</li>
+                        </ul>
+                    </div>
+
+                    <a href="/recursos/construtor-rotina-fichas.html" class="w-full min-h-[46px] rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-sm flex items-center justify-center gap-2 transition shadow-sm">
+                        Montar Quadro de Rotina <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </article>
+
+                <!-- Card 4: RPD Digital (TCC Clássica) -->
+                <article data-audience="adultos regulacao" class="tool-card bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 p-6 md:p-7 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                                <i data-lucide="book-open-check" class="w-3.5 h-3.5"></i> Terapia Cognitivo-Comportamental
+                            </span>
+                            <span class="text-xs font-semibold text-slate-400">Reestruturação · PDF A4</span>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 font-serif-clinical mb-2">
+                            RPD Digital — Registro de Pensamentos Disfuncionais
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Protocolo clássico estruturado de Aaron Beck para identificar situações-gatilho, pensamentos automáticos, distorções cognitivas e formular respostas adaptativas equilibradas entre as sessões.
+                        </p>
+
+                        <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Mapeamento guiado de distorções cognitivas frequentes</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Histórico privado salvo apenas no seu navegador</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 shrink-0"></i> Exportação limpa em folha A4 para análise em sessão</li>
+                        </ul>
+                    </div>
+
+                    <a href="/recursos/rpd-digital.html" class="w-full min-h-[46px] rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-sm flex items-center justify-center gap-2 transition shadow-sm">
+                        Abrir RPD Digital <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </article>
+            </div>
+
+            <!-- Seção Complementar: Demais Ferramentas Neurocognitivas e de Regulação -->
+            <div class="pt-10 border-t border-slate-200">
+                <div class="mb-7">
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-slate-500">Acervo Complementar</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 font-serif-clinical mt-1">
+                        Utilitários de Foco, Funções Executivas e Regulação Autonômica
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Recursos adicionais para suporte diário no TDAH, redução de sobrecarga pré-frontal e biofeedback respiratório.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                    <!-- Matriz de Priorização Neurodivergente -->
+                    <a href="/recursos/matriz-priorizacao-neuro.html" data-audience="adultos infantil regulacao" class="tool-card group bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#005f73] hover:shadow-sm transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-900">TDAH &amp; Energia Cognitiva</span>
+                                <i data-lucide="layout-grid" class="w-4 h-4 text-[#005f73]"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-[#005f73] transition mb-1.5">
+                                Matriz de Priorização Neurodivergente
+                            </h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Substitua listas intermináveis pela triagem baseada em impacto real vs. custo metabólico/executivo atual, superando a paralisia decisória.
+                            </p>
+                        </div>
+                        <span class="text-xs font-bold text-[#005f73] inline-flex items-center gap-1">Acessar ferramenta →</span>
+                    </a>
+
+                    <!-- Coerência Cardíaca e Respiração Vagal -->
+                    <a href="/recursos/coerencia-cardiaca-vagal.html" data-audience="adultos infantil aba regulacao" class="tool-card group bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#005f73] hover:shadow-sm transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-900">Regulação Autonômica</span>
+                                <i data-lucide="heart-pulse" class="w-4 h-4 text-[#005f73]"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-[#005f73] transition mb-1.5">
+                                Coerência Cardíaca &amp; Respiração Vagal
+                            </h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Guia visual rítmico para estimulação do freio vagal parassimpático, modulação da variabilidade cardíaca e redução da ansiedade aguda.
+                            </p>
+                        </div>
+                        <span class="text-xs font-bold text-[#005f73] inline-flex items-center gap-1">Acessar ferramenta →</span>
+                    </a>
+
+                    <!-- Pomodoro Neurodivergente -->
+                    <a href="/recursos/pomodoro-neuro.html" data-audience="adultos infantil regulacao" class="tool-card group bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#005f73] hover:shadow-sm transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-sky-900">Atenção Sustentada</span>
+                                <i data-lucide="headphones" class="w-4 h-4 text-[#005f73]"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-[#005f73] transition mb-1.5">
+                                Timer Neurodivergente &amp; Ruído Marrom
+                            </h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Ciclos flexíveis de foco com gerador nativo de Brown Noise em Web Audio API para atenuar distrações auditivas no TDAH.
+                            </p>
+                        </div>
+                        <span class="text-xs font-bold text-[#005f73] inline-flex items-center gap-1">Acessar ferramenta →</span>
+                    </a>
+
+                    <!-- Decompositor de Tarefas -->
+                    <a href="/recursos/descompositor-tarefas.html" data-audience="adultos infantil regulacao" class="tool-card group bg-white rounded-2xl border border-slate-200 p-5 hover:border-[#005f73] hover:shadow-sm transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 text-purple-900">Funções Executivas</span>
+                                <i data-lucide="list-todo" class="w-4 h-4 text-[#005f73]"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-[#005f73] transition mb-1.5">
+                                Decompositor de Tarefas (Micro-Passos)
+                            </h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Quebre demandas complexas e intimidadoras em etapas concretas de baixa fricção para destravar a iniciação comportamental.
+                            </p>
+                        </div>
+                        <span class="text-xs font-bold text-[#005f73] inline-flex items-center gap-1">Acessar ferramenta →</span>
+                    </a>
+
+                    <!-- Catálogo Geral de Recursos -->
+                    <a href="/recursos.html" data-audience="profissional aba adultos infantil" class="tool-card group bg-slate-900 text-white rounded-2xl border border-slate-800 p-5 hover:bg-slate-800 transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/10 text-cyan-200">Portal Completo</span>
+                                <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+                            </div>
+                            <h3 class="text-base font-bold text-white mb-1.5">
+                                Explorar Storybooks, Testes e Jogos Cognitivos
+                            </h3>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                                Acesse também nossas escalas psicoeducativas de rastreio, leituras infantis mediadas e desafios de ginástica cerebral.
+                            </p>
+                        </div>
+                        <span class="text-xs font-bold text-cyan-300 inline-flex items-center gap-1">Ir para Recursos Gerais →</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Governança Ética e Compromisso LGPD -->
+            <div class="mt-14 bg-white rounded-2xl border border-slate-200 p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-8">
+                        <h3 class="text-lg font-bold text-slate-900 font-serif-clinical mb-2">
+                            Compromisso Ético, Sigilo e Soberania de Dados (LGPD)
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Diferentemente de aplicativos comerciais que armazenam relatos íntimos em nuvens de terceiros, todas as ferramentas deste portal operam sob arquitetura <strong>100% Client-Side (Zero-Backend)</strong>. Seus cálculos, diários e registros comportamentais permanecem gravados unicamente no armazenamento local do seu próprio aparelho, com controle integral para exportar backups ou apagar instantaneamente.
+                        </p>
+                    </div>
+                    <div class="md:col-span-4 flex md:justify-end">
+                        <a href="/agendamento.html" class="w-full md:w-auto min-h-[46px] px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 transition">
+                            <i data-lucide="calendar-check" class="w-4 h-4 text-cyan-300"></i>
+                            Agendar Avaliação ou Consulta
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        function filterTools(audience, btn) {
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.tool-card').forEach(card => {
+                if (audience === 'all') {
+                    card.classList.remove('hidden');
+                    return;
+                }
+                const tags = (card.getAttribute('data-audience') || '').split(/\s+/);
+                card.classList.toggle('hidden', !tags.includes(audience));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

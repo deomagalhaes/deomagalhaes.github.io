@@ -5,17 +5,98 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag( ){dataLayer.push(arguments);}
+      function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-9X4VW4FNZZ');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursos Educativos & Ferramentas – Deo Magalhães</title>
-    <meta name="description" content="Recursos interativos gratuitos, testes de autoavaliação clínica, ferramentas de foco para TDAH, RPD digital e storybooks.">
+    <title>Recursos Clínicos & Ferramentas Interativas – Deo Magalhães</title>
+    <meta name="description" content="Ecossistema de recursos clínicos 100% privados no navegador: registrador comportamental ABC (ABA), clarificação existencial, quadros visuais infantis e ferramentas para TDAH.">
     <link rel="icon" type="image/png" href="assets/favicon2.png">
     <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .clinical-hub-banner {
+            background: linear-gradient(135deg, #001219 0%, #005f73 100%);
+            border-radius: 16px;
+            padding: 28px 32px;
+            color: #ffffff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 34px;
+            box-shadow: 0 14px 30px rgba(0, 95, 115, 0.18);
+            border: 1px solid rgba(148, 210, 189, 0.25);
+        }
+        .clinical-hub-banner h3 {
+            color: #ffffff;
+            font-size: 1.45rem;
+            margin-bottom: 6px;
+        }
+        .clinical-hub-banner p {
+            color: #e2e8f0;
+            font-size: 0.96rem;
+            max-width: 680px;
+            margin: 0;
+        }
+        .clinical-hub-banner .hub-btn {
+            background-color: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 12px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            white-space: nowrap;
+        }
+        .clinical-hub-banner .hub-btn:hover {
+            background-color: #ca6702;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .resource-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        .resource-filter-btn {
+            padding: 9px 16px;
+            border-radius: 999px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .resource-filter-btn:hover {
+            border-color: #005f73;
+            color: #005f73;
+        }
+        .resource-filter-btn.active {
+            background: #005f73;
+            border-color: #005f73;
+            color: #ffffff;
+        }
+        .resource-badge-pill {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(238, 155, 0, 0.92);
+            color: #001219;
+            margin-bottom: 8px;
+            align-self: flex-start;
+        }
+    </style>
 </head>
 <body>
     <!-- Bloco de Cabeçalho Padrão -->
@@ -54,183 +135,235 @@
         </div>
     </header>
 
-   <main>
-    <!-- Seção Hero -->
-    <section class="hero">
-        <div class="container">
-            <h1>Recursos Clínicos & Ferramentas Interativas</h1>
-            <p>Instrumentos psicoeducativos gratuitos, geradores de foco para TDAH, diário cognitivo da TCC e leituras mediadas para desenvolvimento infantil.</p>
-            <div class="hero-buttons">
-                <a href="testes/escala-regulacao-emocional.html" class="cta-button">Fazer Teste de Regulação</a>
-                <a href="recursos/pomodoro-neuro.html" class="cta-button secondary">Timer com Som Marrom</a>
+    <main>
+        <!-- Seção Hero -->
+        <section class="hero">
+            <div class="container">
+                <h1>Recursos Clínicos & Ferramentas Interativas</h1>
+                <p>Instrumentos psicoeducativos gratuitos para pacientes e famílias: registro comportamental ABA, desfusão cognitiva, foco para TDAH e apoio ao desenvolvimento infantil — 100% privados no seu navegador.</p>
+                <div class="hero-buttons">
+                    <a href="ferramentas-clinicas/" class="cta-button">Abrir Hub de Ferramentas Clínicas</a>
+                    <a href="recursos/pomodoro-neuro.html" class="cta-button secondary">Timer com Som Marrom</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Recursos -->
+        <section class="page-section">
+            <div class="container">
+                <div class="clinical-hub-banner">
+                    <div>
+                        <h3>Hub de Instrumentos Clínicos para Pacientes e Famílias (LGPD • Zero-Backend)</h3>
+                        <p>Acesse a suíte interativa dedicada para famílias em acompanhamento ABA, desenvolvimento infantil e pacientes adultos em psicoterapia: diários guiados, quadros imprimíveis em A4 e total isolamento de dados no seu aparelho.</p>
+                    </div>
+                    <a href="ferramentas-clinicas/" class="hub-btn">Explorar Suíte Clínica →</a>
+                </div>
+
+                <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Catálogo de Ferramentas e Utilitários</h2>
+                <p style="text-align: left; margin-top: -15px; margin-bottom: 20px;">Filtre por finalidade clínica ou público-alvo:</p>
+
+                <div class="resource-filter-bar" role="tablist" aria-label="Filtrar recursos por categoria">
+                    <button type="button" class="resource-filter-btn active" data-filter="todos">Todos os Recursos</button>
+                    <button type="button" class="resource-filter-btn" data-filter="aba-pais">Pais &amp; ABA</button>
+                    <button type="button" class="resource-filter-btn" data-filter="adultos">Pacientes Adultos</button>
+                    <button type="button" class="resource-filter-btn" data-filter="infantil">Infantil &amp; Família</button>
+                    <button type="button" class="resource-filter-btn" data-filter="foco-regulacao">Foco &amp; Regulação</button>
+                </div>
+
+                <div class="resource-grid-custom" id="resourcesCatalogGrid">
+
+                    <!-- Card Registrador Comportamental ABC (ABA) -->
+                    <a href="recursos/registrador-abc-aba.html" class="resource-card-bg-image" data-cat="aba-pais infantil" style="background-image: url('assets/imagens/hero-3.jpg');">
+                        <div class="card-content">
+                            <span class="resource-badge-pill">Pais &amp; ABA</span>
+                            <h3>Registrador Comportamental ABC (ABA)</h3>
+                            <p>Registro rápido no celular de Antecedente, Comportamento e Consequência com análise de frequência, PDF/CSV e envio via WhatsApp.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Diário de Clarificação Existencial e Desfusão -->
+                    <a href="recursos/clarificacao-existencial.html" class="resource-card-bg-image" data-cat="adultos" style="background-image: url('assets/imagens/hero-11.jpg');">
+                        <div class="card-content">
+                            <span class="resource-badge-pill">Clínica Adulta</span>
+                            <h3>Clarificação Existencial &amp; Desfusão</h3>
+                            <p>Stepper socrático passo a passo para separar Fato Observável de Hipótese, auditar evidências e orientar escolhas por valores.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Construtor Visual de Rotina e Economia de Fichas -->
+                    <a href="recursos/construtor-rotina-fichas.html" class="resource-card-bg-image" data-cat="infantil aba-pais" style="background-image: url('assets/imagens/hero-10.jpg');">
+                        <div class="card-content">
+                            <span class="resource-badge-pill">Infantil &amp; Executivo</span>
+                            <h3>Construtor de Rotina &amp; Economia de Fichas</h3>
+                            <p>Monte quadros visuais por turno ou semanais com sistema de estrelas, recompensas combinadas e folha A4 pronta para impressão.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Matriz de Priorização Neurodivergente -->
+                    <a href="recursos/matriz-priorizacao-neuro.html" class="resource-card-bg-image" data-cat="foco-regulacao adultos" style="background-image: url('assets/imagens/tdah-controle-inibitorio.jpg');">
+                        <div class="card-content">
+                            <h3>Matriz de Priorização Neurodivergente</h3>
+                            <p>Organize suas tarefas pelo custo de energia cognitiva e impacto real, superando a paralisia decisória do TDAH.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Treinador de Coerência Cardíaca e Respiração Vagal -->
+                    <a href="recursos/coerencia-cardiaca-vagal.html" class="resource-card-bg-image" data-cat="foco-regulacao adultos" style="background-image: url('assets/imagens/coerencia-vagal.png');">
+                        <div class="card-content">
+                            <h3>Coerência Cardíaca &amp; Respiração Vagal</h3>
+                            <p>Biofeedback respiratório para ativação parassimpática, redução do cortisol e alívio do estresse agudo.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card O Diário de Bordo do Explorador de Dois Mundos -->
+                    <a href="recursos/explorador-dois-mundos/index.html" class="resource-card-bg-image" data-cat="infantil" style="background-image: url('assets/imagens/explorador-dois-mundos.jpg');">
+                        <div class="card-content">
+                            <h3>O Diário de Bordo do Explorador</h3>
+                            <p>Recurso lúdico-terapêutico para alívio de sobrecarga emocional, descompressão e conflitos de lealdade infantil.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Teste ERQ -->
+                    <a href="testes/escala-regulacao-emocional.html" class="resource-card-bg-image" data-cat="adultos" style="background-image: url('assets/imagens/hero-2.jpg');">
+                        <div class="card-content">
+                            <h3>Escala de Regulação Emocional</h3>
+                            <p>Descubra seu perfil de Reavaliação Cognitiva vs. Supressão (Gross) com devolutiva imediata.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Pomodoro Neurodivergente -->
+                    <a href="recursos/pomodoro-neuro.html" class="resource-card-bg-image" data-cat="foco-regulacao adultos" style="background-image: url('assets/imagens/deg.png');">
+                        <div class="card-content">
+                            <h3>Timer Neurodivergente &amp; Ruído Marrom</h3>
+                            <p>Pomodoro adaptado para TDAH com sintetizador de Brown Noise via Web Audio API.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Decompositor de Tarefas -->
+                    <a href="recursos/descompositor-tarefas.html" class="resource-card-bg-image" data-cat="foco-regulacao adultos" style="background-image: url('assets/imagens/tdah-controle-inibitorio.jpg');">
+                        <div class="card-content">
+                            <h3>Decompositor de Tarefas</h3>
+                            <p>Vença a paralisia do córtex pré-frontal quebrando tarefas monstro em micro-passos.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card RPD Digital -->
+                    <a href="recursos/rpd-digital.html" class="resource-card-bg-image" data-cat="adultos" style="background-image: url('assets/imagens/hero-11.jpg');">
+                        <div class="card-content">
+                            <h3>RPD Digital (Diário TCC)</h3>
+                            <p>Registro de Pensamentos Disfuncionais privado com exportação de PDF para a sessão.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Leitor Interativo de Storybooks -->
+                    <a href="recursos/leitor-storybooks.html" class="resource-card-bg-image" data-cat="infantil aba-pais" style="background-image: url('assets/imagens/hero-10.jpg');">
+                        <div class="card-content">
+                            <h3>Leitor Interativo de Storybooks</h3>
+                            <p>Histórias socioemocionais com roteiros de perguntas reflexivas para pais e terapeutas.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Jogos Terapêuticos -->
+                    <a href="jogos.html" class="resource-card-bg-image" data-cat="foco-regulacao" style="background-image: url('assets/imagens/hero-9.jpg');">
+                        <div class="card-content">
+                            <h3>Jogos &amp; Ginástica Cerebral</h3>
+                            <p>Desafio neurocognitivo do dia e acompanhamento de sequência (streak) de treino.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card RPG -->
+                    <a href="jogos/cronicas-dos-emissarios/" class="resource-card-bg-image" data-cat="infantil" style="background-image: url('assets/imagens/emissarios.png');">
+                        <div class="card-content">
+                            <h3>Crônicas dos Emissários</h3>
+                            <p>Uma aventura épica sobre empatia, compreensão e sabedoria emocional no reino mágico de Elara.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Respiração Guiada -->
+                    <a href="recursos/respiracao.html" class="resource-card-bg-image" data-cat="foco-regulacao" style="background-image: url('assets/imagens/hero-16.jpg');">
+                        <div class="card-content">
+                            <h3>Exercício de Respiração</h3>
+                            <p>Técnica de coerência respiratória e controle de ansiedade.</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Cartografia -->
+                    <a href="recursos/cartografia.html" class="resource-card-bg-image" data-cat="adultos" style="background-image: url('assets/imagens/deg.png');">
+                        <div class="card-content">
+                            <h3>Cartografia</h3>
+                            <p>Topologia Esquizoanalítica (Deleuze &amp; Guattari).</p>
+                        </div>
+                    </a>
+
+                    <!-- Card Checklist Infantil -->
+                    <a href="https://mailchi.mp/685f6f79341c/guia-gratuito-os-principais-marcos-do-desenvolvimento-infantil" class="resource-card-bg-image" data-cat="infantil aba-pais" style="background-image: url('assets/imagens/hero-3.jpg');" download>
+                        <div class="card-content">
+                            <h3>Checklist de Desenvolvimento Infantil</h3>
+                            <p>Guia em PDF dos principais marcos neuropsicomotores.</p>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- RODAPÉ PADRÃO -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
             </div>
         </div>
-    </section>
-
-    <!-- Seção de Recursos -->
-    <section class="page-section">
-        <div class="container">
-            <h2 class="section-title" style="text-align: left; font-size: 2.2em;">Ferramentas Clínicas e Utilitários</h2>
-            <p style="text-align: left; margin-top: -15px; margin-bottom: 25px;">Tecnologia 100% no seu navegador com privacidade total e respaldo científico.</p>
-            
-            <div class="resource-grid-custom">
-                
-                <!-- Card Matriz de Priorização Neurodivergente -->
-                <a href="recursos/matriz-priorizacao-neuro.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/tdah-controle-inibitorio.jpg');">
-                    <div class="card-content">
-                        <h3>Matriz de Priorização Neurodivergente</h3>
-                        <p>Organize suas tarefas pelo custo de energia cognitiva e impacto real, superando a paralisia decisória do TDAH.</p>
-                    </div>
-                </a>
-
-                <!-- Card Treinador de Coerência Cardíaca e Respiração Vagal -->
-                <a href="recursos/coerencia-cardiaca-vagal.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/coerencia-vagal.png');">
-                    <div class="card-content">
-                        <h3>Coerência Cardíaca & Respiração Vagal</h3>
-                        <p>Biofeedback respiratório para ativação parassimpática, redução do cortisol e alívio do estresse agudo.</p>
-                    </div>
-                </a>
-
-                <!-- Card O Diário de Bordo do Explorador de Dois Mundos (NOVO) -->
-                <a href="recursos/explorador-dois-mundos/index.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/explorador-dois-mundos.jpg');">
-                    <div class="card-content">
-                        <h3>O Diário de Bordo do Explorador</h3>
-                        <p>Recurso lúdico-terapêutico para alívio de sobrecarga emocional, descompressão e conflitos de lealdade infantil.</p>
-                    </div>
-                </a>
-
-                <!-- Card Teste ERQ (NOVO) -->
-                <a href="testes/escala-regulacao-emocional.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-2.jpg');">
-                    <div class="card-content">
-                        <h3>Escala de Regulação Emocional</h3>
-                        <p>Descubra seu perfil de Reavaliação Cognitiva vs. Supressão (Gross) com devolutiva imediata.</p>
-                    </div>
-                </a>
-
-                <!-- Card Pomodoro Neurodivergente (NOVO) -->
-                <a href="recursos/pomodoro-neuro.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/deg.png');">
-                    <div class="card-content">
-                        <h3>Timer Neurodivergente & Ruído Marrom</h3>
-                        <p>Pomodoro adaptado para TDAH com sintetizador de Brown Noise via Web Audio API.</p>
-                    </div>
-                </a>
-
-                <!-- Card Decompositor de Tarefas (NOVO) -->
-                <a href="recursos/descompositor-tarefas.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/tdah-controle-inibitorio.jpg');">
-                    <div class="card-content">
-                        <h3>Decompositor de Tarefas</h3>
-                        <p>Vença a paralisia do córtex pré-frontal quebrando tarefas monstro em micro-passos.</p>
-                    </div>
-                </a>
-
-                <!-- Card RPD Digital (NOVO) -->
-                <a href="recursos/rpd-digital.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-11.jpg');">
-                    <div class="card-content">
-                        <h3>RPD Digital (Diário TCC)</h3>
-                        <p>Registro de Pensamentos Disfuncionais privado com exportação de PDF para a sessão.</p>
-                    </div>
-                </a>
-
-                <!-- Card Leitor Interativo de Storybooks (NOVO) -->
-                <a href="recursos/leitor-storybooks.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-10.jpg');">
-                    <div class="card-content">
-                        <h3>Leitor Interativo de Storybooks</h3>
-                        <p>Histórias socioemocionais com roteiros de perguntas reflexivas para pais e terapeutas.</p>
-                    </div>
-                </a>
-
-                <!-- Card Jogos Terapêuticos -->
-                <a href="jogos.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-9.jpg');">
-                    <div class="card-content">
-                        <h3>Jogos & Ginástica Cerebral</h3>
-                        <p>Desafio neurocognitivo do dia e acompanhamento de sequência (streak) de treino.</p>
-                    </div>
-                </a>
-
-                <!-- Card RPG -->
-                <a href="jogos/cronicas-dos-emissarios/" class="resource-card-bg-image" style="background-image: url('assets/imagens/emissarios.png');">
-                    <div class="card-content">
-                        <h3>🎮 Crônicas dos Emissários</h3>
-                        <p>Uma aventura épica sobre empatia, compreensão e sabedoria emocional no reino mágico de Elara.</p>
-                    </div>
-                </a>
-
-                <!-- Card Respiração Guiada -->
-                <a href="recursos/respiracao.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-16.jpg');">
-                    <div class="card-content">
-                        <h3>Exercício de Respiração</h3>
-                        <p>Técnica de coerência respiratória e controle de ansiedade.</p>
-                    </div>
-                </a>
-
-                <!-- Card Cartografia -->
-                <a href="recursos/cartografia.html" class="resource-card-bg-image" style="background-image: url('assets/imagens/deg.png');">
-                    <div class="card-content">
-                        <h3>Cartografia</h3>
-                        <p>Topologia Esquizoanalítica (Deleuze & Guattari).</p>
-                    </div>
-                </a>
-
-                <!-- Card Checklist Infantil -->
-                <a href="https://mailchi.mp/685f6f79341c/guia-gratuito-os-principais-marcos-do-desenvolvimento-infantil" class="resource-card-bg-image" style="background-image: url('assets/imagens/hero-3.jpg');" download>
-                    <div class="card-content">
-                        <h3>Checklist de Desenvolvimento Infantil</h3>
-                        <p>Guia em PDF dos principais marcos neuropsicomotores.</p>
-                    </div>
-                </a>
-
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
             </div>
         </div>
-    </section>
-</main>
+    </footer>
 
-<!-- RODAPÉ PADRÃO -->
-<footer class="main-footer">
-    <div class="container footer-grid">
-        <div class="footer-column">
-            <h4>Contato</h4>
-            <ul>
-                <li><a href="https://wa.me/5535933003807" target="_blank">(35 ) 9 3300-3807</a></li>
-                <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
-                <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h4>Informações Profissionais</h4>
-            <ul>
-                <li>CRP 04/42784</li>
-                <li>Neuropsicólogo Clínico</li>
-                <li>Especialista em Neurociências</li>
-                <li>Membro da SBNp</li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h4>Redes Sociais</h4>
-            <ul>
-                <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div class="container">
-            <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
-            <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
-        </div>
-    </div>
-</footer>
-
-<!-- SCRIPT PARA MENU MOBILE -->
-<script>
-document.addEventListener("DOMContentLoaded", function( ) {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const mainNav = document.getElementById('main-nav');
-    if (mobileMenuBtn && mainNav) {
-        mobileMenuBtn.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
+    <script src="assets/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterBtns = document.querySelectorAll('.resource-filter-btn');
+        const cards = document.querySelectorAll('#resourcesCatalogGrid .resource-card-bg-image');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const target = btn.getAttribute('data-filter');
+                cards.forEach(card => {
+                    const cats = (card.getAttribute('data-cat') || '').split(/\s+/);
+                    if (target === 'todos' || cats.includes(target)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
         });
-    }
-});
-</script>
-
+    });
+    </script>
 </body>
 </html>

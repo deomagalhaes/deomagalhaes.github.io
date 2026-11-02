@@ -176,8 +176,8 @@ if ($cardsTarget) {
 # 6. Cabecalho Canonico (#main-header) nos HTMLs alvo
 $headerCandidates = @($htmlTargets | Where-Object {
     $_.FullName -notmatch '\\assets\\template\\' -and
-    $_.FullName -notmatch '\\bonsai\\' -and
-    $_.FullName -notmatch '\\teste-bonsai\\' -and
+    $_.FullName -notmatch '\\\.agents\\' -and
+    $_.FullName -notmatch '\\nexus-vault\\' -and
     $_.FullName -notmatch '\\social\\gerador\.html' -and
     $_.FullName -notmatch '\\social\\index\.html' -and
     $_.FullName -notmatch '\\relatorios\\' -and
@@ -264,6 +264,31 @@ foreach ($sf in $socialTargets) {
 
 if ($latexErrorCount -eq 0 -and ($htmlTargets.Count -gt 0 -or $socialTargets.Count -gt 0)) {
     Report-Success "Blindagem Anti-LaTeX Bruto: 0 formulas nao-renderizadas nos arquivos analisados."
+}
+
+# 9. Blindagem de Isolamento do Lab Pessoal Oculto (nexus-vault)
+$vaultLeakCount = 0
+foreach ($f in $targetFiles) {
+    $rel = $f.FullName.Replace($repoDir, '').TrimStart('\')
+    if ($rel -match '^(\.agents|nexus-vault|scripts)\\') { continue }
+    if ($f.Extension -in @('.html', '.js')) {
+        $txt = [System.IO.File]::ReadAllText($f.FullName, [System.Text.Encoding]::UTF8)
+        if ($txt -match 'nexus-vault') {
+            Report-Error "Vazamento de rota oculta: '$rel' contem referencia literal a 'nexus-vault'!"
+            $vaultLeakCount++
+        }
+    }
+}
+$vaultIndexPath = Join-Path $repoDir 'nexus-vault\index.html'
+if (Test-Path -LiteralPath $vaultIndexPath) {
+    $vTxt = [System.IO.File]::ReadAllText($vaultIndexPath, [System.Text.Encoding]::UTF8)
+    if ($vTxt -notmatch '<meta\s+name="robots"\s+content="noindex,\s*nofollow') {
+        Report-Error "nexus-vault\index.html nao contem meta robots noindex, nofollow obrigatoria!"
+        $vaultLeakCount++
+    }
+}
+if ($vaultLeakCount -eq 0) {
+    Report-Success "Blindagem Lab Oculto: Isolamento de rota e noindex verificados."
 }
 
 $stopwatch.Stop()

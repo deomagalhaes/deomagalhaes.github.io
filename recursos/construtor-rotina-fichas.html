@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construtor Visual de Rotina e Economia de Fichas – Deo Magalhães</title>
+    <meta name="description" content="Construtor interativo e imprimível A4 de quadro visual de rotina infantil e economia de fichas (estrelas) para TDAH, TEA e desenvolvimento das funções executivas.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        .font-serif-clinical {
+            font-family: 'Merriweather', serif;
+        }
+        main section {
+            padding: 0;
+        }
+        /* Temas suaves do Quadro Infantil */
+        .board-theme-ocean {
+            --board-primary: #005f73;
+            --board-soft: #ecfeff;
+            --board-border: #a5f3fc;
+        }
+        .board-theme-forest {
+            --board-primary: #15803d;
+            --board-soft: #f0fdf4;
+            --board-border: #bbf7d0;
+        }
+        .board-theme-sun {
+            --board-primary: #b45309;
+            --board-soft: #fffbeb;
+            --board-border: #fde68a;
+        }
+        .themed-header {
+            background-color: var(--board-soft);
+            border-color: var(--board-border);
+        }
+        .themed-accent {
+            color: var(--board-primary);
+        }
+        /* Proteção Institucional do Rodapé */
+        footer.main-footer {
+            background-color: #2c3e50 !important;
+            color: #e2e8f0 !important;
+            padding-top: 50px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+        footer.main-footer .footer-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 30px !important;
+            padding-bottom: 30px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .footer-column h4 {
+            color: #ffffff !important;
+            font-size: 1.2em !important;
+            margin-bottom: 16px !important;
+            font-weight: 600 !important;
+        }
+        footer.main-footer ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        footer.main-footer li {
+            margin-bottom: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            color: #e2e8f0 !important;
+        }
+        footer.main-footer a {
+            color: #e2e8f0 !important;
+            text-decoration: none !important;
+        }
+        footer.main-footer .footer-bottom {
+            border-top: 1px solid #3e5266 !important;
+            padding: 20px 0 !important;
+            text-align: center !important;
+            color: #94a3b8 !important;
+            font-size: 0.9em !important;
+        }
+        /* Folha A4 Pedagógica Limpa */
+        .print-sheet-only {
+            display: none;
+        }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+            .top-bar, #main-header, footer.main-footer, .no-print {
+                display: none !important;
+            }
+            .print-sheet-only {
+                display: block !important;
+            }
+            body {
+                background: #ffffff !important;
+                color: #0f172a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .print-container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            table.a4-routine-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 9.5pt;
+            }
+            table.a4-routine-table th,
+            table.a4-routine-table td {
+                border: 1.2px solid #94a3b8;
+                padding: 6px 6px;
+                vertical-align: middle;
+            }
+            table.a4-routine-table th {
+                background-color: #f1f5f9 !important;
+                font-weight: 700;
+                text-align: center;
+            }
+            .check-square {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border: 1.5px solid #334155;
+                border-radius: 4px;
+                background: #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html" class="active">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="py-8 md:py-10">
+        <div id="app-root" class="max-w-6xl mx-auto px-4 print-container board-theme-ocean">
+
+            <!-- Cabeçalho da Ferramenta (No-Print) -->
+            <div class="mb-7 no-print">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <a href="/ferramentas-clinicas/index.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-[#005f73] hover:underline">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Hub de Ferramentas Clínicas
+                    </a>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200">
+                            <i data-lucide="star" class="w-3.5 h-3.5"></i> Infantil · Funções Executivas · TDAH &amp; TEA
+                        </span>
+                        <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#005f73] text-white hover:bg-[#0a9396] shadow-sm transition">
+                            <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Folha A4 para Geladeira/Quarto
+                        </button>
+                    </div>
+                </div>
+                <h1 class="text-2xl md:text-4xl font-bold text-slate-900 font-serif-clinical mb-2">
+                    Construtor Visual de Rotina &amp; Economia de Fichas
+                </h1>
+                <p class="text-slate-600 text-sm md:text-base max-w-4xl">
+                    Externalize o tempo e fortaleça a memória operacional infantil com cartões visuais previsíveis e reforçamento positivo imediato. Use de forma interativa no tablet/celular ou imprima a folha A4 semanal pronta para colar no quarto da criança.
+                </p>
+            </div>
+
+            <!-- Painel de Personalização do Quadro (No-Print) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-6 no-print">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+                    <div class="lg:col-span-3">
+                        <label for="inp-kid-name" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Nome da Criança</label>
+                        <input type="text" id="inp-kid-name" placeholder="Ex.: Pequeno Explorador" oninput="updateBoardConfig()"
+                            class="w-full min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+                    </div>
+                    <div class="lg:col-span-4">
+                        <label for="inp-board-title" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Título do Quadro</label>
+                        <input type="text" id="inp-board-title" value="Minha Rotina de Conquistas" oninput="updateBoardConfig()"
+                            class="w-full min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+                    </div>
+                    <div class="lg:col-span-3">
+                        <label for="sel-board-mode" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Modo de Visualização</label>
+                        <select id="sel-board-mode" onchange="updateBoardConfig()" class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white">
+                            <option value="shifts">Rotina Diária por Turnos (Manhã/Tarde/Noite)</option>
+                            <option value="weekly">Quadro Semanal (Segunda a Domingo)</option>
+                        </select>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <label for="sel-board-theme" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Tema Visual</label>
+                        <select id="sel-board-theme" onchange="updateBoardConfig()" class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white">
+                            <option value="ocean">🌊 Oceano Sereno</option>
+                            <option value="forest">🌿 Bosque Acolhedor</option>
+                            <option value="sun">☀️ Sol da Manhã</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Biblioteca Rápida de Cartões Ilustrados -->
+                <div class="mt-5 pt-4 border-t border-slate-100">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Biblioteca Rápida de Cartões Lúdicos (Toque para adicionar ao quadro):
+                        </span>
+                        <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                            <input type="checkbox" id="chk-sound-fx" checked onchange="updateBoardConfig()" class="w-4 h-4 rounded text-[#005f73]">
+                            🔊 Som suave ao concluir (Web Audio API)
+                        </label>
+                    </div>
+                    <div id="preset-cards-bar" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <!-- Adição Livre de Tarefa Personalizada -->
+                <form onsubmit="addCustomTask(event)" class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-12 gap-2.5 items-end">
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="inp-task-icon" class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Ícone</label>
+                        <select id="inp-task-icon" class="w-full min-h-[42px] px-2.5 py-1.5 rounded-xl border border-slate-300 text-lg bg-white">
+                            <option value="🪥">🪥 Dentes</option>
+                            <option value="👕">👕 Roupa</option>
+                            <option value="🥣">🥣 Refeição</option>
+                            <option value="🎒">🎒 Mochila</option>
+                            <option value="📚">📚 Tarefa</option>
+                            <option value="🧸">🧸 Guardar</option>
+                            <option value="🚿">🚿 Banho</option>
+                            <option value="🌬️">🌬️ Calma</option>
+                            <option value="🎨">🎨 Brincar</option>
+                            <option value="🐕">🐕 Pet</option>
+                            <option value="💧">💧 Água</option>
+                            <option value="🛌">🛌 Dormir</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-4">
+                        <label for="inp-task-title" class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Nova Missão / Tarefa</label>
+                        <input type="text" id="inp-task-title" required placeholder="Ex.: Arrumar os lápis no estojo"
+                            class="w-full min-h-[42px] px-3 py-1.5 rounded-xl border border-slate-300 text-sm">
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="inp-task-shift" class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Turno</label>
+                        <select id="inp-task-shift" class="w-full min-h-[42px] px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white">
+                            <option value="Manhã">🌅 Manhã</option>
+                            <option value="Tarde">☀️ Tarde</option>
+                            <option value="Noite">🌙 Noite</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="inp-task-time" class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Horário (Opc.)</label>
+                        <input type="time" id="inp-task-time" class="w-full min-h-[42px] px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs">
+                    </div>
+                    <div class="col-span-1 sm:col-span-1">
+                        <label for="inp-task-stars" class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Estrelas</label>
+                        <select id="inp-task-stars" class="w-full min-h-[42px] px-2 py-1.5 rounded-xl border border-slate-300 text-xs font-bold bg-white">
+                            <option value="1">1 ⭐</option>
+                            <option value="2" selected>2 ⭐</option>
+                            <option value="3">3 ⭐</option>
+                            <option value="4">4 ⭐</option>
+                            <option value="5">5 ⭐</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1 sm:col-span-1">
+                        <button type="submit" class="w-full min-h-[42px] rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-xs flex items-center justify-center gap-1 transition" title="Adicionar tarefa">
+                            + Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Grid Interativo Principal: Quadro de Rotina + Cofre de Fichas / Recompensas (No-Print) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8 no-print">
+
+                <!-- Coluna Esquerda (8 cols): Quadro Visual Interativo -->
+                <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="themed-header border-b p-5 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <div class="text-xs font-bold uppercase tracking-wider themed-accent" id="live-kid-badge">Quadro Individual</div>
+                            <h2 class="text-xl md:text-2xl font-extrabold text-slate-900" id="live-board-heading">Minha Rotina de Conquistas</h2>
+                        </div>
+                        <button type="button" onclick="resetTaskChecksOnly()" class="px-3.5 py-2 rounded-xl bg-white/90 hover:bg-white border border-slate-300 text-xs font-semibold text-slate-700 shadow-sm transition">
+                            🔄 Novo Dia / Desmarcar Tarefas
+                        </button>
+                    </div>
+
+                    <div id="interactive-board-body" class="p-5 space-y-6"></div>
+                </div>
+
+                <!-- Coluna Direita (4 cols): Cofre de Estrelas + Recompensas Combinadas -->
+                <div class="lg:col-span-4 space-y-6">
+
+                    <!-- Cofre de Estrelas -->
+                    <div class="bg-slate-900 text-white rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs uppercase tracking-widest text-amber-300 font-bold">Cofre de Fichas</span>
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="adjustBonusStars(-1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold">−1</button>
+                                <button type="button" onclick="adjustBonusStars(1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold">+1</button>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2 my-2">
+                            <span id="star-bank-count" class="text-4xl font-extrabold text-amber-400">0</span>
+                            <span class="text-lg">⭐ acumuladas</span>
+                        </div>
+                        <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden mt-3">
+                            <div id="star-progress-bar" class="h-full bg-amber-400 transition-all duration-300" style="width: 0%;"></div>
+                        </div>
+                        <p id="star-next-goal-text" class="text-xs text-slate-300 mt-2">
+                            Conclua missões do quadro para ganhar estrelas!
+                        </p>
+                    </div>
+
+                    <!-- Recompensas Combinadas -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <h3 class="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
+                            <span>🎁</span> Recompensas Combinadas
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-4">
+                            Priorize privilégios afetivos e experiências compartilhadas em família.
+                        </p>
+
+                        <div id="rewards-list-ui" class="space-y-2.5 mb-4"></div>
+
+                        <form onsubmit="addRewardItem(event)" class="pt-3 border-t border-slate-100 space-y-2">
+                            <div class="flex gap-2">
+                                <input type="text" id="inp-reward-title" required placeholder="Ex.: Escolher o filme de sexta"
+                                    class="flex-1 min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-300 text-xs">
+                                <input type="number" id="inp-reward-cost" min="1" max="200" value="15" required
+                                    class="w-20 min-h-[40px] px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-bold text-center">
+                            </div>
+                            <button type="submit" class="w-full min-h-[40px] rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition">
+                                + Adicionar Recompensa (⭐)
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Ações de Arquivo e Impressão -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 space-y-2.5">
+                        <button type="button" onclick="window.print()" class="w-full min-h-[46px] rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition">
+                            <i data-lucide="printer" class="w-4 h-4"></i>
+                            Imprimir Quadro A4 Semanal
+                        </button>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" onclick="exportRoutineJSON()" class="min-h-[40px] rounded-xl border border-slate-300 hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i> Exportar JSON
+                            </button>
+                            <label class="min-h-[40px] rounded-xl border border-slate-300 hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 cursor-pointer">
+                                <i data-lucide="upload" class="w-3.5 h-3.5"></i> Importar JSON
+                                <input type="file" accept=".json,application/json" class="hidden" onchange="importRoutineJSON(event)">
+                            </label>
+                        </div>
+                        <button type="button" onclick="restoreDefaultRoutine()" class="w-full py-1.5 text-xs text-rose-700 hover:underline font-medium">
+                            Restaurar Quadro Padrão Inicial
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOLHA A4 PEDAGÓGICA EXCLUSIVA PARA IMPRESSÃO (@media print) -->
+            <div class="print-sheet-only">
+                <div class="border-2 border-slate-800 rounded-2xl p-4 mb-3 bg-slate-50 flex items-center justify-between">
+                    <div>
+                        <h1 id="a4-board-title" class="text-xl font-extrabold text-slate-900">Minha Rotina de Conquistas</h1>
+                        <p class="text-xs text-slate-700 mt-1">
+                            <strong>Criança:</strong> <span id="a4-kid-name">____________________________________</span>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <strong>Semana de:</strong> ____/____ a ____/____
+                        </p>
+                    </div>
+                    <div class="text-right text-xs text-slate-700">
+                        <div class="font-bold">Saldo da Semana: _______ ⭐</div>
+                        <div class="text-[10px] text-slate-500">Marque cada conquista diária!</div>
+                    </div>
+                </div>
+
+                <table class="a4-routine-table mb-4">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">Turno</th>
+                            <th style="width: 34%; text-align: left;">Missão / Combinado Visual</th>
+                            <th style="width: 9%;">Valor</th>
+                            <th style="width: 6.4%;">Seg</th>
+                            <th style="width: 6.4%;">Ter</th>
+                            <th style="width: 6.4%;">Qua</th>
+                            <th style="width: 6.4%;">Qui</th>
+                            <th style="width: 6.4%;">Sex</th>
+                            <th style="width: 6.4%;">Sáb</th>
+                            <th style="width: 6.4%;">Dom</th>
+                        </tr>
+                    </thead>
+                    <tbody id="a4-routine-tbody"></tbody>
+                </table>
+
+                <div class="border-2 border-slate-800 rounded-xl p-3.5">
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-900 mb-2">
+                        🎁 Nosso Menu de Recompensas Combinadas em Família
+                    </h2>
+                    <div id="a4-rewards-grid" class="grid grid-cols-2 gap-2 text-xs"></div>
+                </div>
+
+                <p class="text-[9pt] text-slate-500 mt-2.5 text-center">
+                    Recurso de Apoio às Funções Executivas e Orientação Parental · Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) · deomagalhaes.com.br
+                </p>
+            </div>
+
+            <!-- Nota Neuropsicológica (No-Print) -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 text-xs text-slate-600 leading-relaxed no-print">
+                <p class="mb-2">
+                    <strong>Base Neuropsicológica (Barkley, 2020; Diamond, 2013):</strong> Crianças em desenvolvimento — especialmente no TDAH e no TEA — beneficiam-se fortemente da <em>externalização visual da informação</em> no ambiente físico e da redução do atraso temporal entre o esforço autorregulatório e o reforçador positivo concreto.
+                </p>
+                <p class="text-slate-500">
+                    <strong>Orientação Clínica — Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784):</strong> Jamais retire estrelas já conquistadas como punição (custo de resposta punitivo gera frustração e abandono do quadro). Mantenha metas curtas, alcançáveis e celebre o processo de autonomia!
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="routine-toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-xl bg-slate-900 text-white text-sm font-medium shadow-xl no-print"></div>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        const ROUTINE_KEY = 'deo_construtor_rotina_fichas_v1';
+        const DAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+
+        const PRESET_LIBRARY = [
+            { icon: '🪥', title: 'Escovar os dentes', shift: 'Manhã', stars: 1 },
+            { icon: '👕', title: 'Vestir a roupa / uniforme', shift: 'Manhã', stars: 1 },
+            { icon: '🥣', title: 'Tomar café da manhã', shift: 'Manhã', stars: 1 },
+            { icon: '🎒', title: 'Conferir a mochila', shift: 'Manhã', stars: 2 },
+            { icon: '📚', title: 'Hora da tarefa / leitura', shift: 'Tarde', stars: 3 },
+            { icon: '🧸', title: 'Guardar os brinquedos', shift: 'Tarde', stars: 2 },
+            { icon: '🌬️', title: 'Respirar fundo quando frustrado', shift: 'Tarde', stars: 3 },
+            { icon: '🚿', title: 'Banho tranquilo', shift: 'Noite', stars: 2 },
+            { icon: '📵', title: 'Desligar telas no combinado', shift: 'Noite', stars: 3 },
+            { icon: '🛌', title: 'Dormir no horário', shift: 'Noite', stars: 2 }
+        ];
+
+        function getDefaultState() {
+            return {
+                kidName: '',
+                boardTitle: 'Minha Rotina de Conquistas',
+                mode: 'shifts',
+                theme: 'ocean',
+                soundEnabled: true,
+                starBank: 0,
+                tasks: [
+                    { id: 't1', icon: '🪥', title: 'Escovar os dentes ao acordar', shift: 'Manhã', time: '07:30', stars: 1, doneToday: false, weekChecks: [false, false, false, false, false, false, false] },
+                    { id: 't2', icon: '👕', title: 'Vestir o uniforme sozinho(a)', shift: 'Manhã', time: '07:50', stars: 2, doneToday: false, weekChecks: [false, false, false, false, false, false, false] },
+                    { id: 't3', icon: '📚', title: 'Fazer a atividade escolar com atenção', shift: 'Tarde', time: '14:30', stars: 3, doneToday: false, weekChecks: [false, false, false, false, false, false, false] },
+                    { id: 't4', icon: '🧸', title: 'Guardar os brinquedos após brincar', shift: 'Tarde', time: '17:30', stars: 2, doneToday: false, weekChecks: [false, false, false, false, false, false, false] },
+                    { id: 't5', icon: '🚿', title: 'Tomar banho calmo', shift: 'Noite', time: '19:30', stars: 2, doneToday: false, weekChecks: [false, false, false, false, false, false, false] },
+                    { id: 't6', icon: '🛌', title: 'História e dormir no horário combinado', shift: 'Noite', time: '21:00', stars: 2, doneToday: false, weekChecks: [false, false, false, false, false, false, false] }
+                ],
+                rewards: [
+                    { id: 'r1', title: 'Escolher o jogo de tabuleiro com os pais', cost: 10 },
+                    { id: 'r2', title: 'Passeio especial no parque / andar de bicicleta', cost: 22 },
+                    { id: 'r3', title: 'Noite de cinema em casa com pipoca', cost: 35 }
+                ]
+            };
+        }
+
+        let rState = getDefaultState();
+        let audioCtx = null;
+
+        // Sintetizador Web Audio API Puro (Acorde suave sem dependências externas)
+        function playChime(type = 'task') {
+            if (!rState.soundEnabled) return;
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) return;
+                if (!audioCtx) audioCtx = new AudioContextClass();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const now = audioCtx.currentTime;
+                const notes = type === 'reward'
+                    ? [523.25, 659.25, 783.99, 1046.50]
+                    : [587.33, 880.00];
+
+                notes.forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.08);
+                    gain.gain.setValueAtTime(0.001, now + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.14, now + i * 0.08 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + i * 0.08);
+                    osc.stop(now + i * 0.08 + 0.36);
+                });
+            } catch (e) {
+                console.warn('Web Audio indisponível:', e);
+            }
+        }
+
+        function showRoutineToast(msg) {
+            const t = document.getElementById('routine-toast');
+            t.textContent = msg;
+            t.classList.remove('hidden');
+            clearTimeout(window.__rToast);
+            window.__rToast = setTimeout(() => t.classList.add('hidden'), 2600);
+        }
+
+        function saveRoutine() {
+            try {
+                localStorage.setItem(ROUTINE_KEY, JSON.stringify(rState));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function loadRoutine() {
+            try {
+                const raw = localStorage.getItem(ROUTINE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.tasks)) {
+                        rState = { ...getDefaultState(), ...parsed };
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            syncInputsFromState();
+        }
+
+        function syncInputsFromState() {
+            document.getElementById('inp-kid-name').value = rState.kidName || '';
+            document.getElementById('inp-board-title').value = rState.boardTitle || 'Minha Rotina de Conquistas';
+            document.getElementById('sel-board-mode').value = rState.mode || 'shifts';
+            document.getElementById('sel-board-theme').value = rState.theme || 'ocean';
+            document.getElementById('chk-sound-fx').checked = rState.soundEnabled !== false;
+        }
+
+        function updateBoardConfig() {
+            rState.kidName = document.getElementById('inp-kid-name').value.trim();
+            rState.boardTitle = document.getElementById('inp-board-title').value.trim() || 'Minha Rotina de Conquistas';
+            rState.mode = document.getElementById('sel-board-mode').value;
+            rState.theme = document.getElementById('sel-board-theme').value;
+            rState.soundEnabled = document.getElementById('chk-sound-fx').checked;
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function renderPresetBar() {
+            const bar = document.getElementById('preset-cards-bar');
+            bar.innerHTML = PRESET_LIBRARY.map((p, idx) => `
+                <button type="button" onclick="addFromPreset(${idx})"
+                    class="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-teal-50 hover:border-teal-300 text-xs font-semibold text-slate-700 transition flex items-center gap-1.5">
+                    <span class="text-base">${p.icon}</span>
+                    <span>${p.title}</span>
+                    <span class="text-amber-600 font-bold">(${p.stars}⭐)</span>
+                </button>
+            `).join('');
+        }
+
+        function addFromPreset(idx) {
+            const p = PRESET_LIBRARY[idx];
+            if (!p) return;
+            rState.tasks.push({
+                id: 'tk-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+                icon: p.icon,
+                title: p.title,
+                shift: p.shift,
+                time: '',
+                stars: p.stars,
+                doneToday: false,
+                weekChecks: [false, false, false, false, false, false, false]
+            });
+            saveRoutine();
+            renderAllRoutine();
+            showRoutineToast(`"${p.title}" adicionado ao turno da ${p.shift}!`);
+        }
+
+        function addCustomTask(e) {
+            e.preventDefault();
+            const icon = document.getElementById('inp-task-icon').value;
+            const title = document.getElementById('inp-task-title').value.trim();
+            const shift = document.getElementById('inp-task-shift').value;
+            const time = document.getElementById('inp-task-time').value;
+            const stars = parseInt(document.getElementById('inp-task-stars').value, 10) || 1;
+            if (!title) return;
+
+            rState.tasks.push({
+                id: 'tk-' + Date.now().toString(36),
+                icon,
+                title,
+                shift,
+                time,
+                stars,
+                doneToday: false,
+                weekChecks: [false, false, false, false, false, false, false]
+            });
+            document.getElementById('inp-task-title').value = '';
+            document.getElementById('inp-task-time').value = '';
+            saveRoutine();
+            renderAllRoutine();
+            showRoutineToast('Nova missão adicionada ao quadro!');
+        }
+
+        function toggleTaskDaily(taskId) {
+            const tk = rState.tasks.find(t => t.id === taskId);
+            if (!tk) return;
+            tk.doneToday = !tk.doneToday;
+            if (tk.doneToday) {
+                rState.starBank += tk.stars;
+                playChime('task');
+            } else {
+                rState.starBank = Math.max(0, rState.starBank - tk.stars);
+            }
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function toggleTaskWeekday(taskId, dayIdx) {
+            const tk = rState.tasks.find(t => t.id === taskId);
+            if (!tk) return;
+            if (!Array.isArray(tk.weekChecks) || tk.weekChecks.length !== 7) {
+                tk.weekChecks = [false, false, false, false, false, false, false];
+            }
+            tk.weekChecks[dayIdx] = !tk.weekChecks[dayIdx];
+            if (tk.weekChecks[dayIdx]) {
+                rState.starBank += tk.stars;
+                playChime('task');
+            } else {
+                rState.starBank = Math.max(0, rState.starBank - tk.stars);
+            }
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function deleteTask(taskId) {
+            rState.tasks = rState.tasks.filter(t => t.id !== taskId);
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function resetTaskChecksOnly() {
+            rState.tasks.forEach(t => {
+                t.doneToday = false;
+                t.weekChecks = [false, false, false, false, false, false, false];
+            });
+            saveRoutine();
+            renderAllRoutine();
+            showRoutineToast('Marcações reiniciadas para um novo ciclo! O saldo de estrelas no cofre foi preservado.');
+        }
+
+        function adjustBonusStars(delta) {
+            rState.starBank = Math.max(0, (rState.starBank || 0) + delta);
+            if (delta > 0) playChime('task');
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function addRewardItem(e) {
+            e.preventDefault();
+            const title = document.getElementById('inp-reward-title').value.trim();
+            const cost = parseInt(document.getElementById('inp-reward-cost').value, 10) || 10;
+            if (!title) return;
+            rState.rewards.push({
+                id: 'rw-' + Date.now().toString(36),
+                title,
+                cost
+            });
+            rState.rewards.sort((a, b) => a.cost - b.cost);
+            document.getElementById('inp-reward-title').value = '';
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function redeemReward(rewardId) {
+            const rw = rState.rewards.find(r => r.id === rewardId);
+            if (!rw) return;
+            if (rState.starBank < rw.cost) {
+                showRoutineToast(`Ainda faltam ${rw.cost - rState.starBank} ⭐ para resgatar esta recompensa!`);
+                return;
+            }
+            rState.starBank -= rw.cost;
+            playChime('reward');
+            saveRoutine();
+            renderAllRoutine();
+            showRoutineToast(`🎉 Parabéns! Recompensa resgatada: "${rw.title}"!`);
+        }
+
+        function removeReward(rewardId) {
+            rState.rewards = rState.rewards.filter(r => r.id !== rewardId);
+            saveRoutine();
+            renderAllRoutine();
+        }
+
+        function escHtml(s) {
+            return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function renderAllRoutine() {
+            const root = document.getElementById('app-root');
+            root.className = `max-w-6xl mx-auto px-4 print-container board-theme-${rState.theme || 'ocean'}`;
+
+            document.getElementById('live-kid-badge').textContent = rState.kidName ? `Quadro de ${rState.kidName}` : 'Quadro Visual Infantil';
+            document.getElementById('live-board-heading').textContent = rState.boardTitle;
+
+            // Renderiza Corpo Interativo (Turnos vs Semanal)
+            const bodyEl = document.getElementById('interactive-board-body');
+            if (rState.tasks.length === 0) {
+                bodyEl.innerHTML = '<p class="py-10 text-center text-slate-400 italic">Toque nos cartões da biblioteca acima para montar o quadro visual da criança.</p>';
+            } else if (rState.mode === 'shifts') {
+                const shifts = [
+                    { key: 'Manhã', badge: '🌅 Turno da Manhã', bg: 'bg-sky-50/60 border-sky-100' },
+                    { key: 'Tarde', badge: '☀️ Turno da Tarde', bg: 'bg-amber-50/60 border-amber-100' },
+                    { key: 'Noite', badge: '🌙 Turno da Noite', bg: 'bg-indigo-50/50 border-indigo-100' }
+                ];
+                bodyEl.innerHTML = shifts.map(sh => {
+                    const list = rState.tasks.filter(t => t.shift === sh.key);
+                    if (list.length === 0) return '';
+                    return `
+                        <div class="p-4 rounded-2xl border ${sh.bg}">
+                            <h3 class="text-sm font-extrabold text-slate-800 mb-3">${sh.badge}</h3>
+                            <div class="space-y-2.5">
+                                ${list.map(t => `
+                                    <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-white border ${t.doneToday ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-200'} shadow-sm transition">
+                                        <button type="button" onclick="toggleTaskDaily('${t.id}')" class="flex-1 flex items-center gap-3 text-left">
+                                            <span class="w-8 h-8 rounded-lg flex items-center justify-center border-2 ${t.doneToday ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 bg-slate-50'} font-bold">
+                                                ${t.doneToday ? '✓' : ''}
+                                            </span>
+                                            <span class="text-2xl">${escHtml(t.icon)}</span>
+                                            <div>
+                                                <div class="text-sm font-bold ${t.doneToday ? 'line-through text-slate-400' : 'text-slate-800'}">${escHtml(t.title)}</div>
+                                                ${t.time ? `<div class="text-[11px] text-slate-500">⏰ ${escHtml(t.time)}</div>` : ''}
+                                            </div>
+                                        </button>
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-extrabold">+${t.stars} ⭐</span>
+                                            <button type="button" onclick="deleteTask('${t.id}')" class="text-slate-400 hover:text-rose-600 px-1.5 font-bold" title="Remover">×</button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // Modo Quadro Semanal (Seg a Dom)
+                bodyEl.innerHTML = `
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b-2 border-slate-200 text-slate-600">
+                                    <th class="py-2 text-left">Missão Visual</th>
+                                    <th class="py-2 text-center">⭐</th>
+                                    ${DAYS.map(d => `<th class="py-2 text-center px-1">${d}</th>`).join('')}
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                ${rState.tasks.map(t => {
+                                    const checks = Array.isArray(t.weekChecks) ? t.weekChecks : [false, false, false, false, false, false, false];
+                                    return `
+                                        <tr>
+                                            <td class="py-3 pr-2 font-semibold text-slate-800 flex items-center gap-2">
+                                                <span class="text-xl">${escHtml(t.icon)}</span>
+                                                <div>
+                                                    <div>${escHtml(t.title)}</div>
+                                                    <div class="text-[10px] text-slate-400">${escHtml(t.shift)}${t.time ? ' · ' + escHtml(t.time) : ''}</div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center font-bold text-amber-700">${t.stars}⭐</td>
+                                            ${DAYS.map((_, dIdx) => `
+                                                <td class="text-center px-1">
+                                                    <button type="button" onclick="toggleTaskWeekday('${t.id}', ${dIdx})"
+                                                        class="w-8 h-8 rounded-lg border-2 font-bold transition ${checks[dIdx] ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-slate-50 border-slate-300 hover:border-teal-500'}">
+                                                        ${checks[dIdx] ? '★' : ''}
+                                                    </button>
+                                                </td>
+                                            `).join('')}
+                                            <td class="text-right pl-1">
+                                                <button type="button" onclick="deleteTask('${t.id}')" class="text-rose-500 font-bold px-1">×</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            // Cofre & Progresso
+            document.getElementById('star-bank-count').textContent = String(rState.starBank);
+            const nextReward = rState.rewards.find(r => r.cost > rState.starBank) || rState.rewards[rState.rewards.length - 1];
+            if (nextReward) {
+                const pct = Math.min(100, Math.round((rState.starBank / nextReward.cost) * 100));
+                document.getElementById('star-progress-bar').style.width = `${pct}%`;
+                document.getElementById('star-next-goal-text').textContent = rState.starBank >= nextReward.cost
+                    ? `Meta atingida para "${nextReward.title}"! Você já pode resgatar!`
+                    : `Progresso para "${nextReward.title}": ${rState.starBank} de ${nextReward.cost} ⭐`;
+            } else {
+                document.getElementById('star-progress-bar').style.width = '100%';
+                document.getElementById('star-next-goal-text').textContent = 'Adicione recompensas combinadas abaixo.';
+            }
+
+            // Lista de Recompensas
+            const rwEl = document.getElementById('rewards-list-ui');
+            rwEl.innerHTML = rState.rewards.map(rw => {
+                const canRedeem = rState.starBank >= rw.cost;
+                return `
+                    <div class="p-3 rounded-xl border ${canRedeem ? 'border-amber-400 bg-amber-50/60' : 'border-slate-200 bg-slate-50'} flex items-center justify-between gap-2">
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">${escHtml(rw.title)}</div>
+                            <div class="text-[11px] font-extrabold text-amber-700">${rw.cost} ⭐ necessárias</div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="redeemReward('${rw.id}')"
+                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${canRedeem ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm' : 'bg-slate-200 text-slate-500'}">
+                                Resgatar
+                            </button>
+                            <button type="button" onclick="removeReward('${rw.id}')" class="text-slate-400 hover:text-rose-600 px-1 font-bold">×</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Renderiza Folha A4 de Impressão
+            document.getElementById('a4-board-title').textContent = rState.boardTitle;
+            document.getElementById('a4-kid-name').textContent = rState.kidName || '____________________________________';
+
+            const shiftOrder = { 'Manhã': 1, 'Tarde': 2, 'Noite': 3 };
+            const sortedTasks = [...rState.tasks].sort((a, b) => (shiftOrder[a.shift] || 9) - (shiftOrder[b.shift] || 9));
+
+            document.getElementById('a4-routine-tbody').innerHTML = sortedTasks.map(t => `
+                <tr>
+                    <td style="text-align: center; font-weight: 700;">${escHtml(t.shift)}</td>
+                    <td>
+                        <span style="font-size: 13pt; margin-right: 6px;">${escHtml(t.icon)}</span>
+                        <strong>${escHtml(t.title)}</strong>
+                        ${t.time ? `<span style="color:#475569; font-size:8.5pt;"> (${escHtml(t.time)})</span>` : ''}
+                    </td>
+                    <td style="text-align: center; font-weight: 700;">${t.stars} ⭐</td>
+                    ${DAYS.map(() => `<td style="text-align: center;"><span class="check-square"></span></td>`).join('')}
+                </tr>
+            `).join('');
+
+            document.getElementById('a4-rewards-grid').innerHTML = rState.rewards.map(rw => `
+                <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>[ &nbsp; ] <strong>${escHtml(rw.title)}</strong></span>
+                    <span style="font-weight: 800;">${rw.cost} ⭐</span>
+                </div>
+            `).join('');
+        }
+
+        function exportRoutineJSON() {
+            const blob = new Blob([JSON.stringify({ tool: 'construtor-rotina-fichas', exportedAt: new Date().toISOString(), ...rState }, null, 2)], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `quadro-rotina-fichas-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showRoutineToast('Quadro exportado em JSON!');
+        }
+
+        function importRoutineJSON(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (!parsed || !Array.isArray(parsed.tasks)) throw new Error('Inválido');
+                    rState = { ...getDefaultState(), ...parsed };
+                    syncInputsFromState();
+                    saveRoutine();
+                    renderAllRoutine();
+                    showRoutineToast('Quadro importado com sucesso!');
+                } catch (err) {
+                    alert('Arquivo JSON inválido para o Construtor de Rotina.');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        function restoreDefaultRoutine() {
+            if (!confirm('Deseja restaurar o quadro para o modelo inicial padrão?')) return;
+            rState = getDefaultState();
+            syncInputsFromState();
+            saveRoutine();
+            renderAllRoutine();
+            showRoutineToast('Modelo inicial restaurado.');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPresetBar();
+            loadRoutine();
+            renderAllRoutine();
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

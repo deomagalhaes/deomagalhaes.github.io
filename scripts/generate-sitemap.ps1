@@ -69,7 +69,11 @@ if (Test-Path 'recursos') {
     }
 }
 
-# 6. Subaplicacoes
+# 6. Subaplicacoes e Hubs Clinicos (NUNCA indexar pastas ocultas como nexus-vault)
+$hubClinicoIndex = 'ferramentas-clinicas/index.html'
+if (Test-Path $hubClinicoIndex) {
+    Add-UrlEntry ($base + '/ferramentas-clinicas/') (Get-Item $hubClinicoIndex) '0.9' 'weekly' $true
+}
 $expIndex = 'recursos/explorador-dois-mundos/index.html'
 if (Test-Path $expIndex) {
     Add-UrlEntry ($base + '/recursos/explorador-dois-mundos/') (Get-Item $expIndex) '0.8' 'monthly'

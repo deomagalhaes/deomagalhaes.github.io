@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrador Comportamental ABC (ABA) – Deo Magalhães</title>
+    <meta name="description" content="Registrador comportamental ABC (Antecedente, Comportamento, Consequência) para pais, cuidadores e escola em acompanhamento ABA e Neuropsicologia. 100% privado.">
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        .font-serif-clinical {
+            font-family: 'Merriweather', serif;
+        }
+        main section {
+            padding: 0;
+        }
+        /* Chips táteis Mobile-First (operação com uma mão só, min 44px) */
+        .touch-chip {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0.9rem;
+            border-radius: 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1.5px solid #cbd5e1;
+            background-color: #ffffff;
+            color: #334155;
+            transition: all 0.15s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .touch-chip:hover {
+            border-color: #0a9396;
+            background-color: #f0fdfa;
+        }
+        .touch-chip.selected {
+            background-color: #005f73;
+            border-color: #005f73;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 95, 115, 0.25);
+        }
+        .intensity-btn {
+            min-height: 54px;
+            border-radius: 0.85rem;
+            font-weight: 700;
+            border: 2px solid transparent;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .intensity-btn.active-scale {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+             ring: 2px;
+        }
+        /* Proteção Institucional do Rodapé */
+        footer.main-footer {
+            background-color: #2c3e50 !important;
+            color: #e2e8f0 !important;
+            padding-top: 50px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+        footer.main-footer .footer-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 30px !important;
+            padding-bottom: 30px !important;
+            width: 100% !important;
+        }
+        footer.main-footer .footer-column h4 {
+            color: #ffffff !important;
+            font-size: 1.2em !important;
+            margin-bottom: 16px !important;
+            font-weight: 600 !important;
+        }
+        footer.main-footer ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        footer.main-footer li {
+            margin-bottom: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            color: #e2e8f0 !important;
+        }
+        footer.main-footer a {
+            color: #e2e8f0 !important;
+            text-decoration: none !important;
+        }
+        footer.main-footer .footer-bottom {
+            border-top: 1px solid #3e5266 !important;
+            padding: 20px 0 !important;
+            text-align: center !important;
+            color: #94a3b8 !important;
+            font-size: 0.9em !important;
+        }
+        .print-only {
+            display: none;
+        }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm;
+            }
+            .top-bar, #main-header, footer.main-footer, .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10.5pt;
+            }
+            .print-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            table.print-abc-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 9pt;
+                margin-top: 10px;
+            }
+            table.print-abc-table th,
+            table.print-abc-table td {
+                border: 1px solid #94a3b8;
+                padding: 6px 7px;
+                text-align: left;
+                vertical-align: top;
+            }
+            table.print-abc-table th {
+                background: #f1f5f9 !important;
+                font-weight: 700;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html" class="active">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="py-6 md:py-10">
+        <div class="max-w-5xl mx-auto px-4 print-container">
+
+            <!-- Cabeçalho Público (No-Print) -->
+            <div class="mb-6 no-print">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <a href="/ferramentas-clinicas/index.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-[#005f73] hover:underline">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Hub de Ferramentas Clínicas
+                    </a>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200">
+                            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Registro Rápido com Uma Mão (ABA)
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <i data-lucide="lock" class="w-3.5 h-3.5"></i> Salvo Apenas no Celular (LGPD)
+                        </span>
+                    </div>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 font-serif-clinical mb-2">
+                    Registrador Comportamental ABC para Pais, Escola e Cuidadores
+                </h1>
+                <p class="text-slate-600 text-sm md:text-base">
+                    Registre em poucos segundos o <strong>Antecedente (A)</strong>, o <strong>Comportamento Observável (B)</strong> e a <strong>Consequência / Manejo (C)</strong> logo após o episódio para mapear padrões funcionais com precisão clínica.
+                </p>
+            </div>
+
+            <!-- Formulário Tátil de Registro Rápido (No-Print) -->
+            <form id="abc-form" onsubmit="saveEpisode(event)" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-8 space-y-6 no-print">
+
+                <!-- Identificação Opcional + Data/Hora -->
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 pb-5 border-b border-slate-100">
+                    <div class="sm:col-span-5">
+                        <label for="inp-child-ref" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Iniciais ou Apelido da Criança (Opcional)
+                        </label>
+                        <input type="text" id="inp-child-ref" oninput="saveChildMeta()" placeholder="Ex.: L.M. (6 anos)"
+                            class="w-full min-h-[46px] px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+                    </div>
+                    <div class="sm:col-span-7">
+                        <label for="inp-datetime" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Data e Horário do Episódio
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="datetime-local" id="inp-datetime" required
+                                class="flex-1 min-h-[46px] px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+                            <button type="button" onclick="setNowLocal()" class="min-h-[46px] px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold shrink-0">
+                                Agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contexto / Ambiente -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-800 text-white text-xs flex items-center justify-center font-bold">0</span>
+                        Contexto / Ambiente onde ocorreu
+                    </label>
+                    <div id="chips-context" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+                        <button type="button" class="touch-chip selected" data-val="Casa" onclick="selectContextChip(this)">🏠 Casa</button>
+                        <button type="button" class="touch-chip" data-val="Escola" onclick="selectContextChip(this)">🏫 Escola</button>
+                        <button type="button" class="touch-chip" data-val="Terapia" onclick="selectContextChip(this)">🧩 Terapia</button>
+                        <button type="button" class="touch-chip" data-val="Rua/Comércio" onclick="selectContextChip(this)">🛒 Rua/Comércio</button>
+                        <button type="button" class="touch-chip" data-val="Carro/Transição" onclick="selectContextChip(this)">🚗 Carro/Transição</button>
+                        <button type="button" class="touch-chip" data-val="Outro" onclick="selectContextChip(this)">📍 Outro</button>
+                    </div>
+                </div>
+
+                <!-- A: ANTECEDENTE -->
+                <div class="p-4 rounded-2xl bg-sky-50/60 border border-sky-100 space-y-3">
+                    <div>
+                        <span class="inline-block text-xs font-extrabold uppercase tracking-wider text-sky-800 bg-sky-100 px-2.5 py-0.5 rounded-md mb-1">Etapa A · Antecedente</span>
+                        <h2 class="text-base font-bold text-slate-900">O que aconteceu imediatamente ANTES do comportamento?</h2>
+                        <p class="text-xs text-slate-500">Toque em um ou mais gatilhos presentes no ambiente:</p>
+                    </div>
+                    <div id="chips-antecedent" class="flex flex-wrap gap-2">
+                        <button type="button" class="touch-chip" data-val="Negativa de item" onclick="toggleMultiChip(this)">🚫 Negativa de item</button>
+                        <button type="button" class="touch-chip" data-val="Demanda escolar/tarefa" onclick="toggleMultiChip(this)">📚 Demanda escolar/tarefa</button>
+                        <button type="button" class="touch-chip" data-val="Transição de rotina" onclick="toggleMultiChip(this)">🔄 Transição de rotina</button>
+                        <button type="button" class="touch-chip" data-val="Sobrecarga sensorial" onclick="toggleMultiChip(this)">🔊 Sobrecarga sensorial</button>
+                        <button type="button" class="touch-chip" data-val="Fome/Sono/Cansaço" onclick="toggleMultiChip(this)">😴 Fome/Sono/Cansaço</button>
+                        <button type="button" class="touch-chip" data-val="Quebra de previsibilidade" onclick="toggleMultiChip(this)">⚡ Quebra de previsibilidade</button>
+                        <button type="button" class="touch-chip" data-val="Atenção dividida do adulto" onclick="toggleMultiChip(this)">👥 Atenção dividida do adulto</button>
+                    </div>
+                    <input type="text" id="inp-a-notes" placeholder="Detalhe opcional do antecedente (ex.: pedi para desligar o tablet para tomar banho)"
+                        class="w-full min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+                </div>
+
+                <!-- B: COMPORTAMENTO OBSERVÁVEL -->
+                <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-100 space-y-4">
+                    <div>
+                        <span class="inline-block text-xs font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200/70 px-2.5 py-0.5 rounded-md mb-1">Etapa B · Comportamento Observável</span>
+                        <h2 class="text-base font-bold text-slate-900">O que a criança fez de forma visível e concreta?</h2>
+                        <p class="text-xs text-slate-600">Evite adjetivos como "fez birra" ou "ficou teimoso". Selecione a ação observável:</p>
+                    </div>
+
+                    <div id="chips-behavior" class="flex flex-wrap gap-2">
+                        <button type="button" class="touch-chip" data-val="Choro intenso / grito" onclick="toggleMultiChip(this)">😭 Choro intenso / grito</button>
+                        <button type="button" class="touch-chip" data-val="Jogar-se no chão" onclick="toggleMultiChip(this)">⬇️ Jogar-se no chão</button>
+                        <button type="button" class="touch-chip" data-val="Arremessar objetos" onclick="toggleMultiChip(this)">📦 Arremessar objetos</button>
+                        <button type="button" class="touch-chip" data-val="Heteroagressão (bater/morder)" onclick="toggleMultiChip(this)">✋ Bater / morder / empurrar</button>
+                        <button type="button" class="touch-chip" data-val="Autoagressão" onclick="toggleMultiChip(this)">⚠️ Autoagressão</button>
+                        <button type="button" class="touch-chip" data-val="Fuga / correr do local" onclick="toggleMultiChip(this)">🏃 Fuga / sair do local</button>
+                        <button type="button" class="touch-chip" data-val="Recusa verbal / travamento" onclick="toggleMultiChip(this)">🛑 Recusa verbal / travamento</button>
+                        <button type="button" class="touch-chip" data-val="Estereotipia motora/vocal intensa" onclick="toggleMultiChip(this)">🔁 Estereotipia intensa</button>
+                    </div>
+
+                    <input type="text" id="inp-b-notes" placeholder="Descrição objetiva complementar (ex.: chorou alto e jogou o caderno no chão)"
+                        class="w-full min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+
+                    <!-- Duração Estimada + Intensidade 1 a 5 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-2">Duração Estimada</label>
+                            <div id="chips-duration" class="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
+                                <button type="button" class="touch-chip text-xs px-2" data-val="&lt; 1 min" onclick="selectDurationChip(this)">&lt; 1 min</button>
+                                <button type="button" class="touch-chip selected text-xs px-2" data-val="1–5 min" onclick="selectDurationChip(this)">1–5 min</button>
+                                <button type="button" class="touch-chip text-xs px-2" data-val="5–15 min" onclick="selectDurationChip(this)">5–15 min</button>
+                                <button type="button" class="touch-chip text-xs px-2" data-val="15–30 min" onclick="selectDurationChip(this)">15–30m</button>
+                                <button type="button" class="touch-chip text-xs px-2" data-val="&gt; 30 min" onclick="selectDurationChip(this)">&gt; 30m</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-700 mb-2">
+                                Intensidade do Episódio: <span id="lbl-intensity-desc" class="text-amber-800">3 — Moderada</span>
+                            </label>
+                            <div class="grid grid-cols-5 gap-2" id="intensity-selector">
+                                <button type="button" onclick="selectIntensity(1)" data-level="1" class="intensity-btn bg-emerald-100 text-emerald-900 border-emerald-300">1</button>
+                                <button type="button" onclick="selectIntensity(2)" data-level="2" class="intensity-btn bg-teal-100 text-teal-900 border-teal-300">2</button>
+                                <button type="button" onclick="selectIntensity(3)" data-level="3" class="intensity-btn active-scale bg-amber-400 text-slate-950 border-slate-900">3</button>
+                                <button type="button" onclick="selectIntensity(4)" data-level="4" class="intensity-btn bg-orange-200 text-orange-950 border-orange-400">4</button>
+                                <button type="button" onclick="selectIntensity(5)" data-level="5" class="intensity-btn bg-rose-200 text-rose-950 border-rose-400">5</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- C: CONSEQUÊNCIA / MANEJO -->
+                <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3">
+                    <div>
+                        <span class="inline-block text-xs font-extrabold uppercase tracking-wider text-emerald-900 bg-emerald-200/70 px-2.5 py-0.5 rounded-md mb-1">Etapa C · Consequência e Manejo</span>
+                        <h2 class="text-base font-bold text-slate-900">O que aconteceu IMEDIATAMENTE DEPOIS (resposta do ambiente/adulto)?</h2>
+                        <p class="text-xs text-slate-600">Registre com sinceridade sem culpa — isso ajuda o terapeuta a ajustar o plano:</p>
+                    </div>
+                    <div id="chips-consequence" class="flex flex-wrap gap-2">
+                        <button type="button" class="touch-chip" data-val="Atenção fornecida" onclick="toggleMultiChip(this)">💬 Atenção / conversa na hora</button>
+                        <button type="button" class="touch-chip" data-val="Demanda retirada/adiada" onclick="toggleMultiChip(this)">⏸️ Demanda retirada/adiada</button>
+                        <button type="button" class="touch-chip" data-val="Redirecionamento funcional" onclick="toggleMultiChip(this)">🧭 Redirecionamento funcional</button>
+                        <button type="button" class="touch-chip" data-val="Regulação sensorial/espaço calmo" onclick="toggleMultiChip(this)">🌿 Regulação / espaço calmo</button>
+                        <button type="button" class="touch-chip" data-val="Item entregue" onclick="toggleMultiChip(this)">🎁 Item entregue para acalmar</button>
+                        <button type="button" class="touch-chip" data-val="Bloqueio físico protetivo" onclick="toggleMultiChip(this)">🛡️ Bloqueio físico protetivo</button>
+                    </div>
+                    <input type="text" id="inp-c-notes" placeholder="Observação opcional do desfecho (ex.: acalmou após 4 min com abafador e água)"
+                        class="w-full min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#005f73]">
+                </div>
+
+                <!-- Botão Principal Salvar -->
+                <button type="submit" class="w-full min-h-[54px] rounded-2xl bg-[#005f73] hover:bg-[#0a9396] text-white font-bold text-base shadow-md transition flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    Registrar Episódio ABC no Histórico Local
+                </button>
+            </form>
+
+            <!-- Cabeçalho Exclusivo de Impressão A4 -->
+            <div class="print-only mb-4 pb-3 border-b-2 border-slate-800">
+                <h1 class="text-xl font-bold text-slate-900 font-serif-clinical">Relatório de Monitoramento Comportamental ABC (ABA)</h1>
+                <p class="text-xs text-slate-700 mt-1">
+                    <strong>Paciente / Criança:</strong> <span id="print-child-name">Não informado</span> ·
+                    <strong>Data de Emissão:</strong> <span id="print-date-now"></span> ·
+                    <strong>Instrumento Clínico:</strong> Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)
+                </p>
+            </div>
+
+            <!-- Painel Analítico Automático -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-8">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-3 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 text-[#005f73] no-print"></i>
+                            Síntese Analítica de Padrões (Frequência, Contexto &amp; Intensidade)
+                        </h2>
+                        <p class="text-xs text-slate-500">Atualizada em tempo real conforme os episódios são registrados.</p>
+                    </div>
+                    <span id="badge-total-episodes" class="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold">
+                        0 episódios registrados
+                    </span>
+                </div>
+
+                <!-- Cards de KPIs -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="text-xs text-slate-500">Total de Registros</div>
+                        <div id="kpi-count" class="text-2xl font-extrabold text-slate-900 mt-0.5">0</div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="text-xs text-slate-500">Intensidade Média (1–5)</div>
+                        <div id="kpi-avg-intensity" class="text-2xl font-extrabold text-[#005f73] mt-0.5">—</div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="text-xs text-slate-500">Ambiente Predominante</div>
+                        <div id="kpi-top-context" class="text-base font-bold text-slate-800 mt-1 truncate">—</div>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="text-xs text-slate-500">Turno Mais Frequente</div>
+                        <div id="kpi-top-shift" class="text-base font-bold text-slate-800 mt-1 truncate">—</div>
+                    </div>
+                </div>
+
+                <!-- Barras de Frequência por Antecedente e Contexto -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">Frequência por Antecedente (Gatilhos A)</h3>
+                        <div id="chart-antecedents" class="space-y-2.5 text-xs text-slate-600">
+                            <p class="italic text-slate-400">Sem episódios suficientes para análise.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">Distribuição por Ambiente / Contexto</h3>
+                        <div id="chart-contexts" class="space-y-2.5 text-xs text-slate-600">
+                            <p class="italic text-slate-400">Sem episódios suficientes para análise.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leitura Educativa Preliminar -->
+                <div id="functional-hint-box" class="hidden mt-5 p-3.5 rounded-xl bg-teal-50/80 border border-teal-200 text-xs text-teal-950 leading-relaxed">
+                </div>
+            </div>
+
+            <!-- Barra de Exportação e Envio por WhatsApp ao Terapeuta (No-Print) -->
+            <div class="bg-slate-900 text-white rounded-2xl p-5 md:p-6 mb-8 no-print">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                    <div class="lg:col-span-7 space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Comunicação Clínica Rápida</span>
+                        <h2 class="text-lg font-bold">Enviar Resumo Estruturado para o Neuropsicólogo / Terapeuta</h2>
+                        <p class="text-xs text-slate-300">
+                            Gera automaticamente uma mensagem formatada com as estatísticas da semana e os últimos episódios ABC para revisão em supervisão ou consulta.
+                        </p>
+                        <div class="pt-2 flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center">
+                            <div class="flex-1">
+                                <label for="inp-wa-phone" class="block text-[11px] text-slate-400 mb-1">WhatsApp de destino (com DDI+DDD — padrão consultório Deo Magalhães):</label>
+                                <input type="text" id="inp-wa-phone" value="5535933003807" oninput="saveChildMeta()"
+                                    class="w-full min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-emerald-400">
+                            </div>
+                            <button type="button" onclick="sendWhatsAppSummary()" class="sm:mt-5 min-h-[44px] px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition inline-flex items-center justify-center gap-2 shrink-0">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                Enviar Resumo via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 grid grid-cols-2 gap-2.5 pt-3 lg:pt-0 lg:border-l lg:border-slate-800 lg:pl-5">
+                        <button type="button" onclick="exportABCCSV()" class="min-h-[46px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+                            Exportar CSV
+                        </button>
+                        <button type="button" onclick="printABCReport()" class="min-h-[46px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
+                            <i data-lucide="printer" class="w-4 h-4 text-cyan-300"></i>
+                            Relatório PDF (A4)
+                        </button>
+                        <button type="button" onclick="exportABCJSON()" class="min-h-[46px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
+                            <i data-lucide="download" class="w-4 h-4 text-amber-300"></i>
+                            Backup JSON
+                        </button>
+                        <label class="min-h-[46px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700 cursor-pointer">
+                            <i data-lucide="upload" class="w-4 h-4 text-sky-300"></i>
+                            Importar JSON
+                            <input type="file" accept=".json,application/json" class="hidden" onchange="importABCJSON(event)">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Episódios Registrados (Tela + Tabela A4 na Impressão) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-8">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100 no-print">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="history" class="w-5 h-5 text-[#005f73]"></i>
+                        Histórico Cronológico de Episódios ABC
+                    </h2>
+                    <button type="button" onclick="clearAllEpisodes()" class="text-xs font-semibold text-rose-700 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Apagar Todos
+                    </button>
+                </div>
+
+                <!-- Cards Mobile na Tela -->
+                <div id="episodes-cards-list" class="space-y-3 no-print"></div>
+
+                <!-- Tabela Limpa Exclusiva para Impressão PDF A4 -->
+                <div class="print-only">
+                    <h3 class="text-sm font-bold text-slate-900 mb-2">Detalhamento Cronológico dos Episódios</h3>
+                    <table class="print-abc-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 14%;">Data / Hora</th>
+                                <th style="width: 12%;">Ambiente</th>
+                                <th style="width: 24%;">A — Antecedente</th>
+                                <th style="width: 26%;">B — Comportamento (Dur. / Int.)</th>
+                                <th style="width: 24%;">C — Consequência / Manejo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="print-abc-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Nota Científica e Ética -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 text-xs text-slate-600 leading-relaxed no-print">
+                <p class="mb-2">
+                    <strong>Fundamentação em Análise do Comportamento Aplicada (ABA) e Neuropsicologia:</strong> A tríplice contingência (<em>Antecedent – Behavior – Consequence</em>, sistematizada por Bijou, Peterson &amp; Ault, 1968; Cooper, Heron &amp; Heward, 2020) permite substituir impressões subjetivas por dados ecológicos reais sobre o que evoca e o que mantém repertórios de desregulação.
+                </p>
+                <p class="text-slate-500">
+                    <strong>Aviso Ético — Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784):</strong> Este instrumento tem finalidade auxiliar de observação familiar/escolar e não substitui a Avaliação Funcional Comportamental conduzida presencialmente por profissional habilitado. Em situações de risco físico agudo, priorize sempre a integridade e segurança da criança.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="abc-toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-xl bg-slate-900 text-white text-sm font-medium shadow-xl no-print"></div>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        const ABC_STORAGE_KEY = 'deo_registrador_abc_aba_v1';
+        let selectedContext = 'Casa';
+        let selectedDuration = '1–5 min';
+        let selectedIntensity = 3;
+
+        const INTENSITY_META = {
+            1: { label: '1 — Leve (desconforto breve, fácil regulação)', badge: 'bg-emerald-100 text-emerald-900', active: 'bg-emerald-500 text-white border-slate-900' },
+            2: { label: '2 — Moderada-Baixa (protesto sem desorganização)', badge: 'bg-teal-100 text-teal-900', active: 'bg-teal-500 text-white border-slate-900' },
+            3: { label: '3 — Moderada (interrompe atividade atual)', badge: 'bg-amber-100 text-amber-900', active: 'bg-amber-400 text-slate-950 border-slate-900' },
+            4: { label: '4 — Alta (desregulação intensa / difícil manejo)', badge: 'bg-orange-100 text-orange-900', active: 'bg-orange-500 text-white border-slate-900' },
+            5: { label: '5 — Severa / Crise (exige proteção imediata)', badge: 'bg-rose-100 text-rose-900', active: 'bg-rose-600 text-white border-slate-900' }
+        };
+
+        let store = {
+            childRef: '',
+            waPhone: '5535933003807',
+            episodes: []
+        };
+
+        function setNowLocal() {
+            const now = new Date();
+            const offsetMs = now.getTimezoneOffset() * 60000;
+            const localISO = new Date(now.getTime() - offsetMs).toISOString().slice(0, 16);
+            document.getElementById('inp-datetime').value = localISO;
+        }
+
+        function toast(msg) {
+            const el = document.getElementById('abc-toast');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            clearTimeout(window.__abcToast);
+            window.__abcToast = setTimeout(() => el.classList.add('hidden'), 2800);
+        }
+
+        function selectContextChip(btn) {
+            document.querySelectorAll('#chips-context .touch-chip').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedContext = btn.getAttribute('data-val');
+        }
+
+        function selectDurationChip(btn) {
+            document.querySelectorAll('#chips-duration .touch-chip').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedDuration = btn.getAttribute('data-val');
+        }
+
+        function toggleMultiChip(btn) {
+            btn.classList.toggle('selected');
+        }
+
+        function selectIntensity(level) {
+            selectedIntensity = level;
+            document.getElementById('lbl-intensity-desc').textContent = INTENSITY_META[level].label;
+            const idleClasses = {
+                1: 'intensity-btn bg-emerald-100 text-emerald-900 border-emerald-300',
+                2: 'intensity-btn bg-teal-100 text-teal-900 border-teal-300',
+                3: 'intensity-btn bg-amber-100 text-amber-950 border-amber-300',
+                4: 'intensity-btn bg-orange-200 text-orange-950 border-orange-400',
+                5: 'intensity-btn bg-rose-200 text-rose-950 border-rose-400'
+            };
+            document.querySelectorAll('#intensity-selector button').forEach(btn => {
+                const lv = parseInt(btn.getAttribute('data-level'), 10);
+                if (lv === level) {
+                    btn.className = `intensity-btn active-scale ${INTENSITY_META[lv].active}`;
+                } else {
+                    btn.className = idleClasses[lv];
+                }
+            });
+        }
+
+        function getSelectedMultiValues(containerId) {
+            return Array.from(document.querySelectorAll(`#${containerId} .touch-chip.selected`))
+                .map(el => el.getAttribute('data-val'));
+        }
+
+        function saveChildMeta() {
+            store.childRef = document.getElementById('inp-child-ref').value.trim();
+            store.waPhone = document.getElementById('inp-wa-phone').value.replace(/\D/g, '') || '5535933003807';
+            persistStore();
+        }
+
+        function persistStore() {
+            try {
+                localStorage.setItem(ABC_STORAGE_KEY, JSON.stringify(store));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function loadStore() {
+            try {
+                const raw = localStorage.getItem(ABC_STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.episodes)) {
+                        store = { ...store, ...parsed };
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            document.getElementById('inp-child-ref').value = store.childRef || '';
+            document.getElementById('inp-wa-phone').value = store.waPhone || '5535933003807';
+        }
+
+        function saveEpisode(e) {
+            e.preventDefault();
+            const dt = document.getElementById('inp-datetime').value;
+            const aChips = getSelectedMultiValues('chips-antecedent');
+            const aNotes = document.getElementById('inp-a-notes').value.trim();
+            const bChips = getSelectedMultiValues('chips-behavior');
+            const bNotes = document.getElementById('inp-b-notes').value.trim();
+            const cChips = getSelectedMultiValues('chips-consequence');
+            const cNotes = document.getElementById('inp-c-notes').value.trim();
+
+            if (aChips.length === 0 && !aNotes) {
+                alert('Selecione pelo menos um Antecedente (A) ou descreva brevemente o que ocorreu antes.');
+                return;
+            }
+            if (bChips.length === 0 && !bNotes) {
+                alert('Selecione ou descreva o Comportamento Observável (B).');
+                return;
+            }
+            if (cChips.length === 0 && !cNotes) {
+                alert('Selecione ou descreva a Consequência / Manejo (C).');
+                return;
+            }
+
+            const ep = {
+                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                datetime: dt,
+                context: selectedContext,
+                antecedents: aChips,
+                aNotes,
+                behaviors: bChips,
+                bNotes,
+                duration: selectedDuration,
+                intensity: selectedIntensity,
+                consequences: cChips,
+                cNotes
+            };
+
+            store.episodes.unshift(ep);
+            persistStore();
+
+            // Limpa seleções de chips e notas mantendo contexto e atualizando hora
+            document.querySelectorAll('#chips-antecedent .touch-chip, #chips-behavior .touch-chip, #chips-consequence .touch-chip')
+                .forEach(b => b.classList.remove('selected'));
+            document.getElementById('inp-a-notes').value = '';
+            document.getElementById('inp-b-notes').value = '';
+            document.getElementById('inp-c-notes').value = '';
+            selectIntensity(3);
+            setNowLocal();
+
+            renderAll();
+            toast('Episódio ABC registrado com sucesso!');
+        }
+
+        function deleteEpisode(id) {
+            store.episodes = store.episodes.filter(ep => ep.id !== id);
+            persistStore();
+            renderAll();
+            toast('Episódio removido.');
+        }
+
+        function clearAllEpisodes() {
+            if (store.episodes.length === 0) return;
+            if (!confirm('Deseja apagar todos os registros ABC deste dispositivo? Recomendamos exportar backup antes.')) return;
+            store.episodes = [];
+            persistStore();
+            renderAll();
+            toast('Todos os episódios foram removidos.');
+        }
+
+        function escHTML(str) {
+            return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function formatDTBr(isoLocal) {
+            if (!isoLocal) return '—';
+            const d = new Date(isoLocal);
+            if (Number.isNaN(d.getTime())) return isoLocal;
+            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+                ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function getShiftFromISO(isoLocal) {
+            const d = new Date(isoLocal);
+            if (Number.isNaN(d.getTime())) return 'Não identificado';
+            const h = d.getHours();
+            if (h >= 5 && h < 12) return 'Manhã (05h–12h)';
+            if (h >= 12 && h < 18) return 'Tarde (12h–18h)';
+            return 'Noite/Madrugada';
+        }
+
+        function computeAnalytics() {
+            const eps = store.episodes;
+            const total = eps.length;
+            if (total === 0) {
+                return { total: 0, avgInt: null, antSorted: [], ctxSorted: [], topShift: '—', topContext: '—' };
+            }
+            const sumInt = eps.reduce((acc, e) => acc + (Number(e.intensity) || 0), 0);
+            const avgInt = sumInt / total;
+
+            const antMap = {};
+            const ctxMap = {};
+            const shiftMap = {};
+
+            eps.forEach(e => {
+                const ctx = e.context || 'Outro';
+                ctxMap[ctx] = (ctxMap[ctx] || 0) + 1;
+
+                const sh = getShiftFromISO(e.datetime);
+                shiftMap[sh] = (shiftMap[sh] || 0) + 1;
+
+                const ants = (e.antecedents && e.antecedents.length > 0) ? e.antecedents : ['Outros / Descrição livre'];
+                ants.forEach(a => {
+                    antMap[a] = (antMap[a] || 0) + 1;
+                });
+            });
+
+            const antSorted = Object.entries(antMap).sort((a, b) => b[1] - a[1]);
+            const ctxSorted = Object.entries(ctxMap).sort((a, b) => b[1] - a[1]);
+            const shiftSorted = Object.entries(shiftMap).sort((a, b) => b[1] - a[1]);
+
+            return {
+                total,
+                avgInt,
+                antSorted,
+                ctxSorted,
+                topContext: ctxSorted[0] ? `${ctxSorted[0][0]} (${ctxSorted[0][1]})` : '—',
+                topShift: shiftSorted[0] ? shiftSorted[0][0] : '—'
+            };
+        }
+
+        function renderAnalytics() {
+            const stats = computeAnalytics();
+            document.getElementById('badge-total-episodes').textContent = `${stats.total} episódio${stats.total === 1 ? '' : 's'} registrado${stats.total === 1 ? '' : 's'}`;
+            document.getElementById('kpi-count').textContent = String(stats.total);
+            document.getElementById('kpi-avg-intensity').textContent = stats.avgInt !== null ? stats.avgInt.toFixed(1).replace('.', ',') + ' / 5' : '—';
+            document.getElementById('kpi-top-context').textContent = stats.topContext;
+            document.getElementById('kpi-top-shift').textContent = stats.topShift;
+
+            const antEl = document.getElementById('chart-antecedents');
+            const ctxEl = document.getElementById('chart-contexts');
+            const hintBox = document.getElementById('functional-hint-box');
+
+            if (stats.total === 0) {
+                antEl.innerHTML = '<p class="italic text-slate-400">Registre o primeiro episódio acima para visualizar os gráficos de frequência.</p>';
+                ctxEl.innerHTML = '<p class="italic text-slate-400">Registre o primeiro episódio acima para visualizar a distribuição por ambiente.</p>';
+                hintBox.classList.add('hidden');
+                return;
+            }
+
+            antEl.innerHTML = stats.antSorted.map(([label, count]) => {
+                const pct = Math.round((count / stats.total) * 100);
+                return `
+                    <div>
+                        <div class="flex justify-between font-medium text-slate-700 mb-1">
+                            <span>${escHTML(label)}</span>
+                            <span>${count}x (${pct}%)</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-[#005f73] rounded-full" style="width: ${Math.max(6, pct)}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            ctxEl.innerHTML = stats.ctxSorted.map(([label, count]) => {
+                const pct = Math.round((count / stats.total) * 100);
+                return `
+                    <div>
+                        <div class="flex justify-between font-medium text-slate-700 mb-1">
+                            <span>${escHTML(label)}</span>
+                            <span>${count}x (${pct}%)</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-amber-500 rounded-full" style="width: ${Math.max(6, pct)}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const topAnt = stats.antSorted[0][0];
+            let hint = `<strong>Padrão antecedente mais frequente:</strong> <em>${escHTML(topAnt)}</em>. `;
+            if (topAnt.includes('Demanda')) {
+                hint += 'Episódios precedidos por tarefas costumam sinalizar necessidade de fracionamento da exigência, suporte visual prévio ou ensino de pedido funcional de pausa.';
+            } else if (topAnt.includes('Negativa')) {
+                hint += 'Episódios ligados à negativa/retirada de itens sugerem treino gradual de tolerância ao adiamento, cronômetro visual e reforçamento diferencial.';
+            } else if (topAnt.includes('Transição') || topAnt.includes('previsibilidade')) {
+                hint += 'Dificuldades em transições respondem bem a avisos antecipados (5 min / 2 min) e quadros visuais de rotina.';
+            } else if (topAnt.includes('sensorial') || topAnt.includes('Fome')) {
+                hint += 'Operações estabelecedoras fisiológicas/sensoriais indicam importância de regulação preventiva do ambiente e pausas sensoriais programadas.';
+            } else {
+                hint += 'Compartilhe este levantamento na sessão para cruzamento entre antecedentes (A) e consequências mantenedoras (C).';
+            }
+            hintBox.innerHTML = hint;
+            hintBox.classList.remove('hidden');
+        }
+
+        function renderEpisodesList() {
+            const listEl = document.getElementById('episodes-cards-list');
+            const printTbody = document.getElementById('print-abc-tbody');
+
+            document.getElementById('print-child-name').textContent = store.childRef || 'Não informado';
+            document.getElementById('print-date-now').textContent = new Date().toLocaleDateString('pt-BR');
+
+            if (store.episodes.length === 0) {
+                listEl.innerHTML = `
+                    <div class="py-10 text-center text-slate-400 text-sm border border-dashed border-slate-200 rounded-xl">
+                        Nenhum episódio registrado ainda neste navegador.
+                    </div>
+                `;
+                printTbody.innerHTML = '<tr><td colspan="5">Sem registros.</td></tr>';
+                return;
+            }
+
+            listEl.innerHTML = store.episodes.map(ep => {
+                const aText = [...(ep.antecedents || []), ep.aNotes].filter(Boolean).join(' · ');
+                const bText = [...(ep.behaviors || []), ep.bNotes].filter(Boolean).join(' · ');
+                const cText = [...(ep.consequences || []), ep.cNotes].filter(Boolean).join(' · ');
+                const meta = INTENSITY_META[ep.intensity] || INTENSITY_META[3];
+
+                return `
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-white transition">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                            <div class="flex flex-wrap items-center gap-2 text-xs">
+                                <span class="font-bold text-slate-800">${escHTML(formatDTBr(ep.datetime))}</span>
+                                <span class="px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-semibold">${escHTML(ep.context)}</span>
+                                <span class="px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-700">⏱ ${escHTML(ep.duration)}</span>
+                                <span class="px-2.5 py-0.5 rounded-full font-bold ${meta.badge}">Intensidade ${ep.intensity}/5</span>
+                            </div>
+                            <button type="button" onclick="deleteEpisode('${ep.id}')" class="text-xs text-rose-600 hover:underline font-medium">Excluir</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+                            <div class="p-2.5 rounded-lg bg-white border border-sky-100">
+                                <span class="font-extrabold text-sky-800 block mb-0.5">A · Antecedente</span>
+                                <span class="text-slate-700">${escHTML(aText)}</span>
+                            </div>
+                            <div class="p-2.5 rounded-lg bg-white border border-amber-100">
+                                <span class="font-extrabold text-amber-800 block mb-0.5">B · Comportamento</span>
+                                <span class="text-slate-700">${escHTML(bText)}</span>
+                            </div>
+                            <div class="p-2.5 rounded-lg bg-white border border-emerald-100">
+                                <span class="font-extrabold text-emerald-800 block mb-0.5">C · Consequência</span>
+                                <span class="text-slate-700">${escHTML(cText)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            printTbody.innerHTML = store.episodes.map(ep => {
+                const aText = [...(ep.antecedents || []), ep.aNotes].filter(Boolean).join('; ');
+                const bText = [...(ep.behaviors || []), ep.bNotes].filter(Boolean).join('; ');
+                const cText = [...(ep.consequences || []), ep.cNotes].filter(Boolean).join('; ');
+                return `
+                    <tr>
+                        <td>${escHTML(formatDTBr(ep.datetime))}</td>
+                        <td>${escHTML(ep.context)}</td>
+                        <td>${escHTML(aText)}</td>
+                        <td>${escHTML(bText)}<br><strong>Duração:</strong> ${escHTML(ep.duration)} | <strong>Int.:</strong> ${ep.intensity}/5</td>
+                        <td>${escHTML(cText)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function sendWhatsAppSummary() {
+            if (store.episodes.length === 0) {
+                toast('Registre ao menos 1 episódio antes de gerar o resumo para WhatsApp.');
+                return;
+            }
+            saveChildMeta();
+            const stats = computeAnalytics();
+            const topAnts = stats.antSorted.slice(0, 3).map(([k, v]) => `${k} (${v}x)`).join(', ');
+            const recent = store.episodes.slice(0, 5);
+
+            const lines = [
+                `*REGISTRO COMPORTAMENTAL ABC (ABA)*`,
+                store.childRef ? `*Criança/Ref.:* ${store.childRef}` : null,
+                `*Total de episódios:* ${stats.total} | *Intensidade média:* ${stats.avgInt.toFixed(1).replace('.', ',')}/5`,
+                `*Ambiente predominante:* ${stats.topContext}`,
+                `*Principais antecedentes:* ${topAnts}`,
+                ``,
+                `*Últimos episódios registrados:*`
+            ].filter(v => v !== null);
+
+            recent.forEach((ep, idx) => {
+                const aText = [...(ep.antecedents || []), ep.aNotes].filter(Boolean).join('; ');
+                const bText = [...(ep.behaviors || []), ep.bNotes].filter(Boolean).join('; ');
+                const cText = [...(ep.consequences || []), ep.cNotes].filter(Boolean).join('; ');
+                lines.push(
+                    `${idx + 1}. *${formatDTBr(ep.datetime)}* [${ep.context} | Int. ${ep.intensity}/5 | ${ep.duration}]`,
+                    `   • *A:* ${aText}`,
+                    `   • *B:* ${bText}`,
+                    `   • *C:* ${cText}`
+                );
+            });
+
+            const phone = (store.waPhone || '5535933003807').replace(/\D/g, '');
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(lines.join('\n'))}`;
+            window.open(url, '_blank', 'noopener');
+        }
+
+        function exportABCCSV() {
+            if (store.episodes.length === 0) {
+                toast('Nenhum episódio para exportar.');
+                return;
+            }
+            const headers = ['Data_Hora', 'Crianca_Ref', 'Contexto', 'Antecedentes_Chips', 'Antecedente_Nota', 'Comportamentos_Chips', 'Comportamento_Nota', 'Duracao', 'Intensidade_1a5', 'Consequencias_Chips', 'Consequencia_Nota'];
+            const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+            const rows = store.episodes.map(ep => [
+                ep.datetime,
+                store.childRef || '',
+                ep.context,
+                (ep.antecedents || []).join(' | '),
+                ep.aNotes || '',
+                (ep.behaviors || []).join(' | '),
+                ep.bNotes || '',
+                ep.duration,
+                ep.intensity,
+                (ep.consequences || []).join(' | '),
+                ep.cNotes || ''
+            ]);
+            const csv = '\uFEFF' + [headers.map(esc).join(';'), ...rows.map(r => r.map(esc).join(';'))].join('\r\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `registros-abc-aba-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            toast('Planilha CSV exportada.');
+        }
+
+        function printABCReport() {
+            if (store.episodes.length === 0) {
+                toast('Registre ao menos 1 episódio para gerar o relatório A4.');
+                return;
+            }
+            window.print();
+        }
+
+        function exportABCJSON() {
+            const blob = new Blob([JSON.stringify({ tool: 'registrador-abc-aba', exportedAt: new Date().toISOString(), ...store }, null, 2)], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup-abc-aba-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            toast('Backup JSON salvo.');
+        }
+
+        function importABCJSON(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (!parsed || !Array.isArray(parsed.episodes)) throw new Error('Inválido');
+                    store.childRef = parsed.childRef || store.childRef;
+                    store.waPhone = parsed.waPhone || store.waPhone;
+                    store.episodes = parsed.episodes;
+                    document.getElementById('inp-child-ref').value = store.childRef;
+                    document.getElementById('inp-wa-phone').value = store.waPhone;
+                    persistStore();
+                    renderAll();
+                    toast('Backup JSON importado com sucesso!');
+                } catch (err) {
+                    alert('Arquivo JSON inválido para o Registrador ABC.');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        function renderAll() {
+            renderAnalytics();
+            renderEpisodesList();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStore();
+            setNowLocal();
+            selectIntensity(3);
+            renderAll();
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
