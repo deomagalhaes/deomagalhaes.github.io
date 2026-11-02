@@ -1469,6 +1469,10 @@
                             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                                 Em vez de tratar a independência financeira como um "tudo ou nada" distante, a <strong>Cascata de Liberdade</strong> organiza seu custo de vida em 4 camadas sequenciais de prioridade existencial. Cada degrau conquistado pela renda passiva <em>liberta irrevogavelmente uma fatia da sua mente</em>, permitindo reduzir gradativamente a carga de trabalho no consultório sem ansiedade.
                             </p>
+                            <div class="mt-2 text-xs text-cyan-300/90 bg-cyan-950/40 border border-cyan-800/50 rounded-lg p-2.5 flex items-start gap-2">
+                                <i data-lucide="info" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                                <span><strong>Como editar:</strong> Você pode alterar livremente o <em>nome</em> e o <em>valor em R$</em> de qualquer degrau abaixo. Ao digitar um novo valor e confirmar (pressionando Enter ou clicando fora), a cascata recalcula instantaneamente os percentuais de cobertura, o patrimônio correspondente e a quantidade de atendimentos no consultório poupados por mês.</span>
+                            </div>
                         </div>
 
                         <!-- Card de Cobertura Global -->
@@ -1580,25 +1584,36 @@
     function bindCascataInputs() {
         const C = global.VaultCore;
 
-        // Inputs de Custo de cada nível
+        // Inputs de Custo de cada nível: salva no input e recalcula métricas no change sem roubar foco durante a digitação
         document.querySelectorAll('[data-cascade-input]').forEach((inp) => {
             inp.addEventListener('input', (e) => {
                 const key = e.target.getAttribute('data-cascade-input');
                 const val = Math.max(0, Number(e.target.value) || 0);
                 inputs[key] = val;
                 saveInputs();
-                // Recalcula sem perder foco
+            });
+
+            inp.addEventListener('change', () => {
                 lastModel = computeFinancialModel();
                 renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                C.toast('Nível de despesa atualizado e recalculado.', 'success', 1500);
             });
         });
 
         // Inputs de Nome de cada nível
         document.querySelectorAll('[data-cascade-name]').forEach((inp) => {
+            inp.addEventListener('input', (e) => {
+                const key = e.target.getAttribute('data-cascade-name');
+                inputs[key] = e.target.value;
+                saveInputs();
+            });
+
             inp.addEventListener('change', (e) => {
                 const key = e.target.getAttribute('data-cascade-name');
                 inputs[key] = e.target.value.trim();
                 saveInputs();
+                lastModel = computeFinancialModel();
+                renderSubTabCascata(document.getElementById('ind-subtab-container'));
             });
         });
 
@@ -1615,6 +1630,7 @@
                 delete inputs.nameFamily;
                 delete inputs.nameLifestyle;
                 saveInputs();
+                lastModel = computeFinancialModel();
                 renderSubTabCascata(document.getElementById('ind-subtab-container'));
                 C.toast('Valores da cascata restaurados para o padrão sugerido.', 'info');
             });
