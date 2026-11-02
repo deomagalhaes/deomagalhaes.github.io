@@ -833,18 +833,231 @@
     // =========================================================================
     // 3. MODELO DE DADOS & PERSISTÊNCIA
     // =========================================================================
+    // 3. INICIALIZADOR DAS 23 ESPÉCIES DO ACERVO PESSOAL
+    // =========================================================================
     function createInitialPlants() {
         const C = global.VaultCore;
         const t = C.todayISO();
         return [
             {
                 id: 'B-001',
-                popularName: 'Jabuticabeira Sabará',
-                scientificName: 'Plinia cauliflora',
-                bench: 'Sol Pleno A',
+                popularName: 'Acerola',
+                scientificName: 'Malpighia emarginata',
+                bench: 'Bancada Frutíferas',
                 stage: 'Bonsai',
                 pot: 'Cerâmica',
-                substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -20),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -14),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -45),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 10),
+                nextInterventionType: 'Poda de contenção de brotos longos e adubação rica em P/K',
+                notes: 'Excelente resposta à poda. Manter sol pleno para estimular botões florais e frutificação.',
+                logs: [
+                    { date: C.addDaysISO(t, -20), type: 'Adubação (+30d)', detail: 'Bokashi + Farinha de ossos' },
+                    { date: C.addDaysISO(t, -45), type: 'Poda de Manutenção / Pinçagem', detail: 'Condução de patamares secundários' }
+                ]
+            },
+            {
+                id: 'B-002',
+                popularName: 'Amora (Amoreira-preta)',
+                scientificName: 'Morus nigra',
+                bench: 'Bancada Sol Pleno A',
+                stage: 'Pré-bonsai',
+                pot: 'Treino',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -15),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -8),
+                repotCycleMonths: 12,
+                lastStyling: C.addDaysISO(t, -30),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 5),
+                nextInterventionType: 'Pinçagem apical para redução do limbo foliar',
+                notes: 'Crescimento explosivo. Exige rega constante e desfolha seletiva no verão para diminuir folhas.',
+                logs: [
+                    { date: C.addDaysISO(t, -15), type: 'Adubação (+30d)', detail: 'Adubo orgânico completo NPK' }
+                ]
+            },
+            {
+                id: 'B-003',
+                popularName: 'Buxinho',
+                scientificName: 'Buxus sempervirens',
+                bench: 'Bancada Meia-Sombra',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '40% Caqueira / 30% Cacos Cerâmicos / 30% Terra Vegetal',
+                lastFertilization: C.addDaysISO(t, -40),
+                fertCycleDays: 45,
+                lastRepot: C.addMonthsISO(t, -22),
+                repotCycleMonths: 36,
+                lastStyling: C.addDaysISO(t, -60),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 14),
+                nextInterventionType: 'Poda de detalhamento de copas densas com tesoura fina',
+                notes: 'Madeira densa e crescimento lento; não desfolhar totalmente. Aramação cuidadosa com proteção.',
+                logs: [
+                    { date: C.addDaysISO(t, -40), type: 'Adubação (+45d)', detail: 'Torta de mamona e cinzas' }
+                ]
+            },
+            {
+                id: 'B-004',
+                popularName: 'Caliandra-rosa (Esponjinha)',
+                scientificName: 'Calliandra brevipes',
+                bench: 'Bancada Sol Pleno A',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -12),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -18),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -40),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 7),
+                nextInterventionType: 'Pinçagem de ramificação fina e reforço de adubação orgânica',
+                notes: 'Floração em pompons róseos. Ramos secam se podados sem gema ativa; aramar só brotos verdes.',
+                logs: [
+                    { date: C.addDaysISO(t, -12), type: 'Adubação (+30d)', detail: 'Osmocote 15-09-12 + Bokashi' }
+                ]
+            },
+            {
+                id: 'B-005',
+                popularName: 'Caliandra-vermelha',
+                scientificName: 'Calliandra tweedii',
+                bench: 'Bancada Sol Pleno A',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -25),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -16),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -50),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 6),
+                nextInterventionType: 'Limpeza de cálices florais secos e poda direcional',
+                notes: 'Exige sol pleno constante para florescer. Folhas fecham à noite e sob frio/seca.',
+                logs: [
+                    { date: C.addDaysISO(t, -25), type: 'Adubação (+30d)', detail: 'Adubo orgânico líquido de floração' }
+                ]
+            },
+            {
+                id: 'B-006',
+                popularName: 'Duranta (Pingo-de-ouro / Violeteira)',
+                scientificName: 'Duranta erecta',
+                bench: 'Bancada Sol Pleno B',
+                stage: 'Pré-bonsai',
+                pot: 'Treino',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -10),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -10),
+                repotCycleMonths: 18,
+                lastStyling: C.addDaysISO(t, -35),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 12),
+                nextInterventionType: 'Poda de contenção de brotação vigorosa e remoção de espinhos axilares',
+                notes: 'Espinhos nos ramos juvenis. Grande flexibilidade e velocidade para formar patamares.',
+                logs: [
+                    { date: C.addDaysISO(t, -10), type: 'Adubação (+30d)', detail: 'Torta de mamona + Bokashi' }
+                ]
+            },
+            {
+                id: 'B-007',
+                popularName: 'Érica-falsa / Cufea (Flor rosa da foto)',
+                scientificName: 'Cuphea gracilis',
+                bench: 'Bancada Mame & Shohin',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -14),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -12),
+                repotCycleMonths: 18,
+                lastStyling: C.addDaysISO(t, -28),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 4),
+                nextInterventionType: 'Pinçagem fina de pontas floridas para manter copa compacta',
+                notes: 'Floração rosa contínua o ano todo. Substrato úmido sem encharcar; porte Shohin gracioso.',
+                logs: [
+                    { date: C.addDaysISO(t, -14), type: 'Adubação (+30d)', detail: 'Biofertilizante foliar diluído' }
+                ]
+            },
+            {
+                id: 'B-008',
+                popularName: 'Figueira-benjamim (Fícus)',
+                scientificName: 'Ficus benjamina',
+                bench: 'Bancada Sol Pleno B',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -18),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -14),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -70),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 8),
+                nextInterventionType: 'Desfolha parcial de verão e condução de raízes aéreas',
+                notes: 'Látex abundante; vigor incrível no verão tropical. Excelente fusão de troncos e raízes sobre rocha.',
+                logs: [
+                    { date: C.addDaysISO(t, -18), type: 'Adubação (+30d)', detail: 'Osmocote 14-14-14' }
+                ]
+            },
+            {
+                id: 'B-009',
+                popularName: 'Fruta-dos-milagres',
+                scientificName: 'Synsepalum dulcificum',
+                bench: 'Bancada Meia-Sombra',
+                stage: 'Pré-bonsai',
+                pot: 'Treino',
+                substrate: '50% Terra Vegetal Ácida / 30% Caqueira / 20% Casca Pinus',
+                lastFertilization: C.addDaysISO(t, -35),
+                fertCycleDays: 45,
+                lastRepot: C.addMonthsISO(t, -20),
+                repotCycleMonths: 36,
+                lastStyling: C.addDaysISO(t, -80),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 15),
+                nextInterventionType: 'Aplicação de quelato de ferro e checagem de pH do substrato',
+                notes: 'Exige pH ácido (4.5 a 5.8). Regar apenas com água desclorada; folhas sensíveis a calcário.',
+                logs: [
+                    { date: C.addDaysISO(t, -35), type: 'Adubação (+45d)', detail: 'Bokashi ácido + Quelato de Ferro' }
+                ]
+            },
+            {
+                id: 'B-010',
+                popularName: 'Ixora (Mini-ixora)',
+                scientificName: 'Ixora coccinea compacta',
+                bench: 'Bancada Mame & Shohin',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Terra Vegetal / 20% Casca Pinus',
+                lastFertilization: C.addDaysISO(t, -22),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -15),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -45),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 9),
+                nextInterventionType: 'Poda de limpeza de inflorescências exauridas e adubação P',
+                notes: 'Flores em buquê denso. Proteger de ventos frios abaixo de 12°C no inverno.',
+                logs: [
+                    { date: C.addDaysISO(t, -22), type: 'Adubação (+30d)', detail: 'Adubo orgânico de floração rico em fósforo' }
+                ]
+            },
+            {
+                id: 'B-011',
+                popularName: 'Jabuticaba (Sabará / Híbrida)',
+                scientificName: 'Plinia cauliflora',
+                bench: 'Bancada Frutíferas',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
                 lastFertilization: C.addDaysISO(t, -36),
                 fertCycleDays: 30,
                 lastRepot: C.addMonthsISO(t, -18),
@@ -852,118 +1065,264 @@
                 lastStyling: C.addDaysISO(t, -75),
                 wiringDueDate: '',
                 nextInterventionDate: C.addDaysISO(t, 4),
-                nextInterventionType: 'Poda de limpeza interna + Biogold',
-                notes: 'Tronco descascando uniforme; manter rega abundante no calor.',
+                nextInterventionType: 'Poda de ladrões internos + Bokashi reforçado',
+                notes: 'Tronco descascando uniforme com belo aspecto marmorizado; manter alta hidratação no verão.',
                 logs: [
                     { date: C.addDaysISO(t, -36), type: 'Adubação (+30d)', detail: 'Osmocote 15-09-12 + Torta de mamona' },
                     { date: C.addDaysISO(t, -75), type: 'Poda de Manutenção / Pinçagem', detail: 'Seleção de patamares secundários' }
                 ]
             },
             {
-                id: 'B-002',
-                popularName: 'Caliandra Rosa',
-                scientificName: 'Calliandra brevipes',
-                bench: 'Sol Pleno A',
+                id: 'B-012',
+                popularName: 'Junípero Jacaré',
+                scientificName: 'Juniperus horizontalis',
+                bench: 'Bancada Coníferas',
                 stage: 'Bonsai',
                 pot: 'Cerâmica',
-                substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
-                lastFertilization: C.addDaysISO(t, -12),
+                substrate: '50% Akadama / 30% Púmice / 20% Rocha Vulcânica',
+                lastFertilization: C.addDaysISO(t, -48),
+                fertCycleDays: 45,
+                lastRepot: C.addMonthsISO(t, -26),
+                repotCycleMonths: 36,
+                lastStyling: C.addDaysISO(t, -60),
+                wiringDueDate: C.addDaysISO(t, 20),
+                nextInterventionDate: C.addDaysISO(t, 11),
+                nextInterventionType: 'Pinçagem de escamas com ponta dos dedos e revisão de tensores',
+                notes: 'Estilo Han-Kengai (semi-cascata). Shari natural na curva principal tratado com calda sulfocálcica.',
+                logs: [
+                    { date: C.addDaysISO(t, -48), type: 'Adubação (+45d)', detail: 'Bokashi em sachês' },
+                    { date: C.addDaysISO(t, -60), type: 'Aramação', detail: 'Aramação de galho cascata com cobre 2.0mm' }
+                ]
+            },
+            {
+                id: 'B-013',
+                popularName: 'Limão-cravo (Limão-rosa)',
+                scientificName: 'Citrus × limonia',
+                bench: 'Bancada Frutíferas',
+                stage: 'Pré-bonsai',
+                pot: 'Treino',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -16),
                 fertCycleDays: 30,
-                lastRepot: C.addMonthsISO(t, -25),
+                lastRepot: C.addMonthsISO(t, -11),
                 repotCycleMonths: 24,
                 lastStyling: C.addDaysISO(t, -40),
                 wiringDueDate: '',
-                nextInterventionDate: C.addDaysISO(t, 2),
-                nextInterventionType: 'Transplante e poda de raízes finas',
-                notes: 'Raízes já preenchendo drenagem do vaso esmaltado oval.',
+                nextInterventionDate: C.addDaysISO(t, 13),
+                nextInterventionType: 'Raleio de frutos para poupar reservas e adubação com micronutrientes',
+                notes: 'Frutos perfumados. Vigiar cochonilhas de carapaça; aplicar calda de óleo de neem.',
                 logs: [
-                    { date: C.addDaysISO(t, -12), type: 'Adubação (+30d)', detail: 'Adubo orgânico líquido NPK balanceado' }
+                    { date: C.addDaysISO(t, -16), type: 'Adubação (+30d)', detail: 'Adubo cítrico específico' }
                 ]
             },
             {
-                id: 'B-003',
-                popularName: 'Junípero Shimpaku',
-                scientificName: 'Juniperus chinensis',
-                bench: 'Sol Pleno B',
-                stage: 'Pré-bonsai',
-                pot: 'Treino',
-                substrate: '50% Akadama / 30% Púmice / 20% Rocha Vulcânica',
-                lastFertilization: C.addDaysISO(t, -50),
-                fertCycleDays: 45,
-                lastRepot: C.addMonthsISO(t, -14),
-                repotCycleMonths: 36,
-                lastStyling: C.addDaysISO(t, -60),
-                wiringDueDate: C.addDaysISO(t, 25),
-                nextInterventionDate: C.addDaysISO(t, 14),
-                nextInterventionType: 'Revisão de arame de cobre (evitar marca)',
-                notes: 'Shari principal tratado com calda sulfocálcica.',
+                id: 'B-014',
+                popularName: 'Mexerica Ponkan',
+                scientificName: 'Citrus reticulata',
+                bench: 'Bancada Frutíferas',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -24),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -19),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -55),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 8),
+                nextInterventionType: 'Pinçagem de brotos novos e adubação orgânica de outono/inverno',
+                notes: 'Aroma cítrico intenso. Condução em estilo ereto informal (Moyogi) com copa cônica.',
                 logs: [
-                    { date: C.addDaysISO(t, -50), type: 'Adubação (+45d)', detail: 'Bokashi fermentado em sachês' },
-                    { date: C.addDaysISO(t, -60), type: 'Aramação', detail: 'Aramação completa de ramos primários com cobre 2.5mm' }
+                    { date: C.addDaysISO(t, -24), type: 'Adubação (+30d)', detail: 'Torta de mamona + Cinzas ricas em potássio' }
                 ]
             },
             {
-                id: 'B-004',
-                popularName: 'Pitangueira',
+                id: 'B-015',
+                popularName: 'Pau-ferro (Jucá)',
+                scientificName: 'Libidibia ferrea',
+                bench: 'Bancada Nativas Sol Pleno',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -26),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -17),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -85),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 6),
+                nextInterventionType: 'Poda de ramificação fina e inspeção de marcas de arame',
+                notes: 'Casca descamante marmorizada verde e cinza espetacular. Folíolos fecham ao entardecer.',
+                logs: [
+                    { date: C.addDaysISO(t, -26), type: 'Adubação (+30d)', detail: 'Bokashi + Silicato' }
+                ]
+            },
+            {
+                id: 'B-016',
+                popularName: 'Pitanga',
                 scientificName: 'Eugenia uniflora',
-                bench: 'Engorda / Chão',
-                stage: 'Yamadori',
-                pot: 'Escorredor/Chão',
-                substrate: '70% Caqueira / 20% Casca Pinus / 10% Carvão',
+                bench: 'Bancada Frutíferas',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
                 lastFertilization: C.addDaysISO(t, -18),
                 fertCycleDays: 30,
                 lastRepot: C.addMonthsISO(t, -10),
                 repotCycleMonths: 18,
                 lastStyling: C.addDaysISO(t, -90),
                 wiringDueDate: '',
-                nextInterventionDate: C.addDaysISO(t, 20),
-                nextInterventionType: 'Seleção de brotações de sacrifício',
-                notes: 'Nebari de 14 cm em consolidação no escorredor.',
+                nextInterventionDate: C.addDaysISO(t, 16),
+                nextInterventionType: 'Pinçagem de brotações avermelhadas e reforço de rega',
+                notes: 'Tronco canelado com belo nebari de 12 cm. Brotações novas nascem em tom rubro intenso.',
                 logs: [
-                    { date: C.addDaysISO(t, -18), type: 'Adubação (+30d)', detail: 'Adubação rica em nitrogênio para engorda' }
+                    { date: C.addDaysISO(t, -18), type: 'Adubação (+30d)', detail: 'Adubação orgânica equilibrada' }
                 ]
             },
             {
-                id: 'B-005',
-                popularName: 'Acer Burgeriano (Tridente)',
-                scientificName: 'Acer buergerianum',
-                bench: 'Meia-Sombra 50%',
+                id: 'B-017',
+                popularName: 'Piteco / Tataré',
+                scientificName: 'Chloroleucon tortum',
+                bench: 'Bancada Nativas Sol Pleno',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -14),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -13),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -45),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 5),
+                nextInterventionType: 'Pinçagem frequente de brotos de crescimento rápido',
+                notes: 'Madeira extremamente contorcida e casca lisa em tons claros. Cicatriza cortes com facilidade.',
+                logs: [
+                    { date: C.addDaysISO(t, -14), type: 'Adubação (+30d)', detail: 'Torta de mamona com farinha de ossos' }
+                ]
+            },
+            {
+                id: 'B-018',
+                popularName: 'Piteco-cortiçoso (Jurema-branca)',
+                scientificName: 'Chloroleucon mangense',
+                bench: 'Bancada Nativas Sol Pleno',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -28),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -16),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -65),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 7),
+                nextInterventionType: 'Limpeza de poeira e líquens da casca cortiçosa e ajuste de tensores',
+                notes: 'Casca suberosa (cortiça grossa) com fissuras profundas de árvore anciã. Altíssima rusticidade.',
+                logs: [
+                    { date: C.addDaysISO(t, -28), type: 'Adubação (+30d)', detail: 'Bokashi fermentado tradicional' }
+                ]
+            },
+            {
+                id: 'B-019',
+                popularName: 'Primavera (Buganvília)',
+                scientificName: 'Bougainvillea spectabilis',
+                bench: 'Bancada Sol Pleno B',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -27),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -15),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -50),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 3),
+                nextInterventionType: 'Estresse hídrico leve e adubação rica em fósforo para florada',
+                notes: 'Brácteas magenta intensas. Raízes frágeis como giz no transplante: nunca desmanchar o torrão à força.',
+                logs: [
+                    { date: C.addDaysISO(t, -27), type: 'Adubação (+30d)', detail: 'Adubo rico em fósforo e potássio' }
+                ]
+            },
+            {
+                id: 'B-020',
+                popularName: 'Rainha-do-abismo ("Seeninja")',
+                scientificName: 'Sinningia leucotricha',
+                bench: 'Bancada Caudiciformes & Rocha',
                 stage: 'Bonsai',
                 pot: 'Laje',
-                substrate: '50% Akadama / 30% Púmice / 20% Rocha Vulcânica',
-                lastFertilization: C.addDaysISO(t, -8),
+                substrate: '60% Pedrisco / 20% Cacos Cerâmicos / 20% Terra Vegetal',
+                lastFertilization: C.addDaysISO(t, -42),
                 fertCycleDays: 45,
-                lastRepot: C.addMonthsISO(t, -13),
-                repotCycleMonths: 12,
-                lastStyling: C.addDaysISO(t, -30),
-                wiringDueDate: C.addDaysISO(t, 10),
-                nextInterventionDate: C.addDaysISO(t, 5),
-                nextInterventionType: 'Pinçagem de entrenós curtos',
-                notes: 'Bosque de 5 troncos sobre laje de ardósia.',
+                lastRepot: C.addMonthsISO(t, -24),
+                repotCycleMonths: 36,
+                lastStyling: C.addDaysISO(t, -90),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 18),
+                nextInterventionType: 'Inspeção do tubérculo prateado e suspensão de regas no repouso',
+                notes: 'Cáudice tuberoso lanoso prateado rupícola. Montado sobre placa de ardósia natural.',
                 logs: [
-                    { date: C.addDaysISO(t, -8), type: 'Adubação (+45d)', detail: 'Pellets orgânicos de liberação lenta' },
-                    { date: C.addDaysISO(t, -30), type: 'Aramação', detail: 'Aramação fina de ápices com alumínio 1.5mm' }
+                    { date: C.addDaysISO(t, -42), type: 'Adubação (+45d)', detail: 'Fertilizante diluído em 1/4 da dose' }
                 ]
             },
             {
-                id: 'B-006',
-                popularName: 'Bougainvillea (Primavera)',
-                scientificName: 'Bougainvillea glabra',
-                bench: 'Sol Pleno B',
-                stage: 'Muda',
-                pot: 'Treino',
-                substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
-                lastFertilization: C.addDaysISO(t, -5),
-                fertCycleDays: 30,
-                lastRepot: C.addMonthsISO(t, -4),
-                repotCycleMonths: 12,
-                lastStyling: C.addDaysISO(t, -25),
+                id: 'B-021',
+                popularName: 'Rosa-do-deserto',
+                scientificName: 'Adenium obesum',
+                bench: 'Bancada Caudiciformes & Rocha',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '60% Pedrisco / 20% Cacos Cerâmicos / 20% Terra Vegetal',
+                lastFertilization: C.addDaysISO(t, -32),
+                fertCycleDays: 45,
+                lastRepot: C.addMonthsISO(t, -18),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -40),
                 wiringDueDate: '',
-                nextInterventionDate: C.addDaysISO(t, 25),
-                nextInterventionType: 'Movimento inicial de tronco com arame alumínio',
-                notes: 'Estaca lenhosa com ótima resposta radicular.',
+                nextInterventionDate: C.addDaysISO(t, 12),
+                nextInterventionType: 'Poda de ramificação apical dos galhos suculentos e selamento',
+                notes: 'Cáudice basal escultural largo. Substrato de secagem ultra rápida; tolerância zero a encharcamento.',
                 logs: [
-                    { date: C.addDaysISO(t, -5), type: 'Adubação (+30d)', detail: 'Forth Bonsai diluído metade da dose' }
+                    { date: C.addDaysISO(t, -32), type: 'Adubação (+45d)', detail: 'Osmocote para cactos e suculentas' }
+                ]
+            },
+            {
+                id: 'B-022',
+                popularName: 'Serissa variegata (Árvore-das-mil-estrelas)',
+                scientificName: 'Serissa japonica \'Variegata\'',
+                bench: 'Bancada Mame & Shohin',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -17),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -11),
+                repotCycleMonths: 18,
+                lastStyling: C.addDaysISO(t, -30),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 5),
+                nextInterventionType: 'Pinçagem contínua para preservar padrão variegata e folhagem densa',
+                notes: 'Flores brancas estreladas delicadas. Manter em local fixo sem oscilações bruscas de microclima.',
+                logs: [
+                    { date: C.addDaysISO(t, -17), type: 'Adubação (+30d)', detail: 'Bokashi suave em sachê' }
+                ]
+            },
+            {
+                id: 'B-023',
+                popularName: 'Tamarindo',
+                scientificName: 'Tamarindus indica',
+                bench: 'Bancada Sol Pleno B',
+                stage: 'Bonsai',
+                pot: 'Cerâmica',
+                substrate: '50% Caqueira / 30% Casca Pinus / 20% Pedrisco',
+                lastFertilization: C.addDaysISO(t, -21),
+                fertCycleDays: 30,
+                lastRepot: C.addMonthsISO(t, -15),
+                repotCycleMonths: 24,
+                lastStyling: C.addDaysISO(t, -55),
+                wiringDueDate: '',
+                nextInterventionDate: C.addDaysISO(t, 9),
+                nextInterventionType: 'Poda de seleção de ramificação alternada e aramação com ráfia',
+                notes: 'Folhagem pinada leve que recolhe à noite. Tronco áspero de rápida lignificação.',
+                logs: [
+                    { date: C.addDaysISO(t, -21), type: 'Adubação (+30d)', detail: 'Adubação orgânica completa NPK' }
                 ]
             }
         ];
@@ -993,6 +1352,49 @@
         };
     }
 
+    function ensurePersonalSpeciesSeeded(interactive = false) {
+        const C = global.VaultCore;
+        const initial = createInitialPlants();
+
+        // Se o acervo contiver apenas as 6 plantas iniciais de teste antigas:
+        const isLegacySample = plants.length <= 6 && plants.some((p) => p.popularName.includes('Shimpaku') || p.popularName.includes('Burgeriano'));
+        if (isLegacySample) {
+            plants = initial;
+            saveData(false);
+            if (interactive) C.toast('Acervo atualizado: 23 espécies do seu acervo sincronizadas!', 'success', 2500);
+            return;
+        }
+
+        let addedCount = 0;
+        initial.forEach((initP) => {
+            const exists = plants.some((p) => {
+                const pPop = (p.popularName || '').toLowerCase();
+                const iPop = (initP.popularName || '').toLowerCase();
+                const pSci = (p.scientificName || '').toLowerCase();
+                const iSci = (initP.scientificName || '').toLowerCase();
+                return (
+                    pPop === iPop ||
+                    (pPop.length > 4 && iPop.includes(pPop)) ||
+                    (iPop.length > 4 && pPop.includes(iPop)) ||
+                    (pSci && iSci && pSci === iSci)
+                );
+            });
+            if (!exists) {
+                const newId = generateNextId();
+                const copy = { ...initP, id: newId };
+                plants.push(normalizePlant(copy, plants.length));
+                addedCount++;
+            }
+        });
+
+        if (addedCount > 0) {
+            saveData(false);
+            if (interactive) C.toast(`${addedCount} nova(s) espécie(s) adicionada(s) ao acervo!`, 'success', 2500);
+        } else if (interactive) {
+            C.toast('Todas as 23 espécies já constam no seu acervo!', 'info', 2000);
+        }
+    }
+
     function loadData() {
         const C = global.VaultCore;
         const raw = localStorage.getItem(C.STORAGE_KEYS.BONSAI);
@@ -1003,6 +1405,7 @@
             const parsed = C.store.get(C.STORAGE_KEYS.BONSAI, []);
             plants = Array.isArray(parsed) ? parsed.map(normalizePlant) : [];
         }
+        ensurePersonalSpeciesSeeded(false);
         const validSet = new Set(plants.map((p) => p.id));
         selectedIds.forEach((id) => {
             if (!validSet.has(id)) selectedIds.delete(id);
@@ -1302,6 +1705,10 @@
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gestão de Acervo de Bonsai, Ciclos Nutricionais e Calendário Sazonal</h2>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-bonsai-seed-23" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm font-semibold flex items-center gap-2 transition" title="Carregar ou sincronizar as 23 espécies do acervo pessoal">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Carregar 23 Espécies</span>
+                        </button>
                         <button type="button" id="btn-bonsai-guide" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/40 text-cyan-200 text-xs sm:text-sm font-semibold flex items-center gap-2 transition">
                             <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
                             <span>Guia Botânico (40 Espécies)</span>
@@ -2124,6 +2531,14 @@
     // =========================================================================
     function bindEvents() {
         const C = global.VaultCore;
+
+        const btnSeed23 = document.getElementById('btn-bonsai-seed-23');
+        if (btnSeed23) {
+            btnSeed23.addEventListener('click', () => {
+                ensurePersonalSpeciesSeeded(true);
+                renderAll();
+            });
+        }
 
         document.getElementById('btn-bonsai-new').addEventListener('click', () => openModal(null));
         document.getElementById('btn-bonsai-guide').addEventListener('click', openGuideModal);
