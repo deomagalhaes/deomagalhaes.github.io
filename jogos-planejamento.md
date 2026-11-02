@@ -47,6 +47,12 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
    - Efeitos sonoros via Web Audio API (sem dependências externas).
    - Contador de movimentos, tempo e sistema de pontuação com `localStorage`.
    - Explicação neurocognitiva destacando qual região cerebral ou função está sendo estimulada.
-3. **Publicação:**
-   - Adicionar o card correspondente com imagem de capa em `jogos.html`.
+3. **Capa Visual Temática (Obrigatória):**
+   - Cada jogo DEVE possuir uma imagem exclusiva salva em `assets/imagens/jogo-{slug}.png` (ou `.jpg`).
+   - **Proporção:** 16:9 ou 4:3 (ex.: 800×500 px ou 1024×600 px).
+   - **Estilo:** Conceitual, minimalista, digital ou vetorial, evocando o domínio neuropsicológico e a mecânica do jogo.
+   - **Paleta visual:** Coerente com a identidade visual (`#005f73`, `#0a9396`, `#ee9b00`, `#94d2bd`, contrastes escuros elegantes).
+   - **Sem texto embutido:** Não escrever títulos ou palavras dentro da arte, pois o card HTML sobrepõe título e sinopse com degradê.
+4. **Publicação:**
+   - Adicionar o card correspondente em `jogos.html` com `style="background-image: url('assets/imagens/jogo-{slug}.png');"`.
    - Executar `git add`, `git commit` e `git push origin main`.

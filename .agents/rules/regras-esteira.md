@@ -7,7 +7,7 @@ Toda e qualquer rodada de lote de esteira contínua deve entregar OBRIGATORIAMEN
 1. **Pilar 1 — Artigo Científico:** Redação profunda em `artigos/slug.html` com container `.container.article-container`, referências ABNT completas, rodapé `.container.footer-grid` e card no topo de `cards-artigos.html`.
 2. **Pilar 2 — Roteiro Social & Studio Visual:** Roteiro de 6 a 7 slides em `social/YYYY-MM-DD-slug.md`, atualização em `social/README.md` e injeção do preset no topo de `social/gerador.html` com codificação UTF-8 sem BOM.
 3. **Pilar 3 — Escala Psicométrica / Teste Interativo:** Instrumento autoaplicável em `testes/teste-slug.html` com cálculo 100% client-side privado, devolutiva clínica por faixas e card EXCLUSIVAMENTE na grade de `testes.html` (PROIBIDO inserir testes em `cards-artigos.html`).
-4. **Pilar 4 — Jogo Cognitivo Diário:** Jogo interativo em `jogos/jogo-slug.html` com efeitos sonoros via Web Audio API, persistência em localStorage, solubilidade matemática prévia e card EXCLUSIVAMENTE na grade de `jogos.html`.
+4. **Pilar 4 — Jogo Cognitivo Diário:** Jogo interativo em `jogos/jogo-slug.html` com efeitos sonoros via Web Audio API, persistência em localStorage, solubilidade matemática prévia, **geração obrigatória de imagem temática exclusiva em `assets/imagens/jogo-{slug}.png` (estilo conceitual/minimalista, paleta institucional, sem texto sobreposto)** e card EXCLUSIVAMENTE na grade de `jogos.html` com o background apontando para sua respectiva imagem.
 
 ## 2. Trava de Qualidade (Quality Gate)
 - É TERMINANTEMENTE PROIBIDO realizar commit ou finalizar a rodada da esteira entregando apenas o artigo ou apenas o social.
