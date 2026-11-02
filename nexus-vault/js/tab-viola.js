@@ -287,7 +287,13 @@
         progressionBeatsPerChord: 4,  // 2 | 4 | 8 tempos por acorde
         bpm: 92,
         timeSignature: '2/4',        // '2/4' | '3/4' | '4/4' | '6/8'
-        subdivision: 2               // 1 | 2 | 3 | 4
+        subdivision: 2,              // 1 | 2 | 3 | 4
+        metroMode: 'rhythm',         // 'rhythm' (Ritmo Caipira & Repique) | 'click' (Metrônomo Analítico)
+        activeRhythmId: 'cururu',    // 'cururu' | 'pagode' | 'caterete' | 'guarania' | 'toada' | 'querencia'
+        rhythmBoxVolume: 0.85,       // Volume da percussão de tampo/caixa (0.0 a 1.0)
+        rhythmGuideClick: false,     // Tocar clique do metrônomo simultaneamente
+        rhythmChordSync: true,       // Harmonizar bordão e rasqueado com o acorde ativo do campo harmônico
+        activeRhythmStepIdx: -1      // Passo ativo da levada para feedback visual sincronizado
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -1139,6 +1145,281 @@
     }
 
     // =========================================================================
+    // BIBLIOTECA DE RITMOS TRADICIONAIS CAIPIRAS & LEVADAS DE VIOLA E VIOLÃO
+    // =========================================================================
+    const CAIPIRA_RHYTHMS = {
+        cururu: {
+            id: 'cururu',
+            name: 'Cururu Tradicional',
+            style: 'Cururu Paulista & Pantaneiro',
+            timeSignature: '2/4',
+            defaultBpm: 92,
+            subdivision: 2,
+            desc: 'Levada basilar dos desafios de viola caipira. Pulso cadenciado com batida percussiva no tampo e puxadas ascendentes.',
+            handRoleLeft: 'Mão Esquerda dedilha com firmeza e percute no tampo',
+            handRoleRight: 'Mão Direita dedilha com firmeza e percute no tampo',
+            pattern: [
+                { step: 0, beatLabel: '1', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Polegar Baixo', hint: 'Bordão grave' },
+                { step: 1, beatLabel: '1 &', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares agudos' },
+                { step: 2, beatLabel: '2', technique: 'box_tap', sound: 'tap_box', arrow: '✕', colorClass: 'text-amber-400 bg-amber-500/15 border-amber-500/40', label: 'Batida no Tampo', hint: 'Percussão de caixa' },
+                { step: 3, beatLabel: '2 &', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Puxada ascendente' }
+            ]
+        },
+        pagode: {
+            id: 'pagode',
+            name: 'Pagode de Viola (Tião Carreiro)',
+            style: 'Pagode Caipira Sincopado',
+            timeSignature: '2/4',
+            defaultBpm: 96,
+            subdivision: 4,
+            desc: 'A síncopa magistral de Tião Carreiro. Revezamento virtuoso de repique de dedos no tampo, rasqueado e polegar nos bordões.',
+            handRoleLeft: 'Mão Esquerda executa o repique duplo na caixa e dedilhado em leque',
+            handRoleRight: 'Mão Direita executa o repique duplo na caixa e dedilhado em leque',
+            pattern: [
+                { step: 0, beatLabel: '1', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Polegar Baixo', hint: 'Bordão firme' },
+                { step: 1, beatLabel: '1 e', technique: 'box_tap', sound: 'tap_box', arrow: '✕', colorClass: 'text-amber-400 bg-amber-500/15 border-amber-500/40', label: 'Repique Caixa', hint: 'Pancada no tampo' },
+                { step: 2, beatLabel: '1 &', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Polegar Rápido', hint: 'Bordão sincopado' },
+                { step: 3, beatLabel: '1 a', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares 1 e 2' },
+                { step: 4, beatLabel: '2', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-300 bg-emerald-500/20 border-emerald-400', label: 'Rasqueado Baixo', hint: 'Todas as cordas' },
+                { step: 5, beatLabel: '2 e', technique: 'box_tap', sound: 'tap_box', arrow: '✕', colorClass: 'text-amber-400 bg-amber-500/15 border-amber-500/40', label: 'Repique Caixa', hint: 'Pancada no tampo' },
+                { step: 6, beatLabel: '2 &', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Puxada ascendente' },
+                { step: 7, beatLabel: '2 a', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Polegar Fecho', hint: 'Fechamento de ciclo' }
+            ]
+        },
+        caterete: {
+            id: 'caterete',
+            name: 'Cateretê / Catira',
+            style: 'Dança Ancestral Sertaneja',
+            timeSignature: '2/4',
+            defaultBpm: 104,
+            subdivision: 2,
+            desc: 'Ritmo rápido e saltado com corte percussivo abafando a ressonância das cordas com a palma da mão.',
+            handRoleLeft: 'Mão Esquerda desfere o corte abafado seco e rasqueia',
+            handRoleRight: 'Mão Direita desfere o corte abafado seco e rasqueia',
+            pattern: [
+                { step: 0, beatLabel: '1', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Polegar Forte', hint: 'Bordão de ataque' },
+                { step: 1, beatLabel: '1 &', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares agudos' },
+                { step: 2, beatLabel: '2', technique: 'mute_chock', sound: 'chock', arrow: '■', colorClass: 'text-rose-400 bg-rose-500/15 border-rose-500/40', label: 'Abafado Seco', hint: 'Corte com a palma' },
+                { step: 3, beatLabel: '2 &', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30', label: 'Rasqueado Baixo', hint: 'Descida viva' }
+            ]
+        },
+        guarania: {
+            id: 'guarania',
+            name: 'Guarânia Romântica',
+            style: 'Balanço Ternário Lírico',
+            timeSignature: '3/4',
+            defaultBpm: 72,
+            subdivision: 2,
+            desc: 'Ondulação emotiva em compasso ternário com ressonância profunda de bordão e rasqueado aveludado.',
+            handRoleLeft: 'Mão Esquerda conduz com suavidade extrema e dedilhado lírico',
+            handRoleRight: 'Mão Direita conduz com suavidade extrema e dedilhado lírico',
+            pattern: [
+                { step: 0, beatLabel: '1', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Bordão Baixo', hint: 'Fundamental' },
+                { step: 1, beatLabel: '1 &', technique: 'rest', sound: 'rest', arrow: '·', colorClass: 'text-slate-500 bg-slate-800/40 border-slate-700/40', label: 'Ressonância', hint: 'Deixar soar o baixo' },
+                { step: 2, beatLabel: '2', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Rasqueado Suave', hint: 'Pares médios' },
+                { step: 3, beatLabel: '2 &', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares agudos' },
+                { step: 4, beatLabel: '3', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Rasqueado Suave', hint: 'Pares médios' },
+                { step: 5, beatLabel: '3 &', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares agudos' }
+            ]
+        },
+        toada: {
+            id: 'toada',
+            name: 'Toada Caipira (6/8)',
+            style: 'Lamento Seresteiro em 6/8',
+            timeSignature: '6/8',
+            defaultBpm: 76,
+            subdivision: 1,
+            desc: 'Balanço ternário composto (dois pulsos de 3 colcheias). Alternância entre bordão grave, batida no tampo e dedilhado.',
+            handRoleLeft: 'Mão Esquerda acentua os pulsos 1 e 4 com o corpo do instrumento',
+            handRoleRight: 'Mão Direita acentua os pulsos 1 e 4 com o corpo do instrumento',
+            pattern: [
+                { step: 0, beatLabel: '1', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Polegar (Pulso 1)', hint: 'Bordão acentuado' },
+                { step: 1, beatLabel: '2', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Dedos Baixo', hint: 'Pares médios' },
+                { step: 2, beatLabel: '3', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares agudos' },
+                { step: 3, beatLabel: '4', technique: 'box_tap', sound: 'tap_box', arrow: '✕', colorClass: 'text-amber-400 bg-amber-500/15 border-amber-500/40', label: 'Tampo (Pulso 2)', hint: 'Pancada na caixa' },
+                { step: 4, beatLabel: '5', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Dedos Baixo', hint: 'Pares médios' },
+                { step: 5, beatLabel: '6', technique: 'index_up', sound: 'strum_up', arrow: '↑', colorClass: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30', label: 'Indicador Cima', hint: 'Pares agudos' }
+            ]
+        },
+        querencia: {
+            id: 'querencia',
+            name: 'Querência / Valsa Caipira',
+            style: 'Valsa de Rancho Tradicional',
+            timeSignature: '3/4',
+            defaultBpm: 108,
+            subdivision: 1,
+            desc: 'A clássica valsa caipira em três tempos: baixo forte na cabeça do compasso e duas batidas harmônicas nas cordas agudas.',
+            handRoleLeft: 'Mão Esquerda marca o baixo no 1º tempo e rasqueia nos tempos 2 e 3',
+            handRoleRight: 'Mão Direita marca o baixo no 1º tempo e rasqueia nos tempos 2 e 3',
+            pattern: [
+                { step: 0, beatLabel: '1', technique: 'thumb', sound: 'thumb', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/15 border-emerald-400', label: 'Baixo no Bordão', hint: 'Tônica no tempo 1' },
+                { step: 1, beatLabel: '2', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Acorde Baixo', hint: 'Tempo 2' },
+                { step: 2, beatLabel: '3', technique: 'rasqueado', sound: 'rasqueado', arrow: '↓', colorClass: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', label: 'Acorde Baixo', hint: 'Tempo 3' }
+            ]
+        }
+    };
+
+    // =========================================================================
+    // SÍNTESE ACÚSTICA PERCUSSIVA & PALHETADA CAIPIRA (WEB AUDIO API)
+    // =========================================================================
+    function playWoodTap(startTimeOffset = 0, volume = 0.85) {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime + Math.max(0, startTimeOffset);
+
+        // 1. Ressonância oca de madeira do tampo de pinho/cedro da viola
+        const osc = ctx.createOscillator();
+        const oscGain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(148, now);
+        osc.frequency.exponentialRampToValueAtTime(45, now + 0.052);
+
+        oscGain.gain.setValueAtTime(0.0001, now);
+        oscGain.gain.linearRampToValueAtTime(volume * 0.44, now + 0.002);
+        oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+
+        osc.connect(oscGain);
+        oscGain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.065);
+
+        // 2. Estalo seco percussivo de dedos batendo na caixa
+        try {
+            const bufferSize = Math.floor(ctx.sampleRate * 0.04);
+            const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            const whiteNoise = ctx.createBufferSource();
+            whiteNoise.buffer = noiseBuffer;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(260, now);
+            filter.Q.setValueAtTime(3.2, now);
+
+            const noiseGain = ctx.createGain();
+            noiseGain.gain.setValueAtTime(volume * 0.52, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+
+            whiteNoise.connect(filter);
+            filter.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+
+            whiteNoise.start(now);
+            whiteNoise.stop(now + 0.045);
+        } catch (_) {}
+    }
+
+    function playThumbBass(startTimeOffset = 0, volume = 0.85) {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const field = getHarmonicField(state.selectedKeyId);
+        const chord = field[state.selectedDegreeIdx] || field[0];
+        const inst = INSTRUMENTS[state.instrumentId];
+
+        if (state.rhythmChordSync) {
+            const voicings = getChordVoicings(chord);
+            const shape = voicings[state.voicingVariantIdx % voicings.length];
+            // Encontra a corda mais grave do acorde ativo que não esteja abafada
+            let lowestIdx = -1;
+            for (let i = inst.courses.length - 1; i >= 0; i--) {
+                if (shape[i] >= 0) {
+                    lowestIdx = i;
+                    break;
+                }
+            }
+            if (lowestIdx >= 0) {
+                playCourseAtFret(lowestIdx, shape[lowestIdx], startTimeOffset);
+                flashFretCell(lowestIdx, shape[lowestIdx], Math.max(0, startTimeOffset * 1000));
+                return;
+            }
+        }
+
+        // Fallback: bordão fundamental grave (B2/B3 na viola ou E2 no violão)
+        const baseMidi = inst.isPaired ? 47 : 40;
+        pluckMidiNote(baseMidi, startTimeOffset, 0.45, -1.8, volume * 0.28);
+        if (inst.isPaired) {
+            pluckMidiNote(baseMidi + 12, startTimeOffset + 0.005, 0.42, 1.8, volume * 0.24);
+        }
+    }
+
+    function playRasqueado(startTimeOffset = 0, volume = 0.8) {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const field = getHarmonicField(state.selectedKeyId);
+        const chord = field[state.selectedDegreeIdx] || field[0];
+        const voicings = getChordVoicings(chord);
+        const shape = voicings[state.voicingVariantIdx % voicings.length];
+        const inst = INSTRUMENTS[state.instrumentId];
+
+        let delayCount = 0;
+        for (let cIdx = inst.courses.length - 1; cIdx >= 0; cIdx--) {
+            const fret = shape[cIdx];
+            if (fret >= 0) {
+                playCourseAtFret(cIdx, fret, startTimeOffset + delayCount * 0.008);
+                flashFretCell(cIdx, fret, Math.max(0, (startTimeOffset + delayCount * 0.008) * 1000));
+                delayCount++;
+            }
+        }
+    }
+
+    function playIndexUp(startTimeOffset = 0, volume = 0.8) {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const field = getHarmonicField(state.selectedKeyId);
+        const chord = field[state.selectedDegreeIdx] || field[0];
+        const voicings = getChordVoicings(chord);
+        const shape = voicings[state.voicingVariantIdx % voicings.length];
+        const inst = INSTRUMENTS[state.instrumentId];
+
+        let delayCount = 0;
+        // Puxa as cordas agudas (pares 1 e 2 na viola)
+        for (let cIdx = 0; cIdx < Math.min(2, inst.courses.length); cIdx++) {
+            const fret = shape[cIdx];
+            if (fret >= 0) {
+                playCourseAtFret(cIdx, fret, startTimeOffset + delayCount * 0.007);
+                flashFretCell(cIdx, fret, Math.max(0, (startTimeOffset + delayCount * 0.007) * 1000));
+                delayCount++;
+            }
+        }
+    }
+
+    function playMuteChock(startTimeOffset = 0, volume = 0.8) {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime + Math.max(0, startTimeOffset);
+
+        try {
+            const bufferSize = Math.floor(ctx.sampleRate * 0.032);
+            const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            const noise = ctx.createBufferSource();
+            noise.buffer = noiseBuffer;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(840, now);
+            filter.Q.setValueAtTime(3.8, now);
+
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(volume * 0.44, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.028);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+
+            noise.start(now);
+            noise.stop(now + 0.032);
+        } catch (_) {}
+    }
+
+    // =========================================================================
     // METRÔNOMO DE ALTA PRECISÃO (WEB AUDIO API LOOKAHEAD SCHEDULER)
     // =========================================================================
     function getBeatsPerBar() {
@@ -1148,7 +1429,7 @@
         return 4;
     }
 
-    function scheduleMetronomeClick(subStepIndex, time) {
+    function scheduleMetronomeClick(subStepIndex, time, isGuideOnly = false) {
         const ctx = ensureAudioContext();
         if (!ctx) return;
 
@@ -1164,7 +1445,8 @@
         osc.type = isDownbeat ? 'triangle' : 'sine';
 
         const freq = isDownbeat ? 1180 : (isSecondaryAccent ? 880 : (isMainBeat ? 740 : 520));
-        const vol = isDownbeat ? 0.34 : (isMainBeat ? 0.22 : 0.09);
+        let vol = isDownbeat ? 0.34 : (isMainBeat ? 0.22 : 0.09);
+        if (isGuideOnly) vol *= 0.45; // Clique discreto quando em conjunto com ritmo caipira
 
         osc.frequency.setValueAtTime(freq, time);
         gain.gain.setValueAtTime(0.0001, time);
@@ -1176,7 +1458,7 @@
         osc.start(time);
         osc.stop(time + 0.055);
 
-        if (isMainBeat) {
+        if (isMainBeat && !isGuideOnly) {
             metroVisualQueue.push({ beat: beatNumber, time });
         }
     }
@@ -1184,15 +1466,63 @@
     function metroSchedulerTick() {
         if (!metroRunning || !audioCtx) return;
         const scheduleAheadSec = 0.1;
-        const totalSubStepsPerBar = getBeatsPerBar() * state.subdivision;
 
-        while (metroNextNoteTime < audioCtx.currentTime + scheduleAheadSec) {
-            scheduleMetronomeClick(metroCurrentSubStep, metroNextNoteTime);
-            const secPerMainBeat = state.timeSignature === '6/8'
-                ? (60 / state.bpm) / 1.5
-                : (60 / state.bpm);
-            metroNextNoteTime += secPerMainBeat / state.subdivision;
-            metroCurrentSubStep = (metroCurrentSubStep + 1) % totalSubStepsPerBar;
+        if (state.metroMode === 'rhythm') {
+            const rhythm = CAIPIRA_RHYTHMS[state.activeRhythmId] || CAIPIRA_RHYTHMS.cururu;
+            const totalSteps = rhythm.pattern.length;
+
+            while (metroNextNoteTime < audioCtx.currentTime + scheduleAheadSec) {
+                const currentStepIdx = metroCurrentSubStep % totalSteps;
+                const step = rhythm.pattern[currentStepIdx];
+                const timeOffset = Math.max(0, metroNextNoteTime - audioCtx.currentTime);
+
+                // Execução da síntese correspondente ao passo
+                if (step.sound === 'tap_box') {
+                    playWoodTap(timeOffset, state.rhythmBoxVolume);
+                } else if (step.sound === 'thumb') {
+                    playThumbBass(timeOffset, 0.85);
+                } else if (step.sound === 'rasqueado') {
+                    playRasqueado(timeOffset, 0.8);
+                } else if (step.sound === 'strum_up') {
+                    playIndexUp(timeOffset, 0.78);
+                } else if (step.sound === 'chock') {
+                    playMuteChock(timeOffset, 0.8);
+                }
+
+                // Clique guia analítico opcional
+                if (state.rhythmGuideClick) {
+                    if (step.beatLabel === '1' || step.beatLabel === '2' || step.beatLabel === '3' || step.beatLabel === '4') {
+                        scheduleMetronomeClick(0, metroNextNoteTime, true);
+                    }
+                }
+
+                // Fila visual para LEDs de tempo e régua de palhetada
+                const beatsPerBar = getBeatsPerBar();
+                const mainBeat = Math.floor((currentStepIdx / totalSteps) * beatsPerBar);
+                metroVisualQueue.push({ beat: mainBeat, rhythmStep: currentStepIdx, time: metroNextNoteTime });
+
+                // Duração do passo
+                let secPerStep = 0;
+                if (rhythm.timeSignature === '6/8') {
+                    secPerStep = (60 / state.bpm) / 3;
+                } else {
+                    secPerStep = (60 / state.bpm) / rhythm.subdivision;
+                }
+
+                metroNextNoteTime += secPerStep;
+                metroCurrentSubStep = (metroCurrentSubStep + 1) % totalSteps;
+            }
+        } else {
+            // Modo Metrônomo Analítico Lookahead
+            const totalSubStepsPerBar = getBeatsPerBar() * state.subdivision;
+            while (metroNextNoteTime < audioCtx.currentTime + scheduleAheadSec) {
+                scheduleMetronomeClick(metroCurrentSubStep, metroNextNoteTime, false);
+                const secPerMainBeat = state.timeSignature === '6/8'
+                    ? (60 / state.bpm) / 1.5
+                    : (60 / state.bpm);
+                metroNextNoteTime += secPerMainBeat / state.subdivision;
+                metroCurrentSubStep = (metroCurrentSubStep + 1) % totalSubStepsPerBar;
+            }
         }
     }
 
@@ -1200,10 +1530,16 @@
         if (!metroRunning || !audioCtx) return;
         const currentTime = audioCtx.currentTime;
         let activeBeat = -1;
+        let activeRhythmStep = -1;
+
         while (metroVisualQueue.length > 0 && metroVisualQueue[0].time <= currentTime) {
             activeBeat = metroVisualQueue[0].beat;
+            if (metroVisualQueue[0].rhythmStep !== undefined) {
+                activeRhythmStep = metroVisualQueue[0].rhythmStep;
+            }
             metroVisualQueue.shift();
         }
+
         if (activeBeat >= 0) {
             document.querySelectorAll('[data-metro-led]').forEach((led) => {
                 const idx = parseInt(led.getAttribute('data-metro-led'), 10);
@@ -1216,6 +1552,20 @@
                 }
             });
         }
+
+        if (activeRhythmStep >= 0) {
+            document.querySelectorAll('[data-rhythm-step]').forEach((card) => {
+                const stepIdx = parseInt(card.getAttribute('data-rhythm-step'), 10);
+                if (stepIdx === activeRhythmStep) {
+                    card.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-500/25', 'scale-[1.05]', 'shadow-[0_0_16px_rgba(52,211,153,0.4)]');
+                    card.classList.remove('bg-[#090d16]', 'border-slate-800');
+                } else {
+                    card.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-500/25', 'scale-[1.05]', 'shadow-[0_0_16px_rgba(52,211,153,0.4)]');
+                    card.classList.add('bg-[#090d16]', 'border-slate-800');
+                }
+            });
+        }
+
         metroRafId = requestAnimationFrame(metroVisualLoop);
     }
 
@@ -1225,6 +1575,11 @@
             if (metroTimerId) clearInterval(metroTimerId);
             if (metroRafId) cancelAnimationFrame(metroRafId);
             metroVisualQueue = [];
+            // Limpa destaques dos cards de ritmo
+            document.querySelectorAll('[data-rhythm-step]').forEach((card) => {
+                card.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-500/25', 'scale-[1.05]', 'shadow-[0_0_16px_rgba(52,211,153,0.4)]');
+                card.classList.add('bg-[#090d16]', 'border-slate-800');
+            });
             renderMetronomeControls();
             return;
         }
@@ -1608,24 +1963,129 @@
         const bpmSlider = document.getElementById('viola-bpm-slider');
         const playBtn = document.getElementById('btn-viola-metro-toggle');
         const ledsWrap = document.getElementById('viola-metro-leds');
+        const rhythmPanel = document.getElementById('viola-rhythm-panel');
+        const rhythmSelectors = document.getElementById('viola-rhythm-selectors');
+        const rhythmInfoBox = document.getElementById('viola-rhythm-info-box');
+        const rhythmStrip = document.getElementById('viola-rhythm-strip');
+        const rhythmHandGuide = document.getElementById('viola-rhythm-hand-guide');
+        const classicSelects = document.getElementById('viola-classic-metro-selects');
+        const modeRhythmBtn = document.getElementById('btn-viola-metro-mode-rhythm');
+        const modeClickBtn = document.getElementById('btn-viola-metro-mode-click');
 
         if (bpmVal) bpmVal.textContent = `${state.bpm} BPM`;
         if (bpmSlider) bpmSlider.value = String(state.bpm);
 
+        // Alternância visual de modo: Ritmo Caipira vs Metrônomo Analítico
+        if (modeRhythmBtn && modeClickBtn) {
+            if (state.metroMode === 'rhythm') {
+                modeRhythmBtn.className = 'px-3 py-1.5 text-xs font-mono rounded-md font-semibold bg-emerald-600 text-slate-950 shadow';
+                modeClickBtn.className = 'px-3 py-1.5 text-xs font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+                if (rhythmPanel) rhythmPanel.classList.remove('hidden');
+                if (classicSelects) classicSelects.classList.add('hidden');
+            } else {
+                modeRhythmBtn.className = 'px-3 py-1.5 text-xs font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+                modeClickBtn.className = 'px-3 py-1.5 text-xs font-mono rounded-md font-semibold bg-cyan-600 text-slate-950 shadow';
+                if (rhythmPanel) rhythmPanel.classList.add('hidden');
+                if (classicSelects) classicSelects.classList.remove('hidden');
+            }
+        }
+
         if (playBtn) {
+            const isRhythm = state.metroMode === 'rhythm';
             playBtn.className = metroRunning
-                ? 'min-h-[44px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 transition'
-                : 'min-h-[44px] px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition';
+                ? 'min-h-[40px] px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 transition shadow-lg shadow-rose-950/40'
+                : (isRhythm
+                    ? 'min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition'
+                    : 'min-h-[40px] px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition');
             playBtn.innerHTML = metroRunning
-                ? `<i data-lucide="square" class="w-4 h-4"></i><span>Parar Metrônomo</span>`
-                : `<i data-lucide="play" class="w-4 h-4"></i><span>Iniciar Metrônomo</span>`;
+                ? `<i data-lucide="square" class="w-4 h-4"></i><span>Parar ${isRhythm ? 'Levada' : 'Metrônomo'}</span>`
+                : `<i data-lucide="play" class="w-4 h-4"></i><span>Tocar ${isRhythm ? 'Levada Caipira' : 'Metrônomo'}</span>`;
             global.VaultCore.refreshIcons(playBtn);
         }
 
         if (ledsWrap) {
             const beats = getBeatsPerBar();
             ledsWrap.innerHTML = Array.from({ length: beats }, (_, i) => `
-                <div data-metro-led="${i}" class="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 transition-all"></div>
+                <div data-metro-led="${i}" class="w-3.5 h-3.5 rounded-full bg-slate-800 border border-slate-700 transition-all"></div>
+            `).join('');
+        }
+
+        // Renderiza seletores e detalhes do Ritmo Caipira
+        const currentRhythm = CAIPIRA_RHYTHMS[state.activeRhythmId] || CAIPIRA_RHYTHMS.cururu;
+
+        if (rhythmSelectors) {
+            rhythmSelectors.innerHTML = Object.values(CAIPIRA_RHYTHMS).map((r) => {
+                const isSelected = r.id === state.activeRhythmId;
+                return `
+                    <button type="button" data-rhythm-choice="${r.id}"
+                        class="min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-mono font-medium border transition ${
+                            isSelected
+                                ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200 shadow-sm'
+                                : 'bg-[#090d16] border-slate-800 hover:border-slate-700 text-slate-400'
+                        }">
+                        <span>${r.name}</span>
+                        <span class="text-[10px] text-slate-500 ml-1">(${r.timeSignature})</span>
+                    </button>
+                `;
+            }).join('');
+
+            rhythmSelectors.querySelectorAll('[data-rhythm-choice]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const rId = btn.getAttribute('data-rhythm-choice');
+                    const chosen = CAIPIRA_RHYTHMS[rId];
+                    if (!chosen) return;
+                    state.activeRhythmId = rId;
+                    state.timeSignature = chosen.timeSignature;
+                    state.subdivision = chosen.subdivision;
+                    if (!metroRunning) {
+                        state.bpm = chosen.defaultBpm;
+                    }
+                    metroCurrentSubStep = 0;
+                    saveViolaState();
+                    renderMetronomeControls();
+                });
+            });
+        }
+
+        if (rhythmInfoBox) {
+            const handText = state.isLeftHanded ? currentRhythm.handRoleLeft : currentRhythm.handRoleRight;
+            rhythmInfoBox.innerHTML = `
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                            ${currentRhythm.style}
+                        </span>
+                        <span class="text-slate-400">Compasso: <strong class="text-emerald-300">${currentRhythm.timeSignature}</strong></span>
+                        <span class="text-slate-400">• Sugerido: <strong class="text-cyan-300">${currentRhythm.defaultBpm} BPM</strong></span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${currentRhythm.desc}</p>
+                </div>
+                <div class="shrink-0 text-right sm:text-right text-[11px] text-amber-300/90 pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-800/80">
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider">Ergonomia (${state.isLeftHanded ? 'Canhoto' : 'Destro'})</div>
+                    <div>${handText}</div>
+                </div>
+            `;
+        }
+
+        if (rhythmHandGuide) {
+            rhythmHandGuide.textContent = state.isLeftHanded ? 'Mão Esquerda (Dedilha/Caixa)' : 'Mão Direita (Dedilha/Caixa)';
+        }
+
+        if (rhythmStrip) {
+            rhythmStrip.innerHTML = currentRhythm.pattern.map((p) => `
+                <div data-rhythm-step="${p.step}"
+                    class="bg-[#090d16] border border-slate-800 rounded-xl p-2.5 flex flex-col items-center justify-between transition group cursor-default">
+                    <div class="text-[10px] font-mono text-slate-500 font-bold mb-1">
+                        ${p.beatLabel}
+                    </div>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-base border transition ${p.colorClass}">
+                        ${p.arrow}
+                    </div>
+                    <div class="text-center mt-1.5 space-y-0.5">
+                        <div class="text-[10px] font-mono font-semibold text-slate-200">${p.label}</div>
+                        <div class="text-[9px] font-mono text-slate-500">${p.hint}</div>
+                    </div>
+                </div>
             `).join('');
         }
     }
@@ -1634,7 +2094,12 @@
         const C = global.VaultCore;
         const saved = C.store.get(C.STORAGE_KEYS.VIOLA, null);
         if (saved && typeof saved === 'object') {
-            state = Object.assign({}, state, saved, { activeDuadStepIdx: -1, progressionPlaying: false, progressionStepIdx: -1 });
+            state = Object.assign({}, state, saved, {
+                activeDuadStepIdx: -1,
+                progressionPlaying: false,
+                progressionStepIdx: -1,
+                activeRhythmStepIdx: -1
+            });
         }
     }
 
@@ -1644,6 +2109,7 @@
         delete copy.activeDuadStepIdx;
         delete copy.progressionPlaying;
         delete copy.progressionStepIdx;
+        delete copy.activeRhythmStepIdx;
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
@@ -1847,48 +2313,106 @@
                     </div>
                 </div>
 
-                <!-- Metrônomo Lookahead Nativo -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4">
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                        <div class="flex items-center gap-4">
-                            <div>
-                                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Metrônomo Web Audio Lookahead</span>
-                                <div id="viola-bpm-display" class="text-2xl font-mono font-bold text-cyan-300">92 BPM</div>
+                <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Ritmos Tradicionais Caipiras & Metrônomo</h3>
                             </div>
-                            <div id="viola-metro-leds" class="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#090d16] border border-slate-800"></div>
+                            <p class="text-xs text-slate-400 mt-0.5">Síntese Web Audio precisa de batida no tampo, repique de caixa, rasqueado e guia direcional sincronizado</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                                <button type="button" id="btn-viola-metro-mode-rhythm" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'rhythm' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
+                                    Ritmo Caipira
+                                </button>
+                                <button type="button" id="btn-viola-metro-mode-click" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'click' ? 'bg-cyan-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
+                                    Metrônomo Analítico
+                                </button>
+                            </div>
+
+                            <button type="button" id="btn-viola-metro-toggle" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span>Tocar Levada Caipira</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seção de Ritmo Caipira Ativo -->
+                    <div id="viola-rhythm-panel" class="${state.metroMode === 'rhythm' ? 'space-y-3' : 'hidden'}">
+                        <!-- Seletores dos Ritmos Caipiras -->
+                        <div class="flex flex-wrap items-center gap-2" id="viola-rhythm-selectors"></div>
+
+                        <!-- Info do Ritmo & Orientação Ergonômica -->
+                        <div id="viola-rhythm-info-box" class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs font-mono"></div>
+
+                        <!-- Régua Visual de Palhetadas / Repiques -->
+                        <div>
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
+                                <span>Padrão de Palhetada & Repique no Tampo (1 Compasso):</span>
+                                <span class="text-emerald-400 font-semibold" id="viola-rhythm-hand-guide"></span>
+                            </div>
+                            <div id="viola-rhythm-strip" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Andamento (BPM) & Ajustes de Mixagem -->
+                    <div class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                        <div class="flex items-center gap-3 shrink-0">
+                            <div>
+                                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Andamento</span>
+                                <div id="viola-bpm-display" class="text-xl font-mono font-bold text-cyan-300">92 BPM</div>
+                            </div>
+                            <div id="viola-metro-leds" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-800"></div>
                         </div>
 
                         <div class="flex-1 max-w-xl space-y-2">
                             <input type="range" id="viola-bpm-slider" min="40" max="220" value="92"
                                 class="w-full accent-cyan-400 cursor-pointer">
                             <div class="flex flex-wrap items-center gap-1.5">
-                                <button type="button" data-bpm-delta="-5" class="min-h-[38px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−5</button>
-                                <button type="button" data-bpm-delta="-1" class="min-h-[38px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−1</button>
-                                <button type="button" data-bpm-delta="1" class="min-h-[38px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+1</button>
-                                <button type="button" data-bpm-delta="5" class="min-h-[38px] px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+5</button>
-                                <button type="button" id="btn-viola-tap-tempo" class="min-h-[38px] px-3 py-1 rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 font-mono text-xs text-amber-300">Tap Tempo</button>
+                                <button type="button" data-bpm-delta="-5" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−5</button>
+                                <button type="button" data-bpm-delta="-1" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−1</button>
+                                <button type="button" data-bpm-delta="1" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+1</button>
+                                <button type="button" data-bpm-delta="5" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+5</button>
+                                <button type="button" id="btn-viola-tap-tempo" class="min-h-[34px] px-2.5 py-0.5 rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 font-mono text-xs text-amber-300">Tap Tempo</button>
 
-                                <select id="viola-metro-sig" aria-label="Compasso" class="min-h-[38px] px-2.5 py-1 rounded bg-[#090d16] border border-slate-700 font-mono text-xs text-slate-200">
-                                    <option value="2/4">2/4 Pagode / Cururu</option>
-                                    <option value="3/4">3/4 Moda / Guarânia</option>
-                                    <option value="4/4">4/4 Toada / Padrão</option>
-                                    <option value="6/8">6/8 Ternário / Ponteio</option>
-                                </select>
-
-                                <select id="viola-metro-sub" aria-label="Subdivisão" class="min-h-[38px] px-2.5 py-1 rounded bg-[#090d16] border border-slate-700 font-mono text-xs text-slate-200">
-                                    <option value="1">1x Semínima</option>
-                                    <option value="2" selected>2x Colcheia (Dedilhado)</option>
-                                    <option value="3">3x Tercina</option>
-                                    <option value="4">4x Semicolcheia (Pagode)</option>
-                                </select>
+                                <div id="viola-classic-metro-selects" class="inline-flex items-center gap-1.5 ${state.metroMode === 'click' ? '' : 'hidden'}">
+                                    <select id="viola-metro-sig" aria-label="Compasso" class="min-h-[34px] px-2 py-0.5 rounded bg-[#0f172a] border border-slate-700 font-mono text-xs text-slate-200">
+                                        <option value="2/4">2/4 Pagode / Cururu</option>
+                                        <option value="3/4">3/4 Moda / Guarânia</option>
+                                        <option value="4/4">4/4 Toada / Padrão</option>
+                                        <option value="6/8">6/8 Ternário / Ponteio</option>
+                                    </select>
+                                    <select id="viola-metro-sub" aria-label="Subdivisão" class="min-h-[34px] px-2 py-0.5 rounded bg-[#0f172a] border border-slate-700 font-mono text-xs text-slate-200">
+                                        <option value="1">1x Semínima</option>
+                                        <option value="2">2x Colcheia</option>
+                                        <option value="3">3x Tercina</option>
+                                        <option value="4">4x Semicolcheia</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <button type="button" id="btn-viola-metro-toggle" class="min-h-[44px] px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-2">
-                                <i data-lucide="play" class="w-4 h-4"></i>
-                                <span>Iniciar Metrônomo</span>
-                            </button>
+                        <!-- Opções de Mixagem Acústica Caipira -->
+                        <div class="flex flex-wrap items-center gap-2 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-800">
+                            <label class="flex items-center gap-1.5 text-xs font-mono text-slate-300 cursor-pointer" title="Harmonizar palhetada com o acorde ativo no Campo Harmônico">
+                                <input type="checkbox" id="check-viola-rhythm-chord-sync" ${state.rhythmChordSync ? 'checked' : ''} class="accent-emerald-500 rounded cursor-pointer">
+                                <span>Harmonizar Acorde</span>
+                            </label>
+
+                            <label class="flex items-center gap-1.5 text-xs font-mono text-slate-300 cursor-pointer" title="Ouvir clique do metrônomo analítico junto ao ritmo">
+                                <input type="checkbox" id="check-viola-rhythm-guide-click" ${state.rhythmGuideClick ? 'checked' : ''} class="accent-cyan-500 rounded cursor-pointer">
+                                <span>Clique Guia</span>
+                            </label>
+
+                            <div class="flex items-center gap-1.5 pl-2 border-l border-slate-800">
+                                <span class="text-[10px] font-mono text-slate-400">Caixa:</span>
+                                <input type="range" id="viola-slider-box-vol" min="0" max="100" value="${Math.round(state.rhythmBoxVolume * 100)}"
+                                    class="w-16 accent-amber-400 cursor-pointer" title="Volume da batida no tampo da viola">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1899,12 +2423,26 @@
     }
 
     function syncControlValues() {
-        document.getElementById('viola-select-instrument').value = state.instrumentId;
-        document.getElementById('viola-select-key').value = state.selectedKeyId;
-        document.getElementById('viola-select-duad-type').value = state.duadType;
-        document.getElementById('viola-select-duad-key').value = state.duadKeyId;
-        document.getElementById('viola-metro-sig').value = state.timeSignature;
-        document.getElementById('viola-metro-sub').value = String(state.subdivision);
+        const instSel = document.getElementById('viola-select-instrument');
+        if (instSel) instSel.value = state.instrumentId;
+        const keySel = document.getElementById('viola-select-key');
+        if (keySel) keySel.value = state.selectedKeyId;
+        const duadSel = document.getElementById('viola-select-duad-type');
+        if (duadSel) duadSel.value = state.duadType;
+        const duadKeySel = document.getElementById('viola-select-duad-key');
+        if (duadKeySel) duadKeySel.value = state.duadKeyId;
+
+        const metroSig = document.getElementById('viola-metro-sig');
+        if (metroSig) metroSig.value = state.timeSignature;
+        const metroSub = document.getElementById('viola-metro-sub');
+        if (metroSub) metroSub.value = String(state.subdivision);
+
+        const chordSync = document.getElementById('check-viola-rhythm-chord-sync');
+        if (chordSync) chordSync.checked = state.rhythmChordSync;
+        const guideClick = document.getElementById('check-viola-rhythm-guide-click');
+        if (guideClick) guideClick.checked = state.rhythmGuideClick;
+        const boxSlider = document.getElementById('viola-slider-box-vol');
+        if (boxSlider) boxSlider.value = String(Math.round(state.rhythmBoxVolume * 100));
 
         const progSel = document.getElementById('viola-select-progression');
         if (progSel) progSel.value = state.progressionId;
@@ -2098,19 +2636,74 @@
             }
         });
 
-        document.getElementById('viola-metro-sig').addEventListener('change', (e) => {
-            state.timeSignature = e.target.value;
-            metroCurrentSubStep = 0;
-            saveViolaState();
-            renderMetronomeControls();
-        });
+        const metroSigEl = document.getElementById('viola-metro-sig');
+        if (metroSigEl) {
+            metroSigEl.addEventListener('change', (e) => {
+                state.timeSignature = e.target.value;
+                metroCurrentSubStep = 0;
+                saveViolaState();
+                renderMetronomeControls();
+            });
+        }
 
-        document.getElementById('viola-metro-sub').addEventListener('change', (e) => {
-            state.subdivision = parseInt(e.target.value, 10) || 2;
-            metroCurrentSubStep = 0;
-            saveViolaState();
-            renderMetronomeControls();
-        });
+        const metroSubEl = document.getElementById('viola-metro-sub');
+        if (metroSubEl) {
+            metroSubEl.addEventListener('change', (e) => {
+                state.subdivision = parseInt(e.target.value, 10) || 2;
+                metroCurrentSubStep = 0;
+                saveViolaState();
+                renderMetronomeControls();
+            });
+        }
+
+        // Modos do Metrônomo: Ritmo Caipira vs Analítico
+        const btnModeRhythm = document.getElementById('btn-viola-metro-mode-rhythm');
+        const btnModeClick = document.getElementById('btn-viola-metro-mode-click');
+        if (btnModeRhythm && btnModeClick) {
+            btnModeRhythm.addEventListener('click', () => {
+                if (state.metroMode !== 'rhythm') {
+                    state.metroMode = 'rhythm';
+                    const cur = CAIPIRA_RHYTHMS[state.activeRhythmId] || CAIPIRA_RHYTHMS.cururu;
+                    state.timeSignature = cur.timeSignature;
+                    state.subdivision = cur.subdivision;
+                    metroCurrentSubStep = 0;
+                    saveViolaState();
+                    renderMetronomeControls();
+                }
+            });
+            btnModeClick.addEventListener('click', () => {
+                if (state.metroMode !== 'click') {
+                    state.metroMode = 'click';
+                    metroCurrentSubStep = 0;
+                    saveViolaState();
+                    renderMetronomeControls();
+                }
+            });
+        }
+
+        const chordSyncCheck = document.getElementById('check-viola-rhythm-chord-sync');
+        if (chordSyncCheck) {
+            chordSyncCheck.addEventListener('change', (e) => {
+                state.rhythmChordSync = e.target.checked;
+                saveViolaState();
+            });
+        }
+
+        const guideClickCheck = document.getElementById('check-viola-rhythm-guide-click');
+        if (guideClickCheck) {
+            guideClickCheck.addEventListener('change', (e) => {
+                state.rhythmGuideClick = e.target.checked;
+                saveViolaState();
+            });
+        }
+
+        const boxVolSlider = document.getElementById('viola-slider-box-vol');
+        if (boxVolSlider) {
+            boxVolSlider.addEventListener('input', (e) => {
+                state.rhythmBoxVolume = (parseInt(e.target.value, 10) || 85) / 100;
+                saveViolaState();
+            });
+        }
 
         document.getElementById('btn-viola-metro-toggle').addEventListener('click', toggleMetronome);
     }

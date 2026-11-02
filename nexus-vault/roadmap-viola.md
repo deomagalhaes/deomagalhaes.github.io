@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 3 — Módulo de Ritmos e Padrões de Palhetada Caipira no Metrônomo
+## 🎯 Projeto Prioritário Atual: Fase 4 — Dicionário e Buscador Reverso de Acordes (Canhoto & Destro)
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Expandir o metrônomo lookahead com padrões rítmicos percussivos e de palhetada (rasqueado, pagode sincopado e ponteado) para ritmos caipiras autênticos: *Cururu* (2/4), *Pagode de Viola* (2/4 com repique característico), *Cateretê* (2/4), *Guarânia* (3/4) e *Toada* (6/8).
-  2. Implementar sintetizador Web Audio para batida na caixa/tampo da viola e repique de dedo indicador/polegar.
-  3. Adicionar guia visual com setas direcionais de palhetada (baixo/cima/abafado) sincronizadas aos tempos do metrônomo.
+  1. Permitir que o músico clique e posicione os dedos em quaisquer casas das cordas/pares da Viola (Cebolão em Mi) ou Violão (6 Cordas) em modo Canhoto/Destro.
+  2. Implementar motor algorítmico de análise harmônica que calcule as notas tocadas (pitch classes), identifique os intervalos em relação a cada possível tônica e batize o acorde (ex: E7M, F#m7, B7(9), C#m7(11), etc.).
+  3. Exibir graus, notas formadoras, função harmônica provável nas tonalidades de Mi Maior / Lá Maior / Si Maior e botão para dedilhar a digitação customizada.
 
 ---
 
@@ -18,8 +18,8 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 O agente autônomo selecionará diariamente o próximo projeto prioritário desta lista:
 
-1. **[ ] Módulo de Ritmos Tradicionais Caipiras no Metrônomo:**
-   - Adicionar padrões percussivos e de palhetada com áudio sintetizado para: *Cururu*, *Pagode de Viola*, *Cateretê*, *Querência* e *Toada*.
+1. **[x] Módulo de Ritmos Tradicionais Caipiras no Metrônomo:**
+   - Adicionados padrões percussivos e de palhetada com áudio sintetizado para: *Cururu*, *Pagode de Viola*, *Cateretê*, *Guarânia*, *Toada* e *Querência*.
 2. **[ ] Dicionário e Buscador Reverso de Acordes:**
    - Clicar nas casas do braço canhoto/destro e o sistema identificar o nome do acorde, intervalos e notas formadoras.
 3. **[ ] Treinador Auditivo de Afinação e Pares Oitavados:**
@@ -32,6 +32,27 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **02/11/2026 — Sessão 3** (Fase 3 Concluída):
+  - **Módulo de Ritmos Tradicionais Caipiras & Padrões de Palhetada no Metrônomo**:
+    - **Biblioteca Autêntica de Ritmos Caipiras**:
+      - *Cururu Tradicional* (`2/4` cadenciado com batida no tampo)
+      - *Pagode de Viola de Tião Carreiro* (`2/4` sincopado com repique de dedos no tampo em semicolcheias)
+      - *Cateretê / Catira* (`2/4` com corte abafado seco de palma)
+      - *Guarânia Romântica* (`3/4` ternário lento com ressonância profunda)
+      - *Toada Caipira* (`6/8` com alternância de bordão, tampo e pares agudos)
+      - *Querência / Valsa Caipira* (`3/4` tradicional com baixo no 1º tempo e acordes no 2º e 3º)
+    - **Síntese Web Audio Percussiva Realista**:
+      - `playWoodTap`: modelagem física do tampo oco de pinho/jacarandá (oscilador triangle 148Hz→45Hz com envelope percussivo rápido + gerador de ruído com filtro passa-banda em 260Hz com Q=3.2).
+      - `playThumbBass`: bordão de ataque grave, opcionalmente sincronizado com as notas do acorde ativo no Campo Harmônico (`rhythmChordSync`).
+      - `playRasqueado`: dedilhado em leque em todas as cordas com delay escalonado de 8ms entre pares.
+      - `playIndexUp`: puxada rápida ascendente nos pares 1º e 2º (prima e segundinha).
+      - `playMuteChock`: corte percussivo abafado com ruído passa-banda em 840Hz simulando a mão abafando as cordas de aço.
+    - **Régua Interativa de Palhetadas com Guia Visual e Feedback Neon**:
+      - Cards dinâmicos exibindo número do pulso (`1`, `1 e`, `2`, `2 e`...), seta direcional (`↓`, `↑`, `✕`, `■`, `·`), técnica e detalhe acústico.
+      - Iluminação neon sincronizada em tempo real via `requestAnimationFrame` e fila do lookahead scheduler.
+      - Alternância de modo entre **Ritmo Caipira** e **Metrônomo Analítico**, com mixagem de volume da caixa/tampo e clique guia simultâneo opcional.
+      - Orientação ergonômica adaptada nativamente para mãos Canhotas e Destras.
 
 - **02/11/2026 — Sessão 2** (Fase 2 Concluída):
   - **Módulo de Estudos de Progressão Harmônica & Cadências Caipiras**:
