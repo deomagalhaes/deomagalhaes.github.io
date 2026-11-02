@@ -829,6 +829,458 @@
     };
     let editingId = null;
     let selectedCalendarMonth = new Date().getMonth();
+    let currentProcedureFilter = 'ALL';
+
+    // =========================================================================
+    // 2.1. MOTOR FITOTÉCNICO ASTROBOTÂNICO & PROCEDIMENTO IDEAL
+    // =========================================================================
+    function getMoonPhase(targetDate = new Date()) {
+        const refNewMoon = new Date('2000-01-06T18:14:00Z').getTime();
+        const synodicMonthMs = 29.53058867 * 86400000;
+        const diff = targetDate.getTime() - refNewMoon;
+        const cycles = diff / synodicMonthMs;
+        const phaseFraction = cycles - Math.floor(cycles);
+        const moonAge = phaseFraction * 29.53058867;
+        const illumination = Math.round(((1 - Math.cos(2 * Math.PI * phaseFraction)) / 2) * 100);
+
+        let phaseName = '';
+        let phaseGroup = ''; // 'NOVA', 'CRESCENTE', 'CHEIA', 'MINGUANTE'
+        let sapDynamic = '';
+        let badgeCls = '';
+        let phaseIcon = '';
+
+        if (moonAge < 1.84 || moonAge >= 27.69) {
+            phaseName = 'Lua Nova';
+            phaseGroup = 'NOVA';
+            phaseIcon = 'circle';
+            sapDynamic = 'Seiva concentrada nas raízes e base do tronco. Mínima sangria vascular aérea; período seguro para podas estruturais drásticas, redução de troncos e escultura de madeira morta.';
+            badgeCls = 'bg-slate-800 text-slate-300 border-slate-700';
+        } else if (moonAge < 7.38) {
+            phaseName = 'Lua Crescente (Côncava)';
+            phaseGroup = 'CRESCENTE';
+            phaseIcon = 'moon';
+            sapDynamic = 'Fluxo ascendente ativo. Seiva subindo com pressão positiva em direção aos ramos, nutrindo tecidos jovens; excelente para estaquia e início de alporquias.';
+            badgeCls = 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+        } else if (moonAge < 9.22) {
+            phaseName = 'Quarto Crescente';
+            phaseGroup = 'CRESCENTE';
+            phaseIcon = 'moon';
+            sapDynamic = 'Pressão hidrostática vascular e atividade hormonal em rápida expansão aérea. Janela cirúrgica ideal para enxertia e alporquia acelerada.';
+            badgeCls = 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40';
+        } else if (moonAge < 14.77) {
+            phaseName = 'Gibosa Crescente';
+            phaseGroup = 'CRESCENTE';
+            phaseIcon = 'moon';
+            sapDynamic = 'Máximo acúmulo de auxinas e carboidratos nos ramos superiores e botões florais. Alto vigor regenerativo para propagação vegetativa.';
+            badgeCls = 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30';
+        } else if (moonAge < 16.61) {
+            phaseName = 'Lua Cheia';
+            phaseGroup = 'CHEIA';
+            phaseIcon = 'sun';
+            sapDynamic = 'Seiva no ápice foliar, flores e frutos. Turgor celular máximo em toda a copa; excelente para nutrição orgânica de solo, mas EVITAR podas severas de ramos grossos.';
+            badgeCls = 'bg-amber-500/20 text-amber-200 border-amber-500/40';
+        } else if (moonAge < 22.15) {
+            phaseName = 'Gibosa Minguante';
+            phaseGroup = 'MINGUANTE';
+            phaseIcon = 'moon';
+            sapDynamic = 'Início do refluxo da seiva em direção ao sistema radicular. Copa desacelerando; transição para manipulação e poda de raízes com mínima perda de turgor.';
+            badgeCls = 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30';
+        } else if (moonAge < 23.99) {
+            phaseName = 'Quarto Minguante';
+            phaseGroup = 'MINGUANTE';
+            phaseIcon = 'moon';
+            sapDynamic = 'Seiva concentrando-se firmemente nas raízes e solo. Momento clássico e perfeito para poda de raízes, lavagem de torrão e transplante de evolução.';
+            badgeCls = 'bg-indigo-500/20 text-indigo-200 border-indigo-500/40';
+        } else {
+            phaseName = 'Lua Minguante (Balsâmica)';
+            phaseGroup = 'MINGUANTE';
+            phaseIcon = 'moon';
+            sapDynamic = 'Seiva totalmente resguardada na base do nebari e substrato. Risco quase nulo de estresse hídrico aéreo pós-transplante ou desfolha.';
+            badgeCls = 'bg-slate-700/50 text-slate-300 border-slate-600';
+        }
+
+        return {
+            moonAge: Number(moonAge.toFixed(1)),
+            illumination,
+            phaseName,
+            phaseGroup,
+            phaseIcon,
+            sapDynamic,
+            badgeCls
+        };
+    }
+
+    function getSeasonAndClimate(targetDate = new Date()) {
+        const m = targetDate.getMonth();
+        const seasons = [
+            { season: 'Verão', climate: 'Calor intenso, chuvas fortes convectivas e radiação UV elevada. Evapotranspiração no pico.' },
+            { season: 'Verão', climate: 'Auge térmico, noites quentes e umidade do ar elevada. Vigor vegetativo explosivo em tropicais.' },
+            { season: 'Outono', climate: 'Transição climática: noites mais frescas, diminuição de chuvas e fluxo vascular desacelerando.' },
+            { season: 'Outono', climate: 'Dias amenos, ar mais seco e noites frias. Madeira lignificando e consolidando reservas.' },
+            { season: 'Outono', climate: 'Frio e estiagem se estabelecendo. Caducifólias e caudiciformes entrando em dormência vegetativa.' },
+            { season: 'Inverno', climate: 'Dias mais curtos do ano, geadas ocasionais e baixíssima umidade. Seiva em repouso estacional profundo.' },
+            { season: 'Inverno', climate: 'Pico do inverno. Período de dormência máxima, ideal para grandes cirurgias radiculares e madeira morta.' },
+            { season: 'Inverno', climate: 'Fim do inverno, clima muito seco, gemas intumescendo anunciando o despertar da brotação.' },
+            { season: 'Primavera', climate: 'Equinócio de primavera: explosão de brotações novas, floradas e aumento súbito do consumo hídrico.' },
+            { season: 'Primavera', climate: 'Calor em ascensão e início das chuvas regulares. Solo aquecido estimulando raízes novas.' },
+            { season: 'Primavera', climate: 'Clima quente e úmido constante. Momento supremo para transplantes de espécies tropicais nativas.' },
+            { season: 'Verão', climate: 'Solstício de verão: dias mais longos, insolação intensa das 11h às 15h e chuvas de fim de tarde.' }
+        ];
+        return seasons[m] || seasons[0];
+    }
+
+    const PROCEDURES_CATALOG = [
+        {
+            id: 'ALPORQUIA',
+            category: 'ALPORQUIA',
+            categoryBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            title: 'Alporquia Aérea (Air Layering)',
+            subtitle: 'Propagação clonal de alta precisão aproveitando galhos grossos com conicidade',
+            idealMoons: ['CRESCENTE', 'CHEIA'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Primavera', 'Bougainvillea', 'Jabuticaba', 'Pitanga', 'Acerola', 'Figueira', 'Ficus', 'Amora', 'Tamarindo', 'Duranta', 'Pau-ferro'],
+            avoidKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto', 'Érica-falsa'],
+            tools: 'Canivete de enxertia afiado, pó enraizador AIB (3000-6000 ppm), musgo esfagno lavado e esterilizado, plástico filme transparente, papel alumínio e arames de amarração.',
+            steps: [
+                'Escolher um galho lenhoso vigoroso que já possua conicidade ou movimento interessante.',
+                'Fazer dois cortes paralelos na casca, distanciados em cerca de 1,5x o diâmetro do galho.',
+                'Remover completamente o anel de casca e raspar com o dorso da lâmina a camada verde (câmbio) para impedir que a ponte de seiva se refaça.',
+                'Pincelar hormônio enraizador AIB na borda superior do anel (onde a seiva elaborada desce e se acumula).',
+                'Umedecer o musgo esfagno (espremendo o excesso) e moldá-lo firmemente ao redor do anel.',
+                'Envolver com filme plástico bem vedado e cobrir com papel alumínio (face brilhante para fora) para proteger raízes jovens do calor e luz direta.',
+                'Aguardar emissão radicular (45 a 90 dias conforme a espécie) antes de desmamar a nova planta.'
+            ],
+            biologicalNote: 'O fluxo de seiva ascendente ativo combinado com dias longos e calor estimula acúmulo de auxinas acima do anelamento, disparando a formação de calo e raízes adventícias com taxa de sucesso superior a 90%.'
+        },
+        {
+            id: 'ESTAQUIA',
+            category: 'ESTAQUIA',
+            categoryBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            title: 'Estaquia Lenhosa / Semilenhosa',
+            subtitle: 'Multiplicação rápida aproveitando ponteiras e podas de estruturação',
+            idealMoons: ['CRESCENTE'],
+            avoidMoons: ['NOVA', 'MINGUANTE'],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai'],
+            speciesKeywords: ['Figueira', 'Ficus', 'Duranta', 'Caliandra', 'Serissa', 'Amora', 'Érica-falsa', 'Bougainvillea', 'Ixora'],
+            avoidKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto', 'Junípero'],
+            tools: 'Tesoura de poda fina desinfetada, hormônio AIB ou pó de canela, substrato inerte (areia grossa lavada + vermiculita 50/50), borrifador e estufa úmida.',
+            steps: [
+                'Cortar estacas de 10 a 15 cm com 2 a 3 nós, realizando corte em bisel (45°) logo abaixo de um nó.',
+                'Retirar as folhas inferiores, mantendo apenas 2 ou 3 folhas superiores cortadas pela metade para reduzir evapotranspiração.',
+                'Mergulhar a base em água e aplicar pó de hormônio enraizador AIB na ponta do bisel.',
+                'Plantar em substrato inerte bem umedecido sem enterrar demais (cerca de 3 a 4 cm de profundidade).',
+                'Manter sob meia-sombra protegida de vento e com umidade constante no ar (estufa plástica se necessário).'
+            ],
+            biologicalNote: 'A pressão positiva de seiva da Lua Crescente impulsiona o turgor das gemas axilares, prevenindo a desidratação precoce do tecido enquanto os primórdios radiculares se desenvolvem no substrato morno.'
+        },
+        {
+            id: 'PODA_RAIZES',
+            category: 'RAIZES',
+            categoryBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            title: 'Poda de Raízes e Penteamento Radicular',
+            subtitle: 'Renovação do sistema absorvente e estímulo ao crescimento radial do nebari',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA', 'CRESCENTE'],
+            idealSeasons: ['Inverno', 'Primavera'],
+            avoidSeasons: [],
+            suitableStages: ['Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Buxinho', 'Junípero', 'Pau-ferro', 'Piteco', 'Fruta-dos-milagres', 'Pitanga', 'Limão-cravo', 'Mexerica', 'Jabuticaba'],
+            avoidKeywords: ['Rosa-do-deserto', 'Rainha-do-abismo'],
+            tools: 'Hashi ou gancho de raízes de aço, tesoura de poda pesada de raízes, borrifador com água e solução de vitamina B1 / tiamina.',
+            steps: [
+                'Retirar a planta do vaso soltando os arames de ancoragem pelo fundo.',
+                'Pentear suavemente as raízes com o gancho, começando pelas bordas periféricas em direção ao centro do torrão.',
+                'Eliminar raízes grossas pivotantes que crescem para baixo sem radicelas absorventes.',
+                'Reduzir de 25% a 40% da massa radicular externa, preservando as raízes capilares finas próximas ao colo.',
+                'Pulverizar solução anti-estresse (B1 / enraizador líquido) durante todo o trabalho para nunca deixar secar.',
+                'Replantar com drenagem nova e ancorar firmemente com arames antes de palitar o novo substrato.'
+            ],
+            biologicalNote: 'Na Lua Minguante, a seiva está recolhida no sistema radicular e a copa consome o mínimo de água, minimizando o risco de colapso celular ou murcha por corte de raízes.'
+        },
+        {
+            id: 'LAVAGEM_RAIZES',
+            category: 'RAIZES',
+            categoryBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            title: 'Lavagem de Raízes (Root Washing / Desmanche de Torrão)',
+            subtitle: 'Substituição total de terra argilosa pesada ou compactada por substrato granular',
+            idealMoons: ['MINGUANTE'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Primavera', 'Inverno'],
+            avoidSeasons: ['Verão'],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Yamadori'],
+            speciesKeywords: ['Buxinho', 'Junípero', 'Piteco', 'Pau-ferro', 'Amora', 'Duranta', 'Jabuticaba', 'Acerola'],
+            avoidKeywords: ['Bougainvillea', 'Rosa-do-deserto', 'Rainha-do-abismo'],
+            tools: 'Bacia ampla com água sem cloro, mangueira com bico de jato suave (névoa/chuveirinho), hashi de bambu e pasta cicatrizante para raízes grossas.',
+            steps: [
+                'Mergulhar o torrão na bacia de água por 15-20 minutos para amolecer a argila compactada.',
+                'Aplicar jato suave de água removendo a terra velha sem puxar ou romper as raízes capilares.',
+                'Desembaraçar as raízes radialmente a partir da base do tronco (formação de nebari em estrela).',
+                'Cortar raízes podres, cruzadas ou enroladas no fundo do pote antigo.',
+                'Assentar no novo vaso sobre uma camada cônica de substrato granulado seco (caqueira/pinus/pedrisco).',
+                'Palitar pacientemente com hashi entre todas as raízes para eliminar bolsas de ar sem compactar.'
+            ],
+            biologicalNote: 'Procedimento cirúrgico de alto impacto. Na Lua Minguante sob temperatura amena de primavera, a árvore metaboliza o choque sem a perda hídrica que o calor do verão provocaria em raízes nuas.'
+        },
+        {
+            id: 'TRANSPLANTE_EVOLUCAO',
+            category: 'TRANSPLANTE',
+            categoryBadge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+            title: 'Transplante de Evolução para Vaso Definitivo',
+            subtitle: 'Passagem de pote de treinamento para vaso de cerâmica nobre esmaltado ou não-esmaltado',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Primavera', 'Verão', 'Inverno'],
+            avoidSeasons: [],
+            suitableStages: ['Pré-bonsai', 'Bonsai'],
+            speciesKeywords: ['Jabuticaba', 'Pitanga', 'Caliandra', 'Figueira', 'Piteco', 'Pau-ferro', 'Acerola', 'Buxinho', 'Junípero', 'Tamarindo', 'Duranta'],
+            avoidKeywords: [],
+            tools: 'Vaso de cerâmica compatível com o estilo (oval/retangular/redondo), telas de drenagem, arames de cobre/alumínio de fixação, substrato balanceado peneirado.',
+            steps: [
+                'Preparar o novo vaso com telas plásticas presas nos orifícios de drenagem e passar os arames de ancoragem pelo fundo.',
+                'Colocar uma camada de drenagem de pedrisco/cacos cerâmicos (1 a 2 cm).',
+                'Adicionar camada inicial de substrato e posicionar a planta com a frente e inclinação corretas do estilo.',
+                'Fixar a planta amarrando os arames firmemente sobre o nebari (protegendo a casca com pedaço de mangueira).',
+                'Preencher com substrato granulado e palitar com hashi até o completo preenchimento de todos os vazios.',
+                'Realizar primeira rega abundante por imersão ou chuveirinho até a água sair cristalina pelo dreno.',
+                'Manter em local protegido de vento e sol forte direto por 15 a 20 dias.'
+            ],
+            biologicalNote: 'A acomodação em vaso definitivo requer ancoragem imóvel. A Lua Minguante acelera a ancoragem de novas radicelas periféricas no substrato virgem antes do próximo ciclo de brotação foliar.'
+        },
+        {
+            id: 'TRANSPLANTE_PARCIAL',
+            category: 'TRANSPLANTE',
+            categoryBadge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+            title: 'Transplante Parcial de Manutenção (Slip Potting)',
+            subtitle: 'Aumento de espaço ou reposição de substrato sem desmanchar o torrão central',
+            idealMoons: ['MINGUANTE', 'NOVA', 'CRESCENTE'],
+            avoidMoons: [],
+            idealSeasons: ['Primavera', 'Verão', 'Outono'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Bougainvillea', 'Rosa-do-deserto', 'Serissa', 'Ixora', 'Mexerica', 'Limão-cravo', 'Fruta-dos-milagres', 'Érica-falsa'],
+            avoidKeywords: [],
+            tools: 'Vaso ligeiramente maior (ou o mesmo limpo), substrato fresco novo, hashi e regador fino.',
+            steps: [
+                'Retirar o exemplar do vaso com extremo cuidado para não partir o torrão intacto.',
+                'Raspar superficialmente apenas a camada externa e o fundo onde as raízes estiverem enoveladas.',
+                'Reposicionar no vaso com nova camada de drenagem e substrato fértil fresco nas laterais.',
+                'Palitar as bordas para preencher os espaços sem pressionar o miolo do torrão.',
+                'Regar generosamente; a planta não sofre interrupção no ciclo de crescimento.'
+            ],
+            biologicalNote: 'Técnica perfeita para espécies sensíveis que detestam intervenção radicular agressiva (como Bougainvillea e Serissa) ou quando é necessário aliviar o esgotamento nutricional fora da época tradicional.'
+        },
+        {
+            id: 'PODA_DRASTICA',
+            category: 'PODA_DRASTICA',
+            categoryBadge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+            title: 'Poda Drástica Estrutural / Rebaixamento de Tronco',
+            subtitle: 'Corte radical para criação de conicidade acentuada, eliminação de bifurcações e novo ápice',
+            idealMoons: ['NOVA', 'MINGUANTE'],
+            avoidMoons: ['CHEIA', 'CRESCENTE'],
+            idealSeasons: ['Inverno', 'Primavera'],
+            avoidSeasons: ['Verão'],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Yamadori'],
+            speciesKeywords: ['Piteco', 'Piteco-cortiçoso', 'Acerola', 'Amora', 'Duranta', 'Pau-ferro', 'Figueira', 'Tamarindo'],
+            avoidKeywords: ['Junípero', 'Buxinho', 'Rainha-do-abismo'],
+            tools: 'Alicate côncavo ou esférico japonês afiado, serrote de poda fina, lâmina bisturi e pasta cicatrizante japonesa com fungicida (Top Jin M ou similar).',
+            steps: [
+                'Analisar a linha de tronco e identificar o broto ou ramo que assumirá a nova liderança apical.',
+                'Realizar corte inclinado em bisel suave, com a parte mais alta logo acima do ramo líder selecionado.',
+                'Escanear o corte com o alicate esférico para criar uma concavidade que cicatrizará plana no futuro.',
+                'Selar imediatamente o corte com pasta cicatrizante de alta aderência antes que o câmbio oxide.',
+                'Reduzir a rega pela metade (árvore sem copa consome muito menos água; risco de podridão radicular se encharcar).'
+            ],
+            biologicalNote: 'Na Lua Nova, a sangria vascular é mínima porque os tecidos aéreos estão sob pressão negativa e a seiva repousa na base. Os cortes cicatrizam mais rápido sem perda de açúcares vitais.'
+        },
+        {
+            id: 'PODA_RAMIFICACAO',
+            category: 'PODA_RAMIFICACAO',
+            categoryBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            title: 'Poda de Ramificação Fina, Pinçagem & Desfolha',
+            subtitle: 'Manutenção da densidade dos patamares, redução do tamanho das folhas e contenção de vigor',
+            idealMoons: ['MINGUANTE', 'CRESCENTE'],
+            avoidMoons: [],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Érica-falsa', 'Buxinho', 'Serissa', 'Ixora', 'Pitanga', 'Caliandra', 'Junípero', 'Mexerica', 'Limão-cravo', 'Acerola'],
+            avoidKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto'],
+            tools: 'Tesoura fina de pinçagem (Hasami), pinça de desfolha e borrifador foliar.',
+            steps: [
+                'Inspecionar os patamares de galhos e localizar os brotos que ultrapassam a silhueta geométrica da copa.',
+                'Aguardar o broto emitir de 4 a 6 folhas e podar de volta para 1 ou 2 pares de folhas com gemas direcionadas para fora.',
+                'Em coníferas (Junípero Jacaré), pinçar as pontas escamadas apenas com a ponta dos dedos, nunca com tesoura.',
+                'Realizar desfolha parcial em folhas gigantes para permitir que a luz solar penetre no interior da copa.',
+                'Manter fertilização rica em potássio para fortalecer os novos entrenós curtos.'
+            ],
+            biologicalNote: 'Estimula a quebra da dominância apical (auxina) e desperta as gemas dormentes internas (citocininas), densificando os patamares verdes sem alongar entrenós.'
+        },
+        {
+            id: 'ARAMACAO_ESTRUTURAL',
+            category: 'ESTRUTURA',
+            categoryBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+            title: 'Aramação e Posicionamento de Galhos',
+            subtitle: 'Orientação espacial milimétrica de ramos primários e secundários com alumínio anodizado',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Outono', 'Inverno', 'Primavera'],
+            avoidSeasons: ['Verão'],
+            suitableStages: ['Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Junípero', 'Pau-ferro', 'Piteco', 'Tamarindo', 'Buxinho', 'Duranta', 'Bougainvillea'],
+            avoidKeywords: ['Rosa-do-deserto', 'Rainha-do-abismo'],
+            tools: 'Arames de alumínio anodizado (bitolas 1.5mm a 4.0mm), alicate corta-arame, alicate de jin e ráfia úmida para proteção de casca.',
+            steps: [
+                'Suspender a rega no dia anterior para que os galhos percam o excesso de turgor e fiquem flexíveis.',
+                'Proteger ramos de casca lisa ou propensa a rachar envolvendo com ráfia úmida bem tensionada.',
+                'Ancorar o arame firmemente em um ponto fixo (tronco ou ramo oposto em ângulo de 45°).',
+                'Passar as espirais com ângulo constante de 45°, sem estrangular nem deixar folgas.',
+                'Posicionar o galho com as duas mãos, usando os polegares como ponto de apoio do lado de fora da curva.',
+                'Anotar data de revisão para remover o arame antes que morda a casca (verificar a cada 30-45 dias).'
+            ],
+            biologicalNote: 'Na Lua Minguante ou sob madeira madura de outono, o turgor das células vegetais é menor, reduzindo drasticamente o risco de fratura do galho durante a dobra e prevenindo marcas prematuras.'
+        },
+        {
+            id: 'MADEIRA_MORTA',
+            category: 'ESTRUTURA',
+            categoryBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+            title: 'Escultura de Madeira Morta (Jin, Shari e Sabamiki)',
+            subtitle: 'Envelhecimento artístico de troncos e galhos secos com aplicação de calda sulfocálcica',
+            idealMoons: ['NOVA', 'MINGUANTE'],
+            avoidMoons: ['CHEIA', 'CRESCENTE'],
+            idealSeasons: ['Outono', 'Inverno'],
+            avoidSeasons: ['Verão'],
+            suitableStages: ['Bonsai', 'Pré-bonsai', 'Yamadori'],
+            speciesKeywords: ['Junípero', 'Bougainvillea', 'Piteco-cortiçoso', 'Piteco', 'Buxinho', 'Pitanga'],
+            avoidKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto', 'Érica-falsa'],
+            tools: 'Alicate de Jin, goivas de entalhe em madeira, escova de aço de latão, maçarico culinário leve e calda sulfocálcica pura com pincel pequeno.',
+            steps: [
+                'Identificar veios mortos e delimitar com canivete a linha viva de casca que nutre a copa.',
+                'Descarnar a casca do galho com alicate de Jin puxando fibras longitudinais no sentido natural do veio.',
+                'Esculpir ranhuras e fendas com goiva criando aspecto de erosão por vento e tempestades.',
+                'Queimar levemente fiapos soltos com maçarico e escovar com cerdas de aço.',
+                'Umedecer a madeira morta com borrifador de água e aplicar calda sulfocálcica pura com pincel sem encostar na casca viva.',
+                'Deixar secar ao sol por 24 horas até adquirir tom branco-marfim característico.'
+            ],
+            biologicalNote: 'O ar seco e a seiva dormente do outono/inverno proporcionam a absorção perfeita da calda protetora na madeira exposta, impedindo fungos de podridão sem irritar o fluxo de câmbio ativo.'
+        },
+        {
+            id: 'REPOUSO_CAUDICIFORME',
+            category: 'ESTRUTURA',
+            categoryBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            title: 'Manejo de Caudiciformes & Regulação de Dormência',
+            subtitle: 'Proteção de cáudice escultural, suspensão controlada de rega e prevenção de podridão',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Outono', 'Inverno', 'Primavera'],
+            avoidSeasons: [],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto'],
+            avoidKeywords: ['Jabuticaba', 'Pitanga', 'Amora'],
+            tools: 'Pincel macio, canela em pó com própolis, medidor de umidade de solo e estrado ventilado.',
+            steps: [
+                'Na aproximação do outono/inverno, suspender gradativamente as regas da Rainha-do-abismo e Rosa-do-deserto.',
+                'Se houver perda natural das folhas da Rainha-do-abismo, manter o tubérculo em local seco e iluminado sem regar o bulbo.',
+                'Inspecionar a firmeza do cáudice com leve pressão dos dedos: se estiver túrgido, não regar.',
+                'Na primavera, retomar regas periféricas apenas quando as primeiras folhas aveludadas despontarem no topo.',
+                'Aplicar pó de canela em eventuais microferimentos para blindagem fúngica.'
+            ],
+            biologicalNote: 'Caudiciformes e rupícolas necessitam de estresse hídrico sazonal para florescer e preservar suas reservas sem colapsar por fungos radiculares anaeróbicos.'
+        }
+    ];
+
+    function evaluateIdealProcedures(plantsList, targetDate = new Date()) {
+        const moon = getMoonPhase(targetDate);
+        const seasonInfo = getSeasonAndClimate(targetDate);
+        const results = [];
+
+        plantsList.forEach((plant) => {
+            const m = computePlantMetrics(plant);
+            const popName = (plant.popularName || '').toLowerCase();
+            const sciName = (plant.scientificName || '').toLowerCase();
+
+            PROCEDURES_CATALOG.forEach((proc) => {
+                let score = 50;
+
+                // 1. Alinhamento Lunar
+                if (proc.idealMoons.includes(moon.phaseGroup)) {
+                    score += 26;
+                } else if (proc.avoidMoons.includes(moon.phaseGroup)) {
+                    score -= 32;
+                } else {
+                    score += 6;
+                }
+
+                // 2. Alinhamento Sazonal & Climático
+                if (proc.idealSeasons.includes(seasonInfo.season)) {
+                    score += 22;
+                } else if (proc.avoidSeasons.includes(seasonInfo.season)) {
+                    score -= 30;
+                } else {
+                    score += 5;
+                }
+
+                // 3. Adequação ao Estágio da Planta
+                if (proc.suitableStages.includes(plant.stage)) {
+                    score += 12;
+                } else {
+                    score -= 10;
+                }
+
+                // 4. Afinidade Específica com a Espécie
+                const isAffinity = proc.speciesKeywords.some((k) =>
+                    popName.includes(k.toLowerCase()) || sciName.includes(k.toLowerCase())
+                );
+                const isAvoid = proc.avoidKeywords.some((k) =>
+                    popName.includes(k.toLowerCase()) || sciName.includes(k.toLowerCase())
+                );
+
+                if (isAvoid) {
+                    score -= 45;
+                } else if (isAffinity) {
+                    score += 22;
+                }
+
+                // 5. Ajuste Fisiológico Baseado no Histórico Real
+                if (proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') {
+                    if (m.isRepotOverdue) score += 15;
+                    if (m.repotDiff !== null && m.repotDiff > (plant.repotCycleMonths * 30 - 120)) {
+                        score -= 40;
+                    }
+                }
+
+                if (proc.category === 'ESTRUTURA' && plant.lastStyling) {
+                    const daysSinceStyle = Math.abs(global.VaultCore.daysDiffFromToday(plant.lastStyling) || 0);
+                    if (daysSinceStyle > 120) score += 10;
+                }
+
+                if (proc.category === 'PODA_RAMIFICACAO' && plant.stage === 'Bonsai') {
+                    score += 8;
+                }
+
+                const finalScore = Math.max(15, Math.min(98, score));
+
+                if (finalScore >= 70) {
+                    results.push({
+                        score: finalScore,
+                        procedure: proc,
+                        plant,
+                        metrics: m,
+                        moon,
+                        seasonInfo,
+                        whyNow: `${moon.phaseName} (${moon.illumination}% iluminada) + ${seasonInfo.season} (${seasonInfo.climate.split('.')[0]}): ${proc.biologicalNote}`
+                    });
+                }
+            });
+        });
+
+        results.sort((a, b) => b.score - a.score);
+        return results;
+    }
 
     // =========================================================================
     // 3. MODELO DE DADOS & PERSISTÊNCIA
@@ -1705,9 +2157,9 @@
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gestão de Acervo de Bonsai, Ciclos Nutricionais e Calendário Sazonal</h2>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <button type="button" id="btn-bonsai-seed-23" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm font-semibold flex items-center gap-2 transition" title="Carregar ou sincronizar as 23 espécies do acervo pessoal">
-                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
-                            <span>Carregar 23 Espécies</span>
+                        <button type="button" id="btn-bonsai-ideal-procedure" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-gradient-to-r from-cyan-950/90 to-emerald-950/90 hover:from-cyan-900 hover:to-emerald-900 border border-cyan-400/50 text-cyan-200 text-xs sm:text-sm font-semibold flex items-center gap-2 shadow-lg shadow-cyan-950/40 transition" title="Diagnóstico Astrobotânico e Sazonal de Intervenções Ideais">
+                            <i data-lucide="compass" class="w-4 h-4 text-cyan-300"></i>
+                            <span>Procedimento Ideal</span>
                         </button>
                         <button type="button" id="btn-bonsai-guide" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/40 text-cyan-200 text-xs sm:text-sm font-semibold flex items-center gap-2 transition">
                             <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
@@ -2063,6 +2515,51 @@
                     </div>
 
                     <div id="guide-species-list" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- MODAL DE PROCEDIMENTO IDEAL (MOTOR ASTROBOTÂNICO & SAZONAL) -->
+            <div id="bonsai-procedure-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+                    <!-- Cabeçalho Técnico -->
+                    <div class="bg-[#0f172a] border-b border-[#1e293b] p-4 flex items-center justify-between shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">
+                                <i data-lucide="compass" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
+                                    <span>Motor de Decisão Fitotécnica • Procedimento Ideal</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold">Astrobotânica & Sazonalidade</span>
+                                </h3>
+                                <p class="text-xs text-slate-400">Cruzamento de Estação, Clima, Fase da Lua e Fisiologia das Espécies do Seu Acervo</p>
+                            </div>
+                        </div>
+                        <button type="button" id="btn-procedure-modal-close" class="min-h-[40px] min-w-[40px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Banner Cósmico & Climático em Tempo Real -->
+                    <div id="procedure-cosmic-banner" class="p-4 bg-[#090d16] border-b border-slate-800 shrink-0"></div>
+
+                    <!-- Filtros Rápidos por Tipo de Procedimento -->
+                    <div class="p-3 bg-[#0c1220] border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-2 shrink-0">
+                        <div class="flex flex-wrap items-center gap-1.5" id="procedure-filter-chips">
+                            <button type="button" data-proc-filter="ALL" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-slate-950 transition">Todas as Melhores</button>
+                            <button type="button" data-proc-filter="ALPORQUIA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Alporquia</button>
+                            <button type="button" data-proc-filter="ESTAQUIA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Estaquia</button>
+                            <button type="button" data-proc-filter="RAIZES" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Poda & Lavagem de Raízes</button>
+                            <button type="button" data-proc-filter="TRANSPLANTE" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Transplantes</button>
+                            <button type="button" data-proc-filter="PODA_DRASTICA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Poda Drástica</button>
+                            <button type="button" data-proc-filter="PODA_RAMIFICACAO" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Pinçagem & Ramificação</button>
+                            <button type="button" data-proc-filter="ESTRUTURA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Aramação & Jin</button>
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono" id="procedure-match-count">0 recomendações</div>
+                    </div>
+
+                    <!-- Conteúdo Rolável: Cards de Recomendações Cirúrgicas -->
+                    <div id="procedure-recommendations-list" class="flex-1 overflow-y-auto p-4 space-y-4 max-h-[58vh]"></div>
                 </div>
             </div>
         `;
@@ -2527,18 +3024,268 @@
     }
 
     // =========================================================================
+    // 8.1. MODAL DO PROCEDIMENTO IDEAL (ASTROBOTÂNICA EM AÇÃO)
+    // =========================================================================
+    function openProcedureModal() {
+        const modal = document.getElementById('bonsai-procedure-modal');
+        if (!modal) return;
+        currentProcedureFilter = 'ALL';
+        renderProcedureModal('ALL');
+        modal.classList.remove('hidden');
+        global.VaultCore.refreshIcons(modal);
+    }
+
+    function closeProcedureModal() {
+        const modal = document.getElementById('bonsai-procedure-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    function renderProcedureModal(filterCategory = 'ALL') {
+        currentProcedureFilter = filterCategory;
+        const C = global.VaultCore;
+        const today = new Date();
+        const moon = getMoonPhase(today);
+        const seasonInfo = getSeasonAndClimate(today);
+
+        document.querySelectorAll('.proc-filter-btn').forEach((btn) => {
+            const cat = btn.getAttribute('data-proc-filter');
+            if (cat === filterCategory) {
+                btn.className = 'proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-slate-950 transition';
+            } else {
+                btn.className = 'proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition';
+            }
+        });
+
+        const bannerEl = document.getElementById('procedure-cosmic-banner');
+        if (bannerEl) {
+            bannerEl.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5">
+                    <div class="md:col-span-5 bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Fase Lunar em Tempo Real</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${moon.badgeCls}">${moon.moonAge} dias do ciclo</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 mt-2">
+                                <i data-lucide="${moon.phaseIcon}" class="w-6 h-6 text-amber-300"></i>
+                                <div>
+                                    <h4 class="text-base sm:text-lg font-bold text-slate-100">${moon.phaseName}</h4>
+                                    <span class="text-xs text-slate-400 font-mono">${moon.illumination}% do disco iluminado</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2.5 pt-2.5 border-t border-slate-800 text-xs text-slate-300">
+                            <strong class="text-amber-300">Fisiologia Vascular:</strong> ${moon.sapDynamic}
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-7 bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Contexto Sazonal & Agroclimático</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Hemisfério Sul • Brasil</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 mt-2">
+                                <i data-lucide="sun-medium" class="w-6 h-6 text-emerald-400"></i>
+                                <div>
+                                    <h4 class="text-base sm:text-lg font-bold text-slate-100">${seasonInfo.season} (${C.formatDateBR(C.todayISO())})</h4>
+                                    <p class="text-xs text-slate-300 italic">${seasonInfo.climate}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2.5 pt-2.5 border-t border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+                            <span><strong class="text-cyan-300">Acervo Analisado:</strong> ${plants.length} plantas ativas</span>
+                            <span class="text-slate-400">Cruzamento fisiológico multivariado</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const allMatches = evaluateIdealProcedures(plants, today);
+        const filtered = filterCategory === 'ALL'
+            ? allMatches
+            : allMatches.filter((m) => m.procedure.category === filterCategory);
+
+        const countEl = document.getElementById('procedure-match-count');
+        if (countEl) {
+            countEl.textContent = `${filtered.length} intervenção(ões) altamente recomendada(s)`;
+        }
+
+        const listEl = document.getElementById('procedure-recommendations-list');
+        if (!listEl) return;
+
+        if (filtered.length === 0) {
+            listEl.innerHTML = `
+                <div class="p-8 text-center bg-[#090d16] border border-slate-800 rounded-xl space-y-2">
+                    <i data-lucide="info" class="w-8 h-8 text-slate-500 mx-auto"></i>
+                    <p class="text-sm font-semibold text-slate-300">Nenhuma intervenção com janela perfeita nesta categoria hoje.</p>
+                    <p class="text-xs text-slate-500">A combinação de fase lunar e estágio das plantas não atinge o limiar seguro de 70% de compatibilidade para esta categoria. Selecione 'Todas as Melhores' para ver as janelas ativas.</p>
+                </div>
+            `;
+            C.refreshIcons(listEl);
+            return;
+        }
+
+        listEl.innerHTML = filtered.map((rec, idx) => {
+            const p = rec.plant;
+            const proc = rec.procedure;
+            const isTop = idx === 0 && filterCategory === 'ALL';
+
+            return `
+                <div class="bg-[#0f172a] border ${isTop ? 'border-cyan-500/50 shadow-lg shadow-cyan-950/30' : 'border-[#1e293b]'} rounded-xl p-4 space-y-3.5">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold ${rec.score >= 90 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'}">
+                                ${rec.score}% COMPATIBILIDADE
+                            </span>
+                            <span class="px-2 py-0.5 rounded text-xs font-mono border ${proc.categoryBadge}">
+                                ${C.esc(proc.title)}
+                            </span>
+                            ${isTop ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">★ MELHOR JANELA CIRÚRGICA DE HOJE</span>' : ''}
+                        </div>
+
+                        <div class="text-xs font-mono text-slate-400">
+                            Exemplar Alvo: <strong class="text-slate-100 font-semibold">[${p.id}] ${C.esc(p.popularName)}</strong>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+                        <div class="lg:col-span-4 bg-[#090d16] border border-slate-800 rounded-lg p-3 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-100">${C.esc(p.popularName)}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300 font-mono">${p.stage}</span>
+                            </div>
+                            <p class="text-[11px] italic text-slate-400">${C.esc(p.scientificName)}</p>
+                            <div class="text-xs text-slate-300 space-y-1 pt-1 border-t border-slate-800/80">
+                                <p><strong class="text-slate-400">Bancada:</strong> ${C.esc(p.bench)}</p>
+                                <p><strong class="text-slate-400">Vaso Atual:</strong> ${C.esc(p.pot)}</p>
+                                <p><strong class="text-slate-400">Último Transplante:</strong> ${C.formatDateBR(p.lastRepot)}</p>
+                                <p><strong class="text-slate-400">Última Adubação:</strong> ${C.formatDateBR(p.lastFertilization)}</p>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-8 bg-[#090d16] border border-slate-800 rounded-lg p-3 space-y-2.5 flex flex-col justify-between">
+                            <div>
+                                <span class="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-semibold block mb-1">
+                                    Confluência Cósmica & Biológica (Por Que Agora?):
+                                </span>
+                                <p class="text-xs text-slate-200 leading-relaxed">${rec.whyNow}</p>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-800/80">
+                                <span class="text-[11px] font-mono uppercase tracking-wider text-cyan-300 font-semibold block mb-1">
+                                    Insumos e Ferramentas Recomendadas:
+                                </span>
+                                <p class="text-xs text-slate-400">${C.esc(proc.tools)}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#090d16]/70 border border-slate-800/80 rounded-lg p-3 space-y-2">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-emerald-300 font-semibold block">
+                            Protocolo de Execução Passo a Passo:
+                        </span>
+                        <ol class="list-decimal list-inside space-y-1 text-xs text-slate-300 leading-relaxed">
+                            ${proc.steps.map((st) => `<li>${C.esc(st)}</li>`).join('')}
+                        </ol>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-end gap-2.5 pt-2 border-t border-slate-800">
+                        <button type="button" data-sched-proc="${p.id}" data-proc-title="${C.esc(proc.title)}" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i>
+                            <span>Agendar p/ Esta Semana</span>
+                        </button>
+                        <button type="button" data-apply-proc="${p.id}" data-proc-title="${C.esc(proc.title)}" data-proc-cat="${proc.category}" class="min-h-[38px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md transition">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                            <span>Registrar Execução no Histórico de ${p.id}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        listEl.querySelectorAll('[data-apply-proc]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pId = btn.getAttribute('data-apply-proc');
+                const pTitle = btn.getAttribute('data-proc-title');
+                const pCat = btn.getAttribute('data-proc-cat');
+                applyProcedureToPlant(pId, pTitle, pCat);
+            });
+        });
+
+        listEl.querySelectorAll('[data-sched-proc]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pId = btn.getAttribute('data-sched-proc');
+                const pTitle = btn.getAttribute('data-proc-title');
+                scheduleProcedureForPlant(pId, pTitle);
+            });
+        });
+
+        C.refreshIcons(listEl);
+        if (bannerEl) C.refreshIcons(bannerEl);
+    }
+
+    function applyProcedureToPlant(plantId, procTitle, procCat) {
+        const C = global.VaultCore;
+        const target = plants.find((p) => p.id === plantId);
+        if (!target) return;
+
+        if (procCat === 'TRANSPLANTE' || procCat === 'RAIZES') {
+            target.lastRepot = C.todayISO();
+        } else if (procCat === 'ESTRUTURA') {
+            target.lastStyling = C.todayISO();
+        }
+
+        const moon = getMoonPhase();
+        target.logs.unshift({
+            date: C.todayISO(),
+            type: procTitle,
+            detail: `Procedimento ideal executado sob alinhamento fitotécnico de ${moon.phaseName}.`
+        });
+
+        saveData(false);
+        renderAll();
+        renderProcedureModal(currentProcedureFilter);
+        C.toast(`Intervenção '${procTitle}' registrada com sucesso no histórico de ${target.popularName} (${target.id})!`, 'success', 3000);
+    }
+
+    function scheduleProcedureForPlant(plantId, procTitle) {
+        const C = global.VaultCore;
+        const target = plants.find((p) => p.id === plantId);
+        if (!target) return;
+
+        target.nextInterventionDate = C.addDaysISO(C.todayISO(), 3);
+        target.nextInterventionType = procTitle;
+
+        saveData(false);
+        renderAll();
+        renderProcedureModal(currentProcedureFilter);
+        C.toast(`Intervenção '${procTitle}' agendada para daqui a 3 dias em ${target.popularName}!`, 'info', 2500);
+    }
+
+    // =========================================================================
     // 9. LISTENERS & INICIALIZAÇÃO
     // =========================================================================
     function bindEvents() {
         const C = global.VaultCore;
 
-        const btnSeed23 = document.getElementById('btn-bonsai-seed-23');
-        if (btnSeed23) {
-            btnSeed23.addEventListener('click', () => {
-                ensurePersonalSpeciesSeeded(true);
-                renderAll();
-            });
+        const btnIdealProc = document.getElementById('btn-bonsai-ideal-procedure');
+        if (btnIdealProc) {
+            btnIdealProc.addEventListener('click', openProcedureModal);
         }
+
+        const btnProcClose = document.getElementById('btn-procedure-modal-close');
+        if (btnProcClose) {
+            btnProcClose.addEventListener('click', closeProcedureModal);
+        }
+
+        document.querySelectorAll('.proc-filter-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const cat = btn.getAttribute('data-proc-filter');
+                renderProcedureModal(cat);
+            });
+        });
 
         document.getElementById('btn-bonsai-new').addEventListener('click', () => openModal(null));
         document.getElementById('btn-bonsai-guide').addEventListener('click', openGuideModal);
