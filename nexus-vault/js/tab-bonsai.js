@@ -1190,6 +1190,95 @@
                 'Aplicar pó de canela em eventuais microferimentos para blindagem fúngica.'
             ],
             biologicalNote: 'Caudiciformes e rupícolas necessitam de estresse hídrico sazonal para florescer e preservar suas reservas sem colapsar por fungos radiculares anaeróbicos.'
+        },
+        {
+            id: 'DESFOLHA_TOTAL',
+            category: 'DESFOLHA',
+            categoryBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            title: 'Desfolha Total de Verão (Redução Foliar e Ramificação Terciária)',
+            subtitle: 'Técnica cirúrgica para forçar nova brotação compacta com entrenós curtos e folhas reduzidas',
+            idealMoons: ['CRESCENTE', 'CHEIA'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Verão'],
+            avoidSeasons: ['Inverno', 'Outono'],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Amora', 'Morus', 'Ficus', 'Figueira', 'Acerola', 'Jabuticaba', 'Buxinho'],
+            avoidKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto', 'Junípero', 'Pinus'],
+            tools: 'Tesoura de desfolha de ponta fina bem afiada, fertilizante líquido prévio e borrifador.',
+            steps: [
+                'Confirmar vigor impecável da planta; nunca desfolhar árvores recém-transplantadas ou debilitadas.',
+                'Cortar cada folha no meio do pecíolo com a ponta da tesoura, preservando a gema axilar intacta.',
+                'Deixar o toco de pecíolo secar naturalmente; ele cairá sozinho em 7 a 10 dias sem ferir o ramo.',
+                'Proteger o vaso em meia-sombra ventilada por 5 dias após o corte.',
+                'Reduzir as regas em 60%, pois sem folhas a árvore consome pouca água até o estouro das novas gemas.'
+            ],
+            biologicalNote: 'Com seiva ativa na Lua Crescente/Cheia de verão, as gemas dormentes explodem simultaneamente, dividindo a força entre dezenas de brotos que nascem com folhas 50% a 70% menores.'
+        },
+        {
+            id: 'PINCAGEM_APICAL',
+            category: 'PINCAGEM',
+            categoryBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            title: 'Pinçagem Apical Contínua & Condução de Brotação Fina',
+            subtitle: 'Contenção cirúrgica de dominância apical para redirecionar seiva para o interior dos patamares',
+            idealMoons: ['CRESCENTE', 'CHEIA'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Bonsai', 'Pré-bonsai', 'Muda'],
+            speciesKeywords: ['Tataré', 'Piteco', 'Duranta', 'Caliandra', 'Serissa', 'Alecrim', 'Buxinho', 'Jabuticaba'],
+            avoidKeywords: ['Rainha-do-abismo'],
+            tools: 'Pinça fitotécnica japonesa de aço inox ou dedos limpos para não oxidar tecidos tenros.',
+            steps: [
+                'Identificar ramos novos que estão ultrapassando o perfil da copa projetada.',
+                'Aguardar o broto emitir 3 a 4 pares de folíolos e remover o ápice terminal tenro com a pinça.',
+                'Deixar 1 a 2 nós bem direcionados para a direção em que se deseja expandir a ramificação.',
+                'Repetir a cada 15-20 dias durante a estação de crescimento ativo.'
+            ],
+            biologicalNote: 'A remoção do meristema apical corta temporariamente a produção de auxinas no topo, liberando as citocininas para ativar as gemas dormentes da base e manter a copa densa.'
+        },
+        {
+            id: 'CALDA_SULFOCALCICA',
+            category: 'FITOSSANITARIO',
+            categoryBadge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+            title: 'Tratamento Fitossanitário de Inverno & Proteção de Madeira Morta',
+            subtitle: 'Assepsia fúngica com calda sulfocálcica, eliminação de ácaros e clareamento escultural de Jin e Shari',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Outono', 'Inverno'],
+            avoidSeasons: ['Verão'],
+            suitableStages: ['Bonsai', 'Pré-bonsai', 'Yamadori'],
+            speciesKeywords: ['Junípero', 'Shimpaku', 'Buxinho', 'Jabuticaba', 'Pitanga', 'Amora', 'Pau-ferro'],
+            avoidKeywords: ['Rosa-do-deserto', 'Rainha-do-abismo'],
+            tools: 'Calda sulfocálcica diluída (1:30 para pulverização de copa, pura para Jin/Shari), pincel fino e plástico.',
+            steps: [
+                'Cobrir cuidadosamente o substrato com saco plástico para não alterar o pH da terra.',
+                'Em dias nublados e frescos de inverno, pulverizar a diluição 1:30 em troncos e galhos desfolhados.',
+                'Para Jin e Shari, molhar previamente a madeira morta e aplicar a calda pura com pincel fino.',
+                'Aguardar 24h em local protegido para fixação do enxofre e clareamento da fibra de madeira.'
+            ],
+            biologicalNote: 'O enxofre e o cálcio atuam em sinergia esterilizando fungos de casca e madeira, além de petrificar a madeira morta contra podridão sem irritar o sistema radicular dormente.'
+        },
+        {
+            id: 'ADUBACAO_FLORACAO',
+            category: 'NUTRICAO',
+            categoryBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+            title: 'Adubação de Indução Floral (Fósforo e Potássio Reforçados)',
+            subtitle: 'Nutrição específica para formação abundante de botões florais e fixação de frutinhos',
+            idealMoons: ['CRESCENTE', 'CHEIA'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Inverno', 'Primavera'],
+            avoidSeasons: [],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Jabuticaba', 'Pitanga', 'Acerola', 'Bougainvillea', 'Primavera', 'Caliandra', 'Amora', 'Romã', 'Cereja'],
+            avoidKeywords: [],
+            tools: 'Farinha de osso calcinada, cinzas de madeira ou NPK 04-14-08 com micronutrientes, porta-adubos.',
+            steps: [
+                'Aplicar a dose recomendada na periferia do vaso, longe do contato direto com o nebari.',
+                'Inserir em porta-adubos para evitar atração de pássaros e perda por lavagem de rega.',
+                'Regar suavemente após a aplicação para ativar os microrganismos benéficos do solo.',
+                'Manter sol pleno diário para potencializar a fotossíntese e a conversão de carboidratos florais.'
+            ],
+            biologicalNote: 'O balanço NPK direcionado para P e K estimula a síntese de florígeno e reduz a dominância vegetativa de brotos verdes longos, convertendo gemas foliares em gemas florais férteis.'
         }
     ];
 
@@ -1796,6 +1885,7 @@
             lastRepot: p.lastRepot || C.todayISO(),
             repotCycleMonths: Number(p.repotCycleMonths) || 24,
             lastStyling: p.lastStyling || '',
+            lastPruning: p.lastPruning || '',
             wiringDueDate: p.wiringDueDate || '',
             nextInterventionDate: p.nextInterventionDate || '',
             nextInterventionType: String(p.nextInterventionType || p.nextInterventionNote || '').trim(),
@@ -2409,22 +2499,27 @@
                             </div>
                         </div>
 
-                        <!-- Seção de Aramação & Alerta de Desarme -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[#090d16]/70 border border-slate-800/80 rounded-xl p-3">
+                        <!-- Seção de Poda, Aramação & Alerta de Desarme -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#090d16]/70 border border-slate-800/80 rounded-xl p-3">
                             <div>
-                                <label class="block text-xs font-mono text-cyan-300 mb-1">Última Aramação / Estilização</label>
+                                <label class="block text-xs font-mono text-emerald-300 mb-1">Última Poda Realizada</label>
+                                <input type="date" id="bf-last-pruning" class="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 font-mono text-xs text-slate-100">
+                                <span class="text-[10px] text-slate-400">Poda estrutural ou pinçagem</span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-cyan-300 mb-1">Última Aramação</label>
                                 <input type="date" id="bf-last-styling" class="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 font-mono text-xs text-slate-100">
                             </div>
                             <div>
-                                <label class="block text-xs font-mono text-cyan-300 mb-1">Data Limite de Desaramamento</label>
+                                <label class="block text-xs font-mono text-cyan-300 mb-1">Limite de Desaramamento</label>
                                 <input type="date" id="bf-wiring-due" class="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 font-mono text-xs text-slate-100">
-                                <span class="text-[10px] text-slate-400">Gera alerta para não estrangular a casca</span>
+                                <span class="text-[10px] text-slate-400">Prevenção contra marcas</span>
                             </div>
                             <div>
-                                <label class="block text-xs font-mono text-amber-300 mb-1">Próx. Manejo (Data & Tipo)</label>
+                                <label class="block text-xs font-mono text-amber-300 mb-1">Próx. Manejo (Data &amp; Tipo)</label>
                                 <div class="grid grid-cols-2 gap-1.5">
                                     <input type="date" id="bf-next-date" class="min-h-[44px] px-2 py-1 rounded-lg bg-[#090d16] border border-slate-700 font-mono text-[11px] text-slate-100">
-                                    <input type="text" id="bf-next-type" placeholder="Ex: Pinçar ápices" class="min-h-[44px] px-2 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-100">
+                                    <input type="text" id="bf-next-type" placeholder="Ex: Pinçar" class="min-h-[44px] px-2 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-100">
                                 </div>
                             </div>
                         </div>
@@ -2553,7 +2648,10 @@
                             <button type="button" data-proc-filter="TRANSPLANTE" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Transplantes</button>
                             <button type="button" data-proc-filter="PODA_DRASTICA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Poda Drástica</button>
                             <button type="button" data-proc-filter="PODA_RAMIFICACAO" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Pinçagem & Ramificação</button>
+                            <button type="button" data-proc-filter="DESFOLHA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Desfolha</button>
                             <button type="button" data-proc-filter="ESTRUTURA" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Aramação & Jin</button>
+                            <button type="button" data-proc-filter="FITOSSANITARIO" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Calda Sulfocálcica</button>
+                            <button type="button" data-proc-filter="NUTRICAO" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Indução Floral</button>
                         </div>
                         <div class="text-xs text-slate-400 font-mono" id="procedure-match-count">0 recomendações</div>
                     </div>
@@ -2790,6 +2888,11 @@
 
                     <!-- Botões Rápidos Individuais -->
                     <div class="flex items-center justify-end gap-1.5 shrink-0 pt-1 lg:pt-0 border-t lg:border-t-0 border-slate-800/80">
+                        <button type="button" data-quick-prune="${C.esc(p.id)}" title="Registrar Poda de Manutenção Hoje"
+                            class="min-h-[42px] px-2.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-300 text-xs font-semibold flex items-center gap-1 transition">
+                            <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
+                            <span>Poda</span>
+                        </button>
                         <button type="button" data-quick-fert="${C.esc(p.id)}" title="Registrar Adubação Hoje (+${p.fertCycleDays}d)"
                             class="min-h-[42px] px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center gap-1 transition">
                             <i data-lucide="sprout" class="w-3.5 h-3.5"></i>
@@ -2812,6 +2915,26 @@
                 if (e.target.checked) selectedIds.add(id);
                 else selectedIds.delete(id);
                 renderPlantList();
+            });
+        });
+
+        container.querySelectorAll('[data-quick-prune]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-quick-prune');
+                const target = plants.find((item) => item.id === id);
+                if (!target) return;
+                const today = C.todayISO();
+                const moon = getMoonPhase();
+                target.lastPruning = today;
+                if (!Array.isArray(target.logs)) target.logs = [];
+                target.logs.unshift({
+                    date: today,
+                    type: 'Poda de Manutenção / Pinçagem',
+                    detail: `Poda rápida registrada sob ${moon.phaseName}`
+                });
+                saveData(false);
+                renderAll();
+                C.toast(`Poda rápida registrada em ${target.id} (${target.popularName}).`, 'success', 2200);
             });
         });
 
@@ -2878,6 +3001,7 @@
         document.getElementById('bf-fert-cycle').value = String(existing ? existing.fertCycleDays : 30);
         document.getElementById('bf-last-repot').value = existing ? existing.lastRepot : C.todayISO();
         document.getElementById('bf-repot-cycle').value = String(existing ? existing.repotCycleMonths : 24);
+        document.getElementById('bf-last-pruning').value = existing ? (existing.lastPruning || '') : '';
         document.getElementById('bf-last-styling').value = existing ? existing.lastStyling : '';
         document.getElementById('bf-wiring-due').value = existing ? existing.wiringDueDate : '';
         document.getElementById('bf-next-date').value = existing ? existing.nextInterventionDate : '';
@@ -2911,15 +3035,27 @@
             listEl.innerHTML = `<p class="text-xs text-slate-500 italic">Nenhum manejo registrado ainda.</p>`;
             return;
         }
-        listEl.innerHTML = plant.logs.map((lg) => `
-            <div class="flex items-center justify-between gap-2 text-xs bg-[#090d16] border border-slate-800 rounded px-2.5 py-1.5">
-                <div>
-                    <span class="font-mono text-cyan-400">${C.formatDateBR(lg.date)}</span>
-                    <span class="font-semibold text-slate-200 ml-1.5">${C.esc(lg.type)}</span>
-                    <span class="text-slate-400 ml-1">— ${C.esc(lg.detail)}</span>
+        listEl.innerHTML = plant.logs.map((lg) => {
+            const isPruning = lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha'));
+            const isFert = lg.type && lg.type.toLowerCase().includes('adubação');
+            const isRepot = lg.type && (lg.type.toLowerCase().includes('transplante') || lg.type.toLowerCase().includes('raiz'));
+
+            let badgeHtml = '';
+            if (isPruning) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Poda</span>';
+            else if (isFert) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">Adubação</span>';
+            else if (isRepot) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Raízes</span>';
+
+            return `
+                <div class="flex items-center justify-between gap-2 text-xs bg-[#090d16] border border-slate-800 rounded px-2.5 py-1.5">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="font-mono text-cyan-400">${C.formatDateBR(lg.date)}</span>
+                        ${badgeHtml}
+                        <span class="font-semibold text-slate-200">${C.esc(lg.type)}</span>
+                        <span class="text-slate-400">— ${C.esc(lg.detail)}</span>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     function closeModal() {
@@ -3099,6 +3235,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Previsão Astrobotânica dos Próximos 14 Dias -->
+                <div class="mt-3.5 pt-3 border-t border-slate-800/90 space-y-2">
+                    <span class="text-[11px] font-mono uppercase tracking-wider text-cyan-300 font-semibold block">
+                        Planejamento Fitotécnico das Próximas 2 Semanas (Janelas Cirúrgicas Futuras):
+                    </span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        ${[3, 7, 10, 14].map((offset) => {
+                            const d = new Date();
+                            d.setDate(d.getDate() + offset);
+                            const mForecast = getMoonPhase(d);
+                            let reco = '';
+                            if (mForecast.phaseGroup === 'CRESCENTE') reco = 'Alporquias, estaquia e brotação';
+                            else if (mForecast.phaseGroup === 'CHEIA') reco = 'Turgor alto: nutrição foliar e solo';
+                            else if (mForecast.phaseGroup === 'MINGUANTE') reco = 'Poda de raízes e transplantes';
+                            else reco = 'Poda drástica e esculturas';
+                            return `
+                                <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2.5 text-xs space-y-1">
+                                    <div class="flex items-center justify-between text-[10px] font-mono">
+                                        <span class="text-slate-400">+${offset}d (${C.formatDateBR(d.toISOString().slice(0, 10))})</span>
+                                        <span class="px-1.5 py-0.2 rounded ${mForecast.badgeCls}">${mForecast.phaseGroup}</span>
+                                    </div>
+                                    <div class="font-bold text-slate-200 text-[11px] truncate">${mForecast.phaseName}</div>
+                                    <div class="text-[10px] text-emerald-400 truncate">${reco}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
             `;
         }
 
@@ -3235,9 +3400,14 @@
             target.lastRepot = C.todayISO();
         } else if (procCat === 'ESTRUTURA') {
             target.lastStyling = C.todayISO();
+        } else if (procCat === 'PODA_DRASTICA' || procCat === 'PODA_RAMIFICACAO' || procCat === 'DESFOLHA' || procCat === 'PINCAGEM') {
+            target.lastPruning = C.todayISO();
+        } else if (procCat === 'NUTRICAO') {
+            target.lastFertilization = C.todayISO();
         }
 
         const moon = getMoonPhase();
+        if (!Array.isArray(target.logs)) target.logs = [];
         target.logs.unshift({
             date: C.todayISO(),
             type: procTitle,
@@ -3450,6 +3620,7 @@
                 fertCycleDays: Number(document.getElementById('bf-fert-cycle').value),
                 lastRepot: document.getElementById('bf-last-repot').value,
                 repotCycleMonths: Number(document.getElementById('bf-repot-cycle').value),
+                lastPruning: document.getElementById('bf-last-pruning').value,
                 lastStyling: document.getElementById('bf-last-styling').value,
                 wiringDueDate: document.getElementById('bf-wiring-due').value,
                 nextInterventionDate: document.getElementById('bf-next-date').value,

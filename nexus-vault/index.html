@@ -266,11 +266,17 @@
                         <span>6. Independência Clínica</span>
                         <kbd class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-900 border border-slate-800 text-slate-500">Alt+6</kbd>
                     </button>
+
+                    <button type="button" data-vault-tab-btn="agenda" class="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-slate-200 text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition">
+                        <i data-lucide="calendar-check-2" class="w-4 h-4 text-sky-400"></i>
+                        <span>7. Sessões &amp; Faturamento</span>
+                        <kbd class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-900 border border-slate-800 text-slate-500">Alt+7</kbd>
+                    </button>
                 </div>
             </nav>
         </header>
 
-        <!-- CONTEÚDO PRINCIPAL DAS 6 ABAS -->
+        <!-- CONTEÚDO PRINCIPAL DAS 7 ABAS -->
         <main class="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-6 py-5 pb-24 md:pb-8">
             <section id="tab-panel-psicometria" data-vault-panel="psicometria"></section>
             <section id="tab-panel-bonsai" data-vault-panel="bonsai" class="hidden"></section>
@@ -278,10 +284,11 @@
             <section id="tab-panel-desfusao" data-vault-panel="desfusao" class="hidden"></section>
             <section id="tab-panel-contos" data-vault-panel="contos" class="hidden"></section>
             <section id="tab-panel-independencia" data-vault-panel="independencia" class="hidden"></section>
+            <section id="tab-panel-agenda" data-vault-panel="agenda" class="hidden"></section>
         </main>
 
         <!-- BARRA INFERIOR MOBILE ONE-HANDED -->
-        <nav id="vault-mobile-tabs" aria-label="Navegação Mobile" class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#090d16]/95 backdrop-blur-xl border-t border-[#1e293b] grid grid-cols-6 px-1 py-1">
+        <nav id="vault-mobile-tabs" aria-label="Navegação Mobile" class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#090d16]/95 backdrop-blur-xl border-t border-[#1e293b] grid grid-cols-7 px-1 py-1">
             <button type="button" data-vault-tab-btn="psicometria" class="min-h-[48px] rounded-lg border border-transparent flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-slate-400">
                 <i data-lucide="brain-circuit" class="w-4 h-4"></i>
                 <span>Laudos</span>
@@ -305,6 +312,10 @@
             <button type="button" data-vault-tab-btn="independencia" class="min-h-[48px] rounded-lg border border-transparent flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-slate-400">
                 <i data-lucide="trending-up" class="w-4 h-4"></i>
                 <span>Renda</span>
+            </button>
+            <button type="button" data-vault-tab-btn="agenda" class="min-h-[48px] rounded-lg border border-transparent flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-slate-400">
+                <i data-lucide="calendar-check-2" class="w-4 h-4"></i>
+                <span>Agenda</span>
             </button>
         </nav>
     </div>
@@ -416,14 +427,20 @@
     <script src="js/tab-bonsai.js"></script>
     <script src="js/tab-viola.js"></script>
     <script src="js/tab-desfusao-contos.js"></script>
+    <script src="js/tab-contos.js"></script>
     <script src="js/tab-independencia.js"></script>
+    <script src="js/tab-financas.js"></script>
+    <script src="js/tab-agenda.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             if (window.VaultTabPsicometria) window.VaultTabPsicometria.init();
-            window.VaultTabBonsai.init();
-            window.VaultTabViola.init();
-            window.VaultTabDesfusaoContos.init();
-            window.VaultTabIndependencia.init();
+            if (window.VaultTabBonsai) window.VaultTabBonsai.init();
+            if (window.VaultTabViola) window.VaultTabViola.init();
+            if (window.VaultTabDesfusaoContos) window.VaultTabDesfusaoContos.init();
+            if (window.VaultTabContos) window.VaultTabContos.init();
+            if (window.VaultTabIndependencia) window.VaultTabIndependencia.init();
+            if (window.VaultTabFinancas && !window.VaultTabIndependencia) window.VaultTabFinancas.init();
+            if (window.VaultTabAgenda) window.VaultTabAgenda.init();
             window.VaultCore.initShellEvents();
             window.VaultCore.refreshIcons();
         });

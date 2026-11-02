@@ -1,2 +1,3 @@
 logs/
 *.lock
+nexus-vault/data/agenda-cache.json

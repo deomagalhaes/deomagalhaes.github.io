@@ -1183,6 +1183,12 @@
                                 <span>Novo</span>
                             </button>
 
+                            <button type="button" id="btn-psy-demo-prot" title="Carregar Exemplo Clínico de Demonstração (WASI, FDT, SRS-2, BPA-2, RAVLT)"
+                                class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-emerald-300 text-xs font-semibold flex items-center gap-1 transition">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                <span class="hidden sm:inline">Exemplo Clínico</span>
+                            </button>
+
                             <button type="button" id="btn-psy-rename-prot" title="Renomear Código/Iniciais do Protocolo"
                                 class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs flex items-center gap-1 transition">
                                 <i data-lucide="pencil" class="w-3.5 h-3.5 text-cyan-300"></i>
@@ -1381,6 +1387,51 @@
                 saveState();
                 renderAll();
                 C.toast(`Protocolo "${p.code}" criado.`, 'success');
+            });
+        }
+
+        const btnDemo = document.getElementById('btn-psy-demo-prot');
+        if (btnDemo) {
+            btnDemo.addEventListener('click', () => {
+                const demoProt = createEmptyProtocol('DEMO-NEURO-TDAH');
+                demoProt.patient = {
+                    birthDateISO: '2016-04-12',
+                    evalDateISO: '2026-10-20',
+                    gender: 'M',
+                    schooling: '5º Ano Fundamental',
+                    handedness: 'Destra',
+                    informant: 'Mãe e Professora'
+                };
+                demoProt.wasi.voc.raw = 32; demoProt.wasi.voc.t = 55;
+                demoProt.wasi.cub.raw = 34; demoProt.wasi.cub.t = 58;
+                demoProt.wasi.sem.raw = 28; demoProt.wasi.sem.t = 52;
+                demoProt.wasi.rm.raw = 26;  demoProt.wasi.rm.t = 56;
+                demoProt.fdt.leitura.time = 24; demoProt.fdt.leitura.errors = 0;
+                demoProt.fdt.contagem.time = 28; demoProt.fdt.contagem.errors = 0;
+                demoProt.fdt.escolha.time = 44; demoProt.fdt.escolha.errors = 1;
+                demoProt.fdt.alternancia.time = 62; demoProt.fdt.alternancia.errors = 2;
+                demoProt.srs2.rawPerception = 12;
+                demoProt.srs2.rawCognition = 18;
+                demoProt.srs2.rawCommunication = 26;
+                demoProt.srs2.rawMotivation = 14;
+                demoProt.srs2.rawRestricted = 19;
+                demoProt.bpa.acRaw = 94;
+                demoProt.bpa.adRaw = 76;
+                demoProt.bpa.aaRaw = 82;
+                demoProt.ravlt.rawA1 = 5;
+                demoProt.ravlt.rawA2 = 8;
+                demoProt.ravlt.rawA3 = 11;
+                demoProt.ravlt.rawA4 = 12;
+                demoProt.ravlt.rawA5 = 14;
+                demoProt.ravlt.rawB1 = 5;
+                demoProt.ravlt.rawA6 = 12;
+                demoProt.ravlt.rawA7 = 11;
+
+                appState.protocols.unshift(demoProt);
+                appState.activeProtocolId = demoProt.id;
+                saveState();
+                renderAll();
+                C.toast('Protocolo de Demonstração "DEMO-NEURO-TDAH" carregado com sucesso!', 'success', 3000);
             });
         }
 

@@ -1,0 +1,1009 @@
+/**
+ * NEXUS VAULT — Aba 5: Gerador Estruturado de Cenas Terapêuticas e Contos Noturnos
+ * Arquivo Canônico: 'nexus-vault/js/tab-contos.js'
+ * 100% Client-Side • Zero-Backend • LGPD Compliant • Leitor Âmbar Offline Low-Blue-Light
+ *
+ * Módulos Integrados:
+ * 1. Banco Expandido de 18 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
+ * 2. 9 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
+ * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos
+ * 4. Sintetizador Acústico Web Audio API Pré-Sono (Ruído Marrom, Chuva Mansa, Ondas, Grilos) com Sleep Timer
+ * 5. Leitor Âmbar Imersivo com Paletas Térmicas Melatonina, Auto-Scroll Lento e Gestão de Favoritos Local
+ */
+(function (global) {
+    'use strict';
+
+    // =========================================================================
+    // 1. BANCO DE 18 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
+    // =========================================================================
+    const STORY_THEMES = {
+        frustracao: {
+            label: '1. Frustração (Quando algo sai diferente do plano)',
+            defaultMetaphor: 'A semente de ipê-dourado que precisou descansar na terra macia quando a chuva atrasou, descobrindo que raízes calmas florescem mais fortes.',
+            defaultQuestion: 'Qual foi uma coisinha que hoje pareceu difícil, mas que o seu coração aprendeu a esperar com calma?',
+            challengeAct: 'tentou construir uma ponte de gravetos brilhantes, mas uma brisa travessa soprou três vezes e desmontou o caminho bem no meio da brincadeira. O peito ficou apertado e as mãozinhas quiseram desistir na mesma hora.',
+            breathCue: 'inspirou sentindo o cheiro doce da mata por quatro tempos lentos… e soprou devagarinho como quem embala uma folha pousando na água.'
+        },
+        espera: {
+            label: '2. Espera & Paciência (O tempo orgânico das coisas boas)',
+            defaultMetaphor: 'O casulo dourado na galhada silenciosa, que não pode ser aberto com pressa porque cada minuto quietinho pinta mais uma cor nas asas.',
+            defaultQuestion: 'O que será gostoso imaginar crescendo devagarinho enquanto a gente descansa esta noite?',
+            challengeAct: 'queria muito ver a flor-da-noite abrir suas pétalas prateadas imediatamente, batendo o pezinho no chão macio porque esperar parecia demorar um século inteiro.',
+            breathCue: 'pôs a mão na barriga morna, puxou o ar bem mansinho contando um, dois, três… e soltou num suspiro comprido e tranquilo.'
+        },
+        coragem: {
+            label: '3. Coragem Diante do Novo (Passos pequenos e seguros)',
+            defaultMetaphor: 'A lanterninha do coração: ela não precisa iluminar a floresta inteira de uma vez, só precisa clarear o próximo passinho bem diante dos pés.',
+            defaultQuestion: 'Onde você sente morar a sua lanterninha de coragem quando dá um passo novo?',
+            challengeAct: 'chegou diante de uma trilha nova onde as árvores faziam sombras compridas e sons diferentes. Mesmo com curiosidade, deu meio passo para trás sentindo um friozinho na barriga.',
+            breathCue: 'encheu o peito de ar fresco como um guardião tranquilo e soltou devagar, percebendo que os pés estavam firmes e seguros.'
+        },
+        separacao: {
+            label: '4. Separação / Transição de Rotina (O Fio Dourado Invisível)',
+            defaultMetaphor: 'O fio invisível de luz dourada que liga dois corações que se amam: ele estica por qualquer distância sem nunca arrebentar e sempre traz de volta o abraço.',
+            defaultQuestion: 'Se você tocar o seu peito agora, consegue sentir o quentinho do nosso fio dourado guardado aí dentro?',
+            challengeAct: 'precisava atravessar para uma clareira diferente na manhã seguinte e sentiu saudade adiantada, querendo guardar todo o carinho dentro do bolso para não faltar.',
+            breathCue: 'abraçou os próprios ombros bem macio, puxou o ar sentindo o carinho guardado no peito e soprou suave como uma canção de ninar.'
+        },
+        raiva: {
+            label: '5. Raiva & Vulcão Interno (Sopro que esfria a brasa)',
+            defaultMetaphor: 'A pedrinha vulcânica que fica quente demais quando se assusta, mas que ao mergulhar no riacho da respiração longa se transforma num cristal liso e fresquinho.',
+            defaultQuestion: 'Como o seu corpo fica gostoso e levinho depois que o vulcãozinho esfria e vira brisa?',
+            challengeAct: 'sentiu uma onda muito quente subir da barriga até as bochechas quando nada saía do seu jeito, como se um pequeno vulcão quisesse soltar faíscas para todo lado.',
+            breathCue: 'soprou comprido e suave pela boca três vezes seguidas, vendo cada faísca quente virar poeira prateada de estrelas.'
+        },
+        medo_escuro: {
+            label: '6. Medo do Escuro (A noite como cobertor protetor)',
+            defaultMetaphor: 'A noite é apenas o cobertor azul-marinho da natureza: ela apaga as luzes fortes só para as estrelas e os sonhos bonitos conseguirem aparecer.',
+            defaultQuestion: 'Qual estrela mansa vai cuidar do seu sono enquanto os seus olhinhos descansam?',
+            challengeAct: 'olhou para os cantinhos sombreados quando o sol se escondeu e imaginou formas estranhas nas folhas, querendo que o dia nunca terminasse.',
+            breathCue: 'fechou os olhos por um segundo, ouviu a música calma da própria respiração lenta e sentiu o escuro macio abraçar o descanso.'
+        },
+        ciume_partilha: {
+            label: '7. Ciúme / Partilha Afetiva (O coração que estica sem dividir)',
+            defaultMetaphor: 'A luz de uma vela carinhosa: quando ela acende outra vela vizinha, o seu próprio fogo não diminui; pelo contrário, o quarto todo fica duas vezes mais quentinho e iluminado.',
+            defaultQuestion: 'Como o amor cresce ainda mais quando a gente descobre que cabe todo mundo no mesmo abraço?',
+            challengeAct: 'viu os carinhos serem divididos com outro bichinho na clareira e sentiu um aperto cinzento no peito, como se o seu cantinho estivesse ficando pequeno.',
+            breathCue: 'puxou o ar enchendo o peito até sentir que o coração é uma casa gigante sem portas trancadas, soltando o ar com um sorriso sereno.'
+        },
+        perfeccionismo: {
+            label: '8. Perfeccionismo & Medo de Errar (O rascunho de asas)',
+            defaultMetaphor: 'A borboleta que começou com asas pequeninas e dobradas: nenhuma flor no jardim pergunta se uma pétala entortou no vento, porque a beleza está na vida dançando.',
+            defaultQuestion: 'O que o seu coração sentiu de bom quando você se deu conta de que tentar já é uma vitória linda?',
+            challengeAct: 'apagou o desenho de terra três vezes seguidas porque uma linha não ficou reta como queria, com vontade de rasgar a folha e não brincar mais.',
+            breathCue: 'soltou as mãos bem moles ao lado do corpo, respirou fundo deixando a perfeição ir embora e acolheu o desenho com ternura.'
+        },
+        hiperatividade_sono: {
+            label: '9. Desaceleração & Energia no Fim do Dia (O motorzinho do vagalume)',
+            defaultMetaphor: 'O vagalume que correu o dia todo acendendo e apagando sua luzinha dourada, mas que para conseguir brilhar amanhã precisa pousar suave na folha de orvalho e apagar o motor.',
+            defaultQuestion: 'Se o seu corpinho fosse um barquinho chegando na beira da praia, onde ele mais gosta de encostar para relaxar?',
+            challengeAct: 'sentia as perninhas e os pensamentos pulando sem parar de um galho para o outro, como se a noite fosse dia e o descanso não pudesse chegar.',
+            breathCue: 'deitou a cabeça no travesseiro, inspirou contando os pezinhos relaxando… soltou o ar sentindo a gravidade puxar o corpo num abraço fofo.'
+        },
+        tristeza_acolhida: {
+            label: '10. Tristeza & Saudade Suave (A nuvenzinha de chuva boa)',
+            defaultMetaphor: 'A nuvenzinha cinza que chora gotas mansas sobre a terra: depois que a chuva passa devagar, a terra fica perfumada e brotam sementinhas de alegria nova.',
+            defaultQuestion: 'Você sabe que não tem problema nenhum ficar quietinho e com vontade de chorar um pouco no colinho seguro?',
+            challengeAct: 'perdeu uma folhinha dourada especial trazida pelo vento e sentiu uma vontade quieta de não falar com ninguém, com o peito nublado de chuva.',
+            breathCue: 'deixou um suspiro quentinho sair devagarzinho, recebendo um afago nas costas e sentindo a dorzinha virar carinho guardado.'
+        },
+        adaptacao_escola: {
+            label: '11. Adaptação & Pertencimento (O voo e a volta para o ninho)',
+            defaultMetaphor: 'O passarinho que sai do ninho para explorar galhos novos: ele voa pelo céu azul, faz amigos passarinhos e quando a tarde cai, o ninho acolhedor continua exatamente no mesmo lugar.',
+            defaultQuestion: 'Qual foi uma brincadeira ou descoberta diferente que você viu hoje enquanto esteve fora do ninho?',
+            challengeAct: 'ficou na porta da nova escolinha da floresta vendo todos os animais diferentes e sentiu vontade de correr de volta para os braços protetores da manhã.',
+            breathCue: 'respirou fundo sentindo a coragem nas patinhas, tocou o coração para lembrar que o ninho espera por ele ao entardecer, e deu dois passos firmes.'
+        },
+        generosidade_desapego: {
+            label: '12. Apego & Partilha de Brinquedos (O riacho que corre)',
+            defaultMetaphor: 'O riacho transparente que deixa a água correr: a água fica sempre doce e pura porque viaja livre, enquanto poça parada e fechada fica turva.',
+            defaultQuestion: 'Como é gostoso ver a alegria no rostinho de um amigo quando a gente empresta algo com amor?',
+            challengeAct: 'segurou bem forte o barquinho de casca de noz quando outro bichinho se aproximou para ver, com medo de perder seu brinquedo favorito.',
+            breathCue: 'olhou nos olhos gentis do amiguinho, respirou fundo sentindo paz e estendeu a mãozinha aberta com um gesto dócil.'
+        },
+        desconexao_telas: {
+            label: '13. Desconexão Digital & Telas (O Sol que desliga os raios)',
+            defaultMetaphor: 'O Sol dourado que recolhe cada raio brilhante ao entardecer para descansar nas colinas: ele desliga suas luzes fortes porque até o astro mais poderoso precisa dormir no escuro macio para acordar radiante.',
+            defaultQuestion: 'Que imagem bonita o seu pensamento quer pintar quando as luzes das telas se apagam?',
+            challengeAct: 'sentiu vontade de continuar olhando as cores rápidas da telinha mágica, com os olhinhos ardendo e o coração agitado querendo mais um pouquinho sem parar.',
+            breathCue: 'fechou as pálpebras, respirou fundo sentindo um frescor gostoso entrar pelo nariz e soltou o ar imaginando uma cortina de veludo aconchegante descendo sobre os olhos.'
+        },
+        timidez_social: {
+            label: '14. Timidez & Insegurança Social (A casinha do caracol)',
+            defaultMetaphor: 'A conchinha do caracol que sabe a hora de guardar a cabecinha e a hora de espiar o mundo: não tem pressa nenhuma, quem gosta da gente espera com carinho o nosso tempo de sair.',
+            defaultQuestion: 'Como é bom saber que você pode ser quietinho e ainda assim ser infinitamente amado e especial?',
+            challengeAct: 'viu outros animais brincando em roda e ficou encolhido atrás do tronco, com as patinhas congeladas e a garganta travada sem conseguir dizer oi.',
+            breathCue: 'abraçou o próprio peito com suavidade, inspirou sentindo segurança por dentro e soltou um suspiro mansa, sabendo que cada um tem seu tempo único.'
+        },
+        somatizacao_corpo: {
+            label: '15. Nó na Garganta / Dorzinha Emocional na Barriga',
+            defaultMetaphor: 'O balãozinho de sabão preso na barriga: ele só infla quando a gente guarda as palavrinhas que queriam ser ditas. Ao soprar com calma, a película se desfaz e vira perfume no ar.',
+            defaultQuestion: 'Onde o seu corpinho mais gosta de receber carinho quando a barriga ou o peito ficam apertados?',
+            challengeAct: 'sentiu a barriguinha dar nós e a garganta ficar seca antes da hora de dormir, como se uma pedra pequenininha estivesse parada bem no meio do peito.',
+            breathCue: 'pôs as duas mãozinhas na barriga, sentiu o ar entrar quentinho como chá de camomila e soprou devagar, sentindo cada músculo derreter feito manteiga.'
+        },
+        luto_memoria: {
+            label: '16. Memória Afetiva & Perda (A Caixinha de Estrelas)',
+            defaultMetaphor: 'A caixinha de prata invisível que mora dentro do coração: tudo o que a gente ama de verdade fica guardado ali dentro para sempre em forma de estrela, e nada no universo pode apagar.',
+            defaultQuestion: 'Qual lembrança gostosa faz o seu peito ficar quentinho como se quem você ama estivesse abraçando você agora?',
+            challengeAct: 'olhou para o cantinho onde o brinquedo favorito ou o bichinho querido costumava ficar e sentiu um vazio comprido, com os olhinhos cheios de lágrimas mansas.',
+            breathCue: 'levou a mãozinha ao lado esquerdo do peito, sentiu as batidinhas calmas do coração e soprou com ternura, mandando um abraço de luz pelo pensamento.'
+        },
+        autoestima_valor: {
+            label: '17. Sentir-se Pequeno & Autoestima (A formiguinha e a flor)',
+            defaultMetaphor: 'A formiguinha sábia que carregava uma pétala inteira de girassol: o tamanho do corpo nunca limitou a grandeza da sua coragem e da sua bondade.',
+            defaultQuestion: 'Você percebe como o mundo fica mais alegre e bonito só porque você existe exatamente do seu jeitinho?',
+            challengeAct: 'ouviu os bichos grandes pularem alto e sentiu que era pequeno demais para fazer coisas importantes, com vontade de se esconder debaixo de uma folha seca.',
+            breathCue: 'ergueu a cabecinha de manso, inspirou enchendo o peito com o ar do universo e soltou com um sorriso orgulhoso, sentindo-se precioso e único.'
+        },
+        medo_tempestades: {
+            label: '18. Medo de Trovões & Chuva Forte (O tambor da terra)',
+            defaultMetaphor: 'O tambor dos gigantes da serra: eles tocam lá no alto para chamar as nuvens que lavam as folhas e dão de beber aos riachos. Debaixo do teto seguro, é só uma música que embala o sono.',
+            defaultQuestion: 'Se os trovões fossem só um tambor tocando uma canção de ninar bem longe, qual som gostoso a gente ouve aqui dentro do quarto?',
+            challengeAct: 'ouviu o estrondo do trovão fazer tremer o vidro da janela e puxou o lençol até o nariz, com o coração batendo rápido como as asas de um beija-flor.',
+            breathCue: 'encolheu os ombrinhos e depois soltou tudo de uma vez com um suspiro longo, sentindo o peso gostoso do cobertor e o abrigo seguro da casa.'
+        }
+    };
+
+    // =========================================================================
+    // 2. 9 CENÁRIOS POÉTICOS BRASILEIROS E CÓSMICOS
+    // =========================================================================
+    const STORY_SCENARIOS = {
+        cerrado: {
+            label: 'Cerrado & Animais Brasileiros',
+            opening: 'Quando o sol alaranjado se escondeu atrás das chapadas silenciosas do Cerrado, o vento morno passou penteando o capim-dourado e espalhando perfume de flor de pequi.',
+            guide: 'um Lobo-Guará de passos macios e olhar muito calmo, amigo de uma corujinha-buraqueira sonolenta',
+            closing: 'Nas veredas cristalinas, os buritis balançavam devagarinho, o Lobo-Guará se enroscou na relva macia e todo o Cerrado respirou num silêncio doce e profundo.'
+        },
+        pantanal: {
+            label: 'Pantanal & Floresta das Águas Calmas',
+            opening: 'À beira de uma baía espelhada do Pantanal onde vitórias-régias flutuavam como berços verdes gigantes, pequenas gotas de orvalho começavam a brilhar sob o luar prateado.',
+            guide: 'uma Lontra gentil de pelo aveludado e um tuiuiú sábio de bico longo que sabia o momento exato de fechar as asas e dormir',
+            closing: 'A água morna continuou cantando baixinho entre os camalotes, embalando cada peixinho e cada garça num sono sereno até o amanhecer.'
+        },
+        mata_atlantica: {
+            label: 'Mata Atlântica & Mico-Leão Dourado',
+            opening: 'Entre bromélias orvalhadas e orquídeas perfumadas nas encostas da Serra do Mar, os vaga-lumes acendiam pequenas lanternas douradas enquanto a brisa da tardinha trazia frescor de terra úmida.',
+            guide: 'um pequeno Mico-Leão Dourado de pelo macio e uma preguiçinha de três dedos que conhecia a arte de não ter pressa nenhuma',
+            closing: 'As folhas compridas das samambaias formaram um teto verde protetor, guardando o sono de todos os bichinhos com ternura e abrigo absoluto.'
+        },
+        amazonia: {
+            label: 'Floresta Amazônica & Rio Manso',
+            opening: 'Debaixo das copas majestosas de sumaúmas milenares, onde o grande rio corria como um espelho de prata escura, o canto de uma juriti sonolenta ecoava mansinho pelas margens.',
+            guide: 'um Boto-Rosa brincalhão que agora descansava na água rasa e um Bicho-Preguiça sereno com sorriso acolhedor',
+            closing: 'O murmúrio das águas profundas e o aroma gostoso de castanheira embalaram a clareira inteira num repouso seguro e tranquilo.'
+        },
+        caatinga: {
+            label: 'Caatinga Serenada & Tatu-Bola Paciente',
+            opening: 'Ao cair da noite no sertão, quando o calor forte do dia deu lugar a uma brisa deliciosa e fresca, os mandacarus abriram suas flores brancas sob uma abóbada de estrelas brilhantes.',
+            guide: 'um Tatu-Bola de passos cuidadosos que sabia como se encolher feito bolinha para descansar em segurança total',
+            closing: 'O luar iluminou as pedras acolhedoras da serra, e o silêncio manso do sertão envolveu cada toca num calorzinho de paz e abrigo.'
+        },
+        estrelas: {
+            label: 'Viagem pelas Estrelas & Cruzeiro do Sul',
+            opening: 'Lá no alto, onde as nuvens parecem travesseiros de algodão morno, um barquinho de madeira encantada deslizava silenciosamente pelo céu azul-profundo.',
+            guide: 'a Estrela-Guia do Cruzeiro do Sul e uma pequena Lua crescente de sorriso acolhedor',
+            closing: 'O barquinho ancorou numa nuvem macia e silenciosa, coberto por um lençol de poeira estelar morna que convidava os olhos a pesarem devagar.'
+        },
+        serra_canastra: {
+            label: 'Serra da Canastra & Nascentes Cristalinas',
+            opening: 'No alto dos campos de altitude da Canastra, onde o grande rio nasce mansinho como um fio de cristal entre pedras musgosas, uma névoa suave descia cobrindo as colinas de orvalho fresco.',
+            guide: 'um Tamanduá-Bandeira de cauda imensa e felpuda, que se aconchegava numa curva do morro como um xale protetor',
+            closing: 'A água da nascente continuou cantando uma canção de ninar milenar, e o vento puro da montanha guardou o descanso com paz incondicional.'
+        },
+        veadeiros: {
+            label: 'Chapada dos Veadeiros & Jardim de Cristais',
+            opening: 'Entre os cânions prateados e jardins secretos de flores do cerrado, pedras de quartzo refletiam a luz da lua cheia como pequenos vaga-lumes adormecidos.',
+            guide: 'uma Arara-Canindé de penas aveludadas que pousava suave num galho alto para contemplar o silêncio do vale',
+            closing: 'As cachoeiras distantes murmuravam um sussurro constante, embalando os pensamentos num ritmo lento de paz e serenidade.'
+        },
+        lencois: {
+            label: 'Lençóis Maranhenses & Dunas de Vento Manso',
+            opening: 'Sobre as dunas brancas como farinha fina, lagoas de água doce refletiam o céu estrelado enquanto o vento do mar soprava calmo e refrescante.',
+            guide: 'um Maçarico-da-Praia de passos pequeninos que descansava na beira da água morna sem medo nenhum do mar',
+            closing: 'O vento desenhou ondas suaves na areia branca e todo o areal adormeceu sob uma abóbada brilhante de constelações tranquilas.'
+        }
+    };
+
+    let savedStories = [];
+    let currentComposedStory = { title: '', text: '', question: '', theme: '', scenario: '', source: 'Modular Offline' };
+    let amberFontSizeRem = 1.25;
+    let autoScrollInterval = null;
+    let isAutoScrolling = false;
+    let sleepTimerTimeout = null;
+
+    // =========================================================================
+    // 3. SINTETIZADOR ACÚSTICO WEB AUDIO API PRÉ-SONO (OFFLINE NATIVO)
+    // =========================================================================
+    let audioCtx = null;
+    let soundSourceNode = null;
+    let soundGainNode = null;
+    let isRelaxAudioPlaying = false;
+
+    function getOrCreateAudioContext() {
+        if (!audioCtx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        return audioCtx;
+    }
+
+    function startRelaxationAudio(mode = 'brown') {
+        const ctx = getOrCreateAudioContext();
+        stopRelaxationAudio();
+
+        const bufferSize = ctx.sampleRate * 2;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+
+        if (mode === 'brown') {
+            // Ruído Marrom Profundo com integração
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.02 * white)) / 1.02;
+                lastOut = output[i];
+                output[i] *= 3.5;
+            }
+        } else if (mode === 'rain') {
+            // Chuva Mansa na Mata (Ruído rosa com modulação estocástica)
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+                b6 = white * 0.115926;
+            }
+        } else if (mode === 'wave') {
+            // Ondas Noturnas Suaves (modulação senoidal lenta de baixa frequência)
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.02 * white)) / 1.02;
+                lastOut = output[i];
+                const waveMod = Math.sin((i / bufferSize) * Math.PI * 4) * 0.35 + 0.65;
+                output[i] *= waveMod * 3.0;
+            }
+        } else {
+            // Grilos & Brisa da Floresta
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.015 * white)) / 1.015;
+                lastOut = output[i];
+                const cricketPulse = (i % (ctx.sampleRate / 8) < (ctx.sampleRate / 24)) ? (Math.sin(i * 0.3) * 0.08) : 0;
+                output[i] = output[i] * 1.8 + cricketPulse;
+            }
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = noiseBuffer;
+        source.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = mode === 'brown' ? 320 : (mode === 'rain' ? 800 : (mode === 'wave' ? 420 : 650));
+
+        soundGainNode = ctx.createGain();
+        const volSlider = document.getElementById('audio-volume-slider');
+        const volVal = volSlider ? parseInt(volSlider.value, 10) / 100 : 0.3;
+        soundGainNode.gain.setValueAtTime(volVal * 0.22, ctx.currentTime);
+
+        source.connect(filter);
+        filter.connect(soundGainNode);
+        soundGainNode.connect(ctx.destination);
+
+        source.start();
+        soundSourceNode = source;
+        isRelaxAudioPlaying = true;
+        updateAudioControlsUI(true);
+    }
+
+    function stopRelaxationAudio() {
+        if (soundSourceNode) {
+            try { soundSourceNode.stop(); soundSourceNode.disconnect(); } catch (_) {}
+            soundSourceNode = null;
+        }
+        isRelaxAudioPlaying = false;
+        updateAudioControlsUI(false);
+    }
+
+    function setRelaxationVolume(valPercent) {
+        if (!soundGainNode || !audioCtx) return;
+        const norm = Math.max(0, Math.min(1, valPercent / 100));
+        soundGainNode.gain.setValueAtTime(norm * 0.22, audioCtx.currentTime);
+    }
+
+    function updateAudioControlsUI(playing) {
+        const icon = document.getElementById('audio-play-icon');
+        const label = document.getElementById('audio-play-label');
+        if (icon) icon.textContent = playing ? '■' : '▶';
+        if (label) label.textContent = playing ? 'Pausar Som' : 'Áudio Relaxante';
+    }
+
+    function setSleepTimer(minutes) {
+        if (sleepTimerTimeout) clearTimeout(sleepTimerTimeout);
+        if (!minutes || minutes <= 0) return;
+
+        sleepTimerTimeout = setTimeout(() => {
+            if (soundGainNode && audioCtx && isRelaxAudioPlaying) {
+                // Fade out exponencial suave de 15 segundos
+                soundGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 15);
+                setTimeout(() => {
+                    stopRelaxationAudio();
+                    if (global.VaultCore) global.VaultCore.toast('Timer de sono concluído: áudio desligado suavemente.', 'info', 3000);
+                }, 15000);
+            }
+        }, minutes * 60 * 1000);
+
+        if (global.VaultCore) {
+            global.VaultCore.toast(`Sleep timer ativado para ${minutes} minutos com desligamento suave.`, 'success', 2500);
+        }
+    }
+
+    // =========================================================================
+    // 4. PALETAS TÉRMICAS LOW-BLUE-LIGHT DO LEITOR NOTURNO
+    // =========================================================================
+    const AMBER_PALETTES = {
+        amber: {
+            bg: '#110b06',
+            text: '#f5d5a3',
+            title: '#fbdca8',
+            boxBg: '#1b1209',
+            boxBorder: 'rgba(146, 64, 14, 0.4)'
+        },
+        red: {
+            bg: '#0c0402',
+            text: '#fca5a5',
+            title: '#f87171',
+            boxBg: '#180806',
+            boxBorder: 'rgba(185, 28, 28, 0.4)'
+        },
+        sage: {
+            bg: '#07100b',
+            text: '#bbf7d0',
+            title: '#86efac',
+            boxBg: '#0c1a11',
+            boxBorder: 'rgba(5, 150, 105, 0.4)'
+        },
+        dark: {
+            bg: '#020617',
+            text: '#cbd5e1',
+            title: '#f1f5f9',
+            boxBg: '#0f172a',
+            boxBorder: 'rgba(51, 65, 85, 0.6)'
+        }
+    };
+
+    function applyAmberThermalPalette(themeKey) {
+        const pal = AMBER_PALETTES[themeKey] || AMBER_PALETTES.amber;
+        const reader = document.getElementById('amber-night-reader');
+        const title = document.getElementById('amber-reader-title');
+        const body = document.getElementById('amber-reader-body');
+        const qBox = document.getElementById('amber-reader-question-box');
+        const qText = document.getElementById('amber-reader-question');
+
+        if (reader) reader.style.backgroundColor = pal.bg;
+        if (title) title.style.color = pal.title;
+        if (body) body.style.color = pal.text;
+        if (qBox) {
+            qBox.style.backgroundColor = pal.boxBg;
+            qBox.style.borderColor = pal.boxBorder;
+        }
+        if (qText) qText.style.color = pal.title;
+    }
+
+    function loadStories() {
+        const C = global.VaultCore;
+        if (!C || !C.store) return;
+        const arr = C.store.get(C.STORAGE_KEYS.CONTOS, []);
+        savedStories = Array.isArray(arr) ? arr : [];
+    }
+
+    function saveStories() {
+        const C = global.VaultCore;
+        if (!C || !C.store) return;
+        C.store.set(C.STORAGE_KEYS.CONTOS, savedStories);
+    }
+
+    // =========================================================================
+    // 5. MOTOR MODULAR OFFLINE DE GERAÇÃO EM 4 ATOS
+    // =========================================================================
+    function composeModularStory(params) {
+        const th = STORY_THEMES[params.themeKey] || STORY_THEMES.frustracao;
+        const sc = STORY_SCENARIOS[params.scenarioKey] || STORY_SCENARIOS.cerrado;
+        const protagonist = params.childName ? params.childName : 'pequeno(a) viajante';
+        const ageNum = Number(params.childAge) || 5;
+
+        const paceNote = ageNum <= 4
+            ? 'Cada palavra soava redonda, curtinha e mansa como um balanço devagar.'
+            : 'O silêncio gostoso da noite deixava cada pensamento desacelerar sem nenhuma pressa.';
+
+        const title = `${params.childName ? params.childName + ' e ' : 'O Segredo d'}o Descanso em ${sc.label.split('&')[0].trim()}`;
+
+        const act1 = `${sc.opening} ${paceNote} Ali caminhava ${protagonist}, sentindo a terra fresca sob os pés e observando as primeiras luzes douradas e calmas do entardecer.`;
+        const act2 = `Mais cedo naquele dia, ${protagonist} ${th.challengeAct}`;
+        const act3 = `Foi então que se aproximou ${sc.guide}. Com voz baixinha e acolhedora, mostrou um segredo da natureza: "${params.metaphor}". Juntos, praticaram a pausa mágica: ${protagonist} ${th.breathCue} Pouco a pouco, os ombros soltaram todo o peso e o coração encontrou um ritmo quentinho e seguro.`;
+        const act4 = `${sc.closing} Agora, com as pálpebras ficando pesadas, calmas e protegidas, só restava o aconchego do travesseiro e a certeza de que amanhã será um dia gentil.`;
+
+        const fullText = `${act1}\n\n${act2}\n\n${act3}\n\n${act4}`;
+
+        return {
+            title,
+            text: fullText,
+            question: params.question,
+            theme: th.label,
+            scenario: sc.label,
+            source: 'Motor Modular Offline'
+        };
+    }
+
+    function buildStructuredGeminiPrompt(params) {
+        const th = STORY_THEMES[params.themeKey] || STORY_THEMES.frustracao;
+        const sc = STORY_SCENARIOS[params.scenarioKey] || STORY_SCENARIOS.cerrado;
+        const who = params.childName ? `Protagonista/Referência: ${params.childName} (${params.childAge} anos)` : `Criança de ${params.childAge} anos`;
+
+        return [
+            'Atue como um escritor de literatura infantil terapêutica e neuropsicólogo do desenvolvimento infantil.',
+            `Escreva um CONTO NOTURNO DE INDUÇÃO AO SONO E REGULAÇÃO EMOCIONAL para ${who}.`,
+            '',
+            'PARÂMETROS CLÍNICOS E NARRATIVOS:',
+            `- Tema Emocional do Dia: ${th.label}`,
+            `- Cenário / Arquétipo: ${sc.label}`,
+            `- Metáfora Comportamental Central: ${params.metaphor}`,
+            `- Pergunta Final de Conexão Afetiva (sussurrada antes de dormir): "${params.question}"`,
+            '',
+            'ESTRUTURA OBRIGATÓRIA EM 4 ATOS FLUIDOS (sem subtítulos técnicos no texto):',
+            '1. Ambientação sensorial serena, cores quentes de entardecer/noite, redução gradual de estímulos.',
+            '2. Breve desafio emocional acolhido sem julgamento nem moralismo.',
+            '3. Encontro com a metáfora viva e uma microprática respiratória lúdica embutida na cena.',
+            '4. Desfecho hipnótico suave (ritmo lento, relaxamento muscular progressivo sutil) encerrando com a pergunta reflexiva final.',
+            '',
+            'Tom: poético, brasileiro, seguro, afetuoso, adequado para leitura em voz baixa na hora de dormir (350 a 500 palavras).'
+        ].join('\n');
+    }
+
+    async function generateWithGeminiLocal() {
+        const C = global.VaultCore;
+        const keyInput = document.getElementById('ct-gemini-key');
+        const apiKey = (keyInput ? keyInput.value : '').trim();
+
+        if (!apiKey) {
+            C.toast('Insira sua Gemini API Key local (salva apenas neste navegador) para usar a geração IA.', 'warning', 4200);
+            return;
+        }
+
+        C.store.updateProfile({ geminiApiKey: apiKey });
+        const params = collectStoryParams();
+        const prompt = buildStructuredGeminiPrompt(params);
+        const btn = document.getElementById('btn-ct-gemini-run');
+        const origHtml = btn.innerHTML;
+
+        try {
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Tecendo conto inédito...</span>`;
+            C.refreshIcons(btn);
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+            const resp = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        temperature: 0.78,
+                        maxOutputTokens: 1400
+                    }
+                })
+            });
+
+            if (!resp.ok) {
+                const errData = await resp.json().catch(() => ({}));
+                throw new Error((errData.error && errData.error.message) || `HTTP ${resp.status}`);
+            }
+
+            const data = await resp.json();
+            const generatedText = (
+                data.candidates &&
+                data.candidates[0] &&
+                data.candidates[0].content &&
+                data.candidates[0].content.parts &&
+                data.candidates[0].content.parts.map((p) => p.text || '').join('\n')
+            ) || '';
+
+            if (!generatedText.trim()) {
+                throw new Error('Resposta vazia da API Gemini.');
+            }
+
+            const sc = STORY_SCENARIOS[params.scenarioKey] || STORY_SCENARIOS.cerrado;
+            const th = STORY_THEMES[params.themeKey] || STORY_THEMES.frustracao;
+
+            currentComposedStory = {
+                title: `Conto Inédito — ${sc.label}`,
+                text: generatedText.trim(),
+                question: params.question,
+                theme: th.label,
+                scenario: sc.label,
+                source: 'Gemini 2.5 Flash (Client-Side)'
+            };
+
+            renderStoryOutput();
+            C.toast('Conto inédito gerado via Gemini 2.5 Flash!', 'success');
+        } catch (err) {
+            C.toast('Erro na chamada Gemini API: ' + err.message, 'error', 5000);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = origHtml;
+            C.refreshIcons(btn);
+        }
+    }
+
+    function collectStoryParams() {
+        const nameEl = document.getElementById('ct-child-name');
+        const ageEl = document.getElementById('ct-child-age');
+        const themeEl = document.getElementById('ct-theme');
+        const scEl = document.getElementById('ct-scenario');
+        const metaEl = document.getElementById('ct-metaphor');
+        const qEl = document.getElementById('ct-question');
+
+        return {
+            childName: nameEl ? nameEl.value.trim() : '',
+            childAge: ageEl ? (Number(ageEl.value) || 5) : 5,
+            themeKey: themeEl ? themeEl.value : 'frustracao',
+            scenarioKey: scEl ? scEl.value : 'cerrado',
+            metaphor: metaEl ? metaEl.value.trim() : (STORY_THEMES.frustracao.defaultMetaphor),
+            question: qEl ? qEl.value.trim() : (STORY_THEMES.frustracao.defaultQuestion)
+        };
+    }
+
+    function updateModularAndPrompt() {
+        const params = collectStoryParams();
+        currentComposedStory = composeModularStory(params);
+        const promptArea = document.getElementById('ct-prompt-output');
+        if (promptArea) {
+            promptArea.value = buildStructuredGeminiPrompt(params);
+        }
+        renderStoryOutput();
+    }
+
+    function renderStoryOutput() {
+        const C = global.VaultCore;
+        const titleEl = document.getElementById('ct-story-title');
+        const badgeEl = document.getElementById('ct-story-source-badge');
+        const bodyEl = document.getElementById('ct-story-body');
+        const qEl = document.getElementById('ct-story-question');
+
+        if (!titleEl || !bodyEl) return;
+        titleEl.textContent = currentComposedStory.title;
+        if (badgeEl) badgeEl.textContent = currentComposedStory.source;
+
+        const paragraphs = currentComposedStory.text
+            .split(/\n\s*\n/)
+            .map((p) => p.trim())
+            .filter(Boolean);
+
+        bodyEl.innerHTML = paragraphs
+            .map((p) => `<p class="leading-relaxed text-amber-100/90 text-sm sm:text-base">${C.esc(p)}</p>`)
+            .join('');
+
+        if (qEl) qEl.textContent = currentComposedStory.question;
+    }
+
+    // =========================================================================
+    // 6. LEITOR NOTURNO ÂMBAR DE TELA CHEIA (LOW-BLUE-LIGHT)
+    // =========================================================================
+    function openAmberNightReader(storyObj) {
+        const overlay = document.getElementById('amber-night-reader');
+        if (!overlay) return;
+        const C = global.VaultCore;
+        const target = storyObj || currentComposedStory;
+
+        const tEl = document.getElementById('amber-reader-title');
+        const bEl = document.getElementById('amber-reader-body');
+        const qEl = document.getElementById('amber-reader-question');
+
+        if (tEl) tEl.textContent = target.title;
+        if (bEl) {
+            bEl.style.fontSize = `${amberFontSizeRem}rem`;
+            const pars = target.text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+            bEl.innerHTML = pars.map((p) => `<p class="leading-relaxed my-4 text-justify font-serif">${C.esc(p)}</p>`).join('');
+        }
+        if (qEl) qEl.textContent = target.question;
+
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        applyAmberThermalPalette('amber');
+    }
+
+    function closeAmberNightReader() {
+        const overlay = document.getElementById('amber-night-reader');
+        if (overlay) overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        stopAutoScroll();
+    }
+
+    function toggleAutoScroll() {
+        const reader = document.getElementById('amber-night-reader');
+        if (!reader) return;
+        if (isAutoScrolling) {
+            stopAutoScroll();
+        } else {
+            isAutoScrolling = true;
+            autoScrollInterval = setInterval(() => {
+                reader.scrollBy({ top: 1, behavior: 'smooth' });
+                if (reader.scrollTop + reader.clientHeight >= reader.scrollHeight - 5) {
+                    stopAutoScroll();
+                }
+            }, 60);
+        }
+    }
+
+    function stopAutoScroll() {
+        if (autoScrollInterval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+        isAutoScrolling = false;
+    }
+
+    function renderSavedStoriesLibrary() {
+        const C = global.VaultCore;
+        const listEl = document.getElementById('ct-saved-library-list');
+        const countEl = document.getElementById('ct-library-count');
+        if (!listEl) return;
+
+        if (countEl) countEl.textContent = `${savedStories.length} contos salvos`;
+
+        if (savedStories.length === 0) {
+            listEl.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Sua biblioteca local está vazia. Gere um conto acima e clique em 'Salvar na Biblioteca Local'.</p>`;
+            return;
+        }
+
+        listEl.innerHTML = savedStories.map((item, idx) => `
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">${item.theme.split('(')[0].trim()}</span>
+                        <span class="text-[11px] font-mono text-slate-400">${C.formatDateBR(item.createdAt)}</span>
+                    </div>
+                    <div class="font-bold text-sm text-slate-200 truncate mt-1">${C.esc(item.title)}</div>
+                    <p class="text-xs text-slate-400 italic truncate mt-0.5">${C.esc(item.question)}</p>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" data-read-saved="${idx}" class="min-h-[36px] px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                        <span>Ler</span>
+                    </button>
+                    <button type="button" data-del-saved="${idx}" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 text-xs">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        listEl.querySelectorAll('[data-read-saved]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-read-saved'), 10);
+                if (savedStories[idx]) openAmberNightReader(savedStories[idx]);
+            });
+        });
+
+        listEl.querySelectorAll('[data-del-saved]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-del-saved'), 10);
+                if (confirm('Excluir este conto da biblioteca local?')) {
+                    savedStories.splice(idx, 1);
+                    saveStories();
+                    renderSavedStoriesLibrary();
+                    C.toast('Conto removido da biblioteca.', 'info');
+                }
+            });
+        });
+
+        C.refreshIcons(listEl);
+    }
+
+    // =========================================================================
+    // 7. MONTAGEM DA INTERFACE NA ABA 5 (tab-panel-contos)
+    // =========================================================================
+    function mountContosShell() {
+        const panel = document.getElementById('tab-panel-contos');
+        if (!panel) return;
+        const C = global.VaultCore;
+        const prof = C.store.getProfile();
+
+        panel.innerHTML = `
+            <div class="space-y-5 pb-20">
+                <!-- Cabeçalho -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pediatria do Sono &amp; Regulação Afetiva</span>
+                            <span class="text-xs font-mono text-slate-400">18 Metáforas Comportamentais</span>
+                        </div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gerador Estruturado de Cenas Terapêuticas &amp; Contos Noturnos</h2>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-open-amber-now" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="moon" class="w-4 h-4"></i>
+                            <span>Abrir Leitor Âmbar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <!-- Coluna Esquerda: Parâmetros Narrativos -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                            <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-amber-300">1. Parâmetros da Criança &amp; Cena</h3>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nome do(a) Protagonista (Opcional)</label>
+                                    <input type="text" id="ct-child-name" value="${C.esc(prof.childLabel || '')}" placeholder="Ex: Lucas, Sofia, Nina..."
+                                        class="w-full min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-100">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Idade</label>
+                                    <input type="number" id="ct-child-age" min="2" max="12" value="5"
+                                        class="w-full min-h-[40px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-center text-slate-100">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (18 Metáforas Clínicas) *</label>
+                                <select id="ct-theme" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-300">
+                                    ${Object.entries(STORY_THEMES).map(([k, v]) => `
+                                        <option value="${k}">${v.label}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Arquétipo &amp; Bioma Brasileiro *</label>
+                                <select id="ct-scenario" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200">
+                                    ${Object.entries(STORY_SCENARIOS).map(([k, v]) => `
+                                        <option value="${k}">${v.label}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Metáfora Comportamental Central (Editável)</label>
+                                <textarea id="ct-metaphor" rows="3" class="w-full p-2.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Pergunta Final de Conexão Afetiva (Sussurrada)</label>
+                                <input type="text" id="ct-question" class="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-200 italic">
+                            </div>
+
+                            <button type="button" id="btn-ct-compose-offline" class="w-full min-h-[44px] px-4 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                <span>Compor Imediatamente (Motor Offline em 4 Atos)</span>
+                            </button>
+                        </div>
+
+                        <!-- Opcional: Gemini Local -->
+                        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">Geração Opcional via Gemini Local</span>
+                                <span class="text-[10px] font-mono text-emerald-400">100% Client-Side</span>
+                            </div>
+                            <input type="password" id="ct-gemini-key" value="${C.esc(prof.geminiApiKey || '')}" placeholder="Cole sua Gemini API Key aqui..."
+                                class="w-full min-h-[38px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-cyan-300 font-mono">
+                            <button type="button" id="btn-ct-gemini-run" class="w-full min-h-[40px] px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="cpu" class="w-4 h-4"></i>
+                                <span>Gerar Variação Inédita com Gemini 2.5 Flash</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita: Saída do Conto & Biblioteca -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-4">
+                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                                <div>
+                                    <span id="ct-story-source-badge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Motor Modular</span>
+                                    <h3 id="ct-story-title" class="text-base sm:text-lg font-bold text-amber-200 mt-1">Carregando...</h3>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button type="button" id="btn-ct-save-library" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center gap-1">
+                                        <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
+                                        <span>Salvar Favorito</span>
+                                    </button>
+                                    <button type="button" id="btn-ct-read-amber" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-amber-500/10">
+                                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                                        <span>Leitor Âmbar</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="ct-story-body" class="space-y-3 font-serif"></div>
+
+                            <div class="bg-[#090d16] border border-amber-900/40 rounded-xl p-3.5 space-y-1">
+                                <span class="text-[11px] font-mono uppercase tracking-wider text-amber-500/80">Sussurro Final de Conexão:</span>
+                                <p id="ct-story-question" class="text-sm font-serif italic text-amber-200"></p>
+                            </div>
+                        </div>
+
+                        <!-- Biblioteca Local de Contos Favoritos -->
+                        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-slate-200">Biblioteca Local de Contos Favoritos</h3>
+                                <span id="ct-library-count" class="text-xs font-mono text-slate-400">0 contos salvos</span>
+                            </div>
+                            <div id="ct-saved-library-list" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        bindContosEvents();
+        updateModularAndPrompt();
+        renderSavedStoriesLibrary();
+        C.refreshIcons(panel);
+    }
+
+    function bindContosEvents() {
+        const C = global.VaultCore;
+
+        const themeSelect = document.getElementById('ct-theme');
+        if (themeSelect) {
+            themeSelect.addEventListener('change', () => {
+                const th = STORY_THEMES[themeSelect.value] || STORY_THEMES.frustracao;
+                const metaEl = document.getElementById('ct-metaphor');
+                const qEl = document.getElementById('ct-question');
+                if (metaEl) metaEl.value = th.defaultMetaphor;
+                if (qEl) qEl.value = th.defaultQuestion;
+                updateModularAndPrompt();
+            });
+            // Initial seed
+            const th = STORY_THEMES[themeSelect.value] || STORY_THEMES.frustracao;
+            const metaEl = document.getElementById('ct-metaphor');
+            const qEl = document.getElementById('ct-question');
+            if (metaEl) metaEl.value = th.defaultMetaphor;
+            if (qEl) qEl.value = th.defaultQuestion;
+        }
+
+        const scSelect = document.getElementById('ct-scenario');
+        if (scSelect) {
+            scSelect.addEventListener('change', () => updateModularAndPrompt());
+        }
+
+        const btnCompose = document.getElementById('btn-ct-compose-offline');
+        if (btnCompose) {
+            btnCompose.addEventListener('click', () => {
+                updateModularAndPrompt();
+                C.toast('Conto modular offline composto em 4 atos!', 'success', 2000);
+            });
+        }
+
+        const btnGemini = document.getElementById('btn-ct-gemini-run');
+        if (btnGemini) {
+            btnGemini.addEventListener('click', generateWithGeminiLocal);
+        }
+
+        const btnRead = document.getElementById('btn-ct-read-amber');
+        if (btnRead) {
+            btnRead.addEventListener('click', () => openAmberNightReader(currentComposedStory));
+        }
+
+        const btnOpenAmberNow = document.getElementById('btn-open-amber-now');
+        if (btnOpenAmberNow) {
+            btnOpenAmberNow.addEventListener('click', () => openAmberNightReader(currentComposedStory));
+        }
+
+        const btnSave = document.getElementById('btn-ct-save-library');
+        if (btnSave) {
+            btnSave.addEventListener('click', () => {
+                const copy = Object.assign({}, currentComposedStory, {
+                    id: 'CT-' + Date.now(),
+                    createdAt: C.todayISO()
+                });
+                savedStories.unshift(copy);
+                saveStories();
+                renderSavedStoriesLibrary();
+                C.toast('Conto salvo com sucesso na biblioteca local!', 'success');
+            });
+        }
+
+        // Eventos do Modal Âmbar
+        const btnAmberClose = document.getElementById('btn-amber-close');
+        if (btnAmberClose) btnAmberClose.addEventListener('click', closeAmberNightReader);
+
+        const btnFontUp = document.getElementById('btn-amber-font-up');
+        if (btnFontUp) {
+            btnFontUp.addEventListener('click', () => {
+                amberFontSizeRem = Math.min(2.0, amberFontSizeRem + 0.1);
+                const b = document.getElementById('amber-reader-body');
+                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+            });
+        }
+
+        const btnFontDown = document.getElementById('btn-amber-font-down');
+        if (btnFontDown) {
+            btnFontDown.addEventListener('click', () => {
+                amberFontSizeRem = Math.max(0.9, amberFontSizeRem - 0.1);
+                const b = document.getElementById('amber-reader-body');
+                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+            });
+        }
+
+        document.querySelectorAll('[data-amber-theme]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                applyAmberThermalPalette(btn.getAttribute('data-amber-theme'));
+            });
+        });
+
+        const btnAudioToggle = document.getElementById('btn-audio-toggle');
+        if (btnAudioToggle) {
+            btnAudioToggle.addEventListener('click', () => {
+                if (isRelaxAudioPlaying) {
+                    stopRelaxationAudio();
+                } else {
+                    const sel = document.getElementById('audio-mode-select');
+                    const mode = sel ? sel.value : 'brown';
+                    startRelaxationAudio(mode);
+                }
+            });
+        }
+
+        const audioModeSelect = document.getElementById('audio-mode-select');
+        if (audioModeSelect) {
+            audioModeSelect.addEventListener('change', () => {
+                if (isRelaxAudioPlaying) {
+                    startRelaxationAudio(audioModeSelect.value);
+                }
+            });
+        }
+
+        const volSlider = document.getElementById('audio-volume-slider');
+        if (volSlider) {
+            volSlider.addEventListener('input', (e) => {
+                setRelaxationVolume(parseInt(e.target.value, 10));
+            });
+        }
+
+        // Tecla ESC fecha leitor noturno
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('amber-night-reader');
+                if (overlay && !overlay.classList.contains('hidden')) {
+                    closeAmberNightReader();
+                }
+            }
+        });
+    }
+
+    function init() {
+        loadStories();
+        mountContosShell();
+
+        window.addEventListener('vault:restored', () => {
+            loadStories();
+            mountContosShell();
+        });
+    }
+
+    const api = {
+        init,
+        openAmberNightReader,
+        startRelaxationAudio,
+        stopRelaxationAudio,
+        setSleepTimer,
+        toggleAutoScroll
+    };
+
+    global.VaultTabContos = api;
+})(window);

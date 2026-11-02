@@ -360,11 +360,38 @@
                     <p class="text-xs text-emerald-300"><strong>FAREI (24h):</strong> ${C.esc(item.doAction)}</p>
                     <p class="text-xs text-rose-300"><strong>VETADO (24h):</strong> ${C.esc(item.dontAction)}</p>
                 </div>
-                <button type="button" data-df-del="${C.esc(item.id)}" class="self-end md:self-center min-h-[38px] px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs">
-                    Excluir
-                </button>
+                <div class="flex items-center gap-1.5 self-end md:self-center shrink-0">
+                    <button type="button" data-df-copy="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-xs font-mono">
+                        Copiar MD
+                    </button>
+                    <button type="button" data-df-del="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs">
+                        Excluir
+                    </button>
+                </div>
             </div>
         `).join('');
+
+        listEl.querySelectorAll('[data-df-copy]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-df-copy');
+                const target = desfusaoHistory.find((x) => x.id === id);
+                if (!target) return;
+                const md = [
+                    `### Veredito 24h • ${C.formatDateBR(target.date)} ${target.time || ''}`,
+                    `- **Ativação Autonômica:** ${target.autonomicLevel}/10`,
+                    `- **Fato Objetivo:** ${target.strictFact}`,
+                    `- **Leitura Emocional:** ${target.emotionalReading}`,
+                    `- **Distorções:** ${Array.isArray(target.distortions) ? target.distortions.join(', ') : 'Nenhuma'}`,
+                    `- **O QUE FAREI (24h):** ${target.doAction}`,
+                    `- **O QUE NÃO FAREI (24h):** ${target.dontAction}`
+                ].join('\n');
+                navigator.clipboard.writeText(md).then(() => {
+                    C.toast('Veredito copiado em Markdown para a área de transferência!', 'success');
+                }).catch(() => {
+                    C.toast('Não foi possível copiar automaticamente.', 'error');
+                });
+            });
+        });
 
         listEl.querySelectorAll('[data-df-del]').forEach((btn) => {
             btn.addEventListener('click', () => {
@@ -1284,18 +1311,27 @@
 
     function init() {
         loadDesfusaoHistory();
-        loadStories();
         mountDesfusaoShell();
-        mountContosShell();
+        if (global.VaultTabContos && typeof global.VaultTabContos.init === 'function') {
+            global.VaultTabContos.init();
+        } else {
+            loadStories();
+            mountContosShell();
+        }
 
         window.addEventListener('vault:restored', () => {
             loadDesfusaoHistory();
-            loadStories();
             mountDesfusaoShell();
-            mountContosShell();
+            if (global.VaultTabContos && typeof global.VaultTabContos.init === 'function') {
+                global.VaultTabContos.init();
+            } else {
+                loadStories();
+                mountContosShell();
+            }
             global.VaultCore.refreshIcons();
         });
     }
 
     global.VaultTabDesfusaoContos = { init };
+    global.VaultTabDesfusao = { init: () => { loadDesfusaoHistory(); mountDesfusaoShell(); } };
 })(window);

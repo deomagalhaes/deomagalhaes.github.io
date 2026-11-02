@@ -48,6 +48,8 @@
         expenseClinic: 2600,    // Nível 2: Custos fixos do consultório
         expenseFamily: 3500,    // Nível 3: Saúde, educação e alimentação familiar
         expenseLifestyle: 2000, // Nível 4: Viagens, lazer e desenvolvimento pessoal
+        expenseCustom: 0,       // Nível 5: Opcional / Reserva Estratégica & Projetos
+        nameCustom: '',
 
         // Parâmetros de Monte Carlo
         mcVolatility: 13.0,     // Desvio padrão anual da carteira (%)
@@ -206,12 +208,22 @@
         }
 
         return {
+            initPatrimony,
+            monthlyContribution: aporte,
+            weeklySessions: wSessions,
+            weeksPerMonth: wPerMonth,
+            indirectWeeklyHours: indWeekly,
+            avgTicket: ticket,
             monthlySessions,
             indirectMonthlyHours,
             totalEffectiveHours,
             grossRevenue,
             netRevenue,
             costs,
+            annualEssential,
+            annualCosts,
+            annualNet,
+            annualFat,
             netPerSession,
             netEffectiveHourly,
             savingsRate,
@@ -593,6 +605,20 @@
                 badgeClass: 'bg-purple-500/15 text-purple-300 border-purple-500/30'
             }
         ];
+
+        if (Number(inputs.expenseCustom) > 0 || (inputs.nameCustom && inputs.nameCustom.trim())) {
+            tiers.push({
+                id: 'custom',
+                level: 5,
+                name: inputs.nameCustom || 'Nível 5 • Reserva Estratégica & Projetos',
+                desc: 'Aportes em novos projetos, filantropia, investimentos especiais e expansão patrimonial.',
+                cost: Math.max(0, Number(inputs.expenseCustom) || 0),
+                inputKey: 'expenseCustom',
+                nameKey: 'nameCustom',
+                color: 'rose',
+                badgeClass: 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+            });
+        }
 
         let accumulated = 0;
         const processed = tiers.map((t) => {
@@ -1647,9 +1673,9 @@
         const boost = !!inputs.stressBoostContribution;
 
         const baseModel = computeFinancialModel();
-        const basePatrimony = baseModel.initPatrimony || 120000;
+        const basePatrimony = baseModel.initPatrimony !== undefined ? baseModel.initPatrimony : (Number(inputs.currentPatrimony) || 120000);
         const baseMonthlyRate = baseModel.monthlyRate;
-        const baseMonthlyPassive = baseModel.currentPassiveMonthly;
+        const baseMonthlyPassive = basePatrimony * baseMonthlyRate;
         const costsClinic = baseModel.costs;
         const currentAporte = Number(inputs.monthlyContribution) || 4200;
 
@@ -1661,20 +1687,27 @@
         let clinicalPrescription = '';
 
         if (scenarioKey === 'crash30') {
-            title = 'Crash Sistêmico de Mercado (−30% Ações, −20% FIIs)';
-            dropPatrimonyPct = 25.0;
-            dividendShockPct = 12.0;
-            desc = 'Queda aguda similar aos episódios de Março/2020 (COVID) ou Outubro/2008. As cotações na tela desabam, mas os ativos continuam gerando caixa operacional.';
-            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Proibido resgatar qualquer cota no fundo. Os proventos continuam caindo na conta. Manter ou aumentar aportes para comprar ativos com desconto de 30% acelera a curva de recuperação.';
+            title = 'Crash Sistêmico de Mercado (−30% Geral: Ações e FIIs)';
+            dropPatrimonyPct = 30.0;
+            dividendShockPct = 15.0;
+            desc = 'Queda severa e rápida de 30% nas cotações gerais de bolsa e fundos imobiliários, similar aos episódios de Março/2020 (COVID) ou Outubro/2008. As cotações na tela desabam, mas os imóveis físicos e as concessões continuam operacionais gerando fluxo de caixa.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Proibido resgatar qualquer cota ou vender em pânico. Não interromper os aportes. Os proventos continuam caindo e, ao reinvestir a preços 30% mais baratos, cada real compra mais cotas e acelera expressivamente o Crossover futuro.';
+        } else if (scenarioKey === 'crash40') {
+            title = 'Crash Severo Subprime (−40% Ações / −30% FIIs)';
+            dropPatrimonyPct = 35.0;
+            dividendShockPct = 20.0;
+            desc = 'Contração aguda de liquidez internacional com recuo de 40% em ações e 30% em FIIs. Cenário de estresse financeiro histórico.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Acionar a reserva de oportunidade com disciplina cirúrgica. Blindar o consultório mantendo a agenda clínica estável. Historicamente, pânicos dessa magnitude abrem as maiores janelas de acúmulo de patrimônio do século.';
         } else if (scenarioKey === 'stagflation') {
             title = 'Estagflação Severa (IPCA 9.5% a.a. / Juro Real 2.8% a.a.)';
-            dropPatrimonyPct = 10.0;
+            dropPatrimonyPct = 12.0;
             inflationSurprisePct = 5.5;
+            dividendShockPct = 8.0;
             desc = 'Aumento acentuado do custo operacional do consultório e do custo de vida familiar, reduzindo temporariamente a taxa de poupança clínica.';
             clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Reajustar o ticket médio de consultas e psicometria anualmente pelo IPCA. Concentrar novos aportes em Tesouro IPCA+ com juro real contratado.';
         } else if (scenarioKey === 'fii_drop') {
             title = 'Crise Imobiliária / Vacância Severa de FIIs (−25% Yield)';
-            dropPatrimonyPct = 15.0;
+            dropPatrimonyPct = 18.0;
             dividendShockPct = 25.0;
             desc = 'Aumento de vacância física em lajes corporativas e renegociação forçada de aluguéis reduzem temporariamente os dividendos mensais da carteira.';
             clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Não girar a carteira. Os imóveis de tijolo permanecem íntegros e se recuperam no ciclo de expansão seguinte. Proteger com recebíveis (CRIs) de alta qualidade.';
@@ -1682,6 +1715,7 @@
             title = 'Choque Customizado Personalizado';
             dropPatrimonyPct = Math.max(0, Math.min(60, customDrop));
             inflationSurprisePct = Math.max(0, Math.min(15, customInf));
+            dividendShockPct = Math.min(40, dropPatrimonyPct * 0.5);
             desc = `Simulação manual com queda de ${dropPatrimonyPct}% no valor dos ativos e impacto de +${inflationSurprisePct}% nos custos.`;
             clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Testar a robustez atuarial permite calibrar sua reserva de oportunidade sem ansiedade reativa.';
         }
@@ -1702,6 +1736,16 @@
         const lostCapital = basePatrimony - stressedPatrimony;
         const monthsToRecover = effectiveAporte > 0 ? Math.round(lostCapital / effectiveAporte) : 0;
 
+        // Recuperação dinâmica com juros compostos a preços depreciados:
+        let simPat = stressedPatrimony;
+        let monthsToRecoverDynamic = 0;
+        const maxScan = 360;
+        while (simPat < basePatrimony && monthsToRecoverDynamic < maxScan) {
+            simPat = simPat * (1 + stressedMonthlyRate) + effectiveAporte;
+            monthsToRecoverDynamic++;
+        }
+        if (monthsToRecoverDynamic >= maxScan) monthsToRecoverDynamic = monthsToRecover;
+
         return {
             scenarioKey,
             title,
@@ -1719,6 +1763,7 @@
             stressedClinicCoveragePct,
             sessionsNeededStressed,
             monthsToRecover,
+            monthsToRecoverDynamic,
             effectiveAporte,
             boost
         };
@@ -1747,11 +1792,44 @@
                         <!-- Seletor Rápido de Cenário -->
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
                             <select id="stress-scenario-select" class="min-h-[42px] px-3.5 py-2 rounded-xl bg-[#090d16] border border-rose-500/40 font-mono text-xs font-bold text-rose-200 focus:outline-none">
-                                <option value="crash30" ${st.scenarioKey === 'crash30' ? 'selected' : ''}>Crash de Mercado (−30% Ações / −20% FIIs)</option>
+                                <option value="crash30" ${st.scenarioKey === 'crash30' ? 'selected' : ''}>Crash de Mercado (−30% Geral: Ações e FIIs)</option>
+                                <option value="crash40" ${st.scenarioKey === 'crash40' ? 'selected' : ''}>Crash Severo Subprime (−40% Ações / −30% FIIs)</option>
                                 <option value="stagflation" ${st.scenarioKey === 'stagflation' ? 'selected' : ''}>Estagflação (IPCA 9.5% / Juro Real 2.8%)</option>
                                 <option value="fii_drop" ${st.scenarioKey === 'fii_drop' ? 'selected' : ''}>Crise de Vacância FIIs (−25% Yield)</option>
                                 <option value="custom" ${st.scenarioKey === 'custom' ? 'selected' : ''}>Choque Personalizado Manual</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Indicador Visual de Resiliência & Barra Térmica -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-rose-900/30">
+                        <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3 space-y-1.5">
+                            <div class="flex justify-between items-center text-xs font-mono">
+                                <span class="text-slate-400">Patrimônio: Base vs Sob Choque</span>
+                                <span class="text-rose-400 font-bold">${C.formatNum(100 - st.dropPatrimonyPct, 1)}% retido</span>
+                            </div>
+                            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden flex">
+                                <div class="h-full bg-gradient-to-r from-emerald-500 to-cyan-500" style="width: ${100 - st.dropPatrimonyPct}%"></div>
+                                <div class="h-full bg-rose-500/60" style="width: ${st.dropPatrimonyPct}%"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                                <span>Sob Choque: ${C.formatBRL(st.stressedPatrimony)}</span>
+                                <span>Base: ${C.formatBRL(st.basePatrimony)}</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3 space-y-1.5">
+                            <div class="flex justify-between items-center text-xs font-mono">
+                                <span class="text-slate-400">Termômetro de Imunização Clínica</span>
+                                <span class="font-bold ${st.stressedClinicCoveragePct >= 100 ? 'text-emerald-400' : 'text-amber-400'}">${C.formatNum(st.stressedClinicCoveragePct, 1)}%</span>
+                            </div>
+                            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <div class="h-full ${st.stressedClinicCoveragePct >= 100 ? 'bg-emerald-400' : (st.stressedClinicCoveragePct >= 50 ? 'bg-amber-400' : 'bg-rose-500')}" style="width: ${Math.min(100, st.stressedClinicCoveragePct)}%"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                                <span>Renda Sob Choque: ${C.formatBRL(st.stressedMonthlyPassive)}/mês</span>
+                                <span>Custos Consultório: ${C.formatBRL(st.stressedClinicCosts)}/mês</span>
+                            </div>
                         </div>
                     </div>
 
@@ -1835,13 +1913,13 @@
                     <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="text-xs font-mono text-slate-400">Recomposição Plena</div>
                         <div class="text-xl font-mono font-bold text-cyan-300">
-                            ~${st.monthsToRecover} meses
+                            ~${st.monthsToRecoverDynamic} meses <span class="text-xs font-normal text-slate-400 font-sans">(dinâmica)</span>
                         </div>
-                        <div class="text-[11px] font-mono text-slate-400">
-                            Com aporte de ${C.formatBRL(st.effectiveAporte)}/mês
+                        <div class="text-[11px] font-mono text-slate-300">
+                            Apenas aportes mecânicos: ~${st.monthsToRecover}m
                         </div>
                         <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800">
-                            ${st.boost ? 'Economia de ~6 meses via aporte na baixa' : 'Sem considerar recuperação orgânica de preços'}
+                            Aporte: ${C.formatBRL(st.effectiveAporte)}/mês ${st.boost ? '• (+20% anticíclico)' : ''}
                         </div>
                     </div>
                 </div>
@@ -2212,4 +2290,5 @@
         computeFinancialModel,
         fetchLiveMarketData
     };
+    global.VaultTabFinancas = global.VaultTabIndependencia;
 })(window);

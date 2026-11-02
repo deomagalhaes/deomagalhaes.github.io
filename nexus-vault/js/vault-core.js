@@ -18,7 +18,8 @@
         CONTOS: 'dm_vault_contos',
         INDEPENDENCIA: 'dm_vault_independencia',
         PSICOMETRIA: 'dm_vault_psicometria',
-        PROFILE: 'dm_vault_profile'
+        PROFILE: 'dm_vault_profile',
+        AGENDA: 'dm_vault_agenda'
     };
 
     const ALL_MANAGED_KEYS = [
@@ -28,7 +29,8 @@
         STORAGE_KEYS.CONTOS,
         STORAGE_KEYS.INDEPENDENCIA,
         STORAGE_KEYS.PSICOMETRIA,
-        STORAGE_KEYS.PROFILE
+        STORAGE_KEYS.PROFILE,
+        STORAGE_KEYS.AGENDA
     ];
 
     // =========================================================================
@@ -594,7 +596,7 @@
     // =========================================================================
     // 6. NAVEGAÇÃO ENTRE AS 6 ABAS & CONTROLE DO SHELL DE BLOQUEIO
     // =========================================================================
-    const VALID_TABS = ['psicometria', 'bonsai', 'viola', 'desfusao', 'contos', 'independencia'];
+    const VALID_TABS = ['psicometria', 'bonsai', 'viola', 'desfusao', 'contos', 'independencia', 'agenda'];
 
     function switchTab(tabId, savePref = true) {
         const target = VALID_TABS.includes(tabId) ? tabId : 'psicometria';
@@ -795,7 +797,7 @@
         document.addEventListener('keydown', (e) => {
             if (!isUnlocked()) return;
             if (e.altKey && !e.ctrlKey && !e.metaKey) {
-                if (e.key >= '1' && e.key <= '6') {
+                if (e.key >= '1' && e.key <= '7') {
                     e.preventDefault();
                     const idx = parseInt(e.key, 10) - 1;
                     if (VALID_TABS[idx]) switchTab(VALID_TABS[idx]);
