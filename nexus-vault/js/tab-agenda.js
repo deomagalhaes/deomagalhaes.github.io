@@ -3,7 +3,7 @@
  * 100% Client-Side • Zero-Backend • LGPD Compliant • Sincronização Google Agenda
  *
  * Módulos Integrados:
- * 1. Sincronizador Bidirecional de Agendamentos (Google Calendar Cache + LocalStorage)
+ * 1. Sincronizador Multicamadas (API Local, Script Seed JS, Cache JSON, Arquivo iCal .ics e FileReader Nativo)
  * 2. Motor de Apuração Mensal por Paciente (Contagem de Sessões, Datas e Total a Cobrar)
  * 3. Hub de Cobrança Humanista com Integração WhatsApp (1-Click com Chave PIX)
  * 4. Emissor de Recibos Profissionais & Declarações de Comparecimento (ABNT / CRP 04/42784)
@@ -43,7 +43,7 @@
         config: Object.assign({}, DEFAULT_CONFIG),
         selectedYear: new Date().getFullYear(),
         selectedMonth: new Date().getMonth(), // 0-indexed (0 = Jan, 10 = Nov)
-        activeSubTab: 'faturamento', // 'faturamento', 'cronograma', 'pacientes', 'config'
+        activeSubTab: 'faturamento', // 'faturamento', 'cronograma', 'pacientes'
         searchTerm: '',
         statusFilter: 'all', // 'all', 'pendente', 'cobrado', 'pago', 'isento'
         events: [],
@@ -51,7 +51,8 @@
         patientsConfig: {}, // { [pacienteNome]: { customPrice, guardian, phone, notes, isIgnored, category } }
         monthlyStatus: {},  // { [yearMonth_paciente]: { status, paidAmount, paymentDate, paymentMethod, receiptNum, notes } }
         lastSyncedAt: null,
-        syncStatus: 'idle' // 'idle', 'loading', 'success', 'error'
+        syncStatus: 'idle', // 'idle', 'loading', 'success', 'error'
+        lastSyncSource: ''
     };
 
     // =========================================================================
@@ -68,6 +69,7 @@
             if (Array.isArray(saved.manualSessions)) state.manualSessions = saved.manualSessions;
             if (Array.isArray(saved.events) && saved.events.length > 0) state.events = saved.events;
             if (saved.lastSyncedAt) state.lastSyncedAt = saved.lastSyncedAt;
+            if (saved.lastSyncSource) state.lastSyncSource = saved.lastSyncSource;
         }
     }
 
@@ -80,50 +82,205 @@
             monthlyStatus: state.monthlyStatus,
             manualSessions: state.manualSessions,
             events: state.events,
-            lastSyncedAt: state.lastSyncedAt
+            lastSyncedAt: state.lastSyncedAt,
+            lastSyncSource: state.lastSyncSource
         });
     }
 
     // =========================================================================
-    // 4. SINCRONIZAÇÃO COM O ARQUIVO LOCAL CACHE / GOOGLE AGENDA
+    // 4. MOTOR MULTICAMADAS DE IMPORTAÇÃO E SINCRONIZAÇÃO
     // =========================================================================
-    async function syncFromLocalCache(showToast = true) {
+    /**
+     * Importa eventos estruturados mesclando com os existentes
+     */
+    function importEvents(eventsArray, lastSyncedAt, sourceName = 'Google Agenda', showToast = true) {
+        if (!Array.isArray(eventsArray) || eventsArray.length === 0) return 0;
+
+        const eventMap = new Map();
+        // Preserva eventos já existentes
+        state.events.forEach(e => {
+            if (e && e.id) eventMap.set(e.id, e);
+        });
+        // Insere ou atualiza novos
+        eventsArray.forEach(e => {
+            if (e && e.id) eventMap.set(e.id, e);
+        });
+
+        state.events = Array.from(eventMap.values());
+        state.lastSyncedAt = lastSyncedAt || new Date().toISOString();
+        state.lastSyncSource = sourceName;
+        state.syncStatus = 'success';
+        saveState();
+
+        if (showToast && global.VaultCore) {
+            global.VaultCore.toast(`Sincronizado via ${sourceName}! ${eventsArray.length} atendimentos carregados.`, 'success');
+        }
+
+        renderSyncButtonState();
+        render();
+        return eventsArray.length;
+    }
+
+    /**
+     * Sincronização automática com fallback inteligente
+     */
+    async function syncFromGoogleCalendar(interactive = true) {
         state.syncStatus = 'loading';
         renderSyncButtonState();
 
+        // Camada 1: Tenta o Endpoint da API Local (scripts/server.ps1)
+        // Se o servidor local estiver ativo, ele executa gcalendar ao vivo na nuvem!
         try {
-            // Tenta buscar o arquivo gerado pelo script powershell
-            const resp = await fetch('data/agenda-cache.json', { cache: 'no-store' });
-            if (!resp.ok) {
-                throw new Error('Arquivo de cache local data/agenda-cache.json não encontrado ou inacessível.');
-            }
-            const data = await resp.json();
-            if (Array.isArray(data.events)) {
-                // Mescla eventos garantindo integridade
-                const eventMap = new Map();
-                state.events.forEach(e => eventMap.set(e.id, e));
-                data.events.forEach(e => eventMap.set(e.id, e));
-                state.events = Array.from(eventMap.values());
-                state.lastSyncedAt = data.lastSyncedAt || new Date().toISOString();
-                state.syncStatus = 'success';
-                saveState();
-
-                if (showToast && global.VaultCore) {
-                    global.VaultCore.toast(`Sincronizado com Google Agenda! ${data.events.length} atendimentos carregados.`, 'success');
+            const apiUrls = [
+                'http://localhost:8080/api/sync-gcalendar',
+                '/api/sync-gcalendar'
+            ];
+            for (const url of apiUrls) {
+                try {
+                    const resp = await fetch(url, { cache: 'no-store' });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (Array.isArray(data.events) && data.events.length > 0) {
+                            importEvents(data.events, data.lastSyncedAt, 'Google Calendar (Ao Vivo)', interactive);
+                            return true;
+                        }
+                    }
+                } catch {
+                    // segue para próxima tentativa
                 }
-            } else {
-                throw new Error('Formato do arquivo agenda-cache.json inválido.');
             }
-        } catch (err) {
-            state.syncStatus = 'error';
-            console.warn('[VaultAgenda] Falha ao ler cache local:', err.message);
-            if (showToast && global.VaultCore) {
-                global.VaultCore.toast('Cache local ainda não sincronizado via PowerShell. Utilize o botão para carregar dados.', 'warning');
-            }
-        } finally {
-            renderSyncButtonState();
-            render();
+        } catch {
+            // endpoint inativo
         }
+
+        // Camada 2: Tenta ler o arquivo data/agenda-cache.json via fetch HTTP
+        try {
+            const cacheUrls = [
+                'data/agenda-cache.json',
+                '/nexus-vault/data/agenda-cache.json',
+                '../nexus-vault/data/agenda-cache.json'
+            ];
+            for (const url of cacheUrls) {
+                try {
+                    const resp = await fetch(url, { cache: 'no-store' });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (Array.isArray(data.events) && data.events.length > 0) {
+                            importEvents(data.events, data.lastSyncedAt, 'Cache Local (agenda-cache.json)', interactive);
+                            return true;
+                        }
+                    }
+                } catch {
+                    // segue para próxima tentativa
+                }
+            }
+        } catch {
+            // segue
+        }
+
+        // Camada 3: Carrega do Seed JS integrado (window.__VAULT_AGENDA_SEED__)
+        // Funciona 100% mesmo em file:// sem nenhuma restrição de CORS!
+        if (window.__VAULT_AGENDA_SEED__ && Array.isArray(window.__VAULT_AGENDA_SEED__.events) && window.__VAULT_AGENDA_SEED__.events.length > 0) {
+            importEvents(window.__VAULT_AGENDA_SEED__.events, window.__VAULT_AGENDA_SEED__.lastSyncedAt, 'Cache Integrado da Agenda', interactive);
+            return true;
+        }
+
+        // Camada 4: Se não encontrou dados e o usuário clicou interativamente, abre modal com opções guiadas
+        state.syncStatus = 'error';
+        renderSyncButtonState();
+
+        if (interactive) {
+            openSyncModal();
+        }
+        return false;
+    }
+
+    /**
+     * Parser nativo para arquivos iCalendar (.ics) exportados do Google Agenda
+     */
+    function parseICalendar(icsContent) {
+        const events = [];
+        const lines = icsContent.split(/\r\n|\n|\r/);
+        let inEvent = false;
+        let current = {};
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            if (line.startsWith('BEGIN:VEVENT')) {
+                inEvent = true;
+                current = { id: 'ics_' + Math.random().toString(36).substr(2, 9) };
+            } else if (line.startsWith('END:VEVENT')) {
+                if (current.summary && current.start) {
+                    events.push(current);
+                }
+                inEvent = false;
+            } else if (inEvent) {
+                if (line.startsWith('SUMMARY:')) {
+                    current.summary = line.substring(8).trim();
+                } else if (line.startsWith('UID:')) {
+                    current.id = line.substring(4).trim();
+                } else if (line.startsWith('DTSTART')) {
+                    const val = line.split(':')[1];
+                    current.start = parseIcsDate(val);
+                } else if (line.startsWith('DTEND')) {
+                    const val = line.split(':')[1];
+                    current.end = parseIcsDate(val);
+                } else if (line.startsWith('STATUS:')) {
+                    current.status = line.substring(7).trim().toLowerCase();
+                }
+            }
+        }
+        return events;
+    }
+
+    function parseIcsDate(icsDateStr) {
+        if (!icsDateStr) return new Date().toISOString();
+        if (icsDateStr.length === 8) {
+            const y = icsDateStr.substr(0, 4);
+            const m = icsDateStr.substr(4, 2);
+            const d = icsDateStr.substr(6, 2);
+            return `${y}-${m}-${d}T10:00:00`;
+        }
+        const y = icsDateStr.substr(0, 4);
+        const m = icsDateStr.substr(4, 2);
+        const d = icsDateStr.substr(6, 2);
+        const h = icsDateStr.substr(9, 2) || '00';
+        const min = icsDateStr.substr(11, 2) || '00';
+        const s = icsDateStr.substr(13, 2) || '00';
+        return `${y}-${m}-${d}T${h}:${min}:${s}Z`;
+    }
+
+    /**
+     * Processa arquivo selecionado via FileReader nativo (sem restrições de CORS)
+     */
+    function handleFileSelected(file) {
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const content = evt.target.result;
+            try {
+                if (file.name.toLowerCase().endsWith('.ics')) {
+                    const parsed = parseICalendar(content);
+                    if (parsed.length > 0) {
+                        importEvents(parsed, new Date().toISOString(), `Arquivo iCal (${file.name})`, true);
+                    } else {
+                        throw new Error('Nenhum evento encontrado no arquivo .ics.');
+                    }
+                } else {
+                    const json = JSON.parse(content);
+                    const events = Array.isArray(json) ? json : (json.events || []);
+                    if (events.length > 0) {
+                        importEvents(events, json.lastSyncedAt || new Date().toISOString(), `Arquivo JSON (${file.name})`, true);
+                    } else {
+                        throw new Error('Nenhum atendimento encontrado no JSON.');
+                    }
+                }
+            } catch (err) {
+                if (global.VaultCore) global.VaultCore.toast(`Erro ao ler arquivo: ${err.message}`, 'error');
+            }
+        };
+        reader.readAsText(file);
     }
 
     // =========================================================================
@@ -153,11 +310,9 @@
     function isIgnoredTitle(title) {
         const clean = (title || '').trim().toLowerCase();
         if (!clean) return true;
-        // Se configurado explicitamente no cadastro
         if (state.patientsConfig[title] && state.patientsConfig[title].isIgnored) {
             return true;
         }
-        // Verifica contra lista de termos ignorados
         return DEFAULT_IGNORED_KEYWORDS.some(kw => clean === kw || clean.startsWith(kw + ' ') || clean.endsWith(' ' + kw));
     }
 
@@ -213,7 +368,7 @@
         const patientMap = new Map();
 
         allSessions.forEach(session => {
-            if (session.isIgnored) return; // Não incluir compromissos pessoais no faturamento
+            if (session.isIgnored) return;
 
             const patientName = session.title;
             if (!patientMap.has(patientName)) {
@@ -282,7 +437,6 @@
             }
         });
 
-        // Ordenar alfabeticamente por nome de paciente
         patientReports.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
 
         return {
@@ -319,10 +473,10 @@
             btn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i><span>Sincronizado</span>`;
             btn.classList.remove('opacity-75');
         } else if (state.syncStatus === 'error') {
-            btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i><span>Sincronizar</span>`;
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 text-amber-400"></i><span>Sincronizar Agenda</span>`;
             btn.classList.remove('opacity-75');
         } else {
-            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 text-cyan-300"></i><span>Sincronizar Google Agenda</span>`;
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 text-sky-400"></i><span>Sincronizar Google Agenda</span>`;
             btn.classList.remove('opacity-75');
         }
         if (global.VaultCore) global.VaultCore.refreshIcons();
@@ -345,11 +499,12 @@
         });
 
         // Formatação do último sync
-        let syncLabel = 'Nunca sincronizado';
+        let syncLabel = 'Pronto para sincronizar';
         if (state.lastSyncedAt) {
             const syncD = new Date(state.lastSyncedAt);
             if (!isNaN(syncD.getTime())) {
-                syncLabel = `Última sincronização: ${formatDateBR(syncD)} às ${formatTimeBR(syncD)}`;
+                const src = state.lastSyncSource ? ` (${state.lastSyncSource})` : '';
+                syncLabel = `Última sincronização: ${formatDateBR(syncD)} às ${formatTimeBR(syncD)}${src}`;
             }
         }
 
@@ -403,12 +558,20 @@
                                 </button>
                             </div>
 
-                            <!-- Botão Sincronizar Google Agenda -->
+                            <!-- Botão Sincronizar Google Agenda (Ao Vivo / Cache / Guiado) -->
                             <button type="button" id="btn-agenda-sync-trigger"
                                 class="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/35 text-sky-200 font-semibold text-xs flex items-center gap-2 transition shadow-sm">
                                 <i data-lucide="refresh-cw" class="w-4 h-4 text-sky-400"></i>
                                 <span>Sincronizar Google Agenda</span>
                             </button>
+
+                            <!-- Botão Carregar Arquivo da Agenda (.json ou .ics) -->
+                            <button type="button" id="btn-agenda-pick-file-trigger" title="Carregar arquivo exportado do Google Agenda (.json ou .ics)"
+                                class="min-h-[40px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition">
+                                <i data-lucide="file-up" class="w-4 h-4 text-cyan-400"></i>
+                                <span class="hidden sm:inline">Importar Arquivo</span>
+                            </button>
+                            <input type="file" id="input-agenda-file-picker" accept=".json,.ics,text/calendar,application/json" class="hidden">
 
                             <!-- Botão Adicionar Sessão Manual -->
                             <button type="button" id="btn-agenda-add-manual"
@@ -541,6 +704,7 @@
             </div>
 
             <!-- MODAIS INTEGRADOS -->
+            ${renderSyncModal()}
             ${renderWhatsAppModal()}
             ${renderReceiptModal()}
             ${renderConfigModal()}
@@ -609,9 +773,9 @@
                         <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mx-auto">
                             <i data-lucide="inbox" class="w-6 h-6"></i>
                         </div>
-                        <p class="text-sm font-semibold text-slate-300">Nenhum atendimento encontrado para os critérios selecionados.</p>
+                        <p class="text-sm font-semibold text-slate-300">Nenhum atendimento apurado para este mês ou filtro.</p>
                         <p class="text-xs text-slate-500 max-w-md mx-auto">
-                            Verifique o mês selecionado, utilize o botão <strong class="text-cyan-400">Sincronizar Google Agenda</strong> ou crie uma sessão manual.
+                            Clique em <strong class="text-sky-400">Sincronizar Google Agenda</strong> para atualizar ou <strong class="text-cyan-400">Importar Arquivo</strong> para carregar seus dados na hora.
                         </p>
                     </div>
                 ` : `
@@ -642,7 +806,6 @@
         const initials = p.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
         const datesPreview = p.sessions.map(s => formatDateBR(s.date)).join(', ');
 
-        // Status Badge Style
         let statusBadge = '';
         if (p.billingStatus === 'pago') {
             statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 mx-auto justify-center w-fit"><i data-lucide="check" class="w-3 h-3"></i>Pago</span>`;
@@ -820,7 +983,6 @@
      * SUB-ABA 3: GESTÃO DE CADASTRO E VALORES POR PACIENTE
      */
     function renderPacientesConfigView(report) {
-        // Coleta todos os pacientes únicos que já apareceram
         const allPatients = new Set(report.patientReports.map(p => p.name));
         Object.keys(state.patientsConfig).forEach(name => allPatients.add(name));
         const patientsList = Array.from(allPatients).sort((a, b) => a.localeCompare(b, 'pt-BR'));
@@ -902,6 +1064,92 @@
     // =========================================================================
     // 8. MODAIS INTERATIVOS
     // =========================================================================
+
+    /**
+     * MODAL 0: SINCRONIZAÇÃO ASSISTIDA & IMPORTADOR DE ARQUIVO
+     */
+    function renderSyncModal() {
+        return `
+            <div id="modal-agenda-sync" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-lg p-5 sm:p-6 space-y-4 shadow-2xl">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-100">Sincronização com o Google Calendar</h3>
+                                <p class="text-xs text-slate-400">Opções para carregar e sincronizar seus atendimentos</p>
+                            </div>
+                        </div>
+                        <button type="button" id="btn-close-sync-modal" class="min-h-[36px] min-w-[36px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3 text-xs text-slate-300">
+                        <!-- Opção A: Importar Arquivo Local na hora -->
+                        <div class="p-3.5 rounded-xl bg-[#090d16] border border-sky-500/30 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-sky-300 flex items-center gap-1.5">
+                                    <i data-lucide="file-up" class="w-4 h-4"></i>
+                                    Opção 1: Selecionar Arquivo da Agenda (.json ou .ics)
+                                </span>
+                                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-800/60">Sem bloqueio CORS</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Selecione o arquivo <code class="font-mono text-cyan-300">agenda-cache.json</code> gerado em seu computador ou qualquer exportação <code class="font-mono text-cyan-300">.ics</code> do Google Calendar.
+                            </p>
+                            <button type="button" id="btn-sync-modal-choose-file"
+                                class="w-full min-h-[38px] px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition">
+                                <i data-lucide="upload" class="w-4 h-4"></i>
+                                <span>Selecionar Arquivo da Agenda no Computador</span>
+                            </button>
+                        </div>
+
+                        <!-- Opção B: Sincronização ao Vivo via Servidor Local -->
+                        <div class="p-3.5 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-200 flex items-center gap-1.5">
+                                    <i data-lucide="server" class="w-4 h-4 text-emerald-400"></i>
+                                    Opção 2: Sincronizar via Servidor Local (Ao Vivo)
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Se o servidor local estiver em execução (<code class="font-mono text-slate-300">powershell scripts/server.ps1</code>), clique abaixo para buscar os dados ao vivo na nuvem do Google Agenda:
+                            </p>
+                            <button type="button" id="btn-sync-modal-retry-server"
+                                class="w-full min-h-[38px] px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 font-semibold text-xs flex items-center justify-center gap-2 border border-slate-700 transition">
+                                <i data-lucide="refresh-cw" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Testar Conexão com Servidor Local</span>
+                            </button>
+                        </div>
+
+                        <!-- Opção C: Comando PowerShell Direto -->
+                        <div class="p-3.5 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                            <span class="font-bold text-slate-300 flex items-center gap-1.5">
+                                <i data-lucide="terminal" class="w-4 h-4 text-amber-400"></i>
+                                Opção 3: Executar Atualização via Terminal
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <input type="text" readonly value="powershell scripts/sync-agenda-vault.ps1" id="input-sync-cmd-copy"
+                                    class="w-full px-2.5 py-1.5 rounded bg-black/50 border border-slate-800 font-mono text-[11px] text-slate-300">
+                                <button type="button" id="btn-copy-sync-cmd"
+                                    class="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono shrink-0">
+                                    Copiar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function openSyncModal() {
+        const modal = document.getElementById('modal-agenda-sync');
+        if (modal) modal.classList.remove('hidden');
+    }
 
     /**
      * MODAL 1: MENSAGEM DE WHATSAPP COBRANÇA
@@ -997,7 +1245,6 @@
 
                     <!-- Folha do Recibo (Clean A4 Print Ready) -->
                     <div id="receipt-print-area" class="bg-white text-slate-900 rounded-xl p-6 sm:p-8 space-y-6 shadow-inner font-sans border border-slate-200">
-                        <!-- Cabeçalho Timbrado Profissional -->
                         <div class="border-b-2 border-slate-900 pb-4 flex justify-between items-start">
                             <div>
                                 <h4 class="text-lg font-bold tracking-tight text-slate-950 uppercase">${DEFAULT_CONFIG.clinicTitle}</h4>
@@ -1010,22 +1257,18 @@
                             </div>
                         </div>
 
-                        <!-- Título do Documento -->
                         <div class="text-center py-1">
                             <h5 class="text-base font-bold uppercase tracking-widest text-slate-900">DECLARAÇÃO DE RECIBO DE HONORÁRIOS CLÍNICOS</h5>
                             <p id="receipt-doc-number" class="text-xs font-mono text-slate-600 mt-0.5"></p>
                         </div>
 
-                        <!-- Corpo do Recibo -->
                         <div id="receipt-doc-body" class="text-xs sm:text-sm text-slate-800 leading-relaxed space-y-3"></div>
 
-                        <!-- Discriminação das Sessões Realizadas -->
                         <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5">
                             <div class="text-[11px] font-mono uppercase font-bold text-slate-700">Discriminação Detalhada dos Atendimentos:</div>
                             <div id="receipt-doc-sessions-list" class="text-xs text-slate-700 space-y-0.5"></div>
                         </div>
 
-                        <!-- Assinatura e Data -->
                         <div class="pt-8 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div id="receipt-doc-date" class="text-xs text-slate-600 font-serif"></div>
                             <div class="text-center">
@@ -1238,7 +1481,63 @@
         const btnSync = document.getElementById('btn-agenda-sync-trigger');
         if (btnSync) {
             btnSync.addEventListener('click', () => {
-                syncFromLocalCache(true);
+                syncFromGoogleCalendar(true);
+            });
+        }
+
+        // --- Seletor de Arquivos Nativo (Importar Arquivo) ---
+        const btnPickFile = document.getElementById('btn-agenda-pick-file-trigger');
+        const filePicker = document.getElementById('input-agenda-file-picker');
+        if (btnPickFile && filePicker) {
+            btnPickFile.addEventListener('click', () => {
+                filePicker.click();
+            });
+            filePicker.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    handleFileSelected(e.target.files[0]);
+                }
+            });
+        }
+
+        // --- Modal de Sincronização Assistida ---
+        const btnCloseSyncModal = document.getElementById('btn-close-sync-modal');
+        if (btnCloseSyncModal) {
+            btnCloseSyncModal.addEventListener('click', () => {
+                const modal = document.getElementById('modal-agenda-sync');
+                if (modal) modal.classList.add('hidden');
+            });
+        }
+
+        const btnSyncModalChooseFile = document.getElementById('btn-sync-modal-choose-file');
+        if (btnSyncModalChooseFile && filePicker) {
+            btnSyncModalChooseFile.addEventListener('click', () => {
+                const modal = document.getElementById('modal-agenda-sync');
+                if (modal) modal.classList.add('hidden');
+                filePicker.click();
+            });
+        }
+
+        const btnSyncModalRetryServer = document.getElementById('btn-sync-modal-retry-server');
+        if (btnSyncModalRetryServer) {
+            btnSyncModalRetryServer.addEventListener('click', async () => {
+                const modal = document.getElementById('modal-agenda-sync');
+                if (modal) modal.classList.add('hidden');
+                const ok = await syncFromGoogleCalendar(true);
+                if (!ok && global.VaultCore) {
+                    global.VaultCore.toast('Servidor local não respondeu. Utilize a Opção 1 para carregar o arquivo.', 'warning');
+                }
+            });
+        }
+
+        const btnCopySyncCmd = document.getElementById('btn-copy-sync-cmd');
+        if (btnCopySyncCmd) {
+            btnCopySyncCmd.addEventListener('click', () => {
+                const inp = document.getElementById('input-sync-cmd-copy');
+                if (inp) {
+                    inp.select();
+                    navigator.clipboard.writeText(inp.value);
+                    if (global.VaultCore) global.VaultCore.toast('Comando copiado! Execute no PowerShell.', 'success');
+                }
             });
         }
 
@@ -1455,14 +1754,12 @@
         recipientInp.value = p.guardian || p.name;
         phoneInp.value = p.phone || '';
 
-        // Formatação das datas com hora
         const datesFormatted = p.sessions.map(s => {
             const dateStr = formatDateBR(s.date);
             const timeStr = formatTimeBR(s.date);
             return `• ${dateStr} às ${timeStr}`;
         }).join('\n');
 
-        // Interpolação do template configurado
         const tpl = state.config.whatsappTemplate;
         const msg = tpl
             .replace(/{paciente}/g, p.name)
@@ -1479,13 +1776,11 @@
         textarea.value = msg;
         modal.classList.remove('hidden');
 
-        // Fechar Modal
         const btnClose = document.getElementById('btn-close-wa-modal');
         if (btnClose) {
             btnClose.onclick = () => modal.classList.add('hidden');
         }
 
-        // Copiar Texto
         const btnCopy = document.getElementById('btn-wa-copy');
         if (btnCopy) {
             btnCopy.onclick = async () => {
@@ -1500,7 +1795,6 @@
             };
         }
 
-        // Abrir WhatsApp Web / App
         const btnOpenChat = document.getElementById('btn-wa-open-chat');
         if (btnOpenChat) {
             btnOpenChat.onclick = () => {
@@ -1512,7 +1806,6 @@
                     saveState();
                 }
 
-                // Salva telefone se editado
                 const phone = phoneInp.value.replace(/\D/g, '');
                 if (phone) {
                     if (!state.patientsConfig[p.name]) state.patientsConfig[p.name] = {};
@@ -1675,16 +1968,26 @@
     // =========================================================================
     function init() {
         loadState();
+
+        // Se houver __VAULT_AGENDA_SEED__ carregado via script tag (funciona nativamente em file:// e http://),
+        // importa automaticamente garantindo que os atendimentos estejam na tela imediatamente!
+        if (window.__VAULT_AGENDA_SEED__ && Array.isArray(window.__VAULT_AGENDA_SEED__.events) && window.__VAULT_AGENDA_SEED__.events.length > 0) {
+            importEvents(window.__VAULT_AGENDA_SEED__.events, window.__VAULT_AGENDA_SEED__.lastSyncedAt, 'Cache Integrado', false);
+        }
+
         render();
 
-        // Tenta sincronizar silenciosamente do cache se existir
-        syncFromLocalCache(false);
+        // Tenta sincronização silenciosa via servidor local ou cache
+        syncFromGoogleCalendar(false);
 
         // Ouve desbloqueio do Vault
         window.addEventListener('vault:unlocked', () => {
             loadState();
+            if (window.__VAULT_AGENDA_SEED__ && Array.isArray(window.__VAULT_AGENDA_SEED__.events) && window.__VAULT_AGENDA_SEED__.events.length > 0) {
+                importEvents(window.__VAULT_AGENDA_SEED__.events, window.__VAULT_AGENDA_SEED__.lastSyncedAt, 'Cache Integrado', false);
+            }
             render();
-            syncFromLocalCache(false);
+            syncFromGoogleCalendar(false);
         });
 
         window.addEventListener('vault:tab-changed', (e) => {
@@ -1697,7 +2000,8 @@
     global.VaultTabAgenda = {
         init,
         render,
-        syncFromLocalCache,
+        syncFromGoogleCalendar,
+        importEvents,
         getMonthlyReport
     };
 
