@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 25: Matriz de Atenção Dividida e Alternância Cognitiva – Deo Magalhães</title>
+    <meta name="description" content="Treine flexibilidade cognitiva, alternância de tarefas e controle inibitório frontoparietal no jogo neuropsicológico de Atenção Dividida.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.78em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .matrix-display-arena {
+            background: #001219;
+            border: 3px solid #0a9396;
+            border-radius: 14px;
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            color: white;
+            box-shadow: 0 8px 30px rgba(0, 18, 25, 0.35);
+            position: relative;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .active-rule-indicator {
+            display: inline-block;
+            background: #0a9396;
+            color: #ffffff;
+            font-size: 0.85em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(10, 147, 150, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .rule-indicator-amber {
+            background: #ee9b00 !important;
+            color: #001219 !important;
+            box-shadow: 0 2px 10px rgba(238, 155, 0, 0.4) !important;
+        }
+
+        .rule-indicator-dual {
+            background: linear-gradient(135deg, #0a9396, #ee9b00) !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 12px rgba(148, 210, 189, 0.5) !important;
+        }
+
+        .stimulus-card-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            margin: 15px 0;
+        }
+
+        .stimulus-token {
+            font-size: 4em;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            width: 110px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .token-letter {
+            color: #94d2bd;
+            border-color: #0a9396;
+        }
+
+        .token-number {
+            color: #ee9b00;
+            border-color: #ca6702;
+        }
+
+        .token-highlight {
+            transform: scale(1.08);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .prompt-instruction {
+            font-size: 1.15em;
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .action-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto 20px auto;
+        }
+
+        .btn-game-choice {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-game-choice:hover:not(:disabled) {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.25);
+        }
+
+        .btn-game-choice:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-subhint {
+            font-size: 0.75em;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .feedback-banner {
+            display: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .feedback-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-control-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-neuro-action {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary-action {
+            background: #005f73;
+            color: white;
+        }
+
+        .btn-primary-action:hover {
+            background: #0a9396;
+        }
+
+        .btn-outline-action {
+            background: transparent;
+            border: 2px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .btn-outline-action:hover {
+            border-color: #005f73;
+            color: #005f73;
+        }
+
+        .neuro-explanation-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+            margin-top: 30px;
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .final-results-modal {
+            display: none;
+            background: #ffffff;
+            border: 2px solid #0a9396;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 25px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .progress-bar-wrap {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #005f73, #0a9396);
+            width: 10%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container" style="max-width: 860px; padding: 40px 20px;">
+            <header style="text-align: center; margin-bottom: 25px;">
+                <span style="display:inline-block; background:#e0f2fe; color:#0369a1; padding:4px 14px; border-radius:20px; font-size:0.85em; font-weight:700; text-transform:uppercase; margin-bottom:10px;">Treino Cognitivo Diário • Dia 25</span>
+                <h1 style="color:#005f73; font-size:2.1em; margin-bottom:10px;">Matriz de Atenção Dividida e Alternância Cognitiva</h1>
+                <p style="color:#64748b; font-size:1.05em; max-width:680px; margin:0 auto;">Exercite a alternância de tarefas (Task-Switching), a inibição de interferência cruzada e a agilidade atencional frontoparietal.</p>
+            </header>
+
+            <div class="progress-bar-wrap">
+                <div id="progressBar" class="progress-bar-fill"></div>
+            </div>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Fase</span>
+                        <span class="stat-badge-value" id="valLevel">1 / 10</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Pontuação</span>
+                        <span class="stat-badge-value" id="valScore">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Acurácia</span>
+                        <span class="stat-badge-value" id="valAccuracy">100%</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Combo</span>
+                        <span class="stat-badge-value" id="valStreak">0 🔥</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Tempo Médio</span>
+                        <span class="stat-badge-value" id="valReactionTime">-- ms</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Recorde</span>
+                        <span class="stat-badge-value" id="valHighScore">0</span>
+                    </div>
+                </div>
+
+                <!-- Arena de Estímulos -->
+                <div class="matrix-display-arena" id="arenaBox">
+                    <div id="ruleIndicator" class="active-rule-indicator">Regra Ativa: Canal Verbal (Letra)</div>
+                    
+                    <div class="stimulus-card-box">
+                        <div id="tokenLetter" class="stimulus-token token-letter token-highlight">A</div>
+                        <div id="tokenNumber" class="stimulus-token token-number">4</div>
+                    </div>
+
+                    <div id="promptInstruction" class="prompt-instruction">Classifique a Letra: Vogal ou Consoante?</div>
+                </div>
+
+                <!-- Banner de Feedback -->
+                <div id="feedbackBanner" class="feedback-banner"></div>
+
+                <!-- Botões de Resposta -->
+                <div class="action-buttons-grid" id="actionButtons">
+                    <button class="btn-game-choice" id="btnChoiceA">
+                        <span id="labelChoiceA">Vogal</span>
+                        <span class="btn-subhint" id="hintChoiceA">[A, E, I, O, U]</span>
+                    </button>
+                    <button class="btn-game-choice" id="btnChoiceB">
+                        <span id="labelChoiceB">Consoante</span>
+                        <span class="btn-subhint" id="hintChoiceB">[B, C, D, F, G...]</span>
+                    </button>
+                </div>
+
+                <!-- Barra de Controles -->
+                <div class="btn-control-bar">
+                    <button class="btn-neuro-action btn-primary-action" id="btnNext" style="display:none;">Próximo Estímulo →</button>
+                    <button class="btn-neuro-action btn-outline-action" id="btnSoundToggle">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                    <button class="btn-neuro-action btn-outline-action" id="btnRestart">Reiniciar Treino</button>
+                </div>
+
+                <!-- Modal de Conclusão Final -->
+                <div id="finalModal" class="final-results-modal">
+                    <h2 style="color:#005f73; margin-top:0;">🏆 Treino de Alternância Concluído!</h2>
+                    <p style="font-size:1.1em; color:#0f172a;" id="finalScoreMsg">Você finalizou as 10 fases com excelente rendimento.</p>
+                    <div style="display:flex; justify-content:center; gap:25px; margin:20px 0; flex-wrap:wrap;">
+                        <div style="background:#f8fafc; padding:15px 25px; border-radius:8px; border:1px solid #e2e8f0;">
+                            <div style="font-size:0.8em; color:#64748b; font-weight:700;">ACURÁCIA FINAL</div>
+                            <div style="font-size:1.6em; font-weight:800; color:#005f73;" id="finalAccVal">--%</div>
+                        </div>
+                        <div style="background:#f8fafc; padding:15px 25px; border-radius:8px; border:1px solid #e2e8f0;">
+                            <div style="font-size:0.8em; color:#64748b; font-weight:700;">CUSTO DE TROCA (MÉDIO)</div>
+                            <div style="font-size:1.6em; font-weight:800; color:#ee9b00;" id="finalSwitchCostVal">-- ms</div>
+                        </div>
+                        <div style="background:#f8fafc; padding:15px 25px; border-radius:8px; border:1px solid #e2e8f0;">
+                            <div style="font-size:0.8em; color:#64748b; font-weight:700;">PONTUAÇÃO TOTAL</div>
+                            <div style="font-size:1.6em; font-weight:800; color:#0a9396;" id="finalTotalScore">--</div>
+                        </div>
+                    </div>
+                    <button class="btn-neuro-action btn-primary-action" onclick="resetGame()">Jogar Novamente ↺</button>
+                </div>
+            </div>
+
+            <!-- Explicação Neurocognitiva -->
+            <div class="neuro-explanation-box">
+                <h3 style="color:#005f73; margin-top:0;">Fundamentação Neuropsicológica</h3>
+                <p>
+                    A capacidade de alternar rapidamente o foco entre regras conflitantes (paradigma de Rogers & Monsell) depende da integridade do <strong>Córtex Pré-Frontal Dorsolateral (DLPFC)</strong> e do <strong>Sulco Intraparietal</strong>. Quando a regra muda repentinamente (do canal de letras para o canal numérico), o cérebro experimenta o que a neurociência cognitiva denomina <em>switch cost</em> (custo de alternância): um ligeiro retardo no tempo de resposta e uma demanda acrescida de controle inibitório sobre o estímulo recém-ignorado.
+                </p>
+                <p style="margin-bottom:0;">
+                    Ao treinar repetidamente a inibição ativa de distratores concorrentes, você fortalece a reserva executiva, reduz a vulnerabilidade ao resíduo de atenção e aprimora a agilidade mental para tarefas multicontexto no cotidiano.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica do Jogo com Web Audio API -->
+    <script>
+        // Web Audio API Synthesizer
+        const SoundFX = {
+            ctx: null,
+            enabled: true,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            },
+            playTone(freq, type, duration, gainVal) {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            },
+            success() {
+                this.playTone(523.25, 'triangle', 0.1, 0.12); // C5
+                setTimeout(() => this.playTone(659.25, 'triangle', 0.1, 0.12), 70); // E5
+                setTimeout(() => this.playTone(783.99, 'triangle', 0.18, 0.15), 140); // G5
+            },
+            error() {
+                this.playTone(220, 'sawtooth', 0.15, 0.12);
+                setTimeout(() => this.playTone(185, 'sawtooth', 0.25, 0.12), 100);
+            },
+            switchTask() {
+                this.playTone(440, 'sine', 0.06, 0.08);
+            },
+            levelUp() {
+                this.playTone(440, 'sine', 0.08, 0.1);
+                setTimeout(() => this.playTone(554.37, 'sine', 0.08, 0.1), 75);
+                setTimeout(() => this.playTone(659.25, 'sine', 0.08, 0.1), 150);
+                setTimeout(() => this.playTone(880, 'sine', 0.25, 0.15), 225);
+            }
+        };
+
+        // Banco Determinístico de Fases (10 Fases Matematicamente Validadas)
+        const TRIALS = [
+            // Fase 1: Foco Verbal Isolado (Letra)
+            { level: 1, rule: 'letter', letter: 'E', number: '4', correct: 'A', letterType: 'vogal', numberType: 'par', name: 'Fase 1: Foco Verbal (Vogal)' },
+            // Fase 2: Foco Numérico Isolado (Número)
+            { level: 2, rule: 'number', letter: 'K', number: '7', correct: 'B', letterType: 'consoante', numberType: 'impar', name: 'Fase 2: Foco Numérico (Ímpar)' },
+            // Fase 3: Alternância Previsível (Canal Verbal)
+            { level: 3, rule: 'letter', letter: 'M', number: '2', correct: 'B', letterType: 'consoante', numberType: 'par', name: 'Fase 3: Alternância (Letra Consoante)' },
+            // Fase 4: Alternância Previsível (Canal Numérico)
+            { level: 4, rule: 'number', letter: 'O', number: '8', correct: 'A', letterType: 'vogal', numberType: 'par', name: 'Fase 4: Alternância (Número Par)' },
+            // Fase 5: Alternância com Estímulo Incongruente
+            { level: 5, rule: 'letter', letter: 'U', number: '3', correct: 'A', letterType: 'vogal', numberType: 'impar', name: 'Fase 5: Troca de Set (Letra Vogal)' },
+            // Fase 6: Alternância Numérica com Conflito
+            { level: 6, rule: 'number', letter: 'T', number: '6', correct: 'A', letterType: 'consoante', numberType: 'par', name: 'Fase 6: Inibição Frontal (Número Par)' },
+            // Fase 7: Alternância Rápida Imprevisível
+            { level: 7, rule: 'letter', letter: 'R', number: '9', correct: 'B', letterType: 'consoante', numberType: 'impar', name: 'Fase 7: Troca Imediata (Consoante)' },
+            // Fase 8: Alternância com Paridade Ímpar
+            { level: 8, rule: 'number', letter: 'A', number: '5', correct: 'B', letterType: 'vogal', numberType: 'impar', name: 'Fase 8: Paridade Ímpar' },
+            // Fase 9: Atenção Dividida - Checagem Dual (Vogal E Par?)
+            { level: 9, rule: 'dual', letter: 'I', number: '4', correct: 'A', letterType: 'vogal', numberType: 'par', name: 'Fase 9: Atenção Dividida (Vogal + Par)' },
+            // Fase 10: Desafio Final Dual (Vogal E Par? Neste teste: Consoante + Par -> Falso)
+            { level: 10, rule: 'dual', letter: 'Z', number: '8', correct: 'B', letterType: 'consoante', numberType: 'par', name: 'Fase 10: Desafio Final Frontoparietal' }
+        ];
+
+        // Estado do Jogo
+        let currentTrialIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let totalAnswered = 0;
+        let totalCorrect = 0;
+        let reactionTimes = [];
+        let trialStartTime = 0;
+        let answered = false;
+
+        const highScoreKey = 'atencaoDivididaHighScore_v1';
+        let highScore = parseInt(localStorage.getItem(highScoreKey) || '0', 10);
+
+        // Elementos DOM
+        const valLevel = document.getElementById('valLevel');
+        const valScore = document.getElementById('valScore');
+        const valAccuracy = document.getElementById('valAccuracy');
+        const valStreak = document.getElementById('valStreak');
+        const valReactionTime = document.getElementById('valReactionTime');
+        const valHighScore = document.getElementById('valHighScore');
+        const progressBar = document.getElementById('progressBar');
+
+        const arenaBox = document.getElementById('arenaBox');
+        const ruleIndicator = document.getElementById('ruleIndicator');
+        const tokenLetter = document.getElementById('tokenLetter');
+        const tokenNumber = document.getElementById('tokenNumber');
+        const promptInstruction = document.getElementById('promptInstruction');
+        const feedbackBanner = document.getElementById('feedbackBanner');
+
+        const btnChoiceA = document.getElementById('btnChoiceA');
+        const btnChoiceB = document.getElementById('btnChoiceB');
+        const labelChoiceA = document.getElementById('labelChoiceA');
+        const labelChoiceB = document.getElementById('labelChoiceB');
+        const hintChoiceA = document.getElementById('hintChoiceA');
+        const hintChoiceB = document.getElementById('hintChoiceB');
+
+        const btnNext = document.getElementById('btnNext');
+        const btnSoundToggle = document.getElementById('btnSoundToggle');
+        const soundIcon = document.getElementById('soundIcon');
+        const btnRestart = document.getElementById('btnRestart');
+        const finalModal = document.getElementById('finalModal');
+
+        valHighScore.innerText = highScore.toString();
+
+        function renderTrial(index) {
+            if (index >= TRIALS.length) {
+                finishGame();
+                return;
+            }
+
+            answered = false;
+            feedbackBanner.style.display = 'none';
+            btnNext.style.display = 'none';
+
+            const trial = TRIALS[index];
+
+            // Atualiza barra de progresso
+            progressBar.style.width = `${((index + 1) / TRIALS.length) * 100}%`;
+            valLevel.innerText = `${trial.level} / ${TRIALS.length}`;
+
+            // Define estímulos
+            tokenLetter.innerText = trial.letter;
+            tokenNumber.innerText = trial.number;
+
+            // Configura modo de regra
+            if (trial.rule === 'letter') {
+                SoundFX.switchTask();
+                ruleIndicator.className = 'active-rule-indicator';
+                ruleIndicator.innerText = 'Regra Ativa: Canal Verbal (Letra)';
+                tokenLetter.className = 'stimulus-token token-letter token-highlight';
+                tokenNumber.className = 'stimulus-token token-number';
+                promptInstruction.innerText = 'Classifique a Letra: Vogal ou Consoante?';
+
+                labelChoiceA.innerText = 'Vogal';
+                hintChoiceA.innerText = '[A, E, I, O, U]';
+                labelChoiceB.innerText = 'Consoante';
+                hintChoiceB.innerText = '[B, C, D, F, G...]';
+                btnChoiceA.style.display = 'flex';
+                btnChoiceB.style.display = 'flex';
+            } else if (trial.rule === 'number') {
+                SoundFX.switchTask();
+                ruleIndicator.className = 'active-rule-indicator rule-indicator-amber';
+                ruleIndicator.innerText = 'Regra Ativa: Canal Numérico (Número)';
+                tokenLetter.className = 'stimulus-token token-letter';
+                tokenNumber.className = 'stimulus-token token-number token-highlight';
+                promptInstruction.innerText = 'Classifique o Número: Par ou Ímpar?';
+
+                labelChoiceA.innerText = 'Par';
+                hintChoiceA.innerText = '[2, 4, 6, 8]';
+                labelChoiceB.innerText = 'Ímpar';
+                hintChoiceB.innerText = '[1, 3, 5, 7, 9]';
+                btnChoiceA.style.display = 'flex';
+                btnChoiceB.style.display = 'flex';
+            } else if (trial.rule === 'dual') {
+                SoundFX.switchTask();
+                ruleIndicator.className = 'active-rule-indicator rule-indicator-dual';
+                ruleIndicator.innerText = 'Atenção Dividida: Checagem Simultânea';
+                tokenLetter.className = 'stimulus-token token-letter token-highlight';
+                tokenNumber.className = 'stimulus-token token-number token-highlight';
+                promptInstruction.innerText = 'Condição Dual: A Letra é VOGAL E o Número é PAR?';
+
+                labelChoiceA.innerText = 'SIM (Ambos)';
+                hintChoiceA.innerText = '[Vogal E Par]';
+                labelChoiceB.innerText = 'NÃO (Falso)';
+                hintChoiceB.innerText = '[Pelo menos um falha]';
+                btnChoiceA.style.display = 'flex';
+                btnChoiceB.style.display = 'flex';
+            }
+
+            trialStartTime = performance.now();
+        }
+
+        function handleChoice(choice) {
+            if (answered) return;
+            answered = true;
+
+            const rt = Math.round(performance.now() - trialStartTime);
+            reactionTimes.push(rt);
+
+            const trial = TRIALS[currentTrialIndex];
+            const isCorrect = (choice === trial.correct);
+            totalAnswered++;
+
+            feedbackBanner.style.display = 'block';
+
+            if (isCorrect) {
+                totalCorrect++;
+                streak++;
+                score += 100 + (streak * 25);
+                if (rt < 1200) score += 50; // Bônus de velocidade pré-frontal
+
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem(highScoreKey, highScore.toString());
+                    valHighScore.innerText = highScore.toString();
+                }
+
+                SoundFX.success();
+                feedbackBanner.className = 'feedback-banner feedback-success';
+                feedbackBanner.innerHTML = `<strong>✨ Resposta Correta!</strong> Tempo de resposta: ${rt} ms. Alternância realizada com sucesso.`;
+            } else {
+                streak = 0;
+                SoundFX.error();
+                feedbackBanner.className = 'feedback-banner feedback-error';
+                feedbackBanner.innerHTML = `<strong>✕ Interferência Cognitiva Detectada!</strong> Atenção ao critério ativo da fase (${trial.rule.toUpperCase()}).`;
+            }
+
+            // Atualiza métricas
+            valScore.innerText = score.toString();
+            valStreak.innerText = `${streak} 🔥`;
+            const acc = Math.round((totalCorrect / totalAnswered) * 100);
+            valAccuracy.innerText = `${acc}%`;
+
+            const avgRt = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+            valReactionTime.innerText = `${avgRt} ms`;
+
+            if (currentTrialIndex < TRIALS.length - 1) {
+                btnNext.style.display = 'inline-block';
+                btnNext.innerText = 'Próximo Estímulo →';
+            } else {
+                SoundFX.levelUp();
+                btnNext.style.display = 'inline-block';
+                btnNext.innerText = 'Ver Relatório Cognitivo 📊';
+            }
+        }
+
+        function finishGame() {
+            finalModal.style.display = 'block';
+            finalModal.scrollIntoView({ behavior: 'smooth' });
+
+            const acc = Math.round((totalCorrect / totalAnswered) * 100);
+            const avgRt = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+
+            document.getElementById('finalAccVal').innerText = `${acc}%`;
+            document.getElementById('finalSwitchCostVal').innerText = `${avgRt} ms`;
+            document.getElementById('finalTotalScore').innerText = score.toString();
+        }
+
+        function resetGame() {
+            currentTrialIndex = 0;
+            score = 0;
+            streak = 0;
+            totalAnswered = 0;
+            totalCorrect = 0;
+            reactionTimes = [];
+            finalModal.style.display = 'none';
+
+            valScore.innerText = '0';
+            valStreak.innerText = '0 🔥';
+            valAccuracy.innerText = '100%';
+            valReactionTime.innerText = '-- ms';
+
+            renderTrial(0);
+        }
+
+        // Listeners
+        btnChoiceA.addEventListener('click', () => handleChoice('A'));
+        btnChoiceB.addEventListener('click', () => handleChoice('B'));
+
+        btnNext.addEventListener('click', () => {
+            currentTrialIndex++;
+            renderTrial(currentTrialIndex);
+        });
+
+        btnRestart.addEventListener('click', resetGame);
+
+        btnSoundToggle.addEventListener('click', () => {
+            SoundFX.enabled = !SoundFX.enabled;
+            soundIcon.innerText = SoundFX.enabled ? '🔊' : '🔇';
+            btnSoundToggle.innerHTML = `<span id="soundIcon">${SoundFX.enabled ? '🔊' : '🔇'}</span> Som ${SoundFX.enabled ? 'Ativo' : 'Mudo'}`;
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTrial(0);
+        });
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>

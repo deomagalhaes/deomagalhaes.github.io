@@ -32,7 +32,8 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-23** | **Inventário de Dependência de Validação Externa e Esquema de Aprovação** | Apego Inseguro, Busca Compulsiva por Dopamina Social e Esquemas | `testes/teste-validacao-externa.html` | ✅ Concluído |
 | **T-24** | **Inventário de Validação Proposicional e Raciocínio Lógico Básico** | Lógica Proposicional, Princípios Clássicos e Detecção de Falácias | `testes/teste-validacao-proposicional.html` | ✅ Concluído |
 | **T-25** | **Escala de Rigor Epistêmico e Dedução Avançada** | Lógica de Predicados, Paradoxos e Inferência Formal | `testes/teste-rigor-epistemico-avancado.html` | ✅ Concluído |
-| **T-26** | **Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / ITQ)** | Respostas Traumáticas, Desregulação Afetiva e Alterações do Self | `testes/teste-trauma-complexo-cptsd.html` | ⏳ *Próximo da fila* |
+| **T-26** | **Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / ITQ)** | Respostas Traumáticas, Desregulação Afetiva e Alterações do Self | `testes/teste-trauma-complexo-cptsd.html` | ✅ Concluído |
+| **T-27** | **Inventário de Luto Prolongado e Apego Rompido (PG-13)** | Processamento da Perda, Dor Emocional Persistente e Saudade Traumática | `testes/teste-luto-prolongado.html` | ⏳ *Próximo da fila* |
 
 ---
 
@@ -41,4 +42,4 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 2. **Privacidade Absoluta:** 100% no navegador (Client-side), sem gravação de respostas em servidores externos.
 3. **Cálculo Automático com Feedback Qualitativo:** Pontuação imediata categorizada (Leve, Moderado, Severo) com explicações neuroclínicas sobre cada dimensão.
 4. **Orientações e Encaminhamento:** Recomendações práticas e botão direto para consulta ou agendamento especializado.
-5. **Divulgação:** Inclusão do card em `cards-artigos.html` e atualização do `sitemap.xml`.
+5. **Divulgação:** Inclusão do card exclusivamente na grade de `testes.html` e atualização do `sitemap.xml`.

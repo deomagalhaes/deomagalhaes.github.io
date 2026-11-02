@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / T-26) – Deo Magalhães</title>
+    <meta name="description" content="Avalie marcadores de Trauma Complexo (CPTSD), desregulação afetiva, dissociação e autoconceito negativo com base nos critérios da CID-11 / ITQ.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .btn-calc {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 95, 115, 0.35);
+        }
+
+        .results-box {
+            display: none;
+            margin-top: 35px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #0a9396;
+            padding: 30px;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.3em;
+            font-weight: 800;
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .subscale-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.95em;
+            color: #0f172a;
+        }
+
+        .subscale-score {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #0a9396;
+        }
+
+        .cta-consult-box {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #001219, #005f73);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .cta-consult-box h3 {
+            color: #ee9b00;
+            margin-top: 0;
+        }
+
+        .cta-consult-box a {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .cta-consult-box a:hover {
+            background: #ca6702;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container" style="max-width: 860px; padding: 40px 20px;">
+            <header style="text-align: center; margin-bottom: 30px;">
+                <span style="display:inline-block; background:#e0f2fe; color:#0369a1; padding:4px 14px; border-radius:20px; font-size:0.85em; font-weight:700; text-transform:uppercase; margin-bottom:10px;">Instrumento Psicométrico T-26</span>
+                <h1 style="color:#005f73; font-size:2.1em; margin-bottom:10px;">Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / ITQ)</h1>
+                <p style="color:#64748b; font-size:1.05em; max-width:680px; margin:0 auto;">Baseado nos critérios diagnósticos da CID-11 (OMS) para Transtorno de Estresse Pós-Traumático Complexo e na literatura de Marylene Cloitre e Judith Herman.</p>
+            </header>
+
+            <div class="test-intro-box">
+                <strong>Diretrizes de Preenchimento:</strong><br>
+                Pense em como você tem se sentido e funcionado nas últimas semanas e meses, especialmente considerando situações de estresse, conflitos ou memórias difíceis de sua história. Avalie cada afirmação selecionando o grau de frequência de 0 a 4.<br>
+                <em>Este instrumento roda 100% de forma privada no seu dispositivo: nenhuma resposta é gravada ou transmitida para a rede.</em>
+            </div>
+
+            <form id="quizForm" class="quiz-container">
+                <!-- Pergunta 1 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">01</span> Memórias angustiantes, imagens mentais ou sensações físicas do passado invadem sua mente de forma repentina e incontrolável?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q1" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q1" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 2 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">02</span> Você faz esforços intensos para evitar pensamentos, sentimentos, pessoas ou lugares que façam lembrar situações traumáticas ou dolorosas?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q2" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q2" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 3 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">03</span> Você se sente constantemente em estado de alerta máximo ou com sobressaltos exagerados a ruídos e aproximações repentinas?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q3" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q3" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">04</span> Quando sob pressão, você experimenta acessos de raiva repentinos ou, alternativamente, entra em paralisia e anestesia afetiva total?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q4" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q4" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 5 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">05</span> Você tem dificuldade persistente em acalmar seu corpo e retornar ao equilíbrio fisiológico após sofrer uma chateação?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q5" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q5" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 6 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">06</span> Carrega uma sensação profunda e crônica de ser uma pessoa "defeituosa", menor, fracassada ou indigna em comparação aos outros?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q6" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q6" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 7 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">07</span> Sente vergonha tóxica e culpa difusa em relação a coisas que você não pôde controlar ou sobre a sua própria vulnerabilidade?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q7" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q7" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 8 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">08</span> Tem extrema dificuldade em sentir proximidade emocional verdadeira ou confiar que as pessoas não irão trair ou machucar você?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q8" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q8" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 9 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">09</span> Costuma se afastar ou cortar laços interpessoais preventivamente para evitar a dor de uma potencial rejeição futura?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q9" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q9" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 10 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">10</span> Experimenta episódios de desconexão da realidade (desrealização) ou sente como se seu corpo e sua mente estivessem separados (despersonalização)?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q10" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q10" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 11 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">11</span> Sente como se estivesse vivendo em "piloto automático", assistindo à própria vida de fora, especialmente sob conflitos?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q11" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q11" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 12 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">12</span> Esses sintomas interferem significativamente na sua rotina de trabalho, nos estudos, na vida amorosa ou na capacidade de descansar?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q12" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q12" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 13 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">13</span> Você tem a sensação de que perdeu o contato com quem você realmente é, como se sua identidade estivesse fragmentada em partes conflitantes?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q13" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q13" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 14 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">14</span> Experimenta sintomas somáticos inexplicáveis quando sob tensão (dores corporais difusas, enxaquecas, distúrbios gástricos ou aperto torácico)?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q14" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q14" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 15 -->
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">15</span> Sente uma exaustão existencial crônica, como se a sua energia vital fosse drenada pelo simples ato de tentar manter o controle do dia a dia?</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q15" value="0">0 - Nunca</label>
+                        <label class="option-label"><input type="radio" name="q15" value="1">1 - Raro</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2">2 - Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3">3 - Frequente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="4">4 - Quase Sempre</label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-calc" id="btnCalculate">Calcular Meus Marcadores de Trauma Complexo</button>
+            </form>
+
+            <!-- Resultados -->
+            <div id="resultsBox" class="results-box">
+                <h2 style="color:#005f73; margin-top:0;">Resultado da Avaliação Clínica (T-26)</h2>
+                <div id="scoreBadge" class="score-badge">Pontuação Total: -- / 60</div>
+                <h3 id="resultCategory" style="color:#0f172a; margin: 10px 0;">--</h3>
+                <p id="resultDescription" style="line-height:1.7; color:#334155;">--</p>
+
+                <h3 style="margin-top:25px; color:#005f73;">Perfil por Domínios Diagnósticos (CID-11 / ITQ)</h3>
+                <div class="subscales-grid">
+                    <div class="subscale-card">
+                        <h4>Tríade TEPT (Q1-Q3)</h4>
+                        <div class="subscale-score" id="subTEPT">-- / 12</div>
+                        <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Revivência intrusiva, evitação de gatilhos e hipervigilância autonômica.</p>
+                    </div>
+                    <div class="subscale-card">
+                        <h4>Desregulação Afetiva (Q4-Q5, Q14)</h4>
+                        <div class="subscale-score" id="subAfeto">-- / 12</div>
+                        <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Reatividade emocional explosiva vs. anestesia e somatizações corporais.</p>
+                    </div>
+                    <div class="subscale-card">
+                        <h4>Autoconceito & Vergonha (Q6-Q7, Q15)</h4>
+                        <div class="subscale-score" id="subSelf">-- / 12</div>
+                        <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Crença de defeito pessoal, vergonha tóxica e exaustão existencial.</p>
+                    </div>
+                    <div class="subscale-card">
+                        <h4>Relações & Dissociação (Q8-Q11, Q13)</h4>
+                        <div class="subscale-score" id="subRelac">-- / 20</div>
+                        <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Dificuldade de vinculação, isolamento defensivo e despersonalização.</p>
+                    </div>
+                </div>
+
+                <div style="background:#f1f5f9; border-radius:8px; padding:20px; margin-top:25px;">
+                    <h4 style="color:#005f73; margin-top:0;">Interpretação Neurobiológica</h4>
+                    <p style="font-size:0.92em; line-height:1.6; color:#475569; margin-bottom:0;">
+                        No Trauma Complexo, o sistema de resposta ao estresse sofre uma recalibração alostática permanente: a <strong>amígdala</strong> torna-se hiper-reativa a pistas interpessoais ambíguas, o <strong>hipocampo</strong> perde eficiência na contextualização têmporo-espacial das lembranças e o <strong>córtex pré-frontal ventromedial</strong> tem sua capacidade de inibição do medo reduzida. Simultaneamente, sob o modelo da Teoria Polivagal, o corpo oscila entre o estado simpático de luta/fuga e o colapso parassimpático dorsal (dissociação protetiva).
+                    </p>
+                </div>
+
+                <div class="cta-consult-box">
+                    <h3>Precisa de Apoio Especializado em Trauma e Regulação Emocional?</h3>
+                    <p>O acolhimento neuropsicológico permite reprocessar memórias traumáticas, reeducar o tônus vagal e restaurar a coerência do Self em ambiente seguro e baseado em evidências.</p>
+                    <a href="https://wa.me/5535933003807?text=Olá,%20fiz%20a%20Escala%20de%20Trauma%20Complexo%20(CPTSD)%20no%20site%20e%20gostaria%20de%20orientação%20profissional." target="_blank">Agendar Acolhimento Neuropsicológico</a>
+                </div>
+            </div>
+
+            <p style="margin-top:35px; font-size:0.85em; color:#94a3b8; text-align:center;">
+                <em>Aviso Ético: Este questionário tem finalidade estritamente psicoeducativa e de rastreio funcional. Não substitui uma avaliação diagnóstica clínica individualizada realizada por psicólogo ou psiquiatra.</em>
+            </p>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('btnCalculate').addEventListener('click', function() {
+            let totalScore = 0;
+            let answeredCount = 0;
+            const values = [];
+
+            for (let i = 1; i <= 15; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    const val = parseInt(selected.value, 10);
+                    values[i] = val;
+                    totalScore += val;
+                    answeredCount++;
+                } else {
+                    values[i] = 0;
+                }
+            }
+
+            if (answeredCount < 15) {
+                alert(`Você respondeu ${answeredCount} de 15 questões. Por favor, responda todas as perguntas para obter um cálculo psicométrico preciso.`);
+                return;
+            }
+
+            // Subescalas
+            const subTEPT = values[1] + values[2] + values[3];
+            const subAfeto = values[4] + values[5] + values[14];
+            const subSelf = values[6] + values[7] + values[15];
+            const subRelac = values[8] + values[9] + values[10] + values[11] + values[13];
+
+            document.getElementById('scoreBadge').innerText = `Pontuação Total: ${totalScore} / 60`;
+            document.getElementById('subTEPT').innerText = `${subTEPT} / 12`;
+            document.getElementById('subAfeto').innerText = `${subAfeto} / 12`;
+            document.getElementById('subSelf').innerText = `${subSelf} / 12`;
+            document.getElementById('subRelac').innerText = `${subRelac} / 20`;
+
+            const catEl = document.getElementById('resultCategory');
+            const descEl = document.getElementById('resultDescription');
+
+            if (totalScore <= 14) {
+                catEl.innerText = "Nível Baixo: Resiliência Traumática e Boa Regulação Funcional";
+                catEl.style.color = "#2a9d8f";
+                descEl.innerText = "Suas respostas indicam uma baixa carga de reatividade pós-traumática e ausência de perturbações severas no autoconceito ou na autorregulação emocional. Embora estresses pontuais possam ocorrer, seus sistemas fisiológicos de resiliência e afiliação parecem preservados.";
+            } else if (totalScore <= 29) {
+                catEl.innerText = "Nível Leve a Moderado: Sobrecarga Emocional e Reatividade Situacional";
+                catEl.style.color = "#e76f51";
+                descEl.innerText = "Você apresenta sinais perceptíveis de reatividade ao estresse e desgaste afetivo. Podem existir memórias desconfortáveis ou autocrítica acentuada em períodos de pressão interpessoal, sem indicar necessariamente uma desintegração estrutural do autoconceito.";
+            } else if (totalScore <= 44) {
+                catEl.innerText = "Nível Moderado a Alto: Marcadores Significativos de Trauma e Desregulação (DSO)";
+                catEl.style.color = "#e63946";
+                descEl.innerText = "Seu perfil aponta para indicadores expressivos de Perturbações na Auto-organização (DSO): dificuldade persistente de regulação afetiva, crenças de defeito/vergonha crônica e esquiva nas relações sociais. Esse padrão frequentemente reflete estressores interpessoais repetidos ou negligência precoce.";
+            } else {
+                catEl.innerText = "Nível Elevado: Alto Risco de Trauma Complexo (CPTSD) e Dissociação";
+                catEl.style.color = "#9d0208";
+                descEl.innerText = "Sua pontuação sugere forte compatibilidade com os critérios clínicos de Transtorno de Estresse Pós-Traumático Complexo (CID-11). Há indícios de sofrimento psíquico intenso, com frequente sensação de ameaça, fragmentação da identidade, dissociação protetiva e exaustão autonômica. A intervenção neuropsicológica especializada é fortemente indicada.";
+            }
+
+            const resultsBox = document.getElementById('resultsBox');
+            resultsBox.style.display = 'block';
+            resultsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>

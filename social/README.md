@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **02/11/2026** | **O Peso Oculto da Culpa e da Vergonha: A Neurobiologia da Autocrítica** | [social/2026-11-02-a-neurobiologia-da-vergonha-toxica-e-da-culpa.md](2026-11-02-a-neurobiologia-da-vergonha-toxica-e-da-culpa.md) | ✅ Pronto para postar |
 | **01/11/2026** | **Além do Óbvio: Paradoxos e os Limites da Lógica** | [social/2026-11-01-paradoxos-e-os-limites-da-logica.md](2026-11-01-paradoxos-e-os-limites-da-logica.md) | ✅ Pronto para postar |
 | **01/11/2026** | **Fundamentos da Lógica Clássica: Os 3 Princípios e Conectivos** | [social/2026-11-01-fundamentos-logica-classica.md](2026-11-01-fundamentos-logica-classica.md) | ✅ Pronto para postar |
 | **01/11/2026** | **Neurobiologia do Trauma Complexo (CPTSD & Dissociação)** | [social/2026-11-01-trauma-complexo-cptsd-dissociacao.md](2026-11-01-trauma-complexo-cptsd-dissociacao.md) | ✅ Pronto para postar |

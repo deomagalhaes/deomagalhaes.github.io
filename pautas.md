@@ -14,13 +14,14 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 
 
-- [ ] **A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social**
+- [ ] **A Arquitetura Neurobiológica da Resiliência Psíquica: Epigenética, BDNF e Regulação Vagal**
 - [ ] **A Neurociência do Luto e do Vínculo Rompido: Como o Cérebro Processa a Perda e a Ausência**
 
 ---
 
 ## ✅ Pautas Publicadas
 
+- [x] **A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social** (Publicado em 02/11/2026)
 - [x] **Lógica Avançada e Filosofia da Linguagem: Da Lógica de Predicados aos Teoremas de Gödel, Semântica e Paradoxos** (Publicado em 01/11/2026)
 - [x] **Fundamentos da Lógica Clássica: Os Três Princípios do Pensamento, Proposições e Operadores Lógicos** (Publicado em 01/11/2026)
 

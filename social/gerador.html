@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="paradoxos-logica" selected>Além do Óbvio: Paradoxos e os Limites da Lógica</option>
+                        <option value="vergonha-toxica-culpa" selected>O Peso Oculto da Culpa e da Vergonha (Neurobiologia da Autocrítica)</option>
+                        <option value="paradoxos-logica">Além do Óbvio: Paradoxos e os Limites da Lógica</option>
                         <option value="logica-classica">Como Pensar com Clareza: Os 3 Princípios da Lógica Clássica</option>
                         <option value="trauma-complexo-cptsd">Neurobiologia do Trauma Complexo (CPTSD & Dissociação)</option>
                         <option value="apego-dopamina-social">A Insegurança de Apego e o Vício em Validação Externa (Dopamina Social)</option>
@@ -657,6 +658,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "vergonha-toxica-culpa": {
+        "articleSlug": "2026-11-02-a-neurobiologia-da-vergonha-toxica-e-da-culpa",
+        "articleTitle": "A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROCIÊNCIA DAS EMOÇÕES",
+                "title": "Por que a vergonha dói tanto quanto uma ferida física?",
+                "body": "A diferença entre culpa e vergonha tóxica, o tribunal implacável da autocrítica e como o cérebro processa o medo visceral da exclusão social.",
+                "footer": "Deslize para entender o que acontece por dentro 👉"
+            },
+            {
+                "type": "comparison",
+                "badge": "FRATURA DO SELF",
+                "title": "«Eu errei» versus «Eu sou um erro»",
+                "body": "A culpa avalia o ato: «cometi um erro de julgamento e posso reparar». Ela estimula empatia e reconciliação.\n\nA vergonha tóxica ataca a identidade: «eu sou defeituoso, quebrado e indigno». Ela dispara o impulso de fuga e isolamento.",
+                "footer": "Como o cérebro processa isso 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "O ALARME DA REJEIÇÃO",
+                "title": "O cérebro não separa dor física de dor social",
+                "body": "A neuroimagem funcional comprova: a vergonha ativa a mesma circuitaria da dor física aguda:\n\n• Córtex Cingulado Anterior Dorsal (dACC): computa a angústia psíquica da exclusão.\n• Ínsula Anterior: dispara a sensação visceral de nojo e repulsa voltada ao próprio Self.\n• Amígdala: aciona o alarme primário do banimento do grupo.",
+                "footer": "O impacto sistêmico no corpo 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "RESPOSTA INFLAMATÓRIA",
+                "title": "A vergonha crônica adoece o sistema imunológico",
+                "body": "Sob o tribunal da autocrítica implacável, o corpo reage como se estivesse sob ataque biológico real:\n\n• Inundação de Cortisol e Citocinas: picos de inflamação sistêmica (IL-6 e TNF-alfa).\n• Colapso Vagal Dorsal: congelamento autonômico, apatia e perda de vitalidade.\n• Bloqueio da Ocitocina: incapacidade neurológica de assimilar afeto e acolhimento.",
+                "footer": "A raiz evolucionista do ataque 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "SISTEMAS DE GILBERT",
+                "title": "A vergonha é um fóssil evolutivo de submissão",
+                "body": "Nos primatas, expressar submissão (encolher os ombros, baixar a cabeça) evitava ataques fatais do grupo dominante.\n\nEm humanos hipercognitivos, esse reflexo foi internalizado:\n\nNosso próprio cérebro se torna o carrasco e a vítima ao mesmo tempo, gerando um loop exaustivo de autoflagelação mental.",
+                "footer": "Como reeducar essa circuitaria 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "TERAPIA DA COMPAIXÃO",
+                "title": "Autocrítica não gera evolução; gera paralisia",
+                "body": "3 passos clínicos para desarmar o carrasco interno:\n\n1. Nomeie a Emoção: «Isso é vergonha; meu cérebro está tentando me proteger da rejeição».\n2. Ative o Sistema de Cuidado: respiração diafragmática com exalação longa e relaxamento muscular.\n3. Humanidade Compartilhada: reconheça que errar e ser vulnerável é o que nos torna humanos.",
+                "footer": "O antídoto definitivo 👉"
+            },
+            {
+                "type": "takeaway",
+                "badge": "ACOLHIMENTO & SAÚDE MENTAL",
+                "title": "A vergonha só sobrevive no silêncio e no isolamento",
+                "body": "Como pontua Brené Brown, a vergonha definha quando é exposta à luz da palavra e da conexão autêntica.\n\n📖 Leia o ensaio completo e aprofundado no site:\nA Neurobiologia da Vergonha Tóxica e da Culpa\n\n👉 Acesse pelo link na bio ou em deomagalhaes.com.br",
+                "footer": "@deomagalhaesneuro • Compartilhe com quem precisa silenciar o autocrítico"
+            }
+        ],
+        "caption": "Você já se pegou revivendo um erro antigo no meio da noite, sentindo um aperto asfixiante no peito e aquela sensação de que você simplesmente «não presta»?\n\nEssa não é apenas uma tristeza passageira: é a assinatura neurofisiológica da vergonha tóxica.\n\nA ciência comportamental e a neurobiologia mostram que existe uma diferença abissal entre a culpa e a vergonha. A culpa é focada naquilo que fizemos: «cometi um erro de julgamento, preciso aprender e pedir desculpas». Ela preserva o valor da nossa identidade e estimula a empatia reparadora.\n\nJá a vergonha atinge a própria estrutura do Self: «eu sou um erro irreparável, sou defeituoso, mereço ser abandonado».\n\nPesquisas de neuroimagem funcional demonstram que, quando sentimos vergonha intensa, as mesmas áreas corticais que processam a dor de uma fratura óssea ou de uma queimadura física — o córtex cingulado anterior dorsal (dACC) e a ínsula anterior — entram em hiperatividade. O cérebro processa o medo da exclusão social com o mesmo alarme com que processa a morte física.\n\nE quando alimentamos um crítico interno carrasco, o organismo é inundado por cortisol e citocinas inflamatórias, desligando o sistema vagal de apego seguro e mergulhando o corpo em exaustão e congelamento parassimpático.\n\nA saída não é o perfeccionismo ou a autopunição severa. A autocrítica constante não transforma ninguém; ela apenas sabota a autoconfiança e a saúde cardiovascular. A cura para a vergonha começa quando ativamos conscientemente o sistema de calma e afiliação (compassion system): reconhecendo que a imperfeição é o denominador comum de toda a humanidade.\n\nAcabei de publicar um artigo aprofundado no site detalhando a circuitaria cerebral da vergonha, os sistemas de regulação emocional de Paul Gilbert e os caminhos clínicos para silenciar o carrasco interno.\n\n👉 Acesse pelo link na bio ou em deomagalhaes.com.br.\n\nComo o seu crítico interno costuma falar com você nos momentos de erro? Conte sua experiência nos comentários.\n\n#vergonhatoxica #autocritica #neurociencia #psicologiaclinica #terapiafocadanacompaixao #autocompaixao #dorsocial #saudemental #ansiedadesocial #desenvolvimentopessoal #saudeemocional #autoconhecimento #vulnerabilidade #brenebrown #deomagalhaes"
+    },
     "paradoxos-logica": {
         "articleSlug": "2026-11-01-paradoxos-e-os-limites-da-logica",
         "articleTitle": "Além do Óbvio: Paradoxos e os Limites da Lógica",
@@ -2467,9 +2524,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "paradoxos-logica";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["paradoxos-logica"].slides));
-        let currentCaption = PRESETS["paradoxos-logica"].caption;
+        let currentPresetKey = "vergonha-toxica-culpa";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["vergonha-toxica-culpa"].slides));
+        let currentCaption = PRESETS["vergonha-toxica-culpa"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta
