@@ -482,36 +482,56 @@
     // =========================================================================
     function computeExpenseCascade() {
         const C = global.VaultCore;
-        const passive = (lastModel && lastModel.currentPassiveMonthly) || 0;
+        if (!lastModel) lastModel = computeFinancialModel();
+        const passive = lastModel ? lastModel.currentPassiveMonthly : 0;
+        const netPerSession = lastModel && lastModel.netPerSession > 0 ? lastModel.netPerSession : 200;
+        const netPerHour = lastModel && lastModel.netEffectiveHourly > 0 ? lastModel.netEffectiveHourly : 150;
+        const monthlyRate = lastModel && lastModel.monthlyRate > 0 ? lastModel.monthlyRate : 0.006;
 
         const tiers = [
             {
+                id: 'essential',
                 level: 1,
-                name: 'Nível 1 • Sobrevivência Essencial',
-                desc: 'Moradia básica, serviços essenciais e nutrição mínima',
+                name: inputs.nameEssential || 'Nível 1 • Sobrevivência Essencial',
+                desc: 'Moradia, serviços básicos, alimentação essencial e sobrevivência digna.',
                 cost: Math.max(0, Number(inputs.expenseEssential) || 2500),
-                color: 'emerald'
+                inputKey: 'expenseEssential',
+                nameKey: 'nameEssential',
+                color: 'emerald',
+                badgeClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
             },
             {
+                id: 'clinic',
                 level: 2,
-                name: 'Nível 2 • Sustentação do Consultório',
-                desc: 'Custos operacionais fixos, laudos, plataformas e tributos',
+                name: inputs.nameClinic || 'Nível 2 • Sustentação do Consultório',
+                desc: 'Custos operacionais fixos do consultório, laudos, plataformas, tributos e anuidade CRP.',
                 cost: Math.max(0, Number(inputs.expenseClinic) || 2600),
-                color: 'cyan'
+                inputKey: 'expenseClinic',
+                nameKey: 'nameClinic',
+                color: 'cyan',
+                badgeClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
             },
             {
+                id: 'family',
                 level: 3,
-                name: 'Nível 3 • Família & Saúde Plena',
-                desc: 'Plano de saúde top, farmácia, educação e apoio familiar',
+                name: inputs.nameFamily || 'Nível 3 • Família & Saúde Plena',
+                desc: 'Plano de saúde, farmácia, educação, segurança e suporte familiar.',
                 cost: Math.max(0, Number(inputs.expenseFamily) || 3500),
-                color: 'amber'
+                inputKey: 'expenseFamily',
+                nameKey: 'nameFamily',
+                color: 'amber',
+                badgeClass: 'bg-amber-500/15 text-amber-300 border-amber-500/30'
             },
             {
+                id: 'lifestyle',
                 level: 4,
-                name: 'Nível 4 • Liberdade & Estilo de Vida',
-                desc: 'Viagens, congressos internacionais, lazer e artes',
+                name: inputs.nameLifestyle || 'Nível 4 • Liberdade & Estilo de Vida',
+                desc: 'Viagens, congressos internacionais, hobbies, bonsai, música e lazer sem culpa.',
                 cost: Math.max(0, Number(inputs.expenseLifestyle) || 2000),
-                color: 'purple'
+                inputKey: 'expenseLifestyle',
+                nameKey: 'nameLifestyle',
+                color: 'purple',
+                badgeClass: 'bg-purple-500/15 text-purple-300 border-purple-500/30'
             }
         ];
 
@@ -528,21 +548,32 @@
                 coverage = ((passive - startAcc) / t.cost) * 100;
             }
 
+            // Patrimônio exclusivo necessário para cobrir este degrau vitaliciamente
+            const capitalNeeded = monthlyRate > 0 ? (t.cost / monthlyRate) : 0;
+            // Sessões clínicas necessárias por mês para pagar este degrau
+            const sessionsNeeded = netPerSession > 0 ? (t.cost / netPerSession) : 0;
+            const hoursNeeded = netPerHour > 0 ? (t.cost / netPerHour) : 0;
+
             return Object.assign({}, t, {
                 accumulatedCost: endAcc,
                 coveragePct: Math.min(100, Math.max(0, coverage)),
-                isFullyCovered: coverage >= 100
+                isFullyCovered: coverage >= 100,
+                capitalNeeded,
+                sessionsNeeded,
+                hoursNeeded
             });
         });
 
         const totalCost = accumulated;
         const globalCoverage = totalCost > 0 ? (passive / totalCost) * 100 : 0;
+        const totalCapitalNeeded = monthlyRate > 0 ? (totalCost / monthlyRate) : 0;
 
         return {
             tiers: processed,
             totalCost,
             passive,
-            globalCoverage
+            globalCoverage,
+            totalCapitalNeeded
         };
     }
 
@@ -1262,50 +1293,172 @@
 
         container.innerHTML = `
             <div class="space-y-5">
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div>
-                        <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">Cascata de Emancipação Temporal</span>
-                        <h3 class="text-base font-bold text-slate-100 mt-0.5">Quais despesas da sua vida o patrimônio atual já paga?</h3>
-                        <p class="text-xs text-slate-400 mt-1">Renda Passiva Atual: <strong class="text-emerald-300 font-mono">${C.formatBRL(cascade.passive)}/mês</strong> (${C.formatNum(cascade.globalCoverage, 1)}% do custo total de ${C.formatBRL(cascade.totalCost)})</p>
-                    </div>
+                <!-- Banner Explicativo e Status Global -->
+                <div class="bg-gradient-to-r from-[#0f172a] via-[#111c35] to-[#0f172a] border border-cyan-500/30 rounded-xl p-5 shadow-xl">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="space-y-1.5 max-w-2xl">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                                    Filosofia dos 4 Degraus de Emancipação
+                                </span>
+                                <span class="text-xs font-mono text-emerald-400 font-semibold">100% Editável</span>
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-slate-100">
+                                Como Funciona a Cascata de Cobertura de Despesas?
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                Em vez de tratar a independência financeira como um "tudo ou nada" distante, a <strong>Cascata de Liberdade</strong> organiza seu custo de vida em 4 camadas sequenciais de prioridade existencial. Cada degrau conquistado pela renda passiva <em>liberta irrevogavelmente uma fatia da sua mente</em>, permitindo reduzir gradativamente a carga de trabalho no consultório sem ansiedade.
+                            </p>
+                        </div>
 
-                    <div class="w-44 bg-[#090d16] border border-slate-800 rounded-xl p-3 text-center">
-                        <div class="text-[10px] font-mono text-slate-400">Cobertura Global</div>
-                        <div class="text-xl font-mono font-bold ${cascade.globalCoverage >= 100 ? 'text-emerald-300' : 'text-cyan-300'}">
-                            ${C.formatNum(cascade.globalCoverage, 1)}%
+                        <!-- Card de Cobertura Global -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 text-center shrink-0 min-w-[200px]">
+                            <div class="text-[11px] font-mono text-slate-400">Renda Passiva Atual</div>
+                            <div class="text-xl font-mono font-extrabold text-emerald-300 mt-0.5">${C.formatBRL(cascade.passive)}/mês</div>
+                            <div class="text-[10px] font-mono text-slate-500 mt-0.5">Custo Total: ${C.formatBRL(cascade.totalCost)}/mês</div>
+                            <div class="mt-2.5 pt-2 border-t border-slate-800">
+                                <div class="text-[10px] font-mono text-cyan-400">Cobertura Global:</div>
+                                <div class="text-2xl font-mono font-extrabold ${cascade.globalCoverage >= 100 ? 'text-emerald-400' : 'text-cyan-300'}">
+                                    ${C.formatNum(cascade.globalCoverage, 1)}%
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Lista dos 4 Níveis em Cascata -->
-                <div class="space-y-3">
+                <!-- Painel de Dicas Práticas & Ações -->
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-[#0f172a] border border-[#1e293b] rounded-xl px-4 py-3 text-xs font-mono">
+                    <div class="text-slate-400 flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Altere os valores ou nomes diretamente nos campos abaixo. O recálculo é instantâneo e salvo automaticamente.</span>
+                    </div>
+                    <button type="button" id="btn-reset-cascade-defaults" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                        Restaurar Valores Sugeridos
+                    </button>
+                </div>
+
+                <!-- Lista Interativa e Editável dos 4 Degraus -->
+                <div class="space-y-4">
                     ${cascade.tiers.map((t) => `
-                        <div class="bg-[#0f172a] border ${t.isFullyCovered ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-[#1e293b]'} rounded-xl p-4 space-y-2.5">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${t.isFullyCovered ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-300'}">
-                                            ${t.isFullyCovered ? '✓ 100% Coberto' : `${C.formatNum(t.coveragePct, 1)}% Coberto`}
-                                        </span>
-                                        <h4 class="font-bold text-sm text-slate-100">${t.name}</h4>
-                                    </div>
-                                    <p class="text-xs text-slate-400 mt-1">${t.desc}</p>
+                        <div class="bg-[#0f172a] border ${t.isFullyCovered ? 'border-emerald-500/40 bg-emerald-950/15' : 'border-[#1e293b]'} rounded-xl p-4 sm:p-5 space-y-4 transition-all">
+                            <!-- Topo do Nível: Título Editável, Badge e Valor Editável -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="flex items-center gap-2.5 flex-1">
+                                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold border ${t.badgeClass}">
+                                        Nível ${t.level}
+                                    </span>
+                                    <input type="text" data-cascade-name="${t.nameKey}" value="${C.esc(t.name)}"
+                                        class="flex-1 max-w-md bg-[#090d16] border border-slate-700 focus:border-cyan-400 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-100 font-mono transition"
+                                        placeholder="Nome do Nível...">
                                 </div>
-                                <div class="text-right shrink-0">
-                                    <div class="text-base font-mono font-bold text-slate-100">${C.formatBRL(t.cost)}<span class="text-xs text-slate-400">/mês</span></div>
-                                    <div class="text-[10px] font-mono text-slate-500">Acumulado: ${C.formatBRL(t.accumulatedCost)}</div>
+
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <span class="text-xs font-mono text-slate-400">Custo Mensal:</span>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-2.5 text-xs font-mono text-slate-500">R$</span>
+                                        <input type="number" data-cascade-input="${t.inputKey}" step="50" min="0" value="${t.cost}"
+                                            class="w-36 min-h-[38px] pl-9 pr-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 focus:border-cyan-400 font-mono text-base font-bold text-cyan-300 text-right transition">
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Barra de Progresso do Nível -->
-                            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                                <div class="h-full ${t.isFullyCovered ? 'bg-emerald-400' : 'bg-cyan-400'} transition-all duration-300" style="width: ${t.coveragePct}%"></div>
+                            <p class="text-xs text-slate-400 leading-relaxed">${t.desc}</p>
+
+                            <!-- Barra de Progresso com Percentual e Badge de Status -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between text-xs font-mono">
+                                    <span class="text-slate-400 flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full ${t.isFullyCovered ? 'bg-emerald-400' : 'bg-cyan-400'}"></span>
+                                        Status: <strong class="${t.isFullyCovered ? 'text-emerald-300' : 'text-slate-200'}">${t.isFullyCovered ? '✓ Totalmente Coberto pela Renda Passiva' : `${C.formatNum(t.coveragePct, 1)}% Coberto`}</strong>
+                                    </span>
+                                    <span class="text-slate-400">Acumulado até aqui: <strong class="text-slate-200">${C.formatBRL(t.accumulatedCost)}/mês</strong></span>
+                                </div>
+                                <div class="w-full h-2.5 rounded-full bg-slate-800 overflow-hidden">
+                                    <div class="h-full ${t.isFullyCovered ? 'bg-gradient-to-r from-emerald-500 to-emerald-400' : 'bg-gradient-to-r from-cyan-600 to-cyan-400'} transition-all duration-300" style="width: ${t.coveragePct}%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Métricas Clínicas de Equivalência deste Degrau -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+                                <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
+                                    <div class="text-[10px] text-slate-500">Patrimônio Exclusivo Necessário</div>
+                                    <div class="text-sm font-bold text-slate-200 mt-0.5">${C.formatBRL(t.capitalNeeded)}</div>
+                                </div>
+                                <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
+                                    <div class="text-[10px] text-slate-500">Sessões Clínicas/Mês para Pagar</div>
+                                    <div class="text-sm font-bold text-cyan-300 mt-0.5">${C.formatNum(t.sessionsNeeded, 1)} sessões</div>
+                                </div>
+                                <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
+                                    <div class="text-[10px] text-slate-500">Horas Totais de Trabalho/Mês</div>
+                                    <div class="text-sm font-bold text-amber-300 mt-0.5">${C.formatNum(t.hoursNeeded, 1)}h (atend. + laudos)</div>
+                                </div>
                             </div>
                         </div>
                     `).join('')}
                 </div>
+
+                <!-- Resumo Geral de Liberdade e Próximo Passo -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-5 space-y-3">
+                    <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                        Diagnóstico Prático do Seu Momento Atual
+                    </h4>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        ${cascade.globalCoverage >= 100
+                            ? 'Parabéns! Sua renda passiva já cobre <strong>100% de todos os 4 níveis de despesas da sua vida</strong>. Você alcançou a autonomia plena e trabalha no consultório exclusivamente por vocação e escolha existencial.'
+                            : cascade.tiers[0].isFullyCovered
+                                ? `Você já tem a <strong>tranquilidade existencial do Nível 1 garantida</strong>: sua sobrevivência básica não depende de nenhum atendimento este mês. Seu foco atual de aportes deve ser consolidar a cobertura do <strong>${cascade.tiers.find(t => !t.isFullyCovered)?.name || 'próximo nível'}</strong>.`
+                                : `Seu objetivo prioritário número 1 é blindar o <strong>Nível 1 (${cascade.tiers[0].name})</strong>. Faltam aproximadamente <strong>${C.formatBRL(Math.max(0, cascade.tiers[0].cost - cascade.passive))} de renda passiva mensal</strong> para zerar o risco de sobrevivência básica.`
+                        }
+                    </p>
+                </div>
             </div>
         `;
+
+        bindCascataInputs();
+    }
+
+    function bindCascataInputs() {
+        const C = global.VaultCore;
+
+        // Inputs de Custo de cada nível
+        document.querySelectorAll('[data-cascade-input]').forEach((inp) => {
+            inp.addEventListener('input', (e) => {
+                const key = e.target.getAttribute('data-cascade-input');
+                const val = Math.max(0, Number(e.target.value) || 0);
+                inputs[key] = val;
+                saveInputs();
+                // Recalcula sem perder foco
+                lastModel = computeFinancialModel();
+                renderSubTabCascata(document.getElementById('ind-subtab-container'));
+            });
+        });
+
+        // Inputs de Nome de cada nível
+        document.querySelectorAll('[data-cascade-name]').forEach((inp) => {
+            inp.addEventListener('change', (e) => {
+                const key = e.target.getAttribute('data-cascade-name');
+                inputs[key] = e.target.value.trim();
+                saveInputs();
+            });
+        });
+
+        // Botão Restaurar Padrões da Cascata
+        const btnReset = document.getElementById('btn-reset-cascade-defaults');
+        if (btnReset) {
+            btnReset.addEventListener('click', () => {
+                inputs.expenseEssential = DEFAULT_INPUTS.expenseEssential;
+                inputs.expenseClinic = DEFAULT_INPUTS.expenseClinic;
+                inputs.expenseFamily = DEFAULT_INPUTS.expenseFamily;
+                inputs.expenseLifestyle = DEFAULT_INPUTS.expenseLifestyle;
+                delete inputs.nameEssential;
+                delete inputs.nameClinic;
+                delete inputs.nameFamily;
+                delete inputs.nameLifestyle;
+                saveInputs();
+                renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                C.toast('Valores da cascata restaurados para o padrão sugerido.', 'info');
+            });
+        }
     }
 
     // =========================================================================
