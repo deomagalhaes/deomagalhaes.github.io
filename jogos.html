@@ -30,11 +30,12 @@
             overflow: hidden;
             text-decoration: none;
             color: white;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
         }
 
         .resource-card-bg-image:hover {
-            transform: scale(1.03);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 14px 28px rgba(0, 18, 25, 0.25);
         }
 
         .resource-card-bg-image::before {
@@ -44,13 +45,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.05) 100%);
             z-index: 1;
             transition: background 0.3s ease;
         }
         
         .resource-card-bg-image:hover::before {
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.0));
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.0) 100%);
         }
 
         .resource-card-bg-image .card-content {
@@ -60,21 +61,194 @@
         }
 
         .resource-card-bg-image h3 {
-            font-size: 1.5em;
-            margin: 0 0 0.25rem 0;
+            font-size: 1.45em;
+            margin: 0 0 0.35rem 0;
             color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
         }
 
         .resource-card-bg-image p {
-            font-size: 1em;
+            font-size: 0.92em;
             margin: 0;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            color: rgba(255, 255, 255, 0.92);
+            line-height: 1.45;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        /* Hub de Categorias por Faixa Etária */
+        .category-hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
+            margin-bottom: 35px;
+        }
+
+        .category-hub-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .category-hub-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0, 95, 115, 0.16);
+        }
+
+        .category-hub-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+
+        .category-hub-card.card-infantil::before {
+            background: linear-gradient(90deg, #0a9396, #94d2bd);
+        }
+
+        .category-hub-card.card-jovens::before {
+            background: linear-gradient(90deg, #ee9b00, #ca6702);
+        }
+
+        .category-hub-card.card-adultos::before {
+            background: linear-gradient(90deg, #005f73, #0a9396);
+        }
+
+        .category-hub-badge {
+            align-self: flex-start;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card-infantil .category-hub-badge {
+            background: #e6f6f4;
+            color: #0a9396;
+        }
+
+        .card-jovens .category-hub-badge {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .card-adultos .category-hub-badge {
+            background: #e0f2fe;
+            color: #005f73;
+        }
+
+        .category-hub-icon {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .category-hub-card h3 {
+            font-size: 1.55em;
+            color: #001219;
+            margin: 0 0 4px 0;
+            font-weight: 700;
+        }
+
+        .category-hub-age {
+            font-size: 0.85em;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .category-hub-card p {
+            font-size: 0.9em;
+            color: #475569;
+            line-height: 1.5;
+            margin: 0 0 18px 0;
+            flex-grow: 1;
+        }
+
+        .category-hub-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 14px;
+        }
+
+        .category-hub-count {
+            font-size: 0.82em;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .category-hub-btn {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #005f73;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .category-hub-card:hover .category-hub-btn {
+            transform: translateX(4px);
+            color: #ee9b00;
+        }
+
+        /* Toolbar de Filtros */
+        .filters-toolbar {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 35px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .age-filter-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .age-filter-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .age-filter-btn.active-age-filter {
+            background: #001219 !important;
+            color: #ffffff !important;
+            border-color: #001219 !important;
+            box-shadow: 0 2px 8px rgba(0, 18, 25, 0.25);
         }
 
         .game-filter-btn {
-            padding: 8px 18px;
+            padding: 7px 16px;
             border-radius: 20px;
             border: 1px solid #cbd5e1;
             background: #ffffff;
@@ -95,6 +269,58 @@
             color: #ffffff !important;
             border-color: #005f73 !important;
             box-shadow: 0 2px 8px rgba(0, 95, 115, 0.25);
+        }
+
+        /* Seções de Categorias */
+        .category-section {
+            margin-bottom: 55px;
+            scroll-margin-top: 100px;
+        }
+
+        .category-section-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            gap: 12px;
+        }
+
+        .category-section-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-section-icon {
+            font-size: 2.1em;
+            line-height: 1;
+        }
+
+        .category-section-header h2 {
+            font-size: 1.85em;
+            color: #001219;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .category-section-header p {
+            font-size: 0.95em;
+            color: #64748b;
+            margin: 4px 0 0 0;
+        }
+
+        .category-section-badge {
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 0.85em;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            white-space: nowrap;
         }
 
         .game-hidden {
@@ -181,7 +407,371 @@
                 </div>
             </div>
 
-            <!-- Filtros Rápidos por Função Cognitiva -->
+            <!-- HUB DE NAVEGAÇÃO POR FAIXA ETÁRIA / CATEGORIAS -->
+            <div class="category-hub-container" style="margin-bottom: 40px;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <span style="display: inline-block; background: #e0f2fe; color: #0369a1; padding: 4px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Categorias por Faixa Etária</span>
+                    <h2 style="font-size: 2.2em; color: #001219; margin: 8px 0 6px 0; font-weight: 700;">Escolha o Nível de Estimulação</h2>
+                    <p style="color: #64748b; font-size: 1em; max-width: 650px; margin: 0 auto;">Recursos neuropsicológicos adaptados para cada fase do neurodesenvolvimento e maturidade cognitiva.</p>
+                </div>
+
+                <div class="category-hub-grid">
+                    <!-- Card Categoria Infantil -->
+                    <div class="category-hub-card card-infantil" onclick="selectAgeCategory('infantil')">
+                        <div class="category-hub-badge">Desenvolvimento & Afeto</div>
+                        <div class="category-hub-icon">🧸</div>
+                        <h3>Infantil</h3>
+                        <span class="category-hub-age">Crianças (4 a 11 anos)</span>
+                        <p>Jogos lúdicos focados em autorregulação emocional, psicomotricidade, atenção compartilhada e expressão de sentimentos.</p>
+                        <div class="category-hub-footer">
+                            <span class="category-hub-count">10 Jogos Interativos</span>
+                            <span class="category-hub-btn">Explorar ➔</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Categoria Jovens -->
+                    <div class="category-hub-card card-jovens" onclick="selectAgeCategory('jovens')">
+                        <div class="category-hub-badge">Funções Executivas & Foco</div>
+                        <div class="category-hub-icon">⚡</div>
+                        <h3>Jovens</h3>
+                        <span class="category-hub-age">Adolescentes & Estudantes (12 a 17 anos)</span>
+                        <p>Desafios de flexibilidade cognitiva, raciocínio lógico dedutivo, controle de impulsos e memória de trabalho sob tempo.</p>
+                        <div class="category-hub-footer">
+                            <span class="category-hub-count">13 Desafios Cognitivos</span>
+                            <span class="category-hub-btn">Explorar ➔</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Categoria Adultos -->
+                    <div class="category-hub-card card-adultos" onclick="selectAgeCategory('adultos')">
+                        <div class="category-hub-badge">Alta Demanda & Reserva</div>
+                        <div class="category-hub-icon">🧠</div>
+                        <h3>Adultos</h3>
+                        <span class="category-hub-age">Adultos & Maturidade (18+ anos)</span>
+                        <p>Treinos neuropsicológicos de alta complexidade: inferência bayesiana, rotação 3D, lógica formal e controle de viés.</p>
+                        <div class="category-hub-footer">
+                            <span class="category-hub-count">13 Treinos Analíticos</span>
+                            <span class="category-hub-btn">Explorar ➔</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOLBAR DE FILTROS COMBINADOS (Idade & Foco Cognitivo) -->
+            <div class="filters-toolbar">
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                    <span style="font-size: 0.85em; font-weight: 700; color: #475569; text-transform: uppercase;">Categoria:</span>
+                    <button onclick="selectAgeCategory('all', this)" class="age-filter-btn active-age-filter">Todas as Categorias</button>
+                    <button onclick="selectAgeCategory('infantil', this)" class="age-filter-btn">🧸 Infantil (10)</button>
+                    <button onclick="selectAgeCategory('jovens', this)" class="age-filter-btn">⚡ Jovens (13)</button>
+                    <button onclick="selectAgeCategory('adultos', this)" class="age-filter-btn">🧠 Adultos (13)</button>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                    <span style="font-size: 0.85em; font-weight: 700; color: #475569; text-transform: uppercase;">Foco Cognitivo:</span>
+                    <button onclick="filterByCognitiveFocus('all', this)" class="game-filter-btn active-filter">Todos</button>
+                    <button onclick="filterByCognitiveFocus('funcoes-executivas', this)" class="game-filter-btn">Funções Executivas</button>
+                    <button onclick="filterByCognitiveFocus('memoria', this)" class="game-filter-btn">Memória</button>
+                    <button onclick="filterByCognitiveFocus('logica', this)" class="game-filter-btn">Lógica</button>
+                    <button onclick="filterByCognitiveFocus('emocional', this)" class="game-filter-btn">Emocional</button>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 1: CATEGORIA INFANTIL -->
+            <section id="categoria-infantil" class="category-section" data-age-section="infantil">
+                <div class="category-section-header">
+                    <div class="category-section-title-wrap">
+                        <span class="category-section-icon">🧸</span>
+                        <div>
+                            <h2>Jogos Terapêuticos Infantis</h2>
+                            <p>Desenvolvimento socioemocional, psicomotricidade, regulação afetiva e atenção lúdica para crianças.</p>
+                        </div>
+                    </div>
+                    <span class="category-section-badge">10 Jogos Disponíveis</span>
+                </div>
+                <div class="resource-grid-custom" id="grid-infantil">
+                <a href="jogos/jogo-festival-pipa.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/festival-pipa.png');">
+                    <div class="card-content">
+                        <h3>Festival das Pipas</h3>
+                        <p>Um festival, uma corrida, uma aventura feito para um amigo.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo da Memória -->
+                <a href="jogos/jogo-sequencia-cores.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="memoria"
+                   style="background-image: url('assets/imagens/sequencia-cores.png');">
+                    <div class="card-content">
+                        <h3>Sequência de Cores</h3>
+                        <p>Estimule memória de trabalho, controle inibitório, coordenação e planejamento.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo da Memória -->
+                <a href="jogos/jogo-caca-orbs.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/caca-orbs.png');">
+                    <div class="card-content">
+                        <h3>Caça aos Orbs Coloridos</h3>
+                        <p>Um jogo rápido para testar sua atenção, velocidade e precisão. Cace os orbs coloridos e bata seu recorde!</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo da Memória -->
+                <a href="jogos/jogo-encontre-animais.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/encontre-animais.png');">
+                    <div class="card-content">
+                        <h3>Encontre os Animais</h3>
+                        <p>Desenvolva velocidade de processamento, atenção e flexibilidade cognitiva.</p>
+                    </div>
+                </a>
+
+                <!-- Card Diário das Emoções -->
+                <a href="jogos/jogo-diário-emocoes.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/emocoes.png');">
+                    <div class="card-content">
+                        <h3>Diário das Emoções</h3>
+                        <p>Registre seus sentimentos e pensamentos diariamente, salve em PDF.</p>
+                    </div>
+                </a>
+
+                <a href="jogos/jogo-construtor-histórias.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/historias2.png');">
+                    <div class="card-content">
+                        <h3>Construtor de Histórias</h3>
+                        <p>Escolha o personagem, o ambiente e a aventura, crie, leia ou ouça em segundos.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo da Memória -->
+                <a href="jogos/jogo-memoria.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="memoria"
+                   style="background-image: url('assets/imagens/memoria.png');">
+                    <div class="card-content">
+                        <h3>Jogo da Memória das Emoções</h3>
+                        <p>Estimule a memória e o reconhecimento facial de emoções.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo de Regulação Emocional -->
+                <a href="jogos/jogo-regulacao-emocional.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/macaquinho-feliz2.png');">
+                    <div class="card-content">
+                        <h3>Meu Amigo Macaco</h3>
+                        <p>Aprenda a identificar e regular as emoções.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo Fábrica de Emoções -->
+                <a href="jogos/jogo-fabrica-emocoes.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="emocional"
+                   style="background-image: url('assets/imagens/fabrica.png');">
+                    <div class="card-content">
+                        <h3>Fábrica de Emoções</h3>
+                        <p>Ajude os robôs a criarem e conhecerem as emoções básicas e complexas.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Mini-Sudoku das Formas e Cores -->
+                <a href="jogos/jogo-mini-sudoku.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="logica funcoes-executivas"
+                   style="background-image: url('assets/imagens/sequencia-cores.png');">
+                    <div class="card-content">
+                        <h3>Mini-Sudoku das Formas e Cores</h3>
+                        <p>Exercite atenção sustentada, memória de trabalho e raciocínio lógico dedutivo sem números.</p>
+                    </div>
+                </a>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: CATEGORIA JOVENS -->
+            <section id="categoria-jovens" class="category-section" data-age-section="jovens">
+                <div class="category-section-header">
+                    <div class="category-section-title-wrap">
+                        <span class="category-section-icon">⚡</span>
+                        <div>
+                            <h2>Jogos Cognitivos para Jovens</h2>
+                            <p>Desafios para o córtex pré-frontal, flexibilidade mental, controle inibitório e raciocínio lógico em adolescentes.</p>
+                        </div>
+                    </div>
+                    <span class="category-section-badge">13 Desafios Disponíveis</span>
+                </div>
+                <div class="resource-grid-custom" id="grid-jovens">
+                <!-- Card da Torre de Hanói -->
+                <a href="jogos/jogo-torre-hanoi.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/torre-hanoi.png');">
+                    <div class="card-content">
+                        <h3>Torre de Hanói</h3>
+                        <p>Estimule funções executivas, planejamento antecipatório e flexibilidade mental.</p>
+                    </div>
+                </a>
+
+                <!-- Card da Balança de Equivalências -->
+                <a href="jogos/jogo-balanca-logica.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/balanca-logica.png');">
+                    <div class="card-content">
+                        <h3>Balança de Equivalências</h3>
+                        <p>Desenvolva raciocínio algébrico visual, dedução e abstração matemática.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Detetive Lógico (Grid de Dedução) -->
+                <a href="jogos/jogo-detetive-logico.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/jogo-detetive-logico.png');">
+                    <div class="card-content">
+                        <h3>O Detetive Lógico (Grid de Dedução)</h3>
+                        <p>Exercite dedução, eliminação de hipóteses e memória de trabalho.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Circuito Neural (Conexão Lógica) -->
+                <a href="jogos/jogo-circuito-neural.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica funcoes-executivas"
+                   style="background-image: url('assets/imagens/logica-capa.png');">
+                    <div class="card-content">
+                        <h3>Circuito Neural (Conexão Lógica)</h3>
+                        <p>Rotacione as sinapses para restabelecer o pulso elétrico até o córtex pré-frontal.</p>
+                    </div>
+                </a>
+
+                <!-- Card das Matrizes Progressivas (Raven) -->
+                <a href="jogos/jogo-matrizes-raven.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/padroes.png');">
+                    <div class="card-content">
+                        <h3>Matrizes Progressivas (Raven)</h3>
+                        <p>Exercite raciocínio indutivo, identificação de padrões abstratos e inteligência fluida.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Labirinto Visuoespacial (Planejamento) -->
+                <a href="jogos/jogo-labirinto-cognitivo.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/memoria-espacial.png');">
+                    <div class="card-content">
+                        <h3>Labirinto Visuoespacial (Planejamento)</h3>
+                        <p>Planejamento motor, mapeamento cognitivo e antecipação de rotas pelo córtex parietal e pré-frontal.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Circuito Binário (Pensamento Algorítmico) -->
+                <a href="jogos/jogo-circuito-binario.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica funcoes-executivas"
+                   style="background-image: url('assets/imagens/jogo-circuito-binario.png');">
+                    <div class="card-content">
+                        <h3>Circuito Binário (Código Secreto)</h3>
+                        <p>Decodificação em potências de base 2, raciocínio lógico formal e controle inibitório para estabilizar módulos cerebrais.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Efeito Stroop Neurocognitivo -->
+                <a href="jogos/jogo-stroop-neuro.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="funcoes-executivas"
+                   style="background-image: url('assets/imagens/sequencia-cores.png');">
+                    <div class="card-content">
+                        <h3>Efeito Stroop Neurocognitivo</h3>
+                        <p>Controle inibitório frontal, resolução de conflito atencional e velocidade de processamento cognitivo.</p>
+                    </div>
+                </a>
+
+                <!-- Card da Torre de Londres (Shallice 1982) -->
+                <a href="jogos/jogo-torre-londres.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="funcoes-executivas logica"
+                   style="background-image: url('assets/imagens/torre-hanoi.png');">
+                    <div class="card-content">
+                        <h3>Torre de Londres (Shallice)</h3>
+                        <p>Planejamento motor sequencial, antecipação e controle inibitório no córtex pré-frontal dorsolateral.</p>
+                    </div>
+                </a>
+
+                <!-- Card dos Blocos de Corsi (Corsi Block-Tapping) -->
+                <a href="jogos/jogo-blocos-corsi.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="memoria funcoes-executivas"
+                   style="background-image: url('assets/imagens/jogo-blocos-corsi.png');">
+                    <div class="card-content">
+                        <h3>Blocos de Corsi (Memória Visuoespacial)</h3>
+                        <p>O teste padrão-ouro da alça visuoespacial de Baddeley: reproduza trajetórias em ordem direta e inversa.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo da Memória -->
+                <a href="jogos/jogo-memoria-espacial.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="memoria"
+                   style="background-image: url('assets/imagens/memoria-espacial.png');">
+                    <div class="card-content">
+                        <h3>Memória Espacial</h3>
+                        <p>Fortalece a capacidade de manter informações em mente através da memória de curto prazo.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo de Lógica -->
+                <a href="jogos/jogo-logica.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/logica-capa.png');">
+                    <div class="card-content">
+                        <h3>Desafio Sequencial</h3>
+                        <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
+                    </div>
+                </a>
+
+                <!-- Card do Jogo de Lógica 2 -->
+                <a href="jogos/jogo-logica2.html" 
+                   class="resource-card-bg-image" data-age-group="jovens" 
+                   data-category="logica"
+                   style="background-image: url('assets/imagens/padroes.png');">
+                    <div class="card-content">
+                        <h3>Desafio dos Padrões</h3>
+                        <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
+                    </div>
+                </a>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 3: CATEGORIA ADULTOS -->
+            <section id="categoria-adultos" class="category-section" data-age-section="adultos">
+                <div class="category-section-header">
+                    <div class="category-section-title-wrap">
+                        <span class="category-section-icon">🧠</span>
+                        <div>
+                            <h2>Desafios Neuropsicológicos para Adultos</h2>
+                            <p>Alta demanda analítica, tomada de decisão sob incerteza, lógica formal e fortalecimento de reserva cognitiva.</p>
+                        </div>
+                    </div>
+                    <span class="category-section-badge">13 Treinos Disponíveis</span>
+                </div>
+                <div class="resource-grid-custom" id="grid-adultos">
+                <!-- Filtros Rápidos por Função Cognitiva -->
             <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; align-items: center;">
                 <span style="font-size: 0.85em; font-weight: 600; color: #64748b;">Filtrar por foco:</span>
                 <button onclick="filterGames('all', this)" class="game-filter-btn active-filter">Todos</button>
@@ -197,7 +787,7 @@
 
                 <!-- Card da Matriz de Quantificadores e Teoremas Alquímicos -->
                 <a href="jogos/jogo-quantificadores-logicos.html"
-                   class="resource-card-bg-image"
+                   class="resource-card-bg-image" data-age-group="adultos"
                    data-category="logica funcoes-executivas"
                    style="background-image: url('assets/imagens/jogo-quantificadores-logicos.png');">
                     <div class="card-content">
@@ -208,7 +798,7 @@
 
                 <!-- Card do Circuito das Portas da Verdade (Conectivos e Silogismos) -->
                 <a href="jogos/jogo-portas-da-verdade.html"
-                   class="resource-card-bg-image"
+                   class="resource-card-bg-image" data-age-group="adultos"
                    data-category="logica funcoes-executivas"
                    style="background-image: url('assets/imagens/jogo-portas-da-verdade.png');">
                     <div class="card-content">
@@ -219,7 +809,7 @@
 
                 <!-- Card do Labirinto de Rotação Espacial (Perspectiva Mental) -->
                 <a href="jogos/jogo-rotacao-espacial.html"
-                   class="resource-card-bg-image"
+                   class="resource-card-bg-image" data-age-group="adultos"
                    data-category="espacial atencao logica"
                    style="background-image: url('assets/imagens/jogo-rotacao-espacial.png');">
                     <div class="card-content">
@@ -230,7 +820,7 @@
 
                 <!-- Card da Balança Alquímica (Transitividade Lógica) -->
                 <a href="jogos/jogo-transitividade-logica.html"
-                   class="resource-card-bg-image"
+                   class="resource-card-bg-image" data-age-group="adultos"
                    data-category="logica raciocinio"
                    style="background-image: url('assets/imagens/jogo-transitividade-logica.png');">
                     <div class="card-content">
@@ -241,7 +831,7 @@
 
                 <!-- Card do Campo Receptivo Visuoatencional (Flanker Task) -->
                 <a href="jogos/jogo-campo-receptivo.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="funcoes-executivas logica"
                    style="background-image: url('assets/imagens/jogo-campo-receptivo.png');">
                     <div class="card-content">
@@ -252,7 +842,7 @@
 
                 <!-- Card da Matriz de Conflitos & Custo Cognitivo -->
                 <a href="jogos/jogo-matriz-conflitos.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="funcoes-executivas logica"
                    style="background-image: url('assets/imagens/matriz-conflitos.png');">
                     <div class="card-content">
@@ -263,7 +853,7 @@
 
                 <!-- Card da Balança dos Ponderáveis (Inferência Bayesiana) -->
                 <a href="jogos/jogo-balanca-bayesiana.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="logica funcoes-executivas"
                    style="background-image: url('assets/imagens/balanca-logica.png');">
                     <div class="card-content">
@@ -274,7 +864,7 @@
 
                 <!-- Card do Labirinto Hexagonal (Relações Espaciais) -->
                 <a href="jogos/jogo-labirinto-hexagonal.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="logica funcoes-executivas"
                    style="background-image: url('assets/imagens/jogo-labirinto-hexagonal.png');">
                     <div class="card-content">
@@ -285,7 +875,7 @@
 
                 <!-- Card da Criptografia Neural (Substituição de Padrões) -->
                 <a href="jogos/jogo-criptografia-neural.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="logica funcoes-executivas"
                    style="background-image: url('assets/imagens/balanca-logica.png');">
                     <div class="card-content">
@@ -296,7 +886,7 @@
 
                 <!-- Card do N-Back Dual (Memória Operacional Multimodal) -->
                 <a href="jogos/jogo-n-back.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="memoria funcoes-executivas"
                    style="background-image: url('assets/imagens/memoria-espacial.png');">
                     <div class="card-content">
@@ -305,31 +895,9 @@
                     </div>
                 </a>
 
-                <!-- Card dos Blocos de Corsi (Corsi Block-Tapping) -->
-                <a href="jogos/jogo-blocos-corsi.html" 
-                   class="resource-card-bg-image" 
-                   data-category="memoria funcoes-executivas"
-                   style="background-image: url('assets/imagens/jogo-blocos-corsi.png');">
-                    <div class="card-content">
-                        <h3>Blocos de Corsi (Memória Visuoespacial)</h3>
-                        <p>O teste padrão-ouro da alça visuoespacial de Baddeley: reproduza trajetórias em ordem direta e inversa.</p>
-                    </div>
-                </a>
-
-                <!-- Card da Torre de Londres (Shallice 1982) -->
-                <a href="jogos/jogo-torre-londres.html" 
-                   class="resource-card-bg-image" 
-                   data-category="funcoes-executivas logica"
-                   style="background-image: url('assets/imagens/torre-hanoi.png');">
-                    <div class="card-content">
-                        <h3>Torre de Londres (Shallice)</h3>
-                        <p>Planejamento motor sequencial, antecipação e controle inibitório no córtex pré-frontal dorsolateral.</p>
-                    </div>
-                </a>
-
                 <!-- Card da Associação Semântica & Conexões -->
                 <a href="jogos/jogo-associacao-semantica.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="logica memoria funcoes-executivas"
                    style="background-image: url('assets/imagens/padroes.png');">
                     <div class="card-content">
@@ -338,31 +906,9 @@
                     </div>
                 </a>
 
-                <!-- Card do Efeito Stroop Neurocognitivo -->
-                <a href="jogos/jogo-stroop-neuro.html" 
-                   class="resource-card-bg-image" 
-                   data-category="funcoes-executivas"
-                   style="background-image: url('assets/imagens/sequencia-cores.png');">
-                    <div class="card-content">
-                        <h3>Efeito Stroop Neurocognitivo</h3>
-                        <p>Controle inibitório frontal, resolução de conflito atencional e velocidade de processamento cognitivo.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Circuito Binário (Pensamento Algorítmico) -->
-                <a href="jogos/jogo-circuito-binario.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica funcoes-executivas"
-                   style="background-image: url('assets/imagens/jogo-circuito-binario.png');">
-                    <div class="card-content">
-                        <h3>Circuito Binário (Código Secreto)</h3>
-                        <p>Decodificação em potências de base 2, raciocínio lógico formal e controle inibitório para estabilizar módulos cerebrais.</p>
-                    </div>
-                </a>
-
                 <!-- Card do Paradoxo de Monty Hall (Probabilidade & Flexibilidade) -->
                 <a href="jogos/jogo-monty-hall.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="logica funcoes-executivas"
                    style="background-image: url('assets/imagens/jogo-monty-hall.png');">
                     <div class="card-content">
@@ -371,20 +917,9 @@
                     </div>
                 </a>
 
-                <!-- Card do Labirinto Visuoespacial (Planejamento) -->
-                <a href="jogos/jogo-labirinto-cognitivo.html" 
-                   class="resource-card-bg-image" 
-                   data-category="funcoes-executivas"
-                   style="background-image: url('assets/imagens/memoria-espacial.png');">
-                    <div class="card-content">
-                        <h3>Labirinto Visuoespacial (Planejamento)</h3>
-                        <p>Planejamento motor, mapeamento cognitivo e antecipação de rotas pelo córtex parietal e pré-frontal.</p>
-                    </div>
-                </a>
-
                 <!-- Card da Balança da Verdade (Silogismos) -->
                 <a href="jogos/jogo-silogismos.html" 
-                   class="resource-card-bg-image" 
+                   class="resource-card-bg-image" data-age-group="adultos" 
                    data-category="logica"
                    style="background-image: url('assets/imagens/jogo-silogismos.png');">
                     <div class="card-content">
@@ -392,204 +927,9 @@
                         <p>Valide premissas lógicas formais e desative o viés de crença neste desafio de raciocínio dedutivo.</p>
                     </div>
                 </a>
+                </div>
+            </section>
 
-                <!-- Card do Mini-Sudoku das Formas e Cores -->
-                <a href="jogos/jogo-mini-sudoku.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica funcoes-executivas"
-                   style="background-image: url('assets/imagens/sequencia-cores.png');">
-                    <div class="card-content">
-                        <h3>Mini-Sudoku das Formas e Cores</h3>
-                        <p>Exercite atenção sustentada, memória de trabalho e raciocínio lógico dedutivo sem números.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Circuito Neural (Conexão Lógica) -->
-                <a href="jogos/jogo-circuito-neural.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica funcoes-executivas"
-                   style="background-image: url('assets/imagens/logica-capa.png');">
-                    <div class="card-content">
-                        <h3>Circuito Neural (Conexão Lógica)</h3>
-                        <p>Rotacione as sinapses para restabelecer o pulso elétrico até o córtex pré-frontal.</p>
-                    </div>
-                </a>
-
-                <!-- Card das Matrizes Progressivas (Raven) -->
-                <a href="jogos/jogo-matrizes-raven.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica"
-                   style="background-image: url('assets/imagens/padroes.png');">
-                    <div class="card-content">
-                        <h3>Matrizes Progressivas (Raven)</h3>
-                        <p>Exercite raciocínio indutivo, identificação de padrões abstratos e inteligência fluida.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Detetive Lógico (Grid de Dedução) -->
-                <a href="jogos/jogo-detetive-logico.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica"
-                   style="background-image: url('assets/imagens/jogo-detetive-logico.png');">
-                    <div class="card-content">
-                        <h3>O Detetive Lógico (Grid de Dedução)</h3>
-                        <p>Exercite dedução, eliminação de hipóteses e memória de trabalho.</p>
-                    </div>
-                </a>
-
-                <!-- Card da Balança de Equivalências -->
-                <a href="jogos/jogo-balanca-logica.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica"
-                   style="background-image: url('assets/imagens/balanca-logica.png');">
-                    <div class="card-content">
-                        <h3>Balança de Equivalências</h3>
-                        <p>Desenvolva raciocínio algébrico visual, dedução e abstração matemática.</p>
-                    </div>
-                </a>
-
-                <!-- Card da Torre de Hanói -->
-                <a href="jogos/jogo-torre-hanoi.html" 
-                   class="resource-card-bg-image" 
-                   data-category="funcoes-executivas"
-                   style="background-image: url('assets/imagens/torre-hanoi.png');">
-                    <div class="card-content">
-                        <h3>Torre de Hanói</h3>
-                        <p>Estimule funções executivas, planejamento antecipatório e flexibilidade mental.</p>
-                    </div>
-                </a>
-
-                <a href="jogos/jogo-festival-pipa.html" 
-                   class="resource-card-bg-image" 
-                   data-category="emocional"
-                   style="background-image: url('assets/imagens/festival-pipa.png');">
-                    <div class="card-content">
-                        <h3>Festival das Pipas</h3>
-                        <p>Um festival, uma corrida, uma aventura feito para um amigo.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo da Memória -->
-                <a href="jogos/jogo-sequencia-cores.html" 
-                   class="resource-card-bg-image" 
-                   data-category="memoria"
-                   style="background-image: url('assets/imagens/sequencia-cores.png');">
-                    <div class="card-content">
-                        <h3>Sequência de Cores</h3>
-                        <p>Estimule memória de trabalho, controle inibitório, coordenação e planejamento.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo da Memória -->
-                <a href="jogos/jogo-memoria-espacial.html" 
-                   class="resource-card-bg-image" 
-                   data-category="memoria"
-                   style="background-image: url('assets/imagens/memoria-espacial.png');">
-                    <div class="card-content">
-                        <h3>Memória Espacial</h3>
-                        <p>Fortalece a capacidade de manter informações em mente através da memória de curto prazo.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo da Memória -->
-                <a href="jogos/jogo-caca-orbs.html" 
-                   class="resource-card-bg-image" 
-                   data-category="funcoes-executivas"
-                   style="background-image: url('assets/imagens/caca-orbs.png');">
-                    <div class="card-content">
-                        <h3>Caça aos Orbs Coloridos</h3>
-                        <p>Um jogo rápido para testar sua atenção, velocidade e precisão. Cace os orbs coloridos e bata seu recorde!</p>
-                    </div>
-                </a>
-                
-                <!-- Card do Jogo da Memória -->
-                <a href="jogos/jogo-encontre-animais.html" 
-                   class="resource-card-bg-image" 
-                   data-category="funcoes-executivas"
-                   style="background-image: url('assets/imagens/encontre-animais.png');">
-                    <div class="card-content">
-                        <h3>Encontre os Animais</h3>
-                        <p>Desenvolva velocidade de processamento, atenção e flexibilidade cognitiva.</p>
-                    </div>
-                </a>
-
-                <!-- Card Diário das Emoções -->
-                <a href="jogos/jogo-diário-emocoes.html" 
-                   class="resource-card-bg-image" 
-                   data-category="emocional"
-                   style="background-image: url('assets/imagens/emocoes.png');">
-                    <div class="card-content">
-                        <h3>Diário das Emoções</h3>
-                        <p>Registre seus sentimentos e pensamentos diariamente, salve em PDF.</p>
-                    </div>
-                </a>
-
-                <a href="jogos/jogo-construtor-histórias.html" 
-                   class="resource-card-bg-image" 
-                   data-category="emocional"
-                   style="background-image: url('assets/imagens/historias2.png');">
-                    <div class="card-content">
-                        <h3>Construtor de Histórias</h3>
-                        <p>Escolha o personagem, o ambiente e a aventura, crie, leia ou ouça em segundos.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo da Memória -->
-                <a href="jogos/jogo-memoria.html" 
-                   class="resource-card-bg-image" 
-                   data-category="memoria"
-                   style="background-image: url('assets/imagens/memoria.png');">
-                    <div class="card-content">
-                        <h3>Jogo da Memória das Emoções</h3>
-                        <p>Estimule a memória e o reconhecimento facial de emoções.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo de Regulação Emocional -->
-                <a href="jogos/jogo-regulacao-emocional.html" 
-                   class="resource-card-bg-image" 
-                   data-category="emocional"
-                   style="background-image: url('assets/imagens/macaquinho-feliz2.png');">
-                    <div class="card-content">
-                        <h3>Meu Amigo Macaco</h3>
-                        <p>Aprenda a identificar e regular as emoções.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo de Lógica -->
-                <a href="jogos/jogo-logica.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica"
-                   style="background-image: url('assets/imagens/logica-capa.png');">
-                    <div class="card-content">
-                        <h3>Desafio Sequencial</h3>
-                        <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo Fábrica de Emoções -->
-                <a href="jogos/jogo-fabrica-emocoes.html" 
-                   class="resource-card-bg-image" 
-                   data-category="emocional"
-                   style="background-image: url('assets/imagens/fabrica.png');">
-                    <div class="card-content">
-                        <h3>Fábrica de Emoções</h3>
-                        <p>Ajude os robôs a criarem e conhecerem as emoções básicas e complexas.</p>
-                    </div>
-                </a>
-
-                <!-- Card do Jogo de Lógica 2 -->
-                <a href="jogos/jogo-logica2.html" 
-                   class="resource-card-bg-image" 
-                   data-category="logica"
-                   style="background-image: url('assets/imagens/padroes.png');">
-                    <div class="card-content">
-                        <h3>Desafio dos Padrões</h3>
-                        <p>Desenvolva o raciocínio lógico e a atenção aos detalhes.</p>
-                    </div>
-                </a>
-
-            </div>
         </div>
     </section>
 </main>
@@ -699,19 +1039,72 @@
             }
         }
 
-        function filterGames(category, btnElement) {
-            const buttons = document.querySelectorAll('.game-filter-btn');
-            buttons.forEach(b => b.classList.remove('active-filter'));
+        let currentAgeCategory = 'all';
+        let currentCognitiveFocus = 'all';
+
+        function selectAgeCategory(ageCat, btnElement) {
+            currentAgeCategory = ageCat;
+
+            const ageBtns = document.querySelectorAll('.age-filter-btn');
+            ageBtns.forEach(b => b.classList.remove('active-age-filter'));
+            if (btnElement) {
+                btnElement.classList.add('active-age-filter');
+            } else {
+                const matchingBtn = Array.from(ageBtns).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + ageCat + "'"));
+                if (matchingBtn) matchingBtn.classList.add('active-age-filter');
+            }
+
+            applyCombinedFilters();
+
+            if (ageCat !== 'all') {
+                const targetSection = document.getElementById('categoria-' + ageCat);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        function filterByCognitiveFocus(focus, btnElement) {
+            currentCognitiveFocus = focus;
+
+            const focusBtns = document.querySelectorAll('.game-filter-btn');
+            focusBtns.forEach(b => b.classList.remove('active-filter'));
             if (btnElement) btnElement.classList.add('active-filter');
 
-            const cards = document.querySelectorAll('#games-grid .resource-card-bg-image');
-            cards.forEach(card => {
-                const cardCat = (card.getAttribute('data-category') || '').trim();
-                const cats = cardCat.split(/\s+/);
-                if (category === 'all' || cats.includes(category) || cardCat === category) {
-                    card.classList.remove('game-hidden');
+            applyCombinedFilters();
+        }
+
+        function applyCombinedFilters() {
+            const sections = document.querySelectorAll('.category-section');
+
+            sections.forEach(sec => {
+                const secAge = sec.getAttribute('data-age-section');
+                const isSectionVisible = (currentAgeCategory === 'all' || currentAgeCategory === secAge);
+
+                if (!isSectionVisible) {
+                    sec.style.display = 'none';
                 } else {
-                    card.classList.add('game-hidden');
+                    sec.style.display = 'block';
+
+                    const cards = sec.querySelectorAll('.resource-card-bg-image');
+                    let visibleCardsCount = 0;
+
+                    cards.forEach(card => {
+                        const cardCat = (card.getAttribute('data-category') || '').trim();
+                        const cats = cardCat.split(/\s+/);
+                        const matchesFocus = (currentCognitiveFocus === 'all' || cats.includes(currentCognitiveFocus) || cardCat === currentCognitiveFocus);
+
+                        if (matchesFocus) {
+                            card.classList.remove('game-hidden');
+                            visibleCardsCount++;
+                        } else {
+                            card.classList.add('game-hidden');
+                        }
+                    });
+
+                    if (visibleCardsCount === 0 && currentCognitiveFocus !== 'all') {
+                        sec.style.display = 'none';
+                    }
                 }
             });
         }
