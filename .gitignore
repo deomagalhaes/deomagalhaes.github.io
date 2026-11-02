@@ -1,3 +1,4 @@
 logs/
 *.lock
 nexus-vault/data/agenda-cache.json
+nexus-vault/data/agenda-seed.js

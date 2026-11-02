@@ -55,6 +55,40 @@ try {
         $pathPart = $rawUrl.Split('?')[0]
         $decodedPath = [System.Uri]::UnescapeDataString($pathPart)
 
+        # Endpoint de API: Sincronização sob demanda com o Google Calendar
+        if ($decodedPath -eq '/api/sync-gcalendar') {
+            $response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate")
+            $response.Headers.Add("Access-Control-Allow-Origin", "*")
+            $response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            $response.Headers.Add("Access-Control-Allow-Headers", "*")
+            if ($request.HttpMethod -eq 'OPTIONS') {
+                $response.StatusCode = 204
+                $response.Close()
+                continue
+            }
+            try {
+                $syncScript = Join-Path $Root "scripts\sync-agenda-vault.ps1"
+                if (Test-Path $syncScript) {
+                    & $syncScript | Out-Null
+                }
+                $cacheJson = Join-Path $Root "nexus-vault\data\agenda-cache.json"
+                if (Test-Path $cacheJson) {
+                    $bytes = [System.IO.File]::ReadAllBytes($cacheJson)
+                    $response.ContentType = "application/json; charset=utf-8"
+                    $response.StatusCode = 200
+                    $response.OutputStream.Write($bytes, 0, $bytes.Length)
+                } else {
+                    throw "Arquivo agenda-cache.json nao encontrado apos sincronizacao."
+                }
+            } catch {
+                $response.StatusCode = 500
+                $errBytes = [System.Text.Encoding]::UTF8.GetBytes("{`"error`": `"$($_.Exception.Message)`"}")
+                $response.OutputStream.Write($errBytes, 0, $errBytes.Length)
+            }
+            $response.Close()
+            continue
+        }
+
         $relPath = $decodedPath.TrimStart('/').Replace('/', [System.IO.Path]::DirectorySeparatorChar)
         if ([string]::IsNullOrWhiteSpace($relPath)) {
             $relPath = "index.html"

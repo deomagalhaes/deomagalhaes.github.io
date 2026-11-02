@@ -96,7 +96,13 @@ $payload = [PSCustomObject]@{
 $jsonOutput = $payload | ConvertTo-Json -Depth 5
 [System.IO.File]::WriteAllText($outputFile, $jsonOutput, [System.Text.UTF8Encoding]::new($false))
 
+# Grava tambem agenda-seed.js para acesso imediato no navegador sem restricao de CORS em file://
+$seedFile = Join-Path $cacheDir "agenda-seed.js"
+$seedJs = "window.__VAULT_AGENDA_SEED__ = $jsonOutput;"
+[System.IO.File]::WriteAllText($seedFile, $seedJs, [System.Text.UTF8Encoding]::new($false))
+
 Write-Host "Arquivo gravado com sucesso: $outputFile" -ForegroundColor Green
+Write-Host "Seed JS gravado com sucesso: $seedFile" -ForegroundColor Green
 Write-Host "Total de sessoes registradas: $($cleanedEvents.Count)" -ForegroundColor Green
 
 # 5. Exibir Resumo de Atendimentos Agrupados

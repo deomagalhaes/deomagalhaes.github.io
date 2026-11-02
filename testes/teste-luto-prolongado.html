@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Luto Prolongado e Apego Rompido (PG-13 / T-27) – Deo Magalhães</title>
+    <meta name="description" content="Avalie indicadores de Transtorno do Luto Prolongado (PGD), anseio persistente, dor social e impacto funcional com base nos critérios do DSM-5-TR e CID-11.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .btn-calc {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 95, 115, 0.35);
+        }
+
+        .results-box {
+            display: none;
+            margin-top: 35px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #0a9396;
+            padding: 30px;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 640px) {
+            .subscales-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .subscale-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 6px 0;
+            color: #005f73;
+            font-size: 0.95em;
+        }
+
+        .subscale-score {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .cta-consult-box {
+            background: #001219;
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .cta-consult-box h3 {
+            color: #94d2bd;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .cta-consult-box p {
+            color: #e2e8f0;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+        }
+
+        .cta-consult-box a {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-consult-box a:hover {
+            background: #ca6702;
+            color: white;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container" style="max-width: 860px; padding: 40px 20px;">
+            <header style="text-align: center; margin-bottom: 30px;">
+                <span style="display:inline-block; background:#e0f2fe; color:#0369a1; padding:4px 14px; border-radius:20px; font-size:0.85em; font-weight:700; text-transform:uppercase; margin-bottom:10px;">Escala Clínica Autoaplicável • T-27</span>
+                <h1 style="color:#005f73; font-size:2.2em; margin-bottom:10px;">Inventário de Luto Prolongado e Apego Rompido (PG-13)</h1>
+                <p style="color:#64748b; font-size:1.1em; max-width:680px; margin:0 auto;">Rastreio neuroclínico para avaliação do anseio persistente, dor social de apego e reorganização existencial após perdas significativas (DSM-5-TR / CID-11).</p>
+            </header>
+
+            <div class="quiz-container">
+                <div class="test-intro-box">
+                    <strong>Como responder:</strong> Pense na perda mais dolorosa ou vínculo rompido que marcou sua trajetória recente (morte de um ente querido, término de relacionamento longo ou separação afetiva profunda). Indique com que frequência você experimentou os seguintes sentimentos, pensamentos e reações corporais <strong>no último mês</strong>.
+                </div>
+
+                <form id="lutoForm">
+                    <!-- Q1 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">01</span>
+                            <span>Sinto uma saudade avassaladora e um anseio doloroso (fissura afetiva) pela presença física de quem partiu.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">02</span>
+                            <span>Pensamentos e imagens da pessoa invadem minha mente de forma involuntária, sequestrando meu foco cotidiano.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">03</span>
+                            <span>Pego-me esperando ouvir os passos, a voz ou a chegada da pessoa, como se a perda ainda não fosse real.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">04</span>
+                            <span>Sinto que uma parte vital da minha própria identidade e da minha alma foi arrancada junto com a perda.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">05</span>
+                            <span>Tenho grande dificuldade em aceitar a irreversibilidade da separação ou do rompimento do vínculo.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">06</span>
+                            <span>Experimento um vazio existencial profundo e a sensação de que a vida perdeu o sentido ou o brilho.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">07</span>
+                            <span>Sinto-me desorientado(a) quanto ao meu futuro ou sem clareza sobre quem eu sou sem aquela convivência.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">08</span>
+                            <span>Evito ativamente lugares, conversas, fotos, datas ou objetos que me façam lembrar da pessoa ou do ocorrido.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">09</span>
+                            <span>Sinto amargura, mágoa crônica ou uma revolta intensa contra a vida ou circunstâncias relacionadas à perda.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">10</span>
+                            <span>Ao lembrar da ausência, sinto sintomas corporais intensos (nó na garganta, opressão torácica, palpitações ou fadiga extrema).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q11 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">11</span>
+                            <span>Sinto-me emocionalmente anestesiado(a) ou com grande dificuldade de experimentar alegria genuína com outras pessoas.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q12 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">12</span>
+                            <span>Tenho dificuldade para confiar plenamente ou me conectar afetivamente com amigos, familiares ou novos círculos.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Q13 -->
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">13</span>
+                            <span>A saudade e o sofrimento da ausência prejudicam seriamente meu trabalho, meus cuidados pessoais e meu dia a dia.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="5"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <button type="button" id="btnCalculate" class="btn-calc">Calcular Resultado Clínico (T-27)</button>
+                </form>
+
+                <!-- Resultados -->
+                <div id="resultsBox" class="results-box">
+                    <h2 style="color:#005f73; margin-top:0;">Resultado da Avaliação Clínica (T-27)</h2>
+                    <div id="scoreBadge" class="score-badge">Pontuação Total: -- / 65</div>
+                    <h3 id="resultCategory" style="color:#0f172a; margin: 10px 0;">--</h3>
+                    <p id="resultDescription" style="line-height:1.7; color:#334155;">--</p>
+
+                    <h3 style="margin-top:25px; color:#005f73;">Perfil por Dimensões Neuroclínicas</h3>
+                    <div class="subscales-grid">
+                        <div class="subscale-card">
+                            <h4>Anseio e Saudade Intrusiva (Q1-Q3)</h4>
+                            <div class="subscale-score" id="subAnseio">-- / 15</div>
+                            <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Fissura dopaminérgica, pensamentos intrusivos e expectativa límbica.</p>
+                        </div>
+                        <div class="subscale-card">
+                            <h4>Ruptura de Identidade & Vazio (Q4-Q7)</h4>
+                            <div class="subscale-score" id="subIdentidade">-- / 20</div>
+                            <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Desestruturação do Self, desorientação temporal e crise de sentido.</p>
+                        </div>
+                        <div class="subscale-card">
+                            <h4>Evitação e Dor Somática (Q8-Q10)</h4>
+                            <div class="subscale-score" id="subEvitacao">-- / 15</div>
+                            <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Ativação dACC/ínsula, esquiva de gatilhos e amargura existencial.</p>
+                        </div>
+                        <div class="subscale-card">
+                            <h4>Desconexão & Prejuízo Funcional (Q11-Q13)</h4>
+                            <div class="subscale-score" id="subFuncional">-- / 15</div>
+                            <p style="font-size:0.85em; color:#64748b; margin-top:5px;">Anedonia social, retração de afiliação e colapso de rotinas vitais.</p>
+                        </div>
+                    </div>
+
+                    <div style="background:#f1f5f9; border-radius:8px; padding:20px; margin-top:25px;">
+                        <h4 style="color:#005f73; margin-top:0;">Interpretação Neurobiológica</h4>
+                        <p style="font-size:0.92em; line-height:1.6; color:#475569; margin-bottom:0;">
+                            No luto, o cérebro realiza uma gigantesca recalibração sináptica: as redes hipocampais precisam reescrever as coordenadas do vínculo enquanto a <strong>Rede de Modo Padrão (DMN)</strong> gasta vastos estoques de energia revivendo o passado. Quando os escores de anseio e evitação permanecem muito elevados após vários meses, há um congelamento do modelo preditivo: o sistema de apego opera em constante sinal de emergência biológica, elevando a carga alostática e a inflamação sistêmica. A intervenção neuroclínica visa transitar do vínculo físico concreto para a representação simbólica internalizada, devolvendo agência e vitalidade ao sujeito.
+                        </p>
+                    </div>
+
+                    <div class="cta-consult-box">
+                        <h3>Precisa de Apoio Especializado no Processamento do Luto?</h3>
+                        <p>O acolhimento neuropsicológico fornece um espaço seguro e cientificamente embasado para integrar a dor da ausência, regular o sistema nervoso autonômico e reconstruir o horizonte de futuro com dignidade existencial.</p>
+                        <a href="https://wa.me/5535933003807?text=Olá,%20fiz%20o%20Inventário%20de%20Luto%20Prolongado%20(PG-13)%20no%20site%20e%20gostaria%20de%20orientação%20profissional." target="_blank">Agendar Acolhimento Neuropsicológico</a>
+                    </div>
+                </div>
+
+                <p style="margin-top:35px; font-size:0.85em; color:#94a3b8; text-align:center;">
+                    <em>Aviso Ético: Este questionário tem caráter estritamente psicoeducativo e de rastreio funcional. Não substitui uma avaliação diagnóstica clínica individualizada realizada por profissional de saúde mental qualificado.</em>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('btnCalculate').addEventListener('click', function() {
+            let totalScore = 0;
+            let answeredCount = 0;
+            const values = [];
+
+            for (let i = 1; i <= 13; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    const val = parseInt(selected.value, 10);
+                    values[i] = val;
+                    totalScore += val;
+                    answeredCount++;
+                } else {
+                    alert(`Por favor, responda à questão ${i} antes de prosseguir.`);
+                    const qElem = document.querySelector(`input[name="q${i}"]`);
+                    if (qElem) {
+                        qElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            }
+
+            // Subescalas
+            const subAnseio = values[1] + values[2] + values[3]; // Max 15
+            const subIdentidade = values[4] + values[5] + values[6] + values[7]; // Max 20
+            const subEvitacao = values[8] + values[9] + values[10]; // Max 15
+            const subFuncional = values[11] + values[12] + values[13]; // Max 15
+
+            document.getElementById('subAnseio').innerText = `${subAnseio} / 15`;
+            document.getElementById('subIdentidade').innerText = `${subIdentidade} / 20`;
+            document.getElementById('subEvitacao').innerText = `${subEvitacao} / 15`;
+            document.getElementById('subFuncional').innerText = `${subFuncional} / 15`;
+
+            const badge = document.getElementById('scoreBadge');
+            const cat = document.getElementById('resultCategory');
+            const desc = document.getElementById('resultDescription');
+
+            badge.innerText = `Pontuação Total: ${totalScore} / 65`;
+
+            if (totalScore <= 25) {
+                badge.style.background = '#2a9d8f';
+                cat.innerText = 'Processamento Adaptativo e Resiliência Psíquica';
+                desc.innerText = 'Seus escores indicam que a dor da perda e a saudade estão sendo integradas de forma saudável na sua história de vida. Embora a tristeza e a ausência possam emergir em momentos comemorativos, suas funções executivas, identidade pessoal e capacidade de vinculação permanecem ativas e resilientes.';
+            } else if (totalScore <= 38) {
+                badge.style.background = '#0a9396';
+                cat.innerText = 'Reatividade Emocional e Desconforto Significativo';
+                desc.innerText = 'Você apresenta um nível moderado de sofrimento associado à ausência ou término do vínculo. Podem ocorrer momentos de anseio intenso, fadiga mental e esquiva de lembranças específicas. É um momento propício para fortalecer redes de apoio afetivo seguro e priorizar o descanso e a regulação autonômica.';
+            } else if (totalScore <= 50) {
+                badge.style.background = '#ee9b00';
+                cat.innerText = 'Dificuldade Acentuada de Adaptação e Risco Clínico';
+                desc.innerText = 'Seus resultados sugerem que o processo de remapeamento do luto está encontrando entraves significativos. Há forte sensação de vazio existencial, pensamentos intrusivos recorrentes e impacto perceptível no autoconceito e nas rotinas diárias. Um acompanhamento neuropsicológico especializado pode ajudar decisivamente a desbloquear a integração da memória da perda.';
+            } else {
+                badge.style.background = '#ae2012';
+                cat.innerText = 'Indicadores Severos Compatíveis com Rastreio de Transtorno de Luto Prolongado (PGD)';
+                desc.innerText = 'A intensidade do anseio, a evitação fóbica de lembranças, a desintegração do Self e a paralisia funcional observadas configuram um quadro clínico severo que merece atenção imediata. Esse estado indica que o sistema de apego permanece paralisado no trauma da separação. É altamente recomendado buscar acolhimento psicológico e psiquiátrico especializado para suporte estruturado.';
+            }
+
+            const resBox = document.getElementById('resultsBox');
+            resBox.style.display = 'block';
+            resBox.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>
