@@ -280,6 +280,11 @@
         duadType: 'SIXTHS_1_3',      // 'THIRDS_1_2' | 'THIRDS_2_3' | 'THIRDS_3_4' | 'SIXTHS_1_3' | 'SIXTHS_2_4'
         duadKeyId: 'E_maj',
         activeDuadStepIdx: -1,       // -1 = mostra escala toda; 0..7 = destaca grau em reprodução
+        progressionId: 'cururu_moda', // Cadência ativa do módulo de progressões
+        progressionPlaying: false,
+        progressionStepIdx: -1,
+        progressionLoop: true,
+        progressionBeatsPerChord: 4,  // 2 | 4 | 8 tempos por acorde
         bpm: 92,
         timeSignature: '2/4',        // '2/4' | '3/4' | '4/4' | '6/8'
         subdivision: 2               // 1 | 2 | 3 | 4
@@ -295,6 +300,7 @@
     let metroRafId = null;
     let tapTimestamps = [];
     let scalePlayTimers = [];
+    let progressionTimerId = null;
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -635,6 +641,303 @@
     }
 
     // =========================================================================
+    // MOTOR DE ESTUDOS DE PROGRESSÃO HARMÔNICA & CADÊNCIAS
+    // =========================================================================
+    const HARMONIC_PROGRESSIONS = [
+        {
+            id: 'cururu_moda',
+            title: 'Moda & Cururu Tradicional (I – IV – V7 – I)',
+            style: 'Cururu / Moda Caipira',
+            desc: 'Cadência basilar da música de raiz paulista e mineira. Tônica (repouso no 1º grau), Subdominante (afastamento no 4º grau), Dominante com 7ª (tensão máxima no 5º grau) e Resolução.',
+            degrees: [0, 3, 4, 0],
+            useTetrads: [false, false, true, false],
+            functions: ['Tônica (Repouso)', 'Subdominante (Afastamento)', 'Dominante (Tensão)', 'Tônica (Resolução)']
+        },
+        {
+            id: 'toada_amor',
+            title: 'Toada Sentimental (I – V7 – IV – I)',
+            style: 'Toada / Guarânia Lenta',
+            desc: 'Movimento com cadência plagal final (IV – I), criando atmosfera nostálgica e doce típica das toadas líricas e guarânias.',
+            degrees: [0, 4, 3, 0],
+            useTetrads: [false, true, false, false],
+            functions: ['Tônica', 'Dominante com 7ª', 'Subdominante Plagal', 'Tônica']
+        },
+        {
+            id: 'turnaround_caipira',
+            title: 'Turnaround / Lamento Caipira (I – vi – ii – V7)',
+            style: 'Chora Viola / Canção Caipira',
+            desc: 'Círculo harmônico com passagem pela relativa menor (vi) e segundo grau menor (ii). Gera condução fluida e sofisticada para introduções e pontes.',
+            degrees: [0, 5, 1, 4],
+            useTetrads: [true, true, true, true],
+            functions: ['Tônica (I7M)', 'Relativa Menor (vi7)', 'Superfônica (ii7)', 'Dominante (V7)']
+        },
+        {
+            id: 'moda_menor',
+            title: 'Moda em Tom Menor (i – iv – V7 – i)',
+            style: 'Violeiro Triste / Tom Menor',
+            desc: 'Cadência dramática em tonalidade menor. No Cebolão em Mi, explora a força do acorde dominante com 7ª preparando o retorno à tônica menor.',
+            degrees: [0, 3, 4, 0],
+            forceMinor: true,
+            useTetrads: [false, false, true, false],
+            functions: ['Tônica Menor (i)', 'Subdominante Menor (iv)', 'Dominante com 7ª (V7)', 'Tônica Menor (i)']
+        },
+        {
+            id: 'pop_sertanejo',
+            title: 'Quatro Acordes Mágicos (I – V – vi – IV)',
+            style: 'Sertanejo Romântico & Pop',
+            desc: 'A progressão mais utilizada no cancioneiro popular. Combina a luminosidade do I e V com a introspecção do vi e a abertura do IV.',
+            degrees: [0, 4, 5, 3],
+            useTetrads: [false, false, false, false],
+            functions: ['Tônica', 'Dominante', 'Relativa Menor', 'Subdominante']
+        },
+        {
+            id: 'ii_v_i_jazz',
+            title: 'Cadência II – V – I com Tétrades (ii7 – V7 – I7M)',
+            style: 'Harmonia Funcional Avançada',
+            desc: 'O ápice da harmonia funcional. Segundo grau menor com sétima, dominante com trítono e resolução suave na tônica com sétima maior.',
+            degrees: [1, 4, 0],
+            useTetrads: [true, true, true],
+            functions: ['Subdominante (ii7)', 'Dominante (V7)', 'Tônica Nobre (I7M)']
+        },
+        {
+            id: 'ponteado_ascendente',
+            title: 'Ponteio Diatônico Ascendente (I – ii – iii – IV – V)',
+            style: 'Ponteio Escalado / Repique',
+            desc: 'Caminhada diatônica em graus conjuntos ascendentes pelo braço da viola, muito empregada em aberturas de pagode e repiques caipiras.',
+            degrees: [0, 1, 2, 3, 4],
+            useTetrads: [false, false, false, false, true],
+            functions: ['Tônica (I)', 'Grau II (ii)', 'Grau III (iii)', 'Grau IV (IV)', 'Grau V (V7)']
+        }
+    ];
+
+    function stopProgressionPlayback() {
+        if (progressionTimerId) {
+            clearTimeout(progressionTimerId);
+            progressionTimerId = null;
+        }
+        state.progressionPlaying = false;
+        state.progressionStepIdx = -1;
+        updateProgressionUIState();
+    }
+
+    function playProgression() {
+        if (state.progressionPlaying) {
+            stopProgressionPlayback();
+            return;
+        }
+        stopScalePlayback();
+        stopPonteioPlayback();
+        stopTunerTone();
+
+        state.progressionPlaying = true;
+        state.progressionStepIdx = 0;
+        executeProgressionStep();
+    }
+
+    function executeProgressionStep() {
+        if (!state.progressionPlaying) return;
+        const prog = HARMONIC_PROGRESSIONS.find((p) => p.id === state.progressionId) || HARMONIC_PROGRESSIONS[0];
+        const numSteps = prog.degrees.length;
+
+        if (state.progressionStepIdx >= numSteps) {
+            if (state.progressionLoop) {
+                state.progressionStepIdx = 0;
+            } else {
+                stopProgressionPlayback();
+                return;
+            }
+        }
+
+        const stepIdx = state.progressionStepIdx;
+        const degIdx = prog.degrees[stepIdx];
+        const wantTetrad = prog.useTetrads[stepIdx];
+
+        let keyId = state.selectedKeyId;
+        if (prog.forceMinor) {
+            const currKey = HARMONIC_KEYS.find((k) => k.id === keyId);
+            if (currKey && currKey.mode !== 'minor') {
+                const relMinor = HARMONIC_KEYS.find((k) => k.mode === 'minor' && (k.root === (currKey.root + 9) % 12));
+                keyId = relMinor ? relMinor.id : 'C#m_min';
+            }
+        }
+
+        const prevExt = state.harmonicExtension;
+        state.harmonicExtension = wantTetrad ? 'tetrad' : 'triad';
+        const field = getHarmonicField(keyId);
+        state.harmonicExtension = prevExt;
+
+        const chordObj = field[degIdx] || field[0];
+        state.displayMode = 'CHORD';
+        state.selectedDegreeIdx = degIdx;
+        state.voicingVariantIdx = 0;
+
+        renderFretboardSVG();
+        updateProgressionUIState();
+
+        const voicings = getChordVoicings(chordObj);
+        const shape = voicings[0] || [0, 0, 0, 0, 0];
+        const inst = INSTRUMENTS[state.instrumentId];
+        let noteStep = 0;
+        for (let cIdx = inst.courses.length - 1; cIdx >= 0; cIdx--) {
+            const fret = shape[cIdx];
+            if (fret >= 0) {
+                playCourseAtFret(cIdx, fret, noteStep * 0.045);
+                flashFretCell(cIdx, fret, noteStep * 45);
+                noteStep++;
+            }
+        }
+
+        const beatSec = 60 / Math.max(40, state.bpm);
+        const chordDurationSec = beatSec * state.progressionBeatsPerChord;
+
+        state.progressionStepIdx++;
+        progressionTimerId = setTimeout(executeProgressionStep, Math.max(1000, chordDurationSec * 1000));
+    }
+
+    function updateProgressionUIState() {
+        const playBtn = document.getElementById('btn-viola-play-progression');
+        if (playBtn) {
+            playBtn.innerHTML = state.progressionPlaying
+                ? `<i data-lucide="square" class="w-4 h-4 text-rose-300"></i><span>Pausar Estudo</span>`
+                : `<i data-lucide="play" class="w-4 h-4 text-slate-950"></i><span>Tocar Estudo da Progressão</span>`;
+            playBtn.className = state.progressionPlaying
+                ? 'min-h-[40px] px-4 py-1.5 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/40 text-rose-200 font-bold text-xs flex items-center gap-2 transition'
+                : 'min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition';
+            if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        }
+
+        const loopBtn = document.getElementById('btn-viola-loop-progression');
+        if (loopBtn) {
+            loopBtn.className = state.progressionLoop
+                ? 'min-h-[40px] px-3 py-1.5 rounded-lg bg-cyan-600/20 border border-cyan-400 text-cyan-200 text-xs font-mono font-semibold flex items-center gap-1.5 transition'
+                : 'min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 text-xs font-mono flex items-center gap-1.5 transition';
+        }
+
+        const ruler = document.getElementById('viola-progression-ruler');
+        if (ruler) {
+            const activeStep = state.progressionPlaying ? state.progressionStepIdx - 1 : -1;
+            ruler.querySelectorAll('[data-prog-card-idx]').forEach((card) => {
+                const cIdx = parseInt(card.getAttribute('data-prog-card-idx'), 10);
+                if (cIdx === activeStep) {
+                    card.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-500/20', 'border-emerald-400', 'shadow-lg');
+                    card.classList.remove('bg-[#090d16]', 'border-slate-800');
+                } else {
+                    card.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-500/20', 'border-emerald-400', 'shadow-lg');
+                    card.classList.add('bg-[#090d16]', 'border-slate-800');
+                }
+            });
+        }
+    }
+
+    function renderProgressionStudyPanel() {
+        const container = document.getElementById('viola-progression-container');
+        if (!container) return;
+
+        const prog = HARMONIC_PROGRESSIONS.find((p) => p.id === state.progressionId) || HARMONIC_PROGRESSIONS[0];
+        let keyId = state.selectedKeyId;
+        if (prog.forceMinor) {
+            const currKey = HARMONIC_KEYS.find((k) => k.id === keyId);
+            if (currKey && currKey.mode !== 'minor') {
+                const relMinor = HARMONIC_KEYS.find((k) => k.mode === 'minor' && (k.root === (currKey.root + 9) % 12));
+                keyId = relMinor ? relMinor.id : 'C#m_min';
+            }
+        }
+        const activeKeyObj = HARMONIC_KEYS.find((k) => k.id === keyId) || HARMONIC_KEYS[0];
+
+        const chordsData = prog.degrees.map((degIdx, stepIdx) => {
+            const wantTetrad = prog.useTetrads[stepIdx];
+            const prevExt = state.harmonicExtension;
+            state.harmonicExtension = wantTetrad ? 'tetrad' : 'triad';
+            const field = getHarmonicField(keyId);
+            state.harmonicExtension = prevExt;
+
+            const chordObj = field[degIdx] || field[0];
+            const voicings = getChordVoicings(chordObj);
+            const activeShape = voicings[0] || [0, 0, 0, 0, 0];
+            const shapeTxt = activeShape.map((f) => (f < 0 ? 'X' : f)).slice().reverse().join(' - ');
+
+            return {
+                stepIdx,
+                barNum: stepIdx + 1,
+                chordObj,
+                shapeTxt,
+                functionName: prog.functions[stepIdx] || ''
+            };
+        });
+
+        container.innerHTML = `
+            <div class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3.5 space-y-3">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                                ${prog.style}
+                            </span>
+                            <span class="text-xs font-mono text-slate-400">Tonalidade de Estudo: <strong class="text-emerald-300">${activeKeyObj.label}</strong></span>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-100 mt-1">${prog.title}</h4>
+                        <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">${prog.desc}</p>
+                    </div>
+                </div>
+
+                <div id="viola-progression-ruler" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                    ${chordsData.map((item) => `
+                        <div data-prog-card-idx="${item.stepIdx}"
+                            class="bg-[#090d16] border border-slate-800 hover:border-emerald-500/40 rounded-xl p-3 flex flex-col justify-between cursor-pointer transition group">
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between text-[10px] font-mono text-slate-500">
+                                    <span>Compasso ${item.barNum}</span>
+                                    <span class="text-emerald-400 font-semibold">${item.chordObj.roman}</span>
+                                </div>
+                                <div class="text-base sm:text-lg font-bold font-mono text-slate-100 group-hover:text-emerald-300 transition">
+                                    ${item.chordObj.chordName}
+                                </div>
+                                <div class="text-[11px] font-mono text-cyan-300">
+                                    ${item.chordObj.pitchClasses.map((p) => NOTE_NAMES[p]).join('·')}
+                                </div>
+                            </div>
+                            <div class="pt-2 mt-2 border-t border-slate-800/80 space-y-1 text-[10px] font-mono">
+                                <div class="text-slate-400 truncate">${item.functionName}</div>
+                                <div class="text-amber-300/90 font-mono text-[10px]">Casas: ${item.shapeTxt}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        container.querySelectorAll('[data-prog-card-idx]').forEach((card) => {
+            card.addEventListener('click', () => {
+                stopProgressionPlayback();
+                const stepIdx = parseInt(card.getAttribute('data-prog-card-idx'), 10);
+                const stepData = chordsData[stepIdx];
+                if (!stepData) return;
+
+                state.displayMode = 'CHORD';
+                state.selectedDegreeIdx = stepData.chordObj.degreeIndex;
+                state.voicingVariantIdx = 0;
+                renderFretboardSVG();
+                saveViolaState();
+
+                const voicings = getChordVoicings(stepData.chordObj);
+                const shape = voicings[0] || [0, 0, 0, 0, 0];
+                const inst = INSTRUMENTS[state.instrumentId];
+                let noteStep = 0;
+                for (let cIdx = inst.courses.length - 1; cIdx >= 0; cIdx--) {
+                    const fret = shape[cIdx];
+                    if (fret >= 0) {
+                        playCourseAtFret(cIdx, fret, noteStep * 0.045);
+                        flashFretCell(cIdx, fret, noteStep * 45);
+                        noteStep++;
+                    }
+                }
+            });
+        });
+
+        updateProgressionUIState();
+    }
+
+    // =========================================================================
     // BIBLIOTECA DE PONTEIOS & REPERTÓRIO CLÁSSICO DE VIOLA CAIPIRA
     // =========================================================================
     const PONTEIOS_REPERTOIRE = [
@@ -724,6 +1027,7 @@
     function playPonteioSequence(ponteioId) {
         stopScalePlayback();
         stopPonteioPlayback();
+        stopProgressionPlayback();
         stopTunerTone();
         const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === ponteioId);
         if (!pt) return;
@@ -772,6 +1076,7 @@
         stopTunerTone();
         stopPonteioPlayback();
         stopScalePlayback();
+        stopProgressionPlayback();
 
         const inst = INSTRUMENTS[state.instrumentId];
         const course = inst.courses[courseIdx];
@@ -1329,7 +1634,7 @@
         const C = global.VaultCore;
         const saved = C.store.get(C.STORAGE_KEYS.VIOLA, null);
         if (saved && typeof saved === 'object') {
-            state = Object.assign({}, state, saved, { activeDuadStepIdx: -1 });
+            state = Object.assign({}, state, saved, { activeDuadStepIdx: -1, progressionPlaying: false, progressionStepIdx: -1 });
         }
     }
 
@@ -1337,6 +1642,8 @@
         const C = global.VaultCore;
         const copy = Object.assign({}, state);
         delete copy.activeDuadStepIdx;
+        delete copy.progressionPlaying;
+        delete copy.progressionStepIdx;
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
@@ -1462,6 +1769,45 @@
                     </div>
                 </div>
 
+                <!-- Módulo de Estudos de Progressão Harmônica & Cadências -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="git-commit" class="w-4 h-4 text-emerald-400"></i>
+                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Estudos de Progressão Harmônica & Cadências</h3>
+                            </div>
+                            <p class="text-xs text-slate-400">Laboratório auditivo e prático de cadências caipiras, funções harmônicas e treino de transição de shapes</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="viola-select-progression" aria-label="Selecione a progressão harmônica"
+                                class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-emerald-300">
+                                ${HARMONIC_PROGRESSIONS.map((p) => `<option value="${p.id}" ${state.progressionId === p.id ? 'selected' : ''}>${p.title}</option>`).join('')}
+                            </select>
+
+                            <select id="viola-select-prog-beats" aria-label="Tempos por acorde"
+                                class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-slate-200">
+                                <option value="2" ${state.progressionBeatsPerChord === 2 ? 'selected' : ''}>2 Tempos / Acorde</option>
+                                <option value="4" ${state.progressionBeatsPerChord === 4 ? 'selected' : ''}>4 Tempos (Padrão)</option>
+                                <option value="8" ${state.progressionBeatsPerChord === 8 ? 'selected' : ''}>8 Tempos (Lento)</option>
+                            </select>
+
+                            <button type="button" id="btn-viola-loop-progression" title="Alternar repetição contínua (Loop)"
+                                class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.progressionLoop ? 'bg-cyan-600/20 border border-cyan-400 text-cyan-200' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} text-xs font-mono font-semibold flex items-center gap-1.5 transition">
+                                <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                                <span>Loop</span>
+                            </button>
+
+                            <button type="button" id="btn-viola-play-progression" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span>Tocar Estudo da Progressão</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="viola-progression-container"></div>
+                </div>
+
                 <!-- Biblioteca de Repertório de Ponteios & Solos Clássicos -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -1560,6 +1906,11 @@
         document.getElementById('viola-metro-sig').value = state.timeSignature;
         document.getElementById('viola-metro-sub').value = String(state.subdivision);
 
+        const progSel = document.getElementById('viola-select-progression');
+        if (progSel) progSel.value = state.progressionId;
+        const progBeatsSel = document.getElementById('viola-select-prog-beats');
+        if (progBeatsSel) progBeatsSel.value = String(state.progressionBeatsPerChord);
+
         const handBadge = document.getElementById('viola-hand-badge');
         const handLabel = document.getElementById('label-viola-hand');
         if (state.isLeftHanded) {
@@ -1582,6 +1933,7 @@
         document.getElementById('viola-select-instrument').addEventListener('change', (e) => {
             stopScalePlayback();
             stopPonteioPlayback();
+            stopProgressionPlayback();
             stopTunerTone();
             state.instrumentId = e.target.value;
             state.voicingVariantIdx = 0;
@@ -1645,6 +1997,7 @@
 
         document.getElementById('viola-select-key').addEventListener('change', (e) => {
             stopScalePlayback();
+            stopProgressionPlayback();
             state.displayMode = 'CHORD';
             state.selectedKeyId = e.target.value;
             state.selectedDegreeIdx = 0;
@@ -1656,6 +2009,7 @@
 
         document.getElementById('viola-select-duad-type').addEventListener('change', (e) => {
             stopScalePlayback();
+            stopProgressionPlayback();
             state.displayMode = 'DUAD';
             state.duadType = e.target.value;
             saveViolaState();
@@ -1664,6 +2018,7 @@
 
         document.getElementById('viola-select-duad-key').addEventListener('change', (e) => {
             stopScalePlayback();
+            stopProgressionPlayback();
             state.displayMode = 'DUAD';
             state.duadKeyId = e.target.value;
             saveViolaState();
@@ -1671,9 +2026,45 @@
         });
 
         document.getElementById('btn-viola-play-duads').addEventListener('click', () => {
+            stopProgressionPlayback();
             renderAll();
             playDuadScale();
         });
+
+        // Estudos de Progressão Harmônica & Cadências
+        const progSelect = document.getElementById('viola-select-progression');
+        if (progSelect) {
+            progSelect.addEventListener('change', (e) => {
+                stopProgressionPlayback();
+                state.progressionId = e.target.value;
+                saveViolaState();
+                renderProgressionStudyPanel();
+            });
+        }
+
+        const progBeats = document.getElementById('viola-select-prog-beats');
+        if (progBeats) {
+            progBeats.addEventListener('change', (e) => {
+                state.progressionBeatsPerChord = parseInt(e.target.value, 10) || 4;
+                saveViolaState();
+            });
+        }
+
+        const loopProgBtn = document.getElementById('btn-viola-loop-progression');
+        if (loopProgBtn) {
+            loopProgBtn.addEventListener('click', () => {
+                state.progressionLoop = !state.progressionLoop;
+                saveViolaState();
+                updateProgressionUIState();
+            });
+        }
+
+        const playProgBtn = document.getElementById('btn-viola-play-progression');
+        if (playProgBtn) {
+            playProgBtn.addEventListener('click', () => {
+                playProgression();
+            });
+        }
 
         // Metrônomo
         document.getElementById('viola-bpm-slider').addEventListener('input', (e) => {
@@ -1730,6 +2121,7 @@
         renderFretboardSVG();
         renderHarmonicFieldPanel();
         renderDuadStrip();
+        renderProgressionStudyPanel();
         renderMetronomeControls();
     }
 
