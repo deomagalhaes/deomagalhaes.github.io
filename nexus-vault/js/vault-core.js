@@ -304,7 +304,7 @@
                 childLabel: '',
                 childAge: 5,
                 geminiApiKey: '',
-                activeTab: 'bonsai'
+                activeTab: 'psicometria'
             });
         },
         updateProfile(patch) {
@@ -632,7 +632,7 @@
             if (appShell) appShell.classList.remove('hidden');
             updateStorageMeter();
             const prof = store.getProfile();
-            switchTab(prof.activeTab || 'bonsai', false);
+            switchTab(prof.activeTab || 'psicometria', false);
             window.dispatchEvent(new CustomEvent('vault:unlocked'));
         } else {
             if (appShell) appShell.classList.add('hidden');
