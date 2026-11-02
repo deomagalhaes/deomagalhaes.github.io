@@ -428,6 +428,205 @@
     }
 
     // =========================================================================
+    // BIBLIOTECA DE PONTEIOS & REPERTÓRIO CLÁSSICO DE VIOLA CAIPIRA
+    // =========================================================================
+    const PONTEIOS_REPERTOIRE = [
+        {
+            id: 'pagode_brasilia',
+            title: 'Pagode em Brasília',
+            author: 'Tião Carreiro & Lourival dos Santos',
+            rhythm: 'Pagode Caipira (2/4 sincopado)',
+            key: 'Mi Maior (E) Cebolão',
+            desc: 'O mais célebre ponteio da viola brasileira. Introdução com repiques clássicos nos pares 1 e 2 descendo em cascata.',
+            notes: [
+                { c: 0, f: 0, d: 0.16 },
+                { c: 1, f: 2, d: 0.16 },
+                { c: 0, f: 4, d: 0.20 },
+                { c: 0, f: 2, d: 0.16 },
+                { c: 0, f: 0, d: 0.22 },
+                { c: 1, f: 0, d: 0.16 },
+                { c: 2, f: 1, d: 0.20 },
+                { c: 3, f: 2, d: 0.26 },
+                { c: 4, f: 2, d: 0.26 },
+                { c: 0, f: 0, d: 0.45 }
+            ]
+        },
+        {
+            id: 'menino_porteira',
+            title: 'O Menino da Porteira',
+            author: 'Teddy Vieira & Luizinho',
+            rhythm: 'Cururu / Toada em Mi Maior',
+            key: 'Mi Maior (E) Cebolão',
+            desc: 'Dueto lírico nas sextas clássicas (Pares 1 e 3), evocando o som das comitivas no estradão de Ouro Fino.',
+            notes: [
+                { c: 0, f: 0, d: 0.25 },
+                { c: 2, f: 1, d: 0.25 },
+                { c: 0, f: 2, d: 0.25 },
+                { c: 2, f: 3, d: 0.25 },
+                { c: 0, f: 4, d: 0.32 },
+                { c: 2, f: 5, d: 0.32 },
+                { c: 0, f: 2, d: 0.25 },
+                { c: 2, f: 3, d: 0.25 },
+                { c: 0, f: 0, d: 0.50 }
+            ]
+        },
+        {
+            id: 'tristeza_jeca',
+            title: 'Tristeza do Jeca',
+            author: 'Angelino de Oliveira',
+            rhythm: 'Toada Lenta e Sentida',
+            key: 'Mi Maior (E) Cebolão',
+            desc: 'Exploração da ressonância de cordas soltas com terças e quintas abertas que soam como sinos sertanejos.',
+            notes: [
+                { c: 1, f: 0, d: 0.30 },
+                { c: 0, f: 0, d: 0.30 },
+                { c: 0, f: 2, d: 0.30 },
+                { c: 0, f: 4, d: 0.45 },
+                { c: 0, f: 2, d: 0.30 },
+                { c: 0, f: 0, d: 0.30 },
+                { c: 1, f: 2, d: 0.30 },
+                { c: 0, f: 0, d: 0.55 }
+            ]
+        },
+        {
+            id: 'luar_sertao',
+            title: 'Luar do Sertão',
+            author: 'Catulo da Paixão Cearense / João Pernambuco',
+            rhythm: 'Valsa / Toada Poética',
+            key: 'Mi Maior (E) Cebolão',
+            desc: 'Poesia da serra brasileira. Melodia lírica com sustentação harmônica limpa nos pares graves.',
+            notes: [
+                { c: 0, f: 4, d: 0.38 },
+                { c: 0, f: 2, d: 0.38 },
+                { c: 0, f: 0, d: 0.42 },
+                { c: 1, f: 0, d: 0.32 },
+                { c: 0, f: 0, d: 0.32 },
+                { c: 0, f: 2, d: 0.42 },
+                { c: 0, f: 0, d: 0.65 }
+            ]
+        }
+    ];
+
+    let activePonteioTimers = [];
+
+    function stopPonteioPlayback() {
+        activePonteioTimers.forEach((t) => clearTimeout(t));
+        activePonteioTimers = [];
+    }
+
+    function playPonteioSequence(ponteioId) {
+        stopScalePlayback();
+        stopPonteioPlayback();
+        stopTunerTone();
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === ponteioId);
+        if (!pt) return;
+
+        let cumSec = 0;
+        pt.notes.forEach((nt) => {
+            const tId = setTimeout(() => {
+                playCourseAtFret(nt.c, nt.f, 0);
+                flashFretCell(nt.c, nt.f, 0);
+            }, cumSec * 1000);
+            activePonteioTimers.push(tId);
+            cumSec += nt.d;
+        });
+    }
+
+    // =========================================================================
+    // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
+    // =========================================================================
+    let tunerOsc = null;
+    let tunerGain = null;
+    let activeTunerCourse = null;
+
+    function stopTunerTone() {
+        if (tunerGain && audioCtx) {
+            try {
+                tunerGain.gain.setValueAtTime(tunerGain.gain.value, audioCtx.currentTime);
+                tunerGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+                setTimeout(() => {
+                    if (tunerOsc) {
+                        try { tunerOsc.stop(); } catch (_) {}
+                        tunerOsc = null;
+                    }
+                    tunerGain = null;
+                }, 130);
+            } catch (_) {}
+        }
+        activeTunerCourse = null;
+        renderTunerButtons();
+    }
+
+    function toggleTunerTone(courseIdx) {
+        if (activeTunerCourse === courseIdx) {
+            stopTunerTone();
+            return;
+        }
+        stopTunerTone();
+        stopPonteioPlayback();
+        stopScalePlayback();
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const course = inst.courses[courseIdx];
+        if (!course) return;
+
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+
+        const baseMidi = course.midi[0];
+        const freq = midiToFreq(baseMidi);
+        const now = ctx.currentTime;
+
+        tunerOsc = ctx.createOscillator();
+        tunerGain = ctx.createGain();
+
+        tunerOsc.type = 'triangle';
+        tunerOsc.frequency.setValueAtTime(freq, now);
+
+        tunerGain.gain.setValueAtTime(0.0001, now);
+        tunerGain.gain.linearRampToValueAtTime(0.24, now + 0.08);
+
+        tunerOsc.connect(tunerGain);
+        tunerGain.connect(ctx.destination);
+        tunerOsc.start(now);
+
+        activeTunerCourse = courseIdx;
+        renderTunerButtons();
+        flashFretCell(courseIdx, 0, 0);
+    }
+
+    function renderTunerButtons() {
+        const wrap = document.getElementById('viola-tuner-buttons');
+        if (!wrap) return;
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        wrap.innerHTML = inst.courses.map((c, idx) => {
+            const isRinging = activeTunerCourse === idx;
+            return `
+                <button type="button" data-tuner-course="${idx}"
+                    class="min-h-[46px] px-2.5 py-1.5 rounded-lg border text-center font-mono transition ${
+                        isRinging
+                            ? 'bg-amber-500/25 border-amber-400 text-amber-200 ring-2 ring-amber-400/40 shadow-lg'
+                            : 'bg-[#090d16] border-slate-800 hover:border-cyan-500/50 text-slate-200'
+                    }">
+                    <div class="text-[10px] text-slate-400">${c.label}</div>
+                    <div class="text-sm font-bold text-cyan-300 mt-0.5 flex items-center justify-center gap-1">
+                        <span>${c.note}</span>
+                        ${isRinging ? '<span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>' : ''}
+                    </div>
+                </button>
+            `;
+        }).join('');
+
+        wrap.querySelectorAll('[data-tuner-course]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-tuner-course'), 10);
+                toggleTunerTone(idx);
+            });
+        });
+    }
+
+    // =========================================================================
     // METRÔNOMO DE ALTA PRECISÃO (WEB AUDIO API LOOKAHEAD SCHEDULER)
     // =========================================================================
     function getBeatsPerBar() {
@@ -969,6 +1168,26 @@
                     </div>
                 </div>
 
+                <!-- Afinador Auditivo de Precisão (Pitch Reference) -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-2">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+                                <h3 class="text-xs sm:text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Afinador Acústico de Precisão</h3>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Clique em qualquer par/corda para soar a nota de afinação pura como diapasão de referência</p>
+                        </div>
+                        <div>
+                            <button type="button" id="btn-viola-tuner-stop" class="min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition">
+                                <i data-lucide="square" class="w-3.5 h-3.5 text-rose-400"></i>
+                                <span>Silenciar Afinador</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="viola-tuner-buttons" class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-6 gap-2 pt-1"></div>
+                </div>
+
                 <!-- Braço Interativo SVG -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-2">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
@@ -1026,6 +1245,45 @@
                         </div>
 
                         <div id="viola-duad-strip" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+                    </div>
+                </div>
+
+                <!-- Biblioteca de Repertório de Ponteios & Solos Clássicos -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="disc-3" class="w-4 h-4 text-amber-400"></i>
+                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Repertório Canônico de Ponteios (Viola Caipira)</h3>
+                            </div>
+                            <p class="text-xs text-slate-400">Execução sequenciada nota a nota com iluminação dinâmica no braço canhoto</p>
+                        </div>
+                        <button type="button" id="btn-viola-stop-ponteio" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition">
+                            <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                            <span>Interromper Ponteio</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+                        ${PONTEIOS_REPERTOIRE.map((p) => `
+                            <div class="bg-[#090d16] border border-slate-800 hover:border-amber-500/40 rounded-xl p-3 flex flex-col justify-between transition group">
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center justify-between text-[11px] font-mono">
+                                        <span class="text-amber-400 font-semibold">${p.rhythm}</span>
+                                        <span class="text-slate-500">${p.key}</span>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-slate-100 group-hover:text-amber-300 transition">${p.title}</h4>
+                                    <p class="text-[11px] text-slate-400 font-mono">${p.author}</p>
+                                    <p class="text-xs text-slate-400 line-clamp-2">${p.desc}</p>
+                                </div>
+                                <div class="pt-3 mt-2 border-t border-slate-800/80">
+                                    <button type="button" data-play-ponteio="${p.id}" class="w-full min-h-[38px] px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                        <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                                        <span>Ouvir e Animar Braço</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
 
@@ -1109,10 +1367,29 @@
     function bindEvents() {
         document.getElementById('viola-select-instrument').addEventListener('change', (e) => {
             stopScalePlayback();
+            stopPonteioPlayback();
+            stopTunerTone();
             state.instrumentId = e.target.value;
             state.voicingVariantIdx = 0;
             saveViolaState();
             renderAll();
+        });
+
+        const stopTunerBtn = document.getElementById('btn-viola-tuner-stop');
+        if (stopTunerBtn) {
+            stopTunerBtn.addEventListener('click', stopTunerTone);
+        }
+
+        const stopPonteioBtn = document.getElementById('btn-viola-stop-ponteio');
+        if (stopPonteioBtn) {
+            stopPonteioBtn.addEventListener('click', stopPonteioPlayback);
+        }
+
+        document.querySelectorAll('[data-play-ponteio]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-play-ponteio');
+                playPonteioSequence(id);
+            });
         });
 
         document.getElementById('btn-viola-toggle-hand').addEventListener('click', () => {
@@ -1210,6 +1487,7 @@
 
     function renderAll() {
         syncControlValues();
+        renderTunerButtons();
         renderFretboardSVG();
         renderHarmonicFieldPanel();
         renderDuadStrip();

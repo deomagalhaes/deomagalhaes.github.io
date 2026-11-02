@@ -99,10 +99,55 @@
                                         class="w-full p-2.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm text-slate-100 focus:border-cyan-500"></textarea>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Leitura Emocional / Impulso Reativo *</label>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label class="block text-xs font-semibold text-slate-300">Leitura Emocional / Impulso Reativo *</label>
+                                        <button type="button" id="btn-df-apply-defusion" class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25 transition">
+                                            Desfusão ACT (Rótulo Mental)
+                                        </button>
+                                    </div>
                                     <textarea id="df-emotional-reading" rows="3" required
                                         placeholder="Qual narrativa de afronta, urgência de retrucar ou controle imediato apareceu?"
                                         class="w-full p-2.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm text-amber-100 focus:border-amber-500"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Auditoria de Distorções Cognitivas Rápidas (Beck + ACT) -->
+                            <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
+                                <span class="text-[11px] font-semibold text-slate-300 block font-mono">Distorções Cognitivas em Jogo (Selecione as ativas):</span>
+                                <div class="flex flex-wrap gap-1.5" id="df-distortions-chips">
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Leitura Mental" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Leitura Mental</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Catastrofização" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Catastrofização</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Tudo ou Nada" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Tudo ou Nada</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Raciocínio Emocional" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Raciocínio Emocional</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Imperativo ('Deveria')" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Imperativo ("Deveria")</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Personalização" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Personalização</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Âncora Estoica da Dicotomia do Controle -->
+                            <div class="p-2.5 rounded-lg bg-cyan-950/20 border border-cyan-500/20 text-xs text-slate-300 flex items-start gap-2">
+                                <i data-lucide="compass" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="font-bold text-cyan-300 font-mono">Dicotomia do Controle (Epicteto):</span>
+                                    <span> O que o outro faz, fala ou sente está fora do seu controle. O que você diz, como responde e se protege a estabilidade familiar é 100% sua responsabilidade.</span>
                                 </div>
                             </div>
 
@@ -307,6 +352,9 @@
                         <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ativação: ${item.autonomicLevel}/10</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Proteção: ${item.checksPassed}/4</span>
                         <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">Saldo: +${item.netAdvantage}</span>
+                        ${Array.isArray(item.distortions) && item.distortions.length > 0 ? `
+                            <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300">Distorções: ${item.distortions.map(C.esc).join(', ')}</span>
+                        ` : ''}
                     </div>
                     <p class="text-xs text-slate-300"><strong>Fato:</strong> ${C.esc(item.strictFact)}</p>
                     <p class="text-xs text-emerald-300"><strong>FAREI (24h):</strong> ${C.esc(item.doAction)}</p>
@@ -342,6 +390,21 @@
             }
         });
 
+        const btnDefuse = document.getElementById('btn-df-apply-defusion');
+        if (btnDefuse) {
+            btnDefuse.addEventListener('click', () => {
+                const emoArea = document.getElementById('df-emotional-reading');
+                let current = emoArea.value.trim();
+                if (!current) {
+                    current = 'tenho que resolver ou rebater isso imediatamente';
+                }
+                if (!current.startsWith('Estou notando o pensamento de que')) {
+                    emoArea.value = `Estou notando o pensamento de que "${current}"... mas pensamentos são eventos cognitivos transitórios, não ordens motoras.`;
+                }
+                C.toast('Desfusão ACT aplicada à narrativa emocional.', 'info');
+            });
+        }
+
         ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'].forEach((id) => {
             document.getElementById(id).addEventListener('input', updateDesfusaoLiveMetrics);
         });
@@ -355,6 +418,8 @@
             const gain = Number(document.getElementById('df-gain-slider').value);
             const checks = ['df-chk-routine', 'df-chk-shield', 'df-chk-warmth', 'df-chk-documentation']
                 .filter((id) => document.getElementById(id).checked).length;
+            const distortions = Array.from(document.querySelectorAll('#df-distortions-chips input:checked'))
+                .map((el) => el.value);
 
             const now = new Date();
             const record = {
@@ -363,6 +428,7 @@
                 time: now.toTimeString().slice(0, 5),
                 strictFact: document.getElementById('df-strict-fact').value.trim(),
                 emotionalReading: document.getElementById('df-emotional-reading').value.trim(),
+                distortions,
                 autonomicLevel: autoLv,
                 impulsiveNotes: document.getElementById('df-impulsive-text').value.trim(),
                 strategicNotes: document.getElementById('df-strategic-text').value.trim(),
@@ -375,6 +441,7 @@
             desfusaoHistory.unshift(record);
             saveDesfusaoHistory();
             e.target.reset();
+            document.querySelectorAll('#df-distortions-chips input').forEach((el) => { el.checked = false; });
             document.getElementById('df-chk-routine').checked = true;
             document.getElementById('df-chk-shield').checked = true;
             document.getElementById('df-chk-warmth').checked = true;
@@ -385,9 +452,10 @@
         });
 
         document.getElementById('btn-df-export-csv').addEventListener('click', () => {
-            const headers = ['Data', 'Hora', 'Ativação (1-10)', 'Proteção (0-4)', 'Saldo Estratégico', 'Fato Estrito', 'Leitura Reativa', 'Farei (24h)', 'Não Farei (24h)'];
+            const headers = ['Data', 'Hora', 'Ativação (1-10)', 'Proteção (0-4)', 'Saldo Estratégico', 'Distorções', 'Fato Estrito', 'Leitura Reativa', 'Farei (24h)', 'Não Farei (24h)'];
             const rows = desfusaoHistory.map((r) => [
                 r.date, r.time, r.autonomicLevel, r.checksPassed, r.netAdvantage,
+                (r.distortions || []).join('; '),
                 r.strictFact, r.emotionalReading, r.doAction, r.dontAction
             ]);
             C.exportCSV(`protocolos-desfusao-${C.todayISO()}.csv`, headers, rows);
