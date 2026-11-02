@@ -41,70 +41,231 @@
     };
 
     const HARMONIC_KEYS = [
+        // Tonalidades Maiores
         { id: 'E_maj', root: 4, mode: 'major', label: 'Mi Maior (E) — Nativa Cebolão' },
         { id: 'A_maj', root: 9, mode: 'major', label: 'Lá Maior (A)' },
         { id: 'B_maj', root: 11, mode: 'major', label: 'Si Maior (B)' },
         { id: 'D_maj', root: 2, mode: 'major', label: 'Ré Maior (D)' },
         { id: 'G_maj', root: 7, mode: 'major', label: 'Sol Maior (G)' },
         { id: 'C_maj', root: 0, mode: 'major', label: 'Dó Maior (C)' },
-        { id: 'C#m_min', root: 1, mode: 'minor', label: 'Dó# Menor (C#m)' },
-        { id: 'F#m_min', root: 6, mode: 'minor', label: 'Fá# Menor (F#m)' },
-        { id: 'G#m_min', root: 8, mode: 'minor', label: 'Sol# Menor (G#m)' },
-        { id: 'Em_min', root: 4, mode: 'minor', label: 'Mi Menor (Em)' },
-        { id: 'Am_min', root: 9, mode: 'minor', label: 'Lá Menor (Am)' }
+        { id: 'F_maj', root: 5, mode: 'major', label: 'Fá Maior (F)' },
+        { id: 'Bb_maj', root: 10, mode: 'major', label: 'Si♭ Maior (Bb)' },
+        { id: 'Eb_maj', root: 3, mode: 'major', label: 'Mi♭ Maior (Eb)' },
+        { id: 'Ab_maj', root: 8, mode: 'major', label: 'Lá♭ Maior (Ab)' },
+        { id: 'Db_maj', root: 1, mode: 'major', label: 'Ré♭ / Dó# Maior (Db)' },
+        { id: 'F#_maj', root: 6, mode: 'major', label: 'Fá# Maior (F#)' },
+        // Tonalidades Menores Clássicas
+        { id: 'C#m_min', root: 1, mode: 'minor', label: 'Dó# Menor (C#m) — Relativa de Mi' },
+        { id: 'F#m_min', root: 6, mode: 'minor', label: 'Fá# Menor (F#m) — Relativa de Lá' },
+        { id: 'G#m_min', root: 8, mode: 'minor', label: 'Sol# Menor (G#m) — Relativa de Si' },
+        { id: 'Em_min', root: 4, mode: 'minor', label: 'Mi Menor (Em) — Relativa de Sol' },
+        { id: 'Am_min', root: 9, mode: 'minor', label: 'Lá Menor (Am) — Relativa de Dó' },
+        { id: 'Bm_min', root: 11, mode: 'minor', label: 'Si Menor (Bm) — Relativa de Ré' },
+        { id: 'Dm_min', root: 2, mode: 'minor', label: 'Ré Menor (Dm) — Relativa de Fá' },
+        { id: 'Gm_min', root: 7, mode: 'minor', label: 'Sol Menor (Gm) — Relativa de Si♭' },
+        { id: 'Cm_min', root: 0, mode: 'minor', label: 'Dó Menor (Cm) — Relativa de Mi♭' }
     ];
 
-    // Shapes curados e verificados acusticamente (índice 0 = 1º par/corda mais aguda; -1 = abafada)
+    // Shapes curados e verificados acusticamente para Viola Cebolão em Mi (índice 0 = 1º par; -1 = abafada)
     const VIOLA_CHORD_SHAPES = {
-        'E_maj': [[0, 0, 0, 0, 0], [12, 12, 12, 12, 12]],
-        'F#_min': [[2, 2, 1, 2, -1], [5, 7, 5, 4, -1]],
-        'G#_min': [[4, 4, 3, 4, 0], [7, 9, 7, 6, -1]],
-        'A_maj': [[0, 2, 1, 0, -1], [5, 5, 5, 5, 5]],
-        'B_maj': [[2, 4, 3, 2, 0], [7, 7, 7, 7, 7]],
-        'B_dom7': [[2, 4, 1, 2, 0], [2, 0, 1, 2, 0]],
-        'C#_min': [[0, 2, 0, 0, 2], [4, 5, 4, 2, 2]],
-        'D#_dim': [[2, 4, 1, -1, 4], [5, 4, 7, 5, -1]],
-        'D_maj': [[2, 3, 1, -1, 3], [10, 10, 10, 10, 10]],
-        'E_min': [[0, 0, 3, 0, 0], [3, 5, 3, 2, 0]],
-        'G_maj': [[3, 3, 3, 3, 3], [3, 0, 3, 3, 0]],
-        'C_maj': [[8, 8, 8, 8, 8], [3, 1, 4, 0, 1]],
+        // Tríades Maiores
+        'E_maj': [[0, 0, 0, 0, 0], [12, 12, 12, 12, 12], [4, 5, 4, 2, 2]],
+        'F_maj': [[1, 1, 1, 1, 1], [5, 6, 5, 3, 3]],
+        'F#_maj': [[2, 2, 2, 2, 2], [6, 7, 6, 4, 4]],
+        'G_maj': [[3, 3, 3, 3, 3], [3, 0, 3, 3, 0], [7, 8, 7, 5, 5]],
+        'G#_maj': [[4, 4, 4, 4, 4], [8, 9, 8, 6, 6]],
+        'A_maj': [[0, 2, 1, 0, -1], [5, 5, 5, 5, 5], [9, 10, 9, 7, 7]],
+        'A#_maj': [[6, 6, 6, 6, 6], [1, 3, 2, 1, -1]],
+        'B_maj': [[2, 4, 3, 2, 0], [7, 7, 7, 7, 7], [11, 12, 11, 9, 9]],
+        'C_maj': [[8, 8, 8, 8, 8], [3, 1, 4, 0, 1], [0, 1, 0, 2, 3]],
+        'C#_maj': [[9, 9, 9, 9, 9], [4, 2, 5, 1, 2]],
+        'D_maj': [[2, 3, 1, -1, 3], [10, 10, 10, 10, 10], [5, 3, 6, 2, 3]],
+        'D#_maj': [[11, 11, 11, 11, 11], [6, 4, 7, 3, 4]],
+
+        // Tríades Menores
+        'E_min': [[0, 0, -1, 0, 0], [3, 0, -1, 0, 0], [12, 12, 11, 12, 12]],
+        'F_min': [[1, 1, 4, 1, 1], [4, 6, 4, 3, 1]],
+        'F#_min': [[2, 2, 1, 2, -1], [2, 2, 1, 2, 2], [5, 7, 5, 4, 2]],
+        'G_min': [[3, 3, 2, 3, 3], [6, 8, 6, 5, 3]],
+        'G#_min': [[4, 4, 3, 4, 0], [4, 4, 3, 4, 4], [7, 9, 7, 6, 4]],
         'A_min': [[0, 1, 1, 0, -1], [5, 5, 4, 5, 5]],
+        'A#_min': [[1, 2, 2, 1, -1], [6, 6, 5, 6, 6]],
         'B_min': [[2, 3, 3, 2, 0], [7, 7, 6, 7, 7]],
-        'D_min': [[1, 3, 1, -1, 3], [5, 6, 5, 3, 3]],
-        'F_maj': [[1, 1, 1, 1, 1], [5, 6, 4, 5, -1]],
-        'F#_dim': [[2, 1, 1, 2, -1]],
-        'G#_dim': [[4, 3, 3, 4, -1]],
-        'C#_dim': [[3, 2, 0, 2, 2]],
-        'A#_dim': [[0, 2, 2, 2, -1]],
+        'C_min': [[8, 8, 7, 8, 8], [3, 4, 4, 3, 1]],
+        'C#_min': [[0, 2, 0, 0, 2], [9, 9, 8, 9, 9], [4, 5, 5, 4, 2]],
+        'D_min': [[1, 3, 1, -1, 3], [10, 10, 9, 10, 10], [5, 6, 6, 5, 3]],
+        'D#_min': [[2, 4, 2, 1, -1], [11, 11, 10, 11, 11]],
+
+        // Tríades Diminutas
+        'D#_dim': [[2, 4, 1, -1, 4], [5, 4, 7, 5, -1]],
         'E_dim': [[3, 5, 2, 0, -1]],
-        'B_dim': [[1, 3, 3, -1, 0]],
-        'D#_min': [[2, 4, 2, 1, -1]],
-        'A#_min': [[1, 2, 2, 1, -1]]
+        'F_dim': [[1, 3, 0, 2, -1]],
+        'F#_dim': [[2, 1, 1, 2, -1]],
+        'G_dim': [[3, 2, 2, 3, -1]],
+        'G#_dim': [[4, 3, 3, 4, -1]],
+        'A_dim': [[5, 4, 4, 5, -1]],
+        'A#_dim': [[0, 2, 2, 2, -1], [6, 5, 5, 6, -1]],
+        'B_dim': [[1, 3, 3, -1, 0], [7, 6, 6, 7, -1]],
+        'C_dim': [[2, 4, 4, -1, 1]],
+        'C#_dim': [[3, 2, 0, 2, 2], [9, 8, 8, 9, -1]],
+        'D_dim': [[1, 3, 0, 0, -1]],
+
+        // Tétrades: 7ª Maior (maj7)
+        'E_maj7': [[0, 4, 0, 0, 0], [11, 12, 12, 12, 12], [4, 4, 4, 4, 2]],
+        'F_maj7': [[0, 1, 1, 1, -1], [1, 1, 1, 2, 1]],
+        'F#_maj7': [[1, 2, 2, 2, -1], [2, 6, 2, 2, 2]],
+        'G_maj7': [[2, 0, 3, 3, 0], [3, 3, 3, 4, 3]],
+        'G#_maj7': [[3, 4, 4, 4, -1], [4, 4, 4, 5, 4]],
+        'A_maj7': [[0, 2, 0, 0, -1], [4, 2, 1, 0, -1], [5, 5, 5, 6, 5]],
+        'A#_maj7': [[5, 6, 6, 6, -1], [6, 6, 6, 7, 6]],
+        'B_maj7': [[2, 4, 2, 2, 0], [6, 4, 3, 2, 0], [7, 7, 7, 8, 7]],
+        'C_maj7': [[0, 1, 4, 0, 1], [8, 8, 8, 9, 8]],
+        'C#_maj7': [[1, 2, 5, 1, 2], [9, 9, 9, 10, 9]],
+        'D_maj7': [[2, 2, 1, -1, 3], [10, 10, 10, 11, 10]],
+        'D#_maj7': [[3, 3, 2, -1, 4], [11, 11, 11, 12, 11]],
+
+        // Tétrades: Dominantes (7)
+        'E_dom7': [[0, 3, 0, 0, 0], [10, 12, 12, 12, 12], [3, 0, 0, 0, 0]],
+        'F_dom7': [[1, 4, 1, 1, 1], [1, 1, 1, 1, 0]],
+        'F#_dom7': [[0, 2, 2, 2, -1], [2, 5, 2, 2, 2], [2, 2, 2, 0, 2]],
+        'G_dom7': [[1, 0, 3, 3, 0], [3, 6, 3, 3, 3]],
+        'G#_dom7': [[2, 4, 4, 4, 4], [4, 7, 4, 4, 4]],
+        'A_dom7': [[3, 2, 1, 0, -1], [0, 2, 1, 3, -1], [5, 8, 5, 5, 5]],
+        'A#_dom7': [[4, 3, 2, 1, -1], [6, 9, 6, 6, 6]],
+        'B_dom7': [[2, 4, 1, 2, 0], [2, 0, 1, 2, 0], [7, 10, 7, 7, 7]],
+        'C_dom7': [[3, 1, 2, 0, 1], [8, 11, 8, 8, 8]],
+        'C#_dom7': [[4, 2, 3, 1, 2], [9, 12, 9, 9, 9]],
+        'D_dom7': [[2, 1, 1, -1, 3], [10, 13, 10, 10, 10]],
+        'D#_dom7': [[3, 2, 2, -1, 4], [11, 14, 11, 11, 11]],
+
+        // Tétrades: Menores com 7ª (min7)
+        'E_min7': [[0, 3, 11, 0, 0], [10, 12, 11, 12, 12]],
+        'F_min7': [[1, 4, 0, 1, 1], [1, 1, 4, 3, 1]],
+        'F#_min7': [[0, 2, 1, 2, -1], [2, 2, 1, 0, 2], [5, 5, 5, 4, 2]],
+        'G_min7': [[1, 3, 2, 3, 3], [3, 3, 2, 1, 3]],
+        'G#_min7': [[2, 4, 3, 4, 0], [4, 4, 3, 2, 0], [7, 7, 7, 6, 4]],
+        'A_min7': [[3, 1, 1, 0, -1], [0, 1, 1, 3, -1], [5, 5, 4, 7, 5]],
+        'A#_min7': [[4, 2, 2, 1, -1], [6, 6, 5, 8, 6]],
+        'B_min7': [[2, 3, 1, 2, 0], [2, 0, 3, 0, 0], [7, 7, 6, 9, 7]],
+        'C_min7': [[3, 4, 2, 3, 1], [8, 8, 7, 10, 8]],
+        'C#_min7': [[0, 0, 0, 0, 2], [0, 2, 0, 0, 0], [4, 5, 4, 2, 2]],
+        'D_min7': [[1, 1, 1, -1, 3], [10, 10, 9, 12, 10]],
+        'D#_min7': [[2, 2, 2, -1, 4], [11, 11, 10, 13, 11]],
+
+        // Tétrades: Meio-Diminutas (m7b5)
+        'D#_m7b5': [[2, 2, 1, 1, -1], [2, 2, 1, -1, 4], [5, 4, 5, 3, -1]],
+        'E_m7b5': [[3, 3, 2, 2, -1], [3, 5, 2, 0, -1]],
+        'F_m7b5': [[4, 4, 3, 3, -1]],
+        'F#_m7b5': [[2, 1, 1, 2, -1], [5, 5, 4, 4, -1]],
+        'G_m7b5': [[3, 2, 2, 3, -1], [6, 6, 5, 5, -1]],
+        'G#_m7b5': [[4, 3, 3, 4, -1], [7, 7, 6, 6, -1]],
+        'A_m7b5': [[5, 4, 4, 5, -1], [8, 8, 7, 7, -1]],
+        'A#_m7b5': [[0, 2, 0, 2, -1], [6, 5, 5, 6, -1]],
+        'B_m7b5': [[1, 3, 1, -1, 0], [7, 6, 6, 7, -1]],
+        'C_m7b5': [[2, 4, 2, -1, 1], [8, 7, 7, 8, -1]],
+        'C#_m7b5': [[0, 2, 0, 3, 2], [3, 2, 0, 2, 2], [9, 8, 8, 9, -1]],
+        'D_m7b5': [[1, 3, 1, 0, -1], [10, 9, 9, 10, -1]]
     };
 
+    // Shapes curados para Violão Padrão 6 Cordas (índice 0 = 1ª corda/Mi aguda; -1 = abafada)
     const VIOLAO_CHORD_SHAPES = {
-        'E_maj': [[0, 0, 1, 2, 2, 0]],
-        'E_min': [[0, 0, 0, 2, 2, 0]],
-        'F_maj': [[1, 1, 2, 3, 3, 1]],
-        'F#_min': [[2, 2, 2, 4, 4, 2]],
-        'F#_dim': [[2, 1, 2, 4, -1, -1]],
-        'G_maj': [[3, 0, 0, 0, 2, 3], [3, 3, 4, 5, 5, 3]],
-        'G#_min': [[4, 4, 4, 6, 6, 4]],
-        'G#_dim': [[4, 3, 4, 6, -1, -1]],
-        'A_maj': [[0, 2, 2, 2, 0, -1], [5, 5, 6, 7, 7, 5]],
-        'A_min': [[0, 1, 2, 2, 0, -1]],
-        'A#_dim': [[0, 2, 3, 2, 1, -1]],
+        // Tríades Maiores
+        'E_maj': [[0, 0, 1, 2, 2, 0], [4, 5, 4, 2, -1, -1], [7, 9, 9, 9, 7, -1]],
+        'F_maj': [[1, 1, 2, 3, 3, 1], [5, 6, 5, 3, -1, -1], [8, 10, 10, 10, 8, -1]],
+        'F#_maj': [[2, 2, 3, 4, 4, 2], [9, 11, 11, 11, 9, -1]],
+        'G_maj': [[3, 0, 0, 0, 2, 3], [3, 3, 4, 5, 5, 3], [7, 8, 7, 5, -1, -1], [10, 12, 12, 12, 10, -1]],
+        'G#_maj': [[4, 4, 5, 6, 6, 4], [11, 13, 13, 13, 11, -1]],
+        'A_maj': [[0, 2, 2, 2, 0, -1], [5, 5, 6, 7, 7, 5], [9, 10, 9, 7, -1, -1]],
+        'A#_maj': [[1, 3, 3, 3, 1, -1], [6, 6, 7, 8, 8, 6]],
         'B_maj': [[2, 4, 4, 4, 2, -1], [7, 7, 8, 9, 9, 7]],
-        'B_min': [[2, 3, 4, 4, 2, -1]],
-        'B_dim': [[1, 3, 4, 3, 2, -1]],
-        'C_maj': [[0, 1, 0, 2, 3, -1], [3, 5, 5, 5, 3, -1]],
-        'C#_min': [[4, 5, 6, 6, 4, -1]],
-        'C#_dim': [[0, 2, 0, 2, 4, -1]],
-        'D_maj': [[2, 3, 2, 0, -1, -1], [5, 7, 7, 7, 5, -1]],
-        'D_min': [[1, 3, 2, 0, -1, -1]],
-        'D#_min': [[6, 7, 8, 8, 6, -1]],
+        'C_maj': [[0, 1, 0, 2, 3, -1], [3, 5, 5, 5, 3, -1], [8, 8, 9, 10, 10, 8]],
+        'C#_maj': [[4, 6, 6, 6, 4, -1], [9, 9, 10, 11, 11, 9]],
+        'D_maj': [[2, 3, 2, 0, -1, -1], [5, 7, 7, 7, 5, -1], [10, 10, 11, 12, 12, 10]],
+        'D#_maj': [[6, 8, 8, 8, 6, -1], [11, 11, 12, 13, 13, 11]],
+
+        // Tríades Menores
+        'E_min': [[0, 0, 0, 2, 2, 0], [7, 8, 9, 9, 7, -1]],
+        'F_min': [[1, 1, 1, 3, 3, 1], [8, 9, 10, 10, 8, -1]],
+        'F#_min': [[2, 2, 2, 4, 4, 2], [9, 10, 11, 11, 9, -1]],
+        'G_min': [[3, 3, 3, 5, 5, 3], [10, 11, 12, 12, 10, -1]],
+        'G#_min': [[4, 4, 4, 6, 6, 4], [11, 12, 13, 13, 11, -1]],
+        'A_min': [[0, 1, 2, 2, 0, -1], [5, 5, 5, 7, 7, 5]],
+        'A#_min': [[1, 2, 3, 3, 1, -1], [6, 6, 6, 8, 8, 6]],
+        'B_min': [[2, 3, 4, 4, 2, -1], [7, 7, 7, 9, 9, 7]],
+        'C_min': [[3, 4, 5, 5, 3, -1], [8, 8, 8, 10, 10, 8]],
+        'C#_min': [[4, 5, 6, 6, 4, -1], [9, 9, 9, 11, 11, 9]],
+        'D_min': [[1, 3, 2, 0, -1, -1], [5, 6, 7, 7, 5, -1], [10, 10, 10, 12, 12, 10]],
+        'D#_min': [[6, 7, 8, 8, 6, -1], [11, 11, 11, 13, 13, 11]],
+
+        // Tríades Diminutas
         'D#_dim': [[2, 4, 2, 1, -1, -1]],
-        'E_dim': [[0, 2, 0, 2, 1, -1]]
+        'E_dim': [[0, 2, 0, 2, 1, -1]],
+        'F_dim': [[1, 3, 1, 3, 2, -1]],
+        'F#_dim': [[2, 1, 2, 4, -1, -1]],
+        'G_dim': [[3, 2, 3, 5, -1, -1]],
+        'G#_dim': [[4, 3, 4, 6, -1, -1]],
+        'A_dim': [[5, 4, 5, 7, -1, -1]],
+        'A#_dim': [[0, 2, 3, 2, 1, -1]],
+        'B_dim': [[1, 3, 4, 3, 2, -1]],
+        'C_dim': [[2, 4, 5, 4, 3, -1]],
+        'C#_dim': [[0, 2, 0, 2, 4, -1]],
+        'D_dim': [[1, 3, 1, 0, -1, -1]],
+
+        // Tétrades: 7ª Maior (maj7)
+        'E_maj7': [[0, 0, 1, 1, 2, 0], [7, 9, 8, 9, 7, -1]],
+        'F_maj7': [[0, 1, 2, 2, -1, 1], [8, 10, 9, 10, 8, -1]],
+        'F#_maj7': [[2, 2, 3, 3, -1, 2], [9, 11, 10, 11, 9, -1]],
+        'G_maj7': [[2, 0, 0, 0, 2, 3], [10, 12, 11, 12, 10, -1]],
+        'G#_maj7': [[4, 4, 5, 5, -1, 4], [11, 13, 12, 13, 11, -1]],
+        'A_maj7': [[0, 2, 1, 2, 0, -1], [5, 5, 6, 6, -1, 5]],
+        'A#_maj7': [[1, 3, 2, 3, 1, -1], [6, 6, 7, 7, -1, 6]],
+        'B_maj7': [[2, 4, 3, 4, 2, -1], [7, 7, 8, 8, -1, 7]],
+        'C_maj7': [[0, 0, 0, 2, 3, -1], [3, 5, 4, 5, 3, -1], [8, 8, 9, 9, -1, 8]],
+        'C#_maj7': [[4, 6, 5, 6, 4, -1], [9, 9, 10, 10, -1, 9]],
+        'D_maj7': [[2, 2, 2, 0, -1, -1], [5, 7, 6, 7, 5, -1], [10, 10, 11, 11, -1, 10]],
+        'D#_maj7': [[6, 8, 7, 8, 6, -1], [11, 11, 12, 12, -1, 11]],
+
+        // Tétrades: Dominantes (7)
+        'E_dom7': [[0, 3, 1, 0, 2, 0], [0, 0, 1, 0, 2, 0], [7, 9, 7, 9, 7, -1]],
+        'F_dom7': [[1, 4, 2, 1, 3, 1], [1, 1, 2, 1, 3, 1], [8, 10, 8, 10, 8, -1]],
+        'F#_dom7': [[2, 2, 3, 2, 4, 2], [2, 5, 3, 2, 4, 2], [9, 11, 9, 11, 9, -1]],
+        'G_dom7': [[1, 0, 0, 0, 2, 3], [3, 3, 4, 3, 5, 3], [10, 12, 10, 12, 10, -1]],
+        'G#_dom7': [[4, 4, 5, 4, 6, 4], [11, 13, 11, 13, 11, -1]],
+        'A_dom7': [[0, 2, 0, 2, 0, -1], [3, 2, 2, 2, 0, -1], [5, 5, 6, 5, 7, 5]],
+        'A#_dom7': [[1, 3, 1, 3, 1, -1], [6, 6, 7, 6, 8, 6]],
+        'B_dom7': [[2, 0, 2, 1, 2, -1], [2, 4, 2, 4, 2, -1], [7, 7, 8, 7, 9, 7]],
+        'C_dom7': [[0, 1, 3, 2, 3, -1], [3, 5, 3, 5, 3, -1], [8, 8, 9, 8, 10, 8]],
+        'C#_dom7': [[4, 6, 4, 6, 4, -1], [9, 9, 10, 9, 11, 9]],
+        'D_dom7': [[2, 1, 2, 0, -1, -1], [5, 7, 5, 7, 5, -1], [10, 10, 11, 10, 12, 10]],
+        'D#_dom7': [[6, 8, 6, 8, 6, -1], [11, 11, 12, 11, 13, 11]],
+
+        // Tétrades: Menores com 7ª (min7)
+        'E_min7': [[0, 3, 0, 0, 2, 0], [0, 0, 0, 0, 2, 0], [7, 8, 7, 9, 7, -1]],
+        'F_min7': [[1, 1, 1, 1, 3, 1], [8, 9, 8, 10, 8, -1]],
+        'F#_min7': [[2, 2, 2, 2, 4, 2], [9, 10, 9, 11, 9, -1]],
+        'G_min7': [[3, 3, 3, 3, 5, 3], [10, 11, 10, 12, 10, -1]],
+        'G#_min7': [[4, 4, 4, 4, 6, 4], [11, 12, 11, 13, 11, -1]],
+        'A_min7': [[0, 1, 0, 2, 0, -1], [3, 1, 2, 2, 0, -1], [5, 5, 5, 5, 7, 5]],
+        'A#_min7': [[1, 2, 1, 3, 1, -1], [6, 6, 6, 6, 8, 6]],
+        'B_min7': [[2, 0, 2, 0, 2, -1], [2, 3, 2, 4, 2, -1], [7, 7, 7, 7, 9, 7]],
+        'C_min7': [[3, 4, 3, 5, 3, -1], [8, 8, 8, 8, 10, 8]],
+        'C#_min7': [[4, 5, 4, 6, 4, -1], [9, 9, 9, 9, 11, 9]],
+        'D_min7': [[1, 1, 2, 0, -1, -1], [5, 6, 5, 7, 5, -1], [10, 10, 10, 10, 12, 10]],
+        'D#_min7': [[6, 7, 6, 8, 6, -1], [11, 11, 11, 11, 13, 11]],
+
+        // Tétrades: Meio-Diminutas (m7b5)
+        'D#_m7b5': [[2, 2, 2, 1, -1, -1], [5, 7, 6, 7, 6, -1], [11, 10, 11, 11, -1, 11]],
+        'E_m7b5': [[0, 3, 3, 2, -1, 0], [6, 8, 7, 8, 7, -1]],
+        'F_m7b5': [[1, 0, 1, 1, -1, 1], [7, 9, 8, 9, 8, -1]],
+        'F#_m7b5': [[2, 1, 2, 2, -1, 2], [0, 1, 2, 2, -1, 2]],
+        'G_m7b5': [[3, 2, 3, 3, -1, 3]],
+        'G#_m7b5': [[4, 3, 4, 4, -1, 4]],
+        'A_m7b5': [[5, 4, 5, 5, -1, 5], [0, 1, 0, 1, 0, -1]],
+        'A#_m7b5': [[0, 2, 1, 2, 1, -1], [6, 5, 6, 6, -1, 6]],
+        'B_m7b5': [[1, 3, 2, 3, 2, -1], [1, 0, 2, 0, 2, -1], [7, 6, 7, 7, -1, 7]],
+        'C_m7b5': [[2, 4, 3, 4, 3, -1], [8, 7, 8, 8, -1, 8]],
+        'C#_m7b5': [[0, 2, 0, 2, 4, -1], [3, 5, 4, 5, 4, -1], [9, 8, 9, 9, -1, 9]],
+        'D_m7b5': [[1, 1, 1, 0, -1, -1], [4, 6, 5, 6, 5, -1], [10, 9, 10, 10, -1, 10]]
     };
 
     let state = {
@@ -112,6 +273,7 @@
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
         viewPerspective: 'diagram',  // 'diagram' (1º par no topo) | 'player' (5º/6º grave no topo)
         displayMode: 'CHORD',        // 'CHORD' | 'DUAD' | 'FREE'
+        harmonicExtension: 'triad',  // 'triad' (Tríades) | 'tetrad' (Tétrades com 7ª)
         selectedKeyId: 'E_maj',
         selectedDegreeIdx: 0,
         voicingVariantIdx: 0,
@@ -219,19 +381,62 @@
         const keyObj = HARMONIC_KEYS.find((k) => k.id === keyId) || HARMONIC_KEYS[0];
         const isMajor = keyObj.mode === 'major';
         const steps = isMajor ? [0, 2, 4, 5, 7, 9, 11] : [0, 2, 3, 5, 7, 8, 10];
+        const isTetrad = state.harmonicExtension === 'tetrad';
+
         const qualities = isMajor
-            ? ['maj', 'min', 'min', 'maj', 'maj', 'min', 'dim']
-            : ['min', 'dim', 'maj', 'min', 'min', 'maj', 'maj'];
+            ? (isTetrad 
+                ? ['maj7', 'min7', 'min7', 'maj7', 'dom7', 'min7', 'm7b5']
+                : ['maj', 'min', 'min', 'maj', 'maj', 'min', 'dim'])
+            : (isTetrad
+                ? ['min7', 'm7b5', 'maj7', 'min7', 'min7', 'maj7', 'dom7']
+                : ['min', 'dim', 'maj', 'min', 'min', 'maj', 'maj']);
+
         const romans = isMajor
-            ? ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']
-            : ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII'];
+            ? (isTetrad
+                ? ['I7M', 'ii7', 'iii7', 'IV7M', 'V7', 'vi7', 'viiø']
+                : ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'])
+            : (isTetrad
+                ? ['i7', 'iiø', 'III7M', 'iv7', 'v7', 'VI7M', 'VII7']
+                : ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII']);
 
         return steps.map((semi, idx) => {
             const rootPc = (keyObj.root + semi) % 12;
             const qual = qualities[idx];
             const rootStr = NOTE_NAMES[rootPc];
-            const suffix = qual === 'min' ? 'm' : (qual === 'dim' ? '°' : '');
-            const chordIntervals = qual === 'maj' ? [0, 4, 7] : (qual === 'min' ? [0, 3, 7] : [0, 3, 6]);
+            let suffix = '';
+            let chordNamePT = '';
+            let chordIntervals = [0, 4, 7];
+
+            if (qual === 'maj') {
+                suffix = '';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} Maior`;
+                chordIntervals = [0, 4, 7];
+            } else if (qual === 'min') {
+                suffix = 'm';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} menor`;
+                chordIntervals = [0, 3, 7];
+            } else if (qual === 'dim') {
+                suffix = '°';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} diminuto`;
+                chordIntervals = [0, 3, 6];
+            } else if (qual === 'maj7') {
+                suffix = '7M';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} com 7ª Maior`;
+                chordIntervals = [0, 4, 7, 11];
+            } else if (qual === 'min7') {
+                suffix = 'm7';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} menor com 7ª`;
+                chordIntervals = [0, 3, 7, 10];
+            } else if (qual === 'dom7') {
+                suffix = '7';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} com 7ª dominante`;
+                chordIntervals = [0, 4, 7, 10];
+            } else if (qual === 'm7b5') {
+                suffix = 'm7(♭5)';
+                chordNamePT = `${NOTE_NAMES_PT[rootPc]} meio-diminuto`;
+                chordIntervals = [0, 3, 6, 10];
+            }
+
             const pitchClasses = chordIntervals.map((iv) => (rootPc + iv) % 12);
 
             return {
@@ -239,7 +444,7 @@
                 roman: romans[idx],
                 chordCode: `${rootStr}_${qual}`,
                 chordName: `${rootStr}${suffix}`,
-                chordNamePT: `${NOTE_NAMES_PT[rootPc]}${qual === 'min' ? ' menor' : (qual === 'dim' ? ' dim' : ' Maior')}`,
+                chordNamePT,
                 rootPc,
                 quality: qual,
                 pitchClasses
@@ -281,9 +486,11 @@
         if (rel === 0) return 'T';
         if (rel === 3) return '3m';
         if (rel === 4) return '3M';
-        if (rel === 6) return '5°';
+        if (rel === 6) return '5b';
         if (rel === 7) return '5J';
         if (rel === 10) return '7m';
+        if (rel === 11) return '7M';
+        if (rel === 9 && chordObj.quality === 'dim') return '7d';
         return '';
     }
 
@@ -807,7 +1014,7 @@
                         fret,
                         label: NOTE_NAMES[pc],
                         sub: role,
-                        color: role === 'T' ? '#10b981' : (role.startsWith('3') ? '#06b6d4' : '#f59e0b')
+                        color: role === 'T' ? '#10b981' : (role.startsWith('3') ? '#06b6d4' : (role.startsWith('7') ? '#a855f7' : '#f59e0b'))
                     });
                 }
             });
@@ -1196,6 +1403,7 @@
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>Tônica</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>Terça / Escala</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Quinta</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>Sétima (7ª)</span>
                         </div>
                     </div>
                     <div id="viola-fretboard-svg-wrap" class="w-full overflow-x-auto pb-1"></div>
@@ -1210,10 +1418,16 @@
                                 <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Campo Harmônico & Shapes</h3>
                                 <p class="text-xs text-slate-400">Toque em um grau para projetar no braço canhoto e dedilhar</p>
                             </div>
-                            <select id="viola-select-key" aria-label="Tonalidade do campo harmônico"
-                                class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-emerald-300">
-                                ${HARMONIC_KEYS.map((k) => `<option value="${k.id}">${k.label}</option>`).join('')}
-                            </select>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                                    <button type="button" id="btn-viola-mode-triad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${state.harmonicExtension === 'triad' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">Tríades</button>
+                                    <button type="button" id="btn-viola-mode-tetrad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${state.harmonicExtension === 'tetrad' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}">Tétrades (7ª)</button>
+                                </div>
+                                <select id="viola-select-key" aria-label="Tonalidade do campo harmônico"
+                                    class="min-h-[38px] px-2.5 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-emerald-300">
+                                    ${HARMONIC_KEYS.map((k) => `<option value="${k.id}" ${state.selectedKeyId === k.id ? 'selected' : ''}>${k.label}</option>`).join('')}
+                                </select>
+                            </div>
                         </div>
 
                         <div id="viola-harmonic-degrees" class="grid grid-cols-4 sm:grid-cols-7 gap-2"></div>
@@ -1391,6 +1605,31 @@
                 playPonteioSequence(id);
             });
         });
+
+        const btnTriad = document.getElementById('btn-viola-mode-triad');
+        const btnTetrad = document.getElementById('btn-viola-mode-tetrad');
+        if (btnTriad && btnTetrad) {
+            btnTriad.addEventListener('click', () => {
+                if (state.harmonicExtension !== 'triad') {
+                    state.harmonicExtension = 'triad';
+                    state.voicingVariantIdx = 0;
+                    saveViolaState();
+                    mountShell();
+                    renderAll();
+                    strumActiveChord();
+                }
+            });
+            btnTetrad.addEventListener('click', () => {
+                if (state.harmonicExtension !== 'tetrad') {
+                    state.harmonicExtension = 'tetrad';
+                    state.voicingVariantIdx = 0;
+                    saveViolaState();
+                    mountShell();
+                    renderAll();
+                    strumActiveChord();
+                }
+            });
+        }
 
         document.getElementById('btn-viola-toggle-hand').addEventListener('click', () => {
             state.isLeftHanded = !state.isLeftHanded;
