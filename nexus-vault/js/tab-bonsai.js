@@ -1,75 +1,363 @@
 /**
  * NEXUS VAULT — Aba 2: Gestão Fitotécnica de Bonsai (Capacidade: +100 Plantas)
- * Guia Botânico Expandido (26 Espécies), Calendário Sazonal Dinâmico (Hemisfério Sul),
+ * Guia Botânico Expandido (40 Espécies), Calendário Sazonal Dinâmico (Hemisfério Sul),
  * Histórico Detalhado de Manejos, Controle de Aramação/Desarame e Manejo em Lote One-Handed
  */
 (function (global) {
     'use strict';
 
     // =========================================================================
-    // 1. GUIA BOTÂNICO EXPANDIDO FITOTÉCNICO (26 ESPÉCIES CONSAGRADAS)
+    // 1. GUIA BOTÂNICO EXPANDIDO FITOTÉCNICO (40 ESPÉCIES CONSAGRADAS)
     // =========================================================================
     const SPECIES_GUIDE_DB = [
+        // --- 1. Espécies Solicitadas do Acervo Pessoal ---
         {
-            popular: 'Jabuticabeira Sabará',
-            scientific: 'Plinia cauliflora',
-            family: 'Myrtaceae',
-            origin: 'Nativa Brasileira (Mata Atlântica)',
-            sun: 'Sol Pleno a Meia-Sombra',
-            water: 'Muito Alta (Substrato nunca deve secar 100%)',
-            repotSeason: 'Nov a Jan (Pico do calor e início das chuvas)',
+            popular: 'Acerola',
+            scientific: 'Malpighia emarginata',
+            family: 'Malpighiaceae',
+            origin: 'América Central e Norte da América do Sul',
+            sun: 'Sol Pleno rigoroso (mínimo 6h diárias para florescer e frutificar com vigor)',
+            water: 'Moderada a Alta no período de crescimento ativo; suporta secas moderadas, mas derruba frutos se faltar água na florada',
+            repotSeason: 'Out a Jan (Calor estabelecido e início das chuvas de verão)',
             repotCycleMonths: 24,
             substrate: '60% Caqueira / 30% Casca de Pinus / 10% Carvão moído',
-            pruningGuide: 'Poda de manutenção constante nos ápices para estimular floração no tronco. Poda drástica apenas no verão.',
-            wiringGuide: 'Galhos lenhosos rígidos e quebradiços. Aramar brotos semi-lenhosos com alumínio. Retirar em 60–90 dias.',
-            fertGuide: 'Adubação orgânica abundante (Bokashi / Torta de mamona com farinha de ossos) na primavera/verão.',
-            sensitivities: 'Muito sensível à falta d’água; ferrugem da jabuticabeira em épocas muito úmidas.'
+            pruningGuide: 'Ramificação muito rápida e vigorosa. Podar após a frutificação deixando 2 pares de folhas. Pinçar ápices com frequência para conter ramos ladrões verticais.',
+            wiringGuide: 'Ramos semi-lenhosos verdes dobram bem; ramos maduros endurecem rápido e quebram sob torção excessiva. Aramar brotações do ano.',
+            fertGuide: 'Adubação rica em Fósforo e Potássio (farinha de osso ou NPK 04-14-08) na primavera/verão para induzir floradas e frutificações sucessivas.',
+            sensitivities: 'Muito sensível a frio intenso e geadas abaixo de 10°C; atentar para mosca-das-frutas e pulgões nas gemas apicais.'
         },
         {
-            popular: 'Caliandra Rosa',
+            popular: 'Amora (Amoreira-preta)',
+            scientific: 'Morus nigra',
+            family: 'Moraceae',
+            origin: 'Ásia / Aclimatada em todo o território brasileiro',
+            sun: 'Sol Pleno constante',
+            water: 'Alta (consumo hídrico expressivo durante o verão em plena folhagem)',
+            repotSeason: 'Jul a Ago (Inverno, em repouso vegetativo antes do despertar das gemas)',
+            repotCycleMonths: 18,
+            substrate: '60% Caqueira / 30% Casca de Pinus / 10% Pedrisco',
+            pruningGuide: 'Vigor incomparável. Desfolha total no meio do verão reduz as folhas a 20% do tamanho original e multiplica a ramificação terciária. Poda estrutural no inverno.',
+            wiringGuide: 'Madeira mole e suculenta na brotação que engrossa em semanas. Vigiar arames a cada 20–30 dias no calor para não morder o córtex.',
+            fertGuide: 'Adubação pesada com matéria orgânica (Bokashi) e biofertilizante de Setembro a Abril.',
+            sensitivities: 'Cochonilhas nas axilas foliares e formigas cortadeiras atraídas pela brotação doce.'
+        },
+        {
+            popular: 'Buxinho',
+            scientific: 'Buxus sempervirens',
+            family: 'Buxaceae',
+            origin: 'Europa e Bacia do Mediterrâneo',
+            sun: 'Sol Pleno a Meia-Sombra ventilada',
+            water: 'Moderada (drenagem perfeita; raízes finas não toleram encharcamento)',
+            repotSeason: 'Ago a Out (Fim do inverno / início da primavera)',
+            repotCycleMonths: 36,
+            substrate: '60% Caqueira / 25% Casca Pinus / 15% Pedrisco',
+            pruningGuide: 'Crescimento lento e extremamente controlado. Poda com tesoura fina esculpindo patamares densos e compactos. Excelente resposta ao método "clip and grow".',
+            wiringGuide: 'Madeira extremamente densa, dura e fibrosa. Ramos grossos dificilmente vergam sem tensores ou ráfia protetora.',
+            fertGuide: 'Adubação orgânica equilibrada em pellets sólidos a cada 45 dias na primavera/verão.',
+            sensitivities: 'Ácaros em clima seco e fungo Cylindrocladium em condições de excesso de umidade no colo.'
+        },
+        {
+            popular: 'Caliandra-rosa (Esponjinha)',
             scientific: 'Calliandra brevipes',
             family: 'Fabaceae',
-            origin: 'Nativa da América do Sul / Brasil',
-            sun: 'Sol Pleno (essencial para floração abundante)',
-            water: 'Moderada a Alta (drenagem perfeita)',
+            origin: 'Nativa Brasileira (Mata Atlântica e Sudeste)',
+            sun: 'Sol Pleno (indispensável para floração plumosa abundante)',
+            water: 'Moderada a Alta (drenagem rápida e eficiente)',
             repotSeason: 'Set a Nov (Início da primavera)',
             repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
-            pruningGuide: 'Crescimento vigoroso. Podar ápices após floradas para manter a compacidade da copa.',
-            wiringGuide: 'Madeira extremamente frágil e quebradiça. Prefira modelar com poda de direcionamento ou tensores.',
-            fertGuide: 'NPK rico em Fósforo (P) no fim do inverno/primavera para potencializar botões florais.',
-            sensitivities: 'Cochonilhas de carapaça em ramos internos sem ventilação.'
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+            pruningGuide: 'Crescimento vigoroso. Podar ápices logo após o término de cada florada para manter a copa compacta e forçar novas gemas laterais.',
+            wiringGuide: 'Madeira extremamente frágil e quebradiça que estala sem aviso. Prefira conduzir por poda de direcionamento e tensores de ancoragem.',
+            fertGuide: 'NPK rico em Fósforo (P) no final do inverno para maximizar a quantidade de botões florais esponjosos.',
+            sensitivities: 'Cochonilhas de carapaça em ramos internos sem insolação e folhas danificadas por geada.'
         },
         {
-            popular: 'Caliandra Vermelha',
+            popular: 'Caliandra-vermelha',
             scientific: 'Calliandra tweedii',
             family: 'Fabaceae',
-            origin: 'Nativa Brasileira (Sul / Sudeste)',
+            origin: 'Nativa Brasileira (Sul e Sudeste)',
             sun: 'Sol Pleno',
-            water: 'Moderada (tolerante a pequenos períodos de seca relativa)',
+            water: 'Moderada (tolerante a estiagens curtas; nunca manter encharcada)',
             repotSeason: 'Out a Dez',
             repotCycleMonths: 24,
-            substrate: '70% Caqueira / 20% Casca Pinus / 10% Carvão',
-            pruningGuide: 'Pinçar novas brotações deixando 2 a 3 pares de folíolos.',
-            wiringGuide: 'Aramar com cuidado extremo; madeira estala sem aviso. Proteger com ráfia se for vergar galhos grossos.',
-            fertGuide: 'Orgânico a cada 30 dias na primavera; suspender no auge do inverno.',
-            sensitivities: 'Sensível a geadas fortes e ventos frios contínuos.'
+            substrate: '70% Caqueira / 20% Casca Pinus / 10% Carvão moído',
+            pruningGuide: 'Pinçar novas brotações deixando 2 a 3 pares de folíolos plumosos.',
+            wiringGuide: 'Aramar com muito cuidado apenas ramos semi-lenhosos flexíveis. Proteger o tronco com ráfia se for aplicar tensores.',
+            fertGuide: 'Adubação orgânica mensal na primavera; suspender no auge do inverno.',
+            sensitivities: 'Sensível a ventos frios encanados de inverno e sombreamento prolongado.'
         },
         {
-            popular: 'Pitangueira',
+            popular: 'Duranta (Pingo-de-ouro / Violeteira)',
+            scientific: 'Duranta erecta',
+            family: 'Verbenaceae',
+            origin: 'América Tropical (Nativa do Brasil e América do Sul)',
+            sun: 'Sol Pleno intenso (essencial para folhas com tom dourado vivo e floradas roxas)',
+            water: 'Alta (consome muita água no calor devido à transpiração e vigor vegetativo acelerado)',
+            repotSeason: 'Set a Dez',
+            repotCycleMonths: 18,
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+            pruningGuide: 'Crescimento explosivo. Podar brotos a cada 15-20 dias na primavera para induzir ramificação fina e densa. Tolera podas drásticas no tronco com rebrote espetacular.',
+            wiringGuide: 'Ramos jovens são flexíveis, mas engrossam muito rápido. Desaramar em 30–45 dias no verão para não deixar marcas permanentes.',
+            fertGuide: 'Adubação rica em Nitrogênio e matéria orgânica na fase de formação; balanceada com fósforo para induzir floradas e frutinhos dourados.',
+            sensitivities: 'Lagartas desfolhadoras nas brotações tenras e nematóides se cultivada em solo argiloso pesado.'
+        },
+        {
+            popular: 'Érica-falsa / Cufea (Flor rosa da foto)',
+            scientific: 'Cuphea gracilis / Cuphea hyssopifolia',
+            family: 'Lythraceae',
+            origin: 'Brasil e América Tropical',
+            sun: 'Sol Pleno a Meia-Sombra luminosa (o sol direto garante floração rosa contínua o ano todo)',
+            water: 'Moderada a Alta (aprecia solo sempre fresco e levemente úmido, sem empoçamento)',
+            repotSeason: 'Out a Jan',
+            repotCycleMonths: 18,
+            substrate: '60% Caqueira fina / 30% Casca Pinus fina / 10% Areia grossa',
+            pruningGuide: 'Pinçagem frequente dos ponteiros florais com tesoura fina para compactar a copa em pequenas almofadas verdes e floridas. Excelente para mame, shohin e estilo vassoura.',
+            wiringGuide: 'Ramos muito finos e lenhosos. Conduzir prioritariamente por poda ou usar arames ultrafinos (0.8 a 1.2 mm) sem apertar os nós.',
+            fertGuide: 'Adubação orgânica líquida a cada 15 dias de Setembro a Março; pausar no inverno.',
+            sensitivities: 'Desidratação rápida do torrão em vasos rasos sob calor forte; proteger raízes no pico da tarde.'
+        },
+        {
+            popular: 'Figueira-benjamim (Fícus)',
+            scientific: 'Ficus benjamina',
+            family: 'Moraceae',
+            origin: 'Ásia Tropical e Austrália (Clássica aclimatada no Brasil)',
+            sun: 'Sol Pleno a Meia-Sombra bem iluminada',
+            water: 'Moderada a Alta (vigor excepcional e grande plasticidade radicular)',
+            repotSeason: 'Nov a Fev (Meses mais quentes do ano, quando emite raízes aéreas com vigor)',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Carvão moído',
+            pruningGuide: 'Tolera qualquer intensidade de poda, rebrotando até de madeira antiga sem folhas. Desfolha total de verão reduz o limbo foliar a menos da metade.',
+            wiringGuide: 'Flexibilidade excepcional. Cicatriza rápido cortes quando protegidos com pasta selante. Cuidar para não deixar arame estrangular ramos em crescimento.',
+            fertGuide: 'Adubação generosa rica em matéria orgânica e nitrogênio durante todo o período quente.',
+            sensitivities: 'Derruba folhas pontualmente se movido de ambiente bruscamente; tripes em brotos tenros.'
+        },
+        {
+            popular: 'Fruta-dos-milagres',
+            scientific: 'Synsepalum dulcificum',
+            family: 'Sapotaceae',
+            origin: 'África Ocidental Tropical',
+            sun: 'Meia-Sombra a Sol da manhã suave (folhagem sofre com sol abrasador das 12h às 15h)',
+            water: 'Alta e constante (o torrão nunca deve secar 100%; manter umidade ambiental alta)',
+            repotSeason: 'Nov a Jan (Exige calor consolidado acima de 22°C para emissão radicular)',
+            repotCycleMonths: 30,
+            substrate: '60% Caqueira ácida lavada / 30% Turfa de Sphagnum / 10% Púmice (pH ácido obrigatório: 4.5 a 5.5)',
+            pruningGuide: 'Crescimento lento e comedido. Poda suave de pontas mantendo ramos de base para espessamento de tronco. Não fazer desfolha drástica.',
+            wiringGuide: 'Ramos lentos para fixar novas posições. Manter arame de alumínio por 6 a 8 meses monitorando a casca.',
+            fertGuide: 'Adubos orgânicos especiais para plantas acidófilas (torta de mamona/algodão e quelato de ferro). Nunca usar água dura calcária ou calcário.',
+            sensitivities: 'Clorose férrica imediata em solos alcalinos (folhas amarelam entre as nervuras); intolerante ao frio abaixo de 12°C.'
+        },
+        {
+            popular: 'Ixora (Mini-ixora)',
+            scientific: 'Ixora coccinea compacta',
+            family: 'Rubiaceae',
+            origin: 'Ásia Tropical / Índia',
+            sun: 'Sol Pleno (indispensável para buquês florais densos e compactos)',
+            water: 'Moderada a Alta (substrato fresco, permeável e bem drenado)',
+            repotSeason: 'Out a Dez',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Carvão moído',
+            pruningGuide: 'Podar após a floração, cortando logo acima do último nó com folhas maduras para estimular brotações duplas bifurcadas.',
+            wiringGuide: 'Ramos rígidos e fibrosos. Modelar com arame quando ainda semi-verdes; cuidado com quebras nas axilas.',
+            fertGuide: 'Fósforo abundante na primavera/verão associado a micronutrientes (ferro e magnésio).',
+            sensitivities: 'Sensível a ventos frios de inverno e geadas; clorose se o solo for excessivamente alcalino.'
+        },
+        {
+            popular: 'Jabuticaba (Sabará / Híbrida)',
+            scientific: 'Plinia cauliflora / Plinia jaboticaba',
+            family: 'Myrtaceae',
+            origin: 'Nativa Brasileira (Mata Atlântica)',
+            sun: 'Sol Pleno a Meia-Sombra luminosa',
+            water: 'Muito Alta (espécie de beira de rio; o substrato deve estar sempre fresco e úmido, sem estagnar)',
+            repotSeason: 'Nov a Jan (Pico do calor e início das chuvas; transplantar no frio é de altíssimo risco)',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca de Pinus compostada / 10% Carvão vegetal moído',
+            pruningGuide: 'Pinçar ápices apicais continuamente para reverter a força da seiva para o tronco e ramos primários, estimulando floração caulinar e frutificação. Poda drástica somente no verão.',
+            wiringGuide: 'Galhos lenhosos muito duros e quebradiços. Aramar brotos semi-lenhosos novos; proteger a casca lisa com ráfia para não marcar.',
+            fertGuide: 'Adubação orgânica abundante (Bokashi, farinha de ossos e torta de mamona) na primavera/verão.',
+            sensitivities: 'Extremamente sensível à falta pontual de água (desidratação causa queima de folhas em 24h); ferrugem da jabuticaba em épocas de muita chuva e pouco vento.'
+        },
+        {
+            popular: 'Junípero Jacaré',
+            scientific: 'Juniperus horizontalis / Juniperus squamata',
+            family: 'Cupressaceae',
+            origin: 'América do Norte e Ásia',
+            sun: 'Sol Pleno rigoroso (mínimo de 5h a 6h de sol direto diariamente)',
+            water: 'Moderada (deixar a superfície do substrato secar ligeiramente antes de regar novamente)',
+            repotSeason: 'Ago a Out (Fim de inverno / início da primavera no Hemisfério Sul)',
+            repotCycleMonths: 36,
+            substrate: '50% Caqueira / 30% Púmice / 20% Pedrisco (drenagem extrema sem terra vegetal comum)',
+            pruningGuide: 'Nunca usar tesoura na massa verde escamiforme (as pontas cortadas oxidam e ficam marrons). Pinçar com a ponta dos dedos torcendo suavemente.',
+            wiringGuide: 'Excelente maleabilidade e rusticidade para estilos cascata (Kengai), semi-cascata e Bunjin. Permite torções dramáticas se protegido com ráfia.',
+            fertGuide: 'Adubação orgânica sólida em sachês (Biogold ou Bokashi) de Setembro a Maio; pausar no inverno.',
+            sensitivities: 'Ácaros vermelhos em períodos quentes e secos; apodrecimento radicular se o solo reter água em excesso.'
+        },
+        {
+            popular: 'Limão-cravo (Limão-rosa)',
+            scientific: 'Citrus × limonia',
+            family: 'Rutaceae',
+            origin: 'Híbrido Cítrico da Ásia / Muito rústico no Brasil',
+            sun: 'Sol Pleno pleno e direto',
+            water: 'Moderada a Alta durante o crescimento dos frutos; controlar água no outono para induzir floração',
+            repotSeason: 'Set a Nov',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco ou Areia Grossa',
+            pruningGuide: 'Poda de limpeza de ramos internos que cruzam a copa. Eliminar espinhos desnecessários com alicate côncavo para facilitar a modelagem e o manuseio.',
+            wiringGuide: 'Ramos verdes são flexíveis e fáceis de conduzir; proteger a casca e retirar arame antes que morda o câmbio vascular.',
+            fertGuide: 'Adubação rica em micronutrientes (Zinco, Manganês, Boro, Ferro) e matéria orgânica com torta de mamona.',
+            sensitivities: 'Minador-dos-citros (larva que desenha labirintos prateados nas folhas jovens) e pulgões escuros.'
+        },
+        {
+            popular: 'Mexerica Ponkan',
+            scientific: 'Citrus reticulata',
+            family: 'Rutaceae',
+            origin: 'Ásia / Muito cultivada no Sudeste e Sul do Brasil',
+            sun: 'Sol Pleno constante',
+            water: 'Moderada (drenagem perfeita)',
+            repotSeason: 'Set a Nov',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Carvão moído',
+            pruningGuide: 'Poda logo após a colheita dos frutos. Desbastar o excesso de frutinhos em bonsai para não exaurir a árvore (manter no máximo 2 a 3 frutos por planta).',
+            wiringGuide: 'Aramar ramos semi-lenhosos de 1 a 2 anos com alumínio na primavera.',
+            fertGuide: 'NPK 04-14-08 na pré-floração associado a Bokashi trimestral.',
+            sensitivities: 'Minador-dos-citros e cochonilhas brancas nas axilas dos galhos.'
+        },
+        {
+            popular: 'Pau-ferro (Jucá)',
+            scientific: 'Libidibia ferrea',
+            family: 'Fabaceae',
+            origin: 'Nativa Brasileira (Mata Atlântica e Caatinga)',
+            sun: 'Sol Pleno rigoroso',
+            water: 'Moderada (alta tolerância à estiagem; drenagem rápida)',
+            repotSeason: 'Out a Jan (Exclusivamente com calor estabelecido)',
+            repotCycleMonths: 24,
+            substrate: '70% Caqueira / 20% Casca Pinus / 10% Carvão moído',
+            pruningGuide: 'Casca marmorizada espetacular que descama em placas revelando tons brancos, verdes e cinzas. Pinçar folhas bipinadas para reduzir entrenós e tamanho dos folíolos.',
+            wiringGuide: 'Madeira de densidade altíssima ("ferro") que endurece rápido. Aramar enquanto os ramos tiverem casca verde.',
+            fertGuide: 'Adubação moderada; planta leguminosa com bactérias fixadoras de nitrogênio no solo.',
+            sensitivities: 'Muito sensível a frio intenso e geadas (risco de morte dos ramos finos abaixo de 6°C).'
+        },
+        {
+            popular: 'Pitanga',
             scientific: 'Eugenia uniflora',
             family: 'Myrtaceae',
             origin: 'Nativa Brasileira',
-            sun: 'Sol Pleno (folhas avermelham com sol forte e frio suave)',
-            water: 'Alta (gosta de umidade constante sem encharcamento)',
+            sun: 'Sol Pleno (o sol direto colore a brotação nova em tons bronze e avermelhados exuberantes)',
+            water: 'Alta e constante (gosta de solo úmido sem encharcamento estagnado)',
             repotSeason: 'Out a Jan',
             repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
-            pruningGuide: 'Excelente resposta à poda de redução. Ramificação fina espetacular. Desfolha parcial no verão.',
-            wiringGuide: 'Casca lisa e delicada que esfolia naturalmente. Usar arame encapado ou fita para não marcar o tronco.',
-            fertGuide: 'Adubo balanceado na brotação; reforço de potássio no outono para engorda do nebari.',
-            sensitivities: 'Pulgões em brotos novos e fungos foliares no excesso de sombra.'
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+            pruningGuide: 'Excelente capacidade de redução e ramificação fina. Desfolha parcial no verão para reduzir folhas e estimular brotos internos.',
+            wiringGuide: 'Casca lisa e avermelhada que esfolia naturalmente. Usar arame encapado ou fita para não machucar o tronco delicado.',
+            fertGuide: 'Adubação balanceada na brotação; reforço de potássio no outono para engorda do nebari.',
+            sensitivities: 'Pulgões em brotações tenras e manchas foliares se mantida em locais muito sombreados.'
         },
+        {
+            popular: 'Piteco / Tataré',
+            scientific: 'Chloroleucon tortum',
+            family: 'Fabaceae',
+            origin: 'Nativa da Restinga Brasileira (Sudeste/Litoral)',
+            sun: 'Sol Pleno absoluto',
+            water: 'Baixa a Moderada (planta xerofítica de restinga; excelente resistência à seca relativa)',
+            repotSeason: 'Nov a Fev (Apenas no pico do calor para recuperação radicular)',
+            repotCycleMonths: 30,
+            substrate: '70% Caqueira / 20% Areia grossa ou Pedrisco / 10% Casca Pinus',
+            pruningGuide: 'Tronco canelado, retorcido e escultural único. Poda de manutenção nos ramos laterais para evidenciar o movimento do tronco.',
+            wiringGuide: 'Galhos verdes dobram bem; galhos castanhos quebram facilmente. Podar espinhos antes de aramar.',
+            fertGuide: 'Adubação orgânica suave com farinha de ossos na primavera/verão.',
+            sensitivities: 'Intolerante ao frio intenso de inverno sem proteção e sensível a solos com drenagem deficiente.'
+        },
+        {
+            popular: 'Piteco-cortiçoso (Jurema-branca)',
+            scientific: 'Chloroleucon mangense / Pithecellobium tortum var. corticosum',
+            family: 'Fabaceae',
+            origin: 'Caatinga e Cerrado Brasileiro',
+            sun: 'Sol Pleno abrasador',
+            water: 'Baixa a Moderada (altíssima resistência à aridez)',
+            repotSeason: 'Nov a Jan',
+            repotCycleMonths: 36,
+            substrate: '75% Caqueira / 15% Areia grossa de rio / 10% Carvão moído',
+            pruningGuide: 'Casca profundamente corticosa, fendida e rugosa, que confere aspecto milenar imediato. Podar com tesoura afiada preservando as placas de cortiça intactas.',
+            wiringGuide: 'Aramar apenas brotos finos. Jamais apoiar alicates pesados sobre a casca cortiçosa, pois ela quebra e perde o valor estético.',
+            fertGuide: 'Adubação orgânica leve espaçada a cada 60 dias.',
+            sensitivities: 'Raízes apodrecem rapidamente com excesso de água no inverno frio; detesta sombra e solo asfixiante.'
+        },
+        {
+            popular: 'Primavera (Buganvília)',
+            scientific: 'Bougainvillea spectabilis / Bougainvillea glabra',
+            family: 'Nyctaginaceae',
+            origin: 'Nativa Brasileira',
+            sun: 'Sol Pleno inegociável (mínimo de 6h a 8h de sol direto para florescer intensamente)',
+            water: 'Moderada a Baixa (estresse hídrico leve e controlado após maturação da brotação induz floração espetacular de brácteas)',
+            repotSeason: 'Out a Fev (Somente no calor forte estabelecido)',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca Pinus / 10% Pedrisco',
+            pruningGuide: 'Poda drástica após a perda das flores. Cortar ramos longos deixando 2 a 3 gemas. Eliminar brotos ladrões verticais.',
+            wiringGuide: 'Madeira velha e rígida quebra como vidro. Modelar ramos novos enquanto ainda verdes e flexíveis.',
+            fertGuide: 'Farta em Fósforo e Potássio na primavera; evitar excesso de nitrogênio (que produz só folhas e zero flores).',
+            sensitivities: 'Raízes finas e quebradiças no transplante (nunca lavar com pressão nem desembaraçar com força excessiva).'
+        },
+        {
+            popular: 'Rainha-do-abismo ("Seeninja")',
+            scientific: 'Sinningia leucotricha',
+            family: 'Gesneriaceae',
+            origin: 'Nativa Brasileira (Endêmica dos penhascos rochosos do Paraná)',
+            sun: 'Meia-Sombra bem iluminada / Sol suave da manhã (sol causticante do meio-dia queima a penugem prateada)',
+            water: 'Baixa a Moderada (batata/cáudice suculento armazena água; regar o substrato sem molhar a folhagem aveludada)',
+            repotSeason: 'Set a Nov (Início da primavera, quando o tubérculo desperta e emite novas hastes)',
+            repotCycleMonths: 36,
+            substrate: '50% Caqueira fina / 30% Púmice ou Perlita / 20% Turfa/Casca de pinus moída (drenagem perfeita)',
+            pruningGuide: 'No outono/inverno as hastes aéreas secam naturalmente. Cortar rente ao tubérculo e suspender regas no período de dormência.',
+            wiringGuide: 'Não se aplica aramação clássica de galhos. Condução por direcionamento de luz e exposição artística do tubérculo exposto sobre rocha (estilo Ishitsuki / Kusamono de grande porte).',
+            fertGuide: 'Adubação líquida suave diluída a 1/4 da dose a cada 30 dias na primavera.',
+            sensitivities: 'Apodrecimento do cáudice por excesso de umidade no inverno frio; fungos se a folhagem penugenta ficar molhada à noite.'
+        },
+        {
+            popular: 'Rosa-do-deserto',
+            scientific: 'Adenium obesum',
+            family: 'Apocynaceae',
+            origin: 'África Subsaariana e Península Arábica',
+            sun: 'Sol Pleno direto o dia inteiro (indispensável para espessamento do cáudice e floração)',
+            water: 'Baixa (regar abundantemente, mas deixar o substrato secar 100% entre as regas; no inverno reduzir a quase zero)',
+            repotSeason: 'Out a Fev (Somente em temperaturas acima de 22°C)',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 25% Pedrisco ou Areia grossa / 15% Carvão moído (zero retenção de água acumulada)',
+            pruningGuide: 'Poda de bifurcação e redução de hastes estioladas na primavera. Selar cortes com cola instantânea ou canela em pó para evitar podridão.',
+            wiringGuide: 'Condução com arame macio em hastes jovens ou estilização por poda e elevação do cáudice radicular no transplante.',
+            fertGuide: 'Adubo específico para cactos/suculentas ou NPK 04-14-08 na primavera.',
+            sensitivities: 'Podridão bacteriana do cáudice (Erwinia) por umidade excessiva em solo frio; cochonilhas de raiz.'
+        },
+        {
+            popular: 'Serissa variegata (Árvore-das-mil-estrelas)',
+            scientific: 'Serissa japonica \'Variegata\' / Serissa foetida variegata',
+            family: 'Rubiaceae',
+            origin: 'Sudeste Asiático (China / Japão)',
+            sun: 'Meia-Sombra bem iluminada ou Sol filtrado da manhã (evitar sol direto das 12h às 15h para não queimar as margens brancas/cremes das folhas)',
+            water: 'Moderada e constante (o substrato nunca deve secar 100%, mas não tolera prato com água)',
+            repotSeason: 'Set a Nov (Primavera amena)',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Casca Pinus fina / 10% Carvão moído',
+            pruningGuide: 'Pinçar brotos novos após as floradas estreladas para manter a compacidade da copa variegada.',
+            wiringGuide: 'Ramos finos e flexíveis. Usar arame fino de alumínio (1.0 a 1.5 mm).',
+            fertGuide: 'Adubação orgânica líquida a cada 15 dias na primavera; dosagem reduzida em relação às espécies verdes normais.',
+            sensitivities: 'Derruba folhas se mudar repentinamente de local ou sofrer corrente de ar frio seco; ácaros em ambientes fechados.'
+        },
+        {
+            popular: 'Tamarindo',
+            scientific: 'Tamarindus indica',
+            family: 'Fabaceae',
+            origin: 'África Tropical / Muito adaptado ao Nordeste e Sudeste do Brasil',
+            sun: 'Sol Pleno forte e direto',
+            water: 'Baixa a Moderada (raízes profundas e resistentes; tolera pequenos períodos de seca)',
+            repotSeason: 'Nov a Jan (Meses quentes com sol pleno)',
+            repotCycleMonths: 36,
+            substrate: '65% Caqueira / 25% Areia grossa / 10% Casca Pinus',
+            pruningGuide: 'Folhas compostas pinadas que fecham ao anoitecer. Poda de redução após a primavera para manter a escala em bonsai.',
+            wiringGuide: 'Casca enrugada e tronco que ganha textura rugosa formidável. Aramar galhos jovens de 1 ano; madeira velha é muito dura.',
+            fertGuide: 'Orgânica com cinzas vegetais e farinha de ossos na primavera/verão.',
+            sensitivities: 'Sensível a frio abaixo de 10°C; fungos foliares em excesso de umidade na sombra.'
+        },
+
+        // --- 2. Espécies Clássicas Complementares da Arte do Bonsai ---
         {
             popular: 'Junípero Shimpaku',
             scientific: 'Juniperus chinensis',
@@ -99,6 +387,21 @@
             wiringGuide: 'Ideal para estilos Kengai (cascata) e Han-Kengai. Manter arame de 6 a 9 meses monitorando marcas.',
             fertGuide: 'Orgânico sólido em sachês a cada 45 dias.',
             sensitivities: 'Sensível ao excesso de calor no vaso preto; sombrear raízes no verão causticante.'
+        },
+        {
+            popular: 'Pinheiro Negro Japonês',
+            scientific: 'Pinus thunbergii',
+            family: 'Pinaceae',
+            origin: 'Japão',
+            sun: 'Sol Pleno absoluto e boa ventilação',
+            water: 'Controlada (raízes necessitam de aeração com fungos micorrizas saudáveis)',
+            repotSeason: 'Jul a Ago (Inverno profundo no Hemisfério Sul)',
+            repotCycleMonths: 36,
+            substrate: '50% Caqueira grossa / 30% Púmice / 20% Rocha Vulcânica (nunca usar matéria orgânica pura)',
+            pruningGuide: 'Técnica de Mekiri (corte de velas na primavera) e Desagulhamento (Mekaki) no outono para equilibrar vigor.',
+            wiringGuide: 'Aramação pesada no inverno com arame de cobre recozido. Pode permanecer no galho por 12 meses.',
+            fertGuide: 'Orgânico sólido a partir do fim da primavera, após o amadurecimento das novas agulhas.',
+            sensitivities: 'Morte de micorrizas por excesso de umidade no fundo do vaso; broca das pontas.'
         },
         {
             popular: 'Acer Palmatum',
@@ -131,34 +434,19 @@
             sensitivities: 'Excelente rusticidade; atentar para fungos oídio em outonos úmidos.'
         },
         {
-            popular: 'Bougainvillea (Primavera)',
-            scientific: 'Bougainvillea glabra',
-            family: 'Nyctaginaceae',
-            origin: 'Nativa Brasileira',
-            sun: 'Sol Pleno intenso (imprescindível para brácteas coloridas)',
-            water: 'Baixa a Moderada (estresse hídrico leve estimula floração)',
-            repotSeason: 'Out a Fev (Apenas no calor estabelecido; detesta raiz fria e úmida)',
+            popular: 'Azaleia Satsuki',
+            scientific: 'Rhododendron indicum',
+            family: 'Ericaceae',
+            origin: 'Japão',
+            sun: 'Meia-Sombra a Sol da manhã',
+            water: 'Constante, água livre de calcário (aprecia pH ácido entre 5.0 e 5.5)',
+            repotSeason: 'Nov a Dez (Imediatamente após o término da floração!)',
             repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Pinus / 10% Areia grossa ou Pedrisco',
-            pruningGuide: 'Poda drástica após a floração. Cortar galhos longos deixando 2 gemas.',
-            wiringGuide: 'Galhos velhos quebram como vidro. Modelar ramos jovens ainda verdes e flexíveis.',
-            fertGuide: 'Farinha de osso e adubos fosfatados estimulam floração constante.',
-            sensitivities: 'Raízes quebradiças no transplante (não desembaraçar com força excessiva).'
-        },
-        {
-            popular: 'Ficus Tiger Bark',
-            scientific: 'Ficus microcarpa',
-            family: 'Moraceae',
-            origin: 'Sudeste Asiático',
-            sun: 'Sol Pleno a Meia-Sombra brilhante',
-            water: 'Moderada a Alta (adapta-se com vigor formidável)',
-            repotSeason: 'Out a Fev (Meses mais quentes do ano)',
-            repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Pinus / 10% Carvão',
-            pruningGuide: 'Tolera qualquer nível de poda, rebrotando até de madeira antiga sem nenhuma folha remanescente.',
-            wiringGuide: 'Flexibilidade excepcional. Cicatrizes fecham rápido se cobertas com pasta cicatrizante.',
-            fertGuide: 'Adubação rica em Nitrogênio e matéria orgânica durante todo o período vegetativo.',
-            sensitivities: 'Trips (enrola as folhas novas) e sensibilidade ao frio abaixo de 8°C.'
+            substrate: '80% Kanuma (ou Caqueira ácida lavada com Turfa de Sphagnum) / 20% Púmice',
+            pruningGuide: 'Dominância basal (a base cresce mais rápido que o topo). Podar forte na base e suave no ápice.',
+            wiringGuide: 'Ramos lenhosos quebram facilmente. Aramar antes da formação dos botões florais com cuidado.',
+            fertGuide: 'Adubo específico para plantas acidófilas; nunca usar adubos com cal ou calcário.',
+            sensitivities: 'Clorose férrica se o solo ficar alcalino; brocas de tronco.'
         },
         {
             popular: 'Ulmus (Olmo Chinês)',
@@ -176,21 +464,6 @@
             sensitivities: 'Lagartas desfolhadoras e pulgões nas brotações tenras.'
         },
         {
-            popular: 'Azaleia Satsuki',
-            scientific: 'Rhododendron indicum',
-            family: 'Ericaceae',
-            origin: 'Japão',
-            sun: 'Meia-Sombra a Sol da manhã',
-            water: 'Constante, água livre de calcário (aprecia pH ácido entre 5.0 e 5.5)',
-            repotSeason: 'Nov a Dez (Imediatamente após o término da floração!)',
-            repotCycleMonths: 24,
-            substrate: '80% Kanuma (ou Caqueira ácida lavada com Turfa de Sphagnum) / 20% Púmice',
-            pruningGuide: 'Dominância basal (a base cresce mais rápido que o topo). Podar forte na base e suave no ápice.',
-            wiringGuide: 'Ramos lenhosos quebram facilmente. Aramar antes da formação dos botões florais com cuidado.',
-            fertGuide: 'Adubo específico para plantas acidófilas; nunca usar adubos com cal ou calcário.',
-            sensitivities: 'Clorose férrica se o solo ficar alcalino; brocas de tronco.'
-        },
-        {
             popular: 'Piracanta',
             scientific: 'Pyracantha coccinea',
             family: 'Rosaceae',
@@ -206,19 +479,64 @@
             sensitivities: 'Pulgões e fogo bacteriano em climas muito quentes e úmidos sem circulação de ar.'
         },
         {
-            popular: 'Serissa (Árvore das Mil Estrelas)',
-            scientific: 'Serissa foetida',
-            family: 'Rubiaceae',
-            origin: 'Sudeste Asiático',
-            sun: 'Meia-Sombra iluminada (evitar sol escaldante do meio-dia)',
-            water: 'Moderada constante (detesta ressecamento total e encharcamento)',
-            repotSeason: 'Set a Nov',
+            popular: 'Romãzeira Anã',
+            scientific: 'Punica granatum nana',
+            family: 'Lythraceae',
+            origin: 'Mediterrâneo / Ásia',
+            sun: 'Sol Pleno (essencial para flores laranjas e frutificação)',
+            water: 'Moderada (deixar a camada superior do vaso secar entre as regas)',
+            repotSeason: 'Ago a Out',
             repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Turfa / 10% Carvão',
-            pruningGuide: 'Pinçar novas brotações para manter o formato arredondado dos patamares.',
-            wiringGuide: 'Ramos finos e delicados. Usar arames de calibre reduzido (1.0 a 1.5mm).',
-            fertGuide: 'Adubação líquida orgânica suave a cada 15 dias na primavera/verão.',
-            sensitivities: 'Derruba folhas se mudar bruscamente de lugar ou receber rajadas de vento frio.'
+            substrate: '60% Caqueira / 30% Púmice ou Pedrisco / 10% Pinus',
+            pruningGuide: 'Corta-se ramos que já floresceram para estimular novas pontas produtivas.',
+            wiringGuide: 'Galhos finos e retorcidos fáceis de modelar. Tronco ganha aspecto retorcido milenar com o tempo.',
+            fertGuide: 'Adubo balanceado na primavera e rico em potássio no outono.',
+            sensitivities: 'Oídio foliar se mantida em ambientes úmidos sem sol direto.'
+        },
+        {
+            popular: 'Ficus Tiger Bark',
+            scientific: 'Ficus microcarpa',
+            family: 'Moraceae',
+            origin: 'Sudeste Asiático',
+            sun: 'Sol Pleno a Meia-Sombra brilhante',
+            water: 'Moderada a Alta (adapta-se com vigor formidável)',
+            repotSeason: 'Out a Fev (Meses mais quentes do ano)',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Pinus / 10% Carvão',
+            pruningGuide: 'Tolera qualquer nível de poda, rebrotando até de madeira antiga sem nenhuma folha remanescente.',
+            wiringGuide: 'Flexibilidade excepcional. Cicatrizes fecham rápido se cobertas com pasta cicatrizante.',
+            fertGuide: 'Adubação rica em Nitrogênio e matéria orgânica durante todo o período vegetativo.',
+            sensitivities: 'Trips (enrola as folhas novas) e sensibilidade ao frio abaixo de 8°C.'
+        },
+        {
+            popular: 'Ficus Retusa',
+            scientific: 'Ficus retusa',
+            family: 'Moraceae',
+            origin: 'Ásia Tropical',
+            sun: 'Sol Pleno a Meia-Sombra',
+            water: 'Moderada a Alta',
+            repotSeason: 'Out a Fev',
+            repotCycleMonths: 24,
+            substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
+            pruningGuide: 'Tolera podas drásticas de redução e cicatriza com vigor exemplar.',
+            wiringGuide: 'Excelente maleabilidade; vigiar arame para não estrangular os ramos em rápido crescimento.',
+            fertGuide: 'NPK balanceado + matéria orgânica na primavera/verão.',
+            sensitivities: 'Cochonilhas e trips.'
+        },
+        {
+            popular: 'Carmona (Chá de Fukien)',
+            scientific: 'Carmona retusa',
+            family: 'Boraginaceae',
+            origin: 'China / Sudeste Asiático',
+            sun: 'Muita luminosidade / Sol filtrado ou pleno matinal',
+            water: 'Moderada (substrato úmido sem água parada)',
+            repotSeason: 'Nov a Jan (Espécie puramente tropical)',
+            repotCycleMonths: 24,
+            substrate: '50% Caqueira / 30% Turfa / 20% Pedrisco',
+            pruningGuide: 'Poda constante de pontas para manter o contorno das copas.',
+            wiringGuide: 'Galhos jovens e macios. Proteger a casca com fita de proteção.',
+            fertGuide: 'Orgânico suave todo o ano, com pausa nos meses mais frios.',
+            sensitivities: 'Intolerante ao frio abaixo de 12°C. Pulgões e moscas brancas.'
         },
         {
             popular: 'Cerejeira do Rio Grande',
@@ -266,51 +584,6 @@
             sensitivities: 'Lagartas devoradoras de folhas na brotação de primavera.'
         },
         {
-            popular: 'Amoreira',
-            scientific: 'Morus nigra',
-            family: 'Moraceae',
-            origin: 'Ásia / Aclimatada no Brasil',
-            sun: 'Sol Pleno',
-            water: 'Alta (consome muita água no verão)',
-            repotSeason: 'Jul a Ago (Inverno, em repouso vegetativo)',
-            repotCycleMonths: 12,
-            substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
-            pruningGuide: 'Vigor incomparável. Desfolha de verão reduz o tamanho das folhas para 20% do original.',
-            wiringGuide: 'Madeira mole e suculenta que ganha rigidez rápida. Aramar ramos verdes.',
-            fertGuide: 'Adubação pesada durante todo o crescimento ativo.',
-            sensitivities: 'Cochonilhas e formigas cortadeiras.'
-        },
-        {
-            popular: 'Romãzeira Anã',
-            scientific: 'Punica granatum nana',
-            family: 'Lythraceae',
-            origin: 'Mediterrâneo / Ásia',
-            sun: 'Sol Pleno (essencial para flores laranjas e frutificação)',
-            water: 'Moderada (deixar a camada superior do vaso secar entre as regas)',
-            repotSeason: 'Ago a Out',
-            repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Púmice ou Pedrisco / 10% Pinus',
-            pruningGuide: 'Corta-se ramos que já floresceram para estimular novas pontas produtivas.',
-            wiringGuide: 'Galhos finos e retorcidos fáceis de modelar. Tronco ganha aspecto retorcido milenar com o tempo.',
-            fertGuide: 'Adubo balanceado na primavera e rico em potássio no outono.',
-            sensitivities: 'Oídio foliar se mantida em ambientes úmidos sem sol direto.'
-        },
-        {
-            popular: 'Pinheiro Negro Japonês',
-            scientific: 'Pinus thunbergii',
-            family: 'Pinaceae',
-            origin: 'Japão',
-            sun: 'Sol Pleno absoluto e boa ventilação',
-            water: 'Controlada (raízes necessitam de aeração com fungos micorrizas saudáveis)',
-            repotSeason: 'Jul a Ago (Inverno profundo no Hemisfério Sul)',
-            repotCycleMonths: 36,
-            substrate: '50% Caqueira grossa / 30% Púmice / 20% Rocha Vulcânica (nunca usar matéria orgânica pura)',
-            pruningGuide: 'Técnica de Mekiri (corte de velas na primavera) e Desagulhamento (Mekaki) no outono para equilibrar vigor.',
-            wiringGuide: 'Aramação pesada no inverno com arame de cobre recozido. Pode permanecer no galho por 12 meses.',
-            fertGuide: 'Orgânico sólido a partir do fim da primavera, após o amadurecimento das novas agulhas.',
-            sensitivities: 'Morte de micorrizas por excesso de umidade no fundo do vaso; broca das pontas.'
-        },
-        {
             popular: 'Resedá (Flor-de-Merenda)',
             scientific: 'Lagerstroemia indica',
             family: 'Lythraceae',
@@ -326,36 +599,6 @@
             sensitivities: 'Muito suscetível ao fungo oídio nas folhas e botões em primaveras abafadas.'
         },
         {
-            popular: 'Buxinho',
-            scientific: 'Buxus sempervirens',
-            family: 'Buxaceae',
-            origin: 'Europa e Mediterrâneo',
-            sun: 'Sol Pleno a Meia-Sombra',
-            water: 'Moderada (boa drenagem)',
-            repotSeason: 'Ago a Out',
-            repotCycleMonths: 36,
-            substrate: '60% Caqueira / 25% Pinus / 15% Pedrisco',
-            pruningGuide: 'Crescimento lento e controlado. Poda de tesoura mantendo tufos compactos de folhagem perene.',
-            wiringGuide: 'Madeira extremamente densa e dura. Dificilmente verga galhos grossos sem cortes ou tensores.',
-            fertGuide: 'Adubação orgânica equilibrada.',
-            sensitivities: 'Ácaros em clima seco e fungo Cylindrocladium em umidade excessiva.'
-        },
-        {
-            popular: 'Carmona (Chá de Fukien)',
-            scientific: 'Carmona retusa',
-            family: 'Boraginaceae',
-            origin: 'China / Sudeste Asiático',
-            sun: 'Muita luminosidade / Sol filtrado ou pleno matinal',
-            water: 'Moderada (substrato úmido sem água parada)',
-            repotSeason: 'Nov a Jan (Espécie puramente tropical)',
-            repotCycleMonths: 24,
-            substrate: '50% Caqueira / 30% Turfa / 20% Pedrisco',
-            pruningGuide: 'Poda constante de pontas para manter o contorno das copas.',
-            wiringGuide: 'Galhos jovens e macios. Proteger a casca com fita de proteção.',
-            fertGuide: 'Orgânico suave todo o ano, com pausa nos meses mais frios.',
-            sensitivities: 'Intolerante ao frio abaixo de 12°C. Pulgões e moscas brancas.'
-        },
-        {
             popular: 'Jacarandá Mimoso',
             scientific: 'Jacaranda mimosifolia',
             family: 'Bignoniaceae',
@@ -369,36 +612,6 @@
             wiringGuide: 'Ramos crescem retos e eretos; aramação precoce é mandatória para dar movimento.',
             fertGuide: 'Balanço NPK 10-10-10 na primavera.',
             sensitivities: 'Sensível a ventos fortes que quebram folhas plumosas tenras.'
-        },
-        {
-            popular: 'Pitecolóbio (Chuva de Ouro)',
-            scientific: 'Chloroleucon tortum',
-            family: 'Fabaceae',
-            origin: 'Nativa da Restinga Brasileira',
-            sun: 'Sol Pleno rigoroso',
-            water: 'Baixa a Moderada (muito tolerante à seca relativa)',
-            repotSeason: 'Nov a Fev (Apenas com calor forte)',
-            repotCycleMonths: 24,
-            substrate: '70% Caqueira / 20% Areia grossa / 10% Casca Pinus',
-            pruningGuide: 'Tronco escultural com caneluras tortuosas magníficas. Espinhos devem ser podados para manejo.',
-            wiringGuide: 'Aramar com arame de alumínio encapado quando os ramos ainda tiverem coloração verde.',
-            fertGuide: 'Adubação fosfatada leve no verão.',
-            sensitivities: 'Detesta frio intenso e solos encharcados sem drenagem imediata.'
-        },
-        {
-            popular: 'Ficus Retusa',
-            scientific: 'Ficus retusa',
-            family: 'Moraceae',
-            origin: 'Ásia Tropical',
-            sun: 'Sol Pleno a Meia-Sombra',
-            water: 'Moderada a Alta',
-            repotSeason: 'Out a Fev',
-            repotCycleMonths: 24,
-            substrate: '60% Caqueira / 30% Pinus / 10% Pedrisco',
-            pruningGuide: 'Tolera podas drásticas de redução e cicatriza com vigor exemplar.',
-            wiringGuide: 'Excelente maleabilidade; vigiar arame para não estrangular os ramos em rápido crescimento.',
-            fertGuide: 'NPK balanceado + matéria orgânica na primavera/verão.',
-            sensitivities: 'Cochonilhas e trips.'
         }
     ];
 
@@ -433,9 +646,9 @@
                 'Rega rigorosa: verificar vasos menores 2x ao dia (início da manhã e fim da tarde).',
                 'Pinçagem contínua de brotações apicais para conter dominância e ramificar patamares.',
                 'Vigiar arames de primavera: galhos engrossam rápido e podem ficar marcados em dias.',
-                'Transplante seguro apenas de espécies tropicais plenas (Ficus, Jabuticabeira, Pitecolóbio).'
+                'Transplante seguro apenas de espécies tropicais plenas (Ficus, Jabuticaba, Piteco, Acerola).'
             ],
-            speciesInFocus: ['Jabuticabeira', 'Ficus', 'Bougainvillea', 'Pitecolóbio', 'Araçá']
+            speciesInFocus: ['Jabuticaba', 'Figueira-benjamim', 'Acerola', 'Piteco', 'Fruta-dos-milagres', 'Duranta']
         },
         {
             monthIndex: 1,
@@ -448,9 +661,9 @@
                 'Prevenção contra fungos foliares (ferrugem e oídio) em ambientes sem boa circulação de ar.',
                 'Adubação orgânica rica em potássio e fósforo (iniciar preparação de reservas outonais).',
                 'Proteção térmica das raízes: sombrear vasos pretos de plástico expostos ao sol poente.',
-                'Poda de contenção em mudas e exemplares de crescimento acelerado (Amoreira, Caliandra).'
+                'Poda de contenção em mudas e exemplares de crescimento acelerado (Amora, Caliandras, Duranta).'
             ],
-            speciesInFocus: ['Bougainvillea', 'Caliandra Rosa', 'Ficus Tiger Bark', 'Amoreira']
+            speciesInFocus: ['Primavera', 'Caliandra-rosa', 'Caliandra-vermelha', 'Amora', 'Rosa-do-deserto']
         },
         {
             monthIndex: 2,
@@ -463,9 +676,9 @@
                 'Momento chave para adubação rica em P e K para espessamento de troncos e nebari.',
                 'Reduzir ligeiramente a frequência de regas conforme a evaporação diária diminui.',
                 'Limpeza sanitária: remover folhas amarelas, ervas invasoras e restos de adubo exaurido.',
-                'Planejamento de aramações estruturais de outono.'
+                'Planejamento de aramações estruturais de outono para leguminosas e caducifólias.'
             ],
-            speciesInFocus: ['Acer Burgeriano', 'Piracanta', 'Ulmus', 'Romãzeira']
+            speciesInFocus: ['Pau-ferro', 'Tamarindo', 'Piteco-cortiçoso', 'Mexerica Ponkan', 'Limão-cravo']
         },
         {
             monthIndex: 3,
@@ -475,12 +688,12 @@
             seasonBadgeCls: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
             climateNotice: 'Dias amenos, noites frias e ar seco. Caducifólias começam a mudar de cor.',
             priorities: [
-                'Desfrutar da coloração outonal de Acers e caducifólias sem mover a planta bruscamente.',
                 'Aramação estrutural ideal: madeira madura, fluxo de seiva desacelerando.',
                 'Aplicação preventiva de óleo de neem ou calda sulfocálcica muito diluída contra cochonilhas.',
-                'Diminuir adubações nitrogenadas para não induzir brotações tenras que queimarão no frio.'
+                'Diminuir adubações nitrogenadas para não induzir brotações tenras que queimarão no frio.',
+                'Limpeza de acículas velhas e folhas secas em juníperos e folhosas perenes.'
             ],
-            speciesInFocus: ['Acer Palmatum', 'Junípero Shimpaku', 'Pinheiro Negro', 'Ipê-Amarelo']
+            speciesInFocus: ['Junípero Jacaré', 'Buxinho', 'Érica-falsa', 'Ixora', 'Serissa']
         },
         {
             monthIndex: 4,
@@ -490,12 +703,12 @@
             seasonBadgeCls: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
             climateNotice: 'Seca e frio se estabelecem no Sudeste/Sul. Plantas entram em dormência.',
             priorities: [
-                'Suspender fertilização de caducifólias em processo de desfolha natural.',
-                'Trabalhos em madeira morta (Jin e Shari) em coníferas com aplicação de calda sulfocálcica pura.',
-                'Manter Juníperos e Pinheiros em sol pleno para absorver todo o calor diurno possível.',
+                'Suspender fertilização de caducifólias e suculentas/caudiciformes que entram em dormência.',
+                'Redução drástica de rega para Rainha-do-abismo e Rosa-do-deserto (risco de podridão de tubérculo).',
+                'Trabalhos em madeira morta (Jin e Shari) em Juníperos com aplicação de calda sulfocálcica pura.',
                 'Ajustar rega matinal (nunca regar à noite para não manter raízes geladas de madrugada).'
             ],
-            speciesInFocus: ['Junípero Procumbens', 'Pinheiro Negro', 'Buxinho', 'Serissa']
+            speciesInFocus: ['Rainha-do-abismo', 'Rosa-do-deserto', 'Junípero Jacaré', 'Buxinho', 'Serissa variegata']
         },
         {
             monthIndex: 5,
@@ -505,12 +718,12 @@
             seasonBadgeCls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
             climateNotice: 'Dias mais curtos do ano, geadas ocasionais e baixíssima umidade do ar.',
             priorities: [
-                'Proteção contra geadas para tropicais delicadas (Carmona, Ficus jovens, Serissa).',
-                'Poda drástica estrutural em caducifólias totalmente desfolhadas (visão clara da arquitetura de galhos).',
-                'Selar todos os cortes acima de 3mm com pasta cicatrizante japonesa de alta aderência.',
-                'Rega espaçada: apenas quando a superfície do substrato estiver seca.'
+                'Proteção contra geadas para tropicais delicadas (Figueiras jovens, Serissa, Ixora).',
+                'Poda drástica estrutural em caducifólias totalmente desfolhadas (Amora, caducifólias clássicas).',
+                'Selar todos os cortes acima de 3mm com pasta cicatrizante de alta aderência.',
+                'Rega espaçada: apenas quando a superfície do substrato estiver visivelmente seca.'
             ],
-            speciesInFocus: ['Acer Burgeriano', 'Acer Palmatum', 'Ulmus', 'Amoreira']
+            speciesInFocus: ['Amora', 'Figueira-benjamim', 'Buxinho', 'Junípero Jacaré', 'Pau-ferro']
         },
         {
             monthIndex: 6,
@@ -520,12 +733,12 @@
             seasonBadgeCls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
             climateNotice: 'Pico do inverno. Período clássico de repouso vegetativo profundo.',
             priorities: [
-                'Início da janela de transplante para caducifólias clássicas e coníferas (Pinus e Juníperos).',
-                'Poda severa de raízes grossas e ancoragem perfeita no vaso com arames de fundo.',
-                'Limpeza detalhada de cascas velhas e musgos que acumulam umidade excessiva no colo.',
-                'Manter o substrato novo protegido de ventos fortes congelantes pós-transplante.'
+                'Início da janela de transplante para caducifólias clássicas, Buxinho e coníferas (Junípero Jacaré).',
+                'Poda de raízes grossas e ancoragem sólida no vaso com arames de fixação pelo fundo.',
+                'Limpeza detalhada de cascas velhas e musgos que acumulam umidade excessiva no colar da raiz.',
+                'Manter vasos recém-mexidos abrigados de ventos secos e frios.'
             ],
-            speciesInFocus: ['Pinheiro Negro', 'Acer Burgeriano', 'Ulmus', 'Amoreira']
+            speciesInFocus: ['Junípero Jacaré', 'Buxinho', 'Amora', 'Pau-ferro']
         },
         {
             monthIndex: 7,
@@ -533,14 +746,14 @@
             season: 'Inverno',
             seasonIcon: 'snowflake',
             seasonBadgeCls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
-            climateNotice: 'Fim de inverno, ar muito seco, primeiros botões de Ipês e gemas intumescendo.',
+            climateNotice: 'Fim de inverno, ar muito seco, gemas intumescendo anunciando brotação.',
             priorities: [
                 'Janela máxima de transplante: transplantar antes que as gemas abram as primeiras folhas!',
-                'Preparação de substratos (peneirar poeira de caqueira, akadama e casca de pinus).',
+                'Preparação de substratos (peneirar caqueira, pedrisco, cacos cerâmicos e casca de pinus).',
                 'Atenção especial à hidratação em dias com umidade relativa do ar abaixo de 25%.',
-                'Poda de raízes e troca de vasos de exemplares com ciclo vencido.'
+                'Poda de formação em cítricos (Limão-cravo, Mexerica Ponkan) e arbustivas (Duranta).'
             ],
-            speciesInFocus: ['Ipê-Amarelo', 'Acer Palmatum', 'Piracanta', 'Junípero Shimpaku']
+            speciesInFocus: ['Limão-cravo', 'Mexerica Ponkan', 'Duranta', 'Piteco-cortiçoso', 'Buxinho']
         },
         {
             monthIndex: 8,
@@ -548,14 +761,14 @@
             season: 'Primavera',
             seasonIcon: 'sprout',
             seasonBadgeCls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-            climateNotice: 'Início oficial da primavera. Explosão de brotações novas e florações.',
+            climateNotice: 'Início oficial da primavera. Explosão de brotações novas e floradas.',
             priorities: [
-                'Retomada gradual da adubação orgânica assim que a primeira brotação estiver aberta.',
-                'Pinçagem de pontas com dedos ou tesoura fina para evitar o alongamento de entrenós.',
-                'Transplante de frutíferas nativas e espécies de brotação mais tardia (Caliandras).',
-                'Monitoramento intensivo de pulgões e lagartas atraídas pelas brotações tenras.'
+                'Retomada gradual da adubação orgânica (Bokashi / Torta de Mamona) assim que abrir a brotação.',
+                'Pinçagem de pontas com tesoura fina ou dedos para evitar alongamento de entrenós.',
+                'Transplante de nativas com brotação precoce e floríferas (Caliandras, Primavera, Pitanga).',
+                'Monitoramento intensivo de pulgões e lagartas nas folhas novas.'
             ],
-            speciesInFocus: ['Caliandra Rosa', 'Ipê-Amarelo', 'Azaleia Satsuki', 'Pitangueira']
+            speciesInFocus: ['Caliandra-rosa', 'Caliandra-vermelha', 'Primavera', 'Pitanga', 'Érica-falsa']
         },
         {
             monthIndex: 9,
@@ -563,14 +776,14 @@
             season: 'Primavera',
             seasonIcon: 'sprout',
             seasonBadgeCls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-            climateNotice: 'Calor em ascensão, chuvas de primavera começam a regularizar o ar.',
+            climateNotice: 'Calor em ascensão, chuvas de primavera começam a regularizar a umidade.',
             priorities: [
-                'Adubação plena em ritmo quinzenal/mensal (Bokashi / Osmocote / Torta com Farinha de Ossos).',
-                'Desfolha seletiva ou parcial em exemplares com folhas excessivamente grandes.',
-                'Revisão periódica de arames aplicados no outono/inverno (risco de morder a casca).',
-                'Transplante seguro de nativas que exigem solo quente (Pitanga, Cerejeira do Rio Grande).'
+                'Adubação plena em ritmo quinzenal/mensal (Bokashi / Osmocote / Farinha de Ossos).',
+                'Desfolha seletiva ou parcial em exemplares vigorosos (Acerola, Pitanga, Amora).',
+                'Revisão periódica de arames aplicados no outono/inverno para não ferir o córtex.',
+                'Transplante seguro de nativas e tropicais que exigem calor ativo de solo.'
             ],
-            speciesInFocus: ['Pitangueira', 'Cerejeira do Rio Grande', 'Bougainvillea', 'Caliandra Vermelha']
+            speciesInFocus: ['Pitanga', 'Acerola', 'Fruta-dos-milagres', 'Serissa variegata', 'Ixora']
         },
         {
             monthIndex: 10,
@@ -580,12 +793,12 @@
             seasonBadgeCls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
             climateNotice: 'Calor constante, umidade elevada, crescimento vegetativo em velocidade máxima.',
             priorities: [
-                'Poda de Azaleias logo após o término da florada (remover cálices de flores velhas).',
-                'Transplante da Jabuticabeira Sabará no pico de calor e água.',
-                'Controle de ervas invasoras que competem por nutrientes nos vasos.',
-                'Regas diárias garantidas; inspecionar drenos obstruídos por raízes após as chuvas.'
+                'Transplante ideal da Jabuticaba (Sabará / Híbrida) no pico de calor e umidade.',
+                'Despertar pleno da Rainha-do-abismo: regar ao redor do bulbo com luminosidade abundante.',
+                'Atenção ao Piteco / Tataré: responder ao crescimento rápido com podas de ramificação frequentes.',
+                'Regas diárias garantidas; inspecionar drenos para evitar apodrecimento radicular.'
             ],
-            speciesInFocus: ['Jabuticabeira', 'Azaleia Satsuki', 'Ficus Retusa', 'Pitecolóbio']
+            speciesInFocus: ['Jabuticaba', 'Piteco', 'Tamarindo', 'Rainha-do-abismo', 'Rosa-do-deserto']
         },
         {
             monthIndex: 11,
@@ -595,12 +808,12 @@
             seasonBadgeCls: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
             climateNotice: 'Solstício de Verão: dias mais longos e sol quente das 11h às 15h.',
             priorities: [
-                'Manter bancadas limpas e arejadas para evitar proliferação de fungos e ácaros.',
-                'Adubação de manutenção em sachês protegidos contra lavagem por chuvas torrenciais.',
-                'Revisão de amarração e tensores de copa.',
-                'Férias/Viagens: certificar sistema de irrigação automática ou gotejamento programado.'
+                'Manter bancadas limpas e arejadas para evitar proliferação de ácaros e cochonilhas.',
+                'Adubação de manutenção em sachês protegidos contra a lavagem de chuvas torrenciais.',
+                'Revisão de tensores e amarração de copas em formação.',
+                'Garantir rega contínua para frutíferas em fase de formação de frutos (Jabuticaba, Pitanga, Acerola).'
             ],
-            speciesInFocus: ['Jabuticabeira', 'Ficus Tiger Bark', 'Bougainvillea', 'Serissa']
+            speciesInFocus: ['Figueira-benjamim', 'Acerola', 'Jabuticaba', 'Duranta', 'Caliandra-rosa']
         }
     ];
 
@@ -1091,7 +1304,7 @@
                     <div class="flex flex-wrap items-center gap-2">
                         <button type="button" id="btn-bonsai-guide" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/40 text-cyan-200 text-xs sm:text-sm font-semibold flex items-center gap-2 transition">
                             <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
-                            <span>Guia Botânico (26 Espécies)</span>
+                            <span>Guia Botânico (40 Espécies)</span>
                         </button>
                         <button type="button" id="btn-bonsai-new" class="min-h-[44px] px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-sm flex items-center gap-2 transition">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -1418,7 +1631,7 @@
                 </div>
             </div>
 
-            <!-- MODAL DO GUIA BOTÂNICO EXPANDIDO (26 ESPÉCIES) -->
+            <!-- MODAL DO GUIA BOTÂNICO EXPANDIDO (40 ESPÉCIES) -->
             <div id="bonsai-guide-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
                     <div class="bg-[#0f172a] border-b border-[#1e293b] p-4 flex items-center justify-between shrink-0">
@@ -1426,7 +1639,7 @@
                             <i data-lucide="book-open" class="w-5 h-5 text-cyan-400"></i>
                             <div>
                                 <h3 class="text-base sm:text-lg font-bold text-slate-100">Guia Fitotécnico Avançado por Espécie</h3>
-                                <p class="text-xs text-slate-400">26 Espécies Consagradas no Brasil • Parâmetros Sazonais do Hemisfério Sul</p>
+                                <p class="text-xs text-slate-400">40 Espécies Consagradas no Brasil • Parâmetros Sazonais do Hemisfério Sul</p>
                             </div>
                         </div>
                         <button type="button" id="btn-guide-modal-close" class="min-h-[40px] min-w-[40px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center">
