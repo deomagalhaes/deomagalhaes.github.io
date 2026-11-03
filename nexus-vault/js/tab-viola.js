@@ -24,6 +24,45 @@
                 { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', midi: [47, 59], pitchClass: 11, octaved: true }
             ]
         },
+        viola_cebolao_d: {
+            id: 'viola_cebolao_d',
+            name: 'Viola Caipira — Cebolão em Ré (D - A - F# - D - A)',
+            shortName: 'Viola Cebolão em Ré',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', midi: [62, 62], pitchClass: 2, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'A3', midi: [57, 57], pitchClass: 9, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', midi: [54, 66], pitchClass: 6, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], pitchClass: 2, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'A2/A3', midi: [45, 57], pitchClass: 9, octaved: true }
+            ]
+        },
+        viola_rio_abaixo: {
+            id: 'viola_rio_abaixo',
+            name: 'Viola Caipira — Rio Abaixo em Sol (D - B - G - D - G)',
+            shortName: 'Viola Rio Abaixo (Sol)',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', midi: [62, 62], pitchClass: 2, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], pitchClass: 11, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'G3/G4', midi: [55, 67], pitchClass: 7, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], pitchClass: 2, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'G2/G3', midi: [43, 55], pitchClass: 7, octaved: true }
+            ]
+        },
+        viola_boiadeira: {
+            id: 'viola_boiadeira',
+            name: 'Viola Caipira — Boiadeira (D - A - F# - D - G)',
+            shortName: 'Viola Boiadeira',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', midi: [62, 62], pitchClass: 2, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'A3', midi: [57, 57], pitchClass: 9, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', midi: [54, 66], pitchClass: 6, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], pitchClass: 2, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'G2/G3', midi: [43, 55], pitchClass: 7, octaved: true }
+            ]
+        },
         violao_padrao: {
             id: 'violao_padrao',
             name: 'Violão Padrão 6 Cordas (E - A - D - G - B - E)',
@@ -2866,7 +2905,10 @@
                     <div class="flex flex-wrap items-center gap-2">
                         <select id="viola-select-instrument" aria-label="Selecionar instrumento"
                             class="min-h-[44px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm font-medium text-slate-100 focus:border-cyan-500">
-                            <option value="viola_cebolao_e">Viola Caipira — Cebolão em Mi (E-B-G#-E-B)</option>
+                            <option value="viola_cebolao_e">Viola — Cebolão em Mi (E-B-G#-E-B)</option>
+                            <option value="viola_cebolao_d">Viola — Cebolão em Ré (D-A-F#-D-A)</option>
+                            <option value="viola_rio_abaixo">Viola — Rio Abaixo (D-B-G-D-G)</option>
+                            <option value="viola_boiadeira">Viola — Boiadeira (D-A-F#-D-G)</option>
                             <option value="violao_padrao">Violão Padrão 6 Cordas (E-A-D-G-B-E)</option>
                         </select>
 

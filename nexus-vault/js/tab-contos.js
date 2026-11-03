@@ -142,6 +142,48 @@
             defaultQuestion: 'Se os trovões fossem só um tambor tocando uma canção de ninar bem longe, qual som gostoso a gente ouve aqui dentro do quarto?',
             challengeAct: 'ouviu o estrondo do trovão fazer tremer o vidro da janela e puxou o lençol até o nariz, com o coração batendo rápido como as asas de um beija-flor.',
             breathCue: 'encolheu os ombrinhos e depois soltou tudo de uma vez com um suspiro longo, sentindo o peso gostoso do cobertor e o abrigo seguro da casa.'
+        },
+        sobrecarga_sensorial: {
+            label: '19. Sobrecarga Sensorial / Barulhos & Agitação (A concha da tartaruguinha)',
+            defaultMetaphor: 'A conchinha macia da tartaruga: quando o mundo lá fora faz sons altos demais e luzes fortes, ela pode recolher as patinhas para dentro do seu refúgio aveludado e ficar no silêncio manso até o coração sossegar.',
+            defaultQuestion: 'Como é gostoso fechar os olhinhos agora e sentir o silêncio fofo abraçar os seus pensamentos?',
+            challengeAct: 'ouviu muitos sons misturados na festa da floresta, com passos rápidos e conversas altas que faziam a cabecinha doer e as orelhas arderem de tanto barulho.',
+            breathCue: 'tapou os ouvidos bem de leve com as mãos macias, puxou o ar fresquinho contando quatro tempos e soltou num suspiro de veludo, sentindo a tranquilidade voltar.'
+        },
+        expressao_timidez: {
+            label: '20. Medo de Falar na Roda / Expressão com Amor (A flautinha do grilo)',
+            defaultMetaphor: 'A flautinha de bambu do grilo cantor: ela não precisa tocar alto como o trovão para ser linda; um sopro doce e miudinho é capaz de emocionar a mata inteira com sua verdade singela.',
+            defaultQuestion: 'Qual segredo ou história gostosa você mais gosta de contar quando se sente bem seguro e acolhido?',
+            challengeAct: 'viu todos os animais sentados em roda esperando pela sua fala, sentiu a garganta dar um nó seco e as bochechas esquentarem como duas amoras maduras.',
+            breathCue: 'pôs a mão no peito para sentir o calor do coração, puxou o ar bem devagarzinho e soltou soprando uma melodia mansa que destravou o sorriso.'
+        },
+        chegada_irmaozinho: {
+            label: '21. Novo Bebê / Irmãozinho na Família (O ninho que ganha mais um ramo)',
+            defaultMetaphor: 'A copa da sumaúma ancestral: quando nasce um galhinho novo, a árvore não tira a seiva de nenhum outro ramo; pelo contrário, suas raízes bebem mais água da terra e o abraço verde fica duas vezes mais generoso.',
+            defaultQuestion: 'Como o amor da nossa família é mágico e consegue crescer cada dia mais sem faltar para ninguém?',
+            challengeAct: 'olhou para o novo bebezinho no colo protetor e sentiu um friozinho estranho na barriga, com medo de que não sobrasse colo suficiente para o seu próprio descanso.',
+            breathCue: 'aninhou-se bem pertinho do abraço protetor, respirou fundo sentindo o cheiro de carinho e soltou o ar sentindo-se infinitamente insubstituível e amado.'
+        },
+        transicao_rotina_tea: {
+            label: '22. Mudança Imprevista de Rotina / Flexibilidade (A ponte de cipó e flores)',
+            defaultMetaphor: 'O riacho da montanha que encontrou uma pedra grande no meio da trilha: em vez de brigar com a rocha, fez uma curva graciosa pelo musgo fresco e descobriu uma cachoeirinha linda que ninguém conhecia.',
+            defaultQuestion: 'Que surpresa gostosa a gente pode descobrir quando a rota do dia muda um pouquinho?',
+            challengeAct: 'descobriu que a brincadeira planejada precisou ser cancelada por causa da chuva inesperada, e o peito endureceu como gesso querendo que o tempo voltasse atrás.',
+            breathCue: 'soltou o pescoço e os ombrinhos para os lados bem moles, encheu a barriga de ar macio e soltou soprando a rigidez para longe como plumas ao vento.'
+        },
+        pesadelos_monstros: {
+            label: '23. Medo de Pesadelos & Monstros Noturnos (O sopro de luz prateada)',
+            defaultMetaphor: 'A lanterna de cristal dos guardiões da noite: ela mostra que aquela sombra comprida na parede era apenas a orelha comprida do coelhinho de pelúcia dormindo na beira da cama.',
+            defaultQuestion: 'Você sabe que este quarto é um castelo seguro e que nenhum sonho ruim pode entrar no nosso abraço?',
+            challengeAct: 'acordou assustado imaginando uma criatura estranha no canto do quarto escuro, com as perninhas tensas e o coração batendo forte no peito.',
+            breathCue: 'segurou firme a mão protetora ao seu lado, puxou o ar sentindo a luz suave das estrelas iluminar os olhos e soltou um suspiro quentinho e libertador.'
+        },
+        singularidade_diversidade: {
+            label: '24. Orgulho da Singularidade & Neurodiversidade (O jacarandá das cores únicas)',
+            defaultMetaphor: 'O jardim encantado onde cada flor tem um perfume e uma cor totalmente diferentes: a orquídea não tenta ser rosa, e a samambaia não quer dar frutos, porque o encanto da mata é cada uma brilhar do seu jeito único.',
+            defaultQuestion: 'Qual é o superpoder ou detalhe do seu jeitinho que faz você ser uma pessoa tão especial e incrível?',
+            challengeAct: 'percebeu que pensava e brincava de um modo diferente dos outros amiguinhos, sentindo-se como um peixinho tentando voar com os pássaros.',
+            breathCue: 'abraçou o próprio peito com carinho, inspirou sentindo orgulho da sua própria imaginação brilhante e soltou um sorriso de paz e pertencimento.'
         }
     };
 
@@ -208,9 +250,31 @@
     let savedStories = [];
     let currentComposedStory = { title: '', text: '', question: '', theme: '', scenario: '', source: 'Modular Offline' };
     let amberFontSizeRem = 1.25;
+    let activeAmberTheme = 'amber';
     let autoScrollInterval = null;
     let isAutoScrolling = false;
     let sleepTimerTimeout = null;
+
+    const AMBER_PREFS_KEY = 'dm_vault_amber_prefs';
+
+    function loadAmberPrefs() {
+        const C = global.VaultCore;
+        if (!C || !C.store) return;
+        const saved = C.store.get(AMBER_PREFS_KEY, null);
+        if (saved && typeof saved === 'object') {
+            if (saved.fontSizeRem) amberFontSizeRem = Math.max(0.85, Math.min(2.4, Number(saved.fontSizeRem)));
+            if (saved.theme && AMBER_PALETTES[saved.theme]) activeAmberTheme = saved.theme;
+        }
+    }
+
+    function saveAmberPrefs() {
+        const C = global.VaultCore;
+        if (!C || !C.store) return;
+        C.store.set(AMBER_PREFS_KEY, {
+            fontSizeRem: amberFontSizeRem,
+            theme: activeAmberTheme
+        });
+    }
 
     // =========================================================================
     // 3. SINTETIZADOR ACÚSTICO WEB AUDIO API PRÉ-SONO (OFFLINE NATIVO)
@@ -384,7 +448,8 @@
     };
 
     function applyAmberThermalPalette(themeKey) {
-        const pal = AMBER_PALETTES[themeKey] || AMBER_PALETTES.amber;
+        if (AMBER_PALETTES[themeKey]) activeAmberTheme = themeKey;
+        const pal = AMBER_PALETTES[activeAmberTheme] || AMBER_PALETTES.amber;
         const reader = document.getElementById('amber-night-reader');
         const title = document.getElementById('amber-reader-title');
         const body = document.getElementById('amber-reader-body');
@@ -399,6 +464,7 @@
             qBox.style.borderColor = pal.boxBorder;
         }
         if (qText) qText.style.color = pal.title;
+        saveAmberPrefs();
     }
 
     function loadStories() {
@@ -601,6 +667,7 @@
     // 6. LEITOR NOTURNO ÂMBAR DE TELA CHEIA (LOW-BLUE-LIGHT)
     // =========================================================================
     function openAmberNightReader(storyObj) {
+        loadAmberPrefs();
         const overlay = document.getElementById('amber-night-reader');
         if (!overlay) return;
         const C = global.VaultCore;
@@ -609,6 +676,7 @@
         const tEl = document.getElementById('amber-reader-title');
         const bEl = document.getElementById('amber-reader-body');
         const qEl = document.getElementById('amber-reader-question');
+        const metaEl = document.getElementById('amber-reader-meta');
 
         if (tEl) tEl.textContent = target.title;
         if (bEl) {
@@ -618,9 +686,35 @@
         }
         if (qEl) qEl.textContent = target.question;
 
+        // Metadados de leitura suave (palavras e minutos estimados)
+        if (metaEl && target.text) {
+            const words = target.text.trim().split(/\s+/).filter(Boolean).length;
+            const readMins = Math.max(1, Math.round(words / 130));
+            metaEl.textContent = `⏱️ ~${readMins} min de leitura suave • ${words} palavras • ${target.source || 'Modo Offline'}`;
+        }
+
+        // Progresso de rolagem
+        overlay.onscroll = () => {
+            const maxScroll = overlay.scrollHeight - overlay.clientHeight;
+            const pct = maxScroll > 0 ? (overlay.scrollTop / maxScroll) * 100 : 0;
+            const pb = document.getElementById('amber-scroll-progress');
+            if (pb) pb.style.width = `${pct}%`;
+        };
+
+        // Pausa autoscroll suave se o usuário rolar com o dedo ou mouse
+        const handleManualScroll = () => {
+            if (isAutoScrolling) {
+                stopAutoScroll();
+                updateAutoScrollUI(false);
+            }
+        };
+        overlay.addEventListener('wheel', handleManualScroll, { passive: true });
+        overlay.addEventListener('touchmove', handleManualScroll, { passive: true });
+
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-        applyAmberThermalPalette('amber');
+        applyAmberThermalPalette(activeAmberTheme);
+        updateAutoScrollUI(false);
     }
 
     function closeAmberNightReader() {
@@ -628,6 +722,18 @@
         if (overlay) overlay.classList.add('hidden');
         document.body.style.overflow = '';
         stopAutoScroll();
+        if (document.fullscreenElement) {
+            try { document.exitFullscreen(); } catch (_) {}
+        }
+    }
+
+    function updateAutoScrollUI(active) {
+        const btn = document.getElementById('btn-amber-autoscroll');
+        if (btn) {
+            btn.textContent = active ? 'Pausar ⏸' : 'Auto ↓';
+            btn.classList.toggle('bg-amber-500/30', active);
+            btn.classList.toggle('border-amber-400', active);
+        }
     }
 
     function toggleAutoScroll() {
@@ -635,12 +741,15 @@
         if (!reader) return;
         if (isAutoScrolling) {
             stopAutoScroll();
+            updateAutoScrollUI(false);
         } else {
             isAutoScrolling = true;
+            updateAutoScrollUI(true);
             autoScrollInterval = setInterval(() => {
                 reader.scrollBy({ top: 1, behavior: 'smooth' });
                 if (reader.scrollTop + reader.clientHeight >= reader.scrollHeight - 5) {
                     stopAutoScroll();
+                    updateAutoScrollUI(false);
                 }
             }, 60);
         }
@@ -652,6 +761,21 @@
             autoScrollInterval = null;
         }
         isAutoScrolling = false;
+        updateAutoScrollUI(false);
+    }
+
+    function toggleAmberFullscreen() {
+        const overlay = document.getElementById('amber-night-reader');
+        if (!overlay) return;
+        if (!document.fullscreenElement) {
+            if (overlay.requestFullscreen) {
+                overlay.requestFullscreen().catch(() => {});
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
     }
 
     function renderSavedStoriesLibrary() {
@@ -925,19 +1049,31 @@
         const btnFontUp = document.getElementById('btn-amber-font-up');
         if (btnFontUp) {
             btnFontUp.addEventListener('click', () => {
-                amberFontSizeRem = Math.min(2.0, amberFontSizeRem + 0.1);
+                amberFontSizeRem = Math.min(2.4, amberFontSizeRem + 0.1);
                 const b = document.getElementById('amber-reader-body');
                 if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+                saveAmberPrefs();
             });
         }
 
         const btnFontDown = document.getElementById('btn-amber-font-down');
         if (btnFontDown) {
             btnFontDown.addEventListener('click', () => {
-                amberFontSizeRem = Math.max(0.9, amberFontSizeRem - 0.1);
+                amberFontSizeRem = Math.max(0.85, amberFontSizeRem - 0.1);
                 const b = document.getElementById('amber-reader-body');
                 if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+                saveAmberPrefs();
             });
+        }
+
+        const btnAutoScroll = document.getElementById('btn-amber-autoscroll');
+        if (btnAutoScroll) {
+            btnAutoScroll.addEventListener('click', toggleAutoScroll);
+        }
+
+        const btnFullscreen = document.getElementById('btn-amber-fullscreen');
+        if (btnFullscreen) {
+            btnFullscreen.addEventListener('click', toggleAmberFullscreen);
         }
 
         document.querySelectorAll('[data-amber-theme]').forEach((btn) => {
@@ -975,13 +1111,27 @@
             });
         }
 
-        // Tecla ESC fecha leitor noturno
+        // Atalhos de teclado no Leitor Noturno Âmbar
         window.addEventListener('keydown', (e) => {
+            const overlay = document.getElementById('amber-night-reader');
+            if (!overlay || overlay.classList.contains('hidden')) return;
+
             if (e.key === 'Escape') {
-                const overlay = document.getElementById('amber-night-reader');
-                if (overlay && !overlay.classList.contains('hidden')) {
-                    closeAmberNightReader();
-                }
+                closeAmberNightReader();
+            } else if (e.code === 'Space') {
+                e.preventDefault();
+                toggleAutoScroll();
+            } else if (e.key === '+' || e.key === '=') {
+                e.preventDefault();
+                const btnUp = document.getElementById('btn-amber-font-up');
+                if (btnUp) btnUp.click();
+            } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
+                const btnDown = document.getElementById('btn-amber-font-down');
+                if (btnDown) btnDown.click();
+            } else if (e.key === 'f' || e.key === 'F') {
+                e.preventDefault();
+                toggleAmberFullscreen();
             }
         });
     }

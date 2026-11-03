@@ -50,6 +50,17 @@
         expenseLifestyle: 2000, // Nível 4: Viagens, lazer e desenvolvimento pessoal
         expenseCustom: 0,       // Nível 5: Opcional / Reserva Estratégica & Projetos
         nameCustom: '',
+        customExpenses: [],     // Níveis adicionais customizáveis: [{ id, name, cost, category, desc }]
+
+        // Cenários de Estresse & Choques de Mercado
+        stressScenario: 'crash30', // 'crash30', 'crash40', 'correction20', 'stagflation', 'fii_drop', 'custom'
+        stressCustomDrop: 30,
+        stressCustomInf: 4,
+        stressCustomDivShock: 15,
+        stressBoostContribution: false,
+
+        // Tickers Customizados do Usuário no Alocador
+        userTickers: [],
 
         // Parâmetros de Monte Carlo
         mcVolatility: 13.0,     // Desvio padrão anual da carteira (%)
@@ -446,17 +457,31 @@
 
     function computeAporteByTickers(classes) {
         const result = [];
+        let totalResidualAll = 0;
+
         classes.forEach((cls) => {
             const classAporte = cls.recommendedAporte || 0;
-            const tickers = TICKER_DIRECTORY[cls.key] || [];
+            let tickers = (TICKER_DIRECTORY[cls.key] || []).slice();
+
+            // Mesclar tickers personalizados salvos pelo usuário para esta classe
+            if (Array.isArray(inputs.userTickers)) {
+                const userClsTickers = inputs.userTickers.filter(ut => ut.classKey === cls.key);
+                if (userClsTickers.length > 0) {
+                    tickers = userClsTickers.concat(tickers);
+                }
+            }
+
             if (tickers.length === 0) return;
 
+            // Seleciona os 2 primeiros alvos para alocação
             const targetTickers = tickers.slice(0, 2);
-            const perTickerBudget = classAporte / targetTickers.length;
+            const perTickerBudget = targetTickers.length > 0 ? (classAporte / targetTickers.length) : 0;
+            let classSpent = 0;
 
             const tickerAlloc = targetTickers.map((t) => {
                 const shares = t.price > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / t.price) : 0;
                 const totalSpent = shares * t.price;
+                classSpent += totalSpent;
                 return {
                     ticker: t.ticker,
                     name: t.name,
@@ -469,14 +494,23 @@
                 };
             });
 
+            const residual = Math.max(0, classAporte - classSpent);
+            totalResidualAll += residual;
+
             result.push({
                 classKey: cls.key,
                 className: cls.name,
                 classAporte,
+                classSpent,
+                residual,
                 tickers: tickerAlloc
             });
         });
-        return result;
+
+        return {
+            byClass: result,
+            totalResidual: totalResidualAll
+        };
     }
 
     // =========================================================================
@@ -617,6 +651,27 @@
                 nameKey: 'nameCustom',
                 color: 'rose',
                 badgeClass: 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+            });
+        }
+
+        // Suporte a múltiplos níveis/despesas customizadas adicionadas pelo usuário
+        if (Array.isArray(inputs.customExpenses)) {
+            inputs.customExpenses.forEach((ce, idx) => {
+                const cost = Math.max(0, Number(ce.cost) || 0);
+                const lvl = tiers.length + 1;
+                tiers.push({
+                    id: ce.id || `custom_exp_${idx}`,
+                    level: lvl,
+                    name: ce.name || `Nível ${lvl} • ${ce.category || 'Despesa Adicional'}`,
+                    desc: ce.desc || 'Despesa personalizada salva no seu cofre local.',
+                    cost: cost,
+                    category: ce.category || 'Geral',
+                    isCustomItem: true,
+                    customId: ce.id || `custom_exp_${idx}`,
+                    customIndex: idx,
+                    color: ce.color || 'sky',
+                    badgeClass: ce.badgeClass || 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+                });
             });
         }
 
@@ -1260,21 +1315,32 @@
 
                     <!-- RECOMENDAÇÃO ACIONÁVEL POR ATIVO / TICKER INDIVIDUAL -->
                     <div class="pt-4 border-t border-slate-800 space-y-3">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <h4 class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">
                                     Recomendação Operacional por Ativo &amp; Ticker (Cotas Inteiras)
                                 </h4>
                                 <p class="text-[11px] text-slate-400">Simulação de compra prática fracionada baseada na cotação de mercado para o dia do aporte.</p>
                             </div>
+                            ${(() => {
+                                const tickerData = computeAporteByTickers(res.classes);
+                                return tickerData.totalResidual > 0 ? `
+                                    <div class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-400">
+                                        Troco residual: <strong>${C.formatBRL(tickerData.totalResidual)}</strong> (Reserva de Oportunidade)
+                                    </div>
+                                ` : '';
+                            })()}
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            ${computeAporteByTickers(res.classes).map((item) => `
+                            ${(computeAporteByTickers(res.classes).byClass || []).map((item) => `
                                 <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-3.5 space-y-2.5">
                                     <div class="flex items-center justify-between">
                                         <span class="font-bold text-xs text-slate-200 font-mono">${item.className}</span>
-                                        <span class="text-xs font-mono font-bold text-cyan-300">Orçamento: ${C.formatBRL(item.classAporte)}</span>
+                                        <div class="text-right">
+                                            <span class="text-xs font-mono font-bold text-cyan-300">Orçamento: ${C.formatBRL(item.classAporte)}</span>
+                                            ${item.residual > 0 ? `<div class="text-[10px] font-mono text-slate-400">Sobra: ${C.formatBRL(item.residual)}</div>` : ''}
+                                        </div>
                                     </div>
                                     <div class="space-y-2">
                                         ${item.tickers.map((t) => `
@@ -1516,39 +1582,102 @@
                     </div>
                 </div>
 
+                <!-- Barra Visual Consolidada de Cobertura da Cascata -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                            <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                                Mapa Sequencial de Emancipação Existencial
+                            </h4>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400">
+                            Renda Passiva: <strong class="text-emerald-300 font-bold">${C.formatBRL(cascade.passive)}</strong> de <strong class="text-slate-200">${C.formatBRL(cascade.totalCost)}/mês</strong>
+                        </span>
+                    </div>
+
+                    <!-- Régua Horizontal de Segmentos -->
+                    <div class="space-y-1.5">
+                        <div class="w-full h-5 rounded-lg bg-[#090d16] border border-slate-800 overflow-hidden flex relative p-0.5">
+                            ${cascade.tiers.map((t) => {
+                                const widthPct = cascade.totalCost > 0 ? (t.cost / cascade.totalCost) * 100 : 0;
+                                const isFilled = t.isFullyCovered;
+                                const partial = !isFilled && t.coveragePct > 0;
+                                return `
+                                    <div style="width: ${widthPct}%" class="h-full relative group transition-all duration-300 px-0.5" title="${t.name}: ${C.formatBRL(t.cost)}/mês (${C.formatNum(t.coveragePct, 1)}% coberto)">
+                                        <div class="h-full rounded ${isFilled ? 'bg-emerald-500' : partial ? 'bg-cyan-500/80' : 'bg-slate-800/80'} border ${isFilled ? 'border-emerald-400/50' : partial ? 'border-cyan-400/40' : 'border-slate-700/50'}"></div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <!-- Marcadores de Legenda dos Níveis -->
+                        <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 overflow-x-auto pt-1">
+                            ${cascade.tiers.map((t) => `
+                                <span class="flex items-center gap-1 shrink-0 ${t.isFullyCovered ? 'text-emerald-400 font-semibold' : 'text-slate-400'}">
+                                    <span class="w-2 h-2 rounded-full ${t.isFullyCovered ? 'bg-emerald-400' : 'bg-slate-600'}"></span>
+                                    <span>N${t.level}: ${t.isFullyCovered ? '100%' : `${C.formatNum(t.coveragePct, 0)}%`}</span>
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Painel de Dicas Práticas & Ações -->
                 <div class="flex flex-wrap items-center justify-between gap-3 bg-[#0f172a] border border-[#1e293b] rounded-xl px-4 py-3 text-xs font-mono">
                     <div class="text-slate-400 flex items-center gap-2">
                         <i data-lucide="edit-3" class="w-4 h-4 text-cyan-400"></i>
-                        <span>Altere os valores ou nomes diretamente nos campos abaixo. O recálculo é instantâneo e salvo automaticamente.</span>
+                        <span>Altere valores ou nomes diretamente. Você pode adicionar novas despesas customizadas livremente.</span>
                     </div>
-                    <button type="button" id="btn-reset-cascade-defaults" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
-                        Restaurar Valores Sugeridos
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-add-custom-expense" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            <span>+ Adicionar Despesa</span>
+                        </button>
+                        <button type="button" id="btn-reset-cascade-defaults" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                            Restaurar Padrão
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Lista Interativa e Editável dos 4 Degraus -->
+                <!-- Lista Interativa e Editável dos Degraus -->
                 <div class="space-y-4">
                     ${cascade.tiers.map((t) => `
                         <div class="bg-[#0f172a] border ${t.isFullyCovered ? 'border-emerald-500/40 bg-emerald-950/15' : 'border-[#1e293b]'} rounded-xl p-4 sm:p-5 space-y-4 transition-all">
-                            <!-- Topo do Nível: Título Editável, Badge e Valor Editável -->
+                            <!-- Topo do Nível: Título Editável, Badge, Valor Editável e Botão Remover (se custom) -->
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div class="flex items-center gap-2.5 flex-1">
                                     <span class="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold border ${t.badgeClass}">
                                         Nível ${t.level}
                                     </span>
-                                    <input type="text" data-cascade-name="${t.nameKey}" value="${C.esc(t.name)}"
-                                        class="flex-1 max-w-md bg-[#090d16] border border-slate-700 focus:border-cyan-400 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-100 font-mono transition"
-                                        placeholder="Nome do Nível...">
+                                    ${t.isCustomItem ? `
+                                        <input type="text" data-custom-exp-name="${t.customIndex}" value="${C.esc(t.name)}"
+                                            class="flex-1 max-w-md bg-[#090d16] border border-slate-700 focus:border-cyan-400 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-100 font-mono transition"
+                                            placeholder="Nome da despesa personalizada...">
+                                    ` : `
+                                        <input type="text" data-cascade-name="${t.nameKey}" value="${C.esc(t.name)}"
+                                            class="flex-1 max-w-md bg-[#090d16] border border-slate-700 focus:border-cyan-400 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-100 font-mono transition"
+                                            placeholder="Nome do Nível...">
+                                    `}
                                 </div>
 
                                 <div class="flex items-center gap-2 shrink-0">
                                     <span class="text-xs font-mono text-slate-400">Custo Mensal:</span>
                                     <div class="relative">
                                         <span class="absolute left-3 top-2.5 text-xs font-mono text-slate-500">R$</span>
-                                        <input type="number" data-cascade-input="${t.inputKey}" step="50" min="0" value="${t.cost}"
-                                            class="w-36 min-h-[38px] pl-9 pr-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 focus:border-cyan-400 font-mono text-base font-bold text-cyan-300 text-right transition">
+                                        ${t.isCustomItem ? `
+                                            <input type="number" data-custom-exp-cost="${t.customIndex}" step="50" min="0" value="${t.cost}"
+                                                class="w-36 min-h-[38px] pl-9 pr-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 focus:border-cyan-400 font-mono text-base font-bold text-cyan-300 text-right transition">
+                                        ` : `
+                                            <input type="number" data-cascade-input="${t.inputKey}" step="50" min="0" value="${t.cost}"
+                                                class="w-36 min-h-[38px] pl-9 pr-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 focus:border-cyan-400 font-mono text-base font-bold text-cyan-300 text-right transition">
+                                        `}
                                     </div>
+                                    ${t.isCustomItem ? `
+                                        <button type="button" data-custom-exp-del="${t.customIndex}" title="Excluir esta despesa adicional"
+                                            class="min-h-[38px] px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-center transition">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    ` : ''}
                                 </div>
                             </div>
 
@@ -1643,6 +1772,82 @@
             });
         });
 
+        // Inputs de Custo de despesas customizadas
+        document.querySelectorAll('[data-custom-exp-cost]').forEach((inp) => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.getAttribute('data-custom-exp-cost'), 10);
+                const val = Math.max(0, Number(e.target.value) || 0);
+                if (Array.isArray(inputs.customExpenses) && inputs.customExpenses[idx]) {
+                    inputs.customExpenses[idx].cost = val;
+                    saveInputs();
+                }
+            });
+
+            inp.addEventListener('change', () => {
+                lastModel = computeFinancialModel();
+                renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                C.toast('Despesa customizada atualizada.', 'success', 1200);
+            });
+        });
+
+        // Inputs de Nome de despesas customizadas
+        document.querySelectorAll('[data-custom-exp-name]').forEach((inp) => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.getAttribute('data-custom-exp-name'), 10);
+                if (Array.isArray(inputs.customExpenses) && inputs.customExpenses[idx]) {
+                    inputs.customExpenses[idx].name = e.target.value;
+                    saveInputs();
+                }
+            });
+
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(e.target.getAttribute('data-custom-exp-name'), 10);
+                if (Array.isArray(inputs.customExpenses) && inputs.customExpenses[idx]) {
+                    inputs.customExpenses[idx].name = e.target.value.trim();
+                    saveInputs();
+                    lastModel = computeFinancialModel();
+                    renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                }
+            });
+        });
+
+        // Botões de Excluir Despesa Customizada
+        document.querySelectorAll('[data-custom-exp-del]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.getAttribute('data-custom-exp-del'), 10);
+                if (Array.isArray(inputs.customExpenses) && inputs.customExpenses[idx]) {
+                    const removedName = inputs.customExpenses[idx].name;
+                    inputs.customExpenses.splice(idx, 1);
+                    saveInputs();
+                    lastModel = computeFinancialModel();
+                    renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                    C.toast(`Despesa "${removedName}" removida.`, 'info');
+                }
+            });
+        });
+
+        // Botão Adicionar Nova Despesa
+        const btnAddExp = document.getElementById('btn-add-custom-expense');
+        if (btnAddExp) {
+            btnAddExp.addEventListener('click', () => {
+                if (!Array.isArray(inputs.customExpenses)) inputs.customExpenses = [];
+                const newIdx = inputs.customExpenses.length + 1;
+                inputs.customExpenses.push({
+                    id: 'custom_' + Date.now(),
+                    name: `Nível ${5 + inputs.customExpenses.length} • Despesa Adicional`,
+                    cost: 800,
+                    category: 'Planejamento',
+                    desc: 'Despesa customizada criada pelo usuário.',
+                    color: 'sky',
+                    badgeClass: 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+                });
+                saveInputs();
+                lastModel = computeFinancialModel();
+                renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                C.toast('Nova despesa adicionada à cascata.', 'success');
+            });
+        }
+
         // Botão Restaurar Padrões da Cascata
         const btnReset = document.getElementById('btn-reset-cascade-defaults');
         if (btnReset) {
@@ -1698,6 +1903,12 @@
             dividendShockPct = 20.0;
             desc = 'Contração aguda de liquidez internacional com recuo de 40% em ações e 30% em FIIs. Cenário de estresse financeiro histórico.';
             clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Acionar a reserva de oportunidade com disciplina cirúrgica. Blindar o consultório mantendo a agenda clínica estável. Historicamente, pânicos dessa magnitude abrem as maiores janelas de acúmulo de patrimônio do século.';
+        } else if (scenarioKey === 'correction20') {
+            title = 'Correção Técnica de Mercado (−20% Ativos Gerais)';
+            dropPatrimonyPct = 20.0;
+            dividendShockPct = 5.0;
+            desc = 'Recuo cíclico de mercado com queda de 20% nas cotações em tela. Proventos e fluxo de caixa dos ativos mantêm-se quase intactos.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Oscilação natural de mercado. Não interromper os aportes nem tomar decisões sob ansiedade antecipatória. Aproveitar para comprar cotas com desconto.';
         } else if (scenarioKey === 'stagflation') {
             title = 'Estagflação Severa (IPCA 9.5% a.a. / Juro Real 2.8% a.a.)';
             dropPatrimonyPct = 12.0;
@@ -1801,7 +2012,28 @@
                         </div>
                     </div>
 
-                    <!-- Indicador Visual de Resiliência & Barra Térmica -->
+                    <!-- Chips Rápidos de Seleção de Cenário -->
+                    <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                        <span class="text-[11px] font-mono text-slate-400 mr-1">Presets Rápidos:</span>
+                        <button type="button" data-stress-preset="crash30" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'crash30' ? 'bg-rose-500/25 text-rose-200 border-rose-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            ⚡ −30% COVID / Flash Crash
+                        </button>
+                        <button type="button" data-stress-preset="crash40" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'crash40' ? 'bg-rose-500/25 text-rose-200 border-rose-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            🔥 −40% Subprime
+                        </button>
+                        <button type="button" data-stress-preset="correction20" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'correction20' ? 'bg-amber-500/25 text-amber-200 border-amber-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            📉 −20% Correção
+                        </button>
+                        <button type="button" data-stress-preset="stagflation" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'stagflation' ? 'bg-purple-500/25 text-purple-200 border-purple-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            🛑 Estagflação IPCA 9.5%
+                        </button>
+                        <button type="button" data-stress-preset="fii_drop" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'fii_drop' ? 'bg-amber-500/25 text-amber-200 border-amber-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            🏢 FIIs −25% Yield
+                        </button>
+                        <button type="button" data-stress-preset="custom" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'custom' ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            ⚙️ Choque Manual
+                        </button>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-rose-900/30">
                         <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3 space-y-1.5">
                             <div class="flex justify-between items-center text-xs font-mono">
@@ -1955,6 +2187,17 @@
                 renderSubTabEstresse(document.getElementById('ind-subtab-container'));
             });
         }
+
+        // Chips Rápidos de Preset de Estresse
+        document.querySelectorAll('[data-stress-preset]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                const presetKey = btn.getAttribute('data-stress-preset');
+                inputs.stressScenario = presetKey;
+                saveInputs();
+                renderSubTabEstresse(document.getElementById('ind-subtab-container'));
+                C.toast(`Cenário de Estresse ativo: ${presetKey}`, 'info', 1500);
+            });
+        });
 
         const dropSlider = document.getElementById('stress-custom-drop-slider');
         if (dropSlider) {

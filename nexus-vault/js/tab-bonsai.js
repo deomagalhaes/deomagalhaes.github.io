@@ -2287,6 +2287,14 @@
                             </select>
                         </div>
                     </div>
+                    <!-- Régua de 12 Chips de Meses -->
+                    <div class="flex items-center gap-1 overflow-x-auto pb-1 border-t border-slate-800/80 pt-2.5">
+                        ${SEASONAL_CALENDAR_SH.map((m) => `
+                            <button type="button" data-month-chip="${m.monthIndex}" class="month-chip px-2.5 py-1 rounded-md text-[11px] font-mono transition whitespace-nowrap ${m.monthIndex === selectedCalendarMonth ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
+                                ${m.name.slice(0, 3)}
+                            </button>
+                        `).join('')}
+                    </div>
                     <div id="seasonal-content-container"></div>
                 </div>
 
@@ -2735,6 +2743,14 @@
         });
     }
 
+    function updateMonthChipsUI() {
+        document.querySelectorAll('.month-chip').forEach((btn) => {
+            const idx = parseInt(btn.getAttribute('data-month-chip'), 10);
+            const isAct = idx === selectedCalendarMonth;
+            btn.className = `month-chip px-2.5 py-1 rounded-md text-[11px] font-mono transition whitespace-nowrap ${isAct ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}`;
+        });
+    }
+
     function renderSeasonalPanel() {
         const container = document.getElementById('seasonal-content-container');
         if (!container) return;
@@ -2745,6 +2761,14 @@
 
         // Identifica no acervo as plantas que são das espécies em foco
         const focusPlantsInCollection = plants.filter((p) =>
+            cal.speciesInFocus.some((sp) => p.popularName.toLowerCase().includes(sp.toLowerCase()))
+        );
+
+        // Próximas intervenções agendadas no acervo
+        const upcomingInterventions = plants
+            .filter((p) => p.nextInterventionDate)
+            .sort((a, b) => a.nextInterventionDate.localeCompare(b.nextInterventionDate))
+            .slice(0, 3);
             cal.speciesInFocus.some((sp) => p.popularName.toLowerCase().includes(sp.toLowerCase()))
         );
 
@@ -2799,6 +2823,39 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Próximas Intervenções Agendadas no Acervo -->
+            ${upcomingInterventions.length > 0 ? `
+                <div class="mt-3 pt-3 border-t border-slate-800/80 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-semibold flex items-center gap-1.5">
+                            <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i>
+                            <span>Próximas Intervenções Agendadas do Acervo:</span>
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        ${upcomingInterventions.map((up) => {
+                            const diff = C.daysDiffFromToday(up.nextInterventionDate);
+                            return `
+                                <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="font-mono text-cyan-300 font-bold">${up.id}</span>
+                                            <span class="text-slate-200 font-medium truncate">${up.popularName}</span>
+                                        </div>
+                                        <div class="text-[11px] text-amber-300/90 truncate mt-0.5">${up.nextInterventionType || 'Manejo agendado'}</div>
+                                        <div class="text-[10px] font-mono text-slate-400">${C.formatDateBR(up.nextInterventionDate)} (${diff === 0 ? 'Hoje' : diff > 0 ? `em ${diff}d` : `atrasado ${Math.abs(diff)}d`})</div>
+                                    </div>
+                                    <button type="button" data-complete-intervention="${up.id}" title="Marcar como concluído hoje"
+                                        class="px-2 py-1 rounded bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10px] font-mono font-bold shrink-0 transition">
+                                        Concluir
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            ` : ''}
         `;
 
         const filterBtn = document.getElementById('btn-filter-seasonal-focus');
@@ -2809,6 +2866,27 @@
                 renderPlantList();
             });
         }
+
+        container.querySelectorAll('[data-complete-intervention]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-complete-intervention');
+                const target = plants.find(p => p.id === id);
+                if (!target) return;
+                const today = C.todayISO();
+                const type = target.nextInterventionType || 'Intervenção agendada';
+                if (!Array.isArray(target.logs)) target.logs = [];
+                target.logs.unshift({
+                    date: today,
+                    type: type,
+                    detail: 'Concluído via painel sazonal'
+                });
+                target.nextInterventionDate = '';
+                target.nextInterventionType = '';
+                saveData(false);
+                renderAll();
+                C.toast(`Manejo de ${target.id} (${target.popularName}) marcado como concluído.`, 'success', 2200);
+            });
+        });
 
         C.refreshIcons(container);
     }
@@ -3027,6 +3105,8 @@
         C.refreshIcons(modal);
     }
 
+    let modalLogsFilter = 'ALL';
+
     function renderModalLogs(plant) {
         const listEl = document.getElementById('bf-logs-list');
         if (!listEl) return;
@@ -3035,27 +3115,59 @@
             listEl.innerHTML = `<p class="text-xs text-slate-500 italic">Nenhum manejo registrado ainda.</p>`;
             return;
         }
-        listEl.innerHTML = plant.logs.map((lg) => {
-            const isPruning = lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha'));
-            const isFert = lg.type && lg.type.toLowerCase().includes('adubação');
-            const isRepot = lg.type && (lg.type.toLowerCase().includes('transplante') || lg.type.toLowerCase().includes('raiz'));
 
-            let badgeHtml = '';
-            if (isPruning) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Poda</span>';
-            else if (isFert) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">Adubação</span>';
-            else if (isRepot) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Raízes</span>';
+        const pruningLogs = plant.logs.filter(lg => lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha')));
+        const fertLogs = plant.logs.filter(lg => lg.type && lg.type.toLowerCase().includes('adubação'));
+        const repotLogs = plant.logs.filter(lg => lg.type && (lg.type.toLowerCase().includes('transplante') || lg.type.toLowerCase().includes('raiz')));
 
-            return `
-                <div class="flex items-center justify-between gap-2 text-xs bg-[#090d16] border border-slate-800 rounded px-2.5 py-1.5">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="font-mono text-cyan-400">${C.formatDateBR(lg.date)}</span>
-                        ${badgeHtml}
-                        <span class="font-semibold text-slate-200">${C.esc(lg.type)}</span>
-                        <span class="text-slate-400">— ${C.esc(lg.detail)}</span>
-                    </div>
+        let displayedLogs = plant.logs;
+        if (modalLogsFilter === 'PRUNING') displayedLogs = pruningLogs;
+        else if (modalLogsFilter === 'FERT') displayedLogs = fertLogs;
+        else if (modalLogsFilter === 'REPOT') displayedLogs = repotLogs;
+
+        const summaryHtml = `
+            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pb-1.5 border-b border-slate-800">
+                <span>Histórico: <strong>${plant.logs.length}</strong> manejos (<strong>${pruningLogs.length}</strong> podas)</span>
+                <div class="flex items-center gap-1">
+                    <button type="button" data-modal-log-filter="ALL" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'ALL' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Todos</button>
+                    <button type="button" data-modal-log-filter="PRUNING" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'PRUNING' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Podas (${pruningLogs.length})</button>
+                    <button type="button" data-modal-log-filter="FERT" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'FERT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Adubação</button>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `;
+
+        const logsHtml = displayedLogs.length === 0
+            ? `<p class="text-xs text-slate-500 italic py-1">Nenhum registro nesta categoria.</p>`
+            : displayedLogs.map((lg) => {
+                const isPruning = lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha'));
+                const isFert = lg.type && lg.type.toLowerCase().includes('adubação');
+                const isRepot = lg.type && (lg.type.toLowerCase().includes('transplante') || lg.type.toLowerCase().includes('raiz'));
+
+                let badgeHtml = '';
+                if (isPruning) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Poda</span>';
+                else if (isFert) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">Adubação</span>';
+                else if (isRepot) badgeHtml = '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Raízes</span>';
+
+                return `
+                    <div class="flex items-center justify-between gap-2 text-xs bg-[#090d16] border border-slate-800 rounded px-2.5 py-1.5">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="font-mono text-cyan-400">${C.formatDateBR(lg.date)}</span>
+                            ${badgeHtml}
+                            <span class="font-semibold text-slate-200">${C.esc(lg.type)}</span>
+                            <span class="text-slate-400">— ${C.esc(lg.detail)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        listEl.innerHTML = summaryHtml + `<div class="space-y-1 mt-1.5">${logsHtml}</div>`;
+
+        listEl.querySelectorAll('[data-modal-log-filter]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                modalLogsFilter = btn.getAttribute('data-modal-log-filter');
+                renderModalLogs(plant);
+            });
+        });
     }
 
     function closeModal() {
@@ -3473,9 +3585,19 @@
         if (seasonSelect) {
             seasonSelect.addEventListener('change', (e) => {
                 selectedCalendarMonth = parseInt(e.target.value, 10);
+                updateMonthChipsUI();
                 renderSeasonalPanel();
             });
         }
+
+        document.querySelectorAll('[data-month-chip]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                selectedCalendarMonth = parseInt(btn.getAttribute('data-month-chip'), 10);
+                if (seasonSelect) seasonSelect.value = String(selectedCalendarMonth);
+                updateMonthChipsUI();
+                renderSeasonalPanel();
+            });
+        });
 
         document.getElementById('bonsai-search').addEventListener('input', (e) => {
             filters.search = e.target.value;

@@ -368,15 +368,20 @@
     <!-- 4. MODO TELA CHEIA DE LEITURA NOTURNA ÂMBAR (LOW-BLUE-LIGHT READER)   -->
     <!-- ===================================================================== -->
     <div id="amber-night-reader" class="hidden fixed inset-0 z-50 bg-[#110b06] text-[#f5d5a3] overflow-y-auto">
+        <!-- Barra de Progresso Superior de Leitura -->
+        <div id="amber-scroll-progress" class="fixed top-0 left-0 h-1 bg-amber-500/80 z-50 transition-all duration-150" style="width: 0%"></div>
+
         <div class="max-w-2xl mx-auto px-5 sm:px-8 py-6 sm:py-10 space-y-6">
             <!-- Barra de Controles Noturnos (Paletas Térmicas + Tipografia + Fechar) -->
             <div class="border-b border-amber-800/30 pb-3 sticky top-0 bg-[#110b06]/95 backdrop-blur py-2 z-10 space-y-2">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Modo Leitura Noturna Âmbar</span>
                     <div class="flex items-center gap-1.5">
-                        <button type="button" id="btn-amber-font-down" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A−</button>
-                        <button type="button" id="btn-amber-font-up" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A+</button>
-                        <button type="button" id="btn-amber-close" class="min-h-[38px] px-3.5 py-1 rounded-lg bg-amber-800/40 hover:bg-amber-800/60 border border-amber-700/50 text-amber-200 text-xs font-semibold">
+                        <button type="button" id="btn-amber-font-down" title="Diminuir fonte (-)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A−</button>
+                        <button type="button" id="btn-amber-font-up" title="Aumentar fonte (+)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A+</button>
+                        <button type="button" id="btn-amber-autoscroll" title="Auto-Scroll suave (Espaço)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">Auto ↓</button>
+                        <button type="button" id="btn-amber-fullscreen" title="Tela Cheia (F)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">⛶</button>
+                        <button type="button" id="btn-amber-close" title="Fechar (Esc)" class="min-h-[38px] px-3.5 py-1 rounded-lg bg-amber-800/40 hover:bg-amber-800/60 border border-amber-700/50 text-amber-200 text-xs font-semibold">
                             Fechar
                         </button>
                     </div>
@@ -402,13 +407,17 @@
                             <option value="brown">Ruído Marrom Profundo</option>
                             <option value="rain">Chuva Mansa na Mata</option>
                             <option value="wave">Ondas Suaves da Noite</option>
+                            <option value="crickets">Grilos &amp; Brisa do Cerrado</option>
                         </select>
                         <input type="range" id="audio-volume-slider" min="0" max="100" value="30" class="w-14 accent-amber-500 cursor-pointer" title="Volume do som pré-sono">
                     </div>
                 </div>
             </div>
 
-            <h2 id="amber-reader-title" class="text-2xl sm:text-3xl font-serif font-bold text-[#fbdca8] leading-snug"></h2>
+            <div>
+                <h2 id="amber-reader-title" class="text-2xl sm:text-3xl font-serif font-bold text-[#fbdca8] leading-snug"></h2>
+                <div id="amber-reader-meta" class="text-xs font-mono text-amber-500/70 mt-1"></div>
+            </div>
             <article id="amber-reader-body" class="font-serif text-[#f3cfa0]"></article>
 
             <div id="amber-reader-question-box" class="bg-[#1b1209] border border-amber-800/40 rounded-2xl p-5 space-y-2">

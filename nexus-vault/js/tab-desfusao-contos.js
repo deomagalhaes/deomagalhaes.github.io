@@ -283,9 +283,13 @@
                                     <i data-lucide="save" class="w-4 h-4"></i>
                                     <span>Registrar Veredito 24h</span>
                                 </button>
-                                <button type="button" id="btn-df-export-csv" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5">
-                                    <i data-lucide="download" class="w-4 h-4 text-cyan-400"></i>
+                                <button type="button" id="btn-df-export-csv" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5" title="Exportar histórico em CSV">
+                                    <i data-lucide="file-spreadsheet" class="w-4 h-4 text-cyan-400"></i>
                                     <span>CSV</span>
+                                </button>
+                                <button type="button" id="btn-df-export-json" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5" title="Exportar histórico em JSON">
+                                    <i data-lucide="file-json" class="w-4 h-4 text-emerald-400"></i>
+                                    <span>JSON</span>
                                 </button>
                             </div>
                         </div>
@@ -475,8 +479,36 @@
             document.getElementById('df-chk-documentation').checked = true;
             updateDesfusaoLiveMetrics();
             renderDesfusaoHistory();
+            C.store.remove('dm_vault_desfusao_draft');
             C.toast('Veredito operacional de 24h gravado com sucesso.', 'success');
         });
+
+        // Auto-save de rascunho de desfusão
+        const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
+        draftInputs.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    const draft = {};
+                    draftInputs.forEach(k => {
+                        const inp = document.getElementById(k);
+                        if (inp) draft[k] = inp.value;
+                    });
+                    C.store.set('dm_vault_desfusao_draft', draft);
+                });
+            }
+        });
+
+        // Restaura rascunho salvo
+        const savedDraft = C.store.get('dm_vault_desfusao_draft', null);
+        if (savedDraft && typeof savedDraft === 'object') {
+            draftInputs.forEach((k) => {
+                if (savedDraft[k]) {
+                    const el = document.getElementById(k);
+                    if (el && !el.value) el.value = savedDraft[k];
+                }
+            });
+        }
 
         document.getElementById('btn-df-export-csv').addEventListener('click', () => {
             const headers = ['Data', 'Hora', 'Ativação (1-10)', 'Proteção (0-4)', 'Saldo Estratégico', 'Distorções', 'Fato Estrito', 'Leitura Reativa', 'Farei (24h)', 'Não Farei (24h)'];
@@ -488,6 +520,18 @@
             C.exportCSV(`protocolos-desfusao-${C.todayISO()}.csv`, headers, rows);
             C.toast('Histórico de desfusão exportado em CSV.', 'success');
         });
+
+        const btnExportJson = document.getElementById('btn-df-export-json');
+        if (btnExportJson) {
+            btnExportJson.addEventListener('click', () => {
+                C.exportJSON(`protocolos-desfusao-${C.todayISO()}.json`, {
+                    exportDate: new Date().toISOString(),
+                    totalRecords: desfusaoHistory.length,
+                    history: desfusaoHistory
+                });
+                C.toast('Histórico de desfusão exportado em JSON.', 'success');
+            });
+        }
     }
 
     // =========================================================================
