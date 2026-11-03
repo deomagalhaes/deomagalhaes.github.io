@@ -34,6 +34,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 25** | **Matriz de Atenção Dividida e Alternância Cognitiva** | Atenção Dividida, Alternância de Tarefas e Controle Inibitório | `jogos/jogo-atencao-dividida.html` | ✅ **Publicado** |
 | **Dia 26** | **Labirinto de Memória Topológica e Navegação Hipocampal** | Memória Espacial, Mapas Cognitivos e Orientação Alocêntrica | `jogos/jogo-memoria-topologica.html` | ✅ **Publicado** |
 | **Dia 27** | **Matriz de Flexibilidade Conceitual (Wisconsin Sorting)** | Flexibilidade Cognitiva, Mudança de Regra e Controle Frontal | `jogos/jogo-flexibilidade-conceitual.html` | ✅ **Publicado** |
+| **Dia 28** | **Desafio de Apostas de Iowa (Iowa Gambling Task)** | Tomada de Decisão Sob Risco, Marcadores Somáticos e vmPFC | `jogos/jogo-apostas-iowa.html` | ✅ **Publicado** |
 
 ---
 

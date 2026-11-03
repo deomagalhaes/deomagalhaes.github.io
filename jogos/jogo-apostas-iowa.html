@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 28: Desafio de Apostas de Iowa (Iowa Gambling Task) – Deo Magalhães</title>
+    <meta name="description" content="Experimente o clássico teste neuropsicológico de Antonio Damasio e Antoine Bechara. Avalie sua intuição visceral, marcadores somáticos e tomada de decisão sob risco.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Biómetro de Resposta Somática */
+        .somatic-biometer {
+            background: linear-gradient(135deg, #001219, #00222e);
+            border: 1px solid #0a9396;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #f8fafc;
+            box-shadow: 0 4px 15px rgba(0, 18, 25, 0.4);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .biometer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .pulse-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(10, 147, 150, 0.2);
+            border: 2px solid #0a9396;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .pulse-icon.danger {
+            background: rgba(174, 32, 18, 0.3);
+            border-color: #ae2012;
+            animation: heartPulse 0.6s infinite alternate;
+        }
+
+        @keyframes heartPulse {
+            from { transform: scale(1); box-shadow: 0 0 5px #ae2012; }
+            to { transform: scale(1.15); box-shadow: 0 0 15px #e63946; }
+        }
+
+        .biometer-title {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94d2bd;
+            font-weight: 700;
+        }
+
+        .biometer-status {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        .biometer-bar-container {
+            flex: 1;
+            max-width: 280px;
+            min-width: 160px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .biometer-bar-fill {
+            height: 100%;
+            width: 15%;
+            background: linear-gradient(90deg, #0a9396, #ee9b00, #ae2012);
+            border-radius: 5px;
+            transition: width 0.4s ease;
+        }
+
+        /* Arena dos Baralhos */
+        .igt-arena {
+            background: radial-gradient(circle at center, #00222e 0%, #001219 100%);
+            border: 3px solid #0a9396;
+            border-radius: 14px;
+            padding: 30px 20px;
+            margin: 0 auto 25px auto;
+            max-width: 820px;
+            box-shadow: 0 10px 30px rgba(0, 18, 25, 0.45);
+            color: white;
+            position: relative;
+        }
+
+        .decks-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 680px) {
+            .decks-row {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+
+        .deck-card {
+            background: linear-gradient(145deg, #0f2b35, #001a24);
+            border: 2px solid #0a9396;
+            border-radius: 12px;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .deck-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #ee9b00;
+            box-shadow: 0 12px 24px rgba(238, 155, 0, 0.3);
+        }
+
+        .deck-card:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .deck-label {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 8px;
+        }
+
+        .deck-subtext {
+            font-size: 0.8em;
+            color: #94d2bd;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-stack-effect {
+            width: 80%;
+            height: 4px;
+            background: rgba(148, 210, 189, 0.3);
+            border-radius: 2px;
+            margin-top: 15px;
+            box-shadow: 0 3px 0 rgba(0, 95, 115, 0.6);
+        }
+
+        /* Notificação da Rodada */
+        .last-outcome-banner {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(148, 210, 189, 0.25);
+            border-radius: 8px;
+            padding: 14px 20px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .outcome-gain {
+            color: #2a9d8f;
+            font-weight: 700;
+        }
+
+        .outcome-loss {
+            color: #e63946;
+            font-weight: 700;
+        }
+
+        .outcome-net-pos {
+            color: #94d2bd;
+        }
+
+        .outcome-net-neg {
+            color: #ee9b00;
+        }
+
+        /* Gráfico de Patrimônio */
+        .chart-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .chart-title {
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #005f73;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-svg-container {
+            width: 100%;
+            height: 120px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        /* Modal de Resultados Finais */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 18, 25, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 14px;
+            max-width: 640px;
+            width: 100%;
+            padding: 32px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.35s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #005f73;
+            margin-bottom: 6px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .metric-cell {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .metric-cell-title {
+            font-size: 0.78em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .metric-cell-val {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 4px;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 95, 115, 0.3);
+        }
+
+        .instructions-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            text-align: left;
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 28: Desafio de Apostas de Iowa (Iowa Gambling Task)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Treino de Tomada de Decisão Sob Risco</p>
+            </header>
+
+            <div class="instructions-box">
+                <p><strong>Paradigma Neuropsicológico:</strong> Desenvolvido na Universidade de Iowa por Antoine Bechara e Antonio Damasio, este teste investiga a integridade do córtex pré-frontal ventromedial (vmPFC) e o surgimento dos <strong>marcadores somáticos</strong>. Você começa com um capital fictício de R$ 2.000. Sua meta é maximizar seus ganhos escolhendo livremente cartas entre quatro baralhos (A, B, C e D) ao longo de 60 rodadas.</p>
+                <p style="margin-top: 8px;"><em>Atenção: Alguns baralhos oferecem ganhos imediatos chamativos mas escondem punições ruinosas, enquanto outros são modestos porém consistentes a longo prazo. Observe as pistas do seu corpo e descubra a estratégia mais vantajosa!</em></p>
+            </div>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status Superior -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Patrimônio Atual</span>
+                        <span class="stat-badge-value" id="currentBalance" style="color: #005f73;">R$ 2.000</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Lucro / Prejuízo</span>
+                        <span class="stat-badge-value" id="netProfit">R$ 0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Progresso</span>
+                        <span class="stat-badge-value" id="roundProgress">Rodada 0 / 60</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Índice Vantajoso</span>
+                        <span class="stat-badge-value" id="advantageousIndex">0</span>
+                    </div>
+                    <button class="sound-btn" id="soundToggle" onclick="toggleSound()">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Biómetro de Resposta Somática (GSR) -->
+                <div class="somatic-biometer">
+                    <div class="biometer-left">
+                        <div class="pulse-icon" id="pulseIndicator">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94d2bd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <div>
+                            <div class="biometer-title">Sensor Visceral de Marcador Somático (GSR)</div>
+                            <div class="biometer-status" id="biometerText">Estado Autonômico Basal: Monitorando...</div>
+                        </div>
+                    </div>
+                    <div class="biometer-bar-container">
+                        <div class="biometer-bar-fill" id="biometerBar"></div>
+                    </div>
+                </div>
+
+                <!-- Arena de Jogo dos Baralhos -->
+                <div class="igt-arena">
+                    <div class="decks-row">
+                        <!-- Baralho A -->
+                        <div class="deck-card" id="deck-A" onclick="drawCard('A')" onmouseenter="onHoverDeck('A')" onmouseleave="onLeaveDeck()">
+                            <div class="deck-label">BARALHO A</div>
+                            <div class="deck-subtext">Ganho Imediato R$ 100</div>
+                            <div class="card-stack-effect"></div>
+                        </div>
+
+                        <!-- Baralho B -->
+                        <div class="deck-card" id="deck-B" onclick="drawCard('B')" onmouseenter="onHoverDeck('B')" onmouseleave="onLeaveDeck()">
+                            <div class="deck-label">BARALHO B</div>
+                            <div class="deck-subtext">Ganho Imediato R$ 100</div>
+                            <div class="card-stack-effect"></div>
+                        </div>
+
+                        <!-- Baralho C -->
+                        <div class="deck-card" id="deck-C" onclick="drawCard('C')" onmouseenter="onHoverDeck('C')" onmouseleave="onLeaveDeck()">
+                            <div class="deck-label">BARALHO C</div>
+                            <div class="deck-subtext">Ganho Imediato R$ 50</div>
+                            <div class="card-stack-effect"></div>
+                        </div>
+
+                        <!-- Baralho D -->
+                        <div class="deck-card" id="deck-D" onclick="drawCard('D')" onmouseenter="onHoverDeck('D')" onmouseleave="onLeaveDeck()">
+                            <div class="deck-label">BARALHO D</div>
+                            <div class="deck-subtext">Ganho Imediato R$ 50</div>
+                            <div class="card-stack-effect"></div>
+                        </div>
+                    </div>
+
+                    <!-- Banner de Feedback da Rodada -->
+                    <div class="last-outcome-banner" id="outcomeBanner">
+                        Selecione qualquer baralho para iniciar a primeira rodada.
+                    </div>
+                </div>
+
+                <!-- Gráfico de Evolução Patrimonial -->
+                <div class="chart-section">
+                    <div class="chart-title">
+                        <span>Curva de Evolução do Patrimônio (Base: R$ 2.000)</span>
+                        <span id="bestRecordText" style="font-weight: 500; color: #64748b;">Recorde Histórico: R$ 2.000</span>
+                    </div>
+                    <div class="chart-svg-container">
+                        <svg id="balanceChart" width="100%" height="100%" viewBox="0 0 600 120" preserveAspectRatio="none">
+                            <line x1="0" y1="60" x2="600" y2="60" stroke="#cbd5e1" stroke-dasharray="4,4" stroke-width="1.5"></line>
+                            <polyline id="chartPolyline" fill="none" stroke="#0a9396" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="0,60"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Resultados Finais -->
+    <div class="modal-overlay" id="resultsModal">
+        <div class="modal-card">
+            <h2 class="modal-title">Sessão Concluída!</h2>
+            <p style="color: #64748b; font-size: 0.95em;" id="modalSubtitle">Desempenho no Iowa Gambling Task (60 Rodadas)</p>
+
+            <div class="metrics-grid">
+                <div class="metric-cell">
+                    <div class="metric-cell-title">Saldo Final</div>
+                    <div class="metric-cell-val" id="resFinalBalance" style="color: #005f73;">R$ 2.000</div>
+                </div>
+                <div class="metric-cell">
+                    <div class="metric-cell-title">Lucro / Prejuízo Líquido</div>
+                    <div class="metric-cell-val" id="resNetProfit">R$ 0</div>
+                </div>
+                <div class="metric-cell">
+                    <div class="metric-cell-title">Índice Vantajoso [(C+D)-(A+B)]</div>
+                    <div class="metric-cell-val" id="resAdvantageousScore">0</div>
+                </div>
+                <div class="metric-cell">
+                    <div class="metric-cell-title">Distribuição de Escolhas</div>
+                    <div class="metric-cell-val" id="resDistribution" style="font-size: 0.95em;">A:0 | B:0 | C:0 | D:0</div>
+                </div>
+            </div>
+
+            <div style="background: #f1f5f9; border-radius: 8px; padding: 18px; text-align: left; font-size: 0.9em; line-height: 1.6; color: #334155;" id="clinicalAnalysisText">
+                Análise neuropsicológica da sua tomada de decisão...
+            </div>
+
+            <button class="btn-action-primary" onclick="restartGame()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica do Jogo e Web Audio API -->
+    <script>
+        // Web Audio API
+        const SoundFX = {
+            ctx: null,
+            enabled: true,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            },
+            playGainTone() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.12); // E5
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } catch(e) {}
+            },
+            playLossTone() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(260, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.35);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } catch(e) {}
+            },
+            playSomaticPulse() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(80, now);
+                    osc.frequency.linearRampToValueAtTime(60, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } catch(e) {}
+            },
+            playFanfare() {
+                if (!this.enabled) return;
+                this.init();
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((f, idx) => {
+                    setTimeout(() => {
+                        try {
+                            const now = this.ctx.currentTime;
+                            const osc = this.ctx.createOscillator();
+                            const gain = this.ctx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(f, now);
+                            gain.gain.setValueAtTime(0.15, now);
+                            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                            osc.connect(gain);
+                            gain.connect(this.ctx.destination);
+                            osc.start(now);
+                            osc.stop(now + 0.35);
+                        } catch(e) {}
+                    }, idx * 110);
+                });
+            }
+        };
+
+        function toggleSound() {
+            SoundFX.enabled = !SoundFX.enabled;
+            const btn = document.getElementById('soundToggle');
+            const icon = document.getElementById('soundIcon');
+            if (SoundFX.enabled) {
+                icon.innerText = '🔊';
+                btn.style.color = '#334155';
+            } else {
+                icon.innerText = '🔇';
+                btn.style.color = '#94a3b8';
+            }
+        }
+
+        // Modelo Clássico do Iowa Gambling Task (Bechara et al., 1994, 2000)
+        // Cada bloco de 10 cartas obedece à distribuição canônica
+        const DECK_SCHEDULES = {
+            'A': {
+                gain: 100,
+                // Punições a cada 10 cartas (soma = 1250, saldo = -250):
+                losses: [0, 150, 0, 300, 0, 200, 0, 250, 0, 350]
+            },
+            'B': {
+                gain: 100,
+                // Punição única e colossal a cada 10 cartas (soma = 1250, saldo = -250):
+                losses: [0, 0, 0, 0, 0, 0, 0, 0, 1250, 0]
+            },
+            'C': {
+                gain: 50,
+                // Punições moderadas frequentes (soma = 250, saldo = +250):
+                losses: [0, 50, 0, 25, 0, 75, 0, 25, 0, 75]
+            },
+            'D': {
+                gain: 50,
+                // Punição única suave a cada 10 cartas (soma = 250, saldo = +250):
+                losses: [0, 0, 0, 0, 0, 0, 0, 0, 250, 0]
+            }
+        };
+
+        const INITIAL_BALANCE = 2000;
+        const TOTAL_ROUNDS = 60;
+
+        let balance = INITIAL_BALANCE;
+        let round = 0;
+        let deckPointers = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+        let choiceCounts = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+        let historyBalance = [INITIAL_BALANCE];
+        let blockChoices = []; // rastreia escolhas em blocos de 10
+        let cumulativeLosses = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+
+        function initGame() {
+            balance = INITIAL_BALANCE;
+            round = 0;
+            deckPointers = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+            choiceCounts = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+            cumulativeLosses = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+            historyBalance = [INITIAL_BALANCE];
+            blockChoices = [];
+
+            updateStatusUI();
+            updateChartUI();
+            resetBiometer();
+            loadBestRecord();
+
+            document.getElementById('outcomeBanner').innerHTML = 'Selecione qualquer baralho para iniciar a primeira rodada.';
+            document.getElementById('resultsModal').style.display = 'none';
+        }
+
+        function loadBestRecord() {
+            const best = localStorage.getItem('iowa_best_balance');
+            if (best) {
+                document.getElementById('bestRecordText').innerText = `Recorde Histórico: R$ ${parseInt(best, 10).toLocaleString('pt-BR')}`;
+            }
+        }
+
+        function saveRecord(finalBal) {
+            const currentBest = localStorage.getItem('iowa_best_balance') || INITIAL_BALANCE;
+            if (finalBal > currentBest) {
+                localStorage.setItem('iowa_best_balance', finalBal);
+                loadBestRecord();
+            }
+        }
+
+        function drawCard(deckKey) {
+            if (round >= TOTAL_ROUNDS) return;
+
+            SoundFX.init();
+            round++;
+            choiceCounts[deckKey]++;
+
+            const sched = DECK_SCHEDULES[deckKey];
+            const p = deckPointers[deckKey] % sched.losses.length;
+            const gain = sched.gain;
+            const loss = sched.losses[p];
+            deckPointers[deckKey]++;
+
+            const netRound = gain - loss;
+            balance += netRound;
+            cumulativeLosses[deckKey] += loss;
+            historyBalance.push(balance);
+
+            // Registro no bloco de 10
+            const currentBlockIdx = Math.floor((round - 1) / 10);
+            if (!blockChoices[currentBlockIdx]) {
+                blockChoices[currentBlockIdx] = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+            }
+            blockChoices[currentBlockIdx][deckKey]++;
+
+            // Sons e Feedback
+            if (loss > 0) {
+                SoundFX.playLossTone();
+            } else {
+                SoundFX.playGainTone();
+            }
+
+            renderOutcome(deckKey, gain, loss, netRound);
+            updateStatusUI();
+            updateChartUI();
+
+            // Reação Biômetro Pós-Escolha
+            triggerBiometerResponse(deckKey, loss);
+
+            if (round >= TOTAL_ROUNDS) {
+                setTimeout(endSession, 800);
+            }
+        }
+
+        function renderOutcome(deckKey, gain, loss, netRound) {
+            const banner = document.getElementById('outcomeBanner');
+            const netColor = netRound >= 0 ? '#2a9d8f' : '#e63946';
+            const netSign = netRound >= 0 ? '+' : '';
+
+            let msg = `Você escolheu o <strong>Baralho ${deckKey}</strong>: <span class="outcome-gain">+R$ ${gain}</span>`;
+            if (loss > 0) {
+                msg += ` e sofreu uma penalidade de <span class="outcome-loss">-R$ ${loss}</span>. `;
+            } else {
+                msg += ` sem nenhuma penalidade. `;
+            }
+            msg += `Resultado da rodada: <strong style="color: ${netColor}">${netSign}R$ ${netRound}</strong>.`;
+            banner.innerHTML = msg;
+        }
+
+        function updateStatusUI() {
+            const balElem = document.getElementById('currentBalance');
+            balElem.innerText = `R$ ${balance.toLocaleString('pt-BR')}`;
+            balElem.style.color = balance >= INITIAL_BALANCE ? '#005f73' : '#ae2012';
+
+            const net = balance - INITIAL_BALANCE;
+            const netElem = document.getElementById('netProfit');
+            const netSign = net >= 0 ? '+' : '';
+            netElem.innerText = `${netSign}R$ ${net.toLocaleString('pt-BR')}`;
+            netElem.style.color = net >= 0 ? '#2a9d8f' : '#ae2012';
+
+            document.getElementById('roundProgress').innerText = `Rodada ${round} / ${TOTAL_ROUNDS}`;
+
+            const advIndex = (choiceCounts['C'] + choiceCounts['D']) - (choiceCounts['A'] + choiceCounts['B']);
+            const advElem = document.getElementById('advantageousIndex');
+            advElem.innerText = advIndex > 0 ? `+${advIndex}` : advIndex;
+            advElem.style.color = advIndex >= 0 ? '#0a9396' : '#ee9b00';
+        }
+
+        function updateChartUI() {
+            const poly = document.getElementById('chartPolyline');
+            const w = 600;
+            const h = 120;
+            const minBal = Math.min(...historyBalance, 500);
+            const maxBal = Math.max(...historyBalance, 3500);
+            const range = Math.max(maxBal - minBal, 1000);
+
+            const pointsStr = historyBalance.map((b, idx) => {
+                const x = (idx / TOTAL_ROUNDS) * w;
+                const norm = (b - minBal) / range;
+                const y = h - (norm * (h - 20) + 10);
+                return `${x.toFixed(1)},${y.toFixed(1)}`;
+            }).join(' ');
+
+            poly.setAttribute('points', pointsStr);
+            poly.setAttribute('stroke', balance >= INITIAL_BALANCE ? '#0a9396' : '#e63946');
+        }
+
+        /* Biômetro Somático (GSR Simulator) */
+        function onHoverDeck(deckKey) {
+            if (round < 5) return; // nas primeiras 5 rodadas o corpo ainda está explorando
+
+            const textElem = document.getElementById('biometerText');
+            const barFill = document.getElementById('biometerBar');
+            const pulse = document.getElementById('pulseIndicator');
+
+            // Se o participante já sofreu penalidade nos baralhos de alto risco (A ou B)
+            if ((deckKey === 'A' || deckKey === 'B') && cumulativeLosses[deckKey] > 0) {
+                const riskLevel = Math.min(100, 30 + (round * 1.2));
+                barFill.style.width = `${riskLevel}%`;
+                barFill.style.background = '#e63946';
+                textElem.innerText = `Alerta Somático: Condutância cutânea elevada (Sinal Visceral de Risco!)`;
+                textElem.style.color = '#ee9b00';
+                pulse.classList.add('danger');
+                SoundFX.playSomaticPulse();
+            } else if (deckKey === 'C' || deckKey === 'D') {
+                barFill.style.width = '20%';
+                barFill.style.background = '#2a9d8f';
+                textElem.innerText = `Sensação Corporal: Estabilidade autonômica e baixo risco percebido.`;
+                textElem.style.color = '#94d2bd';
+                pulse.classList.remove('danger');
+            }
+        }
+
+        function onLeaveDeck() {
+            resetBiometer();
+        }
+
+        function resetBiometer() {
+            const textElem = document.getElementById('biometerText');
+            const barFill = document.getElementById('biometerBar');
+            const pulse = document.getElementById('pulseIndicator');
+
+            barFill.style.width = '12%';
+            barFill.style.background = 'linear-gradient(90deg, #0a9396, #94d2bd)';
+            textElem.innerText = 'Estado Autonômico Basal: Monitorando...';
+            textElem.style.color = '#ffffff';
+            pulse.classList.remove('danger');
+        }
+
+        function triggerBiometerResponse(deckKey, loss) {
+            const textElem = document.getElementById('biometerText');
+            const barFill = document.getElementById('biometerBar');
+            const pulse = document.getElementById('pulseIndicator');
+
+            if (loss >= 1000) {
+                barFill.style.width = '100%';
+                barFill.style.background = '#ae2012';
+                textElem.innerText = 'Choque Somático Severo: Pico simpático e contração visceral!';
+                textElem.style.color = '#e63946';
+                pulse.classList.add('danger');
+            } else if (loss > 0) {
+                barFill.style.width = '65%';
+                barFill.style.background = '#ee9b00';
+                textElem.innerText = 'Reação Visceral: Registro de penalidade pelo córtex insular.';
+                textElem.style.color = '#ee9b00';
+            }
+        }
+
+        function endSession() {
+            saveRecord(balance);
+            if (balance >= INITIAL_BALANCE) {
+                SoundFX.playFanfare();
+            }
+
+            document.getElementById('resFinalBalance').innerText = `R$ ${balance.toLocaleString('pt-BR')}`;
+            const net = balance - INITIAL_BALANCE;
+            const netSign = net >= 0 ? '+' : '';
+            const netElem = document.getElementById('resNetProfit');
+            netElem.innerText = `${netSign}R$ ${net.toLocaleString('pt-BR')}`;
+            netElem.style.color = net >= 0 ? '#2a9d8f' : '#ae2012';
+
+            const advTotal = (choiceCounts['C'] + choiceCounts['D']) - (choiceCounts['A'] + choiceCounts['B']);
+            const advScoreElem = document.getElementById('resAdvantageousScore');
+            advScoreElem.innerText = advTotal > 0 ? `+${advTotal}` : advTotal;
+            advScoreElem.style.color = advTotal >= 0 ? '#0a9396' : '#ae2012';
+
+            document.getElementById('resDistribution').innerText = `A: ${choiceCounts['A']} | B: ${choiceCounts['B']} | C: ${choiceCounts['C']} | D: ${choiceCounts['D']}`;
+
+            // Análise Clínica
+            const analysisElem = document.getElementById('clinicalAnalysisText');
+            let analysis = '';
+
+            if (advTotal >= 20 && balance >= 2500) {
+                analysis = `<strong>Excelente Sensibilidade a Marcadores Somáticos (Decisor Prudente e Estratégico):</strong><br>
+                Você demonstrou excelente integração entre as pistas viscerais e o córtex pré-frontal ventromedial (vmPFC). À medida que as rodadas avançaram, você detectou que as altas recompensas imediatas dos Baralhos A e B escondiam armadilhas destrutivas, migrando com consistência para os Baralhos C e D. Esse padrão reflete alta tolerância à gratificação postergada e excelente intuição adaptativa.`;
+            } else if (advTotal >= 0 && balance >= 2000) {
+                analysis = `<strong>Perfil de Aprendizado Moderado e Equilíbrio Cauteloso:</strong><br>
+                Seus resultados mostram que você conseguiu manter seu patrimônio seguro, equilibrando a curiosidade exploratória com momentos de prudência. Houve momentos em que o apelo das cartas de R$ 100 gerou recaídas, mas seu cérebro ajustou o leme a tempo de evitar o colapso financeiro.`;
+            } else if (choiceCounts['B'] > 20 || (choiceCounts['A'] + choiceCounts['B'] > 35)) {
+                analysis = `<strong>Hipersensibilidade à Recompensa Imediata e Miopia para o Futuro:</strong><br>
+                Seu padrão de escolhas concentrou-se excessivamente nos Baralhos A e B, seduzido pelo ganho imediato de R$ 100 e ignorando o impacto devastador das punições tardias. Na literatura de Damasio, esse comportamento decorre de baixa reatividade dos marcadores somáticos antecipatórios, sugerindo tendência à impulsividade ou paralisia em discernir riscos em longo prazo.`;
+            } else {
+                analysis = `<strong>Perfil de Incerteza e Exploração Difusa:</strong><br>
+                Suas escolhas oscilaram continuamente sem uma consolidação clara de preferência por baralhos seguros. Isso indica que os sinais corporais de alerta podem ter sido ignorados ou abafados por dúvidas analíticas, retardando a identificação da estratégia ótima.`;
+            }
+
+            analysisElem.innerHTML = analysis;
+            document.getElementById('resultsModal').style.display = 'flex';
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>

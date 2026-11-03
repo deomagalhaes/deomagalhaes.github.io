@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **03/11/2026** | **O Cérebro Visceral: A Ciência da Intuição (Damasio)** | [social/2026-11-03-o-cerebro-visceral-ciencia-da-intuicao.md](2026-11-03-o-cerebro-visceral-ciencia-da-intuicao.md) | ✅ Pronto para postar |
 | **03/11/2026** | **A Biologia da Resiliência: Epigenética, BDNF e Regulação Vagal** | [social/2026-11-03-a-biologia-da-resiliencia-bdnf-regulacao-vagal.md](2026-11-03-a-biologia-da-resiliencia-bdnf-regulacao-vagal.md) | ✅ Pronto para postar |
 | **02/11/2026** | **A Neurobiologia da Ausência e da Saudade: O Cérebro no Luto** | [social/2026-11-02-a-neurobiologia-da-ausencia-e-da-saudade.md](2026-11-02-a-neurobiologia-da-ausencia-e-da-saudade.md) | ✅ Pronto para postar |
 | **02/11/2026** | **O Peso Oculto da Culpa e da Vergonha: A Neurobiologia da Autocrítica** | [social/2026-11-02-a-neurobiologia-da-vergonha-toxica-e-da-culpa.md](2026-11-02-a-neurobiologia-da-vergonha-toxica-e-da-culpa.md) | ✅ Pronto para postar |

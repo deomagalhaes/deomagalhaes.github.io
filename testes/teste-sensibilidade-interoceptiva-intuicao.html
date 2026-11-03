@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Sensibilidade Interoceptiva e Decisão Intuitiva (ISIDI / T-29) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua acuidade interoceptiva, a leitura dos marcadores somáticos e a capacidade de tomar decisões intuitivas sem paralisia por análise. Cálculo 100% privado.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .btn-calc {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 95, 115, 0.35);
+        }
+
+        .results-box {
+            display: none;
+            margin-top: 35px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #0a9396;
+            padding: 30px;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 1.4em;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: white;
+            background: #005f73;
+            margin-bottom: 12px;
+        }
+
+        .result-cat-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 640px) {
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .dimension-card h4 {
+            font-size: 0.95em;
+            color: #005f73;
+            margin-bottom: 6px;
+        }
+
+        .dim-score-val {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #0a9396;
+        }
+
+        .clinical-guidelines {
+            background: #f0fdfa;
+            border-left: 4px solid #0a9396;
+            padding: 18px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 25px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #134e4a;
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Inventário de Sensibilidade Interoceptiva e Decisão Intuitiva (ISIDI / T-29)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Instrumento de Autoavaliação Clínica</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Fundamentação Teórica e Objetivo:</strong> Desenvolvido com base na <em>Hipótese dos Marcadores Somáticos</em> de Antonio Damasio, no <em>Multidimensional Assessment of Interoceptive Awareness (MAIA)</em> e nas neurociências da ínsula anterior, este instrumento investiga a sua competência biológica para escutar o corpo durante escolhas cotidianas, discernir a intuição autêntica da ansiedade e superar a paralisia por análise.</p>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #64748b;"><em>Instruções: Para cada uma das 16 afirmações abaixo, selecione a alternativa que melhor descreve a sua postura habitual diante de decisões e sensações físicas. Não há respostas 'certas' ou 'erradas'. Seja o mais honesto possível consigo mesmo.</em></p>
+            </div>
+
+            <div class="quiz-container">
+                <form id="isidiForm">
+                    <!-- Dimensão 1: Atenção e Conexão Interoceptiva -->
+                    <div style="margin: 10px 0 20px 0; padding-bottom: 8px; border-bottom: 2px solid #005f73;">
+                        <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 1: Atenção e Conexão Interoceptiva (ACI)</h3>
+                        <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Capacidade de registrar conscientemente batimentos, respiração e o tônus das vísceras.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">1</span> Percebo com facilidade as variações sutis no meu ritmo cardíaco e na respiração quando vivencio situações novas ou desafiadoras.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q1" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q1" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">2</span> Noto tensões físicas, nós na garganta ou contrações no estômago antes mesmo de entender conscientemente o que me incomoda.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q2" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q2" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">3</span> Consigo identificar com clareza em qual região do meu corpo as diferentes emoções (alegria, raiva, desconfiança, tranquilidade) se manifestam.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q3" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q3" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">4</span> Durante o dia, costumo fazer breves pausas para checar como meu corpo se sente por dentro (nível de energia, tensão muscular, conforto visceral).</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q4" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q4" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2: Discriminação entre Intuição e Ansiedade -->
+                    <div style="margin: 30px 0 20px 0; padding-bottom: 8px; border-bottom: 2px solid #005f73;">
+                        <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 2: Discriminação entre Intuição e Ansiedade (DIA)</h3>
+                        <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Diferenciação precisa entre a sabedoria silenciosa do corpo e o alarme aflitivo do pânico.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">5</span> Sei diferenciar quando uma sensação física é um aviso sóbrio de prudência ou apenas o medo ansioso de errar.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q5" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q5" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">6</span> Reconheço que a minha intuição autêntica traz calma e clareza imediata, enquanto a ansiedade vem acompanhada de urgência e pensamentos catastróficos.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q6" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q6" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">7</span> Quando sinto um desconforto diante de uma pessoa ou proposta, consigo observar o sinal sem entrar em pânico ou criar teorias conspiratórias.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q7" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q7" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">8</span> Evito tomar decisões cruciais quando percebo que meu corpo está agitado ou sob exaustão, esperando a poeira somática assentar.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q8" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q8" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3: Uso de Marcadores Somáticos na Decisão -->
+                    <div style="margin: 30px 0 20px 0; padding-bottom: 8px; border-bottom: 2px solid #005f73;">
+                        <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 3: Uso de Marcadores Somáticos na Tomada de Decisão (MSD)</h3>
+                        <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Integração prática das sensações viscerais como critério válido de julgamento.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">9</span> Ao ponderar alternativas, presto atenção em qual delas gera sensação de expansão/alívio e qual gera aperto/náusea no peito ou abdômen.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q9" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q9" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">10</span> Costumo confiar no meu 'frio na barriga' como um dado relevante da realidade, unindo essa pista aos dados objetivos conhecidos.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q10" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q10" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">11</span> Em escolhas relacionais ou profissionais complexas, a presença de uma sensação de serenidade interior tem peso substancial no meu caminho final.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q11" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q11" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">12</span> Quando todos os argumentos lógicos parecem convincentes mas sinto um incômodo visceral inexplicável, prefiro pausar e investigar antes de assinar ou concordar.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q12" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q12" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4: Confiança Somática vs. Hiper-racionalização -->
+                    <div style="margin: 30px 0 20px 0; padding-bottom: 8px; border-bottom: 2px solid #005f73;">
+                        <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 4: Confiança Somática vs. Hiper-racionalização (CSH)</h3>
+                        <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Agência para agir com base na certeza interna sem se perder no labirinto mental.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">13</span> Sinto segurança em bancar minhas decisões intuitivas mesmo quando outras pessoas demoram a compreender os motivos do meu posicionamento.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q13" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q13" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">14</span> Consigo evitar a paralisia por excesso de análise, agindo com prontidão quando sinto que a conjuntura está madura.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q14" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q14" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">15</span> Ao revisitar minha trajetória, percebo que os passos mais assertivos da minha vida foram acompanhados por uma certeza corporal límpida.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q15" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q15" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title"><span class="question-number">16</span> Respeito os limites e avisos do meu organismo em vez de me violentar para cumprir metas apenas por orgulho ou pressão externa.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q16" value="0" required> Quase nunca</label>
+                            <label class="option-label"><input type="radio" name="q16" value="1"> Raramente</label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"> Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"> Frequentemente</label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"> Quase sempre</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-calc">Calcular Minha Sensibilidade Interoceptiva e Decisória</button>
+                </form>
+
+                <!-- Box de Resultados -->
+                <div class="results-box" id="resultsBox">
+                    <div class="score-header">
+                        <div class="score-badge" id="scoreBadge">Pontuação: 0 / 64</div>
+                        <div class="result-cat-title" id="resultCategory">Classificação do Perfil</div>
+                        <p style="color: #475569; font-size: 0.98em; line-height: 1.6; max-width: 720px; margin: 0 auto;" id="resultDescription">Descrição clínica detalhada...</p>
+                    </div>
+
+                    <h4 style="color: #005f73; font-size: 1.1em; margin-bottom: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px;">Detalhamento por Dimensões Neurocognitivas</h4>
+                    <div class="dimension-grid">
+                        <div class="dimension-card">
+                            <h4>1. Conexão Interoceptiva (ACI)</h4>
+                            <div class="dim-score-val" id="subAci">0 / 16</div>
+                            <p style="font-size: 0.82em; color: #64748b; margin-top: 4px;">Capacidade de registrar os sinais fisiológicos internos da ínsula e do vago.</p>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>2. Discriminação Intuição vs. Medo (DIA)</h4>
+                            <div class="dim-score-val" id="subDia">0 / 16</div>
+                            <p style="font-size: 0.82em; color: #64748b; margin-top: 4px;">Aptidão para separar a intuição sóbria do alarme ruidoso da ansiedade.</p>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>3. Marcadores Somáticos em Ação (MSD)</h4>
+                            <div class="dim-score-val" id="subMsd">0 / 16</div>
+                            <p style="font-size: 0.82em; color: #64748b; margin-top: 4px;">Uso ativo do pré-frontal ventromedial para filtrar escolhas de risco.</p>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>4. Confiança Somática vs. Análise (CSH)</h4>
+                            <div class="dim-score-val" id="subCsh">0 / 16</div>
+                            <p style="font-size: 0.82em; color: #64748b; margin-top: 4px;">Agência e coragem para agir sem sucumbir à paralisia reflexiva estéril.</p>
+                        </div>
+                    </div>
+
+                    <div class="clinical-guidelines">
+                        <h4 style="margin: 0 0 8px 0; font-size: 1.05em; color: #0f766e;">Diretrizes Psicoeducativas e Prática Clínica:</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9em; line-height: 1.6;">
+                            <li><strong>Pratique a Pausa Interoceptiva Diária:</strong> Dedique 3 minutos matinais para escanear seu meio interno sem julgar sensações de aperto ou relaxamento.</li>
+                            <li><strong>Consulte a Bússola Corporal em Encruzilhadas:</strong> Diante de escolhas difíceis, visualize cada cenário e sinta o eco somático nas suas vísceras antes de calcular tabelas de prós e contras.</li>
+                            <li><strong>Treine a Diferenciação Afetiva:</strong> Quando surgir uma forte urgência interna, questione: <em>'Isto é um aviso lúcido do presente ou um eco do meu medo antigo de errar?'</em></li>
+                        </ul>
+                    </div>
+
+                    <div class="cta-box">
+                        <p style="color: #334155; font-size: 0.95em; margin-bottom: 15px;">Deseja aprofundar seu perfil decisório, trabalhar bloqueios executivos ou investigar como seu sistema nervoso lida com escolhas sob pressão?</p>
+                        <a href="/agendamento.html" class="cta-btn">Agendar Consulta com Deo Magalhães</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('isidiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let totalScore = 0;
+            const values = {};
+
+            for (let i = 1; i <= 16; i++) {
+                const checked = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checked) {
+                    values[i] = parseInt(checked.value, 10);
+                    totalScore += values[i];
+                } else {
+                    alert(`Por favor, responda à questão ${i} antes de prosseguir.`);
+                    const qElem = document.querySelector(`input[name="q${i}"]`);
+                    if (qElem) {
+                        qElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            }
+
+            // Subescalas (4 itens cada, max 16 pontos cada)
+            const subAci = values[1] + values[2] + values[3] + values[4];
+            const subDia = values[5] + values[6] + values[7] + values[8];
+            const subMsd = values[9] + values[10] + values[11] + values[12];
+            const subCsh = values[13] + values[14] + values[15] + values[16];
+
+            document.getElementById('subAci').innerText = `${subAci} / 16`;
+            document.getElementById('subDia').innerText = `${subDia} / 16`;
+            document.getElementById('subMsd').innerText = `${subMsd} / 16`;
+            document.getElementById('subCsh').innerText = `${subCsh} / 16`;
+
+            const badge = document.getElementById('scoreBadge');
+            const cat = document.getElementById('resultCategory');
+            const desc = document.getElementById('resultDescription');
+
+            badge.innerText = `Pontuação Total: ${totalScore} / 64`;
+
+            if (totalScore >= 50) {
+                badge.style.background = '#2a9d8f';
+                cat.innerText = 'Maestria Interoceptiva e Decisão Intuitiva Integrada';
+                desc.innerText = 'Seus resultados demonstram um excelente diálogo entre o córtex pré-frontal e as aferências viscerais. Você possui alta acuidade para registrar seus marcadores somáticos, consegue distinguir com clareza o aviso sábio do corpo da agitação ansiosa passageira e toma decisões estratégicas sem cair na paralisia por excesso de análise.';
+            } else if (totalScore >= 36) {
+                badge.style.background = '#0a9396';
+                cat.innerText = 'Sensibilidade Intuitiva Moderada e Boa Conexão Corporal';
+                desc.innerText = 'Você demonstra uma consciência corporal funcional e utiliza suas sensações em decisões relevantes. No entanto, em períodos de sobrecarga emocional ou estresse acumulado, pode tender a silenciar sua bússola visceral em favor de argumentações hiper-racionais ou hesitar diante de escolhas arriscadas. O aprofundamento da escuta somática fortalecerá sua assertividade.';
+            } else if (totalScore >= 20) {
+                badge.style.background = '#ee9b00';
+                cat.innerText = 'Desconexão Somática Parcial ou Confusão entre Medo e Intuição';
+                desc.innerText = "Seus escores apontam para certa dificuldade na leitura dos marcadores biológicos internos. Há momentos em que você confunde o alarme ruidoso da ansiedade com 'intuição', ou então se perde em dúvidas infinitas tentando justificar logicamente o que o corpo já rejeita. Recomenda-se treinar a pausa interoceptiva e a discriminação afetiva no cotidiano.";
+            } else {
+                badge.style.background = '#ae2012';
+                cat.innerText = 'Bloqueio Interoceptivo Severo e Hiper-racionalização Defensiva';
+                desc.innerText = "Seu perfil indica uma desconexão acentuada em relação aos sinais somáticos. É comum que você decida apenas 'do pescoço para cima', negligenciando sensações físicas de esgotamento e desconforto até que o corpo manifeste sintomas graves. Essa alienação visceral eleva a vulnerabilidade à fadiga por decisão e à frustração pós-escolha. A psicoterapia focada em regulação somática e tomada de decisão é altamente recomendada.";
+            }
+
+            const resBox = document.getElementById('resultsBox');
+            resBox.style.display = 'block';
+            resBox.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>
