@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 4 — Dicionário e Buscador Reverso de Acordes (Canhoto & Destro)
+## 🎯 Projeto Prioritário Atual: Fase 5 — Treinador Auditivo de Afinação e Pares Oitavados
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Permitir que o músico clique e posicione os dedos em quaisquer casas das cordas/pares da Viola (Cebolão em Mi) ou Violão (6 Cordas) em modo Canhoto/Destro.
-  2. Implementar motor algorítmico de análise harmônica que calcule as notas tocadas (pitch classes), identifique os intervalos em relação a cada possível tônica e batize o acorde (ex: E7M, F#m7, B7(9), C#m7(11), etc.).
-  3. Exibir graus, notas formadoras, função harmônica provável nas tonalidades de Mi Maior / Lá Maior / Si Maior e botão para dedilhar a digitação customizada.
+  1. Criar módulo de treino perceptivo auditivo voltado para as peculiaridades acústicas da Viola Caipira: pares 1º e 2º uníssonos e pares 3º, 4º e 5º oitavados (corda fina aguda + corda grossa bordão).
+  2. Implementar gerador de batimentos acústicos (acoustic beats / interferência ondulatória) via Web Audio com controle de desafinação em cents (microtons), desafiando o músico a identificar se o par está baixo (flat), alto (sharp) ou perfeitamente afinado em consonância pura.
+  3. Painel de pontuação e progresso auditivo progressivo (Iniciante, Boiadeiro, Mestre Violeiro).
 
 ---
 
@@ -20,18 +20,34 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 
 1. **[x] Módulo de Ritmos Tradicionais Caipiras no Metrônomo:**
    - Adicionados padrões percussivos e de palhetada com áudio sintetizado para: *Cururu*, *Pagode de Viola*, *Cateretê*, *Guarânia*, *Toada* e *Querência*.
-2. **[ ] Dicionário e Buscador Reverso de Acordes:**
-   - Clicar nas casas do braço canhoto/destro e o sistema identificar o nome do acorde, intervalos e notas formadoras.
+2. **[x] Dicionário e Buscador Reverso de Acordes (Canhoto & Destro):**
+   - Motor de dedução harmônica algorítmica a partir de digitações livres nas casas ou no braço SVG, identificação de inversões, funções modais caipiras, dedilhado Web Audio e presets curados.
 3. **[ ] Treinador Auditivo de Afinação e Pares Oitavados:**
-   - Exercício interativo para afinar de ouvido os pares 3º, 4º e 5º (oitavados) e 1º e 2º (uníssonos).
+   - Exercício interativo para afinar de ouvido os pares 3º, 4º e 5º (oitavados) e 1º e 2º (uníssonos) com simulação de batimentos e cents.
 4. **[ ] Biblioteca Expandida de Ponteios e Intros Clássicas:**
    - Mapeamento e reprodução passo a passo de ponteios tradicionais nas terças e sextas com visualização sincronizada no braço.
-5. **[ ] Gerador / Exportador de Tablaturas:**
+5. **[ ] Gerador / Exportador de Tablaturas e Cifras:**
    - Permitir salvar sequências harmônicas montadas em formato de tablatura e diagrama imprimível.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **03/11/2026 — Sessão 4** (Fase 4 Concluída):
+  - **Dicionário e Buscador Reverso de Acordes (Canhoto & Destro)**:
+    - **Motor Algorítmico de Análise Harmônica Reversa (`analyzeReverseChord`)**:
+      - Base exaustiva de fórmulas harmônicas (`REVERSE_CHORD_FORMULAS`): Tríades (Maior, Menor, Diminuto, Aumentado, Sus2, Sus4, Power Chord 5), Tétrades (7M, 7, m7, m(7M), m7(♭5), dim7, 6, m6, 7sus4, 7(♯5), 7(♭5)) e Extensões Caipiras (add9, m(add9), 9, 7M(9), m9, 6/9, 7(♭9), 7(♯9), m7(11), 7(13), 7(♭13)).
+      - Suporte a omissões de 5ª típicas da viola caipira e deduções de sonoridades abertas / clusters.
+      - Identificação algorítmica da nota do baixo e de inversões clássicas (Estado Fundamental, 1ª Inversão - baixo na 3ª, 2ª Inversão - baixo na 5ª, 3ª Inversão - baixo na 7ª, baixo na 9ª).
+      - Análise contextual automática de funções harmônicas nas três tonalidades basilares da viola caipira: Mi Maior (nativa Cebolão), Lá Maior (subdominante) e Si Maior (dominante).
+    - **Interface Integrada e Interativa**:
+      - Seletores por corda/par com botões rápidos `[X]` (mudo) e casas `0` a `12`, informando em tempo real a nota gerada.
+      - Presets de digitações consagradas de viola caipira (E solto, B7 tradicional, A caipira, E7M, F#m, C#m, G#m/B, E7, Aadd9, B7(9) Tião Carreiro, D folia, etc.) e violão.
+      - Controles rápidos: "Dedilhar Acorde" (com pares oitavados e delay progressivo), transpositor cromático (`♭ -1` e `♯ +1`), "Todas Soltas (0)" e "Abafar (X)".
+    - **Integração com o Braço SVG (Modo Canhoto & Destro)**:
+      - Chaveador de modo no topo do braço: `🎵 Campo Harmônico`, `🪕 Escalas Duadas` e `🔍 Buscador Reverso`.
+      - Projeção imediata no braço com marcadores cromáticos de intervalos (Tônica verde, Terça ciano, Quinta âmbar, Sétima/Sexta roxo, Extensões rosa) e anel dourado no baixo.
+      - Clicar nas casas do braço SVG edita a digitação na hora, reproduz a nota acústica e atualiza a análise em tempo real.
 
 - **02/11/2026 — Sessão 3** (Fase 3 Concluída):
   - **Módulo de Ritmos Tradicionais Caipiras & Padrões de Palhetada no Metrônomo**:

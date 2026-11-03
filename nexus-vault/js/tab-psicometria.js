@@ -430,6 +430,7 @@
             informant: 'Genitores e Escola',
             referralReason: 'Investigação do perfil neurocognitivo, atencional, executivo e socioemocional.',
             clinicalData: {
+                rawDumpText: '',
                 referralReason: 'Investigação do perfil neurocognitivo, atencional, executivo e socioemocional.',
                 anamneseHistory: '',
                 familyHistory: '',
@@ -437,7 +438,7 @@
                 diagnosticHypotheses: '',
                 recommendations: '',
                 isCollapsed: false,
-                activeTab: 'queixa'
+                activeTab: 'smart_dump'
             },
             wasi: {
                 voc: { raw: '', t: '', mode: 'T', mean: '', sd: '' },
@@ -632,6 +633,7 @@
             informant: p.informant ?? base.informant,
             referralReason: p.referralReason ?? base.referralReason,
             clinicalData: Object.assign({}, base.clinicalData, (p && p.clinicalData) || {}, {
+                rawDumpText: (p && p.clinicalData && p.clinicalData.rawDumpText) || '',
                 referralReason: (p && p.clinicalData && p.clinicalData.referralReason !== undefined)
                     ? p.clinicalData.referralReason
                     : (p && p.referralReason ? p.referralReason : base.clinicalData.referralReason),
@@ -641,7 +643,7 @@
                 diagnosticHypotheses: (p && p.clinicalData && p.clinicalData.diagnosticHypotheses) || '',
                 recommendations: (p && p.clinicalData && p.clinicalData.recommendations) || '',
                 isCollapsed: Boolean(p && p.clinicalData && p.clinicalData.isCollapsed),
-                activeTab: (p && p.clinicalData && p.clinicalData.activeTab) || 'queixa'
+                activeTab: (p && p.clinicalData && p.clinicalData.activeTab) || 'smart_dump'
             }),
             wasi: Object.assign({}, base.wasi, p.wasi || {}, {
                 voc: Object.assign({}, base.wasi.voc, (p.wasi && p.wasi.voc) || {}),
@@ -1371,8 +1373,279 @@
     }
 
     // =========================================================================
-    // 4.1. PAINEL CLÍNICO QUALITATIVO: ANAMNESE, OBSERVAÇÃO & HIPÓTESES
+    // 4.1. PAINEL CLÍNICO QUALITATIVO: TRIAGEM POR IA, ANAMNESE & LAUDOS
     // =========================================================================
+
+    const RAW_DUMP_SAMPLE = `Examinando L. M., 9 anos, destro, cursando o 4º ano do Ensino Fundamental em escola privada.
+Mãe e professora coordenadora relatam que a criança apresenta extrema dificuldade em manter o foco em sala de aula, perde com frequência materiais (estojo, apostilas, casaco), esquece recados e tem oscilação marcante nas notas, necessitando de mediação individual constante para iniciar e finalizar as tarefas propostas.
+Na anamnese com os pais: gestação sem intercorrências, parto cesáreo a termo (39 semanas). Marcos do desenvolvimento psicomotor: marcha independente aos 12 meses e primeiras palavras aos 13 meses. Sono regular, sem enurese ou parassonias.
+Histórico familiar: o pai relata que na infância era considerado muito disperso, agitado e tinha dificuldades escolares parecidas. Nega histórico de epilepsia ou deficiência intelectual na família.
+Nas sessões presenciais de avaliação: o examinando compareceu pontual, mostrou-se afetuoso, comunicativo e com bom contato visual. Contudo, em provas com alta demanda de esforço mental sustentado e tarefas cronometradas (FDT e BPA-2), exibiu inquietação psicomotora marcante (mudava de posição na cadeira a todo instante, mexia nos pés e objetos da mesa) e estilo de resposta precipitado/impulsivo, embora aceitasse bem comandos para refazer e elogios contingentes.`;
+
+    /**
+     * Motor Heurístico Local de Processamento de Linguagem Natural (PLN) para Neuropsicologia
+     * Funciona 100% client-side, offline, seguro e em conformidade estrita com a LGPD
+     */
+    function processClinicalTextHeuristically(rawText, prot) {
+        const text = String(rawText || '').trim();
+        if (!text) {
+            return {
+                referralReason: '',
+                anamneseHistory: '',
+                familyHistory: '',
+                behaviorObservation: '',
+                diagnosticHypotheses: '',
+                recommendations: '',
+                demographics: {}
+            };
+        }
+
+        // 1. Extração Demográfica Automática
+        const demographics = {};
+        const ageMatch = text.match(/(\d{1,2})\s*anos/i);
+        if (ageMatch) demographics.age = parseInt(ageMatch[1], 10);
+
+        const schoolMatch = text.match(/(\d{1,2})[ºº°]\s*ano(?:\s*do\s*ensino\s*fundamental)?/i) ||
+                            text.match(/ensino\s*(?:fundamental|médio|superior)/i);
+        if (schoolMatch) demographics.schooling = schoolMatch[0];
+
+        const handMatch = text.match(/\b(destr[oa]|canhot[oa]|ambidestr[oa])\b/i);
+        if (handMatch) {
+            const h = handMatch[1].toLowerCase();
+            demographics.handedness = h.startsWith('destr') ? 'Destro' : (h.startsWith('canhot') ? 'Canhoto' : 'Ambidestro');
+        }
+
+        const infoMatch = text.match(/(?:mãe|pai|pais|professora?|escola|neuropediatra|genitores)/gi);
+        if (infoMatch && infoMatch.length > 0) {
+            const uniqueInfo = [...new Set(infoMatch.map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()))];
+            demographics.informant = uniqueInfo.join(' e ');
+        }
+
+        // 2. Classificação de Sentenças em 6 Eixos Temáticos
+        const rawSentences = text
+            .split(/(?<=[.!?;\n])\s+/)
+            .map((s) => s.trim())
+            .filter((s) => s.length > 5);
+
+        const buckets = {
+            queixa: [],
+            anamnese: [],
+            family: [],
+            behavior: [],
+            hypotheses: [],
+            recommendations: []
+        };
+
+        const KEYWORDS = {
+            queixa: [
+                'queixa', 'encaminh', 'motivo', 'procura', 'relat', 'escola', 'professora', 'professores',
+                'desaten', 'dispers', 'foco', 'distra', 'concentra', 'perde', 'material', 'caderno', 'tarefa',
+                'rendimento', 'nota', 'dificuldade', 'lentid', 'esquec', 'não para', 'inquiet', 'agita'
+            ],
+            anamnese: [
+                'gesta', 'parto', 'cesár', 'normal', 'termo', 'semana', 'prematur', 'apgar', 'nasceu',
+                'marcha', 'andou', 'passos', 'fala', 'palavra', 'linguagem', 'marco', 'desenvolvimento',
+                'sono', 'dorme', 'alimenta', 'desfralde', 'fralda', 'enurese', 'retenç', 'repet'
+            ],
+            family: [
+                'pai', 'mãe', 'pais', 'família', 'familiar', 'irmã', 'irmão', 'parente', 'patern', 'matern',
+                'antecedente', 'genitor', 'crise', 'convuls', 'epilepsia', 'exame', 'audiometr', 'audiç',
+                'visão', 'oftalmo', 'eeg', 'ressonânc', 'remédio', 'medicaç', 'nega histórico'
+            ],
+            behavior: [
+                'sessão', 'sessões', 'consultório', 'avaliaç', 'examinador', 'apresentou', 'postura',
+                'contato visual', 'olhar', 'cadeira', 'mesa', 'inquiet', 'mexia', 'perna', 'lápis',
+                'impulsiv', 'pressa', 'precipit', 'frustra', 'tolerânc', 'desisti', 'cansou', 'fadiga',
+                'colaborativ', 'afetuos', 'comunicativ', 'engajad', 'cooperativ', 'intermitente'
+            ],
+            hypotheses: [
+                'hipótese', 'diagnóstic', 'suspeita', 'compatível', 'dsm', 'cid', 'tdah', 'tea', 'autismo',
+                'dislexia', 'aprendizagem', 'altas habilidades', 'superdotaç', 'transtorno', 'déficit'
+            ],
+            recommendations: [
+                'recomenda', 'indic', 'orienta', 'encaminh', 'intervenç', 'terapia', 'tcc', 'aba',
+                'fono', 'psicopedag', 'neuropediatra', 'psiquiatra', 'adaptaç', 'tempo adicional', 'rotina'
+            ]
+        };
+
+        rawSentences.forEach((sentence) => {
+            const lower = sentence.toLowerCase();
+            let bestCategory = null;
+            let maxScore = 0;
+
+            for (const [cat, words] of Object.entries(KEYWORDS)) {
+                let score = 0;
+                words.forEach((w) => {
+                    if (lower.includes(w)) score += (cat === 'family' && (w === 'pai' || w === 'mãe') ? 1.4 : 1);
+                });
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestCategory = cat;
+                }
+            }
+
+            if (bestCategory && maxScore > 0) {
+                buckets[bestCategory].push(sentence);
+            } else {
+                if (lower.includes('sessão') || lower.includes('teste')) buckets.behavior.push(sentence);
+                else if (lower.includes('escola') || lower.includes('dia')) buckets.queixa.push(sentence);
+                else buckets.anamnese.push(sentence);
+            }
+        });
+
+        const referralReason = buckets.queixa.length > 0
+            ? buckets.queixa.join(' ')
+            : 'Avaliação neuropsicológica solicitada para investigação diagnóstica detalhada do perfil atencional, executivo, cognitivo e comportamental.';
+
+        const anamneseHistory = buckets.anamnese.length > 0
+            ? buckets.anamnese.join(' ')
+            : 'Marcos do desenvolvimento psicomotor e trajetória escolar sem histórico de intercorrências atípicas marcantes pregressas.';
+
+        const familyHistory = buckets.family.length > 0
+            ? buckets.family.join(' ')
+            : 'Histórico familiar e antecedentes de saúde sem relatos de síndromes congênitas ou eventos neurológicos graves na linhagem direta.';
+
+        const behaviorObservation = buckets.behavior.length > 0
+            ? buckets.behavior.join(' ')
+            : 'O examinando compareceu pontualmente às sessões avaliativas, mantendo contato visual adequado, boa vinculação com o examinador e disposição colaborativa frente aos testes.';
+
+        // 3. Formulação Heurística de Hipótese Diagnóstica (DSM-5-TR / CID-11)
+        const fullLower = text.toLowerCase();
+        let diagHypothesis = '';
+        let recs = '';
+
+        if (fullLower.includes('tdah') || (fullLower.includes('desaten') && fullLower.includes('inquiet')) || fullLower.includes('impulsiv')) {
+            diagHypothesis = 'A convergência entre os relatos de anamnese, a observação comportamental clínica nas sessões e as queixas escolares/cotidianas aponta perfil compatível com os critérios do DSM-5-TR (314.01) e CID-11 (6A05.2) para Transtorno do Déficit de Atenção com Hiperatividade (TDAH), Apresentação Combinada, com impacto funcional evidente no controle inibitório e na sustentação atencional.';
+            recs = '1. Encaminhamento a Neuropediatra / Psiquiatra da Infância para avaliação médica integrativa e definição de conduta terapêutica.\n2. Psicoterapia Cognitivo-Comportamental (TCC) voltada ao desenvolvimento de autorregulação e funções executivas.\n3. Plano de Suporte Pedagógico Escolar: fragmentação de atividades longas, assento preferencial na primeira fileira e tempo estendido (25% a 50%) em avaliações formais.\n4. Orientação parental para rotinas externas estruturadas e previsíveis em domicílio.';
+        } else if (fullLower.includes('tea') || fullLower.includes('autis') || fullLower.includes('social') || fullLower.includes('rigidez')) {
+            diagHypothesis = 'Os achados qualitativos da anamnese e a observação clínica convergem para hipótese diagnóstica de Transtorno do Espectro Autista (TEA), Nível 1 de Suporte (DSM-5-TR: 299.00 / CID-11: 6A02.0), evidenciado por peculiaridades na reciprocidade socioemocional e padrões de rigidez cognitiva/comportamental.';
+            recs = '1. Acompanhamento médico especializado (Neurologista / Psiquiatra da Infância) para consolidação diagnóstica interdisciplinar.\n2. Psicoterapia baseada em ABA ou TCC focada em flexibilidade cognitiva e habilidades sociais.\n3. Suporte fonoaudiológico voltado à pragmática da comunicação.\n4. Acomodações sensoriais e rotinas escolares visualmente estruturadas.';
+        } else if (fullLower.includes('dislex') || fullLower.includes('leitura') || fullLower.includes('escrita') || fullLower.includes('alfabetiz')) {
+            diagHypothesis = 'Quadro clínico compatível com Transtorno Específico da Aprendizagem, com prejuízo na leitura (Dislexia do Desenvolvimento) e/ou na expressão escrita (DSM-5-TR: 315.00 / CID-11: 6A03.0), na presença de potencial cognitivo global preservado.';
+            recs = '1. Intervenção fonoaudiológica e psicopedagógica continuada baseada no método fônico e instrução multissensorial.\n2. Adaptações avaliativas na escola: leitor de apoio, avaliações orais e dispensa de penalização em ortografia.\n3. Acompanhamento psicológico preventivo de ansiedade de desempenho acadêmico.';
+        } else if (fullLower.includes('burnout') || fullLower.includes('cansaço') || fullLower.includes('trabalho') || fullLower.includes('sobrecarga')) {
+            diagHypothesis = 'Sintomas neurocognitivos compatíveis com sobrecarga executiva e esgotamento emocional (Síndrome de Burnout / CID-11: QD85), com impacto secundário sobre a memória operacional e a sustentação atencional, sem evidência de transtorno neurocognitivo primário.';
+            recs = '1. Acompanhamento médico para avaliação de ansiedade, regulação do humor e higiene do sono.\n2. Psicoterapia Cognitivo-Comportamental com foco em manejo de estresse ocupacional.\n3. Reorganização de rotina diária com pausas cognitivas programadas durante a jornada.';
+        } else {
+            diagHypothesis = 'Os dados clínicos apontam funcionamento cognitivo e adaptativo global preservado, recomendando-se monitoramento preventivo das demandas ambientais e estimulação neuropsicológica habitual.';
+            recs = '1. Manutenção de estímulos psicopedagógicos e cognitivos adequados à faixa etária.\n2. Acompanhamento do desenvolvimento em consultas clínicas de rotina.';
+        }
+
+        if (buckets.hypotheses.length > 0) {
+            diagHypothesis = buckets.hypotheses.join(' ') + '\n\n' + diagHypothesis;
+        }
+        if (buckets.recommendations.length > 0) {
+            recs = buckets.recommendations.join('\n') + '\n\n' + recs;
+        }
+
+        return {
+            referralReason,
+            anamneseHistory,
+            familyHistory,
+            behaviorObservation,
+            diagnosticHypotheses: diagHypothesis,
+            recommendations: recs,
+            demographics
+        };
+    }
+
+    /**
+     * Orquestrador de IA: Tenta Gemini 2.5 Flash com Fallback Heurístico Local transparente
+     */
+    async function parseRawClinicalTextWithAI(rawText, prot) {
+        const C = global.VaultCore;
+        const text = String(rawText || '').trim();
+        if (!text) {
+            throw new Error('Insira o texto corrido da entrevista para que a IA possa processar.');
+        }
+
+        const profile = (C && C.store && typeof C.store.getProfile === 'function') ? C.store.getProfile() : {};
+        const apiKey = (profile && profile.geminiApiKey) ? String(profile.geminiApiKey).trim() : '';
+
+        // Se NÃO houver chave cadastrada, usa o Motor Heurístico Local (100% offline e rápido)
+        if (!apiKey) {
+            return {
+                mode: 'HEURISTIC_LOCAL',
+                data: processClinicalTextHeuristically(text, prot)
+            };
+        }
+
+        // Se HOUVER chave cadastrada, chama a API Gemini 2.5 Flash
+        try {
+            const prompt = `Você é um Neuropsicólogo Clínico Sênior (membro da SBNp e especialista pelo Conselho Federal de Psicologia).
+O profissional forneceu as seguintes anotações brutas e livres de entrevista clínica, anamnese e observações das sessões (em texto corrido):
+
+"""
+${text}
+"""
+
+Sua tarefa é separar, catalogar, filtrar e redigir essas informações nos 5 eixos técnicos do laudo neuropsicológico (em linguagem formal, acadêmica e rigorosa nosológica DSM-5-TR / CID-11).
+Além disso, extraia informações demográficas se mencionadas no texto.
+
+Responda EXCLUSIVAMENTE com um objeto JSON válido (sem delimitadores markdown, sem texto antes ou depois) no seguinte formato:
+{
+  "demographics": {
+    "approxAge": 9,
+    "schooling": "4º Ano do Ensino Fundamental",
+    "handedness": "Destro",
+    "informant": "Mãe e Professora"
+  },
+  "referralReason": "Queixa principal, motivos do encaminhamento e objetivos da avaliação formal.",
+  "anamneseHistory": "Marcos do desenvolvimento neuropsicomotor, parto, linguagem, histórico escolar e rotina.",
+  "familyHistory": "Antecedentes familiares de transtornos neuropsiquiátricos, exames médicos e histórico de saúde.",
+  "behaviorObservation": "Observações comportamentais durante as sessões (contato visual, persistência, tolerância à frustração, impulsividade motora/verbal e fadiga cognitiva).",
+  "diagnosticHypotheses": "Síntese integrativa e hipóteses diagnósticas alinhadas aos critérios do DSM-5-TR e CID-11 fundamentadas nas queixas e observações.",
+  "recommendations": "Diretrizes terapêuticas, encaminhamentos interdisciplinares, suporte pedagógico escolar e orientações parentais."
+}`;
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+            const resp = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        temperature: 0.2,
+                        maxOutputTokens: 2200,
+                        responseMimeType: 'application/json'
+                    }
+                })
+            });
+
+            if (!resp.ok) {
+                const errData = await resp.json().catch(() => ({}));
+                const msg = (errData.error && errData.error.message) || `HTTP ${resp.status}`;
+                console.warn('[Nexus Vault] Chamada Gemini API falhou, acionando motor heurístico local:', msg);
+                return {
+                    mode: 'HEURISTIC_FALLBACK',
+                    data: processClinicalTextHeuristically(text, prot),
+                    apiError: msg
+                };
+            }
+
+            const resJson = await resp.json();
+            const textResponse = (
+                resJson.candidates &&
+                resJson.candidates[0] &&
+                resJson.candidates[0].content &&
+                resJson.candidates[0].content.parts &&
+                resJson.candidates[0].content.parts.map((p) => p.text || '').join('\n')
+            ) || '';
+
+            const parsed = JSON.parse(textResponse.replace(/^```json/i, '').replace(/```$/i, '').trim());
+            return {
+                mode: 'GEMINI_AI',
+                data: parsed
+            };
+        } catch (err) {
+            console.warn('[Nexus Vault] Erro no processamento Gemini, utilizando fallback heurístico:', err);
+            return {
+                mode: 'HEURISTIC_FALLBACK',
+                data: processClinicalTextHeuristically(text, prot),
+                apiError: err.message
+            };
+        }
+    }
 
     const CLINICAL_PRESETS = {
         tdah: {
@@ -1432,7 +1705,10 @@
         const cd = prot.clinicalData;
         const filledCount = countClinicalFilled(cd);
         const isCollapsed = Boolean(cd.isCollapsed);
-        const activeTab = cd.activeTab || 'queixa';
+        const activeTab = cd.activeTab || 'smart_dump';
+
+        const profile = (C && C.store && typeof C.store.getProfile === 'function') ? C.store.getProfile() : {};
+        const hasGeminiKey = Boolean(profile && profile.geminiApiKey && String(profile.geminiApiKey).trim());
 
         const hasQ = Boolean(cd.referralReason && cd.referralReason.trim());
         const hasA = Boolean(cd.anamneseHistory && cd.anamneseHistory.trim());
@@ -1448,7 +1724,140 @@
         if (!isCollapsed) {
             let activeContent = '';
 
-            if (activeTab === 'queixa') {
+            // ABA 1: SMART DUMP (TEXTO CORRIDO COM IA)
+            if (activeTab === 'smart_dump') {
+                const catalogCards = filledCount > 0 ? `
+                    <div class="mt-4 pt-4 border-t border-slate-800/80 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                    ✓ Catalogação Ativa (${filledCount}/5 eixos)
+                                </span>
+                                <span class="text-xs font-semibold text-slate-200">Resultados da Triagem &amp; Rascunho do Laudo Gerado:</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="btn-psy-dump-go-laudo"
+                                    class="min-h-[34px] px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-md shadow-cyan-500/20">
+                                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                                    <span>Ver Laudo Completo na Sub-aba F &rarr;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+                            <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800 space-y-1">
+                                <div class="flex items-center justify-between text-cyan-300 font-bold text-[11px]">
+                                    <span>1. Queixa &amp; Encaminhamento</span>
+                                    ${dot(hasQ)}
+                                </div>
+                                <p class="text-slate-300 line-clamp-3 text-[11px] leading-relaxed">${C.esc(cd.referralReason || 'Pendente de triagem.')}</p>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800 space-y-1">
+                                <div class="flex items-center justify-between text-cyan-300 font-bold text-[11px]">
+                                    <span>2. Anamnese &amp; Desenvolvimento</span>
+                                    ${dot(hasA)}
+                                </div>
+                                <p class="text-slate-300 line-clamp-3 text-[11px] leading-relaxed">${C.esc(cd.anamneseHistory || 'Pendente de triagem.')}</p>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800 space-y-1">
+                                <div class="flex items-center justify-between text-cyan-300 font-bold text-[11px]">
+                                    <span>3. Antecedentes &amp; Saúde</span>
+                                    ${dot(hasF)}
+                                </div>
+                                <p class="text-slate-300 line-clamp-3 text-[11px] leading-relaxed">${C.esc(cd.familyHistory || 'Pendente de triagem.')}</p>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800 space-y-1">
+                                <div class="flex items-center justify-between text-emerald-300 font-bold text-[11px]">
+                                    <span>4. Observação na Sessão</span>
+                                    ${dot(hasB)}
+                                </div>
+                                <p class="text-slate-300 line-clamp-3 text-[11px] leading-relaxed">${C.esc(cd.behaviorObservation || 'Pendente de triagem.')}</p>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800 space-y-1 lg:col-span-2">
+                                <div class="flex items-center justify-between text-amber-300 font-bold text-[11px]">
+                                    <span>5. Hipóteses Diagnósticas (DSM-5-TR) &amp; Recomendações</span>
+                                    ${dot(hasH)}
+                                </div>
+                                <p class="text-slate-300 line-clamp-3 text-[11px] leading-relaxed">${C.esc(cd.diagnosticHypotheses || cd.recommendations || 'Pendente de triagem.')}</p>
+                            </div>
+                        </div>
+                    </div>
+                ` : '';
+
+                activeContent = `
+                    <div class="space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 bg-[#090d16]/80 p-3 rounded-xl border border-slate-800">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-slate-100">Janela Única de Texto Corrido • Triagem e Catalogação por IA</h4>
+                                    <p class="text-[11px] text-slate-400">Cole ou digite todas as suas anotações livres da entrevista. A IA filtra, separa nos 5 eixos clínicos, formula hipóteses e redige o laudo.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                ${hasGeminiKey
+                                    ? `<span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/35 text-emerald-300 text-[10px] font-mono flex items-center gap-1.5">
+                                           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                           <span>Gemini 2.5 Flash Conectado</span>
+                                       </span>`
+                                    : `<span class="px-2.5 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 text-[10px] font-mono flex items-center gap-1.5" title="Processamento 100% no navegador sem sair da sua máquina">
+                                           <i data-lucide="shield-check" class="w-3 h-3"></i>
+                                           <span>Motor Local Heurístico (Offline &amp; LGPD)</span>
+                                       </span>`
+                                }
+                                <button type="button" id="btn-psy-config-ai-key" title="Configurar ou alterar Chave API do Gemini"
+                                    class="min-h-[30px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] flex items-center gap-1 border border-slate-700 transition">
+                                    <i data-lucide="key" class="w-3 h-3 text-amber-300"></i>
+                                    <span>${hasGeminiKey ? 'Chave API' : 'Usar Gemini API'}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TEXTAREA CORRIDO -->
+                        <div class="space-y-1.5">
+                            <textarea id="psy-smart-dump-input" rows="8" placeholder="Cole aqui todas as suas anotações brutas de entrevista de anamnese e observações em sessão...
+
+Exemplo:
+Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita desatenção na escola, esquecimento de recados e perda de materiais. Gestação a termo sem problemas, andou com 1 ano e falou com 14 meses. Pai conta que era disperso na infância. Nas sessões, o examinando foi colaborativo e comunicativo, mas trocava de posição na cadeira o tempo todo e respondia com muita pressa e impulsividade nas tarefas cronometradas..."
+                                class="w-full p-4 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs sm:text-sm text-slate-100 leading-relaxed font-sans shadow-inner">${C.esc(cd.rawDumpText || '')}</textarea>
+                        </div>
+
+                        <!-- BARRA DE AÇÕES DA IA -->
+                        <div class="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" id="btn-psy-run-ai-parser"
+                                    class="min-h-[42px] px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition transform active:scale-95">
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                    <span>⚡ Processar, Catalogar e Gerar Laudo com IA</span>
+                                </button>
+
+                                <button type="button" id="btn-psy-load-dump-example"
+                                    class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs flex items-center gap-1.5 transition">
+                                    <i data-lucide="file-text" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                    <span>Carregar Exemplo de Texto Corrido</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="btn-psy-clear-dump"
+                                    class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs flex items-center gap-1 transition">
+                                    <i data-lucide="eraser" class="w-3.5 h-3.5"></i>
+                                    <span>Limpar Caixa</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        ${catalogCards}
+                    </div>
+                `;
+            } else if (activeTab === 'queixa') {
                 activeContent = `
                     <div class="space-y-2">
                         <div class="flex flex-wrap items-center justify-between gap-2">
@@ -1457,10 +1866,10 @@
                                     <span>Queixa Principal &amp; Motivos do Encaminhamento</span>
                                     <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção II do Laudo</span>
                                 </label>
-                                <p class="text-[11px] text-slate-400">Descreva as demandas apresentadas pelo paciente, família, escola ou médico assistente, com sintomas e prejuízos no dia a dia.</p>
+                                <p class="text-[11px] text-slate-400">Demandas do paciente, família, escola ou médico assistente, com sintomas e prejuízos cotidianos.</p>
                             </div>
                         </div>
-                        <textarea id="psy-clinical-referral" rows="4" placeholder="Ex.: Encaminhado(a) pela neuropediatra e coordenação escolar devido a queixas persistentes de desatenção, desorganização material e oscilação no rendimento acadêmico..."
+                        <textarea id="psy-clinical-referral" rows="5" placeholder="Queixa catalogada pela IA ou inserida manualmente..."
                             class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.referralReason || '')}</textarea>
                     </div>
                 `;
@@ -1473,10 +1882,10 @@
                                     <span>Marcos do Desenvolvimento, Histórico Escolar &amp; Rotina</span>
                                     <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção III do Laudo</span>
                                 </label>
-                                <p class="text-[11px] text-slate-400">Gestação, parto, marcos motores (marcha), linguagem, adaptação escolar, retenções/apoios pedagógicos e padrão de sono.</p>
+                                <p class="text-[11px] text-slate-400">Gestação, parto, marcos motores (marcha), linguagem, adaptação escolar e padrão de sono.</p>
                             </div>
                         </div>
-                        <textarea id="psy-clinical-anamnese" rows="4" placeholder="Ex.: Parto a termo sem intercorrências. Marcha aos 12 meses e linguagem com marcos típicos. No percurso escolar, relata-se lentidão na escrita e necessidade de apoio individual para focar..."
+                        <textarea id="psy-clinical-anamnese" rows="5" placeholder="Anamnese catalogada pela IA ou inserida manualmente..."
                             class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.anamneseHistory || '')}</textarea>
                     </div>
                 `;
@@ -1489,10 +1898,10 @@
                                     <span>Antecedentes Familiares, Histórico Clínico &amp; Saúde</span>
                                     <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção III do Laudo</span>
                                 </label>
-                                <p class="text-[11px] text-slate-400">Histórico familiar de TDAH, TEA, dificuldades de aprendizagem ou transtornos de humor; exames audiológicos/visuais e medicações.</p>
+                                <p class="text-[11px] text-slate-400">Histórico familiar de TDAH, TEA, dificuldades de aprendizagem ou humor; exames audiológicos/visuais e medicações.</p>
                             </div>
                         </div>
-                        <textarea id="psy-clinical-family" rows="4" placeholder="Ex.: Genitor com relato retrospectivo de sintomas atencionais na infância. Nega crises convulsivas ou histórico de déficits sensoriais. Audiometria recente sem alterações..."
+                        <textarea id="psy-clinical-family" rows="5" placeholder="Histórico familiar e antecedentes catalogados pela IA..."
                             class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.familyHistory || '')}</textarea>
                     </div>
                 `;
@@ -1505,10 +1914,10 @@
                                     <span>Observação Comportamental durante as Sessões de Avaliação</span>
                                     <span class="text-[10px] font-mono text-emerald-300 bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.2 rounded">Seção IV do Laudo</span>
                                 </label>
-                                <p class="text-[11px] text-slate-400">Contato visual, engajamento na tarefa, tolerância à frustração, nível de inquietação psicomotora, impulsividade motora/verbal e fadiga cognitiva.</p>
+                                <p class="text-[11px] text-slate-400">Contato visual, persistência, tolerância à frustração, inquietação motora, impulsividade e fadiga.</p>
                             </div>
                         </div>
-                        <textarea id="psy-clinical-behavior" rows="4" placeholder="Ex.: Apresentou-se colaborativo e comunicativo. Contato visual adequado. Em tarefas de esforço mental prolongado (FDT e BPA-2), exibiu inquietação motora e respostas impulsivas por velocidade, beneficiando-se de reforço verbal contingente..."
+                        <textarea id="psy-clinical-behavior" rows="5" placeholder="Observações das sessões catalogadas pela IA..."
                             class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.behaviorObservation || '')}</textarea>
                     </div>
                 `;
@@ -1520,8 +1929,8 @@
                                 <span>Hipóteses Diagnósticas &amp; Raciocínio Clínico (DSM-5-TR / CID-11)</span>
                                 <span class="text-[10px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/40 px-1.5 py-0.2 rounded">Seção VI</span>
                             </label>
-                            <p class="text-[11px] text-slate-400">Convergência entre dados qualitativos e psicométricos para formulação nosológica.</p>
-                            <textarea id="psy-clinical-hypotheses" rows="5" placeholder="Ex.: Perfil clínico e psicométrico compatível com TDAH, Apresentação Combinada (DSM-5-TR 314.01 / CID-11 6A05.2), evidenciado por discrepância entre raciocínio geral preservado e fragilidade acentuada no controle inibitório e atenção sustentada..."
+                            <p class="text-[11px] text-slate-400">Formulação nosológica estruturada a partir da análise dos relatos e da testagem.</p>
+                            <textarea id="psy-clinical-hypotheses" rows="5" placeholder="Hipóteses diagnósticas formuladas pela IA..."
                                 class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.diagnosticHypotheses || '')}</textarea>
                         </div>
                         <div class="space-y-1.5">
@@ -1529,8 +1938,8 @@
                                 <span>Diretrizes Terapêuticas, Recomendações &amp; Encaminhamentos</span>
                                 <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção VII</span>
                             </label>
-                            <p class="text-[11px] text-slate-400">Encaminhamentos médicos, intervenção psicoterapêutica, suporte escolar e orientação parental.</p>
-                            <textarea id="psy-clinical-recommendations" rows="5" placeholder="Ex.: 1. Avaliação com Neuropediatra para conduta integrada.\n2. TCC para treino de funções executivas.\n3. Adaptações escolares: tempo estendido e fragmentação de atividades longas.\n4. Orientação parental para rotinas visuais estruturadas."
+                            <p class="text-[11px] text-slate-400">Encaminhamentos interdisciplinares, suporte escolar e orientações parentais.</p>
+                            <textarea id="psy-clinical-recommendations" rows="5" placeholder="Diretrizes terapêuticas sugeridas pela IA..."
                                 class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.recommendations || '')}</textarea>
                         </div>
                     </div>
@@ -1540,6 +1949,12 @@
             bodyHtml = `
                 <!-- SUB-TABS DO PAINEL CLÍNICO -->
                 <div class="flex flex-wrap items-center gap-1.5 border-b border-slate-800/80 pb-3">
+                    <button type="button" data-clinical-tab="smart_dump"
+                        class="min-h-[32px] px-3.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${activeTab === 'smart_dump' ? 'bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 text-emerald-200 border border-emerald-500/50 shadow-sm shadow-emerald-500/20' : 'bg-[#090d16] text-slate-300 hover:text-slate-100 border border-slate-800'}">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>⚡ Texto Corrido (IA Automática)</span>
+                    </button>
+
                     <button type="button" data-clinical-tab="queixa"
                         class="min-h-[32px] px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${activeTab === 'queixa' ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
                         ${dot(hasQ)}
@@ -1580,7 +1995,7 @@
                 <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/60 text-[11px] text-slate-400">
                     <div class="flex items-center gap-2">
                         <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
-                        <span>Os textos inseridos são automaticamente sincronizados e estruturam as seções narrativas no rascunho do Laudo.</span>
+                        <span>O processamento por IA preenche os 5 eixos clínicos e redige automaticamente as seções do Laudo Oficial (Sub-aba F).</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <button type="button" id="btn-psy-go-laudo-tab"
@@ -1597,18 +2012,18 @@
             <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-3 ${!isCollapsed ? 'border-b border-slate-800/80 pb-3.5' : ''}">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-300 shrink-0">
-                            <i data-lucide="clipboard-pen" class="w-5 h-5"></i>
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300 shrink-0 shadow-md shadow-emerald-500/10">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-300"></i>
                         </div>
                         <div>
                             <div class="flex items-center gap-2 flex-wrap">
-                                <h3 class="text-sm sm:text-base font-bold text-slate-100 tracking-tight">Dados Clínicos, Anamnese, Observação &amp; Hipóteses Diagnósticas</h3>
+                                <h3 class="text-sm sm:text-base font-bold text-slate-100 tracking-tight">Triagem Clínica por IA • Anamnese, Observação &amp; Laudos</h3>
                                 <span class="px-2 py-0.5 rounded text-[10px] font-mono ${filledCount > 0 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
-                                    ${filledCount}/5 eixos preenchidos
+                                    ${filledCount}/5 eixos catalogados
                                 </span>
-                                <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">Composição do Laudo Ativa</span>
+                                <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">Extração Contínua Ativa</span>
                             </div>
-                            <p class="text-xs text-slate-400">Insira queixa, anamnese, observação comportamental e hipóteses para fundamentar a análise e redigir o laudo com rigor acadêmico.</p>
+                            <p class="text-xs text-slate-400">Cole o texto corrido das suas anotações de entrevista: a IA separa, cataloga e filtra em 5 eixos para compor o laudo em 1 clique.</p>
                         </div>
                     </div>
 
@@ -1616,7 +2031,7 @@
                     <div class="flex flex-wrap items-center gap-2">
                         <select id="psy-clinical-presets" aria-label="Inserir Modelo Clínico Rápido"
                             class="min-h-[36px] px-2.5 py-1 rounded-lg bg-[#090d16] border border-emerald-500/40 text-emerald-300 text-xs font-semibold focus:outline-none focus:border-emerald-400">
-                            <option value="">+ Inserir Roteiro / Preset Clínico...</option>
+                            <option value="">+ Modelos Rápidos Prontos...</option>
                             <option value="tdah">Modelo TDAH (Criança / Adolescente)</option>
                             <option value="tea">Modelo TEA (Socioemocional / Sensorial)</option>
                             <option value="aprendizagem">Modelo Dificuldades de Aprendizagem / Dislexia</option>
@@ -1673,17 +2088,126 @@
             });
         });
 
-        // Atalho para ir à sub-aba de Laudo
-        const btnGoLaudo = document.getElementById('btn-psy-go-laudo-tab');
-        if (btnGoLaudo) {
-            btnGoLaudo.addEventListener('click', () => {
-                prot.report.customDraftText = generateTechnicalNarrativeDraft(prot);
-                appState.activeSubTab = 'laudo';
-                saveState();
-                renderAll();
-                C.toast('Laudo atualizado e aberto na Sub-aba F.', 'success');
+        // Configuração de Chave API Gemini
+        const btnCfgKey = document.getElementById('btn-psy-config-ai-key');
+        if (btnCfgKey) {
+            btnCfgKey.addEventListener('click', () => {
+                const profile = (C && C.store && typeof C.store.getProfile === 'function') ? C.store.getProfile() : {};
+                const currentKey = profile.geminiApiKey || '';
+                const newKey = window.prompt(
+                    'Insira sua Gemini API Key (Google AI Studio) para processamento em nuvem via Gemini 2.5 Flash.\n\nSe deixar em branco, o Nexus Vault continuará utilizando o Motor Neuropsicológico Heurístico Local (100% offline e privado):',
+                    currentKey
+                );
+                if (newKey === null) return;
+                C.store.updateProfile({ geminiApiKey: newKey.trim() });
+                renderClinicalPanel();
+                if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-clinical-panel'));
+                C.toast(newKey.trim() ? 'Chave Gemini salva no perfil!' : 'Chave removida. Motor local ativado.', 'info');
             });
         }
+
+        // Botão de Processamento com IA (Smart Dump)
+        const btnRunAi = document.getElementById('btn-psy-run-ai-parser');
+        if (btnRunAi) {
+            btnRunAi.addEventListener('click', async () => {
+                const inputDump = document.getElementById('psy-smart-dump-input');
+                const rawText = inputDump ? inputDump.value : (cd.rawDumpText || '');
+                if (!rawText || !rawText.trim() || rawText.trim().length < 15) {
+                    C.toast('Digite ou cole suas anotações da entrevista (ao menos 2 frases) para que a IA possa analisar.', 'warning');
+                    if (inputDump) inputDump.focus();
+                    return;
+                }
+
+                btnRunAi.disabled = true;
+                const oldContent = btnRunAi.innerHTML;
+                btnRunAi.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Analisando e catalogando com IA...</span>`;
+                if (C.refreshIcons) C.refreshIcons(btnRunAi);
+
+                try {
+                    const result = await parseRawClinicalTextWithAI(rawText, prot);
+                    const d = result.data || {};
+
+                    cd.rawDumpText = rawText;
+                    cd.referralReason = d.referralReason || cd.referralReason;
+                    cd.anamneseHistory = d.anamneseHistory || cd.anamneseHistory;
+                    cd.familyHistory = d.familyHistory || cd.familyHistory;
+                    cd.behaviorObservation = d.behaviorObservation || cd.behaviorObservation;
+                    cd.diagnosticHypotheses = d.diagnosticHypotheses || cd.diagnosticHypotheses;
+                    cd.recommendations = d.recommendations || cd.recommendations;
+
+                    // Aplica dados demográficos detectados se não informados
+                    if (d.demographics) {
+                        if (d.demographics.schooling && (!prot.schooling || prot.schooling.includes('EF'))) {
+                            prot.schooling = d.demographics.schooling;
+                        }
+                        if (d.demographics.handedness && !prot.handedness) {
+                            prot.handedness = d.demographics.handedness;
+                        }
+                        if (d.demographics.informant && (!prot.informant || prot.informant === 'Genitores e Escola')) {
+                            prot.informant = d.demographics.informant;
+                        }
+                    }
+
+                    prot.referralReason = cd.referralReason;
+                    prot.report.customDraftText = generateTechnicalNarrativeDraft(prot);
+                    saveState();
+
+                    const modeLabel = result.mode === 'GEMINI_AI'
+                        ? 'Gemini 2.5 Flash'
+                        : (result.mode === 'HEURISTIC_FALLBACK' ? 'Motor Local (Fallback)' : 'Motor Neuropsicológico Local');
+                    C.toast(`Triagem concluída via ${modeLabel}! Os 5 eixos foram catalogados e o Laudo foi gerado.`, 'success', 3600);
+
+                    renderHeaderAndSubtabs();
+                    renderClinicalPanel();
+                    if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-clinical-panel'));
+                } catch (err) {
+                    C.toast('Erro no processamento da IA: ' + err.message, 'error');
+                } finally {
+                    btnRunAi.disabled = false;
+                    btnRunAi.innerHTML = oldContent;
+                    if (C.refreshIcons) C.refreshIcons(btnRunAi);
+                }
+            });
+        }
+
+        // Botão de Carregar Exemplo de Texto Corrido
+        const btnLoadSample = document.getElementById('btn-psy-load-dump-example');
+        if (btnLoadSample) {
+            btnLoadSample.addEventListener('click', () => {
+                const inputDump = document.getElementById('psy-smart-dump-input');
+                if (inputDump) {
+                    inputDump.value = RAW_DUMP_SAMPLE;
+                }
+                cd.rawDumpText = RAW_DUMP_SAMPLE;
+                saveState();
+                C.toast('Exemplo de anotação bruta carregado na janela. Clique em "Processar com IA" para testar!', 'info', 3200);
+            });
+        }
+
+        // Botão de Limpar Caixa de Texto Corrido
+        const btnClearDump = document.getElementById('btn-psy-clear-dump');
+        if (btnClearDump) {
+            btnClearDump.addEventListener('click', () => {
+                const inputDump = document.getElementById('psy-smart-dump-input');
+                if (inputDump) inputDump.value = '';
+                cd.rawDumpText = '';
+                saveState();
+                C.toast('Caixa de anotações limpa.', 'info');
+            });
+        }
+
+        // Botão direto para o Laudo
+        const btnGoLaudo = document.getElementById('btn-psy-go-laudo-tab');
+        const btnDumpGoLaudo = document.getElementById('btn-psy-dump-go-laudo');
+        const handleGoLaudo = () => {
+            prot.report.customDraftText = generateTechnicalNarrativeDraft(prot);
+            appState.activeSubTab = 'laudo';
+            saveState();
+            renderAll();
+            C.toast('Laudo técnico atualizado e aberto na Sub-aba F.', 'success');
+        };
+        if (btnGoLaudo) btnGoLaudo.addEventListener('click', handleGoLaudo);
+        if (btnDumpGoLaudo) btnDumpGoLaudo.addEventListener('click', handleGoLaudo);
 
         // Seletor de Presets
         const selPreset = document.getElementById('psy-clinical-presets');
@@ -1696,6 +2220,7 @@
                         selPreset.value = '';
                         return;
                     }
+                    cd.rawDumpText = '';
                     cd.referralReason = '';
                     cd.anamneseHistory = '';
                     cd.familyHistory = '';
@@ -1750,11 +2275,12 @@
                 if (prop === 'referralReason') {
                     prot.referralReason = el.value;
                 }
-                prot.report.customDraftText = ''; // Invalida draft anterior para regeneração
+                prot.report.customDraftText = '';
                 saveState();
             });
         };
 
+        bindClinicalTextarea('psy-smart-dump-input', 'rawDumpText');
         bindClinicalTextarea('psy-clinical-referral', 'referralReason');
         bindClinicalTextarea('psy-clinical-anamnese', 'anamneseHistory');
         bindClinicalTextarea('psy-clinical-family', 'familyHistory');

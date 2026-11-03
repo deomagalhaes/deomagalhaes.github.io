@@ -293,7 +293,9 @@
         rhythmBoxVolume: 0.85,       // Volume da percussão de tampo/caixa (0.0 a 1.0)
         rhythmGuideClick: false,     // Tocar clique do metrônomo simultaneamente
         rhythmChordSync: true,       // Harmonizar bordão e rasqueado com o acorde ativo do campo harmônico
-        activeRhythmStepIdx: -1      // Passo ativo da levada para feedback visual sincronizado
+        activeRhythmStepIdx: -1,     // Passo ativo da levada para feedback visual sincronizado
+        reverseFretsViola: [0, 0, 0, 0, 0], // Digitação ativa no Dicionário Reverso p/ Viola (1º ao 5º par)
+        reverseFretsViolao: [0, 0, 1, 2, 2, 0] // Digitação ativa no Dicionário Reverso p/ Violão (1ª à 6ª corda)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -644,6 +646,501 @@
             renderDuadStrip();
         }, steps.length * beatMs + 350);
         scalePlayTimers.push(endTimer);
+    }
+
+    // =========================================================================
+    // MOTOR DE ANÁLISE HARMÔNICA REVERSA & DICIONÁRIO DE ACORDES
+    // =========================================================================
+    const REVERSE_CHORD_FORMULAS = [
+        // Tríades Fundamentais
+        { suffix: '', fullName: 'Maior', intervals: [0, 4, 7], omissible: false, quality: 'major', tension: 'Repouso / Consonância' },
+        { suffix: 'm', fullName: 'Menor', intervals: [0, 3, 7], omissible: false, quality: 'minor', tension: 'Repouso / Introspecção' },
+        { suffix: 'dim', fullName: 'Diminuto', intervals: [0, 3, 6], omissible: false, quality: 'dim', tension: 'Tensão / Instabilidade' },
+        { suffix: 'aug', fullName: 'Aumentado', intervals: [0, 4, 8], omissible: false, quality: 'aug', tension: 'Tensão Suspensa' },
+        { suffix: 'sus4', fullName: 'Suspenso 4', intervals: [0, 5, 7], omissible: false, quality: 'sus', tension: 'Suspensão Melódica' },
+        { suffix: 'sus2', fullName: 'Suspenso 2', intervals: [0, 2, 7], omissible: false, quality: 'sus', tension: 'Abertura Espacial' },
+        { suffix: '5', fullName: 'Power Chord (Quinta)', intervals: [0, 7], omissible: false, quality: 'power', tension: 'Neutro / Vigor Acústico' },
+
+        // Tétrades Canônicas da Viola e Violão
+        { suffix: '7M', fullName: 'com Sétima Maior', intervals: [0, 4, 7, 11], omissible: true, quality: 'maj7', tension: 'Repouso Nobre / Lirismo' },
+        { suffix: '7', fullName: 'com Sétima Dominante', intervals: [0, 4, 7, 10], omissible: true, quality: 'dom7', tension: 'Tensão Máxima Preparatória' },
+        { suffix: 'm7', fullName: 'Menor com Sétima', intervals: [0, 3, 7, 10], omissible: true, quality: 'min7', tension: 'Afastamento Suave / Toada' },
+        { suffix: 'm(7M)', fullName: 'Menor com Sétima Maior', intervals: [0, 3, 7, 11], omissible: true, quality: 'minmaj7', tension: 'Dramatismo Romântico' },
+        { suffix: 'm7(♭5)', fullName: 'Meio-Diminuto', intervals: [0, 3, 6, 10], omissible: false, quality: 'halfdim', tension: 'Tensão Sensível / Passagem' },
+        { suffix: 'dim7', fullName: 'Diminuto com Sétima', intervals: [0, 3, 6, 9], omissible: false, quality: 'dim7', tension: 'Tensão Simétrica Máxima' },
+        { suffix: '6', fullName: 'com Sexta Maior', intervals: [0, 4, 7, 9], omissible: true, quality: 'maj6', tension: 'Repouso Bucólico / Folia' },
+        { suffix: 'm6', fullName: 'Menor com Sexta', intervals: [0, 3, 7, 9], omissible: true, quality: 'min6', tension: 'Melancolia Caipira' },
+        { suffix: '7sus4', fullName: 'com Sétima e Suspenso 4', intervals: [0, 5, 7, 10], omissible: true, quality: 'sus4', tension: 'Preparação Suspensa' },
+        { suffix: '7(♯5)', fullName: 'com Sétima e Quinta Aumentada', intervals: [0, 4, 8, 10], omissible: false, quality: 'augdom', tension: 'Tensão Dominante Alterada' },
+        { suffix: '7(♭5)', fullName: 'com Sétima e Quinta Diminuta', intervals: [0, 4, 6, 10], omissible: false, quality: 'altdom', tension: 'Tensão Cromática' },
+
+        // Extensões e Adicionadas
+        { suffix: 'add9', fullName: 'com Nona Adicionada', intervals: [0, 4, 7, 2], omissible: true, quality: 'add9', tension: 'Brilho Caipira / Ressonância' },
+        { suffix: 'm(add9)', fullName: 'Menor com Nona Adicionada', intervals: [0, 3, 7, 2], omissible: true, quality: 'madd9', tension: 'Lírico / Ponteio Sentimental' },
+        { suffix: '9', fullName: 'Dominante com Nona', intervals: [0, 4, 7, 10, 2], omissible: true, quality: 'dom9', tension: 'Preparação Encorpada' },
+        { suffix: '7M(9)', fullName: 'com Sétima Maior e Nona', intervals: [0, 4, 7, 11, 2], omissible: true, quality: 'maj9', tension: 'Sofisticação e Nobreza' },
+        { suffix: 'm9', fullName: 'Menor com Nona', intervals: [0, 3, 7, 10, 2], omissible: true, quality: 'min9', tension: 'Profundidade Espacial' },
+        { suffix: '6/9', fullName: 'com Sexta e Nona', intervals: [0, 4, 7, 9, 2], omissible: true, quality: 'sixnine', tension: 'Repouso Cristalino' },
+        { suffix: '7(♭9)', fullName: 'com Sétima e Nona Menor', intervals: [0, 4, 7, 10, 1], omissible: true, quality: 'domb9', tension: 'Tensão Dramática Caipira' },
+        { suffix: '7(♯9)', fullName: 'com Sétima e Nona Aumentada', intervals: [0, 4, 7, 10, 3], omissible: true, quality: 'domsharp9', tension: 'Tensão Áspera de Raiz' },
+        { suffix: 'm7(11)', fullName: 'Menor com Sétima e 11ª', intervals: [0, 3, 7, 10, 5], omissible: true, quality: 'min11', tension: 'Abertura Modal Moderna' },
+        { suffix: '7(13)', fullName: 'Dominante com 13ª', intervals: [0, 4, 7, 10, 9], omissible: true, quality: 'dom13', tension: 'Tensão Orquestrada' },
+        { suffix: '7(♭13)', fullName: 'Dominante com 13ª Menor', intervals: [0, 4, 7, 10, 8], omissible: true, quality: 'domb13', tension: 'Tensão Romântica' }
+    ];
+
+    const REVERSE_PRESETS = {
+        viola_cebolao_e: [
+            { name: 'E Aberto (Solto)', shape: [0, 0, 0, 0, 0], desc: 'Ressonância total da afinação Cebolão em Mi' },
+            { name: 'B7 Tradicional', shape: [2, 4, 1, 2, 0], desc: 'Dominante fundamental da viola caipira' },
+            { name: 'A Caipira', shape: [0, 2, 1, 0, -1], desc: 'Subdominante límpida com primas soltas' },
+            { name: 'E7M Sofisticado', shape: [0, 4, 0, 0, 0], desc: 'Moda lenta com 7ª Maior no 2º par' },
+            { name: 'F#m Caipira', shape: [2, 2, 1, 2, -1], desc: 'Relativa menor de Lá / ii de Mi' },
+            { name: 'C#m Melódico', shape: [0, 2, 0, 0, 2], desc: 'Relativa menor melancólica de Mi' },
+            { name: 'G#m / B', shape: [4, 4, 3, 4, 0], desc: 'Mediante encorpada com bordão solto' },
+            { name: 'E7 Dominante', shape: [0, 3, 0, 0, 0], desc: 'Tensão para preparar o Lá (IV grau)' },
+            { name: 'Aadd9 Brilhante', shape: [0, 0, 1, 0, 0], desc: 'Turina em Lá com primas em uníssono' },
+            { name: 'B7(9) Tião Carreiro', shape: [2, 4, 3, 2, 2], desc: 'Pestana encorpada de pagode de viola' },
+            { name: 'Eadd9 Aberto', shape: [2, 0, 0, 0, 0], desc: 'Fá# agudo no 1º par sobre Mi solto' },
+            { name: 'D Aberto (Folia)', shape: [2, 3, 1, -1, 3], desc: 'Acorde modal ♭VII típico de folia e cururu' }
+        ],
+        violao_padrao: [
+            { name: 'E Maior', shape: [0, 0, 1, 2, 2, 0], desc: 'Posição aberta clássica com 3 bordões' },
+            { name: 'Am Tradicional', shape: [0, 1, 2, 2, 0, -1], desc: 'Relativa menor de Dó Maior' },
+            { name: 'C Maior', shape: [0, 1, 0, 2, 3, -1], desc: 'Tônica basilar no 5º par (Lá)' },
+            { name: 'D Maior', shape: [2, 3, 2, 0, -1, -1], desc: 'Tríade brilhante com baixo na 4ª corda' },
+            { name: 'G Aberto', shape: [3, 0, 0, 0, 2, 3], desc: 'Acorde campestre de grande ressonância' },
+            { name: 'B7 Aberto', shape: [2, 0, 2, 1, 2, -1], desc: 'Dominante de Mi Maior / Menor' },
+            { name: 'Em7 Aberto', shape: [0, 3, 0, 2, 2, 0], desc: 'Harmonia lírica com 7ª menor solta' },
+            { name: 'F7M Aberto', shape: [0, 1, 2, 3, -1, -1], desc: 'Bossa nova / sofisticação com 1ª solta' },
+            { name: 'A7 Dominante', shape: [0, 2, 0, 2, 0, -1], desc: 'Tensão de preparação para Ré' },
+            { name: 'Dm Melancólico', shape: [1, 3, 2, 0, -1, -1], desc: 'Menor doce com baixo em Ré' }
+        ]
+    };
+
+    function getIntervalShortName(semitones) {
+        const map = {
+            0: 'T',
+            1: '♭9',
+            2: '9',
+            3: '3m',
+            4: '3M',
+            5: '11',
+            6: '♭5',
+            7: '5J',
+            8: '♯5',
+            9: '6',
+            10: '7m',
+            11: '7M'
+        };
+        return map[semitones] || `${semitones}st`;
+    }
+
+    function getIntervalFullName(semitones) {
+        const map = {
+            0: 'Tônica (Raiz fundamental)',
+            1: 'Segunda Menor / Nona Menor (♭9)',
+            2: 'Segunda Maior / Nona (9)',
+            3: 'Terça Menor (3m)',
+            4: 'Terça Maior (3M)',
+            5: 'Quarta Justa / Décima Primeira (11)',
+            6: 'Quinta Diminuta / Trítono (♭5 / ♯11)',
+            7: 'Quinta Justa (5J)',
+            8: 'Quinta Aumentada / 13ª Menor (♯5 / ♭13)',
+            9: 'Sexta Maior / 13ª (6 / 13)',
+            10: 'Sétima Menor (7m)',
+            11: 'Sétima Maior (7M)'
+        };
+        return map[semitones] || `${semitones} Semitons`;
+    }
+
+    function getIntervalColor(semitones) {
+        if (semitones === 0) return '#10b981'; // Tônica (verde)
+        if (semitones === 3 || semitones === 4) return '#06b6d4'; // Terças (ciano)
+        if (semitones === 6 || semitones === 7 || semitones === 8) return '#f59e0b'; // Quintas (âmbar)
+        if (semitones === 9 || semitones === 10 || semitones === 11) return '#a855f7'; // Sétimas / Sextas (roxo)
+        return '#ec4899'; // Nonas / Onzenas (rosa choque)
+    }
+
+    function getKeyHarmonicFunctions(rootPc, suffix) {
+        const keys = [
+            { keyId: 'E_maj', root: 4, name: 'Mi Maior (E) — Viola Caipira', nativa: true },
+            { keyId: 'A_maj', root: 9, name: 'Lá Maior (A) — Subdominante', nativa: false },
+            { keyId: 'B_maj', root: 11, name: 'Si Maior (B) — Dominante', nativa: false }
+        ];
+
+        return keys.map((k) => {
+            const degDiff = (rootPc - k.root + 12) % 12;
+            let roman = '';
+            let role = '';
+            let badgeCol = '';
+
+            if (degDiff === 0) {
+                roman = 'I';
+                role = 'Tônica de Repouso (Centro Harmônico)';
+                badgeCol = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+            } else if (degDiff === 2) {
+                roman = suffix.includes('m') ? 'ii' : 'II';
+                role = suffix.includes('m') ? 'Superfônica (Subdominante Suave)' : 'Dominante Secundário (V/V)';
+                badgeCol = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
+            } else if (degDiff === 4) {
+                roman = suffix.includes('m') ? 'iii' : 'III';
+                role = 'Mediante (Harmonia Contemplativa)';
+                badgeCol = 'bg-slate-700 text-slate-300 border-slate-600';
+            } else if (degDiff === 5) {
+                roman = 'IV';
+                role = 'Subdominante (Afastamento Límpido)';
+                badgeCol = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+            } else if (degDiff === 7) {
+                roman = 'V';
+                role = 'Dominante Primário (Tensão que pede Resolução no I)';
+                badgeCol = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+            } else if (degDiff === 9) {
+                roman = suffix.includes('m') ? 'vi' : 'VI';
+                role = suffix.includes('m') ? 'Relativa Menor (Melancolia & Toadas)' : 'Submediante Maior';
+                badgeCol = 'bg-purple-500/20 text-purple-300 border-purple-500/40';
+            } else if (degDiff === 11) {
+                roman = 'viiø';
+                role = 'Sensível / Meio-Diminuto';
+                badgeCol = 'bg-slate-700 text-slate-400 border-slate-600';
+            } else if (degDiff === 10) {
+                roman = '♭VII';
+                role = 'Subtônica Modal (Típico de Cururu e Folia)';
+                badgeCol = 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+            } else {
+                roman = 'Ext.';
+                role = 'Acorde Cromático de Passagem / Empréstimo';
+                badgeCol = 'bg-slate-800 text-slate-400 border-slate-700';
+            }
+
+            return {
+                keyName: k.name,
+                roman: suffix ? `${roman}${suffix}` : roman,
+                role,
+                badgeCol,
+                nativa: k.nativa
+            };
+        });
+    }
+
+    function analyzeReverseChord(inst, shape) {
+        const active = [];
+        shape.forEach((fret, cIdx) => {
+            if (fret >= 0 && fret <= 14) {
+                const course = inst.courses[cIdx];
+                const midi = course.midi[0] + fret;
+                const pc = (course.pitchClass + fret) % 12;
+                active.push({
+                    courseIdx: cIdx,
+                    fret,
+                    midi,
+                    pc,
+                    courseName: course.label,
+                    noteName: NOTE_NAMES[pc],
+                    noteNamePt: NOTE_NAMES_PT[pc],
+                    octaved: course.octaved
+                });
+            }
+        });
+
+        if (active.length === 0) {
+            return {
+                found: false,
+                empty: true,
+                activeCount: 0,
+                chordName: 'Nenhuma Corda Soando',
+                chordNamePT: 'Braço Silenciado',
+                details: 'Todas as cordas estão abafadas (X). Selecione casas ou clique no braço para identificar o acorde.',
+                rootPc: null,
+                bassPc: null,
+                tones: [],
+                alternatives: [],
+                keyFunctions: []
+            };
+        }
+
+        // Baixo: par/corda ativa de maior índice (fisicamente a mais grave)
+        const bass = active.slice().reverse()[0];
+        const bassPc = bass.pc;
+        const bassName = NOTE_NAMES[bassPc];
+        const bassNamePt = NOTE_NAMES_PT[bassPc];
+
+        // Pitch classes únicas
+        const uniquePcs = Array.from(new Set(active.map((a) => a.pc)));
+
+        if (uniquePcs.length === 1) {
+            const root = uniquePcs[0];
+            return {
+                found: true,
+                empty: false,
+                isUnison: true,
+                activeCount: active.length,
+                chordName: `${NOTE_NAMES[root]} (Uníssono / Oitavas)`,
+                chordNamePT: `Nota ${NOTE_NAMES_PT[root]} em oitavas puras`,
+                rootPc: root,
+                bassPc: root,
+                isInverted: false,
+                inversionLabel: 'Uníssono Fundamental',
+                quality: 'unison',
+                tension: 'Consonância Pura',
+                details: `Apenas a nota ${NOTE_NAMES[root]} está soando distribuída em ${active.length} corda(s)/par(es).`,
+                tones: active.map((a) => ({
+                    courseIdx: a.courseIdx,
+                    courseName: a.courseName,
+                    fret: a.fret,
+                    noteName: a.noteName,
+                    noteNamePt: a.noteNamePt,
+                    role: 'T',
+                    roleDesc: 'Tônica pura',
+                    color: '#10b981',
+                    isBass: a.courseIdx === bass.courseIdx
+                })),
+                alternatives: [],
+                keyFunctions: getKeyHarmonicFunctions(root, '')
+            };
+        }
+
+        // Avalia candidatos a tônica: testa cada pitch class presente
+        const candidates = [];
+
+        uniquePcs.forEach((candRoot) => {
+            const relIntervals = uniquePcs
+                .map((p) => (p - candRoot + 12) % 12)
+                .sort((a, b) => a - b);
+
+            REVERSE_CHORD_FORMULAS.forEach((formula) => {
+                const formIntervals = formula.intervals;
+
+                // Verifica se todos os intervalos tocados pertencem à fórmula
+                const unknownIntervals = relIntervals.filter((i) => !formIntervals.includes(i));
+                if (unknownIntervals.length > 0) return;
+
+                // Verifica se a fórmula está suficientemente satisfeita
+                let missing = formIntervals.filter((i) => !relIntervals.includes(i));
+                if (formula.omissible && missing.length === 1 && missing[0] === 7) {
+                    missing = [];
+                }
+
+                if (missing.length === 0) {
+                    let score = 100;
+                    if (candRoot === bassPc) {
+                        score += 25; // Estado fundamental prioritário
+                    }
+                    if (!relIntervals.includes(7) && formIntervals.includes(7)) {
+                        score -= 5;
+                    }
+                    if (formula.suffix === '' || formula.suffix === 'm') score += 15;
+                    if (formula.suffix === '7' || formula.suffix === '7M' || formula.suffix === 'm7') score += 12;
+
+                    candidates.push({
+                        rootPc: candRoot,
+                        formula,
+                        score,
+                        isInverted: candRoot !== bassPc,
+                        bassPc
+                    });
+                }
+            });
+        });
+
+        // Se não encontrou nenhuma fórmula completa, tenta com Díades / Intervalos de 2 notas
+        if (candidates.length === 0 && uniquePcs.length === 2) {
+            const interval = (uniquePcs[1] - uniquePcs[0] + 12) % 12;
+            if (interval === 7 || interval === 5) {
+                const root = interval === 7 ? uniquePcs[0] : uniquePcs[1];
+                candidates.push({
+                    rootPc: root,
+                    formula: { suffix: '5', fullName: 'Power Chord (Díade de Quinta)', intervals: [0, 7], quality: 'power', tension: 'Neutro / Vigor' },
+                    score: 80,
+                    isInverted: root !== bassPc,
+                    bassPc
+                });
+            }
+        }
+
+        candidates.sort((a, b) => b.score - a.score);
+
+        if (candidates.length > 0) {
+            const best = candidates[0];
+            const root = best.rootPc;
+            const formula = best.formula;
+            const isInverted = best.isInverted;
+
+            let inversionLabel = 'Estado Fundamental';
+            if (isInverted) {
+                const bassInterval = (bassPc - root + 12) % 12;
+                if (bassInterval === 3 || bassInterval === 4) {
+                    inversionLabel = '1ª Inversão (Baixo na Terça)';
+                } else if (bassInterval === 6 || bassInterval === 7 || bassInterval === 8) {
+                    inversionLabel = '2ª Inversão (Baixo na Quinta)';
+                } else if (bassInterval === 10 || bassInterval === 11) {
+                    inversionLabel = '3ª Inversão (Baixo na Sétima)';
+                } else if (bassInterval === 1 || bassInterval === 2) {
+                    inversionLabel = 'Baixo na Nona';
+                } else {
+                    inversionLabel = `Baixo em ${bassName}`;
+                }
+            }
+
+            const chordName = isInverted
+                ? `${NOTE_NAMES[root]}${formula.suffix}/${bassName}`
+                : `${NOTE_NAMES[root]}${formula.suffix}`;
+
+            const chordNamePT = isInverted
+                ? `${NOTE_NAMES_PT[root]} ${formula.fullName} (Baixo em ${bassNamePt})`
+                : `${NOTE_NAMES_PT[root]} ${formula.fullName}`;
+
+            const tones = active.map((a) => {
+                const interval = (a.pc - root + 12) % 12;
+                return {
+                    courseIdx: a.courseIdx,
+                    courseName: a.courseName,
+                    fret: a.fret,
+                    noteName: a.noteName,
+                    noteNamePt: a.noteNamePt,
+                    role: getIntervalShortName(interval),
+                    roleDesc: getIntervalFullName(interval),
+                    color: getIntervalColor(interval),
+                    isBass: a.courseIdx === bass.courseIdx
+                };
+            });
+
+            const alternatives = [];
+            const seenNames = new Set([chordName]);
+            for (let i = 1; i < candidates.length; i++) {
+                const c = candidates[i];
+                const altName = c.isInverted
+                    ? `${NOTE_NAMES[c.rootPc]}${c.formula.suffix}/${bassName}`
+                    : `${NOTE_NAMES[c.rootPc]}${c.formula.suffix}`;
+                if (!seenNames.has(altName)) {
+                    seenNames.add(altName);
+                    alternatives.push({
+                        chordName: altName,
+                        desc: `${NOTE_NAMES_PT[c.rootPc]} ${c.formula.fullName}`
+                    });
+                }
+                if (alternatives.length >= 3) break;
+            }
+
+            return {
+                found: true,
+                empty: false,
+                isUnison: false,
+                activeCount: active.length,
+                chordName,
+                chordNamePT,
+                rootPc: root,
+                bassPc,
+                isInverted,
+                inversionLabel,
+                quality: formula.quality,
+                tension: formula.tension,
+                details: `Identificado ${NOTE_NAMES[root]}${formula.suffix} a partir de ${uniquePcs.length} notas distintas (${uniquePcs.map((p) => NOTE_NAMES[p]).join(', ')}).`,
+                tones,
+                alternatives,
+                keyFunctions: getKeyHarmonicFunctions(root, formula.suffix)
+            };
+        }
+
+        // Caso de Cluster ou Acorde Híbrido Aberto
+        const tones = active.map((a) => {
+            const interval = (a.pc - bassPc + 12) % 12;
+            return {
+                courseIdx: a.courseIdx,
+                courseName: a.courseName,
+                fret: a.fret,
+                noteName: a.noteName,
+                noteNamePt: a.noteNamePt,
+                role: a.pc === bassPc ? 'Baixo' : getIntervalShortName(interval),
+                roleDesc: a.pc === bassPc ? 'Nota no Baixo' : getIntervalFullName(interval),
+                color: getIntervalColor(interval),
+                isBass: a.courseIdx === bass.courseIdx
+            };
+        });
+
+        return {
+            found: true,
+            empty: false,
+            isUnison: false,
+            activeCount: active.length,
+            chordName: `Acorde Aberto [${uniquePcs.map((p) => NOTE_NAMES[p]).join('·')}]/${bassName}`,
+            chordNamePT: `Sonoridade Híbrida / Acorde Aberto com baixo em ${bassNamePt}`,
+            rootPc: bassPc,
+            bassPc,
+            isInverted: false,
+            inversionLabel: 'Baixo Referência',
+            quality: 'cluster',
+            tension: 'Ressonância Aberta / Polimodal',
+            details: `Formação harmônica com ${uniquePcs.length} notas distintas (${uniquePcs.map((p) => NOTE_NAMES[p]).join(', ')}).`,
+            tones,
+            alternatives: [],
+            keyFunctions: getKeyHarmonicFunctions(bassPc, '')
+        };
+    }
+
+    function strumReverseChord() {
+        const inst = INSTRUMENTS[state.instrumentId];
+        const shape = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
+
+        let step = 0;
+        for (let cIdx = inst.courses.length - 1; cIdx >= 0; cIdx--) {
+            const fret = shape[cIdx];
+            if (fret >= 0) {
+                playCourseAtFret(cIdx, fret, step * 0.048);
+                flashFretCell(cIdx, fret, step * 48);
+                step++;
+            }
+        }
+    }
+
+    function transposeReverseChord(delta) {
+        const inst = INSTRUMENTS[state.instrumentId];
+        const arr = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] >= 0) {
+                arr[i] = Math.max(0, Math.min(14, arr[i] + delta));
+            }
+        }
+        saveViolaState();
+        renderFretboardSVG();
+        renderReverseChordPanel();
+    }
+
+    function resetReverseChordToOpen() {
+        const inst = INSTRUMENTS[state.instrumentId];
+        if (inst.isPaired) {
+            state.reverseFretsViola = [0, 0, 0, 0, 0];
+        } else {
+            state.reverseFretsViolao = [0, 0, 0, 0, 0, 0];
+        }
+        saveViolaState();
+        renderFretboardSVG();
+        renderReverseChordPanel();
+    }
+
+    function resetReverseChordToMute() {
+        const inst = INSTRUMENTS[state.instrumentId];
+        if (inst.isPaired) {
+            state.reverseFretsViola = [-1, -1, -1, -1, -1];
+        } else {
+            state.reverseFretsViolao = [-1, -1, -1, -1, -1, -1];
+        }
+        saveViolaState();
+        renderFretboardSVG();
+        renderReverseChordPanel();
+    }
+
+    function loadReversePreset(shape) {
+        const inst = INSTRUMENTS[state.instrumentId];
+        if (inst.isPaired) {
+            state.reverseFretsViola = shape.slice();
+        } else {
+            state.reverseFretsViolao = shape.slice();
+        }
+        state.displayMode = 'REVERSE';
+        saveViolaState();
+        renderFretboardSVG();
+        renderReverseChordPanel();
+        strumReverseChord();
     }
 
     // =========================================================================
@@ -1702,6 +2199,38 @@
                     opacity
                 });
             });
+        } else if (state.displayMode === 'REVERSE') {
+            const shape = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
+            const analysis = analyzeReverseChord(inst, shape);
+
+            shape.forEach((fret, cIdx) => {
+                if (fret < 0) {
+                    mutedCourses.add(cIdx);
+                } else {
+                    const pc = (inst.courses[cIdx].pitchClass + fret) % 12;
+                    let role = '•';
+                    let col = '#10b981';
+                    if (analysis.rootPc !== null) {
+                        const interval = (pc - analysis.rootPc + 12) % 12;
+                        role = getIntervalShortName(interval);
+                        col = getIntervalColor(interval);
+                    } else if (analysis.bassPc !== null) {
+                        const interval = (pc - analysis.bassPc + 12) % 12;
+                        role = getIntervalShortName(interval);
+                        col = getIntervalColor(interval);
+                    }
+                    const isBassCourse = analysis.bassPc !== null && cIdx === (analysis.tones.find((t) => t.isBass) || {}).courseIdx;
+                    activeMarkers.push({
+                        courseIdx: cIdx,
+                        fret,
+                        label: NOTE_NAMES[pc],
+                        sub: role,
+                        color: col,
+                        stroke: isBassCourse ? '#f59e0b' : '#090d16',
+                        strokeWidth: isBassCourse ? 3.2 : 2
+                    });
+                }
+            });
         }
 
         // Construção SVG
@@ -1774,9 +2303,11 @@
             const cx = getCellCenterX(mk.fret);
             const cy = getRowY(mk.courseIdx);
             const op = mk.opacity || '1';
+            const strk = mk.stroke || '#090d16';
+            const strkW = mk.strokeWidth || '2';
             markersSvg += `
                 <g opacity="${op}" class="pointer-events-none">
-                    <circle cx="${cx}" cy="${cy}" r="13.5" fill="${mk.color}" stroke="#090d16" stroke-width="2"/>
+                    <circle cx="${cx}" cy="${cy}" r="13.5" fill="${mk.color}" stroke="${strk}" stroke-width="${strkW}"/>
                     <text x="${cx}" y="${mk.sub ? cy - 0.5 : cy + 4}" text-anchor="middle" fill="#090d16" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="800">${mk.label}</text>
                     ${mk.sub ? `<text x="${cx}" y="${cy + 9}" text-anchor="middle" fill="#090d16" font-family="JetBrains Mono, monospace" font-size="7.5" font-weight="700">${mk.sub}</text>` : ''}
                 </g>
@@ -1827,6 +2358,14 @@
                 const f = parseInt(node.getAttribute('data-click-fret'), 10);
                 playCourseAtFret(cIdx, f, 0);
                 flashFretCell(cIdx, f, 0);
+
+                if (state.displayMode === 'REVERSE') {
+                    const arr = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
+                    arr[cIdx] = arr[cIdx] === f ? -1 : f;
+                    saveViolaState();
+                    renderFretboardSVG();
+                    renderReverseChordPanel();
+                }
             });
         });
     }
@@ -1956,6 +2495,195 @@
                 renderDuadStrip();
             });
         });
+    }
+
+    function renderReverseChordPanel() {
+        const analysisContainer = document.getElementById('viola-reverse-analysis-container');
+        const selectorsContainer = document.getElementById('viola-reverse-course-selectors');
+        const presetsContainer = document.getElementById('viola-reverse-presets-container');
+        if (!analysisContainer || !selectorsContainer || !presetsContainer) return;
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const shape = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
+        const analysis = analyzeReverseChord(inst, shape);
+
+        // 1. Diagnóstico do Acorde
+        let tonesHtml = '';
+        if (analysis.tones && analysis.tones.length > 0) {
+            tonesHtml = `
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 pt-1">
+                    ${analysis.tones.map((t) => `
+                        <div class="px-2 py-1.5 rounded-lg bg-[#0f172a] border ${t.isBass ? 'border-amber-500/50' : 'border-slate-800'} text-xs font-mono flex items-center justify-between">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${t.color}"></span>
+                                <span class="font-bold text-slate-100">${t.noteName}</span>
+                                ${t.isBass ? '<span class="text-[9px] px-1 rounded bg-amber-500/20 text-amber-300 font-sans font-semibold">Baixo</span>' : ''}
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-semibold">${t.role}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            tonesHtml = `<p class="text-xs text-slate-500 italic">Nenhuma nota ativa nas cordas.</p>`;
+        }
+
+        let keyFuncHtml = '';
+        if (analysis.keyFunctions && analysis.keyFunctions.length > 0) {
+            keyFuncHtml = `
+                <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+                    <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">Contexto nas Tonalidades Caipiras:</span>
+                    <div class="grid grid-cols-1 gap-1.5">
+                        ${analysis.keyFunctions.map((kf) => `
+                            <div class="flex items-center justify-between px-2.5 py-1 rounded-md bg-[#0f172a] border border-slate-800 text-[11px] font-mono">
+                                <span class="${kf.nativa ? 'text-emerald-300 font-bold' : 'text-slate-300'}">${kf.keyName}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-1.5 py-0.5 rounded border font-bold ${kf.badgeCol}">${kf.roman}</span>
+                                    <span class="text-[10px] text-slate-400 hidden sm:inline">${kf.role.split('(')[0]}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        let altHtml = '';
+        if (analysis.alternatives && analysis.alternatives.length > 0) {
+            altHtml = `
+                <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-slate-400">
+                    <span class="text-slate-500">Alternativas / Enarmonias:</span>
+                    ${analysis.alternatives.map((a) => `
+                        <span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300" title="${a.desc}">${a.chordName}</span>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        const isReversedMode = state.displayMode === 'REVERSE';
+
+        analysisContainer.innerHTML = `
+            <div class="space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Acorde Deduzido</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">${analysis.inversionLabel || 'Fundamental'}</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-300 tracking-tight mt-1">${analysis.chordName}</h3>
+                        <p class="text-xs text-slate-300 font-medium">${analysis.chordNamePT}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-mono text-slate-500 block">Qualidade Harmônica</span>
+                        <span class="text-xs font-mono font-bold text-amber-300">${analysis.tension || 'Harmonia Aberta'}</span>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed">${analysis.details}</p>
+
+                <div class="space-y-1">
+                    <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">Notas Formadoras & Intervalos:</span>
+                    ${tonesHtml}
+                </div>
+
+                ${keyFuncHtml}
+                ${altHtml}
+            </div>
+        `;
+
+        // 2. Seletores por Corda / Par
+        selectorsContainer.innerHTML = inst.courses.map((c, cIdx) => {
+            const currentFret = shape[cIdx];
+            const isMuted = currentFret < 0;
+            const currentPc = isMuted ? null : (c.pitchClass + currentFret) % 12;
+            const currentNote = isMuted ? 'Abafada' : `${NOTE_NAMES[currentPc]} (${NOTE_NAMES_PT[currentPc]})`;
+
+            const fretOptions = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+            return `
+                <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div class="flex items-center justify-between sm:w-44">
+                        <span class="text-xs font-mono font-bold ${isMuted ? 'text-rose-400' : 'text-slate-200'}">${c.label}</span>
+                        <span class="text-[11px] font-mono ${isMuted ? 'text-rose-400/80' : 'text-cyan-400 font-semibold'}">${isMuted ? '✕ Mudo' : currentNote}</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1">
+                        ${fretOptions.map((f) => {
+                            const isSelected = currentFret === f;
+                            let btnClass = 'w-7 h-7 text-[11px] font-mono rounded flex items-center justify-center font-bold transition ';
+                            if (f === -1) {
+                                btnClass += isSelected
+                                    ? 'bg-rose-600 text-white shadow'
+                                    : 'bg-slate-900 border border-slate-800 text-rose-400 hover:bg-slate-800';
+                            } else if (f === 0) {
+                                btnClass += isSelected
+                                    ? 'bg-cyan-600 text-slate-950 shadow'
+                                    : 'bg-slate-900 border border-slate-800 text-cyan-300 hover:bg-slate-800';
+                            } else {
+                                btnClass += isSelected
+                                    ? 'bg-emerald-600 text-slate-950 shadow'
+                                    : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800';
+                            }
+                            return `
+                                <button type="button" data-reverse-course="${cIdx}" data-reverse-fret="${f}" class="${btnClass}">
+                                    ${f === -1 ? 'X' : f}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        selectorsContainer.querySelectorAll('[data-reverse-course]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const cIdx = parseInt(btn.getAttribute('data-reverse-course'), 10);
+                const fret = parseInt(btn.getAttribute('data-reverse-fret'), 10);
+                const arr = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
+                arr[cIdx] = fret;
+                state.displayMode = 'REVERSE';
+                saveViolaState();
+                if (fret >= 0) {
+                    playCourseAtFret(cIdx, fret, 0);
+                    flashFretCell(cIdx, fret, 0);
+                }
+                renderFretboardSVG();
+                renderReverseChordPanel();
+            });
+        });
+
+        // 3. Presets Curados
+        const presets = REVERSE_PRESETS[state.instrumentId] || REVERSE_PRESETS.viola_cebolao_e;
+        presetsContainer.innerHTML = presets.map((p, idx) => `
+            <button type="button" data-reverse-preset="${idx}" class="p-2 rounded-lg bg-[#0f172a] border border-slate-800 hover:border-amber-500/50 text-left transition group">
+                <div class="text-xs font-bold font-mono text-slate-200 group-hover:text-amber-300 transition">${p.name}</div>
+                <div class="text-[10px] text-slate-400 truncate mt-0.5">${p.desc}</div>
+            </button>
+        `).join('');
+
+        presetsContainer.querySelectorAll('[data-reverse-preset]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-reverse-preset'), 10);
+                const p = presets[idx];
+                if (p && p.shape) {
+                    loadReversePreset(p.shape);
+                }
+            });
+        });
+
+        const toFretBtn = document.getElementById('btn-viola-reverse-to-fretboard');
+        if (toFretBtn) {
+            toFretBtn.className = isReversedMode
+                ? 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600/20 border border-emerald-400 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition shadow'
+                : 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition';
+            toFretBtn.innerHTML = isReversedMode
+                ? `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i><span>Ativo no Braço</span>`
+                : `<i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i><span>Editar no Braço</span>`;
+        }
+
+        if (global.VaultCore && global.VaultCore.refreshIcons) {
+            global.VaultCore.refreshIcons(analysisContainer);
+            if (toFretBtn) global.VaultCore.refreshIcons(toFretBtn);
+        }
     }
 
     function renderMetronomeControls() {
@@ -2100,6 +2828,12 @@
                 progressionStepIdx: -1,
                 activeRhythmStepIdx: -1
             });
+            if (!Array.isArray(state.reverseFretsViola) || state.reverseFretsViola.length !== 5) {
+                state.reverseFretsViola = [0, 0, 0, 0, 0];
+            }
+            if (!Array.isArray(state.reverseFretsViolao) || state.reverseFretsViolao.length !== 6) {
+                state.reverseFretsViolao = [0, 0, 1, 2, 2, 0];
+            }
         }
     }
 
@@ -2169,14 +2903,22 @@
                 </div>
 
                 <!-- Braço Interativo SVG -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-2">
-                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-                        <span>Clique em qualquer par/casa para ouvir a síntese acústica real (pares 3º, 4º e 5º oitavados na Viola).</span>
-                        <div class="flex items-center gap-2 font-mono text-[11px]">
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-3">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 pb-2 border-b border-slate-800">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Projeção no Braço:</span>
+                            <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                                <button type="button" id="btn-viola-mode-chord" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎵 Campo Harmônico</button>
+                                <button type="button" id="btn-viola-mode-duad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🪕 Escalas Duadas</button>
+                                <button type="button" id="btn-viola-mode-reverse" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🔍 Buscador Reverso</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>Tônica</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>Terça / Escala</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>Terça</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Quinta</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>Sétima (7ª)</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>Sétima / Sexta</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>Extensões</span>
                         </div>
                     </div>
                     <div id="viola-fretboard-svg-wrap" class="w-full overflow-x-auto pb-1"></div>
@@ -2232,6 +2974,58 @@
                         </div>
 
                         <div id="viola-duad-strip" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+                    </div>
+                </div>
+
+                <!-- Módulo de Dicionário & Buscador Reverso de Acordes (Canhoto & Destro) -->
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i>
+                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Dicionário & Buscador Reverso de Acordes</h3>
+                                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Análise Harmônica Algorítmica</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Monte qualquer digitação nas cordas ou clique diretamente no braço. O motor deduz o nome do acorde, inversões, notas formadoras e função modal caipira.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="btn-viola-reverse-strum" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                <span>Dedilhar Acorde</span>
+                            </button>
+                            <button type="button" id="btn-viola-reverse-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                                <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Editar no Braço</span>
+                            </button>
+                            <button type="button" id="btn-viola-reverse-trans-down" title="Transpor -1 Semitom" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">♭ -1</button>
+                            <button type="button" id="btn-viola-reverse-trans-up" title="Transpor +1 Semitom" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">♯ +1</button>
+                            <button type="button" id="btn-viola-reverse-clear-open" title="Zerar todas as cordas para soltas (0)" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-300 transition">Soltas (0)</button>
+                            <button type="button" id="btn-viola-reverse-clear-mute" title="Abafar todas as cordas (X)" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 transition">Abafar (X)</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        <!-- Coluna 1: Diagnóstico Harmônico do Acorde -->
+                        <div id="viola-reverse-analysis-container" class="lg:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4"></div>
+
+                        <!-- Coluna 2: Seletor Tátil por Corda & Presets Caipiras -->
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Digitação por Corda / Par</h4>
+                                    <span class="text-[11px] font-mono text-slate-500">Clique nas casas para posicionar</span>
+                                </div>
+                                <div id="viola-reverse-course-selectors" class="space-y-2"></div>
+                            </div>
+
+                            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Presets Curados & Digitações Clássicas</h4>
+                                    <span class="text-[11px] font-mono text-amber-400">1 Clique para carregar</span>
+                                </div>
+                                <div id="viola-reverse-presets-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2465,9 +3259,96 @@
         perspLabel.textContent = state.viewPerspective === 'diagram'
             ? 'Diagrama (1º Agudo no Topo)'
             : 'Visão Músico (Grave no Topo)';
+
+        const btnModeChord = document.getElementById('btn-viola-mode-chord');
+        const btnModeDuad = document.getElementById('btn-viola-mode-duad');
+        const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
+        if (btnModeChord && btnModeDuad && btnModeReverse) {
+            btnModeChord.className = state.displayMode === 'CHORD'
+                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-emerald-600 text-slate-950 shadow'
+                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            btnModeDuad.className = state.displayMode === 'DUAD'
+                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-cyan-600 text-slate-950 shadow'
+                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            btnModeReverse.className = state.displayMode === 'REVERSE'
+                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-500 text-slate-950 shadow'
+                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+        }
     }
 
     function bindEvents() {
+        // Modos de Projeção no Braço
+        const btnModeChord = document.getElementById('btn-viola-mode-chord');
+        const btnModeDuad = document.getElementById('btn-viola-mode-duad');
+        const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
+        if (btnModeChord && btnModeDuad && btnModeReverse) {
+            btnModeChord.addEventListener('click', () => {
+                if (state.displayMode !== 'CHORD') {
+                    stopScalePlayback();
+                    stopProgressionPlayback();
+                    state.displayMode = 'CHORD';
+                    saveViolaState();
+                    renderAll();
+                    strumActiveChord();
+                }
+            });
+            btnModeDuad.addEventListener('click', () => {
+                if (state.displayMode !== 'DUAD') {
+                    stopProgressionPlayback();
+                    state.displayMode = 'DUAD';
+                    saveViolaState();
+                    renderAll();
+                }
+            });
+            btnModeReverse.addEventListener('click', () => {
+                if (state.displayMode !== 'REVERSE') {
+                    stopScalePlayback();
+                    stopProgressionPlayback();
+                    state.displayMode = 'REVERSE';
+                    saveViolaState();
+                    renderAll();
+                    strumReverseChord();
+                }
+            });
+        }
+
+        // Ações Rápidas do Dicionário & Buscador Reverso
+        const btnRevStrum = document.getElementById('btn-viola-reverse-strum');
+        if (btnRevStrum) {
+            btnRevStrum.addEventListener('click', strumReverseChord);
+        }
+
+        const btnRevToFret = document.getElementById('btn-viola-reverse-to-fretboard');
+        if (btnRevToFret) {
+            btnRevToFret.addEventListener('click', () => {
+                state.displayMode = 'REVERSE';
+                saveViolaState();
+                renderAll();
+                const wrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+
+        const btnRevTransDown = document.getElementById('btn-viola-reverse-trans-down');
+        if (btnRevTransDown) {
+            btnRevTransDown.addEventListener('click', () => transposeReverseChord(-1));
+        }
+
+        const btnRevTransUp = document.getElementById('btn-viola-reverse-trans-up');
+        if (btnRevTransUp) {
+            btnRevTransUp.addEventListener('click', () => transposeReverseChord(1));
+        }
+
+        const btnRevClearOpen = document.getElementById('btn-viola-reverse-clear-open');
+        if (btnRevClearOpen) {
+            btnRevClearOpen.addEventListener('click', resetReverseChordToOpen);
+        }
+
+        const btnRevClearMute = document.getElementById('btn-viola-reverse-clear-mute');
+        if (btnRevClearMute) {
+            btnRevClearMute.addEventListener('click', resetReverseChordToMute);
+        }
+
         document.getElementById('viola-select-instrument').addEventListener('change', (e) => {
             stopScalePlayback();
             stopPonteioPlayback();
@@ -2714,6 +3595,7 @@
         renderFretboardSVG();
         renderHarmonicFieldPanel();
         renderDuadStrip();
+        renderReverseChordPanel();
         renderProgressionStudyPanel();
         renderMetronomeControls();
     }
