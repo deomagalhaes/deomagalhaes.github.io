@@ -2769,8 +2769,6 @@
             .filter((p) => p.nextInterventionDate)
             .sort((a, b) => a.nextInterventionDate.localeCompare(b.nextInterventionDate))
             .slice(0, 3);
-            cal.speciesInFocus.some((sp) => p.popularName.toLowerCase().includes(sp.toLowerCase()))
-        );
 
         container.innerHTML = `
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
