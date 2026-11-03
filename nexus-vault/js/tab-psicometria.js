@@ -429,6 +429,16 @@
             handedness: 'Destro',
             informant: 'Genitores e Escola',
             referralReason: 'Investigação do perfil neurocognitivo, atencional, executivo e socioemocional.',
+            clinicalData: {
+                referralReason: 'Investigação do perfil neurocognitivo, atencional, executivo e socioemocional.',
+                anamneseHistory: '',
+                familyHistory: '',
+                behaviorObservation: '',
+                diagnosticHypotheses: '',
+                recommendations: '',
+                isCollapsed: false,
+                activeTab: 'queixa'
+            },
             wasi: {
                 voc: { raw: '', t: '', mode: 'T', mean: '', sd: '' },
                 cub: { raw: '', t: '', mode: 'T', mean: '', sd: '' },
@@ -621,6 +631,18 @@
             handedness: p.handedness ?? base.handedness,
             informant: p.informant ?? base.informant,
             referralReason: p.referralReason ?? base.referralReason,
+            clinicalData: Object.assign({}, base.clinicalData, (p && p.clinicalData) || {}, {
+                referralReason: (p && p.clinicalData && p.clinicalData.referralReason !== undefined)
+                    ? p.clinicalData.referralReason
+                    : (p && p.referralReason ? p.referralReason : base.clinicalData.referralReason),
+                anamneseHistory: (p && p.clinicalData && p.clinicalData.anamneseHistory) || '',
+                familyHistory: (p && p.clinicalData && p.clinicalData.familyHistory) || '',
+                behaviorObservation: (p && p.clinicalData && p.clinicalData.behaviorObservation) || '',
+                diagnosticHypotheses: (p && p.clinicalData && p.clinicalData.diagnosticHypotheses) || '',
+                recommendations: (p && p.clinicalData && p.clinicalData.recommendations) || '',
+                isCollapsed: Boolean(p && p.clinicalData && p.clinicalData.isCollapsed),
+                activeTab: (p && p.clinicalData && p.clinicalData.activeTab) || 'queixa'
+            }),
             wasi: Object.assign({}, base.wasi, p.wasi || {}, {
                 voc: Object.assign({}, base.wasi.voc, (p.wasi && p.wasi.voc) || {}),
                 cub: Object.assign({}, base.wasi.cub, (p.wasi && p.wasi.cub) || {}),
@@ -1261,6 +1283,9 @@
                     </div>
                 </div>
 
+                <!-- PAINEL CLÍNICO: ANAMNESE, OBSERVAÇÃO & FORMULAÇÃO DIAGNÓSTICA (ACIMA DOS BOTÕES DOS TESTES) -->
+                <div id="psy-clinical-panel" class="no-print"></div>
+
                 <!-- SUB-NAVEGAÇÃO DE MÓDULOS DE CORREÇÃO -->
                 <div id="psy-subtabs-bar" class="flex flex-wrap items-center gap-2 bg-[#0f172a]/90 border border-[#1e293b] rounded-xl p-2 no-print"></div>
 
@@ -1345,6 +1370,399 @@
         `;
     }
 
+    // =========================================================================
+    // 4.1. PAINEL CLÍNICO QUALITATIVO: ANAMNESE, OBSERVAÇÃO & HIPÓTESES
+    // =========================================================================
+
+    const CLINICAL_PRESETS = {
+        tdah: {
+            label: 'Modelo TDAH (Criança / Adolescente)',
+            referralReason: 'Encaminhado(a) por neuropediatra e coordenação pedagógica escolar devido a queixas persistentes de desatenção em sala de aula, oscilação acentuada no rendimento acadêmico, impulsividade motora, perda recorrente de materiais e dificuldade para iniciar e concluir atividades que exigem esforço mental sustentado.',
+            anamneseHistory: 'Nascido(a) de parto cesáreo a termo (39 semanas), sem intercorrências pré ou perinatais. Marcos neuropsicomotores preservados: marcha independente aos 12 meses e aquisição de linguagem típica aos 14 meses. Sono regular. No contexto escolar, professores relatam inquietação física, necessidade de constantes intervenções verbais para manter o foco e lentidão na cópia em razão de dispersão frequente.',
+            familyHistory: 'Genitor com relato retrospectivo de dificuldade atencional e inquietação motora na idade escolar, sem diagnóstico ou intervenção formal. Ausência de histórico familiar de doenças neurodegenerativas, crises convulsivas ou deficiência intelectual.',
+            behaviorObservation: 'Apresentou-se receptivo(a), colaborativo(a) e com bom engajamento com o examinador. Contato visual adequado e discurso coerente. Durante tarefas cognitivas de maior demanda atencional e executiva sustentada, exibiu inquietação psicomotora (mudanças contínuas de postura, rotação de materiais), impaciência em itens cronometrados e estilo de resposta predominantemente impulsivo (FDT e BPA-2), beneficiando-se claramente de pausas breves estruturadas e reforçamento verbal contingente.',
+            diagnosticHypotheses: 'A integração dos dados qualitativos (anamnese e observação comportamental clínica) com os achados psicométricos aponta perfil compatível com os critérios do DSM-5-TR (314.01) e CID-11 (6A05.2) para Transtorno do Déficit de Atenção com Hiperatividade (TDAH), Apresentação Combinada. Evidencia-se discrepância significativa entre capacidade intelectual global preservada e fragilidades marcantes no controle inibitório, flexibilidade mental e sustentação atencional.',
+            recommendations: '1. Encaminhamento a Neuropediatra/Psiquiatra da Infância para avaliação médica integrativa e discussão de plano terapêutico interdisciplinar.\n2. Psicoterapia Cognitivo-Comportamental (TCC) voltada ao desenvolvimento de autorregulação e funções executivas.\n3. Plano de Suporte Pedagógico Escolar: fragmentação de tarefas extensas, assento preferencial na primeira fileira e tempo estendido (25% a 50%) em avaliações formais.\n4. Orientação parental para rotinas externas estruturadas e previsíveis.'
+        },
+        tea: {
+            label: 'Modelo TEA (Socioemocional / Sensorial)',
+            referralReason: 'Encaminhado(a) para investigação neuropsicológica especializada diante de dificuldades persistentes na reciprocidade socioemocional, comportamentos e interesses circunscritos, rigidez cognitiva a mudanças de rotina e reatividade sensorial atípica relatada pela família e escola.',
+            anamneseHistory: 'Gestação sem intercorrências. Marcos motores atingidos na época esperada. No desenvolvimento da comunicação, relata-se atraso sutil no surgimento da linguagem funcional e predomínio de ecolalias transitórias na primeira infância. Dificuldade histórica em iniciar e manter brincadeiras colaborativas com pares, demonstrando preferência por atividades solitárias e estruturadas.',
+            familyHistory: 'Histórico familiar materno de traços do fenótipo ampliado do autismo (rigidez cognitiva e preferência por isolamento social). Ausência de histórico de síndromes genéticas ou epilepsia.',
+            behaviorObservation: 'Apresentou contato visual intermitente e modulado de maneira atípica. Discurso com prosódia particular e repertório lexical rebuscado. Em tarefas com regras estritas e bem delimitadas, exibiu excelente adesão; diante de instruções abertas ou imprevistos, demonstrou ansiedade e rigidez cognitiva. Sensibilidade perceptiva moderada a ruídos ambientais.',
+            diagnosticHypotheses: 'Os achados da anamnese, observação clínica e instrumentos dimensionais de responsividade social (SRS-2) convergem para hipótese diagnóstica de Transtorno do Espectro Autista (TEA), Nível 1 de Suporte (DSM-5-TR: 299.00 / CID-11: 6A02.0), sem comprometimento intelectual associado.',
+            recommendations: '1. Acompanhamento com Neuropediatra / Psiquiatra da Infância para consolidação diagnóstica interdisciplinar.\n2. Psicoterapia baseada em Análise do Comportamento Aplicada (ABA) ou TCC focada em habilidades sociais e flexibilidade cognitiva.\n3. Suporte fonoaudiológico voltado à pragmática da comunicação.\n4. Adequação ambiental escolar e acomodações sensoriais na rotina diária.'
+        },
+        aprendizagem: {
+            label: 'Modelo Dificuldades de Aprendizagem / Dislexia',
+            referralReason: 'Encaminhado(a) por psicopedagoga institucional devido a dificuldades acentuadas e persistentes na decodificação leitora, fluência de leitura e precisão ortográfica, em discrepância com o nível intelectual geral e oportunidades pedagógicas adequadas.',
+            anamneseHistory: 'Desenvolvimento motor e linguístico prévio adequado. Dificuldades tornaram-se evidentes a partir da alfabetização formal (1º e 2º anos), com trocas fonológicas na escrita, lentidão na correspondência grafema-fonema e necessidade contínua de apoio especializado para aquisição de leitura.',
+            familyHistory: 'Histórico paterno de dificuldades severas na aquisição de leitura e escrita durante a infância e adolescência escolar.',
+            behaviorObservation: 'Examinando colaborativo, persistente em tarefas não-verbais e visuoespaciais. Diante de estímulos envolvendo leitura e escrita, demonstrou ansiedade, postura esquiva e esforço compensatório evidente com fadiga precoce.',
+            diagnosticHypotheses: 'Quadro clínico compatível com Transtorno Específico da Aprendizagem, com prejuízo na leitura (Dislexia do Desenvolvimento) e prejuízo na expressão escrita (DSM-5-TR: 315.00 / CID-11: 6A03.0), na presença de potencial cognitivo global preservado.',
+            recommendations: '1. Intervenção fonoaudiológica e psicopedagógica baseada no método fônico e instrução multissensorial estruturada.\n2. Adaptações avaliativas escolares (leitor de apoio ou avaliações orais, dispensa de penalização em ortografia).\n3. Reforço positivo da autoeficácia acadêmica e acompanhamento psicológico preventivo de ansiedade de desempenho.'
+        },
+        adulto: {
+            label: 'Modelo Adulto (Sobrecarga / Queixa de Memória)',
+            referralReason: 'Autoencaminhamento / Encaminhamento médico com queixas de declínio subjetivo na atenção, falhas frequentes de memória prospectiva no trabalho, fadiga mental e sensação crônica de sobrecarga executiva no cotidiano profissional.',
+            anamneseHistory: 'Adulto em atividade profissional plena. Relata aumento substancial de demandas de trabalho nos últimos 12 meses associado a padrão de sono irregular, privação crônica de repouso e sintomas compatíveis com esgotamento ocupacional (Burnout).',
+            familyHistory: 'Sem histórico familiar de demência precoce. Histórico familiar de transtornos do humor e ansiedade.',
+            behaviorObservation: 'Postura colaborativa, discurso articulado e autocrítico quanto ao próprio desempenho. Ansiedade antecipatória evidente em subtestes de memória e cronometrados, solicitando frequente confirmação de correção pelo examinador.',
+            diagnosticHypotheses: 'O perfil psicométrico evidencia preservação das funções corticais superiores e integridade mnemônica, com flutuações secundárias em tarefas de alta carga de memória de trabalho e controle atencional, configurando impacto de Sintomas Ansiosos / Esgotamento Ocupacional (CID-11: QD85) sobre as Funções Executivas, sem evidência de transtorno neurocognitivo primário.',
+            recommendations: '1. Acompanhamento médico para manejo clínico dos sintomas de ansiedade e regulação do sono.\n2. Psicoterapia Cognitivo-Comportamental com foco em manejo de estresse ocupacional e regulação emocional.\n3. Estruturação de rotinas de higiene do sono e pausas cognitivas programadas durante a jornada de trabalho.'
+        }
+    };
+
+    function countClinicalFilled(cd) {
+        if (!cd) return 0;
+        let count = 0;
+        if (cd.referralReason && cd.referralReason.trim()) count++;
+        if (cd.anamneseHistory && cd.anamneseHistory.trim()) count++;
+        if (cd.familyHistory && cd.familyHistory.trim()) count++;
+        if (cd.behaviorObservation && cd.behaviorObservation.trim()) count++;
+        if ((cd.diagnosticHypotheses && cd.diagnosticHypotheses.trim()) || (cd.recommendations && cd.recommendations.trim())) count++;
+        return count;
+    }
+
+    function renderClinicalPanel() {
+        const host = document.getElementById('psy-clinical-panel');
+        if (!host) return;
+        const C = global.VaultCore;
+        const prot = getActiveProtocol();
+        const cd = prot.clinicalData;
+        const filledCount = countClinicalFilled(cd);
+        const isCollapsed = Boolean(cd.isCollapsed);
+        const activeTab = cd.activeTab || 'queixa';
+
+        const hasQ = Boolean(cd.referralReason && cd.referralReason.trim());
+        const hasA = Boolean(cd.anamneseHistory && cd.anamneseHistory.trim());
+        const hasF = Boolean(cd.familyHistory && cd.familyHistory.trim());
+        const hasB = Boolean(cd.behaviorObservation && cd.behaviorObservation.trim());
+        const hasH = Boolean((cd.diagnosticHypotheses && cd.diagnosticHypotheses.trim()) || (cd.recommendations && cd.recommendations.trim()));
+
+        const dot = (filled) => filled
+            ? `<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400/50"></span>`
+            : `<span class="w-2 h-2 rounded-full bg-slate-700 inline-block"></span>`;
+
+        let bodyHtml = '';
+        if (!isCollapsed) {
+            let activeContent = '';
+
+            if (activeTab === 'queixa') {
+                activeContent = `
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <label for="psy-clinical-referral" class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                    <span>Queixa Principal &amp; Motivos do Encaminhamento</span>
+                                    <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção II do Laudo</span>
+                                </label>
+                                <p class="text-[11px] text-slate-400">Descreva as demandas apresentadas pelo paciente, família, escola ou médico assistente, com sintomas e prejuízos no dia a dia.</p>
+                            </div>
+                        </div>
+                        <textarea id="psy-clinical-referral" rows="4" placeholder="Ex.: Encaminhado(a) pela neuropediatra e coordenação escolar devido a queixas persistentes de desatenção, desorganização material e oscilação no rendimento acadêmico..."
+                            class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.referralReason || '')}</textarea>
+                    </div>
+                `;
+            } else if (activeTab === 'anamnese') {
+                activeContent = `
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <label for="psy-clinical-anamnese" class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                    <span>Marcos do Desenvolvimento, Histórico Escolar &amp; Rotina</span>
+                                    <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção III do Laudo</span>
+                                </label>
+                                <p class="text-[11px] text-slate-400">Gestação, parto, marcos motores (marcha), linguagem, adaptação escolar, retenções/apoios pedagógicos e padrão de sono.</p>
+                            </div>
+                        </div>
+                        <textarea id="psy-clinical-anamnese" rows="4" placeholder="Ex.: Parto a termo sem intercorrências. Marcha aos 12 meses e linguagem com marcos típicos. No percurso escolar, relata-se lentidão na escrita e necessidade de apoio individual para focar..."
+                            class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.anamneseHistory || '')}</textarea>
+                    </div>
+                `;
+            } else if (activeTab === 'antecedentes') {
+                activeContent = `
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <label for="psy-clinical-family" class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                    <span>Antecedentes Familiares, Histórico Clínico &amp; Saúde</span>
+                                    <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção III do Laudo</span>
+                                </label>
+                                <p class="text-[11px] text-slate-400">Histórico familiar de TDAH, TEA, dificuldades de aprendizagem ou transtornos de humor; exames audiológicos/visuais e medicações.</p>
+                            </div>
+                        </div>
+                        <textarea id="psy-clinical-family" rows="4" placeholder="Ex.: Genitor com relato retrospectivo de sintomas atencionais na infância. Nega crises convulsivas ou histórico de déficits sensoriais. Audiometria recente sem alterações..."
+                            class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.familyHistory || '')}</textarea>
+                    </div>
+                `;
+            } else if (activeTab === 'observacao') {
+                activeContent = `
+                    <div class="space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <label for="psy-clinical-behavior" class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                    <span>Observação Comportamental durante as Sessões de Avaliação</span>
+                                    <span class="text-[10px] font-mono text-emerald-300 bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.2 rounded">Seção IV do Laudo</span>
+                                </label>
+                                <p class="text-[11px] text-slate-400">Contato visual, engajamento na tarefa, tolerância à frustração, nível de inquietação psicomotora, impulsividade motora/verbal e fadiga cognitiva.</p>
+                            </div>
+                        </div>
+                        <textarea id="psy-clinical-behavior" rows="4" placeholder="Ex.: Apresentou-se colaborativo e comunicativo. Contato visual adequado. Em tarefas de esforço mental prolongado (FDT e BPA-2), exibiu inquietação motora e respostas impulsivas por velocidade, beneficiando-se de reforço verbal contingente..."
+                            class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.behaviorObservation || '')}</textarea>
+                    </div>
+                `;
+            } else if (activeTab === 'hipoteses') {
+                activeContent = `
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
+                        <div class="space-y-1.5">
+                            <label for="psy-clinical-hypotheses" class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                <span>Hipóteses Diagnósticas &amp; Raciocínio Clínico (DSM-5-TR / CID-11)</span>
+                                <span class="text-[10px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/40 px-1.5 py-0.2 rounded">Seção VI</span>
+                            </label>
+                            <p class="text-[11px] text-slate-400">Convergência entre dados qualitativos e psicométricos para formulação nosológica.</p>
+                            <textarea id="psy-clinical-hypotheses" rows="5" placeholder="Ex.: Perfil clínico e psicométrico compatível com TDAH, Apresentação Combinada (DSM-5-TR 314.01 / CID-11 6A05.2), evidenciado por discrepância entre raciocínio geral preservado e fragilidade acentuada no controle inibitório e atenção sustentada..."
+                                class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.diagnosticHypotheses || '')}</textarea>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="psy-clinical-recommendations" class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                <span>Diretrizes Terapêuticas, Recomendações &amp; Encaminhamentos</span>
+                                <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/40 px-1.5 py-0.2 rounded">Seção VII</span>
+                            </label>
+                            <p class="text-[11px] text-slate-400">Encaminhamentos médicos, intervenção psicoterapêutica, suporte escolar e orientação parental.</p>
+                            <textarea id="psy-clinical-recommendations" rows="5" placeholder="Ex.: 1. Avaliação com Neuropediatra para conduta integrada.\n2. TCC para treino de funções executivas.\n3. Adaptações escolares: tempo estendido e fragmentação de atividades longas.\n4. Orientação parental para rotinas visuais estruturadas."
+                                class="w-full p-3 rounded-xl bg-[#090d16] border border-slate-700 focus:border-cyan-400 focus:outline-none text-xs text-slate-100 leading-relaxed font-sans">${C.esc(cd.recommendations || '')}</textarea>
+                        </div>
+                    </div>
+                `;
+            }
+
+            bodyHtml = `
+                <!-- SUB-TABS DO PAINEL CLÍNICO -->
+                <div class="flex flex-wrap items-center gap-1.5 border-b border-slate-800/80 pb-3">
+                    <button type="button" data-clinical-tab="queixa"
+                        class="min-h-[32px] px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${activeTab === 'queixa' ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
+                        ${dot(hasQ)}
+                        <span>1. Queixa &amp; Encaminhamento</span>
+                    </button>
+
+                    <button type="button" data-clinical-tab="anamnese"
+                        class="min-h-[32px] px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${activeTab === 'anamnese' ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
+                        ${dot(hasA)}
+                        <span>2. Anamnese &amp; Desenvolvimento</span>
+                    </button>
+
+                    <button type="button" data-clinical-tab="antecedentes"
+                        class="min-h-[32px] px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${activeTab === 'antecedentes' ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
+                        ${dot(hasF)}
+                        <span>3. Antecedentes &amp; Saúde</span>
+                    </button>
+
+                    <button type="button" data-clinical-tab="observacao"
+                        class="min-h-[32px] px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${activeTab === 'observacao' ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
+                        ${dot(hasB)}
+                        <span>4. Observação na Testagem</span>
+                    </button>
+
+                    <button type="button" data-clinical-tab="hipoteses"
+                        class="min-h-[32px] px-3 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${activeTab === 'hipoteses' ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40' : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'}">
+                        ${dot(hasH)}
+                        <span>5. Hipóteses &amp; Diretrizes</span>
+                    </button>
+                </div>
+
+                <!-- CONTEÚDO ATIVO -->
+                <div class="pt-1">
+                    ${activeContent}
+                </div>
+
+                <!-- RODAPÉ COM ATALHO DE INTEGRAÇÃO -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/60 text-[11px] text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i>
+                        <span>Os textos inseridos são automaticamente sincronizados e estruturam as seções narrativas no rascunho do Laudo.</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-psy-go-laudo-tab"
+                            class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 font-medium text-xs flex items-center gap-1 border border-slate-700 transition">
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            <span>Ver Rascunho no Laudo (Sub-aba F)</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        host.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 ${!isCollapsed ? 'border-b border-slate-800/80 pb-3.5' : ''}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-300 shrink-0">
+                            <i data-lucide="clipboard-pen" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="text-sm sm:text-base font-bold text-slate-100 tracking-tight">Dados Clínicos, Anamnese, Observação &amp; Hipóteses Diagnósticas</h3>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono ${filledCount > 0 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                                    ${filledCount}/5 eixos preenchidos
+                                </span>
+                                <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">Composição do Laudo Ativa</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Insira queixa, anamnese, observação comportamental e hipóteses para fundamentar a análise e redigir o laudo com rigor acadêmico.</p>
+                        </div>
+                    </div>
+
+                    <!-- Ações Rápidas do Painel Clínico -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="psy-clinical-presets" aria-label="Inserir Modelo Clínico Rápido"
+                            class="min-h-[36px] px-2.5 py-1 rounded-lg bg-[#090d16] border border-emerald-500/40 text-emerald-300 text-xs font-semibold focus:outline-none focus:border-emerald-400">
+                            <option value="">+ Inserir Roteiro / Preset Clínico...</option>
+                            <option value="tdah">Modelo TDAH (Criança / Adolescente)</option>
+                            <option value="tea">Modelo TEA (Socioemocional / Sensorial)</option>
+                            <option value="aprendizagem">Modelo Dificuldades de Aprendizagem / Dislexia</option>
+                            <option value="adulto">Modelo Adulto (Sobrecarga / Queixa de Memória)</option>
+                            <option value="limpar">Limpar Todos os Campos Clínicos</option>
+                        </select>
+
+                        <button type="button" id="btn-psy-sync-clinical-laudo" title="Atualizar a Síntese Narrativa do Laudo com estes Dados Clínicos"
+                            class="min-h-[36px] px-3.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-md shadow-emerald-600/20">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            <span>Integrar ao Laudo</span>
+                        </button>
+
+                        <button type="button" id="btn-psy-toggle-clinical" title="${isCollapsed ? 'Expandir Painel Clínico' : 'Recolher Painel Clínico'}"
+                            class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs flex items-center gap-1 transition">
+                            <i data-lucide="${isCollapsed ? 'chevron-down' : 'chevron-up'}" class="w-3.5 h-3.5"></i>
+                            <span>${isCollapsed ? 'Expandir' : 'Recolher'}</span>
+                        </button>
+                    </div>
+                </div>
+
+                ${bodyHtml}
+            </div>
+        `;
+
+        bindClinicalPanelEvents();
+    }
+
+    function bindClinicalPanelEvents() {
+        const C = global.VaultCore;
+        const prot = getActiveProtocol();
+        const cd = prot.clinicalData;
+
+        // Toggle Expandir / Recolher
+        const btnToggle = document.getElementById('btn-psy-toggle-clinical');
+        if (btnToggle) {
+            btnToggle.addEventListener('click', () => {
+                cd.isCollapsed = !cd.isCollapsed;
+                saveState();
+                renderClinicalPanel();
+                if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-clinical-panel'));
+            });
+        }
+
+        // Troca de sub-abas internas
+        const tabBtns = document.querySelectorAll('[data-clinical-tab]');
+        tabBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-clinical-tab');
+                cd.activeTab = target;
+                saveState();
+                renderClinicalPanel();
+                if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-clinical-panel'));
+            });
+        });
+
+        // Atalho para ir à sub-aba de Laudo
+        const btnGoLaudo = document.getElementById('btn-psy-go-laudo-tab');
+        if (btnGoLaudo) {
+            btnGoLaudo.addEventListener('click', () => {
+                prot.report.customDraftText = generateTechnicalNarrativeDraft(prot);
+                appState.activeSubTab = 'laudo';
+                saveState();
+                renderAll();
+                C.toast('Laudo atualizado e aberto na Sub-aba F.', 'success');
+            });
+        }
+
+        // Seletor de Presets
+        const selPreset = document.getElementById('psy-clinical-presets');
+        if (selPreset) {
+            selPreset.addEventListener('change', () => {
+                const val = selPreset.value;
+                if (!val) return;
+                if (val === 'limpar') {
+                    if (!window.confirm('Limpar todos os textos de anamnese, observação e hipóteses deste protocolo?')) {
+                        selPreset.value = '';
+                        return;
+                    }
+                    cd.referralReason = '';
+                    cd.anamneseHistory = '';
+                    cd.familyHistory = '';
+                    cd.behaviorObservation = '';
+                    cd.diagnosticHypotheses = '';
+                    cd.recommendations = '';
+                    prot.report.customDraftText = '';
+                    saveState();
+                    renderClinicalPanel();
+                    if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-clinical-panel'));
+                    C.toast('Campos clínicos limpos.', 'info');
+                    return;
+                }
+                const pset = CLINICAL_PRESETS[val];
+                if (pset) {
+                    cd.referralReason = pset.referralReason;
+                    cd.anamneseHistory = pset.anamneseHistory;
+                    cd.familyHistory = pset.familyHistory;
+                    cd.behaviorObservation = pset.behaviorObservation;
+                    cd.diagnosticHypotheses = pset.diagnosticHypotheses;
+                    cd.recommendations = pset.recommendations;
+                    cd.isCollapsed = false;
+                    prot.report.customDraftText = generateTechnicalNarrativeDraft(prot);
+                    saveState();
+                    renderClinicalPanel();
+                    if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-clinical-panel'));
+                    C.toast(`Modelo "${pset.label}" aplicado com sucesso!`, 'success');
+                }
+            });
+        }
+
+        // Botão Integrar ao Laudo
+        const btnSyncLaudo = document.getElementById('btn-psy-sync-clinical-laudo');
+        if (btnSyncLaudo) {
+            btnSyncLaudo.addEventListener('click', () => {
+                prot.report.customDraftText = generateTechnicalNarrativeDraft(prot);
+                saveState();
+                C.toast('Dados clínicos, observações e hipóteses integrados com sucesso ao Laudo!', 'success');
+                if (appState.activeSubTab === 'laudo') {
+                    renderActiveSubTab();
+                    if (C.refreshIcons) C.refreshIcons(document.getElementById('psy-subtab-viewport'));
+                }
+            });
+        }
+
+        // Eventos input em cada textarea
+        const bindClinicalTextarea = (id, prop) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('input', () => {
+                cd[prop] = el.value;
+                if (prop === 'referralReason') {
+                    prot.referralReason = el.value;
+                }
+                prot.report.customDraftText = ''; // Invalida draft anterior para regeneração
+                saveState();
+            });
+        };
+
+        bindClinicalTextarea('psy-clinical-referral', 'referralReason');
+        bindClinicalTextarea('psy-clinical-anamnese', 'anamneseHistory');
+        bindClinicalTextarea('psy-clinical-family', 'familyHistory');
+        bindClinicalTextarea('psy-clinical-behavior', 'behaviorObservation');
+        bindClinicalTextarea('psy-clinical-hypotheses', 'diagnosticHypotheses');
+        bindClinicalTextarea('psy-clinical-recommendations', 'recommendations');
+    }
+
     function bindTopProtocolEvents() {
         const C = global.VaultCore;
         const sel = document.getElementById('psy-protocol-select');
@@ -1426,6 +1844,12 @@
                 demoProt.ravlt.rawB1 = 5;
                 demoProt.ravlt.rawA6 = 12;
                 demoProt.ravlt.rawA7 = 11;
+
+                demoProt.clinicalData = Object.assign({}, CLINICAL_PRESETS.tdah, {
+                    isCollapsed: false,
+                    activeTab: 'queixa'
+                });
+                demoProt.report.customDraftText = '';
 
                 appState.protocols.unshift(demoProt);
                 appState.activeProtocolId = demoProt.id;
@@ -3768,22 +4192,103 @@ ${bodyRowsHtml}
     }
 
     /**
+     * Síntese Diagnóstica Assistida Integrativa baseada nos Instrumentos Preenchidos
+     */
+    function composeAssistedDiagnosticSynthesis(prot) {
+        const bits = [];
+
+        // Inteligência
+        const wasi = computeWasiAll(prot);
+        if (wasi.qit4.metrics) {
+            bits.push(`potencial intelectual global na faixa ${wasi.qit4.metrics.classification.label} (QIT-4 = ${Math.round(wasi.qit4.finalQI)}, Percentil ${wasi.qit4.metrics.pctFormatted})`);
+        } else if (wasi.qit2.metrics) {
+            bits.push(`potencial intelectual estimado na faixa ${wasi.qit2.metrics.classification.label} (QIT-2 = ${Math.round(wasi.qit2.finalQI)})`);
+        }
+
+        // Funções Executivas e Atenção
+        const fdt = computeFdtAll(prot);
+        const bpa = computeBpa2All(prot);
+        const execFragile = (fdt.inibicao.metrics && fdt.inibicao.metrics.classification.isImpaired) ||
+                            (fdt.flexibilidade.metrics && fdt.flexibilidade.metrics.classification.isImpaired) ||
+                            (bpa.ag.metrics && bpa.ag.metrics.classification.isImpaired);
+        if (execFragile) {
+            bits.push('evidências psicométricas convergentes de fragilidade nas funções executivas (controle inibitório, flexibilidade mental e/ou sustentação atencional)');
+        } else if (fdt.leitura.time !== null) {
+            bits.push('controle inibitório, flexibilidade cognitiva e velocidade operacional dentro dos limites esperados para a faixa etária');
+        }
+
+        // Memória Auditivo-Verbal
+        const rav = computeRavltAll(prot);
+        if (rav.total !== null) {
+            if (rav.norms.total && rav.norms.total.classification.isImpaired) {
+                bits.push('rebaixamento na eficiência de aprendizagem imediata de novos conteúdos auditivo-verbais');
+            } else {
+                bits.push('capacidade de retenção, armazenamento e evocação tardia de material verbal estruturado preservada');
+            }
+        }
+
+        // Cognição Social e Reciprocidade
+        const srs = computeSrs2All(prot);
+        if (srs.totalObj.t !== null) {
+            if (srs.totalObj.t >= 60) {
+                bits.push(`elevação dimensional na responsividade socioemocional em grau ${srs.totalObj.sev.label} (T = ${fmtPlain(srs.totalObj.t, 0)})`);
+            } else {
+                bits.push('reciprocidade socioemocional, comunicação interpessoal e padrões comportamentais dentro dos limites normais');
+            }
+        }
+
+        if (bits.length > 0) {
+            return `A análise integrativa dos achados neuropsicológicos evidencia ${bits.join('; ')}. A correlação entre os relatos de anamnese, as observações comportamentais durante as sessões e o perfil quantitativo obtido nos instrumentos fundamenta as hipóteses diagnósticas e orienta as diretrizes terapêuticas apresentadas neste documento.`;
+        }
+
+        return 'Os dados clínicos qualitativos e os resultados psicométricos quantitativos devem ser interpretados conjuntamente em perspectiva biopsicossocial, considerando o impacto funcional das demandas ambientais sobre o funcionamento neurocognitivo do examinando.';
+    }
+
+    /**
      * Gerador Automático de Rascunho Técnico-Clínico em Português Acadêmico
      */
     function generateTechnicalNarrativeDraft(prot) {
         const C = global.VaultCore;
         const age = calcChronologicalAge(prot.birthDate, prot.evalDate);
-        const paragraphs = [];
+        const cd = prot.clinicalData || {};
+        const sections = [];
 
-        // 1. Identificação e Enquadre
+        // I. IDENTIFICAÇÃO E ENQUADRE METODOLÓGICO
         const evalBR = C.formatDateBR(prot.evalDate);
         const agePhrase = age ? `com idade cronológica exata de ${age.formatted} na data do exame (${evalBR})` : `avaliado(a) em ${evalBR}`;
-        paragraphs.push(
-            `SÍNTESE TÉCNICA DOS RESULTADOS PSICOMÉTRICOS (Protocolo ${prot.code})\n` +
-            `Examinando(a) ${agePhrase}, escolaridade "${prot.schooling || 'não informada'}", lateralidade ${prot.handedness || 'destra'}, tendo como fonte de informação complementar ${prot.informant || 'os responsáveis'}. Os escores brutos foram convertidos segundo tabelas normativas brasileiras correspondentes à faixa etária/escolaridade e interpretados em consonância com a nosologia do DSM-5-TR.`
+        sections.push(
+            `LAUDO / SÍNTESE DE AVALIAÇÃO NEUROPSICOLÓGICA (Protocolo ${prot.code})\n\n` +
+            `I. IDENTIFICAÇÃO E ENQUADRE METODOLÓGICO\n` +
+            `Examinando(a) ${agePhrase}, escolaridade informada "${prot.schooling || 'não informada'}", lateralidade ${prot.handedness || 'destra'}, tendo como fonte de informação complementar ${prot.informant || 'os responsáveis'}. Os testes administrados foram aferidos segundo tabelas normativas brasileiras vigentes, ajustadas para idade cronológica e/ou escolaridade, em consonância com a Resolução CFP nº 06/2019 e critérios diagnósticos do DSM-5-TR e CID-11.`
         );
 
-        // 2. WASI
+        // II. QUEIXA PRINCIPAL E MOTIVO DO ENCAMINHAMENTO
+        const refReason = (cd.referralReason && cd.referralReason.trim()) || (prot.referralReason && prot.referralReason.trim());
+        if (refReason) {
+            sections.push(`II. MOTIVO DO ENCAMINHAMENTO E QUEIXA PRINCIPAL\n${refReason}`);
+        }
+
+        // III. ANAMNESE E HISTÓRICO DE DESENVOLVIMENTO
+        const anamBits = [];
+        if (cd.anamneseHistory && cd.anamneseHistory.trim()) {
+            anamBits.push(cd.anamneseHistory.trim());
+        }
+        if (cd.familyHistory && cd.familyHistory.trim()) {
+            anamBits.push(`Antecedentes familiares e histórico de saúde: ${cd.familyHistory.trim()}`);
+        }
+        if (anamBits.length > 0) {
+            sections.push(`III. HISTÓRICO CLÍNICO, DESENVOLVIMENTO E ANTECEDENTES\n${anamBits.join('\n\n')}`);
+        }
+
+        // IV. OBSERVAÇÃO COMPORTAMENTAL
+        if (cd.behaviorObservation && cd.behaviorObservation.trim()) {
+            sections.push(`IV. OBSERVAÇÃO COMPORTAMENTAL DURANTE O PROCESSO AVALIATIVO\n${cd.behaviorObservation.trim()}`);
+        }
+
+        // V. RESULTADOS DOS INSTRUMENTOS NEUROPSICOLÓGICOS PADRONIZADOS
+        const psychParagraphs = [];
+
+        // 1. WASI
         const wasi = computeWasiAll(prot);
         if (wasi.qit4.metrics || wasi.qit2.metrics || wasi.qiv.metrics || wasi.qie.metrics) {
             const bits = [];
@@ -3812,10 +4317,10 @@ ${bodyRowsHtml}
             if (wasi.deltaAlert) {
                 pWasi += ` ${wasi.deltaAlert.text}`;
             }
-            paragraphs.push(pWasi);
+            psychParagraphs.push(pWasi);
         }
 
-        // 3. Wechsler (WISC-IV / WAIS-III)
+        // 2. Wechsler (WISC-IV / WAIS-III)
         const wech = computeWechslerIndices(prot);
         if (wech.qit || wech.icv || wech.iop || wech.imo || wech.ivp) {
             const wParts = [];
@@ -3833,10 +4338,10 @@ ${bodyRowsHtml}
             pushIdx('ICC', wech.icc);
             let pWech = `Na bateria ${prot.wechsler.scaleName}, obtiveram-se os seguintes índices compostos: ${wParts.join('; ')}.`;
             if (wech.iagIccNote) pWech += ` ${wech.iagIccNote}`;
-            paragraphs.push(pWech);
+            psychParagraphs.push(pWech);
         }
 
-        // 4. Atenção (BPA-2) e Velocidade / Funções Executivas (FDT)
+        // 3. Atenção (BPA-2) e Velocidade / Funções Executivas (FDT)
         const bpa = computeBpa2All(prot);
         if (bpa.ac.pts !== null || bpa.ad.pts !== null || bpa.aa.pts !== null) {
             const bBits = [
@@ -3849,7 +4354,7 @@ ${bodyRowsHtml}
                     ? `${x.n}: ${x.o.pts} pontos (Percentil ${x.o.metrics.pctFormatted}; Z = ${fmtSigned(x.o.z, 2)}, faixa ${x.o.metrics.classification.label})`
                     : `${x.n}: ${x.o.pts} pontos`
             );
-            paragraphs.push(`Na Bateria Psicológica para Avaliação da Atenção (BPA-2), verificaram-se os seguintes resultados: ${bBits.join('; ')}. ${bpa.qualProfile}`);
+            psychParagraphs.push(`Na Bateria Psicológica para Avaliação da Atenção (BPA-2), verificaram-se os seguintes resultados: ${bBits.join('; ')}. ${bpa.qualProfile}`);
         }
 
         const fdt = computeFdtAll(prot);
@@ -3866,10 +4371,10 @@ ${bodyRowsHtml}
                     ? `${x.n} (${fmtPlain(x.o.time, 1)}s; Percentil de eficiência ${x.o.metrics.pctFormatted}; Z = ${fmtSigned(x.o.z, 2)}, ${x.o.metrics.classification.label})`
                     : `${x.n} (${fmtPlain(x.o.time, 1)}s)`
             );
-            paragraphs.push(`Na avaliação cronometrada de controle inibitório e flexibilidade cognitiva pelo Teste dos Cinco Dígitos (FDT), obtiveram-se: ${fBits.join('; ')}. ${fdt.profileSummary}`);
+            psychParagraphs.push(`Na avaliação cronometrada de controle inibitório e flexibilidade cognitiva pelo Teste dos Cinco Dígitos (FDT), obtiveram-se: ${fBits.join('; ')}. ${fdt.profileSummary}`);
         }
 
-        // 5. Memória Episódica (RAVLT)
+        // 4. Memória Episódica (RAVLT)
         const rav = computeRavltAll(prot);
         if (rav.total !== null || rav.a6 !== null || rav.a7 !== null) {
             const rBits = [];
@@ -3888,10 +4393,10 @@ ${bodyRowsHtml}
             }
             if (rav.velEsq !== null) rBits.push(`Velocidade de Esquecimento (A7/A6) = ${fmtPlain(rav.velEsq, 2)}`);
             if (rav.recNet !== null) rBits.push(`Reconhecimento Líquido = ${rav.recNet}/15`);
-            paragraphs.push(`Quanto à memória episódica auditivo-verbal (RAVLT), observaram-se: ${rBits.join('; ')}. ${rav.clinicalNote}`);
+            psychParagraphs.push(`Quanto à memória episódica auditivo-verbal (RAVLT), observaram-se: ${rBits.join('; ')}. ${rav.clinicalNote}`);
         }
 
-        // 6. Cognição Social (SRS-2) e Escalas Executivas
+        // 5. Cognição Social (SRS-2) e Escalas Executivas
         const srs = computeSrs2All(prot);
         if (srs.totalObj.t !== null || srs.cisObj.t !== null) {
             const sBits = [];
@@ -3904,23 +4409,37 @@ ${bodyRowsHtml}
             if (srs.prr.t !== null) {
                 sBits.push(`Padrões Restritos e Repetitivos [DSM-5-TR] com T = ${fmtPlain(srs.prr.t, 0)} (${srs.prr.sev.label})`);
             }
-            paragraphs.push(`Na investigação dimensional da reciprocidade socioemocional pela SRS-2 (${prot.srs2.form}), evidenciou-se ${sBits.join('; ')}.`);
+            psychParagraphs.push(`Na investigação dimensional da reciprocidade socioemocional pela SRS-2 (${prot.srs2.form}), evidenciou-se ${sBits.join('; ')}.`);
         }
 
-        // 7. Instrumentos Adicionais da Calculadora Universal presentes na Tabela ABNT
+        // 6. Instrumentos Adicionais da Calculadora Universal presentes na Tabela ABNT
         const extraRows = (prot.report.rows || []).filter((r) => String(r.uid).startsWith('univ_'));
         if (extraRows.length > 0) {
             const exStr = extraRows.map((r) =>
                 `${r.instrument} — ${r.measure.replace(' *', '')} (Bruto = ${r.raw}; Z = ${r.z !== null ? fmtSigned(r.z, 2) : '—'}; Percentil ${r.pct}; ${r.classification})`
             ).join('; ');
-            paragraphs.push(`Nos instrumentos complementares administrados, registraram-se: ${exStr}.`);
+            psychParagraphs.push(`Nos instrumentos complementares administrados, registraram-se: ${exStr}.`);
         }
 
-        if (paragraphs.length === 1) {
-            paragraphs.push('Preencha os subtestes nas abas de correção (WASI, FDT, SRS-2, BPA-2, RAVLT ou Calculadora Universal) para compor automaticamente a redação clínica completa.');
+        if (psychParagraphs.length > 0) {
+            sections.push(`V. ANÁLISE DOS INSTRUMENTOS NEUROPSICOLÓGICOS PADRONIZADOS\n\n` + psychParagraphs.join('\n\n'));
         }
 
-        return paragraphs.join('\n\n');
+        // VI. SÍNTESE INTEGRATIVA E HIPÓTESES DIAGNÓSTICAS (DSM-5-TR / CID-11)
+        let diagText = '';
+        if (cd.diagnosticHypotheses && cd.diagnosticHypotheses.trim()) {
+            diagText = cd.diagnosticHypotheses.trim();
+        } else {
+            diagText = composeAssistedDiagnosticSynthesis(prot);
+        }
+        sections.push(`VI. SÍNTESE INTEGRATIVA E HIPÓTESES DIAGNÓSTICAS (DSM-5-TR / CID-11)\n${diagText}`);
+
+        // VII. DIRETRIZES TERAPÊUTICAS E ENCAMINHAMENTOS
+        if (cd.recommendations && cd.recommendations.trim()) {
+            sections.push(`VII. DIRETRIZES TERAPÊUTICAS E ENCAMINHAMENTOS\n${cd.recommendations.trim()}`);
+        }
+
+        return sections.join('\n\n');
     }
 
     /**
@@ -4546,6 +5065,7 @@ ${bodyRowsHtml}
 
     function renderAll() {
         renderHeaderAndSubtabs();
+        renderClinicalPanel();
         renderActiveSubTab();
         if (global.VaultCore && typeof global.VaultCore.refreshIcons === 'function') {
             global.VaultCore.refreshIcons();
