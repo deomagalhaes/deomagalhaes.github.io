@@ -34,7 +34,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-25** | **Escala de Rigor Epistêmico e Dedução Avançada** | Lógica de Predicados, Paradoxos e Inferência Formal | `testes/teste-rigor-epistemico-avancado.html` | ✅ Concluído |
 | **T-26** | **Escala de Sintomas de Trauma Complexo e Dissociação (CPTSD / ITQ)** | Respostas Traumáticas, Desregulação Afetiva e Alterações do Self | `testes/teste-trauma-complexo-cptsd.html` | ✅ Concluído |
 | **T-27** | **Inventário de Luto Prolongado e Apego Rompido (PG-13)** | Processamento da Perda, Dor Emocional Persistente e Saudade Traumática | `testes/teste-luto-prolongado.html` | ✅ Concluído |
-| **T-28** | **Escala de Resiliência Neurobiológica e Regulação Vagal (ERN-RV)** | Tônus Vagal, Resiliência ao Estresse e Recuperação Alostática | `testes/teste-resiliencia-vagal.html` | ⏳ *Próximo da fila* |
+| **T-28** | **Escala de Resiliência Neurobiológica e Regulação Vagal (ERN-RV)** | Tônus Vagal, Resiliência ao Estresse e Recuperação Alostática | `testes/teste-resiliencia-vagal.html` | ✅ Concluído |
 
 ---
 

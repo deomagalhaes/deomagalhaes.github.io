@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Resiliência Neurobiológica e Regulação Vagal (ERN-RV / T-28) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu tônus vagal, flexibilidade pré-frontal, tolerância à incerteza e capacidade de recuperação alostática com base na Teoria Polivagal e neurobiologia do estresse.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .btn-calc {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 95, 115, 0.35);
+        }
+
+        .results-box {
+            display: none;
+            margin-top: 35px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #0a9396;
+            padding: 30px;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .subscales-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 640px) {
+            .subscales-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .subscale-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .subscale-card h4 {
+            margin: 0 0 6px 0;
+            color: #005f73;
+            font-size: 0.95em;
+        }
+
+        .subscale-score {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .cta-consult-box {
+            background: #001219;
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .cta-consult-box h3 {
+            color: #94d2bd;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .cta-consult-box p {
+            color: #e2e8f0;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+        }
+
+        .cta-consult-box a {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-consult-box a:hover {
+            background: #ca6702;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container" style="max-width: 860px; margin: 40px auto; padding: 0 20px;">
+            <header class="article-header" style="text-align: center; margin-bottom: 25px;">
+                <h1 style="color: #005f73; font-size: 2em; line-height: 1.25;">Escala de Resiliência Neurobiológica e Regulação Vagal (ERN-RV / T-28)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Clínico:</strong> Esta escala autoaplicável avalia o seu perfil de resiliência e adaptação fisiológica ao estresse, ancorando-se nos princípios da <em>Teoria Polivagal</em> (Stephen Porges), na regulação do <em>Eixo HPA</em> e no modelo de <em>Carga Alostática</em> (Bruce McEwen).</p>
+                <p style="margin-top: 10px;"><strong>Instruções:</strong> Avalie com que frequência cada afirmação reflete suas reações habituais nas últimas 4 semanas. Seja honesto e selecione a alternativa mais coerente com sua experiência cotidiana.</p>
+                <p style="margin-top: 8px; font-size: 0.88em; color: #64748b;"><em>Nota de Privacidade: Este teste é executado 100% no seu navegador. Nenhuma resposta é gravada ou enviada a servidores externos.</em></p>
+            </div>
+
+            <form id="vagalResilienceForm" class="quiz-container">
+                <!-- Bloco 1: Recuperação Fisiológica e Tônus Vagal -->
+                <div style="margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid #005f73;">
+                    <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 1: Recuperação Fisiológica e Tônus Vagal</h3>
+                    <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Capacidade do sistema autônomo de desativar a cascata simpática e retornar ao repouso.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">1</span> Quando passo por um susto ou situação estressante, sinto que minha respiração e batimentos cardíacos voltam ao normal em poucos minutos.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q1" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q1" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">2</span> Consigo relaxar a musculatura do corpo (como ombros e mandíbula) e adormecer com serenidade mesmo após dias desgastantes.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q2" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q2" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">3</span> Meu corpo mantém digestão estável e ausência de dores viscerais ou tremores mesmo diante de prazos e pressões.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q3" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q3" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">4</span> Práticas de respiração lenta ou pequenas pausas conscientes me acalmam prontamente e diminuem minha inquietude interna.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q4" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q4" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <!-- Bloco 2: Flexibilidade Pré-Frontal e Desfusão Cognitiva -->
+                <div style="margin: 30px 0 25px 0; padding-bottom: 10px; border-bottom: 2px solid #005f73;">
+                    <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 2: Flexibilidade Pré-Frontal e Desfusão Cognitiva</h3>
+                    <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Capacidade executiva de inibir pensamentos catastróficos e reavaliar alternativas.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">5</span> Diante de imprevistos, consigo desacelerar e avaliar diferentes saídas em vez de agir por puro impulso ou irritação.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q5" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q5" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">6</span> Reconheço pensamentos negativos ou autocríticos como hipóteses mentais transitórias, sem tomá-los como verdades literais.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q6" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q6" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">7</span> Quando uma tentativa ou plano falha, consigo abandonar a abordagem anterior e criar novas soluções sem paralisar pela culpa.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q7" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q7" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">8</span> Mantenho a mente focada no essencial e tomo decisões ponderadas mesmo sob cobrança externa ou incerteza.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q8" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q8" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <!-- Bloco 3: Agência Ativa e Tolerância à Adversidade -->
+                <div style="margin: 30px 0 25px 0; padding-bottom: 10px; border-bottom: 2px solid #005f73;">
+                    <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 3: Agência Ativa e Tolerância à Adversidade</h3>
+                    <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Autoeficácia, foco no que está sob controle pessoal e persistência por valores.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">9</span> Acredito firmemente na minha capacidade de aprender novas habilidades e superar obstáculos com dedicação orientada.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q9" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q9" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">10</span> Em meio a crises, concentro minha energia exclusivamente naquilo que posso controlar diretamente em vez de me queixar do incontrolável.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q10" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q10" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">11</span> Encontro propósito e significado para seguir em frente mesmo quando as circunstâncias externas parecem injustas ou difíceis.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q11" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q11" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">12</span> Consigo sustentar metas de longo prazo com disciplina, aceitando os desconfortos inevitáveis da trajetória.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q12" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q12" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <!-- Bloco 4: Conexão Social e Corregulação Vagal -->
+                <div style="margin: 30px 0 25px 0; padding-bottom: 10px; border-bottom: 2px solid #005f73;">
+                    <h3 style="color: #005f73; margin: 0; font-size: 1.15em;">Dimensão 4: Conexão Social e Corregulação Vagal</h3>
+                    <p style="color: #64748b; font-size: 0.85em; margin: 4px 0 0 0;">Capacidade de engajar suporte afetivo seguro e manter laços colaborativos protetores.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">13</span> Em dias complicados, consigo expressar vulnerabilidade e pedir apoio a amigos ou familiares sem vergonha tóxica.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q13" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q13" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">14</span> Sinto que a presença, o tom de voz e o acolhimento de pessoas queridas me trazem segurança corporal e tranquilidade rápida.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q14" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q14" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">15</span> Consigo estabelecer limites firmes nas minhas relações interpessoais sem medo exagerado de desaprovação ou rejeição.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q15" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q15" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title"><span class="question-number">16</span> Mantenho empatia, respeito e curiosidade pelas pessoas ao meu redor mesmo quando me sinto sob estresse moderado.</div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q16" value="0" required> Quase nunca</label>
+                        <label class="option-label"><input type="radio" name="q16" value="1"> Raramente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"> Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"> Frequentemente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="4"> Quase sempre</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-calc">Calcular Meu Índice de Resiliência e Tônus Vagal</button>
+            </form>
+
+            <!-- Devolutiva Clínica -->
+            <div id="resultsBox" class="resultsBox results-box">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <span id="scoreBadge" class="score-badge">Pontuação: -- / 64</span>
+                    <h2 id="resultCategory" style="color: #005f73; margin: 10px 0 6px 0; font-size: 1.5em;">Classificação Clínica</h2>
+                    <p id="resultDescription" style="color: #334155; line-height: 1.6; font-size: 1em; max-width: 720px; margin: 0 auto;">Devolutiva personalizada...</p>
+                </div>
+
+                <h4 style="color: #005f73; margin: 25px 0 10px 0; text-align: center;">Desempenho por Domínio Neurobiológico</h4>
+                <div class="subscales-grid">
+                    <div class="subscale-card">
+                        <h4>Recuperação Fisiológica & Tônus Vagal</h4>
+                        <div class="subscale-score" id="subVagal">-- / 16</div>
+                        <p style="font-size: 0.82em; color: #64748b; margin-top: 5px;">Mede a facilidade com que seu freio vagal ventral restabelece a homeostase.</p>
+                    </div>
+                    <div class="subscale-card">
+                        <h4>Flexibilidade Pré-Frontal & Desfusão</h4>
+                        <div class="subscale-score" id="subFlexibilidade">-- / 16</div>
+                        <p style="font-size: 0.82em; color: #64748b; margin-top: 5px;">Mede o controle inibitório sobre a ruminação e a maleabilidade cognitiva.</p>
+                    </div>
+                    <div class="subscale-card">
+                        <h4>Agência Ativa & Sentido Existencial</h4>
+                        <div class="subscale-score" id="subAgencia">-- / 16</div>
+                        <p style="font-size: 0.82em; color: #64748b; margin-top: 5px;">Mede o locus de controle interno e a persistência guiada por valores.</p>
+                    </div>
+                    <div class="subscale-card">
+                        <h4>Conexão Social & Corregulação</h4>
+                        <div class="subscale-score" id="subSocial">-- / 16</div>
+                        <p style="font-size: 0.82em; color: #64748b; margin-top: 5px;">Mede a capacidade de buscar segurança biológica em laços humanos significativos.</p>
+                    </div>
+                </div>
+
+                <div style="background: #f1f5f9; border-radius: 8px; padding: 20px; margin-top: 25px;">
+                    <h4 style="color: #0f172a; margin-top: 0;">Recomendações Práticas Baseadas em Evidências:</h4>
+                    <ul style="color: #334155; font-size: 0.9em; line-height: 1.6; padding-left: 20px; margin-bottom: 0;">
+                        <li><strong>Treino Diário de Coerência Cardíaca:</strong> Reserve 5 minutos pela manhã e à noite para respirar a 5,5 ciclos/minuto (inspire contando 4 segundos, expire contando 6 segundos). Isso reeduca o freio vagal.</li>
+                        <li><strong>Estímulo de BDNF e Neurogênese:</strong> Exercícios físicos aeróbicos intervalados regulares estimulam a proliferação sináptica no hipocampo.</li>
+                        <li><strong>Desfusão Cognitiva:</strong> Ao notar pensamentos intrusivos de insuficiência, rotule-os mentalmente: <em>'Estou tendo o pensamento de que não vou conseguir'</em>, criando distância desidentificada.</li>
+                        <li><strong>Pacto de Corregulação:</strong> Preserve conversas profundas com pessoas de confiança nas quais você possa baixar suas defesas sem receio de repreensão.</li>
+                    </ul>
+                </div>
+
+                <div class="cta-consult-box">
+                    <h3>Deseja Mapear e Desenvolver Sua Resiliência Neuropsicológica?</h3>
+                    <p>Avaliações neuropsicológicas aprofundadas e intervenções psicoterapêuticas integradas (TCC / ACT / Regulação Somática) fortalecem sua capacidade executiva e autonomia biológica.</p>
+                    <a href="https://wa.me/5535933003807?text=Ol%C3%A1%2C%20Deo!%20Fiz%20a%20Escala%20de%20Resili%C3%AAncia%20e%20Regula%C3%A7%C3%A3o%20Vagal%20no%20site%20e%20gostaria%20de%20conversar%20sobre%20acompanhamento." target="_blank">Agendar Consulta Especializada</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('vagalResilienceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let totalScore = 0;
+            const values = {};
+
+            for (let i = 1; i <= 16; i++) {
+                const checked = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checked) {
+                    values[i] = parseInt(checked.value, 10);
+                    totalScore += values[i];
+                } else {
+                    alert(`Por favor, responda à questão ${i} antes de prosseguir.`);
+                    const qElem = document.querySelector(`input[name="q${i}"]`);
+                    if (qElem) {
+                        qElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            }
+
+            // Subescalas (4 itens cada, max 16 pontos cada)
+            const subVagal = values[1] + values[2] + values[3] + values[4];
+            const subFlexibilidade = values[5] + values[6] + values[7] + values[8];
+            const subAgencia = values[9] + values[10] + values[11] + values[12];
+            const subSocial = values[13] + values[14] + values[15] + values[16];
+
+            document.getElementById('subVagal').innerText = `${subVagal} / 16`;
+            document.getElementById('subFlexibilidade').innerText = `${subFlexibilidade} / 16`;
+            document.getElementById('subAgencia').innerText = `${subAgencia} / 16`;
+            document.getElementById('subSocial').innerText = `${subSocial} / 16`;
+
+            const badge = document.getElementById('scoreBadge');
+            const cat = document.getElementById('resultCategory');
+            const desc = document.getElementById('resultDescription');
+
+            badge.innerText = `Pontuação Total: ${totalScore} / 64`;
+
+            if (totalScore >= 52) {
+                badge.style.background = '#2a9d8f';
+                cat.innerText = 'Resiliência Neurobiológica Elevada e Alta Flexibilidade Vagal';
+                desc.innerText = 'Seus resultados indicam uma excelente capacidade fisiológica e comportamental de resposta ao estresse. Seu sistema nervoso apresenta engajamento eficaz do vago ventral, rápida recuperação autonômica pós-tensão e notável flexibilidade pré-frontal. Você consegue se adaptar a crises sem sobrecarregar seus tecidos com carga alostática crônica.';
+            } else if (totalScore >= 38) {
+                badge.style.background = '#0a9396';
+                cat.innerText = 'Resiliência Adaptativa Moderada e Bom Equilíbrio Autonômico';
+                desc.innerText = 'Você demonstra competências sólidas de enfrentamento e recuperação, mas determinados estressores prolongados ou sobrecargas relacionais pontuais podem elevar sua reatividade e retardar o relaxamento físico. Fortalecer a rotina de descanso somático e a desfusão cognitiva aumentará ainda mais sua reserva adaptativa.';
+            } else if (totalScore >= 22) {
+                badge.style.background = '#ee9b00';
+                cat.innerText = 'Vulnerabilidade Alostática e Sobrecarga Parassimpática Parcial';
+                desc.innerText = 'Seus escores sugerem que o organismo está operando sob certo desgaste adaptativo. O freio vagal tem encontrado dificuldade para desativar a cascata de alerta rapidamente, predispondo a sintomas físicos de tensão, fadiga executiva e ruminação mental. É recomendável introduzir práticas consistentes de regulação biológica e suporte emocional.';
+            } else {
+                badge.style.background = '#ae2012';
+                cat.innerText = 'Desregulação Vagal Acentuada e Alta Carga Alostática';
+                desc.innerText = 'Seu perfil indica um estado significativo de esgotamento e hiperalerta do sistema de alarme corporal. O organismo permanece em ativação de emergência contínua ou colapso defensivo, com dificuldades marcadas para desacelerar, descansar ou confiar nas relações. Recomenda-se acompanhamento clínico neuropsicológico e apoio médico para restabelecer o equilíbrio e a segurança somática.';
+            }
+
+            const resBox = document.getElementById('resultsBox');
+            resBox.style.display = 'block';
+            resBox.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>

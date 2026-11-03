@@ -14,12 +14,13 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 
 
-- [ ] **A Arquitetura Neurobiológica da Resiliência Psíquica: Epigenética, BDNF e Regulação Vagal**
-
+- [ ] **A Neurobiologia da Intuição e dos Marcadores Somáticos: Como o Corpo Decide Antes da Razão (Damasio)**
+- [ ] **A Arquitetura Neural do Desamparo Aprendido e a Reativação Dopaminérgica**
 
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Arquitetura Neurobiológica da Resiliência Psíquica: Epigenética, BDNF e Regulação Vagal** (Publicado em 03/11/2026)
 
 - [x] **A Neurociência do Luto e do Vínculo Rompido: Como o Cérebro Processa a Perda e a Ausência** (Publicado em 02/11/2026)
 - [x] **A Neurobiologia da Vergonha Tóxica e da Culpa: Como a Autocrítica Corrói o Sistema de Conexão Social** (Publicado em 02/11/2026)
