@@ -1446,11 +1446,43 @@
                     score += 22;
                 }
 
-                // 5. Ajuste Fisiológico Baseado no Histórico Real
+                // 5. Ajuste Fisiológico Baseado no Histórico Real & Calendário Fitotécnico
                 if (proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') {
                     if (m.isRepotOverdue) score += 15;
                     if (m.repotDiff !== null && m.repotDiff > (plant.repotCycleMonths * 30 - 120)) {
                         score -= 40;
+                    }
+                }
+
+                // Análise do Histórico de Podas e Intervenções da Planta
+                const pruningLogs = (plant.logs || []).filter(lg => lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha')));
+                const lastPruningLog = pruningLogs.length > 0 ? pruningLogs[0] : null;
+                const daysSinceLastPrune = lastPruningLog && lastPruningLog.date ? Math.abs(global.VaultCore.daysDiffFromToday(lastPruningLog.date) || 999) : 999;
+
+                if (proc.category === 'PODA_RAMIFICACAO' || proc.category === 'DESFOLHA' || proc.category === 'ESTRUTURA') {
+                    if (daysSinceLastPrune < 35) {
+                        // Evita poda ou desfolha repetida em menos de 35 dias para preservar reservas de amido
+                        score -= 35;
+                    } else if (daysSinceLastPrune > 75 && (plant.stage === 'Bonsai' || plant.stage === 'Pré-bonsai')) {
+                        // Árvore vigorosa sem manejo recente se beneficia de refinamento apical
+                        score += 15;
+                    }
+                }
+
+                // Especificidades botânicas finas
+                if (popName.includes('jabuticaba') || popName.includes('pitanga')) {
+                    if (proc.id === 'PODA_LIMPEZA_SANITARIA' || proc.id === 'PINCAGEM_VERDE_PINUS') {
+                        if (seasonInfo.season === 'Verão' || seasonInfo.season === 'Outono') score += 18;
+                    }
+                }
+                if (popName.includes('junípero') || popName.includes('pinheiro')) {
+                    if (proc.id === 'PINCAGEM_VERDE_PINUS' && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
+                        score += 20;
+                    }
+                }
+                if (popName.includes('ficus') || popName.includes('figueira')) {
+                    if (proc.category === 'DESFOLHA' && seasonInfo.season === 'Verão') {
+                        score += 22;
                     }
                 }
 
@@ -3026,6 +3058,10 @@
                 ? 'border-rose-500/40 bg-rose-950/10'
                 : (m.wiringDiff !== null && m.wiringDiff <= 7 ? 'border-cyan-500/40 bg-cyan-950/10' : 'border-[#1e293b] bg-[#0f172a]');
 
+            const pPruningLogs = (p.logs || []).filter(lg => lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha')));
+            const derivedLastPrune = p.lastPruning || (pPruningLogs.length > 0 ? pPruningLogs[0].date : '');
+            const pruneDiff = derivedLastPrune ? Math.abs(C.daysDiffFromToday(derivedLastPrune) || 0) : null;
+
             return `
                 <div class="border ${borderHighlight} rounded-xl p-3 sm:p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 transition">
                     <!-- Checkbox + Identificação da Planta -->
@@ -3043,7 +3079,7 @@
                             <div class="font-semibold text-sm sm:text-base text-slate-100 truncate mt-1">${C.esc(p.popularName)}</div>
                             <div class="text-xs italic text-slate-400 truncate">
                                 ${C.esc(p.scientificName || p.pot)} • Vaso: ${C.esc(p.pot)}
-                                ${p.lastPruning ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 not-italic">✂ Poda há ${Math.abs(C.daysDiffFromToday(p.lastPruning) || 0)}d</span>` : ''}
+                                ${pruneDiff !== null ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 not-italic">✂ Poda há ${pruneDiff}d</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -3806,11 +3842,15 @@
             const cat = document.getElementById('bf-quick-log-category').value;
             const inp = document.getElementById('bf-quick-log-input');
             if (!target || !inp.value.trim()) return;
+            const logDate = C.todayISO();
             target.logs.unshift({
-                date: C.todayISO(),
+                date: logDate,
                 type: cat,
                 detail: inp.value.trim()
             });
+            if (cat.toLowerCase().includes('poda') || cat.toLowerCase().includes('pinçagem') || cat.toLowerCase().includes('desfolha')) {
+                target.lastPruning = logDate;
+            }
             inp.value = '';
             saveData(false);
             renderModalLogs(target);

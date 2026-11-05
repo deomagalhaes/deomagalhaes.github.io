@@ -481,11 +481,12 @@
         const testMonthlyRatePass = Math.abs(rMonthlyCalc - rMonthlyExpected) < 1e-6;
         tests.push({
             name: 'Taxa Mensal Real Composta Equivalente',
+            formula: 'r_m = (1 + r_a)^(1/12) - 1',
             passed: testMonthlyRatePass,
-            detail: `Calculado: ${(rMonthlyCalc * 100).toFixed(6)}% | Esperado: ${(rMonthlyExpected * 100).toFixed(6)}%`
+            detail: `Calculado: ${(rMonthlyCalc * 100).toFixed(6)}% | Esperado: ${(rMonthlyExpected * 100).toFixed(6)}% (Erro < 10⁻⁶)`
         });
 
-        // 2. Teste do Cenário de Estresse: Queda de 30% (Crash Sistêmico)
+        // 2. Teste do Cenário de Estresse: Queda de 30% (Crash Sistêmico COVID/Flash Crash)
         const mockStressed = computeStressTest({
             stressScenario: 'crash30',
             currentPatrimony: 100000,
@@ -498,11 +499,30 @@
         const testLostCapitalPass = Math.abs(mockStressed.lostCapital - 30000) < 1e-2;
         tests.push({
             name: 'Cenário de Estresse de Mercado (−30% Crash Sistêmico)',
+            formula: 'Patrimônio_Estressado = Base × 0,70 | Perda = Base × 0,30',
             passed: testStressDropPass && testLostCapitalPass,
-            detail: `Patrimônio Base: R$ 100.000 | Estressado: R$ ${mockStressed.stressedPatrimony} | Perda em Tela: R$ ${mockStressed.lostCapital}`
+            detail: `Base: R$ 100.000 | Sob Choque: R$ ${mockStressed.stressedPatrimony.toLocaleString('pt-BR')} | Perda: R$ ${mockStressed.lostCapital.toLocaleString('pt-BR')}`
         });
 
-        // 3. Teste de Retirada Segura (Trinity 4% SWR)
+        // 3. Teste do Cenário de Estresse: Queda de 40% (Subprime) com Choque de Dividendos
+        const mockSubprime = computeStressTest({
+            stressScenario: 'crash40',
+            currentPatrimony: 100000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2000,
+            monthlyContribution: 2500,
+            stressBoostContribution: false
+        });
+        const testSubprimeDropPass = Math.abs(mockSubprime.stressedPatrimony - 65000) < 1e-2;
+        const testSubprimeLostPass = Math.abs(mockSubprime.lostCapital - 35000) < 1e-2;
+        tests.push({
+            name: 'Cenário de Estresse Severo (−35% Médio Subprime / −20% Yield)',
+            formula: 'Patrimônio_Estressado = Base × 0,65 | Choque Dividendos = −20%',
+            passed: testSubprimeDropPass && testSubprimeLostPass,
+            detail: `Base: R$ 100.000 | Sob Choque: R$ ${mockSubprime.stressedPatrimony.toLocaleString('pt-BR')} | Perda: R$ ${mockSubprime.lostCapital.toLocaleString('pt-BR')}`
+        });
+
+        // 4. Teste de Retirada Segura (Trinity 4% SWR & Full FIRE)
         const mockModel = computeFinancialModel({
             weeklySessions: 16,
             weeksPerMonth: 4.2,
@@ -515,11 +535,12 @@
         const testSWRPass = Math.abs(mockModel.targetFullFire - expectedFullFire) < 1e-2;
         tests.push({
             name: 'Meta Full FIRE pela Regra dos 4% (Trinity Study)',
+            formula: 'Meta_Full_FIRE = Receita_Líquida_Anual / SWR (4%)',
             passed: testSWRPass,
-            detail: `Receita Líquida Anual: R$ ${annualNetRevenue.toFixed(2)} | Meta Patrimonial: R$ ${mockModel.targetFullFire.toFixed(2)}`
+            detail: `Receita Anual Líquida: R$ ${annualNetRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} | Meta FIRE: R$ ${mockModel.targetFullFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
         });
 
-        // 4. Teste de Cascata de Despesas (Acumulação Sequencial)
+        // 5. Teste de Cascata de Despesas (Acumulação Sequencial e Cobertura)
         const mockCascade = computeExpenseCascade({
             expenseEssential: 2000,
             expenseClinic: 2000,
@@ -531,12 +552,13 @@
         const totalExpected = 8000;
         const testCascadeSumPass = Math.abs(mockCascade.totalCost - totalExpected) < 1e-2;
         tests.push({
-            name: 'Consolidação e Acumulação da Cascata de Despesas',
+            name: 'Consolidação e Acumulação Sequencial da Cascata de Despesas',
+            formula: 'Custo_Total = Σ(Degrau_i)',
             passed: testCascadeSumPass,
-            detail: `Custo Total Consolidado: R$ ${mockCascade.totalCost} | Níveis Avaliados: ${mockCascade.tiers.length}`
+            detail: `Custo Total Consolidado: R$ ${mockCascade.totalCost.toLocaleString('pt-BR')} | Tiers Auditados: ${mockCascade.tiers.length}`
         });
 
-        // 5. Teste de Alocação de Aporte Inteligente sem Venda de Ativos
+        // 6. Teste de Alocação de Aporte Inteligente sem Venda de Ativos
         const mockAlloc = computeAporteAllocation({
             monthlyContribution: 5000,
             targetAllocFII: 50,
@@ -552,24 +574,47 @@
         const rfClass = mockAlloc.classes.find(c => c.key === 'RF');
         const testAllocPass = rfClass && Math.abs(rfClass.recommendedAporte - 5000) < 1e-2;
         tests.push({
-            name: 'Alocador Inteligente por Déficit de Classe',
+            name: 'Alocador Inteligente por Déficit Relativo de Classe',
+            formula: 'Aporte_Classe_i = (Déficit_i / ΣDéficits) × Aporte_Total',
             passed: !!testAllocPass,
-            detail: `Aporte de R$ 5.000 direcionado prioritariamente para suprir a classe com maior atraso patrimonial.`
+            detail: `Aporte de R$ 5.000 direcionado 100% para a classe defasada (Renda Fixa), zerando fricção tributária.`
         });
 
-        // 6. Teste de Cotas Inteiras e Troco Residual (Reserva de Oportunidade)
+        // 7. Teste de Cotas Inteiras e Troco Residual (Reserva de Oportunidade)
         const mockTickersAlloc = computeAporteByTickers(mockAlloc.classes);
         const testTickersPass = Array.isArray(mockTickersAlloc.byClass) && mockTickersAlloc.totalResidual >= 0;
         tests.push({
             name: 'Simulador de Cotas Inteiras e Troco Residual para Reserva',
+            formula: 'Cotas = floor(Orçamento / Preço) | Saldo = Orçamento − (Cotas × Preço)',
             passed: !!testTickersPass,
-            detail: `Classes Alocadas: ${mockTickersAlloc.byClass.length} | Sobra Residual: R$ ${mockTickersAlloc.totalResidual.toFixed(2)}`
+            detail: `Classes Alocadas: ${mockTickersAlloc.byClass.length} | Sobra Residual: R$ ${mockTickersAlloc.totalResidual.toFixed(2)} direcionada à reserva.`
+        });
+
+        // 8. Teste de Valor da Hora Clínica Efetiva e Custo de Oportunidade
+        const mockHourly = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            indirectWeeklyHours: 6,
+            avgTicket: 250,
+            monthlyCosts: 2600
+        });
+        const expGross = 16 * 4.2 * 250; // 16800
+        const expNet = 16800 - 2600; // 14200
+        const expPerSession = expNet / (16 * 4.2); // ~211.31
+        const testHourlyPass = Math.abs(mockHourly.netRevenue - expNet) < 1e-2 && Math.abs(mockHourly.netPerSession - expPerSession) < 1e-2;
+        tests.push({
+            name: 'Valor da Sessão Clínica Líquida & Horas Efetivas',
+            formula: 'Sessão_Líquida = (Receita_Bruta − Custos_Consultório) / Sessões_Mês',
+            passed: testHourlyPass,
+            detail: `Bruto: R$ ${expGross.toLocaleString('pt-BR')} | Líquido: R$ ${expNet.toLocaleString('pt-BR')} | Por Sessão: R$ ${mockHourly.netPerSession.toFixed(2)}`
         });
 
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,
             timestamp: new Date().toISOString(),
+            testsCount: tests.length,
+            passedCount: tests.filter(t => t.passed).length,
             tests
         };
     }

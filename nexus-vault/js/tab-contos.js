@@ -240,6 +240,62 @@
             defaultQuestion: 'O que o seu coração sente quando descobre que cada momento tem a sua hora certa e o seu presente?',
             challengeAct: 'ouviu um "agora não" para um passeio e achou o mundo a coisa mais injusta da galáxia, querendo bater o pé e gritar com o vento.',
             breathCue: 'pôs a mãozinha no peito, respirou sentindo o amor firme que cuida dos limites e soltou o ar sentindo paz e confiança no abraço protetor.'
+        },
+        birra_desregulacao: {
+            label: '33. Birra & Desregulação Autonômica (A onda gigante que vira maré mansa)',
+            defaultMetaphor: 'A onda gigante da praia que parecia querer derrubar os castelos de areia, mas que ao se espalhar na relva macia vai ficando fininha, transparente e morna até virar um espelho d’água onde a lua se deita tranquila.',
+            defaultQuestion: 'Como o seu corpinho sente o alívio gostoso quando o choro forte vai embora e sobra só um abraço quentinho?',
+            challengeAct: 'sentiu uma tempestade de vento quente soprar por dentro do peito, fazendo as mãos tremerem e a voz querer gritar bem alto porque nada cabia na paciência daquele instante.',
+            breathCue: 'deitou a bochecha no peito protetor, sentiu o ar entrar quentinho como um cobertor e soltou um suspiro longo, sentindo a onda brava virar aguinha mansa.'
+        },
+        ansiedade_desempenho: {
+            label: '34. Ansiedade de Desempenho & Avaliações Escolares (O pássaro que canta sem plateia)',
+            defaultMetaphor: 'O sabiá-laranjeira no alto do galho florido: ele não canta para ganhar nota ou medalha de ninguém; canta simplesmente porque a música mora bonita dentro dele e voar é a sua alegria verdadeira.',
+            defaultQuestion: 'Você sabe que o seu valor não depende de nenhuma nota ou prova, porque você já é precioso e amado do jeitinho que é?',
+            challengeAct: 'pensou na tarefinha difícil da manhã seguinte e sentiu um friozinho apertado na garganta, com medo de esquecer as respostas e não conseguir acertar tudo.',
+            breathCue: 'fechou os olhos, inspirou o ar fresco da noite enchendo o peito de calma e soltou o ar devagarzinho, lembrando que errar é só o jeito que a inteligência usa para aprender coisas novas.'
+        },
+        ciume_amigos: {
+            label: '35. Exclusão em Brincadeiras & Ciúme de Amigos (O bosque das muitas árvores)',
+            defaultMetaphor: 'O bosque encantado onde cabem todas as árvores: o jacarandá não fica triste quando a mangueira dá frutos, porque a mata inteira precisa da sombra, do perfume e do encanto de cada um para ser um refúgio acolhedor.',
+            defaultQuestion: 'Como é bom lembrar que o seu espaço no coração dos amigos e de quem ama você é único e nunca pode ser tirado?',
+            challengeAct: 'viu os amiguinhos cochichando e brincando em outra ponta da clareira e sentiu um aperto no peito, achando que ninguém mais se importava com a sua companhia.',
+            breathCue: 'abraçou os joelhinhos devagar, respirou sentindo o próprio ar puro e doce preencher o coração, e lembrou de todos os sorrisos sinceros que já iluminaram o seu dia.'
+        },
+        atencao_dividida_pais: {
+            label: '36. Disputa de Atenção dos Cuidadores (A lareira que aquece todos os cantos)',
+            defaultMetaphor: 'O fogo manso da lareira da cabana: quando mais alguém se senta ao redor do tapete, o calor não diminui para quem já estava ali; o calor se espalha ainda mais gostoso e todo mundo fica protegido do frio juntos.',
+            defaultQuestion: 'Você sente como o amor dos seus pais é infinito como o céu estrelado e cabe inteirinho ao seu redor em cada respiração?',
+            challengeAct: 'sentiu vontade de chamar os pais dez vezes seguidas quando eles precisavam conversar com outra pessoa, com medo de que a atenção deles sumisse se ficasse em silêncio.',
+            breathCue: 'pôs a mão no centro do peito, sentiu o calorzinho do amor que nunca vai embora e soltou o ar com a certeza de que está sempre seguro no mesmo ninho.'
+        },
+        medo_medico_injecao: {
+            label: '37. Medo de Consultas Médicas & Vacinas (O escudo dos pequenos guerreiros)',
+            defaultMetaphor: 'A gotinha de poção mágica guardada no escudo de luz: aquela picadinha pequenina de formiguinha dura só dois segundos, mas é um exército de escudos prateados que defende o corpinho contra qualquer fraqueza por anos inteiros.',
+            defaultQuestion: 'Onde o seu corpinho guarda a coragem de leão para enfrentar um segundo de picadinha e depois ganhar um abraço de herói?',
+            challengeAct: 'lembrou da salinha branca do médico e sentiu as perninhas congelarem com vontade de fugir para baixo da cama só de ver o estetoscópio gelado.',
+            breathCue: 'apertou a mão quentinha de quem ama você, puxou o ar como quem cheira uma flor mágica e soprou como quem apaga uma velinha de aniversário, vencendo o medo num piscar de olhos.'
+        },
+        desapego_objeto_transicao: {
+            label: '38. Desapego da Chupeta ou Objeto de Transição (A caixinha das lembranças queridas)',
+            defaultMetaphor: 'O barquinho de papel que a gente solta no riacho manso: ele cumpriu sua missão linda de nos acalmar quando éramos bebês, e agora viaja livre enquanto nossas mãozinhas crescidas aprendem a segurar brinquedos ainda mais incríveis.',
+            defaultQuestion: 'Qual é a brincadeira mais divertida que você adora fazer agora que já é uma criança maior e forte?',
+            challengeAct: 'olhou para o objeto pequenino que sempre guardava na boca ou no colo e sentiu uma insegurança boba, sem saber como conseguiria adormecer sem aquele apoio antigo.',
+            breathCue: 'abraçou o travesseiro macio bem apertadinho, respirou o perfume gostoso do quarto seguro e soltou o ar sentindo a força que já nasceu dentro do seu próprio peito.'
+        },
+        luto_pet: {
+            label: '39. Perda de um Animalzinho Querido (A constelação dos amigos eternos)',
+            defaultMetaphor: 'A estrelinha travessa que pisca lá no alto do céu: todo bichinho que parte da terra ganha asas de luz e corre por prados verdes sem fim, e sempre que a gente olha para o céu noturno, aquela luzinha carinhosa está abanando o rabinho de volta.',
+            defaultQuestion: 'Qual é a lembrança mais divertida e engraçada do seu amiguinho que faz você sorrir por dentro com saudade gostosa?',
+            challengeAct: 'olhou para o cantinho onde o bichinho costumava dormir encolhidinho e sentiu um silêncio doído, com uma lágrima descendo quentinha pela bochecha.',
+            breathCue: 'deixou a lágrima escorrer sem medo, respirou fundo guardando toda a alegria daquele amor no coração e soprou mandando um beijinho de luz para as estrelas.'
+        },
+        seletividade_alimentar: {
+            label: '40. Seletividade Alimentar & Curiosidade Sensorial (O banquete dos exploradores da floresta)',
+            defaultMetaphor: 'O urso sábio que descobre novos frutos nas margens da floresta: ele não precisa comer tudo de uma vez; ele primeiro olha a cor bonita, cheira de mansinho, toca com a pontinha da pata e descobre sabores mágicos que dão superpoderes aos músculos.',
+            defaultQuestion: 'Que cor ou textura diferente de comida nova foi legal você espiar ou cheirar hoje com curiosidade?',
+            challengeAct: 'viu uma comidinha de cor verde ou diferente no prato e virou o rosto na hora, empurrando o garfo com birra antes mesmo de cheirar o sabor.',
+            breathCue: 'respirou fundo sentindo o cheirinho gostoso da comida feita com carinho, relaxou a mandíbula e pensou: sou um explorador corajoso que pode experimentar devagarzinho.'
         }
     };
 
@@ -780,7 +836,8 @@
         window.speechSynthesis.cancel();
         speechUtterance = new SpeechSynthesisUtterance(textToRead);
         speechUtterance.lang = 'pt-BR';
-        speechUtterance.rate = 0.85; // Leitura compassada e suave
+        const rateSelect = document.getElementById('amber-narrate-rate-select');
+        speechUtterance.rate = rateSelect ? parseFloat(rateSelect.value) || 0.85 : 0.85; // Leitura compassada e suave
         speechUtterance.pitch = 0.95; // Tom morno para indução ao relaxamento
 
         const voices = window.speechSynthesis.getVoices();
@@ -1199,6 +1256,49 @@
         // Eventos do Modal Âmbar
         const btnAmberClose = document.getElementById('btn-amber-close');
         if (btnAmberClose) btnAmberClose.addEventListener('click', closeAmberNightReader);
+
+        const btnAmberCopy = document.getElementById('btn-amber-copy-text');
+        if (btnAmberCopy) {
+            btnAmberCopy.addEventListener('click', () => {
+                const target = currentComposedStory;
+                if (!target || !target.text) return;
+                const formatted = `${target.title}\n\n${target.text}\n\nSussurro final de boa-noite:\n"${target.question}"`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(formatted).then(() => {
+                        C.toast('Conto copiado com formatação de leitura!', 'success');
+                    }).catch(() => {
+                        C.toast('Selecione e copie o texto manualmente.', 'info');
+                    });
+                } else {
+                    C.toast('Área de transferência não disponível.', 'warning');
+                }
+            });
+        }
+
+        // Atalhos de teclado no modo leitor âmbar
+        window.addEventListener('keydown', (e) => {
+            const reader = document.getElementById('amber-night-reader');
+            if (!reader || reader.classList.contains('hidden')) return;
+
+            if (e.key === 'Escape') {
+                closeAmberNightReader();
+            } else if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                toggleAutoScroll();
+            } else if (e.key === '+' || e.key === '=') {
+                amberFontSizeRem = Math.min(2.4, amberFontSizeRem + 0.1);
+                const b = document.getElementById('amber-reader-body');
+                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+                saveAmberPrefs();
+            } else if (e.key === '-' || e.key === '_') {
+                amberFontSizeRem = Math.max(0.85, amberFontSizeRem - 0.1);
+                const b = document.getElementById('amber-reader-body');
+                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+                saveAmberPrefs();
+            } else if (e.key.toLowerCase() === 'f' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                toggleAmberFullscreen();
+            }
+        });
 
         const btnAmberStar = document.getElementById('btn-amber-star');
         if (btnAmberStar) {

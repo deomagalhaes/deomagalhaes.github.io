@@ -112,6 +112,8 @@
                                         <button type="button" data-df-quick-chip="Estou notando a narrativa de que " class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition">"Estou notando a narrativa..."</button>
                                         <button type="button" data-df-quick-chip="Acolho a sensação física de aperto sem transformá-la em ação impulsiva." class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition">"Acolho sem impulso..."</button>
                                         <button type="button" data-df-quick-chip="O silêncio deliberado e a não-reação são minha maior autoridade e soberania." class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition">"Silêncio é soberania..."</button>
+                                        <button type="button" data-df-quick-chip="Sou a consciência calma que observa a emoção, e não a própria emoção passageira." class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-emerald-300 hover:border-emerald-500/40 transition">"Sou quem observa..."</button>
+                                        <button type="button" data-df-quick-chip="Esta urgência imediata é apenas química corporal transitória, não uma ordem de verdade." class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-amber-300 hover:border-amber-500/40 transition">"Química corporal..."</button>
                                     </div>
                                 </div>
                             </div>
@@ -308,6 +310,10 @@
                                 <button type="button" id="btn-df-export-json" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5" title="Exportar histórico em JSON">
                                     <i data-lucide="file-json" class="w-4 h-4 text-emerald-400"></i>
                                     <span>JSON</span>
+                                </button>
+                                <button type="button" id="btn-df-export-md" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5" title="Exportar histórico em Markdown">
+                                    <i data-lucide="file-text" class="w-4 h-4 text-amber-400"></i>
+                                    <span>MD</span>
                                 </button>
                             </div>
                         </div>
@@ -622,6 +628,49 @@
                     history: desfusaoHistory
                 });
                 C.toast('Histórico de desfusão exportado em JSON.', 'success');
+            });
+        }
+
+        const btnExportMd = document.getElementById('btn-df-export-md');
+        if (btnExportMd) {
+            btnExportMd.addEventListener('click', () => {
+                if (desfusaoHistory.length === 0) {
+                    C.toast('Nenhum veredito para exportar.', 'info');
+                    return;
+                }
+                const sections = desfusaoHistory.map((item, idx) => [
+                    `## ${idx + 1}. Veredito 24h • ${C.formatDateBR(item.date)} ${item.time || ''}`,
+                    `- **Ativação Autonômica:** ${item.autonomicLevel}/10`,
+                    `- **Filtro de Proteção Familiar:** ${item.checksPassed}/4 critérios`,
+                    `- **Saldo Estratégico:** +${item.netAdvantage} pts`,
+                    `- **Distorções Identificadas:** ${(item.distortions || []).join(', ') || 'Nenhuma'}`,
+                    `\n### Fato Objetivo Estrito:`,
+                    `> ${item.strictFact || '—'}`,
+                    `\n### Narrativa Reativa / Leitura Emocional:`,
+                    `> ${item.emotionalReading || '—'}`,
+                    `\n### Resolução Operacional:`,
+                    `- **O QUE FAREI (24h):** ${item.doAction}`,
+                    `- **O QUE NÃO FAREI (24h):** ${item.dontAction}`,
+                    `\n---`
+                ].join('\n'));
+
+                const fullDoc = [
+                    `# Histórico Consolidado de Deliberação Estratégica & Desfusão ACT`,
+                    `*Exportado em: ${new Date().toLocaleString('pt-BR')} • Total de Registros: ${desfusaoHistory.length}*`,
+                    `\n---\n`,
+                    ...sections
+                ].join('\n\n');
+
+                const blob = new Blob([fullDoc], { type: 'text/markdown;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `protocolos-desfusao-${C.todayISO()}.md`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                C.toast('Histórico exportado em Markdown com sucesso!', 'success');
             });
         }
     }

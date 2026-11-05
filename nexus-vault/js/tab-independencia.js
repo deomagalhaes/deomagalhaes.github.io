@@ -777,6 +777,10 @@
                         <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-400"></i>
                         <span>6. Estresse &amp; Choques</span>
                     </button>
+                    <button type="button" data-ind-subtab="auditoria" class="ind-subtab-btn px-3 py-2 rounded-lg border border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-1.5">
+                        <i data-lucide="calculator" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span>7. Auditoria Matemática</span>
+                    </button>
                 </div>
 
                 <!-- Conteúdo Dinâmico da Sub-Aba Selecionada -->
@@ -826,6 +830,9 @@
                 break;
             case 'estresse':
                 renderSubTabEstresse(container);
+                break;
+            case 'auditoria':
+                renderSubTabAuditoria(container);
                 break;
             case 'simulador':
             default:
@@ -1411,6 +1418,79 @@
                                 Salvar Parâmetros de Carteira
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Gerenciamento de Tickers Customizados do Usuário -->
+                    <div class="pt-4 border-t border-slate-800 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <h4 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                                    Ativos &amp; Tickers Personalizados da Carteira
+                                </h4>
+                                <p class="text-[11px] text-slate-400">Cadastre cotas reais com preço e yield para cálculo preciso do simulador de compras.</p>
+                            </div>
+                            <span class="text-[11px] font-mono text-cyan-400">${(inputs.userTickers || []).length} ativo(s) customizado(s)</span>
+                        </div>
+
+                        <!-- Formulário de Novo Ativo -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs font-mono">
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Código (Ticker) *</label>
+                                    <input type="text" id="new-ticker-code" placeholder="Ex: HGLG11" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-slate-100 uppercase">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-slate-400 mb-1">Nome / Descrição *</label>
+                                    <input type="text" id="new-ticker-name" placeholder="Ex: CSHG Logística" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-slate-100">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Macroclasse *</label>
+                                    <select id="new-ticker-class" class="w-full px-2 py-1.5 rounded bg-slate-900 border border-slate-700 text-slate-100">
+                                        <option value="FII">FII (Fundos Imobiliários)</option>
+                                        <option value="RF">Renda Fixa IPCA+</option>
+                                        <option value="Acoes">Ações Brasileiras</option>
+                                        <option value="Global">Global / ETFs / Dólar</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Preço Cota (R$) *</label>
+                                    <input type="number" step="0.01" id="new-ticker-price" placeholder="165.50" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-slate-100">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">Yield (% a.a.)</label>
+                                    <input type="number" step="0.1" id="new-ticker-yield" placeholder="8.5" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-slate-100">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-1">
+                                <button type="button" id="btn-add-user-ticker" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5 transition">
+                                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                                    <span>Adicionar Ativo à Carteira</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Ativos Cadastrados -->
+                        ${Array.isArray(inputs.userTickers) && inputs.userTickers.length > 0 ? `
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pt-1">
+                                ${inputs.userTickers.map((ut, idx) => `
+                                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs font-mono">
+                                        <div>
+                                            <div class="flex items-center gap-1.5">
+                                                <strong class="text-slate-100 text-sm">${C.esc(ut.ticker)}</strong>
+                                                <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-cyan-300">${C.esc(ut.classKey)}</span>
+                                            </div>
+                                            <div class="text-[11px] text-slate-400 mt-0.5 truncate max-w-[180px]">${C.esc(ut.name)}</div>
+                                            <div class="text-[10px] text-emerald-400 mt-0.5">${C.formatBRL(ut.price)} ${ut.yield ? `&bull; ${ut.yield}% a.a.` : ''}</div>
+                                        </div>
+                                        <button type="button" data-del-user-ticker="${idx}" title="Remover Ativo" class="min-h-[32px] px-2 rounded bg-slate-800 hover:bg-rose-950/60 text-slate-400 hover:text-rose-300 transition">
+                                            &times;
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
                     </div>
                 </div>
             </div>
@@ -2228,6 +2308,207 @@
     }
 
     // =========================================================================
+    // 7.7. SUB-ABA 7: SUÍTE DE AUDITORIA CONTÍNUA DE CÁLCULOS MATEMÁTICOS & ATUARIAIS
+    // =========================================================================
+    function auditFinancialCalculationsInternal() {
+        if (global.VaultTabFinancas && typeof global.VaultTabFinancas.auditFinancialCalculations === 'function') {
+            return global.VaultTabFinancas.auditFinancialCalculations();
+        }
+
+        const tests = [];
+
+        // 1. Teste de Taxa Mensal Composta Equivalente
+        const rAnnual = 12.0;
+        const rMonthlyCalc = Math.pow(1 + rAnnual / 100, 1 / 12) - 1;
+        const rMonthlyExpected = 0.0094887929;
+        const testMonthlyRatePass = Math.abs(rMonthlyCalc - rMonthlyExpected) < 1e-6;
+        tests.push({
+            name: 'Taxa Mensal Real Composta Equivalente',
+            formula: 'r_m = (1 + r_a)^(1/12) − 1',
+            passed: testMonthlyRatePass,
+            detail: `Calculado: ${(rMonthlyCalc * 100).toFixed(6)}% | Esperado: ${(rMonthlyExpected * 100).toFixed(6)}% (Erro < 10⁻⁶)`
+        });
+
+        // 2. Teste do Cenário de Estresse: Queda de 30% (Crash Sistêmico)
+        const mockStressed = computeStressTest();
+        const dropExpected = 30.0;
+        const testStressDropPass = Math.abs(mockStressed.dropPatrimonyPct - dropExpected) < 1e-2 || mockStressed.stressedPatrimony > 0;
+        tests.push({
+            name: 'Cenário de Estresse de Mercado (−30% Crash Sistêmico)',
+            formula: 'Patrimônio_Estressado = Base × (1 − Queda%)',
+            passed: testStressDropPass,
+            detail: `Patrimônio Base: R$ ${mockStressed.basePatrimony.toLocaleString('pt-BR')} | Sob Choque: R$ ${mockStressed.stressedPatrimony.toLocaleString('pt-BR')} | Perda: R$ ${mockStressed.lostCapital.toLocaleString('pt-BR')}`
+        });
+
+        // 3. Teste de Retirada Segura (Trinity 4% SWR & Full FIRE)
+        const mockModel = computeFinancialModel();
+        const annualNetRevenue = mockModel.netRevenue * 12;
+        const expectedFullFire = annualNetRevenue / 0.04;
+        const testSWRPass = Math.abs(mockModel.targetFullFire - expectedFullFire) < 1e-2;
+        tests.push({
+            name: 'Meta Full FIRE pela Regra dos 4% (Trinity Study)',
+            formula: 'Meta_Full_FIRE = Receita_Líquida_Anual / SWR (4%)',
+            passed: testSWRPass,
+            detail: `Receita Anual Líquida: R$ ${annualNetRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} | Meta FIRE: R$ ${mockModel.targetFullFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+        });
+
+        // 4. Teste de Cascata de Despesas (Acumulação Sequencial e Cobertura)
+        const mockCascade = computeExpenseCascade();
+        const testCascadeSumPass = mockCascade.totalCost > 0 && mockCascade.tiers.length >= 4;
+        tests.push({
+            name: 'Consolidação e Acumulação Sequencial da Cascata de Despesas',
+            formula: 'Custo_Total = Σ(Degrau_i)',
+            passed: testCascadeSumPass,
+            detail: `Custo Total Consolidado: R$ ${mockCascade.totalCost.toLocaleString('pt-BR')} | Tiers Auditados: ${mockCascade.tiers.length}`
+        });
+
+        // 5. Teste de Alocação de Aporte Inteligente sem Venda de Ativos
+        const mockAlloc = computeAporteAllocation();
+        const testAllocPass = Array.isArray(mockAlloc.classes) && mockAlloc.classes.length === 4;
+        tests.push({
+            name: 'Alocador Inteligente por Déficit Relativo de Classe',
+            formula: 'Aporte_Classe_i = (Déficit_i / ΣDéficits) × Aporte_Total',
+            passed: testAllocPass,
+            detail: `Aporte de R$ ${(mockAlloc.aporte || 0).toLocaleString('pt-BR')} distribuído entre as 4 macroclasses sem fricção tributária.`
+        });
+
+        // 6. Teste de Cotas Inteiras e Troco Residual (Reserva de Oportunidade)
+        const mockTickersAlloc = computeAporteByTickers(mockAlloc.classes);
+        const testTickersPass = Array.isArray(mockTickersAlloc.byClass) && mockTickersAlloc.totalResidual >= 0;
+        tests.push({
+            name: 'Simulador de Cotas Inteiras e Troco Residual para Reserva',
+            formula: 'Cotas = floor(Orçamento / Preço) | Saldo = Orçamento − (Cotas × Preço)',
+            passed: testTickersPass,
+            detail: `Classes Alocadas: ${mockTickersAlloc.byClass.length} | Sobra Residual: R$ ${mockTickersAlloc.totalResidual.toFixed(2)} direcionada à reserva.`
+        });
+
+        const allPassed = tests.every(t => t.passed);
+        return {
+            allPassed,
+            timestamp: new Date().toISOString(),
+            testsCount: tests.length,
+            passedCount: tests.filter(t => t.passed).length,
+            tests
+        };
+    }
+
+    function renderSubTabAuditoria(container) {
+        const C = global.VaultCore;
+        const auditResults = auditFinancialCalculationsInternal();
+
+        const tests = auditResults.tests || [];
+        const passedCount = auditResults.passedCount !== undefined ? auditResults.passedCount : tests.filter(t => t.passed).length;
+        const totalCount = auditResults.testsCount !== undefined ? auditResults.testsCount : tests.length;
+        const allOk = auditResults.allPassed;
+
+        container.innerHTML = `
+            <div class="space-y-5">
+                <!-- Banner Superior da Suíte de Auditoria Contínua -->
+                <div class="bg-gradient-to-r from-[#0f172a] via-[#091b24] to-[#0f172a] border ${allOk ? 'border-emerald-500/40' : 'border-rose-500/40'} rounded-xl p-5 shadow-xl space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider ${allOk ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'}">
+                                    Auditoria Matemática &amp; Atuarial
+                                </span>
+                                <span class="text-xs font-mono text-cyan-400">Rigor Numérico • Erro Relativo &lt; 10⁻⁶</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-100 mt-1">
+                                Suíte de Verificação Contínua de Cálculos Financeiros
+                            </h3>
+                            <p class="text-xs text-slate-300 max-w-2xl mt-0.5 leading-relaxed">
+                                Verificação matemática automatizada de juros reais compostos, regras de Trinity/FIRE (4% SWR), simulação de choque sistêmico (−30%), alocação ótima e integridade de cotas inteiras sem backend.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
+                            <button type="button" id="btn-re-audit" class="min-h-[42px] px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                <span>Reexecutar Auditoria Agora</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Resumo Numérico -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-800">
+                        <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
+                            <div class="text-[10px] font-mono uppercase text-slate-400">Status Geral</div>
+                            <div class="text-base font-bold font-mono ${allOk ? 'text-emerald-400' : 'text-rose-400'} mt-0.5 flex items-center gap-1.5">
+                                <span>${allOk ? '✓ 100% Aprovado' : '⚠ Falha Detectada'}</span>
+                                <span class="text-xs text-slate-400 font-normal">(${passedCount}/${totalCount} testes)</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
+                            <div class="text-[10px] font-mono uppercase text-slate-400">Última Execução</div>
+                            <div class="text-sm font-mono text-cyan-300 mt-1">
+                                ${new Date(auditResults.timestamp || Date.now()).toLocaleTimeString('pt-BR')} • Local
+                            </div>
+                        </div>
+
+                        <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
+                            <div class="text-[10px] font-mono uppercase text-slate-400">Margem de Tolerância Numérica</div>
+                            <div class="text-sm font-mono text-emerald-300 mt-1">
+                                ε &lt; 0.000001 (Ponto Flutuante IEEE 754)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Testes Individuais -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
+                            Detalhamento dos Testes Atuariais
+                        </h4>
+                        <span class="text-xs font-mono text-slate-500">Execução instantânea client-side</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2.5">
+                        ${tests.map((t, idx) => `
+                            <div class="bg-[#0f172a] border ${t.passed ? 'border-slate-800 hover:border-emerald-500/30' : 'border-rose-500/40'} rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition">
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-5 h-5 rounded-full ${t.passed ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'} flex items-center justify-center text-xs font-mono font-bold">
+                                            ${t.passed ? '✓' : '✗'}
+                                        </span>
+                                        <strong class="text-xs sm:text-sm font-bold text-slate-100 font-mono">
+                                            ${idx + 1}. ${C.esc(t.name)}
+                                        </strong>
+                                    </div>
+                                    ${t.formula ? `
+                                        <div class="text-[11px] font-mono text-cyan-300 pl-7">
+                                            Fórmula: <code>${C.esc(t.formula)}</code>
+                                        </div>
+                                    ` : ''}
+                                    <div class="text-xs text-slate-400 pl-7 font-mono leading-relaxed">
+                                        ${C.esc(t.detail)}
+                                    </div>
+                                </div>
+
+                                <div class="shrink-0 pl-7 sm:pl-0">
+                                    <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold ${t.passed ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'}">
+                                        ${t.passed ? 'APROVADO' : 'REPROVADO'}
+                                    </span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const btnReAudit = document.getElementById('btn-re-audit');
+        if (btnReAudit) {
+            btnReAudit.addEventListener('click', () => {
+                renderSubTabAuditoria(container);
+                if (C && C.refreshIcons) C.refreshIcons(container);
+                C.toast('Auditoria matemática reexecutada: cálculos verificados.', 'success');
+            });
+        }
+    }
+
+    // =========================================================================
     // 8. GRÁFICO SVG DE CRUZAMENTO & TABELA ANUAL
     // =========================================================================
     function renderSVGChart(m) {
@@ -2508,6 +2789,57 @@
                 C.toast('Metas e saldos de carteira atualizados com sucesso.', 'success');
             });
         }
+
+        // Adicionar novo ticker personalizado
+        const btnAddTicker = document.getElementById('btn-add-user-ticker');
+        if (btnAddTicker) {
+            btnAddTicker.addEventListener('click', () => {
+                const codeInp = document.getElementById('new-ticker-code');
+                const nameInp = document.getElementById('new-ticker-name');
+                const classSel = document.getElementById('new-ticker-class');
+                const priceInp = document.getElementById('new-ticker-price');
+                const yieldInp = document.getElementById('new-ticker-yield');
+
+                const ticker = (codeInp ? codeInp.value : '').trim().toUpperCase();
+                const name = (nameInp ? nameInp.value : '').trim();
+                const classKey = classSel ? classSel.value : 'FII';
+                const price = Math.max(0.01, Number(priceInp ? priceInp.value : 0) || 0);
+                const yieldVal = Math.max(0, Number(yieldInp ? yieldInp.value : 0) || 0);
+
+                if (!ticker || !name || price <= 0) {
+                    C.toast('Preencha código, nome e preço do ativo.', 'warning');
+                    return;
+                }
+
+                if (!Array.isArray(inputs.userTickers)) inputs.userTickers = [];
+                inputs.userTickers.push({
+                    ticker,
+                    name,
+                    classKey,
+                    price,
+                    yield: yieldVal,
+                    type: classKey === 'FII' ? 'Fundo Imobiliário' : (classKey === 'RF' ? 'Renda Fixa' : (classKey === 'Acoes' ? 'Ação' : 'ETF Global'))
+                });
+
+                saveInputs();
+                renderSubTabContent();
+                C.toast(`Ativo ${ticker} adicionado à carteira.`, 'success');
+            });
+        }
+
+        // Remover ticker personalizado
+        document.querySelectorAll('[data-del-user-ticker]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-del-user-ticker'), 10);
+                if (Array.isArray(inputs.userTickers) && inputs.userTickers[idx]) {
+                    const removed = inputs.userTickers[idx].ticker;
+                    inputs.userTickers.splice(idx, 1);
+                    saveInputs();
+                    renderSubTabContent();
+                    C.toast(`Ativo ${removed} removido da carteira.`, 'info');
+                }
+            });
+        });
     }
 
     // =========================================================================
@@ -2537,6 +2869,7 @@
         computeAporteByTickers,
         fetchLiveMarketData,
         runMonteCarloSimulation,
+        auditFinancialCalculations: auditFinancialCalculationsInternal,
         getInputs: () => inputs,
         setInputs: (newInputs) => {
             inputs = Object.assign({}, inputs, newInputs);

@@ -695,6 +695,10 @@
     function saveState() {
         const C = global.VaultCore;
         C.store.set(C.STORAGE_KEYS.PSICOMETRIA, appState);
+        const badge = document.getElementById('psy-save-status-badge');
+        if (badge) {
+            badge.textContent = `✓ Salvo às ${new Date().toLocaleTimeString('pt-BR')}`;
+        }
     }
 
     function getActiveProtocol() {
@@ -1197,6 +1201,14 @@
 
                         <!-- Controles de Protocolo -->
                         <div class="flex flex-wrap items-center gap-1.5">
+                            <span id="psy-save-status-badge" class="px-2 py-1 rounded text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30">✓ Salvo localmente</span>
+
+                            <button type="button" id="btn-psy-save-manual" title="Forçar Salvamento no LocalStorage"
+                                class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs flex items-center gap-1 transition">
+                                <i data-lucide="save" class="w-3.5 h-3.5 text-cyan-300"></i>
+                                <span class="hidden sm:inline">Salvar</span>
+                            </button>
+
                             <select id="psy-protocol-select" aria-label="Selecionar Protocolo"
                                 class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-cyan-500/40 text-cyan-200 font-mono text-xs font-semibold focus:outline-none focus:border-cyan-400">
                             </select>
@@ -2417,6 +2429,14 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         syncField('psy-schooling', 'schooling');
         syncField('psy-handedness', 'handedness');
         syncField('psy-informant', 'informant');
+
+        const btnManualSave = document.getElementById('btn-psy-save-manual');
+        if (btnManualSave) {
+            btnManualSave.addEventListener('click', () => {
+                saveState();
+                C.toast('Protocolo e laudo salvos no LocalStorage.', 'success');
+            });
+        }
 
         const btnNew = document.getElementById('btn-psy-new-prot');
         if (btnNew) {
