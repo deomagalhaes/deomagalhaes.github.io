@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 30: Labirinto de Esforço e Custo-Benefício Cognitivo – Deo Magalhães</title>
+    <meta name="description" content="Treine a tomada de decisão baseada em esforço (EEfRT), desative o freio da Habênula Lateral e recalibre a sensibilidade à recompensa neste desafio interativo.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Biômetro de Dopamina e Energia */
+        .biometer-panel {
+            background: linear-gradient(135deg, #001219, #00222e);
+            border: 1px solid #0a9396;
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin-bottom: 25px;
+            color: #f8fafc;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0, 18, 25, 0.4);
+        }
+
+        @media (max-width: 640px) {
+            .biometer-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .meter-label {
+            font-size: 0.82em;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94d2bd;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-fill-energy {
+            background: linear-gradient(90deg, #0a9396, #94d2bd);
+        }
+
+        .progress-fill-dopamine {
+            background: linear-gradient(90deg, #ee9b00, #ca6702);
+        }
+
+        /* Área do Labirinto de Decisões */
+        .maze-stage {
+            background: #001219;
+            border: 2px solid #005f73;
+            border-radius: 14px;
+            padding: 24px;
+            min-height: 380px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #f8fafc;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .nodes-path-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin: 20px 10px;
+        }
+
+        .nodes-path-display::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 50%;
+            height: 3px;
+            background: rgba(10, 147, 150, 0.3);
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .node-step {
+            position: relative;
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #00222e;
+            border: 2px solid #005f73;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: #94d2bd;
+            transition: all 0.3s ease;
+        }
+
+        .node-step.active {
+            border-color: #ee9b00;
+            background: #ee9b00;
+            color: #001219;
+            box-shadow: 0 0 15px rgba(238, 155, 0, 0.7);
+            transform: scale(1.15);
+        }
+
+        .node-step.completed {
+            border-color: #0a9396;
+            background: #0a9396;
+            color: #ffffff;
+        }
+
+        /* Painel da Encruzilhada */
+        .decision-fork-box {
+            background: rgba(0, 34, 46, 0.85);
+            border: 1px solid rgba(148, 210, 189, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .decision-fork-title {
+            font-size: 1.1em;
+            color: #e9d8a6;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .fork-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 640px) {
+            .fork-options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fork-card {
+            background: #001219;
+            border: 2px solid #005f73;
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fork-card:hover {
+            border-color: #0a9396;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 147, 150, 0.3);
+        }
+
+        .fork-card.fork-hard {
+            border-color: #ca6702;
+        }
+
+        .fork-card.fork-hard:hover {
+            border-color: #ee9b00;
+            box-shadow: 0 6px 16px rgba(238, 155, 0, 0.3);
+        }
+
+        .fork-badge {
+            display: inline-block;
+            font-size: 0.72em;
+            text-transform: uppercase;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .badge-easy {
+            background: rgba(0, 95, 115, 0.4);
+            color: #94d2bd;
+            border: 1px solid #005f73;
+        }
+
+        .badge-hard {
+            background: rgba(238, 155, 0, 0.2);
+            color: #ee9b00;
+            border: 1px solid #ee9b00;
+        }
+
+        .fork-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .fork-desc {
+            font-size: 0.82em;
+            color: #94a3b8;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .fork-metrics {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78em;
+            color: #cbd5e1;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 8px;
+        }
+
+        /* Micro-Desafio de Timing / Esforço */
+        .challenge-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 18, 25, 0.95);
+            border-radius: 12px;
+            z-index: 10;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .timing-bar-container {
+            width: 100%;
+            max-width: 360px;
+            height: 36px;
+            background: #00222e;
+            border: 2px solid #0a9396;
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .timing-target-zone {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background: rgba(238, 155, 0, 0.4);
+            border-left: 2px solid #ee9b00;
+            border-right: 2px solid #ee9b00;
+        }
+
+        .timing-pointer {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: #ffffff;
+            box-shadow: 0 0 10px #ffffff;
+            left: 0%;
+        }
+
+        .btn-action-timing {
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 800;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+        }
+
+        .btn-action-timing:hover {
+            background: #ca6702;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Mensagens de Feedback */
+        .feedback-toast {
+            font-size: 0.9em;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .toast-success {
+            background: rgba(10, 147, 150, 0.2);
+            border: 1px solid #0a9396;
+            color: #94d2bd;
+        }
+
+        .toast-warning {
+            background: rgba(238, 155, 0, 0.2);
+            border: 1px solid #ee9b00;
+            color: #e9d8a6;
+        }
+
+        /* Explicação Neuropsicológica */
+        .neuro-explanation {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+            margin-top: 30px;
+            font-size: 0.92em;
+            line-height: 1.65;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 30: Labirinto de Esforço e Custo-Benefício Cognitivo</h1>
+                <p class="article-author-date">Desafio Neurocognitivo Diário • Por Deo Magalhães - Neuropsicólogo e Neurocientista</p>
+            </header>
+
+            <div class="game-wrapper">
+                
+                <!-- Barra de Estatísticas -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Fase Atual</span>
+                        <span class="stat-badge-value" id="currentPhaseDisplay">1 / 6</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Dopamina Hedônica</span>
+                        <span class="stat-badge-value" id="dopamineDisplay">0 pts</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Meta da Fase</span>
+                        <span class="stat-badge-value" id="targetDisplay">65 pts</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Recorde Pessoal</span>
+                        <span class="stat-badge-value" id="highScoreDisplay">0 pts</span>
+                    </div>
+                    <button id="soundToggleBtn" class="sound-btn" onclick="soundManager.toggle()">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Painel Biométrico -->
+                <div class="biometer-panel">
+                    <div>
+                        <div class="meter-label">
+                            <span>Energia Vital (Reserva Física)</span>
+                            <span id="energyPctTxt">100%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="energyBar" class="progress-bar-fill progress-fill-energy" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="meter-label">
+                            <span>Sensibilidade de Recompensa (Striatum)</span>
+                            <span id="dopaminePctTxt">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="dopamineBar" class="progress-bar-fill progress-fill-dopamine" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Palco Central do Labirinto -->
+                <div class="maze-stage">
+                    <div>
+                        <div style="font-size: 0.85em; color: #94d2bd; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Trilha Neural de Alocação de Esforço</div>
+                        <h3 id="phaseTitle" style="color: #ffffff; margin: 0; font-size: 1.2em;">Fase 1: O Despertar da Iniciativa</h3>
+                    </div>
+
+                    <!-- Progresso dos Nódulos -->
+                    <div class="nodes-path-display" id="nodesContainer">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+
+                    <!-- Encruzilhada Ativa -->
+                    <div class="decision-fork-box" id="forkContainer">
+                        <div class="decision-fork-title" id="forkPrompt">Escolha seu caminho no próximo ponto de bifurcação:</div>
+                        <div class="fork-options-grid">
+                            
+                            <!-- Opção Fácil (Baixo Custo / Baixa Recompensa) -->
+                            <div class="fork-card" onclick="gameEngine.choosePath('easy')">
+                                <span class="fork-badge badge-easy">Trilha Passiva • Baixo Esforço</span>
+                                <div class="fork-title">Acomodação Segura</div>
+                                <div class="fork-desc">Evita riscos imediatos e não exige ativação frontal. A Habênula não se agita, mas o retorno dopaminérgico é insuficiente para sustentar a vitalidade.</div>
+                                <div class="fork-metrics">
+                                    <span>Custo: -10 Energia</span>
+                                    <span style="color: #0a9396; font-weight: 700;">+10 Dopamina</span>
+                                </div>
+                            </div>
+
+                            <!-- Opção Difícil (Alto Custo / Alta Recompensa) -->
+                            <div class="fork-card fork-hard" onclick="gameEngine.choosePath('hard')">
+                                <span class="fork-badge badge-hard">Trilha de Agência • Desafio Pré-Frontal</span>
+                                <div class="fork-title">Superação Ativa (VTA)</div>
+                                <div class="fork-desc">Exige um micro-desafio de precisão temporal e foco. Vence o freio inibitório da Habênula e gera uma explosão de satisfação estriatal.</div>
+                                <div class="fork-metrics">
+                                    <span>Custo: -15 Energia</span>
+                                    <span style="color: #ee9b00; font-weight: 700;">+35 Dopamina</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Micro-Desafio de Timing (Challenge Overlay) -->
+                    <div class="challenge-overlay" id="challengeOverlay">
+                        <h3 style="color: #e9d8a6; margin-bottom: 6px;">Frenagem Inibitória da Habênula</h3>
+                        <p style="font-size: 0.85em; color: #94d2bd; max-width: 420px; line-height: 1.4;">Trave o marcador na zona dourada central para consolidar o erro de predição positivo e liberar a dopamina!</p>
+                        
+                        <div class="timing-bar-container">
+                            <div class="timing-target-zone" id="timingZone"></div>
+                            <div class="timing-pointer" id="timingPointer"></div>
+                        </div>
+
+                        <button class="btn-action-timing" onclick="gameEngine.validateChallenge()">DISPARAR AÇÃO (ESPAÇO OU CLIQUE)</button>
+                    </div>
+
+                    <!-- Toast Feedback -->
+                    <div id="gameToast" class="feedback-toast"></div>
+                </div>
+
+                <!-- Painel de Explicação Científica -->
+                <div class="neuro-explanation">
+                    <h3 style="color: #005f73; margin-top: 0; font-size: 1.15em;">Fundamentação Neuropsicológica: O Paradigma EEfRT</h3>
+                    <p>Este jogo operacionaliza a <em>Effort-Expenditure for Rewards Task (EEfRT)</em>, desenvolvida por Michael Treadway em Harvard. Na depressão e na anedonia clínica, o indivíduo não perde a capacidade sensorial de saborear o prazer, mas sofre um colapso na <strong>tomada de decisão baseada em esforço</strong>.</p>
+                    <p>O cérebro anedônico calcula que qualquer esforço é 'caro demais' devido à hiperatividade da <strong>Habênula Lateral</strong> e da área dorsal do Córtex Cingulado Anterior (dACC). Ao escolher apenas a trilha fácil, sua energia vital se esgota antes de atingir a meta da fase — exatamente o que ocorre na vida real quando nos recolhemos na inércia protetiva. Treinar a superação deliberada de micro-desafios reprograma o cálculo de custo-benefício e restaura a vitalidade volitiva.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        // Web Audio API Procedural Audio Manager
+        const soundManager = {
+            ctx: null,
+            enabled: true,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            },
+            toggle() {
+                this.enabled = !this.enabled;
+                const icon = document.getElementById('soundIcon');
+                const btn = document.getElementById('soundToggleBtn');
+                if (this.enabled) {
+                    icon.innerText = '🔊';
+                    btn.innerHTML = '<span id="soundIcon">🔊</span> Som Ativo';
+                } else {
+                    icon.innerText = '🔇';
+                    btn.innerHTML = '<span id="soundIcon">🔇</span> Silenciado';
+                }
+            },
+            playStep() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(480, now + 0.08);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } catch(e) {}
+            },
+            playSuccess() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    // Arpeggio brilhante de recompensa
+                    const freqs = [587.33, 739.99, 880.00, 1174.66]; // D5, F#5, A5, D6
+                    freqs.forEach((f, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(f, now + idx * 0.04);
+                        gain.gain.setValueAtTime(0.06, now + idx * 0.04);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.22);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.04);
+                        osc.stop(now + idx * 0.04 + 0.22);
+                    });
+                } catch(e) {}
+            },
+            playPass() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(260, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } catch(e) {}
+            },
+            playVictory() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const melody = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                    melody.forEach((f, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(f, now + i * 0.08);
+                        gain.gain.setValueAtTime(0.08, now + i * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.35);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + i * 0.08);
+                        osc.stop(now + i * 0.08 + 0.35);
+                    });
+                } catch(e) {}
+            }
+        };
+
+        // Motor do Jogo Cognitivo (Game Engine)
+        const gameEngine = {
+            currentPhase: 1,
+            maxPhases: 6,
+            currentNode: 0,
+            energy: 100,
+            dopamine: 0,
+            highScore: 0,
+            phaseConfig: [
+                { title: "Fase 1: O Despertar da Iniciativa", nodes: 3, target: 65, easyGain: 10, hardGain: 35, speed: 2.5 },
+                { title: "Fase 2: Resistência à Frustração", nodes: 4, target: 90, easyGain: 10, hardGain: 35, speed: 2.8 },
+                { title: "Fase 3: Alocação de Esforço Pré-Frontal", nodes: 4, target: 110, easyGain: 12, hardGain: 40, speed: 3.2 },
+                { title: "Fase 4: Rompendo a Inércia Habenular", nodes: 5, target: 140, easyGain: 12, hardGain: 40, speed: 3.6 },
+                { title: "Fase 5: A Maestria do Circuito de Recompensa", nodes: 5, target: 170, easyGain: 15, hardGain: 50, speed: 4.0 },
+                { title: "Fase 6: Imunização Neurocognitiva", nodes: 6, target: 210, easyGain: 15, hardGain: 55, speed: 4.4 }
+            ],
+            timingAnimId: null,
+            pointerPos: 0,
+            pointerDir: 1,
+            targetZoneStart: 35,
+            targetZoneWidth: 30,
+
+            init() {
+                this.highScore = parseInt(localStorage.getItem('dia30_highScore') || "0", 10);
+                document.getElementById('highScoreDisplay').innerText = `${this.highScore} pts`;
+                this.startPhase(1);
+
+                window.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' && document.getElementById('challengeOverlay').style.display === 'flex') {
+                        e.preventDefault();
+                        this.validateChallenge();
+                    }
+                });
+            },
+
+            startPhase(phaseNum) {
+                this.currentPhase = phaseNum;
+                this.currentNode = 0;
+                this.energy = 100;
+                this.dopamine = 0;
+
+                const cfg = this.phaseConfig[phaseNum - 1];
+                document.getElementById('currentPhaseDisplay').innerText = `${phaseNum} / ${this.maxPhases}`;
+                document.getElementById('phaseTitle').innerText = cfg.title;
+                document.getElementById('targetDisplay').innerText = `${cfg.target} pts`;
+                this.updateBiometers();
+                this.renderNodes();
+            },
+
+            renderNodes() {
+                const cfg = this.phaseConfig[this.currentPhase - 1];
+                const container = document.getElementById('nodesContainer');
+                container.innerHTML = '';
+
+                for (let i = 0; i <= cfg.nodes; i++) {
+                    const node = document.createElement('div');
+                    node.className = 'node-step';
+                    if (i < this.currentNode) node.classList.add('completed');
+                    else if (i === this.currentNode) node.classList.add('active');
+
+                    if (i === 0) node.innerText = 'S';
+                    else if (i === cfg.nodes) node.innerText = '★';
+                    else node.innerText = i;
+
+                    container.appendChild(node);
+                }
+            },
+
+            updateBiometers() {
+                const cfg = this.phaseConfig[this.currentPhase - 1];
+                document.getElementById('dopamineDisplay').innerText = `${this.dopamine} pts`;
+                document.getElementById('energyPctTxt').innerText = `${Math.max(0, this.energy)}%`;
+                document.getElementById('energyBar').style.width = `${Math.max(0, this.energy)}%`;
+
+                const dopaPct = Math.min(100, Math.round((this.dopamine / cfg.target) * 100));
+                document.getElementById('dopaminePctTxt').innerText = `${dopaPct}%`;
+                document.getElementById('dopamineBar').style.width = `${dopaPct}%`;
+            },
+
+            showToast(msg, type = 'success') {
+                const toast = document.getElementById('gameToast');
+                toast.innerText = msg;
+                toast.className = `feedback-toast ${type === 'success' ? 'toast-success' : 'toast-warning'}`;
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2500);
+            },
+
+            choosePath(type) {
+                const cfg = this.phaseConfig[this.currentPhase - 1];
+                soundManager.init();
+
+                if (type === 'easy') {
+                    // Caminho fácil
+                    this.energy -= 10;
+                    this.dopamine += cfg.easyGain;
+                    soundManager.playPass();
+                    this.showToast(`Trilha Passiva: +${cfg.easyGain} Dopamina (Custo: -10 Energia)`, 'warning');
+                    this.advanceNode();
+                } else {
+                    // Desafio de timing
+                    this.openChallenge();
+                }
+            },
+
+            openChallenge() {
+                const overlay = document.getElementById('challengeOverlay');
+                overlay.style.display = 'flex';
+
+                // Configura zona alvo
+                this.targetZoneWidth = Math.max(18, 32 - (this.currentPhase * 2));
+                this.targetZoneStart = 50 - (this.targetZoneWidth / 2);
+                const zone = document.getElementById('timingZone');
+                zone.style.left = `${this.targetZoneStart}%`;
+                zone.style.width = `${this.targetZoneWidth}%`;
+
+                this.pointerPos = 0;
+                this.pointerDir = 1;
+
+                const cfg = this.phaseConfig[this.currentPhase - 1];
+                const speed = cfg.speed;
+
+                const animatePointer = () => {
+                    this.pointerPos += this.pointerDir * speed;
+                    if (this.pointerPos >= 98) {
+                        this.pointerPos = 98;
+                        this.pointerDir = -1;
+                    } else if (this.pointerPos <= 0) {
+                        this.pointerPos = 0;
+                        this.pointerDir = 1;
+                    }
+                    document.getElementById('timingPointer').style.left = `${this.pointerPos}%`;
+                    this.timingAnimId = requestAnimationFrame(animatePointer);
+                };
+
+                this.timingAnimId = requestAnimationFrame(animatePointer);
+            },
+
+            validateChallenge() {
+                if (this.timingAnimId) cancelAnimationFrame(this.timingAnimId);
+                const overlay = document.getElementById('challengeOverlay');
+                overlay.style.display = 'none';
+
+                const cfg = this.phaseConfig[this.currentPhase - 1];
+                const hitTarget = (this.pointerPos >= this.targetZoneStart && this.pointerPos <= (this.targetZoneStart + this.targetZoneWidth));
+
+                if (hitTarget) {
+                    this.energy -= 15;
+                    this.dopamine += cfg.hardGain;
+                    soundManager.playSuccess();
+                    this.showToast(`🎯 Superação Perfeita! VTA Ativada: +${cfg.hardGain} Dopamina!`, 'success');
+                } else {
+                    // Resposta parcial
+                    const partialGain = Math.round(cfg.hardGain * 0.5);
+                    this.energy -= 12;
+                    this.dopamine += partialGain;
+                    soundManager.playPass();
+                    this.showToast(`Marcador fora do ápice: Liberação parcial (+${partialGain} Dopamina).`, 'warning');
+                }
+
+                this.advanceNode();
+            },
+
+            advanceNode() {
+                this.currentNode++;
+                this.updateBiometers();
+                this.renderNodes();
+
+                const cfg = this.phaseConfig[this.currentPhase - 1];
+
+                // Checa fim da fase
+                if (this.currentNode >= cfg.nodes) {
+                    if (this.dopamine >= cfg.target) {
+                        // Vitória na fase
+                        soundManager.playVictory();
+                        if (this.dopamine > this.highScore) {
+                            this.highScore = this.dopamine;
+                            localStorage.setItem('dia30_highScore', this.highScore.toString());
+                            document.getElementById('highScoreDisplay').innerText = `${this.highScore} pts`;
+                        }
+
+                        if (this.currentPhase < this.maxPhases) {
+                            setTimeout(() => {
+                                alert(`🎉 Parabéns! Você concluiu a ${cfg.title} com ${this.dopamine} pontos de dopamina! Avançando para o próximo desafio.`);
+                                this.startPhase(this.currentPhase + 1);
+                            }, 400);
+                        } else {
+                            setTimeout(() => {
+                                alert(`🏆 VITÓRIA SUPREMA! Você completou todas as 6 fases do Labirinto de Esforço Cognitivo, recalibrando sua circuitaria de recompensa e superando a inibição habenular! Pontuação Final: ${this.dopamine} pts.`);
+                                this.startPhase(1);
+                            }, 400);
+                        }
+                    } else {
+                        // Não atingiu a meta de dopamina
+                        setTimeout(() => {
+                            alert(`⚠️ Acomodação Insuficiente! Você alcançou o fim da fase com apenas ${this.dopamine} pts de dopamina (Meta: ${cfg.target} pts). Escolher apenas a trilha fácil não sustentou o circuito. Tente novamente arriscando trilhas ativas!`);
+                            this.startPhase(this.currentPhase);
+                        }, 400);
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            gameEngine.init();
+        });
+    </script>
+</body>
+</html>

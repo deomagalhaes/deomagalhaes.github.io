@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala Dimensional de Anedonia e Responsividade a Recompensas (EDARR / T-31) – Deo Magalhães</title>
+    <meta name="description" content="Avalie o nível de anedonia antecipatória vs consumatória, a reatividade da Habênula Lateral e a responsividade a recompensas. Cálculo 100% privado.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px 10px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: #005f73;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        /* Área de Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 1.35em;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: white;
+            background: #005f73;
+            margin-bottom: 12px;
+        }
+
+        .result-cat-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 640px) {
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .dimension-card h4 {
+            font-size: 0.95em;
+            color: #005f73;
+            margin-bottom: 6px;
+        }
+
+        .dim-bar-container {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .dim-bar-fill {
+            background: #0a9396;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .dim-score-val {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #0a9396;
+        }
+
+        .clinical-guidelines {
+            background: #f1f5f9;
+            border-left: 4px solid #ee9b00;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala Dimensional de Anedonia e Responsividade a Recompensas (EDARR / T-31)</h1>
+                <p class="article-author-date">Instrumento Psicoeducativo de Autoavaliação • Por Deo Magalhães - Neuropsicólogo e Neurocientista</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Clínico:</strong> Esta escala autoaplicável avalia o grau de embotamento hedônico, a sensibilidade da circuitaria de recompensa e o impacto de frustrações crônicas na motivação. O instrumento discrimina a perda de desejo antecipatório (<em>Wanting / Dopamina</em>) da perda de prazer no momento da experiência (<em>Liking / Opioides</em>), mapeando também a reatividade do circuito antirrecompensa da Habênula Lateral.</p>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #64748b;"><strong>Privacidade Total:</strong> O cálculo é processado 100% de forma local no seu navegador. Nenhuma resposta é transmitida ou gravada externamente.</p>
+            </div>
+
+            <form id="quizForm" class="quiz-container">
+                
+                <!-- Dimensão 1: Anedonia Antecipatória (Wanting / Striatum) -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Anedonia Antecipatória e Avolia Motivacional ('Wanting' / Striatum)</h3>
+                    <p>Avalia a capacidade de projetar prazer futuro, o entusiasmo antecipatório e a disposição energética para iniciar ações gratificantes.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 01</span>
+                        <span>Quando penso em planos futuros ou finais de semana, tenho dificuldade em sentir empolgação ou expectativa positiva.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q1" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 02</span>
+                        <span>Mesmo sabendo que uma atividade me faria bem, sinto que não vale a pena o esforço físico ou mental de sair de casa para fazê-la.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q2" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 03</span>
+                        <span>Perdi o hábito de criar metas ou projetos pessoais porque uma voz interna me diz antecipadamente: 'nada disso vai adiantar'.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q3" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 04</span>
+                        <span>Preciso de um esforço de vontade desmedido para iniciar tarefas recreativas que antes começavam de forma espontânea e natural.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q4" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 2: Anedonia Consumatória (Liking / Opioides) -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Anedonia Consumatória e Embotamento Hedônico ('Liking' / Opioides)</h3>
+                    <p>Avalia a capacidade de saborear o momento presente e registrar deleite sensorial ou afetivo durante a realização da atividade.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 05</span>
+                        <span>Ao comer uma refeição saborosa ou minha comida favorita, percebo que ela tem gosto neutro ou sem graça em comparação ao passado.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q5" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 06</span>
+                        <span>Quando escuto músicas que costumavam me emocionar profundamente, sinto-as apenas como um barulho distante e sem impacto emocional.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q6" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 07</span>
+                        <span>Raramente consigo me sentir relaxado(a) e pleno(a) desfrutando de momentos de lazer; é como se houvesse uma névoa anestesiante contínua.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q7" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 08</span>
+                        <span>Mesmo quando uma situação engraçada acontece ao meu redor, sinto que meu riso é mecânico e não vem de dentro.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q8" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 3: Hipersensibilidade Habenular à Frustração -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Hipersensibilidade Habenular à Frustração (Epitálamo & LHb)</h3>
+                    <p>Mapeia a hiper-reatividade do centro antirrecompensa do cérebro, a aversão ao esforço e a tendência ao desânimo imediato após pequenos imprevistos.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 09</span>
+                        <span>Basta um pequeno imprevisto ou contratempo para que eu desista totalmente de um plano e queira me isolar no quarto.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q9" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 10</span>
+                        <span>A sensação de desapontamento quando algo sai errado me parece física e desproporcionalmente dolorosa, drenando minha energia por dias.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q10" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 11</span>
+                        <span>Costumo superdimensionar a dificuldade de qualquer ação produtiva, antecipando que o cansaço superará de longe o ganho obtido.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q11" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 12</span>
+                        <span>Sinto que acumulei tantas decepções nos últimos meses que meu cérebro simplesmente 'desistiu' de tentar novas iniciativas.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q12" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 4: Responsividade Social e Vínculo Afetivo -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Responsividade Social e Conexão Afetiva (Ocitocina & Vínculo)</h3>
+                    <p>Investiga o isolamento comportamental, o embotamento da empatia hedônica e a perda do prazer em trocas interpessoais.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 13</span>
+                        <span>Conversar com amigos ou familiares parece um fardo exaustivo, e prefiro inventar desculpas para permanecer sozinho(a).</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q13" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 14</span>
+                        <span>Tenho dificuldade em me alegrar com as boas notícias e vitórias das pessoas queridas ao meu redor, experimentando um distanciamento frio.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q14" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 15</span>
+                        <span>Demonstrações de afeto físico (abraços, carinhos) não produzem o conforto acolhedor que outrora proporcionavam.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q15" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">Item 16</span>
+                        <span>Sinto que estou me tornando gradativamente invisível e distante dos círculos sociais aos quais pertencia, sem motivação para reverter isso.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q16" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="4"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit-test">Calcular Perfil Hedônico e Responsividade →</button>
+            </form>
+
+            <!-- Seção de Resultados -->
+            <section id="resultsSection" class="results-section">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <span class="score-badge" id="scoreBadge">0 / 64 Pontos</span>
+                    <h2 class="result-cat-title" id="resultTitle">Resultado da Avaliação</h2>
+                    <p id="resultDesc" style="color: #475569; font-size: 1.05em; max-width: 700px; margin: 0 auto; line-height: 1.6;"></p>
+                </div>
+
+                <!-- Detalhamento por Dimensões -->
+                <div class="dimension-grid">
+                    <div class="dimension-card">
+                        <h4>1. Anedonia Antecipatória (Wanting)</h4>
+                        <div class="dim-score-val" id="d1Score">0 / 16</div>
+                        <div class="dim-bar-container"><div id="d1Bar" class="dim-bar-fill"></div></div>
+                        <p id="d1Feedback" style="font-size: 0.82em; color: #64748b; margin-top: 6px;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>2. Anedonia Consumatória (Liking)</h4>
+                        <div class="dim-score-val" id="d2Score">0 / 16</div>
+                        <div class="dim-bar-container"><div id="d2Bar" class="dim-bar-fill"></div></div>
+                        <p id="d2Feedback" style="font-size: 0.82em; color: #64748b; margin-top: 6px;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>3. Reatividade da Habênula Lateral</h4>
+                        <div class="dim-score-val" id="d3Score">0 / 16</div>
+                        <div class="dim-bar-container"><div id="d3Bar" class="dim-bar-fill"></div></div>
+                        <p id="d3Feedback" style="font-size: 0.82em; color: #64748b; margin-top: 6px;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>4. Responsividade e Vínculo Social</h4>
+                        <div class="dim-score-val" id="d4Score">0 / 16</div>
+                        <div class="dim-bar-container"><div id="d4Bar" class="dim-bar-fill"></div></div>
+                        <p id="d4Feedback" style="font-size: 0.82em; color: #64748b; margin-top: 6px;"></p>
+                    </div>
+                </div>
+
+                <!-- Parecer Clínico e Recomendações -->
+                <div class="clinical-guidelines">
+                    <h3 style="color: #005f73; margin-top: 0; font-size: 1.15em;">Diretrizes Clínicas e Manejo Neuropsicológico</h3>
+                    <div id="guidelinesText"></div>
+                </div>
+
+                <div class="cta-box">
+                    <h3 style="color: #0f172a; margin-bottom: 8px;">Precisa de Apoio Clínico Especializado?</h3>
+                    <p style="color: #64748b; font-size: 0.9em; margin-bottom: 20px;">A anedonia e o esgotamento dopaminérgico são quadros passíveis de reabilitação através de protocolos clínicos estruturados de neuropsicologia e Ativação Comportamental.</p>
+                    <a href="/agendamento.html" class="cta-btn">Agendar Sessão de Avaliação Clínica</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Feedback visual ao clicar nos labels de rádio
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const group = e.target.closest('.options-group');
+                    group.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    e.target.closest('.option-label').classList.add('selected');
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let d1 = 0; // Wanting (Itens 1 a 4)
+                let d2 = 0; // Liking (Itens 5 a 8)
+                let d3 = 0; // Habênula (Itens 9 a 12)
+                let d4 = 0; // Vínculo Social (Itens 13 a 16)
+
+                for (let i = 1; i <= 16; i++) {
+                    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`)?.value || "0", 10);
+                    if (i <= 4) d1 += val;
+                    else if (i <= 8) d2 += val;
+                    else if (i <= 12) d3 += val;
+                    else d4 += val;
+                }
+
+                const total = d1 + d2 + d3 + d4;
+
+                // Renderiza totais e badges
+                document.getElementById('scoreBadge').innerText = `${total} / 64 Pontos`;
+
+                let title = "";
+                let desc = "";
+                let guidelines = "";
+
+                if (total <= 27) {
+                    title = "Tônus Hedônico e Motivacional Preservado";
+                    desc = "Seus escores indicam uma circuitaria de recompensa equilibrada. Você preserva tanto a capacidade de desejar e buscar objetivos (wanting) quanto o deleite sensorial nas experiências vividas (liking). Sua Habênula Lateral opera com limiar adaptativo normal.";
+                    guidelines = "<p>• Mantenha o equilíbrio entre esforço e descanso para prevenir sobrecargas estressoras agudas.</p><p>• Continue investindo em atividades significativas alinhadas aos seus valores pessoais e preserve seus círculos de amizade e afeto.</p>";
+                } else if (total <= 39) {
+                    title = "Embotamento Hedônico Leve a Moderado";
+                    desc = "Observam-se sinais iniciais de sobrecarga neuroquímica e diminuição da prontidão para buscar prazer. É comum haver flutuações onde as tarefas do dia a dia parecem mais pesadas e o entusiasmo prévio encontra-se amortecido.";
+                    guidelines = "<p>• <strong>Atenção à Procrastinação Protetiva:</strong> A perda inicial de 'wanting' faz o cérebro superdimensionar o esforço. Não espere a 'vontade' para agir: estabeleça micrometas de 5 minutos.</p><p>• <strong>Higiene do Estresse:</strong> Identifique fontes repetitivas de frustração no trabalho ou relacionamentos que possam estar sensibilizando a Habênula Lateral.</p>";
+                } else if (total <= 51) {
+                    title = "Anedonia Significativa (Bloqueio Habenular Ativo)";
+                    desc = "Quadro clínico caracterizado por substancial apagamento motivacional e retração hedônica. A Habênula Lateral provavelmente encontra-se em estado de hiperexcitabilidade, mantendo o freio inibitório sobre a VTA e reduzindo a circulação de dopamina.";
+                    guidelines = "<p>• <strong>Protocolo de Ativação Comportamental:</strong> Aja 'de fora para dentro'. Escolha 1 atividade de baixo esforço e alta probabilidade de desfecho positivo por dia, executando-a independentemente do humor momentâneo.</p><p>• <strong>Evite Metas Grandiosas:</strong> Grandes promessas geram risco de falha e novos picos habenulares. Fracione seus desafios em passos minúsculos que garantam micro-recompensas sucessivas.</p><p>• <strong>Apoio Clínico:</strong> Recomenda-se acompanhamento neuropsicológico ou psicoterápico especializado.</p>";
+                } else {
+                    title = "Anedonia Severa (Apagão Hedônico Generalizado)";
+                    desc = "Indica colapso acentuado da capacidade de sentir prazer consumatório e de mobilizar esforço para recompensas futuras. Há indícios de forte isolamento social e exaustão afetiva profunda, comumente presentes em episódios depressivos maiores e burnout grave.";
+                    guidelines = "<p>• <strong>Busca de Ajuda Especializada Imediata:</strong> Este nível de anedonia demanda avaliação diagnóstica com neuropsicólogo e psiquiatra. Quadros graves frequentemente requerem combinação de psicoterapia estruturada e suporte psicofarmacológico para restabelecer a plasticidade sináptica da circuitaria de recompensa.</p><p>• <strong>Autocompaixão Radical:</strong> Reconheça que a apatia não decorre de fraqueza pessoal ou falta de fibra moral, mas de um mecanismo neurofisiológico de esgotamento que necessita de intervenção técnica adequada.</p>";
+                }
+
+                document.getElementById('resultTitle').innerText = title;
+                document.getElementById('resultDesc').innerText = desc;
+                document.getElementById('guidelinesText').innerHTML = guidelines;
+
+                // Preenchimento de barras das dimensões
+                const updateDim = (idPrefix, val, maxVal, label) => {
+                    document.getElementById(`${idPrefix}Score`).innerText = `${val} / ${maxVal}`;
+                    const pct = Math.round((val / maxVal) * 100);
+                    document.getElementById(`${idPrefix}Bar`).style.width = `${pct}%`;
+                    
+                    let statusTxt = "";
+                    if (pct <= 40) statusTxt = "Preservado / Normal";
+                    else if (pct <= 65) statusTxt = "Comprometimento Leve a Moderado";
+                    else statusTxt = "Comprometimento Severo / Alerta";
+                    document.getElementById(`${idPrefix}Feedback`).innerText = `${statusTxt} (${pct}% da pontuação máxima).`;
+                };
+
+                updateDim('d1', d1, 16);
+                updateDim('d2', d2, 16);
+                updateDim('d3', d3, 16);
+                updateDim('d4', d4, 16);
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

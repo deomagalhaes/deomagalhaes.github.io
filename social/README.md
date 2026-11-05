@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **05/11/2026** | **O Apagão do Prazer: A Ciência da Anedonia e o Circuito Habenular** | [social/2026-11-05-o-apagao-do-prazer-circuito-habenular.md](2026-11-05-o-apagao-do-prazer-circuito-habenular.md) | ✅ Pronto para postar |
 | **05/11/2026** | **A Paralisia do Desamparo: Como o Cérebro Desiste e Como Reativá-lo** | [social/2026-11-05-desamparo-aprendido-reativacao-dopaminergica.md](2026-11-05-desamparo-aprendido-reativacao-dopaminergica.md) | ✅ Pronto para postar |
 | **03/11/2026** | **O Cérebro Visceral: A Ciência da Intuição (Damasio)** | [social/2026-11-03-o-cerebro-visceral-ciencia-da-intuicao.md](2026-11-03-o-cerebro-visceral-ciencia-da-intuicao.md) | ✅ Pronto para postar |
 | **03/11/2026** | **A Biologia da Resiliência: Epigenética, BDNF e Regulação Vagal** | [social/2026-11-03-a-biologia-da-resiliencia-bdnf-regulacao-vagal.md](2026-11-03-a-biologia-da-resiliencia-bdnf-regulacao-vagal.md) | ✅ Pronto para postar |
