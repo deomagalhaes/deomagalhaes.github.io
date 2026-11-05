@@ -332,6 +332,14 @@
         pegResidualError: 0
     };
 
+    const DEFAULT_PONTEIO_PLAYER_STATE = {
+        activeId: 'pagode_brasilia',
+        isPlaying: false,
+        currentStepIdx: -1,
+        playbackSpeed: 1.0,
+        isLooping: true
+    };
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -360,7 +368,8 @@
         activeRhythmStepIdx: -1,     // Passo ativo da levada para feedback visual sincronizado
         reverseFretsViola: [0, 0, 0, 0, 0], // Digitação ativa no Dicionário Reverso p/ Viola (1º ao 5º par)
         reverseFretsViolao: [0, 0, 1, 2, 2, 0], // Digitação ativa no Dicionário Reverso p/ Violão (1ª à 6ª corda)
-        earTrainer: Object.assign({}, DEFAULT_EAR_TRAINER_STATE)
+        earTrainer: Object.assign({}, DEFAULT_EAR_TRAINER_STATE),
+        ponteioPlayer: Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -373,6 +382,8 @@
     let metroRafId = null;
     let tapTimestamps = [];
     let scalePlayTimers = [];
+    let progressionTimerId = null;
+    let ponteioPlaybackTimer = null;
     let progressionTimerId = null;
 
     function ensureAudioContext() {
@@ -1506,7 +1517,7 @@
     }
 
     // =========================================================================
-    // BIBLIOTECA DE PONTEIOS & REPERTÓRIO CLÁSSICO DE VIOLA CAIPIRA
+    // BIBLIOTECA EXPANDIDA DE PONTEIOS & SOLOS CANÔNICOS DE VIOLA CAIPIRA (FASE 6)
     // =========================================================================
     const PONTEIOS_REPERTOIRE = [
         {
@@ -1515,72 +1526,255 @@
             author: 'Tião Carreiro & Lourival dos Santos',
             rhythm: 'Pagode Caipira (2/4 sincopado)',
             key: 'Mi Maior (E) Cebolão',
-            desc: 'O mais célebre ponteio da viola brasileira. Introdução com repiques clássicos nos pares 1 e 2 descendo em cascata.',
-            notes: [
-                { c: 0, f: 0, d: 0.16 },
-                { c: 1, f: 2, d: 0.16 },
-                { c: 0, f: 4, d: 0.20 },
-                { c: 0, f: 2, d: 0.16 },
-                { c: 0, f: 0, d: 0.22 },
-                { c: 1, f: 0, d: 0.16 },
-                { c: 2, f: 1, d: 0.20 },
-                { c: 3, f: 2, d: 0.26 },
-                { c: 4, f: 2, d: 0.26 },
-                { c: 0, f: 0, d: 0.45 }
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 104,
+            desc: 'O ponteio mais emblemático da viola caipira brasileira. Introdução histórica gravada em 1959 por Tião Carreiro & Pardinho, fundando o gênero Pagode de Viola. Caracteriza-se por repiques em cascata nos pares 1 e 2, com batida percussiva no tampo e síncopes cortadas.',
+            techniqueTip: 'Use indicador (i) subindo na prima e polegar (p) descendo na segundinha. Na batida de tampo [TAP], utilize a lateral do polegar direito no tampo superior para estalar o ritmo característico de Tião Carreiro.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.18, rh: 'p+i', lh: '0-2', ann: 'Abertura sincopada em Lá' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-2', ann: 'Terça Maior de Mi (E)' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Terça de Si com 7ª (B7)' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.20, rh: 'p+i', lh: '0-2', ann: 'Terça de Lá (A)' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.20, rh: 'p+i', lh: '0-0', ann: 'Cordas soltas E/B' },
+                { measure: 2, beat: '1 e', notes: [{ c: 2, f: 1 }], d: 0.18, rh: 'p', lh: '1', ann: 'Turina Lá' },
+                { measure: 2, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.22, rh: 'p', lh: '2', ann: 'Toeira Fá#' },
+                { measure: 2, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', ann: 'Batida percussiva no tampo' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-2', ann: 'Cascata de Mi Maior' },
+                { measure: 3, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Terça de B7' },
+                { measure: 3, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.18, rh: 'p+i', lh: '0-2', ann: 'Terça de A' },
+                { measure: 3, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', ann: 'Resolução solta' },
+                { measure: 4, beat: '1', notes: [{ c: 3, f: 2 }, { c: 4, f: 2 }], d: 0.26, rh: 'p', lh: '2-2', ann: 'Bordão oitavado B/E' },
+                { measure: 4, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.50, rh: 'rasq', lh: '0', ann: 'Rasqueado em Mi Maior pleno' }
+            ]
+        },
+        {
+            id: 'chico_mineiro',
+            title: 'Chico Mineiro',
+            author: 'Tonico & Francisco Ribeiro',
+            rhythm: 'Cururu / Moda Caipira (2/4)',
+            key: 'Mi Maior (E) Cebolão',
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 84,
+            desc: 'O mais célebre lamento poético da música raiz brasileira. Gravado por Tonico & Tinoco em 1958, o solo sintetiza a essência do dueto caipira em terças diatônicas nos pares 1 e 2, evocando a saudade do companheiro de comitiva nas campinas de Minas Gerais.',
+            techniqueTip: 'Mantenha o indicador (i) apoiado no 1º par e o polegar (p) no 2º par, beliscando simultaneamente como uma pinça macia. A sonoridade deve soar límpida, aveludada e sem pressa.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Terça Mi Maior (Sol# + Mi)' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Repouso na tônica Mi' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.26, rh: 'p+i', lh: '1-3', ann: 'Terça de Si com 7ª (Lá + Fá#)' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.30, rh: 'p+i', lh: '1-3', ann: 'Ponto alto: Terça aguda (Si + Sol#)' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.26, rh: 'p+i', lh: '1-3', ann: 'Descida melódica lírica' },
+                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Terça de Mi Maior' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Terça de passagem (Fá# + Ré#)' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.28, rh: 'p+i', lh: '0-2', ann: 'Terça de Lá (Mi + Dó#)' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.28, rh: 'p+i', lh: '0-0', ann: 'Resolução cordas soltas' },
+                { measure: 3, beat: '1 e', notes: [{ c: 2, f: 1 }], d: 0.24, rh: 'p', lh: '1', ann: 'Bordão Turina Lá' },
+                { measure: 3, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.26, rh: 'p', lh: '2', ann: 'Toeira Fá#' },
+                { measure: 3, beat: '2 e', notes: [{ c: 4, f: 2 }], d: 0.28, rh: 'p', lh: '2', ann: 'Canotilho Dó#' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.60, rh: 'rasq', lh: '0', ann: 'Acorde Mi Maior aberto solene' }
             ]
         },
         {
             id: 'menino_porteira',
             title: 'O Menino da Porteira',
             author: 'Teddy Vieira & Luizinho',
-            rhythm: 'Cururu / Toada em Mi Maior',
+            rhythm: 'Cururu Tradicional (2/4)',
             key: 'Mi Maior (E) Cebolão',
-            desc: 'Dueto lírico nas sextas clássicas (Pares 1 e 3), evocando o som das comitivas no estradão de Ouro Fino.',
-            notes: [
-                { c: 0, f: 0, d: 0.25 },
-                { c: 2, f: 1, d: 0.25 },
-                { c: 0, f: 2, d: 0.25 },
-                { c: 2, f: 3, d: 0.25 },
-                { c: 0, f: 4, d: 0.32 },
-                { c: 2, f: 5, d: 0.32 },
-                { c: 0, f: 2, d: 0.25 },
-                { c: 2, f: 3, d: 0.25 },
-                { c: 0, f: 0, d: 0.50 }
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 92,
+            desc: 'Um dos solos mais emblemáticos da cultura sertaneja. Imortalizado na gravação de Tião Carreiro & Pardinho (1955). Constitui o modelo canônico de execução de ponteio em sextas (Pares 1 e 3), evocando o trotar das boiadas no estradão de Ouro Fino.',
+            techniqueTip: 'Toque com a mão direita em abertura de pinça larga: o polegar (p) no 3º par e o indicador (i) no 1º par, saltando sobre o 2º par sem tocá-lo. Na 5ª e 7ª casa, utilize a pestana do dedo 1 para prender ambos os pares simultaneamente.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.26, rh: 'p+i', lh: '0-0', ann: 'Sexta menor solta (Sol# + Mi)' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], d: 0.26, rh: 'p+i', lh: '2-1', ann: 'Sexta maior (Lá + Fá#)' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.26, rh: 'p+i', lh: '2-1', ann: 'Sexta menor (Si + Sol#)' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.30, rh: 'p+i', lh: 'pest', ann: 'Sexta maior em pestana (Dó# + Lá)' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 7 }, { c: 2, f: 7 }], d: 0.30, rh: 'p+i', lh: 'pest', ann: 'Sexta aguda (Ré# + Si)' },
+                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.26, rh: 'p+i', lh: 'pest', ann: 'Retorno descendente' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.26, rh: 'p+i', lh: '2-1', ann: 'Sexta (Si + Sol#)' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], d: 0.26, rh: 'p+i', lh: '2-1', ann: 'Sexta (Lá + Fá#)' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.28, rh: 'p+i', lh: '0-0', ann: 'Resolução em sextas soltas' },
+                { measure: 3, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.28, rh: 'p+i', lh: '1-2', ann: 'Terça de Mi Maior' },
+                { measure: 3, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.24, rh: 'p', lh: '2', ann: 'Bordão Toeira Fá#' },
+                { measure: 3, beat: '2 e', notes: [{ c: 4, f: 2 }], d: 0.26, rh: 'p', lh: '2', ann: 'Canotilho Dó#' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.55, rh: 'rasq', lh: '0', ann: 'Fechamento Cururu em Mi Maior' }
+            ]
+        },
+        {
+            id: 'rei_do_gado',
+            title: 'O Rei do Gado',
+            author: 'Teddy Vieira / Tião Carreiro',
+            rhythm: 'Moda de Viola / Cururu Forte (2/4)',
+            key: 'Mi Maior (E) Cebolão',
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 90,
+            desc: 'A abertura mais imponente e triunfal de toda a discografia caipira. Introdução monumental da moda de viola lançada em 1961, combinando batida enérgica no tampo, terças cortantes partindo da 7ª casa e arremate poderoso nos bordões oitavados graves.',
+            techniqueTip: 'Inicie com a batida de tampo [TAP] firme com a mão direita, atacando logo em seguida o dueto na 7ª casa com vigor. Tião Carreiro utilizava o peso do polegar de aço para dar a autoridade rítmica da moda.',
+            steps: [
+                { measure: 1, beat: '1', notes: [], d: 0.24, rh: 'tap', lh: '—', ann: 'Golpe percussivo no tampo' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.26, rh: 'p+i', lh: '1-3', ann: 'Ataque em Mi agudo (Si + Sol#)' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.24, rh: 'p+i', lh: '1-3', ann: 'Terça de B7 (Lá + Fá#)' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Terça de Mi Maior' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.24, rh: 'p+i', lh: '1-2', ann: 'Descida Dó#/Fá#' },
+                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.24, rh: 'p+i', lh: '0-2', ann: 'Terça de Lá' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.26, rh: 'p+i', lh: '0-0', ann: 'Cordas soltas' },
+                { measure: 2, beat: '2 e', notes: [{ c: 2, f: 1 }], d: 0.22, rh: 'p', lh: '1', ann: 'Bordão Turina Lá' },
+                { measure: 3, beat: '1', notes: [{ c: 3, f: 2 }], d: 0.24, rh: 'p', lh: '2', ann: 'Toeira Mi oitavado' },
+                { measure: 3, beat: '1 e', notes: [{ c: 4, f: 2 }], d: 0.24, rh: 'p', lh: '2', ann: 'Canotilho Si oitavado' },
+                { measure: 3, beat: '2', notes: [{ c: 4, f: 0 }], d: 0.24, rh: 'p', lh: '0', ann: 'Si grave solto' },
+                { measure: 3, beat: '2 e', notes: [{ c: 3, f: 2 }], d: 0.26, rh: 'p', lh: '2', ann: 'Resposta de bordão' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.60, rh: 'rasq', lh: '0', ann: 'Acorde Mi Maior de majestade' }
+            ]
+        },
+        {
+            id: 'vaca_brejo',
+            title: 'A Vaca Já Foi Pro Brejo',
+            author: 'Tião Carreiro & Lourival dos Santos',
+            rhythm: 'Pagode Caipira / Cururu Apressado (2/4)',
+            key: 'Mi Maior (E) Cebolão',
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 110,
+            desc: 'Ponteio ágil, bem-humorado e mordaz, tornado clássico nacional nos anos 1970. Demonstra a lendária velocidade de repique de Tião Carreiro, com notas repetidas rápidas nas terças e síncopes cortadas com abafamento instantâneo da mão direita.',
+            techniqueTip: 'Execute as notas duplas em semicolcheias rápidas. Na batida [TAP], corte a ressonância das cordas com a palma para produzir o estalo percussivo característico do pagode de Tião Carreiro.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.16, rh: 'p+i', lh: '1-2', ann: 'Ataque em Mi' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.16, rh: 'p+i', lh: '1-2', ann: 'Repique duplo' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.16, rh: 'p+i', lh: '1-2', ann: 'Terça de B7' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.18, rh: 'p+i', lh: '0-2', ann: 'Terça de Lá' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.18, rh: 'p+i', lh: '0-0', ann: 'Cordas soltas' },
+                { measure: 2, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.18, rh: 'p', lh: '2', ann: 'Bordão sincopado' },
+                { measure: 2, beat: '2', notes: [], d: 0.20, rh: 'tap', lh: '—', ann: 'Corte percussivo no tampo' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Retorno ao repique' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Descida rápida' },
+                { measure: 3, beat: '1 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.18, rh: 'p+i', lh: '0-0', ann: 'Resolução em Mi' },
+                { measure: 3, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.20, rh: 'p', lh: '2', ann: 'Toeira firme' },
+                { measure: 3, beat: '2 e', notes: [{ c: 4, f: 2 }], d: 0.22, rh: 'p', lh: '2', ann: 'Canotilho Si' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.50, rh: 'rasq', lh: '0', ann: 'Arremate caipira seco' }
+            ]
+        },
+        {
+            id: 'ferrugem',
+            title: 'Ferrugem',
+            author: 'Almir Sater',
+            rhythm: 'Toada Instrumental Pantaneira (6/8)',
+            key: 'Mi Maior (E) Cebolão',
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 76,
+            desc: 'A quintessência do lirismo contemporâneo de Almir Sater. Introdução que redefiniu a viola moderna nos anos 1980, mesclando o folclore pantaneiro, a milonga e o folk com cordas soltas ressoando como pedais celestiais contra notas presas nos agudos.',
+            techniqueTip: 'Toque com as pontas e unhas com apoio generoso. Não abafe nenhuma corda solta; o segredo do toque de Almir Sater é permitir que o aço vibre continuamente em simpatia harmônica como uma harpa da serra.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 7 }, { c: 3, f: 0 }], d: 0.28, rh: 'p+i', lh: '3-0', ann: 'Nota Si aguda com pedal Mi solto' },
+                { measure: 1, beat: '2', notes: [{ c: 1, f: 9 }], d: 0.26, rh: 'i', lh: '4', ann: 'Sol# cantando no 2º par' },
+                { measure: 1, beat: '3', notes: [{ c: 2, f: 0 }], d: 0.26, rh: 'p', lh: '0', ann: 'Turina solta ressoando' },
+                { measure: 1, beat: '4', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.28, rh: 'p+i', lh: '1-3', ann: 'Terça lírica de Si com 7ª' },
+                { measure: 1, beat: '5', notes: [{ c: 3, f: 0 }], d: 0.26, rh: 'p', lh: '0', ann: 'Pedal grave Mi solto' },
+                { measure: 1, beat: '6', notes: [{ c: 1, f: 7 }], d: 0.26, rh: 'i', lh: '3', ann: 'Sustentação Fá#' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.28, rh: 'p+i', lh: '1-2', ann: 'Terça lírica de Mi Maior' },
+                { measure: 2, beat: '2', notes: [{ c: 2, f: 0 }], d: 0.26, rh: 'p', lh: '0', ann: 'Harmônico natural de corda solta' },
+                { measure: 2, beat: '3', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.28, rh: 'p+i', lh: '1-2', ann: 'Dueto suave' },
+                { measure: 2, beat: '4', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.28, rh: 'p+i', lh: '0-2', ann: 'Terça de Lá (Dó# + Mi)' },
+                { measure: 2, beat: '5', notes: [{ c: 3, f: 0 }], d: 0.26, rh: 'p', lh: '0', ann: 'Pedal grave' },
+                { measure: 2, beat: '6', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.32, rh: 'p+i', lh: '0-0', ann: 'Mi Maior puro' },
+                { measure: 3, beat: '1', notes: [{ c: 2, f: 1 }], d: 0.30, rh: 'p', lh: '1', ann: 'Turina Lá doce' },
+                { measure: 3, beat: '3', notes: [{ c: 3, f: 2 }], d: 0.30, rh: 'p', lh: '2', ann: 'Toeira Fá#' },
+                { measure: 3, beat: '5', notes: [{ c: 4, f: 2 }], d: 0.32, rh: 'p', lh: '2', ann: 'Canotilho Dó#' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.70, rh: 'rasq', lh: '0', ann: 'Ressonância final pantaneira' }
             ]
         },
         {
             id: 'tristeza_jeca',
             title: 'Tristeza do Jeca',
             author: 'Angelino de Oliveira',
-            rhythm: 'Toada Lenta e Sentida',
+            rhythm: 'Toada Sentimental (3/4)',
             key: 'Mi Maior (E) Cebolão',
-            desc: 'Exploração da ressonância de cordas soltas com terças e quintas abertas que soam como sinos sertanejos.',
-            notes: [
-                { c: 1, f: 0, d: 0.30 },
-                { c: 0, f: 0, d: 0.30 },
-                { c: 0, f: 2, d: 0.30 },
-                { c: 0, f: 4, d: 0.45 },
-                { c: 0, f: 2, d: 0.30 },
-                { c: 0, f: 0, d: 0.30 },
-                { c: 1, f: 2, d: 0.30 },
-                { c: 0, f: 0, d: 0.55 }
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 72,
+            desc: 'A mais bela elegia da alma caipira paulista, nascida em 1918 em Botucatu. O solo é uma obra-prima de ternura melódica, retratando o amanhecer na roça e o canto solitário do sabiá entre os cafezais.',
+            techniqueTip: 'Aplique um vibrato macio com a mão esquerda nas notas presas (casa 4 e casa 2). Deixe a nota respirar; a dinâmica deve soar como uma confissão íntima ao luar.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 1, f: 0 }], d: 0.32, rh: 'p', lh: '0', ann: 'Entrada nostálgica em Si' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 0 }], d: 0.30, rh: 'i', lh: '0', ann: 'Prima Mi solta' },
+                { measure: 1, beat: '3', notes: [{ c: 0, f: 2 }], d: 0.32, rh: 'i', lh: '1', ann: 'Nota Fá# de passagem' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.44, rh: 'p+i', lh: '1-2', ann: 'Terça lírica de Mi sustentada' },
+                { measure: 2, beat: '3', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.34, rh: 'p+i', lh: '1-2', ann: 'Retorno Fá#/Ré#' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.34, rh: 'p+i', lh: '0-2', ann: 'Terça Dó#/Mi' },
+                { measure: 3, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.34, rh: 'p+i', lh: '0-0', ann: 'Mi Maior solto' },
+                { measure: 3, beat: '3', notes: [{ c: 2, f: 1 }], d: 0.30, rh: 'p', lh: '1', ann: 'Bordão Turina Lá' },
+                { measure: 4, beat: '1', notes: [{ c: 3, f: 2 }], d: 0.34, rh: 'p', lh: '2', ann: 'Toeira Fá#' },
+                { measure: 4, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.65, rh: 'rasq', lh: '0', ann: 'Lamento final com eco em Mi' }
+            ]
+        },
+        {
+            id: 'vaca_estrela',
+            title: 'Vaca Estrela e Boi Fubá',
+            author: 'Patativa do Assaré',
+            rhythm: 'Lamento Sertanejo Modal (6/8)',
+            key: 'Mi Menor / Modal Caipira (Em) Cebolão',
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 68,
+            desc: 'A tragédia poética do sertão profundo, escrita pelo poeta do Cariri Patativa do Assaré e consagrada na voz de Fagner. O ponteio explora a sonoridade modal caipira com o uso da terça menor (Sol natural no 2º e 3º par), simbolizando o gado perdido na seca impiedosa.',
+            techniqueTip: 'Destaque o peso trágico nos bordões graves oitavados da 4ª e 5ª cordas. Na casa 3 do 2º par (Ré) e casa 1 (Dó), faça o fraseado choroso da escala modal nordestina.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 3, f: 2 }], d: 0.30, rh: 'p', lh: '2', ann: 'Bordão fundamental Fá#' },
+                { measure: 1, beat: '2', notes: [{ c: 1, f: 0 }], d: 0.26, rh: 'i', lh: '0', ann: 'Si solto de apoio' },
+                { measure: 1, beat: '3', notes: [{ c: 0, f: 0 }], d: 0.28, rh: 'i', lh: '0', ann: 'Prima Mi solta' },
+                { measure: 1, beat: '4', notes: [{ c: 1, f: 3 }], d: 0.32, rh: 'i', lh: '3', ann: 'Nota Ré modal' },
+                { measure: 1, beat: '5', notes: [{ c: 1, f: 1 }], d: 0.30, rh: 'i', lh: '1', ann: 'Nota Dó sentimental' },
+                { measure: 1, beat: '6', notes: [{ c: 1, f: 0 }], d: 0.32, rh: 'i', lh: '0', ann: 'Repouso em Si' },
+                { measure: 2, beat: '1', notes: [{ c: 2, f: 0 }], d: 0.30, rh: 'p', lh: '0', ann: 'Turina solta (Sol natural modal)' },
+                { measure: 2, beat: '3', notes: [{ c: 3, f: 2 }], d: 0.30, rh: 'p', lh: '2', ann: 'Toeira grave' },
+                { measure: 2, beat: '5', notes: [{ c: 4, f: 2 }], d: 0.32, rh: 'p', lh: '2', ann: 'Canotilho Dó#' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.36, rh: 'p+i', lh: '0-0', ann: 'Dueto aberto modal' },
+                { measure: 3, beat: '4', notes: [{ c: 3, f: 2 }], d: 0.32, rh: 'p', lh: '2', ann: 'Bordão do vaqueiro' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 2 }, { c: 4, f: 2 }], d: 0.70, rh: 'rasq', lh: '2', ann: 'Acorde modal Mi Menor com eco' }
+            ]
+        },
+        {
+            id: 'canoeiro',
+            title: 'Canoeiro',
+            author: 'Almirante / Zé Carreiro & Carreirinho',
+            rhythm: 'Cururu Tradicional Rápido (2/4)',
+            key: 'Mi Maior (E) Cebolão',
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 100,
+            desc: 'O mais célebre cururu de desafio e navegação fluvial da música paulista. O ponteio retrata a remada cadenciada do canoeiro nas corredeiras do Rio Tietê, com subidas e descidas ágeis em terças nas primeiras casas.',
+            techniqueTip: 'Pratique a transição rápida entre a 2ª, 4ª, 5ª e 7ª casa mantendo a pegada em 2/4 bem marcada. A batida no tampo no compasso 3 emula o bater dos remos na amurada de cedro da canoa.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Saída da remada (Fá# + Ré#)' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-2', ann: 'Impulso em Mi Maior' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.18, rh: 'p+i', lh: '1-3', ann: 'Avanço em Si com 7ª' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.22, rh: 'p+i', lh: '1-3', ann: 'Ponto alto da remada' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.20, rh: 'p+i', lh: '1-3', ann: 'Descida pelo rio' },
+                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-2', ann: 'Retorno ao Mi' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Passagem em Si7' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.20, rh: 'p+i', lh: '0-2', ann: 'Chegada ao remanso' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.20, rh: 'p+i', lh: '0-0', ann: 'Porto seguro solto' },
+                { measure: 3, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.18, rh: 'p', lh: '2', ann: 'Bordão do barqueiro' },
+                { measure: 3, beat: '2', notes: [], d: 0.20, rh: 'tap', lh: '—', ann: 'Batida na amurada da canoa' },
+                { measure: 3, beat: '2 e', notes: [{ c: 4, f: 2 }], d: 0.22, rh: 'p', lh: '2', ann: 'Canotilho firme' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.55, rh: 'rasq', lh: '0', ann: 'Rasqueado triunfal de Cururu' }
             ]
         },
         {
             id: 'luar_sertao',
             title: 'Luar do Sertão',
             author: 'Catulo da Paixão Cearense / João Pernambuco',
-            rhythm: 'Valsa / Toada Poética',
+            rhythm: 'Canção / Valsa Poética (3/4)',
             key: 'Mi Maior (E) Cebolão',
-            desc: 'Poesia da serra brasileira. Melodia lírica com sustentação harmônica limpa nos pares graves.',
-            notes: [
-                { c: 0, f: 4, d: 0.38 },
-                { c: 0, f: 2, d: 0.38 },
-                { c: 0, f: 0, d: 0.42 },
-                { c: 1, f: 0, d: 0.32 },
-                { c: 0, f: 0, d: 0.32 },
-                { c: 0, f: 2, d: 0.42 },
-                { c: 0, f: 0, d: 0.65 }
+            recommendedTuning: 'viola_cebolao_e',
+            bpmDefault: 74,
+            desc: 'Considerada por Villa-Lobos como o segundo hino nacional do povo brasileiro. A melodia de João Pernambuco e os versos de Catulo ganham na viola caipira a doçura infinita da noite de luar nas matas virgens do sertão.',
+            techniqueTip: 'Toque com ternário sereno de valsa: marque o baixo com o polegar (p) no primeiro tempo e cante a melodia nos tempos 2 e 3 com indicador e médio, sustentando a afinação aberta.',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 4 }, { c: 3, f: 2 }], d: 0.36, rh: 'p+i', lh: '1-2', ann: 'Sol# agudo com bordão de apoio' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 2 }], d: 0.32, rh: 'i', lh: '1', ann: 'Fá# doce' },
+                { measure: 1, beat: '3', notes: [{ c: 0, f: 0 }], d: 0.34, rh: 'i', lh: '0', ann: 'Prima Mi solta' },
+                { measure: 2, beat: '1', notes: [{ c: 1, f: 0 }, { c: 4, f: 2 }], d: 0.36, rh: 'p+i', lh: '0-2', ann: 'Si com baixo no Canotilho' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 0 }], d: 0.32, rh: 'i', lh: '0', ann: 'Mi lírico' },
+                { measure: 2, beat: '3', notes: [{ c: 0, f: 2 }], d: 0.34, rh: 'i', lh: '1', ann: 'Fá# de retorno' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.38, rh: 'p+i', lh: '1-2', ann: 'Terça plena sob o luar' },
+                { measure: 3, beat: '2', notes: [{ c: 2, f: 1 }], d: 0.30, rh: 'p', lh: '1', ann: 'Turina Lá suave' },
+                { measure: 3, beat: '3', notes: [{ c: 3, f: 2 }], d: 0.32, rh: 'p', lh: '2', ann: 'Toeira Mi' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.65, rh: 'rasq', lh: '0', ann: 'Ressonância final enluarada' }
             ]
         }
     ];
@@ -1588,26 +1782,599 @@
     let activePonteioTimers = [];
 
     function stopPonteioPlayback() {
+        if (ponteioPlaybackTimer) {
+            clearTimeout(ponteioPlaybackTimer);
+            ponteioPlaybackTimer = null;
+        }
         activePonteioTimers.forEach((t) => clearTimeout(t));
         activePonteioTimers = [];
+        state.ponteioPlayer.isPlaying = false;
+        updatePonteioUI();
+    }
+
+    function playPonteioEvent(step) {
+        if (!step) return;
+        if (step.rh === 'tap') {
+            playWoodTap(0, 0.9);
+            return;
+        }
+        if (step.rh === 'rasq') {
+            const inst = INSTRUMENTS[state.instrumentId];
+            const numCourses = inst.courses.length;
+            for (let c = numCourses - 1; c >= 0; c--) {
+                const nt = (step.notes || []).find((n) => n.c === c);
+                const fret = nt ? nt.f : 0;
+                const delaySec = (numCourses - 1 - c) * 0.016;
+                playCourseAtFret(c, fret, delaySec);
+                flashFretCell(c, fret, delaySec * 1000);
+            }
+            return;
+        }
+
+        (step.notes || []).forEach((nt, idx) => {
+            const slightDelay = idx === 0 ? 0 : 0.009;
+            playCourseAtFret(nt.c, nt.f, slightDelay);
+            flashFretCell(nt.c, nt.f, slightDelay * 1000);
+        });
+    }
+
+    function scheduleNextPonteioStep() {
+        if (!state.ponteioPlayer.isPlaying) return;
+
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId);
+        if (!pt || !pt.steps || pt.steps.length === 0) {
+            stopPonteioPlayback();
+            return;
+        }
+
+        const curIdx = state.ponteioPlayer.currentStepIdx;
+        if (curIdx >= pt.steps.length) {
+            if (state.ponteioPlayer.isLooping) {
+                state.ponteioPlayer.currentStepIdx = 0;
+                scheduleNextPonteioStep();
+            } else {
+                stopPonteioPlayback();
+                state.ponteioPlayer.currentStepIdx = 0;
+                updatePonteioUI();
+                renderFretboardSVG();
+            }
+            return;
+        }
+
+        const step = pt.steps[curIdx];
+        playPonteioEvent(step);
+        highlightPonteioStep(curIdx);
+        renderFretboardSVG();
+
+        const speed = Math.max(0.25, state.ponteioPlayer.playbackSpeed || 1.0);
+        const stepDurationMs = Math.round((step.d / speed) * 1000);
+
+        state.ponteioPlayer.currentStepIdx = curIdx + 1;
+
+        ponteioPlaybackTimer = setTimeout(() => {
+            scheduleNextPonteioStep();
+        }, stepDurationMs);
+    }
+
+    function playPonteio() {
+        stopScalePlayback();
+        stopProgressionPlayback();
+        stopTunerTone();
+        stopEarTrainerAudio();
+
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId) || PONTEIOS_REPERTOIRE[0];
+        if (!pt || !pt.steps || pt.steps.length === 0) return;
+
+        if (state.ponteioPlayer.isPlaying) {
+            pausePonteio();
+            return;
+        }
+
+        state.ponteioPlayer.isPlaying = true;
+        state.displayMode = 'PONTEIO';
+
+        if (state.ponteioPlayer.currentStepIdx < 0 || state.ponteioPlayer.currentStepIdx >= pt.steps.length) {
+            state.ponteioPlayer.currentStepIdx = 0;
+        }
+
+        renderFretboardSVG();
+        updatePonteioUI();
+        scheduleNextPonteioStep();
+    }
+
+    function pausePonteio() {
+        if (ponteioPlaybackTimer) {
+            clearTimeout(ponteioPlaybackTimer);
+            ponteioPlaybackTimer = null;
+        }
+        state.ponteioPlayer.isPlaying = false;
+        updatePonteioUI();
+    }
+
+    function resetPonteio() {
+        stopPonteioPlayback();
+        state.ponteioPlayer.currentStepIdx = 0;
+        updatePonteioUI();
+        renderFretboardSVG();
+    }
+
+    function stepPonteio(direction) {
+        pausePonteio();
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId) || PONTEIOS_REPERTOIRE[0];
+        if (!pt || !pt.steps || pt.steps.length === 0) return;
+
+        let target = state.ponteioPlayer.currentStepIdx + direction;
+        if (target < 0) target = pt.steps.length - 1;
+        if (target >= pt.steps.length) target = 0;
+
+        state.ponteioPlayer.currentStepIdx = target;
+        state.displayMode = 'PONTEIO';
+
+        const step = pt.steps[target];
+        playPonteioEvent(step);
+        highlightPonteioStep(target);
+        renderFretboardSVG();
+        updatePonteioUI();
+    }
+
+    function jumpToPonteioStep(targetIdx) {
+        pausePonteio();
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId) || PONTEIOS_REPERTOIRE[0];
+        if (!pt || !pt.steps || pt.steps.length === 0) return;
+
+        if (targetIdx < 0 || targetIdx >= pt.steps.length) return;
+
+        state.ponteioPlayer.currentStepIdx = targetIdx;
+        state.displayMode = 'PONTEIO';
+
+        const step = pt.steps[targetIdx];
+        playPonteioEvent(step);
+        highlightPonteioStep(targetIdx);
+        renderFretboardSVG();
+        updatePonteioUI();
+    }
+
+    function setPlaybackSpeed(speed) {
+        state.ponteioPlayer.playbackSpeed = speed;
+        saveViolaState();
+        updatePonteioUI();
+    }
+
+    function togglePonteioLoop() {
+        state.ponteioPlayer.isLooping = !state.ponteioPlayer.isLooping;
+        saveViolaState();
+        updatePonteioUI();
+    }
+
+    function selectPonteio(id) {
+        stopPonteioPlayback();
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === id);
+        if (!pt) return;
+
+        state.ponteioPlayer.activeId = id;
+        state.ponteioPlayer.currentStepIdx = 0;
+        state.displayMode = 'PONTEIO';
+        saveViolaState();
+        renderPonteiosSection();
+        renderFretboardSVG();
     }
 
     function playPonteioSequence(ponteioId) {
-        stopScalePlayback();
-        stopPonteioPlayback();
-        stopProgressionPlayback();
-        stopTunerTone();
-        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === ponteioId);
-        if (!pt) return;
+        selectPonteio(ponteioId);
+        playPonteio();
+    }
 
-        let cumSec = 0;
-        pt.notes.forEach((nt) => {
-            const tId = setTimeout(() => {
-                playCourseAtFret(nt.c, nt.f, 0);
-                flashFretCell(nt.c, nt.f, 0);
-            }, cumSec * 1000);
-            activePonteioTimers.push(tId);
-            cumSec += nt.d;
+    function highlightPonteioStep(stepIdx) {
+        const container = document.getElementById('viola-tab-steps-scroll');
+        if (!container) return;
+
+        container.querySelectorAll('[data-tab-step]').forEach((col) => {
+            const idx = parseInt(col.getAttribute('data-tab-step'), 10);
+            if (idx === stepIdx) {
+                col.classList.add('bg-amber-500/20', 'border-amber-400', 'ring-2', 'ring-amber-400/50', 'shadow-[0_0_15px_rgba(245,158,11,0.45)]');
+                col.classList.remove('border-transparent');
+                try {
+                    col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } catch (e) {
+                    // Fallback
+                }
+            } else {
+                col.classList.remove('bg-amber-500/20', 'border-amber-400', 'ring-2', 'ring-amber-400/50', 'shadow-[0_0_15px_rgba(245,158,11,0.45)]');
+                col.classList.add('border-transparent');
+            }
+        });
+
+        // Atualiza a ficha do passo ativo
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId);
+        const step = pt && pt.steps ? pt.steps[stepIdx] : null;
+        const infoEl = document.getElementById('viola-ponteio-step-info');
+        if (infoEl && step) {
+            infoEl.innerHTML = `
+                <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                    <span class="text-amber-300 font-bold">Compasso ${step.measure}</span>
+                    <span class="text-slate-500">•</span>
+                    <span class="text-slate-300">Tempo: ${step.beat}</span>
+                    <span class="text-slate-500">•</span>
+                    <span class="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">Mão Dir: ${step.rh}</span>
+                    <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Mão Esq: ${step.lh}</span>
+                    <span class="text-slate-400 font-sans italic">— ${step.ann}</span>
+                </div>
+            `;
+        }
+    }
+
+    function updatePonteioUI() {
+        const playBtn = document.getElementById('btn-viola-ponteio-play');
+        if (playBtn) {
+            playBtn.className = state.ponteioPlayer.isPlaying
+                ? 'min-h-[40px] px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-slate-950 font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-lg shadow-rose-600/30'
+                : 'min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-lg shadow-emerald-600/30';
+            playBtn.innerHTML = state.ponteioPlayer.isPlaying
+                ? '<i data-lucide="pause" class="w-4 h-4"></i><span>Pausar Estudo</span>'
+                : '<i data-lucide="play" class="w-4 h-4"></i><span>Tocar Ponteio</span>';
+            if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(playBtn);
+        }
+
+        const loopBtn = document.getElementById('btn-viola-ponteio-loop');
+        if (loopBtn) {
+            loopBtn.className = state.ponteioPlayer.isLooping
+                ? 'min-h-[40px] px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/50 text-amber-300 font-mono text-xs font-bold flex items-center gap-1.5 transition'
+                : 'min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 font-mono text-xs flex items-center gap-1.5 transition';
+        }
+
+        // Velocidade ativa
+        [0.5, 0.75, 1.0, 1.2].forEach((spd) => {
+            const spdBtn = document.getElementById(`btn-viola-speed-${Math.round(spd * 100)}`);
+            if (spdBtn) {
+                const isActive = Math.abs(state.ponteioPlayer.playbackSpeed - spd) < 0.05;
+                spdBtn.className = isActive
+                    ? 'px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-mono text-xs font-bold shadow'
+                    : 'px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 font-mono text-xs transition';
+            }
+        });
+
+        // Atualiza cards de galeria
+        const gallery = document.getElementById('viola-ponteios-gallery');
+        if (gallery) {
+            gallery.querySelectorAll('[data-ponteio-card]').forEach((card) => {
+                const cardId = card.getAttribute('data-ponteio-card');
+                if (cardId === state.ponteioPlayer.activeId) {
+                    card.classList.add('border-amber-500', 'bg-amber-500/10', 'ring-1', 'ring-amber-500/40');
+                    card.classList.remove('border-slate-800', 'bg-[#090d16]');
+                } else {
+                    card.classList.remove('border-amber-500', 'bg-amber-500/10', 'ring-1', 'ring-amber-500/40');
+                    card.classList.add('border-slate-800', 'bg-[#090d16]');
+                }
+            });
+        }
+    }
+
+    function renderPonteiosSection() {
+        const container = document.getElementById('viola-ponteios-container');
+        if (!container) return;
+
+        const activePt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId) || PONTEIOS_REPERTOIRE[0];
+        const inst = INSTRUMENTS[state.instrumentId];
+
+        // Ordem visual dos pares conforme perspectiva
+        const courseOrder = state.viewPerspective === 'diagram'
+            ? [0, 1, 2, 3, 4]
+            : [4, 3, 2, 1, 0];
+
+        const courseLabels = {
+            0: '1º Par (Prima: Mi/E4)',
+            1: '2º Par (Segundinha: Si/B3)',
+            2: '3º Par (Turina: Sol#/G#3-4)',
+            3: '4º Par (Toeira: Mi/E3-4)',
+            4: '5º Par (Canotilho: Si/B2-3)'
+        };
+
+        const currentStep = (state.ponteioPlayer.currentStepIdx >= 0 && activePt.steps)
+            ? activePt.steps[state.ponteioPlayer.currentStepIdx]
+            : activePt.steps[0];
+
+        let prevMeasure = -1;
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 sm:p-5 space-y-4 shadow-xl">
+                <!-- Cabeçalho e Seleção Rápida -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Fase 6 Concluída</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">10 Ponteios Canônicos Mapeados</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Tablatura Caipira Digital Interativa</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-wider font-mono mt-1 flex items-center gap-2">
+                            <i data-lucide="disc-3" class="w-5 h-5 text-amber-400"></i>
+                            Repertório Canônico de Ponteios & Solos de Viola Caipira
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Execução sequenciada nota a nota, controle de andamento didático, tablatura com dedilhado de mão direita e sincronização ao braço canhoto/destro</p>
+                    </div>
+
+                    <!-- Seletor de Ponteio Rápido -->
+                    <div class="flex items-center gap-2">
+                        <label for="viola-select-ponteio-quick" class="text-xs font-mono text-slate-400 whitespace-nowrap">Obra Ativa:</label>
+                        <select id="viola-select-ponteio-quick" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-amber-500/40 text-amber-200 text-xs font-mono font-bold focus:outline-none focus:ring-1 focus:ring-amber-400 transition cursor-pointer">
+                            ${PONTEIOS_REPERTOIRE.map((p) => `
+                                <option value="${p.id}" ${p.id === activePt.id ? 'selected' : ''}>
+                                    ${p.title} (${p.author.split('&')[0].trim()})
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Barra de Transporte e Controles de Estudo -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Play/Pause -->
+                        <button type="button" id="btn-viola-ponteio-play" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-lg shadow-emerald-600/30">
+                            <i data-lucide="${state.ponteioPlayer.isPlaying ? 'pause' : 'play'}" class="w-4 h-4"></i>
+                            <span>${state.ponteioPlayer.isPlaying ? 'Pausar Estudo' : 'Tocar Ponteio'}</span>
+                        </button>
+
+                        <!-- Parar/Resetar -->
+                        <button type="button" id="btn-viola-ponteio-stop" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-rose-300 font-mono text-xs font-medium flex items-center gap-1.5 transition">
+                            <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                            <span>Parar &amp; Resetar</span>
+                        </button>
+
+                        <!-- Passo a Passo (Anterior e Próxima) -->
+                        <div class="inline-flex rounded-lg bg-slate-800/80 border border-slate-700 p-0.5" role="group">
+                            <button type="button" id="btn-viola-ponteio-step-prev" title="Nota Anterior" class="min-h-[36px] px-2.5 py-1 text-slate-300 hover:text-amber-300 hover:bg-slate-700/60 rounded-md font-mono text-xs flex items-center gap-1 transition">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                <span>Anterior</span>
+                            </button>
+                            <button type="button" id="btn-viola-ponteio-step-next" title="Próxima Nota" class="min-h-[36px] px-2.5 py-1 text-slate-300 hover:text-amber-300 hover:bg-slate-700/60 rounded-md font-mono text-xs flex items-center gap-1 transition">
+                                <span>Próxima</span>
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <!-- Loop Toggle -->
+                        <button type="button" id="btn-viola-ponteio-loop" class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.ponteioPlayer.isLooping ? 'bg-amber-500/20 border border-amber-500/50 text-amber-300' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                            <span>Loop ${state.ponteioPlayer.isLooping ? 'Ligado' : 'Desligado'}</span>
+                        </button>
+                    </div>
+
+                    <!-- Controle de Velocidade Didática -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono text-slate-400">Andamento:</span>
+                        <div class="inline-flex rounded-lg bg-slate-800/80 border border-slate-700 p-0.5" role="group">
+                            <button type="button" id="btn-viola-speed-50" class="px-2.5 py-1 rounded ${Math.abs(state.ponteioPlayer.playbackSpeed - 0.5) < 0.05 ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'} font-mono text-xs transition">50% Lento</button>
+                            <button type="button" id="btn-viola-speed-75" class="px-2.5 py-1 rounded ${Math.abs(state.ponteioPlayer.playbackSpeed - 0.75) < 0.05 ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'} font-mono text-xs transition">75%</button>
+                            <button type="button" id="btn-viola-speed-100" class="px-2.5 py-1 rounded ${Math.abs(state.ponteioPlayer.playbackSpeed - 1.0) < 0.05 ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'} font-mono text-xs transition">100% Real</button>
+                            <button type="button" id="btn-viola-speed-120" class="px-2.5 py-1 rounded ${Math.abs(state.ponteioPlayer.playbackSpeed - 1.2) < 0.05 ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'} font-mono text-xs transition">120% Mestre</button>
+                        </div>
+
+                        <!-- Botão Focar no Braço -->
+                        <button type="button" id="btn-viola-focus-fretboard" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span>Ver no Braço SVG</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info do Passo em Execução -->
+                <div id="viola-ponteio-step-info" class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs">
+                    <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                        <span class="text-amber-300 font-bold">Compasso ${currentStep.measure}</span>
+                        <span class="text-slate-500">•</span>
+                        <span class="text-slate-300">Tempo: ${currentStep.beat}</span>
+                        <span class="text-slate-500">•</span>
+                        <span class="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">Mão Dir: ${currentStep.rh}</span>
+                        <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Mão Esq: ${currentStep.lh}</span>
+                        <span class="text-slate-400 font-sans italic">— ${currentStep.ann}</span>
+                    </div>
+                </div>
+
+                <!-- Visualizador de Tablatura Digital Caipira Interativa -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="music" class="w-3.5 h-3.5 text-amber-400"></i>
+                            <span>Tablatura para Viola Caipira (Clique em qualquer coluna para ouvir e iluminar no braço):</span>
+                        </span>
+                        <span class="text-[11px] text-slate-500">p = polegar | i = indicador | p+i = dueto pinçado | rasq = rasqueado | tap = batida tampo</span>
+                    </div>
+
+                    <div class="bg-[#070b12] border border-slate-800 rounded-xl p-3 flex overflow-x-auto shadow-inner custom-scrollbar" id="viola-tab-steps-scroll" style="scrollbar-width: thin; scrollbar-color: #f59e0b #090d16;">
+                        <!-- Coluna Fixa com Rótulos das Cordas -->
+                        <div class="flex flex-col justify-between pr-3 border-r-2 border-slate-800 select-none sticky left-0 bg-[#070b12] z-10 shrink-0 min-w-[130px] sm:min-w-[150px]">
+                            <div class="h-6 flex items-center text-[10px] font-mono text-slate-500 uppercase tracking-wider font-bold">Mão Direita</div>
+                            ${courseOrder.map((cIdx) => `
+                                <div class="h-7 flex items-center text-[11px] font-mono text-slate-300 font-semibold truncate" title="${courseLabels[cIdx]}">
+                                    ${courseLabels[cIdx].split(' ')[0]} ${courseLabels[cIdx].split(' ')[1]} <span class="text-slate-500 ml-1 text-[10px]">${courseLabels[cIdx].split('(')[1].replace(')', '')}</span>
+                                </div>
+                            `).join('')}
+                            <div class="h-6 flex items-center text-[10px] font-mono text-slate-500 uppercase tracking-wider">Compasso/Tempo</div>
+                        </div>
+
+                        <!-- Colunas dos Passos da Tablatura -->
+                        <div class="flex items-stretch pl-2 gap-1 shrink-0">
+                            ${activePt.steps.map((st, idx) => {
+                                const isNewMeasure = st.measure !== prevMeasure;
+                                prevMeasure = st.measure;
+                                const isCurrent = state.ponteioPlayer.currentStepIdx === idx;
+
+                                const rhColor = st.rh === 'p+i'
+                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                                    : (st.rh === 'p'
+                                        ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                                        : (st.rh === 'i'
+                                            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                                            : (st.rh === 'rasq'
+                                                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                                                : 'bg-rose-500/20 text-rose-300 border-rose-500/40')));
+
+                                return `
+                                    <div data-tab-step="${idx}" class="flex flex-col items-center justify-between min-w-[42px] sm:min-w-[48px] py-1 px-1 rounded-lg border ${isCurrent ? 'bg-amber-500/20 border-amber-400 ring-2 ring-amber-400/50 shadow-[0_0_15px_rgba(245,158,11,0.45)]' : 'border-transparent hover:border-amber-500/40 hover:bg-slate-800/40'} ${isNewMeasure ? 'border-l border-l-amber-500/50 pl-2' : ''} cursor-pointer transition select-none group" title="Compasso ${st.measure} (${st.beat}): ${st.ann}">
+                                        <!-- Mão Direita -->
+                                        <div class="h-6 flex items-center justify-center">
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${rhColor}">${st.rh}</span>
+                                        </div>
+
+                                        <!-- Casas dos 5 Pares -->
+                                        ${courseOrder.map((cIdx) => {
+                                            const noteObj = (st.notes || []).find((n) => n.c === cIdx);
+                                            if (st.rh === 'tap') {
+                                                return `<div class="h-7 flex items-center justify-center text-slate-700 text-xs font-mono font-bold select-none">✕</div>`;
+                                            }
+                                            if (st.rh === 'rasq') {
+                                                const fVal = noteObj ? noteObj.f : 0;
+                                                return `
+                                                    <div class="h-7 flex items-center justify-center">
+                                                        <span class="w-6 h-6 flex items-center justify-center rounded font-mono font-bold text-xs bg-purple-900/40 text-purple-200 border border-purple-600/40 shadow-sm">${fVal}</span>
+                                                    </div>
+                                                `;
+                                            }
+                                            if (noteObj !== undefined) {
+                                                return `
+                                                    <div class="h-7 flex items-center justify-center">
+                                                        <span class="w-6 h-6 flex items-center justify-center rounded font-mono font-bold text-xs bg-slate-800 group-hover:bg-amber-500/20 text-amber-300 border border-slate-700 group-hover:border-amber-400/60 shadow-sm">${noteObj.f}</span>
+                                                    </div>
+                                                `;
+                                            }
+                                            return `<div class="h-7 flex items-center justify-center text-slate-700 text-xs font-mono select-none">───</div>`;
+                                        }).join('')}
+
+                                        <!-- Compasso / Tempo -->
+                                        <div class="h-6 flex items-center justify-center text-[10px] font-mono ${isNewMeasure ? 'text-amber-400 font-bold' : 'text-slate-500'}">
+                                            ${isNewMeasure ? `C${st.measure}` : st.beat}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ficha Técnica e Dicas do Mestre Violeiro -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <span class="text-[11px] font-mono text-amber-400 font-semibold">${activePt.rhythm}</span>
+                            <h4 class="text-base font-bold text-slate-100">${activePt.title}</h4>
+                            <p class="text-xs text-slate-400 font-mono">Composição: ${activePt.author}</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700">Tom: ${activePt.key}</span>
+                            <span class="px-2.5 py-1 rounded bg-slate-800 text-amber-300 text-xs font-mono border border-slate-700">Andamento Original: ${activePt.bpmDefault} BPM</span>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-300 leading-relaxed">${activePt.desc}</p>
+
+                    <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-xs flex items-start gap-2.5">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <span class="font-bold text-amber-300 font-mono uppercase tracking-wider text-[11px]">Dica do Mestre Violeiro:</span>
+                            <p class="text-slate-300 mt-0.5">${activePt.techniqueTip}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Galeria Canônica de Ponteios Clássicos -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono flex items-center gap-2">
+                            <i data-lucide="library" class="w-4 h-4 text-amber-400"></i>
+                            Galeria Completa de Obras Canônicas de Viola Caipira
+                        </h4>
+                        <span class="text-[11px] text-slate-500 font-mono">10 Clássicos Disponíveis</span>
+                    </div>
+
+                    <div id="viola-ponteios-gallery" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-2.5">
+                        ${PONTEIOS_REPERTOIRE.map((p) => {
+                            const isSelected = p.id === activePt.id;
+                            return `
+                                <div data-ponteio-card="${p.id}" class="rounded-xl p-3 flex flex-col justify-between transition cursor-pointer border ${isSelected ? 'border-amber-500 bg-amber-500/10 ring-1 ring-amber-500/40' : 'border-slate-800 bg-[#090d16] hover:border-amber-500/40'}">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between text-[10px] font-mono">
+                                            <span class="text-amber-400 font-semibold truncate">${p.rhythm.split('/')[0].trim()}</span>
+                                            <span class="text-slate-500">${p.bpmDefault} BPM</span>
+                                        </div>
+                                        <h5 class="text-xs font-bold text-slate-100 truncate">${p.title}</h5>
+                                        <p class="text-[10px] text-slate-400 font-mono truncate">${p.author}</p>
+                                    </div>
+                                    <div class="pt-2 mt-2 border-t border-slate-800/80">
+                                        <button type="button" data-select-ponteio="${p.id}" class="w-full py-1 rounded-md text-[11px] font-mono font-bold transition flex items-center justify-center gap-1 ${isSelected ? 'bg-amber-500 text-slate-950 shadow' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'}">
+                                            <i data-lucide="${isSelected ? 'check' : 'music-2'}" class="w-3 h-3"></i>
+                                            <span>${isSelected ? 'Estudando' : 'Carregar'}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(container);
+
+        // Bind events dos controles
+        const quickSelect = document.getElementById('viola-select-ponteio-quick');
+        if (quickSelect) {
+            quickSelect.addEventListener('change', (e) => selectPonteio(e.target.value));
+        }
+
+        const playBtn = document.getElementById('btn-viola-ponteio-play');
+        if (playBtn) playBtn.addEventListener('click', playPonteio);
+
+        const stopBtn = document.getElementById('btn-viola-ponteio-stop');
+        if (stopBtn) stopBtn.addEventListener('click', resetPonteio);
+
+        const stepPrevBtn = document.getElementById('btn-viola-ponteio-step-prev');
+        if (stepPrevBtn) stepPrevBtn.addEventListener('click', () => stepPonteio(-1));
+
+        const stepNextBtn = document.getElementById('btn-viola-ponteio-step-next');
+        if (stepNextBtn) stepNextBtn.addEventListener('click', () => stepPonteio(1));
+
+        const loopBtn = document.getElementById('btn-viola-ponteio-loop');
+        if (loopBtn) loopBtn.addEventListener('click', togglePonteioLoop);
+
+        [0.5, 0.75, 1.0, 1.2].forEach((spd) => {
+            const spdBtn = document.getElementById(`btn-viola-speed-${Math.round(spd * 100)}`);
+            if (spdBtn) spdBtn.addEventListener('click', () => setPlaybackSpeed(spd));
+        });
+
+        const focusFretBtn = document.getElementById('btn-viola-focus-fretboard');
+        if (focusFretBtn) {
+            focusFretBtn.addEventListener('click', () => {
+                state.displayMode = 'PONTEIO';
+                saveViolaState();
+                renderFretboardSVG();
+                syncControlValues();
+                const fretWrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (fretWrap) fretWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+
+        // Clicabilidade nas colunas da tablatura
+        container.querySelectorAll('[data-tab-step]').forEach((col) => {
+            col.addEventListener('click', () => {
+                const idx = parseInt(col.getAttribute('data-tab-step'), 10);
+                jumpToPonteioStep(idx);
+            });
+        });
+
+        // Seleção na galeria
+        container.querySelectorAll('[data-select-ponteio]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-select-ponteio');
+                selectPonteio(id);
+            });
+        });
+
+        container.querySelectorAll('[data-ponteio-card]').forEach((card) => {
+            card.addEventListener('click', () => {
+                const id = card.getAttribute('data-ponteio-card');
+                selectPonteio(id);
+            });
         });
     }
 
@@ -3403,6 +4170,51 @@
                     });
                 }
             });
+        } else if (state.displayMode === 'PONTEIO') {
+            const activePt = PONTEIOS_REPERTOIRE.find((p) => p.id === state.ponteioPlayer.activeId) || PONTEIOS_REPERTOIRE[0];
+            const currentStep = (state.ponteioPlayer.currentStepIdx >= 0 && activePt && activePt.steps)
+                ? activePt.steps[state.ponteioPlayer.currentStepIdx]
+                : (activePt && activePt.steps ? activePt.steps[0] : null);
+
+            // 1. Marcações fantasmas com todas as notas e posições do ponteio ao longo do braço
+            const ghostSeen = new Set();
+            if (activePt && activePt.steps) {
+                activePt.steps.forEach((st) => {
+                    (st.notes || []).forEach((nt) => {
+                        const key = `${nt.c}_${nt.f}`;
+                        if (!ghostSeen.has(key)) {
+                            ghostSeen.add(key);
+                            const pc = (inst.courses[nt.c].pitchClass + nt.f) % 12;
+                            activeMarkers.push({
+                                courseIdx: nt.c,
+                                fret: nt.f,
+                                label: NOTE_NAMES[pc],
+                                sub: `${nt.c + 1}ºP`,
+                                color: '#475569',
+                                opacity: '0.35'
+                            });
+                        }
+                    });
+                });
+            }
+
+            // 2. Marcadores luminosos do passo em execução
+            if (currentStep && currentStep.notes && currentStep.notes.length > 0) {
+                currentStep.notes.forEach((nt) => {
+                    const pc = (inst.courses[nt.c].pitchClass + nt.f) % 12;
+                    const isAgudo = nt.c === 0;
+                    activeMarkers.push({
+                        courseIdx: nt.c,
+                        fret: nt.f,
+                        label: NOTE_NAMES[pc],
+                        sub: currentStep.rh || (nt.c === 0 ? 'Prima' : 'Dueto'),
+                        color: isAgudo ? '#f59e0b' : '#10b981',
+                        stroke: '#ffffff',
+                        strokeWidth: 3.2,
+                        opacity: '1'
+                    });
+                });
+            }
         }
 
         // Construção SVG
@@ -4015,6 +4827,15 @@
             state.earTrainer.challengeActive = false;
             state.earTrainer.challengeRevealed = false;
             state.earTrainer.pegValidated = false;
+
+            if (saved.ponteioPlayer && typeof saved.ponteioPlayer === 'object') {
+                state.ponteioPlayer = Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE, saved.ponteioPlayer, {
+                    isPlaying: false,
+                    currentStepIdx: -1
+                });
+            } else {
+                state.ponteioPlayer = Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE);
+            }
         }
     }
 
@@ -4025,6 +4846,12 @@
         delete copy.progressionPlaying;
         delete copy.progressionStepIdx;
         delete copy.activeRhythmStepIdx;
+        if (copy.ponteioPlayer) {
+            copy.ponteioPlayer = Object.assign({}, copy.ponteioPlayer, {
+                isPlaying: false,
+                currentStepIdx: -1
+            });
+        }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
@@ -4098,6 +4925,7 @@
                                 <button type="button" id="btn-viola-mode-chord" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎵 Campo Harmônico</button>
                                 <button type="button" id="btn-viola-mode-duad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🪕 Escalas Duadas</button>
                                 <button type="button" id="btn-viola-mode-reverse" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🔍 Buscador Reverso</button>
+                                <button type="button" id="btn-viola-mode-ponteio" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎼 Tablatura &amp; Ponteios</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -4255,44 +5083,8 @@
                     <div id="viola-progression-container"></div>
                 </div>
 
-                <!-- Biblioteca de Repertório de Ponteios & Solos Clássicos -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="disc-3" class="w-4 h-4 text-amber-400"></i>
-                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Repertório Canônico de Ponteios (Viola Caipira)</h3>
-                            </div>
-                            <p class="text-xs text-slate-400">Execução sequenciada nota a nota com iluminação dinâmica no braço canhoto</p>
-                        </div>
-                        <button type="button" id="btn-viola-stop-ponteio" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition">
-                            <i data-lucide="square" class="w-3.5 h-3.5"></i>
-                            <span>Interromper Ponteio</span>
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-                        ${PONTEIOS_REPERTOIRE.map((p) => `
-                            <div class="bg-[#090d16] border border-slate-800 hover:border-amber-500/40 rounded-xl p-3 flex flex-col justify-between transition group">
-                                <div class="space-y-1.5">
-                                    <div class="flex items-center justify-between text-[11px] font-mono">
-                                        <span class="text-amber-400 font-semibold">${p.rhythm}</span>
-                                        <span class="text-slate-500">${p.key}</span>
-                                    </div>
-                                    <h4 class="text-sm font-bold text-slate-100 group-hover:text-amber-300 transition">${p.title}</h4>
-                                    <p class="text-[11px] text-slate-400 font-mono">${p.author}</p>
-                                    <p class="text-xs text-slate-400 line-clamp-2">${p.desc}</p>
-                                </div>
-                                <div class="pt-3 mt-2 border-t border-slate-800/80">
-                                    <button type="button" data-play-ponteio="${p.id}" class="w-full min-h-[38px] px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-mono text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                                        <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                                        <span>Ouvir e Animar Braço</span>
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
+                <!-- Módulo de Ponteios e Intros Clássicas de Viola Caipira (Fase 6) -->
+                <div id="viola-ponteios-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -4450,6 +5242,7 @@
         const btnModeChord = document.getElementById('btn-viola-mode-chord');
         const btnModeDuad = document.getElementById('btn-viola-mode-duad');
         const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
+        const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
         if (btnModeChord && btnModeDuad && btnModeReverse) {
             btnModeChord.className = state.displayMode === 'CHORD'
                 ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-emerald-600 text-slate-950 shadow'
@@ -4460,6 +5253,11 @@
             btnModeReverse.className = state.displayMode === 'REVERSE'
                 ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-500 text-slate-950 shadow'
                 : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            if (btnModePonteio) {
+                btnModePonteio.className = state.displayMode === 'PONTEIO'
+                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-400 text-slate-950 shadow'
+                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            }
         }
     }
 
@@ -4468,10 +5266,12 @@
         const btnModeChord = document.getElementById('btn-viola-mode-chord');
         const btnModeDuad = document.getElementById('btn-viola-mode-duad');
         const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
+        const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
         if (btnModeChord && btnModeDuad && btnModeReverse) {
             btnModeChord.addEventListener('click', () => {
                 if (state.displayMode !== 'CHORD') {
                     stopScalePlayback();
+                    stopPonteioPlayback();
                     stopProgressionPlayback();
                     state.displayMode = 'CHORD';
                     saveViolaState();
@@ -4481,6 +5281,7 @@
             });
             btnModeDuad.addEventListener('click', () => {
                 if (state.displayMode !== 'DUAD') {
+                    stopPonteioPlayback();
                     stopProgressionPlayback();
                     state.displayMode = 'DUAD';
                     saveViolaState();
@@ -4490,6 +5291,7 @@
             btnModeReverse.addEventListener('click', () => {
                 if (state.displayMode !== 'REVERSE') {
                     stopScalePlayback();
+                    stopPonteioPlayback();
                     stopProgressionPlayback();
                     state.displayMode = 'REVERSE';
                     saveViolaState();
@@ -4497,6 +5299,19 @@
                     strumReverseChord();
                 }
             });
+            if (btnModePonteio) {
+                btnModePonteio.addEventListener('click', () => {
+                    if (state.displayMode !== 'PONTEIO') {
+                        stopScalePlayback();
+                        stopProgressionPlayback();
+                        state.displayMode = 'PONTEIO';
+                        saveViolaState();
+                        renderAll();
+                        const pWrap = document.getElementById('viola-ponteios-container');
+                        if (pWrap) pWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
         }
 
         // Ações Rápidas do Dicionário & Buscador Reverso
@@ -4552,18 +5367,6 @@
         if (stopTunerBtn) {
             stopTunerBtn.addEventListener('click', stopTunerTone);
         }
-
-        const stopPonteioBtn = document.getElementById('btn-viola-stop-ponteio');
-        if (stopPonteioBtn) {
-            stopPonteioBtn.addEventListener('click', stopPonteioPlayback);
-        }
-
-        document.querySelectorAll('[data-play-ponteio]').forEach((btn) => {
-            btn.addEventListener('click', () => {
-                const id = btn.getAttribute('data-play-ponteio');
-                playPonteioSequence(id);
-            });
-        });
 
         const btnTriad = document.getElementById('btn-viola-mode-triad');
         const btnTetrad = document.getElementById('btn-viola-mode-tetrad');
@@ -4786,6 +5589,7 @@
         renderDuadStrip();
         renderReverseChordPanel();
         renderProgressionStudyPanel();
+        renderPonteiosSection();
         renderMetronomeControls();
     }
 

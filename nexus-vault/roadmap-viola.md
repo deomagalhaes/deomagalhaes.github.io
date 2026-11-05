@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 6 — Biblioteca Expandida de Ponteios e Intros Clássicas de Viola Caipira
+## 🎯 Projeto Prioritário Atual: Fase 7 — Gerador, Editor e Exportador de Tablaturas e Diagramas de Cifras Caipiras
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Mapear e expandir o repertório de ponteios e introduções clássicas com afinação Cebolão em Mi e Cebolão em Ré (ex: *Chico Mineiro*, *Rei do Gado*, *Vaca Estrela e Boi Fubá*, *Ferrugem*, *A Vaca Já Foi Pro Brejo*, *Pagode do Tião*).
-  2. Implementar reprodutor interativo passo a passo nota a nota e por compasso com visualização sincronizada no braço SVG (modo Canhoto e Destro) e controle de velocidade para estudo lento (50%, 75%, 100%).
-  3. Adicionar renderizador de tablaturas interativas com dedilhado de polegar e indicador destacados.
+  1. Permitir ao usuário criar, editar e compor suas próprias tablaturas e ponteios para Viola Caipira (5 pares) e Violão de 6 cordas, adicionando notas, duetos em terças/sextas, batidas e rasqueados diretamente pelo braço virtual interativo.
+  2. Implementar motor de exportação de partituras/tablaturas em formato texto ASCII (.tab / .txt) formatado e diagrama gráfico imprimível (PDF / Canvas) com indicação para tocadores Canhotos e Destros.
+  3. Adicionar reprodutor Web Audio API para audição imediata das criações do usuário com loop, controle de andamento e salvamento no LocalStorage via `VaultCore`.
 
 ---
 
@@ -24,14 +24,49 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Motor de dedução harmônica algorítmica a partir de digitações livres nas casas ou no braço SVG, identificação de inversões, funções modais caipiras, dedilhado Web Audio e presets curados.
 3. **[x] Treinador Auditivo de Afinação e Pares Oitavados (Acoustic Beats Ear Trainer):**
    - Módulo completo de treino perceptivo com simulação física de batimentos acústicos, teste cego em 4 níveis de dificuldade, simulador de cravelha manual em cents, osciloscópio de envoltória em Canvas e patentes de violeiro (Iniciante até Tião Carreiro).
-4. **[ ] Biblioteca Expandida de Ponteios e Intros Clássicas:**
-   - Mapeamento e reprodução passo a passo de ponteios tradicionais nas terças e sextas com visualização sincronizada no braço e controle de andamento.
-5. **[ ] Gerador / Exportador de Tablaturas e Cifras:**
-   - Permitir salvar sequências harmônicas montadas em formato de tablatura e diagrama imprimível.
+4. **[x] Biblioteca Expandida de Ponteios & Solos Canônicos de Viola Caipira (Fase 6 Concluída):**
+   - Mapeamento e reprodução passo a passo de 10 clássicos em terças e sextas com visualização sincronizada no braço SVG, tablatura digital interativa com dedilhado de mão direita e controle de andamento didático.
+5. **[ ] Gerador / Editor e Exportador de Tablaturas e Cifras (Fase 7):**
+   - Permitir criar composições próprias na tablatura, salvar no cofre e exportar em texto ASCII e PDF imprimível.
+6. **[ ] Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio e Dórico na Viola):**
+   - Mapeamento sonoro e visual dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço do instrumento.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **05/11/2026 — Sessão 6** (Fase 6 Concluída):
+  - **Biblioteca Expandida de Ponteios & Solos Canônicos de Viola Caipira**:
+    - **Repertório Canônico de 10 Clássicos Mapeados**:
+      - *Pagode em Brasília* (Tião Carreiro & Lourival dos Santos) — A gênese do Pagode Caipira com repiques em cascata e batida percussiva de tampo.
+      - *Chico Mineiro* (Tonico & Francisco Ribeiro) — O lirismo puro do dueto em terças no 1º e 2º par da afinação Cebolão em Mi.
+      - *O Menino da Porteira* (Teddy Vieira & Luizinho) — O padrão canônico das sextas caipiras nos pares 1 e 3.
+      - *O Rei do Gado* (Teddy Vieira / Tião Carreiro) — A introdução monumental de moda de viola com batida de tampo, terças cortantes partindo da 7ª casa e arremates em bordões graves.
+      - *A Vaca Já Foi Pro Brejo* (Tião Carreiro & Lourival dos Santos) — Síncopes aceleradas em semicolcheias com repiques cortados e abafamento seco.
+      - *Ferrugem* (Almir Sater) — Estética pantaneira contemporânea com cordas soltas como pedais contínuos e harmonia aberta lírica.
+      - *Tristeza do Jeca* (Angelino de Oliveira) — A toada matriz da música caipira paulista com fraseado nostálgico em terças.
+      - *Vaca Estrela e Boi Fubá* (Patativa do Assaré) — Lamento sertanejo profundo explorando o lado modal com terceira menor.
+      - *Canoeiro* (Almirante / Zé Carreiro & Carreirinho) — O cururu veloz de duelo fluvial com alternância ágil de terças.
+      - *Luar do Sertão* (Catulo da Paixão Cearense & João Pernambuco) — Valsa seresteira solene com melodia cantada sobre bordões pontuados.
+    - **Reprodutor Interativo com Web Audio API**:
+      - Síntese precisa de notas simples, duetos simultâneos (terças/sextas), batidas no tampo da viola (`playWoodTap`) e rasqueados abertos (`playRasqueado`).
+      - Controle de andamento didático em 4 velocidades: 50% (Estudo Lento / Digitação), 75% (Moderado), 100% (Andamento Real) e 120% (Virtuosismo Caipira).
+      - Modo Loop contínuo para repetição ininterrupta do trecho em treino.
+      - Modo Passo a Passo (`[ ◀ Anterior ]` e `[ Próxima ▶ ]`) permitindo ao estudante avançar nota a nota no seu próprio ritmo, ouvindo o som de cada digitação instantaneamente.
+    - **Tablatura Digital Caipira Interativa (5 Pares da Viola)**:
+      - Renderização responsiva com scroll horizontal fluido e régua de compassos numerados.
+      - Notação técnica de mão direita (`p` polegar, `i` indicador, `p+i` dueto pinçado, `rasq` rasqueado, `tap` batida no tampo) e dedilhado sugerido da mão esquerda (`lh`).
+      - Cursor neon âmbar ativo que acompanha a execução sonora em tempo real com auto-scroll suave.
+      - Interatividade total: clique em qualquer coluna/tempo da tablatura para soar o áudio imediatamente, posicionar o cursor e iluminar no braço virtual.
+    - **Integração com Braço SVG (Modo Canhoto & Destro)**:
+      - Novo modo de projeção no braço virtual: `🎼 Tablatura & Ponteios` (`displayMode: 'PONTEIO'`).
+      - Visualização em camada fantasma (cinza translúcido) de todas as notas do ponteio ao longo do braço, permitindo antecipar os saltos de posição.
+      - Destaque vibrante neon dourado e esmeralda nas notas do passo ativo no momento exato em que soam.
+      - Compatibilidade nativa com modo Canhoto (pestana à direita) e Destro, e perspectivas "Diagrama" e "Músico".
+    - **Ficha Técnica & Dicas do Mestre Violeiro**:
+      - Contextualização histórica, tonalidade, afinação recomendada, métrica e dicas ergonômicas de execução prática.
+      - Galeria em grid responsiva de 10 obras com seletor rápido sincronizado.
+      - Persistência de preferências de estudo no LocalStorage via `VaultCore`.
 
 - **05/11/2026 — Sessão 5** (Fase 5 Concluída):
   - **Treinador Auditivo de Afinação & Pares Oitavados (Acoustic Beats Ear Trainer)**:
