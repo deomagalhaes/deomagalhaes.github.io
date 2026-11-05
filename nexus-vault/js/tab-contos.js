@@ -184,6 +184,62 @@
             defaultQuestion: 'Qual é o superpoder ou detalhe do seu jeitinho que faz você ser uma pessoa tão especial e incrível?',
             challengeAct: 'percebeu que pensava e brincava de um modo diferente dos outros amiguinhos, sentindo-se como um peixinho tentando voar com os pássaros.',
             breathCue: 'abraçou o próprio peito com carinho, inspirou sentindo orgulho da sua própria imaginação brilhante e soltou um sorriso de paz e pertencimento.'
+        },
+        mentira_acolhimento: {
+            label: '25. Medo da Punição & Verdade Curativa (A água límpida que lava a mancha)',
+            defaultMetaphor: 'O riacho transparente da floresta: quando cai uma folhinha de terra, a água não grita nem quebra; ela simplesmente corre límpida, lava a mancha com doçura e tudo volta a brilhar transparente.',
+            defaultQuestion: 'Você sabe que pode sempre me contar tudo com calma, porque a verdade é um abraço que conserta qualquer coisa?',
+            challengeAct: 'escondeu o que aconteceu com medo de ver uma cara brava, sentindo o peito pesar como se carregasse uma mochila cheia de pedras pontudas.',
+            breathCue: 'respirou fundo deixando o ar entrar puro, soltou os ombrinhos e sentiu o alívio gostoso de poder ser totalmente sincero e acolhido.'
+        },
+        despedida_fase: {
+            label: '26. Mudança de Fase & Desapego Carinhoso (A jaquetinha que virou asas)',
+            defaultMetaphor: 'O passarinho que adorava seu galho de bebê, mas que ao sentir as penas fortes percebeu que voar pelo céu aberto é ainda mais lindo do que ficar só no ninho.',
+            defaultQuestion: 'Que coisa nova e gostosa você aprendeu a fazer que mostra como você já cresceu com coragem?',
+            challengeAct: 'olhou para um brinquedo de quando era bem pequenininho e sentiu uma saudade esquisita, querendo que o tempo andasse para trás feito caranguejo.',
+            breathCue: 'abraçou a lembrança com ternura, puxou o ar sorrindo e soprou suave como quem sopra uma semente de dente-de-leão rumo ao futuro.'
+        },
+        ansiedade_domingo: {
+            label: '27. Ansiedade Antecipatória de Domingo / Nova Semana (O barquinho do agora)',
+            defaultMetaphor: 'O barquinho de madeira na lagoa tranquila: ele não precisa navegar na água da próxima quarta-feira nem do mês que vem; ele só precisa flutuar suave na aguinha morna desta noite aqui.',
+            defaultQuestion: 'Se amanhã for um presente surpresa guardado numa caixinha, o que a gente faz agora para descansar bem o corpinho?',
+            challengeAct: 'começou a pensar em tudo o que precisava fazer na escolinha nos próximos dias, com a cabecinha acelerada feito locomotiva sem freio.',
+            breathCue: 'deitou a bochecha no travesseiro macio, fechou os olhinhos, respirou bem devagar e pensou: agora é só o meu cobertor e o meu descanso.'
+        },
+        perder_jogos: {
+            label: '28. Frustração em Jogos & Espírito Lúdico (A ciranda onde o riso vale mais)',
+            defaultMetaphor: 'A roda da ciranda dos vaga-lumes: o mais gostoso da dança não é quem chega primeiro, mas sim dar as mãos, rodopiar e dar gargalhada quando todo mundo cai na relva macia.',
+            defaultQuestion: 'Você percebe como o jogo mais divertido do mundo é aquele em que a gente brinca com carinho e se diverte junto?',
+            challengeAct: 'perdeu a rodada da brincadeira e cruzou os braços com a boca amarrada, sentindo que se não vencesse nada mais valia a pena.',
+            breathCue: 'soprou forte como quem sopra um balão de ar quente, desfez o nó do peito e sentiu a alegria de brincar de novo renascer leve.'
+        },
+        tiques_inquietacao: {
+            label: '29. Inquietação Motora & Desaceleração Fisiológica (Os juncos da lagoa mansa)',
+            defaultMetaphor: 'Os juncos verdes na margem do lago: quando o vento forte passa eles balançam ligeiro, mas assim que a brisa da noite chega, eles repousam imóveis espelhando a lua no silêncio.',
+            defaultQuestion: 'Como o seu corpinho vai derretendo gostoso no colchão, como cera de vela morna descansando?',
+            challengeAct: 'sentia os dedinhos, os pezinhos e o pescoço querendo se mexer sem parar, como se pequenas formiguinhas elétricas estivessem dançando na pele.',
+            breathCue: 'esticou os braços e pernas bem compridos por cinco segundos e soltou tudo de uma vez num suspiro mole, sentindo o peso aconchegante da gravidade.'
+        },
+        gratidao_sono: {
+            label: '30. Gratidão do Fim do Dia & Ritual de Boa-Noite (A cesta de vaga-lumes dourados)',
+            defaultMetaphor: 'A cestinha invisível que a gente guarda no peito: antes de dormir, colocamos nela três momentos gostosos do dia, e cada um vira um vaga-lume dourado que brilha suave a noite inteira.',
+            defaultQuestion: 'Quais foram três coisinhas simples de hoje que deixaram o seu coração quentinho de alegria?',
+            challengeAct: 'lembrou de uma coisinha chata que aconteceu à tarde e quase esqueceu de todos os abraços, risadas e brincadeiras boas que também viveu.',
+            breathCue: 'sorriu de olhos fechados, respirou fundo sentindo o calor dos momentos bons e soltou um agradecimento baixinho e tranquilo.'
+        },
+        autonomia_pequenos: {
+            label: '31. Desejo de Autonomia & "Eu Faço Sozinho" (A avezinha das asas firmes)',
+            defaultMetaphor: 'A avezinha jovem que aprende a quebrar a sementinha com o próprio bico: ela tenta uma, duas vezes com paciência, sabendo que quando precisar de ajuda tem sempre uma asa grande por perto.',
+            defaultQuestion: 'Qual é uma coisa que você já consegue fazer sozinho com orgulho e segurança?',
+            challengeAct: 'ficou zangado quando alguém tentou ajudá-lo a amarrar o sapato, querendo provar que já conseguia fazer tudo sozinho sem ninguém falar nada.',
+            breathCue: 'respirou devagar sentindo a força nas mãozinhas, lembrou que pedir ajuda não diminui a nossa força e soltou um suspiro de serenidade.'
+        },
+        injustica_compreensao: {
+            label: '32. Sentimento de "Não é Justo" & Equilíbrio (A balança sábia da montanha)',
+            defaultMetaphor: 'A balança da coruja sábia da serra: às vezes um dia ganha um doce e outro dia ganha um descanso; a vida não é igualzinha em cada minuto, mas no final cabe todo o carinho e o cuidado do mundo.',
+            defaultQuestion: 'O que o seu coração sente quando descobre que cada momento tem a sua hora certa e o seu presente?',
+            challengeAct: 'ouviu um "agora não" para um passeio e achou o mundo a coisa mais injusta da galáxia, querendo bater o pé e gritar com o vento.',
+            breathCue: 'pôs a mãozinha no peito, respirou sentindo o amor firme que cuida dos limites e soltou o ar sentindo paz e confiança no abraço protetor.'
         }
     };
 
@@ -244,6 +300,24 @@
             opening: 'Sobre as dunas brancas como farinha fina, lagoas de água doce refletiam o céu estrelado enquanto o vento do mar soprava calmo e refrescante.',
             guide: 'um Maçarico-da-Praia de passos pequeninos que descansava na beira da água morna sem medo nenhum do mar',
             closing: 'O vento desenhou ondas suaves na areia branca e todo o areal adormeceu sob uma abóbada brilhante de constelações tranquilas.'
+        },
+        noronha: {
+            label: 'Fernando de Noronha & Tartarugas Marinhas',
+            opening: 'Nas águas mornas e esmeralda da Baía dos Porcos, as ondas beijavam as pedras vulcânicas com um ritmo de berço enquanto o pôr do sol dourava o Morro Dois Irmãos.',
+            guide: 'uma Tartaruga-Marinha centenária de nado gracioso e olhar sereno, companheira de um golfinho brincalhão adormecido na enseada',
+            closing: 'A maré mansa cobriu os corais com um véu morno de espuma branca, e o oceano inteiro sussurrou uma canção de ninar profunda.'
+        },
+        araucarias: {
+            label: 'Floresta de Araucárias & Pinhão da Serra da Mantiqueira',
+            opening: 'No alto dos contrafortes da Mantiqueira, onde copas de pinheiros ancestrais recortavam o céu límpido e frio, a brisa trazia cheiro gostoso de fogueira mansa e orvalho.',
+            guide: 'uma Gralha-Azul sábia que descansava sobre um galho largo de pinheiro e um Esquilo serelepe aninhado num oco quentinho',
+            closing: 'O manto de estrelas iluminou o topo das montanhas verdes, e o silêncio puro da serra guardou o descanso com calor e abrigo inabalável.'
+        },
+        jalapao: {
+            label: 'Jalapão & Fervedouro de Águas Cristalinas',
+            opening: 'No coração do cerrado dourado, onde a água pura brota da areia branca e não deixa ninguém afundar, o céu noturno refletia cada constelação num espelho d’água perfeito.',
+            guide: 'uma Ariranha de pelo aveludado e passos tranquilos que conhecia o segredo de flutuar sem nenhum esforço',
+            closing: 'A água morna do fervedouro continuou brotando num sussurro constante de borbulhas, embalando o corpinho numa sensação de leveza total.'
         }
     };
 
@@ -664,6 +738,80 @@
     }
 
     // =========================================================================
+    // 5.1. NARRADOR VOCAL SUAVE OFFLINE (WEB SPEECH API)
+    // =========================================================================
+    let speechUtterance = null;
+    let isSpeaking = false;
+
+    function toggleSpeechNarration() {
+        if (!('speechSynthesis' in window)) {
+            if (global.VaultCore) global.VaultCore.toast('Síntese vocal não suportada neste navegador.', 'warning');
+            return;
+        }
+
+        if (window.speechSynthesis.speaking) {
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                updateNarrateUI(true);
+            } else {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                updateNarrateUI(false);
+            }
+            return;
+        }
+
+        const bodyEl = document.getElementById('amber-reader-body');
+        const questionEl = document.getElementById('amber-reader-question');
+        const titleEl = document.getElementById('amber-reader-title');
+        const textToRead = [
+            titleEl ? titleEl.textContent : '',
+            bodyEl ? bodyEl.textContent : '',
+            questionEl ? ('Sussurro final de boa-noite: ' + questionEl.textContent) : ''
+        ].filter(Boolean).join('. ');
+
+        if (!textToRead.trim()) return;
+
+        window.speechSynthesis.cancel();
+        speechUtterance = new SpeechSynthesisUtterance(textToRead);
+        speechUtterance.lang = 'pt-BR';
+        speechUtterance.rate = 0.85; // Leitura compassada e suave
+        speechUtterance.pitch = 0.95; // Tom morno para indução ao relaxamento
+
+        const voices = window.speechSynthesis.getVoices();
+        const ptVoice = voices.find(v => v.lang && v.lang.startsWith('pt'));
+        if (ptVoice) speechUtterance.voice = ptVoice;
+
+        speechUtterance.onend = () => {
+            isSpeaking = false;
+            updateNarrateUI(false);
+        };
+        speechUtterance.onerror = () => {
+            isSpeaking = false;
+            updateNarrateUI(false);
+        };
+
+        window.speechSynthesis.speak(speechUtterance);
+        isSpeaking = true;
+        updateNarrateUI(true);
+    }
+
+    function stopSpeechNarration() {
+        if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
+        isSpeaking = false;
+        updateNarrateUI(false);
+    }
+
+    function updateNarrateUI(active) {
+        const icon = document.getElementById('amber-narrate-icon');
+        const label = document.getElementById('amber-narrate-label');
+        if (icon) icon.textContent = active ? '⏹' : '🔊';
+        if (label) label.textContent = active ? 'Parar Voz' : 'Narrador';
+    }
+
+    // =========================================================================
     // 6. LEITOR NOTURNO ÂMBAR DE TELA CHEIA (LOW-BLUE-LIGHT)
     // =========================================================================
     function openAmberNightReader(storyObj) {
@@ -722,6 +870,7 @@
         if (overlay) overlay.classList.add('hidden');
         document.body.style.overflow = '';
         stopAutoScroll();
+        stopSpeechNarration();
         if (document.fullscreenElement) {
             try { document.exitFullscreen(); } catch (_) {}
         }
@@ -1046,6 +1195,35 @@
         const btnAmberClose = document.getElementById('btn-amber-close');
         if (btnAmberClose) btnAmberClose.addEventListener('click', closeAmberNightReader);
 
+        const btnAmberStar = document.getElementById('btn-amber-star');
+        if (btnAmberStar) {
+            btnAmberStar.addEventListener('click', () => {
+                const target = currentComposedStory;
+                if (!target || !target.text) return;
+                const copy = Object.assign({}, target, {
+                    id: 'CT-' + Date.now(),
+                    createdAt: C.todayISO()
+                });
+                savedStories.unshift(copy);
+                saveStories();
+                renderSavedStoriesLibrary();
+                C.toast('Conto salvo com sucesso na biblioteca local!', 'success');
+            });
+        }
+
+        const btnAmberNarrate = document.getElementById('btn-amber-narrate');
+        if (btnAmberNarrate) {
+            btnAmberNarrate.addEventListener('click', toggleSpeechNarration);
+        }
+
+        const sleepSelect = document.getElementById('amber-sleep-timer-select');
+        if (sleepSelect) {
+            sleepSelect.addEventListener('change', () => {
+                const mins = parseInt(sleepSelect.value, 10);
+                setSleepTimer(mins);
+            });
+        }
+
         const btnFontUp = document.getElementById('btn-amber-font-up');
         if (btnFontUp) {
             btnFontUp.addEventListener('click', () => {
@@ -1152,7 +1330,9 @@
         startRelaxationAudio,
         stopRelaxationAudio,
         setSleepTimer,
-        toggleAutoScroll
+        toggleAutoScroll,
+        toggleSpeechNarration,
+        stopSpeechNarration
     };
 
     global.VaultTabContos = api;

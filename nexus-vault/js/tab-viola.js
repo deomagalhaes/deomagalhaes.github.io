@@ -307,6 +307,31 @@
         'D_m7b5': [[1, 1, 1, 0, -1, -1], [4, 6, 5, 6, 5, -1], [10, 9, 10, 10, -1, 10]]
     };
 
+    const DEFAULT_EAR_TRAINER_STATE = {
+        mode: 'challenge',          // 'challenge' (Teste Cego) | 'peg' (Cravelha Manual)
+        difficulty: 'intermediate', // 'beginner' (25..45 cents) | 'intermediate' (12..25) | 'advanced' (5..12) | 'legendary' (1.5..5)
+        selectedCourseIdx: 2,       // 2 = 3º par Turina (G#3/G#4 oitavado por padrão)
+        soundType: 'pluck',         // 'pluck' (Dedilhado periódico) | 'drone' (Ressonância contínua)
+        score: 0,
+        streak: 0,
+        bestStreak: 0,
+        totalTested: 0,
+        correctCount: 0,
+        // Desafio Auditivo Cego
+        challengeActive: false,
+        challengeCourseIdx: 2,
+        challengeDetuneCents: 0,
+        challengeUserGuess: null,
+        challengeRevealed: false,
+        challengeIsCorrect: false,
+        // Cravelha Manual
+        pegCourseIdx: 2,
+        pegTargetCents: -24,
+        pegUserCents: 0,
+        pegValidated: false,
+        pegResidualError: 0
+    };
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -334,7 +359,8 @@
         rhythmChordSync: true,       // Harmonizar bordão e rasqueado com o acorde ativo do campo harmônico
         activeRhythmStepIdx: -1,     // Passo ativo da levada para feedback visual sincronizado
         reverseFretsViola: [0, 0, 0, 0, 0], // Digitação ativa no Dicionário Reverso p/ Viola (1º ao 5º par)
-        reverseFretsViolao: [0, 0, 1, 2, 2, 0] // Digitação ativa no Dicionário Reverso p/ Violão (1ª à 6ª corda)
+        reverseFretsViolao: [0, 0, 1, 2, 2, 0], // Digitação ativa no Dicionário Reverso p/ Violão (1ª à 6ª corda)
+        earTrainer: Object.assign({}, DEFAULT_EAR_TRAINER_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -1681,6 +1707,1113 @@
     }
 
     // =========================================================================
+    // TREINADOR AUDITIVO DE AFINAÇÃO & PARES OITAVADOS (FASE 5)
+    // =========================================================================
+    let earAudioNodes = {
+        ctx: null,
+        oscRef: null,
+        oscHarmonic: null,
+        oscTest: null,
+        gainRef: null,
+        gainHarmonic: null,
+        gainTest: null,
+        masterGain: null,
+        pulseTimer: null,
+        rafId: null,
+        isPlaying: false,
+        currentDetuneCents: 0,
+        animPhase: 0,
+        activeSoloMode: null // null (duo), 'ref', 'test', 'pure'
+    };
+
+    function getEarTrainerRank(score) {
+        if (score >= 500) {
+            return {
+                title: 'Tião Carreiro Lendário',
+                badge: '👑 Mestre Supremo',
+                colorClass: 'text-amber-400 bg-amber-500/15 border-amber-500/40',
+                progressPct: 100,
+                nextGoal: 'Nível Máximo Alcançado'
+            };
+        }
+        if (score >= 300) {
+            const p = Math.round(((score - 300) / 200) * 100);
+            return {
+                title: 'Mestre Violeiro de Folia',
+                badge: '🪕 Virtuoso do Aço',
+                colorClass: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40',
+                progressPct: p,
+                nextGoal: `${500 - score} pts para Tião Carreiro`
+            };
+        }
+        if (score >= 150) {
+            const p = Math.round(((score - 150) / 150) * 100);
+            return {
+                title: 'Boiadeiro Afinador',
+                badge: '🐂 Ouvido de Ouro',
+                colorClass: 'text-cyan-300 bg-cyan-500/15 border-cyan-500/40',
+                progressPct: p,
+                nextGoal: `${300 - score} pts para Mestre Violeiro`
+            };
+        }
+        if (score >= 50) {
+            const p = Math.round(((score - 50) / 100) * 100);
+            return {
+                title: 'Peão Violeiro',
+                badge: '🐎 Bom de Ouvido',
+                colorClass: 'text-indigo-300 bg-indigo-500/15 border-indigo-500/40',
+                progressPct: p,
+                nextGoal: `${150 - score} pts para Boiadeiro`
+            };
+        }
+        const p = Math.round((score / 50) * 100);
+        return {
+            title: 'Iniciante da Roça',
+            badge: '🌾 Aprendiz de Viola',
+            colorClass: 'text-slate-300 bg-slate-800 border-slate-700',
+            progressPct: p,
+            nextGoal: `${50 - score} pts para Peão Violeiro`
+        };
+    }
+
+    function calculateBeatFrequency(courseIdx, detuneCents) {
+        const inst = INSTRUMENTS[state.instrumentId];
+        const course = inst.courses[courseIdx] || inst.courses[0];
+        const isPaired = inst.isPaired && course.midi.length >= 2;
+        const isOctaved = isPaired && course.octaved;
+
+        let fTarget = 0;
+        if (isOctaved) {
+            // No par oitavado, a referência de interferência é o 2º harmônico do bordão
+            fTarget = midiToFreq(course.midi[0]) * 2;
+        } else {
+            fTarget = midiToFreq(course.midi[0]);
+        }
+        const fActual = fTarget * Math.pow(2, detuneCents / 1200);
+        return Math.abs(fTarget - fActual);
+    }
+
+    function stopEarTrainerAudio() {
+        if (earAudioNodes.pulseTimer) {
+            clearInterval(earAudioNodes.pulseTimer);
+            earAudioNodes.pulseTimer = null;
+        }
+        if (earAudioNodes.rafId) {
+            cancelAnimationFrame(earAudioNodes.rafId);
+            earAudioNodes.rafId = null;
+        }
+        if (earAudioNodes.masterGain && earAudioNodes.ctx) {
+            try {
+                const now = earAudioNodes.ctx.currentTime;
+                earAudioNodes.masterGain.gain.cancelScheduledValues(now);
+                earAudioNodes.masterGain.gain.setValueAtTime(earAudioNodes.masterGain.gain.value, now);
+                earAudioNodes.masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+                setTimeout(() => {
+                    try {
+                        if (earAudioNodes.oscRef) earAudioNodes.oscRef.stop();
+                        if (earAudioNodes.oscHarmonic) earAudioNodes.oscHarmonic.stop();
+                        if (earAudioNodes.oscTest) earAudioNodes.oscTest.stop();
+                    } catch (_) {}
+                    earAudioNodes.oscRef = null;
+                    earAudioNodes.oscHarmonic = null;
+                    earAudioNodes.oscTest = null;
+                    earAudioNodes.masterGain = null;
+                }, 90);
+            } catch (_) {}
+        }
+        earAudioNodes.isPlaying = false;
+        earAudioNodes.activeSoloMode = null;
+        updateEarTrainerPlayButtons();
+    }
+
+    function playEarTrainerSound(opts = {}) {
+        stopEarTrainerAudio();
+        stopPonteioPlayback();
+        stopScalePlayback();
+        stopProgressionPlayback();
+        stopTunerTone();
+
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        earAudioNodes.ctx = ctx;
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const courseIdx = typeof opts.courseIdx === 'number'
+            ? opts.courseIdx
+            : (state.earTrainer.selectedCourseIdx >= 0 ? state.earTrainer.selectedCourseIdx : 2);
+        const validCourseIdx = Math.max(0, Math.min(inst.courses.length - 1, courseIdx));
+        const course = inst.courses[validCourseIdx];
+        if (!course) return;
+
+        const soundType = opts.soundType || state.earTrainer.soundType || 'pluck';
+        const soloMode = opts.soloMode || null; // 'ref' | 'test' | 'pure' | null
+        let detuneCents = typeof opts.detuneCents === 'number' ? opts.detuneCents : 0;
+        if (soloMode === 'pure') detuneCents = 0;
+
+        earAudioNodes.currentDetuneCents = detuneCents;
+        earAudioNodes.activeSoloMode = soloMode;
+        earAudioNodes.isPlaying = true;
+
+        const isPaired = inst.isPaired && course.midi.length >= 2;
+        const isOctaved = isPaired && course.octaved;
+
+        let fRef = 0;
+        let fTest = 0;
+        if (isOctaved) {
+            fRef = midiToFreq(course.midi[0]); // Bordão grave (G#3, E3, B2...)
+            fTest = midiToFreq(course.midi[1]); // Cantadeira fina (G#4, E4, B3...)
+        } else if (isPaired) {
+            fRef = midiToFreq(course.midi[0]); // Uníssono
+            fTest = midiToFreq(course.midi[1]);
+        } else {
+            fRef = midiToFreq(course.midi[0]); // Violão 6 cordas
+            fTest = midiToFreq(course.midi[0]);
+        }
+
+        function triggerEmission(isPluck) {
+            if (!earAudioNodes.isPlaying) return;
+            const now = ctx.currentTime;
+            const duration = isPluck ? 2.1 : 3600;
+
+            const masterGain = ctx.createGain();
+            const bodyFilter = ctx.createBiquadFilter();
+            bodyFilter.type = 'lowpass';
+            bodyFilter.frequency.setValueAtTime(isOctaved ? 3600 : 4200, now);
+            bodyFilter.Q.setValueAtTime(1.2, now);
+
+            // 1. Oscilador da Corda de Referência (Bordão ou Prima Base)
+            const oscRef = ctx.createOscillator();
+            const gRef = ctx.createGain();
+            oscRef.type = 'triangle';
+            oscRef.frequency.setValueAtTime(fRef, now);
+            const refVol = (soloMode === 'test') ? 0 : 0.36;
+            gRef.gain.setValueAtTime(refVol, now);
+            oscRef.connect(gRef);
+            gRef.connect(bodyFilter);
+
+            // Harmônico 2 do bordão para pares oitavados (física real dos batimentos)
+            let oscHarmonic = null;
+            let gHarmonic = null;
+            if (isOctaved && soloMode !== 'test') {
+                oscHarmonic = ctx.createOscillator();
+                gHarmonic = ctx.createGain();
+                oscHarmonic.type = 'sawtooth';
+                oscHarmonic.frequency.setValueAtTime(fRef * 2, now);
+                gHarmonic.gain.setValueAtTime(0.12, now);
+                oscHarmonic.connect(gHarmonic);
+                gHarmonic.connect(bodyFilter);
+            }
+
+            // 2. Oscilador da Corda Testada / Móvel (com detune em cents)
+            const oscTest = ctx.createOscillator();
+            const gTest = ctx.createGain();
+            oscTest.type = 'triangle';
+            oscTest.frequency.setValueAtTime(fTest, now);
+            oscTest.detune.setValueAtTime(earAudioNodes.currentDetuneCents, now);
+            const testVol = (soloMode === 'ref') ? 0 : 0.34;
+            gTest.gain.setValueAtTime(testVol, now);
+            oscTest.connect(gTest);
+            gTest.connect(bodyFilter);
+
+            // Envelopes de volume
+            if (isPluck) {
+                masterGain.gain.setValueAtTime(0.0001, now);
+                masterGain.gain.linearRampToValueAtTime(0.38, now + 0.008);
+                masterGain.gain.exponentialRampToValueAtTime(0.18, now + 0.25);
+                masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+            } else {
+                masterGain.gain.setValueAtTime(0.0001, now);
+                masterGain.gain.linearRampToValueAtTime(0.24, now + 0.06);
+            }
+
+            bodyFilter.connect(masterGain);
+            masterGain.connect(ctx.destination);
+
+            oscRef.start(now);
+            if (oscHarmonic) oscHarmonic.start(now);
+            oscTest.start(now);
+
+            if (isPluck) {
+                oscRef.stop(now + duration + 0.05);
+                if (oscHarmonic) oscHarmonic.stop(now + duration + 0.05);
+                oscTest.stop(now + duration + 0.05);
+            }
+
+            earAudioNodes.oscRef = oscRef;
+            earAudioNodes.oscHarmonic = oscHarmonic;
+            earAudioNodes.oscTest = oscTest;
+            earAudioNodes.masterGain = masterGain;
+        }
+
+        if (soundType === 'pluck') {
+            triggerEmission(true);
+            earAudioNodes.pulseTimer = setInterval(() => {
+                if (!earAudioNodes.isPlaying) {
+                    clearInterval(earAudioNodes.pulseTimer);
+                    earAudioNodes.pulseTimer = null;
+                    return;
+                }
+                triggerEmission(true);
+            }, 2200);
+        } else {
+            triggerEmission(false);
+        }
+
+        startBeatsAnimation();
+        updateEarTrainerPlayButtons();
+    }
+
+    function updateEarTrainerDetune(newCents) {
+        earAudioNodes.currentDetuneCents = newCents;
+        if (earAudioNodes.oscTest && earAudioNodes.ctx) {
+            try {
+                earAudioNodes.oscTest.detune.setValueAtTime(newCents, earAudioNodes.ctx.currentTime);
+            } catch (_) {}
+        }
+        renderBeatsCanvas();
+    }
+
+    function startBeatsAnimation() {
+        if (earAudioNodes.rafId) return;
+        function loop() {
+            if (!earAudioNodes.isPlaying) {
+                earAudioNodes.rafId = null;
+                return;
+            }
+            earAudioNodes.animPhase += 0.08;
+            renderBeatsCanvas();
+            earAudioNodes.rafId = requestAnimationFrame(loop);
+        }
+        earAudioNodes.rafId = requestAnimationFrame(loop);
+    }
+
+    function renderBeatsCanvas() {
+        const canvas = document.getElementById('viola-beats-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const w = canvas.width;
+        const h = canvas.height;
+        const midY = h / 2;
+
+        ctx.fillStyle = '#070b12';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < w; x += 40) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, h);
+            ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.moveTo(0, midY);
+        ctx.lineTo(w, midY);
+        ctx.stroke();
+
+        const isChallengeMode = state.earTrainer.mode === 'challenge';
+        const isBlind = isChallengeMode && state.earTrainer.challengeActive && !state.earTrainer.challengeRevealed;
+
+        if (isBlind) {
+            ctx.fillStyle = 'rgba(6, 182, 212, 0.04)';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.strokeStyle = 'rgba(34, 211, 238, 0.3)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            for (let x = 0; x < w; x += 3) {
+                const y = midY + Math.sin((x * 0.05) + earAudioNodes.animPhase) * 16 * Math.cos(x * 0.01);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '600 12px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('🎧 MODO TESTE CEGO ATIVO — ESCUTE A PULSAÇÃO DOS BATIMENTOS', w / 2, midY - 6);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '400 10px "Inter", sans-serif';
+            ctx.fillText('A forma de onda e os cents exatos serão revelados logo após sua resposta', w / 2, midY + 14);
+            return;
+        }
+
+        const courseIdx = isChallengeMode
+            ? state.earTrainer.challengeCourseIdx
+            : state.earTrainer.pegCourseIdx;
+        const detuneCents = isChallengeMode
+            ? state.earTrainer.challengeDetuneCents
+            : (state.earTrainer.pegTargetCents + state.earTrainer.pegUserCents);
+
+        const beatFreq = calculateBeatFrequency(courseIdx, detuneCents);
+        const isPure = Math.abs(detuneCents) <= 1.2 || beatFreq < 0.15;
+
+        const modFreq = Math.max(0.2, Math.min(12, beatFreq));
+        const carrierCycles = 24;
+
+        // 1. Envoltória modulada de batimento
+        ctx.strokeStyle = isPure ? 'rgba(52, 211, 153, 0.55)' : 'rgba(251, 191, 36, 0.55)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+
+        ctx.beginPath();
+        for (let x = 0; x < w; x += 2) {
+            const t = (x / w) * 2;
+            const env = isPure
+                ? 34
+                : 38 * Math.abs(Math.cos(Math.PI * modFreq * t + (earAudioNodes.animPhase * 0.4)));
+            const yTop = midY - env;
+            if (x === 0) ctx.moveTo(x, yTop);
+            else ctx.lineTo(x, yTop);
+        }
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let x = 0; x < w; x += 2) {
+            const t = (x / w) * 2;
+            const env = isPure
+                ? 34
+                : 38 * Math.abs(Math.cos(Math.PI * modFreq * t + (earAudioNodes.animPhase * 0.4)));
+            const yBot = midY + env;
+            if (x === 0) ctx.moveTo(x, yBot);
+            else ctx.lineTo(x, yBot);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 2. Onda composta resultante
+        ctx.strokeStyle = isPure ? '#34d399' : '#22d3ee';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let x = 0; x < w; x++) {
+            const t = (x / w) * 2;
+            const env = isPure
+                ? 34
+                : 38 * Math.abs(Math.cos(Math.PI * modFreq * t + (earAudioNodes.animPhase * 0.4)));
+            const carrier = Math.sin(2 * Math.PI * carrierCycles * t + earAudioNodes.animPhase);
+            const y = midY + carrier * env;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // 3. Informações textuais técnicas
+        ctx.font = '700 11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left';
+        if (isPure) {
+            ctx.fillStyle = '#34d399';
+            ctx.fillText('● CONSONÂNCIA PURA • ZERO BATIMENTOS (Fase Estável)', 12, 18);
+        } else {
+            ctx.fillStyle = '#fbbf24';
+            const sign = detuneCents > 0 ? '+' : '';
+            ctx.fillText(`● BATIMENTO: ${beatFreq.toFixed(1)} Hz (${beatFreq.toFixed(1)} oscilações/segundo) • Desvio: ${sign}${detuneCents.toFixed(1)} cents`, 12, 18);
+        }
+    }
+
+    function generateEarChallenge() {
+        stopEarTrainerAudio();
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const numCourses = inst.courses.length;
+        let cIdx = state.earTrainer.selectedCourseIdx;
+        if (cIdx < 0 || cIdx >= numCourses) {
+            // Sorteio aleatório entre os pares disponíveis
+            cIdx = Math.floor(Math.random() * numCourses);
+        }
+
+        const diff = state.earTrainer.difficulty || 'intermediate';
+        let detune = 0;
+        const isTunedChance = diff === 'legendary' ? 0.20 : 0.25;
+        const rollTuned = Math.random() < isTunedChance;
+
+        if (!rollTuned) {
+            let minC = 12;
+            let maxC = 25;
+            if (diff === 'beginner') { minC = 25; maxC = 45; }
+            else if (diff === 'advanced') { minC = 5; maxC = 12; }
+            else if (diff === 'legendary') { minC = 1.5; maxC = 4.8; }
+
+            const val = minC + Math.random() * (maxC - minC);
+            const sign = Math.random() < 0.5 ? -1 : 1;
+            detune = parseFloat((sign * val).toFixed(1));
+        }
+
+        state.earTrainer.challengeActive = true;
+        state.earTrainer.challengeCourseIdx = cIdx;
+        state.earTrainer.challengeDetuneCents = detune;
+        state.earTrainer.challengeUserGuess = null;
+        state.earTrainer.challengeRevealed = false;
+        state.earTrainer.challengeIsCorrect = false;
+
+        saveViolaState();
+        renderEarTrainerPanel();
+
+        // Toca automaticamente o par desafiado
+        playEarTrainerSound({
+            courseIdx: cIdx,
+            detuneCents: detune,
+            soundType: state.earTrainer.soundType
+        });
+    }
+
+    function submitEarChallengeAnswer(choice) {
+        if (!state.earTrainer.challengeActive || state.earTrainer.challengeRevealed) return;
+
+        const detune = state.earTrainer.challengeDetuneCents;
+        let correctChoice = 'tuned';
+        if (detune < -2.0) correctChoice = 'flat';
+        else if (detune > 2.0) correctChoice = 'sharp';
+
+        const isCorrect = (choice === correctChoice);
+        state.earTrainer.challengeUserGuess = choice;
+        state.earTrainer.challengeRevealed = true;
+        state.earTrainer.challengeIsCorrect = isCorrect;
+        state.earTrainer.totalTested++;
+
+        if (isCorrect) {
+            state.earTrainer.correctCount++;
+            state.earTrainer.streak++;
+            if (state.earTrainer.streak > state.earTrainer.bestStreak) {
+                state.earTrainer.bestStreak = state.earTrainer.streak;
+            }
+
+            const diff = state.earTrainer.difficulty;
+            let basePts = 15;
+            if (diff === 'beginner') basePts = 10;
+            else if (diff === 'advanced') basePts = 25;
+            else if (diff === 'legendary') basePts = 40;
+
+            const streakBonus = Math.min(25, (state.earTrainer.streak - 1) * 3);
+            state.earTrainer.score += (basePts + streakBonus);
+        } else {
+            state.earTrainer.streak = 0;
+        }
+
+        saveViolaState();
+        renderEarTrainerPanel();
+        renderBeatsCanvas();
+    }
+
+    function playEarComparison(variant) {
+        const cIdx = state.earTrainer.challengeCourseIdx;
+        const detune = state.earTrainer.challengeDetuneCents;
+
+        if (variant === 'detuned') {
+            playEarTrainerSound({ courseIdx: cIdx, detuneCents: detune });
+        } else if (variant === 'ref') {
+            playEarTrainerSound({ courseIdx: cIdx, detuneCents: 0, soloMode: 'ref' });
+        } else if (variant === 'test') {
+            playEarTrainerSound({ courseIdx: cIdx, detuneCents: detune, soloMode: 'test' });
+        } else if (variant === 'pure') {
+            playEarTrainerSound({ courseIdx: cIdx, detuneCents: 0, soloMode: 'pure' });
+        }
+    }
+
+    function startPegChallenge() {
+        stopEarTrainerAudio();
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const numCourses = inst.courses.length;
+        let cIdx = state.earTrainer.selectedCourseIdx;
+        if (cIdx < 0 || cIdx >= numCourses) cIdx = 2; // Padrão Turina
+
+        // Sorteia um desvio alvo entre -38 e +38 cents (fora de [-6, 6] para desafiar)
+        const sign = Math.random() < 0.5 ? -1 : 1;
+        const mag = 10 + Math.random() * 28;
+        const targetCents = parseFloat((sign * mag).toFixed(1));
+
+        state.earTrainer.pegCourseIdx = cIdx;
+        state.earTrainer.pegTargetCents = targetCents;
+        state.earTrainer.pegUserCents = 0;
+        state.earTrainer.pegValidated = false;
+        state.earTrainer.pegResidualError = 0;
+
+        saveViolaState();
+        renderEarTrainerPanel();
+
+        playEarTrainerSound({
+            courseIdx: cIdx,
+            detuneCents: targetCents,
+            soundType: state.earTrainer.soundType
+        });
+    }
+
+    function adjustPegCents(delta) {
+        let nextVal = state.earTrainer.pegUserCents + delta;
+        nextVal = Math.max(-60, Math.min(60, parseFloat(nextVal.toFixed(1))));
+        state.earTrainer.pegUserCents = nextVal;
+        state.earTrainer.pegValidated = false;
+
+        const effectiveDetune = state.earTrainer.pegTargetCents + nextVal;
+        updateEarTrainerDetune(effectiveDetune);
+
+        const valDisplay = document.getElementById('viola-ear-peg-value');
+        if (valDisplay) {
+            const s = nextVal > 0 ? '+' : '';
+            valDisplay.textContent = `${s}${nextVal.toFixed(1)} cents`;
+        }
+        const slider = document.getElementById('viola-ear-peg-slider');
+        if (slider) slider.value = String(nextVal);
+    }
+
+    function validatePegTuning() {
+        const residual = Math.abs(state.earTrainer.pegTargetCents + state.earTrainer.pegUserCents);
+        state.earTrainer.pegResidualError = parseFloat(residual.toFixed(1));
+        state.earTrainer.pegValidated = true;
+        state.earTrainer.totalTested++;
+
+        if (residual <= 2.2) {
+            state.earTrainer.correctCount++;
+            state.earTrainer.streak++;
+            if (state.earTrainer.streak > state.earTrainer.bestStreak) state.earTrainer.bestStreak = state.earTrainer.streak;
+            state.earTrainer.score += 35;
+        } else if (residual <= 6.0) {
+            state.earTrainer.correctCount++;
+            state.earTrainer.streak++;
+            if (state.earTrainer.streak > state.earTrainer.bestStreak) state.earTrainer.bestStreak = state.earTrainer.streak;
+            state.earTrainer.score += 20;
+        } else if (residual <= 11.0) {
+            state.earTrainer.correctCount++;
+            state.earTrainer.score += 10;
+        } else {
+            state.earTrainer.streak = 0;
+        }
+
+        saveViolaState();
+        renderEarTrainerPanel();
+        renderBeatsCanvas();
+    }
+
+    function resetEarTrainerStats() {
+        if (!confirm('Deseja realmente zerar a pontuação e histórico do Treinador Auditivo?')) return;
+        state.earTrainer.score = 0;
+        state.earTrainer.streak = 0;
+        state.earTrainer.bestStreak = 0;
+        state.earTrainer.totalTested = 0;
+        state.earTrainer.correctCount = 0;
+        saveViolaState();
+        renderEarTrainerPanel();
+    }
+
+    function updateEarTrainerPlayButtons() {
+        const toggleBtn = document.getElementById('btn-viola-ear-audio-toggle');
+        if (!toggleBtn) return;
+        if (earAudioNodes.isPlaying) {
+            toggleBtn.className = 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 transition shadow-lg shadow-rose-950/40';
+            toggleBtn.innerHTML = '<i data-lucide="square" class="w-4 h-4"></i><span>Parar Áudio</span>';
+        } else {
+            toggleBtn.className = 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 transition';
+            toggleBtn.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Ouvir Par</span>';
+        }
+        if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(toggleBtn);
+    }
+
+    function renderEarTrainerPanel() {
+        const panel = document.getElementById('viola-ear-trainer-panel');
+        if (!panel) return;
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const isPaired = inst.isPaired;
+        const trainer = state.earTrainer;
+        const rank = getEarTrainerRank(trainer.score);
+        const accuracyPct = trainer.totalTested > 0
+            ? Math.round((trainer.correctCount / trainer.totalTested) * 100)
+            : 0;
+
+        const isChallenge = trainer.mode === 'challenge';
+        const isPeg = trainer.mode === 'peg';
+
+        panel.innerHTML = `
+            <!-- Topo do Módulo & Chaveador de Modo -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/35 flex items-center justify-center text-cyan-300">
+                            <i data-lucide="headphones" class="w-4 h-4"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Treinador Auditivo de Afinação &amp; Pares Oitavados</h3>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Acústica de Batimentos Ondulatórios</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Treine o ouvido absoluto e relativo para detectar microtons em cents e identificar a ressonância pura entre bordões e cantadeiras na Viola e Violão.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                        <button type="button" id="btn-viola-ear-mode-challenge" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${isChallenge ? 'bg-cyan-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
+                            🎯 Desafio Auditivo Cego
+                        </button>
+                        <button type="button" id="btn-viola-ear-mode-peg" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${isPeg ? 'bg-amber-500 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
+                            🔧 Cravelha Manual (Simulador)
+                        </button>
+                    </div>
+
+                    <button type="button" id="btn-viola-ear-audio-toggle" class="min-h-[40px] px-3.5 py-1.5 rounded-lg ${earAudioNodes.isPlaying ? 'bg-rose-600 text-white' : 'bg-cyan-600 text-slate-950'} font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                        <i data-lucide="${earAudioNodes.isPlaying ? 'square' : 'play'}" class="w-4 h-4"></i>
+                        <span>${earAudioNodes.isPlaying ? 'Parar Áudio' : 'Ouvir Par'}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Placar de Maestria do Violeiro & Métricas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#090d16] border border-slate-800 rounded-xl p-3.5">
+                <div class="space-y-1">
+                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Patente do Violeiro</div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded text-xs font-bold font-mono border ${rank.colorClass}">${rank.badge}</span>
+                        <span class="text-xs font-semibold text-slate-200 truncate">${rank.title}</span>
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-mono mt-1">${rank.nextGoal}</div>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Pontuação Total</div>
+                    <div class="text-xl font-bold font-mono text-cyan-300">${trainer.score} <span class="text-xs font-normal text-slate-400">pts</span></div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1">
+                        <div class="bg-cyan-400 h-full transition-all duration-300" style="width: ${rank.progressPct}%"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Sequência Atual (Streak)</div>
+                    <div class="text-xl font-bold font-mono ${trainer.streak > 2 ? 'text-amber-400' : 'text-slate-200'} flex items-center gap-1">
+                        <span>${trainer.streak > 0 ? `🔥 ${trainer.streak}` : '0'}</span>
+                        <span class="text-xs font-normal text-slate-500">acertos seguidos</span>
+                    </div>
+                    <div class="text-[10px] font-mono text-slate-400">Recorde Histórico: <strong class="text-slate-200">${trainer.bestStreak}</strong></div>
+                </div>
+
+                <div class="space-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Precisão Auditiva</div>
+                        <div class="text-xl font-bold font-mono text-emerald-400">${accuracyPct}% <span class="text-xs font-normal text-slate-500">(${trainer.correctCount}/${trainer.totalTested})</span></div>
+                    </div>
+                    <div class="text-right">
+                        <button type="button" id="btn-viola-ear-reset-stats" class="text-[10px] font-mono text-slate-500 hover:text-rose-400 underline transition">Zerar Estatísticas</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seletores de Configuração (Par, Dificuldade e Timbre) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 bg-[#090d16] border border-slate-800/80 rounded-xl p-3">
+                <div>
+                    <label class="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">Par / Corda Alvo</label>
+                    <select id="viola-ear-course-select" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-slate-200 focus:border-cyan-500">
+                        <option value="-1" ${trainer.selectedCourseIdx === -1 ? 'selected' : ''}>🎲 Qualquer Par (Sorteio Aleatório)</option>
+                        ${inst.courses.map((c, idx) => {
+                            const desc = c.octaved ? 'Oitavado (Bordão + Requinta)' : 'Uníssono Puro';
+                            return `<option value="${idx}" ${trainer.selectedCourseIdx === idx ? 'selected' : ''}>${c.label} — ${c.note} (${desc})</option>`;
+                        }).join('')}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">Dificuldade Perceptiva</label>
+                    <select id="viola-ear-diff-select" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-slate-200 focus:border-cyan-500">
+                        <option value="beginner" ${trainer.difficulty === 'beginner' ? 'selected' : ''}>🌾 Iniciante (±25 a ±45 cents)</option>
+                        <option value="intermediate" ${trainer.difficulty === 'intermediate' ? 'selected' : ''}>🐂 Boiadeiro (±12 a ±25 cents)</option>
+                        <option value="advanced" ${trainer.difficulty === 'advanced' ? 'selected' : ''}>🪕 Mestre Violeiro (±5 a ±12 cents)</option>
+                        <option value="legendary" ${trainer.difficulty === 'legendary' ? 'selected' : ''}>👑 Tião Carreiro (±1.5 a ±5 cents)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">Emissão Acústica</label>
+                    <select id="viola-ear-sound-select" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-slate-200 focus:border-cyan-500">
+                        <option value="pluck" ${trainer.soundType === 'pluck' ? 'selected' : ''}>🪕 Dedilhado Periódico Caipira (Pluck)</option>
+                        <option value="drone" ${trainer.soundType === 'drone' ? 'selected' : ''}>🔊 Ressonância Contínua (Drone)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Visualizador Osciloscópico de Batimentos Acústicos -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] font-mono">
+                    <span class="text-slate-400">Interferência Ondulatória Acústica:</span>
+                    <span class="text-slate-500">Batimento = |f₁ - f₂| • Modulação de Envoltória</span>
+                </div>
+                <div class="relative w-full rounded-lg overflow-hidden border border-slate-800 bg-[#070b12]">
+                    <canvas id="viola-beats-canvas" width="680" height="110" class="w-full h-[110px] block"></canvas>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO ESPECÍFICO DO MODO SELECIONADO -->
+            ${isChallenge ? renderChallengeBody(trainer, inst) : renderPegBody(trainer, inst)}
+        `;
+
+        bindEarTrainerEvents(panel);
+        renderBeatsCanvas();
+        if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(panel);
+    }
+
+    function renderChallengeBody(trainer, inst) {
+        const activeCourse = inst.courses[trainer.challengeCourseIdx] || inst.courses[2];
+        const isOctaved = inst.isPaired && activeCourse.octaved;
+        const octDesc = isOctaved
+            ? 'Par Oitavado (Bordão grave vs Cantadeira fina)'
+            : 'Par Uníssono (Duas cordas na mesma altura)';
+
+        return `
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold tracking-wider bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                                Desafio Auditivo Cego
+                            </span>
+                            <span class="text-xs font-mono text-slate-300">Par: <strong class="text-cyan-300">${activeCourse.label}</strong> (${activeCourse.note})</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">${octDesc} — Ouça a oscilação acústica e determine se a corda móvel está abaixo, afinada ou acima.</p>
+                    </div>
+
+                    <button type="button" id="btn-viola-ear-new-challenge" class="min-h-[40px] px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 transition shrink-0">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Novo Desafio de Ouvido</span>
+                    </button>
+                </div>
+
+                ${!trainer.challengeActive ? `
+                    <div class="text-center py-6 space-y-2">
+                        <p class="text-xs font-mono text-slate-400">Pressione o botão acima para iniciar um novo desafio auditivo às cegas.</p>
+                        <p class="text-[11px] text-slate-500">O sistema gerará uma desafinação controlada em microtons e tocará o par.</p>
+                    </div>
+                ` : `
+                    <!-- Botões de Resposta do Teste Cego -->
+                    <div class="space-y-2">
+                        <div class="text-xs font-mono text-slate-300 font-semibold text-center sm:text-left">
+                            Qual é o estado de afinação da corda móvel?
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                            <button type="button" data-ear-guess="flat" ${trainer.challengeRevealed ? 'disabled' : ''}
+                                class="min-h-[50px] px-3 py-2.5 rounded-xl border text-center transition flex flex-col items-center justify-center gap-0.5 ${
+                                    trainer.challengeRevealed
+                                        ? (trainer.challengeDetuneCents < -2.0 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-slate-900 border-slate-800 text-slate-600 opacity-60')
+                                        : 'bg-slate-900/90 hover:bg-slate-800 border-slate-700 hover:border-cyan-400 text-slate-200'
+                                }">
+                                <span class="text-base font-bold text-sky-400">🔻 Abaixo do Tom</span>
+                                <span class="text-[10px] font-mono text-slate-400">Flat / Grave (Desafinado para baixo)</span>
+                            </button>
+
+                            <button type="button" data-ear-guess="tuned" ${trainer.challengeRevealed ? 'disabled' : ''}
+                                class="min-h-[50px] px-3 py-2.5 rounded-xl border text-center transition flex flex-col items-center justify-center gap-0.5 ${
+                                    trainer.challengeRevealed
+                                        ? (Math.abs(trainer.challengeDetuneCents) <= 2.0 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-slate-900 border-slate-800 text-slate-600 opacity-60')
+                                        : 'bg-slate-900/90 hover:bg-slate-800 border-slate-700 hover:border-emerald-400 text-slate-200'
+                                }">
+                                <span class="text-base font-bold text-emerald-400">🎯 Consonância Pura</span>
+                                <span class="text-[10px] font-mono text-slate-400">In Tune (Perfeitamente Afinado • 0 batimentos)</span>
+                            </button>
+
+                            <button type="button" data-ear-guess="sharp" ${trainer.challengeRevealed ? 'disabled' : ''}
+                                class="min-h-[50px] px-3 py-2.5 rounded-xl border text-center transition flex flex-col items-center justify-center gap-0.5 ${
+                                    trainer.challengeRevealed
+                                        ? (trainer.challengeDetuneCents > 2.0 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-slate-900 border-slate-800 text-slate-600 opacity-60')
+                                        : 'bg-slate-900/90 hover:bg-slate-800 border-slate-700 hover:border-rose-400 text-slate-200'
+                                }">
+                                <span class="text-base font-bold text-amber-400">🔺 Acima do Tom</span>
+                                <span class="text-[10px] font-mono text-slate-400">Sharp / Agudo (Desafinado para cima)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Detalhado & Escuta Comparativa -->
+                    ${trainer.challengeRevealed ? `
+                        <div class="bg-[#0f172a] border ${trainer.challengeIsCorrect ? 'border-emerald-500/40 bg-emerald-950/15' : 'border-rose-500/40 bg-rose-950/15'} rounded-xl p-4 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg">${trainer.challengeIsCorrect ? '🎯' : '❌'}</span>
+                                    <div>
+                                        <div class="text-xs font-bold font-mono ${trainer.challengeIsCorrect ? 'text-emerald-300' : 'text-rose-300'}">
+                                            ${trainer.challengeIsCorrect ? 'Parabéns, resposta exata!' : 'Não foi dessa vez! Continue apurando seu ouvido.'}
+                                        </div>
+                                        <div class="text-[11px] text-slate-300 mt-0.5">
+                                            Desvio real medido: <strong class="font-mono ${trainer.challengeDetuneCents > 0 ? 'text-amber-300' : (trainer.challengeDetuneCents < 0 ? 'text-sky-300' : 'text-emerald-300')}">
+                                                ${trainer.challengeDetuneCents > 0 ? '+' : ''}${trainer.challengeDetuneCents.toFixed(1)} cents
+                                            </strong>
+                                            • Frequência de Batimento: <strong class="font-mono text-cyan-300">${calculateBeatFrequency(trainer.challengeCourseIdx, trainer.challengeDetuneCents).toFixed(1)} Hz</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" id="btn-viola-ear-next-challenge" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                                    <span>Próximo Desafio</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+
+                            <!-- Botões de Escuta Comparativa Ponto a Ponto -->
+                            <div class="pt-2 border-t border-slate-800/80">
+                                <div class="text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1.5">Laboratório de Escuta Comparativa:</div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <button type="button" data-ear-compare="detuned" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 transition text-center">
+                                        🎧 Par Desafinado
+                                    </button>
+                                    <button type="button" data-ear-compare="ref" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 transition text-center">
+                                        🎵 Só Bordão Puro
+                                    </button>
+                                    <button type="button" data-ear-compare="test" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 transition text-center">
+                                        🪕 Só Cantadeira
+                                    </button>
+                                    <button type="button" data-ear-compare="pure" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-mono text-emerald-200 transition text-center font-bold">
+                                        ✨ Consonância Pura
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                `}
+            </div>
+        `;
+    }
+
+    function renderPegBody(trainer, inst) {
+        const activeCourse = inst.courses[trainer.pegCourseIdx] || inst.courses[2];
+        const isOctaved = inst.isPaired && activeCourse.octaved;
+        const currentDetune = trainer.pegTargetCents + trainer.pegUserCents;
+        const sign = trainer.pegUserCents > 0 ? '+' : '';
+        const handAdvice = state.isLeftHanded
+            ? 'Ergonomia Canhota: Mão Direita apoia o braço e gira a cravelha no topo; Mão Esquerda dedilha no tampo.'
+            : 'Ergonomia Destra: Mão Esquerda apoia o braço e gira a cravelha; Mão Direita dedilha no tampo.';
+
+        return `
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                                Simulador de Cravelha Manual
+                            </span>
+                            <span class="text-xs font-mono text-slate-300">Afinando: <strong class="text-amber-300">${activeCourse.label}</strong> (${activeCourse.note})</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">${handAdvice}</p>
+                    </div>
+
+                    <button type="button" id="btn-viola-ear-new-peg" class="min-h-[40px] px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 transition shrink-0">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        <span>Desafinar Corda Aleatoriamente</span>
+                    </button>
+                </div>
+
+                <!-- Controle Tátil da Cravelha -->
+                <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <span class="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">Giro da Cravelha (Apertar / Soltar)</span>
+                            <p class="text-[11px] text-slate-400">Gire a cravelha até que a modulação do batimento desacelere e atinja consonância cristalina pura.</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] font-mono text-slate-400 uppercase">Compensação Aplicada:</span>
+                            <div id="viola-ear-peg-value" class="text-lg font-mono font-bold text-amber-300">${sign}${trainer.pegUserCents.toFixed(1)} cents</div>
+                        </div>
+                    </div>
+
+                    <!-- Slider de Ajuste Contínuo -->
+                    <input type="range" id="viola-ear-peg-slider" min="-60" max="60" step="0.5" value="${trainer.pegUserCents}"
+                        class="w-full accent-amber-400 cursor-pointer">
+
+                    <!-- Botões de Micro-Ajuste em Cents -->
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-1">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button type="button" data-peg-delta="-5" class="min-h-[36px] px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200 transition">−5 cents</button>
+                            <button type="button" data-peg-delta="-1" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200 transition">−1</button>
+                            <button type="button" id="btn-peg-zero" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-400 transition">0 (Centro)</button>
+                            <button type="button" data-peg-delta="1" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200 transition">+1</button>
+                            <button type="button" data-peg-delta="5" class="min-h-[36px] px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200 transition">+5 cents</button>
+                        </div>
+
+                        <button type="button" id="btn-viola-ear-validate-peg" class="min-h-[40px] px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="check-check" class="w-4 h-4"></i>
+                            <span>Travar Cravelha &amp; Validar Afinação</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feedback de Validação da Cravelha -->
+                ${trainer.pegValidated ? `
+                    <div class="bg-[#0f172a] border ${trainer.pegResidualError <= 5.0 ? 'border-emerald-500/40 bg-emerald-950/20' : 'border-amber-500/40 bg-amber-950/20'} rounded-xl p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">${trainer.pegResidualError <= 2.2 ? '🏆' : (trainer.pegResidualError <= 5.0 ? '✨' : '⚠️')}</span>
+                                <div>
+                                    <div class="text-xs font-bold font-mono ${trainer.pegResidualError <= 5.0 ? 'text-emerald-300' : 'text-amber-300'}">
+                                        ${trainer.pegResidualError <= 2.2 ? 'Ouvido Absoluto de Mestre Violeiro! Consonância pura impecável.' : (trainer.pegResidualError <= 5.0 ? 'Excelente Afinação! Corda perfeitamente pronta para o ponteio.' : 'Ainda há batimento perceptível. Ajuste fino necessário.')}
+                                    </div>
+                                    <div class="text-[11px] text-slate-300 mt-0.5">
+                                        Erro residual: <strong class="font-mono text-cyan-300">${trainer.pegResidualError} cents</strong>
+                                        • Batimento resultante: <strong class="font-mono text-amber-300">${calculateBeatFrequency(trainer.pegCourseIdx, currentDetune).toFixed(1)} Hz</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" id="btn-viola-ear-next-peg" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                                <span>Afinar Próxima Corda</span>
+                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    function bindEarTrainerEvents(panel) {
+        // Alternância de Modo (Desafio Cego vs Cravelha Manual)
+        const btnChallenge = panel.querySelector('#btn-viola-ear-mode-challenge');
+        const btnPeg = panel.querySelector('#btn-viola-ear-mode-peg');
+        if (btnChallenge) {
+            btnChallenge.addEventListener('click', () => {
+                if (state.earTrainer.mode !== 'challenge') {
+                    stopEarTrainerAudio();
+                    state.earTrainer.mode = 'challenge';
+                    saveViolaState();
+                    renderEarTrainerPanel();
+                }
+            });
+        }
+        if (btnPeg) {
+            btnPeg.addEventListener('click', () => {
+                if (state.earTrainer.mode !== 'peg') {
+                    stopEarTrainerAudio();
+                    state.earTrainer.mode = 'peg';
+                    saveViolaState();
+                    renderEarTrainerPanel();
+                }
+            });
+        }
+
+        // Botão Tocar / Parar Áudio
+        const btnAudioToggle = panel.querySelector('#btn-viola-ear-audio-toggle');
+        if (btnAudioToggle) {
+            btnAudioToggle.addEventListener('click', () => {
+                if (earAudioNodes.isPlaying) {
+                    stopEarTrainerAudio();
+                } else {
+                    if (state.earTrainer.mode === 'challenge') {
+                        if (!state.earTrainer.challengeActive) {
+                            generateEarChallenge();
+                        } else {
+                            playEarTrainerSound({
+                                courseIdx: state.earTrainer.challengeCourseIdx,
+                                detuneCents: state.earTrainer.challengeDetuneCents,
+                                soundType: state.earTrainer.soundType
+                            });
+                        }
+                    } else {
+                        playEarTrainerSound({
+                            courseIdx: state.earTrainer.pegCourseIdx,
+                            detuneCents: state.earTrainer.pegTargetCents + state.earTrainer.pegUserCents,
+                            soundType: state.earTrainer.soundType
+                        });
+                    }
+                }
+            });
+        }
+
+        // Seletores de Configuração
+        const courseSel = panel.querySelector('#viola-ear-course-select');
+        if (courseSel) {
+            courseSel.addEventListener('change', (e) => {
+                stopEarTrainerAudio();
+                state.earTrainer.selectedCourseIdx = parseInt(e.target.value, 10);
+                saveViolaState();
+                renderEarTrainerPanel();
+            });
+        }
+
+        const diffSel = panel.querySelector('#viola-ear-diff-select');
+        if (diffSel) {
+            diffSel.addEventListener('change', (e) => {
+                state.earTrainer.difficulty = e.target.value;
+                saveViolaState();
+            });
+        }
+
+        const soundSel = panel.querySelector('#viola-ear-sound-select');
+        if (soundSel) {
+            soundSel.addEventListener('change', (e) => {
+                state.earTrainer.soundType = e.target.value;
+                saveViolaState();
+                if (earAudioNodes.isPlaying) {
+                    const cIdx = state.earTrainer.mode === 'challenge'
+                        ? state.earTrainer.challengeCourseIdx
+                        : state.earTrainer.pegCourseIdx;
+                    const detune = state.earTrainer.mode === 'challenge'
+                        ? state.earTrainer.challengeDetuneCents
+                        : (state.earTrainer.pegTargetCents + state.earTrainer.pegUserCents);
+                    playEarTrainerSound({ courseIdx: cIdx, detuneCents: detune, soundType: e.target.value });
+                }
+            });
+        }
+
+        // Zerar Estatísticas
+        const resetBtn = panel.querySelector('#btn-viola-ear-reset-stats');
+        if (resetBtn) resetBtn.addEventListener('click', resetEarTrainerStats);
+
+        // Modo Desafio Cego
+        const newChallengeBtn = panel.querySelector('#btn-viola-ear-new-challenge');
+        if (newChallengeBtn) newChallengeBtn.addEventListener('click', generateEarChallenge);
+
+        const nextChallengeBtn = panel.querySelector('#btn-viola-ear-next-challenge');
+        if (nextChallengeBtn) nextChallengeBtn.addEventListener('click', generateEarChallenge);
+
+        panel.querySelectorAll('[data-ear-guess]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const guess = btn.getAttribute('data-ear-guess');
+                submitEarChallengeAnswer(guess);
+            });
+        });
+
+        panel.querySelectorAll('[data-ear-compare]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const comp = btn.getAttribute('data-ear-compare');
+                playEarComparison(comp);
+            });
+        });
+
+        // Modo Cravelha Manual
+        const newPegBtn = panel.querySelector('#btn-viola-ear-new-peg');
+        if (newPegBtn) newPegBtn.addEventListener('click', startPegChallenge);
+
+        const nextPegBtn = panel.querySelector('#btn-viola-ear-next-peg');
+        if (nextPegBtn) nextPegBtn.addEventListener('click', startPegChallenge);
+
+        const pegSlider = panel.querySelector('#viola-ear-peg-slider');
+        if (pegSlider) {
+            pegSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                state.earTrainer.pegUserCents = val;
+                state.earTrainer.pegValidated = false;
+                const effective = state.earTrainer.pegTargetCents + val;
+                updateEarTrainerDetune(effective);
+                const valDisplay = panel.querySelector('#viola-ear-peg-value');
+                if (valDisplay) {
+                    const s = val > 0 ? '+' : '';
+                    valDisplay.textContent = `${s}${val.toFixed(1)} cents`;
+                }
+            });
+        }
+
+        panel.querySelectorAll('[data-peg-delta]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const delta = parseFloat(btn.getAttribute('data-peg-delta'));
+                adjustPegCents(delta);
+            });
+        });
+
+        const zeroBtn = panel.querySelector('#btn-peg-zero');
+        if (zeroBtn) {
+            zeroBtn.addEventListener('click', () => {
+                adjustPegCents(-state.earTrainer.pegUserCents);
+            });
+        }
+
+        const validatePegBtn = panel.querySelector('#btn-viola-ear-validate-peg');
+        if (validatePegBtn) validatePegBtn.addEventListener('click', validatePegTuning);
+    }
+
+    // =========================================================================
     // BIBLIOTECA DE RITMOS TRADICIONAIS CAIPIRAS & LEVADAS DE VIOLA E VIOLÃO
     // =========================================================================
     const CAIPIRA_RHYTHMS = {
@@ -2873,6 +4006,15 @@
             if (!Array.isArray(state.reverseFretsViolao) || state.reverseFretsViolao.length !== 6) {
                 state.reverseFretsViolao = [0, 0, 1, 2, 2, 0];
             }
+            if (saved.earTrainer && typeof saved.earTrainer === 'object') {
+                state.earTrainer = Object.assign({}, DEFAULT_EAR_TRAINER_STATE, saved.earTrainer);
+            } else {
+                state.earTrainer = Object.assign({}, DEFAULT_EAR_TRAINER_STATE);
+            }
+            // Reseta variáveis transitórias de sessão do treinador auditivo
+            state.earTrainer.challengeActive = false;
+            state.earTrainer.challengeRevealed = false;
+            state.earTrainer.pegValidated = false;
         }
     }
 
@@ -2943,6 +4085,9 @@
                     </div>
                     <div id="viola-tuner-buttons" class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-6 gap-2 pt-1"></div>
                 </div>
+
+                <!-- Treinador Auditivo de Afinação & Pares Oitavados (Fase 5) -->
+                <div id="viola-ear-trainer-panel" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4"></div>
 
                 <!-- Braço Interativo SVG -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-3">
@@ -3396,6 +4541,7 @@
             stopPonteioPlayback();
             stopProgressionPlayback();
             stopTunerTone();
+            stopEarTrainerAudio();
             state.instrumentId = e.target.value;
             state.voicingVariantIdx = 0;
             saveViolaState();
@@ -3634,6 +4780,7 @@
     function renderAll() {
         syncControlValues();
         renderTunerButtons();
+        renderEarTrainerPanel();
         renderFretboardSVG();
         renderHarmonicFieldPanel();
         renderDuadStrip();

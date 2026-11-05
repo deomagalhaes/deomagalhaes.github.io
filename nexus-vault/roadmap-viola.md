@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 5 — Treinador Auditivo de Afinação e Pares Oitavados
+## 🎯 Projeto Prioritário Atual: Fase 6 — Biblioteca Expandida de Ponteios e Intros Clássicas de Viola Caipira
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Criar módulo de treino perceptivo auditivo voltado para as peculiaridades acústicas da Viola Caipira: pares 1º e 2º uníssonos e pares 3º, 4º e 5º oitavados (corda fina aguda + corda grossa bordão).
-  2. Implementar gerador de batimentos acústicos (acoustic beats / interferência ondulatória) via Web Audio com controle de desafinação em cents (microtons), desafiando o músico a identificar se o par está baixo (flat), alto (sharp) ou perfeitamente afinado em consonância pura.
-  3. Painel de pontuação e progresso auditivo progressivo (Iniciante, Boiadeiro, Mestre Violeiro).
+  1. Mapear e expandir o repertório de ponteios e introduções clássicas com afinação Cebolão em Mi e Cebolão em Ré (ex: *Chico Mineiro*, *Rei do Gado*, *Vaca Estrela e Boi Fubá*, *Ferrugem*, *A Vaca Já Foi Pro Brejo*, *Pagode do Tião*).
+  2. Implementar reprodutor interativo passo a passo nota a nota e por compasso com visualização sincronizada no braço SVG (modo Canhoto e Destro) e controle de velocidade para estudo lento (50%, 75%, 100%).
+  3. Adicionar renderizador de tablaturas interativas com dedilhado de polegar e indicador destacados.
 
 ---
 
@@ -22,16 +22,33 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Adicionados padrões percussivos e de palhetada com áudio sintetizado para: *Cururu*, *Pagode de Viola*, *Cateretê*, *Guarânia*, *Toada* e *Querência*.
 2. **[x] Dicionário e Buscador Reverso de Acordes (Canhoto & Destro):**
    - Motor de dedução harmônica algorítmica a partir de digitações livres nas casas ou no braço SVG, identificação de inversões, funções modais caipiras, dedilhado Web Audio e presets curados.
-3. **[ ] Treinador Auditivo de Afinação e Pares Oitavados:**
-   - Exercício interativo para afinar de ouvido os pares 3º, 4º e 5º (oitavados) e 1º e 2º (uníssonos) com simulação de batimentos e cents.
+3. **[x] Treinador Auditivo de Afinação e Pares Oitavados (Acoustic Beats Ear Trainer):**
+   - Módulo completo de treino perceptivo com simulação física de batimentos acústicos, teste cego em 4 níveis de dificuldade, simulador de cravelha manual em cents, osciloscópio de envoltória em Canvas e patentes de violeiro (Iniciante até Tião Carreiro).
 4. **[ ] Biblioteca Expandida de Ponteios e Intros Clássicas:**
-   - Mapeamento e reprodução passo a passo de ponteios tradicionais nas terças e sextas com visualização sincronizada no braço.
+   - Mapeamento e reprodução passo a passo de ponteios tradicionais nas terças e sextas com visualização sincronizada no braço e controle de andamento.
 5. **[ ] Gerador / Exportador de Tablaturas e Cifras:**
    - Permitir salvar sequências harmônicas montadas em formato de tablatura e diagrama imprimível.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **05/11/2026 — Sessão 5** (Fase 5 Concluída):
+  - **Treinador Auditivo de Afinação & Pares Oitavados (Acoustic Beats Ear Trainer)**:
+    - **Síntese Web Audio de Batimentos Acústicos**:
+      - Modelagem física da interferência ondulatória entre cordas de referência e cordas com desafinação controlada em cents (microtons).
+      - Tratamento acústico específico para pares uníssonos (1º Prima e 2º Segundinha) e pares oitavados (3º Turina, 4º Toeira e 5º Canotilho: bordão grave fundamental com reforço no 2º harmônico gerando interferência audível com a cantadeira fina aguda).
+      - Dois modos de emissão sonora: *Dedilhado Caipira Periódico (Pluck)* com ataque rápido e decaimento natural a cada 2.2s, e *Ressonância Contínua (Drone)* para escuta analítica ininterrupta.
+    - **Dois Modos Didáticos de Treino**:
+      - *Modo 1: Desafio Auditivo Cego (Ear Training)*: teste cego com 4 patentes de dificuldade (Iniciante da Roça: ±25 a ±45 cents, Boiadeiro Afinador: ±12 a ±25 cents, Mestre Violeiro: ±5 a ±12 cents, Tião Carreiro Lendário: ±1.5 a ±5 cents). O usuário avalia se a corda está Abaixo (Flat), em Consonância Pura (0 cents) ou Acima (Sharp), com feedback técnico imediato, cálculo da frequência de batimento ($f_{\text{beat}} = |f_1 - f_2|$) e 4 botões de escuta comparativa (par desafinado, só bordão puro, só cantadeira, par em consonância pura).
+      - *Modo 2: Simulador de Cravelha Manual*: afinação tátil em tempo real com slider contínuo de -60 a +60 cents e botões de micro-ajuste (±1, ±5 cents), permitindo ouvir o batimento desacelerar até zerar em tempo real e validando a afinação com cálculo de erro residual em cents e medalhas de mérito.
+    - **Visualizador Osciloscópico de Batimentos em Canvas**:
+      - Canvas animado em tempo real com `requestAnimationFrame` renderizando a onda composta resultante e a envoltória de modulação de amplitude.
+      - Cortina de radar sensorial às cegas durante os testes não revelados e iluminação verde neon na consonância pura.
+    - **Sistema de Maestria, Ranks e Gamificação Caipira**:
+      - Patentes: *Iniciante da Roça*, *Peão Violeiro*, *Boiadeiro Afinador*, *Mestre Violeiro de Folia* e *Tião Carreiro Lendário*.
+      - Pontuação progressiva, bônus multiplicador por sequências de acertos (Streak), taxa de precisão percentual e persistência em LocalStorage via `VaultCore`.
+      - Orientações ergonômicas integradas para tocadores Canhotos (Pestana à direita) e Destros.
 
 - **03/11/2026 — Sessão 4** (Fase 4 Concluída):
   - **Dicionário e Buscador Reverso de Acordes (Canhoto & Destro)**:

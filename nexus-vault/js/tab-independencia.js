@@ -2531,7 +2531,22 @@
     global.VaultTabIndependencia = {
         init,
         computeFinancialModel,
-        fetchLiveMarketData
+        computeExpenseCascade,
+        computeStressTest,
+        computeAporteAllocation,
+        computeAporteByTickers,
+        fetchLiveMarketData,
+        runMonteCarloSimulation,
+        getInputs: () => inputs,
+        setInputs: (newInputs) => {
+            inputs = Object.assign({}, inputs, newInputs);
+            saveInputs();
+            renderSubTabContent();
+        },
+        getLiveMarketData: () => liveMarketData,
+        getLiveMarketStatus: () => liveMarketStatus,
+        DEFAULT_INPUTS,
+        TICKER_DIRECTORY
     };
     global.VaultTabFinancas = global.VaultTabIndependencia;
 })(window);
