@@ -362,19 +362,63 @@
         netBadge.textContent = `Vantagem Estratégica: ${netAdvantage >= 0 ? '+' : ''}${netAdvantage} pts`;
     }
 
-    function renderDesfusaoHistory() {
+    function renderDesfusaoHistory(filterText = '') {
         const listEl = document.getElementById('df-history-list');
         const cntEl = document.getElementById('df-history-count');
+        const metricsEl = document.getElementById('df-history-metrics-bar');
         if (!listEl || !cntEl) return;
         const C = global.VaultCore;
 
-        cntEl.textContent = `${desfusaoHistory.length} registro${desfusaoHistory.length === 1 ? '' : 's'}`;
-        if (desfusaoHistory.length === 0) {
+        const totalCount = desfusaoHistory.length;
+        cntEl.textContent = `${totalCount} registro${totalCount === 1 ? '' : 's'}`;
+
+        if (metricsEl) {
+            if (totalCount === 0) {
+                metricsEl.innerHTML = '';
+            } else {
+                const sumAuto = desfusaoHistory.reduce((acc, i) => acc + (Number(i.autonomicLevel) || 5), 0);
+                const avgAuto = (sumAuto / totalCount).toFixed(1);
+                const passedFull = desfusaoHistory.filter(i => (i.checksPassed || 0) >= 3).length;
+                const shieldRate = Math.round((passedFull / totalCount) * 100);
+                metricsEl.innerHTML = `
+                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">Vereditos Registrados</div>
+                        <div class="text-sm font-bold text-cyan-300">${totalCount}</div>
+                    </div>
+                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">Ativação Média</div>
+                        <div class="text-sm font-bold text-amber-300">${avgAuto}/10</div>
+                    </div>
+                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center col-span-2 sm:col-span-1">
+                        <div class="text-[10px] text-slate-400">Blindagem Familiar</div>
+                        <div class="text-sm font-bold text-emerald-300">${shieldRate}% preservada</div>
+                    </div>
+                `;
+            }
+        }
+
+        if (totalCount === 0) {
             listEl.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Nenhum protocolo salvo ainda neste dispositivo.</p>`;
             return;
         }
 
-        listEl.innerHTML = desfusaoHistory.map((item) => `
+        const q = String(filterText || '').toLowerCase().trim();
+        const filtered = q
+            ? desfusaoHistory.filter(item =>
+                (item.strictFact && item.strictFact.toLowerCase().includes(q)) ||
+                (item.emotionalReading && item.emotionalReading.toLowerCase().includes(q)) ||
+                (item.doAction && item.doAction.toLowerCase().includes(q)) ||
+                (item.dontAction && item.dontAction.toLowerCase().includes(q)) ||
+                (item.date && item.date.includes(q))
+              )
+            : desfusaoHistory;
+
+        if (filtered.length === 0) {
+            listEl.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Nenhum veredito encontrado para "${C.esc(filterText)}".</p>`;
+            return;
+        }
+
+        listEl.innerHTML = filtered.map((item) => `
             <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div class="space-y-1 min-w-0">
                     <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
@@ -428,13 +472,35 @@
                 const id = btn.getAttribute('data-df-del');
                 desfusaoHistory = desfusaoHistory.filter((x) => x.id !== id);
                 saveDesfusaoHistory();
-                renderDesfusaoHistory();
+                renderDesfusaoHistory(document.getElementById('df-history-search') ? document.getElementById('df-history-search').value : '');
             });
         });
     }
 
     function bindDesfusaoEvents() {
         const C = global.VaultCore;
+
+        const searchInp = document.getElementById('df-history-search');
+        if (searchInp) {
+            searchInp.addEventListener('input', (e) => {
+                renderDesfusaoHistory(e.target.value);
+            });
+        }
+
+        document.querySelectorAll('[data-df-quick-chip]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const phrase = btn.getAttribute('data-df-quick-chip');
+                const emoArea = document.getElementById('df-emotional-reading');
+                if (emoArea) {
+                    if (!emoArea.value.trim()) {
+                        emoArea.value = phrase;
+                    } else if (!emoArea.value.includes(phrase)) {
+                        emoArea.value = phrase + ' ' + emoArea.value.trim();
+                    }
+                    emoArea.focus();
+                }
+            });
+        });
 
         const labelInput = document.getElementById('df-profile-label');
         labelInput.addEventListener('input', (e) => {
