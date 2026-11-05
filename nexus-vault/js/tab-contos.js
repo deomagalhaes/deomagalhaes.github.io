@@ -4,8 +4,8 @@
  * 100% Client-Side • Zero-Backend • LGPD Compliant • Leitor Âmbar Offline Low-Blue-Light
  *
  * Módulos Integrados:
- * 1. Banco Expandido de 18 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
- * 2. 9 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
+ * 1. Banco Expandido de 32 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
+ * 2. 12 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
  * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos
  * 4. Sintetizador Acústico Web Audio API Pré-Sono (Ruído Marrom, Chuva Mansa, Ondas, Grilos) com Sleep Timer
  * 5. Leitor Âmbar Imersivo com Paletas Térmicas Melatonina, Auto-Scroll Lento e Gestão de Favoritos Local
@@ -1000,7 +1000,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pediatria do Sono &amp; Regulação Afetiva</span>
-                            <span class="text-xs font-mono text-slate-400">18 Metáforas Comportamentais</span>
+                            <span class="text-xs font-mono text-slate-400">32 Metáforas Comportamentais &amp; 12 Biomas</span>
                         </div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gerador Estruturado de Cenas Terapêuticas &amp; Contos Noturnos</h2>
                     </div>
@@ -1033,7 +1033,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (18 Metáforas Clínicas) *</label>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (32 Metáforas Clínicas) *</label>
                                 <select id="ct-theme" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-300">
                                     ${Object.entries(STORY_THEMES).map(([k, v]) => `
                                         <option value="${k}">${v.label}</option>

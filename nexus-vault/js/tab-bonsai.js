@@ -899,6 +899,23 @@
             badgeCls = 'bg-slate-700/50 text-slate-300 border-slate-600';
         }
 
+        let nextBoundaryAge = 7.38;
+        let nextPhaseName = 'Quarto Crescente';
+        if (moonAge < 7.38) {
+            nextBoundaryAge = 7.38;
+            nextPhaseName = 'Quarto Crescente';
+        } else if (moonAge < 14.77) {
+            nextBoundaryAge = 14.77;
+            nextPhaseName = 'Lua Cheia';
+        } else if (moonAge < 22.15) {
+            nextBoundaryAge = 22.15;
+            nextPhaseName = 'Quarto Minguante';
+        } else {
+            nextBoundaryAge = 29.53;
+            nextPhaseName = 'Lua Nova';
+        }
+        const daysToNextPhase = Math.max(0.5, Number((nextBoundaryAge - moonAge).toFixed(1)));
+
         return {
             moonAge: Number(moonAge.toFixed(1)),
             illumination,
@@ -906,7 +923,10 @@
             phaseGroup,
             phaseIcon,
             sapDynamic,
-            badgeCls
+            badgeCls,
+            daysToNextPhase,
+            nextPhaseName,
+            optimalWindowDays: Math.round(daysToNextPhase)
         };
     }
 
@@ -1279,6 +1299,98 @@
                 'Manter sol pleno diário para potencializar a fotossíntese e a conversão de carboidratos florais.'
             ],
             biologicalNote: 'O balanço NPK direcionado para P e K estimula a síntese de florígeno e reduz a dominância vegetativa de brotos verdes longos, convertendo gemas foliares em gemas florais férteis.'
+        },
+        {
+            id: 'PODA_ESTRUTURAL_INVERNO',
+            category: 'PODA_DRASTICA',
+            categoryBadge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+            title: 'Poda Estrutural de Inverno & Seleção de Ramos Primários',
+            subtitle: 'Cirurgia de arquitetura em dormência sem perda de seiva e com total visibilidade da ramificação',
+            idealMoons: ['NOVA', 'MINGUANTE'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Inverno'],
+            avoidSeasons: ['Verão', 'Primavera'],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Amora', 'Pau-ferro', 'Tamarindo', 'Acerola', 'Buxinho', 'Romã', 'Figueira'],
+            avoidKeywords: ['Rainha-do-abismo', 'Rosa-do-deserto'],
+            tools: 'Alicate côncavo reto, serrote japonês dobrável, pasta selante cicatrizante japonesa com fungicida e álcool 70%.',
+            steps: [
+                'Inspecionar a estrutura do tronco desfolhado sem a interferência da massa verde.',
+                'Eliminar galhos que cruzam o tronco, galhos paralelos no mesmo nó e galhos direcionados para dentro da silhueta.',
+                'Realizar cortes rentes e limpos com alicate côncavo para garantir cicatrização plana sem calombos.',
+                'Selar imediatamente todo corte superior a 3mm com pasta cicatrizante japonesa.',
+                'Suspender fertilização rica em N e manter a árvore em local protegido de geadas e ventos encanados secos.'
+            ],
+            biologicalNote: 'A dormência invernal sob Lua Nova mantém os vasos de xilema e floema com fluxo basal reduzido, permitindo grandes intervenções com zero perda de energia metabólica e cicatrização perfeita.'
+        },
+        {
+            id: 'PINCAGEM_PINUS_VELAS',
+            category: 'PINCAGEM',
+            categoryBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            title: 'Pinçagem de Velas e Brotações em Coníferas (Técnica Mekiri)',
+            subtitle: 'Equilíbrio cirúrgico de vigor entre ápice dominante e ramos fracos da base em juníperos e pinheiros',
+            idealMoons: ['CRESCENTE', 'CHEIA'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Junípero', 'Shimpaku', 'Pinus', 'Cipreste', 'Tuia'],
+            avoidKeywords: ['Rosa-do-deserto', 'Rainha-do-abismo', 'Érica-falsa'],
+            tools: 'Pontas dos dedos limpas (nunca usar tesoura metálica em acículas tenras para evitar pontas amarronzadas).',
+            steps: [
+                'Identificar as velas ou tufos de escamas que ultrapassam a densidade do patamar.',
+                'Segurar a base da vela com o polegar e indicador de uma mão e quebrar suavemente o terço superior com a outra mão.',
+                'Pinçar primeiro as velas mais fortes do topo da árvore; 10 dias depois, pinçar as velas médias e deixar intactas as fracas da base.',
+                'Manter o exemplar sob sol pleno para induzir rebrote homogêneo e acículas compactas.',
+                'Proteger as raízes de excesso hídrico durante a emissão das novas agulhas.'
+            ],
+            biologicalNote: 'A quebra escalonada redistribui as auxinas da copa para os galhos inferiores, equalizando a força vegetativa da conífera e evitando que a base seque por sombreamento.'
+        },
+        {
+            id: 'DESFOLHA_PARCIAL_EQUILIBRIO',
+            category: 'DESFOLHA',
+            categoryBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            title: 'Desfolha Parcial Seletiva para Entrada de Luz Interna',
+            subtitle: 'Remoção cirúrgica de folhas gigantes do topo para nutrir brotos dormentes interiores sem estressar a planta',
+            idealMoons: ['CRESCENTE', 'MINGUANTE'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Figueira', 'Ficus', 'Amora', 'Jabuticaba', 'Pitanga', 'Acerola', 'Piteco'],
+            avoidKeywords: ['Junípero', 'Rainha-do-abismo', 'Rosa-do-deserto'],
+            tools: 'Tesoura japonesa fina de desfolha (Hasami) e borrifador foliar.',
+            steps: [
+                'Localizar as folhas de sombra excessivamente largas nos patamares superiores que bloqueiam o sol para os ramos de dentro.',
+                'Cortar a folha preservando a metade do pecíolo, sem atingir a gema da axila.',
+                'Deixar intactas as folhas menores dos ramos fracos e internos.',
+                'Pulverizar água fresca ao entardecer para hidratar os novos brotinhos agora expostos à luz.',
+                'Observar a explosão de novas ramificações terciárias em 10 a 14 dias.'
+            ],
+            biologicalNote: 'A penetração da luz solar nas gemas latentes de ramos interiores ativa fitocromos e citocininas, revitalizando ramificações que morreriam por senescência natural sob sombra densa.'
+        },
+        {
+            id: 'PODA_LIMPEZA_SANITARIA',
+            category: 'PODA_RAMIFICACAO',
+            categoryBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            title: 'Poda Fitossanitária de Limpeza & Eliminação de Ladrões',
+            subtitle: 'Remoção de galhos secos, espinhos de área de trabalho e brotações de colo (chupões de nebari)',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: [],
+            idealSeasons: ['Outono', 'Inverno', 'Primavera', 'Verão'],
+            avoidSeasons: [],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Acerola', 'Limão-cravo', 'Mexerica Ponkan', 'Caliandra', 'Duranta', 'Piteco', 'Tamarindo'],
+            avoidKeywords: [],
+            tools: 'Tesoura de poda fina, alicate corta-arame e pincel com solução fúngica preventiva.',
+            steps: [
+                'Inspecionar a base do nebari e cortar rentes quaisquer brotos ladrões que drenam a seiva do tronco principal.',
+                'Remover folhas secas caídas sobre o substrato que abrigam caracóis, lesmas e fungos.',
+                'Eliminar galhos secos sem câmbio verde cortando até a margem do tecido são.',
+                'Desbastar espinhos afiados nas zonas onde serão passados arames ou tensores.',
+                'Desinfetar as lâminas com álcool 70% entre uma planta e outra para impedir transmissão de patógenos.'
+            ],
+            biologicalNote: 'A assepsia mecânica elimina vetores de contaminação e garante que 100% da transpiração e nutrientes do solo fluam exclusivamente para a copa estrutural estilizada.'
         }
     ];
 
@@ -2929,7 +3041,10 @@
                                 <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">${C.esc(p.bench)}</span>
                             </div>
                             <div class="font-semibold text-sm sm:text-base text-slate-100 truncate mt-1">${C.esc(p.popularName)}</div>
-                            <div class="text-xs italic text-slate-400 truncate">${C.esc(p.scientificName || p.pot)} • Vaso: ${C.esc(p.pot)}</div>
+                            <div class="text-xs italic text-slate-400 truncate">
+                                ${C.esc(p.scientificName || p.pot)} • Vaso: ${C.esc(p.pot)}
+                                ${p.lastPruning ? `<span class="ml-1.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 not-italic">✂ Poda há ${Math.abs(C.daysDiffFromToday(p.lastPruning) || 0)}d</span>` : ''}
+                            </div>
                         </div>
                     </div>
 
@@ -3310,7 +3425,10 @@
                         <div>
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400">Fase Lunar em Tempo Real</span>
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${moon.badgeCls}">${moon.moonAge} dias do ciclo</span>
+                                <div class="flex items-center gap-1">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${moon.badgeCls}">${moon.moonAge}d do ciclo</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Janela: +${moon.optimalWindowDays}d até ${moon.nextPhaseName}</span>
+                                </div>
                             </div>
                             <div class="flex items-center gap-2.5 mt-2">
                                 <i data-lucide="${moon.phaseIcon}" class="w-6 h-6 text-amber-300"></i>

@@ -108,6 +108,11 @@
                                     <textarea id="df-emotional-reading" rows="3" required
                                         placeholder="Qual narrativa de afronta, urgência de retrucar ou controle imediato apareceu?"
                                         class="w-full p-2.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm text-amber-100 focus:border-amber-500"></textarea>
+                                    <div class="flex flex-wrap gap-1 mt-1.5" id="df-quick-chips-container">
+                                        <button type="button" data-df-quick-chip="Estou notando a narrativa de que " class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition">"Estou notando a narrativa..."</button>
+                                        <button type="button" data-df-quick-chip="Acolho a sensação física de aperto sem transformá-la em ação impulsiva." class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition">"Acolho sem impulso..."</button>
+                                        <button type="button" data-df-quick-chip="O silêncio deliberado e a não-reação são minha maior autoridade e soberania." class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition">"Silêncio é soberania..."</button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -149,6 +154,19 @@
                                     <span class="font-bold text-cyan-300 font-mono">Dicotomia do Controle (Epicteto):</span>
                                     <span> O que o outro faz, fala ou sente está fora do seu controle. O que você diz, como responde e se protege a estabilidade familiar é 100% sua responsabilidade.</span>
                                 </div>
+                            </div>
+
+                            <!-- As 3 Perguntas Socráticas de Blindagem Pré-Decisão -->
+                            <div class="p-3 rounded-lg bg-amber-950/20 border border-amber-500/30 text-xs space-y-1.5">
+                                <div class="flex items-center gap-2 text-amber-300 font-mono font-bold text-[11px] uppercase tracking-wider">
+                                    <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
+                                    <span>Blindagem Socrática Pré-Decisão:</span>
+                                </div>
+                                <ul class="space-y-1 text-slate-300 text-[11px]">
+                                    <li>• <strong>1. Perspectiva Temporal:</strong> Isso terá qualquer relevância real na sua vida daqui a 6 meses?</li>
+                                    <li>• <strong>2. Ecologia Afetiva:</strong> Reagir agora alimenta a escalada ou constrói paz para quem você ama?</li>
+                                    <li>• <strong>3. Soberania:</strong> Qual resposta (ou silêncio deliberado) fará você se orgulhar de si mesmo amanhã?</li>
+                                </ul>
                             </div>
 
                             <!-- Slider de Ativação Fisiológica -->
@@ -298,10 +316,18 @@
 
                 <!-- Histórico Local de Deliberações -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-slate-200">Histórico Local de Vereditos Registrados</h3>
-                        <span id="df-history-count" class="text-xs font-mono text-slate-400">0 registros</span>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-slate-200">Histórico Local de Vereditos Registrados</h3>
+                            <span id="df-history-count" class="text-xs font-mono text-cyan-300 font-semibold">0 registros</span>
+                        </div>
+                        <input type="text" id="df-history-search" placeholder="Buscar no histórico..."
+                            class="min-h-[34px] px-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full sm:w-60">
                     </div>
+
+                    <!-- Métricas Rápidas do Histórico -->
+                    <div id="df-history-metrics-bar" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono"></div>
+
                     <div id="df-history-list" class="space-y-2"></div>
                 </div>
             </div>

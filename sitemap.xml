@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/artigos.html</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -92,13 +92,13 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/jogos.html</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/recursos.html</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -134,9 +134,15 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/testes.html</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/artigos/a-arquitetura-neural-do-desamparo-aprendido.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/artigos/a-arquitetura-neurobiologica-da-resiliencia-psiquica.html</loc>
@@ -715,6 +721,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/testes/teste-desamparo-aprendido.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/testes/teste-desregulacao-eixo-hpa.html</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
@@ -1147,6 +1159,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/jogos/jogo-reforco-probabilistico.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/jogos/jogo-regulacao-emocional.html</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
@@ -1280,7 +1298,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/ferramentas-clinicas/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

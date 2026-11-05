@@ -36,6 +36,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-27** | **Inventário de Luto Prolongado e Apego Rompido (PG-13)** | Processamento da Perda, Dor Emocional Persistente e Saudade Traumática | `testes/teste-luto-prolongado.html` | ✅ Concluído |
 | **T-28** | **Escala de Resiliência Neurobiológica e Regulação Vagal (ERN-RV)** | Tônus Vagal, Resiliência ao Estresse e Recuperação Alostática | `testes/teste-resiliencia-vagal.html` | ✅ Concluído |
 | **T-29** | **Inventário de Sensibilidade Interoceptiva e Decisão Intuitiva (ISIDI)** | Consciência Interoceptiva, Marcadores Somáticos e Intuição | `testes/teste-sensibilidade-interoceptiva-intuicao.html` | ✅ Concluído |
+| **T-30** | **Escala de Desamparo Aprendido e Agência Dopaminérgica (EDA-AD)** | Desamparo Aprendido, Locus de Controle e Agência Dopaminérgica | `testes/teste-desamparo-aprendido.html` | ✅ Concluído |
 
 ---
 
