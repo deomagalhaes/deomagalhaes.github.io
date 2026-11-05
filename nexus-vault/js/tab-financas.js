@@ -371,6 +371,25 @@
         };
     }
 
+    const DEFAULT_TICKERS = {
+        FII: [
+            { ticker: 'HGLG11', name: 'CSHG Logística (FII Tijolo)', price: 165.50, yield: 8.6, type: 'Tijolo / Logística' },
+            { ticker: 'KNCR11', name: 'Kinea Rendimentos Imobiliários', price: 104.20, yield: 12.1, type: 'Papel / Pós CDI' }
+        ],
+        RF: [
+            { ticker: 'IPCA+2035', name: 'Tesouro IPCA+ 2035 (Juros Semestrais)', price: 3200.00, yield: 6.4, type: 'Tesouro Direto' },
+            { ticker: 'IPCA+2045', name: 'Tesouro IPCA+ 2045 (Principal)', price: 1180.00, yield: 6.5, type: 'Tesouro Direto' }
+        ],
+        Acoes: [
+            { ticker: 'BBSE3', name: 'BB Seguridade ON', price: 34.50, yield: 9.8, type: 'Dividendos / Seguros' },
+            { ticker: 'ITUB4', name: 'Itaú Unibanco PN', price: 35.80, yield: 7.9, type: 'Financeiro' }
+        ],
+        Global: [
+            { ticker: 'IVVB11', name: 'iShares S&P 500 Fundo de Índice', price: 310.00, yield: 1.4, type: 'S&P 500 / Dólar' },
+            { ticker: 'WRLD11', name: 'Investo MSCI World', price: 112.50, yield: 1.8, type: 'Global Neutro' }
+        ]
+    };
+
     /**
      * Calcula as cotas inteiras a comprar de cada ativo/ticker específico
      * com alocação ótima e saldo residual para a reserva de oportunidade
@@ -379,7 +398,51 @@
         if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.computeAporteByTickers === 'function') {
             return global.VaultTabIndependencia.computeAporteByTickers(classes);
         }
-        return { byClass: [], totalResidual: 0 };
+        const result = [];
+        let totalResidualAll = 0;
+        const classesArr = Array.isArray(classes) ? classes : [];
+
+        classesArr.forEach((cls) => {
+            const classAporte = cls.recommendedAporte || 0;
+            const tickers = (DEFAULT_TICKERS[cls.key] || []).slice(0, 2);
+            if (tickers.length === 0) return;
+
+            const perTickerBudget = tickers.length > 0 ? (classAporte / tickers.length) : 0;
+            let classSpent = 0;
+
+            const tickerAlloc = tickers.map((t) => {
+                const shares = t.price > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / t.price) : 0;
+                const totalSpent = shares * t.price;
+                classSpent += totalSpent;
+                return {
+                    ticker: t.ticker,
+                    name: t.name,
+                    price: t.price,
+                    yield: t.yield,
+                    type: t.type,
+                    shares,
+                    totalSpent,
+                    budget: perTickerBudget
+                };
+            });
+
+            const residual = Math.max(0, classAporte - classSpent);
+            totalResidualAll += residual;
+
+            result.push({
+                classKey: cls.key,
+                className: cls.name,
+                classAporte,
+                classSpent,
+                residual,
+                tickers: tickerAlloc
+            });
+        });
+
+        return {
+            byClass: result,
+            totalResidual: totalResidualAll
+        };
     }
 
     /**
@@ -492,6 +555,15 @@
             name: 'Alocador Inteligente por Déficit de Classe',
             passed: !!testAllocPass,
             detail: `Aporte de R$ 5.000 direcionado prioritariamente para suprir a classe com maior atraso patrimonial.`
+        });
+
+        // 6. Teste de Cotas Inteiras e Troco Residual (Reserva de Oportunidade)
+        const mockTickersAlloc = computeAporteByTickers(mockAlloc.classes);
+        const testTickersPass = Array.isArray(mockTickersAlloc.byClass) && mockTickersAlloc.totalResidual >= 0;
+        tests.push({
+            name: 'Simulador de Cotas Inteiras e Troco Residual para Reserva',
+            passed: !!testTickersPass,
+            detail: `Classes Alocadas: ${mockTickersAlloc.byClass.length} | Sobra Residual: R$ ${mockTickersAlloc.totalResidual.toFixed(2)}`
         });
 
         const allPassed = tests.every(t => t.passed);

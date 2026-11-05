@@ -1291,6 +1291,9 @@
                 <!-- SUB-NAVEGAÇÃO DE MÓDULOS DE CORREÇÃO -->
                 <div id="psy-subtabs-bar" class="flex flex-wrap items-center gap-2 bg-[#0f172a]/90 border border-[#1e293b] rounded-xl p-2 no-print"></div>
 
+                <!-- PAINEL PSICOMÉTRICO SINTÉTICO (KPIs da Bateria Neuropsicológica) -->
+                <div id="psy-battery-kpis-bar" class="hidden no-print"></div>
+
                 <!-- CONTAINER DINÂMICO DA SUB-ABA ATIVA -->
                 <div id="psy-subtab-viewport"></div>
             </div>
@@ -1325,6 +1328,7 @@
         if (iEl && document.activeElement !== iEl) iEl.value = prot.informant || '';
 
         updateExactAgeBanner();
+        renderBatteryKPIsBar();
 
         const bar = document.getElementById('psy-subtabs-bar');
         if (bar) {
@@ -1370,6 +1374,102 @@
             <span class="truncate">${global.VaultCore.esc(age.formatted)}</span>
             <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-cyan-500/30 text-[10px] text-cyan-300 shrink-0">${age.totalMonths} meses</span>
         `;
+    }
+
+    function renderBatteryKPIsBar() {
+        const bar = document.getElementById('psy-battery-kpis-bar');
+        if (!bar) return;
+        const prot = getActiveProtocol();
+        const C = global.VaultCore;
+
+        const chips = [];
+
+        // WASI QIT
+        const wRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('WASI'));
+        const qitRow = wRows.find(r => r.measure && r.measure.includes('QIT'));
+        if (qitRow && qitRow.z !== undefined) {
+            chips.push({
+                subtab: 'wasi',
+                label: `WASI: ${qitRow.measure} = ${qitRow.derived || qitRow.raw} (Z: ${qitRow.z >= 0 ? '+' : ''}${C.formatNum(qitRow.z, 2)})`,
+                badge: qitRow.classBadge || 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+            });
+        }
+
+        // FDT Inibição
+        const fdtRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('FDT'));
+        const fdtInib = fdtRows.find(r => r.measure && r.measure.includes('Inibição'));
+        if (fdtInib && fdtInib.z !== undefined) {
+            chips.push({
+                subtab: 'fdt',
+                label: `FDT Inibição: Z ${fdtInib.z >= 0 ? '+' : ''}${C.formatNum(fdtInib.z, 2)} (${fdtInib.classLabel || 'Médio'})`,
+                badge: fdtInib.classBadge || 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+            });
+        }
+
+        // SRS-2 Total T
+        const srsRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('SRS-2'));
+        const srsTot = srsRows.find(r => r.measure && (r.measure.includes('Total') || r.measure.includes('Escore Total')));
+        if (srsTot) {
+            chips.push({
+                subtab: 'srs2',
+                label: `SRS-2 Total: T = ${srsTot.derived || srsTot.raw} (${srsTot.classLabel})`,
+                badge: srsTot.classBadge || 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+            });
+        }
+
+        // BPA-2 AG
+        const bpaRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('BPA-2'));
+        const bpaAg = bpaRows.find(r => r.measure && r.measure.includes('Atenção Geral'));
+        if (bpaAg) {
+            chips.push({
+                subtab: 'bpa_ravlt',
+                label: `BPA-2 Atenção Geral: Z ${bpaAg.z >= 0 ? '+' : ''}${C.formatNum(bpaAg.z, 2)} (${bpaAg.classLabel})`,
+                badge: bpaAg.classBadge || 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+            });
+        }
+
+        // RAVLT A7
+        const ravltRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('RAVLT'));
+        const ravltA7 = ravltRows.find(r => r.measure && (r.measure.includes('A7') || r.measure.includes('Evocação Tardia')));
+        if (ravltA7) {
+            chips.push({
+                subtab: 'bpa_ravlt',
+                label: `RAVLT Memória Tardia: Z ${ravltA7.z >= 0 ? '+' : ''}${C.formatNum(ravltA7.z, 2)} (${ravltA7.classLabel})`,
+                badge: ravltA7.classBadge || 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+            });
+        }
+
+        if (chips.length === 0) {
+            bar.innerHTML = '';
+            bar.className = 'hidden';
+            return;
+        }
+
+        bar.className = 'bg-[#090d16] border border-slate-800 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono no-print';
+        bar.innerHTML = `
+            <div class="flex items-center gap-1.5 text-slate-400">
+                <i data-lucide="gauge" class="w-4 h-4 text-cyan-400"></i>
+                <span class="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Resumo Psicométrico da Bateria:</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+                ${chips.map(c => `
+                    <button type="button" data-kpi-subtab="${c.subtab}" class="px-2.5 py-1 rounded-md text-[11px] font-semibold border ${c.badge} hover:brightness-125 transition" title="Clique para navegar até o instrumento">
+                        ${C.esc(c.label)}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        bar.querySelectorAll('[data-kpi-subtab]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetSubtab = btn.getAttribute('data-kpi-subtab');
+                appState.activeSubTab = targetSubtab;
+                saveState();
+                renderAll();
+            });
+        });
+
+        C.refreshIcons(bar);
     }
 
     // =========================================================================

@@ -472,6 +472,9 @@
         if (!minutes || minutes <= 0) return;
 
         sleepTimerTimeout = setTimeout(() => {
+            stopSpeechNarration();
+            stopAutoScroll();
+
             if (soundGainNode && audioCtx && isRelaxAudioPlaying) {
                 // Fade out exponencial suave de 15 segundos
                 soundGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 15);
@@ -479,6 +482,8 @@
                     stopRelaxationAudio();
                     if (global.VaultCore) global.VaultCore.toast('Timer de sono concluído: áudio desligado suavemente.', 'info', 3000);
                 }, 15000);
+            } else if (global.VaultCore) {
+                global.VaultCore.toast('Timer de sono concluído: descanso noturno preservado.', 'info', 3000);
             }
         }, minutes * 60 * 1000);
 
