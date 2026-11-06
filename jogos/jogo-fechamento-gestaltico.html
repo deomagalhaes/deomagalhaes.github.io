@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 31: Matriz de Fechamento Gestáltico e Conclusão de Tarefas – Deo Magalhães</title>
+    <meta name="description" content="Treine o fechamento cognitivo gestáltico, desative o resíduo atencional do Efeito Zeigarnik e resolva matrizes neurais com Web Audio API neste jogo interativo.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Biômetro de Fechamento Gestáltico */
+        .biometer-panel {
+            background: linear-gradient(135deg, #001219, #00222e);
+            border: 1px solid #0a9396;
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin-bottom: 25px;
+            color: #f8fafc;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0, 18, 25, 0.4);
+        }
+
+        @media (max-width: 640px) {
+            .biometer-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .meter-label {
+            font-size: 0.82em;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94d2bd;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.35s ease;
+        }
+
+        .progress-fill-closure {
+            background: linear-gradient(90deg, #0a9396, #94d2bd);
+        }
+
+        .progress-fill-focus {
+            background: linear-gradient(90deg, #ee9b00, #ca6702);
+        }
+
+        /* Área da Matriz de Fechamento */
+        .matrix-board-container {
+            background: #001219;
+            border: 2px solid #005f73;
+            border-radius: 14px;
+            padding: 24px;
+            margin: 0 auto 25px auto;
+            max-width: 520px;
+            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-board {
+            display: grid;
+            gap: 10px;
+            background: #001c27;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(10, 147, 150, 0.4);
+        }
+
+        .grid-tile {
+            width: 80px;
+            height: 80px;
+            background: #002b36;
+            border: 2px solid #005f73;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, background 0.2s ease;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 480px) {
+            .grid-tile {
+                width: 65px;
+                height: 65px;
+            }
+        }
+
+        .grid-tile:hover {
+            border-color: #0a9396;
+            background: #003847;
+            box-shadow: 0 0 12px rgba(10, 147, 150, 0.5);
+        }
+
+        .grid-tile.tile-connected {
+            border-color: #0a9396;
+            box-shadow: 0 0 8px rgba(10, 147, 150, 0.35);
+        }
+
+        .grid-tile.tile-complete {
+            border-color: #ee9b00;
+            box-shadow: 0 0 15px rgba(238, 155, 0, 0.6);
+            background: #00313f;
+        }
+
+        .tile-svg {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transition: transform 0.25s ease-out;
+        }
+
+        .stage-prompt {
+            color: #94d2bd;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .btn-restart-stage {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 5px;
+        }
+
+        .btn-restart-stage:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .btn-next-stage {
+            background: #ee9b00;
+            color: #001219;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 5px;
+            display: none;
+        }
+
+        .btn-next-stage:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Modal / Banner de Conclusão */
+        .stage-banner {
+            display: none;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stage-banner h3 {
+            margin: 0 0 6px 0;
+            font-size: 1.25em;
+        }
+
+        .stage-banner p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+
+        /* Painel Psicoeducativo */
+        .neuro-explanation {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 24px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 35px;
+            text-align: left;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .neuro-explanation h3 {
+            color: #005f73;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 31: Matriz de Fechamento Gestáltico e Conclusão de Tarefas</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Treino Cognitivo Diário</p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status e Controles -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Fase</span>
+                        <span class="stat-badge-value" id="stageDisplay">1 / 5</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Movimentos</span>
+                        <span class="stat-badge-value" id="movesDisplay">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Tempo</span>
+                        <span class="stat-badge-value" id="timerDisplay">00:00</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Melhor Eficiência</span>
+                        <span class="stat-badge-value" id="bestDisplay">--</span>
+                    </div>
+                    <button class="sound-btn" id="soundToggleBtn" onclick="soundManager.toggle()">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Painel de Biômetro Cognitivo -->
+                <div class="biometer-panel">
+                    <div>
+                        <div class="meter-label">
+                            <span>Índice de Fechamento Gestáltico</span>
+                            <span id="closurePercent">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill progress-fill-closure" id="closureBar"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="meter-label">
+                            <span>Resíduo Atencional Silenciado</span>
+                            <span id="residuePercent">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill progress-fill-focus" id="residueBar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stage-banner" id="stageBanner">
+                    <h3 id="bannerTitle">Circuito Fechado com Sucesso!</h3>
+                    <p id="bannerMsg">O Efeito Zeigarnik foi desativado nesta matriz. O córtex pré-frontal concluiu o ciclo.</p>
+                </div>
+
+                <p class="stage-prompt" id="stagePrompt">
+                    Toque ou clique nas peças para rotacioná-las em 90°. Conecte todos os condutos em <strong>laços contínuos perfeitos</strong> para eliminar pontas abertas e atingir o equilíbrio gestáltico.
+                </p>
+
+                <!-- Matriz do Jogo -->
+                <div class="matrix-board-container">
+                    <div class="grid-board" id="gridBoard"></div>
+                </div>
+
+                <div>
+                    <button class="btn-restart-stage" onclick="gameEngine.resetCurrentStage()">Reiniciar Fase</button>
+                    <button class="btn-next-stage" id="btnNextStage" onclick="gameEngine.nextStage()">Avançar para Próxima Matriz →</button>
+                </div>
+
+                <!-- Painel Neurocientífico Psicoeducativo -->
+                <div class="neuro-explanation">
+                    <h3>A Neurociência do Fechamento Gestáltico e a Desativação de Zeigarnik</h3>
+                    <p><strong>A Lei do Fechamento (Gestalt):</strong> Nosso sistema perceptivo visual (áreas V1 a V4 e o Córtex Ínfero-Temporal) é biologicamente impelido a perceber figuras completas. Quando vemos uma curva interrompida ou um arco inacabado, neurônios piramidais sustentam uma oscilação contínua de reconhecimento incompleto, consumindo energia atencional.</p>
+                    <p><strong>Conexão Pré-Frontal (dlPFC e ACC):</strong> Essa mesma arquitetura perceptiva é espelhada nas funções executivas superiores. Como demonstrou Bluma Zeigarnik (1927), qualquer objetivo em aberto permanece retido na memória de trabalho através do disparo sustentado do dlPFC. Ao manipular ativamente as peças até alcançar a harmonia geométrica de fechamento, seu encéfalo experimenta uma despolarização imediata da tensão da quase-necessidade (Kurt Lewin), treinando a memória visuoespacial, a flexibilidade cognitiva e a capacidade executiva de 'concluir ciclos' no mundo real.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Motor do Jogo e Sintetizador Web Audio API -->
+    <script>
+        // 1. Gerenciador de Áudio Procedural (Web Audio API)
+        const soundManager = {
+            ctx: null,
+            enabled: true,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            },
+            toggle() {
+                this.enabled = !this.enabled;
+                const icon = document.getElementById('soundIcon');
+                const btn = document.getElementById('soundToggleBtn');
+                if (this.enabled) {
+                    icon.innerText = '🔊';
+                    btn.innerHTML = '<span id="soundIcon">🔊</span> Som Ativo';
+                } else {
+                    icon.innerText = '🔇';
+                    btn.innerHTML = '<span id="soundIcon">🔇</span> Silenciado';
+                }
+            },
+            playRotate() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(460, now);
+                    osc.frequency.exponentialRampToValueAtTime(620, now + 0.08);
+
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } catch (e) { }
+            },
+            playMatch() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.06); // E5
+
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.16);
+                } catch (e) { }
+            },
+            playStageClear() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        const startTime = now + idx * 0.09;
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, startTime);
+
+                        gain.gain.setValueAtTime(0.18, startTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.35);
+
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+
+                        osc.start(startTime);
+                        osc.stop(startTime + 0.35);
+                    });
+                } catch (e) { }
+            },
+            playGameVictory() {
+                if (!this.enabled) return;
+                this.init();
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+                    const now = this.ctx.currentTime;
+                    const chord = [392.00, 523.25, 659.25, 783.99, 1046.50, 1318.51];
+                    chord.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        const startTime = now + idx * 0.08;
+
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, startTime);
+
+                        gain.gain.setValueAtTime(0.2, startTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+
+                        osc.start(startTime);
+                        osc.stop(startTime + 0.6);
+                    });
+                } catch (e) { }
+            }
+        };
+
+        // 2. Definição Tipológica das Peças e Conectores
+        // Conectores cardeais: [N, E, S, W] (1 = tem conector, 0 = vazio)
+        // Tipos fundamentais:
+        // 'corner': [1, 1, 0, 0] (curva de 90 graus)
+        // 'straight': [1, 0, 1, 0] (linha reta)
+        // 't_junction': [1, 1, 0, 1] (junção em T)
+        // 'cross': [1, 1, 1, 1] (cruzamento quádruplo)
+        // 'end': [1, 0, 0, 0] (terminal)
+        // 'blank': [0, 0, 0, 0] (vazio)
+
+        function rotatePorts(ports, rotation) {
+            // rotation: 0 (0°), 1 (90° hor), 2 (180°), 3 (270°)
+            const shift = rotation % 4;
+            const res = [0, 0, 0, 0];
+            for (let i = 0; i < 4; i++) {
+                res[(i + shift) % 4] = ports[i];
+            }
+            return res;
+        }
+
+        // 3. Fases Matematicamente Validadas (100% Solúveis por Construção Reversível)
+        // Cada fase define: rows, cols, layout de peças e rotações solução.
+        // O gerador aplica rotações (scramble) a partir da solução garantida.
+        const STAGES = [
+            {
+                // Fase 1: Matriz 3x3 - Laço Periférico Único com Centro
+                rows: 3,
+                cols: 3,
+                prompt: "Fase 1/5: Conecte o circuito exterior em um loop contínuo e silencie a tensão perceptual.",
+                // Soluções: { type, basePorts: [N,E,S,W], solRot: 0..3 }
+                tiles: [
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 }, // top-left (liga E e S)
+                    { type: 'straight', ports: [0, 1, 0, 1], solRot: 0 }, // top-mid (liga W e E)
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 }, // top-right (liga S e W)
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 }, // mid-left (liga N e S)
+                    { type: 'blank', ports: [0, 0, 0, 0], solRot: 0 }, // center (vazio)
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 }, // mid-right (liga N e S)
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 }, // bot-left (liga N e E)
+                    { type: 'straight', ports: [0, 1, 0, 1], solRot: 0 }, // bot-mid (liga W e E)
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 }  // bot-right (liga N e W)
+                ],
+                scramble: [1, 2, 3, 2, 0, 1, 3, 1, 2]
+            },
+            {
+                // Fase 2: Matriz 3x3 - Duplo Laço em Figura 8 com Centro Cruz
+                rows: 3,
+                cols: 3,
+                prompt: "Fase 2/5: Organize o circuito em duplo laço integrado, conectando as junções centrais.",
+                tiles: [
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    { type: 'blank', ports: [0, 0, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'cross', ports: [1, 1, 1, 1], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    { type: 'blank', ports: [0, 0, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 }
+                ],
+                scramble: [2, 1, 0, 3, 1, 2, 0, 3, 1]
+            },
+            {
+                // Fase 3: Matriz 4x3 - Múltiplos Laços Conectivos
+                rows: 3,
+                cols: 4,
+                prompt: "Fase 3/5: Quatro quadrantes interconectados. Alinhe os arcos para restaurar a fluidez.",
+                tiles: [
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 },
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 }
+                ],
+                scramble: [3, 2, 1, 2, 1, 3, 1, 2, 2, 1, 3, 1]
+            },
+            {
+                // Fase 4: Matriz 4x4 - Anéis Concêntricos Neurais
+                rows: 4,
+                cols: 4,
+                prompt: "Fase 4/5: Circuito denso de 16 nós. Elimine o resíduo atencional fechando todas as frentes.",
+                tiles: [
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'straight', ports: [0, 1, 0, 1], solRot: 0 },
+                    { type: 'straight', ports: [0, 1, 0, 1], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 },
+                    { type: 'straight', ports: [1, 0, 1, 0], solRot: 0 },
+
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'straight', ports: [0, 1, 0, 1], solRot: 0 },
+                    { type: 'straight', ports: [0, 1, 0, 1], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 }
+                ],
+                scramble: [1, 3, 2, 1, 2, 3, 1, 3, 1, 2, 3, 2, 3, 1, 2, 1]
+            },
+            {
+                // Fase 5: Matriz 4x4 - Simetria Mestre com Junções Múltiplas
+                rows: 4,
+                cols: 4,
+                prompt: "Fase Mestre: Fechamento Gestáltico Total. Cada nó deve encontrar seu par harmônico exato.",
+                tiles: [
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+                    
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'cross', ports: [1, 1, 1, 1], solRot: 0 },
+                    { type: 'cross', ports: [1, 1, 1, 1], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 },
+
+                    { type: 'corner', ports: [0, 1, 1, 0], solRot: 0 },
+                    { type: 'cross', ports: [1, 1, 1, 1], solRot: 0 },
+                    { type: 'cross', ports: [1, 1, 1, 1], solRot: 0 },
+                    { type: 'corner', ports: [0, 0, 1, 1], solRot: 0 },
+
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 },
+                    { type: 'corner', ports: [1, 1, 0, 0], solRot: 0 },
+                    { type: 'corner', ports: [1, 0, 0, 1], solRot: 0 }
+                ],
+                scramble: [2, 1, 3, 2, 1, 3, 2, 1, 3, 1, 2, 3, 1, 2, 3, 2]
+            }
+        ];
+
+        // 4. Renderizador Gráfico SVG das Peças
+        function createTileSVG(type, currentRotation) {
+            const rotDeg = currentRotation * 90;
+            let pathContent = "";
+
+            if (type === 'corner') {
+                // Arco de 90 graus ligando N a E (em rotação 0)
+                pathContent = `
+                    <path d="M 40,0 A 40,40 0 0,1 80,40" fill="none" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="40" cy="0" r="4" fill="#ee9b00"/>
+                    <circle cx="80" cy="40" r="4" fill="#ee9b00"/>
+                `;
+            } else if (type === 'straight') {
+                // Linha reta de N a S (em rotação 0)
+                pathContent = `
+                    <line x1="40" y1="0" x2="40" y2="80" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="40" cy="0" r="4" fill="#ee9b00"/>
+                    <circle cx="40" cy="80" r="4" fill="#ee9b00"/>
+                `;
+            } else if (type === 'cross') {
+                // Cruzamento
+                pathContent = `
+                    <line x1="40" y1="0" x2="40" y2="80" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/>
+                    <line x1="0" y1="40" x2="80" y2="40" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="40" cy="40" r="6" fill="#ee9b00"/>
+                `;
+            } else if (type === 'blank') {
+                pathContent = `<circle cx="40" cy="40" r="3" fill="rgba(10, 147, 150, 0.2)"/>`;
+            }
+
+            return `
+                <svg viewBox="0 0 80 80" class="tile-svg" style="transform: rotate(${rotDeg}deg);">
+                    <circle cx="40" cy="40" r="38" fill="rgba(0, 18, 25, 0.5)" stroke="rgba(10, 147, 150, 0.15)" stroke-width="1"/>
+                    ${pathContent}
+                </svg>
+            `;
+        }
+
+        // 5. Motor de Jogo e Validação Conectiva
+        const gameEngine = {
+            stageIndex: 0,
+            moves: 0,
+            timerSeconds: 0,
+            timerInterval: null,
+            currentTilesState: [],
+            isStageSolved: false,
+
+            init() {
+                this.loadStage(0);
+                this.startTimer();
+                this.updateBestDisplay();
+            },
+
+            loadStage(idx) {
+                this.stageIndex = idx;
+                this.moves = 0;
+                this.isStageSolved = false;
+                document.getElementById('movesDisplay').innerText = this.moves;
+                document.getElementById('stageDisplay').innerText = `${idx + 1} / ${STAGES.length}`;
+                document.getElementById('stagePrompt').innerText = STAGES[idx].prompt;
+                document.getElementById('stageBanner').style.display = 'none';
+                document.getElementById('btnNextStage').style.display = 'none';
+
+                const stage = STAGES[idx];
+                this.currentTilesState = [];
+
+                for (let i = 0; i < stage.tiles.length; i++) {
+                    const t = stage.tiles[i];
+                    const initRot = (t.solRot + stage.scramble[i]) % 4;
+                    this.currentTilesState.push({
+                        type: t.type,
+                        basePorts: [...t.ports],
+                        currentRot: initRot
+                    });
+                }
+
+                this.renderGrid();
+                this.checkBoardState(false);
+            },
+
+            renderGrid() {
+                const stage = STAGES[this.stageIndex];
+                const board = document.getElementById('gridBoard');
+                board.innerHTML = '';
+                board.style.gridTemplateColumns = `repeat(${stage.cols}, 1fr)`;
+
+                this.currentTilesState.forEach((tile, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'grid-tile';
+                    div.id = `tile-${index}`;
+                    div.innerHTML = createTileSVG(tile.type, tile.currentRot);
+                    div.onclick = () => this.rotateTile(index);
+                    board.appendChild(div);
+                });
+            },
+
+            rotateTile(index) {
+                if (this.isStageSolved) return;
+                const tile = this.currentTilesState[index];
+                if (tile.type === 'blank') return;
+
+                tile.currentRot = (tile.currentRot + 1) % 4;
+                this.moves++;
+                document.getElementById('movesDisplay').innerText = this.moves;
+
+                soundManager.playRotate();
+
+                const tileEl = document.getElementById(`tile-${index}`);
+                if (tileEl) {
+                    tileEl.innerHTML = createTileSVG(tile.type, tile.currentRot);
+                }
+
+                this.checkBoardState(true);
+            },
+
+            checkBoardState(fromUserInteraction) {
+                const stage = STAGES[this.stageIndex];
+                const rows = stage.rows;
+                const cols = stage.cols;
+
+                let openEdgesCount = 0;
+                let activePortsTotal = 0;
+                let matchedEdges = 0;
+
+                // Para cada célula, calcula os portos ativos na rotação atual
+                const activeGrid = [];
+                for (let r = 0; r < rows; r++) {
+                    activeGrid[r] = [];
+                    for (let c = 0; c < cols; c++) {
+                        const idx = r * cols + c;
+                        const tile = this.currentTilesState[idx];
+                        const curPorts = rotatePorts(tile.basePorts, tile.currentRot);
+                        activeGrid[r][c] = curPorts; // [N, E, S, W]
+
+                        curPorts.forEach(p => { if (p === 1) activePortsTotal++; });
+                    }
+                }
+
+                // Verifica vizinhanças e limites externos
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        const p = activeGrid[r][c]; // [N, E, S, W]
+                        const idx = r * cols + c;
+                        const tileEl = document.getElementById(`tile-${idx}`);
+
+                        let tileMatches = 0;
+                        let tileHasError = false;
+
+                        // Vizinho Norte (r - 1)
+                        if (p[0] === 1) {
+                            if (r === 0) { openEdgesCount++; tileHasError = true; } // Borda externa aberta
+                            else if (activeGrid[r - 1][c][2] === 1) { matchedEdges++; tileMatches++; }
+                            else { openEdgesCount++; tileHasError = true; }
+                        }
+
+                        // Vizinho Leste (c + 1)
+                        if (p[1] === 1) {
+                            if (c === cols - 1) { openEdgesCount++; tileHasError = true; }
+                            else if (activeGrid[r][c + 1][3] === 1) { matchedEdges++; tileMatches++; }
+                            else { openEdgesCount++; tileHasError = true; }
+                        }
+
+                        // Vizinho Sul (r + 1)
+                        if (p[2] === 1) {
+                            if (r === rows - 1) { openEdgesCount++; tileHasError = true; }
+                            else if (activeGrid[r + 1][c][0] === 1) { matchedEdges++; tileMatches++; }
+                            else { openEdgesCount++; tileHasError = true; }
+                        }
+
+                        // Vizinho Oeste (c - 1)
+                        if (p[3] === 1) {
+                            if (c === 0) { openEdgesCount++; tileHasError = true; }
+                            else if (activeGrid[r][c - 1][1] === 1) { matchedEdges++; tileMatches++; }
+                            else { openEdgesCount++; tileHasError = true; }
+                        }
+
+                        if (tileEl) {
+                            tileEl.classList.toggle('tile-connected', tileMatches > 0 && !tileHasError);
+                            tileEl.classList.toggle('tile-complete', tileMatches > 0 && !tileHasError && openEdgesCount === 0);
+                        }
+                    }
+                }
+
+                // Cálculo dos Biômetros
+                // Fechamento é 100% quando openEdgesCount == 0
+                const closurePct = activePortsTotal > 0 
+                    ? Math.max(0, Math.min(100, Math.round(((activePortsTotal - openEdgesCount) / activePortsTotal) * 100)))
+                    : 100;
+                
+                document.getElementById('closurePercent').innerText = `${closurePct}%`;
+                document.getElementById('closureBar').style.width = `${closurePct}%`;
+
+                const residueSilenced = closurePct;
+                document.getElementById('residuePercent').innerText = `${residueSilenced}%`;
+                document.getElementById('residueBar').style.width = `${residueSilenced}%`;
+
+                if (openEdgesCount === 0 && !this.isStageSolved) {
+                    this.onStageCleared();
+                } else if (fromUserInteraction && closurePct > 65) {
+                    soundManager.playMatch();
+                }
+            },
+
+            onStageCleared() {
+                this.isStageSolved = true;
+                const banner = document.getElementById('stageBanner');
+                const btnNext = document.getElementById('btnNextStage');
+
+                document.querySelectorAll('.grid-tile').forEach(el => el.classList.add('tile-complete'));
+
+                if (this.stageIndex === STAGES.length - 1) {
+                    soundManager.playGameVictory();
+                    document.getElementById('bannerTitle').innerText = "🏆 Fechamento Gestáltico Total Concluído!";
+                    document.getElementById('bannerMsg').innerText = `Parabéns! Todas as 5 matrizes neurais foram completadas com ${this.moves} movimentos em ${document.getElementById('timerDisplay').innerText}. Sua memória operacional e controle pré-frontal estão em pico de harmonia!`;
+                    banner.style.display = 'block';
+                    btnNext.style.display = 'none';
+
+                    this.saveBestScore(this.moves, this.timerSeconds);
+                } else {
+                    soundManager.playStageClear();
+                    document.getElementById('bannerTitle').innerText = `✓ Matriz ${this.stageIndex + 1} Fechada com Sucesso!`;
+                    document.getElementById('bannerMsg').innerText = "Todos os laços condutores foram conectados. O circuito está estável.";
+                    banner.style.display = 'block';
+                    btnNext.style.display = 'inline-block';
+                }
+            },
+
+            nextStage() {
+                if (this.stageIndex < STAGES.length - 1) {
+                    this.loadStage(this.stageIndex + 1);
+                }
+            },
+
+            resetCurrentStage() {
+                this.loadStage(this.stageIndex);
+            },
+
+            startTimer() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                this.timerInterval = setInterval(() => {
+                    if (!this.isStageSolved || this.stageIndex < STAGES.length - 1) {
+                        this.timerSeconds++;
+                        const m = String(Math.floor(this.timerSeconds / 60)).padStart(2, '0');
+                        const s = String(this.timerSeconds % 60).padStart(2, '0');
+                        document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+                    }
+                }, 1000);
+            },
+
+            saveBestScore(moves, secs) {
+                const key = 'deo_gestalt_closure_best';
+                const curBest = localStorage.getItem(key);
+                const scoreVal = moves + Math.floor(secs / 2);
+                if (!curBest || scoreVal < parseInt(curBest, 10)) {
+                    localStorage.setItem(key, scoreVal);
+                    this.updateBestDisplay();
+                }
+            },
+
+            updateBestDisplay() {
+                const best = localStorage.getItem('deo_gestalt_closure_best');
+                document.getElementById('bestDisplay').innerText = best ? `${best} pts` : '--';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            gameEngine.init();
+        });
+    </script>
+</body>
+</html>

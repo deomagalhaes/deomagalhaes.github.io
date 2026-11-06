@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Sobrecarga Mental e Resíduo Atencional (ISMRA / T-32) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de sobrecarga mental, tensão do Efeito Zeigarnik e resíduo atencional no córtex pré-frontal. Cálculo 100% privado com devolutiva imediata.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px 10px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: #005f73;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        /* Área de Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 1.35em;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: white;
+            background: #005f73;
+            margin-bottom: 12px;
+        }
+
+        .result-cat-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 640px) {
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .dimension-card h4 {
+            font-size: 0.95em;
+            color: #005f73;
+            margin-bottom: 6px;
+        }
+
+        .dim-bar-container {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .dim-bar-fill {
+            background: #0a9396;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .dim-score-val {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #0a9396;
+        }
+
+        .clinical-guidelines {
+            background: #f1f5f9;
+            border-left: 4px solid #ee9b00;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            background: #ca6702;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Inventário de Sobrecarga Mental e Resíduo Atencional (ISMRA / T-32)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Instrumento Psicoeducativo</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Fundamentação Neuropsicológica:</strong> Este instrumento avalia o grau de esgotamento da memória de trabalho decorrente de <em>tarefas não finalizadas</em> (o clássico <strong>Efeito Zeigarnik</strong>) e o <strong>Resíduo de Atenção</strong> (Sophie Leroy, 2009) provocado pela troca frequente de tarefas no córtex pré-frontal dorsolateral (dlPFC) e no córtex cingulado anterior (ACC).</p>
+                <p><strong>Privacidade Absoluta:</strong> Suas respostas são calculadas 100% de forma local no seu navegador (client-side). Nenhum dado pessoal ou escore é gravado ou transmitido para servidores externos.</p>
+                <p><em>Instruções: Leia cada uma das 16 afirmações abaixo e assinale com que frequência você vivenciou essa situação nas últimas 3 a 4 semanas.</em></p>
+            </div>
+
+            <form id="quizForm" class="quiz-container">
+                <!-- Dimensão 1 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Resíduo Atencional e Fragmentação de Foco</h3>
+                    <p>Mede o grau em que tarefas anteriores continuam consumindo recursos atencionais na atividade presente.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">01</span>
+                        <span>Ao alternar entre duas atividades de trabalho, sinto que minha mente permanece presa nos detalhes da tarefa anterior.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q1" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">02</span>
+                        <span>Tenho dificuldade para me aprofundar em um texto ou projeto porque pequenos lembretes de outras obrigações interrompem minha concentração.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q2" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">03</span>
+                        <span>Sinto que passo o dia respondendo a notificações ou mensagens avulsas sem conseguir concluir um bloco ininterrupto de foco.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q3" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">04</span>
+                        <span>No final de uma jornada de trabalho, sinto um cansaço mental extremo mesmo sem ter realizado grandes esforços físicos.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q4" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 2 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Tensão de Zeigarnik e Intrusão de Pendências</h3>
+                    <p>Avalia a frequência com que metas não finalizadas invadem a consciência em momentos inadequados.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">05</span>
+                        <span>Tarefas que deixei inacabadas voltam repetidamente à minha mente de forma involuntária durante momentos de repouso ou lazer.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q5" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">06</span>
+                        <span>Sinto uma sensação incômoda de urgência ou inquietação interna quando sei que há listas de afazeres acumuladas.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q6" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">07</span>
+                        <span>Tenho a sensação de que meu cérebro trata qualquer pendência em aberto como uma crise que precisa de resolução imediata.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q7" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">08</span>
+                        <span>Quando sou interrompido abruptamente em uma tarefa, sinto forte irritabilidade ou extrema dificuldade para redirecionar minha atenção.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q8" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 3 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Esgotamento da Memória de Trabalho e Sobrecarga Cognitiva</h3>
+                    <p>Mensura a saturação da capacidade de processamento mental de curto prazo e a fadiga pré-frontal.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">09</span>
+                        <span>Esqueço com frequência informações que acabei de ler ou ouvir porque sinto que minha mente já está com a capacidade saturada.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q9" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">10</span>
+                        <span>Tenho a impressão de que meu raciocínio está lento, como se houvesse 'processos demais rodando em segundo plano' na minha cabeça.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q10" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">11</span>
+                        <span>Tomar decisões cotidianas simples (como escolher o que comer ou que roupa vestir) parece exigir uma energia desproporcional.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q11" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">12</span>
+                        <span>Sinto que perco prazos ou esqueço compromissos a menos que anote tudo minuciosamente em lembretes externos.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q12" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 4 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Dificuldade de Desconexão e Fechamento Psíquico</h3>
+                    <p>Avalia a capacidade de desengajar os circuitos executivos após o expediente e permitir a recuperação neural.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">13</span>
+                        <span>Ao me deitar para dormir, minha mente começa a repassar conversas, tarefas do dia seguinte e compromissos futuros, atrasando o sono.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q13" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">14</span>
+                        <span>Sinto culpa ou inquietação quando tento relaxar sem estar produzindo algo tangível.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q14" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">15</span>
+                        <span>Mesmo em finais de semana ou férias, continuo checando e-mails, grupos de trabalho ou listas de pendências por impulso.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q15" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">16</span>
+                        <span>Tenho dificuldade para encerrar mentalmente o expediente de trabalho, levando as preocupações profissionais para os momentos em família.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q16" value="0" required> Quase nunca (0)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit-test">Calcular Meu Índice de Sobrecarga e Resíduo Atencional</button>
+            </form>
+
+            <!-- Seção de Resultados -->
+            <div id="resultsSection" class="results-section">
+                <div style="text-align: center;">
+                    <div class="score-badge" id="scoreBadge">0 / 48 Pontos</div>
+                    <h2 class="result-cat-title" id="resultTitle">Perfil de Sobrecarga</h2>
+                    <p id="resultDesc" style="color: #475569; font-size: 1.05em; max-width: 720px; margin: 0 auto; line-height: 1.6;"></p>
+                </div>
+
+                <div class="dimension-grid">
+                    <div class="dimension-card">
+                        <h4>1. Resíduo Atencional</h4>
+                        <div class="dim-score-val" id="d1Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d1Bar"></div></div>
+                        <p id="d1Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>2. Tensão de Zeigarnik</h4>
+                        <div class="dim-score-val" id="d2Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d2Bar"></div></div>
+                        <p id="d2Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>3. Esgotamento da Memória de Trabalho</h4>
+                        <div class="dim-score-val" id="d3Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d3Bar"></div></div>
+                        <p id="d3Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>4. Dificuldade de Desconexão</h4>
+                        <div class="dim-score-val" id="d4Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d4Bar"></div></div>
+                        <p id="d4Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+                </div>
+
+                <div class="clinical-guidelines">
+                    <h3 style="color: #005f73; margin-top: 0; font-size: 1.15em;">Orientações Neuropsicológicas e Fechamento Gestáltico</h3>
+                    <div id="guidelinesText"></div>
+                </div>
+
+                <div class="cta-box">
+                    <p style="color: #475569; font-size: 0.95em; margin-bottom: 15px;">Deseja acompanhamento profissional para estruturar sua rotina executiva e superar o esgotamento?</p>
+                    <a href="/agendamento.html" class="cta-btn">Agendar Consulta Neuropsicológica</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Feedback visual ao clicar nos labels de rádio
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const group = e.target.closest('.options-group');
+                    group.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    e.target.closest('.option-label').classList.add('selected');
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let d1 = 0; // Resíduo Atencional (Itens 1 a 4)
+                let d2 = 0; // Tensão de Zeigarnik (Itens 5 a 8)
+                let d3 = 0; // Memória de Trabalho (Itens 9 a 12)
+                let d4 = 0; // Dificuldade de Desconexão (Itens 13 a 16)
+
+                for (let i = 1; i <= 16; i++) {
+                    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`)?.value || "0", 10);
+                    if (i <= 4) d1 += val;
+                    else if (i <= 8) d2 += val;
+                    else if (i <= 12) d3 += val;
+                    else d4 += val;
+                }
+
+                const total = d1 + d2 + d3 + d4;
+
+                // Renderiza totais e badges
+                document.getElementById('scoreBadge').innerText = `${total} / 48 Pontos`;
+
+                let title = "";
+                let desc = "";
+                let guidelines = "";
+
+                if (total <= 12) {
+                    title = "Sobrecarga Baixa e Fechamento Cognitivo Eficaz";
+                    desc = "Seus escores indicam excelente capacidade de desengajamento executivo e regulação da memória de trabalho. Seu cérebro consegue concluir ou delimitar blocos de tarefas sem permitir que resíduos atencionais contaminem os momentos de repouso ou a profundidade de novas atividades.";
+                    guidelines = "<p>• <strong>Preserve suas fronteiras:</strong> Continue cultivando hábitos claros de transição entre trabalho e vida pessoal.</p><p>• <strong>Monotarefa preventiva:</strong> Mantenha a prática de fechar uma demanda antes de abrir novas frentes para não sobrecarregar o dlPFC.</p>";
+                } else if (total <= 24) {
+                    title = "Sobrecarga Leve a Moderada (Alerta de Fragmentação)";
+                    desc = "Observam-se sinais iniciais de resíduo atencional e acúmulo de tensão gestáltica. Algumas pendências em aberto estão começando a infiltrar momentos de lazer ou descanso, gerando dispersão pontual e leve lentificação no raciocínio.";
+                    guidelines = "<p>• <strong>Externalização Sistemática ('Brain Dump'):</strong> Sempre que uma tarefa for interrompida, anote em um papel o próximo micro-passo exato. Isso acalma o detector de conflitos do córtex cingulado anterior.</p><p>• <strong>Agrupamento de Comunicações:</strong> Evite responder mensagens em tempo real. Reserve 2 ou 3 horários fixos do dia para processar e-mails e recados, blindando seus blocos de foco profundo.</p>";
+                } else if (total <= 36) {
+                    title = "Sobrecarga Elevada (Resíduo Atencional Crítico)";
+                    desc = "Quadro de evidente sequestro cognitivo por tarefas inacabadas. O Efeito Zeigarnik está atuando de forma pronunciada, mantendo o córtex pré-frontal em estado de alerta crônico. Há queixas frequentes de fadiga mental, dificuldade para relaxar e invasão de pensamentos intrusivos ao deitar.";
+                    guidelines = "<p>• <strong>Protocolo de Fechamento de Masicampo & Baumeister:</strong> Ao final do expediente, elabore um plano específico para cada pendência crítica: onde, quando e qual a ação exata que será realizada. O cérebro não exige a conclusão física imediata, mas a certeza procedimental.</p><p>• <strong>Ritual Formal de Desligamento:</strong> Estabeleça um horário limite para encerrar o expediente e execute um gesto concreto (fechar o laptop, desligar alertas de trabalho e pronunciar conscientemente que o dia foi concluído).</p><p>• <strong>Redução Drástica do Multitasking:</strong> A multitarefa é uma ilusão que multiplica o resíduo atencional. Trabalhe em blocos únicos de 25 a 45 minutos (técnica Pomodoro).</p>";
+                } else {
+                    title = "Sobrecarga Severa (Exaustão da Memória de Trabalho / Risco de Burnout)";
+                    desc = "Indica esgotamento profundo das funções executivas pré-frontais. A mente opera sob um estado de saturação contínua, onde o volume de abas mentais abertas inviabilizou a recuperação fisiológica do sono e do descanso. Há risco iminente de esgotamento severo (Burnout) e desregulação do eixo neuroendócrino.";
+                    guidelines = "<p>• <strong>Intervenção e Avaliação Especializada:</strong> Recomenda-se buscar avaliação neuropsicológica e psicoterápica para mapear a sobrecarga crônica e construir uma barreira protetiva de rotina.</p><p>• <strong>Descompressão Imediata:</strong> Realize uma auditoria radical de compromissos: delegue, congele ou elimine demandas não essenciais. O sistema nervoso precisa de uma trégua biológica para regenerar a plasticidade sináptica.</p><p>• <strong>Higiene Rigorosa do Sono:</strong> Proíba o uso de telas e a checagem de pendências pelo menos 60 minutos antes de dormir, permitindo que a Rede de Modo Padrão (DMN) desacelere sem alarmes de urgência.</p>";
+                }
+
+                document.getElementById('resultTitle').innerText = title;
+                document.getElementById('resultDesc').innerText = desc;
+                document.getElementById('guidelinesText').innerHTML = guidelines;
+
+                // Preenchimento de barras das dimensões (max 12 cada)
+                const updateDim = (idPrefix, val, maxVal) => {
+                    document.getElementById(`${idPrefix}Score`).innerText = `${val} / ${maxVal}`;
+                    const pct = Math.round((val / maxVal) * 100);
+                    document.getElementById(`${idPrefix}Bar`).style.width = `${pct}%`;
+                    
+                    let statusTxt = "";
+                    if (pct <= 35) statusTxt = "Preservado / Baixa sobrecarga";
+                    else if (pct <= 65) statusTxt = "Moderado / Alerta de resíduo";
+                    else statusTxt = "Crítico / Saturação atencional";
+                    document.getElementById(`${idPrefix}Feedback`).innerText = `${statusTxt} (${pct}% da pontuação máxima).`;
+                };
+
+                updateDim('d1', d1, 12);
+                updateDim('d2', d2, 12);
+                updateDim('d3', d3, 12);
+                updateDim('d4', d4, 12);
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -15,11 +15,12 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 
 
 
-- [ ] **A Neurobiologia do Efeito Zeigarnik e a Carga Cognitiva das Tarefas Inacabadas: Por Que o Cérebro Não Consegue Desligar**
+
 
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia do Efeito Zeigarnik e a Carga Cognitiva das Tarefas Inacabadas: Por Que o Cérebro Não Consegue Desligar** (Publicado em 06/11/2026)
 - [x] **A Neurobiologia da Anedonia e o Circuito Habenular: Por Que a Frustração Crônica Desliga o Prazer** (Publicado em 05/11/2026)
 - [x] **A Arquitetura Neural do Desamparo Aprendido e a Reativação Dopaminérgica** (Publicado em 05/11/2026)
 - [x] **A Neurobiologia da Intuição e dos Marcadores Somáticos: Como o Corpo Decide Antes da Razão** (Publicado em 03/11/2026)
