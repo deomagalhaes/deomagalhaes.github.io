@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 7 — Gerador, Editor e Exportador de Tablaturas e Diagramas de Cifras Caipiras
+## 🎯 Projeto Prioritário Atual: Fase 8 — Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio e Dórico na Viola)
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Permitir ao usuário criar, editar e compor suas próprias tablaturas e ponteios para Viola Caipira (5 pares) e Violão de 6 cordas, adicionando notas, duetos em terças/sextas, batidas e rasqueados diretamente pelo braço virtual interativo.
-  2. Implementar motor de exportação de partituras/tablaturas em formato texto ASCII (.tab / .txt) formatado e diagrama gráfico imprimível (PDF / Canvas) com indicação para tocadores Canhotos e Destros.
-  3. Adicionar reprodutor Web Audio API para audição imediata das criações do usuário com loop, controle de andamento e salvamento no LocalStorage via `VaultCore`.
+  1. Mapeamento sonoro e visual completo dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço do instrumento (Viola Cebolão em Mi/Ré, Rio Abaixo e Violão 6C): Modo Lídio (quarta aumentada, sonoridade mística das folias e cantigas mineiras), Modo Mixolídio (sétima menor, baião, catira e repente nordestino) e Modo Dórico (terça menor com sexta maior, lamento sertanejo do Cariri).
+  2. Visualização em shapes de digitação contínuos ao longo das 14 casas com diferenciação cromática de graus modais, notas características e tríades geradoras.
+  3. Exercícios guiados de digitação, saltos de oitava e improvisação caipira com reprodução Web Audio em andamentos escalonados e modo Canhoto nativo.
 
 ---
 
@@ -26,14 +26,58 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Módulo completo de treino perceptivo com simulação física de batimentos acústicos, teste cego em 4 níveis de dificuldade, simulador de cravelha manual em cents, osciloscópio de envoltória em Canvas e patentes de violeiro (Iniciante até Tião Carreiro).
 4. **[x] Biblioteca Expandida de Ponteios & Solos Canônicos de Viola Caipira (Fase 6 Concluída):**
    - Mapeamento e reprodução passo a passo de 10 clássicos em terças e sextas com visualização sincronizada no braço SVG, tablatura digital interativa com dedilhado de mão direita e controle de andamento didático.
-5. **[ ] Gerador / Editor e Exportador de Tablaturas e Cifras (Fase 7):**
-   - Permitir criar composições próprias na tablatura, salvar no cofre e exportar em texto ASCII e PDF imprimível.
-6. **[ ] Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio e Dórico na Viola):**
+5. **[x] Gerador / Editor e Exportador de Tablaturas e Cifras Caipiras (Fase 7 Concluída):**
+   - Motor completo de criação, edição e composição de tablaturas para Viola Caipira (5 pares) e Violão (6 cordas), integração bidirecional com o braço SVG, técnicas caipiras em 1 clique (Tap, Rasq, Terças e Sextas), reprodutor Web Audio, exportação multiformato (ASCII formatado e Canvas HD PNG / Impressão PDF) e persistência de múltiplos projetos no cofre.
+6. **[ ] Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio e Dórico na Viola) (Fase 8):**
    - Mapeamento sonoro e visual dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço do instrumento.
+7. **[ ] Analisador de Tensão e Calibre de Cordas (String Tension & Action Calculator):**
+   - Cálculo de tensão mecânica em kgf por par para cordas de aço e nylon em afinações Cebolão, Rio Abaixo e Boiadeira com alertas de fadiga do tampo e regulagem de cavalete.
+8. **[ ] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço):**
+   - Expansão lutherística com novos temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão goiano.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **06/11/2026 — Sessão 7** (Fase 7 Concluída):
+  - **Gerador, Editor e Exportador de Tablaturas e Diagramas de Cifras Caipiras**:
+    - **Motor de Composição & Edição Completo (5 Pares da Viola & 6 Cordas do Violão)**:
+      - Arquitetura de projetos múltiplos armazenados de forma persistente no LocalStorage via `VaultCore`: gerenciador com criação de nova composição, seletor de projetos, edição de título e autor em tempo real, andamento BPM e fórmula de compasso (2/4, 3/4, 4/4, 6/8).
+      - Quatro presets canônicos de composições para estudo e base criativa:
+        - *Minha Primeira Moda Caipira* (introdução clássica em terças com cascatas, batida no tampo e rasqueado pleno de Mi Maior).
+        - *Ponteio em Sextas do Estradão* (modelo canônico de sextas nos pares 1 e 3, estilo Menino da Porteira).
+        - *Cururu do Rio Tietê* (síncopes velozes em semicolcheias com repiques e quedas em bordão grave).
+        - *Guarânia Pantaneira* (compasso ternário lírico 3/4 com arpejos abertos e ressonância seresteira).
+        - *Composição em Branco* (tablatura limpa gerada automaticamente pronta para criação livre).
+    - **Integração Bidirecional com o Braço SVG (Modo Canhoto & Destro)**:
+      - Novo modo de projeção no topo do braço: `📝 Editor de Tablatura` (`displayMode: 'TAB_EDITOR'`).
+      - Marcação em camada fantasma (índigo translúcido) de todas as notas da composição ao longo das 14 casas para visualização global da digitação.
+      - Marcadores vibrantes neon violeta e rosa com anel branco no passo ativo em tempo real.
+      - **Edição Direta pelo Braço**: clicar em qualquer casa e corda do braço virtual projeta e insere a nota diretamente na coluna ativa da tablatura, emitindo o som acústico imediato!
+    - **Grade Interativa de Tablatura (Scroll Horizontal Responsivo)**:
+      - Notação de 5 linhas (Viola Caipira) ou 6 linhas (Violão) respeitando tanto a perspectiva 'diagram' (1º agudo no topo) quanto 'player' (grave no topo) e modo Canhoto/Destro.
+      - Células de entrada numérica rápida em cada corda (0 a 14) com reprodução sonora imediata na alteração.
+      - Identificação e dedução algorítmica automática de acordes a partir das digitações simultâneas via motor harmônico reverso.
+      - Barra de ferramentas do passo ativo com técnicas caipiras em 1 clique:
+        - `Batida no Tampo [TAP]` (dispara síntese física percussiva `playWoodTap` e limpa notas do passo).
+        - `Rasqueado [RASQ]` (aplica rasqueado em leque em todas as cordas com `playRasqueado`).
+        - `Terça Caipira [3ª]` (calcula e insere automaticamente dueto em terças diatônicas nos pares 1 e 2).
+        - `Sexta Caipira [6ª]` (calcula e insere dueto em sextas nos pares 1 e 3).
+        - Controles estruturais: `+ Tempo`, `Duplicar Tempo`, `+ Compasso`, `Limpar Passo` e `Excluir Tempo`.
+    - **Importador de Solos Canônicos da Biblioteca (Fase 6 ➔ Editor Fase 7)**:
+      - Modal interativo permitindo clonar qualquer um dos 10 solos canônicos da Fase 6 (Pagode em Brasília, Chico Mineiro, Menino da Porteira, O Rei do Gado, Ferrugem, Tristeza do Jeca, etc.) diretamente para o Editor de Tablatura, habilitando o violeiro a customizar e criar suas próprias variações!
+    - **Motor de Exportação Multiformato de Alto Padrão**:
+      - **1. Exportador em Texto ASCII (.tab / .txt)**:
+        - Gera partitura textual universal perfeitamente alinhada em sistemas de 2 compassos, com cifras superiores, técnica de mão direita (RH), régua de tempos e cabeçalho completo (título, autor, afinação, BPM, métrica, orientação canhota/destra).
+        - Modal de exportação com visualizador com rolagem, botão de cópia de um clique com feedback visual e download imediato do arquivo `.tab`.
+      - **2. Exportador Gráfico de Diagrama / Partitura em Canvas HD (PNG)**:
+        - Renderizador vetorial em Canvas 2D em 2x escala (Retina / Alta Resolução): moldura estúdio dark nobre, cabeçalho dourado, pauta detalhada com barras duplas, números de casa em badges contrastantes, acordes destacados e selo Nexus Vault.
+        - Download de imagem HD em PNG de 1 clique para redes sociais ou impressão.
+      - **3. Sistema de Impressão e PDF**:
+        - Janela de impressão dedicada com folha formatada limpa em preto e branco otimizada para folhas A4 sem cortes de margem.
+    - **Reprodutor Web Audio API Integrado**:
+      - Sequenciador rítmico sincronizado ao BPM da composição com auto-scroll suave do cursor luminoso na tablatura e iluminação sincronizada no braço virtual.
+      - Controles de andamento em 4 velocidades didáticas (50%, 75%, 100%, 125%), modo Loop e navegação passo a passo manual.
 
 - **05/11/2026 — Sessão 6** (Fase 6 Concluída):
   - **Biblioteca Expandida de Ponteios & Solos Canônicos de Viola Caipira**:

@@ -340,6 +340,116 @@
         isLooping: true
     };
 
+    const DEFAULT_TAB_EDITOR_PROJECTS = [
+        {
+            id: 'minha_moda_caipira',
+            title: 'Minha Primeira Moda Caipira',
+            author: 'Violeiro do Nexus',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '2/4',
+            bpm: 96,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Abertura em Lá' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Terça de Mi' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Terça de Si7' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Terça de Lá' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Cordas soltas E/B' },
+                { measure: 2, beat: '1 e', notes: [{ c: 2, f: 1 }], d: 0.22, rh: 'p', lh: '1', chord: 'E', ann: 'Bordão Turina Lá' },
+                { measure: 2, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.22, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Toeira Fá#' },
+                { measure: 2, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida no tampo [TAP]' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Cascata de Mi' },
+                { measure: 3, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Descida em terças' },
+                { measure: 3, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Resolução em Lá' },
+                { measure: 3, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.24, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Acorde solto' },
+                { measure: 4, beat: '1', notes: [{ c: 3, f: 2 }, { c: 4, f: 2 }], d: 0.28, rh: 'p', lh: '2-2', chord: 'B7', ann: 'Bordão Si' },
+                { measure: 4, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.60, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado final de Mi' }
+            ]
+        },
+        {
+            id: 'ponteio_sextas_estradao',
+            title: 'Ponteio em Sextas do Estradão',
+            author: 'Violeiro do Nexus',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '2/4',
+            bpm: 88,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.25, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Sexta solta E/G#' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'F#m', ann: 'Sexta menor F#/A' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'G#m', ann: 'Sexta menor G#/B' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.30, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Sexta Maior A/C#' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 7 }, { c: 2, f: 7 }], d: 0.30, rh: 'p+i', lh: '1-1', chord: 'B', ann: 'Sexta Maior B/D#' },
+                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.25, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Retorno A/C#' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'G#m', ann: 'Passagem G#/B' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'F#m', ann: 'Passagem F#/A' },
+                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.35, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Resolução E/G#' },
+                { measure: 3, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.24, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Toeira' },
+                { measure: 3, beat: '2', notes: [{ c: 4, f: 2 }], d: 0.26, rh: 'p', lh: '2', chord: 'B7', ann: 'Canotilho Si' },
+                { measure: 3, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida no tampo [TAP]' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.60, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado de Mi' }
+            ]
+        },
+        {
+            id: 'cururu_duelo_tiete',
+            title: 'Cururu do Rio Tietê',
+            author: 'Violeiro do Nexus',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '2/4',
+            bpm: 108,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.18, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Abertura rápida' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 1, f: 2 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'F#m', ann: 'Dueto de passagem' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 4 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'G#m', ann: 'Subida ligeira' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Apoio em Lá' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 7 }, { c: 1, f: 7 }], d: 0.20, rh: 'p+i', lh: '1-1', chord: 'B', ann: 'Repique agudo' },
+                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Descida' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 4 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'G#m', ann: 'Passagem' },
+                { measure: 2, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida de tampo [TAP]' },
+                { measure: 3, beat: '1', notes: [{ c: 2, f: 1 }], d: 0.20, rh: 'p', lh: '1', chord: 'E', ann: 'Bordão Lá' },
+                { measure: 3, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.20, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Fá#' },
+                { measure: 3, beat: '2', notes: [{ c: 4, f: 2 }], d: 0.22, rh: 'p', lh: '2', chord: 'B7', ann: 'Canotilho Si' },
+                { measure: 3, beat: '2 e', notes: [{ c: 4, f: 0 }], d: 0.22, rh: 'p', lh: '0', chord: 'E', ann: 'Canotilho solto Mi' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.50, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado firme' }
+            ]
+        },
+        {
+            id: 'guarania_pantaneira',
+            title: 'Guarânia Pantaneira',
+            author: 'Violeiro do Nexus',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '3/4',
+            bpm: 76,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 4, f: 0 }], d: 0.32, rh: 'p', lh: '0', chord: 'E', ann: 'Baixo Mi no tempo 1' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.30, rh: 'i+m', lh: '0-0', chord: 'E', ann: 'Acorde solto' },
+                { measure: 1, beat: '3', notes: [{ c: 2, f: 0 }], d: 0.28, rh: 'p', lh: '0', chord: 'E', ann: 'Turina solta' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.34, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Dueto lírico em terças' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.30, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Terça de Si7' },
+                { measure: 2, beat: '3', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.30, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Terça de Lá' },
+                { measure: 3, beat: '1', notes: [{ c: 3, f: 2 }], d: 0.32, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Si' },
+                { measure: 3, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 0 }], d: 0.30, rh: 'i+m', lh: '2-0', chord: 'B7', ann: 'Acorde Si7' },
+                { measure: 3, beat: '3', notes: [], d: 0.25, rh: 'tap', lh: '—', chord: 'B7', ann: 'Batida leve no tampo' },
+                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.70, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado de Mi profundo' }
+            ]
+        }
+    ];
+
+    const DEFAULT_TAB_EDITOR_STATE = {
+        activeProjectId: 'minha_moda_caipira',
+        currentStepIdx: 0,
+        isPlaying: false,
+        playbackSpeed: 1.0,
+        isLooping: true,
+        projects: DEFAULT_TAB_EDITOR_PROJECTS.slice()
+    };
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -369,7 +479,8 @@
         reverseFretsViola: [0, 0, 0, 0, 0], // Digitação ativa no Dicionário Reverso p/ Viola (1º ao 5º par)
         reverseFretsViolao: [0, 0, 1, 2, 2, 0], // Digitação ativa no Dicionário Reverso p/ Violão (1ª à 6ª corda)
         earTrainer: Object.assign({}, DEFAULT_EAR_TRAINER_STATE),
-        ponteioPlayer: Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE)
+        ponteioPlayer: Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE),
+        tabEditor: Object.assign({}, DEFAULT_TAB_EDITOR_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -384,7 +495,8 @@
     let scalePlayTimers = [];
     let progressionTimerId = null;
     let ponteioPlaybackTimer = null;
-    let progressionTimerId = null;
+    let tabEditorPlaybackTimer = null;
+    let activeTabEditorTimers = [];
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -1306,6 +1418,7 @@
         }
         stopScalePlayback();
         stopPonteioPlayback();
+        stopTabEditorPlayback();
         stopTunerTone();
 
         state.progressionPlaying = true;
@@ -1859,6 +1972,7 @@
     function playPonteio() {
         stopScalePlayback();
         stopProgressionPlayback();
+        stopTabEditorPlayback();
         stopTunerTone();
         stopEarTrainerAudio();
 
@@ -2379,6 +2493,1229 @@
     }
 
     // =========================================================================
+    // GERADOR, EDITOR E EXPORTADOR DE TABLATURAS E DIAGRAMAS DE CIFRAS (FASE 7)
+    // =========================================================================
+
+    function getActiveTabProject() {
+        if (!state.tabEditor || !Array.isArray(state.tabEditor.projects) || state.tabEditor.projects.length === 0) {
+            state.tabEditor = Object.assign({}, DEFAULT_TAB_EDITOR_STATE, {
+                projects: JSON.parse(JSON.stringify(DEFAULT_TAB_EDITOR_PROJECTS))
+            });
+        }
+        const found = state.tabEditor.projects.find((p) => p.id === state.tabEditor.activeProjectId);
+        return found || state.tabEditor.projects[0];
+    }
+
+    function stopTabEditorPlayback() {
+        if (tabEditorPlaybackTimer) {
+            clearTimeout(tabEditorPlaybackTimer);
+            tabEditorPlaybackTimer = null;
+        }
+        activeTabEditorTimers.forEach((t) => clearTimeout(t));
+        activeTabEditorTimers = [];
+        state.tabEditor.isPlaying = false;
+        updateTabEditorUIState();
+    }
+
+    function scheduleNextTabEditorStep() {
+        if (!state.tabEditor.isPlaying) return;
+
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || proj.steps.length === 0) {
+            stopTabEditorPlayback();
+            return;
+        }
+
+        const curIdx = state.tabEditor.currentStepIdx;
+        if (curIdx >= proj.steps.length) {
+            if (state.tabEditor.isLooping) {
+                state.tabEditor.currentStepIdx = 0;
+                scheduleNextTabEditorStep();
+            } else {
+                stopTabEditorPlayback();
+                state.tabEditor.currentStepIdx = 0;
+                updateTabEditorUIState();
+                renderFretboardSVG();
+            }
+            return;
+        }
+
+        const step = proj.steps[curIdx];
+        playPonteioEvent(step);
+        highlightTabEditorStep(curIdx);
+        renderFretboardSVG();
+
+        const speed = Math.max(0.25, state.tabEditor.playbackSpeed || 1.0);
+        const bpmFactor = 96 / Math.max(40, proj.bpm || 96);
+        const stepDurationMs = Math.round(((step.d || 0.22) * bpmFactor / speed) * 1000);
+
+        state.tabEditor.currentStepIdx = curIdx + 1;
+
+        tabEditorPlaybackTimer = setTimeout(() => {
+            scheduleNextTabEditorStep();
+        }, stepDurationMs);
+    }
+
+    function playTabEditorPlayback() {
+        stopScalePlayback();
+        stopProgressionPlayback();
+        stopTunerTone();
+        stopEarTrainerAudio();
+        stopPonteioPlayback();
+
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || proj.steps.length === 0) return;
+
+        if (state.tabEditor.isPlaying) {
+            pauseTabEditorPlayback();
+            return;
+        }
+
+        state.tabEditor.isPlaying = true;
+        state.displayMode = 'TAB_EDITOR';
+
+        if (state.tabEditor.currentStepIdx < 0 || state.tabEditor.currentStepIdx >= proj.steps.length) {
+            state.tabEditor.currentStepIdx = 0;
+        }
+
+        renderFretboardSVG();
+        updateTabEditorUIState();
+        scheduleNextTabEditorStep();
+    }
+
+    function pauseTabEditorPlayback() {
+        stopTabEditorPlayback();
+    }
+
+    function stepTabEditor(delta) {
+        stopTabEditorPlayback();
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || proj.steps.length === 0) return;
+
+        let nextIdx = (state.tabEditor.currentStepIdx < 0 ? 0 : state.tabEditor.currentStepIdx) + delta;
+        if (nextIdx < 0) nextIdx = proj.steps.length - 1;
+        if (nextIdx >= proj.steps.length) nextIdx = 0;
+
+        state.tabEditor.currentStepIdx = nextIdx;
+        state.displayMode = 'TAB_EDITOR';
+
+        const step = proj.steps[nextIdx];
+        playPonteioEvent(step);
+        highlightTabEditorStep(nextIdx);
+        renderFretboardSVG();
+        saveViolaState();
+    }
+
+    function jumpToTabEditorStep(idx) {
+        stopTabEditorPlayback();
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || idx < 0 || idx >= proj.steps.length) return;
+
+        state.tabEditor.currentStepIdx = idx;
+        state.displayMode = 'TAB_EDITOR';
+
+        const step = proj.steps[idx];
+        playPonteioEvent(step);
+        highlightTabEditorStep(idx);
+        renderFretboardSVG();
+        saveViolaState();
+    }
+
+    function highlightTabEditorStep(stepIdx) {
+        const container = document.getElementById('viola-tab-editor-grid');
+        if (!container) return;
+
+        container.querySelectorAll('[data-editor-step]').forEach((col) => {
+            const idx = parseInt(col.getAttribute('data-editor-step'), 10);
+            if (idx === stepIdx) {
+                col.classList.add('bg-violet-500/25', 'border-violet-400', 'ring-2', 'ring-violet-400/50', 'shadow-[0_0_15px_rgba(168,85,247,0.45)]');
+                col.classList.remove('border-slate-800');
+                try {
+                    col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } catch (_) {}
+            } else {
+                col.classList.remove('bg-violet-500/25', 'border-violet-400', 'ring-2', 'ring-violet-400/50', 'shadow-[0_0_15px_rgba(168,85,247,0.45)]');
+                col.classList.add('border-slate-800');
+            }
+        });
+
+        // Atualiza a ficha do passo ativo
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || !proj.steps[stepIdx]) return;
+        const curStep = proj.steps[stepIdx];
+        const inst = INSTRUMENTS[state.instrumentId];
+
+        const notesDesc = (curStep.notes && curStep.notes.length > 0)
+            ? curStep.notes.map((n) => {
+                const pc = (inst.courses[n.c].pitchClass + n.f) % 12;
+                return `${inst.courses[n.c].num}ºP (${NOTE_NAMES[pc]} c.${n.f})`;
+            }).join(' + ')
+            : (curStep.rh === 'tap' ? 'Batida no Tampo [TAP]' : 'Pausa / Sem nota');
+
+        const activeCard = document.getElementById('viola-tab-active-step-info');
+        if (activeCard) {
+            activeCard.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-mono text-xs font-bold border border-violet-500/30">
+                            Compasso ${curStep.measure} • Tempo ${curStep.beat}
+                        </span>
+                        <span class="text-xs font-mono text-slate-300 font-semibold">
+                            ${notesDesc}
+                        </span>
+                        ${curStep.chord ? `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold border border-emerald-500/30">${curStep.chord}</span>` : ''}
+                    </div>
+                    <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+                        <span>Mão Dir: <strong class="text-amber-400">${curStep.rh || 'p'}</strong></span>
+                        <span>Mão Esq: <strong class="text-cyan-400">${curStep.lh || '—'}</strong></span>
+                        <span>Duração: <strong class="text-slate-300">${Math.round(curStep.d * 1000)}ms</strong></span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    function toggleTabEditorLoop() {
+        state.tabEditor.isLooping = !state.tabEditor.isLooping;
+        saveViolaState();
+        updateTabEditorUIState();
+    }
+
+    function setTabEditorSpeed(speed) {
+        state.tabEditor.playbackSpeed = speed;
+        saveViolaState();
+        updateTabEditorUIState();
+    }
+
+    function updateTabEditorUIState() {
+        const playBtn = document.getElementById('btn-viola-tab-play');
+        if (playBtn) {
+            playBtn.className = state.tabEditor.isPlaying
+                ? 'min-h-[40px] px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-lg'
+                : 'min-h-[40px] px-4 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow-lg';
+            playBtn.innerHTML = state.tabEditor.isPlaying
+                ? '<i data-lucide="pause" class="w-4 h-4"></i><span>Pausar</span>'
+                : '<i data-lucide="play" class="w-4 h-4"></i><span>Tocar Obra</span>';
+            if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(playBtn);
+        }
+
+        const loopBtn = document.getElementById('btn-viola-tab-loop');
+        if (loopBtn) {
+            loopBtn.className = state.tabEditor.isLooping
+                ? 'min-h-[40px] px-3 py-1.5 rounded-lg bg-violet-600/25 border border-violet-400 text-violet-200 text-xs font-mono font-semibold flex items-center gap-1 transition'
+                : 'min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 text-xs font-mono flex items-center gap-1 transition';
+        }
+
+        [0.5, 0.75, 1.0, 1.25].forEach((spd) => {
+            const btn = document.getElementById(`btn-viola-tab-speed-${Math.round(spd * 100)}`);
+            if (btn) {
+                const isActive = Math.abs((state.tabEditor.playbackSpeed || 1.0) - spd) < 0.05;
+                btn.className = isActive
+                    ? 'px-2 py-1 text-[11px] font-mono rounded bg-violet-600 text-white font-bold shadow'
+                    : 'px-2 py-1 text-[11px] font-mono rounded bg-slate-800 text-slate-400 hover:text-slate-200';
+            }
+        });
+    }
+
+    function toggleTabEditorNote(courseIdx, fret) {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps) return;
+        const curIdx = state.tabEditor.currentStepIdx;
+        if (curIdx < 0 || curIdx >= proj.steps.length) return;
+
+        const step = proj.steps[curIdx];
+        if (!Array.isArray(step.notes)) step.notes = [];
+
+        if (step.rh === 'tap') {
+            step.rh = 'p';
+            step.ann = '';
+        }
+
+        const existingIdx = step.notes.findIndex((n) => n.c === courseIdx);
+        if (existingIdx >= 0) {
+            if (step.notes[existingIdx].f === fret) {
+                step.notes.splice(existingIdx, 1);
+            } else {
+                step.notes[existingIdx].f = fret;
+            }
+        } else {
+            step.notes.push({ c: courseIdx, f: fret });
+            step.notes.sort((a, b) => a.c - b.c);
+        }
+
+        // Atualiza digitação e técnica
+        if (step.notes.length === 0) {
+            step.rh = 'p';
+            step.lh = '—';
+        } else if (step.notes.length === 1) {
+            step.rh = step.notes[0].c === 0 ? 'i' : 'p';
+            step.lh = String(step.notes[0].f);
+        } else if (step.notes.length === 2) {
+            step.rh = 'p+i';
+            step.lh = `${step.notes[0].f}-${step.notes[1].f}`;
+        } else {
+            step.rh = 'rasq';
+            step.lh = step.notes.map((n) => n.f).join('-');
+        }
+
+        // Tenta deduzir o acorde via Dicionário Reverso algorítmico
+        const inst = INSTRUMENTS[state.instrumentId];
+        if (step.notes.length >= 2) {
+            const shape = inst.courses.map((_, idx) => {
+                const nt = step.notes.find((n) => n.c === idx);
+                return nt ? nt.f : -1;
+            });
+            const chordAnalysis = analyzeReverseChord(inst, shape);
+            if (chordAnalysis && chordAnalysis.found && chordAnalysis.match) {
+                step.chord = chordAnalysis.match.fullName ? chordAnalysis.match.fullName.split(' ')[0] : (chordAnalysis.rootName || '');
+            }
+        }
+
+        proj.updatedAt = new Date().toISOString();
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function setTabEditorStepTech(rh) {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps) return;
+        const curIdx = state.tabEditor.currentStepIdx;
+        if (curIdx < 0 || curIdx >= proj.steps.length) return;
+
+        const step = proj.steps[curIdx];
+        step.rh = rh;
+        if (rh === 'tap') {
+            step.notes = [];
+            step.lh = '—';
+            step.ann = 'Batida no tampo [TAP]';
+            playWoodTap(0, 0.9);
+        } else if (rh === 'rasq') {
+            if (!step.notes || step.notes.length === 0) {
+                const inst = INSTRUMENTS[state.instrumentId];
+                step.notes = inst.courses.map((_, idx) => ({ c: idx, f: 0 }));
+            }
+            playPonteioEvent(step);
+        }
+        proj.updatedAt = new Date().toISOString();
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function addTabEditorStep(afterIdx) {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps) return;
+
+        const baseStep = proj.steps[afterIdx] || proj.steps[proj.steps.length - 1];
+        const newStep = {
+            measure: baseStep ? baseStep.measure : 1,
+            beat: baseStep ? `${baseStep.beat}*` : '1',
+            notes: [],
+            d: 0.22,
+            rh: 'p',
+            lh: '—',
+            chord: '',
+            ann: ''
+        };
+
+        proj.steps.splice(afterIdx + 1, 0, newStep);
+        state.tabEditor.currentStepIdx = afterIdx + 1;
+        proj.updatedAt = new Date().toISOString();
+
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function duplicateTabEditorStep(idx) {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || idx < 0 || idx >= proj.steps.length) return;
+
+        const cloned = JSON.parse(JSON.stringify(proj.steps[idx]));
+        proj.steps.splice(idx + 1, 0, cloned);
+        state.tabEditor.currentStepIdx = idx + 1;
+        proj.updatedAt = new Date().toISOString();
+
+        playPonteioEvent(cloned);
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function deleteTabEditorStep(idx) {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || proj.steps.length <= 1) return;
+
+        proj.steps.splice(idx, 1);
+        state.tabEditor.currentStepIdx = Math.max(0, Math.min(idx, proj.steps.length - 1));
+        proj.updatedAt = new Date().toISOString();
+
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function clearTabEditorStep(idx) {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps || idx < 0 || idx >= proj.steps.length) return;
+
+        const step = proj.steps[idx];
+        step.notes = [];
+        step.rh = 'p';
+        step.lh = '—';
+        step.chord = '';
+        step.ann = '';
+        proj.updatedAt = new Date().toISOString();
+
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function addTabEditorMeasure() {
+        const proj = getActiveTabProject();
+        if (!proj || !proj.steps) return;
+
+        const maxM = proj.steps.reduce((acc, s) => Math.max(acc, s.measure || 1), 1);
+        const newM = maxM + 1;
+        const sig = proj.timeSignature || '2/4';
+
+        const beats = sig === '3/4'
+            ? ['1', '2', '3']
+            : (sig === '6/8'
+                ? ['1', '2', '3', '4', '5', '6']
+                : ['1', '1 e', '2', '2 e']);
+
+        beats.forEach((b) => {
+            proj.steps.push({
+                measure: newM,
+                beat: b,
+                notes: [],
+                d: sig === '3/4' ? 0.30 : 0.22,
+                rh: 'p',
+                lh: '—',
+                chord: '',
+                ann: ''
+            });
+        });
+
+        state.tabEditor.currentStepIdx = proj.steps.length - beats.length;
+        proj.updatedAt = new Date().toISOString();
+
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function addCaipiraThirdDuad() {
+        const duads = computeDuadScaleSteps();
+        if (!duads || duads.length === 0) return;
+        const proj = getActiveTabProject();
+        const curIdx = state.tabEditor.currentStepIdx;
+        if (curIdx < 0 || curIdx >= proj.steps.length) return;
+
+        // Pega o dueto da tônica ou 1º grau (Mi Maior)
+        const d0 = duads[0];
+        const step = proj.steps[curIdx];
+        step.notes = [
+            { c: d0.upperCourse, f: d0.upperFret },
+            { c: d0.lowerCourse, f: d0.lowerFret }
+        ];
+        step.rh = 'p+i';
+        step.lh = `${d0.upperFret}-${d0.lowerFret}`;
+        step.ann = `Terça de ${d0.upperNote}/${d0.lowerNote}`;
+        playPonteioEvent(step);
+
+        proj.updatedAt = new Date().toISOString();
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function addCaipiraSixthDuad() {
+        const origType = state.duadType;
+        state.duadType = 'SIXTHS_1_3';
+        const duads = computeDuadScaleSteps();
+        state.duadType = origType;
+
+        if (!duads || duads.length === 0) return;
+        const proj = getActiveTabProject();
+        const curIdx = state.tabEditor.currentStepIdx;
+        if (curIdx < 0 || curIdx >= proj.steps.length) return;
+
+        const d0 = duads[0];
+        const step = proj.steps[curIdx];
+        step.notes = [
+            { c: d0.upperCourse, f: d0.upperFret },
+            { c: d0.lowerCourse, f: d0.lowerFret }
+        ];
+        step.rh = 'p+i';
+        step.lh = `${d0.upperFret}-${d0.lowerFret}`;
+        step.ann = `Sexta de ${d0.upperNote}/${d0.lowerNote}`;
+        playPonteioEvent(step);
+
+        proj.updatedAt = new Date().toISOString();
+        saveViolaState();
+        renderTabEditorSection();
+        renderFretboardSVG();
+    }
+
+    function createNewTabProject(templateKey, customTitle, customAuthor) {
+        let baseProject = null;
+        if (templateKey === 'sextas') {
+            baseProject = DEFAULT_TAB_EDITOR_PROJECTS[1];
+        } else if (templateKey === 'cururu') {
+            baseProject = DEFAULT_TAB_EDITOR_PROJECTS[2];
+        } else if (templateKey === 'guarania') {
+            baseProject = DEFAULT_TAB_EDITOR_PROJECTS[3];
+        } else if (templateKey === 'blank') {
+            baseProject = {
+                id: 'nova_obra_' + Date.now(),
+                title: customTitle || 'Nova Composição Caipira',
+                author: customAuthor || 'Violeiro do Nexus',
+                instrumentId: state.instrumentId || 'viola_cebolao_e',
+                timeSignature: '2/4',
+                bpm: 92,
+                key: 'Mi Maior (E) Cebolão',
+                updatedAt: new Date().toISOString(),
+                steps: [
+                    { measure: 1, beat: '1', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 1, beat: '1 e', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 1, beat: '2', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 1, beat: '2 e', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 2, beat: '1', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 2, beat: '1 e', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 2, beat: '2', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' },
+                    { measure: 2, beat: '2 e', notes: [], d: 0.24, rh: 'p', lh: '—', chord: '', ann: '' }
+                ]
+            };
+        } else {
+            baseProject = DEFAULT_TAB_EDITOR_PROJECTS[0];
+        }
+
+        const newId = 'obra_' + Date.now();
+        const newProj = JSON.parse(JSON.stringify(baseProject));
+        newProj.id = newId;
+        newProj.title = customTitle || newProj.title;
+        newProj.author = customAuthor || newProj.author;
+        newProj.instrumentId = state.instrumentId;
+        newProj.updatedAt = new Date().toISOString();
+
+        if (!Array.isArray(state.tabEditor.projects)) {
+            state.tabEditor.projects = JSON.parse(JSON.stringify(DEFAULT_TAB_EDITOR_PROJECTS));
+        }
+        state.tabEditor.projects.unshift(newProj);
+        state.tabEditor.activeProjectId = newId;
+        state.tabEditor.currentStepIdx = 0;
+        state.displayMode = 'TAB_EDITOR';
+
+        saveViolaState();
+        renderAll();
+    }
+
+    function deleteTabProject(projectId) {
+        if (!state.tabEditor.projects || state.tabEditor.projects.length <= 1) {
+            alert('Não é possível excluir a única composição salva no cofre.');
+            return;
+        }
+        if (!confirm('Deseja realmente excluir esta composição do cofre?')) return;
+
+        state.tabEditor.projects = state.tabEditor.projects.filter((p) => p.id !== projectId);
+        state.tabEditor.activeProjectId = state.tabEditor.projects[0].id;
+        state.tabEditor.currentStepIdx = 0;
+
+        saveViolaState();
+        renderAll();
+    }
+
+    function importPonteioToEditor(ponteioId) {
+        const pt = PONTEIOS_REPERTOIRE.find((p) => p.id === ponteioId);
+        if (!pt) return;
+
+        const newId = 'ponteio_' + pt.id + '_' + Date.now();
+        const clonedSteps = JSON.parse(JSON.stringify(pt.steps || []));
+
+        const newProj = {
+            id: newId,
+            title: '[Solo] ' + pt.title,
+            author: pt.author || 'Mestre Violeiro',
+            instrumentId: pt.recommendedTuning || state.instrumentId || 'viola_cebolao_e',
+            timeSignature: pt.rhythm && pt.rhythm.includes('3/4') ? '3/4' : (pt.rhythm && pt.rhythm.includes('6/8') ? '6/8' : '2/4'),
+            bpm: pt.bpmDefault || 96,
+            key: pt.key || 'Mi Maior (E) Cebolão',
+            updatedAt: new Date().toISOString(),
+            steps: clonedSteps
+        };
+
+        if (!Array.isArray(state.tabEditor.projects)) {
+            state.tabEditor.projects = JSON.parse(JSON.stringify(DEFAULT_TAB_EDITOR_PROJECTS));
+        }
+        state.tabEditor.projects.unshift(newProj);
+        state.tabEditor.activeProjectId = newId;
+        state.tabEditor.currentStepIdx = 0;
+        state.displayMode = 'TAB_EDITOR';
+
+        saveViolaState();
+        renderAll();
+
+        const wrap = document.getElementById('viola-tab-editor-container');
+        if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // =========================================================================
+    // MOTOR DE EXPORTAÇÃO ASCII FORMATADO (.TAB / .TXT)
+    // =========================================================================
+    function generateTabAscii(project, isLeftHanded, viewPerspective) {
+        const inst = INSTRUMENTS[project.instrumentId || state.instrumentId];
+        const numCourses = inst.courses.length;
+        const courseOrder = viewPerspective === 'diagram'
+            ? Array.from({ length: numCourses }, (_, i) => i)
+            : Array.from({ length: numCourses }, (_, i) => numCourses - 1 - i);
+
+        const measuresMap = new Map();
+        (project.steps || []).forEach((st, idx) => {
+            const m = st.measure || 1;
+            if (!measuresMap.has(m)) measuresMap.set(m, []);
+            measuresMap.get(m).push({ step: st, idx });
+        });
+
+        const measureNumbers = Array.from(measuresMap.keys()).sort((a, b) => a - b);
+        let out = '';
+
+        out += `================================================================================\n`;
+        out += `NEXUS VAULT — TABLATURA & PONTEIO CAIPIRA (FASE 7)\n`;
+        out += `Obra: ${project.title || 'Sem Título'}\n`;
+        out += `Compositor / Arranjo: ${project.author || 'Violeiro do Nexus'}\n`;
+        out += `Instrumento: ${inst.name}\n`;
+        out += `Afinação: ${inst.tuning} | Andamento: ${project.bpm || 96} BPM | Compasso: ${project.timeSignature || '2/4'}\n`;
+        out += `Orientação: ${isLeftHanded ? 'Canhoto (Pestana à Direita)' : 'Destro (Pestana à Esquerda)'}\n`;
+        out += `Exportado em: ${new Date().toLocaleDateString('pt-BR')} via Nexus Vault Studio\n`;
+        out += `================================================================================\n\n`;
+
+        // Agrupa de 2 em 2 compassos por linha de sistema
+        const measuresPerRow = 2;
+        for (let i = 0; i < measureNumbers.length; i += measuresPerRow) {
+            const currentMeasures = measureNumbers.slice(i, i + measuresPerRow);
+            out += `[ Compassos ${currentMeasures.join(' & ')} ]\n`;
+
+            // Linha de Cifras
+            let chordLine = 'Cifra : ';
+            currentMeasures.forEach((m) => {
+                const steps = measuresMap.get(m) || [];
+                steps.forEach(({ step }) => {
+                    const ch = step.chord || ' ';
+                    chordLine += ch.padEnd(8, ' ');
+                });
+                chordLine += '| ';
+            });
+            out += chordLine.trimEnd() + '\n';
+
+            // Linha de Mão Direita
+            let rhLine = 'M.Dir : ';
+            currentMeasures.forEach((m) => {
+                const steps = measuresMap.get(m) || [];
+                steps.forEach(({ step }) => {
+                    const rh = step.rh || ' ';
+                    rhLine += rh.padEnd(8, ' ');
+                });
+                rhLine += '| ';
+            });
+            out += rhLine.trimEnd() + '\n';
+
+            // Linhas das Cordas
+            courseOrder.forEach((cIdx) => {
+                const course = inst.courses[cIdx];
+                const cleanNote = course.note.split('/')[0];
+                const prefix = `${course.num}º(${cleanNote})`.padEnd(7, ' ') + '|';
+                let stringLine = prefix;
+
+                currentMeasures.forEach((m) => {
+                    const steps = measuresMap.get(m) || [];
+                    steps.forEach(({ step }) => {
+                        const nt = (step.notes || []).find((n) => n.c === cIdx);
+                        let cell = '----';
+                        if (step.rh === 'tap') {
+                            cell = cIdx === 2 ? '[TAP]' : '----';
+                        } else if (step.rh === 'rasq') {
+                            cell = nt ? `-${nt.f}--` : '-0--';
+                        } else if (nt) {
+                            cell = `-${nt.f}--`;
+                        }
+                        stringLine += cell.padEnd(8, '-');
+                    });
+                    stringLine += '|';
+                });
+                out += stringLine + '\n';
+            });
+
+            // Linha de Tempos / Pulsos
+            let beatLine = 'Tempo : ';
+            currentMeasures.forEach((m) => {
+                const steps = measuresMap.get(m) || [];
+                steps.forEach(({ step }) => {
+                    const b = step.beat || ' ';
+                    beatLine += b.padEnd(8, ' ');
+                });
+                beatLine += '| ';
+            });
+            out += beatLine.trimEnd() + '\n\n';
+        }
+
+        out += `================================================================================\n`;
+        out += `Legenda Mão Direita: p = Polegar, i = Indicador, p+i = Pinçado/Dueto,\n`;
+        out += `tap = Batida no Tampo, rasq = Rasqueado aberto.\n`;
+        out += `================================================================================\n`;
+
+        return out;
+    }
+
+    // =========================================================================
+    // MOTOR DE EXPORTAÇÃO GRÁFICA EM CANVAS HD & IMPRESSÃO / PDF
+    // =========================================================================
+    function renderTabDiagramCanvas(canvas, project, isLeftHanded, viewPerspective) {
+        if (!canvas) return;
+        const inst = INSTRUMENTS[project.instrumentId || state.instrumentId];
+        const numCourses = inst.courses.length;
+        const courseOrder = viewPerspective === 'diagram'
+            ? Array.from({ length: numCourses }, (_, i) => i)
+            : Array.from({ length: numCourses }, (_, i) => numCourses - 1 - i);
+
+        const measuresMap = new Map();
+        (project.steps || []).forEach((st, idx) => {
+            const m = st.measure || 1;
+            if (!measuresMap.has(m)) measuresMap.set(m, []);
+            measuresMap.get(m).push({ step: st, idx });
+        });
+
+        const measureNumbers = Array.from(measuresMap.keys()).sort((a, b) => a - b);
+        const measuresPerRow = 2;
+        const totalRows = Math.ceil(measureNumbers.length / measuresPerRow);
+
+        const dpr = 2;
+        const width = 1100;
+        const headerH = 140;
+        const rowH = 175;
+        const footerH = 65;
+        const height = headerH + totalRows * rowH + footerH;
+
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+
+        // Fundo Estúdio Escuro Nobre
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+        bgGrad.addColorStop(0, '#090d16');
+        bgGrad.addColorStop(1, '#050811');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Moldura estúdio
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(16, 16, width - 32, height - 32);
+
+        // Cabeçalho Artístico
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 24px Inter, sans-serif';
+        ctx.fillText(project.title || 'Sem Título', 36, 52);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '13px "JetBrains Mono", monospace';
+        const metaStr = `Compositor: ${project.author || 'Violeiro'}  •  Instrumento: ${inst.name}  •  Andamento: ${project.bpm || 96} BPM  •  Compasso: ${project.timeSignature || '2/4'}  •  Afinação: ${inst.tuning}`;
+        ctx.fillText(metaStr, 36, 80);
+
+        ctx.fillStyle = isLeftHanded ? '#fbbf24' : '#38bdf8';
+        ctx.font = 'bold 11px "JetBrains Mono", monospace';
+        const handText = isLeftHanded ? '★ MODO CANHOTO ATIVO (PESTANA À DIREITA)' : 'MODO DESTRO (PESTANA À ESQUERDA)';
+        ctx.fillText(handText, 36, 104);
+
+        ctx.strokeStyle = '#334155';
+        ctx.beginPath();
+        ctx.moveTo(36, 120);
+        ctx.lineTo(width - 36, 120);
+        ctx.stroke();
+
+        // Pautas por Linha de Sistema
+        const padX = 110;
+        const usableW = width - padX - 45;
+
+        for (let r = 0; r < totalRows; r++) {
+            const currentMeasures = measureNumbers.slice(r * measuresPerRow, (r + 1) * measuresPerRow);
+            const rowTopY = headerH + r * rowH + 20;
+            const staveH = (numCourses - 1) * 18;
+
+            // Rótulos laterais das cordas
+            courseOrder.forEach((cIdx, rowIdx) => {
+                const c = inst.courses[cIdx];
+                const y = rowTopY + 25 + rowIdx * 18;
+                ctx.fillStyle = '#64748b';
+                ctx.font = 'bold 11px "JetBrains Mono", monospace';
+                ctx.fillText(`${c.num}º ${c.note.split('/')[0]}`, 36, y + 4);
+
+                // Linha da corda
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.moveTo(padX, y);
+                ctx.lineTo(width - 45, y);
+                ctx.stroke();
+            });
+
+            // Barras duplas no início e fim da linha
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(padX, rowTopY + 25);
+            ctx.lineTo(padX, rowTopY + 25 + staveH);
+            ctx.stroke();
+
+            // Renderiza cada compasso
+            const measureW = usableW / currentMeasures.length;
+            currentMeasures.forEach((m, mIdx) => {
+                const mStartX = padX + mIdx * measureW;
+                const mEndX = mStartX + measureW;
+                const steps = measuresMap.get(m) || [];
+
+                // Barra final de compasso
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(mEndX, rowTopY + 25);
+                ctx.lineTo(mEndX, rowTopY + 25 + staveH);
+                ctx.stroke();
+
+                // Número do compasso
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = 'bold 11px "JetBrains Mono", monospace';
+                ctx.fillText(`C.${m}`, mStartX + 8, rowTopY + 12);
+
+                // Passos do compasso
+                const stepW = measureW / Math.max(steps.length, 1);
+                steps.forEach(({ step }, sIdx) => {
+                    const stepX = mStartX + sIdx * stepW + stepW * 0.5;
+
+                    // Cifra acima da pauta
+                    if (step.chord) {
+                        ctx.fillStyle = '#10b981';
+                        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(step.chord, stepX, rowTopY + 14);
+                    }
+
+                    // Técnica mão direita abaixo da pauta
+                    if (step.rh) {
+                        ctx.fillStyle = '#f59e0b';
+                        ctx.font = 'bold 10px "JetBrains Mono", monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(step.rh, stepX, rowTopY + 38 + staveH);
+                    }
+
+                    // Batida no tampo [TAP]
+                    if (step.rh === 'tap') {
+                        const tapY = rowTopY + 25 + staveH * 0.5;
+                        ctx.fillStyle = '#e11d48';
+                        ctx.beginPath();
+                        ctx.arc(stepX, tapY, 10, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 8.5px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('TAP', stepX, tapY + 3);
+                        return;
+                    }
+
+                    // Notas nas cordas
+                    (step.notes || []).forEach((nt) => {
+                        const visualIdx = courseOrder.indexOf(nt.c);
+                        if (visualIdx >= 0) {
+                            const noteY = rowTopY + 25 + visualIdx * 18;
+                            ctx.fillStyle = '#0f172a';
+                            ctx.beginPath();
+                            ctx.arc(stepX, noteY, 8.5, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.strokeStyle = '#a855f7';
+                            ctx.lineWidth = 2;
+                            ctx.stroke();
+
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = 'bold 10px "JetBrains Mono", monospace';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(String(nt.f), stepX, noteY + 3.5);
+                        }
+                    });
+                });
+            });
+            ctx.textAlign = 'start';
+        }
+
+        // Rodapé
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.fillText(`Nexus Vault • Estúdio Digital de Viola Caipira & Violão • deomagalhaes.com.br`, 36, height - 28);
+    }
+
+    // =========================================================================
+    // MODAIS DE EXPORTAÇÃO E IMPORTAÇÃO
+    // =========================================================================
+    function showTabEditorModal(titleHtml, bodyHtml, footerButtonsHtml) {
+        let overlay = document.getElementById('viola-tab-modal-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'viola-tab-modal-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        overlay.className = 'fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto';
+        overlay.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-4xl p-5 sm:p-6 space-y-4 shadow-2xl relative my-auto animate-in fade-in zoom-in-95">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        ${titleHtml}
+                    </div>
+                    <button type="button" id="btn-close-tab-modal" class="min-h-[36px] min-w-[36px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+                    ${bodyHtml}
+                </div>
+                <div class="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-slate-800">
+                    ${footerButtonsHtml}
+                </div>
+            </div>
+        `;
+
+        const closeBtn = document.getElementById('btn-close-tab-modal');
+        if (closeBtn) closeBtn.addEventListener('click', closeTabEditorModal);
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeTabEditorModal();
+        });
+
+        if (global.VaultCore && global.VaultCore.refreshIcons) {
+            global.VaultCore.refreshIcons(overlay);
+        }
+    }
+
+    function closeTabEditorModal() {
+        const overlay = document.getElementById('viola-tab-modal-overlay');
+        if (overlay) {
+            overlay.className = 'hidden';
+            overlay.innerHTML = '';
+        }
+    }
+
+    function openTabExportAsciiModal() {
+        const proj = getActiveTabProject();
+        const ascii = generateTabAscii(proj, state.isLeftHanded, state.viewPerspective);
+
+        const titleHtml = `
+            <i data-lucide="file-text" class="w-5 h-5 text-cyan-400"></i>
+            <div>
+                <h3 class="text-base font-bold text-slate-100">Exportar Tablatura ASCII (.tab / .txt)</h3>
+                <p class="text-xs text-slate-400">Formato universal de texto com cifras, métrica e afinação formatada</p>
+            </div>
+        `;
+
+        const bodyHtml = `
+            <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                    <span>Pré-visualização da Tablatura:</span>
+                    <span class="text-amber-300">${proj.steps ? proj.steps.length : 0} tempos mapeados</span>
+                </div>
+                <textarea id="viola-tab-ascii-output" readonly rows="16" class="w-full p-4 rounded-xl bg-[#090d16] border border-slate-800 text-slate-200 font-mono text-xs leading-relaxed outline-none select-all focus:border-cyan-500">${ascii}</textarea>
+            </div>
+        `;
+
+        const footerHtml = `
+            <button type="button" id="btn-modal-copy-ascii" class="min-h-[40px] px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+                <span id="label-copy-ascii">Copiar Tablatura</span>
+            </button>
+            <button type="button" id="btn-modal-download-tab" class="min-h-[40px] px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Baixar Arquivo .tab</span>
+            </button>
+        `;
+
+        showTabEditorModal(titleHtml, bodyHtml, footerHtml);
+
+        const copyBtn = document.getElementById('btn-modal-copy-ascii');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const ta = document.getElementById('viola-tab-ascii-output');
+                if (ta) {
+                    navigator.clipboard.writeText(ta.value).then(() => {
+                        const lbl = document.getElementById('label-copy-ascii');
+                        if (lbl) lbl.textContent = '✓ Copiado com Sucesso!';
+                        setTimeout(() => {
+                            if (lbl) lbl.textContent = 'Copiar Tablatura';
+                        }, 2500);
+                    });
+                }
+            });
+        }
+
+        const dlBtn = document.getElementById('btn-modal-download-tab');
+        if (dlBtn) {
+            dlBtn.addEventListener('click', () => {
+                const blob = new Blob([ascii], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const slug = (proj.title || 'tablatura').toLowerCase().replace(/[^a-z0-9]/g, '_');
+                a.href = url;
+                a.download = `${slug}.tab`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+    }
+
+    function openTabExportDiagramModal() {
+        const proj = getActiveTabProject();
+        const titleHtml = `
+            <i data-lucide="image" class="w-5 h-5 text-violet-400"></i>
+            <div>
+                <h3 class="text-base font-bold text-slate-100">Diagrama Gráfico HD & Partitura (Canvas)</h3>
+                <p class="text-xs text-slate-400">Renderização vetorial de alta definição para compartilhamento e impressão</p>
+            </div>
+        `;
+
+        const bodyHtml = `
+            <div class="space-y-3">
+                <div class="w-full overflow-x-auto rounded-xl border border-slate-800 bg-[#090d16] p-2">
+                    <canvas id="viola-tab-export-canvas" class="w-full h-auto select-none rounded shadow-lg"></canvas>
+                </div>
+            </div>
+        `;
+
+        const footerHtml = `
+            <button type="button" id="btn-modal-download-png" class="min-h-[40px] px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Baixar Imagem HD (PNG)</span>
+            </button>
+            <button type="button" id="btn-modal-print-diagram" class="min-h-[40px] px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span>Imprimir / Salvar em PDF</span>
+            </button>
+        `;
+
+        showTabEditorModal(titleHtml, bodyHtml, footerHtml);
+
+        const canvas = document.getElementById('viola-tab-export-canvas');
+        if (canvas) {
+            renderTabDiagramCanvas(canvas, proj, state.isLeftHanded, state.viewPerspective);
+        }
+
+        const dlBtn = document.getElementById('btn-modal-download-png');
+        if (dlBtn && canvas) {
+            dlBtn.addEventListener('click', () => {
+                const dataUrl = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                const slug = (proj.title || 'partitura_caipira').toLowerCase().replace(/[^a-z0-9]/g, '_');
+                a.href = dataUrl;
+                a.download = `${slug}_nexus.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+        }
+
+        const printBtn = document.getElementById('btn-modal-print-diagram');
+        if (printBtn) {
+            printBtn.addEventListener('click', () => {
+                printTabProject(proj);
+            });
+        }
+    }
+
+    function printTabProject(project) {
+        const inst = INSTRUMENTS[project.instrumentId || state.instrumentId];
+        const ascii = generateTabAscii(project, state.isLeftHanded, state.viewPerspective);
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert('Por favor, permita pop-ups no seu navegador para imprimir a partitura.');
+            return;
+        }
+
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+                <meta charset="utf-8">
+                <title>${project.title || 'Tablatura Caipira'} — Partitura / Nexus Vault</title>
+                <style>
+                    @page { size: A4 portrait; margin: 12mm; }
+                    body { font-family: 'JetBrains Mono', Courier, monospace; background: #fff; color: #000; margin: 0; padding: 15px; }
+                    h1 { font-family: Inter, sans-serif; font-size: 20px; margin: 0 0 6px 0; font-weight: 800; color: #111; }
+                    .meta { font-family: Inter, sans-serif; font-size: 11px; color: #444; border-bottom: 2px solid #222; padding-bottom: 8px; margin-bottom: 12px; }
+                    pre { font-size: 11px; line-height: 1.35; white-space: pre-wrap; word-break: break-all; margin: 0; }
+                    .footer { font-family: Inter, sans-serif; font-size: 10px; color: #666; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 6px; }
+                </style>
+            </head>
+            <body>
+                <h1>${project.title || 'Composição Caipira'}</h1>
+                <div class="meta">
+                    <strong>Autor / Arranjo:</strong> ${project.author || 'Violeiro'} | 
+                    <strong>Instrumento:</strong> ${inst.name} | 
+                    <strong>Andamento:</strong> ${project.bpm || 96} BPM | 
+                    <strong>Orientação:</strong> ${state.isLeftHanded ? 'Canhoto (Pestana à Direita)' : 'Destro'}
+                </div>
+                <pre>${ascii}</pre>
+                <div class="footer">Gerado via Nexus Vault • Estúdio de Viola Caipira & Violão • deomagalhaes.com.br</div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                    };
+                </script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
+
+    function openImportPonteioModal() {
+        const titleHtml = `
+            <i data-lucide="download" class="w-5 h-5 text-amber-400"></i>
+            <div>
+                <h3 class="text-base font-bold text-slate-100">Clonar Solo Canônico da Biblioteca (Fase 6)</h3>
+                <p class="text-xs text-slate-400">Importe um clássico para o Editor para personalizar, adicionar variações e exportar</p>
+            </div>
+        `;
+
+        const bodyHtml = `
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                ${PONTEIOS_REPERTOIRE.map((pt) => `
+                    <button type="button" data-import-ponteio-id="${pt.id}" class="p-3 rounded-xl bg-[#090d16] border border-slate-800 hover:border-amber-400 text-left transition group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold font-mono text-slate-200 group-hover:text-amber-300 transition">${pt.title}</span>
+                            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">${pt.rhythm.split(' ')[0]}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 mt-1">${pt.author}</div>
+                        <div class="text-[10px] text-slate-400 line-clamp-2 mt-1">${pt.desc}</div>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        const footerHtml = `
+            <button type="button" onclick="document.getElementById('btn-close-tab-modal').click()" class="min-h-[38px] px-4 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-mono">Cancelar</button>
+        `;
+
+        showTabEditorModal(titleHtml, bodyHtml, footerHtml);
+
+        const overlay = document.getElementById('viola-tab-modal-overlay');
+        if (overlay) {
+            overlay.querySelectorAll('[data-import-ponteio-id]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-import-ponteio-id');
+                    closeTabEditorModal();
+                    importPonteioToEditor(id);
+                });
+            });
+        }
+    }
+
+    function openNewTabProjectModal() {
+        const titleHtml = `
+            <i data-lucide="plus-circle" class="w-5 h-5 text-violet-400"></i>
+            <div>
+                <h3 class="text-base font-bold text-slate-100">Nova Composição Caipira</h3>
+                <p class="text-xs text-slate-400">Escolha um ponto de partida ou monte uma tablatura em branco</p>
+            </div>
+        `;
+
+        const bodyHtml = `
+            <form id="form-new-tab-proj" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1">Título da Música *</label>
+                        <input type="text" id="new-tab-title" value="Minha Nova Moda de Viola" required class="w-full px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-slate-100 focus:border-violet-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1">Compositor / Arranjo</label>
+                        <input type="text" id="new-tab-author" value="Violeiro do Nexus" class="w-full px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-slate-100 focus:border-violet-400 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1.5">Escolha o Padrão Inicial (Template)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <label class="p-2.5 rounded-lg bg-[#090d16] border border-slate-800 hover:border-violet-500 cursor-pointer flex flex-col justify-between">
+                            <div>
+                                <input type="radio" name="new-tab-template" value="moda" checked class="accent-violet-500">
+                                <span class="text-xs font-bold text-slate-200 ml-1.5">Moda Caipira</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">Dueto em terças com batida no tampo [TAP] e rasqueado</span>
+                        </label>
+
+                        <label class="p-2.5 rounded-lg bg-[#090d16] border border-slate-800 hover:border-violet-500 cursor-pointer flex flex-col justify-between">
+                            <div>
+                                <input type="radio" name="new-tab-template" value="sextas" class="accent-violet-500">
+                                <span class="text-xs font-bold text-slate-200 ml-1.5">Ponteio em Sextas</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">Sextas clássicas nos pares 1 e 3 (estilo Menino da Porteira)</span>
+                        </label>
+
+                        <label class="p-2.5 rounded-lg bg-[#090d16] border border-slate-800 hover:border-violet-500 cursor-pointer flex flex-col justify-between">
+                            <div>
+                                <input type="radio" name="new-tab-template" value="cururu" class="accent-violet-500">
+                                <span class="text-xs font-bold text-slate-200 ml-1.5">Cururu Veloz</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">Repiques sincopados rápidos e quedas em bordão grave</span>
+                        </label>
+
+                        <label class="p-2.5 rounded-lg bg-[#090d16] border border-slate-800 hover:border-violet-500 cursor-pointer flex flex-col justify-between">
+                            <div>
+                                <input type="radio" name="new-tab-template" value="guarania" class="accent-violet-500">
+                                <span class="text-xs font-bold text-slate-200 ml-1.5">Guarânia 3/4</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">Compasso ternário lírico com dedilhados abertos</span>
+                        </label>
+
+                        <label class="p-2.5 rounded-lg bg-[#090d16] border border-slate-800 hover:border-violet-500 cursor-pointer flex flex-col justify-between sm:col-span-2">
+                            <div>
+                                <input type="radio" name="new-tab-template" value="blank" class="accent-violet-500">
+                                <span class="text-xs font-bold text-slate-200 ml-1.5">Composição em Branco (Tablatura Limpa)</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1">Comece do zero com 2 compassos vazios prontos para digitação</span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        `;
+
+        const footerHtml = `
+            <button type="button" onclick="document.getElementById('btn-close-tab-modal').click()" class="min-h-[40px] px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-xs font-mono">Cancelar</button>
+            <button type="button" id="btn-submit-new-tab" class="min-h-[40px] px-5 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>Criar Composição</span>
+            </button>
+        `;
+
+        showTabEditorModal(titleHtml, bodyHtml, footerHtml);
+
+        const submitBtn = document.getElementById('btn-submit-new-tab');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', () => {
+                const titleInput = document.getElementById('new-tab-title');
+                const authorInput = document.getElementById('new-tab-author');
+                const tplRadio = document.querySelector('input[name="new-tab-template"]:checked');
+                const tplKey = tplRadio ? tplRadio.value : 'moda';
+                const title = titleInput ? titleInput.value.trim() : 'Nova Composição';
+                const author = authorInput ? authorInput.value.trim() : 'Violeiro';
+
+                closeTabEditorModal();
+                createNewTabProject(tplKey, title, author);
+            });
+        }
+    }
+
+    // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
     // =========================================================================
     let tunerOsc = null;
@@ -2410,6 +3747,7 @@
         }
         stopTunerTone();
         stopPonteioPlayback();
+        stopTabEditorPlayback();
         stopScalePlayback();
         stopProgressionPlayback();
 
@@ -4215,6 +5553,55 @@
                     });
                 });
             }
+        } else if (state.displayMode === 'TAB_EDITOR') {
+            const activeProj = getActiveTabProject();
+            const currentStep = (state.tabEditor.currentStepIdx >= 0 && activeProj && activeProj.steps)
+                ? activeProj.steps[state.tabEditor.currentStepIdx]
+                : (activeProj && activeProj.steps ? activeProj.steps[0] : null);
+
+            // 1. Marcações fantasmas com todas as notas da composição ao longo do braço
+            const ghostSeen = new Set();
+            if (activeProj && activeProj.steps) {
+                activeProj.steps.forEach((st) => {
+                    (st.notes || []).forEach((nt) => {
+                        if (nt.c < numCourses) {
+                            const key = `${nt.c}_${nt.f}`;
+                            if (!ghostSeen.has(key)) {
+                                ghostSeen.add(key);
+                                const pc = (inst.courses[nt.c].pitchClass + nt.f) % 12;
+                                activeMarkers.push({
+                                    courseIdx: nt.c,
+                                    fret: nt.f,
+                                    label: NOTE_NAMES[pc],
+                                    sub: `${nt.c + 1}ºP`,
+                                    color: '#6366f1',
+                                    opacity: '0.36'
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            // 2. Marcadores luminosos do passo em edição ativa
+            if (currentStep && currentStep.notes && currentStep.notes.length > 0) {
+                currentStep.notes.forEach((nt) => {
+                    if (nt.c < numCourses) {
+                        const pc = (inst.courses[nt.c].pitchClass + nt.f) % 12;
+                        const isAgudo = nt.c === 0;
+                        activeMarkers.push({
+                            courseIdx: nt.c,
+                            fret: nt.f,
+                            label: NOTE_NAMES[pc],
+                            sub: currentStep.chord || currentStep.rh || (isAgudo ? 'Prima' : 'Dueto'),
+                            color: isAgudo ? '#a855f7' : '#ec4899',
+                            stroke: '#ffffff',
+                            strokeWidth: 3.2,
+                            opacity: '1'
+                        });
+                    }
+                });
+            }
         }
 
         // Construção SVG
@@ -4349,6 +5736,8 @@
                     saveViolaState();
                     renderFretboardSVG();
                     renderReverseChordPanel();
+                } else if (state.displayMode === 'TAB_EDITOR') {
+                    toggleTabEditorNote(cIdx, f);
                 }
             });
         });
@@ -4836,6 +6225,19 @@
             } else {
                 state.ponteioPlayer = Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE);
             }
+
+            if (saved.tabEditor && typeof saved.tabEditor === 'object') {
+                state.tabEditor = Object.assign({}, DEFAULT_TAB_EDITOR_STATE, saved.tabEditor, {
+                    isPlaying: false
+                });
+                if (!Array.isArray(state.tabEditor.projects) || state.tabEditor.projects.length === 0) {
+                    state.tabEditor.projects = JSON.parse(JSON.stringify(DEFAULT_TAB_EDITOR_PROJECTS));
+                }
+            } else {
+                state.tabEditor = Object.assign({}, DEFAULT_TAB_EDITOR_STATE, {
+                    projects: JSON.parse(JSON.stringify(DEFAULT_TAB_EDITOR_PROJECTS))
+                });
+            }
         }
     }
 
@@ -4850,6 +6252,11 @@
             copy.ponteioPlayer = Object.assign({}, copy.ponteioPlayer, {
                 isPlaying: false,
                 currentStepIdx: -1
+            });
+        }
+        if (copy.tabEditor) {
+            copy.tabEditor = Object.assign({}, copy.tabEditor, {
+                isPlaying: false
             });
         }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
@@ -4926,6 +6333,7 @@
                                 <button type="button" id="btn-viola-mode-duad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🪕 Escalas Duadas</button>
                                 <button type="button" id="btn-viola-mode-reverse" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🔍 Buscador Reverso</button>
                                 <button type="button" id="btn-viola-mode-ponteio" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎼 Tablatura &amp; Ponteios</button>
+                                <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -4933,7 +6341,7 @@
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>Terça</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Quinta</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>Sétima / Sexta</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>Extensões</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>Editor</span>
                         </div>
                     </div>
                     <div id="viola-fretboard-svg-wrap" class="w-full overflow-x-auto pb-1"></div>
@@ -5085,6 +6493,9 @@
 
                 <!-- Módulo de Ponteios e Intros Clássicas de Viola Caipira (Fase 6) -->
                 <div id="viola-ponteios-container" class="space-y-4"></div>
+
+                <!-- Módulo de Gerador, Editor e Exportador de Tablaturas e Cifras Caipiras (Fase 7) -->
+                <div id="viola-tab-editor-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -5258,6 +6669,12 @@
                     ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-400 text-slate-950 shadow'
                     : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
             }
+            const btnModeTabEditor = document.getElementById('btn-viola-mode-tab-editor');
+            if (btnModeTabEditor) {
+                btnModeTabEditor.className = state.displayMode === 'TAB_EDITOR'
+                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-violet-500 text-white shadow'
+                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            }
         }
     }
 
@@ -5267,12 +6684,14 @@
         const btnModeDuad = document.getElementById('btn-viola-mode-duad');
         const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
         const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
+        const btnModeTabEditor = document.getElementById('btn-viola-mode-tab-editor');
         if (btnModeChord && btnModeDuad && btnModeReverse) {
             btnModeChord.addEventListener('click', () => {
                 if (state.displayMode !== 'CHORD') {
                     stopScalePlayback();
                     stopPonteioPlayback();
                     stopProgressionPlayback();
+                    stopTabEditorPlayback();
                     state.displayMode = 'CHORD';
                     saveViolaState();
                     renderAll();
@@ -5283,6 +6702,7 @@
                 if (state.displayMode !== 'DUAD') {
                     stopPonteioPlayback();
                     stopProgressionPlayback();
+                    stopTabEditorPlayback();
                     state.displayMode = 'DUAD';
                     saveViolaState();
                     renderAll();
@@ -5293,6 +6713,7 @@
                     stopScalePlayback();
                     stopPonteioPlayback();
                     stopProgressionPlayback();
+                    stopTabEditorPlayback();
                     state.displayMode = 'REVERSE';
                     saveViolaState();
                     renderAll();
@@ -5304,11 +6725,27 @@
                     if (state.displayMode !== 'PONTEIO') {
                         stopScalePlayback();
                         stopProgressionPlayback();
+                        stopTabEditorPlayback();
                         state.displayMode = 'PONTEIO';
                         saveViolaState();
                         renderAll();
                         const pWrap = document.getElementById('viola-ponteios-container');
                         if (pWrap) pWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+            if (btnModeTabEditor) {
+                btnModeTabEditor.addEventListener('click', () => {
+                    if (state.displayMode !== 'TAB_EDITOR') {
+                        stopScalePlayback();
+                        stopPonteioPlayback();
+                        stopProgressionPlayback();
+                        stopTabEditorPlayback();
+                        state.displayMode = 'TAB_EDITOR';
+                        saveViolaState();
+                        renderAll();
+                        const edWrap = document.getElementById('viola-tab-editor-container');
+                        if (edWrap) edWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             }
@@ -5590,6 +7027,7 @@
         renderReverseChordPanel();
         renderProgressionStudyPanel();
         renderPonteiosSection();
+        renderTabEditorSection();
         renderMetronomeControls();
     }
 
