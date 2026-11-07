@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Granularidade Emocional e Alexitimia Clínica (EGEAC / T-33) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de alexitimia, consciência interoceptiva, granularidade afetiva e risco de somatização. Instrumento 100% privado com cálculo imediato.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px 10px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: white;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: #005f73;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 35px;
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        /* Área de Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 1.35em;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: white;
+            background: #005f73;
+            margin-bottom: 12px;
+        }
+
+        .result-cat-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 640px) {
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .dimension-card h4 {
+            font-size: 0.95em;
+            color: #005f73;
+            margin-bottom: 6px;
+        }
+
+        .dim-bar-container {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .dim-bar-fill {
+            background: #0a9396;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .dim-score-val {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #0a9396;
+        }
+
+        .clinical-guidelines {
+            background: #f1f5f9;
+            border-left: 4px solid #ee9b00;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+
+        .cta-box {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Granularidade Emocional e Alexitimia Clínica (EGEAC / T-33)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - CRP 04/42784</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Clínico:</strong> Este instrumento psicométrico avalia o perfil de leitura e diferenciação afetiva interna, a capacidade de identificar e nomear sentimentos (granularidade emocional), o grau de orientação pragmática externa (pensamento operatório) e a propensão à somatização somatossensorial, com base nos construtos clássicos da <em>Toronto Alexithymia Scale</em> (TAS-20) e no modelo neurocientífico da <em>Teoria da Emoção Construída</em> de Lisa Feldman Barrett.</p>
+                <p style="margin-top: 10px; font-size: 0.88em; color: #64748b;">🔒 <strong>Privacidade Total:</strong> O cálculo é processado 100% de forma local e anônima no seu navegador. Nenhuma resposta é enviada para servidores ou registrada externamente.</p>
+            </div>
+
+            <form id="quizForm" class="quiz-container">
+                <!-- Dimensão 1 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Identificação de Sentimentos e Diferenciação Somática (DIF)</h3>
+                    <p>Avalia a capacidade de distinguir sensações corporais fisiológicas de estados afetivos internos.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">1</span>
+                        <span>Quando sinto desconfortos físicos (como aperto no peito, nó na garganta ou queimação gástrica), fico em dúvida se é uma reação física ou uma emoção.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q1" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">2</span>
+                        <span>Frequentemente percebo agitação ou mal-estar no meu corpo, mas não consigo dizer qual emoção específica estou sentindo.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q2" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">3</span>
+                        <span>Tenho sintomas ou dores físicas que aparecem em momentos de estresse, mas que os exames médicos normais não explicam.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q3" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">4</span>
+                        <span>Quando me sinto angustiado ou incomodado, não sei discernir se é raiva, tristeza, medo ou cansaço: parece um bloco único e indistinto.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q4" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 2 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Dificuldade em Descrever e Nomear Sentimentos (DDF)</h3>
+                    <p>Avalia a facilidade de colocar os afetos em palavras e comunicá-los a outras pessoas.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">5</span>
+                        <span>Acho extremamente desafiador encontrar as palavras exatas para descrever o que sinto a um amigo, parceiro(a) ou terapeuta.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q5" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">6</span>
+                        <span>Pessoas próximas já me cobraram por não expressar verbalmente minhas emoções ou por parecer distante e inacessível.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q6" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">7</span>
+                        <span>Quando me perguntam 'Como você está?', prefiro resumir dizendo 'bem' ou 'normal', porque detalhar o que sinto soa artificial ou confuso.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q7" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">8</span>
+                        <span>Sinto que existe um muro invisível separando o que acontece dentro do meu organismo das palavras que saem pela minha voz.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q8" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 3 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Pensamento Orientado Externamente e Cognição Operatória (POE)</h3>
+                    <p>Avalia o foco excessivo no mundo factual e instrumental em detrimento da vida reflexiva interna.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">9</span>
+                        <span>Prefiro me concentrar em resolver problemas práticos e executar tarefas do que gastar tempo analisando meus sentimentos.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q9" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">10</span>
+                        <span>Tenho pouca paciência para filmes, livros ou conversas que giram em torno de dramas psicológicos ou dilemas sentimentais subjetivos.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q10" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">11</span>
+                        <span>Raramente me pego devaneando, fantasiando ou imaginando cenários hipotéticos; meu pensamento costuma ser estritamente funcional e objetivo.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q11" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">12</span>
+                        <span>Em situações de atrito relacional, busco focar nos fatos lógicos concretos e costumo achar que a reação emocional dos outros é exagerada ou irracional.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q12" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 4 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Déficit de Granularidade e Diferenciação Afetiva (DGA)</h3>
+                    <p>Avalia a carência de vocabulário e conceitos emocionais ricos para categorizar estados corporais complexos.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">13</span>
+                        <span>Para mim, palavras como 'mágoa', 'ressentimento', 'desencanto' e 'frustração' parecem significar basicamente a mesma coisa sem grande diferença prática.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q13" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">14</span>
+                        <span>Acho difícil saber exatamente o que causou meu mal-estar; só percebo que meu corpo 'travou' ou começou a doer horas depois do acontecimento.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q14" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">15</span>
+                        <span>Sinto que meu repertório de emoções diárias é restrito a poucos estados básicos: cansado, estressado, calmo ou irritado.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q15" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">16</span>
+                        <span>Quando algo dá errado, demoro para identificar se estou triste ou magoado, percebendo a reação quase exclusivamente como tensão física nos ombros ou cabeça.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q16" value="0" required> Raramente / Discordo (0)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="1"> Às vezes (1)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"> Frequentemente (2)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"> Quase sempre (3)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit-test">Calcular Meu Índice de Granularidade e Alexitimia</button>
+            </form>
+
+            <!-- Seção de Resultados -->
+            <div id="resultsSection" class="results-section">
+                <div style="text-align: center;">
+                    <div class="score-badge" id="scoreBadge">0 / 48 Pontos</div>
+                    <h2 class="result-cat-title" id="resultTitle">Perfil Clínico de Granularidade</h2>
+                    <p id="resultDesc" style="color: #475569; font-size: 1.05em; max-width: 720px; margin: 0 auto; line-height: 1.6;"></p>
+                </div>
+
+                <div class="dimension-grid">
+                    <div class="dimension-card">
+                        <h4>1. Diferenciação Somato-Afetiva (DIF)</h4>
+                        <div class="dim-score-val" id="d1Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d1Bar"></div></div>
+                        <p id="d1Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>2. Expressão Léxica de Emoções (DDF)</h4>
+                        <div class="dim-score-val" id="d2Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d2Bar"></div></div>
+                        <p id="d2Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>3. Pensamento Operatório (POE)</h4>
+                        <div class="dim-score-val" id="d3Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d3Bar"></div></div>
+                        <p id="d3Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+
+                    <div class="dimension-card">
+                        <h4>4. Déficit de Granularidade (DGA)</h4>
+                        <div class="dim-score-val" id="d4Score">0 / 12</div>
+                        <div class="dim-bar-container"><div class="dim-bar-fill" id="d4Bar"></div></div>
+                        <p id="d4Feedback" style="font-size: 0.85em; color: #64748b; margin: 4px 0 0 0;"></p>
+                    </div>
+                </div>
+
+                <div class="clinical-guidelines">
+                    <h3 style="color: #005f73; margin-top: 0; font-size: 1.15em;">Orientações Clínicas e Neuroreabilitação dos Afetos</h3>
+                    <div id="guidelinesText"></div>
+                </div>
+
+                <div class="cta-box">
+                    <p style="color: #475569; font-size: 0.95em; margin-bottom: 15px;">Deseja acompanhamento profissional para desenvolver alfabetização interoceptiva e superar a somatização?</p>
+                    <a href="/agendamento.html" class="cta-btn">Agendar Consulta Neuropsicológica</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Feedback visual ao clicar nos labels de rádio
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const group = e.target.closest('.options-group');
+                    group.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    e.target.closest('.option-label').classList.add('selected');
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let d1 = 0; // DIF (Itens 1 a 4)
+                let d2 = 0; // DDF (Itens 5 a 8)
+                let d3 = 0; // POE (Itens 9 a 12)
+                let d4 = 0; // DGA (Itens 13 a 16)
+
+                for (let i = 1; i <= 16; i++) {
+                    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`)?.value || "0", 10);
+                    if (i <= 4) d1 += val;
+                    else if (i <= 8) d2 += val;
+                    else if (i <= 12) d3 += val;
+                    else d4 += val;
+                }
+
+                const total = d1 + d2 + d3 + d4;
+
+                document.getElementById('scoreBadge').innerText = `${total} / 48 Pontos`;
+
+                let title = "";
+                let desc = "";
+                let guidelines = "";
+
+                if (total <= 14) {
+                    title = "Percepção Afetiva Típica e Alta Granularidade Emocional";
+                    desc = "Seus escores revelam uma integração córtico-insular íntegra. Você demonstra facilidade para reconhecer as sensações corporais como pistas emocionais, possui vocabulário afetivo refinado e consegue distinguir com precisão estados afetivos sutis. O risco de somatização por afeto reprimido é muito baixo.";
+                    guidelines = "<p>• <strong>Mantenha a escuta do corpo:</strong> Continue valorizando os marcadores somáticos na tomada de decisões diárias (modelo Damásio).</p><p>• <strong>Comunicação autêntica:</strong> Sua habilidade de nomear sentimentos favorece relacionamentos interpessoais com alto grau de apego seguro e empatia.</p>";
+                } else if (total <= 24) {
+                    title = "Alexitimia Leve / Desconexão Afetiva Situacional";
+                    desc = "Você apresenta uma boa capacidade basal de regulação, mas em momentos de sobrecarga, estresse prolongado ou conflitos relacionais, seu cérebro tende a adotar um estilo mais operatório e concreto, reduzindo a capacidade de simbolizar e comunicar o que sente.";
+                    guidelines = "<p>• <strong>Pausa Interoceptiva Diária:</strong> Reserve 2 minutos por dia para checar: 'Qual sensação física está presente no meu corpo agora (calor, aperto, peso)?'. Essa prática treina a ínsula anterior.</p><p>• <strong>Expansão do Léxico Afetivo:</strong> Tente evitar rótulos genéricos como 'estou cansado'. Questione-se: 'Estou cansado, desapontado, frustrado ou precisando de acolhimento?'.</p>";
+                } else if (total <= 35) {
+                    title = "Alexitimia Moderada / Risco Psicossomático Elevado";
+                    desc = "Quadro com sinais evidentes de desconexão entre os aferentes viscerais (ínsula anterior) e as áreas de representação simbólica pré-frontal. Você frequentemente confunde estados emocionais com mal-estar físico, tende a focar excessivamente em tarefas operacionais e tem dificuldade considerável de expressar o que sente para outras pessoas.";
+                    guidelines = "<p>• <strong>Rotulagem Afetiva Consciente (Affect Labeling):</strong> A neurociência comprova que falar ou escrever sobre um afeto específico acalma a amígdala e o eixo do cortisol. Utilize uma roda de emoções para identificar os estados internos antes que eles virem enxaqueca ou dor gástrica.</p><p>• <strong>Atenção à Somatização:</strong> Se você sofre de dores crônicas, contraturas musculares ou distúrbios digestivos funcionais, investigue como eles coincidem com períodos de tensão afetiva não simbolizada.</p><p>• <strong>Treinamento de Mentalização:</strong> A psicoterapia cognitivo-comportamental ou baseada em mentalização pode ajudar a reabrir os canais comunicativos entre os dois hemisférios cerebrais.</p>";
+                } else {
+                    title = "Alexitimia Severa / Desconexão Ínsulo-Pré-Frontal Acentuada";
+                    desc = "Indica acentuado bloqueio na simbolização emocional e forte predomínio de pensamento operatório (pensée opératoire). Há uma profunda dissociação entre a fisiologia visceral e a consciência cognitiva: o organismo vive sob estresse neuroendócrino contínuo, mas a mente não possui o vocabulário para processar o afeto, gerando alto risco de queixas psicossomáticas graves e isolamento interpessoal.";
+                    guidelines = "<p>• <strong>Avaliação Neuropsicológica Recomendada:</strong> É altamente indicada uma consulta com especialista em neuropsicologia ou psicoterapia focada nas emoções para um plano de intervenção estruturado.</p><p>• <strong>Biofeedback e Terapia Focada no Corpo:</strong> Técnicas corporais (Somatic Experiencing, Mindfulness Somático, Yoga restaurativo) ajudam a reintegrar os sinais da ínsula sem a necessidade de exigir um discurso verbal imediato.</p><p>• <strong>Trabalho com Metáforas e Artes:</strong> Exercitar a expressão por vias indiretas (música, artes visuais, metáforas) permite desbloquear o hemisfério direito antes da codificação sintática do hemisfério esquerdo.</p>";
+                }
+
+                document.getElementById('resultTitle').innerText = title;
+                document.getElementById('resultDesc').innerText = desc;
+                document.getElementById('guidelinesText').innerHTML = guidelines;
+
+                const updateDim = (idPrefix, val, maxVal) => {
+                    document.getElementById(`${idPrefix}Score`).innerText = `${val} / ${maxVal}`;
+                    const pct = Math.round((val / maxVal) * 100);
+                    document.getElementById(`${idPrefix}Bar`).style.width = `${pct}%`;
+                    
+                    let statusTxt = "";
+                    if (pct <= 35) statusTxt = "Preservado / Baixo traço";
+                    else if (pct <= 65) statusTxt = "Moderado / Alerta de desconexão";
+                    else statusTxt = "Elevado / Dificuldade acentuada";
+                    document.getElementById(`${idPrefix}Feedback`).innerText = `${statusTxt} (${pct}% do escore máximo).`;
+                };
+
+                updateDim('d1', d1, 12);
+                updateDim('d2', d2, 12);
+                updateDim('d3', d3, 12);
+                updateDim('d4', d4, 12);
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

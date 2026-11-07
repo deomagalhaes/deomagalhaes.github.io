@@ -39,6 +39,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-30** | **Escala de Desamparo Aprendido e Agência Dopaminérgica (EDA-AD)** | Desamparo Aprendido, Locus de Controle e Agência Dopaminérgica | `testes/teste-desamparo-aprendido.html` | ✅ Concluído |
 | **T-31** | **Escala Dimensional de Anedonia e Responsividade a Recompensas (EDARR)** | Anedonia Antecipatória vs. Consumatória, Circuito Habenular e Recompensa | `testes/teste-anedonia-responsividade-recompensa.html` | ✅ Concluído |
 | **T-32** | **Inventário de Sobrecarga Mental e Resíduo Atencional (ISMRA)** | Efeito Zeigarnik, Resíduo de Atenção e Sobrecarga da Memória de Trabalho | `testes/teste-sobrecarga-mental-residuo-atencional.html` | ✅ Concluído |
+| **T-33** | **Escala de Granularidade Emocional e Alexitimia Clínica (EGEAC)** | Alexitimia, Ínsula Anterior, Consciência Interoceptiva e Pensamento Operatório | `testes/teste-granularidade-emocional-alexitimia.html` | ✅ Concluído |
 
 ---
 

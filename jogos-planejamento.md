@@ -38,6 +38,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 29** | **Matriz de Reforço Probabilístico e Reativação de Ação** | Aprendizado por Reforço, Erro de Predição de Recompensa (RPE) e Agência Motora | `jogos/jogo-reforco-probabilistico.html` | ✅ **Publicado** |
 | **Dia 30** | **Labirinto de Esforço e Custo-Benefício Cognitivo** | Avaliação de Custo-Benefício Cognitivo (EEfRT), Inibição Habenular e VTA | `jogos/jogo-esforco-custo-beneficio.html` | ✅ **Publicado** |
 | **Dia 31** | **Matriz de Fechamento Gestáltico e Conclusão de Tarefas** | Fechamento Gestáltico, Alívio da Tensão de Zeigarnik e Controle Executivo | `jogos/jogo-fechamento-gestaltico.html` | ✅ **Publicado** |
+| **Dia 32** | **Matriz de Granularidade Emocional e Diferenciação Afetiva** | Decodificação Interoceptiva, Córtex Insular Anterior e Granularidade Afetiva | `jogos/jogo-granularidade-emocional.html` | ✅ **Publicado** |
 
 ---
 
