@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Bonsai Mori — Gestão &amp; Cultivo Botânico</title>
+  <meta name="description" content="Gestão offline-first de bonsais: fichas botânicas, evolução fotográfica Antes/Depois, controle de aramação, rega, adubação e calendário sazonal brasileiro.">
+
+  <!-- PWA & Mobile Native Meta -->
+  <meta name="theme-color" content="#16291e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bonsai Mori">
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Barra Superior -->
+    <header class="app-topbar">
+      <div class="brand-wrap">
+        <img src="./icons/icon-192.png" alt="Ícone Bonsai Mori" class="brand-logo">
+        <div>
+          <h1 class="brand-title">Bonsai Mori</h1>
+          <p class="brand-subtitle">Diário &amp; Manejo Fitotécnico</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btn-install-pwa" style="display:none;" title="Instalar no celular">📲 Instalar</button>
+        <button class="icon-btn highlight" id="btn-top-add">+ Árvore</button>
+      </div>
+    </header>
+
+    <!-- Área de Conteúdo -->
+    <main class="app-content">
+      <!-- ABA 1: MINHAS ÁRVORES -->
+      <section id="tab-trees" class="tab-panel active">
+        <div id="season-banner-box" class="season-banner"></div>
+        <div id="dashboard-stats" class="stats-grid"></div>
+
+        <div class="section-header">
+          <h2 class="section-title" id="bench-header-title">🌳 Minha Bancada</h2>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="trees-search-input" placeholder="🔍 Buscar planta, espécie ou bancada...">
+        </div>
+        <div id="bench-filter-pills" class="filter-pills"></div>
+
+        <div id="trees-list-container" class="trees-grid"></div>
+      </section>
+
+      <!-- SUB-VISÃO: FICHA DETALHADA DA ÁRVORE -->
+      <section id="tab-detail" class="tab-panel">
+        <div id="tree-detail-container"></div>
+      </section>
+
+      <!-- ABA 2: AGENDA & MANEJO SAZONAL -->
+      <section id="tab-care" class="tab-panel">
+        <div class="section-header" style="margin-top:0;">
+          <h2 class="section-title">🔔 Alertas Inteligentes</h2>
+          <button class="btn btn-water btn-sm" id="btn-water-all">💧 Regar Todas</button>
+        </div>
+        <div id="care-alerts-list" class="alert-list" style="margin-bottom:18px;"></div>
+
+        <div class="section-header">
+          <h2 class="section-title">🧭 Astrobotânica &amp; Calendário (Brasil)</h2>
+        </div>
+        <div id="season-tasks-box"></div>
+      </section>
+
+      <!-- ABA 3: CATÁLOGO BOTÂNICO DE ESPÉCIES -->
+      <section id="tab-guide" class="tab-panel">
+        <div class="section-header" style="margin-top:0;">
+          <h2 class="section-title">🌿 Enciclopédia Fitotécnica (40 Espécies)</h2>
+        </div>
+        <div class="search-box">
+          <input type="text" id="guide-search-input" placeholder="🔍 Filtrar espécie ou nome científico...">
+        </div>
+        <div class="filter-pills" id="guide-filter-pills">
+          <button type="button" class="pill-btn active" data-guide-scope="personal">⭐ Meu Acervo (23)</button>
+          <button type="button" class="pill-btn" data-guide-scope="all">📚 Todas as 40 Espécies</button>
+        </div>
+        <div id="species-catalog-list"></div>
+      </section>
+
+      <!-- ABA 4: BACKUP, INSTALAÇÃO & GERADOR DE APK -->
+      <section id="tab-settings" class="tab-panel">
+        <div class="section-header" style="margin-top:0;">
+          <h2 class="section-title">💾 Acervo &amp; Backup Offline-First</h2>
+        </div>
+        <div class="guide-card">
+          <h4>Seus dados ficam 100% no seu aparelho</h4>
+          <p>Todas as árvores, diários e fotos são salvos localmente via IndexedDB (funciona sem internet no quintal/viveiro). Exporte um backup periodicamente para guardar ou transferir de celular.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;">
+            <button class="btn btn-primary btn-sm" id="btn-export-backup">⬇️ Exportar JSON</button>
+            <button class="btn btn-secondary btn-sm" id="btn-import-backup">⬆️ Restaurar JSON</button>
+          </div>
+          <button class="btn btn-secondary btn-sm btn-block" id="btn-sync-acervo" style="margin-top:9px;">
+            🌱 Sincronizar as 23 Espécies do Meu Acervo
+          </button>
+          <input type="file" id="input-import-backup" accept=".json,application/json" style="display:none;">
+        </div>
+
+        <div class="section-header">
+          <h2 class="section-title">📱 Abrir ou Instalar no Celular</h2>
+        </div>
+        <div class="guide-card" style="text-align:center;">
+          <h4>Aponte a câmera do celular</h4>
+          <div class="qr-box">
+            <img id="qr-install-img" alt="QR Code Bonsai Mori" width="160" height="160">
+          </div>
+          <p style="font-family:monospace;font-size:0.76rem;color:var(--accent-leaf);" id="current-pwa-url">https://deomagalhaes.com.br/bonsai/</p>
+          <p>No Android (Chrome): toque no menu <strong>⋮ → Adicionar à tela inicial / Instalar aplicativo</strong>.<br>No iPhone (Safari): toque em <strong>Compartilhar → Adicionar à Tela de Início</strong>.</p>
+        </div>
+
+        <div class="section-header">
+          <h2 class="section-title">📦 Como gerar o arquivo .APK grátis</h2>
+        </div>
+        <div class="guide-card">
+          <h4>Gerar APK nativo em 2 minutos (Sem instalar nada no PC)</h4>
+          <ol class="step-list">
+            <li>Após publicar esta pasta no GitHub Pages, acesse <strong>pwabuilder.com</strong> no navegador.</li>
+            <li>Cole o endereço <strong>https://deomagalhaes.com.br/bonsai/</strong> e clique em <strong>Start</strong>.</li>
+            <li>Clique em <strong>Package for stores → Android → Generate Package</strong>.</li>
+            <li>Baixe o pacote ZIP gratuito: dentro dele já virá o arquivo <strong>Bonsai Mori.apk</strong> assinado e pronto para instalar ou disponibilizar no GitHub Releases!</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <!-- Navegação Inferior -->
+    <nav class="bottom-nav" aria-label="Navegação Principal">
+      <button class="nav-item active" data-tab="trees">
+        <span class="nav-ico">🌳</span>
+        <span>Bancada</span>
+      </button>
+      <button class="nav-item" data-tab="care">
+        <span class="nav-ico">🔔</span>
+        <span>Manejo</span>
+      </button>
+      <button class="nav-item" data-tab="guide">
+        <span class="nav-ico">🌿</span>
+        <span>Espécies</span>
+      </button>
+      <button class="nav-item" data-tab="settings">
+        <span class="nav-ico">📲</span>
+        <span>App &amp; APK</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL 1: CADASTRAR / EDITAR ÁRVORE -->
+  <div class="modal-backdrop" id="modal-tree">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="modal-tree-title">Novo Bonsai</h3>
+        <button class="icon-btn" type="button" data-close-modal>✕</button>
+      </div>
+      <form id="form-tree">
+        <div class="form-group">
+          <label for="f-name">Nome ou Código da Planta *</label>
+          <input type="text" id="f-name" required placeholder="Ex.: B-024 • Jabuticabeira Matriz">
+        </div>
+
+        <div class="form-group">
+          <label for="f-species">Espécie (23 do Acervo + 17 Clássicas)</label>
+          <select id="f-species"></select>
+        </div>
+
+        <div class="form-group" id="wrap-custom-species" style="display:none;">
+          <label for="f-custom-species">Nome Popular da Espécie</label>
+          <input type="text" id="f-custom-species" placeholder="Ex.: Pitomba, Grumixama...">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-scientific">Nome Científico</label>
+            <input type="text" id="f-scientific" placeholder="Plinia cauliflora">
+          </div>
+          <div class="form-group">
+            <label for="f-style">Estilo</label>
+            <select id="f-style"></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="f-bench">Bancada / Setor</label>
+          <input type="text" id="f-bench" list="bench-suggestions" placeholder="Ex.: Bancada Frutíferas">
+          <datalist id="bench-suggestions">
+            <option value="Bancada Frutíferas"></option>
+            <option value="Bancada Sol Pleno A"></option>
+            <option value="Bancada Sol Pleno B"></option>
+            <option value="Bancada Nativas Sol Pleno"></option>
+            <option value="Bancada Mame &amp; Shohin"></option>
+            <option value="Bancada Meia-Sombra"></option>
+            <option value="Bancada Coníferas"></option>
+            <option value="Bancada Caudiciformes &amp; Rocha"></option>
+          </datalist>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-age">Idade Estimada (anos)</label>
+            <input type="number" id="f-age" min="0" max="500" placeholder="Ex.: 8">
+          </div>
+          <div class="form-group">
+            <label for="f-acquired">Data de Aquisição</label>
+            <input type="date" id="f-acquired">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-height">Altura (cm)</label>
+            <input type="number" id="f-height" step="0.5" placeholder="Ex.: 32">
+          </div>
+          <div class="form-group">
+            <label for="f-nebari">Nebari / Base (cm)</label>
+            <input type="number" id="f-nebari" step="0.5" placeholder="Ex.: 7.5">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="f-pot">Vaso / Laje Atual</label>
+          <input type="text" id="f-pot" placeholder="Ex.: Vaso Cerâmica / Treino / Laje de Ardósia">
+        </div>
+
+        <div class="form-group">
+          <label for="f-substrate">Composição do Substrato</label>
+          <input type="text" id="f-substrate" placeholder="Ex.: 60% Caqueira / 30% Casca Pinus / 10% Pedrisco">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-water-days">Alerta de Rega (dias)</label>
+            <input type="number" id="f-water-days" min="1" max="30" value="1">
+          </div>
+          <div class="form-group">
+            <label for="f-fert-days">Ciclo Adubo (dias)</label>
+            <input type="number" id="f-fert-days" min="5" max="120" value="30">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="f-cover-file">Foto Inicial (Câmera ou Galeria)</label>
+          <input type="file" id="f-cover-file" accept="image/*">
+        </div>
+
+        <div class="form-group">
+          <label for="f-notes">Observações &amp; Projeto Estético</label>
+          <textarea id="f-notes" placeholder="Histórico do material, frente escolhida, próximos passos..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Salvar Bonsai</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: REGISTRAR INTERVENÇÃO -->
+  <div class="modal-backdrop" id="modal-intervention">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>Registrar Intervenção</h3>
+        <button class="icon-btn" type="button" data-close-modal>✕</button>
+      </div>
+      <form id="form-intervention">
+        <input type="hidden" id="int-tree-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="int-type">Tipo de Manejo</label>
+            <select id="int-type"></select>
+          </div>
+          <div class="form-group">
+            <label for="int-date">Data</label>
+            <input type="date" id="int-date" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="int-title">Resumo (opcional)</label>
+          <input type="text" id="int-title" placeholder="Ex.: Poda de seleção do 2º patamar">
+        </div>
+
+        <div id="wrap-product-field" class="form-group" style="display:none;">
+          <label for="int-product">Insumo / Produto Aplicado</label>
+          <input type="text" id="int-product" placeholder="Ex.: Bokashi, Osmocote 15-09-12, Óleo de Neem 1%...">
+        </div>
+
+        <div id="wrap-wire-fields" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="int-wire-days">Revisar Arame em (dias)</label>
+              <input type="number" id="int-wire-days" min="7" max="365" value="45">
+            </div>
+            <div class="form-group">
+              <label for="int-wire-gauge">Bitola do Arame</label>
+              <input type="text" id="int-wire-gauge" placeholder="Ex.: Alumínio 2.5mm">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="int-notes">Detalhes Técnicos</label>
+          <textarea id="int-notes" placeholder="Reação da planta, galhos trabalhados, dosagem..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Salvar no Diário</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADICIONAR FOTO EVOLUTIVA -->
+  <div class="modal-backdrop" id="modal-photo">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>📷 Registro Fotográfico</h3>
+        <button class="icon-btn" type="button" data-close-modal>✕</button>
+      </div>
+      <form id="form-photo">
+        <input type="hidden" id="ph-tree-id">
+        <div class="form-group">
+          <label for="ph-file">Capturar Câmera ou Escolher da Galeria *</label>
+          <input type="file" id="ph-file" accept="image/*" required>
+          <img id="ph-preview" alt="Pré-visualização" style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-top:10px;">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ph-date">Data da Foto</label>
+            <input type="date" id="ph-date" required>
+          </div>
+          <div class="form-group">
+            <label for="ph-angle">Ângulo</label>
+            <select id="ph-angle">
+              <option value="Frente">Frente Principal</option>
+              <option value="Costas">Costas</option>
+              <option value="Lateral Dir.">Lateral Direita</option>
+              <option value="Lateral Esq.">Lateral Esquerda</option>
+              <option value="Nebari">Detalhe Nebari / Cáudice</option>
+              <option value="Copa / Flor">Detalhe Copa / Floração</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ph-caption">Legenda Evolutiva</label>
+          <input type="text" id="ph-caption" placeholder="Ex.: Após desfolha de verão e abertura de luz">
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="ph-set-cover" checked style="width:18px;height:18px;">
+          <label for="ph-set-cover" style="margin:0;">Atualizar como foto principal de capa</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Adicionar à Linha do Tempo</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./js/species-guide.js"></script>
+  <script src="./js/db.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

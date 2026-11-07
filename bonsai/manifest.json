@@ -1,0 +1,74 @@
+{
+  "id": "/bonsai/",
+  "name": "Bonsai Mori — Gestão & Cultivo",
+  "short_name": "Bonsai Mori",
+  "description": "Aplicativo offline-first para gestão botânica de bonsais: fichas técnicas, evolução fotográfica Antes/Depois, controle de aramação, rega, adubação e manejo sazonal (Hemisfério Sul).",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0f1c14",
+  "theme_color": "#16291e",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["lifestyle", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./icons/screenshot-mobile.png",
+      "sizes": "540x960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Painel principal de gestão das árvores e alertas sazonais"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nova Árvore",
+      "short_name": "Cadastrar",
+      "description": "Adicionar um novo bonsai ao acervo",
+      "url": "./index.html?action=new-tree",
+      "icons": [
+        {
+          "src": "./icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Agenda & Alertas",
+      "short_name": "Manejo",
+      "description": "Verificar regas, adubações e aramações ativas",
+      "url": "./index.html?tab=care",
+      "icons": [
+        {
+          "src": "./icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
