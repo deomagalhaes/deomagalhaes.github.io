@@ -939,3 +939,42 @@ input:focus, select:focus, textarea:focus {
   justify-content: center;
   margin: 10px auto;
 }
+
+/* Elementos Comerciais & Selo Licença Vitalícia PRO */
+.pro-pill {
+  background: rgba(230, 184, 92, 0.16);
+  border: 1px solid rgba(230, 184, 92, 0.45);
+  color: #f6d58e;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pro-license-card {
+  background: linear-gradient(145deg, #1f3829 0%, #14241a 100%);
+  border: 1px solid rgba(230, 184, 92, 0.45);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.pro-license-card h4 {
+  margin: 0 0 5px;
+  color: #f6d58e;
+  font-size: 0.98rem;
+}
+
+.pro-license-card p {
+  margin: 0 0 10px;
+  font-size: 0.81rem;
+  color: var(--text-secondary);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #f0c975 0%, #c9963b 100%);
+  color: #171104;
+  font-weight: 700;
+}

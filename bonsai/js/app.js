@@ -1,7 +1,8 @@
-// Controlador Principal SPA — Bonsai Mori (Integrado às 23 Espécies do Acervo + 40 Guia Fitotécnico)
+// Controlador Principal SPA Comercial — Bonsai Mori PRO
 (function () {
   const Botany = window.BonsaiBotany;
   const DB = window.BonsaiDB;
+  const License = window.BonsaiLicense;
 
   let state = {
     trees: [],
@@ -13,7 +14,7 @@
     treeSearch: '',
     benchFilter: 'ALL',
     guideSearch: '',
-    guideScope: 'personal',
+    guideScope: 'all',
     deferredInstallPrompt: null
   };
 
@@ -62,7 +63,20 @@
     el.textContent = msg;
     el.classList.add('show');
     clearTimeout(el._timer);
-    el._timer = setTimeout(() => el.classList.remove('show'), 2600);
+    el._timer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  function openPaywall(reasonMsg) {
+    const txt = document.getElementById('paywall-reason-txt');
+    if (txt) txt.textContent = reasonMsg || 'Desbloqueie recursos ilimitados com a Licença Vitalícia PRO.';
+    document.getElementById('modal-paywall').classList.add('open');
+  }
+
+  function renderHeaderLicenseBadge() {
+    const btn = document.getElementById('btn-pro-status');
+    if (!btn) return;
+    const summary = License.getStatusSummary();
+    btn.textContent = summary.badgeText;
   }
 
   function computeTreeAlerts(tree) {
@@ -213,10 +227,12 @@
         '</div>';
     }
 
-    // Pílulas de Filtro por Bancada / Status
     const benches = Array.from(new Set(state.trees.map((t) => t.bench).filter(Boolean))).sort();
     const pillsEl = document.getElementById('bench-filter-pills');
+    const searchWrap = document.querySelector('#tab-trees .search-box');
+    if (searchWrap) searchWrap.style.display = state.trees.length > 0 ? 'block' : 'none';
     if (pillsEl) {
+      pillsEl.style.display = state.trees.length > 0 ? 'flex' : 'none';
       const items = [
         { id: 'ALL', label: 'Todas (' + state.trees.length + ')' },
         { id: 'WATER_DUE', label: '💧 Regar (' + thirstyCount + ')' }
@@ -252,29 +268,31 @@
 
     const headerTitle = document.getElementById('bench-header-title');
     if (headerTitle) {
-      headerTitle.textContent = '🌳 Minha Bancada (' + filtered.length + ')';
+      headerTitle.textContent = state.trees.length > 0 ? '🌳 Minha Bancada (' + filtered.length + ')' : '🌳 Bem-vindo ao Bonsai Mori';
     }
 
     const listEl = document.getElementById('trees-list-container');
     if (!listEl) return;
 
+    // Onboarding Limpo para Amigos / Novos Usuários!
     if (state.trees.length === 0) {
       listEl.innerHTML =
         '<div class="empty-state">' +
           '<div class="empty-icon">🪴</div>' +
-          '<h3>Sua bancada está vazia</h3>' +
-          '<p>Carregue suas 23 espécies do acervo pessoal ou cadastre uma nova planta.</p>' +
+          '<h3>Sua bancada individual está pronta</h3>' +
+          '<p>Seus dados ficam salvos exclusivamente neste aparelho. Comece cadastrando suas próprias árvores do zero ou carregue 3 exemplares de demonstração para testar o comparador Antes/Depois e o monitor de aramação.</p>' +
           '<div class="empty-actions">' +
-            '<button class="btn btn-primary btn-block" id="btn-empty-sync">🌱 Carregar Minhas 23 Espécies</button>' +
-            '<button class="btn btn-secondary btn-block" id="btn-empty-new">+ Cadastrar Manualmente</button>' +
+            '<button class="btn btn-primary btn-block" id="btn-empty-new">+ Cadastrar Meu Primeiro Bonsai</button>' +
+            '<button class="btn btn-gold btn-block" id="btn-empty-demo3">✨ Testar com 3 Bonsais de Demonstração</button>' +
           '</div>' +
         '</div>';
-      document.getElementById('btn-empty-sync').onclick = async () => {
-        const added = await DB.syncPersonalCollection();
-        await refreshData();
-        showToast(added + ' espécies sincronizadas!');
-      };
+
       document.getElementById('btn-empty-new').onclick = () => openTreeModal(null);
+      document.getElementById('btn-empty-demo3').onclick = async () => {
+        await DB.seedCommercialDemoPack();
+        await refreshData();
+        showToast('3 bonsais de demonstração carregados!');
+      };
       return;
     }
 
@@ -368,6 +386,7 @@
     const styleObj = Botany.getStyleById(tree.styleId);
     const treePhotos = state.photos.filter((p) => p.treeId === tree.id);
     const treeLogs = state.logs.filter((l) => l.treeId === tree.id);
+    const proUnlocked = License.hasProAccess();
 
     let wireHtml = '';
     if (tree.activeWire && tree.activeWire.appliedAt) {
@@ -391,38 +410,46 @@
 
     let compareHtml = '';
     if (treePhotos.length >= 2) {
-      const firstPhoto = treePhotos[0];
-      const latestPhoto = treePhotos[treePhotos.length - 1];
-      const optionsBefore = treePhotos.map((p, idx) =>
-        '<option value="' + idx + '"' + (idx === 0 ? ' selected' : '') + '>Antes: ' + formatDateBR(p.date) + ' (' + esc(p.angle) + ')</option>'
-      ).join('');
-      const optionsAfter = treePhotos.map((p, idx) =>
-        '<option value="' + idx + '"' + (idx === treePhotos.length - 1 ? ' selected' : '') + '>Depois: ' + formatDateBR(p.date) + ' (' + esc(p.angle) + ')</option>'
-      ).join('');
+      if (proUnlocked) {
+        const firstPhoto = treePhotos[0];
+        const latestPhoto = treePhotos[treePhotos.length - 1];
+        const optionsBefore = treePhotos.map((p, idx) =>
+          '<option value="' + idx + '"' + (idx === 0 ? ' selected' : '') + '>Antes: ' + formatDateBR(p.date) + ' (' + esc(p.angle) + ')</option>'
+        ).join('');
+        const optionsAfter = treePhotos.map((p, idx) =>
+          '<option value="' + idx + '"' + (idx === treePhotos.length - 1 ? ' selected' : '') + '>Depois: ' + formatDateBR(p.date) + ' (' + esc(p.angle) + ')</option>'
+        ).join('');
 
-      compareHtml =
-        '<div class="compare-card">' +
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
-            '<h3 class="section-title">⚖️ Evolução Antes vs. Depois</h3>' +
-            '<span style="font-size:0.72rem;color:var(--text-muted);">Arraste para comparar</span>' +
-          '</div>' +
-          '<div class="compare-selects">' +
-            '<select id="cmp-select-before">' + optionsBefore + '</select>' +
-            '<select id="cmp-select-after">' + optionsAfter + '</select>' +
-          '</div>' +
-          '<div class="compare-stage" id="compare-stage">' +
-            '<img id="cmp-img-after" src="' + latestPhoto.dataUrl + '" alt="Depois">' +
-            '<img id="cmp-img-before" class="compare-before-layer" src="' + firstPhoto.dataUrl + '" alt="Antes">' +
-            '<div class="compare-divider" id="cmp-divider"></div>' +
-            '<div class="compare-knob" id="cmp-knob">↔</div>' +
-            '<span class="compare-tag left" id="cmp-tag-before">' + formatDateBR(firstPhoto.date) + '</span>' +
-            '<span class="compare-tag right" id="cmp-tag-after">' + formatDateBR(latestPhoto.date) + '</span>' +
-          '</div>' +
-          '<input type="range" min="0" max="100" value="50" class="compare-range" id="cmp-slider" aria-label="Controle Antes e Depois">' +
-        '</div>';
+        compareHtml =
+          '<div class="compare-card">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+              '<h3 class="section-title">⚖️ Evolução Antes vs. Depois</h3>' +
+              '<span style="font-size:0.72rem;color:var(--text-muted);">Arraste para comparar</span>' +
+            '</div>' +
+            '<div class="compare-selects">' +
+              '<select id="cmp-select-before">' + optionsBefore + '</select>' +
+              '<select id="cmp-select-after">' + optionsAfter + '</select>' +
+            '</div>' +
+            '<div class="compare-stage" id="compare-stage">' +
+              '<img id="cmp-img-after" src="' + latestPhoto.dataUrl + '" alt="Depois">' +
+              '<img id="cmp-img-before" class="compare-before-layer" src="' + firstPhoto.dataUrl + '" alt="Antes">' +
+              '<div class="compare-divider" id="cmp-divider"></div>' +
+              '<div class="compare-knob" id="cmp-knob">↔</div>' +
+              '<span class="compare-tag left" id="cmp-tag-before">' + formatDateBR(firstPhoto.date) + '</span>' +
+              '<span class="compare-tag right" id="cmp-tag-after">' + formatDateBR(latestPhoto.date) + '</span>' +
+            '</div>' +
+            '<input type="range" min="0" max="100" value="50" class="compare-range" id="cmp-slider" aria-label="Controle Antes e Depois">' +
+          '</div>';
+      } else {
+        compareHtml =
+          '<div class="pro-license-card">' +
+            '<h4>🔒 Comparador Antes vs. Depois (PRO)</h4>' +
+            '<p>Desbloqueie a comparação deslizante de evolução fotográfica com a Licença Vitalícia PRO.</p>' +
+            '<button class="btn btn-gold btn-sm" id="btn-unlock-compare">👑 Conhecer Licença Vitalícia</button>' +
+          '</div>';
+      }
     }
 
-    // Card Fitotécnico da Espécie integrado direto na Ficha da Planta
     const speciesGuideHtml = sp.id !== 'outra'
       ? '<div class="guide-card" style="margin-bottom:15px;">' +
           '<h4>🌿 Parâmetros Fitotécnicos — ' + esc(sp.commonName) + '</h4>' +
@@ -437,7 +464,7 @@
       : '';
 
     const photosHtml = treePhotos.length === 0
-      ? '<p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px;">Nenhuma foto ainda. Tire fotos pelo celular para acompanhar a evolução e ativar o comparador Antes/Depois!</p>'
+      ? '<p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px;">Nenhuma foto ainda. Tire pelo menos 2 fotos ao longo do tempo para ativar o comparador Antes/Depois!</p>'
       : '<div class="photo-grid">' + treePhotos.slice().reverse().map((p) =>
           '<div class="photo-item">' +
             '<img src="' + p.dataUrl + '" alt="Foto">' +
@@ -483,7 +510,7 @@
       '<div class="detail-hero">' +
         (tree.coverPhoto
           ? '<img src="' + tree.coverPhoto + '" alt="' + esc(tree.name) + '" class="detail-cover-img">'
-          : '<div class="detail-cover-placeholder"><span style="font-size:2.5rem;">🌳</span><span>Toque em "📷 Nova Foto" para fotografar</span></div>') +
+          : '<div class="detail-cover-placeholder"><span style="font-size:2.5rem;">🌳</span><span>Toque em "📷 Foto" para fotografar</span></div>') +
         '<div style="padding:13px;">' +
           '<h2 style="margin:0 0 3px;font-size:1.2rem;">' + esc(tree.name) + '</h2>' +
           '<p style="margin:0;font-size:0.84rem;color:var(--accent-leaf);font-style:italic;">' +
@@ -502,7 +529,7 @@
 
       '<div class="specs-grid">' +
         '<div class="spec-box"><span class="spec-label">Bancada / Setor</span><span class="spec-val">' + esc(tree.bench || 'Geral') + '</span></div>' +
-        '<div class="spec-box"><span class="spec-label">Estilo</span><span class="spec-val">' + esc(styleObj.name.split(' (')[0]) + '</span></div>' +
+        '<div class="spec-box"><span class="spec-label">Estilo</span><span class="spec-val">' + esc(styleObj.name.split(' ')[0]) + '</span></div>' +
         '<div class="spec-box"><span class="spec-label">Última Adubação</span><span class="spec-val">' + formatDateBR(tree.lastFertilizedAt) + '</span></div>' +
         '<div class="spec-box"><span class="spec-label">Vaso / Base</span><span class="spec-val">' + esc(tree.potType || 'Não informado') + '</span></div>' +
         '<div class="spec-box" style="grid-column:span 2;"><span class="spec-label">Substrato Atual</span><span class="spec-val">' + esc(tree.substrate || sp.substrate) + '</span></div>' +
@@ -540,12 +567,17 @@
         type: 'adubacao',
         date: todayStr(),
         title: 'Adubação de manutenção',
-        notes: 'Ciclo renovado (+' + (tree.fertilizerIntervalDays || 30) + 'd).'
+        notes: 'Ciclo renovado.'
       });
       await refreshData();
       showToast('🌱 Adubação registrada!');
     };
     document.getElementById('btn-add-photo').onclick = () => openPhotoModal(tree);
+
+    const btnUnlockCmp = document.getElementById('btn-unlock-compare');
+    if (btnUnlockCmp) {
+      btnUnlockCmp.onclick = () => openPaywall('O comparador deslizante Antes vs. Depois é exclusivo da Licença Vitalícia PRO.');
+    }
 
     const btnRemoveWire = document.getElementById('btn-remove-wire');
     if (btnRemoveWire) {
@@ -562,7 +594,7 @@
       };
     }
 
-    if (treePhotos.length >= 2) {
+    if (treePhotos.length >= 2 && proUnlocked) {
       const slider = document.getElementById('cmp-slider');
       const stageEl = document.getElementById('compare-stage');
       const beforeImg = document.getElementById('cmp-img-before');
@@ -717,18 +749,33 @@
       '</div>';
   }
 
-  // ABA 3: ENCICLOPÉDIA FITOTÉCNICA (23 DO ACERVO + 17 CLÁSSICAS)
+  // ABA 3: ENCICLOPÉDIA FITOTÉCNICA (40 ESPÉCIES)
   function renderGuideTab() {
     const el = document.getElementById('species-catalog-list');
     if (!el) return;
 
+    const proUnlocked = License.hasProAccess();
     const q = state.guideSearch.trim().toLowerCase();
-    const list = Botany.SPECIES_DB.filter((s) => {
+    let list = Botany.SPECIES_DB.filter((s) => {
       if (s.id === 'outra') return false;
       if (state.guideScope === 'personal' && !s.personalCollection) return false;
       if (!q) return true;
       return (s.commonName + ' ' + s.scientificName + ' ' + (s.family || '') + ' ' + s.group).toLowerCase().includes(q);
     });
+
+    let lockedNoticeHtml = '';
+    if (!proUnlocked) {
+      const maxFree = License.COMMERCIAL_CONFIG.freeLimits.freeSpeciesPreviewCount;
+      if (list.length > maxFree) {
+        lockedNoticeHtml =
+          '<div class="pro-license-card">' +
+            '<h4>👑 Desbloqueie as 40 Fichas Fitotécnicas</h4>' +
+            '<p>O Plano Gratuito exibe ' + maxFree + ' espécies iniciais. Adquira a Licença Vitalícia PRO para acessar todas as 40 espécies completas.</p>' +
+            '<a href="./licenca.html#adquirir" class="btn btn-gold btn-sm" style="text-decoration:none;">Ver Licença Vitalícia</a>' +
+          '</div>';
+        list = list.slice(0, maxFree);
+      }
+    }
 
     if (list.length === 0) {
       el.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-size:0.84rem;padding:16px 0;">Nenhuma espécie encontrada.</p>';
@@ -738,7 +785,6 @@
     el.innerHTML = list.map((s) =>
       '<div class="guide-card">' +
         '<h4>' +
-          (s.personalCollection ? '⭐ ' : '') +
           esc(s.commonName) +
           ' <span style="font-weight:400;font-style:italic;color:var(--text-secondary);font-size:0.79rem;">(' + esc(s.scientificName) + ')</span>' +
         '</h4>' +
@@ -754,13 +800,55 @@
         '<p><strong>🌱 Adubação:</strong> ' + esc(s.fertGuide || '') + '</p>' +
         (s.sensitivities ? '<p><strong>🛡️ Atenção:</strong> ' + esc(s.sensitivities) + '</p>' : '') +
       '</div>'
-    ).join('');
+    ).join('') + lockedNoticeHtml;
   }
 
+  // ABA 4: PAINEL COMERCIAL LICENÇA VITALÍCIA + BACKUP
   function renderSettingsTab() {
+    const statusCard = document.getElementById('license-status-card');
+    const actBox = document.getElementById('license-activation-box');
+    const summary = License.getStatusSummary();
+    const cfg = License.COMMERCIAL_CONFIG;
+
+    if (statusCard) {
+      if (summary.tier === 'PRO_LIFETIME') {
+        statusCard.innerHTML =
+          '<h4>👑 ' + esc(summary.headline) + '</h4>' +
+          '<p>' + esc(summary.description) + '</p>' +
+          '<p style="font-family:monospace;font-size:0.78rem;color:#93ebb0;margin-bottom:10px;">Chave: ' + esc(summary.key) + '</p>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+            '<a href="' + esc(cfg.salesPageUrl) + '" class="btn btn-secondary btn-sm" style="text-decoration:none;">Ver Página Oficial</a>' +
+            '<button type="button" class="btn btn-danger btn-sm" id="btn-remove-license">Remover Chave Deste Aparelho</button>' +
+          '</div>';
+        if (actBox) actBox.style.display = 'none';
+        const rmBtn = document.getElementById('btn-remove-license');
+        if (rmBtn) {
+          rmBtn.onclick = () => {
+            if (confirm('Deseja desvincular a chave vitalícia deste navegador?')) {
+              License.deactivateLicense();
+              renderAll();
+              showToast('Licença removida deste aparelho.');
+            }
+          };
+        }
+      } else {
+        statusCard.innerHTML =
+          '<h4>' + esc(summary.headline) + '</h4>' +
+          '<p>' + esc(summary.description) + '</p>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.28);padding:10px 12px;border-radius:10px;margin:10px 0;">' +
+            '<div>' +
+              '<div style="font-size:0.73rem;color:var(--text-muted);text-decoration:line-through;">' + esc(cfg.priceOriginal) + '</div>' +
+              '<div style="font-size:1.15rem;font-weight:800;color:#f6d58e;">' + esc(cfg.priceCurrent) + ' <span style="font-size:0.74rem;font-weight:500;color:var(--text-secondary);">• Vitalício</span></div>' +
+            '</div>' +
+            '<a href="' + esc(cfg.salesPageUrl) + '" class="btn btn-gold btn-sm" style="text-decoration:none;">Página da Licença →</a>' +
+          '</div>';
+        if (actBox) actBox.style.display = 'block';
+      }
+    }
+
     const urlBox = document.getElementById('current-pwa-url');
     if (urlBox) {
-      urlBox.textContent = window.location.origin + window.location.pathname;
+      urlBox.textContent = 'https://deomagalhaes.com.br/bonsai/';
     }
     const qrImg = document.getElementById('qr-install-img');
     if (qrImg) {
@@ -770,6 +858,7 @@
   }
 
   function renderAll() {
+    renderHeaderLicenseBadge();
     renderTreesTab();
     if (state.activeTab === 'detail') renderTreeDetail();
     renderCareTab();
@@ -777,8 +866,12 @@
     renderSettingsTab();
   }
 
-  // MODAL: CADASTRAR / EDITAR BONSAI (COM OPTGROUP 23 ACERVO + 17 CLÁSSICAS)
   function openTreeModal(existingTree) {
+    if (!existingTree && !License.canAddMoreTrees(state.trees.length)) {
+      openPaywall('O Plano Gratuito permite até ' + License.COMMERCIAL_CONFIG.freeLimits.maxTrees + ' árvores. Ative sua Licença Vitalícia PRO para cadastrar árvores ilimitadas!');
+      return;
+    }
+
     state.editingTreeId = existingTree ? existingTree.id : null;
     const modal = document.getElementById('modal-tree');
     document.getElementById('modal-tree-title').textContent = existingTree ? 'Editar Bonsai' : 'Novo Bonsai';
@@ -793,8 +886,8 @@
 
     const spSelect = document.getElementById('f-species');
     spSelect.innerHTML =
-      '<optgroup label="⭐ Meu Acervo Pessoal (23 Espécies)">' + personalOpts + '</optgroup>' +
-      '<optgroup label="📚 Clássicas Complementares (17 Espécies)">' + classicOpts + '</optgroup>' +
+      '<optgroup label="⭐ Tropicais, Nativas &amp; Frutíferas (23)">' + personalOpts + '</optgroup>' +
+      '<optgroup label="📚 Clássicas Consagradas (17)">' + classicOpts + '</optgroup>' +
       '<optgroup label="Personalizada"><option value="outra">Outra Espécie (Digitar manualmente)</option></optgroup>';
 
     const styleSelect = document.getElementById('f-style');
@@ -887,6 +980,32 @@
     });
 
     document.getElementById('btn-top-add').onclick = () => openTreeModal(null);
+    document.getElementById('btn-pro-status').onclick = () => switchTab('settings');
+
+    const btnPaywallHaveKey = document.getElementById('btn-paywall-have-key');
+    if (btnPaywallHaveKey) {
+      btnPaywallHaveKey.onclick = () => {
+        document.getElementById('modal-paywall').classList.remove('open');
+        switchTab('settings');
+      };
+    }
+
+    const formActivate = document.getElementById('form-activate-license');
+    if (formActivate) {
+      formActivate.onsubmit = (ev) => {
+        ev.preventDefault();
+        const email = document.getElementById('lic-input-email').value;
+        const key = document.getElementById('lic-input-key').value;
+        const res = License.activateLicense(email, key);
+        if (res.valid) {
+          formActivate.reset();
+          renderAll();
+          showToast('👑 Licença Vitalícia PRO ativada com sucesso!');
+        } else {
+          alert(res.reason);
+        }
+      };
+    }
 
     const searchInput = document.getElementById('trees-search-input');
     if (searchInput) {
@@ -1028,6 +1147,10 @@
     };
 
     document.getElementById('btn-export-backup').onclick = async () => {
+      if (!License.hasProAccess()) {
+        openPaywall('A exportação completa de backup em JSON (com fotos) faz parte da Licença Vitalícia PRO.');
+        return;
+      }
       const data = await DB.exportFullBackup();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -1040,7 +1163,13 @@
     };
 
     const importInput = document.getElementById('input-import-backup');
-    document.getElementById('btn-import-backup').onclick = () => importInput.click();
+    document.getElementById('btn-import-backup').onclick = () => {
+      if (!License.hasProAccess()) {
+        openPaywall('A restauração completa de backup faz parte da Licença Vitalícia PRO.');
+        return;
+      }
+      importInput.click();
+    };
     importInput.onchange = (ev) => {
       const file = ev.target.files && ev.target.files[0];
       if (!file) return;
@@ -1058,12 +1187,35 @@
       reader.readAsText(file);
     };
 
+    const btnLoadDemo3 = document.getElementById('btn-load-demo3');
+    if (btnLoadDemo3) {
+      btnLoadDemo3.onclick = async () => {
+        await DB.seedCommercialDemoPack();
+        await refreshData();
+        switchTab('trees');
+        showToast('✨ 3 bonsais de demonstração adicionados!');
+      };
+    }
+
     const btnSyncAcervo = document.getElementById('btn-sync-acervo');
     if (btnSyncAcervo) {
       btnSyncAcervo.onclick = async () => {
         const added = await DB.syncPersonalCollection();
         await refreshData();
-        showToast(added > 0 ? added + ' espécie(s) adicionada(s) à bancada!' : 'Todas as 23 espécies já estão na sua bancada!');
+        switchTab('trees');
+        showToast(added > 0 ? added + ' espécie(s) adicionada(s) à bancada!' : 'As 23 espécies já estão na bancada!');
+      };
+    }
+
+    const btnClearBench = document.getElementById('btn-clear-bench');
+    if (btnClearBench) {
+      btnClearBench.onclick = async () => {
+        if (confirm('Tem certeza que deseja limpar todas as árvores e fotos salvas neste aparelho?')) {
+          await DB.clearAllBenchData();
+          await refreshData();
+          switchTab('trees');
+          showToast('Bancada limpa com sucesso.');
+        }
       };
     }
 
@@ -1095,7 +1247,6 @@
       });
     }
 
-    await DB.ensureInitialAcervo();
     bindGlobalEvents();
     await refreshData();
 
@@ -1104,6 +1255,8 @@
       openTreeModal(null);
     } else if (params.get('tab') === 'care') {
       switchTab('care');
+    } else if (params.get('tab') === 'pro') {
+      switchTab('settings');
     }
   }
 

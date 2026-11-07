@@ -1,17 +1,19 @@
-const CACHE_NAME = 'bonsai-mori-v1.1.0';
+const CACHE_NAME = 'bonsai-mori-v2.0.0';
 const CORE_ASSETS = [
   './',
   './index.html',
+  './licenca.html',
   './manifest.json',
   './css/app.css',
+  './js/license.js',
   './js/species-guide.js',
   './js/db.js',
   './js/app.js',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/screenshot-mobile.png'
+  './icons/icon-192.png?v=2',
+  './icons/icon-512.png?v=2',
+  './icons/icon-maskable-512.png?v=2',
+  './icons/apple-touch-icon.png?v=2',
+  './icons/screenshot-mobile.png?v=2'
 ];
 
 self.addEventListener('install', (event) => {
@@ -39,16 +41,16 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Navigation requests fall back to cached index.html when offline
+  // Navigation requests fall back to cached page or index.html when offline
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then((res) => {
           const clone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', clone));
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           return res;
         })
-        .catch(() => caches.match('./index.html'))
+        .catch(() => caches.match(event.request).then((m) => m || caches.match('./index.html')))
     );
     return;
   }

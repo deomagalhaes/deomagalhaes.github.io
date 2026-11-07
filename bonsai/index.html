@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
-  <title>Bonsai Mori — Gestão &amp; Cultivo Botânico</title>
+  <title>Bonsai Mori PRO — Gestão &amp; Cultivo Fitotécnico</title>
   <meta name="description" content="Gestão offline-first de bonsais: fichas botânicas, evolução fotográfica Antes/Depois, controle de aramação, rega, adubação e calendário sazonal brasileiro.">
 
   <!-- PWA & Mobile Native Meta -->
@@ -15,8 +15,8 @@
   <meta name="apple-mobile-web-app-title" content="Bonsai Mori">
 
   <link rel="manifest" href="./manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=2">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=2">
   <link rel="stylesheet" href="./css/app.css">
 </head>
 <body>
@@ -24,14 +24,15 @@
     <!-- Barra Superior -->
     <header class="app-topbar">
       <div class="brand-wrap">
-        <img src="./icons/icon-192.png" alt="Ícone Bonsai Mori" class="brand-logo">
+        <img src="./icons/icon-192.png?v=2" alt="Logo Bonsai Mori" class="brand-logo">
         <div>
           <h1 class="brand-title">Bonsai Mori</h1>
-          <p class="brand-subtitle">Diário &amp; Manejo Fitotécnico</p>
+          <p class="brand-subtitle">Gestão Fitotécnica</p>
         </div>
       </div>
       <div class="topbar-actions">
-        <button class="icon-btn" id="btn-install-pwa" style="display:none;" title="Instalar no celular">📲 Instalar</button>
+        <button class="pro-pill" id="btn-pro-status" type="button" title="Status da Licença PRO">✨ Demo PRO</button>
+        <button class="icon-btn" id="btn-install-pwa" style="display:none;" title="Instalar no celular">📲</button>
         <button class="icon-btn highlight" id="btn-top-add">+ Árvore</button>
       </div>
     </header>
@@ -83,53 +84,65 @@
           <input type="text" id="guide-search-input" placeholder="🔍 Filtrar espécie ou nome científico...">
         </div>
         <div class="filter-pills" id="guide-filter-pills">
-          <button type="button" class="pill-btn active" data-guide-scope="personal">⭐ Meu Acervo (23)</button>
-          <button type="button" class="pill-btn" data-guide-scope="all">📚 Todas as 40 Espécies</button>
+          <button type="button" class="pill-btn active" data-guide-scope="all">📚 Todas as 40 Espécies</button>
+          <button type="button" class="pill-btn" data-guide-scope="personal">⭐ Seleção Nativas &amp; Tropicais (23)</button>
         </div>
         <div id="species-catalog-list"></div>
       </section>
 
-      <!-- ABA 4: BACKUP, INSTALAÇÃO & GERADOR DE APK -->
+      <!-- ABA 4: LICENÇA VITALÍCIA PRO, BACKUP & INSTALAÇÃO -->
       <section id="tab-settings" class="tab-panel">
         <div class="section-header" style="margin-top:0;">
-          <h2 class="section-title">💾 Acervo &amp; Backup Offline-First</h2>
+          <h2 class="section-title">👑 Licença Vitalícia PRO</h2>
+        </div>
+
+        <div class="pro-license-card" id="license-status-card"></div>
+
+        <div class="guide-card" id="license-activation-box">
+          <h4>🔑 Ativar Chave de Licença Vitalícia</h4>
+          <p>Comprou sua licença vitalícia no site? Insira seu e-mail e o código <strong>BMORI-...</strong> para gravar o desbloqueio permanente neste aparelho.</p>
+          <form id="form-activate-license" style="margin-top:10px;">
+            <div class="form-group" style="margin-bottom:9px;">
+              <input type="email" id="lic-input-email" required placeholder="E-mail cadastrado na compra">
+            </div>
+            <div class="form-group" style="margin-bottom:9px;">
+              <input type="text" id="lic-input-key" required placeholder="BMORI-XXXX-XXXX-XXXX" style="text-transform:uppercase;font-family:monospace;">
+            </div>
+            <button type="submit" class="btn btn-gold btn-sm btn-block">Validar &amp; Ativar Licença Vitalícia</button>
+          </form>
+        </div>
+
+        <div class="section-header">
+          <h2 class="section-title">💾 Dados Locais &amp; Backup</h2>
         </div>
         <div class="guide-card">
-          <h4>Seus dados ficam 100% no seu aparelho</h4>
-          <p>Todas as árvores, diários e fotos são salvos localmente via IndexedDB (funciona sem internet no quintal/viveiro). Exporte um backup periodicamente para guardar ou transferir de celular.</p>
+          <h4>Privacidade 100% no seu aparelho</h4>
+          <p>Cada usuário possui banco de dados próprio e isolado no celular (funciona sem internet no viveiro). Exporte um backup em JSON para guardar ou migrar de celular.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;">
             <button class="btn btn-primary btn-sm" id="btn-export-backup">⬇️ Exportar JSON</button>
             <button class="btn btn-secondary btn-sm" id="btn-import-backup">⬆️ Restaurar JSON</button>
           </div>
-          <button class="btn btn-secondary btn-sm btn-block" id="btn-sync-acervo" style="margin-top:9px;">
-            🌱 Sincronizar as 23 Espécies do Meu Acervo
-          </button>
           <input type="file" id="input-import-backup" accept=".json,application/json" style="display:none;">
+
+          <hr style="border:none;border-top:1px solid var(--border-subtle);margin:14px 0 10px;">
+          <p style="font-size:0.76rem;margin-bottom:8px;">Ferramentas rápidas de bancada:</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-secondary btn-sm btn-block" id="btn-load-demo3">✨ Carregar 3 Bonsais de Demonstração</button>
+            <button class="btn btn-secondary btn-sm btn-block" id="btn-sync-acervo">🌱 Carregar Coleção de 23 Espécies (B-001 a B-023)</button>
+            <button class="btn btn-danger btn-sm btn-block" id="btn-clear-bench">🧹 Limpar Toda a Bancada Local</button>
+          </div>
         </div>
 
         <div class="section-header">
-          <h2 class="section-title">📱 Abrir ou Instalar no Celular</h2>
+          <h2 class="section-title">📱 Compartilhar &amp; Instalar no Celular</h2>
         </div>
         <div class="guide-card" style="text-align:center;">
-          <h4>Aponte a câmera do celular</h4>
+          <h4>Envie para amigos ou aponte a câmera</h4>
           <div class="qr-box">
             <img id="qr-install-img" alt="QR Code Bonsai Mori" width="160" height="160">
           </div>
           <p style="font-family:monospace;font-size:0.76rem;color:var(--accent-leaf);" id="current-pwa-url">https://deomagalhaes.com.br/bonsai/</p>
-          <p>No Android (Chrome): toque no menu <strong>⋮ → Adicionar à tela inicial / Instalar aplicativo</strong>.<br>No iPhone (Safari): toque em <strong>Compartilhar → Adicionar à Tela de Início</strong>.</p>
-        </div>
-
-        <div class="section-header">
-          <h2 class="section-title">📦 Como gerar o arquivo .APK grátis</h2>
-        </div>
-        <div class="guide-card">
-          <h4>Gerar APK nativo em 2 minutos (Sem instalar nada no PC)</h4>
-          <ol class="step-list">
-            <li>Após publicar esta pasta no GitHub Pages, acesse <strong>pwabuilder.com</strong> no navegador.</li>
-            <li>Cole o endereço <strong>https://deomagalhaes.com.br/bonsai/</strong> e clique em <strong>Start</strong>.</li>
-            <li>Clique em <strong>Package for stores → Android → Generate Package</strong>.</li>
-            <li>Baixe o pacote ZIP gratuito: dentro dele já virá o arquivo <strong>Bonsai Mori.apk</strong> assinado e pronto para instalar ou disponibilizar no GitHub Releases!</li>
-          </ol>
+          <p>No Android (Chrome): menu <strong>⋮ → Instalar aplicativo</strong>.<br>No iPhone (Safari): <strong>Compartilhar → Adicionar à Tela de Início</strong>.</p>
         </div>
       </section>
     </main>
@@ -149,8 +162,8 @@
         <span>Espécies</span>
       </button>
       <button class="nav-item" data-tab="settings">
-        <span class="nav-ico">📲</span>
-        <span>App &amp; APK</span>
+        <span class="nav-ico">👑</span>
+        <span>PRO &amp; App</span>
       </button>
     </nav>
   </div>
@@ -165,11 +178,11 @@
       <form id="form-tree">
         <div class="form-group">
           <label for="f-name">Nome ou Código da Planta *</label>
-          <input type="text" id="f-name" required placeholder="Ex.: B-024 • Jabuticabeira Matriz">
+          <input type="text" id="f-name" required placeholder="Ex.: Jabuticabeira Matriz #01">
         </div>
 
         <div class="form-group">
-          <label for="f-species">Espécie (23 do Acervo + 17 Clássicas)</label>
+          <label for="f-species">Espécie (40 Fichas Fitotécnicas)</label>
           <select id="f-species"></select>
         </div>
 
@@ -191,7 +204,7 @@
 
         <div class="form-group">
           <label for="f-bench">Bancada / Setor</label>
-          <input type="text" id="f-bench" list="bench-suggestions" placeholder="Ex.: Bancada Frutíferas">
+          <input type="text" id="f-bench" list="bench-suggestions" placeholder="Ex.: Bancada Sol Pleno">
           <datalist id="bench-suggestions">
             <option value="Bancada Frutíferas"></option>
             <option value="Bancada Sol Pleno A"></option>
@@ -363,8 +376,30 @@
     </div>
   </div>
 
+  <!-- MODAL 4: PAYWALL COMERCIAL LICENÇA VITALÍCIA -->
+  <div class="modal-backdrop" id="modal-paywall">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>👑 Desbloqueie o Bonsai Mori PRO</h3>
+        <button class="icon-btn" type="button" data-close-modal>✕</button>
+      </div>
+      <p id="paywall-reason-txt" style="font-size:0.86rem;color:var(--text-secondary);margin:0 0 12px;">
+        Este recurso é exclusivo da Licença Vitalícia PRO.
+      </p>
+      <div class="pro-license-card">
+        <h4>Pagamento Único • Sem Assinatura Mensal</h4>
+        <p>Tenha árvores e fotos ilimitadas, comparador Antes vs. Depois, backup completo em JSON e todas as 40 fichas fitotécnicas para sempre.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+          <a href="./licenca.html#adquirir" class="btn btn-gold btn-block" style="text-decoration:none;">👑 Adquirir Licença Vitalícia no Site</a>
+          <button type="button" class="btn btn-secondary btn-sm btn-block" id="btn-paywall-have-key">🔑 Já tenho minha chave BMORI-...</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="app-toast" class="toast" role="status" aria-live="polite"></div>
 
+  <script src="./js/license.js"></script>
   <script src="./js/species-guide.js"></script>
   <script src="./js/db.js"></script>
   <script src="./js/app.js"></script>
