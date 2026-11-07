@@ -498,8 +498,8 @@ window.BonsaiDB = (function () {
     ]);
     const lic = window.BonsaiLicense ? window.BonsaiLicense.loadStoredLicense() : null;
     return {
-      app: 'Bonsai Mori',
-      version: 2,
+      app: 'Bonsai Hub',
+      version: 3,
       exportedAt: new Date().toISOString(),
       license: lic || null,
       trees,

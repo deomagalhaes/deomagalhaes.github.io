@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
-  <title>Bonsai Mori PRO — Gestão &amp; Cultivo Fitotécnico</title>
+  <title>Bonsai Hub PRO — Gestão &amp; Cultivo Fitotécnico</title>
   <meta name="description" content="Gestão offline-first de bonsais: fichas botânicas, evolução fotográfica Antes/Depois, controle de aramação, rega, adubação e calendário sazonal brasileiro.">
 
   <!-- PWA & Mobile Native Meta -->
@@ -12,11 +12,11 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Bonsai Mori">
+  <meta name="apple-mobile-web-app-title" content="Bonsai Hub">
 
   <link rel="manifest" href="./manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=2">
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=2">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=3">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=3">
   <link rel="stylesheet" href="./css/app.css">
 </head>
 <body>
@@ -24,9 +24,9 @@
     <!-- Barra Superior -->
     <header class="app-topbar">
       <div class="brand-wrap">
-        <img src="./icons/icon-192.png?v=2" alt="Logo Bonsai Mori" class="brand-logo">
+        <img src="./icons/icon-192.png?v=3" alt="Logo Bonsai Hub" class="brand-logo">
         <div>
-          <h1 class="brand-title">Bonsai Mori</h1>
+          <h1 class="brand-title">Bonsai Hub</h1>
           <p class="brand-subtitle">Gestão Fitotécnica</p>
         </div>
       </div>
@@ -100,13 +100,13 @@
 
         <div class="guide-card" id="license-activation-box">
           <h4>🔑 Ativar Chave de Licença Vitalícia</h4>
-          <p>Comprou sua licença vitalícia no site? Insira seu e-mail e o código <strong>BMORI-...</strong> para gravar o desbloqueio permanente neste aparelho.</p>
+          <p>Comprou sua licença vitalícia no site? Insira seu e-mail e o código <strong>BHUB-...</strong> para gravar o desbloqueio permanente neste aparelho.</p>
           <form id="form-activate-license" style="margin-top:10px;">
             <div class="form-group" style="margin-bottom:9px;">
               <input type="email" id="lic-input-email" required placeholder="E-mail cadastrado na compra">
             </div>
             <div class="form-group" style="margin-bottom:9px;">
-              <input type="text" id="lic-input-key" required placeholder="BMORI-XXXX-XXXX-XXXX" style="text-transform:uppercase;font-family:monospace;">
+              <input type="text" id="lic-input-key" required placeholder="BHUB-XXXX-XXXX-XXXX" style="text-transform:uppercase;font-family:monospace;">
             </div>
             <button type="submit" class="btn btn-gold btn-sm btn-block">Validar &amp; Ativar Licença Vitalícia</button>
           </form>
@@ -139,7 +139,7 @@
         <div class="guide-card" style="text-align:center;">
           <h4>Envie para amigos ou aponte a câmera</h4>
           <div class="qr-box">
-            <img id="qr-install-img" alt="QR Code Bonsai Mori" width="160" height="160">
+            <img id="qr-install-img" alt="QR Code Bonsai Hub" width="160" height="160">
           </div>
           <p style="font-family:monospace;font-size:0.76rem;color:var(--accent-leaf);" id="current-pwa-url">https://deomagalhaes.com.br/bonsai/</p>
           <p>No Android (Chrome): menu <strong>⋮ → Instalar aplicativo</strong>.<br>No iPhone (Safari): <strong>Compartilhar → Adicionar à Tela de Início</strong>.</p>
@@ -261,8 +261,25 @@
         </div>
 
         <div class="form-group">
-          <label for="f-cover-file">Foto Inicial (Câmera ou Galeria)</label>
-          <input type="file" id="f-cover-file" accept="image/*">
+          <label>Foto do Bonsai (opcional)</label>
+          <div class="photo-source-grid">
+            <button type="button" class="photo-pick-btn camera" id="btn-tree-camera">
+              <span class="pick-ico">📸</span>
+              <span>Tirar Foto Agora</span>
+              <span class="pick-sub">Abrir câmera na hora</span>
+            </button>
+            <button type="button" class="photo-pick-btn" id="btn-tree-gallery">
+              <span class="pick-ico">🖼️</span>
+              <span>Escolher Galeria</span>
+              <span class="pick-sub">Selecionar arquivo</span>
+            </button>
+          </div>
+          <input type="file" id="f-cover-camera" accept="image/*" capture="environment" style="display:none;">
+          <input type="file" id="f-cover-file" accept="image/*" style="display:none;">
+          <div class="photo-preview-wrap" id="f-cover-preview-wrap">
+            <span class="photo-preview-badge">✓ Foto pronta</span>
+            <img id="f-cover-preview" alt="Pré-visualização do Bonsai">
+          </div>
         </div>
 
         <div class="form-group">
@@ -338,9 +355,25 @@
       <form id="form-photo">
         <input type="hidden" id="ph-tree-id">
         <div class="form-group">
-          <label for="ph-file">Capturar Câmera ou Escolher da Galeria *</label>
-          <input type="file" id="ph-file" accept="image/*" required>
-          <img id="ph-preview" alt="Pré-visualização" style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-top:10px;">
+          <label>Como deseja adicionar a foto? *</label>
+          <div class="photo-source-grid">
+            <button type="button" class="photo-pick-btn camera" id="btn-ph-camera">
+              <span class="pick-ico">📸</span>
+              <span>Tirar Foto Agora</span>
+              <span class="pick-sub">Abrir câmera na hora</span>
+            </button>
+            <button type="button" class="photo-pick-btn" id="btn-ph-gallery">
+              <span class="pick-ico">🖼️</span>
+              <span>Escolher Galeria</span>
+              <span class="pick-sub">Selecionar arquivo</span>
+            </button>
+          </div>
+          <input type="file" id="ph-camera" accept="image/*" capture="environment" style="display:none;">
+          <input type="file" id="ph-file" accept="image/*" style="display:none;">
+          <div class="photo-preview-wrap" id="ph-preview-wrap">
+            <span class="photo-preview-badge" id="ph-source-badge">✓ Foto pronta</span>
+            <img id="ph-preview" alt="Pré-visualização">
+          </div>
         </div>
 
         <div class="form-row">
@@ -380,7 +413,7 @@
   <div class="modal-backdrop" id="modal-paywall">
     <div class="modal-sheet">
       <div class="modal-header">
-        <h3>👑 Desbloqueie o Bonsai Mori PRO</h3>
+        <h3>👑 Desbloqueie o Bonsai Hub PRO</h3>
         <button class="icon-btn" type="button" data-close-modal>✕</button>
       </div>
       <p id="paywall-reason-txt" style="font-size:0.86rem;color:var(--text-secondary);margin:0 0 12px;">
@@ -391,8 +424,23 @@
         <p>Tenha árvores e fotos ilimitadas, comparador Antes vs. Depois, backup completo em JSON e todas as 40 fichas fitotécnicas para sempre.</p>
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
           <a href="./licenca.html#adquirir" class="btn btn-gold btn-block" style="text-decoration:none;">👑 Adquirir Licença Vitalícia no Site</a>
-          <button type="button" class="btn btn-secondary btn-sm btn-block" id="btn-paywall-have-key">🔑 Já tenho minha chave BMORI-...</button>
+          <button type="button" class="btn btn-secondary btn-sm btn-block" id="btn-paywall-have-key">🔑 Já tenho minha chave BHUB-...</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: CÂMERA AO VIVO (FALLBACK DESKTOP / WEBRTC) -->
+  <div class="modal-backdrop" id="modal-live-cam">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>📸 Câmera ao Vivo</h3>
+        <button class="icon-btn" type="button" id="btn-close-live-cam">✕</button>
+      </div>
+      <video id="live-cam-video" class="live-cam-video" autoplay playsinline muted></video>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-live-cam">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-snap-live-cam">📸 Capturar Foto</button>
       </div>
     </div>
   </div>

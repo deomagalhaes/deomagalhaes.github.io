@@ -16,7 +16,7 @@ if ([string]::IsNullOrWhiteSpace($Salt) -or $Salt.Length -ne 4) {
     $Salt = $Salt.ToUpperInvariant()
 }
 
-$payload = "BMORI_V1|$normEmail|$Salt|$pepper"
+$payload = "BHUB_V1|$normEmail|$Salt|$pepper"
 $sha = [System.Security.Cryptography.SHA256]::Create()
 $hashBytes = $sha.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($payload))
 
@@ -26,10 +26,10 @@ for ($i = 0; $i -lt 8; $i++) {
     $sig += $alphabet[$idx]
 }
 
-$key = "BMORI-$Salt-$($sig.Substring(0,4))-$($sig.Substring(4,4))"
+$key = "BHUB-$Salt-$($sig.Substring(0,4))-$($sig.Substring(4,4))"
 
 Write-Host "==========================================================" -ForegroundColor Green
-Write-Host "  LICENCA VITALICIA BONSAI MORI PRO GERADA" -ForegroundColor Cyan
+Write-Host "  LICENCA VITALICIA BONSAI HUB PRO GERADA" -ForegroundColor Cyan
 Write-Host "  E-mail Vinculado : $normEmail" -ForegroundColor Yellow
 Write-Host "  Chave Vitalicia  : $key" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green

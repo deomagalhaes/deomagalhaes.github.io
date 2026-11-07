@@ -9,7 +9,7 @@ $listener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::An
 $listener.Start()
 
 Write-Host "==========================================================" -ForegroundColor Green
-Write-Host "  Servidor Local Bonsai Mori Ativo!" -ForegroundColor Cyan
+Write-Host "  Servidor Local Bonsai Hub Ativo!" -ForegroundColor Cyan
 Write-Host "  No Computador: http://localhost:$Port/bonsai/" -ForegroundColor Yellow
 Write-Host "  No Celular (mesmo Wi-Fi): http://${ip}:$Port/bonsai/" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green

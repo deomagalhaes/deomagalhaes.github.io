@@ -1,4 +1,4 @@
-// Controlador Principal SPA Comercial — Bonsai Mori PRO
+// Controlador Principal SPA Comercial — Bonsai Hub PRO
 (function () {
   const Botany = window.BonsaiBotany;
   const DB = window.BonsaiDB;
@@ -268,7 +268,7 @@
 
     const headerTitle = document.getElementById('bench-header-title');
     if (headerTitle) {
-      headerTitle.textContent = state.trees.length > 0 ? '🌳 Minha Bancada (' + filtered.length + ')' : '🌳 Bem-vindo ao Bonsai Mori';
+      headerTitle.textContent = state.trees.length > 0 ? '🌳 Minha Bancada (' + filtered.length + ')' : '🌳 Bem-vindo ao Bonsai Hub';
     }
 
     const listEl = document.getElementById('trees-list-container');
@@ -921,6 +921,16 @@
       document.getElementById('f-fert-days').value = defSp.fertilizerIntervalDays;
     }
 
+    modal._treeCoverDataUrl = null;
+    const treePrevWrap = document.getElementById('f-cover-preview-wrap');
+    const treePrevImg = document.getElementById('f-cover-preview');
+    if (existingTree && existingTree.coverPhoto) {
+      treePrevImg.src = existingTree.coverPhoto;
+      treePrevWrap.style.display = 'block';
+    } else {
+      treePrevWrap.style.display = 'none';
+    }
+
     const toggleCustomSpecies = () => {
       const val = spSelect.value;
       document.getElementById('wrap-custom-species').style.display = val === 'outra' ? 'block' : 'none';
@@ -969,9 +979,53 @@
     document.getElementById('form-photo').reset();
     document.getElementById('ph-tree-id').value = tree.id;
     document.getElementById('ph-date').value = todayStr();
-    document.getElementById('ph-preview').style.display = 'none';
+    document.getElementById('ph-preview-wrap').style.display = 'none';
     modal._compressedDataUrl = null;
     modal.classList.add('open');
+  }
+
+  // Motor Híbrido de Câmera Instantânea (Câmera Nativa no Celular + Visor WebRTC no Desktop)
+  let activeLiveStream = null;
+  let liveCamCallback = null;
+
+  function stopLiveCamera() {
+    if (activeLiveStream) {
+      activeLiveStream.getTracks().forEach((tr) => tr.stop());
+      activeLiveStream = null;
+    }
+    const vid = document.getElementById('live-cam-video');
+    if (vid) vid.srcObject = null;
+    const mod = document.getElementById('modal-live-cam');
+    if (mod) mod.classList.remove('open');
+  }
+
+  async function launchCameraCapture(nativeCameraInput, onCapturedDataUrl) {
+    const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+    if (isMobileDevice) {
+      nativeCameraInput.value = '';
+      nativeCameraInput.click();
+      return;
+    }
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false
+        });
+        activeLiveStream = stream;
+        liveCamCallback = onCapturedDataUrl;
+        const vid = document.getElementById('live-cam-video');
+        vid.srcObject = stream;
+        document.getElementById('modal-live-cam').classList.add('open');
+        return;
+      } catch (_) {
+        // Sem webcam ou permissão negada: usa seletor nativo como fallback
+      }
+    }
+
+    nativeCameraInput.value = '';
+    nativeCameraInput.click();
   }
 
   function bindGlobalEvents() {
@@ -1067,25 +1121,24 @@
         notes: document.getElementById('f-notes').value.trim()
       });
 
-      const fileInput = document.getElementById('f-cover-file');
-      if (fileInput.files && fileInput.files[0]) {
-        const compressed = await DB.compressImageFile(fileInput.files[0]);
-        payload.coverPhoto = compressed;
+      const treeModal = document.getElementById('modal-tree');
+      if (treeModal._treeCoverDataUrl) {
+        payload.coverPhoto = treeModal._treeCoverDataUrl;
       }
 
       const saved = await DB.saveTree(payload);
 
-      if (fileInput.files && fileInput.files[0] && payload.coverPhoto) {
+      if (treeModal._treeCoverDataUrl) {
         await DB.addPhoto({
           treeId: saved.id,
           date: todayStr(),
           angle: 'Frente',
-          caption: 'Registro inicial',
-          dataUrl: payload.coverPhoto
+          caption: existing ? 'Atualização de capa' : 'Registro inicial',
+          dataUrl: treeModal._treeCoverDataUrl
         });
       }
 
-      document.getElementById('modal-tree').classList.remove('open');
+      treeModal.classList.remove('open');
       await refreshData();
       openTreeDetail(saved.id);
       showToast('Bonsai salvo com sucesso!');
@@ -1114,16 +1167,91 @@
       showToast(meta.icon + ' Intervenção salva!');
     };
 
-    const phInput = document.getElementById('ph-file');
-    phInput.onchange = async () => {
-      if (phInput.files && phInput.files[0]) {
-        const dataUrl = await DB.compressImageFile(phInput.files[0]);
-        const modal = document.getElementById('modal-photo');
-        modal._compressedDataUrl = dataUrl;
-        const prev = document.getElementById('ph-preview');
-        prev.src = dataUrl;
-        prev.style.display = 'block';
+    // Captura de foto no Modal de Árvore (Câmera na Hora ou Galeria)
+    const treeModalEl = document.getElementById('modal-tree');
+    const treeCamInput = document.getElementById('f-cover-camera');
+    const treeGalInput = document.getElementById('f-cover-file');
+    const applyTreeCoverPreview = (dataUrl) => {
+      treeModalEl._treeCoverDataUrl = dataUrl;
+      document.getElementById('f-cover-preview').src = dataUrl;
+      document.getElementById('f-cover-preview-wrap').style.display = 'block';
+    };
+
+    document.getElementById('btn-tree-camera').onclick = () => {
+      launchCameraCapture(treeCamInput, applyTreeCoverPreview);
+    };
+    document.getElementById('btn-tree-gallery').onclick = () => {
+      treeGalInput.value = '';
+      treeGalInput.click();
+    };
+    treeCamInput.onchange = async () => {
+      if (treeCamInput.files && treeCamInput.files[0]) {
+        applyTreeCoverPreview(await DB.compressImageFile(treeCamInput.files[0]));
       }
+    };
+    treeGalInput.onchange = async () => {
+      if (treeGalInput.files && treeGalInput.files[0]) {
+        applyTreeCoverPreview(await DB.compressImageFile(treeGalInput.files[0]));
+      }
+    };
+
+    // Captura de foto no Modal de Registro Fotográfico (Câmera na Hora ou Galeria)
+    const photoModalEl = document.getElementById('modal-photo');
+    const phCamInput = document.getElementById('ph-camera');
+    const phGalInput = document.getElementById('ph-file');
+    const applyPhotoRecordPreview = (dataUrl, badgeLabel) => {
+      photoModalEl._compressedDataUrl = dataUrl;
+      document.getElementById('ph-preview').src = dataUrl;
+      document.getElementById('ph-source-badge').textContent = badgeLabel || '✓ Foto pronta';
+      document.getElementById('ph-preview-wrap').style.display = 'block';
+    };
+
+    document.getElementById('btn-ph-camera').onclick = () => {
+      launchCameraCapture(phCamInput, (url) => applyPhotoRecordPreview(url, '📸 Capturada na hora'));
+    };
+    document.getElementById('btn-ph-gallery').onclick = () => {
+      phGalInput.value = '';
+      phGalInput.click();
+    };
+    phCamInput.onchange = async () => {
+      if (phCamInput.files && phCamInput.files[0]) {
+        const dataUrl = await DB.compressImageFile(phCamInput.files[0]);
+        applyPhotoRecordPreview(dataUrl, '📸 Capturada na hora');
+      }
+    };
+    phGalInput.onchange = async () => {
+      if (phGalInput.files && phGalInput.files[0]) {
+        const dataUrl = await DB.compressImageFile(phGalInput.files[0]);
+        applyPhotoRecordPreview(dataUrl, '🖼️ Selecionada da galeria');
+      }
+    };
+
+    // Controles do Modal de Câmera ao Vivo (Desktop / WebRTC)
+    document.getElementById('btn-close-live-cam').onclick = stopLiveCamera;
+    document.getElementById('btn-cancel-live-cam').onclick = stopLiveCamera;
+    document.getElementById('btn-snap-live-cam').onclick = () => {
+      const vid = document.getElementById('live-cam-video');
+      if (!vid || !vid.videoWidth) return;
+      const maxSide = 920;
+      let w = vid.videoWidth;
+      let h = vid.videoHeight;
+      if (w > maxSide || h > maxSide) {
+        if (w >= h) {
+          h = Math.round((h * maxSide) / w);
+          w = maxSide;
+        } else {
+          w = Math.round((w * maxSide) / h);
+          h = maxSide;
+        }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(vid, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      const cb = liveCamCallback;
+      stopLiveCamera();
+      if (cb) cb(dataUrl);
     };
 
     document.getElementById('form-photo').onsubmit = async (ev) => {
@@ -1156,7 +1284,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'bonsai-mori-backup-' + todayStr() + '.json';
+      a.download = 'bonsai-hub-backup-' + todayStr() + '.json';
       a.click();
       URL.revokeObjectURL(url);
       showToast('Backup completo exportado!');

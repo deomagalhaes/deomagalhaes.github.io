@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bonsai-mori-v2.0.0';
+const CACHE_NAME = 'bonsai-hub-v3.0.0';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -9,11 +9,11 @@ const CORE_ASSETS = [
   './js/species-guide.js',
   './js/db.js',
   './js/app.js',
-  './icons/icon-192.png?v=2',
-  './icons/icon-512.png?v=2',
-  './icons/icon-maskable-512.png?v=2',
-  './icons/apple-touch-icon.png?v=2',
-  './icons/screenshot-mobile.png?v=2'
+  './icons/icon-192.png?v=3',
+  './icons/icon-512.png?v=3',
+  './icons/icon-maskable-512.png?v=3',
+  './icons/apple-touch-icon.png?v=3',
+  './icons/screenshot-mobile.png?v=3'
 ];
 
 self.addEventListener('install', (event) => {

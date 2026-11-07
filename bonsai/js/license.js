@@ -1,8 +1,9 @@
-// Motor Comercial & Validador Criptográfico de Licença Vitalícia — Bonsai Mori PRO
+// Motor Comercial & Validador Criptográfico de Licença Vitalícia — Bonsai Hub PRO
 window.BonsaiLicense = (function () {
   const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const SECRET_PEPPER = 'DEO_NEURO_BOTANY_2026_V1';
-  const STORAGE_KEY = 'bonsai_mori_license_v1';
+  const STORAGE_KEY = 'bonsai_hub_license_v1';
+  const LEGACY_STORAGE_KEY = 'bonsai_mori_license_v1';
 
   // =========================================================================
   // CONFIGURAÇÃO COMERCIAL CENTRAL
@@ -11,7 +12,7 @@ window.BonsaiLicense = (function () {
   // =========================================================================
   const COMMERCIAL_CONFIG = {
     mode: 'SHOWCASE_FREE', // 'SHOWCASE_FREE' | 'COMMERCIAL_ACTIVE'
-    productName: 'Bonsai Mori PRO — Licença Vitalícia',
+    productName: 'Bonsai Hub PRO — Licença Vitalícia',
     priceOriginal: 'R$ 97,00',
     priceCurrent: 'R$ 49,90',
     priceNote: 'Pagamento único • Acesso vitalício • Zero mensalidade',
@@ -104,8 +105,8 @@ window.BonsaiLicense = (function () {
     return out;
   }
 
-  function computeSignatureBlocks(normalizedEmail, salt4) {
-    const payload = 'BMORI_V1|' + normalizedEmail + '|' + salt4 + '|' + SECRET_PEPPER;
+  function computeSignatureBlocks(prefixTag, normalizedEmail, salt4) {
+    const payload = prefixTag + '_V1|' + normalizedEmail + '|' + salt4 + '|' + SECRET_PEPPER;
     const digest = sha256Bytes(payload);
     let sig = '';
     for (let i = 0; i < 8; i++) {
@@ -121,10 +122,10 @@ window.BonsaiLicense = (function () {
       return { valid: false, reason: 'Informe o mesmo e-mail cadastrado na compra.' };
     }
     const parts = normKey.split('-');
-    if (parts.length !== 4 || parts[0] !== 'BMORI' || parts[1].length !== 4 || parts[2].length !== 4 || parts[3].length !== 4) {
-      return { valid: false, reason: 'Formato esperado: BMORI-XXXX-XXXX-XXXX.' };
+    if (parts.length !== 4 || (parts[0] !== 'BHUB' && parts[0] !== 'BMORI') || parts[1].length !== 4 || parts[2].length !== 4 || parts[3].length !== 4) {
+      return { valid: false, reason: 'Formato esperado: BHUB-XXXX-XXXX-XXXX.' };
     }
-    const expected = computeSignatureBlocks(normEmail, parts[1]);
+    const expected = computeSignatureBlocks(parts[0], normEmail, parts[1]);
     const provided = parts[2] + '-' + parts[3];
     if (expected !== provided) {
       return { valid: false, reason: 'Chave inválida para o e-mail informado.' };
@@ -140,7 +141,7 @@ window.BonsaiLicense = (function () {
   function loadStoredLicense() {
     if (cachedLicense) return cachedLicense;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && parsed.email && parsed.key) {
@@ -175,6 +176,7 @@ window.BonsaiLicense = (function () {
     cachedLicense = null;
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch (_) {}
   }
 

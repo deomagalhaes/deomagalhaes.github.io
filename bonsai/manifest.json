@@ -1,7 +1,7 @@
 {
   "id": "/bonsai/",
-  "name": "Bonsai Mori — Gestão & Cultivo PRO",
-  "short_name": "Bonsai Mori",
+  "name": "Bonsai Hub — Gestão & Cultivo PRO",
+  "short_name": "Bonsai Hub",
   "description": "Aplicativo offline-first para gestão fitotécnica de bonsais: fichas botânicas, evolução fotográfica Antes/Depois, controle de aramação, rega, adubação e manejo sazonal (Hemisfério Sul).",
   "start_url": "./index.html",
   "scope": "./",
@@ -16,19 +16,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "./icons/icon-192.png?v=2",
+      "src": "./icons/icon-192.png?v=3",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512.png?v=2",
+      "src": "./icons/icon-512.png?v=3",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-maskable-512.png?v=2",
+      "src": "./icons/icon-maskable-512.png?v=3",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -36,7 +36,7 @@
   ],
   "screenshots": [
     {
-      "src": "./icons/screenshot-mobile.png?v=2",
+      "src": "./icons/screenshot-mobile.png?v=3",
       "sizes": "540x960",
       "type": "image/png",
       "form_factor": "narrow",
@@ -51,7 +51,7 @@
       "url": "./index.html?action=new-tree",
       "icons": [
         {
-          "src": "./icons/icon-192.png?v=2",
+          "src": "./icons/icon-192.png?v=3",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -64,7 +64,7 @@
       "url": "./index.html?tab=care",
       "icons": [
         {
-          "src": "./icons/icon-192.png?v=2",
+          "src": "./icons/icon-192.png?v=3",
           "sizes": "192x192",
           "type": "image/png"
         }
