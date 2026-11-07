@@ -41,6 +41,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-32** | **Inventário de Sobrecarga Mental e Resíduo Atencional (ISMRA)** | Efeito Zeigarnik, Resíduo de Atenção e Sobrecarga da Memória de Trabalho | `testes/teste-sobrecarga-mental-residuo-atencional.html` | ✅ Concluído |
 | **T-33** | **Escala de Granularidade Emocional e Alexitimia Clínica (EGEAC)** | Alexitimia, Ínsula Anterior, Consciência Interoceptiva e Pensamento Operatório | `testes/teste-granularidade-emocional-alexitimia.html` | ✅ Concluído |
 | **T-34** | **Escala de Intolerância à Incerteza e Ansiedade Preditiva (EIU-AP)** | Intolerância à Incerteza, Cérebro Preditivo, Paralisia Inibitória e Reatividade Somática | `testes/teste-intolerancia-incerteza.html` | ✅ Concluído |
+| **T-35** | **Escala Multidimensional de Perfeccionismo Clínico e Monitoramento de Erros (EMPC-ME)** | Perfeccionismo Clínico, dACC / ERN, Tirania dos Deverias e Medo do Julgamento | `testes/teste-perfeccionismo-clinico.html` | ✅ Concluído |
 
 ---
 

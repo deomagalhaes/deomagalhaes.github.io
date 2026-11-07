@@ -40,6 +40,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 31** | **Matriz de Fechamento Gestáltico e Conclusão de Tarefas** | Fechamento Gestáltico, Alívio da Tensão de Zeigarnik e Controle Executivo | `jogos/jogo-fechamento-gestaltico.html` | ✅ **Publicado** |
 | **Dia 32** | **Matriz de Granularidade Emocional e Diferenciação Afetiva** | Decodificação Interoceptiva, Córtex Insular Anterior e Granularidade Afetiva | `jogos/jogo-granularidade-emocional.html` | ✅ **Publicado** |
 | **Dia 33** | **Matriz de Predição Bayesiana e Decisão Sob Incerteza** | Inferência Bayesiana Ativa, Custo da Amostragem e Tolerância à Incerteza | `jogos/jogo-predicao-incerteza.html` | ✅ **Publicado** |
+| **Dia 34** | **Matriz de Calibração de Erros e Controle Inibitório** | Monitoramento de Erros (dACC / ERN), Paradoxo de Flanker e Inibição Go/No-Go | `jogos/jogo-calibracao-erros.html` | ✅ **Publicado** |
 
 ---
 

@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="intolerancia-incerteza" selected>A Mente que Não Tolera a Dúvida: Intolerância à Incerteza e o Cérebro Preditivo</option>
+                        <option value="perfeccionismo-desadaptativo" selected>A Prisão da Perfeição: A Neurobiologia do Perfeccionismo Desadaptativo</option>
+                        <option value="intolerancia-incerteza">A Mente que Não Tolera a Dúvida: Intolerância à Incerteza e o Cérebro Preditivo</option>
                         <option value="alexitimia-desconexao">O Silêncio das Emoções: Alexitimia e a Desconexão Ínsulo-Pré-Frontal</option>
                         <option value="efeito-zeigarnik">A Mente Inacabada: O Efeito Zeigarnik (Carga Cognitiva)</option>
                         <option value="anedonia-circuito-habenular">O Apagão do Prazer: A Ciência da Anedonia (Circuito Habenular)</option>
@@ -666,6 +667,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "perfeccionismo-desadaptativo": {
+        "articleSlug": "2026-11-07-neurobiologia-perfeccionismo-desadaptativo",
+        "articleTitle": "A Neurobiologia do Perfeccionismo Desadaptativo: Como a Hiperatividade de Monitoramento de Erros Aprisiona o Cérebro na Rigidez",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROCIÊNCIA DO COMPORTAMENTO",
+                "title": "A dor física de cometer um erro",
+                "body": "Você revisa uma mensagem cinco vezes antes de enviar. Quando percebe uma falha minúscula em um relatório já entregue, sente um soco no estômago e o coração acelera. A sociedade chama isso de 'dedicação'. A neuroclínica chama de prisão: descubra como o perfeccionismo desadaptativo sequestra seu cérebro.",
+                "footer": "Deslize para entender a tirania do erro 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "GEHRING & HAJCAK (ERN)",
+                "title": "O cérebro que não aceita falhar",
+                "body": "Em 50 a 100 milissegundos após um deslize, o Córtex Cingulado Anterior dorsal (dACC) dispara uma onda elétrica chamada Error-Related Negativity (ERN):\n\n• No cérebro flexível: A ERN é apenas um sussurro de ajuste — 'atenção, corrija o próximo passo'.\n\n• No cérebro perfeccionista: A amplitude da ERN é desproporcional e massiva. O encéfalo interpreta o erro corriqueiro como uma ameaça à sobrevivência, deflagrando descargas de pânico visceral.",
+                "footer": "A tirania do ideal inatingível 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "KAREN HORNEY & JEFFREY YOUNG",
+                "title": "A guerra contra o Self real",
+                "body": "Em 1950, a psiquiatra Karen Horney identificou a raiz da neurose perfeccionista: a 'Tirania dos Deverias':\n\n• A mente cria um 'Self Idealizado' imaculado: infalível, incansável, aprovado por todos.\n\n• Como o 'Self Real' é humano e falível, a pessoa passa a odiar a si mesma por qualquer hesitação.\n\n• Na Terapia do Esquema, isso forma o esquema de 'Padrões Inflexíveis', onde o valor próprio é condicional à performance impecável.",
+                "footer": "O mistério da procrastinação perfeccionista 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "MECANISMO DE DEFESA",
+                "title": "Por que o perfeccionista procrastina?",
+                "body": "Por que quem exige perfeição vive adiando tarefas até o limite do esgotamento?\n\n• Não é preguiça: é evitação fóbica do erro.\n\n• Se o córtex pré-frontal decodifica a entrega como um teste do seu valor existencial, começar a tarefa vira um gatilho de terror.\n\n• Adiar é uma tentativa desesperada da amígdala de proteger a autoimagem: 'Se eu não entregar, não poderei ser julgado como incompetente'.",
+                "footer": "As três dimensões do perfeccionismo 👉"
+            },
+            {
+                "type": "insight",
+                "badge": "HEWITT & FLETT",
+                "title": "Qual é o seu padrão de exigência?",
+                "body": "A psicologia clínica classifica o perfeccionismo em três dimensões distintas:\n\n• Auto-Orientado: Cobrança interna implacável de perfeição e punição severa por falhas.\n\n• Socialmente Prescrito: O pavor constante de que os outros exigem perfeição e vão rejeitá-lo ao menor deslize (o perfil de maior risco para burnout e depressão).\n\n• Orientado para o Outro: Julgamento hipercrítico e intolerância com os erros alheios.",
+                "footer": "Como flexibilizar o circuito do erro? 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "KRISTIN NEFF & VIKTOR FRANKL",
+                "title": "A coragem de ser imperfeito",
+                "body": "A libertação do perfeccionismo não é o desleixo, mas a compaixão e a flexibilidade psicológica:\n\n• Humanidade Compartilhada (Neff): Errar não o torna defeituoso; torna-o humano. É a nossa imperfeição que nos conecta aos outros.\n\n• Logoterapia (Frankl): O sentido da vida está na autenticidade do caminho, não no delírio estéril da infalibilidade.\n\n• Experimentos de Imperfeição: Treine cometer erros pequenos deliberadamente para ensinar ao dACC que o mundo não acaba.",
+                "footer": "Recursos clínicos e treino cerebral 👉"
+            },
+            {
+                "type": "cta",
+                "badge": "REABILITAÇÃO COGNITIVA",
+                "title": "Recalibre seu padrão interno",
+                "body": "Disponibilizei uma trilha completa no site para ajudar você a transformar autocrítica em clareza:\n\n• Artigo Científico: A neurobiologia do perfeccionismo e a circuitaria do monitoramento de erros;\n\n• Teste Psicométrico T-35: Escala Multidimensional de Perfeccionismo Clínico (EMPC-ME);\n\n• Jogo Cognitivo Dia 34: Matriz de Calibração de Erros e Controle Inibitório com Web Audio API.",
+                "footer": "Acesse deomagalhaes.com.br • Link na bio"
+            }
+        ],
+        "caption": "Você já sentiu uma queimação no peito ou um frio no estômago após perceber que cometeu uma pequena falha em um trabalho ou mensagem?\n\nPara muitas pessoas, cometer um erro não é apenas um contratempo cotidiano: o corpo reage como se estivesse diante de uma ameaça mortal. Na sociedade do desempenho, costuma-se romantizar essa exigência brutal chamando-a de \"busca pela perfeição\". Mas a neurociência e a clínica psicológica revelam a verdade: o perfeccionismo desadaptativo é uma prisão neurocognitiva de exaustão e sofrimento.\n\nEstudos de eletrofisiologia cerebral (William Gehring, Greg Hajcak) mostram que, entre 50 e 100 milissegundos após um deslize, o Córtex Cingulado Anterior dorsal (dACC) deflagra uma onda negativa chamada Error-Related Negativity (ERN). No cérebro perfeccionista, esse potencial de erro tem uma amplitude massiva e hipertrofiada. A falha aciona imediatamente a ínsula anterior e a amígdala, inundando o corpo de cortisol e vergonha visceral.\n\nEm 1950, a psiquiatra Karen Horney já alertava para a \"Tirania dos Deverias\": a mente constrói um \"Self Idealizado\" perfeito, e passa a odiar e punir o \"Self Real\" por ser apenas humano. O resultado? Uma paralisia executiva constante — a famosa procrastinação perfeccionista, que não é preguiça, mas evitação fóbica de ser confrontado com a própria imperfeição.\n\nA verdadeira saúde mental não consiste na ilusão de nunca errar, mas na capacidade de acolher os próprios tropeços com autocompaixão (Kristin Neff) e recalibrar o foco para valores que realmente importam.\n\nPara apoiar essa jornada de flexibilização, publiquei hoje no portal uma rodada completa de recursos:\n1. Ensaio Científico Completo sobre a neurobiologia do perfeccionismo e o circuito dACC/ERN;\n2. A nova Escala Psicométrica T-35 (Escala Multidimensional de Perfeccionismo Clínico e Monitoramento de Erros - EMPC-ME), 100% privada e imediata;\n3. O novo Jogo Cognitivo do Dia 34 (Matriz de Calibração de Erros e Controle Inibitório) com efeitos de áudio procedural via Web Audio API.\n\nToque no link da bio ou acesse deomagalhaes.com.br para realizar sua avaliação e exercitar seu cérebro.\n\nVocê se considera mais exigente consigo mesmo ou com os outros? A autocrítica costuma travar suas entregas? Comente aqui embaixo!\n\n#perfeccionismo #autocritica #neuropsicologia #neurociencias #saudemental #ansiedade #burnout #cortexcingulado #psicoterapia #tcc #terapiadoesquema #act #deomagalhaes #procrastinacao #autoconhecimento"
+    },
     "intolerancia-incerteza": {
         "articleSlug": "2026-11-07-neurobiologia-intolerancia-incerteza",
         "articleTitle": "A Neurobiologia da Intolerância à Incerteza: Como o Cérebro Preditivo Transforma a Dúvida em Alerta de Ameaça",
@@ -2980,9 +3037,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "intolerancia-incerteza";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["intolerancia-incerteza"].slides));
-        let currentCaption = PRESETS["intolerancia-incerteza"].caption;
+        let currentPresetKey = "perfeccionismo-desadaptativo";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["perfeccionismo-desadaptativo"].slides));
+        let currentCaption = PRESETS["perfeccionismo-desadaptativo"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta

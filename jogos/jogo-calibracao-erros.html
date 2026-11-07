@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 34: Matriz de Calibração de Erros e Controle Inibitório – Deo Magalhães</title>
+    <meta name="description" content="Exercite o córtex cingulado anterior (dACC) e a tolerância ao erro com este treino cognitivo de controle inibitório e Flanker com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Painel Central do Experimento */
+        .flanker-panel {
+            background: linear-gradient(135deg, #001219, #002533);
+            border: 2px solid #0a9396;
+            border-radius: 14px;
+            padding: 35px 20px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 18, 25, 0.25);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flanker-rule-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .rule-standard {
+            background: #005f73;
+            color: #ffffff;
+            border: 1px solid #0a9396;
+        }
+
+        .rule-reverse {
+            background: #ca6702;
+            color: #ffffff;
+            border: 1px solid #ee9b00;
+            box-shadow: 0 0 12px rgba(238, 155, 0, 0.4);
+        }
+
+        .rule-nogo {
+            background: #9b2226;
+            color: #ffffff;
+            border: 1px solid #ae2012;
+            box-shadow: 0 0 14px rgba(174, 32, 18, 0.5);
+            animation: pulse-nogo 1s infinite alternate;
+        }
+
+        @keyframes pulse-nogo {
+            from { transform: scale(1); }
+            to { transform: scale(1.04); }
+        }
+
+        /* Display dos Estímulos */
+        .stimulus-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stimulus-arrow {
+            font-size: 3.8em;
+            font-weight: 900;
+            color: #94d2bd;
+            transition: all 0.15s ease;
+            user-select: none;
+            line-height: 1;
+        }
+
+        .stimulus-arrow.target-arrow {
+            font-size: 4.8em;
+            color: #ee9b00;
+            text-shadow: 0 0 16px rgba(238, 155, 0, 0.6);
+            transform: scale(1.1);
+        }
+
+        .stimulus-arrow.nogo-style {
+            color: #e9d8a6 !important;
+            text-shadow: 0 0 18px rgba(233, 216, 166, 0.8) !important;
+        }
+
+        /* Barra de Tempo */
+        .timer-track {
+            width: 100%;
+            max-width: 480px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: #0a9396;
+            transition: width 0.05s linear;
+        }
+
+        /* Feedback Flash */
+        .feedback-overlay {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-top: 15px;
+            min-height: 24px;
+        }
+
+        .feedback-correct {
+            color: #94d2bd;
+        }
+
+        .feedback-error {
+            color: #ee9b00;
+        }
+
+        /* Controles Táteis e Desktop */
+        .controls-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .action-arrow-btn {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px 36px;
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #005f73;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .action-arrow-btn:hover {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 95, 115, 0.25);
+        }
+
+        .action-arrow-btn:active {
+            transform: translateY(1px);
+        }
+
+        .action-arrow-btn span.key-hint {
+            font-size: 0.55em;
+            background: #e2e8f0;
+            color: #475569;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .action-arrow-btn:hover span.key-hint {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        /* Painel de Resultados */
+        .game-results-modal {
+            display: none;
+            background: #f8fafc;
+            border: 2px solid #005f73;
+            border-radius: 14px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-score-big {
+            font-size: 2.8em;
+            font-weight: 900;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .results-grid-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .summary-card {
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-title {
+            font-size: 0.8em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .summary-val {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 4px;
+        }
+
+        .btn-restart-game {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 25px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.3);
+        }
+
+        .btn-restart-game:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.4);
+        }
+
+        /* Seção Teórica Neurocognitiva */
+        .neuro-explanation {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .neuro-explanation h3 {
+            color: #005f73;
+            margin-top: 0;
+        }
+
+        .neuro-explanation p {
+            color: #334155;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 34: Matriz de Calibração de Erros e Controle Inibitório</h1>
+                <p class="article-author-date">Treino Neuropsicológico Diário • Paradoxo de Flanker & Go/No-Go • Web Audio API</p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status Superior -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Rodada</span>
+                        <span class="stat-badge-value" id="roundDisplay">1 / 15</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Acurácia</span>
+                        <span class="stat-badge-value" id="accuracyDisplay">100%</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Tempo Médio</span>
+                        <span class="stat-badge-value" id="rtDisplay">-- ms</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Pontos</span>
+                        <span class="stat-badge-value" id="scoreDisplay">0</span>
+                    </div>
+                    <button class="sound-btn" id="soundToggleBtn" title="Ativar/Desativar Sons">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Painel Central com Estímulos -->
+                <div class="flanker-panel" id="flankerPanel">
+                    <div id="ruleBadge" class="flanker-rule-badge rule-standard">Regra Padrão: Siga a Seta Central</div>
+
+                    <div class="stimulus-display" id="stimulusDisplay">
+                        <span class="stimulus-arrow" id="s0">←</span>
+                        <span class="stimulus-arrow" id="s1">←</span>
+                        <span class="stimulus-arrow target-arrow" id="s2">←</span>
+                        <span class="stimulus-arrow" id="s3">←</span>
+                        <span class="stimulus-arrow" id="s4">←</span>
+                    </div>
+
+                    <div class="timer-track">
+                        <div class="timer-bar" id="timerBar"></div>
+                    </div>
+
+                    <div class="feedback-overlay" id="feedbackOverlay">
+                        Aguardando início...
+                    </div>
+                </div>
+
+                <!-- Controles Táteis e Atalhos -->
+                <div class="controls-container">
+                    <button class="action-arrow-btn" id="btnLeft">
+                        <span>← Esquerda</span>
+                        <span class="key-hint">[Seta ← ou A]</span>
+                    </button>
+                    <button class="action-arrow-btn" id="btnRight">
+                        <span>Direita →</span>
+                        <span class="key-hint">[Seta → ou D]</span>
+                    </button>
+                </div>
+
+                <!-- Modal de Conclusão / Resultados -->
+                <div class="game-results-modal" id="resultsModal">
+                    <h3>Sessão de Calibração Concluída!</h3>
+                    <p style="color: #64748b;">Seu Córtex Cingulado Anterior e o Córtex Pré-Frontal completaram as 15 rodadas adaptativas.</p>
+                    
+                    <div class="results-score-big" id="finalScoreVal">0 pts</div>
+
+                    <div class="results-grid-summary">
+                        <div class="summary-card">
+                            <span class="summary-title">Acurácia Global</span>
+                            <div class="summary-val" id="finalAccuracy">0%</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-title">Tempo Médio de Reação</span>
+                            <div class="summary-val" id="finalRT">0 ms</div>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-title">Recuperação Pós-Erro</span>
+                            <div class="summary-val" id="finalPostError">Excelente</div>
+                        </div>
+                    </div>
+
+                    <p id="clinicalDevolutivaText" style="color: #334155; line-height: 1.6; max-width: 650px; margin: 0 auto 25px auto;"></p>
+
+                    <button class="btn-restart-game" id="btnRestart">Jogar Novamente</button>
+                </div>
+            </div>
+
+            <!-- Explicação Neurocognitiva -->
+            <div class="neuro-explanation">
+                <h3>Neurobiologia do Desafio: Como Esta Matriz Treina Seu Cérebro</h3>
+                <p><strong>1. Filtragem de Ruído e Efeito Flanker (Eriksen & Eriksen):</strong> O cérebro processa informações do campo visual periférico em paralelo. Quando as setas adjacentes apontam para a mesma direção da central (congruentes), o tempo de reação é rápido. Quando apontam para a direção oposta (incongruentes), o <strong>Córtex Cingulado Anterior dorsal (dACC)</strong> precisa inibir ativamente a resposta automática de flanco antes de emitir a decisão correta.</p>
+                <p><strong>2. Calibração da Error-Related Negativity (ERN):</strong> Quando ocorre uma falha, o dACC dispara o potencial ERN entre 50 e 100 ms. Em perfis perfeccionistas desadaptativos, o erro deflagra congelamento (desaceleração excessiva pós-erro) ou impulsividade reativa. O objetivo deste jogo é treinar a mente a acolher o erro com neutralidade e recuperar o ritmo ótimo sem paralisia afetiva.</p>
+                <p><strong>3. Flexibilidade e Inibição Go/No-Go:</strong> As alternâncias repentinas entre a regra padrão, a regra reversa e a suspensão motora (No-Go) recrutam o <strong>Córtex Pré-Frontal Ventrolateral direito (rVLPFC)</strong>, exercitando o controle executivo inibitório essencial para regular a impulsividade e a autocrítica.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Mecânica do Jogo & Web Audio API -->
+    <script>
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) {
+                        this.ctx = new AudioContext();
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playCorrect() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Tríade suave F5 - A5
+                [698.46, 880.00].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const t = now + (idx * 0.05);
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, t);
+
+                    gain.gain.setValueAtTime(0.12, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(t);
+                    osc.stop(t + 0.22);
+                });
+            }
+
+            playErrorTone() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Tom suave de ajuste A3 (220 Hz) em onda senoidal pura sem estridência punitiva
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(220, now);
+
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+
+            playNoGoSuccess() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(783.99, now); // G5
+
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+
+            playVictory() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Arpejo luminoso: C5, E5, G5, C6
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const t = now + (idx * 0.08);
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, t);
+
+                    gain.gain.setValueAtTime(0.14, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(t);
+                    osc.stop(t + 0.38);
+                });
+            }
+        }
+
+        const sound = new SoundEngine();
+
+        // 15 Rodadas Determinísticas Solúveis
+        const TRIALS = [
+            // Fase 1: Flanker Padrão
+            { rule: 'standard', flanker: 'left', target: 'left', limitMs: 2400 },
+            { rule: 'standard', flanker: 'right', target: 'right', limitMs: 2400 },
+            { rule: 'standard', flanker: 'right', target: 'left', limitMs: 2200 }, // Incongruente
+            { rule: 'standard', flanker: 'left', target: 'right', limitMs: 2200 }, // Incongruente
+            { rule: 'standard', flanker: 'right', target: 'right', limitMs: 2000 },
+
+            // Fase 2: Introdução da Regra Reversa
+            { rule: 'reverse', flanker: 'left', target: 'left', limitMs: 2200 }, // Resposta: Direita
+            { rule: 'reverse', flanker: 'right', target: 'left', limitMs: 2200 }, // Incongruente + Reverso
+            { rule: 'standard', flanker: 'left', target: 'left', limitMs: 1900 }, // Troca rápida
+            { rule: 'reverse', flanker: 'right', target: 'right', limitMs: 2000 }, // Resposta: Esquerda
+            { rule: 'nogo', flanker: 'left', target: 'left', limitMs: 1800 }, // SINAL NO-GO
+
+            // Fase 3: Desafio Cingulado Integrado
+            { rule: 'standard', flanker: 'left', target: 'right', limitMs: 1800 },
+            { rule: 'reverse', flanker: 'right', target: 'left', limitMs: 1800 },
+            { rule: 'nogo', flanker: 'right', target: 'right', limitMs: 1700 }, // NO-GO
+            { rule: 'reverse', flanker: 'left', target: 'right', limitMs: 1700 },
+            { rule: 'standard', flanker: 'right', target: 'right', limitMs: 1600 }
+        ];
+
+        let currentTrialIdx = 0;
+        let score = 0;
+        let correctCount = 0;
+        let responseTimes = [];
+        let postErrorTrials = []; // Avalia desempenho na rodada seguinte a um erro
+        let previousWasError = false;
+
+        let trialStartTime = 0;
+        let timerInterval = null;
+        let isTrialActive = false;
+
+        // Elementos DOM
+        const roundDisplay = document.getElementById('roundDisplay');
+        const accuracyDisplay = document.getElementById('accuracyDisplay');
+        const rtDisplay = document.getElementById('rtDisplay');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const ruleBadge = document.getElementById('ruleBadge');
+        const feedbackOverlay = document.getElementById('feedbackOverlay');
+        const timerBar = document.getElementById('timerBar');
+        const flankerPanel = document.getElementById('flankerPanel');
+        const resultsModal = document.getElementById('resultsModal');
+
+        const sArrows = [
+            document.getElementById('s0'),
+            document.getElementById('s1'),
+            document.getElementById('s2'),
+            document.getElementById('s3'),
+            document.getElementById('s4')
+        ];
+
+        // Alternador de Som
+        document.getElementById('soundToggleBtn').addEventListener('click', () => {
+            sound.enabled = !sound.enabled;
+            document.getElementById('soundIcon').innerText = sound.enabled ? '🔊' : '🔇';
+            document.getElementById('soundToggleBtn').innerHTML = `${sound.enabled ? '🔊 Som Ativo' : '🔇 Mudo'}`;
+        });
+
+        function startTrial(idx) {
+            if (idx >= TRIALS.length) {
+                concludeGame();
+                return;
+            }
+
+            const trial = TRIALS[idx];
+            currentTrialIdx = idx;
+            isTrialActive = true;
+
+            roundDisplay.innerText = `${idx + 1} / ${TRIALS.length}`;
+            feedbackOverlay.innerText = "Responda o mais rápido e preciso possível!";
+            feedbackOverlay.className = "feedback-overlay";
+
+            // Configurar Regra Visual
+            if (trial.rule === 'standard') {
+                ruleBadge.innerText = "Regra Padrão: Siga a Seta Central";
+                ruleBadge.className = "flanker-rule-badge rule-standard";
+            } else if (trial.rule === 'reverse') {
+                ruleBadge.innerText = "Regra Reversa: Pressione a Direção Oposta";
+                ruleBadge.className = "flanker-rule-badge rule-reverse";
+            } else if (trial.rule === 'nogo') {
+                ruleBadge.innerText = "Sinal No-Go: Não Pressione Nada!";
+                ruleBadge.className = "flanker-rule-badge rule-nogo";
+            }
+
+            // Exibir Estímulos Visuais
+            const flankChar = trial.flanker === 'left' ? '←' : '→';
+            const targetChar = trial.target === 'left' ? '←' : '→';
+
+            sArrows[0].innerText = flankChar;
+            sArrows[1].innerText = flankChar;
+            sArrows[2].innerText = targetChar;
+            sArrows[3].innerText = flankChar;
+            sArrows[4].innerText = flankChar;
+
+            sArrows.forEach(s => {
+                s.classList.remove('nogo-style');
+                if (trial.rule === 'nogo') {
+                    s.classList.add('nogo-style');
+                }
+            });
+
+            // Barra de Tempo e Contagem Regressiva
+            const limit = trial.limitMs;
+            trialStartTime = performance.now();
+            timerBar.style.width = '100%';
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = performance.now() - trialStartTime;
+                const remaining = Math.max(0, limit - elapsed);
+                const pct = (remaining / limit) * 100;
+                timerBar.style.width = `${pct}%`;
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeOut();
+                }
+            }, 25);
+        }
+
+        function handleInput(dir) {
+            if (!isTrialActive) return;
+            isTrialActive = false;
+            clearInterval(timerInterval);
+
+            const elapsed = Math.round(performance.now() - trialStartTime);
+            const trial = TRIALS[currentTrialIdx];
+
+            let expected = null;
+            if (trial.rule === 'standard') {
+                expected = trial.target;
+            } else if (trial.rule === 'reverse') {
+                expected = trial.target === 'left' ? 'right' : 'left';
+            } else if (trial.rule === 'nogo') {
+                expected = 'none'; // Não deveria ter pressionado
+            }
+
+            const isCorrect = (dir === expected);
+            processTrialOutcome(isCorrect, elapsed, false);
+        }
+
+        function handleTimeOut() {
+            if (!isTrialActive) return;
+            isTrialActive = false;
+
+            const trial = TRIALS[currentTrialIdx];
+            // No modo No-Go, esgotar o tempo sem responder é o comportamento CORRETO!
+            if (trial.rule === 'nogo') {
+                processTrialOutcome(true, trial.limitMs, true);
+            } else {
+                // No modo normal/reverso, estourar o tempo é erro de omissão
+                processTrialOutcome(false, trial.limitMs, true);
+            }
+        }
+
+        function processTrialOutcome(isCorrect, rt, isTimeout) {
+            if (previousWasError) {
+                postErrorTrials.push(isCorrect);
+            }
+
+            if (isCorrect) {
+                correctCount++;
+                if (TRIALS[currentTrialIdx].rule === 'nogo') {
+                    sound.playNoGoSuccess();
+                    feedbackOverlay.innerText = "✓ Inibição Perfeita! (Controle No-Go mantido)";
+                } else {
+                    sound.playCorrect();
+                    feedbackOverlay.innerText = `✓ Correto! (${rt} ms)`;
+                }
+                feedbackOverlay.className = "feedback-overlay feedback-correct";
+                
+                // Pontuação: bônus de velocidade
+                const speedBonus = Math.max(20, Math.round((2500 - rt) / 20));
+                score += (100 + speedBonus);
+                previousWasError = false;
+            } else {
+                sound.playErrorTone();
+                if (TRIALS[currentTrialIdx].rule === 'nogo') {
+                    feedbackOverlay.innerText = "Falha de Inibição: Era uma rodada No-Go!";
+                } else if (isTimeout) {
+                    feedbackOverlay.innerText = "Tempo Esgotado! Seja mais rápido na próxima.";
+                } else {
+                    feedbackOverlay.innerText = "Desvio Detectado. Calibre o foco para o próximo passo!";
+                }
+                feedbackOverlay.className = "feedback-overlay feedback-error";
+                previousWasError = true;
+            }
+
+            if (!isTimeout || TRIALS[currentTrialIdx].rule !== 'nogo') {
+                responseTimes.push(rt);
+            }
+
+            updateDashboard();
+
+            // Intervalo entre rodadas (800ms)
+            setTimeout(() => {
+                startTrial(currentTrialIdx + 1);
+            }, 800);
+        }
+
+        function updateDashboard() {
+            scoreDisplay.innerText = score;
+            const completed = currentTrialIdx + 1;
+            const acc = Math.round((correctCount / completed) * 100);
+            accuracyDisplay.innerText = `${acc}%`;
+
+            if (responseTimes.length > 0) {
+                const avg = Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length);
+                rtDisplay.innerText = `${avg} ms`;
+            }
+        }
+
+        function concludeGame() {
+            clearInterval(timerInterval);
+            isTrialActive = false;
+            sound.playVictory();
+
+            const totalTrials = TRIALS.length;
+            const finalAcc = Math.round((correctCount / totalTrials) * 100);
+            const avgRT = responseTimes.length > 0 ? Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length) : 0;
+
+            document.getElementById('finalScoreVal').innerText = `${score} Pontos`;
+            document.getElementById('finalAccuracy').innerText = `${finalAcc}%`;
+            document.getElementById('finalRT').innerText = `${avgRT} ms`;
+
+            let postErrorText = "Excelente";
+            if (postErrorTrials.length > 0) {
+                const correctAfter = postErrorTrials.filter(x => x).length;
+                const ratio = correctAfter / postErrorTrials.length;
+                if (ratio >= 0.7) postErrorText = "Adaptativa (Resiliente)";
+                else postErrorText = "Vigilante (Sensível)";
+            }
+            document.getElementById('finalPostError').innerText = postErrorText;
+
+            let devolutiva = "";
+            if (finalAcc >= 85) {
+                devolutiva = "Seu Córtex Cingulado Anterior dorsal (dACC) e córtex pré-frontal demonstraram excelente controle inibitório e capacidade de alternância rápida de regras sem paralisia executiva. Você foi capaz de processar os desvios sem colapso no tempo de resposta.";
+            } else if (finalAcc >= 65) {
+                devolutiva = "Bom desempenho executivo. Notou-se um leve conflito atencional durante as transições para a regra reversa e os sinais No-Go, indicando uma sensibilidade moderada à interferência de ruído do campo periférico.";
+            } else {
+                devolutiva = "Ocorreu sobrecarga nos circuitos de monitoramento de conflito. Erros consecutivos ou impulsividade nos sinais No-Go sugerem que a mente pode estar sobrecarregada por autocrítica ou fadiga atencional. Treinar regularmente com este paradigma ajuda a restaurar a serenidade executiva.";
+            }
+            document.getElementById('clinicalDevolutivaText').innerText = devolutiva;
+
+            resultsModal.style.display = 'block';
+            resultsModal.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Eventos de Clique
+        document.getElementById('btnLeft').addEventListener('click', () => handleInput('left'));
+        document.getElementById('btnRight').addEventListener('click', () => handleInput('right'));
+        document.getElementById('btnRestart').addEventListener('click', () => {
+            resultsModal.style.display = 'none';
+            score = 0;
+            correctCount = 0;
+            responseTimes = [];
+            postErrorTrials = [];
+            previousWasError = false;
+            updateDashboard();
+            startTrial(0);
+        });
+
+        // Eventos de Teclado
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') {
+                handleInput('left');
+            } else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') {
+                handleInput('right');
+            }
+        });
+
+        // Inicializar Jogo
+        document.addEventListener('DOMContentLoaded', () => {
+            startTrial(0);
+        });
+    </script>
+</body>
+</html>
