@@ -338,11 +338,53 @@
             defaultQuestion: 'O que você fez hoje do seu jeitinho que ficou especial, mesmo sem ser perfeitinho?',
             challengeAct: 'estava desenhando ou montando um quebra-cabeça e, quando uma peça não encaixou reta como imaginava na cabeça, quis amassar o papel e jogar tudo no chão.',
             breathCue: 'olhou para o desenho com carinho, respirou fundo três vezes sentindo o ar fresco encher o peito e pensou: o meu melhor de hoje já é perfeito para o meu coração.'
+        },
+        despedida_telas: {
+            label: '47. Despedida das Telas & Anoitecer Suave (O vilarejo dos olhinhos)',
+            defaultMetaphor: 'O vilarejo encantado onde moram todas as cores: quando a lua sobe, o guardião apaga uma por uma as lanternas fortes das janelas para que os moradores consigam fechar as pálpebras em paz no escuro aveludado.',
+            defaultQuestion: 'Qual sonho bonito você quer chamar para a sua cabecinha agora que os olhinhos descansam no escurinho macio?',
+            challengeAct: 'queria continuar assistindo a mais um desenho brilhante na telinha, com os olhinhos piscando cansados e o corpo irritado querendo lutar contra a hora de dormir.',
+            breathCue: 'fechou as pálpebras devagarinho, inspirou sentindo o ar fresco acalmar as bochechas e soltou num suspiro gostoso como quem desliga a última luzinha do castelo.'
+        },
+        irmandade_partilha: {
+            label: '48. Conflitos de Convivência & Partilha de Espaço (Os dois riachos da mesma montanha)',
+            defaultMetaphor: 'Os dois riachos transparentes que nascem no mesmo topo de serra: quando correm lado a lado, eles cantam uma melodia duas vezes mais alegre e descobrem que cabem todos os peixinhos e todas as brincadeiras na mesma correnteza de afeto.',
+            defaultQuestion: 'Como o nosso abraço fica mais gostoso quando a gente decide rir e brincar junto sem disputar quem é o primeiro?',
+            challengeAct: 'achou que o outro estava ocupando espaço demais no quarto e sentiu vontade de empurrar as almofadas e emburrar a carinha num canto.',
+            breathCue: 'soltou o ar bem longo, tocou o próprio peito sentindo o calor do carinho fraterno e deu um sorriso manso que dissolveu a briga na hora.'
+        },
+        vozes_noite: {
+            label: '49. Sons Noturnos Estranhos & Imaginação Serena (O vento artesão da madeira)',
+            defaultMetaphor: 'O vento carpinteiro da serra: à noite ele passa suavemente pelas frestas das árvores e do telhado como quem afina uma viola caipira de madeira boa, tocando uma música de ninar que protege a casa.',
+            defaultQuestion: 'Você sabe que cada estalo da casa é só a madeira descansando do calor do dia, exatamente como nós dois na cama quentinha?',
+            challengeAct: 'ouviu um estalo na parede e o vento assobiar na janela, arregalando os olhos e achando que havia algo misterioso rondando o quarto.',
+            breathCue: 'segurou bem firme a mão protetora ao lado, puxou o ar ouvindo o ritmo seguro da própria respiração e soltou relaxando os dedinhos dos pés até a testa.'
+        },
+        autocompaixao_pequenos: {
+            label: '50. Autocompaixão Infantil & Dias Difíceis (O dia cinzento que ganha um abraço)',
+            defaultMetaphor: 'A florzinha do campo que enfrentou um dia de vento forte e poeira: ela não fica zangada consigo mesma por ter dobrado um pouquinho as folhas; ela apenas recolhe as pétalas, descansa na noite fresca e sabe que amanhã o sol vai brilhar de novo para ela.',
+            defaultQuestion: 'O que o seu coração mais precisa ouvir esta noite: que você é muito amado, ou que amanhã é uma página novinha em folha?',
+            challengeAct: 'teve um dia em que quase tudo deu errado, levou bronca, tropeçou e achou que era a pessoa mais desastrada do mundo inteiro.',
+            breathCue: 'abraçou o travesseiro com ternura, respirou fundo sentindo o abraço de perdão e acolhimento e soltou o ar dizendo baixinho: eu sou bom, eu sou querido, eu posso descansar.'
+        },
+        despedida_viagem: {
+            label: '51. Volta para Casa & Fim de Passeio (A conchinha do retorno ao ninho)',
+            defaultMetaphor: 'A tartaruguinha marinheira que viajou mares distantes e conheceu recifes coloridos: quando a maré baixa ela volta para a sua enseada quentinha, sabendo que todas as lembranças lindas viajaram com ela dentro do casco.',
+            defaultQuestion: 'Qual foi o momento mais feliz do nosso passeio que você quer guardar dentro da sua caixinha secreta do coração?',
+            challengeAct: 'ficou com o peito apertado e triste porque a viagem ou o fim de semana gostoso acabou, querendo que o tempo parasse no relógio.',
+            breathCue: 'respirou o cheirinho familiar do próprio travesseiro, soltou os ombros pesados e sorriu lembrando que voltar para o ninho seguro é uma delícia.'
+        },
+        respiracao_ursinho: {
+            label: '52. Ancoragem Corporal & O Ursinho na Barriga (A técnica da onda serena)',
+            defaultMetaphor: 'O ursinho de pelúcia que viaja de barquinho sobre a barriguinha: quando o ar entra mansinho, o barquinho sobe até o céu; quando o ar sai suave, o barquinho desce descansando na água morna sem fazer marola.',
+            defaultQuestion: 'Quantas ondas mansas o seu barquinho já fez até o seu corpinho ficar todo molinho e leve?',
+            challengeAct: 'estava com o peito inquieto e as mãos agitadas, sem saber direito como fazer o corpo obedecer à ordem de desacelerar.',
+            breathCue: 'pôs a mãozinha ou o bichinho sobre o umbigo, puxou o ar contando um, dois, três… e soltou devagarzinho observando o mar calmo do sono se abrir.'
         }
     };
 
     // =========================================================================
-    // 2. 9 CENÁRIOS POÉTICOS BRASILEIROS E CÓSMICOS
+    // 2. 14 CENÁRIOS POÉTICOS BRASILEIROS E CÓSMICOS
     // =========================================================================
     const STORY_SCENARIOS = {
         cerrado: {
@@ -416,6 +458,18 @@
             opening: 'No coração do cerrado dourado, onde a água pura brota da areia branca e não deixa ninguém afundar, o céu noturno refletia cada constelação num espelho d’água perfeito.',
             guide: 'uma Ariranha de pelo aveludado e passos tranquilos que conhecia o segredo de flutuar sem nenhum esforço',
             closing: 'A água morna do fervedouro continuou brotando num sussurro constante de borbulhas, embalando o corpinho numa sensação de leveza total.'
+        },
+        ilha_mel: {
+            label: 'Ilha do Mel & Enseada dos Golfinhos Noturnos',
+            opening: 'Na ponta da praia mansa da Ilha do Mel, onde o farol das Conchas gira um feixe suave sobre o mar prateado, a brisa do oceano soprava morna e perfumada de flor de restinga.',
+            guide: 'um Golfinho-Cinza de respiração calma que nadava devagarinho acompanhado de uma Gaivota pousada na areia lisa',
+            closing: 'As ondas pequenas beijaram a areia num ritmo manso de ninar, e o manto estrelado da baía cobriu o sono com tranquilidade absoluta.'
+        },
+        gruta_bonito: {
+            label: 'Bonito & Nascente Cristalina do Rio Formoso',
+            opening: 'Em meio às pedras de calcário azulado e matas silenciosas de Bonito, a nascente brotava tão pura e transparente que parecia água de vidro mágico sob a luz da lua.',
+            guide: 'um Peixe-Piraputanga de cauda dourada que descansava sereno na sombra de uma planta aquática fresca',
+            closing: 'A água continuou fluindo macia e silenciosa entre os seixos lisos, lavando todo o cansaço e ninando os pensamentos num sossego profundo.'
         }
     };
 
@@ -918,6 +972,8 @@
     // =========================================================================
     // 6. LEITOR NOTURNO ÂMBAR DE TELA CHEIA (LOW-BLUE-LIGHT)
     // =========================================================================
+    let readerKeyHandler = null;
+
     function openAmberNightReader(storyObj) {
         loadAmberPrefs();
         const overlay = document.getElementById('amber-night-reader');
@@ -963,6 +1019,35 @@
         overlay.addEventListener('wheel', handleManualScroll, { passive: true });
         overlay.addEventListener('touchmove', handleManualScroll, { passive: true });
 
+        // Atalhos de teclado no modo leitor noturno
+        if (readerKeyHandler) {
+            document.removeEventListener('keydown', readerKeyHandler);
+        }
+        readerKeyHandler = (e) => {
+            if (overlay.classList.contains('hidden')) return;
+            if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) return;
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeAmberNightReader();
+            } else if (e.key === ' ' || e.code === 'Space') {
+                e.preventDefault();
+                toggleAutoScroll();
+            } else if (e.key === '+' || e.key === '=') {
+                e.preventDefault();
+                changeAmberFontSize(0.1);
+            } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
+                changeAmberFontSize(-0.1);
+            } else if (e.key === 'f' || e.key === 'F') {
+                e.preventDefault();
+                toggleAmberFullscreen();
+            } else if (e.key === 'm' || e.key === 'M') {
+                e.preventDefault();
+                toggleSpeechNarration();
+            }
+        };
+        document.addEventListener('keydown', readerKeyHandler);
+
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         applyAmberThermalPalette(activeAmberTheme);
@@ -975,6 +1060,10 @@
         document.body.style.overflow = '';
         stopAutoScroll();
         stopSpeechNarration();
+        if (readerKeyHandler) {
+            document.removeEventListener('keydown', readerKeyHandler);
+            readerKeyHandler = null;
+        }
         if (document.fullscreenElement) {
             try { document.exitFullscreen(); } catch (_) {}
         }

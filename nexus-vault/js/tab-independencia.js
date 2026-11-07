@@ -507,9 +507,31 @@
             });
         });
 
+        // Gera minuta de boleta de compra consolidada para Home Broker
+        const totalAporte = classes.reduce((acc, c) => acc + (c.recommendedAporte || 0), 0);
+        let summaryOrderText = `📋 BOLETA DE APORTE CONSOLIDADA — NEXUS VAULT\n`;
+        summaryOrderText += `Data: ${new Date().toLocaleDateString('pt-BR')} | Total Aporte: R$ ${totalAporte.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+        summaryOrderText += `--------------------------------------------------------\n`;
+        result.forEach((r) => {
+            if (r.classAporte > 0) {
+                summaryOrderText += `[${r.classKey}] ${r.className} — Orçamento: R$ ${r.classAporte.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+                r.tickers.forEach((t) => {
+                    if (t.shares > 0) {
+                        summaryOrderText += `  • ${t.ticker}: Comprar ${t.shares} cota(s) @ ~R$ ${t.price.toFixed(2)} = R$ ${t.totalSpent.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+                    }
+                });
+                if (r.residual > 0) {
+                    summaryOrderText += `  • Sobra residual da classe: R$ ${r.residual.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+                }
+            }
+        });
+        summaryOrderText += `--------------------------------------------------------\n`;
+        summaryOrderText += `Troco Residual Consolidado (Reserva de Oportunidade / CDI): R$ ${totalResidualAll.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+
         return {
             byClass: result,
-            totalResidual: totalResidualAll
+            totalResidual: totalResidualAll,
+            summaryOrderText
         };
     }
 
@@ -1329,14 +1351,20 @@
                                 </h4>
                                 <p class="text-[11px] text-slate-400">Simulação de compra prática fracionada baseada na cotação de mercado para o dia do aporte.</p>
                             </div>
-                            ${(() => {
-                                const tickerData = computeAporteByTickers(res.classes);
-                                return tickerData.totalResidual > 0 ? `
-                                    <div class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-400">
-                                        Troco residual: <strong>${C.formatBRL(tickerData.totalResidual)}</strong> (Reserva de Oportunidade)
-                                    </div>
-                                ` : '';
-                            })()}
+                            <div class="flex items-center gap-2 flex-wrap">
+                                ${(() => {
+                                    const tickerData = computeAporteByTickers(res.classes);
+                                    return tickerData.totalResidual > 0 ? `
+                                        <div class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-400">
+                                            Troco residual: <strong>${C.formatBRL(tickerData.totalResidual)}</strong> (Reserva de Oportunidade)
+                                        </div>
+                                    ` : '';
+                                })()}
+                                <button type="button" id="btn-copy-alocador-order" class="px-2.5 py-1 rounded bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/40 text-[11px] font-mono text-cyan-200 flex items-center gap-1.5 transition" title="Copiar ordem de compra formatada para colar no Home Broker">
+                                    <span>📋</span>
+                                    <span>Copiar Boleta</span>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1719,6 +1747,17 @@
                     </div>
                 </div>
 
+                <!-- Teste Rápido de Resiliência Sob Estresse -->
+                <div class="bg-[#090d16] border border-rose-500/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                        <span><strong>Resiliência ao Choque:</strong> Sob o cenário de estresse ativo (${inputs.stressScenario || 'crash30'}), sua renda passiva mensal projetada seria de <strong>${C.formatBRL(computeStressTest().stressedMonthlyPassive)}/mês</strong>.</span>
+                    </div>
+                    <button type="button" id="btn-cascata-to-stress" class="text-cyan-300 hover:text-cyan-200 underline font-semibold whitespace-nowrap text-left sm:text-right">
+                        Ajustar Cenários de Estresse →
+                    </button>
+                </div>
+
                 <!-- Lista Interativa e Editável dos Degraus -->
                 <div class="space-y-4">
                     ${cascade.tiers.map((t) => `
@@ -1944,6 +1983,15 @@
                 lastModel = computeFinancialModel();
                 renderSubTabCascata(document.getElementById('ind-subtab-container'));
                 C.toast('Valores da cascata restaurados para o padrão sugerido.', 'info');
+            });
+        }
+
+        // Link/Botão para ajustar cenários de estresse
+        const btnGoStress = document.getElementById('btn-cascata-to-stress');
+        if (btnGoStress) {
+            btnGoStress.addEventListener('click', () => {
+                inputs.activeSubTab = 'estresse';
+                renderSubTabContent();
             });
         }
     }
@@ -2840,6 +2888,26 @@
                 }
             });
         });
+
+        // Copiar boleta de compras consolidada para Home Broker
+        const btnCopyOrder = document.getElementById('btn-copy-alocador-order');
+        if (btnCopyOrder) {
+            btnCopyOrder.addEventListener('click', () => {
+                const res = computeAporteAllocation();
+                const tickerData = computeAporteByTickers(res.classes);
+                if (tickerData && tickerData.summaryOrderText) {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(tickerData.summaryOrderText).then(() => {
+                            C.toast('Boleta de compra copiada para a área de transferência!', 'success', 2500);
+                        }).catch(() => {
+                            C.toast('Selecione e copie manualmente os ativos da tela.', 'warning');
+                        });
+                    } else {
+                        C.toast('Área de transferência não disponível. Copie diretamente da tela.', 'warning');
+                    }
+                }
+            });
+        }
     }
 
     // =========================================================================

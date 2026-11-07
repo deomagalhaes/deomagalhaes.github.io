@@ -358,6 +358,275 @@
                 { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Cordas soltas E/B' },
                 { measure: 2, beat: '1 e', notes: [{ c: 2, f: 1 }], d: 0.22, rh: 'p', lh: '1', chord: 'E', ann: 'Bordão Turina Lá' },
                 { measure: 2, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.22, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Toeira Fá#' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.35, rh: 'rasq', lh: '0-0-0-0-0', chord: 'E', ann: 'Rasqueado de Mi Maior' }
+            ]
+        },
+        {
+            id: 'ponteio_sextas_estradao',
+            title: 'Ponteio em Sextas do Estradão',
+            author: 'Tradicional Caipira',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '2/4',
+            bpm: 92,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 7 }, { c: 2, f: 7 }], d: 0.24, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Sexta na 7ª casa (Si/Fá#)' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.24, rh: 'p+i', lh: '1-2', chord: 'A', ann: 'Sexta na 5ª casa (Lá/Mi)' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 4 }], d: 0.24, rh: 'p+i', lh: '1-2', chord: 'G#m', ann: 'Sexta na 4ª casa (Sol#/Ré#)' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 2 }], d: 0.24, rh: 'p+i', lh: '1-2', chord: 'F#m', ann: 'Sexta na 2ª casa (Fá#/Dó#)' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.28, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Sexta solta (Mi/Si)' },
+                { measure: 2, beat: '1 e', notes: [], d: 0.20, rh: 'tap', lh: '—', chord: '', ann: 'Batida de Tampo [TAP]' },
+                { measure: 2, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.24, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Fá#' },
+                { measure: 2, beat: '2 e', notes: [{ c: 4, f: 0 }], d: 0.32, rh: 'p', lh: '0', chord: 'E', ann: 'Bordão Si solto' }
+            ]
+        },
+        {
+            id: 'cururu_rio_tiete',
+            title: 'Cururu do Rio Tietê',
+            author: 'Mestre Tião Carreiro',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '2/4',
+            bpm: 104,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 4, f: 0 }], d: 0.20, rh: 'p', lh: '0', chord: 'B', ann: 'Bordão 5º Par' },
+                { measure: 1, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.20, rh: 'p', lh: '2', chord: 'B7', ann: 'Toeira 2ª casa' },
+                { measure: 1, beat: '2', notes: [{ c: 2, f: 1 }], d: 0.20, rh: 'i', lh: '1', chord: 'E', ann: 'Repique de Turina' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.20, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Prima e Segundinha soltas' },
+                { measure: 2, beat: '1', notes: [], d: 0.18, rh: 'tap', lh: '—', chord: '', ann: 'Batida seca no tampo' },
+                { measure: 2, beat: '1 e', notes: [{ c: 1, f: 2 }], d: 0.20, rh: 'i', lh: '1', chord: 'B7', ann: 'Repique 2º Par' },
+                { measure: 2, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.24, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Soltas agudas' },
+                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.32, rh: 'rasq', lh: '0-0-0-0-0', chord: 'E', ann: 'Rasqueado firme' }
+            ]
+        },
+        {
+            id: 'guarania_pantaneira',
+            title: 'Guarânia Pantaneira',
+            author: 'Inspirado em Almir Sater',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '3/4',
+            bpm: 76,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 3, f: 0 }], d: 0.32, rh: 'p', lh: '0', chord: 'E', ann: 'Baixo fundamental' },
+                { measure: 1, beat: '2', notes: [{ c: 2, f: 0 }, { c: 1, f: 0 }], d: 0.30, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Arpejo central' },
+                { measure: 1, beat: '3', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.32, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Terça lírica aguda' },
+                { measure: 2, beat: '1', notes: [{ c: 4, f: 2 }], d: 0.32, rh: 'p', lh: '2', chord: 'B7', ann: 'Baixo em Fá#' },
+                { measure: 2, beat: '2', notes: [{ c: 2, f: 3 }, { c: 1, f: 4 }], d: 0.30, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Dueto harmônico' },
+                { measure: 2, beat: '3', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.36, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Suspensão romântica' }
+            ]
+        }
+    ];
+
+    const DEFAULT_TAB_EDITOR_STATE = {
+        activeProjectId: 'minha_moda_caipira',
+        currentStepIdx: 0,
+        isPlaying: false,
+        playbackSpeed: 1.0,
+        isLooping: true,
+        projects: DEFAULT_TAB_EDITOR_PROJECTS.slice()
+    };
+
+    // =========================================================================
+    // ESTRUTURAS DE DADOS: ESCALAS MODAIS CAIPIRAS (FASE 8)
+    // =========================================================================
+    const DEFAULT_MODAL_TRAINER_STATE = {
+        modeId: 'lydian',
+        rootPc: 4,                  // 4 = Mi / E (default p/ Viola Cebolão em Mi)
+        regionFilter: 'FULL_NECK',  // 'FULL_NECK' | 'SHAPE_OPEN' | 'SHAPE_MID' | 'SHAPE_HIGH' | 'CHARACTERISTIC_ONLY'
+        activeExerciseId: 'linear', // 'linear' | 'characteristic' | 'arpeggio' | 'duads' | 'folia'
+        currentStepIdx: -1,
+        isPlaying: false,
+        playbackSpeed: 1.0,
+        isLooping: true
+    };
+
+    const MODAL_ROOTS = [
+        { pc: 4, name: 'Mi (E)', label: 'Mi (E) — Afinação Cebolão em Mi / Violão 6ª corda' },
+        { pc: 2, name: 'Ré (D)', label: 'Ré (D) — Afinação Cebolão em Ré / Viola Boiadeira' },
+        { pc: 7, name: 'Sol (G)', label: 'Sol (G) — Afinação Rio Abaixo' },
+        { pc: 9, name: 'Lá (A)', label: 'Lá (A) — Subdominante Pastoral' },
+        { pc: 11, name: 'Si (B)', label: 'Si (B) — Dominante Caipira' },
+        { pc: 0, name: 'Dó (C)', label: 'Dó (C) — Tom Natural' },
+        { pc: 5, name: 'Fá (F)', label: 'Fá (F)' },
+        { pc: 6, name: 'Fá# (F#)', label: 'Fá# (F#)' }
+    ];
+
+    const MODAL_SCALES = {
+        lydian: {
+            id: 'lydian',
+            name: 'Modo Lídio',
+            subtitle: 'A Mística das Folias e da Viola Celestial',
+            badge: 'Folia & Cantiga',
+            badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+            intervals: [0, 2, 4, 6, 7, 9, 11],
+            degreeNames: ['1', '2', '3', '♯4', '5', '6', '7'],
+            characteristicDegrees: ['♯4'],
+            characteristicIntervals: [6],
+            charDegreeLabel: '4ª Aumentada (♯4)',
+            description: 'Sonoridade aérea, luminosa e transcendental, típica das Folias de Reis de Minas e Goiás e das introduções atmosféricas de Almir Sater. A 4ª aumentada (♯4 / trítono lídio) quebra a gravidade tonal sem gerar o peso da escala menor, criando uma ressonância mística e cósmica que brilha com intensidade sobre o acorde solto do Cebolão em Mi.',
+            folkContext: 'Folias de Reis mineiras e goianas, Cantigas Medievais Sertanejas e Ponteios Pantaneiros',
+            generatingChords: [
+                { roman: 'I', name: 'E', namePT: 'Mi Maior (Acorde Aberto Solto)' },
+                { roman: 'II', name: 'F#', namePT: 'Fá# Maior (Acorde Característico Lídio)' },
+                { roman: 'vii', name: 'D#m', namePT: 'Ré# Menor (Subtônica Aérea)' }
+            ],
+            techniqueTip: 'Explore o 1º par (Prima) solto (E) e toque a nota ♯4 (Lá# / A#) no 2º par (casa 11) ou no 3º par (casa 3). O choque acústico suave entre a fundamental Mi e a quarta aumentada Lá# gera o clássico "brilho de serra" do sertão mineiro.'
+        },
+        mixolydian: {
+            id: 'mixolydian',
+            name: 'Modo Mixolídio',
+            subtitle: 'A Matriz do Baião, Catira, Pagode e Repente',
+            badge: 'Baião & Catira',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            intervals: [0, 2, 4, 5, 7, 9, 10],
+            degreeNames: ['1', '2', '3', '4', '5', '6', '♭7'],
+            characteristicDegrees: ['♭7'],
+            characteristicIntervals: [10],
+            charDegreeLabel: '7ª Menor (♭7)',
+            description: 'A alma rítmica e cadenciada do sertão brasileiro. A 7ª menor (♭7) substitui a sensível clássica europeia, retirando o caráter erudito estrito e imprimindo o suingue sincopado do Cururu, Pagode de Viola de Tião Carreiro, Cateretê paulista e repente nordestino.',
+            folkContext: 'Pagode Caipira paulista, Catira mineira, Baião e Repente nordestino',
+            generatingChords: [
+                { roman: 'I', name: 'E', namePT: 'Mi Maior (Tônica Sertaneja)' },
+                { roman: '♭VII', name: 'D', namePT: 'Ré Maior (Acorde de Balanço Mixolídio)' },
+                { roman: 'v', name: 'Bm', namePT: 'Si Menor (Dominante Modal Suave)' }
+            ],
+            techniqueTip: 'No ritmo de Pagode ou Cururu, alterne rapidamente entre a tríade de Mi Maior e o acorde de Ré Maior (♭VII). O salto melódico para a nota Ré (♭7) no 4º ou 1º par é o segredo motor do fraseado tião-carreiriano.'
+        },
+        dorian: {
+            id: 'dorian',
+            name: 'Modo Dórico',
+            subtitle: 'O Lamento Sertanejo & Balanço do Cariri',
+            badge: 'Lamento & Toada',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            intervals: [0, 2, 3, 5, 7, 9, 10],
+            degreeNames: ['1', '2', '♭3', '4', '5', '6', '♭7'],
+            characteristicDegrees: ['♭3', '6'],
+            characteristicIntervals: [3, 9],
+            charDegreeLabel: '3ª Menor (♭3) & 6ª Maior (6M)',
+            description: 'O lamento profundo do sertanejo sem desespero ou vitimização. A combinação da 3ª menor (♭3) com a 6ª maior (6M) traz uma nobreza altiva à dor, imortalizada em obras como "Vaca Estrela e Boi Fubá" e toadas antigas do sertão profundo.',
+            folkContext: 'Sertão do Cariri, Toadas de Despedida e Lamentos de Violeiros',
+            generatingChords: [
+                { roman: 'i', name: 'Em', namePT: 'Mi Menor (Tônica de Lamento)' },
+                { roman: 'IV', name: 'A', namePT: 'Lá Maior (Acorde Iluminador da 6ª Maior)' },
+                { roman: 'ii', name: 'F#m', namePT: 'Fá# Menor (Cadência Melancólica)' }
+            ],
+            techniqueTip: 'A transição entre o acorde Em (i) e A (IV maior) é a assinatura dórica. No ponteio, destaque a nota C# (6M) resolvendo suavemente na nota B (5J), gerando a sensação de consolo lírico.'
+        },
+        nordestino: {
+            id: 'nordestino',
+            name: 'Modo Nordestino (Escala Acústica / Lídio ♭7)',
+            subtitle: 'O Encontro da Viola Caipira com o Forró Pé-de-Serra',
+            badge: 'Ponteio Fronteiriço',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            intervals: [0, 2, 4, 6, 7, 9, 10],
+            degreeNames: ['1', '2', '3', '♯4', '5', '6', '♭7'],
+            characteristicDegrees: ['♯4', '♭7'],
+            characteristicIntervals: [6, 10],
+            charDegreeLabel: '4ª Aum (♯4) & 7ª Menor (♭7)',
+            description: 'A síntese suprema entre a mística do Lídio e a cadência dançante do Mixolídio. Também conhecida como Escala Acústica (4º modo da Menor Melódica), é a assinatura do ponteio nordestino, aboio de vaqueiro e das canções épicas da literatura de cordel sertaneja.',
+            folkContext: 'Forró Pé-de-Serra, Aboios do Sertão, Cantigas de Cordel e Viola Nordestina',
+            generatingChords: [
+                { roman: 'I7', name: 'E7', namePT: 'Mi com Sétima (Dominante Caipira)' },
+                { roman: 'II', name: 'F#', namePT: 'Fá# Maior (Tensão Lídia)' },
+                { roman: '♭VII', name: 'D', namePT: 'Ré Maior (Balanço Nordestino)' }
+            ],
+            techniqueTip: 'Execute ponteios velozes com palhetada alternada descendo da 7ª casa até as cordas soltas, enfatizando o trítono (A#) e a sétima menor (D) com apoio do polegar nos bordões.'
+        },
+        ionian: {
+            id: 'ionian',
+            name: 'Modo Jônio (Maior Caipira)',
+            subtitle: 'A Clareza Cristalina do Cebolão em Mi Aberto',
+            badge: 'Matriz Caipira',
+            badgeColor: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+            intervals: [0, 2, 4, 5, 7, 9, 11],
+            degreeNames: ['1', '2', '3', '4', '5', '6', '7'],
+            characteristicDegrees: ['3', '7'],
+            characteristicIntervals: [4, 11],
+            charDegreeLabel: '3ª Maior (3M) & 7ª Maior (7M)',
+            description: 'A afinação Cebolão em Mi da viola caipira já é, por natureza física, um acorde perfeito maior aberto. O Modo Jônio é a referência natural da música caipira de raiz, transmitindo serenidade, festa da colheita e religiosidade campestre.',
+            folkContext: 'Modas de Viola de raiz, Toadas Românticas e Festas Tradicionais da Roça',
+            generatingChords: [
+                { roman: 'I', name: 'E', namePT: 'Mi Maior (Acorde Aberto Solto)' },
+                { roman: 'IV', name: 'A', namePT: 'Lá Maior (Subdominante Pastoral)' },
+                { roman: 'V7', name: 'B7', namePT: 'Si com Sétima (Dominante Caipira)' }
+            ],
+            techniqueTip: 'Aproveite a ressonância por simpatia das cordas soltas. O dueto em terças nos dois primeiros pares (Prima e Segundinha) é a marca registrada incontestável da afinação Cebolão.'
+        },
+        aeolian: {
+            id: 'aeolian',
+            name: 'Modo Eólio (Menor Natural)',
+            subtitle: 'A Saudade Sertaneja & As Noites do Estradão',
+            badge: 'Saudade & Noite',
+            badgeColor: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+            intervals: [0, 2, 3, 5, 7, 8, 10],
+            degreeNames: ['1', '2', '♭3', '4', '5', '♭6', '♭7'],
+            characteristicDegrees: ['♭6'],
+            characteristicIntervals: [8],
+            charDegreeLabel: '6ª Menor (♭6)',
+            description: 'A expressão da saudade pura, dos causos de assombração na beira do fogo e das modas dramáticas sobre a vida dura no estradão de terra batida.',
+            folkContext: 'Causos de Assombração, Modas Tristes e Canções Noturnas de Tropeiros',
+            generatingChords: [
+                { roman: 'i', name: 'Em', namePT: 'Mi Menor (Nostalgia Pura)' },
+                { roman: 'iv', name: 'Am', namePT: 'Lá Menor (Subdominante Melancólica)' },
+                { roman: '♭VI', name: 'C', namePT: 'Dó Maior (Acorde de Esperança)' }
+            ],
+            techniqueTip: 'Dedilhe os bordões graves (4º e 5º pares oitavados) com o polegar em toques apoiados, deixando-os vibrar enquanto a melodia chora nos pares agudos.'
+        }
+    };
+
+    const MODAL_EXERCISES_INFO = {
+        linear: {
+            id: 'linear',
+            title: 'Subida & Descida Linear',
+            badge: 'Fundamentos de Digitação',
+            desc: 'Subida contínua da tônica até a oitava e descida ao longo dos pares, fixando a memória muscular e visual dos shapes modais.'
+        },
+        characteristic: {
+            id: 'characteristic',
+            title: 'Foco na Nota Característica',
+            badge: 'Cor Sonora do Modo',
+            desc: 'Frase melódica caipira desenhada para enfatizar e isolar a nota característica (♯4 no Lídio, ♭7 no Mixolídio, 6M no Dórico).'
+        },
+        arpeggio: {
+            id: 'arpeggio',
+            title: 'Arpejo da Tríade + Cor Modal',
+            badge: 'Conexão Harmônica',
+            desc: 'Dedilhado do acorde fundamental enriquecido pela nota modal, conectando harmonia de base ao solo melódico.'
+        },
+        duads: {
+            id: 'duads',
+            title: 'Dueto em Terças / Sextas',
+            badge: 'Ponteio Canônico a 2 Vozes',
+            desc: 'Execução de duetos simultâneos nos pares 1 e 2 aplicando os graus modais em terças e sextas caipiras.'
+        },
+        folia: {
+            id: 'folia',
+            title: 'Fraseado Tradicional do Sertão',
+            badge: 'Estilo & Cadência Autêntica',
+            desc: 'Frase completa com síncopes sertanejas, repiques e cadência típica da tradição oral brasileira.'
+        }
+    };
+        {
+            id: 'minha_moda_caipira',
+            title: 'Minha Primeira Moda Caipira',
+            author: 'Violeiro do Nexus',
+            instrumentId: 'viola_cebolao_e',
+            timeSignature: '2/4',
+            bpm: 96,
+            key: 'Mi Maior (E) Cebolão',
+            updatedAt: '2026-11-06T14:00:00.000Z',
+            steps: [
+                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Abertura em Lá' },
+                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Terça de Mi' },
+                { measure: 1, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Terça de Si7' },
+                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Terça de Lá' },
+                { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Cordas soltas E/B' },
+                { measure: 2, beat: '1 e', notes: [{ c: 2, f: 1 }], d: 0.22, rh: 'p', lh: '1', chord: 'E', ann: 'Bordão Turina Lá' },
+                { measure: 2, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.22, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Toeira Fá#' },
                 { measure: 2, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida no tampo [TAP]' },
                 { measure: 3, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Cascata de Mi' },
                 { measure: 3, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Descida em terças' },
@@ -480,7 +749,8 @@
         reverseFretsViolao: [0, 0, 1, 2, 2, 0], // Digitação ativa no Dicionário Reverso p/ Violão (1ª à 6ª corda)
         earTrainer: Object.assign({}, DEFAULT_EAR_TRAINER_STATE),
         ponteioPlayer: Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE),
-        tabEditor: Object.assign({}, DEFAULT_TAB_EDITOR_STATE)
+        tabEditor: Object.assign({}, DEFAULT_TAB_EDITOR_STATE),
+        modalTrainer: Object.assign({}, DEFAULT_MODAL_TRAINER_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -497,6 +767,8 @@
     let ponteioPlaybackTimer = null;
     let tabEditorPlaybackTimer = null;
     let activeTabEditorTimers = [];
+    let modalPlaybackTimer = null;
+    let activeModalTimers = [];
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -3063,6 +3335,390 @@
         if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    function renderTabEditorSection() {
+        const container = document.getElementById('viola-tab-editor-container');
+        if (!container) return;
+
+        const proj = getActiveTabProject();
+        const inst = INSTRUMENTS[proj.instrumentId || state.instrumentId];
+        const numCourses = inst.courses.length;
+        const courseOrder = state.viewPerspective === 'diagram'
+            ? Array.from({ length: numCourses }, (_, i) => i)
+            : Array.from({ length: numCourses }, (_, i) => numCourses - 1 - i);
+
+        const currentStep = (state.tabEditor.currentStepIdx >= 0 && proj.steps)
+            ? proj.steps[state.tabEditor.currentStepIdx]
+            : (proj.steps ? proj.steps[0] : null);
+
+        let prevMeasure = -1;
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 sm:p-5 space-y-4 shadow-xl">
+                <!-- Cabeçalho e Gerenciador de Obras -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-violet-500/15 text-violet-300 border border-violet-500/30">Fase 7 Concluída</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Composição &amp; Tablatura Caipira</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Exportador Multiformato (ASCII / Canvas HD / PDF)</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-wider font-mono mt-1 flex items-center gap-2">
+                            <i data-lucide="pen-tool" class="w-5 h-5 text-violet-400"></i>
+                            Gerador, Editor e Exportador de Tablaturas e Cifras Caipiras
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Crie arranjos para 5 pares de viola ou 6 cordas de violão, edite clicando na tablatura ou no braço SVG virtual, aplique técnicas caipiras em 1 clique e exporte partituras em alta resolução</p>
+                    </div>
+
+                    <!-- Seletor de Obras e Ações Rápidas -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="viola-select-tab-project" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-violet-500/40 text-violet-200 text-xs font-mono font-bold focus:outline-none focus:ring-1 focus:ring-violet-400 transition cursor-pointer">
+                            ${(state.tabEditor.projects || []).map((p) => `
+                                <option value="${p.id}" ${p.id === proj.id ? 'selected' : ''}>
+                                    ${p.title} (${p.author || 'Violeiro'})
+                                </option>
+                            `).join('')}
+                        </select>
+
+                        <button type="button" id="btn-viola-tab-new" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 transition shadow">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span>Nova</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-tab-import-solo" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            <span class="hidden sm:inline">Clonar Solo</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-tab-export-ascii" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                            <span>ASCII</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-tab-export-diagram" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                            <span>Canvas HD / PDF</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-tab-delete" title="Excluir Composição" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 border border-slate-700 hover:border-rose-700 text-rose-400 font-mono text-xs transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metadados da Composição Ativa -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                    <div>
+                        <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Título da Obra</label>
+                        <input type="text" id="viola-tab-title-input" value="${proj.title || ''}" class="w-full px-2.5 py-1 rounded-md bg-[#0f172a] border border-slate-700 text-slate-100 text-xs font-mono font-bold focus:border-violet-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Autor / Arranjo</label>
+                        <input type="text" id="viola-tab-author-input" value="${proj.author || ''}" class="w-full px-2.5 py-1 rounded-md bg-[#0f172a] border border-slate-700 text-slate-100 text-xs font-mono focus:border-violet-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Andamento &amp; Compasso</label>
+                        <div class="flex items-center gap-1.5">
+                            <input type="number" id="viola-tab-bpm-input" value="${proj.bpm || 96}" min="40" max="220" class="w-20 px-2 py-1 rounded-md bg-[#0f172a] border border-slate-700 text-cyan-300 text-xs font-mono font-bold outline-none">
+                            <span class="text-xs font-mono text-slate-500">BPM</span>
+                            <select id="viola-tab-sig-select" class="px-2 py-1 rounded-md bg-[#0f172a] border border-slate-700 text-slate-300 text-xs font-mono outline-none">
+                                <option value="2/4" ${(proj.timeSignature || '2/4') === '2/4' ? 'selected' : ''}>2/4</option>
+                                <option value="3/4" ${(proj.timeSignature || '') === '3/4' ? 'selected' : ''}>3/4</option>
+                                <option value="4/4" ${(proj.timeSignature || '') === '4/4' ? 'selected' : ''}>4/4</option>
+                                <option value="6/8" ${(proj.timeSignature || '') === '6/8' ? 'selected' : ''}>6/8</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-end justify-between sm:justify-end gap-2">
+                        <span class="text-[11px] font-mono text-slate-400">Total: <strong class="text-violet-300">${proj.steps ? proj.steps.length : 0} tempos</strong></span>
+                        <button type="button" id="btn-viola-tab-add-measure" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-violet-300 text-xs font-mono font-semibold flex items-center gap-1 transition">
+                            <i data-lucide="plus-square" class="w-3.5 h-3.5"></i>
+                            <span>+ Compasso</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barra de Transporte e Controles do Reprodutor -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-tab-play" class="min-h-[40px] px-4 py-1.5 rounded-lg ${state.tabEditor.isPlaying ? 'bg-amber-500 hover:bg-amber-400 text-slate-950' : 'bg-violet-600 hover:bg-violet-500 text-white'} font-mono text-xs font-bold flex items-center gap-1.5 transition shadow-lg">
+                            <i data-lucide="${state.tabEditor.isPlaying ? 'pause' : 'play'}" class="w-4 h-4"></i>
+                            <span>${state.tabEditor.isPlaying ? 'Pausar' : 'Tocar Obra'}</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-tab-stop" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-rose-300 font-mono text-xs font-medium flex items-center gap-1.5 transition">
+                            <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                            <span>Resetar</span>
+                        </button>
+
+                        <div class="inline-flex rounded-lg bg-slate-800/80 border border-slate-700 p-0.5" role="group">
+                            <button type="button" id="btn-viola-tab-step-prev" title="Tempo Anterior" class="min-h-[36px] px-2.5 py-1 text-slate-300 hover:text-violet-300 hover:bg-slate-700/60 rounded-md font-mono text-xs flex items-center gap-1 transition">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                <span>Anterior</span>
+                            </button>
+                            <button type="button" id="btn-viola-tab-step-next" title="Próximo Tempo" class="min-h-[36px] px-2.5 py-1 text-slate-300 hover:text-violet-300 hover:bg-slate-700/60 rounded-md font-mono text-xs flex items-center gap-1 transition">
+                                <span>Próximo</span>
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <button type="button" id="btn-viola-tab-loop" class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.tabEditor.isLooping ? 'bg-violet-600/25 border border-violet-400 text-violet-200' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                            <span>Loop ${state.tabEditor.isLooping ? 'Ligado' : 'Desligado'}</span>
+                        </button>
+                    </div>
+
+                    <!-- Velocidades Didáticas -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono text-slate-400">Velocidade:</span>
+                        <div class="inline-flex rounded-lg bg-slate-800/80 border border-slate-700 p-0.5" role="group">
+                            <button type="button" id="btn-viola-tab-speed-50" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.tabEditor.playbackSpeed - 0.5) < 0.05 ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">50%</button>
+                            <button type="button" id="btn-viola-tab-speed-75" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.tabEditor.playbackSpeed - 0.75) < 0.05 ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">75%</button>
+                            <button type="button" id="btn-viola-tab-speed-100" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.tabEditor.playbackSpeed - 1.0) < 0.05 ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">100%</button>
+                            <button type="button" id="btn-viola-tab-speed-125" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.tabEditor.playbackSpeed - 1.25) < 0.05 ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">125%</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações Rápidas de Técnicas Caipiras no Passo Ativo -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <span class="text-slate-500 font-semibold uppercase text-[10px] mr-1">Técnicas 1-Clique:</span>
+                        <button type="button" id="btn-viola-tab-tech-tap" title="Batida Percussiva no Tampo da Viola" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-rose-300 font-bold transition flex items-center gap-1">
+                            <span>[TAP] Tampo</span>
+                        </button>
+                        <button type="button" id="btn-viola-tab-tech-rasq" title="Rasqueado Aberto em Todas as Cordas" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-purple-300 font-bold transition flex items-center gap-1">
+                            <span>[RASQ] Rasqueado</span>
+                        </button>
+                        <button type="button" id="btn-viola-tab-tech-third" title="Inserir Dueto em Terça Diatônica nos Pares 1 e 2" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-bold transition flex items-center gap-1">
+                            <span>[3ª] Terça Caipira</span>
+                        </button>
+                        <button type="button" id="btn-viola-tab-tech-sixth" title="Inserir Dueto em Sexta nos Pares 1 e 3" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 font-bold transition flex items-center gap-1">
+                            <span>[6ª] Sexta Caipira</span>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <button type="button" id="btn-viola-tab-step-add" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition">+ Tempo</button>
+                        <button type="button" id="btn-viola-tab-step-dup" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition">Duplicar</button>
+                        <button type="button" id="btn-viola-tab-step-clear" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 hover:text-amber-300 transition">Limpar</button>
+                        <button type="button" id="btn-viola-tab-step-del" class="px-2 py-1 rounded bg-slate-800 hover:bg-rose-950 border border-slate-700 hover:border-rose-700 text-rose-400 transition">Excluir</button>
+                    </div>
+                </div>
+
+                <!-- Ficha do Passo Ativo -->
+                <div id="viola-tab-active-step-info" class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs"></div>
+
+                <!-- Grade Interativa de Tablatura -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="grid" class="w-3.5 h-3.5 text-violet-400"></i>
+                            <span>Pauta Digital (Clique para editar casa ou digite números 0..14):</span>
+                        </span>
+                        <span class="text-[11px] text-slate-500">Clique no Braço Virtual SVG para inserir notas no passo selecionado!</span>
+                    </div>
+
+                    <div class="bg-[#070b12] border border-slate-800 rounded-xl p-3 flex overflow-x-auto shadow-inner custom-scrollbar" id="viola-tab-editor-grid" style="scrollbar-width: thin; scrollbar-color: #8b5cf6 #090d16;">
+                        <!-- Coluna Fixa com Rótulos das Cordas -->
+                        <div class="flex flex-col justify-between pr-3 border-r-2 border-slate-800 select-none sticky left-0 bg-[#070b12] z-10 shrink-0 min-w-[125px] sm:min-w-[145px]">
+                            <div class="h-6 flex items-center text-[10px] font-mono text-slate-500 uppercase tracking-wider font-bold">Mão / Cifra</div>
+                            ${courseOrder.map((cIdx) => {
+                                const c = inst.courses[cIdx];
+                                const cleanNote = c.note.split('/')[0];
+                                return `
+                                    <div class="h-7 flex items-center text-[11px] font-mono text-slate-300 font-semibold truncate" title="${c.label}">
+                                        ${c.num}º ${cleanNote} <span class="text-slate-500 ml-1 text-[10px]">(${c.label.split('(')[1] ? c.label.split('(')[1].replace(')', '') : ''})</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                            <div class="h-6 flex items-center text-[10px] font-mono text-slate-500 uppercase tracking-wider">Compasso/Tempo</div>
+                        </div>
+
+                        <!-- Colunas dos Passos da Tablatura -->
+                        <div class="flex items-stretch pl-2 gap-1 shrink-0">
+                            ${(proj.steps || []).map((st, idx) => {
+                                const isNewMeasure = st.measure !== prevMeasure;
+                                prevMeasure = st.measure;
+                                const isCurrent = state.tabEditor.currentStepIdx === idx;
+
+                                return `
+                                    <div data-editor-step="${idx}" class="flex flex-col items-center justify-between min-w-[44px] sm:min-w-[50px] py-1 px-1 rounded-lg border ${isCurrent ? 'bg-violet-500/25 border-violet-400 ring-2 ring-violet-400/50 shadow-[0_0_15px_rgba(168,85,247,0.45)]' : 'border-slate-800 hover:border-violet-500/40 hover:bg-slate-800/40'} ${isNewMeasure ? 'border-l-2 border-l-violet-500/60 pl-2' : ''} cursor-pointer transition select-none group" title="Compasso ${st.measure} • Tempo ${st.beat}">
+                                        <!-- Cifra ou Mão Direita -->
+                                        <div class="h-6 flex items-center justify-center">
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${st.chord ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-slate-300 border border-slate-700'}">${st.chord || st.rh || 'p'}</span>
+                                        </div>
+
+                                        <!-- Casas dos Pares / Cordas -->
+                                        ${courseOrder.map((cIdx) => {
+                                            const noteObj = (st.notes || []).find((n) => n.c === cIdx);
+                                            if (st.rh === 'tap') {
+                                                return `<div class="h-7 flex items-center justify-center text-rose-400 text-xs font-mono font-bold select-none">[TAP]</div>`;
+                                            }
+                                            if (st.rh === 'rasq') {
+                                                const fVal = noteObj ? noteObj.f : 0;
+                                                return `
+                                                    <div class="h-7 flex items-center justify-center">
+                                                        <span class="w-6 h-6 flex items-center justify-center rounded font-mono font-bold text-xs bg-purple-900/40 text-purple-200 border border-purple-600/40 shadow-sm">${fVal}</span>
+                                                    </div>
+                                                `;
+                                            }
+                                            if (noteObj !== undefined) {
+                                                return `
+                                                    <div class="h-7 flex items-center justify-center">
+                                                        <span class="w-6 h-6 flex items-center justify-center rounded font-mono font-bold text-xs bg-violet-900/50 group-hover:bg-violet-500/20 text-violet-200 border border-violet-500/60 shadow-sm">${noteObj.f}</span>
+                                                    </div>
+                                                `;
+                                            }
+                                            return `<div class="h-7 flex items-center justify-center text-slate-700 text-xs font-mono select-none">───</div>`;
+                                        }).join('')}
+
+                                        <!-- Compasso / Tempo -->
+                                        <div class="h-6 flex items-center justify-center text-[10px] font-mono ${isNewMeasure ? 'text-violet-400 font-bold' : 'text-slate-500'}">
+                                            ${isNewMeasure ? `C${st.measure}` : st.beat}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(container);
+
+        // Bind events dos metadados
+        const titleInput = document.getElementById('viola-tab-title-input');
+        if (titleInput) {
+            titleInput.addEventListener('change', (e) => {
+                proj.title = e.target.value.trim() || 'Sem Título';
+                proj.updatedAt = new Date().toISOString();
+                saveViolaState();
+            });
+        }
+
+        const authorInput = document.getElementById('viola-tab-author-input');
+        if (authorInput) {
+            authorInput.addEventListener('change', (e) => {
+                proj.author = e.target.value.trim() || 'Violeiro';
+                proj.updatedAt = new Date().toISOString();
+                saveViolaState();
+            });
+        }
+
+        const bpmInput = document.getElementById('viola-tab-bpm-input');
+        if (bpmInput) {
+            bpmInput.addEventListener('change', (e) => {
+                proj.bpm = Math.max(40, Math.min(220, parseInt(e.target.value, 10) || 96));
+                proj.updatedAt = new Date().toISOString();
+                saveViolaState();
+            });
+        }
+
+        const sigSelect = document.getElementById('viola-tab-sig-select');
+        if (sigSelect) {
+            sigSelect.addEventListener('change', (e) => {
+                proj.timeSignature = e.target.value;
+                proj.updatedAt = new Date().toISOString();
+                saveViolaState();
+                renderTabEditorSection();
+            });
+        }
+
+        const projSelect = document.getElementById('viola-select-tab-project');
+        if (projSelect) {
+            projSelect.addEventListener('change', (e) => {
+                stopTabEditorPlayback();
+                state.tabEditor.activeProjectId = e.target.value;
+                state.tabEditor.currentStepIdx = 0;
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        // Botões de Ação
+        const newBtn = document.getElementById('btn-viola-tab-new');
+        if (newBtn) newBtn.addEventListener('click', openNewTabProjectModal);
+
+        const importBtn = document.getElementById('btn-viola-tab-import-solo');
+        if (importBtn) importBtn.addEventListener('click', openImportPonteioModal);
+
+        const exportAsciiBtn = document.getElementById('btn-viola-tab-export-ascii');
+        if (exportAsciiBtn) exportAsciiBtn.addEventListener('click', openTabExportAsciiModal);
+
+        const exportDiagramBtn = document.getElementById('btn-viola-tab-export-diagram');
+        if (exportDiagramBtn) exportDiagramBtn.addEventListener('click', openTabExportDiagramModal);
+
+        const deleteBtn = document.getElementById('btn-viola-tab-delete');
+        if (deleteBtn) deleteBtn.addEventListener('click', () => deleteTabProject(proj.id));
+
+        const addMeasureBtn = document.getElementById('btn-viola-tab-add-measure');
+        if (addMeasureBtn) addMeasureBtn.addEventListener('click', addTabEditorMeasure);
+
+        // Player de Transporte
+        const playBtn = document.getElementById('btn-viola-tab-play');
+        if (playBtn) playBtn.addEventListener('click', playTabEditorPlayback);
+
+        const stopBtn = document.getElementById('btn-viola-tab-stop');
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => {
+                stopTabEditorPlayback();
+                state.tabEditor.currentStepIdx = 0;
+                highlightTabEditorStep(0);
+                renderFretboardSVG();
+            });
+        }
+
+        const stepPrevBtn = document.getElementById('btn-viola-tab-step-prev');
+        if (stepPrevBtn) stepPrevBtn.addEventListener('click', () => stepTabEditor(-1));
+
+        const stepNextBtn = document.getElementById('btn-viola-tab-step-next');
+        if (stepNextBtn) stepNextBtn.addEventListener('click', () => stepTabEditor(1));
+
+        const loopBtn = document.getElementById('btn-viola-tab-loop');
+        if (loopBtn) loopBtn.addEventListener('click', toggleTabEditorLoop);
+
+        [0.5, 0.75, 1.0, 1.25].forEach((spd) => {
+            const btn = document.getElementById(`btn-viola-tab-speed-${Math.round(spd * 100)}`);
+            if (btn) btn.addEventListener('click', () => setTabEditorSpeed(spd));
+        });
+
+        // Técnicas Caipiras 1-Clique
+        const techTapBtn = document.getElementById('btn-viola-tab-tech-tap');
+        if (techTapBtn) techTapBtn.addEventListener('click', () => setTabEditorStepTech('tap'));
+
+        const techRasqBtn = document.getElementById('btn-viola-tab-tech-rasq');
+        if (techRasqBtn) techRasqBtn.addEventListener('click', () => setTabEditorStepTech('rasq'));
+
+        const techThirdBtn = document.getElementById('btn-viola-tab-tech-third');
+        if (techThirdBtn) techThirdBtn.addEventListener('click', addCaipiraThirdDuad);
+
+        const techSixthBtn = document.getElementById('btn-viola-tab-tech-sixth');
+        if (techSixthBtn) techSixthBtn.addEventListener('click', addCaipiraSixthDuad);
+
+        const stepAddBtn = document.getElementById('btn-viola-tab-step-add');
+        if (stepAddBtn) stepAddBtn.addEventListener('click', () => addTabEditorStep(state.tabEditor.currentStepIdx));
+
+        const stepDupBtn = document.getElementById('btn-viola-tab-step-dup');
+        if (stepDupBtn) stepDupBtn.addEventListener('click', () => duplicateTabEditorStep(state.tabEditor.currentStepIdx));
+
+        const stepClearBtn = document.getElementById('btn-viola-tab-step-clear');
+        if (stepClearBtn) stepClearBtn.addEventListener('click', () => clearTabEditorStep(state.tabEditor.currentStepIdx));
+
+        const stepDelBtn = document.getElementById('btn-viola-tab-step-del');
+        if (stepDelBtn) stepDelBtn.addEventListener('click', () => deleteTabEditorStep(state.tabEditor.currentStepIdx));
+
+        // Clicabilidade nas colunas de passo
+        container.querySelectorAll('[data-editor-step]').forEach((col) => {
+            col.addEventListener('click', () => {
+                const idx = parseInt(col.getAttribute('data-editor-step'), 10);
+                jumpToTabEditorStep(idx);
+            });
+        });
+
+        highlightTabEditorStep(state.tabEditor.currentStepIdx >= 0 ? state.tabEditor.currentStepIdx : 0);
+    }
+
     // =========================================================================
     // MOTOR DE EXPORTAÇÃO ASCII FORMATADO (.TAB / .TXT)
     // =========================================================================
@@ -3713,6 +4369,953 @@
                 createNewTabProject(tplKey, title, author);
             });
         }
+    }
+
+    // =========================================================================
+    // TREINADOR DE ESCALAS MODAIS CAIPIRAS (FASE 8)
+    // =========================================================================
+
+    function findBestFretForPitch(inst, targetPc, preferCourse = 0, minFret = 0, maxFret = 12) {
+        let best = null;
+        let minDistance = 999;
+        inst.courses.forEach((c, cIdx) => {
+            let f = (targetPc - c.pitchClass + 12) % 12;
+            if (f < minFret && f + 12 <= maxFret) {
+                f += 12;
+            }
+            if (f >= minFret && f <= maxFret) {
+                const dist = Math.abs(cIdx - preferCourse);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    best = { c: cIdx, f };
+                }
+            }
+        });
+        return best || { c: Math.min(preferCourse, inst.courses.length - 1), f: 0 };
+    }
+
+    function computeModalExerciseSteps(modeId, rootPc, exerciseId, inst) {
+        const modalCfg = MODAL_SCALES[modeId] || MODAL_SCALES.lydian;
+        const intervals = modalCfg.intervals;
+        const degNames = modalCfg.degreeNames;
+        const charIntervals = modalCfg.characteristicIntervals;
+        const steps = [];
+
+        const numCourses = inst.courses.length;
+        const bassCourse = Math.min(3, numCourses - 1);
+
+        if (exerciseId === 'linear') {
+            // Subida e descida linear pelas cordas
+            const degIndices = [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0];
+            const preferProgression = [bassCourse, bassCourse, 2, 2, 1, 1, 1, 0, 0, 1, 1, 1, 2, 2, bassCourse];
+
+            degIndices.forEach((dIdx, stepIdx) => {
+                const isOctave = dIdx === 7;
+                const interval = isOctave ? 12 : intervals[dIdx];
+                const targetPc = (rootPc + interval) % 12;
+                const degName = isOctave ? '8 (1)' : degNames[dIdx];
+                const isChar = charIntervals.includes(interval % 12);
+                const isRoot = (interval % 12) === 0;
+                const prefC = preferProgression[stepIdx % preferProgression.length];
+
+                const pos = findBestFretForPitch(inst, targetPc, prefC, 0, 12);
+                const rh = pos.c === 0 ? 'i' : (pos.c >= bassCourse ? 'p' : 'i');
+
+                steps.push({
+                    c: pos.c,
+                    f: pos.f,
+                    d: 0.28,
+                    rh,
+                    lh: pos.f === 0 ? '0' : String(pos.f),
+                    degree: degName,
+                    noteName: NOTE_NAMES[targetPc],
+                    isCharacteristic: isChar,
+                    isRoot,
+                    ann: isChar ? `★ ${degName} [Nota Característica]` : (isRoot ? 'Tônica' : `${degName}º Grau`)
+                });
+            });
+        } else if (exerciseId === 'characteristic') {
+            // Frase com foco e repetição na nota característica
+            const charInt = charIntervals[0] !== undefined ? charIntervals[0] : 6;
+            const thirdInt = intervals[2]; // 3ª
+            const fifthInt = intervals[4]; // 5ª
+
+            const phraseIntervals = [
+                { int: 0, d: 0.32, ann: 'Tônica de partida' },
+                { int: thirdInt, d: 0.28, ann: 'Terça do modo' },
+                { int: fifthInt, d: 0.28, ann: 'Quinta Justa' },
+                { int: charInt, d: 0.48, ann: `★ ${modalCfg.charDegreeLabel} [Cor Sonora Exclusiva]` },
+                { int: fifthInt, d: 0.26, ann: 'Retorno à 5ª' },
+                { int: thirdInt, d: 0.26, ann: 'Retorno à 3ª' },
+                { int: charInt, d: 0.42, ann: `★ ${modalCfg.charDegreeLabel} [Reafirmação]` },
+                { int: 12, d: 0.38, ann: 'Resolução na Tônica Aguda' },
+                { int: fifthInt, d: 0.28, ann: 'Queda em 5ª' },
+                { int: 0, d: 0.45, ann: 'Repouso na Fundamental' }
+            ];
+
+            phraseIntervals.forEach((item, idx) => {
+                const targetPc = (rootPc + item.int) % 12;
+                const isChar = charIntervals.includes(item.int % 12);
+                const isRoot = (item.int % 12) === 0;
+                const prefC = (item.int === 12 || isChar) ? 0 : (isRoot && idx > 0 ? bassCourse : 1);
+
+                const pos = findBestFretForPitch(inst, targetPc, prefC, 0, 12);
+                const rh = pos.c === 0 ? 'i' : (pos.c >= bassCourse ? 'p' : 'i');
+                const degIdx = intervals.indexOf(item.int % 12);
+                const degName = item.int === 12 ? '8' : (degIdx >= 0 ? degNames[degIdx] : '•');
+
+                steps.push({
+                    c: pos.c,
+                    f: pos.f,
+                    d: item.d,
+                    rh,
+                    lh: pos.f === 0 ? '0' : String(pos.f),
+                    degree: degName,
+                    noteName: NOTE_NAMES[targetPc],
+                    isCharacteristic: isChar,
+                    isRoot,
+                    ann: item.ann
+                });
+            });
+        } else if (exerciseId === 'arpeggio') {
+            // Arpejo da Tríade Geradora + Nota Modal
+            const thirdInt = intervals[2];
+            const fifthInt = intervals[4];
+            const charInt = charIntervals[0] !== undefined ? charIntervals[0] : 6;
+
+            const arpPattern = [
+                { int: 0, d: 0.30, ann: 'Tônica Fundamental' },
+                { int: thirdInt, d: 0.28, ann: 'Terça Maior/Menor' },
+                { int: fifthInt, d: 0.28, ann: 'Quinta Justa' },
+                { int: charInt, d: 0.40, ann: `★ ${modalCfg.charDegreeLabel}` },
+                { int: 12, d: 0.35, ann: 'Oitava Superior' },
+                { int: charInt, d: 0.35, ann: `★ ${modalCfg.charDegreeLabel}` },
+                { int: fifthInt, d: 0.28, ann: 'Quinta Justa' },
+                { int: thirdInt, d: 0.28, ann: 'Terça' },
+                { int: 0, d: 0.48, ann: 'Resolução Fundamental' }
+            ];
+
+            arpPattern.forEach((item) => {
+                const targetPc = (rootPc + item.int) % 12;
+                const isChar = charIntervals.includes(item.int % 12);
+                const isRoot = (item.int % 12) === 0;
+                const prefC = item.int === 12 ? 0 : (isRoot ? bassCourse : 1);
+
+                const pos = findBestFretForPitch(inst, targetPc, prefC, 0, 12);
+                const rh = pos.c === 0 ? 'i' : (pos.c >= bassCourse ? 'p' : 'i');
+                const degIdx = intervals.indexOf(item.int % 12);
+                const degName = item.int === 12 ? '8' : (degIdx >= 0 ? degNames[degIdx] : '•');
+
+                steps.push({
+                    c: pos.c,
+                    f: pos.f,
+                    d: item.d,
+                    rh,
+                    lh: pos.f === 0 ? '0' : String(pos.f),
+                    degree: degName,
+                    noteName: NOTE_NAMES[targetPc],
+                    isCharacteristic: isChar,
+                    isRoot,
+                    ann: item.ann
+                });
+            });
+        } else if (exerciseId === 'duads') {
+            // Duetos em Terças/Sextas Modais nos dois primeiros pares (Prima e Segundinha)
+            const cUpper = 0;
+            const cLower = Math.min(1, numCourses - 1);
+            const duadProgression = [0, 1, 2, 3, 4, 3, 2, 0];
+
+            duadProgression.forEach((dIdx) => {
+                const intUpper = intervals[dIdx];
+                const pcUpper = (rootPc + intUpper) % 12;
+                const degUpper = degNames[dIdx];
+                const isChar = charIntervals.includes(intUpper);
+
+                const lowerDegIdx = (dIdx - 2 + intervals.length) % intervals.length;
+                const intLower = intervals[lowerDegIdx];
+                const pcLower = (rootPc + intLower) % 12;
+
+                const fUpper = (pcUpper - inst.courses[cUpper].pitchClass + 12) % 12;
+                const fLower = (pcLower - inst.courses[cLower].pitchClass + 12) % 12;
+
+                steps.push({
+                    c: cUpper,
+                    f: fUpper,
+                    notes: [
+                        { c: cUpper, f: fUpper },
+                        { c: cLower, f: fLower }
+                    ],
+                    d: 0.36,
+                    rh: 'p+i',
+                    lh: `${fUpper}-${fLower}`,
+                    degree: degUpper,
+                    noteName: `${NOTE_NAMES[pcUpper]}+${NOTE_NAMES[pcLower]}`,
+                    isCharacteristic: isChar,
+                    isRoot: intUpper === 0,
+                    ann: `Dueto Modal Grau ${degUpper} (${NOTE_NAMES[pcUpper]}/${NOTE_NAMES[pcLower]})`
+                });
+            });
+        } else if (exerciseId === 'folia') {
+            // Fraseado Tradicional com Cadência de Folia/Baião
+            const charInt = charIntervals[0] !== undefined ? charIntervals[0] : 6;
+            const thirdInt = intervals[2];
+            const fifthInt = intervals[4];
+            const secondInt = intervals[1];
+            const seventhInt = intervals[6];
+
+            const foliaPattern = [
+                { int: 0, d: 0.22, ann: 'Bordão de ataque' },
+                { int: 0, d: 0.20, ann: 'Repique rítmico' },
+                { int: thirdInt, d: 0.22, ann: 'Terça ascendente' },
+                { int: fifthInt, d: 0.22, ann: 'Quinta aberta' },
+                { int: charInt, d: 0.38, ann: `★ Síncope na ${modalCfg.charDegreeLabel}` },
+                { int: fifthInt, d: 0.20, ann: 'Corte rápido' },
+                { int: charInt, d: 0.35, ann: 'Rebatida da cor modal' },
+                { int: seventhInt, d: 0.22, ann: 'Passagem melódica' },
+                { int: 12, d: 0.36, ann: 'Pico lírico da folia' },
+                { int: fifthInt, d: 0.24, ann: 'Cascata descendente' },
+                { int: thirdInt, d: 0.24, ann: 'Terça cadencial' },
+                { int: secondInt, d: 0.24, ann: 'Apojatura de 2ª' },
+                { int: 0, d: 0.50, ann: 'Acorde / Repouso Caipira' }
+            ];
+
+            foliaPattern.forEach((item) => {
+                const targetPc = (rootPc + item.int) % 12;
+                const isChar = charIntervals.includes(item.int % 12);
+                const isRoot = (item.int % 12) === 0;
+                const prefC = item.int === 12 ? 0 : (isRoot ? bassCourse : 1);
+
+                const pos = findBestFretForPitch(inst, targetPc, prefC, 0, 12);
+                const rh = pos.c === 0 ? 'i' : (pos.c >= bassCourse ? 'p' : 'i');
+                const degIdx = intervals.indexOf(item.int % 12);
+                const degName = item.int === 12 ? '8' : (degIdx >= 0 ? degNames[degIdx] : '•');
+
+                steps.push({
+                    c: pos.c,
+                    f: pos.f,
+                    d: item.d,
+                    rh,
+                    lh: pos.f === 0 ? '0' : String(pos.f),
+                    degree: degName,
+                    noteName: NOTE_NAMES[targetPc],
+                    isCharacteristic: isChar,
+                    isRoot,
+                    ann: item.ann
+                });
+            });
+        }
+
+        return steps;
+    }
+
+    function playModalEvent(step) {
+        if (!step) return;
+        if (Array.isArray(step.notes) && step.notes.length > 0) {
+            step.notes.forEach((n, idx) => {
+                playCourseAtFret(n.c, n.f, idx * 0.012);
+                flashFretCell(n.c, n.f, idx * 0.012);
+            });
+        } else if (step.c !== undefined && step.f !== undefined) {
+            playCourseAtFret(step.c, step.f, 0);
+            flashFretCell(step.c, step.f, 0);
+        }
+    }
+
+    function stopModalPlayback() {
+        if (modalPlaybackTimer) {
+            clearTimeout(modalPlaybackTimer);
+            modalPlaybackTimer = null;
+        }
+        activeModalTimers.forEach((t) => clearTimeout(t));
+        activeModalTimers = [];
+        state.modalTrainer.isPlaying = false;
+        updateModalUIState();
+    }
+
+    function scheduleNextModalStep() {
+        if (!state.modalTrainer.isPlaying) return;
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const steps = computeModalExerciseSteps(state.modalTrainer.modeId, state.modalTrainer.rootPc, state.modalTrainer.activeExerciseId, inst);
+        if (!steps || steps.length === 0) {
+            stopModalPlayback();
+            return;
+        }
+
+        const curIdx = state.modalTrainer.currentStepIdx;
+        if (curIdx >= steps.length) {
+            if (state.modalTrainer.isLooping) {
+                state.modalTrainer.currentStepIdx = 0;
+                scheduleNextModalStep();
+            } else {
+                stopModalPlayback();
+                state.modalTrainer.currentStepIdx = 0;
+                updateModalUIState();
+                renderFretboardSVG();
+            }
+            return;
+        }
+
+        const step = steps[curIdx];
+        playModalEvent(step);
+        highlightModalStep(curIdx);
+        renderFretboardSVG();
+
+        const speed = Math.max(0.25, state.modalTrainer.playbackSpeed || 1.0);
+        const stepDurationMs = Math.round(((step.d || 0.28) / speed) * 1000);
+
+        state.modalTrainer.currentStepIdx = curIdx + 1;
+
+        modalPlaybackTimer = setTimeout(() => {
+            scheduleNextModalStep();
+        }, stepDurationMs);
+    }
+
+    function playModalPlayback() {
+        stopScalePlayback();
+        stopProgressionPlayback();
+        stopTunerTone();
+        stopEarTrainerAudio();
+        stopPonteioPlayback();
+        stopTabEditorPlayback();
+
+        const inst = INSTRUMENTS[state.instrumentId];
+        const steps = computeModalExerciseSteps(state.modalTrainer.modeId, state.modalTrainer.rootPc, state.modalTrainer.activeExerciseId, inst);
+        if (!steps || steps.length === 0) return;
+
+        if (state.modalTrainer.isPlaying) {
+            pauseModalPlayback();
+            return;
+        }
+
+        state.modalTrainer.isPlaying = true;
+        state.displayMode = 'MODAL';
+
+        if (state.modalTrainer.currentStepIdx < 0 || state.modalTrainer.currentStepIdx >= steps.length) {
+            state.modalTrainer.currentStepIdx = 0;
+        }
+
+        renderFretboardSVG();
+        updateModalUIState();
+        scheduleNextModalStep();
+    }
+
+    function pauseModalPlayback() {
+        stopModalPlayback();
+    }
+
+    function stepModalExercise(delta) {
+        stopModalPlayback();
+        const inst = INSTRUMENTS[state.instrumentId];
+        const steps = computeModalExerciseSteps(state.modalTrainer.modeId, state.modalTrainer.rootPc, state.modalTrainer.activeExerciseId, inst);
+        if (!steps || steps.length === 0) return;
+
+        let nextIdx = (state.modalTrainer.currentStepIdx < 0 ? 0 : state.modalTrainer.currentStepIdx) + delta;
+        if (nextIdx < 0) nextIdx = steps.length - 1;
+        if (nextIdx >= steps.length) nextIdx = 0;
+
+        state.modalTrainer.currentStepIdx = nextIdx;
+        state.displayMode = 'MODAL';
+
+        const step = steps[nextIdx];
+        playModalEvent(step);
+        highlightModalStep(nextIdx);
+        renderFretboardSVG();
+        saveViolaState();
+    }
+
+    function jumpToModalStep(idx) {
+        stopModalPlayback();
+        const inst = INSTRUMENTS[state.instrumentId];
+        const steps = computeModalExerciseSteps(state.modalTrainer.modeId, state.modalTrainer.rootPc, state.modalTrainer.activeExerciseId, inst);
+        if (!steps || idx < 0 || idx >= steps.length) return;
+
+        state.modalTrainer.currentStepIdx = idx;
+        state.displayMode = 'MODAL';
+
+        const step = steps[idx];
+        playModalEvent(step);
+        highlightModalStep(idx);
+        renderFretboardSVG();
+        saveViolaState();
+    }
+
+    function highlightModalStep(stepIdx) {
+        const container = document.getElementById('viola-modal-steps-ribbon');
+        if (!container) return;
+
+        container.querySelectorAll('[data-modal-step]').forEach((col) => {
+            const idx = parseInt(col.getAttribute('data-modal-step'), 10);
+            if (idx === stepIdx) {
+                col.classList.add('bg-rose-500/25', 'border-rose-400', 'ring-2', 'ring-rose-400/50', 'shadow-[0_0_15px_rgba(244,63,94,0.45)]');
+                col.classList.remove('border-slate-800');
+                try {
+                    col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } catch (_) {}
+            } else {
+                col.classList.remove('bg-rose-500/25', 'border-rose-400', 'ring-2', 'ring-rose-400/50', 'shadow-[0_0_15px_rgba(244,63,94,0.45)]');
+                col.classList.add('border-slate-800');
+            }
+        });
+
+        const activeCard = document.getElementById('viola-modal-active-step-info');
+        if (activeCard) {
+            const inst = INSTRUMENTS[state.instrumentId];
+            const steps = computeModalExerciseSteps(state.modalTrainer.modeId, state.modalTrainer.rootPc, state.modalTrainer.activeExerciseId, inst);
+            const curStep = steps && steps[stepIdx] ? steps[stepIdx] : null;
+            if (curStep) {
+                activeCard.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded ${curStep.isCharacteristic ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40 font-bold' : (curStep.isRoot ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 font-bold' : 'bg-slate-800 text-slate-300')}">
+                                Passo ${stepIdx + 1}/${steps.length} • Grau ${curStep.degree}
+                            </span>
+                            <span class="font-bold text-slate-100">
+                                Nota: <strong class="${curStep.isCharacteristic ? 'text-rose-400' : (curStep.isRoot ? 'text-emerald-400' : 'text-cyan-300')}">${curStep.noteName}</strong>
+                            </span>
+                            <span class="text-slate-400 hidden sm:inline">— ${curStep.ann}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-400 text-[11px]">
+                            <span>Mão Dir: <strong class="text-amber-400">${curStep.rh || 'p'}</strong></span>
+                            <span>Mão Esq: <strong class="text-cyan-400">${curStep.lh || '—'}</strong></span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    function toggleModalLoop() {
+        state.modalTrainer.isLooping = !state.modalTrainer.isLooping;
+        saveViolaState();
+        updateModalUIState();
+    }
+
+    function setModalSpeed(speed) {
+        state.modalTrainer.playbackSpeed = speed;
+        saveViolaState();
+        updateModalUIState();
+    }
+
+    function updateModalUIState() {
+        const playBtn = document.getElementById('btn-viola-modal-play');
+        if (playBtn) {
+            playBtn.className = state.modalTrainer.isPlaying
+                ? 'min-h-[40px] px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-lg'
+                : 'min-h-[40px] px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow-lg';
+            playBtn.innerHTML = state.modalTrainer.isPlaying
+                ? '<i data-lucide="pause" class="w-4 h-4"></i><span>Pausar</span>'
+                : '<i data-lucide="play" class="w-4 h-4"></i><span>Tocar Exercício</span>';
+            if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(playBtn);
+        }
+
+        const loopBtn = document.getElementById('btn-viola-modal-loop');
+        if (loopBtn) {
+            loopBtn.className = state.modalTrainer.isLooping
+                ? 'min-h-[40px] px-3 py-1.5 rounded-lg bg-rose-600/25 border border-rose-400 text-rose-200 text-xs font-mono font-semibold flex items-center gap-1 transition'
+                : 'min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 text-xs font-mono flex items-center gap-1 transition';
+        }
+
+        [0.5, 0.75, 1.0, 1.2].forEach((spd) => {
+            const btn = document.getElementById(`btn-viola-modal-speed-${Math.round(spd * 100)}`);
+            if (btn) {
+                const isActive = Math.abs((state.modalTrainer.playbackSpeed || 1.0) - spd) < 0.05;
+                btn.className = isActive
+                    ? 'px-2 py-1 text-[11px] font-mono rounded bg-rose-600 text-white font-bold shadow'
+                    : 'px-2 py-1 text-[11px] font-mono rounded bg-slate-800 text-slate-400 hover:text-slate-200';
+            }
+        });
+    }
+
+    function playModalScalePreview() {
+        stopScalePlayback();
+        stopModalPlayback();
+        stopProgressionPlayback();
+        stopPonteioPlayback();
+        stopTabEditorPlayback();
+
+        const modalCfg = MODAL_SCALES[state.modalTrainer.modeId] || MODAL_SCALES.lydian;
+        const rootPc = state.modalTrainer.rootPc;
+        const inst = INSTRUMENTS[state.instrumentId];
+
+        const notes = modalCfg.intervals.concat([12]);
+        notes.forEach((interval, idx) => {
+            const pc = (rootPc + interval) % 12;
+            const prefC = interval === 12 ? 0 : (idx < 3 ? Math.min(3, inst.courses.length - 1) : 1);
+            const pos = findBestFretForPitch(inst, pc, prefC, 0, 12);
+
+            const timer = setTimeout(() => {
+                playCourseAtFret(pos.c, pos.f, 0);
+                flashFretCell(pos.c, pos.f, 0);
+            }, idx * 240);
+            activeModalTimers.push(timer);
+        });
+    }
+
+    function playGeneratingChord(chordName) {
+        stopModalPlayback();
+        const inst = INSTRUMENTS[state.instrumentId];
+        const rootLetter = chordName.replace(/m|7/g, '');
+        const rootPc = NOTE_NAMES.indexOf(rootLetter);
+        if (rootPc < 0) return;
+
+        const isMinor = chordName.includes('m') && !chordName.includes('maj');
+        const pitchClasses = isMinor ? [rootPc, (rootPc + 3) % 12, (rootPc + 7) % 12] : [rootPc, (rootPc + 4) % 12, (rootPc + 7) % 12];
+        const shape = solveAlgorithmicVoicing(inst, rootPc, pitchClasses, 0);
+
+        shape.forEach((fret, cIdx) => {
+            if (fret >= 0) {
+                playCourseAtFret(cIdx, fret, cIdx * 0.022);
+                flashFretCell(cIdx, fret, cIdx * 0.022);
+            }
+        });
+    }
+
+    function renderModalScalesSection() {
+        const container = document.getElementById('viola-modal-trainer-container');
+        if (!container) return;
+
+        const activeMode = MODAL_SCALES[state.modalTrainer.modeId] || MODAL_SCALES.lydian;
+        const inst = INSTRUMENTS[state.instrumentId];
+        const rootPc = state.modalTrainer.rootPc;
+        const rootName = NOTE_NAMES[rootPc];
+        const exerciseSteps = computeModalExerciseSteps(state.modalTrainer.modeId, rootPc, state.modalTrainer.activeExerciseId, inst);
+
+        // Calcula notas do modo na tônica ativa
+        const modeNotes = activeMode.intervals.map((semi, idx) => {
+            const pc = (rootPc + semi) % 12;
+            const deg = activeMode.degreeNames[idx];
+            const isChar = activeMode.characteristicIntervals.includes(semi);
+            const isRoot = semi === 0;
+            return {
+                deg,
+                name: NOTE_NAMES[pc],
+                namePT: NOTE_NAMES_PT[pc],
+                isChar,
+                isRoot
+            };
+        });
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 sm:p-5 space-y-4 shadow-xl">
+                <!-- Cabeçalho e Apresentação -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-rose-500/15 text-rose-300 border border-rose-500/30">Fase 8 Concluída</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Modos Litúrgicos &amp; Folclóricos</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Treinador Guiado de Digitação &amp; Braço SVG</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-wider font-mono mt-1 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-rose-400"></i>
+                            Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio, Dórico &amp; Nordestino)
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Explore a riqueza modal do sertão brasileiro: mapeamento sonoro nas 14 casas com diferenciação cromática de notas características, tríades geradoras, exercícios guiados e suporte nativo ao modo Canhoto/Destro</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-modal-preview-scale" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-rose-600/15 hover:bg-rose-600/25 border border-rose-500/40 text-rose-300 font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="music-2" class="w-3.5 h-3.5"></i>
+                            <span>Ouvir Escala Modal</span>
+                        </button>
+                        <button type="button" id="btn-viola-modal-to-fretboard" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span>Ver no Braço SVG</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Galeria dos 6 Modos Caipiras -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                        <span class="uppercase tracking-wider font-bold text-[11px] text-slate-300">Escolha o Modo do Sertão:</span>
+                        <span class="text-slate-500">Clique para selecionar e atualizar teoria &amp; shapes</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2">
+                        ${Object.values(MODAL_SCALES).map((m) => {
+                            const isSelected = m.id === state.modalTrainer.modeId;
+                            return `
+                                <div data-select-modal="${m.id}" class="rounded-xl p-3 flex flex-col justify-between transition cursor-pointer border ${isSelected ? 'border-rose-500 bg-rose-500/10 ring-1 ring-rose-500/50 shadow-md' : 'border-slate-800 bg-[#090d16] hover:border-slate-700'}">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border uppercase font-bold tracking-wider ${m.badgeColor}">
+                                                ${m.badge}
+                                            </span>
+                                            <span class="text-[10px] font-mono font-bold ${isSelected ? 'text-rose-400' : 'text-slate-500'}">
+                                                ${m.characteristicDegrees.join(' & ')}
+                                            </span>
+                                        </div>
+                                        <h4 class="text-xs font-bold font-mono text-slate-100 truncate mt-1">${m.name}</h4>
+                                        <p class="text-[10px] text-slate-400 leading-snug line-clamp-2">${m.subtitle}</p>
+                                    </div>
+                                    <div class="pt-2 mt-2 border-t border-slate-800/80">
+                                        <button type="button" data-modal-btn="${m.id}" class="w-full py-1 rounded-md text-[11px] font-mono font-bold transition flex items-center justify-center gap-1 ${isSelected ? 'bg-rose-600 text-white shadow' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'}">
+                                            <i data-lucide="${isSelected ? 'check' : 'play-circle'}" class="w-3 h-3"></i>
+                                            <span>${isSelected ? 'Ativo' : 'Praticar'}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Barra de Configuração: Tônica & Filtro de Região do Braço -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div>
+                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Tônica Fundamental</label>
+                            <select id="viola-modal-root-select" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-emerald-300 font-mono text-xs font-bold focus:border-rose-400 outline-none cursor-pointer">
+                                ${MODAL_ROOTS.map((r) => `
+                                    <option value="${r.pc}" ${r.pc === rootPc ? 'selected' : ''}>
+                                        ${r.label}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-0.5">Filtro de Região / Shapes do Braço</label>
+                            <select id="viola-modal-region-filter" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-slate-200 font-mono text-xs focus:border-rose-400 outline-none cursor-pointer">
+                                <option value="FULL_NECK" ${state.modalTrainer.regionFilter === 'FULL_NECK' ? 'selected' : ''}>Braço Completo (Casas 0 a 14)</option>
+                                <option value="SHAPE_OPEN" ${state.modalTrainer.regionFilter === 'SHAPE_OPEN' ? 'selected' : ''}>Posição Aberta (Casas 0 a 4)</option>
+                                <option value="SHAPE_MID" ${state.modalTrainer.regionFilter === 'SHAPE_MID' ? 'selected' : ''}>Meio do Braço (Casas 4 a 9)</option>
+                                <option value="SHAPE_HIGH" ${state.modalTrainer.regionFilter === 'SHAPE_HIGH' ? 'selected' : ''}>Ponteios Agudos (Casas 9 a 14)</option>
+                                <option value="CHARACTERISTIC_ONLY" ${state.modalTrainer.regionFilter === 'CHARACTERISTIC_ONLY' ? 'selected' : ''}>Apenas Notas Características &amp; Tríades</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Ficha Resumo do Modo Ativo -->
+                    <div class="flex items-center gap-2">
+                        <div class="px-3 py-1 rounded-lg bg-[#0f172a] border border-slate-800 text-xs font-mono">
+                            <span class="text-slate-500">Nota Característica:</span>
+                            <strong class="text-rose-400 ml-1">${activeMode.charDegreeLabel}</strong>
+                        </div>
+                        <div class="px-3 py-1 rounded-lg bg-[#0f172a] border border-slate-800 text-xs font-mono">
+                            <span class="text-slate-500">Tom:</span>
+                            <strong class="text-emerald-300 ml-1">${rootName} ${activeMode.name}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Teórico-Clínico & Musicologia do Sertão -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="text-base font-bold text-slate-100 font-mono">${rootName} ${activeMode.name}</h4>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider ${activeMode.badgeColor}">
+                                    ${activeMode.badge}
+                                </span>
+                            </div>
+                            <p class="text-xs text-rose-300/90 font-medium mt-0.5">${activeMode.subtitle}</p>
+                        </div>
+                        <div class="text-left sm:text-right text-xs font-mono text-slate-400">
+                            <span class="text-slate-500 block text-[10px] uppercase">Tradição Folclórica</span>
+                            <span class="text-slate-300">${activeMode.folkContext}</span>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-300 leading-relaxed">${activeMode.description}</p>
+
+                    <!-- Notas Formadoras & Graus -->
+                    <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">Notas Formadoras &amp; Graus no Tom de ${rootName}:</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                            ${modeNotes.map((nt) => `
+                                <div class="px-2.5 py-1.5 rounded-lg bg-[#0f172a] border ${nt.isChar ? 'border-rose-500/50 bg-rose-500/10' : (nt.isRoot ? 'border-emerald-500/50 bg-emerald-500/10' : 'border-slate-800')} flex flex-col items-center justify-center font-mono">
+                                    <div class="text-[10px] ${nt.isChar ? 'text-rose-400 font-bold' : (nt.isRoot ? 'text-emerald-400 font-bold' : 'text-slate-500')}">
+                                        Grau ${nt.deg} ${nt.isChar ? '★' : ''}
+                                    </div>
+                                    <div class="text-sm font-bold text-slate-100">${nt.name}</div>
+                                    <div class="text-[9px] text-slate-400">${nt.namePT}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Acordes Geradores e Característicos -->
+                    <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="uppercase tracking-wider text-slate-400 font-semibold">Harmonia Geradora (Clique para ouvir o arpejo):</span>
+                            <span class="text-slate-500">Ressonância no braço</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            ${activeMode.generatingChords.map((ch) => `
+                                <button type="button" data-play-chord="${ch.name}" class="px-3 py-2 rounded-lg bg-[#0f172a] border border-slate-800 hover:border-amber-500/50 text-left transition group flex items-center justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-amber-300 font-bold">${ch.roman}</span>
+                                            <strong class="text-sm font-bold font-mono text-slate-100 group-hover:text-amber-300 transition">${ch.name}</strong>
+                                        </div>
+                                        <span class="text-[10px] text-slate-400 block mt-0.5">${ch.namePT}</span>
+                                    </div>
+                                    <i data-lucide="volume-2" class="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition shrink-0"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Dica do Mestre Violeiro -->
+                    <div class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-xs flex items-start gap-2.5">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <span class="font-bold text-rose-300 font-mono uppercase tracking-wider text-[11px]">Dica do Mestre Violeiro:</span>
+                            <p class="text-slate-300 mt-0.5">${activeMode.techniqueTip}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo de Exercícios Guiados de Digitação & Fraseados -->
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                                <i data-lucide="list-music" class="w-4 h-4 text-rose-400"></i>
+                                Exercícios Guiados de Digitação &amp; Fraseados Caipiras
+                            </h4>
+                            <p class="text-[11px] text-slate-400">Pratique com reprodução sincronizada ao braço SVG em andamentos escalonados</p>
+                        </div>
+
+                        <!-- Abas dos Exercícios -->
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            ${Object.values(MODAL_EXERCISES_INFO).map((ex) => {
+                                const isSelected = ex.id === state.modalTrainer.activeExerciseId;
+                                return `
+                                    <button type="button" data-modal-ex-tab="${ex.id}" class="px-2.5 py-1 rounded-md text-xs font-mono font-medium border transition ${
+                                        isSelected
+                                            ? 'bg-rose-600 text-white border-rose-500 shadow'
+                                            : 'bg-[#090d16] border-slate-800 text-slate-400 hover:text-slate-200'
+                                    }">
+                                        ${ex.title}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Barra de Transporte do Exercício -->
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="btn-viola-modal-play" class="min-h-[40px] px-4 py-1.5 rounded-lg ${state.modalTrainer.isPlaying ? 'bg-amber-500 hover:bg-amber-400 text-slate-950' : 'bg-rose-600 hover:bg-rose-500 text-white'} font-mono text-xs font-bold flex items-center gap-1.5 transition shadow-lg">
+                                <i data-lucide="${state.modalTrainer.isPlaying ? 'pause' : 'play'}" class="w-4 h-4"></i>
+                                <span>${state.modalTrainer.isPlaying ? 'Pausar' : 'Tocar Exercício'}</span>
+                            </button>
+
+                            <button type="button" id="btn-viola-modal-stop" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-rose-300 font-mono text-xs font-medium flex items-center gap-1.5 transition">
+                                <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                                <span>Resetar</span>
+                            </button>
+
+                            <div class="inline-flex rounded-lg bg-slate-800/80 border border-slate-700 p-0.5" role="group">
+                                <button type="button" id="btn-viola-modal-step-prev" title="Nota Anterior" class="min-h-[36px] px-2.5 py-1 text-slate-300 hover:text-rose-300 hover:bg-slate-700/60 rounded-md font-mono text-xs flex items-center gap-1 transition">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                    <span>Anterior</span>
+                                </button>
+                                <button type="button" id="btn-viola-modal-step-next" title="Próxima Nota" class="min-h-[36px] px-2.5 py-1 text-slate-300 hover:text-rose-300 hover:bg-slate-700/60 rounded-md font-mono text-xs flex items-center gap-1 transition">
+                                    <span>Próxima</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <button type="button" id="btn-viola-modal-loop" class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.modalTrainer.isLooping ? 'bg-rose-600/25 border border-rose-400 text-rose-200' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                                <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                                <span>Loop ${state.modalTrainer.isLooping ? 'Ligado' : 'Desligado'}</span>
+                            </button>
+                        </div>
+
+                        <!-- Velocidades Didáticas -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono text-slate-400">Andamento:</span>
+                            <div class="inline-flex rounded-lg bg-slate-800/80 border border-slate-700 p-0.5" role="group">
+                                <button type="button" id="btn-viola-modal-speed-50" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.modalTrainer.playbackSpeed - 0.5) < 0.05 ? 'bg-rose-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">50% Lento</button>
+                                <button type="button" id="btn-viola-modal-speed-75" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.modalTrainer.playbackSpeed - 0.75) < 0.05 ? 'bg-rose-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">75%</button>
+                                <button type="button" id="btn-viola-modal-speed-100" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.modalTrainer.playbackSpeed - 1.0) < 0.05 ? 'bg-rose-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">100% Real</button>
+                                <button type="button" id="btn-viola-modal-speed-120" class="px-2 py-1 rounded text-[11px] font-mono transition ${Math.abs(state.modalTrainer.playbackSpeed - 1.2) < 0.05 ? 'bg-rose-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'}">120% Mestre</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ficha da Nota / Passo em Foco -->
+                    <div id="viola-modal-active-step-info" class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs"></div>
+
+                    <!-- Régua Visual Horizontal com Todos os Passos do Exercício -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span class="flex items-center gap-1.5">
+                                <i data-lucide="music" class="w-3.5 h-3.5 text-rose-400"></i>
+                                <span>Sequência das Notas (Clique em qualquer passo para soar a nota e iluminar no braço):</span>
+                            </span>
+                            <span class="text-[11px] text-slate-500">Destaque rosa = Nota Característica do Modo</span>
+                        </div>
+
+                        <div class="bg-[#070b12] border border-slate-800 rounded-xl p-3 flex overflow-x-auto shadow-inner custom-scrollbar" id="viola-modal-steps-ribbon" style="scrollbar-width: thin; scrollbar-color: #f43f5e #090d16;">
+                            <div class="flex items-stretch gap-1.5 shrink-0">
+                                ${exerciseSteps.map((st, idx) => {
+                                    const isCurrent = state.modalTrainer.currentStepIdx === idx;
+                                    const isChar = st.isCharacteristic;
+                                    const isRoot = st.isRoot;
+
+                                    return `
+                                        <div data-modal-step="${idx}" class="flex flex-col items-center justify-between min-w-[54px] sm:min-w-[62px] p-2 rounded-xl border ${
+                                            isCurrent
+                                                ? 'bg-rose-500/25 border-rose-400 ring-2 ring-rose-400/50 shadow-[0_0_15px_rgba(244,63,94,0.45)]'
+                                                : (isChar
+                                                    ? 'bg-rose-950/20 border-rose-500/40 hover:border-rose-400'
+                                                    : (isRoot
+                                                        ? 'bg-emerald-950/20 border-emerald-500/40 hover:border-emerald-400'
+                                                        : 'border-slate-800 bg-[#090d16] hover:border-slate-700'))
+                                        } cursor-pointer transition select-none group text-center" title="${st.ann}">
+                                            <div class="text-[10px] font-mono font-bold ${isChar ? 'text-rose-400' : (isRoot ? 'text-emerald-400' : 'text-slate-500')}">
+                                                ${st.degree} ${isChar ? '★' : ''}
+                                            </div>
+
+                                            <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm font-mono my-1 border ${
+                                                isChar
+                                                    ? 'bg-rose-600/30 text-rose-200 border-rose-500/60 shadow-sm'
+                                                    : (isRoot
+                                                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500/60 shadow-sm'
+                                                        : 'bg-slate-800 text-slate-200 border-slate-700')
+                                            }">
+                                                ${st.noteName}
+                                            </div>
+
+                                            <div class="text-[10px] font-mono text-slate-400 space-y-0.5">
+                                                <div class="font-bold ${isChar ? 'text-rose-300' : 'text-cyan-300'}">
+                                                    ${st.notes ? `P.1+2` : `${st.c + 1}ºP c.${st.f}`}
+                                                </div>
+                                                <div class="text-[9px] text-slate-500">
+                                                    M.Dir: ${st.rh}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (global.VaultCore && global.VaultCore.refreshIcons) global.VaultCore.refreshIcons(container);
+
+        // Bind events dos seletores de modo
+        container.querySelectorAll('[data-select-modal]').forEach((card) => {
+            card.addEventListener('click', () => {
+                const modeId = card.getAttribute('data-select-modal');
+                if (modeId && MODAL_SCALES[modeId]) {
+                    stopModalPlayback();
+                    state.modalTrainer.modeId = modeId;
+                    state.modalTrainer.currentStepIdx = 0;
+                    state.displayMode = 'MODAL';
+                    saveViolaState();
+                    renderModalScalesSection();
+                    renderFretboardSVG();
+                }
+            });
+        });
+
+        // Tônica
+        const rootSel = document.getElementById('viola-modal-root-select');
+        if (rootSel) {
+            rootSel.addEventListener('change', (e) => {
+                stopModalPlayback();
+                state.modalTrainer.rootPc = parseInt(e.target.value, 10);
+                state.modalTrainer.currentStepIdx = 0;
+                saveViolaState();
+                renderModalScalesSection();
+                renderFretboardSVG();
+            });
+        }
+
+        // Filtro de Região do Braço
+        const regionSel = document.getElementById('viola-modal-region-filter');
+        if (regionSel) {
+            regionSel.addEventListener('change', (e) => {
+                state.modalTrainer.regionFilter = e.target.value;
+                saveViolaState();
+                renderFretboardSVG();
+            });
+        }
+
+        // Abas dos Exercícios
+        container.querySelectorAll('[data-modal-ex-tab]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                stopModalPlayback();
+                const exId = btn.getAttribute('data-modal-ex-tab');
+                state.modalTrainer.activeExerciseId = exId;
+                state.modalTrainer.currentStepIdx = 0;
+                saveViolaState();
+                renderModalScalesSection();
+                renderFretboardSVG();
+            });
+        });
+
+        // Botão Ouvir Escala Modal
+        const previewBtn = document.getElementById('btn-viola-modal-preview-scale');
+        if (previewBtn) previewBtn.addEventListener('click', playModalScalePreview);
+
+        // Botão Ver no Braço SVG
+        const toFretBtn = document.getElementById('btn-viola-modal-to-fretboard');
+        if (toFretBtn) {
+            toFretBtn.addEventListener('click', () => {
+                state.displayMode = 'MODAL';
+                saveViolaState();
+                renderFretboardSVG();
+                syncControlValues();
+                const wrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+
+        // Player do Exercício
+        const playBtn = document.getElementById('btn-viola-modal-play');
+        if (playBtn) playBtn.addEventListener('click', playModalPlayback);
+
+        const stopBtn = document.getElementById('btn-viola-modal-stop');
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => {
+                stopModalPlayback();
+                state.modalTrainer.currentStepIdx = 0;
+                highlightModalStep(0);
+                renderFretboardSVG();
+            });
+        }
+
+        const stepPrevBtn = document.getElementById('btn-viola-modal-step-prev');
+        if (stepPrevBtn) stepPrevBtn.addEventListener('click', () => stepModalExercise(-1));
+
+        const stepNextBtn = document.getElementById('btn-viola-modal-step-next');
+        if (stepNextBtn) stepNextBtn.addEventListener('click', () => stepModalExercise(1));
+
+        const loopBtn = document.getElementById('btn-viola-modal-loop');
+        if (loopBtn) loopBtn.addEventListener('click', toggleModalLoop);
+
+        [0.5, 0.75, 1.0, 1.2].forEach((spd) => {
+            const btn = document.getElementById(`btn-viola-modal-speed-${Math.round(spd * 100)}`);
+            if (btn) btn.addEventListener('click', () => setModalSpeed(spd));
+        });
+
+        // Clicabilidade nos passos da régua
+        container.querySelectorAll('[data-modal-step]').forEach((col) => {
+            col.addEventListener('click', () => {
+                const idx = parseInt(col.getAttribute('data-modal-step'), 10);
+                jumpToModalStep(idx);
+            });
+        });
+
+        // Botões de arpejo de acordes geradores
+        container.querySelectorAll('[data-play-chord]').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const ch = btn.getAttribute('data-play-chord');
+                if (ch) playGeneratingChord(ch);
+            });
+        });
+
+        highlightModalStep(state.modalTrainer.currentStepIdx >= 0 ? state.modalTrainer.currentStepIdx : 0);
     }
 
     // =========================================================================
@@ -5602,6 +7205,78 @@
                     }
                 });
             }
+        } else if (state.displayMode === 'MODAL') {
+            const modalCfg = MODAL_SCALES[state.modalTrainer.modeId] || MODAL_SCALES.lydian;
+            const rootPc = state.modalTrainer.rootPc;
+            const region = state.modalTrainer.regionFilter || 'FULL_NECK';
+            const curStepIdx = state.modalTrainer.currentStepIdx;
+            const exerciseSteps = computeModalExerciseSteps(state.modalTrainer.modeId, rootPc, state.modalTrainer.activeExerciseId, inst);
+            const activeStep = (curStepIdx >= 0 && exerciseSteps && exerciseSteps[curStepIdx]) ? exerciseSteps[curStepIdx] : null;
+
+            inst.courses.forEach((c, cIdx) => {
+                for (let f = 0; f <= maxFret; f++) {
+                    if (region === 'SHAPE_OPEN' && (f < 0 || f > 4)) continue;
+                    if (region === 'SHAPE_MID' && (f < 4 || f > 9)) continue;
+                    if (region === 'SHAPE_HIGH' && (f < 9 || f > 14)) continue;
+
+                    const pc = (c.pitchClass + f) % 12;
+                    const interval = (pc - rootPc + 12) % 12;
+                    const degreeIdx = modalCfg.intervals.indexOf(interval);
+
+                    if (degreeIdx >= 0) {
+                        const degName = modalCfg.degreeNames[degreeIdx];
+                        const isChar = modalCfg.characteristicIntervals.includes(interval);
+                        const isRoot = interval === 0;
+                        const isThird = interval === 3 || interval === 4;
+                        const isFifth = interval === 7;
+
+                        if (region === 'CHARACTERISTIC_ONLY' && !isRoot && !isChar && !isThird && !isFifth) {
+                            continue;
+                        }
+
+                        const isActiveStepNote = activeStep && (
+                            (activeStep.notes && activeStep.notes.some((n) => n.c === cIdx && n.f === f)) ||
+                            (activeStep.c === cIdx && activeStep.f === f)
+                        );
+
+                        let color = '#818cf8';
+                        let stroke = '#090d16';
+                        let strokeWidth = 2;
+                        let opacity = activeStep ? (isActiveStepNote ? '1' : '0.36') : '1';
+
+                        if (isRoot) {
+                            color = '#10b981';
+                            stroke = '#f59e0b';
+                            strokeWidth = 3.2;
+                        } else if (isChar) {
+                            color = '#ec4899';
+                            stroke = '#ffffff';
+                            strokeWidth = 3;
+                        } else if (isThird) {
+                            color = '#06b6d4';
+                        } else if (isFifth) {
+                            color = '#f59e0b';
+                        }
+
+                        if (isActiveStepNote) {
+                            stroke = '#ffffff';
+                            strokeWidth = 3.8;
+                            opacity = '1';
+                        }
+
+                        activeMarkers.push({
+                            courseIdx: cIdx,
+                            fret: f,
+                            label: NOTE_NAMES[pc],
+                            sub: isChar ? `★${degName}` : degName,
+                            color,
+                            stroke,
+                            strokeWidth,
+                            opacity
+                        });
+                    }
+                }
+            });
         }
 
         // Construção SVG
@@ -6238,6 +7913,15 @@
                     projects: JSON.parse(JSON.stringify(DEFAULT_TAB_EDITOR_PROJECTS))
                 });
             }
+
+            if (saved.modalTrainer && typeof saved.modalTrainer === 'object') {
+                state.modalTrainer = Object.assign({}, DEFAULT_MODAL_TRAINER_STATE, saved.modalTrainer, {
+                    isPlaying: false,
+                    currentStepIdx: -1
+                });
+            } else {
+                state.modalTrainer = Object.assign({}, DEFAULT_MODAL_TRAINER_STATE);
+            }
         }
     }
 
@@ -6257,6 +7941,12 @@
         if (copy.tabEditor) {
             copy.tabEditor = Object.assign({}, copy.tabEditor, {
                 isPlaying: false
+            });
+        }
+        if (copy.modalTrainer) {
+            copy.modalTrainer = Object.assign({}, copy.modalTrainer, {
+                isPlaying: false,
+                currentStepIdx: -1
             });
         }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
@@ -6334,10 +8024,12 @@
                                 <button type="button" id="btn-viola-mode-reverse" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🔍 Buscador Reverso</button>
                                 <button type="button" id="btn-viola-mode-ponteio" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎼 Tablatura &amp; Ponteios</button>
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
+                                <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>Tônica</span>
+                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>Nota Caract.</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>Terça</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Quinta</span>
                             <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>Sétima / Sexta</span>
@@ -6496,6 +8188,9 @@
 
                 <!-- Módulo de Gerador, Editor e Exportador de Tablaturas e Cifras Caipiras (Fase 7) -->
                 <div id="viola-tab-editor-container" class="space-y-4"></div>
+
+                <!-- Módulo de Treinador de Escalas Modais Caipiras (Fase 8) -->
+                <div id="viola-modal-trainer-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -6675,6 +8370,12 @@
                     ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-violet-500 text-white shadow'
                     : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
             }
+            const btnModeModal = document.getElementById('btn-viola-mode-modal');
+            if (btnModeModal) {
+                btnModeModal.className = state.displayMode === 'MODAL'
+                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-rose-600 text-white shadow'
+                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            }
         }
     }
 
@@ -6685,6 +8386,7 @@
         const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
         const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
         const btnModeTabEditor = document.getElementById('btn-viola-mode-tab-editor');
+        const btnModeModal = document.getElementById('btn-viola-mode-modal');
         if (btnModeChord && btnModeDuad && btnModeReverse) {
             btnModeChord.addEventListener('click', () => {
                 if (state.displayMode !== 'CHORD') {
@@ -6692,6 +8394,7 @@
                     stopPonteioPlayback();
                     stopProgressionPlayback();
                     stopTabEditorPlayback();
+                    stopModalPlayback();
                     state.displayMode = 'CHORD';
                     saveViolaState();
                     renderAll();
@@ -6703,6 +8406,7 @@
                     stopPonteioPlayback();
                     stopProgressionPlayback();
                     stopTabEditorPlayback();
+                    stopModalPlayback();
                     state.displayMode = 'DUAD';
                     saveViolaState();
                     renderAll();
@@ -6714,6 +8418,7 @@
                     stopPonteioPlayback();
                     stopProgressionPlayback();
                     stopTabEditorPlayback();
+                    stopModalPlayback();
                     state.displayMode = 'REVERSE';
                     saveViolaState();
                     renderAll();
@@ -6726,6 +8431,7 @@
                         stopScalePlayback();
                         stopProgressionPlayback();
                         stopTabEditorPlayback();
+                        stopModalPlayback();
                         state.displayMode = 'PONTEIO';
                         saveViolaState();
                         renderAll();
@@ -6741,11 +8447,28 @@
                         stopPonteioPlayback();
                         stopProgressionPlayback();
                         stopTabEditorPlayback();
+                        stopModalPlayback();
                         state.displayMode = 'TAB_EDITOR';
                         saveViolaState();
                         renderAll();
                         const edWrap = document.getElementById('viola-tab-editor-container');
                         if (edWrap) edWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+            if (btnModeModal) {
+                btnModeModal.addEventListener('click', () => {
+                    if (state.displayMode !== 'MODAL') {
+                        stopScalePlayback();
+                        stopPonteioPlayback();
+                        stopProgressionPlayback();
+                        stopTabEditorPlayback();
+                        stopModalPlayback();
+                        state.displayMode = 'MODAL';
+                        saveViolaState();
+                        renderAll();
+                        const mWrap = document.getElementById('viola-modal-trainer-container');
+                        if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             }
@@ -6792,6 +8515,8 @@
             stopScalePlayback();
             stopPonteioPlayback();
             stopProgressionPlayback();
+            stopTabEditorPlayback();
+            stopModalPlayback();
             stopTunerTone();
             stopEarTrainerAudio();
             state.instrumentId = e.target.value;
@@ -7028,6 +8753,7 @@
         renderProgressionStudyPanel();
         renderPonteiosSection();
         renderTabEditorSection();
+        renderModalScalesSection();
         renderMetronomeControls();
     }
 

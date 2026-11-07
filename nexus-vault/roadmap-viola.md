@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 8 — Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio e Dórico na Viola)
+## 🎯 Projeto Prioritário Atual: Fase 9 — Analisador de Tensão Mecânica e Calibre de Cordas (String Tension & Action Calculator)
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Mapeamento sonoro e visual completo dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço do instrumento (Viola Cebolão em Mi/Ré, Rio Abaixo e Violão 6C): Modo Lídio (quarta aumentada, sonoridade mística das folias e cantigas mineiras), Modo Mixolídio (sétima menor, baião, catira e repente nordestino) e Modo Dórico (terça menor com sexta maior, lamento sertanejo do Cariri).
-  2. Visualização em shapes de digitação contínuos ao longo das 14 casas com diferenciação cromática de graus modais, notas características e tríades geradoras.
-  3. Exercícios guiados de digitação, saltos de oitava e improvisação caipira com reprodução Web Audio em andamentos escalonados e modo Canhoto nativo.
+  1. Cálculo de tensão mecânica em quilograma-força (kgf) e Newtons por corda/par para encordoamentos de aço e nylon em afinações Cebolão em Mi, Cebolão em Ré, Rio Abaixo, Boiadeira e Violão 6 cordas.
+  2. Diagnóstico lutherístico de sobretensão e fadiga estrutural do tampo harmônico, empenamento de cavalete e esforço axial no braço da viola.
+  3. Simulador de ação de cordas (altura em milímetros nos trastes 1 e 12) com recomendações de ajuste de pestana (nut) e rastilho em osso para tocadores canhotos e destros.
 
 ---
 
@@ -28,16 +28,69 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Mapeamento e reprodução passo a passo de 10 clássicos em terças e sextas com visualização sincronizada no braço SVG, tablatura digital interativa com dedilhado de mão direita e controle de andamento didático.
 5. **[x] Gerador / Editor e Exportador de Tablaturas e Cifras Caipiras (Fase 7 Concluída):**
    - Motor completo de criação, edição e composição de tablaturas para Viola Caipira (5 pares) e Violão (6 cordas), integração bidirecional com o braço SVG, técnicas caipiras em 1 clique (Tap, Rasq, Terças e Sextas), reprodutor Web Audio, exportação multiformato (ASCII formatado e Canvas HD PNG / Impressão PDF) e persistência de múltiplos projetos no cofre.
-6. **[ ] Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio e Dórico na Viola) (Fase 8):**
-   - Mapeamento sonoro e visual dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço do instrumento.
-7. **[ ] Analisador de Tensão e Calibre de Cordas (String Tension & Action Calculator):**
+6. **[x] Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio, Dórico & Nordestino na Viola e Violão) (Fase 8 Concluída):**
+   - Mapeamento sonoro e visual completo dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço SVG, diferenciação cromática de notas características, 5 exercícios guiados por modo, sequenciador Web Audio API e filtros de região do braço.
+7. **[ ] Analisador de Tensão e Calibre de Cordas (String Tension & Action Calculator) (Fase 9):**
    - Cálculo de tensão mecânica em kgf por par para cordas de aço e nylon em afinações Cebolão, Rio Abaixo e Boiadeira com alertas de fadiga do tampo e regulagem de cavalete.
 8. **[ ] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço):**
    - Expansão lutherística com novos temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão goiano.
+9. **[ ] Gerador de Modulações & Preparação Harmônica Caipira:**
+   - Ferramenta de transição tonal com acordes de preparação em dois tempos, pestanas móveis e dominantes secundárias típicas de duplas sertanejas clássicas.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **07/11/2026 — Sessão 8** (Fase 8 Concluída):
+  - **Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio, Dórico, Nordestino, Jônio e Eólio)**:
+    - **Mapeamento Teórico e Musicológico Completo dos Modos do Sertão**:
+      - *Modo Lídio (1, 2, 3, ♯4, 5, 6, 7)*:
+        - Nota característica: **4ª Aumentada (♯4 / trítono lídio)**.
+        - Contextualização: A mística das Folias de Reis de Minas e Goiás e introduções atmosféricas de Almir Sater. Sonoridade celestial e aberta que ressoa em harmonia pura sobre o acorde aberto do Cebolão em Mi.
+        - Harmonia geradora: Tríades I (`E`), II (`F#`) e vii menor (`D#m`).
+      - *Modo Mixolídio (1, 2, 3, 4, 5, 6, ♭7)*:
+        - Nota característica: **7ª Menor (♭7)**.
+        - Contextualização: A alma rítmica do Cururu, Pagode de Viola de Tião Carreiro, Cateretê paulista e repente nordestino, retirando a sensível clássica europeia e imprimindo o suingue sincopado do cerrado.
+        - Harmonia geradora: Tríades I (`E`), ♭VII (`D`) e v menor (`Bm`).
+      - *Modo Dórico (1, 2, ♭3, 4, 5, 6, ♭7)*:
+        - Notas características: **3ª Menor (♭3) e 6ª Maior (6M)**.
+        - Contextualização: O lamento sertanejo do Cariri (*Vaca Estrela e Boi Fubá*), melancolia lírica sem desespero onde a 6ª maior ilumina a dor sertaneja com esperança e dignidade existencial.
+        - Harmonia geradora: Tríades i menor (`Em`), IV maior (`A`) e ii menor (`F#m`).
+      - *Modo Nordestino / Escala Acústica (1, 2, 3, ♯4, 5, 6, ♭7)*:
+        - Notas características: **4ª Aumentada (♯4) e 7ª Menor (♭7)**.
+        - Contextualização: Fusão suprema entre o Lídio e o Mixolídio; ponteio veloz de forró pé-de-serra, aboio e literatura de cordel.
+        - Harmonia geradora: Acordes I7 (`E7`), II (`F#`) e ♭VII (`D`).
+      - *Modo Jônio (1, 2, 3, 4, 5, 6, 7)*: Referência do Cebolão aberto natural e modas festivas.
+      - *Modo Eólio (1, 2, ♭3, 4, 5, ♭6, ♭7)*: Toadas de saudade e causos noturnos no estradão.
+    - **Integração com o Braço SVG Virtual (Modo Canhoto & Destro)**:
+      - Novo botão de projeção direta no topo do braço: `🌟 Modos Caipiras` (`displayMode: 'MODAL'`).
+      - Código cromático enriquecido:
+        - Tônica (1 / T): Destaque verde esmeralda (`#10b981`) com anel dourado (`#f59e0b`).
+        - Nota Característica: Destaque neon rosa vibrante (`#ec4899`) com estrela `★` e anel branco `#ffffff`.
+        - 3ª do Modo: Ciano (`#06b6d4`).
+        - 5ª Justa: Âmbar (`#f59e0b`).
+        - Demais graus modais (2ª, 4ª, 6ª, 7ª): Roxo/Índigo (`#818cf8`).
+      - **Filtro de Regiões / Shapes do Braço**:
+        - *Braço Completo* (Casas 0 a 14)
+        - *Posição Aberta* (Casas 0 a 4)
+        - *Meio do Braço* (Casas 4 a 9)
+        - *Ponteios Agudos* (Casas 9 a 14)
+        - *Apenas Notas Características & Tríades*
+    - **Sequenciador & Reprodutor de Exercícios Web Audio API**:
+      - 5 categorias de exercícios dinâmicos calculados algorítmicamente para qualquer afinação:
+        1. *Subida & Descida Linear*: Fixação de dedilhado e digitação através dos pares.
+        2. *Foco na Nota Característica*: Frase caipira cadenciada ressaltando a cor modal.
+        3. *Arpejo da Tríade + Nota Modal*: Conexão entre o acorde de base e a melodia.
+        4. *Dueto em Terças / Sextas*: Ponteio canônico em dueto nos pares agudos.
+        5. *Fraseado Tradicional do Sertão*: Síncopes e repiques rítmicos da folia/baião/lamento.
+      - Controles didáticos: Play/Pause, Resetar, Passo a Passo (`◀ Anterior` / `Próxima ▶`), Loop contínuo e 4 velocidades (50%, 75%, 100%, 120%).
+      - Régua visual horizontal interativa com scroll suave e iluminação sincronizada das notas em tempo real no braço SVG.
+      - Clique em qualquer nota da régua para soar imediatamente e destacar no braço.
+      - Botão de audição imediata da escala completa e botões para dedilhar os acordes geradores de cada modo.
+    - **Conclusão da Interface do Editor de Tablaturas (Fase 7)**:
+      - Implementado renderizador completo de `renderTabEditorSection()` integrando grade de pauta, seletor de composições, técnicas caipiras em 1 clique e exportações.
+    - **Persistência Global no LocalStorage**:
+      - Sincronização automática do modo ativo, tônica, filtro de região e preferências via `VaultCore`.
 
 - **06/11/2026 — Sessão 7** (Fase 7 Concluída):
   - **Gerador, Editor e Exportador de Tablaturas e Diagramas de Cifras Caipiras**:
