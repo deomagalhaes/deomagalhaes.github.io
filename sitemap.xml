@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/artigos.html</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -92,13 +92,13 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/jogos.html</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/recursos.html</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -134,9 +134,15 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/testes.html</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/trilha.html</loc>
+    <lastmod>2026-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/artigos/a-arquitetura-neural-do-desamparo-aprendido.html</loc>
@@ -1352,7 +1358,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/ferramentas-clinicas/</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

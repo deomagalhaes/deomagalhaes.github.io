@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trilha de Leitura Guiada – Deo Magalhães</title>
+    <meta name="description" content="Jornada sequencial de leitura integrando neurociência comportamental, psicologia clínica e filosofia da mente por Deo Magalhães.">
+    <link rel="icon" type="image/png" href="assets/favicon2.png">
+    <link rel="stylesheet" href="assets/style.css">
+
+    <style>
+        /* Hero Imersivo da Trilha */
+        .journey-hero {
+            position: relative;
+            background-color: #001219;
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            padding: 64px 0 56px 0;
+            border-bottom: 3px solid #0a9396;
+        }
+        /* Breadcrumb no Hero da Trilha */
+        .journey-breadcrumb {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.85em;
+            color: #94d2bd;
+            margin-bottom: 18px;
+            position: static !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            width: auto !important;
+        }
+        .journey-breadcrumb a {
+            color: #cbd5e1 !important;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            padding: 0 !important;
+            border: none !important;
+            width: auto !important;
+            background: transparent !important;
+            display: inline !important;
+        }
+        .journey-breadcrumb a:hover {
+            color: #ee9b00 !important;
+            background: transparent !important;
+        }
+        .journey-breadcrumb span {
+            color: #94d2bd;
+        }
+        .journey-meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .j-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.76em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+        .j-badge-area {
+            background: rgba(10, 147, 150, 0.28);
+            color: #94d2bd;
+            border: 1px solid rgba(148, 210, 189, 0.45);
+        }
+        .j-badge-steps {
+            background: rgba(238, 155, 0, 0.22);
+            color: #ffca63;
+            border: 1px solid rgba(238, 155, 0, 0.45);
+        }
+        .j-badge-time {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .journey-hero h1 {
+            font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+            line-height: 1.2;
+            margin: 0 0 14px 0;
+            color: #ffffff;
+            max-width: 850px;
+        }
+        .journey-hero-subtitle {
+            font-size: 1.08em;
+            line-height: 1.6;
+            color: #e2e8f0;
+            max-width: 780px;
+            margin: 0 0 28px 0;
+        }
+
+        /* Painel de Progresso no Hero */
+        .journey-progress-panel {
+            background: rgba(0, 29, 38, 0.82);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 210, 189, 0.28);
+            border-radius: 14px;
+            padding: 20px 24px;
+            max-width: 780px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+        .progress-stats {
+            flex: 1 1 300px;
+        }
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .progress-pct {
+            color: #94d2bd;
+            font-weight: 700;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 9px;
+            background: rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a9396, #ee9b00);
+            border-radius: 10px;
+            transition: width 0.35s ease;
+            width: 0%;
+        }
+        .progress-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-continue-journey {
+            background: #ee9b00;
+            color: #001219;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-continue-journey:hover {
+            background: #f4a261;
+            transform: translateY(-1px);
+        }
+        .btn-reset-journey {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-reset-journey:hover {
+            color: #ffffff;
+            border-color: #cbd5e1;
+        }
+
+        /* Caixa de Racional Clínico */
+        .rationale-box {
+            background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
+            border-left: 5px solid #005f73;
+            border-radius: 0 14px 14px 0;
+            padding: 26px 30px;
+            margin: 36px 0 42px 0;
+            box-shadow: 0 4px 16px rgba(0, 95, 115, 0.06);
+        }
+        .rationale-box h2 {
+            font-size: 1.22em;
+            color: #005f73;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rationale-box p {
+            margin: 0;
+            color: #334155;
+            line-height: 1.72;
+            font-size: 0.98em;
+        }
+
+        /* Linha do Tempo Sequencial */
+        .timeline-header {
+            margin-bottom: 26px;
+        }
+        .timeline-header h2 {
+            font-size: 1.75em;
+            color: #001219;
+            margin: 0 0 6px 0;
+        }
+        .timeline-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.96em;
+        }
+
+        .journey-timeline {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 50px;
+        }
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 18px;
+            bottom: 28px;
+            width: 3px;
+            background: linear-gradient(180deg, #0a9396 0%, #cbd5e1 100%);
+            border-radius: 3px;
+        }
+
+        .step-card {
+            position: relative;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 26px 28px;
+            margin-bottom: 26px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .step-card:hover {
+            border-color: #94d2bd;
+            box-shadow: 0 10px 26px rgba(0, 95, 115, 0.09);
+        }
+        .step-card.is-completed {
+            border-color: #0a9396;
+            background: linear-gradient(180deg, #ffffff 0%, #f4fbfb 100%);
+        }
+        .step-card.is-next {
+            border-color: #ee9b00;
+            box-shadow: 0 8px 24px rgba(238, 155, 0, 0.12);
+        }
+
+        .step-marker {
+            position: absolute;
+            left: -36px;
+            top: 26px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #005f73;
+            color: #005f73;
+            font-weight: 800;
+            font-size: 0.88em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: all 0.25s ease;
+        }
+        .step-card.is-completed .step-marker {
+            background: #0a9396;
+            border-color: #0a9396;
+            color: #ffffff;
+        }
+        .step-card.is-next .step-marker {
+            background: #ee9b00;
+            border-color: #ee9b00;
+            color: #001219;
+        }
+
+        .step-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .step-role-pill {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #005f73;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.76em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .step-card.is-next .step-role-pill {
+            background: #fef3c7;
+            color: #9a3412;
+        }
+        .step-read-time {
+            font-size: 0.83em;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-size: 1.28em;
+            margin: 0 0 10px 0;
+            line-height: 1.35;
+        }
+        .step-title a {
+            color: #0f172a;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .step-title a:hover {
+            color: #005f73;
+        }
+
+        .step-summary {
+            color: #475569;
+            font-size: 0.95em;
+            line-height: 1.65;
+            margin: 0 0 16px 0;
+        }
+
+        .step-bridge {
+            background: #f8fafc;
+            border-left: 3px solid #94a3b8;
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.86em;
+            color: #475569;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        .step-bridge strong {
+            color: #005f73;
+        }
+
+        .step-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .btn-read-step {
+            background: #005f73;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.88em;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-read-step:hover {
+            background: #0a9396;
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+        .btn-toggle-complete {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 9px 16px;
+            border-radius: 25px;
+            font-size: 0.84em;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-toggle-complete:hover {
+            border-color: #0a9396;
+            color: #005f73;
+        }
+        .btn-toggle-complete.done {
+            background: #ecfdf5;
+            border-color: #10b981;
+            color: #047857;
+        }
+
+        /* Ponte Prática do Ecossistema */
+        .ecosystem-section {
+            background: #001219;
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 34px 32px;
+            margin-bottom: 50px;
+        }
+        .ecosystem-section h2 {
+            color: #ffffff;
+            font-size: 1.5em;
+            margin: 4px 0 8px 0;
+        }
+        .ecosystem-section > p {
+            color: #cbd5e1;
+            margin: 0 0 24px 0;
+            font-size: 0.95em;
+        }
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+        }
+        .eco-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(148, 210, 189, 0.22);
+            border-radius: 14px;
+            padding: 20px;
+            text-decoration: none;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+        }
+        .eco-card:hover {
+            background: rgba(255, 255, 255, 0.11);
+            border-color: #ee9b00;
+            transform: translateY(-3px);
+        }
+        .eco-type {
+            font-size: 0.72em;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94d2bd;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .eco-card h3 {
+            font-size: 1.1em;
+            color: #ffffff;
+            margin: 0 0 8px 0;
+        }
+        .eco-card p {
+            font-size: 0.86em;
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin: 0 0 14px 0;
+        }
+        .eco-cta {
+            font-size: 0.84em;
+            font-weight: 700;
+            color: #ee9b00;
+        }
+
+        /* Outras Trilhas / Diretório Geral */
+        .other-tracks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .mini-track-card {
+            border-radius: 14px;
+            overflow: hidden;
+            min-height: 240px;
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .mini-track-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 26px rgba(0,18,25,0.3);
+        }
+        .mini-track-badges {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .mini-pill {
+            background: rgba(0, 95, 115, 0.9);
+            color: #94d2bd;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.7em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .mini-steps {
+            background: rgba(0, 18, 25, 0.82);
+            color: #ffca63;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.7em;
+            font-weight: 700;
+        }
+        .mini-track-card h3 {
+            color: #ffffff;
+            font-size: 1.15em;
+            margin: 0 0 6px 0;
+            line-height: 1.35;
+        }
+        .mini-track-card p {
+            color: #e2e8f0;
+            font-size: 0.84em;
+            margin: 0 0 10px 0;
+            line-height: 1.45;
+        }
+        .mini-cta {
+            color: #ee9b00;
+            font-size: 0.83em;
+            font-weight: 700;
+        }
+
+        @media (max-width: 640px) {
+            .journey-timeline {
+                padding-left: 26px;
+            }
+            .journey-timeline::before {
+                left: 10px;
+            }
+            .step-marker {
+                left: -26px;
+                width: 26px;
+                height: 26px;
+                font-size: 0.78em;
+            }
+            .step-card {
+                padding: 20px 18px;
+            }
+            .ecosystem-section {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Bloco de Cabeçalho Padrão -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="index.html" class="logo-container">
+                <img src="assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="index.html">Home</a>
+                <a href="sobre.html">Sobre</a>
+                <a href="servicos.html">Serviços</a>
+                <a href="agendamento.html">Agendamento</a>
+                <a href="artigos.html" class="active">Artigos</a>
+                <a href="testes.html">Testes</a>
+                <a href="jogos.html">Jogos</a>
+                <a href="recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="journey-app">
+        <!-- Renderizado dinamicamente via assets/trilhas-dados.js -->
+    </main>
+
+    <!-- RODAPÉ PADRÃO -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/trilhas-dados.js"></script>
+    <script src="assets/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const app = document.getElementById('journey-app');
+        if (!app || !window.DeoTrilhas) return;
+
+        const params = new URLSearchParams(window.location.search);
+        const trackId = params.get('id');
+        const track = trackId ? window.DeoTrilhas.getTrackById(trackId) : null;
+
+        function renderAllTracksDirectory() {
+            document.title = 'Trilhas de Leitura Guiadas – Deo Magalhães';
+            const cardsHtml = window.DeoTrilhas.tracks.map(function (t) {
+                const doneCount = window.DeoTrilhas.getTrackProgress(t.id).length;
+                const stepBadge = doneCount > 0
+                    ? doneCount + '/' + t.steps.length + ' Concluídas'
+                    : 'Jornada em ' + t.steps.length + ' Etapas';
+                return (
+                    '<a href="trilha.html?id=' + t.id + '" class="mini-track-card" style="background-image: linear-gradient(180deg, rgba(0,18,25,0.28) 0%, rgba(0,18,25,0.95) 100%), url(\'' + t.coverImage + '\');">' +
+                        '<div class="mini-track-badges">' +
+                            '<span class="mini-pill">' + t.areaBadge + '</span>' +
+                            '<span class="mini-steps">' + stepBadge + '</span>' +
+                        '</div>' +
+                        '<div>' +
+                            '<h3>' + t.title + '</h3>' +
+                            '<p>' + t.shortDesc + '</p>' +
+                            '<span class="mini-cta">Iniciar Jornada →</span>' +
+                        '</div>' +
+                    '</a>'
+                );
+            }).join('');
+
+            app.innerHTML =
+                '<section class="hero">' +
+                    '<div class="container">' +
+                        '<h1>Trilhas de Leitura Guiadas</h1>' +
+                        '<p>Percursos sequenciais estruturados por Deo Magalhães para aprofundar temas complexos da base neurobiológica à integração clínica.</p>' +
+                        '<div class="hero-buttons">' +
+                            '<a href="artigos.html#todos-os-artigos" class="cta-button secondary">← Voltar ao Acervo Completo</a>' +
+                        '</div>' +
+                    '</div>' +
+                '</section>' +
+                '<section class="page-section">' +
+                    '<div class="container">' +
+                        '<div class="other-tracks-grid">' + cardsHtml + '</div>' +
+                    '</div>' +
+                '</section>';
+        }
+
+        if (!track) {
+            renderAllTracksDirectory();
+            return;
+        }
+
+        document.title = track.title + ' – Trilha de Leitura | Deo Magalhães';
+
+        function renderJourney() {
+            const completed = window.DeoTrilhas.getTrackProgress(track.id);
+            const total = track.steps.length;
+            const doneCount = completed.length;
+            const pct = Math.round((doneCount / total) * 100);
+
+            let nextStepIndex = -1;
+            for (let i = 0; i < total; i++) {
+                if (completed.indexOf(i) === -1) {
+                    nextStepIndex = i;
+                    break;
+                }
+            }
+
+            let continueBtnLabel = 'Iniciar pela Etapa 1 →';
+            if (doneCount > 0 && nextStepIndex !== -1) {
+                continueBtnLabel = 'Continuar na Etapa ' + (nextStepIndex + 1) + ' →';
+            } else if (doneCount === total) {
+                continueBtnLabel = '✓ Jornada Concluída! Revisar Etapa 1';
+            }
+
+            const stepsHtml = track.steps.map(function (step, idx) {
+                const isDone = completed.indexOf(idx) !== -1;
+                const isNext = !isDone && idx === nextStepIndex;
+                const cardClass = 'step-card' + (isDone ? ' is-completed' : '') + (isNext ? ' is-next' : '');
+                const markerContent = isDone ? '✓' : String(idx + 1);
+                const roleLabel = 'Etapa ' + (idx + 1) + ' • ' + step.role + (isNext ? ' (Próxima Leitura)' : '');
+                const toggleClass = 'btn-toggle-complete' + (isDone ? ' done' : '');
+                const toggleText = isDone ? '✓ Etapa Concluída' : '○ Marcar como Lida';
+
+                return (
+                    '<article class="' + cardClass + '" id="etapa-' + (idx + 1) + '">' +
+                        '<div class="step-marker">' + markerContent + '</div>' +
+                        '<div class="step-top-row">' +
+                            '<span class="step-role-pill">' + roleLabel + '</span>' +
+                            '<span class="step-read-time">⏱ ' + step.readTime + ' de leitura</span>' +
+                        '</div>' +
+                        '<h3 class="step-title"><a href="' + step.url + '" data-step-read="' + idx + '">' + step.title + '</a></h3>' +
+                        '<p class="step-summary">' + step.summary + '</p>' +
+                        '<div class="step-bridge"><strong>Conexão Lógica:</strong> ' + step.bridgeNote + '</div>' +
+                        '<div class="step-actions">' +
+                            '<a href="' + step.url + '" class="btn-read-step" data-step-read="' + idx + '">Ler Ensaio Completo →</a>' +
+                            '<button type="button" class="' + toggleClass + '" data-step-toggle="' + idx + '">' + toggleText + '</button>' +
+                        '</div>' +
+                    '</article>'
+                );
+            }).join('');
+
+            const ecoHtml = (track.ecosystem || []).map(function (item) {
+                return (
+                    '<a href="' + item.url + '" class="eco-card">' +
+                        '<div>' +
+                            '<div class="eco-type">' + item.type + '</div>' +
+                            '<h3>' + item.title + '</h3>' +
+                            '<p>' + item.desc + '</p>' +
+                        '</div>' +
+                        '<span class="eco-cta">' + item.cta + '</span>' +
+                    '</a>'
+                );
+            }).join('');
+
+            const otherTracks = window.DeoTrilhas.tracks.filter(function (t) { return t.id !== track.id; }).slice(0, 3);
+            const otherHtml = otherTracks.map(function (t) {
+                return (
+                    '<a href="trilha.html?id=' + t.id + '" class="mini-track-card" style="background-image: linear-gradient(180deg, rgba(0,18,25,0.28) 0%, rgba(0,18,25,0.95) 100%), url(\'' + t.coverImage + '\');">' +
+                        '<div class="mini-track-badges">' +
+                            '<span class="mini-pill">' + t.areaBadge + '</span>' +
+                            '<span class="mini-steps">Jornada em ' + t.steps.length + ' Etapas</span>' +
+                        '</div>' +
+                        '<div>' +
+                            '<h3>' + t.title + '</h3>' +
+                            '<p>' + t.shortDesc + '</p>' +
+                            '<span class="mini-cta">Explorar Trilha →</span>' +
+                        '</div>' +
+                    '</a>'
+                );
+            }).join('');
+
+            app.innerHTML =
+                '<section class="journey-hero" style="background-image: linear-gradient(90deg, rgba(0,18,25,0.95) 0%, rgba(0,18,25,0.82) 60%, rgba(0,18,25,0.68) 100%), url(\'' + track.coverImage + '\');">' +
+                    '<div class="container">' +
+                        '<div class="journey-breadcrumb" role="navigation" aria-label="Navegação estrutural">' +
+                            '<a href="artigos.html">Artigos</a> <span>›</span> ' +
+                            '<a href="artigos.html#trilhas-guiadas">Trilhas de Leitura Guiadas</a> <span>›</span> ' +
+                            '<span>' + track.areaBadge + '</span>' +
+                        '</div>' +
+                        '<div class="journey-meta-badges">' +
+                            '<span class="j-badge j-badge-area">' + track.areaBadge + '</span>' +
+                            '<span class="j-badge j-badge-steps">Jornada em ' + total + ' Etapas</span>' +
+                            '<span class="j-badge j-badge-time">⏱ ' + track.estimatedTime + '</span>' +
+                        '</div>' +
+                        '<h1>' + track.title + '</h1>' +
+                        '<p class="journey-hero-subtitle">' + track.subtitle + '</p>' +
+                        '<div class="journey-progress-panel">' +
+                            '<div class="progress-stats">' +
+                                '<div class="progress-label-row">' +
+                                    '<span>Seu progresso nesta trilha: <strong>' + doneCount + ' de ' + total + '</strong> etapas lidas</span>' +
+                                    '<span class="progress-pct">' + pct + '%</span>' +
+                                '</div>' +
+                                '<div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ' + pct + '%;"></div></div>' +
+                            '</div>' +
+                            '<div class="progress-actions">' +
+                                '<button type="button" class="btn-continue-journey" id="btn-jump-next">' + continueBtnLabel + '</button>' +
+                                (doneCount > 0 ? '<button type="button" class="btn-reset-journey" id="btn-reset-prog">Reiniciar</button>' : '') +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</section>' +
+
+                '<section class="page-section" style="padding-top: 36px;">' +
+                    '<div class="container" style="max-width: 960px;">' +
+                        '<div class="rationale-box">' +
+                            '<h2>🧭 Por que ler nesta sequência lógica?</h2>' +
+                            '<p>' + track.clinicalRationale + '</p>' +
+                        '</div>' +
+
+                        '<div class="timeline-header">' +
+                            '<h2>Percurso Passo a Passo</h2>' +
+                            '<p>Siga a ordem recomendada abaixo. Ao concluir cada leitura, marque a etapa para salvar seu avanço neste navegador.</p>' +
+                        '</div>' +
+
+                        '<div class="journey-timeline">' + stepsHtml + '</div>' +
+
+                        '<div class="ecosystem-section">' +
+                            '<span style="color: #ee9b00; font-size: 0.8em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Ponte Prática do Ecossistema</span>' +
+                            '<h2>Da Compreensão Teórica à Autoavaliação & Prática</h2>' +
+                            '<p>Complemente os conceitos estudados nesta trilha com instrumentos psicométricos interativos, laboratórios cognitivos e ferramentas clínicas gratuitas do portal:</p>' +
+                            '<div class="ecosystem-grid">' + ecoHtml + '</div>' +
+                        '</div>' +
+
+                        '<div style="border-top: 1px solid #e2e8f0; padding-top: 36px;">' +
+                            '<div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 10px;">' +
+                                '<h2 style="margin: 0; font-size: 1.5em; color: #001219;">Outras Trilhas de Leitura Guiadas</h2>' +
+                                '<a href="artigos.html" style="color: #005f73; font-weight: 700; text-decoration: none; font-size: 0.92em;">← Voltar para Todos os Artigos</a>' +
+                            '</div>' +
+                            '<div class="other-tracks-grid">' + otherHtml + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</section>';
+
+            // Eventos de alternância de conclusão
+            app.querySelectorAll('[data-step-toggle]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const idx = parseInt(btn.getAttribute('data-step-toggle'), 10);
+                    window.DeoTrilhas.toggleStepProgress(track.id, idx);
+                    renderJourney();
+                });
+            });
+
+            // Botão pular para próxima etapa
+            const jumpBtn = document.getElementById('btn-jump-next');
+            if (jumpBtn) {
+                jumpBtn.addEventListener('click', function () {
+                    const targetIdx = nextStepIndex !== -1 ? (nextStepIndex + 1) : 1;
+                    const el = document.getElementById('etapa-' + targetIdx);
+                    if (el) {
+                        const top = el.getBoundingClientRect().top + window.pageYOffset - 95;
+                        window.scrollTo({ top: top, behavior: 'smooth' });
+                    }
+                });
+            }
+
+            // Botão reiniciar progresso
+            const resetBtn = document.getElementById('btn-reset-prog');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function () {
+                    window.DeoTrilhas.resetTrackProgress(track.id);
+                    renderJourney();
+                });
+            }
+        }
+
+        renderJourney();
+    });
+    </script>
+</body>
+</html>
