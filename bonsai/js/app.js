@@ -1034,7 +1034,7 @@
     });
 
     document.getElementById('btn-top-add').onclick = () => openTreeModal(null);
-    document.getElementById('btn-pro-status').onclick = () => switchTab('settings');
+    const btnProStatus = document.getElementById('btn-pro-status'); if (btnProStatus) { btnProStatus.onclick = () => switchTab('settings'); }
 
     const btnPaywallHaveKey = document.getElementById('btn-paywall-have-key');
     if (btnPaywallHaveKey) {

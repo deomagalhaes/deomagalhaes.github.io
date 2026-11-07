@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bonsai-hub-v3.0.0';
+const CACHE_NAME = 'bonsai-hub-v3.0.1';
 const CORE_ASSETS = [
   './',
   './index.html',
