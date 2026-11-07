@@ -39,6 +39,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 30** | **Labirinto de Esforço e Custo-Benefício Cognitivo** | Avaliação de Custo-Benefício Cognitivo (EEfRT), Inibição Habenular e VTA | `jogos/jogo-esforco-custo-beneficio.html` | ✅ **Publicado** |
 | **Dia 31** | **Matriz de Fechamento Gestáltico e Conclusão de Tarefas** | Fechamento Gestáltico, Alívio da Tensão de Zeigarnik e Controle Executivo | `jogos/jogo-fechamento-gestaltico.html` | ✅ **Publicado** |
 | **Dia 32** | **Matriz de Granularidade Emocional e Diferenciação Afetiva** | Decodificação Interoceptiva, Córtex Insular Anterior e Granularidade Afetiva | `jogos/jogo-granularidade-emocional.html` | ✅ **Publicado** |
+| **Dia 33** | **Matriz de Predição Bayesiana e Decisão Sob Incerteza** | Inferência Bayesiana Ativa, Custo da Amostragem e Tolerância à Incerteza | `jogos/jogo-predicao-incerteza.html` | ✅ **Publicado** |
 
 ---
 

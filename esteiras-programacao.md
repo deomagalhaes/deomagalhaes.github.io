@@ -35,6 +35,7 @@ Cada **Rodada de Esteira (Lote de Produção)** é uma unidade autônoma e sincr
 | **Lote 19** | **A Neurobiologia da Anedonia e o Circuito Habenular:** Por Que a Frustração Crônica Desliga o Prazer | Carrossel: *O Apagão do Prazer: A Ciência da Anedonia* | **T-31:** Escala Dimensional de Anedonia e Responsividade a Recompensas | **Dia 30:** Labirinto de Esforço e Custo-Benefício Cognitivo | ✅ **Concluído** |
 | **Lote 20** | **A Neurobiologia do Efeito Zeigarnik e a Carga Cognitiva das Tarefas Inacabadas:** Por Que o Cérebro Não Consegue Desligar | Carrossel: *A Mente Inacabada: O Efeito Zeigarnik* | **T-32:** Inventário de Sobrecarga Mental e Resíduo Atencional | **Dia 31:** Matriz de Fechamento Gestáltico e Conclusão de Tarefas | ✅ **Concluído** |
 | **Lote 21** | **A Neurobiologia da Alexitimia e a Desconexão Ínsulo-Pré-Frontal:** Quando o Corpo Fala o Que as Palavras Não Alcançam | Carrossel: *O Silêncio das Emoções: A Neurociência da Alexitimia* | **T-33:** Escala de Granularidade Emocional e Alexitimia Clínica (EGEAC) | **Dia 32:** Matriz de Granularidade Emocional e Diferenciação Afetiva | ✅ **Concluído** |
+| **Lote 22** | **A Neurobiologia da Intolerância à Incerteza:** Como o Cérebro Preditivo Transforma a Dúvida em Alerta de Ameaça | Carrossel: *Por Que Não Saber Dói Tanto? A Neurociência da Intolerância à Incerteza* | **T-34:** Escala de Intolerância à Incerteza e Ansiedade Preditiva (EIU-AP) | **Dia 33:** Matriz de Predição Bayesiana e Decisão Sob Incerteza | ✅ **Concluído** |
 
 ---
 

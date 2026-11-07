@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Intolerância à Incerteza: Como o Cérebro Preditivo Transforma a Dúvida em Alerta de Ameaça** (Publicado em 07/11/2026)
 - [x] **A Neurobiologia da Alexitimia e a Desconexão Ínsulo-Pré-Frontal: Quando o Corpo Fala o Que as Palavras Não Alcançam** (Publicado em 06/11/2026)
 - [x] **A Neurobiologia do Efeito Zeigarnik e a Carga Cognitiva das Tarefas Inacabadas: Por Que o Cérebro Não Consegue Desligar** (Publicado em 06/11/2026)
 - [x] **A Neurobiologia da Anedonia e o Circuito Habenular: Por Que a Frustração Crônica Desliga o Prazer** (Publicado em 05/11/2026)

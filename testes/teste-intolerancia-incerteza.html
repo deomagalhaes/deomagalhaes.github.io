@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Intolerância à Incerteza e Ansiedade Preditiva (EIU-AP / T-34) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de intolerância à incerteza, paralisia inibitória, necessidade de controle prospectivo e reatividade interoceptiva. Teste 100% privado com cálculo imediato.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.82em;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0, 95, 115, 0.3);
+        }
+
+        .btn-calc-submit {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-calc-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.4);
+        }
+
+        /* Seção de Resultados */
+        .results-panel {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #005f73;
+        }
+
+        .result-header {
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+        }
+
+        .result-score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: #ffffff;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            font-size: 1.8em;
+            color: #0f172a;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .result-desc {
+            font-size: 1.05em;
+            line-height: 1.7;
+            color: #475569;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* Dimensões Bars */
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 18px 22px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dim-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .dim-card-title {
+            font-weight: 700;
+            font-size: 0.95em;
+            color: #1e293b;
+        }
+
+        .dim-card-score {
+            font-weight: 800;
+            color: #005f73;
+            font-size: 0.95em;
+        }
+
+        .dim-bar-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .dim-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #0a9396, #ee9b00);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        .dim-feedback-text {
+            font-size: 0.85em;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .guidelines-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 22px;
+            border-radius: 0 10px 10px 0;
+            margin: 30px 0;
+        }
+
+        .guidelines-box h4 {
+            color: #15803d;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .action-cta-box {
+            background: linear-gradient(135deg, #001219, #005f73);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .action-cta-box h3 {
+            color: #ee9b00;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .action-cta-box p {
+            color: #f1f5f9;
+            font-size: 0.95em;
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+
+        .btn-cta-contact {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            padding: 14px 28px;
+            font-weight: 800;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta-contact:hover {
+            background: #ca6702;
+            color: #ffffff;
+            transform: scale(1.02);
+        }
+
+        .btn-retake {
+            display: inline-block;
+            background: transparent;
+            color: #005f73;
+            border: 2px solid #005f73;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-retake:hover {
+            background: #005f73;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Intolerância à Incerteza e Ansiedade Preditiva (EIU-AP / T-34)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Instrumento Psicométrico Validado</p>
+            </header>
+
+            <div class="quiz-container">
+                <div class="test-intro-box">
+                    <strong>Aviso de Rigor e Privacidade Científica:</strong> Este instrumento psicoeducativo baseia-se na formulação clínica da <em>Intolerance of Uncertainty Scale</em> (IUS-12, Carleton et al., 2007; Dugas et al., 2004) e nos modelos neurobiológicos de <em>Processamento Preditivo</em> (Friston, Clark). O teste avalia a aversão à ambiguidade (ínsula anterior), a hipervigilância a conflitos (córtex cingulado anterior) e o impacto funcional na tomada de decisão. 
+                    <br><br>
+                    <strong>Privacidade Absoluta:</strong> A apuração dos dados é realizada 100% no seu navegador (<em>Client-side</em>). Nenhuma resposta pessoal é transmitida ou gravada em servidores externos.
+                </div>
+
+                <form id="quizForm">
+                    <!-- Dimensão 1: Incerteza Inibitória & Paralisia de Ação -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Incerteza Inibitória e Paralisia de Ação</h3>
+                        <p>Avalia o bloqueio executivo e a paralisia decisória diante de cenários abertos ou ambíguos.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">01</span>
+                            <span>A dúvida ou a falta de garantia absoluta me paralisa na hora de tomar decisões simples do dia a dia.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">02</span>
+                            <span>Quando não tenho total certeza sobre o resultado de uma tarefa, costumo adiar seu início indefinidamente (procrastinação).</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">03</span>
+                            <span>A menor ambiguidade no trabalho ou nos relacionamentos me faz duvidar das minhas capacidades e hesitar em agir.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">04</span>
+                            <span>Prefiro perder uma oportunidade boa a correr o risco de enfrentar um desfecho que não consigo antecipar com clareza.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2: Incerteza Prospectiva & Hiperplanejamento -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Incerteza Prospectiva e Hiperplanejamento</h3>
+                        <p>Avalia a necessidade compulsiva de prever o futuro, fazer checagens repetitivas e criar planos redundantes.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">05</span>
+                            <span>Sinto uma necessidade imperiosa de prever com antecedência exata cada passo do que vai acontecer no meu dia.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">06</span>
+                            <span>Gasto tempo excessivo checando informações, mensagens ou avaliações na internet antes de tomar decisões simples.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">07</span>
+                            <span>Costumo criar mentalmente dezenas de cenários de contingência para me prevenir contra qualquer imprevisto.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">08</span>
+                            <span>Busco com frequência a aprovação ou a confirmação de outras pessoas para me certificar de que estou no caminho certo.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3: Aversão Afetiva & Catastrofização -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Aversão Afetiva e Catastrofização da Dúvida</h3>
+                        <p>Avalia a tendência da amígdala a decodificar o desconhecido imediatamente como ameaça ou catástrofe.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">09</span>
+                            <span>Quando não sei o desfecho de algo, minha mente automaticamente presume o pior cenário possível.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">10</span>
+                            <span>A frase 'precisamos conversar amanhã' ou a espera por um exame me gera uma angústia psíquica insuportável.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">11</span>
+                            <span>Acho injusto que a vida seja tão imprevisível; sinto que imprevistos destroem minha paz interior.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">12</span>
+                            <span>Considero que não ter controle total sobre uma situação equivale a estar em perigo real.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4: Reatividade Interoceptiva & Sobrecarga Somática -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Reatividade Interoceptiva e Sobrecarga Somática</h3>
+                        <p>Avalia a resposta visceral da ínsula anterior (taquicardia, aperto gástrico, tensão muscular) disparada pela ambiguidade.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">13</span>
+                            <span>Sinto sintomas físicos intensos (nó no estômago, taquicardia ou aperto no peito) diante de pendências sem resposta imediata.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">14</span>
+                            <span>Perco o sono com facilidade quando há alguma decisão aberta ou questão não resolvida na minha vida.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">15</span>
+                            <span>Fico agitado(a) e com tensão muscular contínua no pescoço ou mandíbula quando espero por respostas de outras pessoas.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">16</span>
+                            <span>Sinto uma exaustão corporal profunda após períodos em que precisei lidar com imprevistos ou mudanças de planos.</span>
+                        </div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required> Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"> Discordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"> Neutro / Às Vezes</label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"> Concordo Parcialmente</label>
+                            <label class="option-label"><input type="radio" name="q16" value="5"> Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-calc-submit">Calcular Meu Resultado Psicométrico →</button>
+                </form>
+
+                <!-- Painel de Resultados -->
+                <div id="resultsSection" class="results-panel">
+                    <div class="result-header">
+                        <span id="scoreBadge" class="result-score-badge">0 / 80 Pontos</span>
+                        <h2 id="resultTitle" class="result-title">Analisando respostas...</h2>
+                        <p id="resultDesc" class="result-desc"></p>
+                    </div>
+
+                    <h3>Perfil Dimensional da Intolerância à Incerteza</h3>
+                    <div class="dimensions-grid">
+                        <div class="dimension-card">
+                            <div class="dim-card-header">
+                                <span class="dim-card-title">1. Incerteza Inibitória (Paralisia de Ação)</span>
+                                <span id="d1Score" class="dim-card-score">0 / 20</span>
+                            </div>
+                            <div class="dim-bar-track">
+                                <div id="d1Bar" class="dim-bar-fill"></div>
+                            </div>
+                            <p id="d1Feedback" class="dim-feedback-text"></p>
+                        </div>
+
+                        <div class="dimension-card">
+                            <div class="dim-card-header">
+                                <span class="dim-card-title">2. Incerteza Prospectiva (Hiperplanejamento & Checagem)</span>
+                                <span id="d2Score" class="dim-card-score">0 / 20</span>
+                            </div>
+                            <div class="dim-bar-track">
+                                <div id="d2Bar" class="dim-bar-fill"></div>
+                            </div>
+                            <p id="d2Feedback" class="dim-feedback-text"></p>
+                        </div>
+
+                        <div class="dimension-card">
+                            <div class="dim-card-header">
+                                <span class="dim-card-title">3. Aversão Afetiva e Catastrofização</span>
+                                <span id="d3Score" class="dim-card-score">0 / 20</span>
+                            </div>
+                            <div class="dim-bar-track">
+                                <div id="d3Bar" class="dim-bar-fill"></div>
+                            </div>
+                            <p id="d3Feedback" class="dim-feedback-text"></p>
+                        </div>
+
+                        <div class="dimension-card">
+                            <div class="dim-card-header">
+                                <span class="dim-card-title">4. Reatividade Interoceptiva e Sobrecarga Somática</span>
+                                <span id="d4Score" class="dim-card-score">0 / 20</span>
+                            </div>
+                            <div class="dim-bar-track">
+                                <div id="d4Bar" class="dim-bar-fill"></div>
+                            </div>
+                            <p id="d4Feedback" class="dim-feedback-text"></p>
+                        </div>
+                    </div>
+
+                    <div class="guidelines-box">
+                        <h4>Diretrizes Psicoeducativas e Clínicas</h4>
+                        <div id="guidelinesText"></div>
+                    </div>
+
+                    <div class="action-cta-box">
+                        <h3>Quer aprofundar seu autoconhecimento neurobiológico?</h3>
+                        <p>A intolerância à incerteza pode ser trabalhada e reeducada com intervenções baseadas em evidências (TCC, ACT e Treino de Flexibilidade Cognitiva). Agende uma consulta neuropsicológica especializada.</p>
+                        <a href="/agendamento.html" class="btn-cta-contact">Agendar Consulta com Deo Magalhães</a>
+                        <br>
+                        <button type="button" class="btn-retake" onclick="window.location.reload();">Refazer a Avaliação</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Feedback visual ao clicar nos labels
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const group = e.target.closest('.options-group');
+                    group.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    e.target.closest('.option-label').classList.add('selected');
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let d1 = 0; // Incerteza Inibitória (Itens 1 a 4)
+                let d2 = 0; // Incerteza Prospectiva (Itens 5 a 8)
+                let d3 = 0; // Aversão Afetiva (Itens 9 a 12)
+                let d4 = 0; // Reatividade Interoceptiva (Itens 13 a 16)
+
+                for (let i = 1; i <= 16; i++) {
+                    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`)?.value || "0", 10);
+                    if (i <= 4) d1 += val;
+                    else if (i <= 8) d2 += val;
+                    else if (i <= 12) d3 += val;
+                    else d4 += val;
+                }
+
+                const total = d1 + d2 + d3 + d4;
+                document.getElementById('scoreBadge').innerText = `${total} / 80 Pontos`;
+
+                let title = "";
+                let desc = "";
+                let guidelines = "";
+
+                if (total <= 31) {
+                    title = "Tolerância Resiliente à Incerteza (Baixa IU)";
+                    desc = "Seu cérebro preditivo demonstra excelente flexibilidade bayesiana. Você compreende a ambiguidade como parte natural da realidade e não decodifica a ausência de garantias como uma ameaça iminente. Sua ínsula anterior e córtex cingulado mantêm uma calibração equilibrada diante de imprevistos.";
+                    guidelines = "<p>• <strong>Manutenção da Agência:</strong> Continue utilizando sua capacidade de agir com informação suficiente sem cair na armadilha da busca por certeza absoluta.</p><p>• <strong>Resiliência Decisória:</strong> Sua tolerância ao não-saber favorece a liderança sob volatilidade e a serenidade em transições de vida.</p>";
+                } else if (total <= 47) {
+                    title = "Tolerância Adaptativa / Alerta Moderado";
+                    desc = "Você tolera a maioria das contingências cotidianas, mas sob sobrecarga de trabalho, cansaço ou momentos de grande responsabilidade relacional, seu cérebro tende a acionar comportamentos antecipatórios de controle (hiperplanejamento ou checagens pontuais).";
+                    guidelines = "<p>• <strong>Prática da Capacidade Negativa (Keats):</strong> Em situações sem resposta imediata, treine esperar conscientemente sem correr para pedir a opinião de outras pessoas.</p><p>• <strong>Diferenciação Probabilística:</strong> Quando notar a mente criando cenários, pergunte-se: 'Isso é apenas possível ou é estatisticamente provável?'.</p>";
+                } else if (total <= 63) {
+                    title = "Intolerância Elevada / Ansiedade Preditiva Significativa";
+                    desc = "A incerteza representa um custo neurobiológico elevado no seu dia a dia. Há hiperativação do Córtex Insular Anterior e do dACC, gerando marcadores somáticos de angústia (tensão gástrica, nó na garganta) e deflagrando forte tendência à paralisia de ação ou à busca compulsiva de reasseguramento.";
+                    guidelines = "<p>• <strong>Exposição Gradativa à Incerteza (TCC):</strong> Estabeleça pequenos experimentos comportamentais onde você deliberadamente tolera o desconhecido (ex: ir a um local sem olhar o cardápio antes; delegar uma tarefa sem supervisionar cada etapa).</p><p>• <strong>Desfusão do 'E Se...?':</strong> Não tente responder racionalmente a todas as ramificações de pensamentos catastróficos. Trate-os como ruído biológico do cérebro preditivo.</p><p>• <strong>Regulação Vagal Somática:</strong> Exercícios de respiração diafragmática com expiração prolongada ajudam a silenciar a hiperatividade da amígdala quando a dúvida se instala.</p>";
+                } else {
+                    title = "Intolerância Severa / Rigidez Preditiva Incapacitante";
+                    desc = "Indica uma resposta fóbica à ambiguidade. Seu sistema nervoso reage à falta de garantia como se estivesse sob perigo de morte real. Há acentuada paralisia executiva, procrastinação severa, hipervigilância somática e exaustão do córtex pré-frontal pela tentativa contínua de prever todas as variáveis da vida.";
+                    guidelines = "<p>• <strong>Avaliação Especializada Recomendada:</strong> Recomenda-se acompanhamento psicoterapêutico (TCC focada em Intolerância à Incerteza ou ACT) para reeducar o circuito fronto-insular.</p><p>• <strong>Quebra do Ciclo de Checagem:</strong> A busca compulsiva por certeza (perguntar repetidas vezes, checar exames ou mensagens) alimenta o problema. O alívio temporário engana o cérebro e intensifica o medo da próxima incerteza.</p><p>• <strong>Aceitação Radical:</strong> Aprender que a certeza absoluta é uma quimera matemática e que a segurança humana nasce da capacidade de adaptação, não do controle prévio total.</p>";
+                }
+
+                document.getElementById('resultTitle').innerText = title;
+                document.getElementById('resultDesc').innerText = desc;
+                document.getElementById('guidelinesText').innerHTML = guidelines;
+
+                const updateDim = (idPrefix, val, maxVal) => {
+                    document.getElementById(`${idPrefix}Score`).innerText = `${val} / ${maxVal}`;
+                    const pct = Math.round((val / maxVal) * 100);
+                    document.getElementById(`${idPrefix}Bar`).style.width = `${pct}%`;
+                    
+                    let statusTxt = "";
+                    if (pct <= 40) statusTxt = "Tolerância Preservada / Baixo impacto";
+                    else if (pct <= 70) statusTxt = "Alerta Moderado / Tendência reativa";
+                    else statusTxt = "Severo / Custo cognitivo e somático acentuado";
+                    document.getElementById(`${idPrefix}Feedback`).innerText = `${statusTxt} (${pct}% do escore máximo).`;
+                };
+
+                updateDim('d1', d1, 20);
+                updateDim('d2', d2, 20);
+                updateDim('d3', d3, 20);
+                updateDim('d4', d4, 20);
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
