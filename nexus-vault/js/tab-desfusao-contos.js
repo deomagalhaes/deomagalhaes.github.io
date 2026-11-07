@@ -441,7 +441,10 @@
                     <p class="text-xs text-rose-300"><strong>VETADO (24h):</strong> ${C.esc(item.dontAction)}</p>
                 </div>
                 <div class="flex items-center gap-1.5 self-end md:self-center shrink-0">
-                    <button type="button" data-df-copy="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-xs font-mono">
+                    <button type="button" data-df-load="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-700/50 text-cyan-300 text-xs font-mono" title="Carregar dados deste veredito no formulário">
+                        Carregar
+                    </button>
+                    <button type="button" data-df-copy="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-mono">
                         Copiar MD
                     </button>
                     <button type="button" data-df-del="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs">
@@ -450,6 +453,48 @@
                 </div>
             </div>
         `).join('');
+
+        listEl.querySelectorAll('[data-df-load]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-df-load');
+                const target = desfusaoHistory.find((x) => x.id === id);
+                if (!target) return;
+
+                const setVal = (elmId, val) => {
+                    const el = document.getElementById(elmId);
+                    if (el && val !== undefined) el.value = val;
+                };
+
+                setVal('df-strict-fact', target.strictFact || '');
+                setVal('df-emotional-reading', target.emotionalReading || '');
+                setVal('df-impulsive-text', target.impulsiveReaction || '');
+                setVal('df-strategic-text', target.strategicIntervention || '');
+                setVal('df-do-action', target.doAction || '');
+                setVal('df-dont-action', target.dontAction || '');
+
+                if (target.autonomicLevel !== undefined) {
+                    setVal('df-autonomic-slider', target.autonomicLevel);
+                }
+                if (target.tradeOffs) {
+                    if (target.tradeOffs.loss !== undefined) setVal('df-loss-slider', target.tradeOffs.loss);
+                    if (target.tradeOffs.escalation !== undefined) setVal('df-esc-slider', target.tradeOffs.escalation);
+                    if (target.tradeOffs.effort !== undefined) setVal('df-effort-slider', target.tradeOffs.effort);
+                    if (target.tradeOffs.gain !== undefined) setVal('df-gain-slider', target.tradeOffs.gain);
+                }
+
+                const dists = Array.isArray(target.distortions) ? target.distortions : [];
+                document.querySelectorAll('#df-distortions-chips input').forEach((chk) => {
+                    chk.checked = dists.includes(chk.value);
+                });
+
+                updateDesfusaoLiveMetrics();
+                saveDesfusaoDraft();
+
+                const f = document.getElementById('desfusao-form');
+                if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                C.toast('Protocolo carregado no formulário para reavaliação.', 'info');
+            });
+        });
 
         listEl.querySelectorAll('[data-df-copy]').forEach((btn) => {
             btn.addEventListener('click', () => {
@@ -581,32 +626,88 @@
             C.toast('Veredito operacional de 24h gravado com sucesso.', 'success');
         });
 
-        // Auto-save de rascunho de desfusão
-        const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
-        draftInputs.forEach((id) => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('input', () => {
-                    const draft = {};
-                    draftInputs.forEach(k => {
-                        const inp = document.getElementById(k);
-                        if (inp) draft[k] = inp.value;
-                    });
-                    C.store.set('dm_vault_desfusao_draft', draft);
-                });
-            }
-        });
+        // Auto-save de rascunho de desfusão integral (textos, sliders, distorções e checks)
+        function saveDesfusaoDraft() {
+            const draft = {};
+            const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
+            draftInputs.forEach((k) => {
+                const inp = document.getElementById(k);
+                if (inp) draft[k] = inp.value;
+            });
+            const sliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
+            sliders.forEach((k) => {
+                const s = document.getElementById(k);
+                if (s) draft[k] = s.value;
+            });
+            const dists = [];
+            document.querySelectorAll('#df-distortions-chips input:checked').forEach((c) => dists.push(c.value));
+            draft.distortions = dists;
+            const checks = {};
+            ['df-chk-routine', 'df-chk-shield', 'df-chk-warmth', 'df-chk-documentation'].forEach((chkId) => {
+                const el = document.getElementById(chkId);
+                if (el) checks[chkId] = el.checked;
+            });
+            draft.checks = checks;
+            C.store.set('dm_vault_desfusao_draft', draft);
+        }
 
-        // Restaura rascunho salvo
-        const savedDraft = C.store.get('dm_vault_desfusao_draft', null);
-        if (savedDraft && typeof savedDraft === 'object') {
+        function restoreDesfusaoDraft() {
+            const savedDraft = C.store.get('dm_vault_desfusao_draft', null);
+            if (!savedDraft || typeof savedDraft !== 'object') return;
+            const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
             draftInputs.forEach((k) => {
                 if (savedDraft[k]) {
                     const el = document.getElementById(k);
                     if (el && !el.value) el.value = savedDraft[k];
                 }
             });
+            const sliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
+            sliders.forEach((k) => {
+                if (savedDraft[k] !== undefined) {
+                    const el = document.getElementById(k);
+                    if (el) el.value = savedDraft[k];
+                }
+            });
+            if (Array.isArray(savedDraft.distortions)) {
+                document.querySelectorAll('#df-distortions-chips input').forEach((chk) => {
+                    chk.checked = savedDraft.distortions.includes(chk.value);
+                });
+            }
+            if (savedDraft.checks && typeof savedDraft.checks === 'object') {
+                Object.keys(savedDraft.checks).forEach((chkId) => {
+                    const el = document.getElementById(chkId);
+                    if (el) el.checked = Boolean(savedDraft.checks[chkId]);
+                });
+            }
+            updateDesfusaoLiveMetrics();
         }
+
+        const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
+        draftInputs.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', saveDesfusaoDraft);
+            }
+        });
+
+        const draftSliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
+        draftSliders.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', saveDesfusaoDraft);
+            }
+        });
+
+        document.querySelectorAll('#df-distortions-chips input').forEach((el) => {
+            el.addEventListener('change', saveDesfusaoDraft);
+        });
+
+        ['df-chk-routine', 'df-chk-shield', 'df-chk-warmth', 'df-chk-documentation'].forEach((chkId) => {
+            const el = document.getElementById(chkId);
+            if (el) el.addEventListener('change', saveDesfusaoDraft);
+        });
+
+        restoreDesfusaoDraft();
 
         document.getElementById('btn-df-export-csv').addEventListener('click', () => {
             const headers = ['Data', 'Hora', 'Ativação (1-10)', 'Proteção (0-4)', 'Saldo Estratégico', 'Distorções', 'Fato Estrito', 'Leitura Reativa', 'Farei (24h)', 'Não Farei (24h)'];
@@ -1497,9 +1598,7 @@
     function init() {
         loadDesfusaoHistory();
         mountDesfusaoShell();
-        if (global.VaultTabContos && typeof global.VaultTabContos.init === 'function') {
-            global.VaultTabContos.init();
-        } else {
+        if (!global.VaultTabContos) {
             loadStories();
             mountContosShell();
         }
@@ -1507,9 +1606,7 @@
         window.addEventListener('vault:restored', () => {
             loadDesfusaoHistory();
             mountDesfusaoShell();
-            if (global.VaultTabContos && typeof global.VaultTabContos.init === 'function') {
-                global.VaultTabContos.init();
-            } else {
+            if (!global.VaultTabContos) {
                 loadStories();
                 mountContosShell();
             }

@@ -720,9 +720,11 @@
         const normalized = {
             uid: rowObj.uid || ('row_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)),
             domain: rowObj.domain || 'Inteligência Geral e Raciocínio',
-            instrument: rowObj.instrument || '',
+            instrument: rowObj.instrument || rowObj.tool || '',
+            tool: rowObj.instrument || rowObj.tool || '',
             measure: rowObj.measure || '',
             raw: rowObj.raw !== undefined && rowObj.raw !== null ? String(rowObj.raw) : '—',
+            derived: rowObj.derived !== undefined ? rowObj.derived : (rowObj.qi !== null && rowObj.qi !== undefined ? rowObj.qi : (rowObj.t !== null && rowObj.t !== undefined ? rowObj.t : (rowObj.ep !== null && rowObj.ep !== undefined ? rowObj.ep : '—'))),
             z: Number.isFinite(rowObj.z) ? Number(rowObj.z) : null,
             ep: Number.isFinite(rowObj.ep) ? Number(rowObj.ep) : null,
             t: Number.isFinite(rowObj.t) ? Number(rowObj.t) : null,
@@ -730,6 +732,8 @@
             ci95: rowObj.ci95 || '—',
             pct: rowObj.pct || '—',
             classification: rowObj.classification || '—',
+            classLabel: rowObj.classLabel || rowObj.classification || '—',
+            classBadge: rowObj.classBadge || (rowObj.z !== null ? (Math.abs(rowObj.z) <= 1 ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : (rowObj.z < -1.5 ? 'bg-rose-500/15 text-rose-300 border-rose-500/30' : 'bg-amber-500/15 text-amber-300 border-amber-500/30')) : 'bg-slate-800 text-slate-300'),
             isSymptom: Boolean(rowObj.isSymptom),
             plotInCurve: rowObj.plotInCurve !== undefined ? Boolean(rowObj.plotInCurve) : !rowObj.isSymptom
         };
@@ -1395,58 +1399,62 @@
         const C = global.VaultCore;
 
         const chips = [];
+        const getRowsFor = (name) => (prot.report.rows || []).filter(r => {
+            const inst = (r.instrument || r.tool || '').toUpperCase();
+            return inst.includes(name.toUpperCase());
+        });
 
         // WASI QIT
-        const wRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('WASI'));
+        const wRows = getRowsFor('WASI');
         const qitRow = wRows.find(r => r.measure && r.measure.includes('QIT'));
-        if (qitRow && qitRow.z !== undefined) {
+        if (qitRow && (qitRow.z !== undefined || qitRow.derived !== undefined)) {
             chips.push({
                 subtab: 'wasi',
-                label: `WASI: ${qitRow.measure} = ${qitRow.derived || qitRow.raw} (Z: ${qitRow.z >= 0 ? '+' : ''}${C.formatNum(qitRow.z, 2)})`,
+                label: `WASI: ${qitRow.measure} = ${qitRow.derived || qitRow.raw} (Z: ${qitRow.z !== null ? (qitRow.z >= 0 ? '+' : '') + C.formatNum(qitRow.z, 2) : '—'})`,
                 badge: qitRow.classBadge || 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
             });
         }
 
         // FDT Inibição
-        const fdtRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('FDT'));
+        const fdtRows = getRowsFor('FDT');
         const fdtInib = fdtRows.find(r => r.measure && r.measure.includes('Inibição'));
-        if (fdtInib && fdtInib.z !== undefined) {
+        if (fdtInib && (fdtInib.z !== undefined || fdtInib.derived !== undefined)) {
             chips.push({
                 subtab: 'fdt',
-                label: `FDT Inibição: Z ${fdtInib.z >= 0 ? '+' : ''}${C.formatNum(fdtInib.z, 2)} (${fdtInib.classLabel || 'Médio'})`,
+                label: `FDT Inibição: Z ${fdtInib.z !== null ? (fdtInib.z >= 0 ? '+' : '') + C.formatNum(fdtInib.z, 2) : '—'} (${fdtInib.classLabel || 'Médio'})`,
                 badge: fdtInib.classBadge || 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
             });
         }
 
         // SRS-2 Total T
-        const srsRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('SRS-2'));
+        const srsRows = getRowsFor('SRS-2');
         const srsTot = srsRows.find(r => r.measure && (r.measure.includes('Total') || r.measure.includes('Escore Total')));
         if (srsTot) {
             chips.push({
                 subtab: 'srs2',
-                label: `SRS-2 Total: T = ${srsTot.derived || srsTot.raw} (${srsTot.classLabel})`,
+                label: `SRS-2 Total: T = ${srsTot.derived || srsTot.raw} (${srsTot.classLabel || 'Classificação'})`,
                 badge: srsTot.classBadge || 'bg-amber-500/15 text-amber-300 border-amber-500/30'
             });
         }
 
         // BPA-2 AG
-        const bpaRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('BPA-2'));
+        const bpaRows = getRowsFor('BPA-2');
         const bpaAg = bpaRows.find(r => r.measure && r.measure.includes('Atenção Geral'));
         if (bpaAg) {
             chips.push({
                 subtab: 'bpa_ravlt',
-                label: `BPA-2 Atenção Geral: Z ${bpaAg.z >= 0 ? '+' : ''}${C.formatNum(bpaAg.z, 2)} (${bpaAg.classLabel})`,
+                label: `BPA-2 Atenção Geral: Z ${bpaAg.z !== null ? (bpaAg.z >= 0 ? '+' : '') + C.formatNum(bpaAg.z, 2) : '—'} (${bpaAg.classLabel || 'Médio'})`,
                 badge: bpaAg.classBadge || 'bg-sky-500/15 text-sky-300 border-sky-500/30'
             });
         }
 
         // RAVLT A7
-        const ravltRows = (prot.report.rows || []).filter(r => r.tool && r.tool.includes('RAVLT'));
+        const ravltRows = getRowsFor('RAVLT');
         const ravltA7 = ravltRows.find(r => r.measure && (r.measure.includes('A7') || r.measure.includes('Evocação Tardia')));
         if (ravltA7) {
             chips.push({
                 subtab: 'bpa_ravlt',
-                label: `RAVLT Memória Tardia: Z ${ravltA7.z >= 0 ? '+' : ''}${C.formatNum(ravltA7.z, 2)} (${ravltA7.classLabel})`,
+                label: `RAVLT Memória Tardia: Z ${ravltA7.z !== null ? (ravltA7.z >= 0 ? '+' : '') + C.formatNum(ravltA7.z, 2) : '—'} (${ravltA7.classLabel || 'Médio'})`,
                 badge: ravltA7.classBadge || 'bg-purple-500/15 text-purple-300 border-purple-500/30'
             });
         }

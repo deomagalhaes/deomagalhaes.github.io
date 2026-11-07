@@ -296,6 +296,48 @@
             defaultQuestion: 'Que cor ou textura diferente de comida nova foi legal você espiar ou cheirar hoje com curiosidade?',
             challengeAct: 'viu uma comidinha de cor verde ou diferente no prato e virou o rosto na hora, empurrando o garfo com birra antes mesmo de cheirar o sabor.',
             breathCue: 'respirou fundo sentindo o cheirinho gostoso da comida feita com carinho, relaxou a mandíbula e pensou: sou um explorador corajoso que pode experimentar devagarzinho.'
+        },
+        combinados_familiares: {
+            label: '41. Cumprir Combinados & Cooperação Familiar (A bússola do navio em águas mansas)',
+            defaultMetaphor: 'A bússola dourada do capitão da floresta: os combinados familiares não são correntes para prender, mas faróis que avisam onde estão as pedras para o barco navegar seguro e todo mundo chegar feliz na ilha dos brinquedos.',
+            defaultQuestion: 'Qual foi um combinado gostoso que você ajudou a cumprir hoje e deixou todo mundo em casa com o coração quentinho?',
+            challengeAct: 'quando ouviu que a hora da brincadeira tinha chegado ao fim para tomar banho e jantar, sentiu vontade de cruzar os braços e fingir que não ouviu o chamado.',
+            breathCue: 'fechou os olhos, respirou contando mentalmente até quatro lembrando que quem sabe cooperar navega com firmeza, e estendeu a mãozinha com um sorriso confiante.'
+        },
+        perdao_reparacao: {
+            label: '42. Reparação e Autoacolhimento após o Erro (A borracha mágica do carinho)',
+            defaultMetaphor: 'O caderno dos pequenos pintores das estrelas: quando um traço sai torto no papel, a gente não joga a folha fora; a gente usa a borracha macia do abraço, pede desculpas e desenha uma borboleta colorida por cima.',
+            defaultQuestion: 'Como é bom saber que quando a gente erra uma coisinha, um abraço de desculpa deixa tudo limpo e leve outra vez?',
+            challengeAct: 'derrubou sem querer a torre de blocos ou falou uma palavra ríspida no momento de aperto, e logo sentiu um nó gelado na garganta, achando que todo mundo ficaria bravo para sempre.',
+            breathCue: 'colocou a mão sobre o peito, soltou um suspiro comprido e suave sentindo que errar faz parte do aprendizado de todos os guardiões gentis.'
+        },
+        coragem_pedir_ajuda: {
+            label: '43. Pedir Ajuda sem Medo (O canto de chamado dos passarinhos)',
+            defaultMetaphor: 'Os filhotes de arara-azul na copa mais alta: eles não tentam carregar a semente mais pesada sozinhos. Quando a patinha cansa, eles abrem as asas e soltam um piado doce para a mãe e o pai voarem juntos ao lado.',
+            defaultQuestion: 'Quando você precisa de uma mãozinha amiga, quem é a pessoa que você mais gosta de chamar com carinho?',
+            challengeAct: 'tentou amarrar o tênis, alcançar um brinquedo no alto ou resolver uma tarefa difícil sozinho, ficando com os olhos cheios de água porque parecia difícil demais para um par de mãos apenas.',
+            breathCue: 'respirou bem fundo, relaxou os ombros e percebeu que pedir ajuda com voz calma é o maior sinal de sabedoria e coragem.'
+        },
+        paciencia_irmaos: {
+            label: '44. Convivência Fraterna & Espaço Partilhado (Os dois barquinhos no mesmo rio)',
+            defaultMetaphor: 'Os dois pequenos castores na represa do riacho: quando um quer um galho e o outro quer o mesmo tronco, eles descobrem que juntando as forças conseguem construir um castelo d\'água duas vezes mais bonito e quentinho para dormir.',
+            defaultQuestion: 'O que foi gostoso brincar ou conversar com seu irmão ou amiguinho hoje quando vocês dividiram com alegria?',
+            challengeAct: 'viu o irmão ou o colega pegando o objeto que queria brincar bem naquela hora, e sentiu a mãozinha fechar querendo puxar de volta com força.',
+            breathCue: 'soprou o ar devagarinho como quem sopra uma velinha mágica de aniversário, lembrando que a amizade vale mais do que qualquer brinquedo de plástico.'
+        },
+        desacelerar_corpo: {
+            label: '45. Desaceleração Somática & Transição para o Sono (A locomotiva a vapor das estrelas)',
+            defaultMetaphor: 'A locomotiva de brinquedo que viajou o dia inteiro apitando e correndo pelos trilhos de ferro: ao chegar na estação das nuvens douradas, o maquinista desliga o motor, o vapor sai num suspiro fofo e cada vagão pousa macio sobre o algodão da noite.',
+            defaultQuestion: 'Qual pedacinho do seu corpo — os pezinhos, as pernas ou os ombros — está mais molinho e pronto para sonhar agora?',
+            challengeAct: 'o relógio avisava que era hora de deitar, mas as perninhas ainda queriam pular na cama e os pensamentos continuavam rodando como um pião elétrico veloz.',
+            breathCue: 'deitou a cabeça no travesseiro, soltou todo o peso do corpo sobre o colchão fofo e soltou o ar fazendo o som suave do vapor: ssshhhh… até tudo ficar imóvel e calmo.'
+        },
+        tolerancia_erro: {
+            label: '46. Desfusão do Perfeccionismo & Flexibilidade (A teia de orvalho da aranha sábia)',
+            defaultMetaphor: 'A pequena aranha tecelã da floresta: quando uma gota de chuva cai e deixa um fiozinho da teia torto, ela não desmancha tudo; ela nota que a gota brilha feito um diamante sob o luar justamente porque a teia é única e natural.',
+            defaultQuestion: 'O que você fez hoje do seu jeitinho que ficou especial, mesmo sem ser perfeitinho?',
+            challengeAct: 'estava desenhando ou montando um quebra-cabeça e, quando uma peça não encaixou reta como imaginava na cabeça, quis amassar o papel e jogar tudo no chão.',
+            breathCue: 'olhou para o desenho com carinho, respirou fundo três vezes sentindo o ar fresco encher o peito e pensou: o meu melhor de hoje já é perfeito para o meu coração.'
         }
     };
 
@@ -1275,28 +1317,49 @@
             });
         }
 
-        // Atalhos de teclado no modo leitor âmbar
+        // Atalhos de teclado no modo leitor âmbar (único listener consolidado)
         window.addEventListener('keydown', (e) => {
             const reader = document.getElementById('amber-night-reader');
             if (!reader || reader.classList.contains('hidden')) return;
 
+            const isInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT';
+            if (isInput) return;
+
             if (e.key === 'Escape') {
                 closeAmberNightReader();
-            } else if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            } else if (e.code === 'Space') {
                 e.preventDefault();
                 toggleAutoScroll();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                stopAutoScroll();
+                reader.scrollBy({ top: 90, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                stopAutoScroll();
+                reader.scrollBy({ top: -90, behavior: 'smooth' });
             } else if (e.key === '+' || e.key === '=') {
+                e.preventDefault();
                 amberFontSizeRem = Math.min(2.4, amberFontSizeRem + 0.1);
                 const b = document.getElementById('amber-reader-body');
                 if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
                 saveAmberPrefs();
             } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
                 amberFontSizeRem = Math.max(0.85, amberFontSizeRem - 0.1);
                 const b = document.getElementById('amber-reader-body');
                 if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
                 saveAmberPrefs();
-            } else if (e.key.toLowerCase() === 'f' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            } else if (e.key.toLowerCase() === 'f') {
+                e.preventDefault();
                 toggleAmberFullscreen();
+            } else if (e.key.toLowerCase() === 'm') {
+                e.preventDefault();
+                const btnAudio = document.getElementById('btn-audio-toggle');
+                if (btnAudio) btnAudio.click();
+            } else if (e.key.toLowerCase() === 'n') {
+                e.preventDefault();
+                toggleSpeechNarration();
             }
         });
 
@@ -1393,30 +1456,6 @@
                 setRelaxationVolume(parseInt(e.target.value, 10));
             });
         }
-
-        // Atalhos de teclado no Leitor Noturno Âmbar
-        window.addEventListener('keydown', (e) => {
-            const overlay = document.getElementById('amber-night-reader');
-            if (!overlay || overlay.classList.contains('hidden')) return;
-
-            if (e.key === 'Escape') {
-                closeAmberNightReader();
-            } else if (e.code === 'Space') {
-                e.preventDefault();
-                toggleAutoScroll();
-            } else if (e.key === '+' || e.key === '=') {
-                e.preventDefault();
-                const btnUp = document.getElementById('btn-amber-font-up');
-                if (btnUp) btnUp.click();
-            } else if (e.key === '-' || e.key === '_') {
-                e.preventDefault();
-                const btnDown = document.getElementById('btn-amber-font-down');
-                if (btnDown) btnDown.click();
-            } else if (e.key === 'f' || e.key === 'F') {
-                e.preventDefault();
-                toggleAmberFullscreen();
-            }
-        });
     }
 
     function init() {

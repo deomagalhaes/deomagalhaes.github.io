@@ -1457,32 +1457,64 @@
                 // Análise do Histórico de Podas e Intervenções da Planta
                 const pruningLogs = (plant.logs || []).filter(lg => lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha')));
                 const lastPruningLog = pruningLogs.length > 0 ? pruningLogs[0] : null;
-                const daysSinceLastPrune = lastPruningLog && lastPruningLog.date ? Math.abs(global.VaultCore.daysDiffFromToday(lastPruningLog.date) || 999) : 999;
+                const effectivePruneDate = plant.lastPruning || (lastPruningLog && lastPruningLog.date ? lastPruningLog.date : null);
+                const daysSinceLastPrune = effectivePruneDate ? Math.abs(global.VaultCore.daysDiffFromToday(effectivePruneDate) || 999) : 999;
 
-                if (proc.category === 'PODA_RAMIFICACAO' || proc.category === 'DESFOLHA' || proc.category === 'ESTRUTURA') {
-                    if (daysSinceLastPrune < 35) {
-                        // Evita poda ou desfolha repetida em menos de 35 dias para preservar reservas de amido
+                if (proc.category === 'PODA_RAMIFICACAO' || proc.category === 'DESFOLHA' || proc.category === 'ESTRUTURA' || proc.category === 'PINCAGEM') {
+                    if (daysSinceLastPrune < 30) {
+                        // Evita poda, pinçagem severa ou desfolha repetida em menos de 30 dias para preservar reservas de amido
                         score -= 35;
-                    } else if (daysSinceLastPrune > 75 && (plant.stage === 'Bonsai' || plant.stage === 'Pré-bonsai')) {
-                        // Árvore vigorosa sem manejo recente se beneficia de refinamento apical
-                        score += 15;
+                    } else if (daysSinceLastPrune > 60 && (plant.stage === 'Bonsai' || plant.stage === 'Pré-bonsai')) {
+                        // Árvore vigorosa sem manejo recente se beneficia de refinamento apical e contenção
+                        score += 18;
                     }
                 }
 
-                // Especificidades botânicas finas
-                if (popName.includes('jabuticaba') || popName.includes('pitanga')) {
-                    if (proc.id === 'PODA_LIMPEZA_SANITARIA' || proc.id === 'PINCAGEM_VERDE_PINUS') {
-                        if (seasonInfo.season === 'Verão' || seasonInfo.season === 'Outono') score += 18;
+                // Especificidades botânicas finas da flora brasileira e espécies clássicas
+                if (popName.includes('jabuticaba') || sciName.includes('myrciaria')) {
+                    if (proc.id === 'PODA_LIMPEZA_SANITARIA' || proc.id === 'PINCAGEM_APICAL') {
+                        if (seasonInfo.season === 'Outono' || seasonInfo.season === 'Verão') score += 22;
+                    }
+                    if (proc.category === 'PODA_DRASTICA' && (seasonInfo.season === 'Inverno')) {
+                        score -= 30; // Evitar corte pesado no frio para não estagnar gemas dormentes
                     }
                 }
-                if (popName.includes('junípero') || popName.includes('pinheiro')) {
-                    if (proc.id === 'PINCAGEM_VERDE_PINUS' && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
+                if (popName.includes('pitanga') || sciName.includes('eugenia')) {
+                    if (proc.category === 'PODA_RAMIFICACAO' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
                         score += 20;
                     }
                 }
-                if (popName.includes('ficus') || popName.includes('figueira')) {
-                    if (proc.category === 'DESFOLHA' && seasonInfo.season === 'Verão') {
+                if (popName.includes('caliandra') || sciName.includes('calliandra')) {
+                    if (proc.category === 'PINCAGEM' && seasonInfo.season === 'Verão') {
+                        score += 24; // Resposta explosiva a pinçagem contínua de ponteiras
+                    }
+                }
+                if (popName.includes('piteco') || popName.includes('tataré') || sciName.includes('chloroleucon')) {
+                    if (proc.category === 'PODA_RAMIFICACAO' || proc.category === 'ESTRUTURA') {
+                        if (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'MINGUANTE') score += 20;
+                    }
+                }
+                if (popName.includes('ipê') || sciName.includes('handroanthus')) {
+                    if (proc.category === 'ESTRUTURA' && seasonInfo.season === 'Inverno') {
+                        score += 22; // Janela ideal pré-brotação de primavera
+                    }
+                }
+                if (popName.includes('buxinho') || sciName.includes('buxus')) {
+                    if (proc.category === 'PODA_RAMIFICACAO' && moon.phaseGroup === 'MINGUANTE') {
+                        score += 18; // Poda de contenção com mínima sangria
+                    }
+                }
+                if (popName.includes('junípero') || popName.includes('pinheiro') || sciName.includes('juniperus')) {
+                    if (proc.id === 'PINCAGEM_VERDE_PINUS' && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
                         score += 22;
+                    }
+                    if (proc.category === 'MADEIRA_MORTA' && (moon.phaseGroup === 'NOVA' || moon.phaseGroup === 'MINGUANTE')) {
+                        score += 24; // Ideal para Jin e Shari
+                    }
+                }
+                if (popName.includes('ficus') || popName.includes('figueira') || sciName.includes('ficus')) {
+                    if (proc.category === 'DESFOLHA' && seasonInfo.season === 'Verão') {
+                        score += 25;
                     }
                 }
 
@@ -3280,7 +3312,8 @@
                 <div class="flex items-center gap-1">
                     <button type="button" data-modal-log-filter="ALL" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'ALL' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Todos</button>
                     <button type="button" data-modal-log-filter="PRUNING" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'PRUNING' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Podas (${pruningLogs.length})</button>
-                    <button type="button" data-modal-log-filter="FERT" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'FERT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Adubação</button>
+                    <button type="button" data-modal-log-filter="FERT" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'FERT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Adubação (${fertLogs.length})</button>
+                    <button type="button" data-modal-log-filter="REPOT" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'REPOT' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Raízes (${repotLogs.length})</button>
                 </div>
             </div>
         `;

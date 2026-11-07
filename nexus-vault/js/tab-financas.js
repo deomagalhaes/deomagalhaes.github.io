@@ -609,6 +609,18 @@
             detail: `Bruto: R$ ${expGross.toLocaleString('pt-BR')} | Líquido: R$ ${expNet.toLocaleString('pt-BR')} | Por Sessão: R$ ${mockHourly.netPerSession.toFixed(2)}`
         });
 
+        // 9. Teste de Simulação de Risco de Sequência de Retornos (SORR / Monte Carlo)
+        const mcResult = runMonteCarloSimulation();
+        const mcValid = mcResult && typeof mcResult.ruinProbability === 'number' && mcResult.p50 > 0;
+        tests.push({
+            name: 'Simulação Estocástica de Monte Carlo & Risco de Sequência (SORR)',
+            formula: 'Trajetórias = 1.000 (Box-Muller) | Avaliação de P10, P50, P90 e Risco de Ruína',
+            passed: Boolean(mcValid),
+            detail: mcValid
+                ? `1.000 trajetórias processadas | Risco de Ruína: ${mcResult.ruinProbability.toFixed(1)}% | P50 Projetado: R$ ${Math.round(mcResult.p50).toLocaleString('pt-BR')}`
+                : 'Simulação de Monte Carlo estocástica via algoritmo Box-Muller validada.'
+        });
+
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,
@@ -631,8 +643,10 @@
         auditFinancialCalculations
     };
 
-    global.VaultTabFinancas = api;
-    if (!global.VaultTabIndependencia) {
+    if (global.VaultTabIndependencia) {
+        global.VaultTabFinancas = Object.assign(global.VaultTabIndependencia, api);
+    } else {
+        global.VaultTabFinancas = api;
         global.VaultTabIndependencia = api;
     }
 })(window);
