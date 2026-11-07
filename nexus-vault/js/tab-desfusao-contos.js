@@ -303,6 +303,10 @@
                                     <i data-lucide="save" class="w-4 h-4"></i>
                                     <span>Registrar Veredito 24h</span>
                                 </button>
+                                <button type="button" id="btn-df-reset-form" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition" title="Limpar formulário e iniciar novo protocolo de deliberação">
+                                    <i data-lucide="rotate-ccw" class="w-4 h-4 text-cyan-400"></i>
+                                    <span>Novo</span>
+                                </button>
                                 <button type="button" id="btn-df-export-csv" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5" title="Exportar histórico em CSV">
                                     <i data-lucide="file-spreadsheet" class="w-4 h-4 text-cyan-400"></i>
                                     <span>CSV</span>
@@ -708,6 +712,29 @@
         });
 
         restoreDesfusaoDraft();
+
+        const btnResetForm = document.getElementById('btn-df-reset-form');
+        if (btnResetForm) {
+            btnResetForm.addEventListener('click', () => {
+                const formEl = document.getElementById('desfusao-form');
+                if (formEl) formEl.reset();
+                const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+                setVal('df-autonomic-slider', 5);
+                setVal('df-loss-slider', 8);
+                setVal('df-esc-slider', 8);
+                setVal('df-effort-slider', 4);
+                setVal('df-gain-slider', 9);
+                document.querySelectorAll('#df-distortions-chips input').forEach((chk) => { chk.checked = false; });
+                const setChk = (id, b) => { const el = document.getElementById(id); if (el) el.checked = b; };
+                setChk('df-chk-routine', true);
+                setChk('df-chk-shield', true);
+                setChk('df-chk-warmth', true);
+                setChk('df-chk-documentation', true);
+                C.store.remove('dm_vault_desfusao_draft');
+                updateDesfusaoLiveMetrics();
+                C.toast('Formulário limpo para um novo protocolo.', 'info', 2000);
+            });
+        }
 
         document.getElementById('btn-df-export-csv').addEventListener('click', () => {
             const headers = ['Data', 'Hora', 'Ativação (1-10)', 'Proteção (0-4)', 'Saldo Estratégico', 'Distorções', 'Fato Estrito', 'Leitura Reativa', 'Farei (24h)', 'Não Farei (24h)'];
