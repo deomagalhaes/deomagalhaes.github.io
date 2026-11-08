@@ -41,6 +41,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 32** | **Matriz de Granularidade Emocional e Diferenciação Afetiva** | Decodificação Interoceptiva, Córtex Insular Anterior e Granularidade Afetiva | `jogos/jogo-granularidade-emocional.html` | ✅ **Publicado** |
 | **Dia 33** | **Matriz de Predição Bayesiana e Decisão Sob Incerteza** | Inferência Bayesiana Ativa, Custo da Amostragem e Tolerância à Incerteza | `jogos/jogo-predicao-incerteza.html` | ✅ **Publicado** |
 | **Dia 34** | **Matriz de Calibração de Erros e Controle Inibitório** | Monitoramento de Erros (dACC / ERN), Paradoxo de Flanker e Inibição Go/No-Go | `jogos/jogo-calibracao-erros.html` | ✅ **Publicado** |
+| **Dia 35** | **Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal** | Córtex Orbitofrontal (OFC), Resolução de Erros de Predição e Inibição Perseverativa | `jogos/jogo-aprendizado-reversao.html` | ✅ **Publicado** |
 
 ---
 

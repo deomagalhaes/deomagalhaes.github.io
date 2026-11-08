@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="perfeccionismo-desadaptativo" selected>A Prisão da Perfeição: A Neurobiologia do Perfeccionismo Desadaptativo</option>
+                        <option value="vinculo-traumatico" selected>A Prisão do Afeto: A Neurobiologia do Vínculo Traumático e Reforço Intermitente</option>
+                        <option value="perfeccionismo-desadaptativo">A Prisão da Perfeição: A Neurobiologia do Perfeccionismo Desadaptativo</option>
                         <option value="intolerancia-incerteza">A Mente que Não Tolera a Dúvida: Intolerância à Incerteza e o Cérebro Preditivo</option>
                         <option value="alexitimia-desconexao">O Silêncio das Emoções: Alexitimia e a Desconexão Ínsulo-Pré-Frontal</option>
                         <option value="efeito-zeigarnik">A Mente Inacabada: O Efeito Zeigarnik (Carga Cognitiva)</option>
@@ -667,6 +668,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "vinculo-traumatico": {
+        "articleSlug": "2026-11-08-neurobiologia-vinculo-traumatico",
+        "articleTitle": "A Neurobiologia do Vínculo Traumático e do Reforço Intermitente: Como a Incerteza Afetiva e a Desregulação Dopaminérgica Aprisionam as Relações",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROCIÊNCIA DAS RELAÇÕES",
+                "title": "Por que relações tóxicas viciam?",
+                "body": "Você sabe que a relação machuca. Seus amigos avisam, sua razão grita para se afastar, mas seu corpo entra em pânico só de pensar em ir embora. Por que pessoas inteligentes permanecem presas a quem as faz sofrer? Não é fraqueza de caráter nem falta de amor-próprio: descubra a neuroquímica oculta do Vínculo Traumático.",
+                "footer": "Deslize para entender a armadilha bioquímica 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "B. F. SKINNER & WOLFRAM SCHULTZ",
+                "title": "O poder viciante da incerteza",
+                "body": "Se alguém te maltrata 100% do tempo, você vai embora sem hesitar. O perigo real acontece quando o afeto é imprevisível:\n\n• Dias de frieza e desprezo seguidos, de repente, por um gesto apaixonado ou um pedido de perdão caloroso.\n\n• Na neurociência, isso se chama Reforço Intermitente de Razão Variável: a mesma mecânica dos caça-níqueis de cassino.\n\n• O cérebro libera muito mais dopamina fásica na dúvida do que na certeza. Você não vicia no prazer, mas na angústia da busca por migalhas de alívio.",
+                "footer": "A química da dor e da reconciliação 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "ENDORFINAS, CORTISOL & OCITOCINA",
+                "title": "A tempestade neuroendócrina",
+                "body": "O vínculo traumático (Trauma Bonding) altera a fisiologia do corpo em três ondas:\n\n• 1. Tensão e Medo: A agressão ou silêncio inunda a circulação de cortisol e adrenalina, colocando o organismo em hipervigilância.\n\n• 2. A Dor e os Opioides: Para suportar o estresse agudo, o cérebro secreta opioides endógenos (endorfinas).\n\n• 3. A Reconciliação: Quando o parceiro volta a ser carinhoso, o alívio gera uma explosão de ocitocina. O cérebro passa a ver o agressor como o único remédio para a dor que ele mesmo causou.",
+                "footer": "Por que a razão desliga? 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "O COLAPSO DO CONTROLE TOP-DOWN",
+                "title": "Quando a lógica perde a batalha",
+                "body": "Por que você justifica o injustificável?\n\n• A amígdala hiperativada sequestra o Córtex Pré-Frontal Dorsolateral (dlPFC), desativando o discernimento crítico.\n\n• Racionalização Defensiva: Para aliviar a dissonância cognitiva, sua mente mente para você: 'se eu tiver paciência, ele(a) vai mudar', 'a culpa foi minha por ter provocado'.\n\n• Amnésia Seletiva: O cérebro dissocia os episódios de crueldade e revive obsessivamente os poucos momentos bons do passado.",
+                "footer": "As raízes na infância 👉"
+            },
+            {
+                "type": "insight",
+                "badge": "TEORIA DO APEGO & TERAPIA DO ESQUEMA",
+                "title": "Uma ferida que já existia",
+                "body": "Embora qualquer um possa cair nessa teia, o risco é maior para quem carrega feridas precoces:\n\n• Apego Desorganizado: Crianças cujos cuidadores alternavam carinho e agressão aprendem que amor e perigo habitam o mesmo corpo.\n\n• Esquema de Abandono (Jeffrey Young): O pavor visceral da solidão faz o adulto tolerar qualquer humilhação para não ser abandonado.\n\n• O inconsciente tenta desesperadamente 'consertar' o parceiro tóxico para provar a si mesmo que finalmente merece ser amado.",
+                "footer": "Como quebrar esse ciclo? 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "NEUROBIOLOGIA & PSICOTERAPIA",
+                "title": "Tratando o laço como abstinência",
+                "body": "Romper o vínculo traumático requer encarar o processo como uma desintoxicação química:\n\n• Contato Zero Absoluto: Qualquer mensagem casual reinicia a tempestade dopaminérgica. O corte total é indispensável para recalibrar os receptores neuronais.\n\n• Tolerar a Abstinência (DBT): A dor física, o choro e a angústia inicial são sintomas reais de abstinência de opioides. Use regulação vagal (respiração lenta, gelo facial).\n\n• Dossiê da Realidade (TCC): Escreva todos os fatos cruéis vividos e releia sempre que a nostalgia tentar te enganar.",
+                "footer": "Recursos clínicos e teste gratuito 👉"
+            },
+            {
+                "type": "cta",
+                "badge": "EXPANSÃO DO ECOSSISTEMA",
+                "title": "Liberte seu sistema de apego",
+                "body": "Preparei um lote completo de ferramentas clínicas para ajudar você a reconstruir sua segurança afetiva:\n\n• Artigo Científico: A neurobiologia do vínculo traumático, dopamina e reforço intermitente;\n\n• Teste Psicométrico T-36: Escala de Vínculo Traumático e Dependência de Reforço Intermitente (EVT-DRI);\n\n• Jogo Cognitivo Dia 35: Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal (Web Audio API).",
+                "footer": "Acesse deomagalhaes.com.br • Link na bio"
+            }
+        ],
+        "caption": "Você já se perguntou por que é tão difícil colocar um ponto final em relações que claramente te machucam?\n\nQuantas vezes você jurou que não aceitaria mais desrespeito, mas ao menor pedido de desculpas, sentiu uma onda avassaladora de alívio e voltou atrás?\n\nNa cultura popular, costuma-se julgar quem passa por isso com frases duras: \"gosta de sofrer\", \"falta vergonha na cara\", \"precisa ter amor-próprio\". Mas como neuropsicólogo, preciso te dizer: a razão pela qual você não consegue sair não é fraqueza de caráter. É neuroquímica pura.\n\nTrata-se do fenômeno clínico do Vínculo Traumático (Trauma Bonding) alimentado pelo Reforço Intermitente.\n\nQuando alguém te trata com afeto imprevisível — ora com frieza, agressão ou indiferença, ora com carinho intenso e promessas de amor eterno —, seu cérebro entra no esquema de condicionamento mais poderoso descoberto pela ciência (B. F. Skinner e Wolfram Schultz). A incerteza dispara descargas colossais de dopamina no núcleo accumbens. Você não fica viciado no parceiro: você fica bioquimicamente viciado no alívio da angústia quando o perigo passa.\n\nDurante as brigas, seu corpo é inundado de cortisol e adrenalina (hipervigilância do sistema de apego). Para anestesiar o desespero, o cérebro libera opioides endógenos. Quando ocorre a reconciliação, o alívio e a ocitocina selam o laço com força magnética. O agressor vira o único analgésico para a dor que ele próprio causou.\n\nRomper esse ciclo não depende apenas de força de vontade: exige tratar o processo como uma verdadeira síndrome de abstinência química.\n\nPara ajudar você a compreender e desarmar essa dinâmica, lancei hoje no portal uma trilha clínica completa:\n1. Ensaio Científico Completo sobre a neurobiologia do vínculo traumático, dopamina fásica e reforço de razão variável;\n2. A nova Escala Psicométrica T-36 (Escala de Vínculo Traumático e Dependência de Reforço Intermitente - EVT-DRI), 100% gratuita, anônima e com devolutiva neuropsicológica imediata;\n3. O novo Jogo Cognitivo do Dia 35 (Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal) com efeitos de áudio procedural via Web Audio API.\n\nToque no link da bio ou acesse deomagalhaes.com.br para ler o ensaio e realizar sua avaliação.\n\nVocê já viveu ou presenciou uma relação pautada pela montanha-russa do reforço intermitente? O que mais dificultou a libertação? Deixe sua reflexão nos comentários!\n\n#vinculotraumatico #traumabonding #reforcointermitente #neuropsicologia #relacionamentotoxico #neurociencias #dopamina #apegoinseguro #saudemental #terapiadoesquema #tcc #act #autoestima #dependenciaemocional #deomagalhaes"
+    },
     "perfeccionismo-desadaptativo": {
         "articleSlug": "2026-11-07-neurobiologia-perfeccionismo-desadaptativo",
         "articleTitle": "A Neurobiologia do Perfeccionismo Desadaptativo: Como a Hiperatividade de Monitoramento de Erros Aprisiona o Cérebro na Rigidez",
@@ -3037,9 +3094,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "perfeccionismo-desadaptativo";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["perfeccionismo-desadaptativo"].slides));
-        let currentCaption = PRESETS["perfeccionismo-desadaptativo"].caption;
+        let currentPresetKey = "vinculo-traumatico";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["vinculo-traumatico"].slides));
+        let currentCaption = PRESETS["vinculo-traumatico"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta

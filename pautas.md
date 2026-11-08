@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia do Vínculo Traumático e do Reforço Intermitente: Como a Incerteza Afetiva e a Desregulação Dopaminérgica Aprisionam as Relações** (Publicado em 08/11/2026)
 - [x] **A Neurobiologia do Perfeccionismo Desadaptativo: Como a Hiperatividade de Monitoramento de Erros Aprisiona o Cérebro na Rigidez** (Publicado em 07/11/2026)
 - [x] **A Neurobiologia da Intolerância à Incerteza: Como o Cérebro Preditivo Transforma a Dúvida em Alerta de Ameaça** (Publicado em 07/11/2026)
 - [x] **A Neurobiologia da Alexitimia e a Desconexão Ínsulo-Pré-Frontal: Quando o Corpo Fala o Que as Palavras Não Alcançam** (Publicado em 06/11/2026)

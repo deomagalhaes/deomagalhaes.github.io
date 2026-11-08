@@ -42,6 +42,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-33** | **Escala de Granularidade Emocional e Alexitimia Clínica (EGEAC)** | Alexitimia, Ínsula Anterior, Consciência Interoceptiva e Pensamento Operatório | `testes/teste-granularidade-emocional-alexitimia.html` | ✅ Concluído |
 | **T-34** | **Escala de Intolerância à Incerteza e Ansiedade Preditiva (EIU-AP)** | Intolerância à Incerteza, Cérebro Preditivo, Paralisia Inibitória e Reatividade Somática | `testes/teste-intolerancia-incerteza.html` | ✅ Concluído |
 | **T-35** | **Escala Multidimensional de Perfeccionismo Clínico e Monitoramento de Erros (EMPC-ME)** | Perfeccionismo Clínico, dACC / ERN, Tirania dos Deverias e Medo do Julgamento | `testes/teste-perfeccionismo-clinico.html` | ✅ Concluído |
+| **T-36** | **Escala de Vínculo Traumático e Dependência de Reforço Intermitente (EVT-DRI)** | Vínculo Traumático, Reforço Intermitente, Abstinência e Apego Desorganizado | `testes/teste-vinculo-traumatico-dependencia-afetiva.html` | ✅ Concluído |
 
 ---
 

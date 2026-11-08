@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Vínculo Traumático e Dependência de Reforço Intermitente (EVT-DRI / T-36) – Deo Magalhães</title>
+    <meta name="description" content="Avalie a intensidade do vínculo traumático (trauma bonding), a dependência do reforço intermitente, sintomas de abstinência e sequestro neuroquímico relacional.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85em;
+            color: #475569;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-bottom: 6px;
+        }
+
+        .option-label.selected {
+            background: #e0f2fe;
+            border-color: #0284c7;
+            color: #0369a1;
+            font-weight: 600;
+        }
+
+        .btn-calc-submit {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+        }
+
+        .btn-calc-submit:hover {
+            background: linear-gradient(135deg, #0a9396, #005f73);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.4);
+        }
+
+        .results-panel {
+            display: none;
+            margin-top: 40px;
+            padding: 32px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 2px solid #005f73;
+            box-shadow: 0 10px 30px rgba(0, 95, 115, 0.15);
+        }
+
+        .result-header {
+            text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .result-score-badge {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            font-size: 1.4em;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            color: #0f172a;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .result-desc {
+            color: #475569;
+            font-size: 1em;
+            line-height: 1.7;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #0a9396;
+        }
+
+        .dim-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .dim-card-title {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 1em;
+        }
+
+        .dim-card-score {
+            font-weight: 800;
+            color: #005f73;
+            font-size: 1.05em;
+        }
+
+        .dim-bar-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .dim-bar-fill {
+            background: linear-gradient(90deg, #0a9396, #ee9b00);
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.8s ease;
+        }
+
+        .dim-feedback-text {
+            font-size: 0.9em;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .guidelines-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 30px;
+        }
+
+        .guidelines-box h4 {
+            color: #166534;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .guidelines-box p {
+            color: #15803d;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .guidelines-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cta-consult-box {
+            text-align: center;
+            margin-top: 35px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .cta-consult-box h4 {
+            margin: 0 0 10px 0;
+            color: #005f73;
+        }
+
+        .cta-consult-box p {
+            color: #64748b;
+            font-size: 0.95em;
+            margin-bottom: 18px;
+        }
+
+        .cta-consult-box a {
+            display: inline-block;
+            background: #005f73;
+            color: white;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .cta-consult-box a:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Vínculo Traumático e Dependência de Reforço Intermitente (EVT-DRI / T-36)</h1>
+                <p class="article-author-date">Instrumento de Avaliação Clínica e Psicoeducação Neuropsicológica • Deo Magalhães (CRP 04/42784)</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Fundamentação Neuroclínica:</strong> O <em>Vínculo Traumático (Trauma Bonding)</em> é uma neuroadaptação paradoxal e profunda observada em relacionamentos disfuncionais caracterizados por desequilíbrio de poder e abuso intermitente (Dutton & Painter, 1981; Carnes, 1997). Quando o afeto é imprevisível (reforço de razão variável), o cérebro dispara picos anômalos de dopamina fásica, associados a uma cascata de cortisol, opioides endógenos e ocitocina durante ciclos de crise e reconciliação.</p>
+                <p>Este instrumento autoaplicável mapeia o grau de dependência neuroquímica relacional através de 16 itens distribuídos em 4 dimensões neurofuncionais. <strong>100% privado e anônimo:</strong> os cálculos ocorrem exclusivamente no seu navegador.</p>
+            </div>
+
+            <form id="quizForm" class="quiz-container">
+                <!-- DIMENSÃO 1 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Sensibilidade ao Reforço Intermitente e Fixação por Migalhas (VTA & Accumbens)</h3>
+                    <p>Avalia a resposta dopaminérgica à incerteza afetiva e a dependência de ciclos de imprevisibilidade.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">01</span>
+                        <span>Quando a pessoa passa dias fria ou distante e subitamente me envia uma mensagem carinhosa, sinto uma euforia desproporcional que faz tudo parecer perfeito.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q1" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q1" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q1" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">02</span>
+                        <span>Percebo que a instabilidade e o receio de perder o afeto me deixam muito mais obcecado(a) do que quando vivo um relacionamento calmo e seguro.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q2" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q2" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q2" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">03</span>
+                        <span>Fico constantemente esperando pelo retorno daquela pessoa maravilhosa do início da relação ou daqueles momentos de intensa reconciliação.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q3" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q3" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q3" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">04</span>
+                        <span>Sinto que preciso me desdobrar e me anular continuamente para conseguir arrancar pequenos momentos de carinho, aprovação e atenção.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q4" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q4" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q4" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <!-- DIMENSÃO 2 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Pânico de Abandono e Resposta Fisiológica de Abstinência (Eixo HPA & Opioides)</h3>
+                    <p>Mapeia sintomas corporais, hiperalerta autonômico e o desespero visceral diante da distância.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">05</span>
+                        <span>Quando nos desentendemos ou nos afastamos, sinto uma dor física no peito, enjoo, tremores ou um vazio angustiante que não consigo conter.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q5" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q5" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q5" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">06</span>
+                        <span>A simples perspectiva de que o relacionamento termine definitivamente desperta em mim uma sensação de desamparo e pânico absoluto.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q6" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q6" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q6" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">07</span>
+                        <span>Quando tento me afastar, a angústia da ausência é tão insuportável que acabo quebrando o afastamento apenas para fazer a dor parar.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q7" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q7" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q7" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">08</span>
+                        <span>Sinto que não consigo focar no trabalho ou relaxar enquanto não tiver a confirmação explícita de que está tudo em paz entre nós.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q8" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q8" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q8" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <!-- DIMENSÃO 3 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Racionalização Defensiva e Autoengano Protetivo (Inibição Pré-Frontal)</h3>
+                    <p>Identifica justificativas automáticas, autoimputação de culpa e amnésia seletiva pós-crise.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">09</span>
+                        <span>Frequentemente culpo a mim mesmo(a) pela grosseria ou frieza da pessoa, pensando: "se eu tivesse sido mais paciente, isso não aconteceria".</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q9" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q9" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q9" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">10</span>
+                        <span>Costumo desculpar atitudes inaceitáveis da pessoa atribuindo-as ao estresse no trabalho, trauma de infância ou fases difíceis.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q10" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q10" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q10" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">11</span>
+                        <span>Escondo de amigos ou familiares episódios graves de desrespeito ou humilhação vividos na relação por vergonha ou medo do julgamento deles.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q11" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q11" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q11" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">12</span>
+                        <span>Prefiro me apegar a promessas de mudanças futuras da pessoa do que encarar o padrão real e contínuo de atitudes no presente.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q12" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q12" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q12" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <!-- DIMENSÃO 4 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Hipervigilância Relacional e Supressão de Limites (Apego Desorganizado & Esquemas)</h3>
+                    <p>Avalia o estado de alerta constante, a perda da própria individualidade e a paralisia do término.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">13</span>
+                        <span>Vivo em constante estado de alerta ("pisando em ovos"), calculando cada palavra ou atitude para não despertar irritação ou rejeição.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q13" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q13" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q13" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">14</span>
+                        <span>Já tolerei violações de limites éticos e pessoais que no passado eu jurava que jamais aceitaria de ninguém.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q14" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q14" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q14" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">15</span>
+                        <span>Sinto que fui me desfazendo dos meus próprios gostos, objetivos e limites pessoais apenas para acomodar as exigências ou o humor do outro.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q15" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q15" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q15" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="question-number">16</span>
+                        <span>Mesmo exausto(a), triste e consciente do mal que a dinâmica me faz, sinto uma paralisia e incapacidade de dar um basta definitivo.</span>
+                    </div>
+                    <div class="options-group">
+                        <label class="option-label"><input type="radio" name="q16" value="1" required> Discordo Totalmente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"> Discordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"> Neutro / Às vezes</label>
+                        <label class="option-label"><input type="radio" name="q16" value="4"> Concordo Parcialmente</label>
+                        <label class="option-label"><input type="radio" name="q16" value="5"> Concordo Totalmente</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-calc-submit">Calcular Meu Escore de Vínculo Traumático</button>
+            </form>
+
+            <!-- SEÇÃO DE RESULTADOS -->
+            <section id="resultsSection" class="results-panel">
+                <div class="result-header">
+                    <span id="scoreBadge" class="result-score-badge">0 / 80 Pontos</span>
+                    <h2 id="resultTitle" class="result-title">Perfil Psicométrico</h2>
+                    <p id="resultDesc" class="result-desc">Análise neuroclínica personalizada.</p>
+                </div>
+
+                <!-- Detalhamento por Dimensões -->
+                <h3 style="color: #005f73; margin-bottom: 15px;">Perfil Dimensional Neurofuncional:</h3>
+                <div class="dimensions-grid">
+                    <!-- D1 -->
+                    <div class="dimension-card">
+                        <div class="dim-card-header">
+                            <span class="dim-card-title">1. Sensibilidade ao Reforço Intermitente (VTA / Accumbens)</span>
+                            <span id="d1Score" class="dim-card-score">0 / 20</span>
+                        </div>
+                        <div class="dim-bar-track">
+                            <div id="d1Bar" class="dim-bar-fill"></div>
+                        </div>
+                        <div id="d1Feedback" class="dim-feedback-text">Calculando...</div>
+                    </div>
+
+                    <!-- D2 -->
+                    <div class="dimension-card">
+                        <div class="dim-card-header">
+                            <span class="dim-card-title">2. Pânico de Abandono & Resposta de Abstinência (Eixo HPA)</span>
+                            <span id="d2Score" class="dim-card-score">0 / 20</span>
+                        </div>
+                        <div class="dim-bar-track">
+                            <div id="d2Bar" class="dim-bar-fill"></div>
+                        </div>
+                        <div id="d2Feedback" class="dim-feedback-text">Calculando...</div>
+                    </div>
+
+                    <!-- D3 -->
+                    <div class="dimension-card">
+                        <div class="dim-card-header">
+                            <span class="dim-card-title">3. Racionalização Defensiva & Autoengano (Inibição Pré-Frontal)</span>
+                            <span id="d3Score" class="dim-card-score">0 / 20</span>
+                        </div>
+                        <div class="dim-bar-track">
+                            <div id="d3Bar" class="dim-bar-fill"></div>
+                        </div>
+                        <div id="d3Feedback" class="dim-feedback-text">Calculando...</div>
+                    </div>
+
+                    <!-- D4 -->
+                    <div class="dimension-card">
+                        <div class="dim-card-header">
+                            <span class="dim-card-title">4. Hipervigilância Relacional & Supressão de Limites (Apego Inseguro)</span>
+                            <span id="d4Score" class="dim-card-score">0 / 20</span>
+                        </div>
+                        <div class="dim-bar-track">
+                            <div id="d4Bar" class="dim-bar-fill"></div>
+                        </div>
+                        <div id="d4Feedback" class="dim-feedback-text">Calculando...</div>
+                    </div>
+                </div>
+
+                <!-- Diretrizes Psicoeducativas -->
+                <div class="guidelines-box">
+                    <h4>Diretrizes Clínicas e Estratégias de Recuperação Neuropsicológica:</h4>
+                    <div id="guidelinesText">
+                        <!-- Injetado via JS -->
+                    </div>
+                </div>
+
+                <!-- CTA Agendamento -->
+                <div class="cta-consult-box">
+                    <h4>Deseja auxílio profissional para reestruturar seu apego e limites?</h4>
+                    <p>Avaliações neuropsicológicas e psicoterapias baseadas em evidências (TCC, Terapia do Esquema e ACT) para resgate da autonomia emocional.</p>
+                    <a href="/agendamento.html">Agendar Avaliação ou Consulta Clínica</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Feedback visual ao clicar nos labels
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const group = e.target.closest('.options-group');
+                    group.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    e.target.closest('.option-label').classList.add('selected');
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let d1 = 0; // Sensibilidade ao Reforço Intermitente (Itens 1 a 4)
+                let d2 = 0; // Pânico de Abandono & Abstinência (Itens 5 a 8)
+                let d3 = 0; // Racionalização Defensiva (Itens 9 a 12)
+                let d4 = 0; // Hipervigilância & Supressão de Limites (Itens 13 a 16)
+
+                for (let i = 1; i <= 16; i++) {
+                    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`)?.value || "0", 10);
+                    if (i <= 4) d1 += val;
+                    else if (i <= 8) d2 += val;
+                    else if (i <= 12) d3 += val;
+                    else d4 += val;
+                }
+
+                const total = d1 + d2 + d3 + d4;
+                document.getElementById('scoreBadge').innerText = `${total} / 80 Pontos`;
+
+                let title = "";
+                let desc = "";
+                let guidelines = "";
+
+                if (total <= 34) {
+                    title = "Vínculo Seguro / Baixa Dependência de Reforço Intermitente";
+                    desc = "Seu funcionamento relacional demonstra sólido senso de integridade, autoeficácia e clareza de limites. Você não apresenta vulnerabilidade neurobiológica acentuada a dinâmicas de imprevisibilidade afetiva. Seu sistema dopaminérgico não é sequestrado por migalhas de atenção e suas funções pré-frontais permanecem ativas para discernir reciprocity saudável de manipulação.";
+                    guidelines = "<p>• <strong>Manutenção de Limites Claros:</strong> Continue cultivando relacionamentos pautados em previsibilidade, respeito mútuo e comunicação direta.</p><p>• <strong>Reconhecimento Precoce de Sinais:</strong> Sua clareza cognitiva permite detectar rapidamente dinâmicas instáveis antes que se consolide qualquer ligação de trauma.</p>";
+                } else if (total <= 52) {
+                    title = "Vulnerabilidade Afetiva Moderada / Insegurança de Apego";
+                    desc = "Você apresenta sensibilidade intermediária a flutuações de afeto e instabilidade relacional. Em momentos de desentendimento ou distanciamento prolongado, a amígdala e o eixo HPA acionam sinais de angústia e pensamentos de insuficiência, favorecendo concessões excessivas para restabelecer a paz a curto prazo.";
+                    guidelines = "<p>• <strong>Calibração da Tolerância ao Silêncio:</strong> Evite a necessidade compulsiva de apaziguamento imediato. Pratique a respiração diafragmática para reduzir a reatividade adrenérgica quando houver desentendimentos normais.</p><p>• <strong>Diferenciação entre Insegurança e Manipulação:</strong> Observe se a incerteza provém de medos internos seus ou se é provocada deliberadamente por inconsistência crônica da outra parte.</p>";
+                } else if (total <= 67) {
+                    title = "Vínculo Traumático Significativo / Dependência Dopaminérgica Elevada";
+                    desc = "Seu sistema nervoso está respondendo ativamente ao ciclo do reforço intermitente. O córtex pré-frontal está sofrendo inibição funcional pelos picos de estresse, gerando racionalização automática dos erros do outro, amnésia seletiva das dores e forte apego às memórias de reconciliação. A experiência de afastamento deflagra sintomas dolorosos e reais de abstinência fisiológica.";
+                    guidelines = "<p>• <strong>Protocolo de Extinção do Estímulo (Contato Zero / Fricção Máxima):</strong> Reduza drasticamente a exposição à pessoa. O cérebro necessita de tempo contínuo sem estímulos imprevisíveis para reequilibrar os receptores de dopamina e opioides.</p><p>• <strong>Dossiê da Realidade (TCC):</strong> Liste por escrito todos os fatos dolorosos concretos. Sempre que o anseio pela pessoa surgir, releia os fatos para reativar o córtex pré-frontal e desarmar a nostalgia seletiva.</p><p>• <strong>Apoio Terapêutico Focado em Esquemas:</strong> Trabalhe esquemas de abandono e subjugação para recuperar a crença de dignidade e merecimento pessoal.</p>";
+                } else {
+                    title = "Vínculo Traumático Crítico / Sequestro Bioquímico Severo";
+                    desc = "Configura um quadro grave de aprisionamento neurobiológico relacional (Trauma Bonding profundo). O organismo opera em estado de hipervigilância crônica e exaustão alostática. O desespero diante do término e a dor somática da ausência anulam o discernimento lógico, levando à aceitação de abusos severos e anulação completa da identidade existencial.";
+                    guidelines = "<p>• <strong>Acompanhamento Psicológico Especializado Urgente:</strong> É fundamental suporte profissional estruturado (Psicologia Clínica / Neuropsicologia / Psiquiatria) e rede de apoio social segura para interrupção do ciclo.</p><p>• <strong>Manejo Clínico da Abstinência:</strong> Entenda a dor do afastamento como desintoxicação fisiológica transitória. Utilize técnicas corporais de regulação autonômica (DBT / Teoria Polivagal): gelo no rosto, caminhadas e ancoragem sensorial.</p><p>• <strong>Reconstrução da Dignidade Existencial:</strong> Nenhum vínculo autêntico exige a aniquilação do seu ser. O rompimento do laço abusivo é um ato supremo de preservação biológica e respeito à sua própria vida.</p>";
+                }
+
+                document.getElementById('resultTitle').innerText = title;
+                document.getElementById('resultDesc').innerText = desc;
+                document.getElementById('guidelinesText').innerHTML = guidelines;
+
+                const updateDim = (idPrefix, val, maxVal) => {
+                    document.getElementById(`${idPrefix}Score`).innerText = `${val} / ${maxVal}`;
+                    const pct = Math.round((val / maxVal) * 100);
+                    document.getElementById(`${idPrefix}Bar`).style.width = `${pct}%`;
+                    
+                    let statusTxt = "";
+                    if (pct <= 45) statusTxt = "Baixo / Funcionamento Seguro";
+                    else if (pct <= 70) statusTxt = "Moderado / Alerta de Insegurança";
+                    else statusTxt = "Severo / Dependência e Sequestro Neuroquímico";
+                    document.getElementById(`${idPrefix}Feedback`).innerText = `${statusTxt} (${pct}% do escore máximo).`;
+                };
+
+                updateDim('d1', d1, 20);
+                updateDim('d2', d2, 20);
+                updateDim('d3', d3, 20);
+                updateDim('d4', d4, 20);
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

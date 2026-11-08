@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 35: Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal – Deo Magalhães</title>
+    <meta name="description" content="Treine o córtex orbitofrontal (OFC) e a flexibilidade cognitiva com a tarefa clássica de Reversal Learning Task (PRLT) e efeitos Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Painel Central do Experimento */
+        .reversal-panel {
+            background: linear-gradient(135deg, #001219, #002533);
+            border: 2px solid #0a9396;
+            border-radius: 14px;
+            padding: 35px 20px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 18, 25, 0.25);
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .reversal-phase-indicator {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            color: #94d2bd;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reversal-phase-indicator span {
+            background: rgba(10, 147, 150, 0.3);
+            border: 1px solid #0a9396;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .stimuli-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .stimulus-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(148, 210, 189, 0.3);
+            border-radius: 16px;
+            padding: 30px 25px;
+            width: 220px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            user-select: none;
+        }
+
+        .stimulus-card:hover:not(.disabled) {
+            transform: translateY(-6px) scale(1.03);
+            border-color: #ee9b00;
+            box-shadow: 0 12px 30px rgba(238, 155, 0, 0.3);
+            background: rgba(238, 155, 0, 0.08);
+        }
+
+        .stimulus-card:active:not(.disabled) {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .stimulus-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .stimulus-symbol {
+            font-size: 3.5em;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 12px rgba(10, 147, 150, 0.6));
+            transition: transform 0.3s ease;
+        }
+
+        .stimulus-title {
+            color: #ffffff;
+            font-size: 1.2em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stimulus-sub {
+            color: #94a3b8;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .feedback-banner {
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15em;
+            font-weight: 700;
+            padding: 8px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .feedback-banner.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid #22c55e;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .feedback-banner.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .feedback-banner.reversal-alert {
+            background: rgba(238, 155, 0, 0.25);
+            color: #fcd34d;
+            border: 1px solid #ee9b00;
+            box-shadow: 0 0 20px rgba(238, 155, 0, 0.4);
+            animation: pulseBanner 1.2s infinite alternate;
+        }
+
+        @keyframes pulseBanner {
+            0% { transform: scale(0.98); }
+            100% { transform: scale(1.02); }
+        }
+
+        .instruction-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 25px;
+        }
+
+        .history-pills {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .history-pill {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .history-pill.correct {
+            background: #22c55e;
+            border-color: #4ade80;
+            box-shadow: 0 0 8px #22c55e;
+        }
+
+        .history-pill.wrong {
+            background: #ef4444;
+            border-color: #f87171;
+        }
+
+        .history-pill.reversal {
+            background: #ee9b00;
+            border-color: #fcd34d;
+            box-shadow: 0 0 8px #ee9b00;
+        }
+
+        /* Modal / Relatório Final */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 18, 25, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 35px;
+            max-width: 580px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid #005f73;
+            text-align: center;
+        }
+
+        .modal-card h2 {
+            color: #005f73;
+            margin-bottom: 10px;
+            font-size: 1.6em;
+        }
+
+        .modal-card p {
+            color: #475569;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .metric-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric-label {
+            font-size: 0.75em;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #005f73;
+            margin-top: 4px;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restart:hover {
+            background: linear-gradient(135deg, #0a9396, #005f73);
+            transform: translateY(-2px);
+        }
+
+        /* Seção Científica */
+        .science-section {
+            text-align: left;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .science-section h3 {
+            color: #005f73;
+            font-size: 1.3em;
+            margin-bottom: 12px;
+        }
+
+        .science-section p {
+            color: #334155;
+            font-size: 0.95em;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal (Dia 35)</h1>
+                <p class="article-author-date">Neurociência Aplicada e Treino das Funções Executivas • Por Deo Magalhães (CRP 04/42784)</p>
+            </header>
+
+            <div class="instruction-box">
+                <strong>Instruções do Experimento:</strong>
+                <p>Dois vórtices neurais competem pelo fornecimento de energia biofotônica. Em cada fase, <strong>um dos vórtices é altamente vantajoso (80% de chance de ganho)</strong>, enquanto o outro é desfavorável (apenas 20% de ganho). Observe que mesmo a melhor opção possui 20% de ruído probabilístico!</p>
+                <p>Descubra a regra vantajosa e acumule acertos estáveis. Em momentos imprevisíveis, <strong>a regra se inverterá</strong> (Reversão Oculta). Seu Córtex Orbitofrontal (OFC) precisará notar o erro de predição, inibir a perseveração no hábito antigo e alternar rapidamente para o novo vórtice vantajoso. Conclua 4 reversões para finalizar o treino.</p>
+            </div>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status Superior -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Energia (Biofótons)</span>
+                        <span id="scoreVal" class="stat-badge-value">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Tentativa</span>
+                        <span id="trialVal" class="stat-badge-value">1</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Reversões Concluídas</span>
+                        <span id="reversalsVal" class="stat-badge-value">0 / 4</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Precisão Global</span>
+                        <span id="accuracyVal" class="stat-badge-value">--%</span>
+                    </div>
+                    <button id="soundToggleBtn" class="sound-btn" title="Alternar Som">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Painel de Estímulos -->
+                <div class="reversal-panel">
+                    <div class="reversal-phase-indicator">
+                        <span>Fase <strong id="phaseNum">1</strong>: Calibração de Regra</span>
+                    </div>
+
+                    <div class="stimuli-container">
+                        <!-- Estímulo 0: Vórtice Alpha -->
+                        <div id="stimulus0" class="stimulus-card" onclick="handleChoice(0)">
+                            <div class="stimulus-symbol">⚛️</div>
+                            <div class="stimulus-title">Vórtice Alpha</div>
+                            <div class="stimulus-sub">Canal Sináptico 01</div>
+                        </div>
+
+                        <!-- Estímulo 1: Vórtice Beta -->
+                        <div id="stimulus1" class="stimulus-card" onclick="handleChoice(1)">
+                            <div class="stimulus-symbol">🔮</div>
+                            <div class="stimulus-title">Vórtice Beta</div>
+                            <div class="stimulus-sub">Canal Sináptico 02</div>
+                        </div>
+                    </div>
+
+                    <div id="feedbackBanner" class="feedback-banner">
+                        Selecione um dos vórtices para iniciar a amostragem neural.
+                    </div>
+
+                    <div class="history-pills" id="historyContainer" title="Histórico recente de decisões">
+                        <!-- Pílulas de histórico geradas dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Fundamentação Científica -->
+                <div class="science-section">
+                    <h3>Neurobiologia da Tarefa: O Córtex Orbitofrontal e o Aprendizado por Reversão</h3>
+                    <p>A <strong>Probabilistic Reversal Learning Task (PRLT)</strong> é um dos paradigmas mais consagrados da neuropsicologia experimental humana e comportamental (Cools et al., 2002; Fellows & Farah, 2003). Ela avalia especificamente a integridade funcional do <strong>Córtex Orbitofrontal (OFC)</strong>, do <strong>Córtex Pré-Frontal Ventromedial (vmPFC)</strong> e da alça corticoestriatal ventral (estriado ventral e núcleo accumbens).</p>
+                    <p>Enquanto o aprendizado inicial depende da codificação do <em>Erro de Predição de Recompensa (RPE)</em> mediado por dopamina na Área Tegmentar Ventral (Wolfram Schultz), o momento da reversão exige um esforço cognitivo radicalmente distinto: o cérebro precisa <strong>desacoplar o valor associativo de uma contingência previamente reforçada</strong> e inibir o impulso automático de perseveração. Essa é a base neuropsicológica da superação de vícios, hábitos rígidos e vínculos disfuncionais.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Vitória / Resultados -->
+    <div id="resultModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2>Calibração Pré-Frontal Concluída!</h2>
+            <p id="modalDesc">Você concluiu com sucesso todas as 4 reversões de contingência, demonstrando alta flexibilidade cognitiva e adaptabilidade do córtex orbitofrontal.</p>
+            
+            <div class="modal-metrics-grid">
+                <div class="metric-cell">
+                    <span class="metric-label">Tentativas Totais</span>
+                    <span id="finalTrials" class="metric-value">0</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-label">Erros Perseverativos</span>
+                    <span id="finalPersev" class="metric-value">0</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-label">Índice de Flexibilidade</span>
+                    <span id="finalFlexIndex" class="metric-value">0%</span>
+                </div>
+            </div>
+
+            <button class="btn-restart" onclick="restartExperiment()">Executar Nova Sessão</button>
+        </div>
+    </div>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Motor de Som Web Audio API & Lógica do Jogo -->
+    <script>
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) {
+                        this.ctx = new AudioContext();
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playReward() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Arpejo luminoso senoidal C5 -> G5
+                [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const t = now + (idx * 0.06);
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, t);
+
+                    gain.gain.setValueAtTime(0.12, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(t);
+                    osc.stop(t + 0.28);
+                });
+            }
+
+            playPenalty() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Tom suave de ajuste A2 (110 Hz) com decaimento macio sem estridência punitiva
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(146.83, now); // D3
+                osc.frequency.exponentialRampToValueAtTime(110.00, now + 0.25); // A2
+
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+
+            playReversalAlert() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Acorde cósmico suave de reversão
+                [440.00, 554.37, 659.25].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const t = now + (idx * 0.08);
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, t);
+
+                    gain.gain.setValueAtTime(0.08, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(t);
+                    osc.stop(t + 0.5);
+                });
+            }
+
+            playVictory() {
+                if (!this.enabled) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                // Fanfarra triunfal C5 - E5 - G5 - C6
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const t = now + (idx * 0.1);
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, t);
+
+                    gain.gain.setValueAtTime(0.14, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(t);
+                    osc.stop(t + 0.45);
+                });
+            }
+        }
+
+        const sound = new SoundEngine();
+
+        // Estado do Jogo
+        let advantageousStimulus = 0; // 0 = Alpha, 1 = Beta
+        let trialsCount = 0;
+        let score = 0;
+        let reversalsCount = 0;
+        const TARGET_REVERSALS = 4;
+        let consecutiveAdvantageous = 0;
+        const CRITERION_CONSECUTIVE = 4; // 4 escolhas vantajosas seguidas ativam reversão
+        let isProcessing = false;
+
+        // Métricas Psicométricas
+        let advantageousChoicesCount = 0;
+        let perseverativeErrorsCount = 0;
+        let trialsSinceReversal = 0;
+        let inReversalPhase = false;
+
+        function initGame() {
+            // Sorteio inicial do estímulo vantajoso
+            advantageousStimulus = Math.random() < 0.5 ? 0 : 1;
+            trialsCount = 0;
+            score = 0;
+            reversalsCount = 0;
+            consecutiveAdvantageous = 0;
+            advantageousChoicesCount = 0;
+            perseverativeErrorsCount = 0;
+            trialsSinceReversal = 0;
+            inReversalPhase = false;
+            isProcessing = false;
+
+            updateUI();
+            document.getElementById('historyContainer').innerHTML = '';
+            document.getElementById('resultModal').style.display = 'none';
+            setBanner("Selecione um dos vórtices para iniciar a amostragem neural.", "");
+        }
+
+        function handleChoice(chosenStimulus) {
+            if (isProcessing) return;
+            isProcessing = true;
+            trialsCount++;
+            trialsSinceReversal++;
+
+            const isAdvantageous = (chosenStimulus === advantageousStimulus);
+            if (isAdvantageous) {
+                advantageousChoicesCount++;
+            } else if (inReversalPhase && trialsSinceReversal <= 3) {
+                // Erro perseverativo: insistir na regra que acabou de se inverter
+                perseverativeErrorsCount++;
+            }
+
+            // Probabilidade: 80% de ganho se vantajoso, 20% se desvantajoso
+            const winProbability = isAdvantageous ? 0.80 : 0.20;
+            const won = Math.random() < winProbability;
+
+            // Feedback visual e sonoro
+            const banner = document.getElementById('feedbackBanner');
+            const cardEl = document.getElementById(`stimulus${chosenStimulus}`);
+
+            if (won) {
+                score += 25;
+                sound.playReward();
+                setBanner(`+25 Biofótons! Fluxo sináptico confirmado no Vórtice ${chosenStimulus === 0 ? 'Alpha' : 'Beta'}.`, "success");
+                addHistoryPill('correct');
+            } else {
+                score = Math.max(0, score - 10);
+                sound.playPenalty();
+                setBanner(`Ruído Neural (-10): Flutuação de sinal no Vórtice ${chosenStimulus === 0 ? 'Alpha' : 'Beta'}.`, "error");
+                addHistoryPill('wrong');
+            }
+
+            // Critério de Reversão
+            if (isAdvantageous) {
+                consecutiveAdvantageous++;
+                if (consecutiveAdvantageous >= CRITERION_CONSECUTIVE) {
+                    // Ativa Reversão!
+                    triggerReversal();
+                }
+            } else {
+                consecutiveAdvantageous = Math.max(0, consecutiveAdvantageous - 1);
+            }
+
+            updateUI();
+
+            setTimeout(() => {
+                isProcessing = false;
+                if (reversalsCount >= TARGET_REVERSALS) {
+                    finishGame();
+                }
+            }, 600);
+        }
+
+        function triggerReversal() {
+            reversalsCount++;
+            advantageousStimulus = 1 - advantageousStimulus; // Inversão da contingência!
+            consecutiveAdvantageous = 0;
+            trialsSinceReversal = 0;
+            inReversalPhase = true;
+
+            sound.playReversalAlert();
+            addHistoryPill('reversal');
+
+            setTimeout(() => {
+                setBanner("⚡ Alerta de Mudança de Fase: O padrão neural se alterou! Recalibre sua atenção.", "reversal-alert");
+            }, 700);
+        }
+
+        function setBanner(text, typeClass) {
+            const banner = document.getElementById('feedbackBanner');
+            banner.className = `feedback-banner ${typeClass}`;
+            banner.innerText = text;
+        }
+
+        function addHistoryPill(type) {
+            const container = document.getElementById('historyContainer');
+            const pill = document.createElement('div');
+            pill.className = `history-pill ${type}`;
+            container.appendChild(pill);
+            if (container.children.length > 25) {
+                container.removeChild(container.firstChild);
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('trialVal').innerText = trialsCount;
+            document.getElementById('reversalsVal').innerText = `${reversalsCount} / ${TARGET_REVERSALS}`;
+            document.getElementById('phaseNum').innerText = Math.min(TARGET_REVERSALS + 1, reversalsCount + 1);
+
+            const acc = trialsCount > 0 ? Math.round((advantageousChoicesCount / trialsCount) * 100) : 0;
+            document.getElementById('accuracyVal').innerText = `${acc}%`;
+        }
+
+        function finishGame() {
+            sound.playVictory();
+            const modal = document.getElementById('resultModal');
+            document.getElementById('finalTrials').innerText = trialsCount;
+            document.getElementById('finalPersev').innerText = perseverativeErrorsCount;
+
+            // Índice de flexibilidade: baseado no número de tentativas e controle perseverativo
+            const flexScore = Math.max(30, Math.min(100, Math.round(100 - (perseverativeErrorsCount * 8) - (trialsCount * 0.5))));
+            document.getElementById('finalFlexIndex').innerText = `${flexScore}%`;
+
+            modal.style.display = 'flex';
+        }
+
+        function restartExperiment() {
+            initGame();
+        }
+
+        // Controle de Áudio
+        document.getElementById('soundToggleBtn').addEventListener('click', () => {
+            sound.enabled = !sound.enabled;
+            const btn = document.getElementById('soundToggleBtn');
+            const icon = document.getElementById('soundIcon');
+            if (sound.enabled) {
+                icon.innerText = "🔊";
+                btn.innerHTML = `<span id="soundIcon">🔊</span> Som Ativo`;
+            } else {
+                icon.innerText = "🔇";
+                btn.innerHTML = `<span id="soundIcon">🔇</span> Som Mudo`;
+            }
+        });
+
+        // Início
+        document.addEventListener('DOMContentLoaded', () => {
+            initGame();
+        });
+    </script>
+</body>
+</html>
