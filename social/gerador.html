@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="vinculo-traumatico" selected>A Prisão do Afeto: A Neurobiologia do Vínculo Traumático e Reforço Intermitente</option>
+<option value="hipervigilancia-cronica" selected>O Cérebro em Sentinela: A Neurobiologia da Hipervigilância Crônica</option>
+                        <option value="vinculo-traumatico">A Prisão do Afeto: A Neurobiologia do Vínculo Traumático e Reforço Intermitente</option>
                         <option value="perfeccionismo-desadaptativo">A Prisão da Perfeição: A Neurobiologia do Perfeccionismo Desadaptativo</option>
                         <option value="intolerancia-incerteza">A Mente que Não Tolera a Dúvida: Intolerância à Incerteza e o Cérebro Preditivo</option>
                         <option value="alexitimia-desconexao">O Silêncio das Emoções: Alexitimia e a Desconexão Ínsulo-Pré-Frontal</option>
@@ -668,6 +669,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "hipervigilancia-cronica": {
+        "articleSlug": "2026-11-08-neurobiologia-hipervigilancia-cronica",
+        "articleTitle": "A Neurobiologia da Hipervigilância Crônica e a Falha do Filtro Talâmico: Como a Sensibilização Central Aprisiona a Mente em Alerta Permanente",
+        "slides": [
+            {
+                "type": "mechanism",
+                "badge": "NEUROBIOLOGIA DO ALERTA",
+                "title": "Por que seu cérebro não consegue relaxar?",
+                "body": "Você está em casa, no silêncio da noite, mas seu corpo age como se estivesse no meio de uma emboscada. Músculos contraídos, respiração curta, ouvidos atentos a qualquer estalo e uma sensação difusa de que algo ruim vai acontecer a qualquer segundo. Não é covardia nem excesso de imaginação: descubra a neurociência por trás da Hipervigilância Crônica.",
+                "footer": "Deslize para entender por que o alarme travou ligado 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "SENSORY GATING & FILTRO TALÂMICO",
+                "title": "Quando a sentinela do cérebro falha",
+                "body": "A cada segundo, seu corpo recebe milhões de estímulos. Para você conseguir pensar ou conversar, o cérebro usa um filtro: o Núcleo Reticular Talâmico (TRN):\n\n• Em equilíbrio, esse portão silencia estímulos irrelevantes (ruído do tráfego, atrito da roupa, murmúrios).\n\n• Na hipervigilância, o portão quebra: o cérebro perde a capacidade de supressão pré-atencional (sensory gating).\n\n• Cada som, cada mudança de luz e cada microexpressão facial atingem sua consciência como se fossem perigos iminentes.",
+                "footer": "A tempestade química do alerta 👉"
+            },
+            {
+                "type": "mechanism",
+                "badge": "TÔNUS NORADRENÉRGICO",
+                "title": "O marcapasso do medo disparado",
+                "body": "No tronco encefálico vive o Locus Coeruleus, a central produtora de noradrenalina do cérebro:\n\n• Em estresse crônico, ele entra em modo tônico hiperativo, banhando o sistema nervoso em alerta químico ininterrupto.\n\n• Alça de Retroalimentação: A amígdala excita o Locus Coeruleus, e a noradrenalina hipersensibiliza a amígdala.\n\n• O resultado no corpo: taquicardia basal, extremidades frias, pupila dilatada e reflexo de sobressalto no volume máximo.",
+                "footer": "Por que a razão não convence o corpo? 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "CÉREBRO PREDITIVO & FRISTON",
+                "title": "A máquina de prever desastres",
+                "body": "O cérebro não apenas enxerga o mundo; ele tenta adivinhar o próximo segundo:\n\n• Na mente hipervigilante, a probabilidade prévia atribuída ao perigo é calibrada em 99%.\n\n• Sinais neutros viram ameaças: um silêncio no WhatsApp vira rejeição; um cansaço muscular vira prenúncio de colapso.\n\n• O Córtex Pré-Frontal Ventromedial (vmPFC), que deveria acalmar o sistema, perde o poder inibitório sobre a amígdala. O alarme grita mais alto que os fatos.",
+                "footer": "As consequências somáticas 👉"
+            },
+            {
+                "type": "insight",
+                "badge": "SOBRECARGA ALOSTÁTICA",
+                "title": "O preço invisível de nunca baixar a guarda",
+                "body": "Manter o organismo em prontidão de guerra 24 horas por dia consome uma energia biológica monumental:\n\n• Fadiga Crônica: O corpo está exausto, mas a mente é incapaz de desligar para o sono reparador profundo.\n\n• Hipersensibilidade à Dor: A sensibilização central reduz o limiar de dor (cefaléias, dores miofasciais e bruxismo).\n\n• Isolamento Afetivo: Quando qualquer aproximação humana é decodificada como ameaça potencial, a solidão torna-se a única trincheira segura aparente.",
+                "footer": "Como ensinar o corpo a descansar? 👉"
+            },
+            {
+                "type": "concept",
+                "badge": "PROTOCOLO CLÍNICO & TEORIA POLIVAGAL",
+                "title": "3 passos para desarmar a sentinela",
+                "body": "Para fechar o portão de alarme, é preciso dialogar com o corpo antes da razão:\n\n• 1. Respiração por Ressonância Vagal: 6 respirações lentas por minuto (expiração prolongada de 6 segundos) ativam o vago ventral e freiam o Locus Coeruleus.\n\n• 2. Higiene Sensorial Proativa: Reduza o bombardeio estroboscópico de notificações e ruídos digitais. Dê trégua aos canais talâmicos.\n\n• 3. Desfusão das Sentinelas (ACT & TCC): 'Noto que meu corpo está querendo me proteger com um alarme antigo. Agradeço à minha biologia, mas neste exato segundo, estou seguro'.",
+                "footer": "Recursos clínicos e teste gratuito 👉"
+            },
+            {
+                "type": "action",
+                "badge": "ARTIGO COMPLETO & ESCALA CLÍNICA",
+                "title": "A paz é um treino biológico",
+                "body": "Abaixar os escudos não significa ficar indefeso: significa permitir que a vida aconteça sem a tirania do medo.\n\n• Leia o artigo completo com referências científicas detalhadas no site.\n\n• Avalie seu grau de alerta com o novo instrumento: Escala de Hipervigilância Neuroafetiva e Sensibilização Central (EHNSC / T-37).\n\n• Salve este carrossel e compartilhe com alguém que vive em estado de alerta.",
+                "footer": "Acesse deomagalhaes.com.br | Link na Bio 🔗"
+            }
+        ],
+        "caption": "Estar em segurança e, ainda assim, não conseguir sentir paz. Essa é uma das experiências humanas mais solitárias e exaustivas que existem.\n\nVocê tranca as portas, deita na cama, o ambiente está silencioso, mas por dentro o seu sistema nervoso opera como se você estivesse em solo inimigo: o coração bate acelerado, a mandíbula está travada, os ombros tensos e os pensamentos escaneiam catástrofes futuras sem parar.\n\nNa neurociência, chamamos isso de Hipervigilância Crônica.\n\nIsso não acontece porque você 'quer se preocupar' ou porque 'falta fé e pensamento positivo'. Trata-se de uma descalibração neurofisiológica concreta: a quebra do filtro talâmico (sensory gating), a hiperatividade do Locus Coeruleus e o sequestro do córtex pré-frontal pela amígdala.\n\nAcabei de publicar um artigo profundo sobre esse tema no site, acompanhado da nova Escala de Hipervigilância Neuroafetiva e Sensibilização Central (EHNSC / T-37) para você avaliar seu nível atual de sobrecarga.\n\n👉 Acesse o link completo na bio: deomagalhaes.com.br\n\n#neuropsicologia #hipervigilancia #saudemental #neurociencias #ansiedade #estressecronico #teoriapolivagal #sensorygating #locuscoeruleus #psicologiaclinica #act #deomagalhaes #regulacaoemocional #neurobiologia"
+    },
     "vinculo-traumatico": {
         "articleSlug": "2026-11-08-neurobiologia-vinculo-traumatico",
         "articleTitle": "A Neurobiologia do Vínculo Traumático e do Reforço Intermitente: Como a Incerteza Afetiva e a Desregulação Dopaminérgica Aprisionam as Relações",
@@ -3094,9 +3151,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "vinculo-traumatico";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["vinculo-traumatico"].slides));
-        let currentCaption = PRESETS["vinculo-traumatico"].caption;
+        let currentPresetKey = "hipervigilancia-cronica";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["hipervigilancia-cronica"].slides));
+        let currentCaption = PRESETS["hipervigilancia-cronica"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta

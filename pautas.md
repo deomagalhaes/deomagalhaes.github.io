@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Hipervigilância Crônica e a Falha do Filtro Talâmico: Como a Sensibilização Central Aprisiona a Mente em Alerta Permanente** (Publicado em 08/11/2026)
 - [x] **A Neurobiologia do Vínculo Traumático e do Reforço Intermitente: Como a Incerteza Afetiva e a Desregulação Dopaminérgica Aprisionam as Relações** (Publicado em 08/11/2026)
 - [x] **A Neurobiologia do Perfeccionismo Desadaptativo: Como a Hiperatividade de Monitoramento de Erros Aprisiona o Cérebro na Rigidez** (Publicado em 07/11/2026)
 - [x] **A Neurobiologia da Intolerância à Incerteza: Como o Cérebro Preditivo Transforma a Dúvida em Alerta de Ameaça** (Publicado em 07/11/2026)
