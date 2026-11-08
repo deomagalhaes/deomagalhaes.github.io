@@ -105,6 +105,8 @@
                                     <button type="button" data-df-preset="urgencia" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Urgência Fabricada</button>
                                     <button type="button" data-df-preset="ruptura" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Ruptura de Combinado</button>
                                     <button type="button" data-df-preset="defesa" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Defesa de Imagem</button>
+                                    <button type="button" data-df-preset="critica" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Crítica Pública</button>
+                                    <button type="button" data-df-preset="manipulacao" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Vitimização Alheia</button>
                                 </div>
                             </div>
 
@@ -615,6 +617,34 @@
                 strategic: 'Sustentar o incômodo da incompreensão alheia. Deixar a consistência dos resultados falar por si.',
                 doAction: 'Manter a conduta correta em silêncio e focar nos pacientes e na família.',
                 dontAction: 'Zero textões de justificativa ou tentativas de convencer quem já tem opinião formada.'
+            },
+            critica: {
+                fact: 'Comentário sarcástico ou juízo de valor infundado expressado em ambiente de grupo ou mensagem indireta.',
+                reading: 'Estou notando a narrativa de ataque à minha dignidade e o ímpeto combativo de retrucar com superioridade.',
+                distortions: ['Personalização', 'Catastrofização'],
+                autonomic: 7,
+                loss: 9,
+                esc: 9,
+                effort: 5,
+                gain: 10,
+                impulsive: 'Retrucar desmontando o argumento com frieza mordaz.',
+                strategic: 'Não morder a isca. O ataque não me define; a reação desregulada sim definiria meu nível de maturidade.',
+                doAction: 'Ignorar olimpicamente a provocação e manter o foco nas prioridades reais.',
+                dontAction: 'Zero embates públicos, zero respostas sarcásticas e zero alimentar polêmicas.'
+            },
+            manipulacao: {
+                fact: 'Discurso de vitimização com chantagem emocional velada para induzir culpa e concessão imediata.',
+                reading: 'Estou notando o nó no estômago da culpa fabricada e o impulso de ceder aos limites para apaziguar o desconforto alheio.',
+                distortions: ['Raciocínio Emocional', 'Imperativo ("Deveria")'],
+                autonomic: 6,
+                loss: 8,
+                esc: 8,
+                effort: 5,
+                gain: 9,
+                impulsive: 'Ceder imediatamente ao limite estabelecido para acabar logo com o clima pesado.',
+                strategic: 'Firmeza compassiva e limites inegociáveis. Sentimento de culpa não é evidência de erro.',
+                doAction: 'Reiterar o combinado prévio em tom neutro e cordial sem abrir brechas.',
+                dontAction: 'Zero concessões por culpa e zero debates circulares intermináveis.'
             }
         };
 

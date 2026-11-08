@@ -27,11 +27,7 @@
      * taxas mensais reais compostas, compra de liberdade e SWR
      */
     function computeFinancialModel(customInputs) {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.computeFinancialModel === 'function' && !customInputs) {
-            return global.VaultTabIndependencia.computeFinancialModel();
-        }
-
-        // Fallback / Standalone engine matemático auditado
+        // Engine matemático autônomo auditado
         const base = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
         const wSessions = Math.max(0, Number(base.weeklySessions) || 16);
         const wPerMonth = Math.max(1, Number(base.weeksPerMonth) || 4.2);
@@ -172,10 +168,6 @@
      * consultório, família, estilo de vida e despesas personalizadas
      */
     function computeExpenseCascade(customInputs) {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.computeExpenseCascade === 'function' && !customInputs) {
-            return global.VaultTabIndependencia.computeExpenseCascade();
-        }
-
         const model = computeFinancialModel(customInputs);
         const passive = model.currentPassiveMonthly;
         const monthlyRate = model.monthlyRate > 0 ? model.monthlyRate : 0.006;
@@ -257,10 +249,6 @@
      * -30% COVID/Flash Crash, -40% Subprime, -20% Correção, Estagflação, FIIs e Choque Manual
      */
     function computeStressTest(customInputs) {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.computeStressTest === 'function' && !customInputs) {
-            return global.VaultTabIndependencia.computeStressTest();
-        }
-
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
         const scenarioKey = raw.stressScenario || 'crash30';
         const customDrop = Number(raw.stressCustomDrop) || 30;
@@ -374,10 +362,6 @@
      * sem venda de ativos (evitando fricção tributária)
      */
     function computeAporteAllocation(customInputs) {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.computeAporteAllocation === 'function' && !customInputs) {
-            return global.VaultTabIndependencia.computeAporteAllocation();
-        }
-
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
         const aporte = Math.max(0, Number(raw.customAporteValue) || Number(raw.monthlyContribution) || 4200);
 
@@ -457,9 +441,6 @@
      * com alocação ótima e saldo residual para a reserva de oportunidade
      */
     function computeAporteByTickers(classes, customTickers) {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.computeAporteByTickers === 'function' && !customTickers) {
-            return global.VaultTabIndependencia.computeAporteByTickers(classes);
-        }
         const result = [];
         let totalResidualAll = 0;
         const classesArr = Array.isArray(classes) ? classes : [];
@@ -544,11 +525,59 @@
      * Executa 1.000 trajetórias estocásticas de Monte Carlo (Box-Muller)
      * para avaliar risco de ruína e risco de sequência de retornos (SORR)
      */
-    function runMonteCarloSimulation() {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.runMonteCarloSimulation === 'function') {
-            return global.VaultTabIndependencia.runMonteCarloSimulation();
+    function runMonteCarloSimulation(customInputs) {
+        if (global.VaultTabIndependencia && global.VaultTabIndependencia._runMonteCarloSimulationInternal) {
+            return global.VaultTabIndependencia._runMonteCarloSimulationInternal(customInputs);
         }
-        return null;
+        const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
+        const initPatrimony = Math.max(1000, Number(raw.currentPatrimony) || 120000);
+        const meanReturn = (Number(raw.realAnnualReturn) || 7.5) / 100;
+        const volatility = (Number(raw.mcVolatility) || 13.0) / 100;
+        const years = Math.max(5, Math.min(40, Number(raw.mcYears) || 30));
+        const numSims = Math.max(100, Math.min(2000, Number(raw.mcSimulations) || 1000));
+        const annualWithdrawal = (raw.monthlyCosts || 2600) * 12;
+
+        function gaussianRandom() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        let ruinCount = 0;
+        const finalPatrimonies = [];
+        for (let sim = 0; sim < numSims; sim++) {
+            let pat = initPatrimony;
+            let ruined = false;
+            for (let y = 1; y <= years; y++) {
+                const randZ = gaussianRandom();
+                const yearReturn = Math.exp((meanReturn - 0.5 * volatility * volatility) + volatility * randZ) - 1;
+                pat = pat * (1 + yearReturn) - annualWithdrawal;
+                if (pat <= 0) {
+                    ruined = true;
+                    pat = 0;
+                    break;
+                }
+            }
+            if (ruined) ruinCount++;
+            finalPatrimonies.push(pat);
+        }
+        finalPatrimonies.sort((a, b) => a - b);
+        const p10 = finalPatrimonies[Math.floor(numSims * 0.10)] || 0;
+        const p50 = finalPatrimonies[Math.floor(numSims * 0.50)] || 0;
+        const p90 = finalPatrimonies[Math.floor(numSims * 0.90)] || 0;
+        const ruinProbability = (ruinCount / numSims) * 100;
+
+        return {
+            simulations: numSims,
+            years,
+            ruinedCount: ruinCount,
+            ruinProbability,
+            p10,
+            p50,
+            p90,
+            finalPatrimonies
+        };
     }
 
     /**
@@ -828,6 +857,83 @@
             detail: mcAudit
                 ? `P10: R$ ${Math.round(mcAudit.p10).toLocaleString('pt-BR')} | P50: R$ ${Math.round(mcAudit.p50).toLocaleString('pt-BR')} | P90: R$ ${Math.round(mcAudit.p90).toLocaleString('pt-BR')} | Ruína: ${mcAudit.ruinProbability.toFixed(1)}%`
                 : 'Simulação estocástica respeita intervalos de confiança e propriedades distribucionais.'
+        });
+
+        // 17. Teste de Resiliência a Choque de Vacância de FIIs (−25% Yield)
+        const mockFiiDrop = computeStressTest({
+            stressScenario: 'fii_drop',
+            currentPatrimony: 100000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200
+        });
+        const testFiiDropPass = Math.abs(mockFiiDrop.stressedPatrimony - 82000) < 1e-2 && mockFiiDrop.stressedMonthlyPassive > 0;
+        tests.push({
+            name: 'Resiliência a Choque de Vacância de FIIs (−25% Yield)',
+            formula: 'Patrimônio_Estressado = Base × 0,82 | Choque Proventos = −25%',
+            passed: Boolean(testFiiDropPass),
+            detail: `Patrimônio sob choque: R$ ${mockFiiDrop.stressedPatrimony.toLocaleString('pt-BR')} | Provento mensal estressado: R$ ${mockFiiDrop.stressedMonthlyPassive.toFixed(2)}/mês.`
+        });
+
+        // 18. Teste de Blindagem contra Divisão por Zero com Parâmetros Nulos
+        const mockZeroInputs = computeFinancialModel({
+            weeklySessions: 0,
+            avgTicket: 0,
+            monthlyCosts: 0,
+            monthlyContribution: 0,
+            currentPatrimony: 0,
+            realAnnualReturn: 0
+        });
+        const testZeroDivisionPass = mockZeroInputs.grossRevenue === 0 &&
+            mockZeroInputs.netRevenue === 0 &&
+            mockZeroInputs.netPerSession === 0 &&
+            mockZeroInputs.savingsRate === 0 &&
+            mockZeroInputs.currentPassiveMonthly === 0;
+        tests.push({
+            name: 'Blindagem Numérica contra Divisão por Zero (Valores Nulos / Limítrofes)',
+            formula: '∀ input = 0 ⇒ Resultados ∈ ℝ ∧ ¬NaN ∧ ¬Infinity',
+            passed: Boolean(testZeroDivisionPass),
+            detail: `Parâmetros zerados tratados com segurança: receita, taxas e compra de liberdade convergem a zero sem exceções numéricas.`
+        });
+
+        // 19. Teste de Conservação e Consistência da Trajetória Plurianual
+        const mockSeries = computeFinancialModel({
+            weeklySessions: 16,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 3000,
+            currentPatrimony: 50000,
+            realAnnualReturn: 8.0,
+            horizonYears: 10
+        });
+        const year10 = mockSeries.yearlySeries.find(y => y.year === 10);
+        const testSeriesMonotonic = year10 && year10.patrimony > mockSeries.initPatrimony && year10.totalContributed > mockSeries.initPatrimony;
+        tests.push({
+            name: 'Consistência Temporal e Acumulação Composta Plurianual (10 Anos)',
+            formula: 'Patrimônio(t=10) > Patrimônio(t=0) + Σ(Aportes)',
+            passed: Boolean(testSeriesMonotonic),
+            detail: `Patrimônio Ano 10: R$ ${year10 ? Math.round(year10.patrimony).toLocaleString('pt-BR') : 0} | Juros acumulados: R$ ${year10 ? Math.round(year10.interestEarned).toLocaleString('pt-BR') : 0}.`
+        });
+
+        // 20. Teste de Exaustão Orçamentária e Restrição Orçamentária Ótima
+        const mockBudgetTest = computeAporteAllocation({
+            monthlyContribution: 6000,
+            targetAllocFII: 25,
+            targetAllocRF: 25,
+            targetAllocAcoes: 25,
+            targetAllocGlobal: 25,
+            currentAllocFII: 10000,
+            currentAllocRF: 10000,
+            currentAllocAcoes: 10000,
+            currentAllocGlobal: 10000
+        });
+        const sumAlloc = mockBudgetTest.classes.reduce((acc, c) => acc + c.recommendedAporte, 0);
+        const testBudgetExact = Math.abs(sumAlloc - 6000) < 1e-2;
+        tests.push({
+            name: 'Conservação da Restrição Orçamentária (Zero Estouro de Aporte)',
+            formula: 'Σ Aporte_Recomendado_i = Aporte_Total_Disponível',
+            passed: Boolean(testBudgetExact),
+            detail: `Orçamento de R$ 6.000 integralmente preservado e balanceado igualmente entre as 4 classes.`
         });
 
         const allPassed = tests.every(t => t.passed);

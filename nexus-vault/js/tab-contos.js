@@ -436,6 +436,90 @@
             defaultQuestion: 'Você sente como suas pálpebras estão doces e pesadas, e como é gostoso entregar todo o cansaço para o sono cuidar?',
             challengeAct: 'estava tão cansado que tudo parecia irritante e difícil, tropeçando nos próprios pés e quase chorando só por ter que escovar os dentes.',
             breathCue: 'fechou os olhinhos pesados, soltou um bocejo bem gostoso e comprido, e sentiu o corpo afundar no abraço quentinho do travesseiro até adormecer em paz.'
+        },
+        interocepcao_sinais: {
+            label: '61. Interocepção & Sinais Corporais Sutis (A bússola do marinheiro do corpo)',
+            defaultMetaphor: 'A pequena bússola de latão dourado que o marinheiro carrega no bolso: ela não faz barulho, mas aponta suavemente para o norte quando o corpinho precisa de água fresca, comida quentinha ou descanso macio antes que a tempestade comece.',
+            defaultQuestion: 'Qual sinalzinho manso o seu corpinho dá para você quando avisa que é hora de deitar e relaxar?',
+            challengeAct: 'não percebeu que a sede e o cansaço estavam acumulando desde a tarde, sentindo o peito apertar de repente como se o mundo inteiro estivesse pesado demais sem motivo aparente.',
+            breathCue: 'colocou a mãozinha na barriga, sentiu o ritmo manso da respiração como o vaivém do mar calmo e escutou o carinho que o corpo pedia.'
+        },
+        alexitimia_paleta: {
+            label: '62. Nomear Sentimentos Misturados (A paleta de aquarelas da alma)',
+            defaultMetaphor: 'O estojo de tintas do pintor da floresta: às vezes o azul da saudade e o amarelo da alegria se misturam numa gotinha verde de esperança. Não precisamos ter um sentimento só; nosso coração é grande o bastante para abrigar todas as cores do mundo.',
+            defaultQuestion: 'Se você pudesse pintar a sensação gostosa deste momento com uma cor mágica, qual cor seria?',
+            challengeAct: 'sentiu uma confusão de emoções no peito sem saber dizer se estava bravo, triste ou com saudade, com a garganta travada sem achar as palavras certas.',
+            breathCue: 'respirou devagarzinho imaginando uma luz suave clarear o peito, sabendo que sentir tudo ao mesmo tempo é natural e acolhedor.'
+        },
+        espaco_fraterno: {
+            label: '63. Rivalidade Fraterna & Espaço Pessoal (O arquipélago das ilhas encantadas)',
+            defaultMetaphor: 'O arquipélago no mar tranquilo: cada ilha tem seus coqueiros e sua prainha única, e entre uma ilha e outra corre uma água límpida onde os peixinhos nadam juntos. Ter seu cantinho sagrado faz a brincadeira compartilhada ficar ainda mais especial.',
+            defaultQuestion: 'Como é gostoso ter o seu espacinho único e depois se juntar para dar risada em família?',
+            challengeAct: 'ficou irritado quando o irmãozinho ou primo invadiu a sua cabaninha de almofadas sem pedir licença, sentindo vontade de empurrar tudo com brava indignação.',
+            breathCue: 'deu dois passos lentos para trás, puxou o ar puro enchendo o próprio espaço de tranquilidade e falou com voz calma e firme o que precisava.'
+        },
+        sensibilidade_tatil: {
+            label: '64. Sensibilidade Tátil a Roupas & Etiquetas (O linho macio da fada tecelã)',
+            defaultMetaphor: 'O linho macio da fada das florestas: a pele dos seres mais sensíveis é como pétala de rosa que sente até o menor grãozinho de areia. Essa delicadeza é um dom que ensina o mundo a tocar tudo com máxima gentileza e respeito.',
+            defaultQuestion: 'Como o seu corpinho fica leve e solto agora que está com o pijama mais macio e gostoso do mundo?',
+            challengeAct: 'sentiu uma costura ou etiqueta incomodar como se fosse uma farpinha no pescoço, ficando inquieto e querendo arrancar a roupa com aflição.',
+            breathCue: 'respirou fundo sentindo o ar fresco afagar a pele, relaxou os ombros caídos e deixou o toque suave do lençol abraçar o descanso.'
+        },
+        transicao_ferias: {
+            label: '65. Fim de Férias & Retorno à Rotina Escolar (O baú dos tesouros da andorinha)',
+            defaultMetaphor: 'O baú encantado da andorinha viajante: ela recolhe conchinhas, pedrinhas brilhantes e risadas das suas viagens, guarda no coração e leva tudo consigo para iluminar os dias novos de aula e descobertas com os amigos.',
+            defaultQuestion: 'Qual lembrança divertida das brincadeiras você vai levar guardada no peito para o seu novo dia amanhã?',
+            challengeAct: 'olhou para os cadernos e sentiu um aperto de saudade dos dias livres no sol, querendo congelar o tempo para as férias não acabarem.',
+            breathCue: 'abraçou o travesseiro com ternura, puxou o ar sentindo orgulho de tudo o que viveu e soprou mansinho, pronto para viver novas aventuras.'
+        },
+        rigidez_rota: {
+            label: '66. Rigidez de Rota & Flexibilidade no Caminho (Os muitos atalhos do cervo saltador)',
+            defaultMetaphor: 'Os caminhos floridos do cervo sábio: quando uma árvore caída fecha a trilha de sempre, ele salta com leveza por um atalho novo de musgo e encontra uma nascente secreta cheia de vaga-lumes dourados.',
+            defaultQuestion: 'Que coisa interessante e diferente a gente conseguiu reparar hoje quando o caminho precisou mudar?',
+            challengeAct: 'percebeu que o trajeto de carro ou a sequência do passeio não foi exatamente igual ao habitual e sentiu o peito endurecer em aflição.',
+            breathCue: 'soltou o queixo e as mãozinhas bem moles, respirou sentindo que o coração pode ser flexível como bambu verde que dança no vento sem quebrar.'
+        },
+        sombras_noturnas: {
+            label: '67. Desmistificar Sombras no Teto (A trupe de teatro dos vaga-lumes)',
+            defaultMetaphor: 'O teatrinho de sombras da trupe dos vaga-lumes: aquela forma comprida na parede é apenas o galhinho do jasmineiro dançando ao vento lá fora contra a lua prateada, encenando uma dança amiga para desejar boa-noite.',
+            defaultQuestion: 'Se aquela sombrinha no teto fosse um bichinho brincalhão dando tchau para você dormir, qual bichinho seria?',
+            challengeAct: 'olhou para o reflexo na parede escura e o coração deu um pulo rápido imaginando um vulto misterioso onde só havia silêncio.',
+            breathCue: 'olhou com curiosidade mansa, respirou fundo acendendo a luz da coragem nos olhos e sorriu ao ver que era só um galho amigo.'
+        },
+        cama_propria: {
+            label: '68. Autonomia para Dormir a Noite Toda na Própria Cama (O capitão do navio dos sonhos)',
+            defaultMetaphor: 'O capitão corajoso no seu próprio veleiro de algodão: o seu quarto é o navio mais seguro dos sete mares, com velas de lençol quentinho e uma âncora de amor que liga o seu berço direto ao quarto dos guardiões vizinhos.',
+            defaultQuestion: 'Como é aconchegante e seguro navegar a noite inteira no seu próprio barquinho de paz?',
+            challengeAct: 'acordou no meio da noite e sentiu vontade de correr assustado para outra cama, temendo ficar sozinho naquele quarto espaçoso.',
+            breathCue: 'abraçou seu bichinho de pelúcia preferido, puxou o ar sentindo a proteção das paredes seguras e deitou a cabeça relaxando em sono profundo.'
+        },
+        vergonha_erro: {
+            label: '69. Acolhimento da Vergonha após Queda ou Erro (O palhacinho gentil que reverencia o chão)',
+            defaultMetaphor: 'O palhacinho gentil do circo das estrelas: quando ele tropeça e cai na relva macia, ele abre um sorriso bondoso, faz uma reverência engraçada para o chão e descobre que todo mundo tropeça para aprender a dançar melhor.',
+            defaultQuestion: 'Você sabe como o seu jeitinho é perfeito, e como errar de vez em quando é apenas um jeito divertido de aprender?',
+            challengeAct: 'tropeçou ou errou uma palavra na frente dos outros e sentiu as bochechas queimarem como duas brasas, com vontade de se esconder num buraco.',
+            breathCue: 'deu uma risadinha suave para si mesmo, respirou fundo enchendo o peito de autoacolhimento e percebeu que o carinho continuava intacto.'
+        },
+        respiracao_choro: {
+            label: '70. Regulação da Respiração no Ataque de Choro (A flor que desabrocha em quatro tempos)',
+            defaultMetaphor: 'A flor-de-lótus da lagoa mansa: quando a chuva bate forte suas pétalas se fecham para proteger o coraçãozinho de pólen. Depois ela abre suave em quatro tempos lentos e perfuma toda a noite estrelada.',
+            defaultQuestion: 'Como o ar entra fresquinho e sai macio quando você solta todo o arzinho velho do choro?',
+            challengeAct: 'sentiu o soluço do choro acelerar a respiração em suspiros curtos e entrecortados, com o peito parecendo um tamborzinho descontrolado.',
+            breathCue: 'segurou o ar por um instante calmo, e soltou devagarinho soprando uma bolha de sabão imaginária até o peito sossegar totalmente.'
+        },
+        urgencia_imediatismo: {
+            label: '71. Impulsividade "Quero Agora" & Espera Fértil (O relojoeiro das sementes de carvalho)',
+            defaultMetaphor: 'O relojoeiro ancestral das sementes de carvalho: nenhuma árvore majestosa nasce num estalar de dedos. O segredo da magia é deixar o tempo regar a terra em silêncio para que a madeira cresça forte e inquebrável.',
+            defaultQuestion: 'O que o seu coração sente quando descobre que esperar um pouquinho torna a comemoração ainda mais saborosa?',
+            challengeAct: 'queria que a resposta ou o brinquedo chegassem naquele exato segundo, ficando agitado e impaciente como água fervendo na panela.',
+            breathCue: 'pôs a mão no centro do peito, respirou fundo sentindo a paciência firme de uma montanha e soltou o ar sereno como névoa da serra.'
+        },
+        conforto_silencio: {
+            label: '72. Medo do Silêncio & Paz Interior (A canção suave que mora dentro da calma)',
+            defaultMetaphor: 'A canção doce e sem palavras que mora dentro do silêncio: quando o quarto fica bem quietinho, não é vazio que existe ali; é um manto morno de veludo onde os pensamentos podem deitar sem pressa e sonhar bonito.',
+            defaultQuestion: 'Como é suave ouvir a musiquinha mansa da sua própria respiração embalando o seu sono esta noite?',
+            challengeAct: 'sentiu aflição com o silêncio da casa apagada, querendo barulhos ou luzes acesas para não se sentir sozinho na quietude da noite.',
+            breathCue: 'fechou os olhinhos com doçura, escutou o arzinho gostoso entrando e saindo do nariz e sentiu o abraço fofo do silêncio acolher o seu descanso.'
         }
     };
 
@@ -965,6 +1049,22 @@
     // =========================================================================
     let speechUtterance = null;
     let isSpeaking = false;
+    let speechKeepAliveTimer = null;
+    let cachedVoices = [];
+
+    function populateVoices() {
+        if ('speechSynthesis' in window) {
+            try {
+                cachedVoices = window.speechSynthesis.getVoices() || [];
+            } catch (_) {}
+        }
+    }
+    if ('speechSynthesis' in window) {
+        populateVoices();
+        if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+            window.speechSynthesis.onvoiceschanged = populateVoices;
+        }
+    }
 
     function toggleSpeechNarration() {
         if (!('speechSynthesis' in window)) {
@@ -977,9 +1077,7 @@
                 window.speechSynthesis.resume();
                 updateNarrateUI(true);
             } else {
-                window.speechSynthesis.cancel();
-                isSpeaking = false;
-                updateNarrateUI(false);
+                stopSpeechNarration();
             }
             return;
         }
@@ -995,34 +1093,50 @@
 
         if (!textToRead.trim()) return;
 
-        window.speechSynthesis.cancel();
+        stopSpeechNarration();
         speechUtterance = new SpeechSynthesisUtterance(textToRead);
         speechUtterance.lang = 'pt-BR';
         const rateSelect = document.getElementById('amber-narrate-rate-select');
         speechUtterance.rate = rateSelect ? parseFloat(rateSelect.value) || 0.85 : 0.85; // Leitura compassada e suave
         speechUtterance.pitch = 0.95; // Tom morno para indução ao relaxamento
 
-        const voices = window.speechSynthesis.getVoices();
-        const ptVoice = voices.find(v => v.lang && v.lang.startsWith('pt'));
+        const allVoices = cachedVoices.length > 0 ? cachedVoices : (window.speechSynthesis.getVoices() || []);
+        const ptVoice = allVoices.find(v => v.lang && (v.lang.toLowerCase().startsWith('pt') || v.lang.toLowerCase().replace('_', '-').startsWith('pt-br')));
         if (ptVoice) speechUtterance.voice = ptVoice;
 
         speechUtterance.onend = () => {
             isSpeaking = false;
+            if (speechKeepAliveTimer) { clearInterval(speechKeepAliveTimer); speechKeepAliveTimer = null; }
             updateNarrateUI(false);
         };
         speechUtterance.onerror = () => {
             isSpeaking = false;
+            if (speechKeepAliveTimer) { clearInterval(speechKeepAliveTimer); speechKeepAliveTimer = null; }
             updateNarrateUI(false);
         };
 
         window.speechSynthesis.speak(speechUtterance);
         isSpeaking = true;
         updateNarrateUI(true);
+
+        if (speechKeepAliveTimer) clearInterval(speechKeepAliveTimer);
+        speechKeepAliveTimer = setInterval(() => {
+            if (window.speechSynthesis && window.speechSynthesis.speaking) {
+                window.speechSynthesis.pause();
+                window.speechSynthesis.resume();
+            } else {
+                if (speechKeepAliveTimer) { clearInterval(speechKeepAliveTimer); speechKeepAliveTimer = null; }
+            }
+        }, 10000);
     }
 
     function stopSpeechNarration() {
-        if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
+        if ('speechSynthesis' in window) {
+            try { window.speechSynthesis.cancel(); } catch (_) {}
+        }
+        if (speechKeepAliveTimer) {
+            clearInterval(speechKeepAliveTimer);
+            speechKeepAliveTimer = null;
         }
         isSpeaking = false;
         updateNarrateUI(false);
@@ -1040,12 +1154,25 @@
     // =========================================================================
     let readerKeyHandler = null;
 
+    function changeAmberFontSize(delta) {
+        amberFontSizeRem = Math.max(0.85, Math.min(2.4, Number((amberFontSizeRem + delta).toFixed(2))));
+        const b = document.getElementById('amber-reader-body');
+        if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
+        saveAmberPrefs();
+    }
+
     function openAmberNightReader(storyObj) {
         loadAmberPrefs();
         const overlay = document.getElementById('amber-night-reader');
         if (!overlay) return;
         const C = global.VaultCore;
-        const target = storyObj || currentComposedStory;
+
+        let target = storyObj || currentComposedStory;
+        if (!target || !target.text) {
+            const params = collectStoryParams();
+            target = composeModularStory(params);
+            currentComposedStory = target;
+        }
 
         const tEl = document.getElementById('amber-reader-title');
         const bEl = document.getElementById('amber-reader-body');
@@ -1549,22 +1676,12 @@
 
         const btnFontUp = document.getElementById('btn-amber-font-up');
         if (btnFontUp) {
-            btnFontUp.addEventListener('click', () => {
-                amberFontSizeRem = Math.min(2.4, amberFontSizeRem + 0.1);
-                const b = document.getElementById('amber-reader-body');
-                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
-                saveAmberPrefs();
-            });
+            btnFontUp.addEventListener('click', () => changeAmberFontSize(0.1));
         }
 
         const btnFontDown = document.getElementById('btn-amber-font-down');
         if (btnFontDown) {
-            btnFontDown.addEventListener('click', () => {
-                amberFontSizeRem = Math.max(0.85, amberFontSizeRem - 0.1);
-                const b = document.getElementById('amber-reader-body');
-                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
-                saveAmberPrefs();
-            });
+            btnFontDown.addEventListener('click', () => changeAmberFontSize(-0.1));
         }
 
         const btnAutoScroll = document.getElementById('btn-amber-autoscroll');

@@ -1484,6 +1484,75 @@
                 'Deixar o calo cicatricial rolar sobre a pasta ao longo das estações subsequentes.'
             ],
             biologicalNote: 'O selamento estéril isola os feixes vasculares cortados da dessecação atmosférica e patógenos necróticos, permitindo que a divisão mitótica das células cambiais forme um calo circular perfeito.'
+        },
+        {
+            id: 'ADUBACAO_FOLIAR_MICROS',
+            category: 'NUTRICAO',
+            categoryBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            title: 'Adubação Foliar de Micronutrientes Quelatizados (Fe, Mg, B, Zn)',
+            subtitle: 'Correção instantânea de clorose e reforço fotossintético via estômatos matinais',
+            idealMoons: ['CRESCENTE', 'CHEIA'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Primavera', 'Verão'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai'],
+            speciesKeywords: ['Fruta-dos-milagres', 'Acerola', 'Jabuticaba', 'Pitanga', 'Amora', 'Caliandra', 'Duranta', 'Ixora'],
+            avoidKeywords: ['Rosa-do-deserto', 'Rainha-do-abismo'],
+            tools: 'Pulverizador manual pressurizado fino, quelato de ferro EDDHA/EDTA, sulfato de magnésio e água sem cloro.',
+            steps: [
+                'Dissolver a dose prescrita (1g a 2g por litro) em água descansada e desclorada.',
+                'Pulverizar no início da manhã (antes das 8h30) com estômatos abertos e sem sol forte.',
+                'Molhar completamente ambas as faces das folhas até o ponto de gotejamento leve.',
+                'Evitar aplicar sobre flores abertas para não manchar pétalas delicadas.',
+                'Repetir a cada 15 a 20 dias durante a fase de emissão foliar ativa.'
+            ],
+            biologicalNote: 'A absorção transcuticular e estomática de ferro e magnésio durante a Lua Crescente ativa a síntese de clorofila em até 48 horas, revertendo amarelecimento intercostal.'
+        },
+        {
+            id: 'TRATAMENTO_CALDA_SULFOCALCICA',
+            category: 'FITOSSANIDADE',
+            categoryBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            title: 'Assepsia de Inverno & Conservação de Madeira Morta (Calda Sulfocálcica)',
+            subtitle: 'Higienização contra ácaros, fungos de casca e branqueamento preservativo de Jin e Shari',
+            idealMoons: ['NOVA', 'MINGUANTE'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Inverno', 'Outono'],
+            avoidSeasons: ['Verão'],
+            suitableStages: ['Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Junípero', 'Pinheiro', 'Buxinho', 'Ipê', 'Piteco', 'Amora'],
+            avoidKeywords: ['Rosa-do-deserto', 'Rainha-do-abismo'],
+            tools: 'Calda sulfocálcica concentrada a 30-32° Bé, pincel de nylon rígido, borrifador com água e plástico de proteção para o substrato.',
+            steps: [
+                'Umedecer previamente com água pura a madeira morta que receberá a calda pura.',
+                'Proteger o substrato e nebari com plástico filme para evitar que a calda caia na terra e altere o pH do solo.',
+                'Para madeira morta (Jin/Shari): aplicar calda pura com pincel fino, sem encostar nas veias vivas com casca.',
+                'Para assepsia de ramos caducifólios em dormência total de inverno: pulverizar na diluição suave de 1:30 (somente sem folhas).',
+                'Deixar secar ao ar livre ventilado sob sombra por 24 horas até adquirir tom branco-marfim característico.'
+            ],
+            biologicalNote: 'O polissulfeto de cálcio penetra nas fibras mortas petrificando a lignina e criando um escudo impermeável e fungicida de longa duração sem agredir o lenho vivo.'
+        },
+        {
+            id: 'DESPONTE_VELAS_PINUS',
+            category: 'PINCAGEM',
+            categoryBadge: 'bg-teal-500/15 text-teal-300 border-teal-500/30',
+            title: 'Desponte e Seleção de Velas em Coníferas (Mekiri de Verão)',
+            subtitle: 'Redução do comprimento de agulhas e multiplicação de gemas axilares secundárias',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Verão', 'Primavera'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Bonsai', 'Pré-bonsai'],
+            speciesKeywords: ['Pinheiro', 'Pinus', 'Junípero', 'Podocarpo'],
+            avoidKeywords: ['Bougainvillea', 'Jabuticaba', 'Acerola', 'Amora'],
+            tools: 'Tesoura fina para desponte japonês e pinça curva para desarame e limpeza de agulhas velhas.',
+            steps: [
+                'Identificar o momento em que as velas de primavera terminaram de abrir as primeiras agulhas novas.',
+                'Cortar na base as velas mais fortes e vigorosas do ápice e ramos externos, deixando as fracas intactas.',
+                'Remover agulhas velhas de anos anteriores (Mekaki) deixando apenas 4 a 6 pares por ramete.',
+                'Manter boa insolação nas gemas internas para que a segunda brotação estival nasça compacta e com agulhas curtas.',
+                'Suspender adubação nitrogenada pesada nas 3 semanas seguintes ao corte.'
+            ],
+            biologicalNote: 'A quebra mecânica da dominância apical no início do verão redistribui a seiva para as gemas latentes basais, gerando agulhas até 60% menores no ciclo estival.'
         }
     ];
 
@@ -2389,6 +2458,32 @@
         C.toast(`Transplante registrado para ${count} planta(s).`, 'success');
     }
 
+    function applyBatchPruning() {
+        const C = global.VaultCore;
+        if (selectedIds.size === 0) {
+            C.toast('Selecione as plantas para registrar poda em lote.', 'warning');
+            return;
+        }
+        const today = C.todayISO();
+        const moon = getMoonPhase();
+        let count = 0;
+        plants.forEach((p) => {
+            if (selectedIds.has(p.id)) {
+                p.lastPruning = today;
+                if (!Array.isArray(p.logs)) p.logs = [];
+                p.logs.unshift({
+                    date: today,
+                    type: 'Poda de Manutenção / Pinçagem em Lote',
+                    detail: `Poda em lote registrada sob ${moon.phaseName} (${moon.illumination}% iluminada).`
+                });
+                count++;
+            }
+        });
+        saveData(false);
+        renderAll();
+        C.toast(`Poda registrada para ${count} planta(s).`, 'success');
+    }
+
     function applyBatchSchedule(dateISO, interventionType) {
         const C = global.VaultCore;
         if (selectedIds.size === 0 || !dateISO || !interventionType) {
@@ -2661,6 +2756,10 @@
                             <button type="button" id="btn-batch-repot" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition">
                                 <i data-lucide="layers" class="w-4 h-4"></i>
                                 <span>Transplante Hoje</span>
+                            </button>
+                            <button type="button" id="btn-batch-prune" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition" title="Registrar Poda de Manutenção / Pinçagem em lote">
+                                <i data-lucide="scissors" class="w-4 h-4"></i>
+                                <span>Poda Hoje</span>
                             </button>
                             <button type="button" id="btn-batch-schedule-toggle" class="min-h-[44px] px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
                                 <i data-lucide="calendar-plus" class="w-4 h-4"></i>
@@ -3926,6 +4025,8 @@
         document.getElementById('btn-batch-fert-30').addEventListener('click', () => applyBatchFertilization(30));
         document.getElementById('btn-batch-fert-45').addEventListener('click', () => applyBatchFertilization(45));
         document.getElementById('btn-batch-repot').addEventListener('click', applyBatchRepot);
+        const btnBatchPrune = document.getElementById('btn-batch-prune');
+        if (btnBatchPrune) btnBatchPrune.addEventListener('click', applyBatchPruning);
         document.getElementById('btn-batch-delete').addEventListener('click', deleteSelectedBatch);
 
         const schedBox = document.getElementById('bonsai-batch-schedule-box');
