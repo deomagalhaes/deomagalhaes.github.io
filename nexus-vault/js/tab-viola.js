@@ -9879,6 +9879,14 @@
             btnRevClearMute.addEventListener('click', resetReverseChordToMute);
         }
 
+        const scrollTensionBtn = document.getElementById('btn-viola-scroll-tension');
+        if (scrollTensionBtn) {
+            scrollTensionBtn.addEventListener('click', () => {
+                const el = document.getElementById('viola-tension-calculator-container');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
         document.getElementById('viola-select-instrument').addEventListener('change', (e) => {
             stopScalePlayback();
             stopPonteioPlayback();
@@ -9889,6 +9897,35 @@
             stopEarTrainerAudio();
             state.instrumentId = e.target.value;
             state.voicingVariantIdx = 0;
+
+            // Sincroniza inteligentemente o preset de tensão com o instrumento selecionado
+            if (state.instrumentId === 'violao_padrao' && !state.tensionCalculator.presetId.startsWith('violao_')) {
+                state.tensionCalculator.presetId = 'violao_nylon_normal';
+                state.tensionCalculator.scaleLengthMm = 650;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'nylon_classical';
+            } else if (state.instrumentId === 'viola_cebolao_e' && state.tensionCalculator.presetId.startsWith('violao_')) {
+                state.tensionCalculator.presetId = 'viola_cebolao_e_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_cebolao_d') {
+                state.tensionCalculator.presetId = 'viola_cebolao_d_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_rio_abaixo') {
+                state.tensionCalculator.presetId = 'viola_rio_abaixo_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_boiadeira') {
+                state.tensionCalculator.presetId = 'viola_boiadeira_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            }
+
             saveViolaState();
             renderAll();
         });
@@ -10122,6 +10159,7 @@
         renderPonteiosSection();
         renderTabEditorSection();
         renderModalScalesSection();
+        renderTensionCalculatorSection();
         renderMetronomeControls();
     }
 
