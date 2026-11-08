@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 10 — Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço)
+## 🎯 Projeto Prioritário Atual: Fase 11 — Gerador de Modulações & Preparação Harmônica Caipira
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Expansão lutherística e musicológica com temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro, sertão baiano e goiano (Rio Acima em Mi/Fá#, Meia-Guitarra, São Lourenço e Cana-Verde).
-  2. Mapeamento dos novos intervalos e tensões mecânicas para cada afinação rara com síntese sonora dedicada no afinador acústico.
-  3. Biblioteca de ponteios e afinações abertas modais com integração nativa ao braço SVG canhoto/destro.
+  1. Ferramenta analítica e prática de transição tonal com acordes de preparação em dois tempos (Dominantes Secundárias V7/V, V7/ii, V7/IV, V7/vi).
+  2. Mapeamento de acordes diminutos de passagem (♯I° e ♯IV°), aproximações cromáticas e acordes de empréstimo modal típicos de duplas sertanejas clássicas (Tião Carreiro & Pardinho, Tonico & Tinoco, Milionário & José Rico).
+  3. Sequenciador auditivo Web Audio com dedilhado sincronizado, visualização no braço SVG canhoto/destro e diagramas de pestanas móveis para transposição de modulações no estradão.
 
 ---
 
@@ -32,10 +32,47 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Mapeamento sonoro e visual completo dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço SVG, diferenciação cromática de notas características, 5 exercícios guiados por modo, sequenciador Web Audio API e filtros de região do braço.
 7. **[x] Analisador de Tensão e Calibre de Cordas (String Tension & Action Calculator) (Fase 9 Concluída):**
    - Cálculo de tensão mecânica em kgf por par para cordas de aço e nylon em afinações Cebolão, Rio Abaixo, Boiadeira e Violão com alertas de fadiga do tampo, simulação de ação no 1º e 12º traste e regulagem em osso para Canhoto e Destro.
-8. **[ ] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço) (Fase 10):**
-   - Expansão lutherística com novos temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão goiano.
-9. **[ ] Gerador de Modulações & Preparação Harmônica Caipira:**
+8. **[x] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço, Cana-Verde) (Fase 10 Concluída):**
+   - Expansão lutherística com temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão baiano, compêndio etnomusicológico, áudio de licks e acordes abertos, assistente de reafinação guiada e projeção no braço SVG.
+9. **[ ] Gerador de Modulações & Preparação Harmônica Caipira (Fase 11):**
    - Ferramenta de transição tonal com acordes de preparação em dois tempos, pestanas móveis e dominantes secundárias típicas de duplas sertanejas clássicas.
+10. **[ ] Dicionário de Licks & Frases de Resposta de Folia de Reis (Fase 12):**
+    - Mapeamento de introduções litúrgicas de devoção aos Santos Reis, fraseados responsivos de mestre de folia, contracantos de turina e toeira.
+11. **[ ] Simulador de Capotraste & Transposição Inteligente para Duplas (Fase 13):**
+    - Cálculo de tessitura de voz (1ª e 2ª voz caipira), posicionamento ideal de braçadeira móvel e visualização imediata da equivalência harmônica.
+
+---
+
+## 📝 Histórico de Implementações Diárias
+
+- **08/11/2026 — Sessão 10** (Fase 10 Concluída):
+  - **Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço e Cana-Verde)**:
+    - **Expansão Lutherística & Musicológica do Núcleo do Instrumento**:
+      - Adicionadas 4 novas afinações históricas raras à matriz de afinações do estúdio (`INSTRUMENTS`), permitindo uso global em todo o Nexus Vault (braço SVG, afinador acústico, gerador harmônico e calculador de tensão):
+        - *Rio Acima em Dó (E4 - C4 - G3/G4 - E3/E4 - C3/C4)*: A mística afinação do diabo do Vale do Jequitinhonha e cerrado mineiro, que soa um acorde puro de Dó Maior nas cordas soltas com uma das sonoridades mais ricas do folclore brasileiro.
+        - *Meia-Guitarra (E4 - B3 - G3/G4 - D3/D4 - A2/A3)*: Elo histórico secular entre a guitarra barroca e a viola de arame portuguesa nos sertões de Minas Gerais e Bahia (E-B-G-D-A), afinação em quartas e terças herdada dos séculos XVII e XVIII.
+        - *São Lourenço (D4 - B3 - F#3/F#4 - D3/D4 - D2/D3)*: Afinação cerimonial de Folias de Reis e terços cantados com bordão pedal hipnótico em Ré ultragrave (D2 / 73.4 Hz) no 5º par, soando um acorde aberto de Sol ou Ré com baixo pedal contínuo.
+        - *Cana-Verde em Si Menor (D4 - B3 - F#3/F#4 - D3/D4 - B2/B3)*: Rara afinação nativamente menor do sertão paulista e goiano (Bm), consagrada na dança tradicional da cana-verde e toadas trágicas de boiadeiro.
+    - **Presets de Tensão Mecânica Lutherística Dedicados (`TENSION_PRESETS`)**:
+      - Mapeados 4 novos perfis de encordoamento com calibres de fábrica (.009 a .030) e tensões ideais calculadas (50 a 54 kgf), prevenindo estiramento perigoso de bordões ou empenamento de tampos históricos.
+      - Sincronização automática entre a troca de instrumento no topo e a calculadora de tensão.
+    - **Compêndio Etnomusicológico & Cultural (`HISTORICAL_TUNINGS_CATALOG`)**:
+      - Informações completas de contextualização histórica, mitologia cabocla (pactos e causos), geografia cultural, afinação par a par (com oitavas e frequências em Hz), acorde aberto resultante, precauções lutherísticas para transição a partir do Cebolão em Mi e frases tradicionais de demonstração.
+    - **Síntese Sonora Web Audio & Reprodutor de Licks Folclóricos**:
+      - *Acorde Aberto da Afinação*: sintetiza dedilhado arpejado dos bordões às primas seguido de rasqueado aberto com as cordas soltas puras de cada afinação rara.
+      - *Frase / Lick Tradicional Típico*: reprodução melódica passo a passo em tempo real de solos folclóricos clássicos de cada região (Ponteio das Lavadeiras do Jequitinhonha, Toada Antiga da Guitarra Portuguesa, Toque Solene da Folia de Reis, Dança Tradicional da Cana-Verde).
+      - Cursor luminoso em tempo real no visualizador de notas do lick e destaque sincronizado no braço SVG virtual.
+    - **Assistente Interativo de Reafinação Guiada (Pitch Reference & Guided Re-Tuning)**:
+      - Tabela interativa par a par detalhando a nota de destino, intervalo, frequência em Hz e a recomendação prática de manuseio da cravelha (ex: "Aliviar −2 semitons", "Subir +1 semitom", "Cuidado: Tensão Alta").
+      - Botões individuais de diapasão para cada par soando a frequência pura como referência auditiva.
+      - *Modo Reafinação Guiada Contínua*: dispara uma sequência automatizada dos bordões até as primas com intervalo de 3.2s por par, permitindo ao violeiro manter as mãos no instrumento e nas cravelhas enquanto afina corda por corda guiado pelo estúdio.
+    - **Integração com o Braço SVG Virtual (Modo Canhoto & Destro)**:
+      - Novo botão de projeção no topo do braço: `🏛️ Afinações Raras` (`displayMode: 'HISTORICAL'`).
+      - Identificação cromática de Tônica, Terça e Quinta do acorde aberto nas cordas soltas (pestana traste 0) e marcação em camada fantasma de todas as notas do lick tradicional ao longo do braço.
+      - Iluminação neon dourada e esmeralda nas notas do solo em execução em tempo real.
+      - Suporte pleno e nativo ao Modo Canhoto (`isLeftHanded`) e Destro.
+    - **Persistência de Estado & Sincronização Global**:
+      - Integração com `loadViolaState` e `saveViolaState` no LocalStorage via `VaultCore`.
 
 ---
 

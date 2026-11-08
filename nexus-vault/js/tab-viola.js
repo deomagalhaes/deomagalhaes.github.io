@@ -63,6 +63,58 @@
                 { num: 5, label: '5º Par (Canotilho)', note: 'G2/G3', midi: [43, 55], pitchClass: 7, octaved: true }
             ]
         },
+        viola_rio_acima_c: {
+            id: 'viola_rio_acima_c',
+            name: 'Viola Caipira — Rio Acima em Dó (E - C - G - E - C)',
+            shortName: 'Viola Rio Acima (Dó)',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', midi: [64, 64], pitchClass: 4, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'C4', midi: [60, 60], pitchClass: 0, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'G3/G4', midi: [55, 67], pitchClass: 7, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'E3/E4', midi: [52, 64], pitchClass: 4, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'C3/C4', midi: [48, 60], pitchClass: 0, octaved: true }
+            ]
+        },
+        viola_meia_guitarra: {
+            id: 'viola_meia_guitarra',
+            name: 'Viola Caipira — Meia-Guitarra (E - B - G - D - A)',
+            shortName: 'Viola Meia-Guitarra',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', midi: [64, 64], pitchClass: 4, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], pitchClass: 11, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'G3/G4', midi: [55, 67], pitchClass: 7, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], pitchClass: 2, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'A2/A3', midi: [45, 57], pitchClass: 9, octaved: true }
+            ]
+        },
+        viola_sao_lourenco: {
+            id: 'viola_sao_lourenco',
+            name: 'Viola Caipira — São Lourenço (D - B - F# - D - D grave)',
+            shortName: 'Viola São Lourenço',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', midi: [62, 62], pitchClass: 2, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], pitchClass: 11, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', midi: [54, 66], pitchClass: 6, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], pitchClass: 2, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'D2/D3', midi: [38, 50], pitchClass: 2, octaved: true }
+            ]
+        },
+        viola_cana_verde: {
+            id: 'viola_cana_verde',
+            name: 'Viola Caipira — Cana-Verde em Si Menor (D - B - F# - D - B)',
+            shortName: 'Viola Cana-Verde (Si Menor)',
+            isPaired: true,
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', midi: [62, 62], pitchClass: 2, octaved: false },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], pitchClass: 11, octaved: false },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', midi: [54, 66], pitchClass: 6, octaved: true },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], pitchClass: 2, octaved: true },
+                { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', midi: [47, 59], pitchClass: 11, octaved: true }
+            ]
+        },
         violao_padrao: {
             id: 'violao_padrao',
             name: 'Violão Padrão 6 Cordas (E - A - D - G - B - E)',
@@ -1035,6 +1087,294 @@
                 { num: 5, label: '5ª Corda (Lá)', note: 'A2', strings: [{ gauge: 0.042, type: 'wound', midi: 45 }] },
                 { num: 6, label: '6ª Corda (Mi)', note: 'E2', strings: [{ gauge: 0.053, type: 'wound', midi: 40 }] }
             ]
+        },
+        viola_rio_acima_media: {
+            id: 'viola_rio_acima_media',
+            instrumentId: 'viola_rio_acima_c',
+            name: 'Viola Rio Acima em Dó — Tensão Média (.009 - .038)',
+            badge: 'Jequitinhonha / Dó Maior',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            description: 'Calibragem específica para a afinação aberta em Dó Maior do Vale do Jequitinhonha. O 2º par em C4 exige calibre macio (.012) para manter flexibilidade e ressonância límpida sem sobrecarregar o braço.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', strings: [{ gauge: 0.009, type: 'plain', midi: 64 }, { gauge: 0.009, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'C4', strings: [{ gauge: 0.012, type: 'plain', midi: 60 }, { gauge: 0.012, type: 'plain', midi: 60 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G3/G4', strings: [{ gauge: 0.022, type: 'wound', midi: 55 }, { gauge: 0.010, type: 'plain', midi: 67 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'E3/E4', strings: [{ gauge: 0.028, type: 'wound', midi: 52 }, { gauge: 0.012, type: 'plain', midi: 64 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'C3/C4', strings: [{ gauge: 0.038, type: 'wound', midi: 48 }, { gauge: 0.018, type: 'plain', midi: 60 }] }
+            ]
+        },
+        viola_meia_guitarra_media: {
+            id: 'viola_meia_guitarra_media',
+            instrumentId: 'viola_meia_guitarra',
+            name: 'Viola Meia-Guitarra — Tensão Média (.010 - .038)',
+            badge: 'Ponte Violão / Aço',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            description: 'Afinação que reflete a herança da guitarra barroca e das 5 primeiras cordas do violão clássico (A-D-G-B-E). Tensão harmônica perfeitamente balanceada.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', strings: [{ gauge: 0.010, type: 'plain', midi: 64 }, { gauge: 0.010, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.013, type: 'plain', midi: 59 }, { gauge: 0.013, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G3/G4', strings: [{ gauge: 0.022, type: 'wound', midi: 55 }, { gauge: 0.010, type: 'plain', midi: 67 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.028, type: 'wound', midi: 50 }, { gauge: 0.013, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'A2/A3', strings: [{ gauge: 0.038, type: 'wound', midi: 45 }, { gauge: 0.018, type: 'plain', midi: 57 }] }
+            ]
+        },
+        viola_sao_lourenco_media: {
+            id: 'viola_sao_lourenco_media',
+            instrumentId: 'viola_sao_lourenco',
+            name: 'Viola São Lourenço — Tensão Média (.010 - .046)',
+            badge: 'Bordão Profundo / D2 Drone',
+            badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+            description: 'O 5º par desce até Ré grave (D2 a 73.4 Hz). Utiliza corda bordão encorpada (.046) para garantir sustentação física e evitar trastejamento por oscilação excessiva.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', strings: [{ gauge: 0.010, type: 'plain', midi: 62 }, { gauge: 0.010, type: 'plain', midi: 62 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.013, type: 'plain', midi: 59 }, { gauge: 0.013, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', strings: [{ gauge: 0.022, type: 'wound', midi: 54 }, { gauge: 0.010, type: 'plain', midi: 66 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.028, type: 'wound', midi: 50 }, { gauge: 0.013, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'D2/D3', strings: [{ gauge: 0.046, type: 'wound', midi: 38 }, { gauge: 0.020, type: 'plain', midi: 50 }] }
+            ]
+        },
+        viola_cana_verde_media: {
+            id: 'viola_cana_verde_media',
+            instrumentId: 'viola_cana_verde',
+            name: 'Viola Cana-Verde — Tensão Média (.010 - .038)',
+            badge: 'Si Menor Nativo / Melancolia',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            description: 'Afinação menor tradicional das cantigas de Cana-Verde e lamentos do sertão. O 5º par em Si (B2) sustenta a fundamental menor com projeção aveludada e toque macio.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', strings: [{ gauge: 0.010, type: 'plain', midi: 62 }, { gauge: 0.010, type: 'plain', midi: 62 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.013, type: 'plain', midi: 59 }, { gauge: 0.013, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', strings: [{ gauge: 0.022, type: 'wound', midi: 54 }, { gauge: 0.010, type: 'plain', midi: 66 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.028, type: 'wound', midi: 50 }, { gauge: 0.013, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', strings: [{ gauge: 0.038, type: 'wound', midi: 47 }, { gauge: 0.018, type: 'plain', midi: 59 }] }
+            ]
+        }
+    };
+
+    // =========================================================================
+    // ESTRUTURAS DE DADOS: AFINAÇÕES HISTÓRICAS & REGIONAIS RARAS (FASE 10)
+    // =========================================================================
+    const DEFAULT_HISTORICAL_TUNINGS_STATE = {
+        activeTargetTuningId: 'viola_rio_acima_c',
+        filterCategory: 'all', // 'all' | 'open_major' | 'open_minor' | 'modal_drone'
+        isPlayingLick: false,
+        activeLickId: null,
+        activeLickStepIdx: -1,
+        isSequenceTuning: false,
+        activeSequenceCourseIdx: -1
+    };
+
+    const HISTORICAL_TUNINGS_CATALOG = {
+        viola_rio_acima_c: {
+            id: 'viola_rio_acima_c',
+            name: 'Rio Acima em Dó',
+            formalName: 'Viola Caipira — Rio Acima em Dó (E - C - G - E - C)',
+            category: 'open_major',
+            categoryLabel: 'Aberta Maior (Open C)',
+            region: 'Vale do Jequitinhonha, Norte de Minas e Sertão Baiano',
+            openChord: 'C',
+            openChordName: 'Dó Maior (C)',
+            openChordNotes: ['C', 'E', 'G'],
+            coursesSummary: '1º E4 • 2º C4 • 3º G3/G4 • 4º E3/E4 • 5º C3/C4',
+            coursesDetail: [
+                { num: 1, name: '1º Par (Prima)', note: 'E4', midi: [64, 64], intervalRole: '3M (Terça Maior)', roleColor: 'text-cyan-300' },
+                { num: 2, name: '2º Par (Segundinha)', note: 'C4', midi: [60, 60], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300 font-bold' },
+                { num: 3, name: '3º Par (Turina)', note: 'G3/G4', midi: [55, 67], intervalRole: '5J (Quinta Justa)', roleColor: 'text-amber-300' },
+                { num: 4, name: '4º Par (Toeira)', note: 'E3/E4', midi: [52, 64], intervalRole: '3M (Terça Maior)', roleColor: 'text-cyan-300' },
+                { num: 5, name: '5º Par (Canotilho)', note: 'C3/C4', midi: [48, 60], intervalRole: 'T (Baixo em Dó)', roleColor: 'text-emerald-300 font-bold' }
+            ],
+            tradition: 'Conhecida na tradição oral como a "afinação dos anjos e da Virgem", opõe-se ao mito do pacto telúrico do Rio Abaixo. Tradicional nas Folias de Reis e novenas de promessa do Jequitinhonha, sua tessitura soa mais aguda, cristalina e alegre.',
+            lutherieTip: 'O 2º par sobe para Dó4 (1 semitom acima de Si). Recomenda-se utilizar encordoamento de tensão leve (.009 ou .010) para não sobrecarregar a tensão no braço e no rastilho de osso.',
+            badge: 'Luz do Jequitinhonha',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            folkLick: [
+                { c: 0, f: 0, dur: 0.22, delay: 0 },
+                { c: 1, f: 1, dur: 0.22, delay: 0.22 },
+                { c: 1, f: 0, dur: 0.22, delay: 0.44 },
+                { c: 0, f: 3, dur: 0.28, delay: 0.66 },
+                { c: 0, f: 0, dur: 0.22, delay: 0.94 },
+                { c: 1, f: 0, dur: 0.22, delay: 1.16 },
+                { c: 2, f: 0, dur: 0.22, delay: 1.38 },
+                { c: 3, f: 0, dur: 0.24, delay: 1.60 },
+                { c: 4, f: 0, dur: 0.45, delay: 1.84 }
+            ]
+        },
+        viola_meia_guitarra: {
+            id: 'viola_meia_guitarra',
+            name: 'Meia-Guitarra',
+            formalName: 'Viola Caipira — Meia-Guitarra (E - B - G - D - A)',
+            category: 'modal_drone',
+            categoryLabel: 'Modal / Ponte Violão',
+            region: 'Goiás Velho, Cerrado Mineiro e Serestas Coloniais Paulistas',
+            openChord: 'Em7(11)',
+            openChordName: 'Sonoridade Modal Aberta (A-D-G-B-E)',
+            openChordNotes: ['A', 'D', 'G', 'B', 'E'],
+            coursesSummary: '1º E4 • 2º B3 • 3º G3/G4 • 4º D3/D4 • 5º A2/A3',
+            coursesDetail: [
+                { num: 1, name: '1º Par (Prima)', note: 'E4', midi: [64, 64], intervalRole: 'Mi (5ª do Lá)', roleColor: 'text-cyan-300' },
+                { num: 2, name: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], intervalRole: 'Si (9ª do Lá)', roleColor: 'text-indigo-300' },
+                { num: 3, name: '3º Par (Turina)', note: 'G3/G4', midi: [55, 67], intervalRole: 'Sol (7ª menor)', roleColor: 'text-amber-300' },
+                { num: 4, name: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], intervalRole: 'Ré (4ª justa)', roleColor: 'text-emerald-300' },
+                { num: 5, name: '5º Par (Canotilho)', note: 'A2/A3', midi: [45, 57], intervalRole: 'Lá (Bordão Grave)', roleColor: 'text-purple-300 font-bold' }
+            ],
+            tradition: 'Herança ibérica direta da guitarra barroca e das cinco primeiras cordas do violão moderno. Foi a afinação predileta dos seresteiros coloniais que passavam do violão para a viola sem alterar as digitações de mão esquerda, somando o brilho dos pares oitavados.',
+            lutherieTip: 'Tensões mecânicas muito uniformes e equilibradas. Permite uso de calibres padrão .010 sem nenhuma torção assimétrica no braço.',
+            badge: 'Ponte Histórica Ibérica',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            folkLick: [
+                { c: 4, f: 0, dur: 0.28, delay: 0 },
+                { c: 3, f: 2, dur: 0.22, delay: 0.28 },
+                { c: 2, f: 2, dur: 0.22, delay: 0.50 },
+                { c: 1, f: 1, dur: 0.22, delay: 0.72 },
+                { c: 0, f: 0, dur: 0.28, delay: 0.94 },
+                { c: 1, f: 1, dur: 0.22, delay: 1.22 },
+                { c: 2, f: 2, dur: 0.22, delay: 1.44 },
+                { c: 3, f: 2, dur: 0.24, delay: 1.66 },
+                { c: 4, f: 0, dur: 0.45, delay: 1.90 }
+            ]
+        },
+        viola_sao_lourenco: {
+            id: 'viola_sao_lourenco',
+            name: 'São Lourenço',
+            formalName: 'Viola Caipira — São Lourenço (D - B - F# - D - D grave)',
+            category: 'modal_drone',
+            categoryLabel: 'Drone Modal / Bordão Profundo',
+            region: 'Vale do Paraíba, Centro-Oeste e Romarias de Minas',
+            openChord: 'D6 (baixo D2)',
+            openChordName: 'Ré Maior com 6ª e Bordão D2',
+            openChordNotes: ['D', 'F#', 'B'],
+            coursesSummary: '1º D4 • 2º B3 • 3º F#3/F#4 • 4º D3/D4 • 5º D2/D3',
+            coursesDetail: [
+                { num: 1, name: '1º Par (Prima)', note: 'D4', midi: [62, 62], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300 font-bold' },
+                { num: 2, name: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], intervalRole: '6M (Sexta Maior)', roleColor: 'text-purple-300' },
+                { num: 3, name: '3º Par (Turina)', note: 'F#3/F#4', midi: [54, 66], intervalRole: '3M (Terça Maior)', roleColor: 'text-cyan-300' },
+                { num: 4, name: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300' },
+                { num: 5, name: '5º Par (Canotilho)', note: 'D2/D3', midi: [38, 50], intervalRole: 'T (Drone D2: 73.4Hz)', roleColor: 'text-rose-400 font-bold ring-1 ring-rose-400/40 rounded px-1' }
+            ],
+            tradition: 'A afinação solene das folias e procissões de São Lourenço. O 5º par desce até Ré grave (D2 a 73.4 Hz), vibrando como um sino de capela que ecoa nos vales. O violeiro mantém o bordão batendo em pedal hipnótico contínuo enquanto ponteia temas litúrgicos e modas solenes nas primas.',
+            lutherieTip: 'Requer bordão mais espesso (.044 a .046) no 5º par. Uma corda muito fina em D2 ficaria excessivamente frouxa, trastejando nos primeiros trastes devido à grande amplitude oscilatória.',
+            badge: 'Bordão Telúrico D2',
+            badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+            folkLick: [
+                { c: 4, f: 0, dur: 0.35, delay: 0 },
+                { c: 0, f: 0, dur: 0.22, delay: 0.32 },
+                { c: 1, f: 0, dur: 0.22, delay: 0.54 },
+                { c: 2, f: 0, dur: 0.22, delay: 0.76 },
+                { c: 4, f: 0, dur: 0.32, delay: 0.98 },
+                { c: 0, f: 4, dur: 0.24, delay: 1.28 },
+                { c: 0, f: 2, dur: 0.22, delay: 1.52 },
+                { c: 0, f: 0, dur: 0.24, delay: 1.74 },
+                { c: 4, f: 0, dur: 0.50, delay: 1.98 }
+            ]
+        },
+        viola_cana_verde: {
+            id: 'viola_cana_verde',
+            name: 'Cana-Verde',
+            formalName: 'Viola Caipira — Cana-Verde em Si Menor (D - B - F# - D - B)',
+            category: 'open_minor',
+            categoryLabel: 'Modo Menor Nativo (Open Bm)',
+            region: 'Litoral Paulista, Vale do Ribeira, Sul de Minas e Vale do Tietê',
+            openChord: 'Bm',
+            openChordName: 'Si Menor (Bm Puro)',
+            openChordNotes: ['B', 'D', 'F#'],
+            coursesSummary: '1º D4 • 2º B3 • 3º F#3/F#4 • 4º D3/D4 • 5º B2/B3',
+            coursesDetail: [
+                { num: 1, name: '1º Par (Prima)', note: 'D4', midi: [62, 62], intervalRole: '3m (Terça Menor)', roleColor: 'text-cyan-300' },
+                { num: 2, name: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300 font-bold' },
+                { num: 3, name: '3º Par (Turina)', note: 'F#3/F#4', midi: [54, 66], intervalRole: '5J (Quinta Justa)', roleColor: 'text-amber-300' },
+                { num: 4, name: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], intervalRole: '3m (Terça Menor)', roleColor: 'text-cyan-300' },
+                { num: 5, name: '5º Par (Canotilho)', note: 'B2/B3', midi: [47, 59], intervalRole: 'T (Baixo em Si)', roleColor: 'text-emerald-300 font-bold' }
+            ],
+            tradition: 'A única afinação caipira cuja ressonância livre forma uma tríade menor natural perfeita (Si menor). Eternizada nos bailes de fandango e na dança da Cana-Verde, era usada para cantar modas de dor, desilusão e despedida. Seu som aberto evoca uma profunda e digna melancolia existencial sertaneja.',
+            lutherieTip: 'Tensão muito confortável em toda a extensão do braço. Proporciona excelente sustentação lírica mesmo com toques delicados.',
+            badge: 'Lamento Menor Ancestral',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            folkLick: [
+                { c: 4, f: 0, dur: 0.30, delay: 0 },
+                { c: 2, f: 0, dur: 0.22, delay: 0.30 },
+                { c: 1, f: 0, dur: 0.22, delay: 0.52 },
+                { c: 0, f: 0, dur: 0.24, delay: 0.74 },
+                { c: 0, f: 2, dur: 0.22, delay: 0.98 },
+                { c: 0, f: 4, dur: 0.26, delay: 1.20 },
+                { c: 0, f: 0, dur: 0.22, delay: 1.46 },
+                { c: 1, f: 0, dur: 0.24, delay: 1.68 },
+                { c: 4, f: 0, dur: 0.45, delay: 1.92 }
+            ]
+        },
+        viola_rio_abaixo: {
+            id: 'viola_rio_abaixo',
+            name: 'Rio Abaixo em Sol',
+            formalName: 'Viola Caipira — Rio Abaixo em Sol (D - B - G - D - G)',
+            category: 'open_major',
+            categoryLabel: 'Aberta Maior (Open G)',
+            region: 'Vale do Rio São Francisco, Pantanal e Centro-Oeste',
+            openChord: 'G',
+            openChordName: 'Sol Maior (G)',
+            openChordNotes: ['G', 'B', 'D'],
+            coursesSummary: '1º D4 • 2º B3 • 3º G3/G4 • 4º D3/D4 • 5º G2/G3',
+            coursesDetail: [
+                { num: 1, name: '1º Par (Prima)', note: 'D4', midi: [62, 62], intervalRole: '5J (Quinta Justa)', roleColor: 'text-amber-300' },
+                { num: 2, name: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], intervalRole: '3M (Terça Maior)', roleColor: 'text-cyan-300' },
+                { num: 3, name: '3º Par (Turina)', note: 'G3/G4', midi: [55, 67], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300 font-bold' },
+                { num: 4, name: '4º Par (Toeira)', note: 'D3/D4', midi: [50, 62], intervalRole: '5J (Quinta Justa)', roleColor: 'text-amber-300' },
+                { num: 5, name: '5º Par (Canotilho)', note: 'G2/G3', midi: [43, 55], intervalRole: 'T (Baixo em Sol)', roleColor: 'text-emerald-300 font-bold' }
+            ],
+            tradition: 'A mais mística e lendária afinação da viola brasileira. O folclore conta que o violeiro afinado em Rio Abaixo faz o rio correr ao contrário e encanta mulheres e serpentes com seus ponteios aveludados. Imortalizada nas composições de Almir Sater e Renato Andrade.',
+            lutherieTip: 'Afinação relaxada e macia. Excelente ressonância do 3º par em Sol.',
+            badge: 'Mística Pantaneira',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            folkLick: [
+                { c: 4, f: 0, dur: 0.28, delay: 0 },
+                { c: 2, f: 0, dur: 0.22, delay: 0.28 },
+                { c: 1, f: 0, dur: 0.22, delay: 0.50 },
+                { c: 0, f: 2, dur: 0.22, delay: 0.72 },
+                { c: 0, f: 0, dur: 0.24, delay: 0.94 },
+                { c: 1, f: 1, dur: 0.22, delay: 1.18 },
+                { c: 1, f: 0, dur: 0.22, delay: 1.40 },
+                { c: 2, f: 0, dur: 0.24, delay: 1.62 },
+                { c: 4, f: 0, dur: 0.45, delay: 1.86 }
+            ]
+        },
+        viola_cebolao_e: {
+            id: 'viola_cebolao_e',
+            name: 'Cebolão em Mi',
+            formalName: 'Viola Caipira — Cebolão em Mi (E - B - G# - E - B)',
+            category: 'open_major',
+            categoryLabel: 'Aberta Maior Canônica (Open E)',
+            region: 'Coração Caipira (SP, MG, GO, MS, PR)',
+            openChord: 'E',
+            openChordName: 'Mi Maior (E Canônico)',
+            openChordNotes: ['E', 'G#', 'B'],
+            coursesSummary: '1º E4 • 2º B3 • 3º G#3/G#4 • 4º E3/E4 • 5º B2/B3',
+            coursesDetail: [
+                { num: 1, name: '1º Par (Prima)', note: 'E4', midi: [64, 64], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300 font-bold' },
+                { num: 2, name: '2º Par (Segundinha)', note: 'B3', midi: [59, 59], intervalRole: '5J (Quinta Justa)', roleColor: 'text-amber-300' },
+                { num: 3, name: '3º Par (Turina)', note: 'G#3/G#4', midi: [56, 68], intervalRole: '3M (Terça Maior)', roleColor: 'text-cyan-300' },
+                { num: 4, name: '4º Par (Toeira)', note: 'E3/E4', midi: [52, 64], intervalRole: 'T (Tônica)', roleColor: 'text-emerald-300' },
+                { num: 5, name: '5º Par (Canotilho)', note: 'B2/B3', midi: [47, 59], intervalRole: '5J (Baixo em Si)', roleColor: 'text-amber-300 font-bold' }
+            ],
+            tradition: 'A matriz soberana da viola caipira. Diz a sabedoria popular que "faz chorar feito cebola quando bem ponteada". Base de todo o repertório canônico de Tião Carreiro, Tonico e Tinoco e Almir Sater, com ataque percussivo brilhante no tampo e duetos em terças cortantes.',
+            lutherieTip: 'Afinação com maior exigência de rigidez do tampo. Manter ação confortável (2.2 a 2.6mm no 12º traste) para não cansar a mão esquerda em pestanas prolongadas.',
+            badge: 'A Rainha do Sertão',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            folkLick: [
+                { c: 4, f: 0, dur: 0.26, delay: 0 },
+                { c: 3, f: 0, dur: 0.22, delay: 0.26 },
+                { c: 2, f: 0, dur: 0.22, delay: 0.48 },
+                { c: 1, f: 0, dur: 0.22, delay: 0.70 },
+                { c: 0, f: 0, dur: 0.24, delay: 0.92 },
+                { c: 0, f: 4, dur: 0.22, delay: 1.16 },
+                { c: 0, f: 2, dur: 0.22, delay: 1.38 },
+                { c: 0, f: 0, dur: 0.24, delay: 1.60 },
+                { c: 4, f: 0, dur: 0.45, delay: 1.84 }
+            ]
         }
     };
 
@@ -1070,7 +1410,8 @@
         ponteioPlayer: Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE),
         tabEditor: Object.assign({}, DEFAULT_TAB_EDITOR_STATE),
         modalTrainer: Object.assign({}, DEFAULT_MODAL_TRAINER_STATE),
-        tensionCalculator: Object.assign({}, DEFAULT_TENSION_STATE)
+        tensionCalculator: Object.assign({}, DEFAULT_TENSION_STATE),
+        historicalTunings: Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -1089,6 +1430,9 @@
     let activeTabEditorTimers = [];
     let modalPlaybackTimer = null;
     let activeModalTimers = [];
+    let historicalLickTimer = null;
+    let sequenceTuningTimer = null;
+    let activeHistoricalTimers = [];
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -1264,8 +1608,21 @@
 
     function getChordVoicings(chordObj) {
         const inst = INSTRUMENTS[state.instrumentId];
-        const dict = inst.isPaired ? VIOLA_CHORD_SHAPES : VIOLAO_CHORD_SHAPES;
-        const curated = dict[chordObj.chordCode];
+        let curated = null;
+        if (inst.id === 'viola_cebolao_e') {
+            curated = VIOLA_CHORD_SHAPES[chordObj.chordCode];
+        } else if (inst.id === 'violao_padrao') {
+            curated = VIOLAO_CHORD_SHAPES[chordObj.chordCode];
+        } else if (inst.id === 'viola_rio_acima_c' && chordObj.chordCode === 'C_maj') {
+            curated = [[0, 0, 0, 0, 0], [0, 0, 0, 0, -1], [5, 5, 5, 5, 5]];
+        } else if (inst.id === 'viola_cana_verde' && chordObj.chordCode === 'Bm_min') {
+            curated = [[0, 0, 0, 0, 0], [0, 0, 0, 0, -1], [7, 7, 7, 7, 7]];
+        } else if (inst.id === 'viola_rio_abaixo' && chordObj.chordCode === 'G_maj') {
+            curated = [[0, 0, 0, 0, 0], [0, 0, 0, 0, -1], [5, 5, 5, 5, 5]];
+        } else if (inst.id === 'viola_sao_lourenco' && chordObj.chordCode === 'D_maj') {
+            curated = [[0, 0, 0, 0, 0], [4, 3, 2, 0, 0], [7, 7, 7, 7, 7]];
+        }
+
         if (curated && curated.length > 0) {
             return curated;
         }
@@ -2011,6 +2368,7 @@
         stopScalePlayback();
         stopPonteioPlayback();
         stopTabEditorPlayback();
+        stopHistoricalAudio();
         stopTunerTone();
 
         state.progressionPlaying = true;
@@ -2565,6 +2923,7 @@
         stopScalePlayback();
         stopProgressionPlayback();
         stopTabEditorPlayback();
+        stopHistoricalAudio();
         stopTunerTone();
         stopEarTrainerAudio();
 
@@ -3154,6 +3513,7 @@
         stopTunerTone();
         stopEarTrainerAudio();
         stopPonteioPlayback();
+        stopHistoricalAudio();
 
         const proj = getActiveTabProject();
         if (!proj || !proj.steps || proj.steps.length === 0) return;
@@ -4997,6 +5357,7 @@
         stopTunerTone();
         stopEarTrainerAudio();
         stopPonteioPlayback();
+        stopHistoricalAudio();
         stopTabEditorPlayback();
 
         const inst = INSTRUMENTS[state.instrumentId];
@@ -6670,6 +7031,753 @@
     }
 
     // =========================================================================
+    // MÓDULO DE AFINAÇÕES HISTÓRICAS & REGIONAIS RARAS (FASE 10)
+    // =========================================================================
+    let historicalLickTimer = null;
+    let sequenceTuningTimer = null;
+    let activeHistoricalTimers = [];
+
+    function stopHistoricalAudio() {
+        if (historicalLickTimer) {
+            clearTimeout(historicalLickTimer);
+            historicalLickTimer = null;
+        }
+        if (sequenceTuningTimer) {
+            clearTimeout(sequenceTuningTimer);
+            sequenceTuningTimer = null;
+        }
+        activeHistoricalTimers.forEach((t) => clearTimeout(t));
+        activeHistoricalTimers = [];
+        state.historicalTunings.isPlayingLick = false;
+        state.historicalTunings.activeLickId = null;
+        state.historicalTunings.activeLickStepIdx = -1;
+        state.historicalTunings.isSequenceTuning = false;
+        state.historicalTunings.activeSequenceCourseIdx = -1;
+        updateHistoricalUI();
+    }
+
+    function playTuningOpenChord(instrumentId) {
+        stopScalePlayback();
+        stopPonteioPlayback();
+        stopProgressionPlayback();
+        stopTabEditorPlayback();
+        stopModalPlayback();
+        stopHistoricalAudio();
+        stopTunerTone();
+        stopEarTrainerAudio();
+
+        const inst = INSTRUMENTS[instrumentId];
+        if (!inst || !inst.courses) return;
+
+        const numCourses = inst.courses.length;
+        // Cascata arpejada dos bordões às primas
+        for (let idx = numCourses - 1; idx >= 0; idx--) {
+            const delay = (numCourses - 1 - idx) * 0.045;
+            const course = inst.courses[idx];
+            if (inst.isPaired && course.midi.length === 2) {
+                pluckMidiNote(course.midi[0], delay, 2.2, -1.6, 0.19);
+                pluckMidiNote(course.midi[1], delay + 0.012, 2.2, 1.6, 0.17);
+            } else {
+                pluckMidiNote(course.midi[0], delay, 2.3, 0, 0.25);
+            }
+        }
+        // Rasqueado aberto suave de sustentação harmônica 0.34s depois
+        setTimeout(() => {
+            for (let idx = 0; idx < numCourses; idx++) {
+                const c = inst.courses[idx];
+                const delay = idx * 0.015;
+                if (inst.isPaired && c.midi.length === 2) {
+                    pluckMidiNote(c.midi[0], delay, 2.4, -1.2, 0.14);
+                    pluckMidiNote(c.midi[1], delay + 0.008, 2.4, 1.2, 0.13);
+                } else {
+                    pluckMidiNote(c.midi[0], delay, 2.5, 0, 0.18);
+                }
+            }
+        }, 340);
+    }
+
+    function playHistoricalLick(tuningId) {
+        const tuning = HISTORICAL_TUNINGS_CATALOG[tuningId];
+        if (!tuning || !tuning.folkLick || tuning.folkLick.length === 0) return;
+
+        if (state.historicalTunings.isPlayingLick && state.historicalTunings.activeLickId === tuningId) {
+            stopHistoricalAudio();
+            return;
+        }
+
+        stopScalePlayback();
+        stopPonteioPlayback();
+        stopProgressionPlayback();
+        stopTabEditorPlayback();
+        stopModalPlayback();
+        stopHistoricalAudio();
+        stopTunerTone();
+        stopEarTrainerAudio();
+
+        state.historicalTunings.isPlayingLick = true;
+        state.historicalTunings.activeLickId = tuningId;
+        state.historicalTunings.activeLickStepIdx = 0;
+        updateHistoricalUI();
+
+        const inst = INSTRUMENTS[tuningId] || INSTRUMENTS[state.instrumentId];
+
+        tuning.folkLick.forEach((step, idx) => {
+            const timer = setTimeout(() => {
+                if (!state.historicalTunings.isPlayingLick) return;
+                state.historicalTunings.activeLickStepIdx = idx;
+
+                const c = inst.courses[step.c];
+                if (c) {
+                    const f = step.f;
+                    if (inst.isPaired && c.midi.length === 2) {
+                        pluckMidiNote(c.midi[0] + f, 0, step.dur * 4.5, -1.6, 0.22);
+                        pluckMidiNote(c.midi[1] + f, 0.011, step.dur * 4.5, 1.6, 0.20);
+                    } else {
+                        pluckMidiNote(c.midi[0] + f, 0, step.dur * 4.5, 0, 0.26);
+                    }
+                }
+
+                if (state.displayMode === 'HISTORICAL') {
+                    renderFretboardSVG();
+                }
+                updateHistoricalUI();
+            }, step.delay * 1000);
+
+            activeHistoricalTimers.push(timer);
+        });
+
+        const lastStep = tuning.folkLick[tuning.folkLick.length - 1];
+        const totalDurationMs = (lastStep.delay + lastStep.dur + 0.3) * 1000;
+        historicalLickTimer = setTimeout(() => {
+            state.historicalTunings.isPlayingLick = false;
+            state.historicalTunings.activeLickId = null;
+            state.historicalTunings.activeLickStepIdx = -1;
+            if (state.displayMode === 'HISTORICAL') {
+                renderFretboardSVG();
+            }
+            updateHistoricalUI();
+        }, totalDurationMs);
+    }
+
+    function playReTuningReference(courseIdx, isTarget) {
+        stopTunerTone();
+        stopHistoricalAudio();
+        const instId = isTarget ? state.historicalTunings.activeTargetTuningId : state.instrumentId;
+        const inst = INSTRUMENTS[instId];
+        if (!inst || !inst.courses || !inst.courses[courseIdx]) return;
+
+        const c = inst.courses[courseIdx];
+        if (inst.isPaired && c.midi.length === 2) {
+            pluckMidiNote(c.midi[0], 0, 2.5, -1.5, 0.22);
+            pluckMidiNote(c.midi[1], 0.012, 2.5, 1.5, 0.20);
+        } else {
+            pluckMidiNote(c.midi[0], 0, 2.6, 0, 0.26);
+        }
+    }
+
+    function playReTuningSequence(targetInstrumentId) {
+        if (state.historicalTunings.isSequenceTuning) {
+            stopHistoricalAudio();
+            return;
+        }
+
+        stopScalePlayback();
+        stopPonteioPlayback();
+        stopProgressionPlayback();
+        stopTabEditorPlayback();
+        stopModalPlayback();
+        stopHistoricalAudio();
+        stopTunerTone();
+        stopEarTrainerAudio();
+
+        const inst = INSTRUMENTS[targetInstrumentId];
+        if (!inst || !inst.courses) return;
+
+        state.historicalTunings.isSequenceTuning = true;
+        updateHistoricalUI();
+
+        let courseIndex = inst.courses.length - 1; // 5º par ao 1º
+
+        function playNextStep() {
+            if (!state.historicalTunings.isSequenceTuning) return;
+            if (courseIndex < 0) {
+                state.historicalTunings.isSequenceTuning = false;
+                state.historicalTunings.activeSequenceCourseIdx = -1;
+                updateHistoricalUI();
+                return;
+            }
+
+            state.historicalTunings.activeSequenceCourseIdx = courseIndex;
+            updateHistoricalUI();
+
+            const c = inst.courses[courseIndex];
+            if (inst.isPaired && c.midi.length === 2) {
+                pluckMidiNote(c.midi[0], 0, 2.1, -1.5, 0.24);
+                pluckMidiNote(c.midi[1], 0.012, 2.1, 1.5, 0.22);
+            } else {
+                pluckMidiNote(c.midi[0], 0, 2.2, 0, 0.28);
+            }
+
+            courseIndex--;
+            sequenceTuningTimer = setTimeout(playNextStep, 1850);
+        }
+
+        playNextStep();
+    }
+
+    function updateHistoricalUI() {
+        const container = document.getElementById('viola-historical-tunings-container');
+        if (!container) return;
+
+        container.querySelectorAll('[data-play-historical-lick]').forEach((btn) => {
+            const tid = btn.getAttribute('data-play-historical-lick');
+            const isPlayingThis = state.historicalTunings.isPlayingLick && state.historicalTunings.activeLickId === tid;
+            btn.className = isPlayingThis
+                ? 'min-h-[36px] px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg ring-2 ring-amber-400'
+                : 'min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-1.5 transition';
+            btn.innerHTML = isPlayingThis
+                ? '<i data-lucide="square" class="w-3.5 h-3.5"></i> Parar Frase'
+                : '<i data-lucide="music-2" class="w-3.5 h-3.5 text-amber-400"></i> Tocar Frase Folclórica';
+        });
+
+        const seqBtn = document.getElementById('btn-viola-hist-play-sequence');
+        if (seqBtn) {
+            seqBtn.className = state.historicalTunings.isSequenceTuning
+                ? 'min-h-[40px] px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg ring-2 ring-rose-400'
+                : 'min-h-[40px] px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition shadow-md';
+            seqBtn.innerHTML = state.historicalTunings.isSequenceTuning
+                ? '<i data-lucide="square" class="w-4 h-4"></i> Parar Diapasão'
+                : '<i data-lucide="headphones" class="w-4 h-4"></i> Ouvir Sequência de Afinação Completa (Pares 5 a 1)';
+        }
+
+        container.querySelectorAll('[data-retune-course-row]').forEach((row) => {
+            const cIdx = parseInt(row.getAttribute('data-retune-course-row'), 10);
+            const isSounding = state.historicalTunings.isSequenceTuning && state.historicalTunings.activeSequenceCourseIdx === cIdx;
+            if (isSounding) {
+                row.className = 'border-b border-amber-500/60 bg-amber-500/15 transition duration-200';
+            } else {
+                row.className = 'border-b border-slate-800/80 hover:bg-slate-900/50 transition';
+            }
+        });
+
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+    }
+
+    function renderHistoricalTuningsSection() {
+        const container = document.getElementById('viola-historical-tunings-container');
+        if (!container) return;
+
+        const currentInst = INSTRUMENTS[state.instrumentId];
+        const targetTuningId = state.historicalTunings.activeTargetTuningId || 'viola_rio_acima_c';
+        const targetTuning = HISTORICAL_TUNINGS_CATALOG[targetTuningId] || HISTORICAL_TUNINGS_CATALOG.viola_rio_acima_c;
+        const currentCat = state.historicalTunings.filterCategory || 'all';
+
+        const allTunings = Object.values(HISTORICAL_TUNINGS_CATALOG);
+        const filteredTunings = currentCat === 'all'
+            ? allTunings
+            : allTunings.filter((t) => t.category === currentCat);
+
+        let retuneRowsHtml = '';
+        const targetInst = INSTRUMENTS[targetTuningId];
+        const isPairedComparison = currentInst && targetInst && currentInst.isPaired && targetInst.isPaired;
+
+        if (isPairedComparison) {
+            retuneRowsHtml = targetInst.courses.map((tCourse, idx) => {
+                const cCourse = currentInst.courses[idx];
+                const cMidi = cCourse.midi[0];
+                const tMidi = tCourse.midi[0];
+                const delta = tMidi - cMidi;
+                const absDelta = Math.abs(delta);
+
+                let badgeHtml = '';
+                let actionText = '';
+                let riskText = '';
+                let riskClass = 'text-slate-400';
+
+                if (delta === 0) {
+                    badgeHtml = '<span class="px-2 py-0.5 text-[11px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold">✓ Uníssono (Manter)</span>';
+                    actionText = 'Nenhuma alteração na cravelha. Mesma tensão física.';
+                    riskText = 'Segurança total (0 delta)';
+                    riskClass = 'text-emerald-400';
+                } else if (delta > 0) {
+                    badgeHtml = `<span class="px-2 py-0.5 text-[11px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">▲ Subir (+${delta} semitom${absDelta > 1 ? 's' : ''})</span>`;
+                    actionText = `Girar cravelha no sentido anti-horário (apertar). Tensão aumenta +${absDelta * 100} cents.`;
+                    if (absDelta === 1) {
+                        riskText = 'Tensão segura: margem elástica normal';
+                        riskClass = 'text-cyan-400';
+                    } else if (absDelta === 2) {
+                        riskText = 'Atenção: tensão moderada. Aperte ouvindo o timbre';
+                        riskClass = 'text-amber-400';
+                    } else {
+                        riskText = 'Cuidado: tensão elevada. Risco de ruptura se corda velha';
+                        riskClass = 'text-rose-400 font-semibold';
+                    }
+                } else {
+                    badgeHtml = `<span class="px-2 py-0.5 text-[11px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-semibold">▼ Baixar (${delta} semitom${absDelta > 1 ? 's' : ''})</span>`;
+                    actionText = `Girar cravelha no sentido horário (afrouxar). Alívio de ${absDelta * 100} cents.`;
+                    riskText = 'Alívio mecânico: sem risco de quebra';
+                    riskClass = 'text-emerald-400';
+                }
+
+                const isSoundingRow = state.historicalTunings.isSequenceTuning && state.historicalTunings.activeSequenceCourseIdx === idx;
+
+                return `
+                    <tr data-retune-course-row="${idx}" class="${isSoundingRow ? 'border-b border-amber-500/60 bg-amber-500/15' : 'border-b border-slate-800/80 hover:bg-slate-900/50'} transition">
+                        <td class="p-3 font-mono font-semibold text-slate-200">
+                            <div>${tCourse.label}</div>
+                            <span class="text-[10px] text-slate-500">${tCourse.octaved ? 'Par Oitavado' : 'Par Uníssono'}</span>
+                        </td>
+                        <td class="p-3 font-mono font-bold text-cyan-300">
+                            <span class="text-xs text-slate-400 font-normal">Atual:</span> ${cCourse.note}
+                        </td>
+                        <td class="p-3 font-mono font-bold text-amber-300">
+                            <span class="text-xs text-slate-400 font-normal">Alvo:</span> ${tCourse.note}
+                        </td>
+                        <td class="p-3">
+                            <div class="flex items-center gap-2">
+                                ${badgeHtml}
+                            </div>
+                            <div class="text-[11px] text-slate-400 mt-1">${actionText}</div>
+                            <div class="text-[10px] ${riskClass} mt-0.5">${riskText}</div>
+                        </td>
+                        <td class="p-3 text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button type="button" data-play-retune-current="${idx}" title="Ouvir nota atual (${cCourse.note})" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">
+                                    Atual (${cCourse.note})
+                                </button>
+                                <button type="button" data-play-retune-target="${idx}" title="Ouvir nota alvo (${tCourse.note})" class="px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-mono font-semibold transition">
+                                    Alvo (${tCourse.note})
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        } else {
+            retuneRowsHtml = `
+                <tr>
+                    <td colspan="5" class="p-6 text-center font-mono text-xs text-amber-300">
+                        O instrumento atual (${currentInst ? currentInst.name : ''}) tem número de cordas diferente da viola de 5 pares.
+                        Selecione uma viola de 5 pares para visualização detalhada par a par.
+                    </td>
+                </tr>
+            `;
+        }
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 sm:p-5 space-y-5 shadow-xl">
+                <!-- Cabeçalho do Módulo -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Fase 10 Concluída</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Etnomusicologia &amp; Lutheria</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Cerrado • Jequitinhonha • Pantanal</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-wider font-mono mt-1 flex items-center gap-2">
+                            <i data-lucide="compass" class="w-5 h-5 text-amber-400"></i>
+                            Afinações Históricas &amp; Regionais Raras da Viola Brasileira
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Explore os temperamentos e afinações abertas ancestrais que moldaram a música raiz: Meia-Guitarra colonial, Rio Acima em Dó das novenas, o estrondoso Ré grave de São Lourenço (D2 a 73.4 Hz), o lamento menor da Cana-Verde e a mística de Rio Abaixo e Cebolão.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-hist-strum-active" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="volume-2" class="w-4 h-4 text-amber-400"></i>
+                            <span>Arpejar Afinação Atual</span>
+                        </button>
+                        <button type="button" id="btn-viola-hist-scroll-retuner" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Assistente de Reafinação</span>
+                        </button>
+                        <button type="button" id="btn-viola-hist-scroll-compendium" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+                            <span>Compêndio Teórico</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros de Categoria -->
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex flex-wrap items-center gap-1.5 text-xs font-mono">
+                        <span class="text-slate-400 mr-1 uppercase tracking-wider text-[11px] font-bold">Filtro de Temperamento:</span>
+                        <button type="button" data-hist-filter="all" class="px-3 py-1 rounded-lg border font-semibold transition ${currentCat === 'all' ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md' : 'bg-[#090d16] text-slate-400 border-slate-800 hover:text-slate-200'}">Todas (6)</button>
+                        <button type="button" data-hist-filter="open_major" class="px-3 py-1 rounded-lg border font-semibold transition ${currentCat === 'open_major' ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md' : 'bg-[#090d16] text-slate-400 border-slate-800 hover:text-slate-200'}">Abertas Maiores (Cebolão, Rio Abaixo, Rio Acima)</button>
+                        <button type="button" data-hist-filter="open_minor" class="px-3 py-1 rounded-lg border font-semibold transition ${currentCat === 'open_minor' ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md' : 'bg-[#090d16] text-slate-400 border-slate-800 hover:text-slate-200'}">Modo Menor (Cana-Verde)</button>
+                        <button type="button" data-hist-filter="modal_drone" class="px-3 py-1 rounded-lg border font-semibold transition ${currentCat === 'modal_drone' ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md' : 'bg-[#090d16] text-slate-400 border-slate-800 hover:text-slate-200'}">Modais &amp; Drone (São Lourenço, Meia-Guitarra)</button>
+                    </div>
+                    <div class="text-[11px] font-mono text-slate-500">
+                        Afinação Ativa: <span class="text-amber-300 font-bold">${currentInst ? currentInst.shortName : ''}</span>
+                    </div>
+                </div>
+
+                <!-- Grid de Cards de Afinações Raras e Históricas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    ${filteredTunings.map((tuning) => {
+                        const isCurrentActive = state.instrumentId === tuning.id;
+                        const isSelectedTarget = state.historicalTunings.activeTargetTuningId === tuning.id;
+                        const isPlayingLick = state.historicalTunings.isPlayingLick && state.historicalTunings.activeLickId === tuning.id;
+
+                        return `
+                            <div class="bg-[#090d16] border ${isCurrentActive ? 'border-amber-400 shadow-lg shadow-amber-500/10 ring-1 ring-amber-400/40' : 'border-slate-800 hover:border-slate-700'} rounded-xl p-4 flex flex-col justify-between space-y-3 transition">
+                                <div class="space-y-2.5">
+                                    <div class="flex items-start justify-between gap-2">
+                                        <div class="space-y-0.5">
+                                            <span class="px-2 py-0.5 text-[10px] font-mono rounded ${tuning.badgeColor}">
+                                                ${tuning.badge}
+                                            </span>
+                                            <h4 class="text-base font-bold text-slate-100 flex items-center gap-1.5 mt-1">
+                                                <span>${tuning.name}</span>
+                                            </h4>
+                                            <p class="text-[11px] font-mono text-slate-400">${tuning.region}</p>
+                                        </div>
+                                        ${isCurrentActive
+                                            ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-semibold shrink-0 animate-pulse"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Em Uso</span>'
+                                            : ''
+                                        }
+                                    </div>
+
+                                    <!-- Acorde Solto e Fórmula -->
+                                    <div class="bg-[#0f172a] border border-slate-800/80 rounded-lg p-2.5 flex items-center justify-between">
+                                        <div>
+                                            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">Acorde Cordas Soltas</span>
+                                            <span class="text-sm font-mono font-bold text-amber-300">${tuning.openChordName}</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">Categoria</span>
+                                            <span class="text-xs font-mono text-cyan-300">${tuning.categoryLabel}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Régua das 5 Ordens / Pares -->
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Notas dos Pares (1º Prima ao 5º Bordão):</span>
+                                        <div class="grid grid-cols-5 gap-1 text-center font-mono">
+                                            ${tuning.coursesDetail.map((cd) => `
+                                                <div class="p-1 rounded bg-[#0f172a] border border-slate-800/80">
+                                                    <div class="text-[9px] text-slate-500">${cd.num}º</div>
+                                                    <div class="text-xs font-bold text-slate-200">${cd.note}</div>
+                                                    <div class="text-[9px] ${cd.roleColor}">${cd.intervalRole.replace(/\s*\(.*\)/, '')}</div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+
+                                    <!-- Contexto Etnomusicológico & Mito -->
+                                    <p class="text-xs text-slate-300 leading-relaxed bg-[#0f172a]/50 p-2.5 rounded-lg border border-slate-800/50">
+                                        ${tuning.tradition}
+                                    </p>
+
+                                    <!-- Dica de Lutheria -->
+                                    <div class="flex items-start gap-1.5 text-[11px] text-slate-400 font-mono">
+                                        <i data-lucide="wrench" class="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5"></i>
+                                        <span>${tuning.lutherieTip}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Ações do Card -->
+                                <div class="pt-2 border-t border-slate-800/80 space-y-2">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button type="button" data-activate-tuning="${tuning.id}" class="min-h-[38px] px-3 py-1.5 rounded-lg ${isCurrentActive ? 'bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 cursor-default font-semibold' : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold'} text-xs flex items-center justify-center gap-1.5 transition">
+                                            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                            <span>${isCurrentActive ? 'Afinação Ativa' : 'Ativar no Estúdio'}</span>
+                                        </button>
+                                        <button type="button" data-play-open-chord="${tuning.id}" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                                            <span>Ouvir Acorde</span>
+                                        </button>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button type="button" data-play-historical-lick="${tuning.id}" class="min-h-[36px] px-2.5 py-1.5 rounded-lg ${isPlayingLick ? 'bg-amber-500 text-slate-950 font-bold ring-2 ring-amber-400 shadow-md' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200'} text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                            <i data-lucide="${isPlayingLick ? 'square' : 'music-2'}" class="w-3.5 h-3.5 ${isPlayingLick ? '' : 'text-amber-400'}"></i>
+                                            <span>${isPlayingLick ? 'Parar Frase' : 'Tocar Frase'}</span>
+                                        </button>
+                                        <button type="button" data-set-retune-target="${tuning.id}" class="min-h-[36px] px-2.5 py-1.5 rounded-lg ${isSelectedTarget ? 'bg-cyan-600/30 border border-cyan-400 text-cyan-200 font-semibold' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300'} text-xs flex items-center justify-center gap-1.5 transition">
+                                            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                            <span>Reafinar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- ASSISTENTE INTERATIVO DE REAFINAÇÃO PASSO A PASSO -->
+                <div id="viola-retuning-assistant-section" class="bg-[#090d16] border border-slate-800 rounded-xl p-4 sm:p-5 space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-cyan-400"></i>
+                                <h4 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Assistente Interativo de Reafinação (Re-Tuning Guide)</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Calcula as voltas e semitons de cravelha para migrar do seu instrumento atual para a afinação alvo com segurança de luthier.</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-mono text-slate-400">Afinação de Destino (Alvo):</span>
+                            <select id="viola-hist-select-target" aria-label="Selecione a afinação alvo"
+                                class="min-h-[38px] px-3 py-1 rounded-lg bg-[#0f172a] border border-slate-700 font-mono text-xs text-amber-300 font-semibold focus:border-amber-400">
+                                ${Object.values(HISTORICAL_TUNINGS_CATALOG).map((t) => `
+                                    <option value="${t.id}" ${t.id === targetTuningId ? 'selected' : ''}>${t.name} (${t.coursesSummary})</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Comparação Resumida -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-slate-800">
+                            <span class="text-[10px] uppercase text-slate-500 block">Ponto de Partida (Instrumento Atual):</span>
+                            <div class="text-sm font-bold text-cyan-300 mt-0.5">${currentInst ? currentInst.name : ''}</div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-slate-800">
+                            <span class="text-[10px] uppercase text-slate-500 block">Destino (Afinação Selecionada):</span>
+                            <div class="text-sm font-bold text-amber-300 mt-0.5">${targetTuning ? targetTuning.formalName : ''}</div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Reafinação Par a Par -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 font-mono uppercase tracking-wider text-[11px] text-slate-400 bg-[#0f172a]/60">
+                                    <th class="p-3">Ordem / Par</th>
+                                    <th class="p-3">Nota Atual</th>
+                                    <th class="p-3">Nota Alvo</th>
+                                    <th class="p-3">Ação na Cravelha &amp; Tensão</th>
+                                    <th class="p-3 text-right">Diapasão A/B</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${retuneRowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Botão Master: Diapasão Sequencial Guiado -->
+                    <div class="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+                            <i data-lucide="info" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                            <span>O diapasão sequencial toca cada par do bordão à prima espaçado em 1.8s para você afinar sem usar as mãos.</span>
+                        </div>
+                        <button type="button" id="btn-viola-hist-play-sequence" class="min-h-[40px] px-4 py-2 rounded-lg ${state.historicalTunings.isSequenceTuning ? 'bg-rose-600 hover:bg-rose-500 text-white font-bold ring-2 ring-rose-400' : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold'} text-xs flex items-center gap-2 transition shadow-md shrink-0">
+                            <i data-lucide="${state.historicalTunings.isSequenceTuning ? 'square' : 'headphones'}" class="w-4 h-4"></i>
+                            <span>${state.historicalTunings.isSequenceTuning ? 'Parar Diapasão' : 'Ouvir Sequência de Afinação Completa (Pares 5 a 1)'}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COMPÊNDIO ETNOMUSICOLÓGICO & TEORIA LUTHERÍSTICA -->
+                <div id="viola-hist-compendium-section" class="bg-[#090d16] border border-slate-800 rounded-xl p-4 sm:p-5 space-y-4">
+                    <div class="flex items-center gap-2 pb-2 border-b border-slate-800">
+                        <i data-lucide="book-open" class="w-4 h-4 text-amber-400"></i>
+                        <h4 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Compêndio Etnomusicológico &amp; Teoria Lutherística</h4>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-[#0f172a] border border-slate-800/80 rounded-xl p-3.5 space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                                <h5 class="text-xs font-bold text-slate-200 uppercase font-mono">1. A Mística das Águas: Rio Abaixo vs Rio Acima</h5>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                No imaginário caipira tradicional, a afinação é mais do que um conjunto de frequências: é uma chave mística. <em>Rio Abaixo</em> (Sol Maior) carrega a lenda do pacto ribeirinho do Rio São Francisco, famoso por "encantar serpentes e fazer a canoa rodar contra a correnteza". Já o <em>Rio Acima</em> (Dó Maior), nascido no Vale do Jequitinhonha, era chamado de afinação da Virgem e dos anjos: sua tessitura mais alta e reluzente servia para saudar o Menino Jesus nas Folias e alvorecer novenas nas capelas de Minas.
+                            </p>
+                        </div>
+
+                        <div class="bg-[#0f172a] border border-slate-800/80 rounded-xl p-3.5 space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                <h5 class="text-xs font-bold text-slate-200 uppercase font-mono">2. A Herança Ibérica da Meia-Guitarra</h5>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                A <em>Meia-Guitarra</em> preserva a estrutura intervalar exata das 5 cordas superiores do violão moderno e da guitarra portuguesa barroca (Lá - Ré - Sol - Si - Mi). Era a afinação favorita dos seresteiros coloniais de Goiás Velho e Ouro Preto: permitia que músicos treinados no violão clássico executassem modinhas e lundus na viola mantendo seus shapes habituais, mas aproveitando a rica reverberação metálica dos pares oitavados.
+                            </p>
+                        </div>
+
+                        <div class="bg-[#0f172a] border border-slate-800/80 rounded-xl p-3.5 space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                                <h5 class="text-xs font-bold text-slate-200 uppercase font-mono">3. O Bordão Telúrico D2 de São Lourenço &amp; Física das Cordas</h5>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                A afinação de <em>São Lourenço</em> desce o 5º par para Ré grave (D2 a 73.4 Hz). Sob o ponto de vista da física acústica, cordas muito graves em braços curtos (580 mm) perdem rigidez e vibram com grande amplitude lateral. Por isso, mestres luthieres recomendam cordas de calibre mínimo .044 a .046 no bordão, mantendo a tensão axial acima de 6.2 kgf e prevenindo o trastejamento nas casas 1 a 3.
+                            </p>
+                        </div>
+
+                        <div class="bg-[#0f172a] border border-slate-800/80 rounded-xl p-3.5 space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                                <h5 class="text-xs font-bold text-slate-200 uppercase font-mono">4. A Cana-Verde e o Modo Menor Nativo da Viola</h5>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                A imensa maioria das afinações caipiras ressoa em tríade maior quando tocada solta. A notável exceção é a <em>Cana-Verde</em>, afinada no acorde de Si Menor (Bm: Ré - Si - Fá# - Ré - Si). É a sonoridade que melhor expressa a "saudade" e o pranto contido das despedidas de tropeiros e modas fúnebres tradicionais, permitindo tocar melodias plangentes com a mão solta ressoando a terça menor natural.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        bindHistoricalTuningsEvents(container);
+    }
+
+    function bindHistoricalTuningsEvents(container) {
+        container.querySelectorAll('[data-hist-filter]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const cat = btn.getAttribute('data-hist-filter');
+                state.historicalTunings.filterCategory = cat;
+                saveViolaState();
+                renderHistoricalTuningsSection();
+            });
+        });
+
+        container.querySelectorAll('[data-activate-tuning]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const tId = btn.getAttribute('data-activate-tuning');
+                if (state.instrumentId !== tId) {
+                    stopHistoricalAudio();
+                    stopScalePlayback();
+                    stopPonteioPlayback();
+                    stopProgressionPlayback();
+                    stopTabEditorPlayback();
+                    stopModalPlayback();
+                    stopTunerTone();
+                    stopEarTrainerAudio();
+
+                    state.instrumentId = tId;
+                    state.voicingVariantIdx = 0;
+
+                    if (tId === 'viola_rio_acima_c') {
+                        state.tensionCalculator.presetId = 'viola_rio_acima_media';
+                        state.tensionCalculator.scaleLengthMm = 580;
+                        state.tensionCalculator.customGauges = null;
+                        state.tensionCalculator.stringMaterial = 'steel_bronze';
+                    } else if (tId === 'viola_meia_guitarra') {
+                        state.tensionCalculator.presetId = 'viola_meia_guitarra_media';
+                        state.tensionCalculator.scaleLengthMm = 580;
+                        state.tensionCalculator.customGauges = null;
+                        state.tensionCalculator.stringMaterial = 'steel_bronze';
+                    } else if (tId === 'viola_sao_lourenco') {
+                        state.tensionCalculator.presetId = 'viola_sao_lourenco_media';
+                        state.tensionCalculator.scaleLengthMm = 580;
+                        state.tensionCalculator.customGauges = null;
+                        state.tensionCalculator.stringMaterial = 'steel_bronze';
+                    } else if (tId === 'viola_cana_verde') {
+                        state.tensionCalculator.presetId = 'viola_cana_verde_media';
+                        state.tensionCalculator.scaleLengthMm = 580;
+                        state.tensionCalculator.customGauges = null;
+                        state.tensionCalculator.stringMaterial = 'steel_bronze';
+                    } else if (tId === 'viola_rio_abaixo') {
+                        state.tensionCalculator.presetId = 'viola_rio_abaixo_media';
+                        state.tensionCalculator.scaleLengthMm = 580;
+                        state.tensionCalculator.customGauges = null;
+                        state.tensionCalculator.stringMaterial = 'steel_bronze';
+                    } else if (tId === 'viola_cebolao_e') {
+                        state.tensionCalculator.presetId = 'viola_cebolao_e_media';
+                        state.tensionCalculator.scaleLengthMm = 580;
+                        state.tensionCalculator.customGauges = null;
+                        state.tensionCalculator.stringMaterial = 'steel_bronze';
+                    }
+
+                    saveViolaState();
+                    renderAll();
+                    playTuningOpenChord(tId);
+
+                    const fbWrap = document.getElementById('viola-fretboard-svg-wrap');
+                    if (fbWrap) fbWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-play-open-chord]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const tId = btn.getAttribute('data-play-open-chord');
+                playTuningOpenChord(tId);
+            });
+        });
+
+        container.querySelectorAll('[data-play-historical-lick]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const tId = btn.getAttribute('data-play-historical-lick');
+                playHistoricalLick(tId);
+            });
+        });
+
+        container.querySelectorAll('[data-set-retune-target]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const tId = btn.getAttribute('data-set-retune-target');
+                state.historicalTunings.activeTargetTuningId = tId;
+                saveViolaState();
+                renderHistoricalTuningsSection();
+                const retuneEl = document.getElementById('viola-retuning-assistant-section');
+                if (retuneEl) retuneEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        const targetSel = document.getElementById('viola-hist-select-target');
+        if (targetSel) {
+            targetSel.addEventListener('change', (e) => {
+                state.historicalTunings.activeTargetTuningId = e.target.value;
+                saveViolaState();
+                renderHistoricalTuningsSection();
+            });
+        }
+
+        container.querySelectorAll('[data-play-retune-current]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const cIdx = parseInt(btn.getAttribute('data-play-retune-current'), 10);
+                playReTuningReference(cIdx, false);
+            });
+        });
+
+        container.querySelectorAll('[data-play-retune-target]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const cIdx = parseInt(btn.getAttribute('data-play-retune-target'), 10);
+                playReTuningReference(cIdx, true);
+            });
+        });
+
+        const seqBtn = document.getElementById('btn-viola-hist-play-sequence');
+        if (seqBtn) {
+            seqBtn.addEventListener('click', () => {
+                const targetId = state.historicalTunings.activeTargetTuningId || 'viola_rio_acima_c';
+                playReTuningSequence(targetId);
+            });
+        }
+
+        const strumActiveBtn = document.getElementById('btn-viola-hist-strum-active');
+        if (strumActiveBtn) {
+            strumActiveBtn.addEventListener('click', () => {
+                playTuningOpenChord(state.instrumentId);
+            });
+        }
+
+        const scrollRetunerBtn = document.getElementById('btn-viola-hist-scroll-retuner');
+        if (scrollRetunerBtn) {
+            scrollRetunerBtn.addEventListener('click', () => {
+                const el = document.getElementById('viola-retuning-assistant-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        const scrollCompendiumBtn = document.getElementById('btn-viola-hist-scroll-compendium');
+        if (scrollCompendiumBtn) {
+            scrollCompendiumBtn.addEventListener('click', () => {
+                const el = document.getElementById('viola-hist-compendium-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+    }
+
+    // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
     // =========================================================================
     let tunerOsc = null;
@@ -6702,6 +7810,7 @@
         stopTunerTone();
         stopPonteioPlayback();
         stopTabEditorPlayback();
+        stopHistoricalAudio();
         stopScalePlayback();
         stopProgressionPlayback();
 
@@ -6890,6 +7999,7 @@
         stopPonteioPlayback();
         stopScalePlayback();
         stopProgressionPlayback();
+        stopHistoricalAudio();
         stopTunerTone();
 
         const ctx = ensureAudioContext();
@@ -8556,6 +9666,82 @@
                     }
                 });
             }
+        } else if (state.displayMode === 'HISTORICAL') {
+            const histTuning = HISTORICAL_TUNINGS_CATALOG[state.historicalTunings.activeTargetTuningId] || HISTORICAL_TUNINGS_CATALOG.viola_rio_acima_c;
+            const curLickStep = (state.historicalTunings.isPlayingLick && state.historicalTunings.activeLickStepIdx >= 0 && histTuning.folkLick)
+                ? histTuning.folkLick[state.historicalTunings.activeLickStepIdx]
+                : null;
+
+            // 1. Marcações das cordas soltas com papéis intervalares no acorde da afinação
+            inst.courses.forEach((c, cIdx) => {
+                const pc = c.pitchClass;
+                const detail = (histTuning.id === inst.id && histTuning.coursesDetail) ? histTuning.coursesDetail[cIdx] : null;
+                const role = detail ? detail.intervalRole : NOTE_NAMES[pc];
+                const isRoot = role.startsWith('T');
+                const isThird = role.includes('3M') || role.includes('3m');
+                const isFifth = role.includes('5J');
+
+                let color = '#818cf8';
+                let stroke = '#090d16';
+                let strokeWidth = 2;
+                if (isRoot) {
+                    color = '#10b981';
+                    stroke = '#f59e0b';
+                    strokeWidth = 3;
+                } else if (isThird) {
+                    color = '#06b6d4';
+                } else if (isFifth) {
+                    color = '#f59e0b';
+                }
+
+                activeMarkers.push({
+                    courseIdx: cIdx,
+                    fret: 0,
+                    label: NOTE_NAMES[pc],
+                    sub: role.replace(/\s*\(.*\)/, ''),
+                    color,
+                    stroke,
+                    strokeWidth,
+                    opacity: '1'
+                });
+            });
+
+            // 2. Marcações fantasmas das notas do fraseado folclórico
+            if (histTuning && histTuning.folkLick) {
+                const lickGhostSeen = new Set();
+                histTuning.folkLick.forEach((nt) => {
+                    if (nt.c < numCourses) {
+                        const key = `${nt.c}_${nt.f}`;
+                        if (!lickGhostSeen.has(key) && nt.f > 0) {
+                            lickGhostSeen.add(key);
+                            const pc = (inst.courses[nt.c].pitchClass + nt.f) % 12;
+                            activeMarkers.push({
+                                courseIdx: nt.c,
+                                fret: nt.f,
+                                label: NOTE_NAMES[pc],
+                                sub: `${nt.c + 1}ºP`,
+                                color: '#d97706',
+                                opacity: '0.4'
+                            });
+                        }
+                    }
+                });
+            }
+
+            // 3. Marcador ativo durante execução da frase folclórica
+            if (curLickStep && curLickStep.c < numCourses) {
+                const pc = (inst.courses[curLickStep.c].pitchClass + curLickStep.f) % 12;
+                activeMarkers.push({
+                    courseIdx: curLickStep.c,
+                    fret: curLickStep.f,
+                    label: NOTE_NAMES[pc],
+                    sub: 'Frase',
+                    color: '#fbbf24',
+                    stroke: '#ffffff',
+                    strokeWidth: 3.5,
+                    opacity: '1'
+                });
+            }
         } else if (state.displayMode === 'MODAL') {
             const modalCfg = MODAL_SCALES[state.modalTrainer.modeId] || MODAL_SCALES.lydian;
             const rootPc = state.modalTrainer.rootPc;
@@ -9279,6 +10465,16 @@
             } else {
                 state.tensionCalculator = Object.assign({}, DEFAULT_TENSION_STATE);
             }
+
+            if (saved.historicalTunings && typeof saved.historicalTunings === 'object') {
+                state.historicalTunings = Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE, saved.historicalTunings, {
+                    isPlayingLick: false,
+                    activeLickId: null,
+                    isSequenceTuning: false
+                });
+            } else {
+                state.historicalTunings = Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE);
+            }
         }
     }
 
@@ -9309,6 +10505,13 @@
         if (copy.tensionCalculator) {
             copy.tensionCalculator = Object.assign({}, copy.tensionCalculator);
         }
+        if (copy.historicalTunings) {
+            copy.historicalTunings = Object.assign({}, copy.historicalTunings, {
+                isPlayingLick: false,
+                activeLickId: null,
+                isSequenceTuning: false
+            });
+        }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
@@ -9333,8 +10536,12 @@
                             class="min-h-[44px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm font-medium text-slate-100 focus:border-cyan-500">
                             <option value="viola_cebolao_e">Viola — Cebolão em Mi (E-B-G#-E-B)</option>
                             <option value="viola_cebolao_d">Viola — Cebolão em Ré (D-A-F#-D-A)</option>
-                            <option value="viola_rio_abaixo">Viola — Rio Abaixo (D-B-G-D-G)</option>
+                            <option value="viola_rio_abaixo">Viola — Rio Abaixo em Sol (D-B-G-D-G)</option>
                             <option value="viola_boiadeira">Viola — Boiadeira (D-A-F#-D-G)</option>
+                            <option value="viola_rio_acima_c">Viola — Rio Acima em Dó (E-C-G-E-C)</option>
+                            <option value="viola_meia_guitarra">Viola — Meia-Guitarra (E-B-G-D-A)</option>
+                            <option value="viola_sao_lourenco">Viola — São Lourenço (D-B-F#-D-D grave)</option>
+                            <option value="viola_cana_verde">Viola — Cana-Verde em Bm (D-B-F#-D-B)</option>
                             <option value="violao_padrao">Violão Padrão 6 Cordas (E-A-D-G-B-E)</option>
                         </select>
 
@@ -9351,6 +10558,11 @@
                         <button type="button" id="btn-viola-scroll-tension" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
                             <i data-lucide="scale" class="w-4 h-4 text-emerald-400"></i>
                             <span>Tensão &amp; Ação (Fase 9)</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-scroll-historical" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
+                            <span>Afinações Raras (Fase 10)</span>
                         </button>
                     </div>
                 </div>
@@ -9390,6 +10602,7 @@
                                 <button type="button" id="btn-viola-mode-ponteio" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎼 Tablatura &amp; Ponteios</button>
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
+                                <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -9559,6 +10772,9 @@
 
                 <!-- Módulo de Analisador de Tensão Mecânica e Calibre de Cordas (Fase 9) -->
                 <div id="viola-tension-calculator-container" class="space-y-4"></div>
+
+                <!-- Módulo de Afinações Históricas & Regionais Raras (Fase 10) -->
+                <div id="viola-historical-tunings-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -9744,6 +10960,12 @@
                     ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-rose-600 text-white shadow'
                     : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
             }
+            const btnModeHistorical = document.getElementById('btn-viola-mode-historical');
+            if (btnModeHistorical) {
+                btnModeHistorical.className = state.displayMode === 'HISTORICAL'
+                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-500 text-slate-950 shadow'
+                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            }
         }
     }
 
@@ -9755,6 +10977,7 @@
         const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
         const btnModeTabEditor = document.getElementById('btn-viola-mode-tab-editor');
         const btnModeModal = document.getElementById('btn-viola-mode-modal');
+        const btnModeHistorical = document.getElementById('btn-viola-mode-historical');
         if (btnModeChord && btnModeDuad && btnModeReverse) {
             btnModeChord.addEventListener('click', () => {
                 if (state.displayMode !== 'CHORD') {
@@ -9763,6 +10986,7 @@
                     stopProgressionPlayback();
                     stopTabEditorPlayback();
                     stopModalPlayback();
+                    stopHistoricalAudio();
                     state.displayMode = 'CHORD';
                     saveViolaState();
                     renderAll();
@@ -9771,10 +10995,12 @@
             });
             btnModeDuad.addEventListener('click', () => {
                 if (state.displayMode !== 'DUAD') {
+                    stopScalePlayback();
                     stopPonteioPlayback();
                     stopProgressionPlayback();
                     stopTabEditorPlayback();
                     stopModalPlayback();
+                    stopHistoricalAudio();
                     state.displayMode = 'DUAD';
                     saveViolaState();
                     renderAll();
@@ -9787,6 +11013,7 @@
                     stopProgressionPlayback();
                     stopTabEditorPlayback();
                     stopModalPlayback();
+                    stopHistoricalAudio();
                     state.displayMode = 'REVERSE';
                     saveViolaState();
                     renderAll();
@@ -9797,9 +11024,11 @@
                 btnModePonteio.addEventListener('click', () => {
                     if (state.displayMode !== 'PONTEIO') {
                         stopScalePlayback();
+                        stopPonteioPlayback();
                         stopProgressionPlayback();
                         stopTabEditorPlayback();
                         stopModalPlayback();
+                        stopHistoricalAudio();
                         state.displayMode = 'PONTEIO';
                         saveViolaState();
                         renderAll();
@@ -9816,6 +11045,7 @@
                         stopProgressionPlayback();
                         stopTabEditorPlayback();
                         stopModalPlayback();
+                        stopHistoricalAudio();
                         state.displayMode = 'TAB_EDITOR';
                         saveViolaState();
                         renderAll();
@@ -9832,11 +11062,29 @@
                         stopProgressionPlayback();
                         stopTabEditorPlayback();
                         stopModalPlayback();
+                        stopHistoricalAudio();
                         state.displayMode = 'MODAL';
                         saveViolaState();
                         renderAll();
                         const mWrap = document.getElementById('viola-modal-trainer-container');
                         if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+            if (btnModeHistorical) {
+                btnModeHistorical.addEventListener('click', () => {
+                    if (state.displayMode !== 'HISTORICAL') {
+                        stopScalePlayback();
+                        stopPonteioPlayback();
+                        stopProgressionPlayback();
+                        stopTabEditorPlayback();
+                        stopModalPlayback();
+                        stopHistoricalAudio();
+                        state.displayMode = 'HISTORICAL';
+                        saveViolaState();
+                        renderAll();
+                        const hWrap = document.getElementById('viola-historical-tunings-container');
+                        if (hWrap) hWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             }
@@ -9887,12 +11135,21 @@
             });
         }
 
+        const scrollHistoricalBtn = document.getElementById('btn-viola-scroll-historical');
+        if (scrollHistoricalBtn) {
+            scrollHistoricalBtn.addEventListener('click', () => {
+                const el = document.getElementById('viola-historical-tunings-container');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
         document.getElementById('viola-select-instrument').addEventListener('change', (e) => {
             stopScalePlayback();
             stopPonteioPlayback();
             stopProgressionPlayback();
             stopTabEditorPlayback();
             stopModalPlayback();
+            stopHistoricalAudio();
             stopTunerTone();
             stopEarTrainerAudio();
             state.instrumentId = e.target.value;
@@ -9921,6 +11178,26 @@
                 state.tensionCalculator.stringMaterial = 'steel_bronze';
             } else if (state.instrumentId === 'viola_boiadeira') {
                 state.tensionCalculator.presetId = 'viola_boiadeira_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_rio_acima_c') {
+                state.tensionCalculator.presetId = 'viola_rio_acima_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_meia_guitarra') {
+                state.tensionCalculator.presetId = 'viola_meia_guitarra_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_sao_lourenco') {
+                state.tensionCalculator.presetId = 'viola_sao_lourenco_media';
+                state.tensionCalculator.scaleLengthMm = 580;
+                state.tensionCalculator.customGauges = null;
+                state.tensionCalculator.stringMaterial = 'steel_bronze';
+            } else if (state.instrumentId === 'viola_cana_verde') {
+                state.tensionCalculator.presetId = 'viola_cana_verde_media';
                 state.tensionCalculator.scaleLengthMm = 580;
                 state.tensionCalculator.customGauges = null;
                 state.tensionCalculator.stringMaterial = 'steel_bronze';
@@ -10160,6 +11437,7 @@
         renderTabEditorSection();
         renderModalScalesSection();
         renderTensionCalculatorSection();
+        renderHistoricalTuningsSection();
         renderMetronomeControls();
     }
 
