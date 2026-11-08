@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 9 — Analisador de Tensão Mecânica e Calibre de Cordas (String Tension & Action Calculator)
+## 🎯 Projeto Prioritário Atual: Fase 10 — Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço)
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Cálculo de tensão mecânica em quilograma-força (kgf) e Newtons por corda/par para encordoamentos de aço e nylon em afinações Cebolão em Mi, Cebolão em Ré, Rio Abaixo, Boiadeira e Violão 6 cordas.
-  2. Diagnóstico lutherístico de sobretensão e fadiga estrutural do tampo harmônico, empenamento de cavalete e esforço axial no braço da viola.
-  3. Simulador de ação de cordas (altura em milímetros nos trastes 1 e 12) com recomendações de ajuste de pestana (nut) e rastilho em osso para tocadores canhotos e destros.
+  1. Expansão lutherística e musicológica com temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro, sertão baiano e goiano (Rio Acima em Mi/Fá#, Meia-Guitarra, São Lourenço e Cana-Verde).
+  2. Mapeamento dos novos intervalos e tensões mecânicas para cada afinação rara com síntese sonora dedicada no afinador acústico.
+  3. Biblioteca de ponteios e afinações abertas modais com integração nativa ao braço SVG canhoto/destro.
 
 ---
 
@@ -30,9 +30,9 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Motor completo de criação, edição e composição de tablaturas para Viola Caipira (5 pares) e Violão (6 cordas), integração bidirecional com o braço SVG, técnicas caipiras em 1 clique (Tap, Rasq, Terças e Sextas), reprodutor Web Audio, exportação multiformato (ASCII formatado e Canvas HD PNG / Impressão PDF) e persistência de múltiplos projetos no cofre.
 6. **[x] Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio, Dórico & Nordestino na Viola e Violão) (Fase 8 Concluída):**
    - Mapeamento sonoro e visual completo dos modos litúrgicos e folclóricos do sertão brasileiro ao longo de todo o braço SVG, diferenciação cromática de notas características, 5 exercícios guiados por modo, sequenciador Web Audio API e filtros de região do braço.
-7. **[ ] Analisador de Tensão e Calibre de Cordas (String Tension & Action Calculator) (Fase 9):**
-   - Cálculo de tensão mecânica em kgf por par para cordas de aço e nylon em afinações Cebolão, Rio Abaixo e Boiadeira com alertas de fadiga do tampo e regulagem de cavalete.
-8. **[ ] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço):**
+7. **[x] Analisador de Tensão e Calibre de Cordas (String Tension & Action Calculator) (Fase 9 Concluída):**
+   - Cálculo de tensão mecânica em kgf por par para cordas de aço e nylon em afinações Cebolão, Rio Abaixo, Boiadeira e Violão com alertas de fadiga do tampo, simulação de ação no 1º e 12º traste e regulagem em osso para Canhoto e Destro.
+8. **[ ] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço) (Fase 10):**
    - Expansão lutherística com novos temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão goiano.
 9. **[ ] Gerador de Modulações & Preparação Harmônica Caipira:**
    - Ferramenta de transição tonal com acordes de preparação em dois tempos, pestanas móveis e dominantes secundárias típicas de duplas sertanejas clássicas.
@@ -40,6 +40,34 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **08/11/2026 — Sessão 9** (Fase 9 Concluída):
+  - **Analisador de Tensão Mecânica e Calibre de Cordas (String Tension & Action Calculator)**:
+    - **Física Acústica de Cordas por Mersenne (<em>T</em> = 4 · μ · <em>L</em>² · <em>f</em>²)**:
+      - Cálculo analítico exato de tensão mecânica em Newtons (N), quilogramas-força (kgf) e libras (lbs) para cada corda individual e para cada par somado.
+      - Tabela calibrada de densidade linear de massa (μ) para Plain Steel, Wound Steel (núcleo hexagonal de aço com bronze 85/15, fósforo bronze ou níquel), Plain Nylon e Wound Nylon.
+      - 12 Presets Canônicos de fábrica: Viola Cebolão em Mi (Leve .009, Média .010 e Pesada .011), Cebolão em Ré (Média e Pesada), Rio Abaixo em Sol, Boiadeira, Viola Nylon Especial, Violão Clássico Nylon (EJ45 e EJ46 Alta Tensão), Violão Aço Folk (Extra-Light .010 e Light .012).
+      - Ajuste fino individual de calibres com botões `−.001″` e `+.001″`, comprimento de escala vibrante (500 a 700 mm com presets 570, 580, 590, 600, 640, 650, 660 mm) e transposição tonal de afinação (`♭ -2`, `♭ -1`, `Nominal 0`, `♯ +1`) com exibição dinâmica do delta de alívio ou sobrecarga mecânica.
+    - **Diagnóstico Lutherístico Estrutural & Saúde do Tampo Harmônico**:
+      - Medidor visual tipo gauge com segmentação por faixas de projeto: Zona Segura (≤ 66 kgf Viola / ≤ 44 kgf Violão Nylon / ≤ 75 kgf Violão Aço), Zona de Alerta Moderado e Zona Crítica de Sobretensão.
+      - Cálculo de esforço axial de compressão no braço (kgf) com parecer técnico sobre tensor metálico e braços de cedro tradicionais com longarina de jacarandá.
+      - Torque e momento fletor no cavalete (<em>M</em> = <em>T</em> · <em>h</em><sub>cavalete</sub> em N·m) e tração tangencial na lâmina de cola do bloco de jacarandá.
+      - Pressão descendente no tampo via ângulo de quebra (break angle de 30°) sobre o rastilho de osso.
+      - Alertas lutherísticos preventivos contra abaulamento ("belly bulge"), afundamento de boca e colapso de travessas do leque harmônico.
+    - **Simulador de Ação de Cordas (Nut & Saddle Setup Calculator)**:
+      - 3 Perfis de regulagem alvo: *Solo & Ponteio Ágil (Baixa)*, *Padrão Caipira Versátil (Média / Recomendada)* e *Batida Forte, Pagode & Rasqueado (Alta)*.
+      - Sliders interativos para medição da altura real no 1º traste (Pestana) e 12º traste (Rastilho) com diagnóstico de conforto e trastejamento.
+      - Teorema geométrico de luthier: cálculo exato de desbaste na base do rastilho em osso (Δ = 2 · |<em>h</em><sub>12</sub> − <em>h</em><sub>alvo</sub>|) com instruções passo a passo para oficina de lutheria (lixamento em superfície plana de vidro com lixa 400).
+      - Diagnóstico de aprofundamento ou calçamento de ranhuras da pestana com limas calibradas.
+      - **Compensação Especial Canhoto vs Destro**: orientação técnica sobre a inversão do ângulo de oitava do rastilho no modo Canhoto (+1.5 mm a +2.5 mm de recuo na 5ª corda), prevenindo desafinações oitavadas nas casas 7 a 12.
+    - **Áudio Interativo Web Audio API**:
+      - Botões de audição imediata de cada par com síntese de corda dedilhada e micro-delay de consonância.
+      - Botão *Arpejar Instrumento Completo* executando cascata arpejada dos bordões às primas seguida de rasqueado aberto de sustentação harmônica.
+    - **Exportador de Relatório Lutherístico**:
+      - Botão *Copiar Ficha de Lutheria* gerando relatório técnico completo em texto formatado para arquivamento ou envio ao luthier.
+    - **Persistência de Estado & Sincronização Inteligente**:
+      - Persistência das medições e preferências em LocalStorage via `VaultCore`.
+      - Sincronização automática entre o seletor principal de instrumentos e os presets de tensão.
 
 - **07/11/2026 — Sessão 8** (Fase 8 Concluída):
   - **Treinador de Escalas Modais Caipiras (Modo Lídio, Mixolídio, Dórico, Nordestino, Jônio e Eólio)**:
