@@ -1391,6 +1391,99 @@
                 'Desinfetar as lâminas com álcool 70% entre uma planta e outra para impedir transmissão de patógenos.'
             ],
             biologicalNote: 'A assepsia mecânica elimina vetores de contaminação e garante que 100% da transpiração e nutrientes do solo fluam exclusivamente para a copa estrutural estilizada.'
+        },
+        {
+            id: 'ENXERTIA_APROXIMACAO',
+            category: 'ESTRUTURA',
+            categoryBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            title: 'Enxertia de Aproximação de Ramos / Ponte Vascular',
+            subtitle: 'Correção de vazios de copa e indução de raízes no nebari via fusão cambial ativa',
+            idealMoons: ['CRESCENTE'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Primavera'],
+            avoidSeasons: ['Inverno'],
+            suitableStages: ['Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Ficus', 'Figueira', 'Jabuticaba', 'Pitanga', 'Caliandra', 'Amora', 'Piteco'],
+            avoidKeywords: ['Rosa-do-deserto'],
+            tools: 'Canivete cirúrgico afiado, fita parafilm, mini parafusos de latão/tachinhas e pasta cicatrizante japonesa.',
+            steps: [
+                'Selecionar um ramo flexível jovem da própria árvore ou muda vizinha para preencher o vazio desejado.',
+                'Entalhar uma canaleta no tronco receptor expondo o câmbio vascular com precisão milimétrica.',
+                'Decapar a casca do ramo doador na face de contato e encaixá-lo firmemente na canaleta.',
+                'Fixar com tachinha ou parafuso de latão para garantir imobilidade absoluta contra o vento.',
+                'Vedar todas as bordas com pasta cicatrizante e envolver com fita parafilm para manter umidade estéril.',
+                'Aguardar fusão cambial completa (90 a 120 dias) antes de desmamar a base do ramo doador.'
+            ],
+            biologicalNote: 'A pressão cambial ativa durante a Lua Crescente na Primavera dispara a diferenciação acelerada de xilema e floema, consolidando a união anatômica dos dois tecidos com altíssima taxa de pegamento.'
+        },
+        {
+            id: 'DESFOLHA_REDUCAO_VERAO',
+            category: 'DESFOLHA',
+            categoryBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            title: 'Desfolha Total de Verão para Redução Foliar e Refinamento',
+            subtitle: 'Indução da 2ª brotação com entrenós curtos e redução do limbo em até 70%',
+            idealMoons: ['CHEIA', 'MINGUANTE'],
+            avoidMoons: ['NOVA'],
+            idealSeasons: ['Verão'],
+            avoidSeasons: ['Inverno', 'Outono'],
+            suitableStages: ['Bonsai'],
+            speciesKeywords: ['Amora', 'Figueira', 'Ficus', 'Acerola', 'Piteco', 'Limão-cravo'],
+            avoidKeywords: ['Junípero', 'Pinheiro', 'Rosa-do-deserto'],
+            tools: 'Tesoura japonesa Hasami esterilizada e borrifador foliar com água fresca.',
+            steps: [
+                'Confirmar que a árvore goza de saúde vigorosa e recebeu adubação rica nas semanas anteriores.',
+                'Cortar cada folha no terço distal do pecíolo, preservando a gema axilar dormente intacta.',
+                'Manter a planta sob meia-sombra luminosa ventilada por 5 a 7 dias após a operação.',
+                'Moderar a rega no substrato (sem folhas a evapotranspiração cai em 80%), borrifando os ramos ao entardecer.',
+                'Acompanhar a eclosão da 2ª geração de folhas muito menores e compactas em 12 a 15 dias.'
+            ],
+            biologicalNote: 'O choque desfoliador na abundância térmica do Verão força o despertar sincronizado de gemas axilares adormecidas, dividindo a energia da planta em centenas de folhas miniaturizadas.'
+        },
+        {
+            id: 'TRATAMENTO_FITOSSANITARIO_PREVENTIVO',
+            category: 'PODA_RAMIFICACAO',
+            categoryBadge: 'bg-teal-500/15 text-teal-300 border-teal-500/30',
+            title: 'Tratamento Fitossanitário Ecológico (Óleo de Neem & Calda)',
+            subtitle: 'Blindagem preventiva contra ácaros, tripes, cochonilhas e pulgões ao entardecer',
+            idealMoons: ['MINGUANTE', 'NOVA'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Primavera', 'Verão', 'Outono'],
+            avoidSeasons: [],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Acerola', 'Pitanga', 'Jabuticaba', 'Buxinho', 'Caliandra', 'Amora', 'Duranta', 'Fruta-dos-milagres'],
+            avoidKeywords: [],
+            tools: 'Pulverizador de pressão prévia, emulsão de óleo de neem 1% e detergente neutro de coco.',
+            steps: [
+                'Preparar calda fresca na proporção de 5 ml de óleo de neem + 2 ml de sabão de coco por litro de água morna.',
+                'Aplicar exclusivamente no final da tarde (após as 17h30) para evitar que o sol queime as folhas umedecidas.',
+                'Cobrir face adaxial e abaxial das folhas, fendas de tronco e topo do nebari.',
+                'Evitar molhar flores abertas para preservar abelhas e polinizadores naturais.',
+                'Repetir a cada 15 a 21 dias na fase de crescimento ativo.'
+            ],
+            biologicalNote: 'A azadiractina do óleo de neem atua como regulador do crescimento de insetos mastigadores e sugadores, rompendo o ciclo de metamorfose sem causar toxidade ao tecido vegetal.'
+        },
+        {
+            id: 'SELAMENTO_PASTA_CICATRIZANTE',
+            category: 'ESTRUTURA',
+            categoryBadge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+            title: 'Selamento Hermético com Pasta Cicatrizante Japonesa',
+            subtitle: 'Prevenção de retração vascular (die-back) e infecção fúngica após cortes de galhos grossos',
+            idealMoons: ['NOVA', 'MINGUANTE'],
+            avoidMoons: ['CHEIA'],
+            idealSeasons: ['Outono', 'Inverno', 'Primavera'],
+            avoidSeasons: [],
+            suitableStages: ['Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Jabuticaba', 'Pitanga', 'Ipê', 'Acerola', 'Bougainvillea', 'Figueira', 'Piteco', 'Tamarindo'],
+            avoidKeywords: [],
+            tools: 'Alicate côncavo ou esférico japonês afiado e pasta cicatrizante japonesa (Kiyonal ou Cut Paste).',
+            steps: [
+                'Refinar o corte com alicate côncavo criando uma leve cavidade côncava no tronco para que o calo futuro feche nivelado.',
+                'Limpar a serragem e umedecer de leve o câmbio com lâmina afiada sem esmagar o bordo da casca.',
+                'Aplicar camada uniforme de pasta cicatrizante cobrindo 1 mm além do bordo do corte.',
+                'Moldar com a ponta dos dedos úmidos para formar selo impermeável contra ar e água de rega.',
+                'Deixar o calo cicatricial rolar sobre a pasta ao longo das estações subsequentes.'
+            ],
+            biologicalNote: 'O selamento estéril isola os feixes vasculares cortados da dessecação atmosférica e patógenos necróticos, permitindo que a divisão mitótica das células cambiais forme um calo circular perfeito.'
         }
     ];
 
@@ -2133,6 +2226,7 @@
     function saveData(notify = false) {
         const C = global.VaultCore;
         C.store.set(C.STORAGE_KEYS.BONSAI, plants);
+        if (typeof C.updateStorageMeter === 'function') C.updateStorageMeter();
         if (notify) C.toast('Acervo de Bonsai salvo localmente.', 'success', 2000);
     }
 

@@ -710,13 +710,332 @@
         }
     ];
 
-    const DEFAULT_TAB_EDITOR_STATE = {
-        activeProjectId: 'minha_moda_caipira',
-        currentStepIdx: 0,
-        isPlaying: false,
-        playbackSpeed: 1.0,
-        isLooping: true,
-        projects: DEFAULT_TAB_EDITOR_PROJECTS.slice()
+    // =========================================================================
+    // ESTRUTURAS DE DADOS: ANALISADOR DE TENSÃO & AÇÃO DE CORDAS (FASE 9)
+    // =========================================================================
+    const DEFAULT_TENSION_STATE = {
+        presetId: 'viola_cebolao_e_media',
+        scaleLengthMm: 580,             // Escala padrão de Viola Caipira: 580 mm (Violão: 650 mm)
+        pitchOffsetSemitones: 0,        // -2 (Tom abaixo), -1 (1/2 tom abaixo), 0 (Nominal), +1 (1/2 tom acima)
+        customGauges: null,             // Matriz com calibres personalizados caso editado pelo usuário
+        stringMaterial: 'steel_bronze', // 'steel_bronze' | 'steel_nickel' | 'steel_stainless' | 'nylon_classical'
+        actionMeasureNutTreble: 0.50,   // Medição 1º traste prima em mm
+        actionMeasureNutBass: 0.65,     // Medição 1º traste bordão em mm
+        actionMeasure12thTreble: 2.30,  // Medição 12º traste prima em mm
+        actionMeasure12thBass: 2.70,    // Medição 12º traste bordão em mm
+        targetActionProfile: 'caipira_versatil' // 'solo_baixo' | 'caipira_versatil' | 'rasqueado_alto'
+    };
+
+    const STRING_MATERIALS = {
+        steel_bronze: { name: 'Bronze 85/15 Caipira / Phosphor Bronze', factor: 1.0, badge: 'Bronze / Ressonante', badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+        steel_nickel: { name: 'Aço Niquelado (Nickel-Plated Steel)', factor: 0.99, badge: 'Níquel / Macio', badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' },
+        steel_stainless: { name: 'Aço Inox (Stainless Steel)', factor: 1.01, badge: 'Inox / Brilhante', badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+        nylon_classical: { name: 'Nylon Cristal / Silverplated Wound', factor: 1.0, badge: 'Nylon / Nobre', badgeColor: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30' }
+    };
+
+    const ACTION_TARGET_PROFILES = {
+        solo_baixo: {
+            id: 'solo_baixo',
+            name: 'Solo & Ponteio Ágil (Ação Baixa)',
+            badge: 'Ponteio Rápido / Baixa',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            description: 'Toque suave e veloz para ponteios em terças rápidas. Mínimo esforço para a mão de digitação e facilidade para pestanas prolongadas.',
+            viola: { nutTreble: 0.45, nutBass: 0.55, fret12Treble: 1.90, fret12Bass: 2.30 },
+            violao_nylon: { nutTreble: 0.65, nutBass: 0.75, fret12Treble: 2.60, fret12Bass: 3.20 },
+            violao_aco: { nutTreble: 0.45, nutBass: 0.55, fret12Treble: 1.80, fret12Bass: 2.30 }
+        },
+        caipira_versatil: {
+            id: 'caipira_versatil',
+            name: 'Padrão Caipira Versátil (Recomendada)',
+            badge: 'Equilíbrio Canônico / Média',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            description: 'A regulagem consagrada pelos mestres luthieres caipiras: excelente dinâmica tanto para ponteios límpidos quanto para batidas e rasqueados sem trastejamento.',
+            viola: { nutTreble: 0.50, nutBass: 0.65, fret12Treble: 2.30, fret12Bass: 2.70 },
+            violao_nylon: { nutTreble: 0.70, nutBass: 0.80, fret12Treble: 2.90, fret12Bass: 3.50 },
+            violao_aco: { nutTreble: 0.50, nutBass: 0.60, fret12Treble: 2.10, fret12Bass: 2.60 }
+        },
+        rasqueado_alto: {
+            id: 'rasqueado_alto',
+            name: 'Batida Forte, Pagode & Rasqueado (Ação Alta)',
+            badge: 'Batida Pesada / Alta',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            description: 'Mais espaço para oscilação das cordas em rasqueados enérgicos, repiques de Pagode de Viola e palhetadas vigorosas sem ruído nos trastes.',
+            viola: { nutTreble: 0.55, nutBass: 0.70, fret12Treble: 2.70, fret12Bass: 3.20 },
+            violao_nylon: { nutTreble: 0.75, nutBass: 0.85, fret12Treble: 3.20, fret12Bass: 3.90 },
+            violao_aco: { nutTreble: 0.55, nutBass: 0.65, fret12Treble: 2.40, fret12Bass: 2.90 }
+        }
+    };
+
+    const LINEAR_MASS_TABLE = {
+        plain_steel: {
+            get: (d) => 3.978 * Math.pow(d, 2)
+        },
+        wound_steel: {
+            samplePoints: [
+                { d: 0.018, mu: 0.00125 },
+                { d: 0.019, mu: 0.00140 },
+                { d: 0.022, mu: 0.00185 },
+                { d: 0.024, mu: 0.00220 },
+                { d: 0.026, mu: 0.00260 },
+                { d: 0.028, mu: 0.00305 },
+                { d: 0.030, mu: 0.00350 },
+                { d: 0.032, mu: 0.00400 },
+                { d: 0.034, mu: 0.00455 },
+                { d: 0.038, mu: 0.00565 },
+                { d: 0.042, mu: 0.00695 },
+                { d: 0.047, mu: 0.00870 },
+                { d: 0.053, mu: 0.01110 }
+            ],
+            get: function (d) {
+                const pts = this.samplePoints;
+                if (d <= pts[0].d) return pts[0].mu * Math.pow(d / pts[0].d, 2);
+                if (d >= pts[pts.length - 1].d) return pts[pts.length - 1].mu * Math.pow(d / pts[pts.length - 1].d, 2);
+                for (let i = 0; i < pts.length - 1; i++) {
+                    if (d >= pts[i].d && d <= pts[i + 1].d) {
+                        const ratio = (d - pts[i].d) / (pts[i + 1].d - pts[i].d);
+                        return pts[i].mu + ratio * (pts[i + 1].mu - pts[i].mu);
+                    }
+                }
+                return 3.22 * Math.pow(d, 2) + 0.00015;
+            }
+        },
+        nylon_plain: {
+            get: (d) => 0.578 * Math.pow(d, 2)
+        },
+        nylon_wound: {
+            samplePoints: [
+                { d: 0.028, mu: 0.00170 },
+                { d: 0.029, mu: 0.00185 },
+                { d: 0.032, mu: 0.00225 },
+                { d: 0.035, mu: 0.00270 },
+                { d: 0.038, mu: 0.00325 },
+                { d: 0.043, mu: 0.00410 },
+                { d: 0.045, mu: 0.00450 }
+            ],
+            get: function (d) {
+                const pts = this.samplePoints;
+                if (d <= pts[0].d) return pts[0].mu * Math.pow(d / pts[0].d, 2);
+                if (d >= pts[pts.length - 1].d) return pts[pts.length - 1].mu * Math.pow(d / pts[pts.length - 1].d, 2);
+                for (let i = 0; i < pts.length - 1; i++) {
+                    if (d >= pts[i].d && d <= pts[i + 1].d) {
+                        const ratio = (d - pts[i].d) / (pts[i + 1].d - pts[i].d);
+                        return pts[i].mu + ratio * (pts[i + 1].mu - pts[i].mu);
+                    }
+                }
+                return 2.15 * Math.pow(d, 2);
+            }
+        }
+    };
+
+    const TENSION_PRESETS = {
+        viola_cebolao_e_leve: {
+            id: 'viola_cebolao_e_leve',
+            instrumentId: 'viola_cebolao_e',
+            name: 'Viola Cebolão em Mi — Tensão Leve (.009 - .034)',
+            badge: 'Toque Macio / Conforto',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            description: 'Ideal para dedos sensíveis, violas de tampo fino ou estudo prolongado sem fadiga muscular.',
+            defaultScaleMm: 580,
+            material: 'steel_nickel',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', strings: [{ gauge: 0.009, type: 'plain', midi: 64 }, { gauge: 0.009, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.012, type: 'plain', midi: 59 }, { gauge: 0.012, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G#3/G#4', strings: [{ gauge: 0.019, type: 'wound', midi: 56 }, { gauge: 0.009, type: 'plain', midi: 68 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'E3/E4', strings: [{ gauge: 0.026, type: 'wound', midi: 52 }, { gauge: 0.012, type: 'plain', midi: 64 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', strings: [{ gauge: 0.034, type: 'wound', midi: 47 }, { gauge: 0.015, type: 'plain', midi: 59 }] }
+            ]
+        },
+        viola_cebolao_e_media: {
+            id: 'viola_cebolao_e_media',
+            instrumentId: 'viola_cebolao_e',
+            name: 'Viola Cebolão em Mi — Tensão Média (.010 - .038)',
+            badge: 'Padrão Consagrado / Luthier',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            description: 'O encordoamento canônico mais utilizado na viola brasileira. Equilíbrio perfeito entre ataque, volume, ressonância e pressão controlada no tampo.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', strings: [{ gauge: 0.010, type: 'plain', midi: 64 }, { gauge: 0.010, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.013, type: 'plain', midi: 59 }, { gauge: 0.013, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G#3/G#4', strings: [{ gauge: 0.022, type: 'wound', midi: 56 }, { gauge: 0.010, type: 'plain', midi: 68 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'E3/E4', strings: [{ gauge: 0.028, type: 'wound', midi: 52 }, { gauge: 0.013, type: 'plain', midi: 64 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', strings: [{ gauge: 0.038, type: 'wound', midi: 47 }, { gauge: 0.018, type: 'plain', midi: 59 }] }
+            ]
+        },
+        viola_cebolao_e_pesada: {
+            id: 'viola_cebolao_e_pesada',
+            instrumentId: 'viola_cebolao_e',
+            name: 'Viola Cebolão em Mi — Tensão Pesada (.011 - .042)',
+            badge: 'Alta Projeção / Violeiro Raiz',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            description: 'Pressão alta para violeiros que tocam ao ar livre ou em duplas sem microfonação forte. Exige tampo reforçado e tensor metálico.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', strings: [{ gauge: 0.011, type: 'plain', midi: 64 }, { gauge: 0.011, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.014, type: 'plain', midi: 59 }, { gauge: 0.014, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G#3/G#4', strings: [{ gauge: 0.024, type: 'wound', midi: 56 }, { gauge: 0.011, type: 'plain', midi: 68 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'E3/E4', strings: [{ gauge: 0.030, type: 'wound', midi: 52 }, { gauge: 0.014, type: 'plain', midi: 64 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', strings: [{ gauge: 0.042, type: 'wound', midi: 47 }, { gauge: 0.020, type: 'plain', midi: 59 }] }
+            ]
+        },
+        viola_cebolao_d_media: {
+            id: 'viola_cebolao_d_media',
+            instrumentId: 'viola_cebolao_d',
+            name: 'Viola Cebolão em Ré — Tensão Média (.010 - .038)',
+            badge: 'Afinação Baixa / Veludo',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            description: 'Afinação clássica tradicional da música sertaneja caipira dos anos 1940-60. Tensão mais baixa e som aveludado profundo.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', strings: [{ gauge: 0.010, type: 'plain', midi: 62 }, { gauge: 0.010, type: 'plain', midi: 62 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'A3', strings: [{ gauge: 0.013, type: 'plain', midi: 57 }, { gauge: 0.013, type: 'plain', midi: 57 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', strings: [{ gauge: 0.022, type: 'wound', midi: 54 }, { gauge: 0.010, type: 'plain', midi: 66 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.028, type: 'wound', midi: 50 }, { gauge: 0.013, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'A2/A3', strings: [{ gauge: 0.038, type: 'wound', midi: 45 }, { gauge: 0.018, type: 'plain', midi: 57 }] }
+            ]
+        },
+        viola_cebolao_d_pesada: {
+            id: 'viola_cebolao_d_pesada',
+            instrumentId: 'viola_cebolao_d',
+            name: 'Viola Cebolão em Ré — Tensão Pesada (.011 - .042)',
+            badge: 'Tião Carreiro Ré',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            description: 'Conjunto pesado ajustado para afinação em Ré. Compensa o tom a menos e entrega pegada firme com excelente tensão mecânica.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', strings: [{ gauge: 0.011, type: 'plain', midi: 62 }, { gauge: 0.011, type: 'plain', midi: 62 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'A3', strings: [{ gauge: 0.014, type: 'plain', midi: 57 }, { gauge: 0.014, type: 'plain', midi: 57 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', strings: [{ gauge: 0.024, type: 'wound', midi: 54 }, { gauge: 0.011, type: 'plain', midi: 66 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.030, type: 'wound', midi: 50 }, { gauge: 0.014, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'A2/A3', strings: [{ gauge: 0.042, type: 'wound', midi: 45 }, { gauge: 0.020, type: 'plain', midi: 57 }] }
+            ]
+        },
+        viola_rio_abaixo_media: {
+            id: 'viola_rio_abaixo_media',
+            instrumentId: 'viola_rio_abaixo',
+            name: 'Viola Rio Abaixo em Sol — Tensão Média (.010 - .038)',
+            badge: 'Pantanal & Mística',
+            badgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+            description: 'A afinação do diabo e das toadas pantaneiras. 5º par afinado no Sol grave.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', strings: [{ gauge: 0.010, type: 'plain', midi: 62 }, { gauge: 0.010, type: 'plain', midi: 62 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.013, type: 'plain', midi: 59 }, { gauge: 0.013, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G3/G4', strings: [{ gauge: 0.022, type: 'wound', midi: 55 }, { gauge: 0.010, type: 'plain', midi: 67 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.028, type: 'wound', midi: 50 }, { gauge: 0.013, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'G2/G3', strings: [{ gauge: 0.038, type: 'wound', midi: 43 }, { gauge: 0.018, type: 'plain', midi: 55 }] }
+            ]
+        },
+        viola_boiadeira_media: {
+            id: 'viola_boiadeira_media',
+            instrumentId: 'viola_boiadeira',
+            name: 'Viola Boiadeira — Tensão Média (.010 - .038)',
+            badge: 'Boiadeiro & Estrada',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            description: 'Afinação híbrida entre o Cebolão e o Rio Abaixo, com o 5º par em Sol grave.',
+            defaultScaleMm: 580,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'D4', strings: [{ gauge: 0.010, type: 'plain', midi: 62 }, { gauge: 0.010, type: 'plain', midi: 62 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'A3', strings: [{ gauge: 0.013, type: 'plain', midi: 57 }, { gauge: 0.013, type: 'plain', midi: 57 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'F#3/F#4', strings: [{ gauge: 0.022, type: 'wound', midi: 54 }, { gauge: 0.010, type: 'plain', midi: 66 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'D3/D4', strings: [{ gauge: 0.028, type: 'wound', midi: 50 }, { gauge: 0.013, type: 'plain', midi: 62 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'G2/G3', strings: [{ gauge: 0.038, type: 'wound', midi: 43 }, { gauge: 0.018, type: 'plain', midi: 55 }] }
+            ]
+        },
+        viola_nylon_suave: {
+            id: 'viola_nylon_suave',
+            instrumentId: 'viola_cebolao_e',
+            name: 'Viola Caipira — Nylon Suave (.022 - .038)',
+            badge: 'Alívio Total de Tampo',
+            badgeColor: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+            description: 'Redução drástica de tensão mecânica (~34 kgf). Preserva violas centenárias e confere timbre doce de alaúde caipira.',
+            defaultScaleMm: 580,
+            material: 'nylon_classical',
+            courses: [
+                { num: 1, label: '1º Par (Prima)', note: 'E4', strings: [{ gauge: 0.022, type: 'nylon_plain', midi: 64 }, { gauge: 0.022, type: 'nylon_plain', midi: 64 }] },
+                { num: 2, label: '2º Par (Segundinha)', note: 'B3', strings: [{ gauge: 0.026, type: 'nylon_plain', midi: 59 }, { gauge: 0.026, type: 'nylon_plain', midi: 59 }] },
+                { num: 3, label: '3º Par (Turina)', note: 'G#3/G#4', strings: [{ gauge: 0.028, type: 'nylon_wound', midi: 56 }, { gauge: 0.022, type: 'nylon_plain', midi: 68 }] },
+                { num: 4, label: '4º Par (Toeira)', note: 'E3/E4', strings: [{ gauge: 0.032, type: 'nylon_wound', midi: 52 }, { gauge: 0.026, type: 'nylon_plain', midi: 64 }] },
+                { num: 5, label: '5º Par (Canotilho)', note: 'B2/B3', strings: [{ gauge: 0.038, type: 'nylon_wound', midi: 47 }, { gauge: 0.028, type: 'nylon_wound', midi: 59 }] }
+            ]
+        },
+        violao_nylon_normal: {
+            id: 'violao_nylon_normal',
+            instrumentId: 'violao_padrao',
+            name: 'Violão 6 Cordas — Nylon Tensão Normal (EJ45)',
+            badge: 'Clássico / MPB',
+            badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+            description: 'O padrão mundial do violão clássico de concerto. Tensão moderada (~39 kgf), flexibilidade e dinâmica expressiva.',
+            defaultScaleMm: 650,
+            material: 'nylon_classical',
+            courses: [
+                { num: 1, label: '1ª Corda (Mi)', note: 'E4', strings: [{ gauge: 0.0280, type: 'nylon_plain', midi: 64 }] },
+                { num: 2, label: '2ª Corda (Si)', note: 'B3', strings: [{ gauge: 0.0322, type: 'nylon_plain', midi: 59 }] },
+                { num: 3, label: '3ª Corda (Sol)', note: 'G3', strings: [{ gauge: 0.0403, type: 'nylon_plain', midi: 55 }] },
+                { num: 4, label: '4ª Corda (Ré)', note: 'D3', strings: [{ gauge: 0.0290, type: 'nylon_wound', midi: 50 }] },
+                { num: 5, label: '5ª Corda (Lá)', note: 'A2', strings: [{ gauge: 0.0350, type: 'nylon_wound', midi: 45 }] },
+                { num: 6, label: '6ª Corda (Mi)', note: 'E2', strings: [{ gauge: 0.0430, type: 'nylon_wound', midi: 40 }] }
+            ]
+        },
+        violao_nylon_alta: {
+            id: 'violao_nylon_alta',
+            instrumentId: 'violao_padrao',
+            name: 'Violão 6 Cordas — Nylon Alta Tensão (EJ46 / Corum)',
+            badge: 'Concerto / Ataque Firme',
+            badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+            description: 'Tensão de ~44 kgf com resposta percussiva firme, ideal para solistas, flamenco e tocadores de pegada vigorosa.',
+            defaultScaleMm: 650,
+            material: 'nylon_classical',
+            courses: [
+                { num: 1, label: '1ª Corda (Mi)', note: 'E4', strings: [{ gauge: 0.0285, type: 'nylon_plain', midi: 64 }] },
+                { num: 2, label: '2ª Corda (Si)', note: 'B3', strings: [{ gauge: 0.0327, type: 'nylon_plain', midi: 59 }] },
+                { num: 3, label: '3ª Corda (Sol)', note: 'G3', strings: [{ gauge: 0.0410, type: 'nylon_plain', midi: 55 }] },
+                { num: 4, label: '4ª Corda (Ré)', note: 'D3', strings: [{ gauge: 0.0300, type: 'nylon_wound', midi: 50 }] },
+                { num: 5, label: '5ª Corda (Lá)', note: 'A2', strings: [{ gauge: 0.0360, type: 'nylon_wound', midi: 45 }] },
+                { num: 6, label: '6ª Corda (Mi)', note: 'E2', strings: [{ gauge: 0.0440, type: 'nylon_wound', midi: 40 }] }
+            ]
+        },
+        violao_aco_extralight: {
+            id: 'violao_aco_extralight',
+            instrumentId: 'violao_padrao',
+            name: 'Violão Aço — Extra-Light (.010 - .047)',
+            badge: 'Aço Confortável',
+            badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+            description: 'Aço macio para violões folk e fingerstyle. Facilidade para pestanas e menor tensão sobre o cavalete (~58 kgf).',
+            defaultScaleMm: 650,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1ª Corda (Mi)', note: 'E4', strings: [{ gauge: 0.010, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2ª Corda (Si)', note: 'B3', strings: [{ gauge: 0.014, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3ª Corda (Sol)', note: 'G3', strings: [{ gauge: 0.023, type: 'wound', midi: 55 }] },
+                { num: 4, label: '4ª Corda (Ré)', note: 'D3', strings: [{ gauge: 0.030, type: 'wound', midi: 50 }] },
+                { num: 5, label: '5ª Corda (Lá)', note: 'A2', strings: [{ gauge: 0.039, type: 'wound', midi: 45 }] },
+                { num: 6, label: '6ª Corda (Mi)', note: 'E2', strings: [{ gauge: 0.047, type: 'wound', midi: 40 }] }
+            ]
+        },
+        violao_aco_light: {
+            id: 'violao_aco_light',
+            instrumentId: 'violao_padrao',
+            name: 'Violão Aço — Light (.012 - .053)',
+            badge: 'Folk Padrão / Dreadnought',
+            badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+            description: 'O calibre padrão do violão folk acústico. Encorpado e potente, gerando cerca de 73 kgf de tensão constante.',
+            defaultScaleMm: 650,
+            material: 'steel_bronze',
+            courses: [
+                { num: 1, label: '1ª Corda (Mi)', note: 'E4', strings: [{ gauge: 0.012, type: 'plain', midi: 64 }] },
+                { num: 2, label: '2ª Corda (Si)', note: 'B3', strings: [{ gauge: 0.016, type: 'plain', midi: 59 }] },
+                { num: 3, label: '3ª Corda (Sol)', note: 'G3', strings: [{ gauge: 0.024, type: 'wound', midi: 55 }] },
+                { num: 4, label: '4ª Corda (Ré)', note: 'D3', strings: [{ gauge: 0.032, type: 'wound', midi: 50 }] },
+                { num: 5, label: '5ª Corda (Lá)', note: 'A2', strings: [{ gauge: 0.042, type: 'wound', midi: 45 }] },
+                { num: 6, label: '6ª Corda (Mi)', note: 'E2', strings: [{ gauge: 0.053, type: 'wound', midi: 40 }] }
+            ]
+        }
     };
 
     let state = {
@@ -750,7 +1069,8 @@
         earTrainer: Object.assign({}, DEFAULT_EAR_TRAINER_STATE),
         ponteioPlayer: Object.assign({}, DEFAULT_PONTEIO_PLAYER_STATE),
         tabEditor: Object.assign({}, DEFAULT_TAB_EDITOR_STATE),
-        modalTrainer: Object.assign({}, DEFAULT_MODAL_TRAINER_STATE)
+        modalTrainer: Object.assign({}, DEFAULT_MODAL_TRAINER_STATE),
+        tensionCalculator: Object.assign({}, DEFAULT_TENSION_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -5319,6 +5639,1037 @@
     }
 
     // =========================================================================
+    // ANALISADOR DE TENSÃO MECÂNICA & AÇÃO DE CORDAS (FASE 9)
+    // =========================================================================
+
+    function getActiveTensionPreset() {
+        return TENSION_PRESETS[state.tensionCalculator.presetId] || TENSION_PRESETS.viola_cebolao_e_media;
+    }
+
+    function calculateLinearMass(gaugeInches, type) {
+        if (type === 'plain') {
+            return LINEAR_MASS_TABLE.plain_steel.get(gaugeInches);
+        } else if (type === 'wound') {
+            return LINEAR_MASS_TABLE.wound_steel.get(gaugeInches);
+        } else if (type === 'nylon_plain') {
+            return LINEAR_MASS_TABLE.nylon_plain.get(gaugeInches);
+        } else if (type === 'nylon_wound') {
+            return LINEAR_MASS_TABLE.nylon_wound.get(gaugeInches);
+        }
+        return LINEAR_MASS_TABLE.plain_steel.get(gaugeInches);
+    }
+
+    function calculateStringTension(gaugeInches, type, baseMidi, scaleLengthMm, semitoneOffset = 0, materialKey = 'steel_bronze') {
+        const adjustedMidi = baseMidi + semitoneOffset;
+        const freqHz = midiToFreq(adjustedMidi);
+        const scaleMeters = scaleLengthMm / 1000.0;
+        let mu = calculateLinearMass(gaugeInches, type);
+
+        // Fator de densidade do material
+        const mat = STRING_MATERIALS[materialKey];
+        if (mat && mat.factor) {
+            mu = mu * mat.factor;
+        }
+
+        // Fórmula de Mersenne: T = 4 * mu * L^2 * f^2 (em Newtons)
+        const tensionNewtons = 4 * mu * Math.pow(scaleMeters, 2) * Math.pow(freqHz, 2);
+        const tensionKgf = tensionNewtons / 9.80665;
+        const tensionLbs = tensionKgf * 2.20462;
+
+        return {
+            gaugeInches,
+            gaugeMm: gaugeInches * 25.4,
+            type,
+            freqHz,
+            midi: adjustedMidi,
+            noteName: NOTE_NAMES[adjustedMidi % 12] + Math.floor(adjustedMidi / 12 - 1),
+            muKgM: mu,
+            tensionNewtons,
+            tensionKgf,
+            tensionLbs
+        };
+    }
+
+    function getActiveTensionCourses() {
+        const preset = getActiveTensionPreset();
+        const scaleMm = state.tensionCalculator.scaleLengthMm || preset.defaultScaleMm || 580;
+        const semitoneOffset = state.tensionCalculator.pitchOffsetSemitones || 0;
+        const materialKey = state.tensionCalculator.stringMaterial || preset.material || 'steel_bronze';
+        const custom = state.tensionCalculator.customGauges;
+
+        return preset.courses.map((course, cIdx) => {
+            const stringsCalc = course.strings.map((str, sIdx) => {
+                let gauge = str.gauge;
+                let type = str.type;
+                if (Array.isArray(custom) && custom[cIdx] && custom[cIdx][sIdx] !== undefined) {
+                    gauge = custom[cIdx][sIdx];
+                }
+                const calc = calculateStringTension(gauge, type, str.midi, scaleMm, semitoneOffset, materialKey);
+                return Object.assign({}, str, calc);
+            });
+
+            const courseTensionNewtons = stringsCalc.reduce((acc, s) => acc + s.tensionNewtons, 0);
+            const courseTensionKgf = courseTensionNewtons / 9.80665;
+            const courseTensionLbs = courseTensionKgf * 2.20462;
+
+            return {
+                num: course.num,
+                label: course.label,
+                note: course.note,
+                strings: stringsCalc,
+                tensionNewtons: courseTensionNewtons,
+                tensionKgf: courseTensionKgf,
+                tensionLbs: courseTensionLbs
+            };
+        });
+    }
+
+    function computeTensionSummary() {
+        const courses = getActiveTensionCourses();
+        const totalNewtons = courses.reduce((acc, c) => acc + c.tensionNewtons, 0);
+        const totalKgf = totalNewtons / 9.80665;
+        const totalLbs = totalKgf * 2.20462;
+
+        const preset = getActiveTensionPreset();
+        const diagnostic = analyzeStructuralTension(totalKgf, preset.instrumentId, state.tensionCalculator.stringMaterial || preset.material);
+
+        return {
+            courses,
+            totalNewtons,
+            totalKgf,
+            totalLbs,
+            diagnostic
+        };
+    }
+
+    function analyzeStructuralTension(totalKgf, instrumentId, material) {
+        const isViola = instrumentId.startsWith('viola_');
+        const isNylon = material === 'nylon_classical';
+
+        let safeThreshold, warningThreshold;
+        if (isViola) {
+            safeThreshold = 66.0;
+            warningThreshold = 78.0;
+        } else if (isNylon) {
+            safeThreshold = 44.0;
+            warningThreshold = 52.0;
+        } else {
+            // Violão Aço Folk
+            safeThreshold = 75.0;
+            warningThreshold = 86.0;
+        }
+
+        let status, color, badge, icon, summary, actionAdvice;
+        const percent = Math.min(130, Math.round((totalKgf / safeThreshold) * 100));
+
+        // Esforço mecânico no cavalete e braço
+        const totalNewtons = totalKgf * 9.80665;
+        const bridgeTorqueNm = totalNewtons * 0.014; // Alavanca média do cavalete ~14mm
+        const breakAngleDeg = 30; // Ângulo médio de quebra sobre o rastilho
+        const bridgeDownwardForceKgf = totalKgf * Math.sin(breakAngleDeg * Math.PI / 180);
+
+        if (totalKgf <= safeThreshold) {
+            status = 'SAFE';
+            color = 'emerald';
+            badge = 'Tensão Segura & Ressonância Ideal';
+            icon = 'shield-check';
+            summary = 'Carga axial e momento fletor perfeitamente equilibrados para a integridade do instrumento. Tampo harmônico livre para oscilar com ressonância plena, ataque limpo e sustentação prolongada.';
+            actionAdvice = 'Configuração perfeita para preservação lutherística. A cola do cavalete opera com margem ampla de segurança e o braço mantém a curvatura (relief) estável.';
+        } else if (totalKgf <= warningThreshold) {
+            status = 'WARNING';
+            color = 'amber';
+            badge = 'Atenção: Tensão Moderada / Elevada';
+            icon = 'alert-triangle';
+            summary = 'Tensão mecânica elevada sobre o tampo. Em instrumentos de fábrica modernos com tensor ajustável duplo, a estrutura suporta bem, mas requer acompanhamento periódico do abaulamento ("belly bulge").';
+            actionAdvice = isViola
+                ? 'Em violas artesanais sem tensor metálico ou tampos finos de pinho, considere afinar 1/2 tom abaixo (Eb) ou migrar para encordoamento de Tensão Leve (.009) para prevenir aumento progressivo da ação de cordas.'
+                : 'Monitore a altura no 12º traste. Se as cordas subirem ao longo dos meses, alivie a afinação ou revise o tensor.';
+        } else {
+            status = 'DANGER';
+            color = 'rose';
+            badge = 'Sobretensão Crítica: Risco Estrutural';
+            icon = 'alert-octagon';
+            summary = 'ALERTA DE LUTHIER: Sobretensão severa! A carga contínua ultrapassa a margem elástica do tampo e da lâmina de cola do cavalete, com risco de empenamento de braço e afundamento do leque harmônico.';
+            actionAdvice = isViola
+                ? 'Abaixe imediatamente a afinação para Cebolão em Ré (D) ou instale encordoamento leve (.009). Evite manter a viola afinada em Mi com calibres pesados se o instrumento não possuir reforço estrutural reforçado.'
+                : 'PERIGO: Se for violão clássico com estrutura para nylon, o uso de cordas de aço arranca o cavalete e rompe o tampo harmônico!';
+        }
+
+        return {
+            status,
+            color,
+            badge,
+            icon,
+            percent,
+            safeThreshold,
+            warningThreshold,
+            axialCompressionKgf: totalKgf,
+            bridgeTorqueNm,
+            bridgeDownwardForceKgf,
+            summary,
+            actionAdvice
+        };
+    }
+
+    function analyzeStringAction(measure12Treble, measure12Bass, measureNutTreble, measureNutBass, targetProfileKey, instrumentId) {
+        const isViola = instrumentId.startsWith('viola_');
+        const isViolaoNylon = instrumentId === 'violao_padrao' && state.tensionCalculator.stringMaterial === 'nylon_classical';
+        const key = isViola ? 'viola' : (isViolaoNylon ? 'violao_nylon' : 'violao_aco');
+        const profile = ACTION_TARGET_PROFILES[targetProfileKey] || ACTION_TARGET_PROFILES.caipira_versatil;
+        const target = profile[key];
+
+        // Diferenças no 12º traste (altura da corda ao traste em mm)
+        const delta12Treble = measure12Treble - target.fret12Treble;
+        const delta12Bass = measure12Bass - target.fret12Bass;
+
+        // Desbaste no rastilho pelo teorema geométrico do braço: delta_rastilho = 2 * delta_12
+        const saddleSandTreble = delta12Treble * 2;
+        const saddleSandBass = delta12Bass * 2;
+
+        // Diferenças no 1º traste (Pestana / Nut)
+        const deltaNutTreble = measureNutTreble - target.nutTreble;
+        const deltaNutBass = measureNutBass - target.nutBass;
+
+        // Diagnóstico 12º Traste
+        let action12Status = 'IDEAL';
+        let action12Color = 'emerald';
+        let action12Label = 'Ação Calibrada no 12º Traste';
+        if (delta12Treble > 0.4 || delta12Bass > 0.4) {
+            action12Status = 'HIGH';
+            action12Color = 'amber';
+            action12Label = 'Ação Alta / Cordas Afastadas';
+        } else if (delta12Treble < -0.3 || delta12Bass < -0.3) {
+            action12Status = 'LOW';
+            action12Color = 'rose';
+            action12Label = 'Ação Baixa / Risco de Trastejamento';
+        }
+
+        // Diagnóstico Pestana
+        let nutStatus = 'IDEAL';
+        let nutColor = 'emerald';
+        let nutLabel = 'Pestana Calibrada';
+        if (deltaNutTreble > 0.12 || deltaNutBass > 0.12) {
+            nutStatus = 'HIGH';
+            nutColor = 'amber';
+            nutLabel = 'Pestana Alta (Dificulta primeiros acordes)';
+        } else if (deltaNutTreble < -0.08 || deltaNutBass < -0.08) {
+            nutStatus = 'LOW';
+            nutColor = 'rose';
+            nutLabel = 'Pestana Baixa (Zumbido em corda solta)';
+        }
+
+        return {
+            target,
+            delta12Treble,
+            delta12Bass,
+            saddleSandTreble,
+            saddleSandBass,
+            deltaNutTreble,
+            deltaNutBass,
+            action12Status,
+            action12Color,
+            action12Label,
+            nutStatus,
+            nutColor,
+            nutLabel
+        };
+    }
+
+    function playCourseTensionAudio(courseIdx) {
+        const courses = getActiveTensionCourses();
+        const course = courses[courseIdx];
+        if (!course) return;
+
+        course.strings.forEach((str, sIdx) => {
+            const delay = sIdx === 0 ? 0 : 0.024;
+            const detune = sIdx === 0 ? 0 : 0.8;
+            pluckMidiNote(str.midi, delay, 1.8, detune, 0.24);
+        });
+    }
+
+    function arpeggiateTensionAllCourses() {
+        const courses = getActiveTensionCourses();
+        // Dedilhado arpejado das cordas graves para as agudas
+        const ordered = courses.slice().reverse();
+        ordered.forEach((course, idx) => {
+            const startTime = idx * 0.075;
+            course.strings.forEach((str, sIdx) => {
+                const subDelay = startTime + (sIdx === 0 ? 0 : 0.018);
+                pluckMidiNote(str.midi, subDelay, 1.8, 0, 0.22);
+            });
+        });
+
+        // Rasqueado final aberto de ressonância após o arpejo
+        const sweepTime = ordered.length * 0.075 + 0.35;
+        courses.forEach((course, idx) => {
+            const strumDelay = sweepTime + idx * 0.015;
+            course.strings.forEach((str) => {
+                pluckMidiNote(str.midi, strumDelay, 2.2, 0, 0.15);
+            });
+        });
+    }
+
+    function generateLutherieReport() {
+        const preset = getActiveTensionPreset();
+        const summary = computeTensionSummary();
+        const actionAnalysis = analyzeStringAction(
+            state.tensionCalculator.actionMeasure12thTreble,
+            state.tensionCalculator.actionMeasure12thBass,
+            state.tensionCalculator.actionMeasureNutTreble,
+            state.tensionCalculator.actionMeasureNutBass,
+            state.tensionCalculator.targetActionProfile,
+            preset.instrumentId
+        );
+        const profile = ACTION_TARGET_PROFILES[state.tensionCalculator.targetActionProfile] || ACTION_TARGET_PROFILES.caipira_versatil;
+        const hand = state.isLeftHanded ? 'Canhoto (Pestana à Direita / Mão Esquerda dedilhando)' : 'Destro (Pestana à Esquerda)';
+        const dateStr = new Date().toLocaleDateString('pt-BR');
+
+        let report = `========================================================================\n`;
+        report += `RELATÓRIO DE LUTHERIA DIGITAL & TENSÃO MECÂNICA — NEXUS VAULT\n`;
+        report += `Autor: Deo Magalhães — Neuropsicólogo, Especialista e Violeiro\n`;
+        report += `Data da Análise: ${dateStr}\n`;
+        report += `========================================================================\n\n`;
+
+        report += `[1] DADOS DO INSTRUMENTO & AFINAÇÃO:\n`;
+        report += `  - Encordoamento: ${preset.name}\n`;
+        report += `  - Orientação: ${hand}\n`;
+        report += `  - Comprimento de Escala Vibrante: ${state.tensionCalculator.scaleLengthMm} mm\n`;
+        report += `  - Material das Cordas: ${STRING_MATERIALS[state.tensionCalculator.stringMaterial || preset.material].name}\n`;
+        report += `  - Transposição / Offset: ${state.tensionCalculator.pitchOffsetSemitones === 0 ? 'Afinação Nominal (0 semitons)' : (state.tensionCalculator.pitchOffsetSemitones > 0 ? `+${state.tensionCalculator.pitchOffsetSemitones} semitons` : `${state.tensionCalculator.pitchOffsetSemitones} semitons`)}\n\n`;
+
+        report += `[2] DIAGNÓSTICO ESTRUTURAL DE TENSÃO MECÂNICA:\n`;
+        report += `  - Tensão Total Acumulada: ${summary.totalKgf.toFixed(2)} kgf (${summary.totalNewtons.toFixed(1)} N / ${summary.totalLbs.toFixed(1)} lbs)\n`;
+        report += `  - Status Construtivo: ${summary.diagnostic.badge}\n`;
+        report += `  - Limite Seguro de Projeto: ≤ ${summary.diagnostic.safeThreshold.toFixed(1)} kgf | Limite Crítico: ≥ ${summary.diagnostic.warningThreshold.toFixed(1)} kgf\n`;
+        report += `  - Carga Axial de Compressão no Braço: ${summary.diagnostic.axialCompressionKgf.toFixed(2)} kgf\n`;
+        report += `  - Momento Fletor / Torque no Cavalete: ${summary.diagnostic.bridgeTorqueNm.toFixed(2)} N·m\n`;
+        report += `  - Pressão Descendente no Rastilho: ${summary.diagnostic.bridgeDownwardForceKgf.toFixed(2)} kgf\n`;
+        report += `  - Avaliação Lutherística: ${summary.diagnostic.summary}\n`;
+        report += `  - Parecer Técnico: ${summary.diagnostic.actionAdvice}\n\n`;
+
+        report += `[3] TABELA DE TENSÃO INDIVIDUAL POR PAR / CORDA:\n`;
+        summary.courses.forEach((c) => {
+            report += `  * ${c.label} [${c.note}] — Tensão do Par: ${c.tensionKgf.toFixed(2)} kgf (${c.tensionNewtons.toFixed(1)} N)\n`;
+            c.strings.forEach((s, sIdx) => {
+                const strDesc = c.strings.length > 1 ? (sIdx === 0 ? 'Corda A' : 'Corda B') : 'Corda Única';
+                report += `      - ${strDesc}: .0${Math.round(s.gaugeInches * 1000)}" (${s.gaugeMm.toFixed(3)} mm) | ${s.noteName} (${s.freqHz.toFixed(1)} Hz) | ${s.tensionKgf.toFixed(2)} kgf\n`;
+            });
+        });
+        report += `\n`;
+
+        report += `[4] SIMULADOR DE AÇÃO & REGULAGEM DE PESTANA E RASTILHO:\n`;
+        report += `  - Perfil Alvo: ${profile.name} (${profile.description})\n`;
+        report += `  - Medição 1º Traste (Pestana): Prima = ${state.tensionCalculator.actionMeasureNutTreble.toFixed(2)} mm (Alvo: ${actionAnalysis.target.nutTreble.toFixed(2)} mm) | Bordão = ${state.tensionCalculator.actionMeasureNutBass.toFixed(2)} mm (Alvo: ${actionAnalysis.target.nutBass.toFixed(2)} mm)\n`;
+        report += `  - Medição 12º Traste: Prima = ${state.tensionCalculator.actionMeasure12thTreble.toFixed(2)} mm (Alvo: ${actionAnalysis.target.fret12Treble.toFixed(2)} mm) | Bordão = ${state.tensionCalculator.actionMeasure12thBass.toFixed(2)} mm (Alvo: ${actionAnalysis.target.fret12Bass.toFixed(2)} mm)\n`;
+        report += `  - Diagnóstico no 12º Traste: ${actionAnalysis.action12Label}\n`;
+        report += `  - Ajuste Recomendado no Rastilho (Cavalete):\n`;
+        if (actionAnalysis.saddleSandTreble > 0.1 || actionAnalysis.saddleSandBass > 0.1) {
+            report += `      -> LIXAR base inferior do rastilho em osso: ${actionAnalysis.saddleSandTreble > 0.1 ? actionAnalysis.saddleSandTreble.toFixed(2) + ' mm no lado da prima' : 'manter prima'} | ${actionAnalysis.saddleSandBass > 0.1 ? actionAnalysis.saddleSandBass.toFixed(2) + ' mm no lado do bordão' : 'manter bordão'}.\n`;
+        } else if (actionAnalysis.saddleSandTreble < -0.1 || actionAnalysis.saddleSandBass < -0.1) {
+            report += `      -> CALÇAR rastilho em ${Math.abs(actionAnalysis.saddleSandTreble).toFixed(2)} mm ou confeccionar novo rastilho em osso mais alto.\n`;
+        } else {
+            report += `      -> Rastilho na altura ideal calibrada.\n`;
+        }
+        report += `  - Ajuste Recomendado na Pestana (Nut):\n`;
+        if (actionAnalysis.deltaNutTreble > 0.08 || actionAnalysis.deltaNutBass > 0.08) {
+            report += `      -> Aprofundar ranhuras da pestana com lima calibrada em ${Math.max(0, actionAnalysis.deltaNutTreble).toFixed(2)} mm (prima) e ${Math.max(0, actionAnalysis.deltaNutBass).toFixed(2)} mm (bordão).\n`;
+        } else if (actionAnalysis.deltaNutTreble < -0.05 || actionAnalysis.deltaNutBass < -0.05) {
+            report += `      -> Cuidado: ranhura muito funda na pestana. Preencher com pó de osso ou trocar pestana.\n`;
+        } else {
+            report += `      -> Pestana calibrada perfeitamente.\n`;
+        }
+        report += `\n`;
+
+        if (state.isLeftHanded) {
+            report += `[5] OBSERVAÇÃO CRÍTICA PARA TOCADORES CANHOTOS:\n`;
+            report += `  - No modo Canhoto, o rastilho de osso DEVE possuir inclinação de oitava invertida em relação a instrumentos destros.\n`;
+            report += `  - O ponto de apoio da 5ª corda (Canotilho) deve ficar de 1.5 mm a 2.5 mm mais distante da pestana do que o apoio da 1ª corda (Prima).\n`;
+            report += `  - Inverter as cordas num cavalete destro padrão sem refazer o rastilho compromete irremediavelmente a afinação oitavada das casas 7 a 12.\n\n`;
+        }
+
+        report += `========================================================================\n`;
+        report += `Nexus Vault — Lutheria & Acústica Musical — Deo Magalhães\n`;
+        report += `========================================================================\n`;
+
+        return report;
+    }
+
+    function copyLutherieReport() {
+        const text = generateLutherieReport();
+        const btn = document.getElementById('btn-viola-copy-report');
+        const done = () => {
+            if (btn) {
+                const prev = btn.innerHTML;
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i><span>Relatório Copiado!</span>`;
+                btn.classList.add('bg-emerald-600/30', 'border-emerald-400');
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = prev;
+                    btn.classList.remove('bg-emerald-600/30', 'border-emerald-400');
+                    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                }, 2200);
+            }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(() => {
+                fallbackCopy(text);
+                done();
+            });
+        } else {
+            fallbackCopy(text);
+            done();
+        }
+    }
+
+    function renderTensionCalculatorSection() {
+        const container = document.getElementById('viola-tension-calculator-container');
+        if (!container) return;
+
+        const preset = getActiveTensionPreset();
+        const summary = computeTensionSummary();
+        const currentScale = state.tensionCalculator.scaleLengthMm || preset.defaultScaleMm || 580;
+        const currentMaterialKey = state.tensionCalculator.stringMaterial || preset.material || 'steel_bronze';
+        const currentOffset = state.tensionCalculator.pitchOffsetSemitones || 0;
+        const hasCustomGauges = Array.isArray(state.tensionCalculator.customGauges);
+
+        const actionAnalysis = analyzeStringAction(
+            state.tensionCalculator.actionMeasure12thTreble,
+            state.tensionCalculator.actionMeasure12thBass,
+            state.tensionCalculator.actionMeasureNutTreble,
+            state.tensionCalculator.actionMeasureNutBass,
+            state.tensionCalculator.targetActionProfile,
+            preset.instrumentId
+        );
+        const activeProfile = ACTION_TARGET_PROFILES[state.tensionCalculator.targetActionProfile] || ACTION_TARGET_PROFILES.caipira_versatil;
+
+        // Indicador percentual da barra de tensão
+        const maxGaugeTension = summary.diagnostic.warningThreshold * 1.25;
+        const gaugePercent = Math.min(100, Math.max(10, Math.round((summary.totalKgf / maxGaugeTension) * 100)));
+        const safePercent = Math.round((summary.diagnostic.safeThreshold / maxGaugeTension) * 100);
+        const warnPercent = Math.round((summary.diagnostic.warningThreshold / maxGaugeTension) * 100);
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5 sm:p-5 space-y-4 shadow-xl">
+                <!-- Cabeçalho e Apresentação -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Fase 9 Concluída</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Física Acústica de Cordas (Mersenne)</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-purple-500/15 text-purple-300 border border-purple-500/30">Diagnóstico de Tampo &amp; Cavalete</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Simulador de Ação Nut &amp; Saddle</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-wider font-mono mt-1 flex items-center gap-2">
+                            <i data-lucide="scale" class="w-5 h-5 text-emerald-400"></i>
+                            Analisador de Tensão Mecânica &amp; Ação de Cordas (String Tension &amp; Action Calculator)
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Cálculo de esforço físico por corda e par em kgf e Newtons, avaliação de fadiga do tampo e empenamento de cavalete, simulador de desbaste de rastilho e pestana em osso com compensação especial para Canhotos e Destros</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-tension-arpeggiate" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                            <span>Arpejar Instrumento</span>
+                        </button>
+                        <button type="button" id="btn-viola-copy-report" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="clipboard" class="w-3.5 h-3.5"></i>
+                            <span>Copiar Ficha de Lutheria</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Galeria dos 12 Presets Canônicos de Encordoamento -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                        <span class="uppercase tracking-wider font-bold text-[11px] text-slate-300">Presets Canônicos de Encordoamento (1 Clique):</span>
+                        <span class="text-slate-500">Selecione para carregar bitolas consagradas de fábrica</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+                        ${Object.values(TENSION_PRESETS).map((p) => {
+                            const isSelected = p.id === state.tensionCalculator.presetId;
+                            return `
+                                <div data-tension-preset="${p.id}" class="rounded-xl p-3 flex flex-col justify-between transition cursor-pointer border ${isSelected ? 'border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500/50 shadow-md' : 'border-slate-800 bg-[#090d16] hover:border-slate-700'}">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border uppercase font-bold tracking-wider ${p.badgeColor}">
+                                                ${p.badge}
+                                            </span>
+                                            <span class="text-[10px] font-mono text-slate-400">
+                                                ${p.defaultScaleMm} mm
+                                            </span>
+                                        </div>
+                                        <h4 class="text-xs font-bold font-mono text-slate-100 mt-1 line-clamp-1">${p.name}</h4>
+                                        <p class="text-[10px] text-slate-400 leading-snug line-clamp-2">${p.description}</p>
+                                    </div>
+                                    <div class="pt-2 mt-2 border-t border-slate-800/80 flex items-center justify-between">
+                                        <span class="text-[10px] font-mono ${isSelected ? 'text-emerald-400 font-bold' : 'text-slate-500'}">
+                                            ${isSelected ? '● Ativo no Cálculo' : 'Carregar Preset'}
+                                        </span>
+                                        <span class="text-[10px] font-mono text-cyan-400 font-bold">
+                                            ${p.courses.length} ${p.courses.length === 5 ? 'pares' : 'cordas'}
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Barra de Parâmetros Globais de Lutheria (Escala, Material, Transposição) -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                        <!-- Escala Vibrante -->
+                        <div class="md:col-span-4 space-y-1">
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                                <label for="viola-scale-input" class="uppercase font-bold text-slate-300">Escala Vibrante (L):</label>
+                                <span class="text-cyan-400 font-bold">${currentScale} mm</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <input type="number" id="viola-scale-input" min="500" max="700" step="5" value="${currentScale}" class="w-24 px-2 py-1 rounded bg-[#0f172a] border border-slate-700 text-xs font-mono text-slate-200 text-center font-bold">
+                                <div class="flex flex-wrap gap-1">
+                                    ${[580, 590, 600, 650].map((sVal) => `
+                                        <button type="button" data-scale-val="${sVal}" class="px-1.5 py-1 text-[10px] font-mono rounded border ${currentScale === sVal ? 'bg-cyan-600 text-slate-950 font-bold border-cyan-400' : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500'} transition">
+                                            ${sVal}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Material da Corda -->
+                        <div class="md:col-span-4 space-y-1">
+                            <label for="viola-tension-material-select" class="block text-[11px] font-mono uppercase font-bold text-slate-300">Material do Encordoamento:</label>
+                            <select id="viola-tension-material-select" class="w-full px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-slate-200 focus:border-cyan-400 outline-none">
+                                ${Object.entries(STRING_MATERIALS).map(([key, m]) => `
+                                    <option value="${key}" ${key === currentMaterialKey ? 'selected' : ''}>${m.name}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+
+                        <!-- Transposição / Afinação -->
+                        <div class="md:col-span-4 space-y-1">
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                                <span class="uppercase font-bold text-slate-300">Tonalidade / Transposição:</span>
+                                <span class="text-amber-400 font-bold">${currentOffset === 0 ? 'Nominal (0)' : (currentOffset > 0 ? `+${currentOffset} semitom` : `${currentOffset} semitons`)}</span>
+                            </div>
+                            <div class="inline-flex rounded-lg bg-[#0f172a] border border-slate-700 p-0.5 w-full justify-between" role="group">
+                                <button type="button" data-pitch-offset="-2" class="px-2 py-1 text-[11px] font-mono rounded transition flex-1 text-center ${currentOffset === -2 ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'}">♭ -2</button>
+                                <button type="button" data-pitch-offset="-1" class="px-2 py-1 text-[11px] font-mono rounded transition flex-1 text-center ${currentOffset === -1 ? 'bg-emerald-600 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'}">♭ -1 (Eb)</button>
+                                <button type="button" data-pitch-offset="0" class="px-2 py-1 text-[11px] font-mono rounded transition flex-1 text-center ${currentOffset === 0 ? 'bg-cyan-600 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-slate-200'}">Nominal (0)</button>
+                                <button type="button" data-pitch-offset="1" class="px-2 py-1 text-[11px] font-mono rounded transition flex-1 text-center ${currentOffset === 1 ? 'bg-rose-600 text-white font-bold shadow' : 'text-slate-400 hover:text-slate-200'}">♯ +1 (F)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${hasCustomGauges ? `
+                        <div class="flex items-center justify-between p-2 rounded bg-amber-500/10 border border-amber-500/30 text-xs font-mono text-amber-300">
+                            <span>⚠ Calibres personalizados ativos (modificados pelo usuário).</span>
+                            <button type="button" id="btn-viola-reset-gauges" class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-[11px]">
+                                Restaurar Calibres do Preset
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Painel de Diagnóstico Estrutural & Saúde do Tampo Harmônico -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 text-[10px] font-mono uppercase font-bold rounded border ${summary.diagnostic.color === 'emerald' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : (summary.diagnostic.color === 'amber' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-rose-500/15 text-rose-300 border-rose-500/30')}">
+                                    ${summary.diagnostic.badge}
+                                </span>
+                                <h4 class="text-sm font-bold font-mono text-slate-100 uppercase tracking-wider">Diagnóstico Estrutural do Instrumento</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Tensão acumulada calculada rigorosamente por <em>T</em> = 4 · μ · <em>L</em>² · <em>f</em>²</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-mono font-black ${summary.diagnostic.color === 'emerald' ? 'text-emerald-400' : (summary.diagnostic.color === 'amber' ? 'text-amber-400' : 'text-rose-400')}">
+                                ${summary.totalKgf.toFixed(2)} kgf
+                            </div>
+                            <div class="text-[11px] font-mono text-slate-400">
+                                ${summary.totalNewtons.toFixed(1)} N &bull; ${summary.totalLbs.toFixed(1)} lbs
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Carga Mecânica Total (Gauge Visual) -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                            <span>Zona Segura (≤ ${summary.diagnostic.safeThreshold.toFixed(1)} kgf)</span>
+                            <span>Zona Alerta (${summary.diagnostic.safeThreshold.toFixed(1)} – ${summary.diagnostic.warningThreshold.toFixed(1)} kgf)</span>
+                            <span>Zona Crítica (&gt; ${summary.diagnostic.warningThreshold.toFixed(1)} kgf)</span>
+                        </div>
+                        <div class="h-4 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-700 relative flex">
+                            <!-- Faixa Verde -->
+                            <div style="width: ${safePercent}%;" class="h-full bg-emerald-600/30 border-r border-emerald-500/50"></div>
+                            <!-- Faixa Âmbar -->
+                            <div style="width: ${warnPercent - safePercent}%;" class="h-full bg-amber-500/30 border-r border-amber-500/50"></div>
+                            <!-- Faixa Vermelha -->
+                            <div style="width: ${100 - warnPercent}%;" class="h-full bg-rose-600/30"></div>
+                            <!-- Cursor Indicador -->
+                            <div style="left: ${gaugePercent}%;" class="absolute top-0 bottom-0 w-1.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] -ml-0.5"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3 Cards de Engenharia Mecânica de Lutheria -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-slate-800 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-mono uppercase text-slate-400">Compressão Axial no Braço</span>
+                                <i data-lucide="arrow-right-left" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            </div>
+                            <div class="text-base font-bold font-mono text-cyan-300">${summary.diagnostic.axialCompressionKgf.toFixed(2)} kgf</div>
+                            <p class="text-[10px] text-slate-400 leading-tight">Força longitudinal de tração constante sobre o tróculo e tensor metálico.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-slate-800 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-mono uppercase text-slate-400">Torque / Cisalhamento no Cavalete</span>
+                                <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-amber-400"></i>
+                            </div>
+                            <div class="text-base font-bold font-mono text-amber-300">${summary.diagnostic.bridgeTorqueNm.toFixed(2)} N·m</div>
+                            <p class="text-[10px] text-slate-400 leading-tight">Momento de rotação que tenta levantar o cavalete e afundar a frente da boca.</p>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-slate-800 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-mono uppercase text-slate-400">Pressão Descendente no Tampo</span>
+                                <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            </div>
+                            <div class="text-base font-bold font-mono text-emerald-300">${summary.diagnostic.bridgeDownwardForceKgf.toFixed(2)} kgf</div>
+                            <p class="text-[10px] text-slate-400 leading-tight">Força vertical que excita o leque harmônico via ângulo de quebra de 30°.</p>
+                        </div>
+                    </div>
+
+                    <!-- Caixa de Parecer Técnico do Luthier -->
+                    <div class="p-3 rounded-lg border ${summary.diagnostic.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-200' : (summary.diagnostic.color === 'amber' ? 'bg-amber-500/5 border-amber-500/20 text-amber-200' : 'bg-rose-500/5 border-rose-500/20 text-rose-200')} space-y-1 text-xs">
+                        <div class="font-bold font-mono uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="${summary.diagnostic.icon}" class="w-4 h-4"></i>
+                            <span>Parecer Técnico do Especialista Violeiro:</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">${summary.diagnostic.summary}</p>
+                        <p class="font-semibold mt-1">${summary.diagnostic.actionAdvice}</p>
+                    </div>
+                </div>
+
+                <!-- Tabela Detalhada Par a Par / Corda a Corda -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                            <h4 class="text-xs font-bold font-mono text-slate-200 uppercase tracking-wider">Detalhamento Físico por Par / Corda</h4>
+                            <p class="text-[11px] text-slate-400">Ajuste fino individual de calibres com recálculo instantâneo de tensão</p>
+                        </div>
+                        <div>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded ${state.isLeftHanded ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                                ${state.isLeftHanded ? 'Disposição Canhota Ativa' : 'Disposição Destra'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs font-mono">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-[10px] uppercase text-slate-400">
+                                    <th class="py-2 px-2">Par / Corda</th>
+                                    <th class="py-2 px-2">Afinação Nominal</th>
+                                    <th class="py-2 px-2">Calibre Individual (pol / mm)</th>
+                                    <th class="py-2 px-2">Tipo de Corda</th>
+                                    <th class="py-2 px-2">Tensão Individual</th>
+                                    <th class="py-2 px-2">Tensão do Par</th>
+                                    <th class="py-2 px-2 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/60">
+                                ${summary.courses.map((c, cIdx) => `
+                                    <tr class="hover:bg-slate-800/30 transition">
+                                        <td class="py-2.5 px-2">
+                                            <div class="font-bold text-slate-200">${c.label}</div>
+                                            <div class="text-[10px] text-slate-400">${c.strings.length > 1 ? 'Par duplo' : 'Corda simples'}</div>
+                                        </td>
+                                        <td class="py-2.5 px-2">
+                                            <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30">${c.note}</span>
+                                        </td>
+                                        <td class="py-2.5 px-2 space-y-1">
+                                            ${c.strings.map((str, sIdx) => `
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="w-16 font-bold text-slate-200">.0${Math.round(str.gaugeInches * 1000)}"</span>
+                                                    <span class="text-[10px] text-slate-500">(${str.gaugeMm.toFixed(2)} mm)</span>
+                                                    <div class="inline-flex rounded bg-[#0f172a] border border-slate-700">
+                                                        <button type="button" data-gauge-delta="-0.001" data-cidx="${cIdx}" data-sidx="${sIdx}" class="px-1.5 py-0.5 text-[10px] hover:bg-slate-700 text-slate-300 font-bold">−.001</button>
+                                                        <button type="button" data-gauge-delta="0.001" data-cidx="${cIdx}" data-sidx="${sIdx}" class="px-1.5 py-0.5 text-[10px] hover:bg-slate-700 text-slate-300 font-bold border-l border-slate-700">+.001</button>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </td>
+                                        <td class="py-2.5 px-2 text-[10px] text-slate-400 space-y-1">
+                                            ${c.strings.map((str) => `
+                                                <div>
+                                                    <span class="px-1.5 py-0.5 rounded ${str.type === 'plain' ? 'bg-slate-800 text-slate-300' : (str.type === 'wound' ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' : 'bg-indigo-500/15 text-indigo-300')}">
+                                                        ${str.type === 'plain' ? 'Aço Liso' : (str.type === 'wound' ? 'Encapada' : (str.type === 'nylon_plain' ? 'Nylon Cristal' : 'Nylon Encapado'))}
+                                                    </span>
+                                                </div>
+                                            `).join('')}
+                                        </td>
+                                        <td class="py-2.5 px-2 space-y-1 text-slate-300">
+                                            ${c.strings.map((str) => `
+                                                <div>
+                                                    <span class="font-bold text-emerald-400">${str.tensionKgf.toFixed(2)} kgf</span>
+                                                    <span class="text-[10px] text-slate-500">(${str.tensionNewtons.toFixed(1)} N)</span>
+                                                </div>
+                                            `).join('')}
+                                        </td>
+                                        <td class="py-2.5 px-2">
+                                            <div class="font-bold text-sm text-cyan-300">${c.tensionKgf.toFixed(2)} kgf</div>
+                                            <div class="text-[10px] text-slate-500">${c.tensionNewtons.toFixed(1)} N</div>
+                                            <div class="w-20 h-1.5 bg-slate-800 rounded-full mt-1 overflow-hidden">
+                                                <div style="width: ${Math.min(100, Math.round((c.tensionKgf / 22) * 100))}%;" class="h-full bg-cyan-500"></div>
+                                            </div>
+                                        </td>
+                                        <td class="py-2.5 px-2 text-right">
+                                            <button type="button" data-play-course-tension="${cIdx}" class="px-2.5 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition flex items-center gap-1 ml-auto">
+                                                <i data-lucide="play" class="w-3 h-3"></i>
+                                                <span>Ouvir</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Simulador de Ação de Cordas (Nut & Saddle Setup Calculator) -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="ruler" class="w-4 h-4 text-amber-400"></i>
+                                <h4 class="text-sm font-bold font-mono text-slate-100 uppercase tracking-wider">Simulador de Ação de Cordas &amp; Regulagem de Pestana e Rastilho</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Insira as medidas em milímetros da altura das cordas no 1º e 12º traste para calcular o desbaste exato em osso</p>
+                        </div>
+                    </div>
+
+                    <!-- Seletor de Perfil Alvo de Tocada -->
+                    <div class="space-y-1.5">
+                        <span class="text-[11px] font-mono uppercase font-bold text-slate-300">Perfil Alvo de Regulagem:</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            ${Object.values(ACTION_TARGET_PROFILES).map((prof) => {
+                                const isProfActive = prof.id === state.tensionCalculator.targetActionProfile;
+                                return `
+                                    <div data-action-profile="${prof.id}" class="rounded-xl p-3 border cursor-pointer transition ${isProfActive ? 'border-amber-500 bg-amber-500/10 ring-1 ring-amber-500/50 shadow-md' : 'border-slate-800 bg-[#0f172a] hover:border-slate-700'}">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border uppercase font-bold ${prof.badgeColor}">
+                                                ${prof.badge}
+                                            </span>
+                                            <span class="text-[10px] font-mono font-bold ${isProfActive ? 'text-amber-400' : 'text-slate-500'}">
+                                                ${isProfActive ? '● Ativo' : 'Escolher'}
+                                            </span>
+                                        </div>
+                                        <h5 class="text-xs font-bold font-mono text-slate-200 mt-1">${prof.name}</h5>
+                                        <p class="text-[10px] text-slate-400 leading-snug mt-1">${prof.description}</p>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Medições Reais do Instrumento (Inputs Interativos) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                        <!-- Coluna 1: 1º Traste (Pestana / Nut) -->
+                        <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-3 space-y-3">
+                            <div class="flex items-center justify-between pb-1 border-b border-slate-800/80">
+                                <span class="text-xs font-mono font-bold text-cyan-300 uppercase">Pestana (1º Traste)</span>
+                                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded ${actionAnalysis.nutStatus === 'IDEAL' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'} font-bold">
+                                    ${actionAnalysis.nutLabel}
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 text-xs font-mono">
+                                <div>
+                                    <div class="flex justify-between text-slate-300 mb-1">
+                                        <span>1º Par (Prima):</span>
+                                        <span class="font-bold text-cyan-400">${state.tensionCalculator.actionMeasureNutTreble.toFixed(2)} mm</span>
+                                        <span class="text-[10px] text-slate-500">(Alvo: ${actionAnalysis.target.nutTreble.toFixed(2)} mm)</span>
+                                    </div>
+                                    <input type="range" id="viola-action-nut-treble" min="0.25" max="1.20" step="0.05" value="${state.tensionCalculator.actionMeasureNutTreble}" class="w-full accent-cyan-400 cursor-pointer">
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-slate-300 mb-1">
+                                        <span>5º Par (Bordão / Canotilho):</span>
+                                        <span class="font-bold text-cyan-400">${state.tensionCalculator.actionMeasureNutBass.toFixed(2)} mm</span>
+                                        <span class="text-[10px] text-slate-500">(Alvo: ${actionAnalysis.target.nutBass.toFixed(2)} mm)</span>
+                                    </div>
+                                    <input type="range" id="viola-action-nut-bass" min="0.30" max="1.40" step="0.05" value="${state.tensionCalculator.actionMeasureNutBass}" class="w-full accent-cyan-400 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2: 12º Traste (Rastilho / Saddle) -->
+                        <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-3 space-y-3">
+                            <div class="flex items-center justify-between pb-1 border-b border-slate-800/80">
+                                <span class="text-xs font-mono font-bold text-amber-300 uppercase">Cavalete &amp; Rastilho (12º Traste)</span>
+                                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded ${actionAnalysis.action12Status === 'IDEAL' ? 'bg-emerald-500/20 text-emerald-300' : (actionAnalysis.action12Status === 'HIGH' ? 'bg-amber-500/20 text-amber-300' : 'bg-rose-500/20 text-rose-300')} font-bold">
+                                    ${actionAnalysis.action12Label}
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 text-xs font-mono">
+                                <div>
+                                    <div class="flex justify-between text-slate-300 mb-1">
+                                        <span>1º Par (Prima):</span>
+                                        <span class="font-bold text-amber-400">${state.tensionCalculator.actionMeasure12thTreble.toFixed(2)} mm</span>
+                                        <span class="text-[10px] text-slate-500">(Alvo: ${actionAnalysis.target.fret12Treble.toFixed(2)} mm)</span>
+                                    </div>
+                                    <input type="range" id="viola-action-12th-treble" min="1.20" max="4.50" step="0.10" value="${state.tensionCalculator.actionMeasure12thTreble}" class="w-full accent-amber-400 cursor-pointer">
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-slate-300 mb-1">
+                                        <span>5º Par (Bordão / Canotilho):</span>
+                                        <span class="font-bold text-amber-400">${state.tensionCalculator.actionMeasure12thBass.toFixed(2)} mm</span>
+                                        <span class="text-[10px] text-slate-500">(Alvo: ${actionAnalysis.target.fret12Bass.toFixed(2)} mm)</span>
+                                    </div>
+                                    <input type="range" id="viola-action-12th-bass" min="1.40" max="5.00" step="0.10" value="${state.tensionCalculator.actionMeasure12thBass}" class="w-full accent-amber-400 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instruções Técnicas de Ajuste em Oficina (Rastilho & Pestana) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-amber-500/30 text-xs font-mono space-y-1.5">
+                            <div class="font-bold text-amber-300 flex items-center gap-1.5">
+                                <i data-lucide="wrench" class="w-4 h-4"></i>
+                                <span>Ajuste Recomendado no Rastilho (Cavalete):</span>
+                            </div>
+                            <div class="text-slate-300 text-[11px] leading-relaxed">
+                                ${actionAnalysis.saddleSandTreble > 0.1 || actionAnalysis.saddleSandBass > 0.1 ? `
+                                    Pela relação trigonométrica do braço, desbaste a base do rastilho em:
+                                    <div class="my-1.5 p-2 rounded bg-amber-500/10 border border-amber-500/30 font-bold text-amber-300">
+                                        Lado Prima: ${actionAnalysis.saddleSandTreble > 0.1 ? actionAnalysis.saddleSandTreble.toFixed(2) + ' mm' : '0.00 mm (manter)'} |
+                                        Lado Bordão: ${actionAnalysis.saddleSandBass > 0.1 ? actionAnalysis.saddleSandBass.toFixed(2) + ' mm' : '0.00 mm (manter)'}
+                                    </div>
+                                    Apoie o rastilho de osso sobre uma lixa 400 em superfície de vidro plano, mantendo ângulo reto perfeito de 90° para não perder contato acústico com o fundo do cavalete.
+                                ` : (actionAnalysis.saddleSandTreble < -0.1 || actionAnalysis.saddleSandBass < -0.1 ? `
+                                    Rastilho excessivamente baixo! Calce a base com lâmina de madeira nobre de ${Math.abs(actionAnalysis.saddleSandTreble).toFixed(2)} mm ou confeccione novo rastilho em osso de boi natural.
+                                ` : `
+                                    Rastilho perfeitamente calibrado para o perfil alvo! Nenhuma alteração de altura necessária no cavalete.
+                                `)}
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-[#0f172a] border border-cyan-500/30 text-xs font-mono space-y-1.5">
+                            <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+                                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                <span>Ajuste Recomendado na Pestana (Nut):</span>
+                            </div>
+                            <div class="text-slate-300 text-[11px] leading-relaxed">
+                                ${actionAnalysis.deltaNutTreble > 0.08 || actionAnalysis.deltaNutBass > 0.08 ? `
+                                    As cordas soltas estão afastadas do 1º traste, tornando pestanas difíceis:
+                                    <div class="my-1.5 p-2 rounded bg-cyan-500/10 border border-cyan-500/30 font-bold text-cyan-300">
+                                        Aprofundar ranhuras em: Prima = ${Math.max(0, actionAnalysis.deltaNutTreble).toFixed(2)} mm | Bordão = ${Math.max(0, actionAnalysis.deltaNutBass).toFixed(2)} mm
+                                    </div>
+                                    Utilize limas calibradas de luthier (nut slotting files) inclinadas no ângulo da mão da viola (headstock angle).
+                                ` : (actionAnalysis.deltaNutTreble < -0.05 || actionAnalysis.deltaNutBass < -0.05 ? `
+                                    Ranhura da pestana muito baixa. Risco de trastejamento em corda solta. Preencha o sulco com pó de osso + cianoacrilato ou substitua a pestana.
+                                ` : `
+                                    Altura da pestana ideal no 1º traste. Digitação suave sem desafinação por pressão excessiva.
+                                `)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compensação Especial para Canhotos -->
+                    <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/40 text-xs font-mono space-y-1">
+                        <div class="flex items-center gap-2 font-bold text-amber-300">
+                            <i data-lucide="info" class="w-4 h-4"></i>
+                            <span>Compensação de Entonação Canhota no Rastilho de Osso:</span>
+                        </div>
+                        <p class="text-slate-300 text-[11px] leading-relaxed">
+                            ${state.isLeftHanded ? `
+                                <strong>Modo Canhoto Ativo:</strong> O rastilho da viola deve ser invertido em espelho! O ponto de apoio da 5ª corda (Canotilho) deve ficar entre 1.5 e 2.5 mm mais distante da pestana do que a Prima para compensar a rigidez de flexão da corda grossa. Sem essa compensação, as notas tocadas além do 5º traste soarão desafinadas para sustenido.
+                            ` : `
+                                <strong>Modo Destro:</strong> O rastilho padrão possui o recuo de oitava voltado para o lado esquerdo (corda grave). Ao converter um instrumento para canhoto, nunca inverta apenas as cordas: troque ou retrabalhe o rastilho para inverter o ângulo de compensação.
+                            `}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Eventos dos Presets
+        container.querySelectorAll('[data-tension-preset]').forEach((el) => {
+            el.addEventListener('click', () => {
+                const pid = el.getAttribute('data-tension-preset');
+                if (pid && TENSION_PRESETS[pid]) {
+                    state.tensionCalculator.presetId = pid;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.scaleLengthMm = TENSION_PRESETS[pid].defaultScaleMm;
+                    state.tensionCalculator.stringMaterial = TENSION_PRESETS[pid].material;
+
+                    // Se o preset for de violão e o instrumento atual for viola (ou vice-versa), sincroniza o instrumento
+                    if (pid.startsWith('violao_') && state.instrumentId !== 'violao_padrao') {
+                        state.instrumentId = 'violao_padrao';
+                    } else if (pid.startsWith('viola_') && state.instrumentId === 'violao_padrao') {
+                        state.instrumentId = TENSION_PRESETS[pid].instrumentId || 'viola_cebolao_e';
+                    }
+
+                    saveViolaState();
+                    renderAll();
+                }
+            });
+        });
+
+        // Eventos de Escala (Botões e Input)
+        container.querySelectorAll('[data-scale-val]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const sVal = parseInt(btn.getAttribute('data-scale-val'), 10);
+                if (sVal) {
+                    state.tensionCalculator.scaleLengthMm = sVal;
+                    saveViolaState();
+                    renderTensionCalculatorSection();
+                }
+            });
+        });
+
+        const scaleInput = document.getElementById('viola-scale-input');
+        if (scaleInput) {
+            scaleInput.addEventListener('change', (e) => {
+                const sVal = parseInt(e.target.value, 10);
+                if (sVal && sVal >= 450 && sVal <= 750) {
+                    state.tensionCalculator.scaleLengthMm = sVal;
+                    saveViolaState();
+                    renderTensionCalculatorSection();
+                }
+            });
+        }
+
+        // Evento de Material
+        const matSelect = document.getElementById('viola-tension-material-select');
+        if (matSelect) {
+            matSelect.addEventListener('change', (e) => {
+                state.tensionCalculator.stringMaterial = e.target.value;
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        }
+
+        // Eventos de Transposição
+        container.querySelectorAll('[data-pitch-offset]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const offset = parseInt(btn.getAttribute('data-pitch-offset'), 10);
+                state.tensionCalculator.pitchOffsetSemitones = offset;
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        });
+
+        // Resetar calibres
+        const resetGaugesBtn = document.getElementById('btn-viola-reset-gauges');
+        if (resetGaugesBtn) {
+            resetGaugesBtn.addEventListener('click', () => {
+                state.tensionCalculator.customGauges = null;
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        }
+
+        // Modificações finas de calibre (+- .001)
+        container.querySelectorAll('[data-gauge-delta]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const delta = parseFloat(btn.getAttribute('data-gauge-delta'));
+                const cIdx = parseInt(btn.getAttribute('data-cidx'), 10);
+                const sIdx = parseInt(btn.getAttribute('data-sidx'), 10);
+
+                if (!Array.isArray(state.tensionCalculator.customGauges)) {
+                    state.tensionCalculator.customGauges = preset.courses.map((c) => c.strings.map((s) => s.gauge));
+                }
+
+                if (state.tensionCalculator.customGauges[cIdx] && state.tensionCalculator.customGauges[cIdx][sIdx] !== undefined) {
+                    let cur = state.tensionCalculator.customGauges[cIdx][sIdx];
+                    cur = Math.max(0.007, Math.min(0.065, Math.round((cur + delta) * 1000) / 1000));
+                    state.tensionCalculator.customGauges[cIdx][sIdx] = cur;
+                    saveViolaState();
+                    renderTensionCalculatorSection();
+                }
+            });
+        });
+
+        // Botões de ouvir par individual
+        container.querySelectorAll('[data-play-course-tension]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const cIdx = parseInt(btn.getAttribute('data-play-course-tension'), 10);
+                playCourseTensionAudio(cIdx);
+            });
+        });
+
+        // Botão Arpejar Instrumento
+        const arpBtn = document.getElementById('btn-viola-tension-arpeggiate');
+        if (arpBtn) arpBtn.addEventListener('click', arpeggiateTensionAllCourses);
+
+        // Botão Copiar Relatório
+        const copyBtn = document.getElementById('btn-viola-copy-report');
+        if (copyBtn) copyBtn.addEventListener('click', copyLutherieReport);
+
+        // Perfil Alvo de Ação
+        container.querySelectorAll('[data-action-profile]').forEach((el) => {
+            el.addEventListener('click', () => {
+                const pId = el.getAttribute('data-action-profile');
+                if (pId && ACTION_TARGET_PROFILES[pId]) {
+                    state.tensionCalculator.targetActionProfile = pId;
+                    saveViolaState();
+                    renderTensionCalculatorSection();
+                }
+            });
+        });
+
+        // Sliders de Ação
+        const nutTrebleSlider = document.getElementById('viola-action-nut-treble');
+        if (nutTrebleSlider) {
+            nutTrebleSlider.addEventListener('input', (e) => {
+                state.tensionCalculator.actionMeasureNutTreble = parseFloat(e.target.value);
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        }
+
+        const nutBassSlider = document.getElementById('viola-action-nut-bass');
+        if (nutBassSlider) {
+            nutBassSlider.addEventListener('input', (e) => {
+                state.tensionCalculator.actionMeasureNutBass = parseFloat(e.target.value);
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        }
+
+        const fret12TrebleSlider = document.getElementById('viola-action-12th-treble');
+        if (fret12TrebleSlider) {
+            fret12TrebleSlider.addEventListener('input', (e) => {
+                state.tensionCalculator.actionMeasure12thTreble = parseFloat(e.target.value);
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        }
+
+        const fret12BassSlider = document.getElementById('viola-action-12th-bass');
+        if (fret12BassSlider) {
+            fret12BassSlider.addEventListener('input', (e) => {
+                state.tensionCalculator.actionMeasure12thBass = parseFloat(e.target.value);
+                saveViolaState();
+                renderTensionCalculatorSection();
+            });
+        }
+
+        if (window.lucide && window.lucide.createIcons) {
+            window.lucide.createIcons();
+        }
+    }
+
+    // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
     // =========================================================================
     let tunerOsc = null;
@@ -7922,6 +9273,12 @@
             } else {
                 state.modalTrainer = Object.assign({}, DEFAULT_MODAL_TRAINER_STATE);
             }
+
+            if (saved.tensionCalculator && typeof saved.tensionCalculator === 'object') {
+                state.tensionCalculator = Object.assign({}, DEFAULT_TENSION_STATE, saved.tensionCalculator);
+            } else {
+                state.tensionCalculator = Object.assign({}, DEFAULT_TENSION_STATE);
+            }
         }
     }
 
@@ -7948,6 +9305,9 @@
                 isPlaying: false,
                 currentStepIdx: -1
             });
+        }
+        if (copy.tensionCalculator) {
+            copy.tensionCalculator = Object.assign({}, copy.tensionCalculator);
         }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
@@ -7986,6 +9346,11 @@
                         <button type="button" id="btn-viola-toggle-persp" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1.5 transition">
                             <i data-lucide="arrow-up-down" class="w-4 h-4 text-cyan-400"></i>
                             <span id="label-viola-persp">1º Par no Topo</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-scroll-tension" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="scale" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Tensão &amp; Ação (Fase 9)</span>
                         </button>
                     </div>
                 </div>
@@ -8191,6 +9556,9 @@
 
                 <!-- Módulo de Treinador de Escalas Modais Caipiras (Fase 8) -->
                 <div id="viola-modal-trainer-container" class="space-y-4"></div>
+
+                <!-- Módulo de Analisador de Tensão Mecânica e Calibre de Cordas (Fase 9) -->
+                <div id="viola-tension-calculator-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">

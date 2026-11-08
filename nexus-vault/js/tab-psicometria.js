@@ -694,7 +694,12 @@
 
     function saveState() {
         const C = global.VaultCore;
-        C.store.set(C.STORAGE_KEYS.PSICOMETRIA, appState);
+        if (C && C.store) {
+            C.store.set(C.STORAGE_KEYS.PSICOMETRIA, appState);
+            if (typeof C.updateStorageMeter === 'function') {
+                C.updateStorageMeter();
+            }
+        }
         const badge = document.getElementById('psy-save-status-badge');
         if (badge) {
             badge.textContent = `✓ Salvo às ${new Date().toLocaleTimeString('pt-BR')}`;

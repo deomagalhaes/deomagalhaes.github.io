@@ -4,8 +4,8 @@
  * 100% Client-Side • Zero-Backend • LGPD Compliant • Leitor Âmbar Offline Low-Blue-Light
  *
  * Módulos Integrados:
- * 1. Banco Expandido de 32 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
- * 2. 12 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
+ * 1. Banco Expandido de 60 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
+ * 2. 14 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
  * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos
  * 4. Sintetizador Acústico Web Audio API Pré-Sono (Ruído Marrom, Chuva Mansa, Ondas, Grilos) com Sleep Timer
  * 5. Leitor Âmbar Imersivo com Paletas Térmicas Melatonina, Auto-Scroll Lento e Gestão de Favoritos Local
@@ -14,7 +14,7 @@
     'use strict';
 
     // =========================================================================
-    // 1. BANCO DE 18 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
+    // 1. BANCO DE 60 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
     // =========================================================================
     const STORY_THEMES = {
         frustracao: {
@@ -380,6 +380,62 @@
             defaultQuestion: 'Quantas ondas mansas o seu barquinho já fez até o seu corpinho ficar todo molinho e leve?',
             challengeAct: 'estava com o peito inquieto e as mãos agitadas, sem saber direito como fazer o corpo obedecer à ordem de desacelerar.',
             breathCue: 'pôs a mãozinha ou o bichinho sobre o umbigo, puxou o ar contando um, dois, três… e soltou devagarzinho observando o mar calmo do sono se abrir.'
+        },
+        separacao_noturna: {
+            label: '53. Ansiedade de Separação Noturna (A âncora de luz na enseada mansa)',
+            defaultMetaphor: 'A âncora dourada do barquinho na enseada: mesmo quando a noite fica toda escura e o capitão não vê o fundo, a âncora do amor dos pais continua firme, segura e segurando o barquinho com carinho para nada levá-lo embora.',
+            defaultQuestion: 'Você consegue sentir como o nosso abraço fica coladinho em você mesmo quando cada um está no seu travesseiro?',
+            challengeAct: 'olhou para a porta do quarto que começava a fechar devagarinho e sentiu um aperto no peito, querendo pular da cama dez vezes seguidas só para checar se os pais continuavam na sala ao lado.',
+            breathCue: 'abraçou o cobertor bem fofinho, inspirou o ar quentinho como chá de hortelã e soltou o ar sentindo a âncora invisível do amor proteger o quarto inteiro.'
+        },
+        sensibilidade_tatil: {
+            label: '54. Sensibilidade Tátil & Roupas/Etiquetas (O casaco macio do coelhinho da colina)',
+            defaultMetaphor: 'O coelhinho da montanha que tinha as orelhas e a pele mais sensíveis de toda a floresta: quando uma folha áspera encostava nele, ele sabia que podia escolher a folha aveludada do musgo macio para repousar com calma sem precisar chorar.',
+            defaultQuestion: 'Qual cantinho da sua cama é o mais gostoso e fofinho para a sua pele descansar sem nada pinicar?',
+            challengeAct: 'sentiu a costura da meia ou a etiqueta do pijama pinicar como se fossem cem formiguinhas de ponta, ficando irritado e querendo arrancar tudo com raiva.',
+            breathCue: 'passou a mãozinha devagar pela parte mais macia do lençol, respirou fundo sentindo a pele amolecer e soprou devagarinho desarmando qualquer cócega chata.'
+        },
+        acolhimento_choro: {
+            label: '55. Acolhimento do Choro sem Vergonha (A chuva mansa que limpa a janela)',
+            defaultMetaphor: 'A chuva doce de fim de tarde que lava a vidraça da cabana: as lágrimas são apenas água mansa que a natureza manda para limpar a poeira das preocupações. Depois que a gotinha cai no colinho acolhedor, a vista fica limpa e o céu se abre estrelado.',
+            defaultQuestion: 'Você sabe que no nosso ninho você nunca precisa engolir o choro, e que uma lágrima no colinho sempre vira aconchego?',
+            challengeAct: 'sentiu o queixo tremer e uma vontade imensa de chorar, mas apertou as bochechas com força achando que quem já é grandinho não pode chorar na frente dos outros.',
+            breathCue: 'deixou as lágrimas escorrerem mansas e quentes, puxou o ar ouvindo uma voz carinhosa dizer "está tudo bem" e soltou um suspiro de alívio libertador.'
+        },
+        transicao_banho_refeicao: {
+            label: '56. Transição de Brincadeira para o Banho/Jantar (O trem mágico que troca de estação)',
+            defaultMetaphor: 'O trenzinho da floresta que viaja por estações encantadas: ele não precisa jogar fora os brinquedos da Estação das Brincadeiras; ele apenas estaciona na plataforma da Estação do Banho Quentinho, sabendo que amanhã o trem volta com força total.',
+            defaultQuestion: 'O que foi mais legal guardar na memória do seu dia para continuar brincando na sua imaginação durante o banho e o sono?',
+            challengeAct: 'estava no meio de uma construção com bloquinhos coloridos e, quando ouviu que o banho estava pronto, quis gritar e dizer que não ia sair dali de jeito nenhum.',
+            breathCue: 'deu uma piscadinha para os blocos dizendo "até amanhã, amigos", respirou fundo sentindo o cheiro acolhedor do sabonete e deu três passos com um sorriso no rosto.'
+        },
+        perda_peca_brinquedo: {
+            label: '57. Tolerância ao Perder Peça de Brinquedo (A expedição arqueológica na sala de estar)',
+            defaultMetaphor: 'Os sábios exploradores da serra: quando uma pedrinha brilhante cai numa fresta, eles não cancelam a expedição; eles sabem que o brinquedo mais valioso de todos é a própria inteligência que inventa novas histórias incríveis.',
+            defaultQuestion: 'Qual nova brincadeira mágica você consegue inventar com as peças que continuam na sua mãozinha?',
+            challengeAct: 'procurou a rodinha do carrinho embaixo do tapete e não encontrou, sentindo uma frustração pesada subir pelo estômago querendo desistir de tudo.',
+            breathCue: 'abriu as mãozinhas sobre as pernas, respirou fundo sentindo a calma encher os pulmões e pensou: sou muito maior e mais esperto do que uma pecinha perdida.'
+        },
+        tempestade_vento: {
+            label: '58. Segurança Diante de Tempestades de Vento (As raízes profundas da sumaúma protetora)',
+            defaultMetaphor: 'A sumaúma gigante que abraça o chão da mata: lá no alto os galhos dançam ao som da ventania, mas lá embaixo, onde as raízes abraçam a terra mãe, nada se mexe. A nossa casa é a raiz forte onde você está eternamente seguro.',
+            defaultQuestion: 'Como é bom saber que lá fora o vento pode soprar forte, mas aqui dentro a nossa casinha é um escudo inquebrável?',
+            challengeAct: 'ouviu as folhas estalarem e o vento assobiar forte nos vidros, puxando o cobertor com medo de que a casa balançasse como um galho fino.',
+            breathCue: 'apoiou os pezinhos firmes no colchão, puxou o ar sentindo a solidez das paredes e soltou soprando de volta para o vento com coragem serena.'
+        },
+        sons_subitos: {
+            label: '59. Medo de Trovões & Sons Súbitos Repentinos (Os tambores dos gigantes amigos das nuvens)',
+            defaultMetaphor: 'Os grandes tambores de festa dos gigantes das montanhas: eles tocam lá no alto para comemorar a chegada da chuva que refresca as plantinhas. O barulho alto dura só um segundo e depois vem um silêncio gostoso de frescor.',
+            defaultQuestion: 'Onde o seu peito mais gosta de se aconchegar quando o céu dá um estalo e logo depois sopra um ar fresquinho?',
+            challengeAct: 'assustou-se com um trovão estalando perto da janela e sentiu o coração disparar como uma buzina assustada, querendo tapar a cabeça com tudo.',
+            breathCue: 'abraçou forte o colinho seguro, inspirou contando um, dois, três e soltou relaxando os ombros, percebendo que o trovão já virou passado e sumiu na serra.'
+        },
+        cansaco_extremo: {
+            label: '60. Autoaceitação Diante do Cansaço Extremo (O ninho que acolhe as asinhas pesadas)',
+            defaultMetaphor: 'O beija-flor de penas esmeralda que bateu as asinhas cem mil vezes no ar: ele não precisa continuar voando quando a lua sobe; ele recolhe o biquinho, deita no ninho de paina e deixa as asinhas descansarem moles sem peso nenhum.',
+            defaultQuestion: 'Você sente como suas pálpebras estão doces e pesadas, e como é gostoso entregar todo o cansaço para o sono cuidar?',
+            challengeAct: 'estava tão cansado que tudo parecia irritante e difícil, tropeçando nos próprios pés e quase chorando só por ter que escovar os dentes.',
+            breathCue: 'fechou os olhinhos pesados, soltou um bocejo bem gostoso e comprido, e sentiu o corpo afundar no abraço quentinho do travesseiro até adormecer em paz.'
         }
     };
 
@@ -585,7 +641,8 @@
         soundGainNode = ctx.createGain();
         const volSlider = document.getElementById('audio-volume-slider');
         const volVal = volSlider ? parseInt(volSlider.value, 10) / 100 : 0.3;
-        soundGainNode.gain.setValueAtTime(volVal * 0.22, ctx.currentTime);
+        soundGainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
+        soundGainNode.gain.linearRampToValueAtTime(volVal * 0.22, ctx.currentTime + 0.15);
 
         source.connect(filter);
         filter.connect(soundGainNode);
@@ -598,10 +655,18 @@
     }
 
     function stopRelaxationAudio() {
-        if (soundSourceNode) {
-            try { soundSourceNode.stop(); soundSourceNode.disconnect(); } catch (_) {}
-            soundSourceNode = null;
+        if (soundGainNode && audioCtx && audioCtx.state === 'running') {
+            try {
+                soundGainNode.gain.setValueAtTime(soundGainNode.gain.value, audioCtx.currentTime);
+                soundGainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            } catch (_) {}
         }
+        setTimeout(() => {
+            if (soundSourceNode) {
+                try { soundSourceNode.stop(); soundSourceNode.disconnect(); } catch (_) {}
+                soundSourceNode = null;
+            }
+        }, 220);
         isRelaxAudioPlaying = false;
         updateAudioControlsUI(false);
     }
@@ -709,6 +774,7 @@
         const C = global.VaultCore;
         if (!C || !C.store) return;
         C.store.set(C.STORAGE_KEYS.CONTOS, savedStories);
+        if (typeof C.updateStorageMeter === 'function') C.updateStorageMeter();
     }
 
     // =========================================================================
@@ -1193,7 +1259,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pediatria do Sono &amp; Regulação Afetiva</span>
-                            <span class="text-xs font-mono text-slate-400">32 Metáforas Comportamentais &amp; 12 Biomas</span>
+                            <span class="text-xs font-mono text-slate-400">60 Metáforas Comportamentais &amp; 14 Biomas</span>
                         </div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gerador Estruturado de Cenas Terapêuticas &amp; Contos Noturnos</h2>
                     </div>
@@ -1226,7 +1292,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (32 Metáforas Clínicas) *</label>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (60 Metáforas Clínicas) *</label>
                                 <select id="ct-theme" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-300">
                                     ${Object.entries(STORY_THEMES).map(([k, v]) => `
                                         <option value="${k}">${v.label}</option>

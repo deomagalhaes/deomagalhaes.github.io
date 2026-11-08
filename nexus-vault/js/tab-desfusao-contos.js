@@ -22,7 +22,10 @@
 
     function saveDesfusaoHistory() {
         const C = global.VaultCore;
-        C.store.set(C.STORAGE_KEYS.DESFUSAO, desfusaoHistory);
+        if (C && C.store) {
+            C.store.set(C.STORAGE_KEYS.DESFUSAO, desfusaoHistory);
+            if (typeof C.updateStorageMeter === 'function') C.updateStorageMeter();
+        }
     }
 
     function getNeutralChildRef() {
@@ -89,6 +92,20 @@
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-cyan-300">1. Clivagem Fenomenológica</h3>
                                 <span class="text-[11px] text-slate-400">Separar dado observável de fusão verbal</span>
+                            </div>
+
+                            <!-- Atalhos Rápidos para Cenários Frequentes de Tensão -->
+                            <div class="p-2.5 rounded-lg bg-[#090d16] border border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex items-center gap-1.5 text-xs font-mono text-cyan-300">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                    <span class="font-bold">Cenários Rápidos de Tensão Relacional:</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1">
+                                    <button type="button" data-df-preset="ironia" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Provocação Velada</button>
+                                    <button type="button" data-df-preset="urgencia" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Urgência Fabricada</button>
+                                    <button type="button" data-df-preset="ruptura" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Ruptura de Combinado</button>
+                                    <button type="button" data-df-preset="defesa" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Defesa de Imagem</button>
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -541,6 +558,93 @@
                 renderDesfusaoHistory(e.target.value);
             });
         }
+
+        const DF_PRESETS = {
+            ironia: {
+                fact: 'Mensagem recebida com frase ambígua e emoji irônico sobre horário/combinado anterior.',
+                reading: 'Estou notando a narrativa de afronta e a urgência visceral de responder ponto a ponto com sarcasmo superior para me defender.',
+                distortions: ['Leitura Mental', 'Personalização'],
+                autonomic: 7,
+                loss: 9,
+                esc: 9,
+                effort: 5,
+                gain: 9,
+                impulsive: 'Responder imediatamente com ironia retrucando o ataque e provando meu ponto.',
+                strategic: 'Silêncio deliberado de 24h. Responder apenas amanhã de forma estritamente factual e neutra.',
+                doAction: 'Aguardar 24h em silêncio; responder amanhã às 10h em 1 frase neutra sobre o fato.',
+                dontAction: 'Zero respostas emotivas agora, zero justificativas longas e zero desabafos com terceiros.'
+            },
+            urgencia: {
+                fact: 'Notificação com demanda de resposta urgente fora do horário comercial para questão não emergencial.',
+                reading: 'Estou notando o impulso de interromper meu descanso para responder na hora por medo de parecer omisso ou culpado.',
+                distortions: ['Catastrofização', 'Imperativo ("Deveria")'],
+                autonomic: 6,
+                loss: 8,
+                esc: 7,
+                effort: 4,
+                gain: 8,
+                impulsive: 'Parar o que estou fazendo, ficar agitado e redigir resposta rápida sob estresse.',
+                strategic: 'Preservar a tranquilidade da casa e responder no próximo expediente comercial com clareza.',
+                doAction: 'Silenciar a notificação e responder no horário comercial de amanhã com serenidade.',
+                dontAction: 'Zero digitação apressada sob ativação fisiológica alta à noite.'
+            },
+            ruptura: {
+                fact: 'Alteração unilateral ou cancelamento imprevisto de compromisso sem aviso prévio adequado.',
+                reading: 'Estou notando a narrativa de desrespeito ao meu tempo e o desejo de reclamar para exigir retratação.',
+                distortions: ['Tudo ou Nada', 'Raciocínio Emocional'],
+                autonomic: 6,
+                loss: 8,
+                esc: 8,
+                effort: 4,
+                gain: 9,
+                impulsive: 'Enviar mensagens indignadas cobrando consideração e reclamando da falta de compromisso.',
+                strategic: 'Registro documental neutro ("Entendido, compromisso cancelado") e redirecionamento do tempo para produção própria.',
+                doAction: 'Confirmar o cancelamento em 4 palavras neutras e aproveitar o tempo livre para estudo e autocuidado.',
+                dontAction: 'Zero bate-boca sobre consideração ou justiça.'
+            },
+            defesa: {
+                fact: 'Crítica ou comentário indireto questionando uma decisão ou conduta clínica/pessoal.',
+                reading: 'Estou notando o impulso de escrever um texto longo explicando minuciosamente minhas intenções para ser compreendido.',
+                distortions: ['Personalização', 'Leitura Mental'],
+                autonomic: 5,
+                loss: 7,
+                esc: 6,
+                effort: 4,
+                gain: 9,
+                impulsive: 'Escrever 5 parágrafos de justificativa para provar que minhas razões estavam certas.',
+                strategic: 'Sustentar o incômodo da incompreensão alheia. Deixar a consistência dos resultados falar por si.',
+                doAction: 'Manter a conduta correta em silêncio e focar nos pacientes e na família.',
+                dontAction: 'Zero textões de justificativa ou tentativas de convencer quem já tem opinião formada.'
+            }
+        };
+
+        document.querySelectorAll('[data-df-preset]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pKey = btn.getAttribute('data-df-preset');
+                const preset = DF_PRESETS[pKey];
+                if (!preset) return;
+                const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+                setVal('df-strict-fact', preset.fact);
+                setVal('df-emotional-reading', preset.reading);
+                setVal('df-impulsive-text', preset.impulsive);
+                setVal('df-strategic-text', preset.strategic);
+                setVal('df-do-action', preset.doAction);
+                setVal('df-dont-action', preset.dontAction);
+                setVal('df-autonomic-slider', preset.autonomic);
+                setVal('df-loss-slider', preset.loss);
+                setVal('df-esc-slider', preset.esc);
+                setVal('df-effort-slider', preset.effort);
+                setVal('df-gain-slider', preset.gain);
+
+                document.querySelectorAll('#df-distortions-chips input').forEach((chk) => {
+                    chk.checked = preset.distortions.includes(chk.value);
+                });
+
+                saveDesfusaoDraft();
+                updateDesfusaoLiveMetrics();
+                C.toast(`Cenário '${btn.textContent.trim()}' carregado para deliberação!`, 'info');
+            });
+        });
 
         document.querySelectorAll('[data-df-quick-chip]').forEach((btn) => {
             btn.addEventListener('click', () => {
