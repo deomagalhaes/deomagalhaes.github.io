@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC / T-38) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de fusão cognitiva, reatividade a pensamentos intrusivos, capacidade de descentralização (decentering) e autonomia orientada por valores.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .options-group {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8em;
+            color: #475569;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .option-label.selected {
+            background: #e0f2fe;
+            border-color: #0284c7;
+            color: #0369a1;
+            font-weight: 600;
+        }
+
+        .option-label input[type="radio"] {
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .submit-btn-container {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .btn-calc-test {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-calc-test:hover {
+            background: #0a9396;
+            transform: translateY(-1px);
+        }
+
+        /* Seção de Resultados */
+        .results-wrapper {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 35px 0;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .result-header-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-pill {
+            display: inline-block;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 1.3em;
+            font-weight: 700;
+            padding: 8px 22px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+        }
+
+        .result-level-title {
+            color: #0f172a;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .result-level-desc {
+            color: #475569;
+            font-size: 0.95em;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .dim-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        .dim-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .dim-card-header h4 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 0.95em;
+        }
+
+        .dim-card-header span {
+            font-weight: 700;
+            color: #005f73;
+            font-size: 0.9em;
+        }
+
+        .progress-bar-bg {
+            height: 10px;
+            background: #f1f5f9;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a9396, #ee9b00, #ae2012);
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .dim-feedback-text {
+            color: #64748b;
+            font-size: 0.85em;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .guidelines-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 25px;
+        }
+
+        .guidelines-box h4 {
+            color: #166534;
+            margin: 0 0 10px 0;
+            font-size: 1.05em;
+        }
+
+        .guidelines-box p {
+            color: #14532d;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .guidelines-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .action-banner-cta {
+            margin-top: 30px;
+            background: #005f73;
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .action-banner-cta h4 {
+            margin: 0 0 8px 0;
+            font-size: 1.15em;
+        }
+
+        .action-banner-cta p {
+            margin: 0 0 18px 0;
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+
+        .action-banner-cta a {
+            background: #ee9b00;
+            color: #001219;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9em;
+            display: inline-block;
+            transition: background 0.2s ease;
+        }
+
+        .action-banner-cta a:hover {
+            background: #ca6702;
+        }
+
+        @media (max-width: 640px) {
+            .options-group {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .option-label {
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            .option-label input[type="radio"] {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC / T-38)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Publicado em 09 de Novembro de 2026</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Psicoeducativo e Clínico:</strong> Este instrumento avalia a sua capacidade de se relacionar com a sua própria mente. Ele investiga o grau de <em>Fusão Cognitiva</em> (a tendência a tomar pensamentos negativos e previsões catastróficas como fatos consumados ou ordens irrevogáveis) versus a sua <em>Consciência Metacognitiva</em> (a habilidade de observar os pensamentos como eventos mentais passageiros sem ser aprisionado por eles). O cálculo é 100% privado e realizado no próprio navegador.</p>
+                <p><em>Instruções: Leia cada uma das 16 afirmações abaixo e assinale a opção que melhor descreve como você tem se sentido e se comportado nas últimas semanas.</em></p>
+            </div>
+
+            <div class="quiz-container">
+                <form id="quizForm">
+
+                    <!-- DIMENSÃO 1 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Fusão Conceitual e Literalidade do Pensamento</h3>
+                        <p>Avalia a tendência a confundir pensamentos com a realidade fática e acreditar piamente na veracidade absoluta das autocríticas.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">1. Quando um pensamento autocrítico surge (ex: "sou incapaz" ou "vou estragar tudo"), sinto como se ele fosse uma verdade incontestável e não apenas uma hipótese mental.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">2. Tenho dificuldade em separar o que realmente está acontecendo no ambiente externo daquilo que minha mente está prevendo ou imaginando.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">3. As narrativas que minha mente constrói sobre meus erros passados determinam quase instantaneamente meu humor e a sensação de valor próprio.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">4. Sinto que meus pensamentos têm o poder de me controlar ou me forçar a agir contra a minha vontade para aliviar o desconforto.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <!-- DIMENSÃO 2 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Reatividade Emocional e Luta Interna contra Pensamentos</h3>
+                        <p>Mede o esforço exaustivo para debater, suprimir ou silenciar pensamentos intrusivos e o consequente efeito rebote.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">5. Gasto muita energia psíquica tentando debater, refutar ou expulsar pensamentos intrusivos e desconfortáveis.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">6. Fico extremamente angustiado ou culpado simplesmente por ter certos pensamentos considerados "ruins", "fracos" ou "inadequados".</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">7. Tento desesperadamente me distrair a qualquer custo para não ter que entrar em contato com os diálogos internos que me incomodam.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">8. Quando tento suprimir voluntariamente um pensamento angustiante, percebo que ele retorna com mais força e intensidade (efeito rebote).</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <!-- DIMENSÃO 3 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Dificuldade de Descentralização (Déficit de Decentering)</h3>
+                        <p>Investiga a dificuldade em manter a perspectiva do observador consciente (Self-como-Contexto) diante de fluxos mentais intrusivos.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">9. É difícil para mim dar um passo atrás e apenas observar um pensamento doloroso passar como se fosse uma nuvem no céu.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">10. Costumo me identificar de tal forma com meus estados emocionais passageiros que me sinto totalmente engolido por eles.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">11. Quando um pensamento de medo surge, eu me percebo como sendo o próprio medo, esquecendo que sou o ser consciente que o está testemunhando.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">12. Tenho dificuldade em reconhecer mentalmente frases como "estou tendo o pensamento de..." e acabo assumindo que o pensamento sou eu.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <!-- DIMENSÃO 4 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Aprisionamento da Ação e Bloqueio Orientado por Valores</h3>
+                        <p>Mede a paralisia volitiva e o sacrifício de metas de longo prazo em troca do alívio imediato da esquiva experiencial.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">13. Deixo de realizar atividades importantes para o meu futuro ou para meus relacionamentos se minha mente me alertar de que vou me sentir desconfortável.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">14. Minhas decisões diárias são mais pautadas em fugir de pensamentos desagradáveis do que em construir aquilo que realmente tem valor para mim.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">15. Fico paralisado diante de decisões necessárias porque me perco ruminando todos os cenários catastróficos que meu cérebro projeta.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">16. Mesmo sabendo racionalmente o que preciso fazer, a enxurrada de autocríticas internas costuma sabotar o meu arranque de ação.</div>
+                        <div class="options-group">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required><span>1 - Quase nunca</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"><span>2 - Raramente</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"><span>3 - Às vezes</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"><span>4 - Frequentemente</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="5"><span>5 - Quase sempre</span></label>
+                        </div>
+                    </div>
+
+                    <div class="submit-btn-container">
+                        <button type="submit" class="btn-calc-test">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            Calcular Minha Pontuação Metacognitiva
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- RESULTADOS -->
+            <div id="resultsSection" class="results-wrapper">
+                <div class="result-header-card">
+                    <span id="scoreBadge" class="score-pill">0 / 80 Pontos</span>
+                    <h2 id="resultTitle" class="result-level-title">Calculando...</h2>
+                    <p id="resultDesc" class="result-level-desc">Aguarde a apuração das dimensões.</p>
+                </div>
+
+                <h3>Desempenho por Dimensão Metacognitiva</h3>
+
+                <div class="dim-card">
+                    <div class="dim-card-header">
+                        <h4>1. Fusão Conceitual e Literalidade do Pensamento</h4>
+                        <span id="d1Score">0 / 20</span>
+                    </div>
+                    <div class="progress-bar-bg"><div id="d1Bar" class="progress-bar-fill"></div></div>
+                    <p id="d1Feedback" class="dim-feedback-text"></p>
+                </div>
+
+                <div class="dim-card">
+                    <div class="dim-card-header">
+                        <h4>2. Reatividade Emocional e Luta Interna contra Pensamentos</h4>
+                        <span id="d2Score">0 / 20</span>
+                    </div>
+                    <div class="progress-bar-bg"><div id="d2Bar" class="progress-bar-fill"></div></div>
+                    <p id="d2Feedback" class="dim-feedback-text"></p>
+                </div>
+
+                <div class="dim-card">
+                    <div class="dim-card-header">
+                        <h4>3. Dificuldade de Descentralização (Déficit de Decentering)</h4>
+                        <span id="d3Score">0 / 20</span>
+                    </div>
+                    <div class="progress-bar-bg"><div id="d3Bar" class="progress-bar-fill"></div></div>
+                    <p id="d3Feedback" class="dim-feedback-text"></p>
+                </div>
+
+                <div class="dim-card">
+                    <div class="dim-card-header">
+                        <h4>4. Aprisionamento da Ação e Bloqueio Orientado por Valores</h4>
+                        <span id="d4Score">0 / 20</span>
+                    </div>
+                    <div class="progress-bar-bg"><div id="d4Bar" class="progress-bar-fill"></div></div>
+                    <p id="d4Feedback" class="dim-feedback-text"></p>
+                </div>
+
+                <div class="guidelines-box">
+                    <h4>Diretrizes Psicoeducativas e Estratégias de Desfusão (ACT & TCC)</h4>
+                    <div id="guidelinesText"></div>
+                </div>
+
+                <div class="action-banner-cta">
+                    <h4>Precisa de Apoio Clínico para Desenvolver Flexibilidade Psicológica?</h4>
+                    <p>A psicoterapia baseada em processos e a avaliação neuropsicológica auxiliam na reconfiguração das molduras relacionais e no fortalecimento do controle executivo pré-frontal.</p>
+                    <a href="/agendamento.html">Agendar Consulta com Deo Magalhães</a>
+                </div>
+            </div>
+
+            <hr class="article-divider">
+
+            <div class="article-body">
+                <h3>Fundamentação Teórica da Escala</h3>
+                <p>A <strong>Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC / T-38)</strong> sintetiza os postulados empíricos do <em>Cognitive Fusion Questionnaire (CFQ)</em> (Gillanders et al., 2014), da Teoria das Molduras Relacionais (RFT) de Steven C. Hayes e dos modelos neurocognitivos de metacognição e controle de segunda ordem (Fleming & Frith, 2014). Ela reflete o nível em que o indivíduo é dominado pela literalidade linguística ou capaz de acessar a consciência observadora mediada pela Área 10 de Brodmann.</p>
+                <p class="article-disclaimer"><em>Aviso Clínico: Este teste é um instrumento estritamente psicoeducativo e reflexivo. Ele não substitui uma avaliação neuropsicológica completa ou consulta diagnóstica especializada.</em></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quizForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            // Feedback visual ao clicar nos labels
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const group = e.target.closest('.options-group');
+                    group.querySelectorAll('.option-label').forEach(lbl => lbl.classList.remove('selected'));
+                    e.target.closest('.option-label').classList.add('selected');
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                let d1 = 0; // Fusão Conceitual e Literalidade (Itens 1 a 4)
+                let d2 = 0; // Reatividade Emocional e Luta Interna (Itens 5 a 8)
+                let d3 = 0; // Déficit de Descentralização / Decentering (Itens 9 a 12)
+                let d4 = 0; // Aprisionamento da Ação / Bloqueio por Valores (Itens 13 a 16)
+
+                for (let i = 1; i <= 16; i++) {
+                    const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`)?.value || "0", 10);
+                    if (i <= 4) d1 += val;
+                    else if (i <= 8) d2 += val;
+                    else if (i <= 12) d3 += val;
+                    else d4 += val;
+                }
+
+                const total = d1 + d2 + d3 + d4;
+                document.getElementById('scoreBadge').innerText = `${total} / 80 Pontos`;
+
+                let title = "";
+                let desc = "";
+                let guidelines = "";
+
+                if (total <= 32) {
+                    title = "Alta Desfusão Cognitiva e Flexibilidade Metacognitiva";
+                    desc = "Seus escores indicam uma excelente capacidade de descentramento (decentering) e consciência observadora. Você consegue reconhecer seus pensamentos como eventos mentais transitórios sem tratá-los como verdades literais ou ordens incontestáveis. Diante de autocríticas ou incertezas, você preserva a agência e mantém comportamentos alinhados aos seus valores centrais.";
+                    guidelines = "<p>• <strong>Manutenção da Presença Consciente:</strong> Continue exercitando a postura de observador curioso da própria mente em momentos de pico de estresse.</p><p>• <strong>Ação Focada em Valores:</strong> Seu cérebro demonstra boa diferenciação entre ruído cognitivo e valor real; continue priorizando projetos com significado existencial profundo.</p>";
+                } else if (total <= 48) {
+                    title = "Fusão Cognitiva Transitória e Vulnerabilidade Reativa";
+                    desc = "Você apresenta um grau moderado de fusão cognitiva. Em situações tranquilas, você consegue relativizar pensamentos autocríticos; no entanto, sob pressão emocional, cansaço ou ameaça relacional, sua mente tende a cair na armadilha da literalidade, gerando debates internos desgastantes e hesitação na ação.";
+                    guidelines = "<p>• <strong>Prática da Rotulação de Processo:</strong> Quando notar autocrítica ferina, treine a mudança linguística deliberada: 'Noto que minha mente está produzindo a narrativa de fracasso'. Esse pequeno ajuste ativa a Área 10 pré-frontal.</p><p>• <strong>Interrupção do Debate Mental:</strong> Desista de provar para a sua mente que o pensamento negativo está errado; debater com ele apenas prolonga a ativação da DMN. Trate-o como barulho de tráfego que passa ao longe.</p>";
+                } else if (total <= 64) {
+                    title = "Fusão Cognitiva Elevada e Rigidez Conceitual";
+                    desc = "Os dados indicam que você frequentemente se encontra aprisionado pelos conteúdos da sua mente. Pensamentos negativos são vividos com forte intensidade somática e interpretados como fatos consumados. Há um gasto excessivo de energia tentando suprimir ou silenciar pensamentos intrusivos, o que gera o efeito rebote e prejudica o engajamento em metas de vida vitais.";
+                    guidelines = "<p>• <strong>Desacoplamento Semântico e Dessensibilização (ACT):</strong> Pratique a repetição de palavras gatilho para esvaziá-las do poder ameaçador. Reconheça que pensamentos não têm dentes nem garras.</p><p>• <strong>Treino do Self-como-Contexto:</strong> Fortaleça a noção de que você é o recipiente consciente e não o conteúdo mental. A tempestade ocorre no céu, mas o céu não se destrói com o relâmpago.</p><p>• <strong>Acompanhamento Psicoterapêutico Recomendado:</strong> Abordagens como a Terapia de Aceitação e Compromisso (ACT) e a TCC Focada em Processos são extremamente eficazes para restabelecer a flexibilidade psicológica.</p>";
+                } else {
+                    title = "Hiperfusão Cognitiva Severa e Paralisia Volitiva";
+                    desc = "Configura um quadro grave de sequestro psíquico pela narrativa mental. A fronteira entre o que você pensa e quem você é praticamente colapsou. A vida cotidiana está sendo ditada pela esquiva experiencial — a tentativa constante de não sentir desconforto —, resultando em paralisia de decisões, exaustão emocional profunda e isolamento existencial.";
+                    guidelines = "<p>• <strong>Suporte Profissional Especializado Imediato:</strong> É essencial iniciar psicoterapia baseada em evidências para desmontar os ciclos de rigidez cognitiva e restabelecer a conexão com a realidade presente.</p><p>• <strong>Cessação da Luta com o Rádio Interno:</strong> O primeiro passo terapêutico é reconhecer que lutar contra a mente é o que a mantém no controle. Acolha a vulnerabilidade somática e retome microações diárias simples guiadas por valores básicos.</p><p>• <strong>Regulação Autonômica Integrada:</strong> Práticas somáticas (respiração diafragmática ritmada, contato com a natureza e grounding) para acalmar a amígdala antes de tentar o raciocínio metacognitivo.</p>";
+                }
+
+                document.getElementById('resultTitle').innerText = title;
+                document.getElementById('resultDesc').innerText = desc;
+                document.getElementById('guidelinesText').innerHTML = guidelines;
+
+                const updateDim = (idPrefix, val, maxVal) => {
+                    document.getElementById(`${idPrefix}Score`).innerText = `${val} / ${maxVal}`;
+                    const pct = Math.round((val / maxVal) * 100);
+                    document.getElementById(`${idPrefix}Bar`).style.width = `${pct}%`;
+                    
+                    let statusTxt = "";
+                    if (pct <= 45) statusTxt = "Baixo / Flexibilidade Preservada";
+                    else if (pct <= 70) statusTxt = "Moderado / Alerta de Fusão";
+                    else statusTxt = "Severo / Rigidez e Fusão Crônica";
+                    document.getElementById(`${idPrefix}Feedback`).innerText = `${statusTxt} (${pct}% do escore máximo).`;
+                };
+
+                updateDim('d1', d1, 20);
+                updateDim('d2', d2, 20);
+                updateDim('d3', d3, 20);
+                updateDim('d4', d4, 20);
+
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -43,6 +43,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 34** | **Matriz de Calibração de Erros e Controle Inibitório** | Monitoramento de Erros (dACC / ERN), Paradoxo de Flanker e Inibição Go/No-Go | `jogos/jogo-calibracao-erros.html` | ✅ **Publicado** |
 | **Dia 35** | **Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal** | Córtex Orbitofrontal (OFC), Resolução de Erros de Predição e Inibição Perseverativa | `jogos/jogo-aprendizado-reversao.html` | ✅ **Publicado** |
 | **Dia 36** | **Matriz de Filtragem Talâmica e Inibição de Distratores** | Núcleo Reticular Talâmico (TRN), Sensory Gating, Inibição de Flanker e Córtex Cingulado Anterior | `jogos/jogo-filtragem-talamica.html` | ✅ **Publicado** |
+| **Dia 37** | **Matriz de Desfusão Metacognitiva e Calibração de Certeza** | Córtex Frontopolar (BA 10), Metacognição, Desfusão Cognitiva e Calibração Bayesiana | `jogos/jogo-desfusao-metacognitiva.html` | ✅ **Publicado** |
 
 ---
 

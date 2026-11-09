@@ -44,6 +44,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-35** | **Escala Multidimensional de Perfeccionismo Clínico e Monitoramento de Erros (EMPC-ME)** | Perfeccionismo Clínico, dACC / ERN, Tirania dos Deverias e Medo do Julgamento | `testes/teste-perfeccionismo-clinico.html` | ✅ Concluído |
 | **T-36** | **Escala de Vínculo Traumático e Dependência de Reforço Intermitente (EVT-DRI)** | Vínculo Traumático, Reforço Intermitente, Abstinência e Apego Desorganizado | `testes/teste-vinculo-traumatico-dependencia-afetiva.html` | ✅ Concluído |
 | **T-37** | **Escala de Hipervigilância Neuroafetiva e Sensibilização Central (EHNSC)** | Hipervigilância, Filtro Talâmico (TRN), Sensory Gating, Tônus Simpático e Tensão Somática | `testes/teste-hipervigilancia-sensibilizacao.html` | ✅ Concluído |
+| **T-38** | **Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC)** | Fusão Cognitiva, Teoria das Molduras Relacionais, Metacognição (BA 10) e Decentering | `testes/teste-desfusao-metacognicao.html` | ✅ Concluído |
 
 ---
 
