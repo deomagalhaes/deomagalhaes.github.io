@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **09/11/2026** | **A Janela de Tolerância: Neurobiologia da Regulação Autonômica** | [social/2026-11-09-neurobiologia-janela-tolerancia-regulacao-autonomica.md](2026-11-09-neurobiologia-janela-tolerancia-regulacao-autonomica.md) | ✅ Pronto para postar |
 | **09/11/2026** | **Você Não É Seus Pensamentos: A Neurociência da Desfusão Cognitiva** | [social/2026-11-09-neurobiologia-desfusao-cognitiva-metacognicao.md](2026-11-09-neurobiologia-desfusao-cognitiva-metacognicao.md) | ✅ Pronto para postar |
 | **08/11/2026** | **O Cérebro em Sentinela: A Neurobiologia da Hipervigilância Crônica** | [social/2026-11-08-neurobiologia-hipervigilancia-cronica.md](2026-11-08-neurobiologia-hipervigilancia-cronica.md) | ✅ Pronto para postar |
 | **08/11/2026** | **A Prisão do Afeto: A Neurobiologia do Vínculo Traumático e do Reforço Intermitente** | [social/2026-11-08-neurobiologia-vinculo-traumatico.md](2026-11-08-neurobiologia-vinculo-traumatico.md) | ✅ Pronto para postar |

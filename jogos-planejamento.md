@@ -44,6 +44,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 35** | **Matriz de Aprendizado por Reversão e Flexibilidade Pré-Frontal** | Córtex Orbitofrontal (OFC), Resolução de Erros de Predição e Inibição Perseverativa | `jogos/jogo-aprendizado-reversao.html` | ✅ **Publicado** |
 | **Dia 36** | **Matriz de Filtragem Talâmica e Inibição de Distratores** | Núcleo Reticular Talâmico (TRN), Sensory Gating, Inibição de Flanker e Córtex Cingulado Anterior | `jogos/jogo-filtragem-talamica.html` | ✅ **Publicado** |
 | **Dia 37** | **Matriz de Desfusão Metacognitiva e Calibração de Certeza** | Córtex Frontopolar (BA 10), Metacognição, Desfusão Cognitiva e Calibração Bayesiana | `jogos/jogo-desfusao-metacognitiva.html` | ✅ **Publicado** |
+| **Dia 38** | **Matriz de Regulação Autonômica e Equilíbrio Homeostático** | Teoria Polivagal, Freio Vagal, Janela de Tolerância e Calibração de Arousal | `jogos/jogo-regulacao-autonomica.html` | ✅ **Publicado** |
 
 ---
 

@@ -41,6 +41,7 @@ Cada **Rodada de Esteira (Lote de Produção)** é uma unidade autônoma e sincr
 | **Lote 25** | **A Neurobiologia da Hipervigilância Crônica e a Falha do Filtro Talâmico:** Como a Sensibilização Central Aprisiona a Mente em Alerta Permanente | Carrossel: *O Cérebro em Sentinela: A Neurobiologia da Hipervigilância Crônica* | **T-37:** Escala de Hipervigilância Neuroafetiva e Sensibilização Central (EHNSC) | **Dia 36:** Matriz de Filtragem Talâmica e Inibição de Distratores | ✅ **Concluído** |
 | **Lote 26** | **A Neurobiologia da Desfusão Cognitiva e da Metacognição:** Como o Cérebro Observa Seus Próprios Pensamentos Sem Ser Aprisionado por Eles | Carrossel: *Você Não É Seus Pensamentos: A Neurociência da Desfusão Cognitiva* | **T-38:** Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC) | **Dia 37:** Matriz de Desfusão Metacognitiva e Calibração de Certeza | ✅ **Concluído** |
 
+| **Lote 27** | **A Neurobiologia da Janela de Tolerância e da Regulação Autonômica:** Como o Sistema Nervoso Navega Entre a Hiperativação, o Colapso e a Segurança | Carrossel: *A Janela de Tolerância: Por Que Seu Corpo Entra em Pânico ou Simplesmente Desliga* | **T-39:** Escala da Janela de Tolerância e Regulação Autonômica (EJTRA) | **Dia 38:** Matriz de Regulação Autonômica e Equilíbrio Homeostático | ✅ **Concluído** |
 ---
 
 ## ⚙️ Regras de Ouro e Critérios de Qualidade (Quality Gates)
