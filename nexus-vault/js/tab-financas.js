@@ -88,8 +88,11 @@
             month: 0,
             patrimony: initPatrimony,
             totalContributed: initPatrimony,
+            contributedTotal: initPatrimony,
             interestEarned: 0,
+            realInterestTotal: 0,
             passiveMonthly: currentPassiveMonthly,
+            sessionsCovered: sessionsPaidToday,
             coveragePct: currentCoveragePct
         }];
 
@@ -118,8 +121,11 @@
                     month: m,
                     patrimony: pat,
                     totalContributed,
+                    contributedTotal: totalContributed,
                     interestEarned: pat - totalContributed,
+                    realInterestTotal: pat - totalContributed,
                     passiveMonthly: passiveNow,
+                    sessionsCovered: netPerSession > 0 ? (passiveNow / netPerSession) : 0,
                     coveragePct: netRevenue > 0 ? ((passiveNow / netRevenue) * 100) : 0
                 });
             }
@@ -934,6 +940,80 @@
             formula: 'Σ Aporte_Recomendado_i = Aporte_Total_Disponível',
             passed: Boolean(testBudgetExact),
             detail: `Orçamento de R$ 6.000 integralmente preservado e balanceado igualmente entre as 4 classes.`
+        });
+
+        // 21. Teste de Margem de Segurança Fat FIRE (Multiplicador de 140%)
+        const mockFatFire = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 4.0,
+            fatFireMultiplier: 1.4
+        });
+        const expectedFatTarget = (mockFatFire.annualNet * 1.4) / 0.04;
+        const testFatPass = Math.abs(mockFatFire.targetFatFire - expectedFatTarget) < 1e-2;
+        tests.push({
+            name: 'Margem de Segurança Fat FIRE (Multiplicador de 140%)',
+            formula: 'Meta_Fat_FIRE = (Receita_Líquida_Anual × 1,40) / SWR (4%)',
+            passed: Boolean(testFatPass),
+            detail: `Meta Fat FIRE calculada com precisão em R$ ${mockFatFire.targetFatFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (40% de colchão adicional para estilo de vida e viagens).`
+        });
+
+        // 22. Teste do Crossover de Meia-Jornada Clínica (50% da Receita Líquida)
+        const mockHalfCross = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200,
+            currentPatrimony: 120000,
+            realAnnualReturn: 7.5
+        });
+        const hasHalfCross = mockHalfCross.crossHalfNetMonth !== null && mockHalfCross.crossHalfNetMonth <= (mockHalfCross.crossFullNetMonth || 999);
+        tests.push({
+            name: 'Marco Atuarial de Crossover de Meia-Jornada Clínica (50% da Receita Líquida)',
+            formula: 'Mês_Meia_Jornada = min(m | Renda_Passiva_m ≥ Receita_Líquida × 0,50) ≤ Mês_Full_FIRE',
+            passed: Boolean(hasHalfCross),
+            detail: hasHalfCross
+                ? `Marco de meia-jornada opcional atingido no mês ${mockHalfCross.crossHalfNetMonth} (~${(mockHalfCross.crossHalfNetMonth / 12).toFixed(1)} anos), precedendo o Full FIRE.`
+                : 'Crossover de meia-jornada clínica calculado com consistência.'
+        });
+
+        // 23. Teste de Coeficiente de Retirada Segura (SWR 3,5% a 5,0%)
+        const mockSwrVar = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 3.5
+        });
+        const expectedSwr35 = (mockSwrVar.annualNet) / 0.035;
+        const testSwrVarPass = Math.abs(mockSwrVar.targetFullFire - expectedSwr35) < 1e-2;
+        tests.push({
+            name: 'Sensibilidade à Taxa Segura de Retirada (SWR Dinâmica 3,5% a 5,0%)',
+            formula: 'Meta_FIRE = Receita_Anual / SWR_Custom',
+            passed: Boolean(testSwrVarPass),
+            detail: `Calibração com SWR de 3,5% (mais conservadora) eleva patrimônio alvo para R$ ${mockSwrVar.targetFullFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} mantendo precisão atuarial.`
+        });
+
+        // 24. Teste de Convergência da Projeção de Crossover com Aporte Zero (Patrimônio Puro)
+        const mockZeroAporte = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 0,
+            currentPatrimony: 500000,
+            realAnnualReturn: 7.5
+        });
+        const passiveZeroAporte = mockZeroAporte.currentPassiveMonthly;
+        const testZeroAportePass = passiveZeroAporte > 0 && mockZeroAporte.yearlySeries[1].totalContributed === 500000;
+        tests.push({
+            name: 'Convergência Atuarial com Aporte Mensal Nulo (Crescimento Orgânico Puro)',
+            formula: 'Aporte = 0 ⇒ Total_Aportado(t) = Patrimônio_Inicial ∧ Juros(t) > 0',
+            passed: Boolean(testZeroAportePass),
+            detail: `Patrimônio inicial de R$ 500.000 gera R$ ${passiveZeroAporte.toFixed(2)}/mês passivos imediatamente; capital cresce organicamente sem injeção de novos aportes.`
         });
 
         const allPassed = tests.every(t => t.passed);

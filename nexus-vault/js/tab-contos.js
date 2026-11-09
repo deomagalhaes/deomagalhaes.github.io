@@ -458,7 +458,7 @@
             challengeAct: 'ficou irritado quando o irmãozinho ou primo invadiu a sua cabaninha de almofadas sem pedir licença, sentindo vontade de empurrar tudo com brava indignação.',
             breathCue: 'deu dois passos lentos para trás, puxou o ar puro enchendo o próprio espaço de tranquilidade e falou com voz calma e firme o que precisava.'
         },
-        sensibilidade_tatil: {
+        sensibilidade_texturas: {
             label: '64. Sensibilidade Tátil a Roupas & Etiquetas (O linho macio da fada tecelã)',
             defaultMetaphor: 'O linho macio da fada das florestas: a pele dos seres mais sensíveis é como pétala de rosa que sente até o menor grãozinho de areia. Essa delicadeza é um dom que ensina o mundo a tocar tudo com máxima gentileza e respeito.',
             defaultQuestion: 'Como o seu corpinho fica leve e solto agora que está com o pijama mais macio e gostoso do mundo?',
@@ -520,6 +520,48 @@
             defaultQuestion: 'Como é suave ouvir a musiquinha mansa da sua própria respiração embalando o seu sono esta noite?',
             challengeAct: 'sentiu aflição com o silêncio da casa apagada, querendo barulhos ou luzes acesas para não se sentir sozinho na quietude da noite.',
             breathCue: 'fechou os olhinhos com doçura, escutou o arzinho gostoso entrando e saindo do nariz e sentiu o abraço fofo do silêncio acolher o seu descanso.'
+        },
+        perfeccionismo_desenho: {
+            label: '73. Frustração ao Desenhar & Criatividade Livre (O traço ondulado da folha de outono)',
+            defaultMetaphor: 'A folhinha de outono que voa dançando no vento: nenhuma linha na natureza é perfeitamente reta. As curvas mais surpreendentes e os desenhos mais bonitos do mundo nascem justamente quando a mãozinha se liberta da pressa de não errar.',
+            defaultQuestion: 'Que desenho mágico e divertido a sua imaginação quer sonhar esta noite, sem nenhuma regra de perfeição?',
+            challengeAct: 'amassou o papel com raiva porque a casinha ou o bichinho não ficou exatamente igual à imagem que tinha na cabeça, achando que seu desenho estava feio.',
+            breathCue: 'abriu os dedos das mãos bem relaxados, soltou um sopro suave que desamassa qualquer aperto e acolheu o desenho com carinho curioso.'
+        },
+        mordida_briga_pequenos: {
+            label: '74. Impulsividade Física & Mãozinhas Gentis (O abraço protetor do ursinho de feltro)',
+            defaultMetaphor: 'As patas fofas do urso guardião da montanha: ele é grandalhão e muito forte, mas guarda toda essa força para dar o abraço mais seguro e macio da floresta. Nossas mãozinhas e nossa boquinha foram feitas para fazer carinho, saborear frutinhas e falar palavras amigas.',
+            defaultQuestion: 'Como o seu coração fica quentinho quando você escolhe um gesto manso e recebe um abraço de volta?',
+            challengeAct: 'sentiu a frustração subir rápido demais nos bracinhos e teve vontade de bater ou morder para desabafar a energia que parecia não caber no corpo.',
+            breathCue: 'apertou bem forte o travesseiro com os bracinhos por três segundos… e soltou o ar num suspiro longo, relaxando cada músculo como manteiga derretida.'
+        },
+        desfralde_seguranca: {
+            label: '75. Desfralde & Respeito ao Tempo do Corpo (O barquinho que aprende a navegar)',
+            defaultMetaphor: 'O barquinho de madeira mansa que aprende a sentir a maré: ele não tem pressa de cruzar o lago. Cada dia é um aprendizado calmo onde o corpinho avisa o momento certo de ir ao porto seguro sem nenhum susto ou cobrança.',
+            defaultQuestion: 'Você sabe como o seu corpinho é inteligente e como nós estamos aqui para cuidar de você com todo o amor do mundo?',
+            challengeAct: 'ficou preocupado ou envergonhado porque o aviso do corpinho demorou a chegar, temendo que os adultos ficassem chateados com o imprevisto.',
+            breathCue: 'recebeu um abraço aconchegante, respirou fundo sentindo segurança total e soltou o ar sabendo que cada dia traz uma vitória nova.'
+        },
+        troca_escola_amigos: {
+            label: '76. Mudança de Escola/Ambiente & Novos Laços (A sementinha que ganha novo canteiro)',
+            defaultMetaphor: 'A sementinha viajante que o passarinho plantou num jardim novo: no começo a terra parece diferente, mas logo a chuva mansa molha o canteiro, os raios de sol aquecem o solo e brotam amizades cheias de cores vivas e risadas.',
+            defaultQuestion: 'Qual cantinho da sua nova rotina já está começando a parecer um amigo acolhedor?',
+            challengeAct: 'sentiu saudade apertada dos amigos antigos e da sala conhecida, com medo de não encontrar ninguém para brincar no novo pátio.',
+            breathCue: 'colocou a mão no peito lembrando que as memórias boas viajam junto com ele para onde for, inspirou coragem e expirou serenidade.'
+        },
+        pesadelos_recorrentes: {
+            label: '77. Dissolução de Pesadelos Noturnos (A lanterna mágica dos sonhos bons)',
+            defaultMetaphor: 'A lanterna mágica de luz dourada que os vaga-lumes acendem sobre o quarto: sombras assustadoras em sonhos são apenas nuvens de fumaça sem dentes nem garras. Quando a luz do amor toca a fumaça, ela se dissolve e vira bolhas de sabão coloridas.',
+            defaultQuestion: 'Que guardião poderoso e amigo você escolhe para vigiar a porta dos seus sonhos com uma capa brilhante?',
+            challengeAct: 'acordou assustado no meio de uma sombra ruim de sonho, com o coraçãozinho batendo rápido e os olhos arregalados procurando proteção.',
+            breathCue: 'segurou firme a mão de quem ama, puxou o ar fresco enchendo o peito de luz dourada e soprou a fumaça ruim para bem longe até ela sumir nas estrelas.'
+        },
+        gratidao_dia_dormir: {
+            label: '78. Gratidão Simples Pré-Sono (As três pedrinhas douradas do riacho)',
+            defaultMetaphor: 'As pedrinhas lisas e brilhantes que o rio limpo guarda no fundo: antes de fechar os olhos, a gente recolhe três pedrinhas douradas do dia — três momentos gostosos, um riso, um sabor ou um carinho — e deita com o coração cheio de fartura afetiva.',
+            defaultQuestion: 'Quais são as três coisinhas boas que aconteceram hoje e que você quer agradecer antes de sonhar?',
+            challengeAct: 'estava focado em uma coisinha pequena que não deu certo mais cedo, quase esquecendo de todas as brincadeiras gostosas e do carinho recebido ao longo do dia.',
+            breathCue: 'lembrou de um abraço carinhoso, inspirou com um sorriso calmo nos lábios e soltou o ar afundando suavemente no descanso mais doce da noite.'
         }
     };
 
@@ -777,8 +819,14 @@
             stopAutoScroll();
 
             if (soundGainNode && audioCtx && isRelaxAudioPlaying) {
-                // Fade out exponencial suave de 15 segundos
-                soundGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 15);
+                // Fade out exponencial suave de 15 segundos calibrado para Web Audio API
+                try {
+                    const currGain = Math.max(0.0001, soundGainNode.gain.value);
+                    soundGainNode.gain.setValueAtTime(currGain, audioCtx.currentTime);
+                    soundGainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 15);
+                } catch (_) {
+                    soundGainNode.gain.value = 0.0001;
+                }
                 setTimeout(() => {
                     stopRelaxationAudio();
                     if (global.VaultCore) global.VaultCore.toast('Timer de sono concluído: áudio desligado suavemente.', 'info', 3000);

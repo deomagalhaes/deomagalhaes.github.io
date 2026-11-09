@@ -1689,9 +1689,26 @@
                     score += 8;
                 }
 
+                if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && m.isRepotOverdue) {
+                    if (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA') {
+                        score += 35;
+                    }
+                }
+
+                if (proc.id === 'DESARAME' || proc.id === 'ARAMACAO_ESTRUTURAL') {
+                    if (m.wiringDiff !== null && m.wiringDiff <= 7) {
+                        score += 30;
+                    }
+                }
+
                 const finalScore = Math.max(15, Math.min(98, score));
 
                 if (finalScore >= 70) {
+                    let pruneContext = daysSinceLastPrune < 999
+                        ? ` • Última poda há ${daysSinceLastPrune}d.`
+                        : ' • Sem podas recentes na copa.';
+                    let repotContext = m.isRepotOverdue ? ' • [Transplante Atrasado: Janela Ideal]' : '';
+
                     results.push({
                         score: finalScore,
                         procedure: proc,
@@ -1699,7 +1716,7 @@
                         metrics: m,
                         moon,
                         seasonInfo,
-                        whyNow: `${moon.phaseName} (${moon.illumination}% iluminada) + ${seasonInfo.season} (${seasonInfo.climate.split('.')[0]}): ${proc.biologicalNote}`
+                        whyNow: `${moon.phaseName} (${moon.illumination}% iluminada • ${moon.phaseGroup}) + ${seasonInfo.season}: ${proc.biologicalNote}${pruneContext}${repotContext}`
                     });
                 }
             });

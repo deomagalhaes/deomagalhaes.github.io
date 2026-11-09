@@ -165,6 +165,18 @@
                                         <input type="checkbox" value="Personalização" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
                                         <span>Personalização</span>
                                     </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Desqualificação do Positivo" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Desqualificação do Positivo</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Rotulação Global" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Rotulação Global</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#090d16] border border-slate-800 text-[11px] text-slate-300 hover:border-slate-600 cursor-pointer">
+                                        <input type="checkbox" value="Filtro Negativo" class="w-3.5 h-3.5 rounded text-amber-500 bg-slate-900 border-slate-700">
+                                        <span>Filtro Negativo</span>
+                                    </label>
                                 </div>
                             </div>
 
