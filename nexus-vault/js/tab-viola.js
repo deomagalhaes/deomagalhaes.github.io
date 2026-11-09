@@ -1378,6 +1378,342 @@
         }
     };
 
+// =========================================================================
+// FASE 11: GERADOR DE MODULAÇÕES & PREPARAÇÃO HARMÔNICA CAIPIRA
+// =========================================================================
+
+const DEFAULT_MODULATION_STATE = {
+    activeCategory: 'all',        // 'all' | 'secondary_dominant' | 'diminished' | 'borrowed' | 'key_change' | 'movable_barre' | 'custom_bridge'
+    activeModulationId: 'dim_sharp_iv', // Cadência / Modulação ativa
+    fromKeyId: 'E_maj',           // Tonalidade de partida
+    toKeyId: 'A_maj',             // Tonalidade de destino (quando aplicável)
+    isPlaying: false,             // Status do sequenciador de áudio
+    currentStepIdx: -1,           // Passo ativo (-1 = repouso / todos visíveis)
+    playbackSpeed: 1.0,           // 0.75 | 1.0 | 1.25
+    playStyle: 'strum',           // 'strum' (rasqueado caipira) | 'arpeggio' (dedilhado lírico)
+    isLooping: true,              // Repetição contínua em loop
+    beatsPerChord: 4,             // 2 | 4 tempos por acorde
+    barreFret: 0,                 // Casa da pestana móvel (0 a 12)
+    barreType: 'major',           // 'major' | 'dom7' | 'minor' | 'dim7'
+    customBridgeFrom: 'E_maj',    // Origem na calculadora de pontes
+    customBridgeTo: 'G_maj',      // Destino na calculadora de pontes
+    customBridgeRouteIdx: 0       // 0 = Dominante Direta | 1 = ii-V7 | 2 = Diminuto
+};
+
+const CAIPIRA_MODULATION_CATEGORIES = {
+    all: { id: 'all', label: 'Todas as Fórmulas', badge: '15 Canônicas', icon: 'sparkles' },
+    secondary_dominant: { id: 'secondary_dominant', label: 'Dominantes Secundárias (V7/X)', badge: '5 Fórmulas', icon: 'zap' },
+    diminished: { id: 'diminished', label: 'Diminutos de Passagem (X°)', badge: '4 Fórmulas', icon: 'link-2' },
+    borrowed: { id: 'borrowed', label: 'Empréstimo Modal (AEC)', badge: '3 Fórmulas', icon: 'feather' },
+    key_change: { id: 'key_change', label: 'Subida de Tom & Clímax', badge: '3 Fórmulas', icon: 'trending-up' },
+    movable_barre: { id: 'movable_barre', label: 'Pestanas Móveis do Estradão', badge: 'Braço Aberto', icon: 'sliders' },
+    custom_bridge: { id: 'custom_bridge', label: 'Calculadora de Pontes Harmônicas', badge: 'Transição Livre', icon: 'git-merge' }
+};
+
+const CAIPIRA_MODULATIONS_CATALOG = {
+    // -------------------------------------------------------------------------
+    // 1. DOMINANTES SECUNDÁRIAS CAIPIRAS (V7/X)
+    // -------------------------------------------------------------------------
+    v7_iv: {
+        id: 'v7_iv',
+        category: 'secondary_dominant',
+        title: 'Abrir pro Quarto',
+        formula: 'I ➔ V7/IV ➔ IV ➔ I',
+        subtitle: 'Preparação instintiva para a Subdominante onde a 2ª voz entra aguda',
+        duoContext: 'Tonico & Tinoco, Tião Carreiro & Pardinho (Chico Mineiro, Menino da Porteira)',
+        description: 'O movimento mais consagrado da viola caipira. O violeiro acrescenta a sétima menor à tônica (ex: E7 em tom de Mi), transformando o repouso em máxima atração tonal em direção ao IV grau (Lá Maior). Na viola em Cebolão, ferir o Ré na 3ª casa do 1º par faz o estradão inteiro vibrar.',
+        voiceLeading: 'A 3ª maior da tônica (Sol♯) sobe meio tom para a fundamental da subdominante (Lá), enquanto a 7ª menor (Ré) resolve descendo para a 3ª do IV grau (Dó♯).',
+        luthierTip: 'Na viola em Cebolão, passe da casa solta (0) direto para o 1º par na 3ª casa (ou 4º par na 3ª casa) com ataque firme de polegar e rasqueado de indicador.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica de Partida' },
+            { semitones: 0, quality: 'dom7', roman: 'V7/IV', role: 'Dominante Secundária Tensiva' },
+            { semitones: 5, quality: 'maj', roman: 'IV', role: 'Subdominante (Clímax Vocal)' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Retorno ao Repouso' }
+        ]
+    },
+    v7_v: {
+        id: 'v7_v',
+        category: 'secondary_dominant',
+        title: 'Tensão Pré-Refrão',
+        formula: 'I ➔ V7/V ➔ V7 ➔ I',
+        subtitle: 'Dominante da Dominante preparando a explosão do refrão sertanejo',
+        duoContext: 'Tião Carreiro, Zé Carreiro & Carreirinho (Cururus e Modas de Viola)',
+        description: 'Preparação do quinto grau através de sua própria dominante (II7 ou V7/V, ex: F♯7 preparando B7 no tom de Mi). O trítono gerado pelo Lá♯ cria uma urgência quase elétrica que antecede a dominante principal.',
+        voiceLeading: 'A nota característica da dominante secundária (Lá♯ no tom de Mi) atua como sensível secundária, conduzindo por meio tom ascendente até a fundamental da dominante (Si).',
+        luthierTip: 'Execute com pestana rápida no 2º traste. Se quiser soar como Tião Carreiro, dê um corte percussivo seco de palma antes de entrar no Si com Sétima.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica de Repouso' },
+            { semitones: 2, quality: 'dom7', roman: 'V7/V (II7)', role: 'Dominante da Dominante' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante Principal' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Resolução Triunfal' }
+        ]
+    },
+    v7_vi: {
+        id: 'v7_vi',
+        category: 'secondary_dominant',
+        title: 'Lamento da Roça',
+        formula: 'I ➔ V7/vi ➔ vi ➔ V7 ➔ I',
+        subtitle: 'Preparação lírica para o Relativo Menor e toadas de saudade',
+        duoContext: 'Pena Branca & Xavantinho, Almir Sater, Cascatinha & Inhana (Índia, Saudade de Ouro Preto)',
+        description: 'A curva dramática que mergulha a narrativa sertaneja em melancolia e introspecção. O acorde V7/vi (G♯7 no tom de Mi) rompe a luminosidade do modo maior e abre as portas do relativo menor (C♯m).',
+        voiceLeading: 'A sensível do relativo menor (Si♯/Dó natural) conduz a melodia diretamente para a tônica menor, enquanto o baixo sustenta a gravidade do lamento caboclo.',
+        luthierTip: 'No Cebolão em Mi, toque o G♯7 com pestana no 4º traste ferindo os bordões graves com o polegar de apoio. Deixe o C♯m ressoar com toque aveludado.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica Maior' },
+            { semitones: 4, quality: 'dom7', roman: 'V7/vi', role: 'Dominante Secundária do Menor' },
+            { semitones: 9, quality: 'min', roman: 'vi', role: 'Relativo Menor (Lamento)' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante de Resgate' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Consolo na Tônica' }
+        ]
+    },
+    v7_ii: {
+        id: 'v7_ii',
+        category: 'secondary_dominant',
+        title: 'Descida pro Segundo',
+        formula: 'I ➔ V7/ii ➔ ii ➔ V7 ➔ I',
+        subtitle: 'Cadência circular seresteira que embala o estradão de terra',
+        duoContext: 'Trio Parada Dura, Milionário & José Rico (As Andorinhas, Estrada da Vida)',
+        description: 'Transição circular seresteira muito refinada na música sertaneja dos anos 70 e 80. O V7/ii (C♯7 no tom de Mi) prepara o segundo grau menor (F♯m), estabelecendo a elegante progressão circular I ➔ VI7 ➔ ii ➔ V7.',
+        voiceLeading: 'A terça maior de C♯7 (Mi♯/Fá) empurra a voz melodicamente para a fundamental do F♯m por meio tom, gerando um balanço suave.',
+        luthierTip: 'Dedilhe suavemente com a unha do polegar nos bordões e indicador nos pares 1 e 2. O shape aberto do C♯7 na viola tem um colorido brilhante.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica' },
+            { semitones: 9, quality: 'dom7', roman: 'V7/ii (VI7)', role: 'Dominante Circular' },
+            { semitones: 2, quality: 'min', roman: 'ii', role: 'Segundo Grau Menor' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante com 7ª' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Resolução' }
+        ]
+    },
+    v7_iii: {
+        id: 'v7_iii',
+        category: 'secondary_dominant',
+        title: 'Ponteio da Madrugada',
+        formula: 'I ➔ V7/iii ➔ iii ➔ vi ➔ V7 ➔ I',
+        subtitle: 'Preparação contemplativa do terceiro grau em toadas pantaneiras',
+        duoContext: 'Almir Sater & Renato Teixeira (Tocando em Frente, Um Violeiro Toca)',
+        description: 'Condução harmônica misteriosa e profunda. A preparação do terceiro grau menor (G♯m no tom de Mi) através de D♯7 evoca o silêncio da noite no pantanal e o som dos bichos na mata.',
+        voiceLeading: 'O D♯7 atua com forte atração modal sobre a escala pentatônica caipira, conectando-se fluidamente com o relativo menor C♯m.',
+        luthierTip: 'Deixe o par 5 (bordão grave) solto como nota pedal quando possível para criar o colchão harmônico ressonante típico de Almir Sater.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica de Abertura' },
+            { semitones: 11, quality: 'dom7', roman: 'V7/iii', role: 'Dominante do Mediante' },
+            { semitones: 4, quality: 'min', roman: 'iii', role: 'Terceiro Grau Menor Noturno' },
+            { semitones: 9, quality: 'min', roman: 'vi', role: 'Relativo Menor' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Alvorecer na Tônica' }
+        ]
+    },
+
+    // -------------------------------------------------------------------------
+    // 2. DIMINUTOS DE PASSAGEM & CROMATISMOS SERTANEJOS (X°)
+    // -------------------------------------------------------------------------
+    dim_sharp_iv: {
+        id: 'dim_sharp_iv',
+        category: 'diminished',
+        title: 'O Rei do Sertão',
+        formula: 'IV ➔ ♯IV° ➔ I/V ➔ V7 ➔ I',
+        subtitle: 'O mais icônico e emocionante movimento harmônico de toda a história sertaneja',
+        duoContext: 'Tonico & Tinoco, Milionário & José Rico, Chitãozinho & Xororó (Ainda Ontem Chorei de Saudade, Saudade da Minha Terra, O Doutor e o Caipira)',
+        description: 'A assinatura definitiva da música caipira e sertaneja de raiz! A partir da subdominante (Lá no tom de Mi), o baixo e a harmonia sobem meio tom para o diminuto de passagem (A♯°), criando uma tensão pungente que resolve com doçura inigualável na tônica com baixo na quinta (Mi com baixo em Si) e dominante.',
+        voiceLeading: 'O baixo cromático Lá ➔ Lá♯ ➔ Si forma uma linha de baixo ascendente irresistível, enquanto as notas internas mantêm o trítono condutor.',
+        luthierTip: 'Na viola em Cebolão, monte o A♯° digitando o par 2 na 2ª casa, par 3 na 2ª casa e par 4 na 2ª casa, deixando a cantadeira vibrar. No violão, use o shape simétrico de quatro cordas.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica de Partida' },
+            { semitones: 5, quality: 'maj', roman: 'IV', role: 'Subdominante' },
+            { semitones: 6, quality: 'dim', roman: '♯IV°', role: 'Diminuto de Passagem Tensivo' },
+            { semitones: 0, quality: 'maj', roman: 'I/5', role: 'Tônica com Baixo na 5ª', overrideBassSemi: 7 },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante Preparatória' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Resolução Impecável' }
+        ]
+    },
+    dim_sharp_i: {
+        id: 'dim_sharp_i',
+        category: 'diminished',
+        title: 'Escalada Cromática da Terra',
+        formula: 'I ➔ ♯I° ➔ ii ➔ V7 ➔ I',
+        subtitle: 'Subida gradual do baixo cromático do primeiro ao segundo grau',
+        duoContext: 'Pedro Bento & Zé da Estrada, Miltinho Rodrigues (Toadas e Modas Dramáticas)',
+        description: 'A tônica sobe meio tom no baixo para o diminuto de passagem ♯I° (F° ou E♯° no tom de Mi), criando uma ponte de tensão que desemboca com precisão cirúrgica no segundo grau menor (F♯m).',
+        voiceLeading: 'Linha de baixo: Mi ➔ Fá (E♯) ➔ Fá♯. As vozes superiores movem-se por semitons contrários garantindo condução contínua e rica.',
+        luthierTip: 'Execute o F° com toque pinçado entre polegar e indicador. A dissonância diminuta precisa respirar antes de repousar no F♯m.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica' },
+            { semitones: 1, quality: 'dim', roman: '♯I°', role: 'Diminuto de Passagem Ascendente' },
+            { semitones: 2, quality: 'min', roman: 'ii', role: 'Segundo Grau Menor' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Repouso' }
+        ]
+    },
+    dim_sharp_ii: {
+        id: 'dim_sharp_ii',
+        category: 'diminished',
+        title: 'Ponteio do Cariri',
+        formula: 'ii ➔ ♯II° ➔ iii ➔ V7 ➔ I',
+        subtitle: 'Ligação cromática ascendente amarrando segundo e terceiro grau',
+        duoContext: 'Tião Carreiro & Lourival dos Santos (Ponteios Virtuosos em Dueto)',
+        description: 'Excelente passagem para conectar frases de ponteio em terças e sextas. O diminuto de passagem ♯II° (G° no tom de Mi) serve de alavanca para atingir o terceiro grau menor (G♯m) no meio do braço.',
+        voiceLeading: 'Linha de baixo: Fá♯ ➔ Sol natural ➔ Sol♯. Na viola, esse movimento permite deslizar o dedilhado dois trastes acima com máxima agilidade.',
+        luthierTip: 'Aproveite a simetria dos acordes diminutos: qualquer acorde diminuto repete as mesmas 4 notas a cada 3 trastes (+3, +6, +9 casas)!',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica' },
+            { semitones: 2, quality: 'min', roman: 'ii', role: 'Segundo Grau Menor' },
+            { semitones: 3, quality: 'dim', roman: '♯II°', role: 'Diminuto Cromático' },
+            { semitones: 4, quality: 'min', roman: 'iii', role: 'Terceiro Grau Menor' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica' }
+        ]
+    },
+    dim_flat_iii: {
+        id: 'dim_flat_iii',
+        category: 'diminished',
+        title: 'Lágrima Descendente',
+        formula: 'iii ➔ ♭III° ➔ ii ➔ V7 ➔ I',
+        subtitle: 'Condução cromática descendente das vozes em toadas de despedida',
+        duoContext: 'Vieira & Vieirinha, Trio Parada Dura (Toadas de Despedida e Lamento)',
+        description: 'Enquanto a maioria dos diminutos sobe, este desce suavemente. Partindo do terceiro grau menor (G♯m), a harmonia escorrega meio tom para o G° e depois para o F♯m, evocando lágrimas que escorrem no rosto do violeiro.',
+        voiceLeading: 'Linha de baixo descendente: Sol♯ ➔ Sol natural ➔ Fá♯. Dá uma sensação poética de alívio e entrega emocional.',
+        luthierTip: 'Ao descer do G♯m para o G°, mantenha a mão esquerda relaxada e use o mesmo formato deslizando 1 traste para trás em direção à pestana.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica' },
+            { semitones: 4, quality: 'min', roman: 'iii', role: 'Terceiro Grau Menor' },
+            { semitones: 3, quality: 'dim', roman: '♭III°', role: 'Diminuto Descendente' },
+            { semitones: 2, quality: 'min', roman: 'ii', role: 'Segundo Grau Menor' },
+            { semitones: 7, quality: 'dom7', roman: 'V7', role: 'Dominante' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica de Acolhimento' }
+        ]
+    },
+
+    // -------------------------------------------------------------------------
+    // 3. ACORDES DE EMPRÉSTIMO MODAL DO HOMÔNIMO MENOR (AEC)
+    // -------------------------------------------------------------------------
+    aec_flat_vi: {
+        id: 'aec_flat_vi',
+        category: 'borrowed',
+        title: 'Grandiosidade do Estradão',
+        formula: 'I ➔ ♭VI ➔ ♭VII ➔ I',
+        subtitle: 'A entrada épica e triunfal do sexto grau bemol (Dó em tom de Mi)',
+        duoContext: 'Almir Sater, Milionário & José Rico, Canções Épicas de Festival Caipira',
+        description: 'A mais impactante modulação modal da música sertaneja moderna. Em tom de Mi Maior, a entrada repentina do acorde de Dó Maior (♭VI, emprestado de Mi Menor) causa um choque de beleza majestosa, seguido pelo Ré Maior (♭VII) até consagrar a tônica com força monumental.',
+        voiceLeading: 'A nota Dó natural descende da terça Mi e depois sobe para o Ré natural, contornando a tonalidade com sabor modal e cinematográfico.',
+        luthierTip: 'Na viola em Cebolão em Mi, o Dó Maior é uma pestana direta no 8º traste e o Ré Maior no 10º traste! Você corre a mão pelo braço como quem viaja pelo asfalto quente da rodovia.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica Solar' },
+            { semitones: 8, quality: 'maj', roman: '♭VI', role: 'Empréstimo Épico do Menor' },
+            { semitones: 10, quality: 'maj', roman: '♭VII', role: 'Subtônica Modal Caipira' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Glória na Tônica' }
+        ]
+    },
+    aec_flat_vii: {
+        id: 'aec_flat_vii',
+        category: 'borrowed',
+        title: 'Folia dos Três Reis',
+        formula: 'I ➔ ♭VII ➔ IV ➔ I',
+        subtitle: 'A cadência modal caipira das folias de reis de Minas Gerais e Goiás',
+        duoContext: 'Folias de Reis de Minas e Goiás, Renato Teixeira, Tião Carreiro (Toque de Bandeira)',
+        description: 'A pureza da música folclórica do sertão. O acorde de ♭VII (Ré Maior em tom de Mi) antecede o quarto grau (Lá), suprimindo a sensível européia e imprimindo o suingue mixolídio autêntico das bandeiras do Divino.',
+        voiceLeading: 'O trítono clássico desaparece: o movimento de Ré para Lá e Mi produz consonâncias perfeitas de quartas e quintas paralelas tradicionais.',
+        luthierTip: 'Toque com rasqueado rítmico de cateretê ou cururu. Deixe o bordão em Mi soar solto mesmo durante o acorde de Ré para criar o som de gaita-de-fole caipira.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica da Devoção' },
+            { semitones: 10, quality: 'maj', roman: '♭VII', role: 'Acorde Modal da Folia' },
+            { semitones: 5, quality: 'maj', roman: 'IV', role: 'Subdominante Cerimonial' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Bênção na Tônica' }
+        ]
+    },
+    aec_minor_iv: {
+        id: 'aec_minor_iv',
+        category: 'borrowed',
+        title: 'Subdominante Menor Romântica',
+        formula: 'I ➔ IV ➔ iv ➔ I',
+        subtitle: 'A lágrima seresteira da terça do quarto grau descendo meio tom',
+        duoContext: 'Cascatinha & Inhana, Liu & Léu, Serestas e Guarânias Românticas',
+        description: 'Um clássico do romantismo caboclo. Após a claridade do quarto grau maior (Lá), a terça desce meio tom para a menor (Lá Menor), gerando aquela sensação agridoce de amor não correspondido ou saudade da terra natal.',
+        voiceLeading: 'Condução cromática: Dó♯ (em Lá Maior) ➔ Dó natural (em Lá Menor) ➔ Si (quinta da tônica Mi). Uma linha melódica pura e comovente.',
+        luthierTip: 'Dedilhe o Lá Menor com arpejo lento e delicado. Na viola, o shape de Lá Menor tem um timbre seresteiro doce e nostálgico.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Tônica' },
+            { semitones: 5, quality: 'maj', roman: 'IV', role: 'Subdominante Maior' },
+            { semitones: 5, quality: 'min', roman: 'iv', role: 'Subdominante Menor Seresteira' },
+            { semitones: 0, quality: 'maj', roman: 'I', role: 'Resolução Afetuosa' }
+        ]
+    },
+
+    // -------------------------------------------------------------------------
+    // 4. MODULAÇÕES DIRETAS & SUBIDAS DE TOM (TRUCK DRIVER'S SHIFT)
+    // -------------------------------------------------------------------------
+    mod_half_step_up: {
+        id: 'mod_half_step_up',
+        category: 'key_change',
+        title: 'Clímax de Festival (+1 Semitom)',
+        formula: 'I(tom1) ➔ V7(tom2) ➔ I(tom2) ➔ V7(tom2) ➔ I(tom2)',
+        subtitle: 'A explosão de energia no refrão final subindo meio tom (ex: Mi ➔ Fá)',
+        duoContext: 'Zezé Di Camargo & Luciano, Chitãozinho & Xororó, Leandro & Leonardo',
+        description: 'O artifício mais empolgante do cancioneiro sertanejo de arena e festival. A dupla eleva a afinação em meio tom no último refrão, obrigando a primeira voz a brilhar nos agudos com máxima potência e entrega vocal.',
+        voiceLeading: 'O acorde dominante pivô (C7 preparando o tom de Fá) arrebenta as amarras do tom antigo e catapulta os ouvintes para uma dimensão sonora superior.',
+        luthierTip: 'Em Cebolão em Mi, passar de Mi para Fá significa sair das cordas soltas e cravar uma pestana reta completa no 1º traste. Aperte o braço com convicção!',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I (Tom Original)', role: 'Tônica Original de Abertura' },
+            { semitones: 8, quality: 'dom7', roman: 'V7 (Tom Novo)', role: 'Dominante Preparatória de Subida' },
+            { semitones: 1, quality: 'maj', roman: 'I (+1 Semitom)', role: 'Nova Tônica Elevada (Clímax)' },
+            { semitones: 8, quality: 'dom7', roman: 'V7 (+1 Semitom)', role: 'Confirmação Dominante' },
+            { semitones: 1, quality: 'maj', roman: 'I (+1 Semitom)', role: 'Fixação da Nova Tonalidade' }
+        ]
+    },
+    mod_whole_step_up: {
+        id: 'mod_whole_step_up',
+        category: 'key_change',
+        title: 'Duelo das Vozes (+2 Semitons)',
+        formula: 'I(tom1) ➔ V7(tom2) ➔ I(tom2) ➔ V7(tom2) ➔ I(tom2)',
+        subtitle: 'Elevação épica de um tom inteiro para o refrão heroico (ex: Mi ➔ Fá♯)',
+        duoContext: 'Milionário & José Rico, João Paulo & Daniel (Toadas e Guarânias Monumentais)',
+        description: 'A prova de fogo das grandes vozes sertanejas. Uma modulação direta de dois semitons (um tom inteiro) exige controle absoluto de respiração e apoio diafragmático da dupla, criando um momento de apoteose.',
+        voiceLeading: 'O C♯7 atua como dominante preparatória para o Fá♯ Maior, rompendo o centro gravitacional com tensão nobre.',
+        luthierTip: 'No Cebolão, Fá♯ Maior é a pestana reta no 2º traste. No violão, é a pestana clássica tipo Mi no 2º traste.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I (Tom Original)', role: 'Tônica de Partida' },
+            { semitones: 9, quality: 'dom7', roman: 'V7 (Tom Novo)', role: 'Dominante Preparatória (+2)' },
+            { semitones: 2, quality: 'maj', roman: 'I (+2 Semitons)', role: 'Nova Tônica Heroica' },
+            { semitones: 9, quality: 'dom7', roman: 'V7 (+2 Semitons)', role: 'Dominante do Novo Tom' },
+            { semitones: 2, quality: 'maj', roman: 'I (+2 Semitons)', role: 'Fixação Triunfal' }
+        ]
+    },
+    mod_to_relative_minor: {
+        id: 'mod_to_relative_minor',
+        category: 'key_change',
+        title: 'Conto da Noite Escura (Modulação para vi)',
+        formula: 'I ➔ iiø(novo) ➔ V7(novo) ➔ i(novo)',
+        subtitle: 'Mudança definitiva para o relativo menor através do iiø - V7 - i',
+        duoContext: 'Romances e Causos de Assombração no Sertão, Tião Carreiro (Modas de Poesia Trágica)',
+        description: 'Uma mudança formal de tonalidade da moda para o ambiente menor. Usando o clássico segundo cadencial meio-diminuto (D♯m7b5) e dominante (G♯7), a peça estabelece C♯m como novo centro de repouso.',
+        voiceLeading: 'O acorde meio-diminuto introduz a quinta diminuta que, em conjunto com o trítono de G♯7, sela a resolução inquestionável na tônica menor.',
+        luthierTip: 'O shape de D♯m7b5 na viola caipira tem uma digitação compacta nos pares agudos. Toque as notas com ataque nítido de ponta de dedo.',
+        defaultBeats: 4,
+        stepsDef: [
+            { semitones: 0, quality: 'maj', roman: 'I (Maior)', role: 'Tônica Maior Original' },
+            { semitones: 11, quality: 'm7b5', roman: 'iiø (Novo Tom)', role: 'Segundo Cadencial Meio-Diminuto' },
+            { semitones: 4, quality: 'dom7', roman: 'V7 (Novo Tom)', role: 'Dominante do Relativo Menor' },
+            { semitones: 9, quality: 'min', roman: 'i (Novo Tom Menor)', role: 'Novo Centro Tonal Menor' },
+            { semitones: 4, quality: 'dom7', roman: 'V7 (Novo Tom)', role: 'Tensão Dominante Menor' },
+            { semitones: 9, quality: 'min', roman: 'i (Novo Tom Menor)', role: 'Resolução Sombria Final' }
+        ]
+    }
+};
+
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -1411,7 +1747,8 @@
         tabEditor: Object.assign({}, DEFAULT_TAB_EDITOR_STATE),
         modalTrainer: Object.assign({}, DEFAULT_MODAL_TRAINER_STATE),
         tensionCalculator: Object.assign({}, DEFAULT_TENSION_STATE),
-        historicalTunings: Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE)
+        historicalTunings: Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE),
+        modulation: Object.assign({}, DEFAULT_MODULATION_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -1433,6 +1770,8 @@
     let historicalLickTimer = null;
     let sequenceTuningTimer = null;
     let activeHistoricalTimers = [];
+    let modulationPlaybackTimer = null;
+    let activeModulationTimers = [];
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -7036,6 +7375,8 @@
     let historicalLickTimer = null;
     let sequenceTuningTimer = null;
     let activeHistoricalTimers = [];
+    let modulationPlaybackTimer = null;
+    let activeModulationTimers = [];
 
     function stopHistoricalAudio() {
         if (historicalLickTimer) {
@@ -7632,6 +7973,7 @@
                 state.historicalTunings.filterCategory = cat;
                 saveViolaState();
                 renderHistoricalTuningsSection();
+        renderModulationSection();
             });
         });
 
@@ -7713,6 +8055,7 @@
                 state.historicalTunings.activeTargetTuningId = tId;
                 saveViolaState();
                 renderHistoricalTuningsSection();
+        renderModulationSection();
                 const retuneEl = document.getElementById('viola-retuning-assistant-section');
                 if (retuneEl) retuneEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
@@ -7724,6 +8067,7 @@
                 state.historicalTunings.activeTargetTuningId = e.target.value;
                 saveViolaState();
                 renderHistoricalTuningsSection();
+        renderModulationSection();
             });
         }
 
@@ -7776,6 +8120,852 @@
             window.lucide.createIcons();
         }
     }
+// =========================================================================
+// MOTOR DA FASE 11: GERADOR DE MODULAÇÕES & PREPARAÇÃO HARMÔNICA CAIPIRA
+// =========================================================================
+
+let modulationPlaybackTimer = null;
+let activeModulationTimers = [];
+
+function stopModulationAudio() {
+    if (modulationPlaybackTimer) {
+        clearTimeout(modulationPlaybackTimer);
+        modulationPlaybackTimer = null;
+    }
+    activeModulationTimers.forEach((t) => clearTimeout(t));
+    activeModulationTimers = [];
+
+    state.modulation.isPlaying = false;
+    state.modulation.currentStepIdx = -1;
+    updateModulationUIProgress();
+    if (state.displayMode === 'MODULATION') {
+        renderFretboardSVG();
+    }
+}
+
+function computeModulationSteps(modId, fromKeyId, toKeyId, inst) {
+    const mod = CAIPIRA_MODULATIONS_CATALOG[modId] || CAIPIRA_MODULATIONS_CATALOG.dim_sharp_iv;
+    const baseKey = HARMONIC_KEYS.find((k) => k.id === fromKeyId) || HARMONIC_KEYS[0];
+    const baseRoot = baseKey.root;
+
+    return mod.stepsDef.map((def, idx) => {
+        const chordRootPc = (baseRoot + def.semitones) % 12;
+        const rootStr = NOTE_NAMES[chordRootPc];
+        const chordCode = `${rootStr}_${def.quality}`;
+
+        // Determinação das notas formadoras
+        let pitchClasses = [chordRootPc];
+        if (def.quality === 'maj') {
+            pitchClasses = [chordRootPc, (chordRootPc + 4) % 12, (chordRootPc + 7) % 12];
+        } else if (def.quality === 'min') {
+            pitchClasses = [chordRootPc, (chordRootPc + 3) % 12, (chordRootPc + 7) % 12];
+        } else if (def.quality === 'dim') {
+            pitchClasses = [chordRootPc, (chordRootPc + 3) % 12, (chordRootPc + 6) % 12, (chordRootPc + 9) % 12];
+        } else if (def.quality === 'dom7') {
+            pitchClasses = [chordRootPc, (chordRootPc + 4) % 12, (chordRootPc + 7) % 12, (chordRootPc + 10) % 12];
+        } else if (def.quality === 'maj7') {
+            pitchClasses = [chordRootPc, (chordRootPc + 4) % 12, (chordRootPc + 7) % 12, (chordRootPc + 11) % 12];
+        } else if (def.quality === 'min7') {
+            pitchClasses = [chordRootPc, (chordRootPc + 3) % 12, (chordRootPc + 7) % 12, (chordRootPc + 10) % 12];
+        } else if (def.quality === 'm7b5') {
+            pitchClasses = [chordRootPc, (chordRootPc + 3) % 12, (chordRootPc + 6) % 12, (chordRootPc + 10) % 12];
+        }
+
+        const chordObj = {
+            chordCode,
+            rootPc: chordRootPc,
+            quality: def.quality,
+            pitchClasses
+        };
+
+        const voicings = getChordVoicings(chordObj);
+        const shape = voicings && voicings.length > 0 ? voicings[0] : [0, 0, 0, 0, 0];
+
+        // Nome amigável de exibição
+        let name = rootStr;
+        if (def.quality === 'min') name += 'm';
+        else if (def.quality === 'dim') name += '°';
+        else if (def.quality === 'dom7') name += '7';
+        else if (def.quality === 'maj7') name += '7M';
+        else if (def.quality === 'min7') name += 'm7';
+        else if (def.quality === 'm7b5') name += 'm7(♭5)';
+
+        let bassStr = rootStr;
+        if (def.overrideBassSemi !== undefined) {
+            const bassPc = (baseRoot + def.overrideBassSemi) % 12;
+            bassStr = NOTE_NAMES[bassPc];
+            name += `/${bassStr}`;
+        }
+
+        return {
+            stepIdx: idx,
+            name,
+            rootStr,
+            quality: def.quality,
+            roman: def.roman,
+            role: def.role,
+            chordCode,
+            rootPc: chordRootPc,
+            pitchClasses,
+            shape,
+            bassNote: bassStr,
+            beats: mod.defaultBeats || 4
+        };
+    });
+}
+
+function computeCustomBridgeRoutes(fromKeyId, toKeyId, inst) {
+    const kFrom = HARMONIC_KEYS.find((k) => k.id === fromKeyId) || HARMONIC_KEYS[0];
+    const kTo = HARMONIC_KEYS.find((k) => k.id === toKeyId) || HARMONIC_KEYS[5];
+    const rFrom = kFrom.root;
+    const rTo = kTo.root;
+
+    // Rota 1: Dominante Direta (V7 do tom novo)
+    const v7Root = (rTo + 7) % 12;
+    const v7Name = `${NOTE_NAMES[v7Root]}7`;
+    const toName = NOTE_NAMES[rTo];
+    const fromName = NOTE_NAMES[rFrom];
+
+    const route1Steps = [
+        { name: fromName, roman: 'I (Origem)', role: 'Tônica de Partida', chordCode: `${fromName}_maj`, beats: 4 },
+        { name: v7Name, roman: 'V7 (Destino)', role: 'Dominante Direta de Transição', chordCode: `${NOTE_NAMES[v7Root]}_dom7`, beats: 4 },
+        { name: toName, roman: 'I (Destino)', role: 'Resolução no Novo Tom', chordCode: `${toName}_maj`, beats: 4 }
+    ];
+
+    // Rota 2: Segundo Cadencial Caipira (ii - V7 - I)
+    const iiRoot = (rTo + 2) % 12;
+    const iiName = `${NOTE_NAMES[iiRoot]}m`;
+    const route2Steps = [
+        { name: fromName, roman: 'I (Origem)', role: 'Tônica de Partida', chordCode: `${fromName}_maj`, beats: 4 },
+        { name: iiName, roman: 'ii (Destino)', role: 'Segundo Cadencial Menor', chordCode: `${NOTE_NAMES[iiRoot]}_min`, beats: 2 },
+        { name: v7Name, roman: 'V7 (Destino)', role: 'Dominante com 7ª', chordCode: `${NOTE_NAMES[v7Root]}_dom7`, beats: 2 },
+        { name: toName, roman: 'I (Destino)', role: 'Chegada Consagrada', chordCode: `${toName}_maj`, beats: 4 }
+    ];
+
+    // Rota 3: Diminuto de Aproximação Cromática Inferior (VII° ➔ I)
+    const dimRoot = (rTo + 11) % 12;
+    const dimName = `${NOTE_NAMES[dimRoot]}°`;
+    const route3Steps = [
+        { name: fromName, roman: 'I (Origem)', role: 'Tônica de Partida', chordCode: `${fromName}_maj`, beats: 4 },
+        { name: dimName, roman: 'VII° (Destino)', role: 'Diminuto Sensível Cromático', chordCode: `${NOTE_NAMES[dimRoot]}_dim`, beats: 4 },
+        { name: toName, roman: 'I (Destino)', role: 'Resolução Triunfal', chordCode: `${toName}_maj`, beats: 4 }
+    ];
+
+    return [
+        {
+            title: 'Rota 1: Dominante Direta (V7 ➔ I)',
+            subtitle: 'Transição rápida em dois tempos para modulações ágeis de refrão',
+            steps: route1Steps
+        },
+        {
+            title: 'Rota 2: Segundo Cadencial (ii ➔ V7 ➔ I)',
+            subtitle: 'Preparação canônica completa com condução suave de vozes',
+            steps: route2Steps
+        },
+        {
+            title: 'Rota 3: Ponte Diminuta Cromática (VII° ➔ I)',
+            subtitle: 'Aproximação por meio-tom inferior com tensão de sétima diminuída',
+            steps: route3Steps
+        }
+    ];
+}
+
+function computeMovableBarreShape(barreFret, barreType, inst) {
+    const f = Math.max(0, Math.min(12, barreFret));
+    const isViola = inst.isPaired;
+
+    let shape = [];
+    let rootPc = 0;
+    let quality = 'maj';
+    let chordLabel = '';
+
+    if (isViola) {
+        // Viola Cebolão em Mi (E-B-G#-E-B):
+        // Traste f puro = Acorde Maior de Tônica = (4 + f) % 12
+        rootPc = (4 + f) % 12;
+        const rName = NOTE_NAMES[rootPc];
+
+        if (barreType === 'major') {
+            quality = 'maj';
+            chordLabel = `${rName} Maior`;
+            shape = [f, f, f, f, f];
+        } else if (barreType === 'dom7') {
+            quality = 'dom7';
+            chordLabel = `${rName}7 Dominante`;
+            // 7ª menor ferida no 1º par 3 casas acima, ou 2º par 2 casas acima
+            shape = [Math.min(14, f + 3), f, f, f, f];
+        } else if (barreType === 'minor') {
+            quality = 'min';
+            chordLabel = `${rName}m Menor`;
+            // Terça menor recuada 1 casa no 3º par
+            shape = [f, f, Math.max(0, f - 1), f, f];
+        } else if (barreType === 'dim7') {
+            quality = 'dim';
+            chordLabel = `${rName}° Diminuto`;
+            shape = [f, Math.min(14, f + 2), Math.min(14, f + 1), Math.min(14, f + 2), -1];
+        }
+    } else {
+        // Violão Padrão (E-A-D-G-B-E): Shape tipo Mi na 6ª corda
+        rootPc = (4 + f) % 12;
+        const rName = NOTE_NAMES[rootPc];
+
+        if (barreType === 'major') {
+            quality = 'maj';
+            chordLabel = `${rName} Maior`;
+            shape = [f, f, Math.min(14, f + 1), Math.min(14, f + 2), Math.min(14, f + 2), f];
+        } else if (barreType === 'dom7') {
+            quality = 'dom7';
+            chordLabel = `${rName}7 Dominante`;
+            shape = [f, f, Math.min(14, f + 1), f, Math.min(14, f + 2), f];
+        } else if (barreType === 'minor') {
+            quality = 'min';
+            chordLabel = `${rName}m Menor`;
+            shape = [f, f, f, Math.min(14, f + 2), Math.min(14, f + 2), f];
+        } else if (barreType === 'dim7') {
+            quality = 'dim';
+            chordLabel = `${rName}° Diminuto`;
+            shape = [-1, Math.min(14, f + 1), f, Math.min(14, f + 1), f, -1];
+        }
+    }
+
+    return {
+        fret: f,
+        type: barreType,
+        chordLabel,
+        rootPc,
+        rootName: NOTE_NAMES[rootPc],
+        quality,
+        shape
+    };
+}
+
+function playMovableBarreChord(barreFret, barreType) {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const barre = computeMovableBarreShape(barreFret, barreType, inst);
+    strumCustomShape(barre.shape, state.modulation.playStyle === 'strum' ? 0.018 : 0.048, true);
+
+    state.modulation.barreFret = barreFret;
+    state.modulation.barreType = barreType;
+    state.displayMode = 'MODULATION';
+    saveViolaState();
+    renderFretboardSVG();
+    renderModulationSection();
+}
+
+function strumCustomShape(shape, delayBetweenCourses = 0.04, flashFret = true) {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const len = inst.courses.length;
+    let step = 0;
+
+    for (let cIdx = len - 1; cIdx >= 0; cIdx--) {
+        const fret = shape[cIdx];
+        if (fret !== undefined && fret >= 0) {
+            playCourseAtFret(cIdx, fret, step * delayBetweenCourses);
+            if (flashFret) {
+                flashFretCell(cIdx, fret, step * delayBetweenCourses * 1000);
+            }
+            step++;
+        }
+    }
+}
+
+function playModulationChord(step, style = 'strum') {
+    const isRasqueado = style === 'strum';
+    const delay = isRasqueado ? 0.018 : 0.048;
+
+    if (isRasqueado && typeof playWoodTap === 'function') {
+        playWoodTap(0.0);
+    }
+    strumCustomShape(step.shape, delay, true);
+}
+
+function playSingleModulationStep(idx) {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const steps = computeModulationSteps(state.modulation.activeModulationId, state.modulation.fromKeyId, state.modulation.toKeyId, inst);
+    if (!steps || !steps[idx]) return;
+
+    state.modulation.currentStepIdx = idx;
+    playModulationChord(steps[idx], state.modulation.playStyle);
+    updateModulationUIProgress();
+    if (state.displayMode === 'MODULATION') {
+        renderFretboardSVG();
+    }
+}
+
+function executeModulationStep() {
+    if (!state.modulation.isPlaying) return;
+
+    const inst = INSTRUMENTS[state.instrumentId];
+    const steps = computeModulationSteps(state.modulation.activeModulationId, state.modulation.fromKeyId, state.modulation.toKeyId, inst);
+    const numSteps = steps.length;
+
+    if (state.modulation.currentStepIdx >= numSteps) {
+        if (state.modulation.isLooping) {
+            state.modulation.currentStepIdx = 0;
+        } else {
+            stopModulationAudio();
+            return;
+        }
+    }
+
+    const curIdx = state.modulation.currentStepIdx;
+    const curStep = steps[curIdx];
+
+    playModulationChord(curStep, state.modulation.playStyle);
+    updateModulationUIProgress();
+    if (state.displayMode === 'MODULATION') {
+        renderFretboardSVG();
+    }
+
+    // Cálculo da duração do passo baseada no BPM e tempos do acorde
+    const bpm = state.bpm || 92;
+    const spd = state.modulation.playbackSpeed || 1.0;
+    const secPerBeat = 60 / bpm / spd;
+    const durationMs = Math.max(700, curStep.beats * secPerBeat * 1000);
+
+    modulationPlaybackTimer = setTimeout(() => {
+        if (!state.modulation.isPlaying) return;
+        state.modulation.currentStepIdx++;
+        executeModulationStep();
+    }, durationMs);
+}
+
+function playModulationSequence() {
+    if (state.modulation.isPlaying) {
+        stopModulationAudio();
+        return;
+    }
+
+    stopScalePlayback();
+    stopPonteioPlayback();
+    stopProgressionPlayback();
+    stopTabEditorPlayback();
+    stopModalPlayback();
+    stopHistoricalAudio();
+    stopTunerTone();
+    stopEarTrainerAudio();
+
+    state.modulation.isPlaying = true;
+    state.modulation.currentStepIdx = 0;
+    state.displayMode = 'MODULATION';
+    saveViolaState();
+    renderFretboardSVG();
+    updateModulationUIProgress();
+    executeModulationStep();
+}
+
+function updateModulationUIProgress() {
+    const strip = document.getElementById('viola-modulation-steps-strip');
+    if (!strip) return;
+
+    const curIdx = state.modulation.currentStepIdx;
+    strip.querySelectorAll('[data-mod-step-card]').forEach((card) => {
+        const idx = parseInt(card.getAttribute('data-mod-step-card'), 10);
+        if (idx === curIdx) {
+            card.classList.add('ring-2', 'ring-pink-400', 'bg-pink-500/20', 'shadow-lg');
+            card.classList.remove('bg-[#090d16]', 'border-slate-800');
+        } else {
+            card.classList.remove('ring-2', 'ring-pink-400', 'bg-pink-500/20', 'shadow-lg');
+            card.classList.add('bg-[#090d16]', 'border-slate-800');
+        }
+    });
+
+    const playBtn = document.getElementById('btn-viola-mod-toggle-play');
+    if (playBtn) {
+        if (state.modulation.isPlaying) {
+            playBtn.innerHTML = `<i data-lucide="square" class="w-4 h-4 text-rose-300"></i><span>Parar Modulação</span>`;
+            playBtn.className = 'min-h-[40px] px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg transition';
+        } else {
+            playBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4 text-slate-950"></i><span>Tocar Cadeia Caipira</span>`;
+            playBtn.className = 'min-h-[40px] px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg transition';
+        }
+    }
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
+function renderModulationSection() {
+    const container = document.getElementById('viola-modulation-container');
+    if (!container) return;
+
+    const inst = INSTRUMENTS[state.instrumentId];
+    const activeModId = state.modulation.activeModulationId || 'dim_sharp_iv';
+    const mod = CAIPIRA_MODULATIONS_CATALOG[activeModId] || CAIPIRA_MODULATIONS_CATALOG.dim_sharp_iv;
+    const fromKeyId = state.modulation.fromKeyId || 'E_maj';
+    const activeCat = state.modulation.activeCategory || 'all';
+    const steps = computeModulationSteps(activeModId, fromKeyId, state.modulation.toKeyId, inst);
+    const customRoutes = computeCustomBridgeRoutes(state.modulation.customBridgeFrom, state.modulation.customBridgeTo, inst);
+    const movableBarre = computeMovableBarreShape(state.modulation.barreFret, state.modulation.barreType, inst);
+
+    const allMods = Object.values(CAIPIRA_MODULATIONS_CATALOG);
+    const filteredMods = activeCat === 'all'
+        ? allMods
+        : allMods.filter((m) => m.category === activeCat);
+
+    container.innerHTML = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-5">
+            <!-- Cabeçalho Principal do Módulo -->
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-2.5 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-pink-500/15 text-pink-300 border border-pink-500/30">Fase 11 Concluída</span>
+                        <span class="px-2.5 py-0.5 text-[11px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Dominantes Secundárias &amp; Diminutos</span>
+                        <span class="px-2.5 py-0.5 text-[11px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pestanas do Estradão</span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-wider font-mono mt-1">
+                        Gerador de Modulações &amp; Preparação Harmônica Caipira
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5 max-w-4xl">
+                        Laboratório analítico e prático de transição tonal com dominantes secundárias (V7/X), diminutos de passagem (♯IV°, ♯I°, ♯II°), empréstimo modal (♭VI, ♭VII, iv) e pestanas móveis para transposição de refrões e duelos vocais sertanejos.
+                    </p>
+                </div>
+
+                <!-- Barra Superior de Controles de Áudio -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="viola-mod-select-from-key" aria-label="Tonalidade base"
+                        class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-pink-300 focus:border-pink-500">
+                        ${HARMONIC_KEYS.map((k) => `<option value="${k.id}" ${fromKeyId === k.id ? 'selected' : ''}>Tom Base: ${k.label}</option>`).join('')}
+                    </select>
+
+                    <select id="viola-mod-select-style" aria-label="Estilo de execução"
+                        class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-slate-200">
+                        <option value="strum" ${state.modulation.playStyle === 'strum' ? 'selected' : ''}>Rasqueado Caipira</option>
+                        <option value="arpeggio" ${state.modulation.playStyle === 'arpeggio' ? 'selected' : ''}>Dedilhado Lírico</option>
+                    </select>
+
+                    <button type="button" id="btn-viola-mod-toggle-loop" title="Alternar repetição contínua"
+                        class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.modulation.isLooping ? 'bg-pink-600/20 border border-pink-400 text-pink-200' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} text-xs font-mono font-semibold flex items-center gap-1.5 transition">
+                        <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                        <span>Loop</span>
+                    </button>
+
+                    <button type="button" id="btn-viola-mod-toggle-play" class="min-h-[40px] px-4 py-2 rounded-lg ${state.modulation.isPlaying ? 'bg-rose-600 hover:bg-rose-500 text-white' : 'bg-pink-500 hover:bg-pink-400 text-slate-950'} font-bold text-xs flex items-center gap-2 shadow-lg transition">
+                        <i data-lucide="${state.modulation.isPlaying ? 'square' : 'play'}" class="w-4 h-4"></i>
+                        <span>${state.modulation.isPlaying ? 'Parar Modulação' : 'Tocar Cadeia Caipira'}</span>
+                    </button>
+
+                    <button type="button" id="btn-viola-mod-to-fretboard" title="Projetar no Braço SVG"
+                        class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 transition">
+                        <i data-lucide="eye" class="w-4 h-4 text-pink-400"></i>
+                        <span>Ver no Braço</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de Filtros por Categoria -->
+            <div class="flex flex-wrap items-center gap-2">
+                ${Object.entries(CAIPIRA_MODULATION_CATEGORIES).map(([catId, cat]) => {
+                    const isActive = activeCat === catId;
+                    return `
+                        <button type="button" data-mod-filter-cat="${catId}"
+                            class="min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-mono font-medium flex items-center gap-1.5 transition ${isActive ? 'bg-pink-600 text-white shadow-md' : 'bg-[#090d16] hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200'}">
+                            <span>${cat.label}</span>
+                            <span class="text-[10px] px-1.5 py-0.2 rounded ${isActive ? 'bg-pink-700/80 text-white' : 'bg-slate-800 text-slate-400'}">${cat.badge}</span>
+                        </button>
+                    `;
+                }).join('')}
+            </div>
+
+            <!-- Conteúdo Dinâmico: Catalogo Normal vs Pestanas Móveis vs Calculadora de Pontes -->
+            ${activeCat === 'movable_barre' ? `
+                <!-- PAINEL INTERATIVO DE PESTANAS MÓVEIS DO ESTRADÃO -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 sm:p-5 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-800/80">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i>
+                                <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider font-mono">Pestanas Móveis do Estradão (Braço Transponível)</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Na Viola em Cebolão (afinação aberta em tríade), cada traste é uma pestana direta que gera um acorde maior, menor ou dominante sem mudar a forma da mão esquerda!</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono text-amber-300 font-bold">${movableBarre.chordLabel} (Casa ${movableBarre.fret})</span>
+                        </div>
+                    </div>
+
+                    <!-- Seletor do Tipo de Shape Móvel -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        ${[
+                            { id: 'major', label: '1. Acorde Maior (Pestana Reta)', icon: 'sun' },
+                            { id: 'dom7', label: '2. Dominante com 7ª (V7)', icon: 'zap' },
+                            { id: 'minor', label: '3. Acorde Menor (Traste -1)', icon: 'moon' },
+                            { id: 'dim7', label: '4. Acorde Diminuto (°)', icon: 'link-2' }
+                        ].map((b) => `
+                            <button type="button" data-barre-type="${b.id}"
+                                class="min-h-[44px] px-3 py-2 rounded-lg text-xs font-mono font-semibold flex items-center justify-center gap-1.5 transition ${state.modulation.barreType === b.id ? 'bg-amber-500 text-slate-950 shadow-md font-bold' : 'bg-[#0f172a] hover:bg-slate-800 border border-slate-700 text-slate-300'}">
+                                <span>${b.label}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <!-- Régua Interativa de Casas / Trastes (0 a 12) -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                            <span>Posição da Pestana no Braço (Casa 0 a 12):</span>
+                            <span class="text-amber-400 font-bold">Casa ${state.modulation.barreFret}: ${movableBarre.chordLabel}</span>
+                        </div>
+                        <div class="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-13 gap-1.5">
+                            ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((f) => {
+                                const preview = computeMovableBarreShape(f, state.modulation.barreType, inst);
+                                const isCur = state.modulation.barreFret === f;
+                                return `
+                                    <button type="button" data-barre-fret="${f}"
+                                        class="min-h-[52px] p-1.5 rounded-lg border text-center flex flex-col justify-center items-center transition ${isCur ? 'bg-amber-500/20 border-amber-400 text-amber-200 ring-2 ring-amber-400/50' : 'bg-[#0f172a] hover:bg-slate-800 border-slate-800 text-slate-400 hover:text-slate-200'}">
+                                        <span class="text-[10px] font-mono text-slate-500">C.${f}</span>
+                                        <span class="text-xs font-mono font-bold ${isCur ? 'text-amber-300' : 'text-slate-200'}">${preview.rootName}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Diagrama da Digitação e Dica de Lutheria -->
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-amber-400">Digitação de Mão Esquerda (Pares 1º ao 5º):</span>
+                            <div class="text-sm font-mono font-bold text-slate-100 mt-1">
+                                [ ${movableBarre.shape.map((n) => n < 0 ? 'X' : n).join(' • ')} ]
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">
+                                ${inst.isPaired
+                                    ? 'Na viola caipira, o indicador deita reto como uma barra de ferro sobre as cordas. Apoie o polegar atrás do cedro exatamente oposto à pestana.'
+                                    : 'No violão padrão de 6 cordas, mantenha a curvatura natural da falange do indicador para evitar trastejamento na 2ª e 3ª corda.'}
+                            </p>
+                        </div>
+                        <button type="button" id="btn-viola-mod-play-barre" class="min-h-[44px] px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shrink-0 transition">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                            <span>Dedilhar Pestana Móvel</span>
+                        </button>
+                    </div>
+                </div>
+            ` : activeCat === 'custom_bridge' ? `
+                <!-- CALCULADORA DE PONTES HARMÔNICAS LIVRES -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 sm:p-5 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-800/80">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="git-merge" class="w-4 h-4 text-pink-400"></i>
+                                <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider font-mono">Calculadora de Pontes Harmônicas Caipiras</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Escolha qualquer Tom de Partida e qualquer Tom de Chegada. O motor algorítmico gera instantaneamente as 3 rotas de transição mais eficazes do cancioneiro sertanejo.</p>
+                        </div>
+                    </div>
+
+                    <!-- Seletores Origem e Destino -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                            <label class="text-[11px] font-mono uppercase tracking-wider text-slate-400">1. Tonalidade de Partida:</label>
+                            <select id="viola-mod-bridge-from" class="w-full min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-emerald-300">
+                                ${HARMONIC_KEYS.map((k) => `<option value="${k.id}" ${state.modulation.customBridgeFrom === k.id ? 'selected' : ''}>${k.label}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                            <label class="text-[11px] font-mono uppercase tracking-wider text-slate-400">2. Tonalidade de Destino:</label>
+                            <select id="viola-mod-bridge-to" class="w-full min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-pink-300">
+                                ${HARMONIC_KEYS.map((k) => `<option value="${k.id}" ${state.modulation.customBridgeTo === k.id ? 'selected' : ''}>${k.label}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- As 3 Rotas Calculadas -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                        ${customRoutes.map((route, rIdx) => `
+                            <div class="bg-[#0f172a] border border-slate-800/80 rounded-xl p-3.5 space-y-3 flex flex-col justify-between">
+                                <div>
+                                    <h5 class="text-xs font-mono font-bold text-pink-300">${route.title}</h5>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">${route.subtitle}</p>
+                                    <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                                        ${route.steps.map((st) => `
+                                            <span class="px-2 py-1 rounded bg-[#090d16] border border-slate-700 text-xs font-mono font-bold text-slate-200">
+                                                ${st.name} <span class="text-[10px] text-slate-500 font-normal">(${st.roman})</span>
+                                            </span>
+                                        `).join('<span class="text-slate-600 text-xs">➔</span>')}
+                                    </div>
+                                </div>
+                                <button type="button" data-play-custom-route="${rIdx}"
+                                    class="w-full min-h-[38px] px-3 py-1.5 rounded-lg bg-pink-600/20 hover:bg-pink-600/30 border border-pink-500/40 text-pink-200 text-xs font-mono font-semibold flex items-center justify-center gap-1.5 transition">
+                                    <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                                    <span>Tocar Esta Rota</span>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : `
+                <!-- GRADE DE SELEÇÃO DE FÓRMULAS MODULANTES -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                    ${filteredMods.map((item) => {
+                        const isCur = item.id === activeModId;
+                        return `
+                            <button type="button" data-select-mod-id="${item.id}"
+                                class="text-left p-3.5 rounded-xl border transition flex flex-col justify-between gap-2.5 ${isCur ? 'bg-pink-500/15 border-pink-500/60 ring-2 ring-pink-500/40' : 'bg-[#090d16] hover:bg-slate-800/70 border-slate-800 hover:border-slate-700'}">
+                                <div>
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span class="text-xs font-mono font-bold ${isCur ? 'text-pink-300' : 'text-slate-200'}">${item.title}</span>
+                                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded ${isCur ? 'bg-pink-500/30 text-pink-200' : 'bg-slate-800 text-slate-400'}">${item.formula}</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${item.subtitle}</p>
+                                </div>
+                                <div class="flex items-center justify-between pt-2 border-t border-slate-800/60 text-[10px] font-mono text-slate-500">
+                                    <span class="truncate max-w-[200px]">${item.duoContext}</span>
+                                    <span class="text-pink-400 font-semibold">${isCur ? '● Ativa' : 'Selecionar'}</span>
+                                </div>
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            `}
+
+            <!-- RÉGUA INTERATIVA DE COMPASSOS DA CADEIA ATIVA -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800/80">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="music-2" class="w-4 h-4 text-pink-400"></i>
+                            <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider font-mono">
+                                Régua de Compassos: ${mod.title} (${fromKeyId.replace('_maj', ' Maior')})
+                            </h4>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Clique em qualquer acorde para ouvir a digitação isolada e iluminar a mão no braço da viola.</p>
+                    </div>
+                    <div class="text-xs font-mono text-slate-400">
+                        <span>Fórmula: <strong class="text-pink-400 font-bold">${mod.formula}</strong></span>
+                    </div>
+                </div>
+
+                <div id="viola-modulation-steps-strip" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+                    ${steps.map((st, idx) => {
+                        const isCurStep = state.modulation.currentStepIdx === idx;
+                        return `
+                            <div data-mod-step-card="${idx}"
+                                class="cursor-pointer p-3 rounded-xl border text-center transition space-y-1.5 ${isCurStep ? 'ring-2 ring-pink-400 bg-pink-500/20 shadow-lg' : 'bg-[#090d16] border-slate-800 hover:border-slate-700'}">
+                                <div class="flex items-center justify-between text-[10px] font-mono text-slate-500">
+                                    <span>P.${idx + 1}</span>
+                                    <span class="text-pink-400">${st.beats} tempos</span>
+                                </div>
+                                <div class="text-base sm:text-lg font-mono font-bold ${isCurStep ? 'text-pink-300' : 'text-slate-100'}">
+                                    ${st.name}
+                                </div>
+                                <div class="text-[11px] font-mono text-pink-400 font-semibold">
+                                    ${st.roman}
+                                </div>
+                                <div class="text-[10px] font-mono text-slate-400 truncate" title="${st.role}">
+                                    ${st.role}
+                                </div>
+                                <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800/80">
+                                    Baixo: <strong class="text-slate-300">${st.bassNote}</strong>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- PAINEL DIDÁTICO DO MESTRE VIOLEIRO (HISTÓRIA, CONDUÇÃO DE VOZES E DICA PRÁTICA) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-4 space-y-2">
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold text-pink-300 uppercase tracking-wider">
+                        <i data-lucide="book-open" class="w-4 h-4 text-pink-400"></i>
+                        <span>Contexto Musicológico</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">${mod.description}</p>
+                    <div class="text-[11px] font-mono text-slate-500 pt-1">Duplas de Referência: <span class="text-pink-400">${mod.duoContext}</span></div>
+                </div>
+
+                <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-4 space-y-2">
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold text-emerald-300 uppercase tracking-wider">
+                        <i data-lucide="git-commit" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Condução de Vozes (Voice Leading)</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">${mod.voiceLeading}</p>
+                    <div class="text-[11px] font-mono text-slate-500 pt-1">Linha do Baixo: <span class="text-emerald-400">${steps.map((s) => s.bassNote).join(' ➔ ')}</span></div>
+                </div>
+
+                <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-4 space-y-2">
+                    <div class="flex items-center gap-2 text-xs font-mono font-bold text-amber-300 uppercase tracking-wider">
+                        <i data-lucide="wrench" class="w-4 h-4 text-amber-400"></i>
+                        <span>Dica do Violeiro no Braço</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">${mod.luthierTip}</p>
+                    <div class="text-[11px] font-mono text-slate-500 pt-1">Instrumento Ativo: <span class="text-amber-400">${inst.label}</span></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    setupModulationListeners();
+}
+
+function setupModulationListeners() {
+    const container = document.getElementById('viola-modulation-container');
+    if (!container) return;
+
+    // Seletor de Tonalidade de Origem
+    const fromKeySel = document.getElementById('viola-mod-select-from-key');
+    if (fromKeySel) {
+        fromKeySel.addEventListener('change', (e) => {
+            stopModulationAudio();
+            state.modulation.fromKeyId = e.target.value;
+            saveViolaState();
+            renderModulationSection();
+            if (state.displayMode === 'MODULATION') {
+                renderFretboardSVG();
+            }
+        });
+    }
+
+    // Seletor de Estilo (Rasqueado / Arpejo)
+    const styleSel = document.getElementById('viola-mod-select-style');
+    if (styleSel) {
+        styleSel.addEventListener('change', (e) => {
+            state.modulation.playStyle = e.target.value;
+            saveViolaState();
+        });
+    }
+
+    // Botão de Loop
+    const loopBtn = document.getElementById('btn-viola-mod-toggle-loop');
+    if (loopBtn) {
+        loopBtn.addEventListener('click', () => {
+            state.modulation.isLooping = !state.modulation.isLooping;
+            saveViolaState();
+            renderModulationSection();
+        });
+    }
+
+    // Botão de Play / Stop
+    const playBtn = document.getElementById('btn-viola-mod-toggle-play');
+    if (playBtn) {
+        playBtn.addEventListener('click', playModulationSequence);
+    }
+
+    // Botão Projetar no Braço SVG
+    const toFretBtn = document.getElementById('btn-viola-mod-to-fretboard');
+    if (toFretBtn) {
+        toFretBtn.addEventListener('click', () => {
+            state.displayMode = 'MODULATION';
+            saveViolaState();
+            renderFretboardSVG();
+            const wrap = document.getElementById('viola-fretboard-svg-wrap');
+            if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    }
+
+    // Filtros por Categoria
+    container.querySelectorAll('[data-mod-filter-cat]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const cat = btn.getAttribute('data-mod-filter-cat');
+            state.modulation.activeCategory = cat;
+            saveViolaState();
+            renderModulationSection();
+        });
+    });
+
+    // Seleção de Modulação no Catálogo
+    container.querySelectorAll('[data-select-mod-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const modId = btn.getAttribute('data-select-mod-id');
+            stopModulationAudio();
+            state.modulation.activeModulationId = modId;
+            saveViolaState();
+            renderModulationSection();
+            if (state.displayMode === 'MODULATION') {
+                renderFretboardSVG();
+            }
+        });
+    });
+
+    // Clique em Passo Individual na Régua
+    container.querySelectorAll('[data-mod-step-card]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const idx = parseInt(card.getAttribute('data-mod-step-card'), 10);
+            stopModulationAudio();
+            playSingleModulationStep(idx);
+        });
+    });
+
+    // Pestanas Móveis: Botões de Tipo
+    container.querySelectorAll('[data-barre-type]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const type = btn.getAttribute('data-barre-type');
+            state.modulation.barreType = type;
+            saveViolaState();
+            renderModulationSection();
+            if (state.displayMode === 'MODULATION') {
+                renderFretboardSVG();
+            }
+        });
+    });
+
+    // Pestanas Móveis: Botões de Casa (0 a 12)
+    container.querySelectorAll('[data-barre-fret]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const fret = parseInt(btn.getAttribute('data-barre-fret'), 10);
+            playMovableBarreChord(fret, state.modulation.barreType);
+        });
+    });
+
+    // Pestanas Móveis: Botão Dedilhar
+    const playBarreBtn = document.getElementById('btn-viola-mod-play-barre');
+    if (playBarreBtn) {
+        playBarreBtn.addEventListener('click', () => {
+            playMovableBarreChord(state.modulation.barreFret, state.modulation.barreType);
+        });
+    }
+
+    // Calculadora de Pontes: Seletores Origem e Destino
+    const bridgeFromSel = document.getElementById('viola-mod-bridge-from');
+    if (bridgeFromSel) {
+        bridgeFromSel.addEventListener('change', (e) => {
+            state.modulation.customBridgeFrom = e.target.value;
+            saveViolaState();
+            renderModulationSection();
+        });
+    }
+    const bridgeToSel = document.getElementById('viola-mod-bridge-to');
+    if (bridgeToSel) {
+        bridgeToSel.addEventListener('change', (e) => {
+            state.modulation.customBridgeTo = e.target.value;
+            saveViolaState();
+            renderModulationSection();
+        });
+    }
+
+    // Calculadora de Pontes: Tocar Rota
+    container.querySelectorAll('[data-play-custom-route]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const rIdx = parseInt(btn.getAttribute('data-play-custom-route'), 10);
+            const inst = INSTRUMENTS[state.instrumentId];
+            const routes = computeCustomBridgeRoutes(state.modulation.customBridgeFrom, state.modulation.customBridgeTo, inst);
+            const selectedRoute = routes[rIdx];
+            if (!selectedRoute) return;
+
+            stopModulationAudio();
+            state.displayMode = 'MODULATION';
+
+            // Reprodução sequencial dos passos da rota
+            let sIdx = 0;
+            const playNextStep = () => {
+                if (sIdx >= selectedRoute.steps.length) return;
+                const st = selectedRoute.steps[sIdx];
+                const voicings = getChordVoicings({ chordCode: st.chordCode });
+                const shape = voicings && voicings.length > 0 ? voicings[0] : [0, 0, 0, 0, 0];
+                strumCustomShape(shape, 0.02, true);
+                sIdx++;
+                activeModulationTimers.push(setTimeout(playNextStep, (st.beats || 4) * 550));
+            };
+            playNextStep();
+        });
+    });
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
+
 
     // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
@@ -9815,7 +11005,128 @@
                 }
             });
         }
+        } else if (state.displayMode === 'MODULATION') {
+            // FASE 11: PROJEÇÃO DE MODULAÇÕES & PREPARAÇÃO HARMÔNICA CAIPIRA
+            if (state.modulation.activeCategory === 'movable_barre') {
+                const barre = computeMovableBarreShape(state.modulation.barreFret, state.modulation.barreType, inst);
+                const bFret = barre.fret;
 
+                inst.courses.forEach((c, cIdx) => {
+                    const f = barre.shape[cIdx];
+                    if (f !== undefined && f >= 0) {
+                        const pc = (c.pitchClass + f) % 12;
+                        const isRoot = pc === barre.rootPc;
+                        const isBass = cIdx === inst.courses.length - 1 || (inst.courses[cIdx + 1] && barre.shape[cIdx + 1] < 0);
+
+                        let color = '#f59e0b';
+                        let stroke = '#090d16';
+                        let strokeWidth = 2;
+                        if (isRoot) {
+                            color = '#10b981';
+                            stroke = '#f59e0b';
+                            strokeWidth = 3.2;
+                        } else if (barre.quality === 'dim') {
+                            color = '#ec4899';
+                        } else if (barre.quality === 'min') {
+                            color = '#06b6d4';
+                        } else if (barre.quality === 'dom7') {
+                            color = '#a855f7';
+                        }
+
+                        activeMarkers.push({
+                            courseIdx: cIdx,
+                            fret: f,
+                            label: NOTE_NAMES[pc],
+                            sub: isRoot ? 'T' : (f === bFret ? 'Pest' : `${f}c`),
+                            color,
+                            stroke: isBass ? '#ffffff' : stroke,
+                            strokeWidth: isBass ? 3.5 : strokeWidth,
+                            opacity: '1'
+                        });
+                    } else {
+                        mutedCourses.add(cIdx);
+                    }
+                });
+            } else {
+                const steps = computeModulationSteps(state.modulation.activeModulationId, state.modulation.fromKeyId, state.modulation.toKeyId, inst);
+                const curIdx = state.modulation.currentStepIdx >= 0 ? state.modulation.currentStepIdx : 0;
+                const activeStep = steps[curIdx] || steps[0];
+
+                // 1. Marcações fantasma dos outros acordes da sequência
+                const ghostKeys = new Set();
+                steps.forEach((st, sIdx) => {
+                    if (sIdx !== curIdx && st.shape) {
+                        st.shape.forEach((f, cIdx) => {
+                            if (f >= 0) {
+                                const key = `${cIdx}_${f}`;
+                                if (!ghostKeys.has(key)) {
+                                    ghostKeys.add(key);
+                                    const pc = (inst.courses[cIdx].pitchClass + f) % 12;
+                                    activeMarkers.push({
+                                        courseIdx: cIdx,
+                                        fret: f,
+                                        label: NOTE_NAMES[pc],
+                                        sub: st.roman,
+                                        color: '#ec4899',
+                                        opacity: '0.24'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // 2. Acorde ativo destacado
+                if (activeStep && activeStep.shape) {
+                    activeStep.shape.forEach((f, cIdx) => {
+                        if (f < 0) {
+                            mutedCourses.add(cIdx);
+                        } else {
+                            const pc = (inst.courses[cIdx].pitchClass + f) % 12;
+                            const isRoot = pc === activeStep.rootPc;
+                            const isBass = NOTE_NAMES[pc] === activeStep.bassNote;
+
+                            let color = '#f59e0b';
+                            let stroke = '#090d16';
+                            let strokeWidth = 2;
+
+                            if (isRoot) {
+                                color = '#10b981';
+                                stroke = '#f59e0b';
+                                strokeWidth = 3.2;
+                            } else if (activeStep.quality === 'dim') {
+                                color = '#ec4899';
+                                stroke = '#ffffff';
+                                strokeWidth = 3;
+                            } else if (activeStep.quality === 'dom7') {
+                                color = '#a855f7';
+                            } else if (activeStep.quality === 'min' || activeStep.quality === 'min7') {
+                                color = '#06b6d4';
+                            }
+
+                            if (isBass) {
+                                stroke = '#fbbf24';
+                                strokeWidth = 3.8;
+                            }
+
+                            activeMarkers.push({
+                                courseIdx: cIdx,
+                                fret: f,
+                                label: NOTE_NAMES[pc],
+                                sub: isRoot ? 'T' : (isBass ? 'Baixo' : activeStep.roman),
+                                color,
+                                stroke,
+                                strokeWidth,
+                                opacity: '1'
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+
+        
         // Construção SVG
         const nutX = getNutLineX();
         const bodyEndX = getFretLineX(maxFret);
@@ -10466,6 +11777,15 @@
                 state.tensionCalculator = Object.assign({}, DEFAULT_TENSION_STATE);
             }
 
+            if (saved.modulation && typeof saved.modulation === 'object') {
+                state.modulation = Object.assign({}, DEFAULT_MODULATION_STATE, saved.modulation, {
+                    isPlaying: false,
+                    currentStepIdx: -1
+                });
+            } else {
+                state.modulation = Object.assign({}, DEFAULT_MODULATION_STATE);
+            }
+
             if (saved.historicalTunings && typeof saved.historicalTunings === 'object') {
                 state.historicalTunings = Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE, saved.historicalTunings, {
                     isPlayingLick: false,
@@ -10504,6 +11824,12 @@
         }
         if (copy.tensionCalculator) {
             copy.tensionCalculator = Object.assign({}, copy.tensionCalculator);
+        }
+        if (copy.modulation) {
+            copy.modulation = Object.assign({}, copy.modulation, {
+                isPlaying: false,
+                currentStepIdx: -1
+            });
         }
         if (copy.historicalTunings) {
             copy.historicalTunings = Object.assign({}, copy.historicalTunings, {
@@ -10564,6 +11890,11 @@
                             <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
                             <span>Afinações Raras (Fase 10)</span>
                         </button>
+
+                        <button type="button" id="btn-viola-scroll-modulation" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/40 text-pink-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="git-merge" class="w-4 h-4 text-pink-400"></i>
+                            <span>Modula&ccedil;&otilde;es (Fase 11)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -10603,6 +11934,7 @@
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -10775,6 +12107,9 @@
 
                 <!-- Módulo de Afinações Históricas & Regionais Raras (Fase 10) -->
                 <div id="viola-historical-tunings-container" class="space-y-4"></div>
+
+                <!-- Modulo de Modulacoes & Preparacao Harmonica Caipira (Fase 11) -->
+                <div id="viola-modulation-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -10966,6 +12301,12 @@
                     ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-500 text-slate-950 shadow'
                     : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
             }
+            const btnModeModulation = document.getElementById('btn-viola-mode-modulation');
+            if (btnModeModulation) {
+                btnModeModulation.className = state.displayMode === 'MODULATION'
+                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-pink-600 text-white shadow'
+                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
+            }
         }
     }
 
@@ -11086,6 +12427,32 @@
                         const hWrap = document.getElementById('viola-historical-tunings-container');
                         if (hWrap) hWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
+            const btnModeModulation = document.getElementById('btn-viola-mode-modulation');
+            if (btnModeModulation) {
+                btnModeModulation.addEventListener('click', () => {
+                    if (state.displayMode !== 'MODULATION') {
+                        stopScalePlayback();
+                        stopPonteioPlayback();
+                        stopProgressionPlayback();
+                        stopTabEditorPlayback();
+                        stopModalPlayback();
+                        stopHistoricalAudio();
+                        stopModulationAudio();
+                        state.displayMode = 'MODULATION';
+                        saveViolaState();
+                        renderAll();
+                        const mWrap = document.getElementById('viola-modulation-container');
+                        if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+            const btnScrollMod = document.getElementById('btn-viola-scroll-modulation');
+            if (btnScrollMod) {
+                btnScrollMod.addEventListener('click', () => {
+                    const mWrap = document.getElementById('viola-modulation-container');
+                    if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
                 });
             }
         }
@@ -11438,6 +12805,7 @@
         renderModalScalesSection();
         renderTensionCalculatorSection();
         renderHistoricalTuningsSection();
+        renderModulationSection();
         renderMetronomeControls();
     }
 

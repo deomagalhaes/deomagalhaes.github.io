@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 11 — Gerador de Modulações & Preparação Harmônica Caipira
+## 🎯 Projeto Prioritário Atual: Fase 12 — Dicionário de Licks & Frases de Resposta de Folia de Reis
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Ferramenta analítica e prática de transição tonal com acordes de preparação em dois tempos (Dominantes Secundárias V7/V, V7/ii, V7/IV, V7/vi).
-  2. Mapeamento de acordes diminutos de passagem (♯I° e ♯IV°), aproximações cromáticas e acordes de empréstimo modal típicos de duplas sertanejas clássicas (Tião Carreiro & Pardinho, Tonico & Tinoco, Milionário & José Rico).
-  3. Sequenciador auditivo Web Audio com dedilhado sincronizado, visualização no braço SVG canhoto/destro e diagramas de pestanas móveis para transposição de modulações no estradão.
+  1. Mapeamento sistemático de toques de entrada, marcha, oferenda e despedida de Folias de Reis tradicionais de Minas Gerais, Goiás e interior de São Paulo (Cebolão em Mi, São Lourenço e Rio Abaixo).
+  2. Fraseados responsivos em dueto de terças e sextas entre mestre e contra-mestre com contracantos polifônicos entre turina (3º par) e prima (1º par).
+  3. Sequenciador auditivo Web Audio com chamada e resposta dialogada, visualização passo a passo no braço SVG (Canhoto e Destro) e clonagem em 1 clique para o Editor de Tablaturas.
 
 ---
 
@@ -34,12 +34,60 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Cálculo de tensão mecânica em kgf por par para cordas de aço e nylon em afinações Cebolão, Rio Abaixo, Boiadeira e Violão com alertas de fadiga do tampo, simulação de ação no 1º e 12º traste e regulagem em osso para Canhoto e Destro.
 8. **[x] Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço, Cana-Verde) (Fase 10 Concluída):**
    - Expansão lutherística com temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão baiano, compêndio etnomusicológico, áudio de licks e acordes abertos, assistente de reafinação guiada e projeção no braço SVG.
-9. **[ ] Gerador de Modulações & Preparação Harmônica Caipira (Fase 11):**
-   - Ferramenta de transição tonal com acordes de preparação em dois tempos, pestanas móveis e dominantes secundárias típicas de duplas sertanejas clássicas.
+9. **[x] Gerador de Modulações & Preparação Harmônica Caipira (Fase 11 Concluída):**
+   - Laboratório analítico e prático de transição tonal com 15 fórmulas canônicas (Dominantes Secundárias V7/X, Diminutos de Passagem ♯IV°, ♯I°, ♯II°, Empréstimo Modal ♭VI, ♭VII, iv e Subidas de Tom), simulador de pestanas móveis do estradão, calculadora de pontes harmônicas livres e sequenciador Web Audio API com sincronização no braço SVG canhoto/destro.
 10. **[ ] Dicionário de Licks & Frases de Resposta de Folia de Reis (Fase 12):**
     - Mapeamento de introduções litúrgicas de devoção aos Santos Reis, fraseados responsivos de mestre de folia, contracantos de turina e toeira.
 11. **[ ] Simulador de Capotraste & Transposição Inteligente para Duplas (Fase 13):**
     - Cálculo de tessitura de voz (1ª e 2ª voz caipira), posicionamento ideal de braçadeira móvel e visualização imediata da equivalência harmônica.
+12. **[ ] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14):**
+    - Processamento de sinal com FFT e autocorrelação (YIN) para detecção de notas e digitações reais captadas ao vivo pelo microfone do violeiro com feedback imediato no braço SVG.
+
+---
+
+## 📝 Histórico de Implementações Diárias
+
+- **09/11/2026 — Sessão 11** (Fase 11 Concluída):
+  - **Gerador de Modulações & Preparação Harmônica Caipira**:
+    - **Catálogo Canônico de 15 Fórmulas Modulatórias Caipiras (`CAIPIRA_MODULATIONS_CATALOG`)**:
+      - *Dominantes Secundárias Caipiras (V7/X)*:
+        - `v7_iv`: *Abrir pro Quarto (I ➔ V7/IV ➔ IV ➔ I)* — A clássica preparação caipira onde a 7ª menor ferida no 1º par (3ª casa) faz a 2ª voz explodir no quarto grau (estilo Tonico & Tinoco e Tião Carreiro).
+        - `v7_v`: *Tensão Pré-Refrão (I ➔ V7/V ➔ V7 ➔ I)* — A dominante da dominante (II7) que gera o clímax dramático antes do refrão de cururus e modas de viola.
+        - `v7_vi`: *Lamento da Roça (I ➔ V7/vi ➔ vi ➔ V7 ➔ I)* — Preparação lírica para o relativo menor (C♯m no tom de Mi), evocando toadas de saudade (Almir Sater, Pena Branca & Xavantinho, Cascatinha & Inhana).
+        - `v7_ii`: *Descida pro Segundo (I ➔ V7/ii ➔ ii ➔ V7 ➔ I)* — Cadência circular seresteira sofisticada (I ➔ VI7 ➔ ii ➔ V7) imortalizada pelo Trio Parada Dura e Milionário & José Rico.
+        - `v7_iii`: *Ponteio da Madrugada (I ➔ V7/iii ➔ iii ➔ vi ➔ V7 ➔ I)* — Preparação contemplativa do terceiro grau em toadas pantaneiras introspectivas.
+      - *Diminutos de Passagem & Cromatismos Sertanejos (X°)*:
+        - `dim_sharp_iv`: *O Rei do Sertão (IV ➔ ♯IV° ➔ I/V ➔ V7 ➔ I)* — O mais icônico e emocionante movimento harmônico de toda a história sertaneja! Linha de baixo cromática ascendente (Lá ➔ Lá♯ ➔ Si) consagrada em *Ainda Ontem Chorei de Saudade*, *Saudade da Minha Terra* e *O Doutor e o Caipira*.
+        - `dim_sharp_i`: *Escalada Cromática da Terra (I ➔ ♯I° ➔ ii ➔ V7 ➔ I)* — Conexão tensa do primeiro ao segundo grau com o baixo subindo por semitom (Mi ➔ Fá/E♯ ➔ Fá♯).
+        - `dim_sharp_ii`: *Ponteio do Cariri (ii ➔ ♯II° ➔ iii ➔ V7 ➔ I)* — Amarra cromática ascendente conectando segundo e terceiro grau para licks rápidos em terças.
+        - `dim_flat_iii`: *Lágrima Descendente (iii ➔ ♭III° ➔ ii ➔ V7 ➔ I)* — Condução cromática descendente das vozes (Sol♯ ➔ Sol ➔ Fá♯) em toadas de despedida.
+      - *Empréstimo Modal do Homônimo Menor (AEC)*:
+        - `aec_flat_vi`: *Grandiosidade do Estradão (I ➔ ♭VI ➔ ♭VII ➔ I)* — A entrada épica e triunfal do acorde de Dó Maior em tom de Mi Maior, abrindo horizontes cinematográficos no estradão.
+        - `aec_flat_vii`: *Folia dos Três Reis (I ➔ ♭VII ➔ IV ➔ I)* — A cadência modal subtonal pura das folias de reis de Minas e Goiás (Ré Maior antecedendo Lá e Mi).
+        - `aec_minor_iv`: *Subdominante Menor Romântica (I ➔ IV ➔ iv ➔ I)* — O lirismo comovente da terça do quarto grau descendo meio tom (Lá Menor seresteiro).
+      - *Modulações Diretas / Subidas de Tom ("Truck Driver's Key Change")*:
+        - `mod_half_step_up`: *Clímax de Festival (+1 Semitom: Mi ➔ Fá)* — Subida de meio-tom para a apoteose vocal do último refrão (estilo Zezé Di Camargo & Luciano e Chitãozinho & Xororó).
+        - `mod_whole_step_up`: *Duelo das Vozes (+2 Semitons: Mi ➔ Fá♯)* — Elevação heroica de um tom inteiro exigindo máxima tessitura vocal da dupla sertaneja.
+        - `mod_to_relative_minor`: *Conto da Noite Escura (Modulação para vi)* — Mudança formal para o relativo menor via segundo cadencial meio-diminuto (iiø - V7 - i).
+    - **Simulador Interativo de Pestanas Móveis do Estradão**:
+      - Exploração didática das propriedades do braço aberto do Cebolão em Mi: cada traste é uma pestana reta direta produzindo acordes maiores, menores, com sétima ou diminutos sem alterar a forma de mão esquerda.
+      - Régua de casas de 0 a 12 com seleção de shape (Maior, Dominante com 7ª, Menor, Diminuto), cálculo de digitação exata nas cordas e botão para dedilhar a pestana móvel imediatamente com síntese Web Audio.
+    - **Calculadora de Pontes Harmônicas Caipiras (Transição Livre entre Qualquer Tom)**:
+      - Seletores de Tonalidade de Partida e Chegada gerando instantaneamente 3 rotas harmônicas:
+        1. *Rota 1: Dominante Direta (V7 ➔ I)*
+        2. *Rota 2: Segundo Cadencial Caipira (ii ➔ V7 ➔ I)*
+        3. *Rota 3: Ponte Diminuta Cromática Sensível (VII° ➔ I)*
+      - Botão de audição imediata sequencial de cada rota com dedilhado harmônico.
+    - **Sequenciador Auditivo Web Audio API**:
+      - Execução rítmica sincronizada com andamento ajustável (BPM), alternador de estilo (*Rasqueado Caipira* com batida percussiva no tampo vs *Dedilhado Lírico*), modo Loop e auto-scroll do cursor de passos.
+      - Régua interativa de compassos com cards detalhados por tempo/acorde (cifra, grau romano, função analítica, baixo sugerido e miniatura de digitação) clicáveis para audição individual.
+    - **Integração Plena com o Braço SVG (Modo Canhoto & Destro)**:
+      - Novo modo de projeção no topo do braço: `🔀 Modulações Caipiras` (`displayMode: 'MODULATION'`).
+      - Destaque em tempo real do acorde ativo no momento exato em que soa: verde esmeralda (`#10b981`) para a tônica, rosa choque vibrante (`#ec4899`) para preparações/diminutos com borda dourada no baixo e ciano (`#06b6d4`) para acordes de resolução.
+      - Projeção em camada fantasma translúcida das notas dos próximos acordes da cadeia para treino de antecipação de digitação da mão esquerda.
+      - Compatibilidade nativa e testada com o Modo Canhoto (`isLeftHanded`) e Destro.
+    - **Persistência de Estado no LocalStorage**:
+      - Sincronização automática das preferências (`activeModulationId`, `fromKeyId`, `playStyle`, `isLooping`, `barreFret`, `barreType`, etc.) via `VaultCore`.
 
 ---
 
