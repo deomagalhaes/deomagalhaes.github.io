@@ -1714,6 +1714,252 @@ const CAIPIRA_MODULATIONS_CATALOG = {
 };
 
 
+
+// =========================================================================
+// FASE 12: DICIONÁRIO DE LICKS & FRASES DE RESPOSTA DE FOLIA DE REIS
+// =========================================================================
+
+const DEFAULT_FOLIA_STATE = {
+    activeLickId: 'folia_chegada_porteira',
+    activeCategory: 'all',          // 'all' | 'chegada' | 'marcha' | 'presepio' | 'dialogo' | 'sao_lourenco' | 'contracanto' | 'bastiao' | 'despedida'
+    activeRoleFilter: 'both',       // 'both' (Dueto Completo) | 'mestre' (Apenas Chamada) | 'resposta' (Apenas Contra-Mestre)
+    isPlaying: false,
+    currentStepIdx: -1,
+    playbackSpeed: 1.0,             // 0.5 | 0.75 | 1.0 | 1.25
+    isLooping: true
+};
+
+const FOLIA_CATEGORIES = {
+    all: { id: 'all', label: 'Todas as Frases', badge: '8 Canônicas', icon: 'sparkles' },
+    chegada: { id: 'chegada', label: 'Chegada & Porteira', badge: 'Entrada', icon: 'flag' },
+    marcha: { id: 'marcha', label: 'Marcha do Estradão', badge: 'Caminhada', icon: 'compass' },
+    presepio: { id: 'presepio', label: 'Louvação ao Presépio', badge: 'Adoração', icon: 'star' },
+    dialogo: { id: 'dialogo', label: 'Chamada & Resposta', badge: 'Dueto Mestre', icon: 'message-circle' },
+    sao_lourenco: { id: 'sao_lourenco', label: 'São Lourenço Litúrgico', badge: 'Bordão 73Hz', icon: 'bell' },
+    contracanto: { id: 'contracanto', label: 'Contracanto de Turina', badge: 'Polifonia', icon: 'git-merge' },
+    bastiao: { id: 'bastiao', label: 'Dança do Bastião / Bastões', badge: 'Sincopado', icon: 'zap' },
+    despedida: { id: 'despedida', label: 'Despedida & Bênção', badge: 'Despedida', icon: 'heart' }
+};
+
+const FOLIA_LICKS_CATALOG = {
+    folia_chegada_porteira: {
+        id: 'folia_chegada_porteira',
+        category: 'chegada',
+        title: 'Chegada na Porteira & Pedido de Licença',
+        liturgy: 'Aproximação e Saudação Inicial ao Terreiro',
+        region: 'Sul de Minas Gerais & Vale do Paraíba',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '2/4',
+        bpm: 92,
+        key: 'Mi Maior (E) Cebolão',
+        verse: 'Ó de casa, nobre gente / Escutai o nosso clamor / Viemos lá do Oriente / Adorar o Salvador.',
+        description: 'O toque sagrado de entrada. O Mestre empunha a 1ª viola e desfere uma chamada em terças cortantes subindo até a 11ª casa (sensível em Dó# / Ré#), pedindo licença para a Bandeira dos Três Reis entrar. O Contra-Mestre responde com a batida solene de tampo e arremata nos bordões.',
+        techniqueTip: 'Use dedilhado pinçado polegar e indicador (p+i) nos pares 1 e 2. Na batida de tampo [TAP], ataque com a lateral do polegar direito no tampo superior para soar como o estalo de madeira do bastão do mestre.',
+        dialogueRoleSummary: 'Mestre abre com chamado agudo (casas 0 ➔ 4 ➔ 7 ➔ 11); Contra-mestre sela a entrada com tampo e bordão em Si e Mi.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', ann: 'Chamada: cordas soltas E/B' },
+            { measure: 1, beat: '1 e', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Terça Maior de Mi' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.24, rh: 'p+i', lh: '1-2', ann: 'Salto para a 7ª casa' },
+            { measure: 1, beat: '2 e', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 11 }, { c: 1, f: 12 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Clímax: Sensível de Si7 (D#)' },
+            { measure: 2, beat: '1', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [], d: 0.20, rh: 'tap', lh: '-', ann: 'Batida de licença no tampo' },
+            { measure: 2, beat: '1 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 1, f: 0 }, { c: 2, f: 1 }], d: 0.24, rh: 'p+i', lh: '0-1', ann: 'Resposta em terças médias' },
+            { measure: 2, beat: '2', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 3, f: 2 }, { c: 4, f: 0 }], d: 0.26, rh: 'p+i', lh: '2-0', ann: 'Bordão de afirmação em Si/Mi' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', chordVoicing: [0, 0, 1, 2, 0], chordName: 'E (Acorde Aberto)', d: 0.35, rh: 'rasq', lh: 'Pestana', ann: 'Resolução Tutti em Mi Maior' }
+        ]
+    },
+
+    folia_marcha_estradao: {
+        id: 'folia_marcha_estradao',
+        category: 'marcha',
+        title: 'Marcha do Estradão dos Três Santos Reis',
+        liturgy: 'Caminhada Noturna pelas Estradas e Porteiras',
+        region: 'Triângulo Mineiro e Sul de Goiás',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '2/4',
+        bpm: 96,
+        key: 'Mi Maior (E)',
+        verse: 'Santos Reis vem caminhando / Com a estrela a clarear / O estradão da romaria / Onde a bênção vai brotar.',
+        description: 'Toque cadenciado e hipnótico que embala os passos dos foliões pela poeira da estrada. O Mestre puxa uma melodia rítmica que imita o trote suave, enquanto o Contra-Mestre marca o contratempo com toques abafados de choque (chock) na mão direita.',
+        techniqueTip: 'Abafamento seco [CHOCK]: desça a mão direita sobre as cordas imediatamente após tocar com o polegar, abafando com a palma (pizzicato sertanejo).',
+        dialogueRoleSummary: 'Mestre dita o passo do estradão; Contra-mestre balança no contratempo com chock.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.20, rh: 'p', lh: '0-0', ann: 'Passo do estradão: Bordão Mi' },
+            { measure: 1, beat: '1 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [], d: 0.18, rh: 'chock', lh: '-', ann: 'Choque rítmico abafado' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-3', ann: 'Terça de Si7 (F#/D#)' },
+            { measure: 1, beat: '2 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 2, f: 1 }, { c: 3, f: 2 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Contracanto nos pares médios' },
+            { measure: 2, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Avanço para Mi Maior (G#/E)' },
+            { measure: 2, beat: '1 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [], d: 0.18, rh: 'tap', lh: '-', ann: 'Batida de caixa/tampo' },
+            { measure: 2, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.24, rh: 'p+i', lh: '1-2', ann: 'Passada firme na 7ª casa' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 1 }], d: 0.32, rh: 'rasq', lh: '0-0-1', ann: 'Arremate conjunto em Mi' }
+        ]
+    },
+
+    folia_saudacao_presepio: {
+        id: 'folia_saudacao_presepio',
+        category: 'presepio',
+        title: 'Louvação Solene ao Presépio e Menino Deus',
+        liturgy: 'Ajoelhamento diante da Lapinha e Menino Jesus',
+        region: 'Norte de Minas e Vale do Jequitinhonha',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '3/4',
+        bpm: 80,
+        key: 'Mi Maior (E) Litúrgico',
+        verse: 'Vinde ver o Deus Menino / Numa manjedoura além / Entre a palha e o carinho / Na choupana de Belém.',
+        description: 'Toque de máxima reverência e comoção mística. Ao se aproximar do presépio na sala da casa devota, o mestre toca um arpejo ascendente lento que culmina na 12ª casa (oitava límpida do Cebolão), enquanto o contra-mestre desce em sextas suaves como prece cantada.',
+        techniqueTip: 'Dedilhado arpejado suave: toque com toque flautado perto da escala para produzir um timbre aveludado e celestial.',
+        dialogueRoleSummary: 'Mestre ascende até a 12ª casa em terças límpidas; Contra-mestre abençoa com sextas graves.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.26, rh: 'p+i', lh: '0-0', ann: 'Prece inicial: Mi/Si soltos' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.26, rh: 'p+i', lh: '1-2', ann: 'Elevação: G#/E' },
+            { measure: 1, beat: '3', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.28, rh: 'p+i', lh: '1-2', ann: 'Luz da Estrela: B/G#' },
+            { measure: 2, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 12 }, { c: 1, f: 12 }], d: 0.32, rh: 'p+i', lh: '1-1', ann: 'Glória na 12ª casa (oitava pura)' },
+            { measure: 2, beat: '2', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 0, f: 9 }, { c: 2, f: 8 }], d: 0.26, rh: 'p+m', lh: '2-1', ann: 'Sexta reverente de C#m' },
+            { measure: 2, beat: '3', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.26, rh: 'p+m', lh: '1-1', ann: 'Descida mística em sextas' },
+            { measure: 3, beat: '1', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.28, rh: 'p+m', lh: '2-1', ann: 'Aproximação da tônica' },
+            { measure: 3, beat: '2', role: 'tutti', voiceName: 'Dueto Mestre & Contra', chordVoicing: [0, 0, 1, 2, 0], chordName: 'E (Adoração)', d: 0.40, rh: 'arpejo', lh: '0-0-1-2-0', ann: 'Arpejo final ajoelhado em Mi' }
+        ]
+    },
+
+    folia_dialogo_mestre_resposta: {
+        id: 'folia_dialogo_mestre_resposta',
+        category: 'dialogo',
+        title: 'Chamada do Mestre & Resposta do Contra-Mestre',
+        liturgy: 'Contraponto Vocal e Instrumental na Sala de Entrada',
+        region: 'Interior de São Paulo (Tietê e Piracicaba)',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '2/4',
+        bpm: 94,
+        key: 'Mi Maior (E)',
+        verse: '— Quem foi que mandou abrir? / — Foi a Estrela da Guia! / — Quem foi que mandou cantar? / — Foi a Virgem Maria!',
+        description: 'A clássica estrutura antifônica de pergunta e resposta. O Mestre puxa uma frase interrogativa aguda nos pares 1 e 2; o Contra-Mestre replica imediatamente com a resposta afirmativa nos pares médios e bordões, selando a cumplicidade musical do dueto tradicional.',
+        techniqueTip: 'Alterne a dinâmica: toque a chamada do mestre com volume firme (forte) e a resposta do contra-mestre com volume equilibrado e timbre encorpado (mezzo-forte).',
+        dialogueRoleSummary: 'Mestre pergunta na ponta aguda; Contra-mestre responde seguro nos graves.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-2', ann: 'Pergunta: "Quem mandou abrir?"' },
+            { measure: 1, beat: '1 e', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.20, rh: 'p+i', lh: '1-2', ann: 'Subida da dúvida melódica' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.24, rh: 'p+i', lh: '1-2', ann: 'Ponto de interrogação no agudo' },
+            { measure: 1, beat: '2 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 2, f: 3 }, { c: 3, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Resposta: "Estrela da Guia!"' },
+            { measure: 2, beat: '1', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 2, f: 1 }, { c: 3, f: 2 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Confirmação harmônica' },
+            { measure: 2, beat: '1 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.24, rh: 'p', lh: '0-0', ann: 'Batida afirmativa nos bordões' },
+            { measure: 2, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-3', ann: 'Fechamento do diálogo' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', chordVoicing: [0, 0, 1, 2, 0], chordName: 'E (Acorde Final)', d: 0.34, rh: 'rasq', lh: '0-0-1-2-0', ann: 'Concordância plena em Mi Maior' }
+        ]
+    },
+
+    folia_pedal_sao_lourenco: {
+        id: 'folia_pedal_sao_lourenco',
+        category: 'sao_lourenco',
+        title: 'Toque Devocional em São Lourenço (Bordão 73Hz)',
+        liturgy: 'Terço Cantado e Madrugada Sagrada',
+        region: 'Cerrado Mineiro e Alto Paranaíba',
+        tuning: 'viola_sao_lourenco',
+        tuningLabel: 'São Lourenço (D-B-F#-D-D grave 73Hz)',
+        timeSignature: '2/4',
+        bpm: 86,
+        key: 'Ré Maior / Sol Maior com Pedal em Ré (D2 / 73.4 Hz)',
+        verse: 'Na afinação sagrada / São Lourenço vem dizer / Que a viola consagrada / Faz o mal desaparecer.',
+        description: 'Toque tradicional na rara e mística afinação São Lourenço. O 5º par afinado no Ré ultragrave (D2 / 73.4 Hz) atua como um bordão pedal ressoante ininterrupto (bordoneio da gaita de fole caipira), enquanto o mestre ponteia terças e sextas litúrgicas sobre o baixo vibratório.',
+        techniqueTip: 'Toque o 5º par (bordão Ré2) com o polegar apoiado firme para manter a vibração por simpática ressonando o tampo o tempo todo.',
+        dialogueRoleSummary: 'Bordão 73Hz sussurra como sino sagrado; terças ponteiam a bênção celestial.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Bordão Pedal (D2)', notes: [{ c: 4, f: 0 }], d: 0.24, rh: 'p', lh: '0', ann: 'Bordão sagrado D2 (73.4 Hz)' },
+            { measure: 1, beat: '1 e', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'i+m', lh: '0-0', ann: 'Corda solta D/B' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 3 }], d: 0.24, rh: 'i+m', lh: '2-1', ann: 'Terça de Sol Maior' },
+            { measure: 1, beat: '2 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 4, f: 0 }], d: 0.20, rh: 'p', lh: '0', ann: 'Rebatida do bordão pedal D2' },
+            { measure: 2, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], d: 0.24, rh: 'i+m', lh: '1-1', ann: 'Pestana modal na 5ª casa' },
+            { measure: 2, beat: '1 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 2, f: 0 }, { c: 3, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', ann: 'Harmônicos nos pares médios' },
+            { measure: 2, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 7 }, { c: 1, f: 7 }], d: 0.26, rh: 'i+m', lh: '1-1', ann: 'Glória na 7ª casa (Lá Maior)' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto São Lourenço', chordVoicing: [0, 0, 0, 0, 0], chordName: 'D (Acorde Aberto São Lourenço)', d: 0.38, rh: 'rasq', lh: '0-0-0-0-0', ann: 'Ressonância plena de todas as cordas' }
+        ]
+    },
+
+    folia_contracanto_turina: {
+        id: 'folia_contracanto_turina',
+        category: 'contracanto',
+        title: 'Contracanto Polifônico de Turina & Prima',
+        liturgy: 'Polifonia das Três Vozes de Folia',
+        region: 'Sul de Minas Gerais & Mantiqueira',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '2/4',
+        bpm: 90,
+        key: 'Mi Maior (E)',
+        verse: 'A viola é três em uma / Prima, cana e turiná / Cada corda é uma prece / Para quem sabe escutar.',
+        description: 'Exemplo supremo da polifonia caipira brasileira. O 1º par (prima) executa uma linha melódica brilhante ascendente, enquanto o 3º par (turina) executa um contracanto descendente em movimento contrário, criando uma teia contrapontística comparável à polifonia renascentista.',
+        techniqueTip: 'Mão direita independente: o polegar comanda a turina (3º par) com articulação apoiada, enquanto o dedo indicador pinça a prima (1º par) sem tocar o 2º par.',
+        dialogueRoleSummary: 'Prima sobe cantando; Turina desce respondendo em contraponto severo.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Mestre: Prima & Turina', notes: [{ c: 0, f: 0 }, { c: 2, f: 5 }], d: 0.22, rh: 'p+i', lh: '0-2', ann: 'Prima solta (E) contra Turina (C#)' },
+            { measure: 1, beat: '1 e', role: 'mestre', voiceName: 'Mestre: Prima & Turina', notes: [{ c: 0, f: 2 }, { c: 2, f: 3 }], d: 0.22, rh: 'p+i', lh: '1-1', ann: 'Movimento contrário: Prima F# / Turina B' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre: Prima & Turina', notes: [{ c: 0, f: 4 }, { c: 2, f: 1 }], d: 0.24, rh: 'p+i', lh: '2-1', ann: 'Abertura: Prima G# / Turina A' },
+            { measure: 1, beat: '2 e', role: 'resposta', voiceName: 'Contra-Mestre: Bordão', notes: [{ c: 3, f: 2 }, { c: 4, f: 0 }], d: 0.22, rh: 'p', lh: '2-0', ann: 'Contra-mestre sustenta a base' },
+            { measure: 2, beat: '1', role: 'mestre', voiceName: 'Mestre: Prima & Turina', notes: [{ c: 0, f: 7 }, { c: 2, f: 0 }], d: 0.24, rh: 'p+i', lh: '1-0', ann: 'Clímax: Prima Si (7ª c.) / Turina G# solta' },
+            { measure: 2, beat: '1 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 1, f: 0 }, { c: 2, f: 1 }], d: 0.22, rh: 'p+i', lh: '0-1', ann: 'Resposta em terças aconchegantes' },
+            { measure: 2, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Retorno ao Mi Maior' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', chordVoicing: [0, 0, 1, 2, 0], chordName: 'E (Polifonia Resolvida)', d: 0.36, rh: 'rasq', lh: '0-0-1-2-0', ann: 'Resolução polifônica magistral' }
+        ]
+    },
+
+    folia_toque_palhaco: {
+        id: 'folia_toque_palhaco',
+        category: 'bastiao',
+        title: 'Dança do Bastião & Batida de Bastões',
+        liturgy: 'Evolução dos Palhaços da Folia e Defesa da Bandeira',
+        region: 'Goiás Central e Sul de Minas',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '2/4',
+        bpm: 104,
+        key: 'Mi Maior (E)',
+        verse: 'Pula palhaço, bate o bastão / Guarda a bandeira dos Três Folião! / Quem não tem fé se espanta / Quem tem amor se adianta!',
+        description: 'O ritmo mais vibrante, sincopado e teatral da festa. O Bastião (palhaço sagrado da folia) faz acrobacias, declama versos cômicos de duplo sentido e bate o cajado de madeira no chão de terra no contratempo, enquanto as violas repicam síncopes cortantes com toques de madeira no tampo e abafamentos.',
+        techniqueTip: 'Ritmo sincopado rápido: alterne batidas no tampo superior [TAP] com rasqueados curtos e secos [CHOCK], simulando a coreografia dos bastões.',
+        dialogueRoleSummary: 'Mestre acelera o repique; Contra-mestre e Bastião cruzam bastões e tampo.',
+        steps: [
+            { measure: 1, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.16, rh: 'rasq', lh: '0-0', ann: 'Ataque vivo nas primas' },
+            { measure: 1, beat: '1 e', role: 'resposta', voiceName: 'Bastião / Contra-Mestre', notes: [], d: 0.16, rh: 'tap', lh: '-', ann: 'Batida de cajado no chão [TAP]' },
+            { measure: 1, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Salto rápido em terça' },
+            { measure: 1, beat: '2 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [], d: 0.16, rh: 'chock', lh: '-', ann: 'Choque abafado com palma [CHOCK]' },
+            { measure: 2, beat: '1', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.18, rh: 'p+i', lh: '1-2', ann: 'Giro do palhaço na 7ª casa' },
+            { measure: 2, beat: '1 e', role: 'resposta', voiceName: 'Bastião / Contra-Mestre', notes: [], d: 0.16, rh: 'tap', lh: '-', ann: 'Segundo estalo de madeira [TAP]' },
+            { measure: 2, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-3', ann: 'Queda cômica para Si7' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto Mestre & Bastião', chordVoicing: [0, 0, 1, 2, 0], chordName: 'E (Repique do Palhaço)', d: 0.28, rh: 'rasq', lh: '0-0-1-2-0', ann: 'Gargalhada de rasqueado final' }
+        ]
+    },
+
+    folia_despedida_abencoada: {
+        id: 'folia_despedida_abencoada',
+        category: 'despedida',
+        title: 'Despedida da Folia & Bênção aos Moradores',
+        liturgy: 'Partida para a Próxima Casa e Agradecimento',
+        region: 'Sul de Minas, Vale do Paraíba e Goiás',
+        tuning: 'viola_cebolao_e',
+        tuningLabel: 'Cebolão em Mi (E-B-G#-E-B)',
+        timeSignature: '2/4',
+        bpm: 88,
+        key: 'Mi Maior (E)',
+        verse: 'Fica com Deus, nobre dono / Fica com a Virgem Maria / Para o ano se nós for vivo / Nós volta com alegria.',
+        description: 'O momento mais solene e afetuoso da visita. A bandeira é recolhida após abençoar todos os cômodos e a mesa servida da família. As violas tocam em dueto estrito de terças descendentes comovidas, agradecendo a acolhida e prometendo voltar no ano vindouro se Deus permitir.',
+        techniqueTip: 'Toque com legato expressivo e vibrato suave na mão esquerda nas casas 9, 7 e 4 para evocar a saudade sertaneja.',
+        dialogueRoleSummary: 'Mestre e Contra-mestre unem as violas em dueto fraterno de despedida.',
+        steps: [
+            { measure: 1, beat: '1', role: 'tutti', voiceName: 'Dueto Mestre & Contra', notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], d: 0.24, rh: 'p+i', lh: '1-2', ann: 'Despedida na 7ª casa: Bênção' },
+            { measure: 1, beat: '1 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', notes: [{ c: 0, f: 5 }, { c: 1, f: 7 }], d: 0.22, rh: 'p+i', lh: '1-2', ann: 'Descida fraterna' },
+            { measure: 1, beat: '2', role: 'tutti', voiceName: 'Dueto Mestre & Contra', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.24, rh: 'p+i', lh: '1-2', ann: 'Agradecimento da mesa' },
+            { measure: 1, beat: '2 e', role: 'resposta', voiceName: 'Contra-Mestre (2ª Viola)', notes: [{ c: 3, f: 2 }, { c: 4, f: 0 }], d: 0.22, rh: 'p', lh: '2-0', ann: 'Bordão de afirmação' },
+            { measure: 2, beat: '1', role: 'tutti', voiceName: 'Dueto Mestre & Contra', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.24, rh: 'p+i', lh: '1-3', ann: '"Para o ano se for vivo..."' },
+            { measure: 2, beat: '1 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', ann: '"...Nós volta com alegria!"' },
+            { measure: 2, beat: '2', role: 'mestre', voiceName: 'Mestre (1ª Viola)', notes: [{ c: 1, f: 0 }, { c: 2, f: 1 }], d: 0.24, rh: 'p+i', lh: '0-1', ann: 'Último chamado na porta' },
+            { measure: 2, beat: '2 e', role: 'tutti', voiceName: 'Dueto Mestre & Contra', chordVoicing: [0, 0, 1, 2, 0], chordName: 'E (Bênção Final)', d: 0.42, rh: 'rasq', lh: '0-0-1-2-0', ann: 'Amém sertanejo: Acorde aberto puro' }
+        ]
+    }
+};
+
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -1748,7 +1994,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         modalTrainer: Object.assign({}, DEFAULT_MODAL_TRAINER_STATE),
         tensionCalculator: Object.assign({}, DEFAULT_TENSION_STATE),
         historicalTunings: Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE),
-        modulation: Object.assign({}, DEFAULT_MODULATION_STATE)
+        modulation: Object.assign({}, DEFAULT_MODULATION_STATE),
+        folia: Object.assign({}, DEFAULT_FOLIA_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -1772,6 +2019,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
     let activeHistoricalTimers = [];
     let modulationPlaybackTimer = null;
     let activeModulationTimers = [];
+    let foliaPlaybackTimer = null;
+    let activeFoliaTimers = [];
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -2708,6 +2957,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopPonteioPlayback();
         stopTabEditorPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
         stopTunerTone();
 
         state.progressionPlaying = true;
@@ -3263,6 +3514,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopProgressionPlayback();
         stopTabEditorPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
         stopTunerTone();
         stopEarTrainerAudio();
 
@@ -3853,6 +4106,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopEarTrainerAudio();
         stopPonteioPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
 
         const proj = getActiveTabProject();
         if (!proj || !proj.steps || proj.steps.length === 0) return;
@@ -5697,6 +5952,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopEarTrainerAudio();
         stopPonteioPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
         stopTabEditorPlayback();
 
         const inst = INSTRUMENTS[state.instrumentId];
@@ -7404,6 +7661,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopTabEditorPlayback();
         stopModalPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
         stopTunerTone();
         stopEarTrainerAudio();
 
@@ -7452,6 +7711,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopTabEditorPlayback();
         stopModalPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
         stopTunerTone();
         stopEarTrainerAudio();
 
@@ -7528,6 +7789,8 @@ const CAIPIRA_MODULATIONS_CATALOG = {
         stopTabEditorPlayback();
         stopModalPlayback();
         stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
         stopTunerTone();
         stopEarTrainerAudio();
 
@@ -8442,6 +8705,8 @@ function playModulationSequence() {
     stopTabEditorPlayback();
     stopModalPlayback();
     stopHistoricalAudio();
+    stopModulationAudio();
+    stopFoliaAudio();
     stopTunerTone();
     stopEarTrainerAudio();
 
@@ -8964,6 +9229,596 @@ function setupModulationListeners() {
         window.lucide.createIcons();
     }
 }
+
+
+// =========================================================================
+// MOTOR DA FASE 12: DICIONÁRIO DE LICKS & FRASES DE RESPOSTA DE FOLIA DE REIS
+// =========================================================================
+
+function stopFoliaAudio() {
+    if (foliaPlaybackTimer) {
+        clearTimeout(foliaPlaybackTimer);
+        foliaPlaybackTimer = null;
+    }
+    activeFoliaTimers.forEach((t) => clearTimeout(t));
+    activeFoliaTimers = [];
+
+    state.folia.isPlaying = false;
+    state.folia.currentStepIdx = -1;
+    updateFoliaUIProgress();
+    if (state.displayMode === 'FOLIA') {
+        renderFretboardSVG();
+    }
+}
+
+function playFoliaStep(step) {
+    if (!step) return;
+    ensureAudioContext();
+
+    if (step.rh === 'tap') {
+        playWoodTap(0, 0.9);
+        return;
+    }
+    if (step.rh === 'chock') {
+        playMuteChock(0, 0.85);
+        return;
+    }
+    if (step.rh === 'rasq') {
+        playRasqueado(0, 0.85);
+        return;
+    }
+
+    const inst = INSTRUMENTS[state.instrumentId];
+
+    // Acorde completo
+    if (step.chordVoicing && Array.isArray(step.chordVoicing)) {
+        strumCustomShape(step.chordVoicing, 0.02, true);
+        return;
+    }
+
+    // Notas individuais ou duetadas
+    if (step.notes && Array.isArray(step.notes) && step.notes.length > 0) {
+        step.notes.forEach((nt, idx) => {
+            if (nt.c >= 0 && nt.c < inst.courses.length) {
+                const c = inst.courses[nt.c];
+                const midi = c.midi[0] + nt.f;
+                const dur = step.d || 0.25;
+                const delay = idx * 0.012;
+
+                const isMestre = step.role === 'mestre';
+                const gain = isMestre ? 0.25 : 0.22;
+                const detune = (c.octaved ? 3.5 : 1.8) * (idx % 2 === 0 ? 1 : -1);
+
+                pluckMidiNote(midi, delay, dur, detune, gain);
+
+                // Se o par for oitavado na viola, sintetiza a oitava aguda do par
+                if (c.octaved && c.midi.length > 1) {
+                    const octMidi = c.midi[1] + nt.f;
+                    pluckMidiNote(octMidi, delay + 0.003, dur * 0.9, detune + 2, gain * 0.75);
+                }
+            }
+        });
+    }
+}
+
+function executeFoliaStep() {
+    const lick = FOLIA_LICKS_CATALOG[state.folia.activeLickId];
+    if (!lick || !lick.steps || lick.steps.length === 0) {
+        stopFoliaAudio();
+        return;
+    }
+
+    const sIdx = state.folia.currentStepIdx;
+    if (sIdx < 0 || sIdx >= lick.steps.length) {
+        if (state.folia.isLooping) {
+            state.folia.currentStepIdx = 0;
+            executeFoliaStep();
+        } else {
+            stopFoliaAudio();
+        }
+        return;
+    }
+
+    const step = lick.steps[sIdx];
+    const roleFilter = state.folia.activeRoleFilter || 'both';
+
+    // Checa se o passo deve soar com base no filtro de voz/papel
+    let shouldPlayAudio = true;
+    if (roleFilter === 'mestre' && step.role === 'resposta') {
+        shouldPlayAudio = false;
+    } else if (roleFilter === 'resposta' && step.role === 'mestre') {
+        shouldPlayAudio = false;
+    }
+
+    if (shouldPlayAudio) {
+        playFoliaStep(step);
+    }
+
+    updateFoliaUIProgress();
+    if (state.displayMode === 'FOLIA') {
+        renderFretboardSVG();
+    }
+
+    // Calcula tempo do próximo passo
+    const speed = state.folia.playbackSpeed || 1.0;
+    const stepDurationMs = Math.max(120, ((step.d || 0.25) * 1000) / speed);
+
+    state.folia.currentStepIdx = sIdx + 1;
+    foliaPlaybackTimer = setTimeout(executeFoliaStep, stepDurationMs);
+}
+
+function playFoliaSequence() {
+    if (state.folia.isPlaying) {
+        stopFoliaAudio();
+        return;
+    }
+
+    stopScalePlayback();
+    stopPonteioPlayback();
+    stopProgressionPlayback();
+    stopTabEditorPlayback();
+    stopModalPlayback();
+    stopHistoricalAudio();
+    stopModulationAudio();
+    stopTunerTone();
+    stopEarTrainerAudio();
+
+    state.folia.isPlaying = true;
+    state.folia.currentStepIdx = 0;
+    state.displayMode = 'FOLIA';
+    saveViolaState();
+    renderFretboardSVG();
+    updateFoliaUIProgress();
+    executeFoliaStep();
+}
+
+function playSingleFoliaStep(idx) {
+    const lick = FOLIA_LICKS_CATALOG[state.folia.activeLickId];
+    if (!lick || !lick.steps || !lick.steps[idx]) return;
+
+    state.folia.currentStepIdx = idx;
+    playFoliaStep(lick.steps[idx]);
+    updateFoliaUIProgress();
+    if (state.displayMode === 'FOLIA') {
+        renderFretboardSVG();
+    }
+}
+
+function cloneFoliaToTabEditor(lickId) {
+    const lick = FOLIA_LICKS_CATALOG[lickId || state.folia.activeLickId];
+    if (!lick || !lick.steps) return;
+
+    const projectId = `folia_${lick.id}_${Date.now().toString(36)}`;
+    const convertedSteps = lick.steps.map((st) => ({
+        measure: st.measure,
+        beat: st.beat,
+        notes: st.notes ? st.notes.map((n) => ({ c: n.c, f: n.f })) : [],
+        rh: st.rh || 'p+i',
+        ann: `${st.voiceName ? st.voiceName + ': ' : ''}${st.ann || ''}`
+    }));
+
+    const newProject = {
+        id: projectId,
+        title: `Folia: ${lick.title}`,
+        timeSignature: lick.timeSignature || '2/4',
+        bpm: lick.bpm || 92,
+        instrumentId: lick.tuning || 'viola_cebolao_e',
+        notes: `Frase canônica de Folia de Reis (${lick.liturgy} — ${lick.region}). Clonada do Dicionário de Folia da Fase 12.`,
+        steps: convertedSteps
+    };
+
+    if (!Array.isArray(state.tabEditor.projects)) {
+        state.tabEditor.projects = [];
+    }
+    state.tabEditor.projects.unshift(newProject);
+    state.tabEditor.activeProjectId = projectId;
+    state.displayMode = 'TAB_EDITOR';
+    saveViolaState();
+    renderAll();
+
+    const edWrap = document.getElementById('viola-tab-editor-container');
+    if (edWrap) edWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateFoliaUIProgress() {
+    const container = document.getElementById('viola-folia-container');
+    if (!container) return;
+
+    const playBtn = document.getElementById('btn-viola-folia-toggle-play');
+    if (playBtn) {
+        if (state.folia.isPlaying) {
+            playBtn.className = 'min-h-[40px] px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-rose-900/30 transition';
+            playBtn.innerHTML = '<i data-lucide="square" class="w-4 h-4 fill-white"></i><span>Parar Sequência</span>';
+        } else {
+            playBtn.className = 'min-h-[40px] px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-900/30 transition';
+            playBtn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-slate-950"></i><span>Ouvir Sequência Completa</span>';
+        }
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    const curIdx = state.folia.currentStepIdx;
+    container.querySelectorAll('[data-folia-step-card]').forEach((card) => {
+        const idx = parseInt(card.getAttribute('data-folia-step-card'), 10);
+        if (idx === curIdx) {
+            card.classList.add('ring-2', 'ring-amber-400', 'bg-amber-500/20', 'border-amber-400');
+        } else {
+            card.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-500/20', 'border-amber-400');
+        }
+    });
+}
+
+function renderFoliaSection() {
+    const container = document.getElementById('viola-folia-container');
+    if (!container) return;
+
+    const activeLick = FOLIA_LICKS_CATALOG[state.folia.activeLickId] || FOLIA_LICKS_CATALOG.folia_chegada_porteira;
+    const catKeys = Object.keys(FOLIA_CATEGORIES);
+
+    // Filtra licks por categoria ativa
+    const filteredLicks = Object.values(FOLIA_LICKS_CATALOG).filter((lk) => {
+        if (state.folia.activeCategory === 'all') return true;
+        return lk.category === state.folia.activeCategory;
+    });
+
+    const isPlaying = state.folia.isPlaying;
+    const curIdx = state.folia.currentStepIdx;
+    const roleFilter = state.folia.activeRoleFilter || 'both';
+
+    let html = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-4">
+            <!-- Cabeçalho com Badges Litúrgicos -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <i data-lucide="crown" class="w-5 h-5 text-amber-400"></i>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Dicionário de Licks &amp; Frases de Resposta de Folia de Reis</h3>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Devoção &amp; Polifonia Litúrgica</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Fase 12</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Mapeamento canônico dos toques cerimoniais de Santos Reis de Minas Gerais, Goiás e Vale do Paraíba: diálogos em terças entre Mestre e Contra-Mestre, batidas de tampo [TAP] e contracantos de turina.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" id="btn-viola-folia-clone-tab" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span>Clonar p/ Editor de Tablatura</span>
+                    </button>
+                    <button type="button" id="btn-viola-folia-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-cyan-300 flex items-center gap-1.5 transition">
+                        <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Projetar no Braço SVG</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros de Categoria -->
+            <div class="flex flex-wrap items-center gap-1.5">
+                ${catKeys.map((k) => {
+                    const c = FOLIA_CATEGORIES[k];
+                    const active = state.folia.activeCategory === k;
+                    return `
+                        <button type="button" data-folia-filter-cat="${c.id}"
+                            class="px-2.5 py-1 rounded-md text-xs font-mono transition flex items-center gap-1.5 ${
+                                active
+                                    ? 'bg-amber-500 text-slate-950 font-bold shadow'
+                                    : 'bg-[#090d16] hover:bg-slate-800 text-slate-300 border border-slate-800'
+                            }">
+                            <i data-lucide="${c.icon}" class="w-3.5 h-3.5"></i>
+                            <span>${c.label}</span>
+                            <span class="text-[10px] opacity-75">(${c.badge})</span>
+                        </button>
+                    `;
+                }).join('')}
+            </div>
+
+            <!-- Grade de Seleção de Licks / Frases -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                ${filteredLicks.map((lk) => {
+                    const isSel = state.folia.activeLickId === lk.id;
+                    return `
+                        <div data-select-folia-id="${lk.id}"
+                            class="cursor-pointer rounded-lg p-3 transition border text-left ${
+                                isSel
+                                    ? 'bg-amber-500/10 border-amber-500 shadow-md ring-1 ring-amber-500/40'
+                                    : 'bg-[#090d16] border-slate-800 hover:border-slate-700'
+                            }">
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pb-1">
+                                <span class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">${lk.timeSignature} · ${lk.bpm} BPM</span>
+                                <span class="text-[10px] text-slate-400">${lk.steps.length} passos</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-100 mt-1 line-clamp-1">${lk.title}</h4>
+                            <p class="text-[11px] text-amber-300/80 mt-0.5 line-clamp-1">${lk.liturgy}</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5 line-clamp-1 font-mono">${lk.region}</p>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <!-- Card de Contextualização Litúrgica & Técnica da Frase Ativa -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                    <div class="space-y-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono uppercase rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">${activeLick.liturgy}</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-slate-300">${activeLick.tuningLabel}</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-cyan-300">${activeLick.key}</span>
+                        </div>
+                        <h4 class="text-sm sm:text-base font-bold text-slate-100">${activeLick.title}</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">${activeLick.description}</p>
+                    </div>
+
+                    <!-- Bloco do Verso Sagrado Cantado -->
+                    <div class="min-w-[260px] max-w-sm bg-slate-900/80 border border-amber-500/20 rounded-lg p-3 space-y-1">
+                        <div class="flex items-center gap-1.5 text-amber-400 text-xs font-mono font-semibold">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            <span>Verso de Chegada / Devoção</span>
+                        </div>
+                        <p class="text-xs italic text-amber-200/90 leading-relaxed font-serif">"${activeLick.verse}"</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-slate-800/80 text-[11px]">
+                    <div class="flex items-start gap-1.5 text-slate-300">
+                        <span class="font-bold text-amber-400 font-mono">Dueto Litúrgico:</span>
+                        <span>${activeLick.dialogueRoleSummary}</span>
+                    </div>
+                    <div class="flex items-start gap-1.5 text-slate-300">
+                        <span class="font-bold text-cyan-400 font-mono">Dica de Execução:</span>
+                        <span>${activeLick.techniqueTip}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles do Sequenciador e Filtro de Papel (Mestre / Contra) -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-folia-toggle-play"
+                            class="min-h-[40px] px-4 py-1.5 rounded-lg ${
+                                isPlaying
+                                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-900/30'
+                                    : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-900/30'
+                            } font-bold text-xs flex items-center gap-1.5 transition">
+                            <i data-lucide="${isPlaying ? 'square' : 'play'}" class="w-4 h-4 ${isPlaying ? 'fill-white' : 'fill-slate-950'}"></i>
+                            <span>${isPlaying ? 'Parar Sequência' : 'Ouvir Sequência Completa'}</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-folia-step-prev" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 flex items-center gap-1">
+                            <i data-lucide="skip-back" class="w-4 h-4"></i>
+                            <span>Passo Anterior</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-folia-step-next" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 flex items-center gap-1">
+                            <span>Próximo</span>
+                            <i data-lucide="skip-forward" class="w-4 h-4"></i>
+                        </button>
+
+                        <button type="button" id="btn-viola-folia-toggle-loop"
+                            class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition ${
+                                state.folia.isLooping
+                                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                    : 'bg-slate-800 text-slate-400 border border-slate-700'
+                            }">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                            <span>Loop Contínuo</span>
+                        </button>
+                    </div>
+
+                    <!-- Filtro de Voz e Andamento -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="inline-flex rounded-lg bg-slate-900 border border-slate-700 p-0.5" role="group">
+                            <button type="button" data-folia-role="both"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    roleFilter === 'both' ? 'bg-amber-500 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Dueto Completo</button>
+                            <button type="button" data-folia-role="mestre"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    roleFilter === 'mestre' ? 'bg-amber-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Só Mestre</button>
+                            <button type="button" data-folia-role="resposta"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    roleFilter === 'resposta' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Só Contra-Mestre</button>
+                        </div>
+
+                        <div class="inline-flex rounded-lg bg-slate-900 border border-slate-700 p-0.5" role="group">
+                            ${[0.5, 0.75, 1.0, 1.25].map((spd) => `
+                                <button type="button" data-folia-speed="${spd}"
+                                    class="px-2 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                        state.folia.playbackSpeed === spd ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                                    }">${spd}x</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Régua Visual de Passos da Frase (Visual Steps Strip) -->
+                <div class="space-y-1.5 pt-2">
+                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <span>Régua Interativa de Passos (Clique em qualquer passo para audição individual):</span>
+                        <span>Passo Ativo: ${curIdx >= 0 && curIdx < activeLick.steps.length ? `${curIdx + 1}/${activeLick.steps.length}` : '—'}</span>
+                    </div>
+
+                    <div id="viola-folia-steps-strip" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+                        ${activeLick.steps.map((st, sIdx) => {
+                            const isCur = sIdx === curIdx;
+                            const isMestre = st.role === 'mestre';
+                            const isResp = st.role === 'resposta';
+                            const roleColor = isMestre ? 'text-amber-400 border-amber-500/40 bg-amber-500/10' : (isResp ? 'text-cyan-400 border-cyan-500/40 bg-cyan-500/10' : 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10');
+                            const roleBadge = isMestre ? 'Mestre' : (isResp ? 'Contra' : 'Tutti');
+
+                            let notesDisplay = '';
+                            if (st.chordName) {
+                                notesDisplay = `<span class="font-bold text-amber-300">${st.chordName}</span>`;
+                            } else if (st.rh === 'tap') {
+                                notesDisplay = '<span class="text-rose-400 font-bold">🪵 [TAP] Tampo</span>';
+                            } else if (st.rh === 'chock') {
+                                notesDisplay = '<span class="text-purple-400 font-bold">✋ [CHOCK] Abafado</span>';
+                            } else if (st.notes && st.notes.length > 0) {
+                                notesDisplay = st.notes.map((n) => `P${n.c + 1} c${n.f}`).join(' · ');
+                            }
+
+                            return `
+                                <div data-folia-step-card="${sIdx}"
+                                    class="cursor-pointer rounded-lg p-2.5 transition border text-left flex flex-col justify-between ${
+                                        isCur
+                                            ? 'bg-amber-500/20 border-amber-400 ring-2 ring-amber-400 shadow-md'
+                                            : 'bg-[#090d16] border-slate-800 hover:border-slate-700'
+                                    }">
+                                    <div class="flex items-center justify-between text-[10px] font-mono pb-1 border-b border-slate-800/60">
+                                        <span class="text-slate-400">c.${st.measure} · t.${st.beat}</span>
+                                        <span class="px-1 py-0.2 rounded text-[9px] uppercase font-bold border ${roleColor}">${roleBadge}</span>
+                                    </div>
+                                    <div class="py-1.5 text-center">
+                                        <div class="text-xs font-mono font-bold text-slate-100">${notesDisplay}</div>
+                                        <div class="text-[10px] font-mono text-slate-400 mt-0.5">Técnica: <span class="text-slate-200">${st.rh || 'p+i'}</span></div>
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 line-clamp-1 border-t border-slate-800/40 pt-1 text-center font-mono">
+                                        ${st.ann || ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+    setupFoliaListeners();
+}
+
+function setupFoliaListeners() {
+    const container = document.getElementById('viola-folia-container');
+    if (!container) return;
+
+    // Filtros de Categoria
+    container.querySelectorAll('[data-folia-filter-cat]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const cat = btn.getAttribute('data-folia-filter-cat');
+            state.folia.activeCategory = cat;
+            saveViolaState();
+            renderFoliaSection();
+        });
+    });
+
+    // Seleção de Lick no Catálogo
+    container.querySelectorAll('[data-select-folia-id]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const lkId = card.getAttribute('data-select-folia-id');
+            stopFoliaAudio();
+            state.folia.activeLickId = lkId;
+            saveViolaState();
+            renderFoliaSection();
+            if (state.displayMode === 'FOLIA') {
+                renderFretboardSVG();
+            }
+        });
+    });
+
+    // Botão Ouvir Sequência Completa / Parar
+    const playBtn = document.getElementById('btn-viola-folia-toggle-play');
+    if (playBtn) {
+        playBtn.addEventListener('click', playFoliaSequence);
+    }
+
+    // Botão Passo Anterior
+    const prevBtn = document.getElementById('btn-viola-folia-step-prev');
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            const lick = FOLIA_LICKS_CATALOG[state.folia.activeLickId];
+            if (!lick || !lick.steps) return;
+            stopFoliaAudio();
+            let nextIdx = (state.folia.currentStepIdx - 1 + lick.steps.length) % lick.steps.length;
+            playSingleFoliaStep(nextIdx);
+        });
+    }
+
+    // Botão Próximo Passo
+    const nextBtn = document.getElementById('btn-viola-folia-step-next');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const lick = FOLIA_LICKS_CATALOG[state.folia.activeLickId];
+            if (!lick || !lick.steps) return;
+            stopFoliaAudio();
+            let nextIdx = (state.folia.currentStepIdx + 1) % lick.steps.length;
+            playSingleFoliaStep(nextIdx);
+        });
+    }
+
+    // Botão Loop
+    const loopBtn = document.getElementById('btn-viola-folia-toggle-loop');
+    if (loopBtn) {
+        loopBtn.addEventListener('click', () => {
+            state.folia.isLooping = !state.folia.isLooping;
+            saveViolaState();
+            renderFoliaSection();
+        });
+    }
+
+    // Filtros de Voz / Papel (both, mestre, resposta)
+    container.querySelectorAll('[data-folia-role]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const role = btn.getAttribute('data-folia-role');
+            state.folia.activeRoleFilter = role;
+            saveViolaState();
+            renderFoliaSection();
+        });
+    });
+
+    // Velocidade de Reprodução
+    container.querySelectorAll('[data-folia-speed]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const spd = parseFloat(btn.getAttribute('data-folia-speed'));
+            state.folia.playbackSpeed = spd;
+            saveViolaState();
+            renderFoliaSection();
+        });
+    });
+
+    // Clique em Passo Individual na Régua
+    container.querySelectorAll('[data-folia-step-card]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const idx = parseInt(card.getAttribute('data-folia-step-card'), 10);
+            stopFoliaAudio();
+            playSingleFoliaStep(idx);
+        });
+    });
+
+    // Botão Projetar no Braço SVG
+    const toFretBtn = document.getElementById('btn-viola-folia-to-fretboard');
+    if (toFretBtn) {
+        toFretBtn.addEventListener('click', () => {
+            stopScalePlayback();
+            stopPonteioPlayback();
+            stopProgressionPlayback();
+            stopTabEditorPlayback();
+            stopModalPlayback();
+            stopHistoricalAudio();
+            stopModulationAudio();
+            stopFoliaAudio();
+            state.displayMode = 'FOLIA';
+            saveViolaState();
+            renderAll();
+            const fboard = document.getElementById('viola-fretboard-svg-wrap');
+            if (fboard) fboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    // Botão Clonar p/ Editor de Tablatura
+    const cloneTabBtn = document.getElementById('btn-viola-folia-clone-tab');
+    if (cloneTabBtn) {
+        cloneTabBtn.addEventListener('click', () => {
+            cloneFoliaToTabEditor(state.folia.activeLickId);
+        });
+    }
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
+
+
 
 
 
@@ -11124,6 +11979,110 @@ function setupModulationListeners() {
                 }
             }
         }
+        } else if (state.displayMode === 'FOLIA') {
+            // FASE 12: PROJEÇÃO DE LICKS & FRASES DE RESPOSTA DE FOLIA DE REIS
+            const lick = FOLIA_LICKS_CATALOG[state.folia.activeLickId];
+            if (lick && lick.steps) {
+                const curStepIdx = state.folia.currentStepIdx;
+                const activeStep = (curStepIdx >= 0 && curStepIdx < lick.steps.length) ? lick.steps[curStepIdx] : null;
+
+                // 1. Marcações fantasma de todos os passos do lick
+                const ghostKeys = new Set();
+                lick.steps.forEach((st) => {
+                    const isMestre = st.role === 'mestre';
+                    const isResp = st.role === 'resposta';
+                    const stepColor = isMestre ? '#f59e0b' : (isResp ? '#06b6d4' : '#10b981');
+
+                    // Notas normais do passo
+                    if (st.notes && Array.isArray(st.notes)) {
+                        st.notes.forEach((n) => {
+                            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                                const key = `${n.c}_${n.f}`;
+                                if (!ghostKeys.has(key)) {
+                                    ghostKeys.add(key);
+                                    const pc = (inst.courses[n.c] ? inst.courses[n.c].pitchClass + n.f : n.f) % 12;
+                                    activeMarkers.push({
+                                        courseIdx: n.c,
+                                        fret: n.f,
+                                        label: NOTE_NAMES[pc],
+                                        sub: isMestre ? 'M' : (isResp ? 'R' : 'T'),
+                                        color: stepColor,
+                                        opacity: '0.28'
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                    // Se for acorde
+                    if (st.chordVoicing && Array.isArray(st.chordVoicing)) {
+                        st.chordVoicing.forEach((f, cIdx) => {
+                            if (f >= 0) {
+                                const key = `${cIdx}_${f}`;
+                                if (!ghostKeys.has(key)) {
+                                    ghostKeys.add(key);
+                                    const pc = (inst.courses[cIdx] ? inst.courses[cIdx].pitchClass + f : f) % 12;
+                                    activeMarkers.push({
+                                        courseIdx: cIdx,
+                                        fret: f,
+                                        label: NOTE_NAMES[pc],
+                                        sub: st.chordName || 'Ac',
+                                        color: stepColor,
+                                        opacity: '0.22'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // 2. Passo ativo em destaque máximo
+                if (activeStep) {
+                    const isMestre = activeStep.role === 'mestre';
+                    const isResp = activeStep.role === 'resposta';
+                    const activeColor = isMestre ? '#f59e0b' : (isResp ? '#06b6d4' : '#10b981');
+
+                    if (activeStep.notes && Array.isArray(activeStep.notes)) {
+                        activeStep.notes.forEach((n) => {
+                            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                                const pc = (inst.courses[n.c] ? inst.courses[n.c].pitchClass + n.f : n.f) % 12;
+                                activeMarkers.push({
+                                    courseIdx: n.c,
+                                    fret: n.f,
+                                    label: NOTE_NAMES[pc],
+                                    sub: isMestre ? 'Mestre' : (isResp ? 'Resposta' : 'Tutti'),
+                                    color: activeColor,
+                                    stroke: '#ffffff',
+                                    strokeWidth: 3.5,
+                                    opacity: '1'
+                                });
+                            }
+                        });
+                    }
+
+                    if (activeStep.chordVoicing && Array.isArray(activeStep.chordVoicing)) {
+                        activeStep.chordVoicing.forEach((f, cIdx) => {
+                            if (f < 0) {
+                                mutedCourses.add(cIdx);
+                            } else {
+                                const pc = (inst.courses[cIdx] ? inst.courses[cIdx].pitchClass + f : f) % 12;
+                                activeMarkers.push({
+                                    courseIdx: cIdx,
+                                    fret: f,
+                                    label: NOTE_NAMES[pc],
+                                    sub: activeStep.chordName || (isMestre ? 'Mestre' : 'Resp'),
+                                    color: activeColor,
+                                    stroke: '#ffffff',
+                                    strokeWidth: 3.5,
+                                    opacity: '1'
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
 
 
         
@@ -11783,7 +12742,15 @@ function setupModulationListeners() {
                     currentStepIdx: -1
                 });
             } else {
-                state.modulation = Object.assign({}, DEFAULT_MODULATION_STATE);
+                state.modulation = Object.assign({}
+            if (saved.folia && typeof saved.folia === 'object') {
+                state.folia = Object.assign({}, DEFAULT_FOLIA_STATE, saved.folia, {
+                    isPlaying: false,
+                    currentStepIdx: -1
+                });
+            } else {
+                state.folia = Object.assign({}, DEFAULT_FOLIA_STATE);
+            }, DEFAULT_MODULATION_STATE);
             }
 
             if (saved.historicalTunings && typeof saved.historicalTunings === 'object') {
@@ -11827,6 +12794,12 @@ function setupModulationListeners() {
         }
         if (copy.modulation) {
             copy.modulation = Object.assign({}, copy.modulation, {
+                isPlaying: false,
+                currentStepIdx: -1
+            });
+        }
+        if (copy.folia) {
+            copy.folia = Object.assign({}, copy.folia, {
                 isPlaying: false,
                 currentStepIdx: -1
             });
@@ -11895,6 +12868,10 @@ function setupModulationListeners() {
                             <i data-lucide="git-merge" class="w-4 h-4 text-pink-400"></i>
                             <span>Modula&ccedil;&otilde;es (Fase 11)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-folia" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
+                            <span>Folia de Reis (Fase 12)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -11934,7 +12911,7 @@ function setupModulationListeners() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -12110,6 +13087,8 @@ function setupModulationListeners() {
 
                 <!-- Modulo de Modulacoes & Preparacao Harmonica Caipira (Fase 11) -->
                 <div id="viola-modulation-container" class="space-y-4"></div>
+                <!-- Modulo de Dicionario de Licks & Frases de Resposta de Folia de Reis (Fase 12) -->
+                <div id="viola-folia-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -12297,122 +13276,6 @@ function setupModulationListeners() {
             }
             const btnModeHistorical = document.getElementById('btn-viola-mode-historical');
             if (btnModeHistorical) {
-                btnModeHistorical.className = state.displayMode === 'HISTORICAL'
-                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-500 text-slate-950 shadow'
-                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            }
-            const btnModeModulation = document.getElementById('btn-viola-mode-modulation');
-            if (btnModeModulation) {
-                btnModeModulation.className = state.displayMode === 'MODULATION'
-                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-pink-600 text-white shadow'
-                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            }
-        }
-    }
-
-    function bindEvents() {
-        // Modos de Projeção no Braço
-        const btnModeChord = document.getElementById('btn-viola-mode-chord');
-        const btnModeDuad = document.getElementById('btn-viola-mode-duad');
-        const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
-        const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
-        const btnModeTabEditor = document.getElementById('btn-viola-mode-tab-editor');
-        const btnModeModal = document.getElementById('btn-viola-mode-modal');
-        const btnModeHistorical = document.getElementById('btn-viola-mode-historical');
-        if (btnModeChord && btnModeDuad && btnModeReverse) {
-            btnModeChord.addEventListener('click', () => {
-                if (state.displayMode !== 'CHORD') {
-                    stopScalePlayback();
-                    stopPonteioPlayback();
-                    stopProgressionPlayback();
-                    stopTabEditorPlayback();
-                    stopModalPlayback();
-                    stopHistoricalAudio();
-                    state.displayMode = 'CHORD';
-                    saveViolaState();
-                    renderAll();
-                    strumActiveChord();
-                }
-            });
-            btnModeDuad.addEventListener('click', () => {
-                if (state.displayMode !== 'DUAD') {
-                    stopScalePlayback();
-                    stopPonteioPlayback();
-                    stopProgressionPlayback();
-                    stopTabEditorPlayback();
-                    stopModalPlayback();
-                    stopHistoricalAudio();
-                    state.displayMode = 'DUAD';
-                    saveViolaState();
-                    renderAll();
-                }
-            });
-            btnModeReverse.addEventListener('click', () => {
-                if (state.displayMode !== 'REVERSE') {
-                    stopScalePlayback();
-                    stopPonteioPlayback();
-                    stopProgressionPlayback();
-                    stopTabEditorPlayback();
-                    stopModalPlayback();
-                    stopHistoricalAudio();
-                    state.displayMode = 'REVERSE';
-                    saveViolaState();
-                    renderAll();
-                    strumReverseChord();
-                }
-            });
-            if (btnModePonteio) {
-                btnModePonteio.addEventListener('click', () => {
-                    if (state.displayMode !== 'PONTEIO') {
-                        stopScalePlayback();
-                        stopPonteioPlayback();
-                        stopProgressionPlayback();
-                        stopTabEditorPlayback();
-                        stopModalPlayback();
-                        stopHistoricalAudio();
-                        state.displayMode = 'PONTEIO';
-                        saveViolaState();
-                        renderAll();
-                        const pWrap = document.getElementById('viola-ponteios-container');
-                        if (pWrap) pWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-            if (btnModeTabEditor) {
-                btnModeTabEditor.addEventListener('click', () => {
-                    if (state.displayMode !== 'TAB_EDITOR') {
-                        stopScalePlayback();
-                        stopPonteioPlayback();
-                        stopProgressionPlayback();
-                        stopTabEditorPlayback();
-                        stopModalPlayback();
-                        stopHistoricalAudio();
-                        state.displayMode = 'TAB_EDITOR';
-                        saveViolaState();
-                        renderAll();
-                        const edWrap = document.getElementById('viola-tab-editor-container');
-                        if (edWrap) edWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-            if (btnModeModal) {
-                btnModeModal.addEventListener('click', () => {
-                    if (state.displayMode !== 'MODAL') {
-                        stopScalePlayback();
-                        stopPonteioPlayback();
-                        stopProgressionPlayback();
-                        stopTabEditorPlayback();
-                        stopModalPlayback();
-                        stopHistoricalAudio();
-                        state.displayMode = 'MODAL';
-                        saveViolaState();
-                        renderAll();
-                        const mWrap = document.getElementById('viola-modal-trainer-container');
-                        if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-            if (btnModeHistorical) {
                 btnModeHistorical.addEventListener('click', () => {
                     if (state.displayMode !== 'HISTORICAL') {
                         stopScalePlayback();
@@ -12421,12 +13284,16 @@ function setupModulationListeners() {
                         stopTabEditorPlayback();
                         stopModalPlayback();
                         stopHistoricalAudio();
+                        stopModulationAudio();
+                        stopFoliaAudio();
                         state.displayMode = 'HISTORICAL';
                         saveViolaState();
                         renderAll();
                         const hWrap = document.getElementById('viola-historical-tunings-container');
                         if (hWrap) hWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
+                });
+            }
             const btnModeModulation = document.getElementById('btn-viola-mode-modulation');
             if (btnModeModulation) {
                 btnModeModulation.addEventListener('click', () => {
@@ -12438,6 +13305,7 @@ function setupModulationListeners() {
                         stopModalPlayback();
                         stopHistoricalAudio();
                         stopModulationAudio();
+                        stopFoliaAudio();
                         state.displayMode = 'MODULATION';
                         saveViolaState();
                         renderAll();
@@ -12453,11 +13321,36 @@ function setupModulationListeners() {
                     if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             }
+            const btnModeFolia = document.getElementById('btn-viola-mode-folia');
+            if (btnModeFolia) {
+                btnModeFolia.addEventListener('click', () => {
+                    if (state.displayMode !== 'FOLIA') {
+                        stopScalePlayback();
+                        stopPonteioPlayback();
+                        stopProgressionPlayback();
+                        stopTabEditorPlayback();
+                        stopModalPlayback();
+                        stopHistoricalAudio();
+                        stopModulationAudio();
+                        stopFoliaAudio();
+                        state.displayMode = 'FOLIA';
+                        saveViolaState();
+                        renderAll();
+                        const fWrap = document.getElementById('viola-folia-container');
+                        if (fWrap) fWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+            const btnScrollFolia = document.getElementById('btn-viola-scroll-folia');
+            if (btnScrollFolia) {
+                btnScrollFolia.addEventListener('click', () => {
+                    const fWrap = document.getElementById('viola-folia-container');
+                    if (fWrap) fWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             }
         }
 
-        // Ações Rápidas do Dicionário & Buscador Reverso
+        // Acoes Rapidas do Dicionario & Buscador Reverso
         const btnRevStrum = document.getElementById('btn-viola-reverse-strum');
         if (btnRevStrum) {
             btnRevStrum.addEventListener('click', strumReverseChord);
@@ -12806,6 +13699,7 @@ function setupModulationListeners() {
         renderTensionCalculatorSection();
         renderHistoricalTuningsSection();
         renderModulationSection();
+        renderFoliaSection();
         renderMetronomeControls();
     }
 

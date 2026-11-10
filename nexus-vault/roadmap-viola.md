@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 12 — Dicionário de Licks & Frases de Resposta de Folia de Reis
+## 🎯 Projeto Prioritário Atual: Fase 13 — Simulador de Capotraste & Transposição Inteligente para Duplas
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Mapeamento sistemático de toques de entrada, marcha, oferenda e despedida de Folias de Reis tradicionais de Minas Gerais, Goiás e interior de São Paulo (Cebolão em Mi, São Lourenço e Rio Abaixo).
-  2. Fraseados responsivos em dueto de terças e sextas entre mestre e contra-mestre com contracantos polifônicos entre turina (3º par) e prima (1º par).
-  3. Sequenciador auditivo Web Audio com chamada e resposta dialogada, visualização passo a passo no braço SVG (Canhoto e Destro) e clonagem em 1 clique para o Editor de Tablaturas.
+  1. Matriz de tessitura vocal tradicional caipira (1ª e 2ª voz caipira em intervalos de terças e sextas), permitindo ao violeiro encontrar instantaneamente o tom ideal para a extensão dos cantadores da dupla.
+  2. Simulador gráfico de braçadeira móvel (capotraste da 1ª à 9ª casa) no braço SVG (Modo Canhoto e Destro), calculando em tempo real os acordes reais gerados a partir das posições relativas dos shapes no Cebolão em Mi, Rio Abaixo e Violão.
+  3. Matriz comparativa de transposição e equivalência harmônica entre afinações caipiras e o violão de acompanhamento, com dedilhado Web Audio demonstrativo e exportação direta para o Editor de Tablaturas.
 
 ---
 
@@ -36,8 +36,8 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Expansão lutherística com temperamentos e afinações do folclore do Vale do Jequitinhonha, cerrado mineiro e sertão baiano, compêndio etnomusicológico, áudio de licks e acordes abertos, assistente de reafinação guiada e projeção no braço SVG.
 9. **[x] Gerador de Modulações & Preparação Harmônica Caipira (Fase 11 Concluída):**
    - Laboratório analítico e prático de transição tonal com 15 fórmulas canônicas (Dominantes Secundárias V7/X, Diminutos de Passagem ♯IV°, ♯I°, ♯II°, Empréstimo Modal ♭VI, ♭VII, iv e Subidas de Tom), simulador de pestanas móveis do estradão, calculadora de pontes harmônicas livres e sequenciador Web Audio API com sincronização no braço SVG canhoto/destro.
-10. **[ ] Dicionário de Licks & Frases de Resposta de Folia de Reis (Fase 12):**
-    - Mapeamento de introduções litúrgicas de devoção aos Santos Reis, fraseados responsivos de mestre de folia, contracantos de turina e toeira.
+10. **[x] Dicionário de Licks & Frases de Resposta de Folia de Reis (Fase 12 Concluída):**
+    - Mapeamento sistemático de toques litúrgicos de devoção aos Três Santos Reis (Minas Gerais, Goiás e Vale do Paraíba), diálogos em terças e sextas entre Mestre e Contra-Mestre, contracantos de turina, batidas no tampo [TAP] e abafamentos [CHOCK], sequenciador Web Audio com filtro de voz e clonagem em 1 clique para o Editor de Tablaturas.
 11. **[ ] Simulador de Capotraste & Transposição Inteligente para Duplas (Fase 13):**
     - Cálculo de tessitura de voz (1ª e 2ª voz caipira), posicionamento ideal de braçadeira móvel e visualização imediata da equivalência harmônica.
 12. **[ ] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14):**
@@ -46,6 +46,33 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **10/11/2026 — Sessão 12** (Fase 12 Concluída):
+  - **Dicionário de Licks & Frases de Resposta de Folia de Reis**:
+    - **Catálogo Canônico de 8 Licks e Toques Tradicionais de Folia (`FOLIA_LICKS_CATALOG`)**:
+      - `folia_chegada_porteira`: *Chegada na Porteira & Pedido de Licença* (Cebolão em Mi) — Entrada solene no terreiro com o Mestre subindo até a 11ª casa nas primas (sensível de Dó♯/Ré♯) e Contra-Mestre respondendo com batida de tampo [TAP] e bordão em Si/Mi.
+      - `folia_marcha_estradao`: *Marcha do Estradão dos Três Santos Reis* (Cebolão em Mi) — Trote cadenciado da romaria noturna alternando rasqueado aberto e choques percussivos abafados [CHOCK].
+      - `folia_saudacao_presepio`: *Louvação Solene ao Presépio e Menino Deus* (Cebolão em Mi) — Toque lírico em compasso 3/4 com o Mestre culminando na 12ª casa (oitava pura) e o Contra-Mestre descendo em sextas sacras de adoração.
+      - `folia_dialogo_mestre_resposta`: *Chamada do Mestre & Resposta do Contra-Mestre* (Cebolão em Mi) — Antifonia caipira clássica onde a 1ª viola interroga nos pares agudos e a 2ª viola responde com firmeza nos médios e graves.
+      - `folia_pedal_sao_lourenco`: *Toque Devocional em São Lourenço* (Afinação São Lourenço) — Toque cerimonial sustentado sobre o bordão pedal ultragrave em Ré (D2 / 73.4 Hz) no 5º par, ressoando como sino sagrado de madrugada.
+      - `folia_contracanto_turina`: *Contracanto Polifônico de Turina & Prima* (Cebolão em Mi) — Polifonia sertaneja independente com a prima (1º par) em melodia ascendente e a turina (3º par) em movimento contrário descendente.
+      - `folia_toque_palhaco`: *Dança do Bastião & Batida de Bastões* (Cebolão em Mi) — Síncopes aceleradas em 104 BPM com estalos percussivos no tampo [TAP] e batidas simuladas de cajado dos palhaços da folia.
+      - `folia_despedida_abencoada`: *Despedida da Folia & Bênção aos Moradores* (Cebolão em Mi) — Dueto fraterno em terças e sextas descendentes comovidas, agradecendo a acolhida com bênção final em acorde aberto pleno.
+    - **Síntese Acústica Realista Web Audio API**:
+      - Modelagem de técnicas físicas caipiras: batida percussiva no tampo superior (`playWoodTap`), abafamento seco de palma (`playMuteChock`), rasqueado tradicional (`playRasqueado`), microafinação de pares oitavados (cents) e timbragem distinta para a chamada cortante do Mestre e o aconchego do Contra-Mestre.
+    - **Sequenciador Auditivo com Filtro de Papel & Velocidade Didática**:
+      - Filtro de Voz comutável em tempo real: *Dueto Completo (Mestre & Contra)*, *Apenas Mestre (1ª Viola)* ou *Apenas Contra-Mestre (2ª Viola)*, permitindo ao estudante praticar o papel oposto ao vivo.
+      - Ajustes de velocidade didática (0.5x, 0.75x, 1.0x, 1.25x), botão de repetição contínua (Loop) e navegação passo a passo (Passo Anterior / Próximo).
+    - **Régua Visual Interativa de Passos (`viola-folia-steps-strip`)**:
+      - Visualização de cada passo com indicação de compasso, tempo, badge colorido de papel (Mestre em âmbar, Contra em ciano, Tutti em esmeralda), digitação nas cordas (Pares e Casas), técnica de mão direita e anotação litúrgica.
+      - Cursor luminoso em tempo real acompanhando o áudio e clique individual em qualquer card para audição isolada imediata.
+    - **Integração Total com o Braço SVG Virtual (Modo Canhoto & Destro)**:
+      - Novo modo de projeção: `👑 Folia de Reis` (`displayMode: 'FOLIA'`).
+      - Projeção em camada fantasma de todas as notas da frase ao longo do braço com diferenciação de vozes e destaque vibrante em branco e neon do passo atualmente em execução.
+    - **Clonagem em 1 Clique para o Editor de Tablatura (`cloneFoliaToTabEditor`)**:
+      - Transposição instantânea da frase litúrgica para um novo projeto no Editor de Tablaturas da Fase 7, pronto para customização, adição de novos compassos, reprodução no metrônomo e exportação em alta definição.
+    - **Persistência de Estado e Silenciamento Cruzado**:
+      - Salvamento automático de preferências via `loadViolaState`/`saveViolaState` e integração com os mecanismos de parada de áudio mútuo entre todos os módulos da Aba 3.
 
 - **09/11/2026 — Sessão 11** (Fase 11 Concluída):
   - **Gerador de Modulações & Preparação Harmônica Caipira**:
