@@ -2086,6 +2086,45 @@
         }
         if (monthsToRecoverDynamic >= maxScan) monthsToRecoverDynamic = monthsToRecover;
 
+        // Recuperação com aporte acelerado (+20% Oportunidade)
+        let simPatBoost = stressedPatrimony;
+        let monthsToRecoverWithBoost = 0;
+        const boostedAporte = currentAporte * 1.2;
+        while (simPatBoost < basePatrimony && monthsToRecoverWithBoost < maxScan) {
+            simPatBoost = simPatBoost * (1 + stressedMonthlyRate) + boostedAporte;
+            monthsToRecoverWithBoost++;
+        }
+        if (monthsToRecoverWithBoost >= maxScan) monthsToRecoverWithBoost = Math.round(lostCapital / (boostedAporte || 1));
+
+        // Impacto na cascata de despesas sob estresse
+        let stressedCascade = null;
+        let fullyCoveredTiersStressed = 0;
+        let totalTiersCount = 4;
+        try {
+            stressedCascade = computeExpenseCascade();
+            if (stressedCascade && Array.isArray(stressedCascade.tiers)) {
+                totalTiersCount = stressedCascade.tiers.length;
+                let accCost = 0;
+                stressedCascade.tiers = stressedCascade.tiers.map((t) => {
+                    const startAcc = accCost;
+                    accCost += t.cost;
+                    const endAcc = accCost;
+                    let cov = 0;
+                    if (stressedMonthlyPassive >= endAcc) {
+                        cov = 100;
+                    } else if (stressedMonthlyPassive > startAcc) {
+                        cov = ((stressedMonthlyPassive - startAcc) / t.cost) * 100;
+                    }
+                    const isFullyCovered = cov >= 100;
+                    if (isFullyCovered) fullyCoveredTiersStressed++;
+                    return Object.assign({}, t, {
+                        coveragePct: Math.min(100, Math.max(0, cov)),
+                        isFullyCovered
+                    });
+                });
+            }
+        } catch (_) {}
+
         return {
             scenarioKey,
             title,
@@ -2104,8 +2143,12 @@
             sessionsNeededStressed,
             monthsToRecover,
             monthsToRecoverDynamic,
+            monthsToRecoverWithBoost,
             effectiveAporte,
-            boost
+            boost,
+            stressedCascade,
+            fullyCoveredTiersStressed,
+            totalTiersCount
         };
     }
 
@@ -2279,9 +2322,46 @@
                         <div class="text-[11px] font-mono text-slate-300">
                             Apenas aportes mecânicos: ~${st.monthsToRecover}m
                         </div>
-                        <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800">
-                            Aporte: ${C.formatBRL(st.effectiveAporte)}/mês ${st.boost ? '• (+20% anticíclico)' : ''}
+                        <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800 flex items-center justify-between">
+                            <span>Aporte: ${C.formatBRL(st.effectiveAporte)}/mês</span>
+                            ${st.monthsToRecoverWithBoost ? `<span class="text-emerald-400 font-semibold">+20%: ~${st.monthsToRecoverWithBoost}m</span>` : ''}
                         </div>
+                    </div>
+                </div>
+
+                <!-- Painel de Impacto Direto na Cascata de Liberdade sob o Choque -->
+                <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-amber-400"></i>
+                            <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                                Impacto na Cascata de Despesas sob o Choque
+                            </h4>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded text-[11px] font-mono ${(st.fullyCoveredTiersStressed || 0) > 0 ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">
+                                ${st.fullyCoveredTiersStressed || 0} de ${st.totalTiersCount || 4} Degraus 100% Blindados
+                            </span>
+                            <span class="text-[11px] font-mono text-cyan-300">Renda sob Choque: ${C.formatBRL(st.stressedMonthlyPassive)}/mês</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                        ${(st.stressedCascade && st.stressedCascade.tiers ? st.stressedCascade.tiers : []).slice(0, 4).map((t) => `
+                            <div class="bg-[#090d16] border ${t.isFullyCovered ? 'border-emerald-500/40 bg-emerald-950/15' : 'border-slate-800'} rounded-lg p-3 space-y-1.5">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-mono font-medium text-slate-200 truncate">${C.esc(t.name)}</span>
+                                    <span class="font-mono font-bold ${t.isFullyCovered ? 'text-emerald-400' : 'text-amber-400'}">${C.formatNum(t.coveragePct, 1)}%</span>
+                                </div>
+                                <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                    <div class="h-full ${t.isFullyCovered ? 'bg-emerald-400' : 'bg-amber-400'}" style="width: ${t.coveragePct}%"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                                    <span>Custo: ${C.formatBRL(t.cost)}</span>
+                                    <span class="${t.isFullyCovered ? 'text-emerald-400 font-bold' : 'text-slate-400'}">${t.isFullyCovered ? '✓ Blindado' : 'Parcial'}</span>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
 

@@ -562,6 +562,55 @@
             defaultQuestion: 'Quais são as três coisinhas boas que aconteceram hoje e que você quer agradecer antes de sonhar?',
             challengeAct: 'estava focado em uma coisinha pequena que não deu certo mais cedo, quase esquecendo de todas as brincadeiras gostosas e do carinho recebido ao longo do dia.',
             breathCue: 'lembrou de um abraço carinhoso, inspirou com um sorriso calmo nos lábios e soltou o ar afundando suavemente no descanso mais doce da noite.'
+        },
+        resiliencia_cura_febrinha: {
+            label: '79. Convalescença, Dodói & Cura do Corpo (O ursinho que descansa no sol manso)',
+            defaultMetaphor: 'O ursinho da montanha que se recolhe na toca quentinha quando o corpinho esquenta: a febrinha é o exército de guardiões invisíveis trabalhando para proteger a saúde. Ao descansar quieto, o corpo se refaz e acorda radiante.',
+            defaultQuestion: 'Como o seu corpinho vai sentindo o alívio e o carinho do cobertor enquanto se cura devagarinho?',
+            challengeAct: 'sentiu o corpinho pesado e a testa quente, querendo pular e brincar como nos outros dias mas sem ter forças nas perninhas.',
+            breathCue: 'deitou a bochecha no travesseiro macio, puxou o ar morno sentindo o abraço de cura e soltou um suspiro quentinho relaxando cada músculo.'
+        },
+        vacina_escudo_invisivel: {
+            label: '80. Coragem em Consultório & Vacina (A gota mágica e a picadinha de estrela)',
+            defaultMetaphor: 'A gotinha de luz dourada do escudo invisível: a picadinha dura só o tempo de um piscar de olhos, como um beijo de formiguinha, mas constrói uma muralha mágica de saúde que defende a gente por anos inteiros.',
+            defaultQuestion: 'Onde você quer guardar o seu troféu invisível de coragem depois de cuidar da sua saúde?',
+            challengeAct: 'viu o jaleco branco e sentiu o coração bater apressado, com vontade de correr para longe e não deixar ninguém encostar no bracinho.',
+            breathCue: 'apertou a mão de quem ama, puxou o ar enchendo o peito de coragem de guardião e soltou um sopro comprido como quem apaga uma velinha de aniversário.'
+        },
+        espera_festa_viagem: {
+            label: '81. Ansiedade Gostosa de Véspera de Viagem ou Aniversário (A tartaruguinha navegadora)',
+            defaultMetaphor: 'A tartaruguinha navegadora que arruma sua concha para cruzar o oceano: o mais gostoso da viagem não é só a praia nova, mas sim saborear o soninho da véspera sabendo que o dia de amanhã será inesquecível.',
+            defaultQuestion: 'Que sonho lindo você quer visitar esta noite para que o amanhecer chegue bem rápido e cheio de festa?',
+            challengeAct: 'sentia os pensamentos pulando na cama como pipoca na panela, querendo que o sol nascesse imediatamente para a festa começar.',
+            breathCue: 'fechou os olhos, respirou fundo sentindo a alegria no peito e soltou o ar afundando gostoso no colchão, deixando o tempo passar suave.'
+        },
+        dois_lares_amor_infinito: {
+            label: '82. Dois Ninhos sob o Mesmo Céu (Casas diferentes com amor que multiplica)',
+            defaultMetaphor: 'O sol que brilha sobre duas clareiras na mesma montanha: em qualquer ninho que a avezinha pousar, o calor do carinho é exatamente o mesmo. O amor dos pais não se divide; ele cria dois portos seguros onde há sempre colinho e proteção.',
+            defaultQuestion: 'Como é bom saber que você tem dois cantinhos cheios de amor e que o carinho por você nunca diminui nem um milímetro?',
+            challengeAct: 'sentiu saudade da outra casa na hora de dormir, com o peito apertado sem saber como guardar o carinho dos dois lugares ao mesmo tempo.',
+            breathCue: 'tocou o coraçãozinho, respirou fundo sentindo o fio dourado de amor que conecta os dois lares e soltou um suspiro de profunda segurança.'
+        },
+        quebracabeca_paciencia: {
+            label: '83. Tolerância à Frustração em Tarefas & Brinquedos (A peça do tempo certo)',
+            defaultMetaphor: 'A sementinha que encontra o espaço certo entre as pedras: quando a peça do quebra-cabeça não encaixa de primeira, não é porque está errada, é porque a mãozinha precisa girar devagar até encontrar o ângulo perfeito.',
+            defaultQuestion: 'Qual foi uma brincadeira que parecia difícil no início e que hoje você já faz com um sorriso no rosto?',
+            challengeAct: 'tentou encaixar as pecinhas três vezes e elas caíram no chão, dando vontade de chutar o brinquedo e cruzar os braços com raiva.',
+            breathCue: 'soltou as mãozinhas no colo, respirou fundo sentindo a calma voltar e soprou devagar, pronto para tentar com delicadeza e paciência.'
+        },
+        sensibilidade_tatil_roupas: {
+            label: '84. Hipersensibilidade Tátil & Sobrecarga da Pele (A manta de nuvem mansa)',
+            defaultMetaphor: 'A pele suave da borboleta de veludo: ela tem o superpoder de sentir cada toque do mundo. Quando uma roupinha ou etiqueta parece pinicar, ela respira fundo, troca por um tecido de algodão manso e descansa protegida no seu abrigo macio.',
+            defaultQuestion: 'Qual é o tecido ou travesseiro mais fofinho do quarto que faz o seu corpinho relaxar totalmente?',
+            challengeAct: 'sentiu a costura da meia ou a gola da camiseta pinicar como se fossem alfinetes, ficando agitado sem conseguir se acalmar.',
+            breathCue: 'deslizou as mãos sobre o lençol macio, inspirou sentindo o frescor e soltou o ar sentindo a pele acolhida por uma carícia suave.'
+        },
+        despedida_bichinho_estrelinha: {
+            label: '85. Saudade Carinhosa de um Animalzinho (A estrela de rabo abanando)',
+            defaultMetaphor: 'O cachorrinho ou gatinho que virou estrela guia no céu da noite: ele não sente mais nenhuma dorzinha, corre pelos campos infinitos de grama prateada e toda vez que a gente olha para o céu e sorri, ele abana o rabinho brilhante lá em cima.',
+            defaultQuestion: 'Qual foi a travessura mais engraçada e carinhosa do seu bichinho que sempre faz você sorrir por dentro?',
+            challengeAct: 'olhou para a caminha vazia do animalzinho e sentiu lágrimas quentinhas rolarem pelas bochechas, com uma saudade que parecia um nó no peito.',
+            breathCue: 'abraçou uma almofada macia, puxou o ar mandando um carinho em pensamento até as estrelas e soltou um suspiro sereno e reconfortante.'
         }
     };
 
@@ -1647,6 +1696,25 @@
             });
         }
 
+        const btnAmberTxt = document.getElementById('btn-amber-export-txt');
+        if (btnAmberTxt) {
+            btnAmberTxt.addEventListener('click', () => {
+                const target = currentComposedStory;
+                if (!target || !target.text) return;
+                const formatted = `${target.title}\n${'='.repeat(target.title.length)}\n\n${target.text}\n\nSussurro final de boa-noite:\n"${target.question}"\n\n[Nexus Vault • Leitor Noturno Âmbar • Zero-Backend]`;
+                const blob = new Blob([formatted], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `conto_${(target.title || 'noturno').toLowerCase().replace(/[^a-z0-9]/g, '_')}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                C.toast('Conto exportado em arquivo .txt!', 'success');
+            });
+        }
+
         // Atalhos de teclado no modo leitor âmbar (único listener consolidado)
         window.addEventListener('keydown', (e) => {
             const reader = document.getElementById('amber-night-reader');
@@ -1660,11 +1728,11 @@
             } else if (e.code === 'Space') {
                 e.preventDefault();
                 toggleAutoScroll();
-            } else if (e.key === 'ArrowDown') {
+            } else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 'j') {
                 e.preventDefault();
                 stopAutoScroll();
                 reader.scrollBy({ top: 90, behavior: 'smooth' });
-            } else if (e.key === 'ArrowUp') {
+            } else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'k') {
                 e.preventDefault();
                 stopAutoScroll();
                 reader.scrollBy({ top: -90, behavior: 'smooth' });
@@ -1683,6 +1751,13 @@
             } else if (e.key.toLowerCase() === 'f') {
                 e.preventDefault();
                 toggleAmberFullscreen();
+            } else if (e.key.toLowerCase() === 't') {
+                e.preventDefault();
+                const themesCycle = ['amber', 'red', 'sage', 'dark'];
+                const curIdx = themesCycle.indexOf(activeAmberTheme);
+                const nextTheme = themesCycle[(curIdx + 1) % themesCycle.length];
+                applyAmberThermalPalette(nextTheme);
+                C.toast(`Paleta: ${nextTheme}`, 'info', 1000);
             } else if (e.key.toLowerCase() === 'm') {
                 e.preventDefault();
                 const btnAudio = document.getElementById('btn-audio-toggle');

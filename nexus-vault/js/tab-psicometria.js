@@ -4428,6 +4428,13 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                                 <label class="block text-[10px] font-mono text-cyan-300 mb-1">Valor Consultado</label>
                                 <input type="text" inputmode="decimal" id="univ-direct-val" value="${C.esc(u.directVal)}"
                                     class="w-full min-h-[36px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-cyan-500/40 font-mono font-bold text-cyan-200">
+                                <div class="flex flex-wrap items-center gap-1 mt-1.5">
+                                    <button type="button" data-univ-chip="50" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] font-mono text-slate-300">Pc 50</button>
+                                    <button type="button" data-univ-chip="16" class="px-1.5 py-0.5 rounded bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/40 text-[10px] font-mono text-amber-300">Pc 16 (−1DP)</button>
+                                    <button type="button" data-univ-chip="2" class="px-1.5 py-0.5 rounded bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/40 text-[10px] font-mono text-rose-300">Pc 2 (−2DP)</button>
+                                    <button type="button" data-univ-chip="84" class="px-1.5 py-0.5 rounded bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-800/40 text-[10px] font-mono text-cyan-300">Pc 84 (+1DP)</button>
+                                    <button type="button" data-univ-chip="98" class="px-1.5 py-0.5 rounded bg-emerald-950/40 hover:bg-emerald-900/60 border border-emerald-800/40 text-[10px] font-mono text-emerald-300">Pc 98 (+2DP)</button>
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-[10px] font-mono text-slate-400 mb-1">Fidedignidade (<em>r<sub>xx</sub></em>)</label>
@@ -4497,6 +4504,21 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         const btnModeDir = document.getElementById('btn-univ-mode-direct');
         if (btnModeRaw) btnModeRaw.addEventListener('click', () => { universalState.entryMode = 'RAW_NORM'; renderSubTabUniversal(viewport); C.refreshIcons(viewport); });
         if (btnModeDir) btnModeDir.addEventListener('click', () => { universalState.entryMode = 'DIRECT_SCORE'; renderSubTabUniversal(viewport); C.refreshIcons(viewport); });
+
+        viewport.querySelectorAll('[data-univ-chip]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pc = btn.getAttribute('data-univ-chip');
+                universalState.directType = 'PCT';
+                universalState.directVal = pc;
+                const sel = document.getElementById('univ-direct-type');
+                const inp = document.getElementById('univ-direct-val');
+                if (sel) sel.value = 'PCT';
+                if (inp) inp.value = pc;
+                saveAppState();
+                updateUniversalResults();
+                C.toast(`Corte normativo Pc ${pc} aplicado!`, 'info', 1200);
+            });
+        });
 
         const btnSaveNorm = document.getElementById('btn-univ-save-norm');
         if (btnSaveNorm) {

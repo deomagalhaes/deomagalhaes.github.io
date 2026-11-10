@@ -1679,6 +1679,40 @@
                         score += 25;
                     }
                 }
+                if (popName.includes('acerola') || sciName.includes('malpighia')) {
+                    if (proc.id === 'ADUBACAO_FLORACAO' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
+                        score += 25; // Estímulo a floradas e frutificação sucessiva
+                    }
+                    if (proc.category === 'PINCAGEM' && seasonInfo.season === 'Verão') {
+                        score += 20; // Contenção de ramos ladrões e adensamento
+                    }
+                }
+                if (popName.includes('amora') || sciName.includes('morus')) {
+                    if (proc.id === 'DESFOLHA_TOTAL' && seasonInfo.season === 'Verão' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
+                        score += 30; // Redução de folhas em até 70% e ramificação terciária vigorosa
+                    }
+                    if (proc.id === 'PODA_ESTRUTURAL_INVERNO' && seasonInfo.season === 'Inverno' && (moon.phaseGroup === 'NOVA' || moon.phaseGroup === 'MINGUANTE')) {
+                        score += 28; // Poda cirúrgica em dormência total
+                    }
+                }
+                if (popName.includes('bougainvillea') || popName.includes('primavera') || sciName.includes('bougainvillea')) {
+                    if (proc.category === 'PODA_DRASTICA' && (seasonInfo.season === 'Verão' || seasonInfo.season === 'Outono')) {
+                        score += 24; // Poda vigorosa pós-queda das brácteas florais
+                    }
+                    if (proc.id === 'LAVAGEM_RAIZES') {
+                        score -= 50; // Raízes frágeis: nunca lavar o torrão central de bougainvillea
+                    }
+                }
+                if (popName.includes('érica') || popName.includes('cufea') || sciName.includes('cuphea')) {
+                    if ((proc.id === 'PINCAGEM_APICAL' || proc.category === 'PODA_RAMIFICACAO') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
+                        score += 26; // Refinamento de almofadas floridas com tesoura fina
+                    }
+                }
+                if (popName.includes('fruta-dos-milagres') || sciName.includes('synsepalum')) {
+                    if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && seasonInfo.season === 'Inverno') {
+                        score -= 40; // Sensível ao frio: transplantar apenas no calor com solo aquecido
+                    }
+                }
 
                 if (proc.category === 'ESTRUTURA' && plant.lastStyling) {
                     const daysSinceStyle = Math.abs(global.VaultCore.daysDiffFromToday(plant.lastStyling) || 0);

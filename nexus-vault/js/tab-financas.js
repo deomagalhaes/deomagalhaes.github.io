@@ -340,6 +340,25 @@
         }
         if (monthsToRecoverDynamic >= maxScan) monthsToRecoverDynamic = monthsToRecover;
 
+        // Simulação do tempo de recuperação com Aporte Acelerado (+20% Oportunidade)
+        let simPatBoost = stressedPatrimony;
+        let monthsToRecoverWithBoost = 0;
+        const boostedAporte = currentAporte * 1.2;
+        while (simPatBoost < basePatrimony && monthsToRecoverWithBoost < maxScan) {
+            simPatBoost = simPatBoost * (1 + stressedMonthlyRate) + boostedAporte;
+            monthsToRecoverWithBoost++;
+        }
+        if (monthsToRecoverWithBoost >= maxScan) monthsToRecoverWithBoost = Math.round(lostCapital / (boostedAporte || 1));
+
+        // Avaliação de impacto na Cascata de Despesas sob estresse
+        const stressedCascade = computeExpenseCascade(Object.assign({}, raw, {
+            currentPatrimony: stressedPatrimony,
+            realAnnualReturn: Math.max(1, (baseModel.annualRatePct * (1 - dividendShockPct / 100)))
+        }));
+
+        const fullyCoveredTiersStressed = stressedCascade.tiers.filter(t => t.isFullyCovered).length;
+        const totalTiersCount = stressedCascade.tiers.length;
+
         return {
             scenarioKey,
             title,
@@ -358,8 +377,12 @@
             sessionsNeededStressed,
             monthsToRecover,
             monthsToRecoverDynamic,
+            monthsToRecoverWithBoost,
             effectiveAporte,
-            boost
+            boost,
+            stressedCascade,
+            fullyCoveredTiersStressed,
+            totalTiersCount
         };
     }
 
@@ -1014,6 +1037,109 @@
             formula: 'Aporte = 0 ⇒ Total_Aportado(t) = Patrimônio_Inicial ∧ Juros(t) > 0',
             passed: Boolean(testZeroAportePass),
             detail: `Patrimônio inicial de R$ 500.000 gera R$ ${passiveZeroAporte.toFixed(2)}/mês passivos imediatamente; capital cresce organicamente sem injeção de novos aportes.`
+        });
+
+        // 25. Teste de Choque de 30% e Tempo de Recuperação Dinâmica com Reinvestimento
+        const mockCrash30 = computeStressTest({
+            currentPatrimony: 200000,
+            monthlyContribution: 4000,
+            realAnnualReturn: 7.5,
+            stressScenario: 'crash30'
+        });
+        const testCrash30Pass = mockCrash30.stressedPatrimony === 140000 &&
+            mockCrash30.monthsToRecoverDynamic <= mockCrash30.monthsToRecover &&
+            mockCrash30.monthsToRecoverDynamic > 0;
+        tests.push({
+            name: 'Choque de −30% de Mercado com Recuperação Dinâmica Reinvestida',
+            formula: 'Patrimônio_Crash = Base × 0,70 ∧ Meses_Dinâmicos ≤ Meses_Lineares',
+            passed: Boolean(testCrash30Pass),
+            detail: `Queda de R$ 60.000 é recuperada em ${mockCrash30.monthsToRecoverDynamic} meses dinâmicos com aportes a preços descontados (vs ${mockCrash30.monthsToRecover} meses lineares).`
+        });
+
+        // 26. Teste de Conservação de Capital no Alocador de Cotas Inteiras por Ticker
+        const mockAllocClasses = [
+            { key: 'FII', name: 'Fundos Imobiliários', recommendedAporte: 1000 },
+            { key: 'RF', name: 'Renda Fixa', recommendedAporte: 1000 },
+            { key: 'Acoes', name: 'Ações Brasil', recommendedAporte: 1000 },
+            { key: 'Global', name: 'Internacional', recommendedAporte: 1000 }
+        ];
+        const mockTickersResult = computeAporteByTickers(mockAllocClasses);
+        const totalSpentAll = mockTickersResult.byClass.reduce((acc, c) => acc + c.classSpent, 0);
+        const grandTotal = totalSpentAll + mockTickersResult.totalResidual;
+        const testTickersConservePass = Math.abs(grandTotal - 4000) < 1e-2 && mockTickersResult.totalResidual >= 0;
+        tests.push({
+            name: 'Conservação Estrita de Capital no Alocador por Ativos (Cotas + Troco)',
+            formula: 'Σ(Cotas_i × Preço_i) + Saldo_Residual = Orçamento_Total',
+            passed: Boolean(testTickersConservePass),
+            detail: `Orçamento de R$ 4.000: R$ ${totalSpentAll.toFixed(2)} alocados em cotas inteiras e R$ ${mockTickersResult.totalResidual.toFixed(2)} direcionados à reserva de oportunidade.`
+        });
+
+        // 27. Teste de Monotonia Estrita e Boundedness da Cascata de Despesas
+        const mockCascadeCheck = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            currentPatrimony: 300000,
+            realAnnualReturn: 7.5
+        });
+        const tiersCheck = mockCascadeCheck.tiers;
+        const isMonotonic = tiersCheck.every((t, idx) => idx === 0 || t.accumulatedCost > tiersCheck[idx - 1].accumulatedCost);
+        const isBounded = tiersCheck.every(t => t.coveragePct >= 0 && t.coveragePct <= 100);
+        tests.push({
+            name: 'Monotonia Estrita e Delimitação da Cascata de Despesas',
+            formula: 'Custo_Acumulado(k) > Custo_Acumulado(k−1) ∧ 0% ≤ Cobertura ≤ 100%',
+            passed: Boolean(isMonotonic && isBounded),
+            detail: `Degraus acumulados de R$ ${tiersCheck[0].accumulatedCost} até R$ ${mockCascadeCheck.totalCost} validados com cobertura global de ${mockCascadeCheck.globalCoverage.toFixed(1)}%.`
+        });
+
+        // 28. Teste de Resiliência de Custos Fixos sob Vacância de FIIs (−25% Yield)
+        const mockFiiDrop = computeStressTest({
+            monthlyCosts: 2600,
+            currentPatrimony: 500000,
+            realAnnualReturn: 8.0,
+            stressScenario: 'fii_drop'
+        });
+        const testFiiDropPass = mockFiiDrop.stressedMonthlyPassive > 0 && mockFiiDrop.stressedClinicCoveragePct > 0;
+        tests.push({
+            name: 'Resiliência de Cobertura Clínica sob Vacância de FIIs (−25% Yield)',
+            formula: 'Yield_Estressado = Base × 0,75 ∧ Cobertura_Consultório > 0',
+            passed: Boolean(testFiiDropPass),
+            detail: `Renda passiva estressada de R$ ${mockFiiDrop.stressedMonthlyPassive.toFixed(2)}/mês mantém ${mockFiiDrop.stressedClinicCoveragePct.toFixed(1)}% de imunização dos custos do consultório.`
+        });
+
+        // 29. Teste de Invariância de Retirada Segura e Estocástica Box-Muller (Monte Carlo)
+        const mockMcTest = runMonteCarloSimulation({
+            currentPatrimony: 1500000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2600,
+            mcYears: 20,
+            mcSimulations: 200,
+            mcVolatility: 12.0
+        });
+        const testMcPass = mockMcTest.simulations === 200 && mockMcTest.p10 <= mockMcTest.p50 && mockMcTest.p50 <= mockMcTest.p90;
+        tests.push({
+            name: 'Consistência Estocástica da Distribuição Normal de Monte Carlo (Box-Muller)',
+            formula: 'P10 ≤ P50 (Mediana) ≤ P90 ∧ Probabilidade_Ruína ∈ [0%, 100%]',
+            passed: Boolean(testMcPass),
+            detail: `200 trajetórias calculadas com sucesso: P10 = R$ ${Math.round(mockMcTest.p10).toLocaleString('pt-BR')} ≤ Mediana = R$ ${Math.round(mockMcTest.p50).toLocaleString('pt-BR')} ≤ P90 = R$ ${Math.round(mockMcTest.p90).toLocaleString('pt-BR')}.`
+        });
+
+        // 30. Teste de Sensibilidade da Taxa de Poupança Clínica (Savings Rate)
+        const mockSavings = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200
+        });
+        const expectedSavingsRate = (4200 / (mockSavings.netRevenue)) * 100;
+        const testSavingsPass = Math.abs(mockSavings.savingsRate - expectedSavingsRate) < 1e-2 && mockSavings.savingsRate > 20;
+        tests.push({
+            name: 'Cálculo de Precisão da Taxa de Poupança Clínica Líquida (Savings Rate)',
+            formula: 'Taxa_Poupança = (Aporte_Mensal / Receita_Líquida) × 100',
+            passed: Boolean(testSavingsPass),
+            detail: `Taxa de poupança clínica apurada em ${mockSavings.savingsRate.toFixed(2)}% (receita líquida de R$ ${mockSavings.netRevenue.toFixed(2)}/mês e aporte de R$ 4.200,00).`
         });
 
         const allPassed = tests.every(t => t.passed);

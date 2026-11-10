@@ -475,12 +475,15 @@
                     <p class="text-xs text-emerald-300"><strong>FAREI (24h):</strong> ${C.esc(item.doAction)}</p>
                     <p class="text-xs text-rose-300"><strong>VETADO (24h):</strong> ${C.esc(item.dontAction)}</p>
                 </div>
-                <div class="flex items-center gap-1.5 self-end md:self-center shrink-0">
+                <div class="flex items-center gap-1.5 self-end md:self-center shrink-0 flex-wrap justify-end">
+                    <button type="button" data-df-quick-copy="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-700/50 text-emerald-300 text-xs font-mono" title="Copiar síntese rápida de 3 linhas (Fato, Ação e Vetos)">
+                        Síntese
+                    </button>
                     <button type="button" data-df-load="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-700/50 text-cyan-300 text-xs font-mono" title="Carregar dados deste veredito no formulário">
                         Carregar
                     </button>
                     <button type="button" data-df-copy="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-mono">
-                        Copiar MD
+                        MD
                     </button>
                     <button type="button" data-df-del="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs">
                         Excluir
@@ -528,6 +531,25 @@
                 const f = document.getElementById('desfusao-form');
                 if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 C.toast('Protocolo carregado no formulário para reavaliação.', 'info');
+            });
+        });
+
+        listEl.querySelectorAll('[data-df-quick-copy]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-df-quick-copy');
+                const target = desfusaoHistory.find((x) => x.id === id);
+                if (!target) return;
+                const quickText = [
+                    `📋 Veredito 24h (${C.formatDateBR(target.date)}):`,
+                    `• FATO: ${target.strictFact}`,
+                    `• FAREI: ${target.doAction}`,
+                    `• NÃO FAREI (VETADO): ${target.dontAction}`
+                ].join('\n');
+                navigator.clipboard.writeText(quickText).then(() => {
+                    C.toast('Síntese de 3 linhas copiada para a área de transferência!', 'success');
+                }).catch(() => {
+                    C.toast('Não foi possível copiar automaticamente.', 'error');
+                });
             });
         });
 
