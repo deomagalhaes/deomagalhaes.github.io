@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 40: Matriz de Custo Atencional e Descompressão Cognitiva – Deo Magalhães</title>
+    <meta name="description" content="Simule e calibre o consumo bioenergético do córtex pré-frontal, a filtragem sensorial do tálamo e a regulação autonômica contra o burnout neurodivergente com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Painel do Cenário Ecológico */
+        .scenario-box {
+            background: #001219;
+            color: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border: 2px solid #005f73;
+            box-shadow: inset 0 2px 15px rgba(0, 0, 0, 0.6);
+            text-align: left;
+        }
+
+        .scenario-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(148, 210, 189, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .scenario-tag {
+            color: #ee9b00;
+            font-weight: 800;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .scenario-demand-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.78em;
+            font-weight: 700;
+        }
+
+        .scenario-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #94d2bd;
+            margin-bottom: 10px;
+        }
+
+        .scenario-desc {
+            font-size: 1.05em;
+            font-weight: 500;
+            line-height: 1.6;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+        }
+
+        .scenario-sensory-alert {
+            font-size: 0.85em;
+            color: #ee9b00;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Medidores Neurofisiológicos em Tempo Real */
+        .meters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .meter-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .meter-bar-bg {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .meter-bar-fill {
+            height: 100%;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .fill-battery { background: #0a9396; }
+        .fill-overload { background: #ef4444; }
+        .fill-self { background: #ee9b00; }
+
+        /* Controles de Decisão Estratégica */
+        .decision-panel {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .decision-section-title {
+            font-size: 0.9em;
+            font-weight: 800;
+            color: #005f73;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .options-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .action-card-btn {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .action-card-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+        }
+
+        .action-card-btn.selected {
+            border-color: #005f73;
+            background: #e6fffa;
+            box-shadow: 0 0 0 1px #005f73;
+        }
+
+        .action-card-title {
+            font-weight: 700;
+            font-size: 0.9em;
+            color: #005f73;
+            margin-bottom: 6px;
+        }
+
+        .action-card-desc {
+            font-size: 0.78em;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        .action-card-tradeoff {
+            font-size: 0.72em;
+            font-weight: 700;
+            margin-top: 8px;
+            color: #047857;
+        }
+
+        .action-card-cost {
+            color: #b91c1c;
+        }
+
+        .confirm-btn {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.25);
+        }
+
+        .confirm-btn:hover:not(:disabled) {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .confirm-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Feedback da Rodada */
+        .round-feedback-card {
+            display: none;
+            background: #f1f5f9;
+            border-left: 5px solid #0a9396;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+
+        .round-feedback-card h4 {
+            margin: 0 0 8px 0;
+            color: #005f73;
+            font-size: 1.05em;
+        }
+
+        /* Painel Final de Resultados */
+        .final-results-card {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            border: 2px solid #005f73;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .final-medal {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        .final-title {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #005f73;
+            margin-bottom: 12px;
+        }
+
+        .final-score-callout {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: #ee9b00;
+            margin-bottom: 15px;
+        }
+
+        .final-summary-text {
+            color: #334155;
+            max-width: 650px;
+            margin: 0 auto 25px auto;
+            line-height: 1.7;
+            font-size: 1.02em;
+        }
+
+        .restart-btn {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .restart-btn:hover {
+            background: #0a9396;
+        }
+
+        /* Seção Teórica Neuropsicológica */
+        .neuro-explanation {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            margin-top: 35px;
+            text-align: left;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .neuro-explanation h3 {
+            color: #005f73;
+            margin-top: 0;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .meters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .options-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 40: Matriz de Custo Atencional e Descompressão Cognitiva</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Treino de Funções Executivas e Reserva Neural</p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra Superior de Status -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Cenário</span>
+                        <span class="stat-badge-value" id="currentRoundDisplay">1 / 10</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Índice Homeostático</span>
+                        <span class="stat-badge-value" id="homeostasisScoreDisplay">100</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Créditos de Presença</span>
+                        <span class="stat-badge-value" id="socialCreditsDisplay">3</span>
+                    </div>
+                    <button id="soundToggleBtn" class="sound-btn" aria-label="Alternar Som">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Medidores Neurofisiológicos em Tempo Real -->
+                <div class="meters-grid">
+                    <div class="meter-container">
+                        <div class="meter-header">
+                            <span>Bateria Bioenergética (dlPFC / ATP)</span>
+                            <span id="batteryValDisplay">100%</span>
+                        </div>
+                        <div class="meter-bar-bg">
+                            <div class="meter-bar-fill fill-battery" id="batteryBar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="meter-header">
+                            <span>Sobrecarga Sensorial (Tálamo & Amígdala)</span>
+                            <span id="overloadValDisplay">15%</span>
+                        </div>
+                        <div class="meter-bar-bg">
+                            <div class="meter-bar-fill fill-overload" id="overloadBar" style="width: 15%;"></div>
+                        </div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="meter-header">
+                            <span>Coesão do Self (Autenticidade)</span>
+                            <span id="selfValDisplay">85%</span>
+                        </div>
+                        <div class="meter-bar-bg">
+                            <div class="meter-bar-fill fill-self" id="selfBar" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel do Jogo Ativo -->
+                <div id="gamePlayArea">
+                    <!-- Cenário Atual -->
+                    <div class="scenario-box">
+                        <div class="scenario-meta">
+                            <span class="scenario-tag" id="scenarioCategory">Ambiente Corporativo</span>
+                            <span class="scenario-demand-badge" id="scenarioDemandBadge">Alta Demanda Social & Sensorial</span>
+                        </div>
+                        <div class="scenario-title" id="scenarioTitle">Reunião Presencial com Lâmpadas Fluorescentes Zumbindo</div>
+                        <div class="scenario-desc" id="scenarioDesc">
+                            Você está em uma sala fechada há 40 minutos com 6 pessoas. A iluminação de teto emite um zumbido agudo contínuo e três colegas debatem ao mesmo tempo com entonações concorrentes. Esperam que você mantenha contato visual e participe da discussão.
+                        </div>
+                        <div class="scenario-sensory-alert">
+                            <span>⚠️ Ruído acústico de fundo: 75 dB • Iluminação oscilante: 120 Hz • Risco de depleção frontal.</span>
+                        </div>
+                    </div>
+
+                    <!-- Controles de Decisão Estratégica -->
+                    <div class="decision-panel">
+                        <!-- 1. Estratégia Social -->
+                        <div class="decision-section-title">
+                            <span>1. Escolha a Estratégia de Modulação Social:</span>
+                        </div>
+                        <div class="options-cards-grid" id="socialOptionsGrid">
+                            <!-- Injetado via JS -->
+                        </div>
+
+                        <!-- 2. Suporte Sensório-Motor -->
+                        <div class="decision-section-title">
+                            <span>2. Escolha o Suporte de Regulação Sensorial:</span>
+                        </div>
+                        <div class="options-cards-grid" id="sensoryOptionsGrid">
+                            <!-- Injetado via JS -->
+                        </div>
+
+                        <button id="executeActionBtn" class="confirm-btn" disabled>Executar Decisão Neuroafirmativa →</button>
+                    </div>
+
+                    <!-- Feedback da Rodada -->
+                    <div id="roundFeedbackBox" class="round-feedback-card">
+                        <h4 id="feedbackTitle">Resultado da Modulação</h4>
+                        <p id="feedbackDesc"></p>
+                        <button id="nextRoundBtn" class="confirm-btn" style="margin-top: 15px; width: auto; padding: 10px 24px;">Avançar para o Próximo Cenário ➔</button>
+                    </div>
+                </div>
+
+                <!-- Painel Final de Conclusão -->
+                <div id="finalPanel" class="final-results-card">
+                    <div class="final-medal" id="finalMedal">🏆</div>
+                    <div class="final-title" id="finalStatusTitle">Mestre em Homeostase Neuroafirmativa</div>
+                    <div class="final-score-callout" id="finalScoreVal">94 / 100</div>
+                    <div class="final-summary-text" id="finalSummaryText">
+                        Excelente calibração executiva! Você conseguiu navegar pelas demandas sociais preservando a integridade da sua bateria pré-frontal, utilizando fones e stimming regulatório nos momentos críticos sem capitular ao masking destrutivo.
+                    </div>
+                    <button id="restartGameBtn" class="restart-btn">Reiniciar Simulação ↺</button>
+                </div>
+            </div>
+
+            <!-- Fundamentação Neuropsicológica -->
+            <div class="neuro-explanation">
+                <h3>Bases Neurobiológicas do Treino de Gestão de Custo Atencional</h3>
+                <p>O <strong>Custo Atencional do Masking</strong> é um dos fenômenos mais pesquisados na neurociência contemporânea do autismo e TDAH (Raymaker et al., 2020; Hull et al., 2020). Quando uma pessoa neurodivergente é forçada a atuar como neurotípica:</p>
+                <ul>
+                    <li><strong>Córtex Pré-Frontal Dorsolateral (dlPFC):</strong> Assume o processamento social analítico de regras, gastando até 300% mais glicose e ATP cerebral do que o processamento heurístico implícito típico;</li>
+                    <li><strong>Núcleo Reticular Talâmico (TRN):</strong> O portão de filtragem sensorial falha diante de sobrecargas ambientais (ruído, luz, estímulos simultâneos), enviando alarme imediato para a amígdala basolateral;</li>
+                    <li><strong>Gânglios da Base & Stimming:</strong> Movimentos autoestimulatórios não são maneirismos disfuncionais, mas estratégias de amortecimento proprioceptivo que descarregam o tônus simpático e liberam opioides endógenos de alívio;</li>
+                    <li><strong>Regulação Vagal Ventral (Teoria Polivagal):</strong> Alternar entre esforço executivo e pausas de descompressão ativa o freio vagal, prevenindo o colapso parassimpático dorsal (Burnout / Shutdown).</li>
+                </ul>
+                <p><em>Este treino simula os trade-offs cotidianos da conservação de energia e foi matematicamente balanceado para demonstrar que o "unmasking estratégico" é a chave para a sustentabilidade biológica e produtiva a longo prazo.</em></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Script de Lógica do Jogo e Web Audio API -->
+    <script>
+        // Módulo de Áudio Procedural (Web Audio API)
+        let audioCtx = null;
+        let isMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playClickTone() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(540, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(840, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.09);
+            } catch (e) {}
+        }
+
+        function playWarningTone() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(140, ctx.currentTime + 0.22);
+                gain.gain.setValueAtTime(0.18, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.23);
+            } catch (e) {}
+        }
+
+        function playCalmChord() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const freqs = [329.63, 440.00, 523.25, 659.25]; // Mi, Lá, Dó, Mi
+                freqs.forEach((f, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 800;
+
+                    osc.type = 'triangle';
+                    osc.frequency.value = f;
+                    gain.gain.setValueAtTime(0.06, ctx.currentTime + (idx * 0.04));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.04));
+                    osc.stop(ctx.currentTime + 0.55);
+                });
+            } catch (e) {}
+        }
+
+        function playVictoryFanfare() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime + (i * 0.1));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.1) + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (i * 0.1));
+                    osc.stop(ctx.currentTime + (i * 0.1) + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        // Cenários Ecológicos Realistas (10 Rodadas)
+        const SCENARIOS = [
+            {
+                round: 1,
+                category: "Ambiente Corporativo",
+                title: "Reunião de Equipe com Iluminação Fluorescente Zumbindo",
+                desc: "Você está em uma sala fechada há 40 minutos com 6 pessoas. A luz do teto emite um zumbido contínuo e todos debatem projetos simultaneamente cobrando participação ativa.",
+                demandBadge: "Sobrecarga Sensorial Moderada",
+                socialOptions: [
+                    { id: "masking", title: "Masking Total", desc: "Forçar contato visual contínuo e sorrisos.", dBattery: -20, dOverload: +20, dSelf: -15, trade: "Aprovação alta (+10)", cost: "-20% Bateria, +20% Sobrecarga" },
+                    { id: "assertive", title: "Comunicação Neuroafirmativa", desc: "Olhar para suas anotações e falar com calma.", dBattery: -10, dOverload: +5, dSelf: +10, trade: "Preserva energia (+10 Self)", cost: "-10% Bateria" },
+                    { id: "retreat", title: "Pausa Tática de Silêncio", desc: "Pedir 3 minutos para beber água.", dBattery: +10, dOverload: -15, dSelf: +5, trade: "Recarrega bateria", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Stimming Discreto", desc: "Girar anel sensorial ou apertar bola antiestresse sob a mesa.", dOverload: -12, dBattery: 0 },
+                    { id: "anc", title: "Filtro Acústico / Fone Discreto", desc: "Colocar protetor auricular intra-auricular transparente.", dOverload: -18, dBattery: +5 },
+                    { id: "rigid", title: "Postura Rígida sem Movimento", desc: "Travar as mãos e o corpo para parecer 100% imóvel.", dOverload: +12, dBattery: -8 }
+                ]
+            },
+            {
+                round: 2,
+                category: "Confraternização Relacional",
+                title: "Almoço com Equipe em Restaurante com Eco Acústico",
+                desc: "Pratos batendo, música alta de fundo e conversas cruzadas. Alguém pergunta sua opinião sobre um tema pessoal inesperado enquanto o barulho atinge 80 dB.",
+                demandBadge: "Alta Sobrecarga Acústica",
+                socialOptions: [
+                    { id: "masking", title: "Masking Total", desc: "Rir de tudo e tentar acompanhar 3 conversas ao mesmo tempo.", dBattery: -25, dOverload: +25, dSelf: -20, trade: "Evita estranhamento", cost: "-25% Bateria, +25% Ruído" },
+                    { id: "assertive", title: "Foco Singular Direto", desc: "Conversar apenas com a pessoa imediatamente ao lado.", dBattery: -12, dOverload: +8, dSelf: +8, trade: "Mantém foco sem exaustão", cost: "-12% Bateria" },
+                    { id: "retreat", title: "Retirada Estratégica", desc: "Avisar que precisa responder uma mensagem e sair da mesa.", dBattery: +12, dOverload: -18, dSelf: +5, trade: "Alivia dor de cabeça", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Stimming de Respiração", desc: "Focar na expiração lenta e ritmo dos pés no chão.", dOverload: -10, dBattery: +5 },
+                    { id: "anc", title: "Atenuação Sonora", desc: "Sentar de costas para a caixa de som e diminuir ruído.", dOverload: -15, dBattery: +5 },
+                    { id: "rigid", title: "Reprimir Incômodo", desc: "Engolir a tontura e fingir que o som não incomoda.", dOverload: +18, dBattery: -10 }
+                ]
+            },
+            {
+                round: 3,
+                category: "Desafio Executivo",
+                title: "Apresentação de Relatório com Foco no Olhar",
+                desc: "Você precisa apresentar um relatório técnico. O coordenador insiste: 'fale olhando para a diretoria, mostre confiança'. Sua memória operacional está no limite.",
+                demandBadge: "Conflito dlPFC / Cognição",
+                socialOptions: [
+                    { id: "masking", title: "Hipercompensação Ocular", desc: "Calcular 4 segundos de olhar fixo em cada diretor.", dBattery: -22, dOverload: +18, dSelf: -15, trade: "Apresentação padrão", cost: "Drena glicose frontal" },
+                    { id: "assertive", title: "Ancoragem no Conteúdo", desc: "Focar nos gráficos da tela e falar com maestria técnica.", dBattery: -10, dOverload: +5, dSelf: +15, trade: "Entrega impecável", cost: "-10% Bateria" },
+                    { id: "retreat", title: "Compartilhar a Fala", desc: "Passar a palavra para um colega por 2 minutos.", dBattery: +10, dOverload: -12, dSelf: +5, trade: "Respiro de fala", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Manipular Caneta / Passador", desc: "Usar o passador de slides como objeto regulatório tátil.", dOverload: -12, dBattery: +5 },
+                    { id: "anc", title: "Óculos com Filtro de Luz", desc: "Usar óculos com filtro antirreflexo para a tela.", dOverload: -15, dBattery: +5 },
+                    { id: "rigid", title: "Mãos no Bolso Travadas", desc: "Conter qualquer gesto espontâneo por medo de julgamento.", dOverload: +15, dBattery: -8 }
+                ]
+            },
+            {
+                round: 4,
+                category: "Espaço Compartilhado",
+                title: "Trabalho em Open-Space com Interrupções Contínuas",
+                desc: "Mesas abertas sem divisórias. Notificações apitando, passos contínuos atrás da sua cadeira e colegas puxando conversa a cada 15 minutos.",
+                demandBadge: "Falha de Sensory Gating",
+                socialOptions: [
+                    { id: "masking", title: "Disponibilidade Forçada", desc: "Tirar o fone e responder sorrindo a cada interrupção.", dBattery: -25, dOverload: +22, dSelf: -18, trade: "Imagem de prestativo", cost: "Fragmentação severa de foco" },
+                    { id: "assertive", title: "Sinalização de Hiperfoco", desc: "Avisar gentilmente: 'estou fechando um relatório complexo até as 15h'.", dBattery: -8, dOverload: -5, dSelf: +12, trade: "Blindagem de agenda", cost: "Exige firmeza inicial" },
+                    { id: "retreat", title: "Migrar para Cabine Isolada", desc: "Pegar o notebook e ir para uma sala silenciosa.", dBattery: +15, dOverload: -20, dSelf: +8, trade: "Recuperação de ATP", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Balançar os Pés Discretamente", desc: "Liberar a descarga rítmica proprioceptiva sob a mesa.", dOverload: -12, dBattery: +5 },
+                    { id: "anc", title: "Fones de Cancelamento Ativo", desc: "Ligar fones com cancelamento de ruído e ruído marrom suave.", dOverload: -22, dBattery: +10 },
+                    { id: "rigid", title: "Suportar o Caos Auditivo", desc: "Trabalhar com a mente bombardeada por medo de parecer antissocial.", dOverload: +20, dBattery: -12 }
+                ]
+            },
+            {
+                round: 5,
+                category: "Gestão de Conflito",
+                title: "Crítica Inesperada e Cobrança de Reação Imediata",
+                desc: "Em uma conversa rápida de corredor, um gestor faz um comentário crítico sobre um detalhe irrelevante e fica encarando você esperando uma réplica instantânea.",
+                demandBadge: "Alarme Amigdaliano & dACC",
+                socialOptions: [
+                    { id: "masking", title: "Apaziguamento Reflexo (Fawn)", desc: "Pedir desculpas excessivas e concordar com tudo na hora.", dBattery: -18, dOverload: +20, dSelf: -25, trade: "Cessa o conflito imediato", cost: "Ressentimento e perda do Self" },
+                    { id: "assertive", title: "Processamento com Pausa", desc: "Dizer: 'vou analisar os dados técnicos e te dou um parecer por e-mail'.", dBattery: -8, dOverload: +5, dSelf: +18, trade: "Soberania e profissionalismo", cost: "Sustentar silêncio inicial" },
+                    { id: "retreat", title: "Interromper para Respirar", desc: "Dizer que tem um compromisso urgente agora e agendar depois.", dBattery: +8, dOverload: -12, dSelf: +8, trade: "Desativa amígdala", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Apoio Postural dos Pés", desc: "Sentir os pés firmes no chão e soltar a musculatura da mandíbula.", dOverload: -10, dBattery: +5 },
+                    { id: "anc", title: "Desvio do Olhar para Documento", desc: "Fixar os olhos na prancheta ou tela para aliviar a pressão visual.", dOverload: -12, dBattery: +5 },
+                    { id: "rigid", title: "Sorriso Rígido Defensivo", desc: "Manter a face congelada enquanto o coração dispara a 120 bpm.", dOverload: +18, dBattery: -10 }
+                ]
+            },
+            {
+                round: 6,
+                category: "Mudança Imprevista",
+                title: "Cancelamento de Cronograma e Troca Brusca de Rota",
+                desc: "A tarefa que você planejou detalhadamente a semana toda é cancelada de última hora por uma demanda caótica e desorganizada.",
+                demandBadge: "Inflexibilidade Cognitiva / Dor",
+                socialOptions: [
+                    { id: "masking", title: "Entusiasmo Forçado", desc: "Fingir que amou a mudança e absorver o caos em silêncio.", dBattery: -24, dOverload: +22, dSelf: -16, trade: "Parece 'superflexível'", cost: "Depleção executiva severa" },
+                    { id: "assertive", title: "Negociação de Prazos", desc: "Explicar objetivamente os impactos e pedir 30 min para reorganizar a rota.", dBattery: -10, dOverload: +6, dSelf: +14, trade: "Ordem mental restabelecida", cost: "-10% Bateria" },
+                    { id: "retreat", title: "Pausa de Reorganização", desc: "Trancar a agenda por 20 minutos para respirar e replanejar.", dBattery: +12, dOverload: -16, dSelf: +8, trade: "Evita o colapso (meltdown)", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Desenhar / Rascunhar Padrões", desc: "Rabiscar geometrias no papel para regular o foco visual.", dOverload: -14, dBattery: +5 },
+                    { id: "anc", title: "Isolamento Visual", desc: "Minimizar janelas do computador e focar em uma única linha por vez.", dOverload: -16, dBattery: +5 },
+                    { id: "rigid", title: "Tentar Fazer Tudo em Pânico", desc: "Acelerar sem respirar, acumulando sobrecarga motora.", dOverload: +22, dBattery: -15 }
+                ]
+            },
+            {
+                round: 7,
+                category: "Encontro Familiar",
+                title: "Reunião de Família com Várias Vozes Simultâneas",
+                desc: "Sala de jantar cheia, televisão ligada, crianças correndo e perguntas íntimas invasivas sendo disparadas de todos os lados.",
+                demandBadge: "Sobrecarga Afetiva & Auditiva",
+                socialOptions: [
+                    { id: "masking", title: "Persona Hiper-Sociável", desc: "Sorrir sem parar, responder tudo e carregar a dinâmica.", dBattery: -25, dOverload: +24, dSelf: -20, trade: "Todos acham simpático", cost: "Apagão de fala no fim do dia" },
+                    { id: "assertive", title: "Presença dosada", desc: "Conversar com 1 pessoa querida e ouvir com tranquilidade.", dBattery: -10, dOverload: +5, dSelf: +10, trade: "Conexão real sem teatro", cost: "-10% Bateria" },
+                    { id: "retreat", title: "Passeio com o Cachorro / Ar Livre", desc: "Sair 15 minutos para a varanda ou quintal silencioso.", dBattery: +14, dOverload: -20, dSelf: +10, trade: "Recuperação do ar fresco", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Tocar Tecido / Animal de Estimação", desc: "Acariciar o gato ou cachorro para regular a propriocepção.", dOverload: -15, dBattery: +8 },
+                    { id: "anc", title: "Afastamento da TV", desc: "Mudar de cadeira para ficar longe da caixa de som.", dOverload: -12, dBattery: +5 },
+                    { id: "rigid", title: "Engolir o Desespero Sensorial", desc: "Ficar estático na cadeira acumulando cefaleia tensional.", dOverload: +20, dBattery: -12 }
+                ]
+            },
+            {
+                round: 8,
+                category: "Sobrecarga Digital",
+                title: "Enxurrada de Mensagens com Cobrança de 'Agilidade'",
+                desc: "Fim do expediente. Cinco mensagens de WhatsApp e três e-mails chegam cobrando confirmações urgentes de encontros para o fim de semana.",
+                demandBadge: "Fadiga por Decisão Residual",
+                socialOptions: [
+                    { id: "masking", title: "Responder Tudo na Hora", desc: "Digitar respostas longas e polidas para não parecer rude.", dBattery: -20, dOverload: +18, dSelf: -14, trade: "Zera pendências sociais", cost: "Zera energia para autocuidado" },
+                    { id: "assertive", title: "Resposta Padrão Automatizada", desc: "'Recebi, amanhã pela manhã vejo com calma e respondo'.", dBattery: -6, dOverload: -6, dSelf: +15, trade: "Limites digitais saudáveis", cost: "Tolerar notificação pendente" },
+                    { id: "retreat", title: "Modo Avião Imediato", desc: "Desligar a conexão e só olhar no dia seguinte.", dBattery: +15, dOverload: -18, dSelf: +12, trade: "Paz mental restaurada", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Alongamento Somático Lento", desc: "Esticar braços e soltar o pescoço no chão.", dOverload: -14, dBattery: +8 },
+                    { id: "anc", title: "Desativar Telas e Luzes Fortes", desc: "Iluminação âmbar suave e silêncio ambiental.", dOverload: -20, dBattery: +10 },
+                    { id: "rigid", title: "Ficar Ruminando as Mensagens", desc: "Ficar olhando a barra de notificações em estado de culpa.", dOverload: +18, dBattery: -10 }
+                ]
+            },
+            {
+                round: 9,
+                category: "Avaliação Profissional",
+                title: "Feedback com Demanda de 'Espírito de Equipe Efusivo'",
+                desc: "Seu desempenho técnico foi elogiado com nota máxima, mas o avaliador diz: 'gostaríamos que você fosse mais comunicativo e extrovertido no dia a dia'.",
+                demandBadge: "Invalidação Neurodivergente",
+                socialOptions: [
+                    { id: "masking", title: "Prometer Mudança Impossível", desc: "Dizer que vai se esforçar para ser a pessoa mais animada da empresa.", dBattery: -26, dOverload: +22, dSelf: -28, trade: "Agrada ao avaliador", cost: "Receita garantida para Burnout" },
+                    { id: "assertive", title: "Enquadre de Diversidade Cognitiva", desc: "'Meu perfil focado e reflexivo é o que garante minha alta precisão técnica'.", dBattery: -8, dOverload: +5, dSelf: +22, trade: "Educação neuroafirmativa", cost: "Exige coragem ética" },
+                    { id: "retreat", title: "Acolher e Pensar com Calma", desc: "'Agradeço a pontuação e vou refletir sobre formas de otimizar a comunicação'.", dBattery: +6, dOverload: -8, dSelf: +10, trade: "Compre tempo sem se render", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Respiração 4-7-8 com Tônus Vagal", desc: "Respirar desacelerando o batimento cardíaco antes de falar.", dOverload: -14, dBattery: +6 },
+                    { id: "anc", title: "Postura Neutra e Firme", desc: "Manter contato visual no centro da testa sem forçar sorriso.", dOverload: -10, dBattery: +5 },
+                    { id: "rigid", title: "Colapso com Autocrítica Tóxica", desc: "Internalizar a crítica e se julgar 'defeituoso' por ser quieto.", dOverload: +22, dBattery: -14 }
+                ]
+            },
+            {
+                round: 10,
+                category: "Retorno Para Casa",
+                title: "Viagem Noturna em Transporte Público Lotado",
+                desc: "Fim do dia. Trem/ônibus cheio, calor, freios chiando, conversas altas e luz branca forte. Sua bateria está no fim da jornada.",
+                demandBadge: "Teste Final de Sobrevivência",
+                socialOptions: [
+                    { id: "masking", title: "Ficar Alerta e Atento a Todos", desc: "Ficar em pé monitorando olhares alheios por medo de julgamento.", dBattery: -20, dOverload: +22, dSelf: -15, trade: "Hipervigilância inútil", cost: "Esgota os últimos 5% de ATP" },
+                    { id: "assertive", title: "Fechamento Focado em Si", desc: "Fechar os olhos, apoiar a cabeça e focar na respiração.", dBattery: -4, dOverload: -10, dSelf: +12, trade: "Preservação da dignidade", cost: "Desacoplar do ambiente" },
+                    { id: "retreat", title: "Descer e Pegar Transporte Calmo", desc: "Optar por rota mais tranquila ou esperar 15 min na praça.", dBattery: +12, dOverload: -20, dSelf: +10, trade: "Protege o sono noturno", cost: "Consome 1 Crédito Social" }
+                ],
+                sensoryOptions: [
+                    { id: "stimming", title: "Stimming de Toque Suave", desc: "Sentir o tecido da jaqueta ou fita suave entre os dedos.", dOverload: -15, dBattery: +5 },
+                    { id: "anc", title: "Fones de Ruído Marrom no Máximo", desc: "Blindagem acústica total com sons de chuva.", dOverload: -22, dBattery: +10 },
+                    { id: "rigid", title: "Tensão Muscular Extrema", desc: "Agarrar a barra de apoio com força travando os dentes.", dOverload: +24, dBattery: -12 }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentRound = 0;
+        let battery = 100;
+        let overload = 15;
+        let selfCohesion = 85;
+        let socialCredits = 3;
+        let selectedSocialOption = null;
+        let selectedSensoryOption = null;
+
+        // Inicialização
+        function initGame() {
+            currentRound = 0;
+            battery = 100;
+            overload = 15;
+            selfCohesion = 85;
+            socialCredits = 3;
+            selectedSocialOption = null;
+            selectedSensoryOption = null;
+
+            document.getElementById('gamePlayArea').style.display = 'block';
+            document.getElementById('finalPanel').style.display = 'none';
+            document.getElementById('roundFeedbackBox').style.display = 'none';
+
+            loadRound(0);
+            updateMeters();
+        }
+
+        function updateMeters() {
+            // Clamping 0 a 100
+            battery = Math.max(0, Math.min(100, battery));
+            overload = Math.max(0, Math.min(100, overload));
+            selfCohesion = Math.max(0, Math.min(100, selfCohesion));
+
+            document.getElementById('batteryValDisplay').innerText = `${battery}%`;
+            document.getElementById('batteryBar').style.width = `${battery}%`;
+            document.getElementById('overloadValDisplay').innerText = `${overload}%`;
+            document.getElementById('overloadBar').style.width = `${overload}%`;
+            document.getElementById('selfValDisplay').innerText = `${selfCohesion}%`;
+            document.getElementById('selfBar').style.width = `${selfCohesion}%`;
+
+            // Cores dinâmicas de alerta
+            const batteryBar = document.getElementById('batteryBar');
+            if (battery < 25) {
+                batteryBar.style.backgroundColor = '#ef4444';
+            } else if (battery < 55) {
+                batteryBar.style.backgroundColor = '#ee9b00';
+            } else {
+                batteryBar.style.backgroundColor = '#0a9396';
+            }
+
+            const overloadBar = document.getElementById('overloadBar');
+            if (overload > 75) {
+                overloadBar.style.backgroundColor = '#b91c1c';
+            } else if (overload > 45) {
+                overloadBar.style.backgroundColor = '#ee9b00';
+            } else {
+                overloadBar.style.backgroundColor = '#0a9396';
+            }
+
+            // Score Geral de Homeostase
+            const homeostasisScore = Math.round((battery * 0.4) + ((100 - overload) * 0.35) + (selfCohesion * 0.25));
+            document.getElementById('homeostasisScoreDisplay').innerText = homeostasisScore;
+            document.getElementById('socialCreditsDisplay').innerText = socialCredits;
+        }
+
+        function loadRound(idx) {
+            if (idx >= SCENARIOS.length) {
+                finishGame();
+                return;
+            }
+
+            const s = SCENARIOS[idx];
+            document.getElementById('currentRoundDisplay').innerText = `${idx + 1} / ${SCENARIOS.length}`;
+            document.getElementById('scenarioCategory').innerText = s.category;
+            document.getElementById('scenarioDemandBadge').innerText = s.demandBadge;
+            document.getElementById('scenarioTitle').innerText = s.title;
+            document.getElementById('scenarioDesc').innerText = s.desc;
+
+            // Reset seleções
+            selectedSocialOption = null;
+            selectedSensoryOption = null;
+            document.getElementById('executeActionBtn').disabled = true;
+            document.getElementById('roundFeedbackBox').style.display = 'none';
+
+            // Montar Opções Sociais
+            const socContainer = document.getElementById('socialOptionsGrid');
+            socContainer.innerHTML = '';
+            s.socialOptions.forEach(opt => {
+                const card = document.createElement('div');
+                card.className = 'action-card-btn';
+                card.id = `soc_${opt.id}`;
+                card.innerHTML = `
+                    <div class="action-card-title">${opt.title}</div>
+                    <div class="action-card-desc">${opt.desc}</div>
+                    <div class="action-card-tradeoff">${opt.trade}</div>
+                    <div class="action-card-cost">${opt.cost}</div>
+                `;
+                card.onclick = () => selectSocial(opt, card);
+                socContainer.appendChild(card);
+            });
+
+            // Montar Opções Sensoriais
+            const senContainer = document.getElementById('sensoryOptionsGrid');
+            senContainer.innerHTML = '';
+            s.sensoryOptions.forEach(opt => {
+                const card = document.createElement('div');
+                card.className = 'action-card-btn';
+                card.id = `sen_${opt.id}`;
+                card.innerHTML = `
+                    <div class="action-card-title">${opt.title}</div>
+                    <div class="action-card-desc">${opt.desc}</div>
+                    <div class="action-card-tradeoff">${opt.dOverload < 0 ? opt.dOverload + '% Sobrecarga' : '+' + opt.dOverload + '% Sobrecarga'}</div>
+                `;
+                card.onclick = () => selectSensory(opt, card);
+                senContainer.appendChild(card);
+            });
+        }
+
+        function selectSocial(opt, el) {
+            playClickTone();
+            if (opt.id === 'retreat' && socialCredits <= 0) {
+                alert('Você não possui créditos de presença suficientes para esta pausa estratégica nesta rodada.');
+                return;
+            }
+            selectedSocialOption = opt;
+            document.querySelectorAll('#socialOptionsGrid .action-card-btn').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            checkReady();
+        }
+
+        function selectSensory(opt, el) {
+            playClickTone();
+            selectedSensoryOption = opt;
+            document.querySelectorAll('#sensoryOptionsGrid .action-card-btn').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            checkReady();
+        }
+
+        function checkReady() {
+            const btn = document.getElementById('executeActionBtn');
+            if (selectedSocialOption && selectedSensoryOption) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+
+        // Execução da Ação
+        document.getElementById('executeActionBtn').addEventListener('click', () => {
+            if (!selectedSocialOption || !selectedSensoryOption) return;
+
+            // Desconta crédito se retreat
+            if (selectedSocialOption.id === 'retreat') {
+                socialCredits--;
+            }
+
+            // Aplica deltas
+            const dBat = selectedSocialOption.dBattery + (selectedSensoryOption.dBattery || 0);
+            const dOver = selectedSocialOption.dOverload + selectedSensoryOption.dOverload;
+            const dSelf = selectedSocialOption.dSelf;
+
+            battery += dBat;
+            overload += dOver;
+            selfCohesion += dSelf;
+
+            updateMeters();
+
+            // Áudio de feedback baseado no resultado
+            if (dOver > 20 || battery < 20) {
+                playWarningTone();
+            } else if (dOver < 0 && dSelf > 0) {
+                playCalmChord();
+            } else {
+                playClickTone();
+            }
+
+            // Exibe Feedback da Rodada
+            const feedbackBox = document.getElementById('roundFeedbackBox');
+            const fTitle = document.getElementById('feedbackTitle');
+            const fDesc = document.getElementById('feedbackDesc');
+
+            let commentary = '';
+            if (selectedSocialOption.id === 'masking') {
+                commentary = 'Você optou pelo Masking Total. Embora tenha mantido as aparências, o Córtex Pré-Frontal Dorsolateral (dlPFC) sofreu forte depleção energética. A simulação contínua aproxima seu sistema do Burnout.';
+            } else if (selectedSocialOption.id === 'assertive') {
+                commentary = 'Excelente escolha neuroafirmativa! Você sustentou limites saudáveis e manteve a coerência da sua identidade, economizando glicose cerebral e evitando o sequestro da amígdala.';
+            } else {
+                commentary = 'Pausa tática regenerativa executada com maestria. Seu sistema nervoso ativou o freio vagal ventral e o tálamo desacelerou o bombardeio de estímulos.';
+            }
+
+            if (selectedSensoryOption.id === 'stimming' || selectedSensoryOption.id === 'anc') {
+                commentary += ' O suporte sensorial escolhido funcionou como um amortecedor eficaz de ruído neural.';
+            } else {
+                commentary += ' Contudo, a repressão rígida do corpo adicionou uma sobrecarga desnecessária à sua musculatura.';
+            }
+
+            fTitle.innerText = `Rodada ${currentRound + 1} Concluída`;
+            fDesc.innerText = commentary;
+            feedbackBox.style.display = 'block';
+
+            // Desabilita botões temporariamente
+            document.getElementById('executeActionBtn').disabled = true;
+            feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // Avançar Rodada
+        document.getElementById('nextRoundBtn').addEventListener('click', () => {
+            playClickTone();
+            currentRound++;
+            loadRound(currentRound);
+        });
+
+        // Fim de Jogo
+        function finishGame() {
+            playVictoryFanfare();
+            document.getElementById('gamePlayArea').style.display = 'none';
+            const finalPanel = document.getElementById('finalPanel');
+            finalPanel.style.display = 'block';
+
+            const finalHomeostasis = Math.round((battery * 0.4) + ((100 - overload) * 0.35) + (selfCohesion * 0.25));
+            document.getElementById('finalScoreVal').innerText = `${finalHomeostasis} / 100`;
+
+            const medalEl = document.getElementById('finalMedal');
+            const titleEl = document.getElementById('finalStatusTitle');
+            const textEl = document.getElementById('finalSummaryText');
+
+            if (finalHomeostasis >= 80) {
+                medalEl.innerText = '🏆';
+                titleEl.innerText = 'Mestre em Homeostase Neuroafirmativa';
+                textEl.innerText = `Pontuação Excepcional (${finalHomeostasis}/100)! Você dominou a arte de alternar entre atuação focada e descompressão consciente. Sua bateria pré-frontal terminou preservada e a sobrecarga sensorial foi filtrada com maestria. Você provou na prática que viver sem máscara destrutiva é a melhor proteção contra o Burnout.`;
+            } else if (finalHomeostasis >= 55) {
+                medalEl.innerText = '🥈';
+                titleEl.innerText = 'Equilíbrio Executivo Estável';
+                textEl.innerText = `Bom Desempenho (${finalHomeostasis}/100). Você conseguiu atravessar os cenários mais severos sem entrar em colapso total, mas acumulou desgaste pontual em alguns momentos por ceder ao masking desnecessário. Continue treinando a introdução de pausas e fones sem culpa.`;
+            } else {
+                medalEl.innerText = '🥉';
+                titleEl.innerText = 'Reserva Esgotada / Risco de Burnout';
+                textEl.innerText = `Atenção Clínica (${finalHomeostasis}/100). Sua bateria bioenergética zerou ou sua sobrecarga atingiu níveis alarmantes. Isso demonstra exatamente o que acontece na vida real quando tentamos agradar a todos através do masking compulsivo sem proteger nossos sentidos. Seu cérebro precisa de pausas urgentes e respeito aos seus limites.`;
+            }
+
+            // Persistência em localStorage
+            try {
+                localStorage.setItem('jogoDia40Score', finalHomeostasis);
+                localStorage.setItem('jogoDia40Date', new Date().toISOString());
+            } catch (e) {}
+
+            finalPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Reiniciar Jogo
+        document.getElementById('restartGameBtn').addEventListener('click', () => {
+            playClickTone();
+            initGame();
+        });
+
+        // Controle de Som Mute
+        document.getElementById('soundToggleBtn').addEventListener('click', function() {
+            isMuted = !isMuted;
+            this.innerHTML = isMuted 
+                ? '<span id="soundIcon">🔇</span> Som Mudo' 
+                : '<span id="soundIcon">🔊</span> Som Ativo';
+            if (!isMuted) playClickTone();
+        });
+
+        // Início automático ao carregar
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

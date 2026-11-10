@@ -43,6 +43,7 @@ Cada **Rodada de Esteira (Lote de Produção)** é uma unidade autônoma e sincr
 
 | **Lote 27** | **A Neurobiologia da Janela de Tolerância e da Regulação Autonômica:** Como o Sistema Nervoso Navega Entre a Hiperativação, o Colapso e a Segurança | Carrossel: *A Janela de Tolerância: Por Que Seu Corpo Entra em Pânico ou Simplesmente Desliga* | **T-39:** Escala da Janela de Tolerância e Regulação Autonômica (EJTRA) | **Dia 38:** Matriz de Regulação Autonômica e Equilíbrio Homeostático | ✅ **Concluído** |
 | **Lote 28** | **A Neurobiologia da Resposta de Fawning e o Apaziguamento Social Compulsivo:** Como o Trauma Transforma a Agradabilidade em Mecanismo de Sobrevivência | Carrossel: *Por Que Você Não Consegue Dizer "Não"? A Neurobiologia do Fawning* | **T-40:** Escala de Fawning, Apaziguamento Social e Supressão da Autenticidade (EFASA) | **Dia 39:** Matriz de Assertividade Relacional e Calibração de Limites | ✅ **Concluído** |
+| **Lote 29** | **A Neurobiologia do Masking Social e do Burnout Neurodivergente:** O Custo Metabólico e Cognitivo da Camuflagem no TEA e TDAH | Carrossel: *O Custo Invisível do Masking: Por Que Fingir Ser "Normal" Esgota Seu Cérebro* | **T-41:** Escala de Camuflagem Social e Custo por Masking (ECSCM) | **Dia 40:** Matriz de Custo Atencional e Descompressão Cognitiva | ✅ **Concluído** |
 ---
 
 ## ⚙️ Regras de Ouro e Critérios de Qualidade (Quality Gates)

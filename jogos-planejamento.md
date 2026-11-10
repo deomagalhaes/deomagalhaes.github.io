@@ -46,6 +46,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 37** | **Matriz de Desfusão Metacognitiva e Calibração de Certeza** | Córtex Frontopolar (BA 10), Metacognição, Desfusão Cognitiva e Calibração Bayesiana | `jogos/jogo-desfusao-metacognitiva.html` | ✅ **Publicado** |
 | **Dia 38** | **Matriz de Regulação Autonômica e Equilíbrio Homeostático** | Teoria Polivagal, Freio Vagal, Janela de Tolerância e Calibração de Arousal | `jogos/jogo-regulacao-autonomica.html` | ✅ **Publicado** |
 | **Dia 39** | **Matriz de Assertividade Relacional e Calibração de Limites** | Controle Inibitório Pré-Frontal, Desarme do Fawning, Calibração de Limites e dACC | `jogos/jogo-calibracao-limites-assertividade.html` | ✅ **Publicado** |
+| **Dia 40** | **Matriz de Custo Atencional e Descompressão Cognitiva** | Funções Executivas, Reserva Cognitiva, Regulação Sensorial e Alternância Atencional | `jogos/jogo-custo-atencional-descompressao.html` | ✅ **Publicado** |
 
 ---
 
