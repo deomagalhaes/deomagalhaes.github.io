@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Resposta de Fawning e o Apaziguamento Social Compulsivo: Como o Trauma Transforma a Agradabilidade em Mecanismo de Sobrevivência** (Publicado em 10/11/2026)
 - [x] **A Neurobiologia da Janela de Tolerância e da Regulação Autonômica: Como o Sistema Nervoso Navega Entre a Hiperativação, o Colapso e a Segurança** (Publicado em 09/11/2026)
 - [x] **A Neurobiologia da Desfusão Cognitiva e da Metacognição: Como o Cérebro Observa Seus Próprios Pensamentos Sem Ser Aprisionado por Eles** (Publicado em 09/11/2026)
 - [x] **A Neurobiologia da Hipervigilância Crônica e a Falha do Filtro Talâmico: Como a Sensibilização Central Aprisiona a Mente em Alerta Permanente** (Publicado em 08/11/2026)

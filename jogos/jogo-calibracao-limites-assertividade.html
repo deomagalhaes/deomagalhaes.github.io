@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 39: Matriz de Assertividade Relacional e Calibração de Limites – Deo Magalhães</title>
+    <meta name="description" content="Exercite o controle inibitório pré-frontal, desarme a resposta automática de fawning (apaziguamento) e calibre limites interpessoais com feedback Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-badge-title {
+            font-size: 0.75em;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge-value {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* Painel do Cenário Relacional */
+        .scenario-box {
+            background: #001219;
+            color: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border: 2px solid #005f73;
+            box-shadow: inset 0 2px 15px rgba(0, 0, 0, 0.6);
+            text-align: left;
+        }
+
+        .scenario-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(148, 210, 189, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .scenario-interlocutor {
+            color: #ee9b00;
+            font-weight: 800;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .scenario-pressure-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.78em;
+            font-weight: 700;
+        }
+
+        .scenario-quote {
+            font-size: 1.15em;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #f1f5f9;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .scenario-danger {
+            font-size: 0.85em;
+            color: #94d2bd;
+            line-height: 1.5;
+        }
+
+        /* Bares de Status Fisiológico */
+        .meters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .meter-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .meter-bar-bg {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .meter-bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .fill-autonomy { background: #0a9396; }
+        .fill-alarm { background: #ef4444; }
+
+        /* Controles de Calibração */
+        .controls-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .slider-section {
+            margin-bottom: 24px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .slider-header span {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.95em;
+        }
+
+        .slider-val-tag {
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.82em;
+        }
+
+        .tag-fawn { background: #fef3c7; color: #92400e; }
+        .tag-assertive { background: #dcfce7; color: #166534; }
+        .tag-aggressive { background: #fee2e2; color: #991b1b; }
+
+        .range-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #f59e0b 0%, #10b981 50%, #ef4444 100%);
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #005f73;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .slider-zones-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72em;
+            color: #64748b;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        /* Respostas Verbais */
+        .response-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .response-btn {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 16px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.92em;
+            line-height: 1.5;
+            color: #1e293b;
+            transition: all 0.2s ease;
+        }
+
+        .response-btn:hover {
+            border-color: #005f73;
+            background: #f1f5f9;
+        }
+
+        .response-btn.selected {
+            border-color: #005f73;
+            background: #f0fdfa;
+            font-weight: 600;
+        }
+
+        .confirm-action-btn {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.25);
+        }
+
+        .confirm-action-btn:hover {
+            background: #0a9396;
+        }
+
+        /* Toast de Feedback Imediato */
+        .feedback-overlay {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 8px;
+            font-size: 0.92em;
+            line-height: 1.6;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-success {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .feedback-error {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+
+        .next-round-btn {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Painel Final de Conclusão */
+        .victory-panel {
+            display: none;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .victory-panel h2 {
+            color: #005f73;
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .meters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 39: Matriz de Assertividade Relacional e Calibração de Limites</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Atualizado em 10 de Novembro, 2026</p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status Superior -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Cenário</span>
+                        <span id="currentRoundDisplay" class="stat-badge-value">1 / 8</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Pontuação</span>
+                        <span id="scoreDisplay" class="stat-badge-value">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-badge-title">Recorde</span>
+                        <span id="highScoreDisplay" class="stat-badge-value">0</span>
+                    </div>
+                    <button id="soundToggleBtn" class="sound-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        <span>Som: Ativo</span>
+                    </button>
+                </div>
+
+                <!-- Bares de Indicadores Neurobiológicos -->
+                <div class="meters-grid">
+                    <div class="meter-container">
+                        <div class="meter-header">
+                            <span>Autonomia Pré-Frontal (dlPFC)</span>
+                            <span id="autonomyText">100%</span>
+                        </div>
+                        <div class="meter-bar-bg">
+                            <div id="autonomyBar" class="meter-bar-fill fill-autonomy" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="meter-container">
+                        <div class="meter-header">
+                            <span>Alarme de Rejeição (dACC / Amígdala)</span>
+                            <span id="alarmText">10%</span>
+                        </div>
+                        <div class="meter-bar-bg">
+                            <div id="alarmBar" class="meter-bar-fill fill-alarm" style="width: 10%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel do Jogo Ativo -->
+                <div id="activeGameArea">
+                    <!-- Box do Cenário -->
+                    <div class="scenario-box">
+                        <div class="scenario-meta">
+                            <span id="scenarioInterlocutor" class="scenario-interlocutor">Colega de Equipe</span>
+                            <span id="scenarioPressure" class="scenario-pressure-badge">Pressão por Culpa</span>
+                        </div>
+                        <div id="scenarioQuote" class="scenario-quote">"Poxa, se você não ficar até mais tarde para terminar essa planilha por mim, vou me dar muito mal com o chefe amanhã..."</div>
+                        <div id="scenarioDanger" class="scenario-danger">Risco Neuroclínico: Invasão de fronteira pessoal e chantagem emocional para provocar a resposta de submissão preventiva (fawning).</div>
+                    </div>
+
+                    <!-- Controles de Decisão -->
+                    <div class="controls-card">
+                        <div class="slider-section">
+                            <div class="slider-header">
+                                <span>1. Calibre a Firmeza da Sua Postura:</span>
+                                <span id="sliderTag" class="slider-val-tag tag-assertive">Assertividade (52%)</span>
+                            </div>
+                            <input type="range" id="postureSlider" class="range-slider" min="0" max="100" value="50">
+                            <div class="slider-zones-legend">
+                                <span>0% Submissão / Fawn</span>
+                                <span>50% Assertividade Calibrada</span>
+                                <span>100% Hostilidade Reativa</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span style="font-weight: 700; color: #1e293b; font-size: 0.95em; display: block; margin-bottom: 12px;">2. Selecione a Resposta Tática Ideal:</span>
+                            <div id="responseOptions" class="response-options-list">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </div>
+                        </div>
+
+                        <button id="confirmBtn" class="confirm-action-btn">Executar Resposta Interpessoal</button>
+                    </div>
+
+                    <!-- Feedback Overlay -->
+                    <div id="feedbackBox" class="feedback-overlay">
+                        <div id="feedbackContent"></div>
+                        <button id="nextBtn" class="next-round-btn">Próximo Cenário ➔</button>
+                    </div>
+                </div>
+
+                <!-- Painel de Conclusão / Vitória -->
+                <div id="victoryPanel" class="victory-panel">
+                    <h2>Protocolo de Calibração Concluído!</h2>
+                    <p style="color: #64748b; font-size: 0.95em; margin-bottom: 20px;">Você completou todos os 8 desafios de demarcação de limites com controle executivo pré-frontal.</p>
+                    <div style="font-size: 2.2em; font-weight: 800; color: #005f73; margin-bottom: 10px;" id="finalScoreText">1250 Pts</div>
+                    <p id="finalFeedbackText" style="line-height: 1.6; color: #334155; margin-bottom: 25px;"></p>
+                    <button id="restartBtn" class="confirm-action-btn" style="max-width: 280px; margin: 0 auto;">Repetir Treinamento Cognitivo</button>
+                </div>
+
+                <div style="margin-top: 30px; text-align: left; background: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #005f73; font-size: 0.88em; color: #475569; line-height: 1.6;">
+                    <strong>Foco Neuropsicológico:</strong> Este jogo exercita o córtex pré-frontal dorsolateral (dlPFC) e orbitofrontal (OFC) na inibição do impulso automático de condescendência. Dizer um "não" calibrado requer tolerar a dor social temporária disparada pelo córtex cingulado anterior (dACC) sem capitular à submissão traumática (fawning).
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Web Audio API Procedural Synth
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+
+                if (type === 'click') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'assertive') {
+                    // Acorde Maior Claro (C5 & E5)
+                    [523.25, 659.25].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + (idx * 0.04));
+                        gain.gain.setValueAtTime(0.15, now + (idx * 0.04));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + (idx * 0.04));
+                        osc.stop(now + 0.35);
+                    });
+                } else if (type === 'error') {
+                    // Tom Grave de Alarme
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.25);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'victory') {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + (idx * 0.1));
+                        gain.gain.setValueAtTime(0.18, now + (idx * 0.1));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + (idx * 0.1));
+                        osc.stop(now + 0.6);
+                    });
+                }
+            } catch (e) {
+                console.error("Audio error", e);
+            }
+        }
+
+        // Cenários Estruturados (8 Rodadas com Solubilidade Matemática 100%)
+        const SCENARIOS = [
+            {
+                interlocutor: "Colega de Trabalho",
+                pressure: "Chantagem por Culpa",
+                quote: "\"Poxa, se você não ficar até mais tarde para terminar essa planilha por mim, vou me dar muito mal com a diretoria amanhã...\"",
+                danger: "Tentativa de transferir uma responsabilidade pessoal sob apelo dramático.",
+                optimalRange: [42, 60],
+                options: [
+                    {
+                        text: "Tudo bem, deixa comigo! Eu fico até tarde e faço para você não se prejudicar.",
+                        type: "fawn",
+                        feedback: "Erro de Submissão (Fawning): Você assumiu o fardo alheio e sacrificou sua noite para evitar a culpa. O córtex pré-frontal capitulou."
+                    },
+                    {
+                        text: "Isso não é problema meu! Você é um irresponsável e deveria ter feito o seu trabalho no horário.",
+                        type: "aggressive",
+                        feedback: "Erro de Hostilidade Reativa: O ataque pessoal escala o conflito desnecessariamente e aciona o alarme de rejeição na equipe."
+                    },
+                    {
+                        text: "Entendo a sua preocupação com o prazo, mas hoje tenho compromissos pessoais e não poderei assumir essa tarefa. Posso te orientar nos primeiros 10 minutos amanhã cedo se precisar.",
+                        type: "assertive",
+                        feedback: "Excelente! Assertividade Calibrada: Você validou o sentimento do colega sem ceder à invasão do seu limite pessoal."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Familiar Próximo",
+                pressure: "Invasão de Limite e Cobrança",
+                quote: "\"Você quase não aparece mais aqui em casa! No próximo domingo quero você o dia inteiro conosco, sem desculpas.\"",
+                danger: "Exigência autoritária desconsiderando seu descanso e autonomia de agenda.",
+                optimalRange: [45, 62],
+                options: [
+                    {
+                        text: "Vocês são insuportáveis e só sabem me cobrar! Nunca mais piso aí!",
+                        type: "aggressive",
+                        feedback: "Erro de Hostilidade: Reação agressiva reativa dispara defesas familiares e rompe pontes afetivas."
+                    },
+                    {
+                        text: "Desculpa, mãe/pai... Eu vou sim, cancelo tudo o que tinha planejado para ficar o dia todo aí.",
+                        type: "fawn",
+                        feedback: "Erro de Fawning: Você capitulou à culpa parental, engolindo sua necessidade de descanso e alimentando ressentimento futuro."
+                    },
+                    {
+                        text: "Também gosto de estar com vocês! Neste domingo preciso descansar pela manhã, mas posso ir almoçar com vocês e ficar até o meio da tarde.",
+                        type: "assertive",
+                        feedback: "Perfeito! Calibração Afetiva: Estabeleceu um meio-termo sustentável preservando tanto o vínculo quanto o seu autocuidado."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Gestor Autoritário",
+                pressure: "Urgência Artificiosa no Fim de Semana",
+                quote: "\"Preciso que você revise esta apresentação no sábado à noite. É coisa rápida, você é o mais dedicado do time.\"",
+                danger: "Elogio condicional manipulativo para normalizar invasão de período de descanso.",
+                optimalRange: [40, 58],
+                options: [
+                    {
+                        text: "Claro, chefe! Já estou abrindo o computador agora mesmo, não se preocupe!",
+                        type: "fawn",
+                        feedback: "Erro de Apaziguamento: O elogio manipulativo sequestrou sua necessidade de validação externa, reforçando a exploração de limites."
+                    },
+                    {
+                        text: "Agradeço a confiança na qualidade do meu trabalho. O sábado é meu período de desconexão, mas já reservei a primeira hora da segunda-feira para revisar o material com prioridade máxima.",
+                        type: "assertive",
+                        feedback: "Magnífico! Firmeza Profissional: Agradeceu o elogio, reafirmou a política de descanso e ofereceu solução executiva no horário cabível."
+                    },
+                    {
+                        text: "Não sou obrigado a trabalhar fora do expediente! A lei proíbe mensagens no fim de semana!",
+                        type: "aggressive",
+                        feedback: "Erro de Reatividade Agressiva: A postura litigiosa prematura fecha canais de diálogo corporativo maduro."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Amigo Íntimo",
+                pressure: "Pedido de Empréstimo Financeiro Arriscado",
+                quote: "\"Você é meu melhor amigo, se você não me emprestar esse dinheiro agora não sei o que vai ser da minha vida...\"",
+                danger: "Pressão emocional extrema envolvendo segurança financeira e limites pessoais.",
+                optimalRange: [45, 65],
+                options: [
+                    {
+                        text: "Você é um folgado sem noção de vir me pedir isso logo agora!",
+                        type: "aggressive",
+                        feedback: "Erro Agressivo: A agressão afasta a pessoa em vulnerabilidade em vez de comunicar um limite com dignidade."
+                    },
+                    {
+                        text: "Valorizo imensamente nossa amizade e sinto muito pela situação difícil que você está passando. No momento, tenho uma regra financeira estrita de não realizar empréstimos pessoais, mas posso te ajudar a organizar uma planilha de renegociação se quiser.",
+                        type: "assertive",
+                        feedback: "Excelente Diferenciação do Self! Empatia profunda combinada com limite inegociável protegeu o seu patrimônio e a amizade."
+                    },
+                    {
+                        text: "Nossa... eu estava guardando para minha emergência, mas vou te transferir agora para você não ficar mal.",
+                        type: "fawn",
+                        feedback: "Erro de Fawning Destrutivo: Você colocou sua própria segurança econômica em risco pelo medo intolerável de frustrar o amigo."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Conhecido Oportunista",
+                pressure: "Pedido de Favor Profissional Gratuito",
+                quote: "\"Você que é especialista, dá uma olhada rápida nesse meu projeto e me passa umas dicas de graça, coisa de 5 minutinhos!\"",
+                danger: "Desvalorização do seu tempo e conhecimento técnico profissional.",
+                optimalRange: [40, 58],
+                options: [
+                    {
+                        text: "Fico feliz que você tenha interesse na minha área de atuação! Como esse tipo de análise exige rigor metodológico, realizo esse trabalho através de consultoria formal. Caso tenha interesse, te envio minha tabela de serviços.",
+                        type: "assertive",
+                        feedback: "Impecável! Postura de Autoestima Profissional: Enquadrou o pedido na dimensão correta sem arrogância e sem auto-desvalorização."
+                    },
+                    {
+                        text: "Ah, tá bom... me manda aí que quando der eu dou uma olhadinha de graça.",
+                        type: "fawn",
+                        feedback: "Erro de Apaziguamento: Desvalorizou seu investimento de carreira para evitar o desconforto de cobrar o valor justo."
+                    },
+                    {
+                        text: "Trabalho não é caridade! Vai procurar um profissional pago e para de pedir esmola técnica!",
+                        type: "aggressive",
+                        feedback: "Erro de Hostilidade: Resposta desproporcional revela fragilidade pré-frontal na contenção do impulso irritativo."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Parceiro Afetivo",
+                pressure: "Imposição de Programa Indesejado",
+                quote: "\"Se você realmente me amasse, iria comigo naquele jantar na casa dos meus amigos hoje, mesmo cansado.\"",
+                danger: "Distorção afetiva que iguala submissão incondicional a prova de amor.",
+                optimalRange: [45, 62],
+                options: [
+                    {
+                        text: "Eu te amo muito, e exatamente por respeitar nossa relação, preciso ser sincero sobre meu cansaço hoje. Não irei ao jantar para poder me recuperar, mas faça questão de ir e se divertir!",
+                        type: "assertive",
+                        feedback: "Brilhante! Separação Saudável: Desacoplou a chantagem amorosa e sustentou a integridade física sem desqualificar o parceiro."
+                    },
+                    {
+                        text: "Você nunca respeita meu cansaço, você é um egoísta manipulador!",
+                        type: "aggressive",
+                        feedback: "Erro Agressivo: Rotular o parceiro gera clivagem conjugal defensiva em vez de fortalecer o acordo mútuo."
+                    },
+                    {
+                        text: "Não diz isso, por favor... Eu vou sim, só não fica chateado(a) comigo, eu me arrumo rápido.",
+                        type: "fawn",
+                        feedback: "Erro de Fawning Conjugal: Capitular sob chantagem afetiva reforça o ciclo de manipulação crônica na intimidade."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Grupo Social",
+                pressure: "Pressão por Conformismo e Julgamento",
+                quote: "\"Todo mundo do grupo concordou em fazer essa viagem cara. Se você ficar de fora, vai ser o estraga-prazeres da turma!\"",
+                danger: "Pressão de bando para forçar adesão a gastos ou condutas incompatíveis com seus valores.",
+                optimalRange: [42, 60],
+                options: [
+                    {
+                        text: "Sei que a viagem será incrível e torço para que se divirtam muito! Para mim, esse investimento não se alinha ao meu planejamento financeiro atual, então não participarei desta vez, mas nos vemos no próximo encontro local.",
+                        type: "assertive",
+                        feedback: "Excelente Resistência à Pressão de Bando! Manteve a serenidade sem pedir desculpas por seus próprios limites financeiros."
+                    },
+                    {
+                        text: "Vocês são todos fúteis e só sabem esbanjar dinheiro com bobagem!",
+                        type: "aggressive",
+                        feedback: "Erro Agressivo: Julgar as escolhas alheias revela mecanismo compensatório de inferioridade/superioridade."
+                    },
+                    {
+                        text: "Ai meu Deus, não quero ser o estraga-prazeres... Vou parcelar em 12 vezes e dar um jeito de ir com vocês.",
+                        type: "fawn",
+                        feedback: "Erro Crítico de Fawning Social: O terror de ser excluído do grupo levou à desorganização orçamentária pessoal."
+                    }
+                ]
+            },
+            {
+                interlocutor: "Familiar Crítico",
+                pressure: "Opinião Não-Solicitada Sobre Sua Vida",
+                quote: "\"Você precisa emagrecer e mudar esse cabelo, ninguém vai te levar a sério desse jeito. Falo isso para o seu próprio bem!\"",
+                danger: "Invasão estética e desrespeito sob o manto de 'preocupação carinhosa'.",
+                optimalRange: [48, 65],
+                options: [
+                    {
+                        text: "É verdade... eu sou horrível mesmo, preciso mudar tudo em mim...",
+                        type: "fawn",
+                        feedback: "Erro Grave de Subjugação: Você introjetou a crítica abusiva, aniquilando sua autoestima somática para compra de paz."
+                    },
+                    {
+                        text: "Olha para o seu próprio corpo antes de falar do meu, sua pessoa amarga e invejosa!",
+                        type: "aggressive",
+                        feedback: "Erro Agressivo: Contra-ataque pessoal morde a isca da provocação e alimenta a dinâmica tóxica."
+                    },
+                    {
+                        text: "Agradeço sua preocupação, mas estou muito confortável com as minhas escolhas pessoais e não solicitei opiniões sobre minha aparência. Vamos mudar de assunto.",
+                        type: "assertive",
+                        feedback: "Perfeição Neuroclínica! Delimitação Soberana: Encerrou o ataque com elegância inabalável e mudou o foco sem se rebaixar."
+                    }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentRound = 0;
+        let score = 0;
+        let autonomy = 100;
+        let alarm = 10;
+        let selectedOptionIndex = null;
+        let highScore = parseInt(localStorage.getItem('jogo_assertividade_highscore') || '0', 10);
+
+        document.getElementById('highScoreDisplay').innerText = highScore;
+
+        const slider = document.getElementById('postureSlider');
+        const sliderTag = document.getElementById('sliderTag');
+
+        // Atualização Dinâmica do Slider
+        slider.addEventListener('input', function() {
+            const val = parseInt(this.value, 10);
+            if (val <= 35) {
+                sliderTag.className = 'slider-val-tag tag-fawn';
+                sliderTag.innerText = `Submissão / Fawn (${val}%)`;
+            } else if (val >= 68) {
+                sliderTag.className = 'slider-val-tag tag-aggressive';
+                sliderTag.innerText = `Hostilidade Reativa (${val}%)`;
+            } else {
+                sliderTag.className = 'slider-val-tag tag-assertive';
+                sliderTag.innerText = `Assertividade (${val}%)`;
+            }
+        });
+
+        // Toggle de Som
+        document.getElementById('soundToggleBtn').addEventListener('click', function() {
+            soundEnabled = !soundEnabled;
+            this.querySelector('span').innerText = soundEnabled ? 'Som: Ativo' : 'Som: Mudo';
+            this.style.opacity = soundEnabled ? '1' : '0.6';
+            if (soundEnabled) playSound('click');
+        });
+
+        function renderRound(idx) {
+            if (idx >= SCENARIOS.length) {
+                endGame();
+                return;
+            }
+
+            const scen = SCENARIOS[idx];
+            document.getElementById('currentRoundDisplay').innerText = `${idx + 1} / ${SCENARIOS.length}`;
+            document.getElementById('scenarioInterlocutor').innerText = scen.interlocutor;
+            document.getElementById('scenarioPressure').innerText = scen.pressure;
+            document.getElementById('scenarioQuote').innerText = scen.quote;
+            document.getElementById('scenarioDanger').innerText = `Risco Neuroclínico: ${scen.danger}`;
+
+            // Reset do Slider
+            slider.value = 50;
+            slider.dispatchEvent(new Event('input'));
+
+            // Renderização das Opções
+            const optContainer = document.getElementById('responseOptions');
+            optContainer.innerHTML = '';
+            selectedOptionIndex = null;
+
+            scen.options.forEach((opt, oIdx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'response-btn';
+                btn.innerText = opt.text;
+                btn.addEventListener('click', function() {
+                    playSound('click');
+                    document.querySelectorAll('.response-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedOptionIndex = oIdx;
+                });
+                optContainer.appendChild(btn);
+            });
+
+            document.getElementById('feedbackBox').style.display = 'none';
+            document.getElementById('confirmBtn').style.display = 'block';
+        }
+
+        // Validação da Rodada
+        document.getElementById('confirmBtn').addEventListener('click', function() {
+            if (selectedOptionIndex === null) {
+                alert('Por favor, selecione uma resposta tática antes de confirmar.');
+                return;
+            }
+
+            const scen = SCENARIOS[currentRound];
+            const opt = scen.options[selectedOptionIndex];
+            const sliderVal = parseInt(slider.value, 10);
+            const isSliderOk = sliderVal >= scen.optimalRange[0] && sliderVal <= scen.optimalRange[1];
+            const isOptionOk = opt.type === 'assertive';
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const feedbackContent = document.getElementById('feedbackContent');
+
+            if (isOptionOk && isSliderOk) {
+                // Sucesso Total
+                playSound('assertive');
+                score += 150;
+                autonomy = Math.min(100, autonomy + 10);
+                alarm = Math.max(5, alarm - 10);
+
+                feedbackBox.className = 'feedback-overlay feedback-success';
+                feedbackContent.innerHTML = `<strong>Calibração Perfeita (+150 Pts)!</strong><br>${opt.feedback}`;
+            } else {
+                // Erro ou Falha de Calibração
+                playSound('error');
+                score = Math.max(0, score - 50);
+
+                if (opt.type === 'fawn') {
+                    autonomy = Math.max(10, autonomy - 25);
+                    alarm = Math.min(100, alarm + 5);
+                } else if (opt.type === 'aggressive') {
+                    alarm = Math.min(100, alarm + 30);
+                    autonomy = Math.max(10, autonomy - 10);
+                } else {
+                    // Escolheu a opção certa mas errou a postura do slider
+                    score += 50;
+                }
+
+                feedbackBox.className = 'feedback-overlay feedback-error';
+                let reason = opt.feedback;
+                if (!isSliderOk && isOptionOk) {
+                    reason = `Você escolheu a resposta verbal correta, mas seu potenciômetro de postura estava fora da faixa ideal (${scen.optimalRange[0]}% a ${scen.optimalRange[1]}%). O corpo precisa acompanhar as palavras!`;
+                }
+                feedbackContent.innerHTML = `<strong>Ajuste Necessário (-50 Pts):</strong><br>${reason}`;
+            }
+
+            // Atualização dos Medidores
+            updateMeters();
+            document.getElementById('scoreDisplay').innerText = score;
+
+            this.style.display = 'none';
+            feedbackBox.style.display = 'block';
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            playSound('click');
+            currentRound++;
+            renderRound(currentRound);
+        });
+
+        function updateMeters() {
+            document.getElementById('autonomyText').innerText = `${autonomy}%`;
+            document.getElementById('autonomyBar').style.width = `${autonomy}%`;
+
+            document.getElementById('alarmText').innerText = `${alarm}%`;
+            document.getElementById('alarmBar').style.width = `${alarm}%`;
+        }
+
+        function endGame() {
+            playSound('victory');
+            document.getElementById('activeGameArea').style.display = 'none';
+            const vicPanel = document.getElementById('victoryPanel');
+            vicPanel.style.display = 'block';
+
+            document.getElementById('finalScoreText').innerText = `${score} Pontos`;
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('jogo_assertividade_highscore', highScore);
+                document.getElementById('highScoreDisplay').innerText = highScore;
+            }
+
+            let diag = '';
+            if (score >= 1000) {
+                diag = 'Excepcional! Seu córtex pré-frontal demonstrou controle inibitório cirúrgico contra as armadilhas de fawning e agressividade. Você preservou sua integridade somática sob todas as pressões relacionais.';
+            } else if (score >= 650) {
+                diag = 'Bom desempenho! Você possui clareza teórica sobre assertividade, mas ainda vacila em cenários de alta culpa ou intimidade afetiva. Continue treinando a dissociação entre limites e desamor.';
+            } else {
+                diag = 'Treinamento concluído! Seu sistema nervoso ainda apresenta forte tendência reflexa ao apaziguamento profilático. Recomendamos a leitura do artigo científico de fawning e a prática regular deste simulador.';
+            }
+
+            document.getElementById('finalFeedbackText').innerText = diag;
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', function() {
+            playSound('click');
+            currentRound = 0;
+            score = 0;
+            autonomy = 100;
+            alarm = 10;
+            updateMeters();
+            document.getElementById('scoreDisplay').innerText = score;
+            document.getElementById('victoryPanel').style.display = 'none';
+            document.getElementById('activeGameArea').style.display = 'block';
+            renderRound(0);
+        });
+
+        // Início
+        renderRound(0);
+    </script>
+</body>
+</html>

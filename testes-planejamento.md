@@ -46,6 +46,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-37** | **Escala de Hipervigilância Neuroafetiva e Sensibilização Central (EHNSC)** | Hipervigilância, Filtro Talâmico (TRN), Sensory Gating, Tônus Simpático e Tensão Somática | `testes/teste-hipervigilancia-sensibilizacao.html` | ✅ Concluído |
 | **T-38** | **Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC)** | Fusão Cognitiva, Teoria das Molduras Relacionais, Metacognição (BA 10) e Decentering | `testes/teste-desfusao-metacognicao.html` | ✅ Concluído |
 | **T-39** | **Escala da Janela de Tolerância e Regulação Autonômica (EJTRA)** | Teoria Polivagal, Hiperativação Simpática, Hipoativação Dorsal e Resiliência Vagal | `testes/teste-janela-tolerancia-regulacao-autonomica.html` | ✅ Concluído |
+| **T-40** | **Escala de Fawning, Apaziguamento Social e Supressão da Autenticidade (EFASA)** | Fawning, Subjugação por Medo de Rejeição, Hipervigilância Relacional e Supressão Somática | `testes/teste-fawning-apaziguamento-social.html` | ✅ Concluído |
 
 ---
 

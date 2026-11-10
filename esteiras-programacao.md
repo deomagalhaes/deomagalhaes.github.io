@@ -42,6 +42,7 @@ Cada **Rodada de Esteira (Lote de Produção)** é uma unidade autônoma e sincr
 | **Lote 26** | **A Neurobiologia da Desfusão Cognitiva e da Metacognição:** Como o Cérebro Observa Seus Próprios Pensamentos Sem Ser Aprisionado por Eles | Carrossel: *Você Não É Seus Pensamentos: A Neurociência da Desfusão Cognitiva* | **T-38:** Escala de Consciência Metacognitiva e Desfusão Cognitiva (ECM-DC) | **Dia 37:** Matriz de Desfusão Metacognitiva e Calibração de Certeza | ✅ **Concluído** |
 
 | **Lote 27** | **A Neurobiologia da Janela de Tolerância e da Regulação Autonômica:** Como o Sistema Nervoso Navega Entre a Hiperativação, o Colapso e a Segurança | Carrossel: *A Janela de Tolerância: Por Que Seu Corpo Entra em Pânico ou Simplesmente Desliga* | **T-39:** Escala da Janela de Tolerância e Regulação Autonômica (EJTRA) | **Dia 38:** Matriz de Regulação Autonômica e Equilíbrio Homeostático | ✅ **Concluído** |
+| **Lote 28** | **A Neurobiologia da Resposta de Fawning e o Apaziguamento Social Compulsivo:** Como o Trauma Transforma a Agradabilidade em Mecanismo de Sobrevivência | Carrossel: *Por Que Você Não Consegue Dizer "Não"? A Neurobiologia do Fawning* | **T-40:** Escala de Fawning, Apaziguamento Social e Supressão da Autenticidade (EFASA) | **Dia 39:** Matriz de Assertividade Relacional e Calibração de Limites | ✅ **Concluído** |
 ---
 
 ## ⚙️ Regras de Ouro e Critérios de Qualidade (Quality Gates)
