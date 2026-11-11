@@ -48,6 +48,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-39** | **Escala da Janela de Tolerância e Regulação Autonômica (EJTRA)** | Teoria Polivagal, Hiperativação Simpática, Hipoativação Dorsal e Resiliência Vagal | `testes/teste-janela-tolerancia-regulacao-autonomica.html` | ✅ Concluído |
 | **T-40** | **Escala de Fawning, Apaziguamento Social e Supressão da Autenticidade (EFASA)** | Fawning, Subjugação por Medo de Rejeição, Hipervigilância Relacional e Supressão Somática | `testes/teste-fawning-apaziguamento-social.html` | ✅ Concluído |
 | **T-41** | **Escala de Camuflagem Social e Custo por Masking (ECSCM)** | Masking Social, Compensação Pré-Frontal (dlPFC), Supressão de Stimming e Burnout Autista | `testes/teste-masking-burnout-neurodivergente.html` | ✅ Concluído |
+| **T-42** | **Escala de Fenômeno do Impostor e Calibração Atribucional (EFICA)** | Fenômeno do Impostor, Descalibração Atribucional, dACC / ERN e Vácuo Dopaminérgico | `testes/teste-fenomeno-impostor-calibracao.html` | ✅ Concluído |
 
 ---
 

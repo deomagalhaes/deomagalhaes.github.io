@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 41: Matriz de Calibração Atribucional e Autoeficácia – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para desarmar o Fenômeno do Impostor, calibrar o detector de erros do dACC e consolidar a recompensa dopaminérgica do mérito com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .gauges-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .gauge-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .gauge-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .gauge-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .fill-efficacy { background: #0a9396; }
+        .fill-dacc { background: #ee9b00; }
+        .fill-dopamine { background: #005f73; }
+
+        /* Card do Desafio / Cenário */
+        .scenario-box {
+            background: #ffffff;
+            border: 2px solid #005f73;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            background: #005f73;
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.78em;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .scenario-title {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0 0 10px 0;
+        }
+
+        .scenario-desc {
+            font-size: 0.98em;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 16px;
+        }
+
+        .impostor-trigger-box {
+            background: #fffbeb;
+            border-left: 4px solid #ee9b00;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: #92400e;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .options-title {
+            font-size: 0.92em;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .tactics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .tactic-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .tactic-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #005f73;
+            transform: translateX(4px);
+        }
+
+        .tactic-letter {
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.85em;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tactic-content h4 {
+            margin: 0 0 4px 0;
+            font-size: 0.98em;
+            color: #1e293b;
+        }
+
+        .tactic-content p {
+            margin: 0;
+            font-size: 0.88em;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        /* Feedback da Rodada */
+        .feedback-card {
+            display: none;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+            border: 1px solid transparent;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-optimal {
+            background: #f0fdf4;
+            border-color: #86efac;
+            color: #14532d;
+        }
+
+        .feedback-suboptimal {
+            background: #fefce8;
+            border-color: #fde047;
+            color: #713f12;
+        }
+
+        .feedback-impostor {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #7f1d1d;
+        }
+
+        .feedback-header {
+            font-size: 1.05em;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-body {
+            font-size: 0.92em;
+            line-height: 1.6;
+        }
+
+        .btn-next-round {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin-top: 14px;
+        }
+
+        .btn-next-round:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        /* Modal de Fim de Jogo */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 18, 25, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            max-width: 580px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #005f73;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .sound-toggle-btn {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85em;
+            cursor: pointer;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-toggle-btn:hover {
+            background: #f1f5f9;
+            color: #005f73;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 41: Matriz de Calibração Atribucional e Autoeficácia</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Publicado em 11 de Novembro, 2026</p>
+            </header>
+
+            <div class="game-wrapper">
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Rodada</span>
+                        <span class="stat-value" id="currentRoundDisplay">1 / 10</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Autoeficácia Realista</span>
+                        <span class="stat-value" id="statEfficacy">50%</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Melhor Registro</span>
+                        <span class="stat-value" id="statBest">--</span>
+                    </div>
+                    <div>
+                        <button id="soundToggle" class="sound-toggle-btn" onclick="toggleMute()">
+                            <span id="soundIcon">🔊</span> Som Ativo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel de Medidores ao Vivo -->
+                <div class="gauges-container">
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Autoeficácia (vmPFC)</span>
+                            <span id="labelEfficacy">50%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div id="barEfficacy" class="gauge-fill fill-efficacy" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Alarme de Erro (dACC)</span>
+                            <span id="labelDacc">50%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div id="barDacc" class="gauge-fill fill-dacc" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Recompensa (Estriado)</span>
+                            <span id="labelDopamine">50%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div id="barDopamine" class="gauge-fill fill-dopamine" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box do Cenário Atual -->
+                <div class="scenario-box" id="scenarioContainer">
+                    <span class="scenario-tag" id="scenarioCategory">Cenário 01</span>
+                    <h3 class="scenario-title" id="scenarioTitle">Carregando cenário...</h3>
+                    <p class="scenario-desc" id="scenarioDesc">Descrição do desafio.</p>
+                    
+                    <div class="impostor-trigger-box">
+                        <strong>⚠️ Gatilho Automático do Impostor:</strong>
+                        <span id="impostorTriggerText">"Você só teve sorte, logo verão quem você é."</span>
+                    </div>
+
+                    <div class="options-title">Selecione sua Resposta Neurocognitiva de Calibração:</div>
+                    <div class="tactics-grid" id="tacticsGrid">
+                        <!-- Botões de táticas injetados via JS -->
+                    </div>
+
+                    <!-- Feedback pós-escolha -->
+                    <div id="roundFeedback" class="feedback-card">
+                        <div class="feedback-header" id="feedbackHeader"></div>
+                        <div class="feedback-body" id="feedbackBody"></div>
+                        <button class="btn-next-round" id="btnNext" onclick="nextRound()">Avançar para Próxima Rodada →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Fundamentação Neuropsicológica -->
+            <article class="article-body" style="margin-top: 40px;">
+                <h2>Bases Neuropsicológicas da Matriz de Calibração Atribucional</h2>
+                <p>O <strong>Dia 41: Matriz de Calibração Atribucional e Autoeficácia</strong> foi estruturado para treinar o controle inibitório pré-frontal sobre as distorções cognitivas do Fenômeno do Impostor. Sob o prisma da neurociência comportamental, o jogo exercita:</p>
+                <ul>
+                    <li><strong>Inibição da Hiper-reatividade do dACC:</strong> O Córtex Cingulado Anterior Dorsal dispara alarmes excessivos diante de qualquer incerteza. A escolha por evidências objetivas reeduca o cérebro a modular essa resposta de ameaça social.</li>
+                    <li><strong>Ativação da Circuitaria de Recompensa (Estriado Ventral / VTA):</strong> A prática deliberada de <em>savoring</em> (apreciação do mérito pessoal) religa a sinalização dopaminérgica de reforço, consolidando a autoimagem no hipocampo.</li>
+                    <li><strong>Reavaliação Metacognitiva no vmPFC:</strong> O Córtex Pré-Frontal Ventromedial é treinado a balancear a atribuição causal (Bernard Weiner), desmantelando a crença de que vitórias dependem puramente de sorte ou acaso.</li>
+                </ul>
+                <hr class="article-divider">
+                <p class="article-disclaimer"><em>Este jogo possui finalidade psicoeducativa e treino cognitivo. Para diagnósticos e intervenções clínicas aprofundadas sobre ansiedade e esquemas disfuncionais, consulte um neuropsicólogo qualificado.</em></p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Modal de Vitória / Conclusão -->
+    <div id="gameModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 style="color: #005f73; margin-top: 0;" id="modalTitle">Matriz Calibrada com Sucesso!</h2>
+            <p id="modalDesc" style="color: #334155; line-height: 1.6;"></p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #cbd5e1;">
+                <div style="font-size: 0.9em; color: #64748b;">Índice Final de Autoeficácia Realista:</div>
+                <div style="font-size: 2.2em; font-weight: 800; color: #0a9396;" id="modalFinalScore">0%</div>
+            </div>
+            <button class="btn-next-round" onclick="restartGame()">Jogar Novamente</button>
+            <div style="margin-top: 15px;">
+                <a href="/testes/teste-fenomeno-impostor-calibracao.html" style="color: #005f73; font-weight: 700; text-decoration: underline; font-size: 0.9em;">Fazer a Escala Psicométrica EFICA (T-42)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Motor do Jogo & Web Audio API -->
+    <script>
+        // Web Audio API
+        let audioCtx = null;
+        let isMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('soundIcon').innerText = isMuted ? '🔇' : '🔊';
+            document.getElementById('soundToggle').innerHTML = isMuted ? '<span id="soundIcon">🔇</span> Som Mudo' : '<span id="soundIcon">🔊</span> Som Ativo';
+        }
+
+        function playClickTone() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(540, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(840, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.09);
+            } catch (e) {}
+        }
+
+        function playAlertTone() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(160, ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.21);
+            } catch (e) {}
+        }
+
+        function playHarmonicChime() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const freqs = [440, 554.37, 659.25]; // Lá maior harmônico
+                freqs.forEach((f, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = f;
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime + (idx * 0.05));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.05));
+                    osc.stop(ctx.currentTime + 0.46);
+                });
+            } catch (e) {}
+        }
+
+        function playVictoryFanfare() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // Dó, Mi, Sol, Dó alto
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime + (i * 0.1));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.1) + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (i * 0.1));
+                    osc.stop(ctx.currentTime + (i * 0.1) + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        // Banco de Cenários Lógicos (10 Rodadas Determinísticas)
+        const SCENARIOS = [
+            {
+                tag: "Cenário 01 • Apresentação Executiva",
+                title: "Elogio Unânime da Diretoria em Reunião",
+                desc: "Você apresentou o relatório trimestral e a diretoria elogiou publicamente a profundidade das suas análises e clareza didática.",
+                trigger: "\"Eles só elogiaram porque a apresentação tinha slides bonitos e o humor deles estava bom hoje.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Fórmula do Impostor (Atribuição Externa)",
+                        desc: "Diga a si mesmo que qualquer estagiário faria o mesmo e tema ser cobrado por isso na próxima semana.",
+                        type: "impostor",
+                        efficacyDelta: -10,
+                        daccDelta: +15,
+                        dopamineDelta: -10,
+                        header: "Viés do Impostor Ativado!",
+                        body: "Você externalizou a causa para fatores instáveis (humor da diretoria). O dACC mantém-se em alarme e o estriado ventral perde a oportunidade de registrar o mérito."
+                    },
+                    {
+                        letter: "B",
+                        title: "Compensação Defensiva por Hipertrabalho",
+                        desc: "Fique feliz, mas planeje virar noites no próximo trimestre para não decepcioná-los.",
+                        type: "suboptimal",
+                        efficacyDelta: +5,
+                        daccDelta: +10,
+                        dopamineDelta: +5,
+                        header: "Alívio Parcial com Risco de Esgotamento",
+                        body: "Você aceitou o resultado, mas fusionou-se com a obrigação de hipercompensação, elevando a carga alostática para o próximo ciclo."
+                    },
+                    {
+                        letter: "C",
+                        title: "Calibração Bayesiana & Savoring (Ótima)",
+                        desc: "Audite o fato: você pesquisou por 2 semanas, dominava os dados e respondeu a todas as dúvidas com precisão. Respire e saboreie seu mérito.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Calibração Perfeita (vmPFC & Núcleo Accumbens)",
+                        body: "Você vinculou o sucesso a competências internas e controláveis. O estriado ventral consolida o sinal dopaminérgico de eficácia e o dACC silencia o alarme."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 02 • Resolução de Incidente",
+                title: "Correção de Falha Crítica sob Pressão",
+                desc: "Um sistema entrou em pane súbita. Você manteve a compostura, identificou a causa raiz e reverteu o problema em 20 minutos.",
+                trigger: "\"Foi um palpite de sorte. Se tivessem me perguntado 5 minutos depois, eu não saberia o que fazer.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Calibração Bayesiana de Competência (Ótima)",
+                        desc: "Reconheça que sua rapidez decorreu de anos de experiência acumulada e estudo prévio, não de magia ou sorte cega.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Memória Procedural Reconhecida!",
+                        body: "Intuição técnica é o cérebro processando padrões implícitos em alta velocidade. Você validou a eficácia do seu córtex pré-frontal."
+                    },
+                    {
+                        letter: "B",
+                        title: "Externalização Pura para o Acaso",
+                        desc: "Conclua que foi mera coincidência e trema pensando no dia em que um bug real expor sua suposta ignorância.",
+                        type: "impostor",
+                        efficacyDelta: -15,
+                        daccDelta: +20,
+                        dopamineDelta: -15,
+                        header: "Sequestro da Amígdala!",
+                        body: "A autocrítica severa anulou seu raciocínio lógico. O dACC interpretou o sucesso como um escape por um triz, aumentando a ansiedade antecipatória."
+                    },
+                    {
+                        letter: "C",
+                        title: "Foco Exclusivo no que Faltou",
+                        desc: "Pense: 'resolvi, mas demorei 20 minutos quando o ideal seria 10'.",
+                        type: "suboptimal",
+                        efficacyDelta: 0,
+                        daccDelta: +10,
+                        dopamineDelta: -5,
+                        header: "Perfeccionismo Desadaptativo",
+                        body: "O filtro mental negativo focou na margem de imperfeição em vez da resolução bem-sucedida, mantendo o tônus simpático elevado."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 03 • Conquista Profissional",
+                title: "Aprovação em Processo Seletivo Disputado",
+                desc: "Entre mais de 80 concorrentes, você foi selecionado para uma vaga estratégica de alta relevância.",
+                trigger: "\"Os recrutadores erraram no perfil ou os outros candidatos eram fracos demais.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Teoria da Conspiração contra Si Mesmo",
+                        desc: "Acredite que os avaliadores foram enganados pelo seu carisma e que a demissão virá no primeiro mês.",
+                        type: "impostor",
+                        efficacyDelta: -15,
+                        daccDelta: +20,
+                        dopamineDelta: -15,
+                        header: "Descalibração Atribucional Extrema",
+                        body: "Você pressupõe que profissionais seniores de RH cometeram um erro crasso, apenas para não aceitar seu próprio talento."
+                    },
+                    {
+                        letter: "B",
+                        title: "Auditoria Bayesiana Realista (Ótima)",
+                        desc: "Considere: recrutadores testaram seu conhecimento por 4 etapas rigorosas. A probabilidade de erro sistemático é quase nula. Você mereceu.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Rigor Lógico Aplicado à Autoimagem",
+                        body: "A Navalha de Ockham venceu: a explicação mais provável é que você é a pessoa mais qualificada para o cargo. Dopamina estabilizada!"
+                    },
+                    {
+                        letter: "C",
+                        title: "Aceitação Cautelosa com Isolamento",
+                        desc: "Comemore discretamente, mas evite interagir com colegas seniores para não falar bobagem.",
+                        type: "suboptimal",
+                        efficacyDelta: +5,
+                        daccDelta: +5,
+                        dopamineDelta: +5,
+                        header: "Comportamento de Esquiva Mantido",
+                        body: "A aceitação parcial protege a autoeficácia, mas a esquiva social preserva a crença subjacente de defectividade."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 04 • Liderança & Inovação",
+                title: "Convite para Liderar Projeto Estratégico",
+                desc: "A diretoria convida você formalmente para coordenar o projeto prioritário da empresa no próximo ano.",
+                trigger: "\"Eles só me chamaram porque ninguém mais quis o fardo; serei responsabilizado pelo desastre.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Aceitação Ativa & Integração de Mérito (Ótima)",
+                        desc: "Reconheça que sua capacidade analítica e de engajamento de pessoas justificam o convite. Aceite o desafio com entusiasmo regulado.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Agência Pessoal Consolidada!",
+                        body: "O córtex pré-frontal ventromedial assume a narrativa. O cérebro antecipa oportunidade de expansão em vez de ameaça de ruína."
+                    },
+                    {
+                        letter: "B",
+                        title: "Recusa por Medo de Exposição",
+                        desc: "Invente uma desculpa de falta de tempo para não ter que assumir o risco de ser desmascarado.",
+                        type: "impostor",
+                        efficacyDelta: -20,
+                        daccDelta: +15,
+                        dopamineDelta: -20,
+                        header: "Autoanulação e Fracasso Autoinduzido",
+                        body: "A esquiva comportamental priva seu sistema de novas evidências de competência, fortalecendo a farsa interna."
+                    },
+                    {
+                        letter: "C",
+                        title: "Aceitação com Pavor e Promessa de Overworking",
+                        desc: "Aceite o projeto, mas declare guerra ao sono e à vida pessoal para garantir controle absoluto de cada detalhe.",
+                        type: "suboptimal",
+                        efficacyDelta: 0,
+                        daccDelta: +15,
+                        dopamineDelta: 0,
+                        header: "Rumo ao Esgotamento Alostático",
+                        body: "O ciclo do impostor se retroalimenta: o sucesso futuro será atribuído ao sacrifício de saúde e não à competência intrínseca."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 05 • Reconhecimento Acadêmico",
+                title: "Artigo Técnico Aceito em Periódico de Prestígio",
+                desc: "Seu estudo recebeu pareceres extremamente positivos de revisores anônimos internacionais sem grandes ressalvas.",
+                trigger: "\"Os revisores leram com pressa ou não entenderam os limites metodológicos do meu texto.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Desvalorização Cínica dos Pareceres",
+                        desc: "Afirme que os revisores foram descuidados e tema que pesquisadores apontem erros crassos no futuro.",
+                        type: "impostor",
+                        efficacyDelta: -15,
+                        daccDelta: +20,
+                        dopamineDelta: -15,
+                        header: "Desprezo Epistêmico à Evidência",
+                        body: "Para sustentar a crença de insuficiência, você desacredita cientistas de renome internacional. O dACC permanece disparando ERN."
+                    },
+                    {
+                        letter: "B",
+                        title: "Internalização Consciente de Mérito (Ótima)",
+                        desc: "Reconheça que sua hipótese era robusta, sua escrita foi rigorosa e seu método é sólido. Celebre a vitória científica.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Validação Epistêmica e Recompensa Real",
+                        body: "A concordância entre revisão cega independente e competência pessoal é a mais pura evidência bayesiana. Autoeficácia no topo!"
+                    },
+                    {
+                        letter: "C",
+                        title: "Alívio Rápido e Foco Imediato no Próximo Artigo",
+                        desc: "Apenas respire fundo e abra o próximo documento em branco sem dar um segundo de trégua ao cérebro.",
+                        type: "suboptimal",
+                        efficacyDelta: +5,
+                        daccDelta: +5,
+                        dopamineDelta: 0,
+                        header: "Apagão de Savoring",
+                        body: "Ao não consolidar a conquista, a dopamina decai rapidamente, gerando uma sensação crônica de vazio e 'esteira sem fim'."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 06 • Satisfação do Cliente",
+                title: "Cliente Crítico Envia Mensagem de Agradecimento",
+                desc: "Um cliente conhecido por ser rígido e exigente elogiou a sensibilidade e o rigor do seu atendimento.",
+                trigger: "\"Ele só foi simpático porque teve um bom dia, ou eu tive sorte de ele não ter notado falhas.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Calibração de Eficácia Interpessoal (Ótima)",
+                        desc: "Compreenda que clientes exigentes não elogiam por caridade; seu profissionalismo e escuta qualificada geraram valor real.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Segurança Relacional Restaurada!",
+                        body: "A via do engajamento social (Teoria Polivagal) se alinha ao mérito cognitivo. Sua competência técnica gerou impacto humano."
+                    },
+                    {
+                        letter: "B",
+                        title: "Dúvida Paralisante sobre a Próxima Sessão",
+                        desc: "Pense: 'desta vez foi bom, mas no próximo encontro ele verá que não tenho respostas'.",
+                        type: "impostor",
+                        efficacyDelta: -10,
+                        daccDelta: +15,
+                        dopamineDelta: -10,
+                        header: "Ansiedade Antecipatória Reativada",
+                        body: "O elogio foi transformado em dívida de desempenho. O dACC antecipa a ruína da expectativa."
+                    },
+                    {
+                        letter: "C",
+                        title: "Minimização Polida ('Não Foi Nada')",
+                        desc: "Responda dizendo que 'apenas fez o básico que qualquer um faria', desqualificando o próprio esforço.",
+                        type: "suboptimal",
+                        efficacyDelta: 0,
+                        daccDelta: +5,
+                        dopamineDelta: -5,
+                        header: "Desconto Social de Mérito",
+                        body: "A falsa modéstia mascara o desconforto de assumir agência e impede a internalização do elogio pelo hipocampo."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 07 • Gestão de Erros",
+                title: "Ocorrência de Deslize Técnico Menor em Relatório",
+                desc: "Você cometeu um erro de digitação pontual em uma planilha de 40 páginas. A equipe corrigiu em 2 minutos sem impacto.",
+                trigger: "\"Esse erro prova que sou descuidado, incompetente e que tudo o que fiz até hoje é ilusão.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Generalização Catastrófica (Fórmula Impostor)",
+                        desc: "Passe o dia ruminando sobre a falha e sinta uma vergonha visceral profunda perante os pares.",
+                        type: "impostor",
+                        efficacyDelta: -20,
+                        daccDelta: +20,
+                        dopamineDelta: -15,
+                        header: "Hiperativação Cingulada Tóxica",
+                        body: "Você transformou um erro local em atestado de inadequação existencial. A ERN do dACC ativou a dor social da ínsula."
+                    },
+                    {
+                        letter: "B",
+                        title: "Calibração Realista do Erro Humano (Ótima)",
+                        desc: "Observe o fato: 39 páginas estavam impecáveis; 1 número foi digitado errado e sanado. Errar faz parte da fisiologia humana.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +15,
+                        header: "Autocompaixão e Controle Inibitório",
+                        body: "Você conteve a catastrofização no córtex pré-frontal dorsolateral. A falha pontual não destrói o histórico consolidado."
+                    },
+                    {
+                        letter: "C",
+                        title: "Revisão Obsessiva Noturna por 5 Horas",
+                        desc: "Vá para casa e revise novamente todas as planilhas já entregues nos últimos 6 meses para checar se errou em outro lugar.",
+                        type: "suboptimal",
+                        efficacyDelta: -5,
+                        daccDelta: +15,
+                        dopamineDelta: -5,
+                        header: "Comportamento de Segurança Compulsivo",
+                        body: "A checagem obsessiva acalma a ansiedade por uma hora, mas reforça a crença do impostor de que você é intrinsecamente falho."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 08 • Performance & Metas",
+                title: "Superação Expressiva de Metas Anuais",
+                desc: "Seu setor bateu recorde histórico de entregas sob sua condução direta, superando em 40% a meta planejada.",
+                trigger: "\"O mercado ajudou; o vento soprou a favor. Se o cenário econômico estivesse difícil, teríamos quebrado.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Integração Bayesiana de Mérito & Liderança (Ótima)",
+                        desc: "Reconheça a conjuntura, mas valide: concorrentes com o mesmo mercado não cresceram. Sua estratégia e execução foram decisivas.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Análise Causal Equilibrada!",
+                        body: "Weiner em sua forma pura: você reconheceu o contexto externo sem subtrair seu agenciamento interno e estável."
+                    },
+                    {
+                        letter: "B",
+                        title: "Atribuição 100% Externa e Aleatória",
+                        desc: "Insista que foi mera maré de sorte e que no próximo ano a média matemática cobrará a conta do fracasso.",
+                        type: "impostor",
+                        efficacyDelta: -15,
+                        daccDelta: +20,
+                        dopamineDelta: -15,
+                        header: "Sabotagem da Autoimagem de Competência",
+                        body: "O núcleo accumbens é bloqueado de celebrar o êxito. O sistema permanece em modo crônico de estresse simpático."
+                    },
+                    {
+                        letter: "C",
+                        title: "Alívio com Fixação em Novas Metas Impossíveis",
+                        desc: "Diga 'legal, agora dobrem a meta' e eleve a pressão a níveis desumanos para calar sua dúvida interna.",
+                        type: "suboptimal",
+                        efficacyDelta: +5,
+                        daccDelta: +15,
+                        dopamineDelta: 0,
+                        header: "Tirania dos Padrões Inflexíveis",
+                        body: "O esquema de padrões inflexíveis (Jeffrey Young) compensa a defectividade com tirania produtiva, gerando risco de burnout coletivo."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 09 • Reconhecimento Público",
+                title: "Homenagem em Evento Setorial da Categoria",
+                desc: "Você foi convidado para subir ao palco e receber uma menção honrosa por sua contribuição relevante à área.",
+                trigger: "\"Há dezenas de profissionais melhores do que eu. É uma vergonha estar aqui; estou tirando o lugar de alguém de verdade.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Vontade de Fugir e Não Comparecer",
+                        desc: "Considere faltar ao evento alegando mal-estar súbito para evitar a exposição e os holofotes.",
+                        type: "impostor",
+                        efficacyDelta: -20,
+                        daccDelta: +20,
+                        dopamineDelta: -20,
+                        header: "Fuga por Pavor de Visibilidade",
+                        body: "A esquiva severa confirma a premissa de fraude da mente. O cérebro consolida que o palco é uma ameaça mortal."
+                    },
+                    {
+                        letter: "B",
+                        title: "Acolhimento da Honra com Dignidade Humana (Ótima)",
+                        desc: "Suba ao palco, respire fundo, receba a homenagem com gratidão aos seus mentores e permita-se sentir a alegria legítima do momento.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Conexão Social e Autoeficácia Plena!",
+                        body: "A ocitocina e a dopamina trabalham em sinergia. O cérebro aprende que você tem um lugar legítimo e seguro no grupo."
+                    },
+                    {
+                        letter: "C",
+                        title: "Discurso Hiperautodepreciativo no Palco",
+                        desc: "Use o microfone para dizer que 'não sabe por que foi escolhido e que outros mereciam mais', constrangendo a plateia.",
+                        type: "suboptimal",
+                        efficacyDelta: -5,
+                        daccDelta: +10,
+                        dopamineDelta: -5,
+                        header: "Apaziguamento e Fawning em Público",
+                        body: "A autoanulação pública tenta apaziguar o medo de inveja ou rejeição, mas corrói sua autoridade profissional perante a plateia."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 10 • Mentoria & Transmissão",
+                title: "Orientação de Novos Colegas e Mentoria",
+                desc: "Dois profissionais iniciantes procuram você pedindo conselhos de carreira e afirmando que você é o maior modelo profissional deles.",
+                trigger: "\"Se eles soubessem como sou inseguro por dentro, jamais pediriam minha ajuda. Sou uma farsa.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Transmissão Generosa e Autêntica (Ótima)",
+                        desc: "Compartilhe seus métodos, seus erros superados e sua trajetória real. Perceba que sua sabedoria prática é real e transforma vidas.",
+                        type: "optimal",
+                        efficacyDelta: +15,
+                        daccDelta: -15,
+                        dopamineDelta: +20,
+                        header: "Generatividade e Maestria Consolidada!",
+                        body: "Segundo Erik Erikson, a generatividade é o estágio supremo da maturidade. Ensinar consolida suas redes neurais e desmonta o impostor."
+                    },
+                    {
+                        letter: "B",
+                        title: "Recusa por Não Sentir-se 'Pronto'",
+                        desc: "Diga a eles que procurem outra pessoa porque você 'ainda precisa aprender o básico antes de ensinar alguém'.",
+                        type: "impostor",
+                        efficacyDelta: -15,
+                        daccDelta: +15,
+                        dopamineDelta: -15,
+                        header: "Paralisia do Eterno Aprendiz",
+                        body: "A recusa de ensinar priva você de enxergar o próprio conhecimento refletido nos olhos do outro. A ilusão de ignorância se perpetua."
+                    },
+                    {
+                        letter: "C",
+                        title: "Postura Inflexível de 'Especialista Perfeito'",
+                        desc: "Finja não ter nenhuma dúvida e apresente uma persona invulnerável e distante, aumentando a pressão sobre si mesmo.",
+                        type: "suboptimal",
+                        efficacyDelta: +5,
+                        daccDelta: +15,
+                        dopamineDelta: 0,
+                        header: "Máscara de Invulnerabilidade",
+                        body: "Manter a persona de perfeição exige um custo metabólico exorbitante no córtex dorsolateral, mantendo a sensação de falsidade."
+                    }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentRound = 0;
+        let statEfficacy = 50;
+        let statDacc = 50;
+        let statDopamine = 50;
+        let roundAnswered = false;
+
+        function loadGameState() {
+            const best = localStorage.getItem('deo_dia41_best_score');
+            if (best) {
+                document.getElementById('statBest').innerText = best + '%';
+            }
+            renderRound(0);
+        }
+
+        function renderRound(idx) {
+            currentRound = idx;
+            roundAnswered = false;
+
+            const sc = SCENARIOS[idx];
+            document.getElementById('currentRoundDisplay').innerText = `${idx + 1} / ${SCENARIOS.length}`;
+            document.getElementById('scenarioCategory').innerText = sc.tag;
+            document.getElementById('scenarioTitle').innerText = sc.title;
+            document.getElementById('scenarioDesc').innerText = sc.desc;
+            document.getElementById('impostorTriggerText').innerText = sc.trigger;
+
+            const grid = document.getElementById('tacticsGrid');
+            grid.innerHTML = '';
+
+            sc.options.forEach((opt, optIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'tactic-btn';
+                btn.onclick = () => selectOption(optIdx);
+                btn.innerHTML = `
+                    <div class="tactic-letter">${opt.letter}</div>
+                    <div class="tactic-content">
+                        <h4>${opt.title}</h4>
+                        <p>${opt.desc}</p>
+                    </div>
+                `;
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('roundFeedback').style.display = 'none';
+            updateGauges();
+        }
+
+        function selectOption(optIdx) {
+            if (roundAnswered) return;
+            roundAnswered = true;
+
+            const opt = SCENARIOS[currentRound].options[optIdx];
+
+            // Tocar som apropriado
+            if (opt.type === 'optimal') {
+                playHarmonicChime();
+            } else if (opt.type === 'impostor') {
+                playAlertTone();
+            } else {
+                playClickTone();
+            }
+
+            // Atualizar deltas
+            statEfficacy = Math.max(0, Math.min(100, statEfficacy + opt.efficacyDelta));
+            statDacc = Math.max(0, Math.min(100, statDacc + opt.daccDelta));
+            statDopamine = Math.max(0, Math.min(100, statDopamine + opt.dopamineDelta));
+
+            updateGauges();
+
+            // Desabilitar botões
+            const buttons = document.querySelectorAll('.tactic-btn');
+            buttons.forEach(b => b.disabled = true);
+            buttons[optIdx].style.borderColor = opt.type === 'optimal' ? '#0a9396' : (opt.type === 'impostor' ? '#e63946' : '#ee9b00');
+            buttons[optIdx].style.background = opt.type === 'optimal' ? '#f0fdf4' : (opt.type === 'impostor' ? '#fef2f2' : '#fefce8');
+
+            // Exibir feedback
+            const fbBox = document.getElementById('roundFeedback');
+            fbBox.className = `feedback-card feedback-${opt.type}`;
+            fbBox.style.display = 'block';
+
+            document.getElementById('feedbackHeader').innerText = opt.header;
+            document.getElementById('feedbackBody').innerText = opt.body;
+
+            const btnNext = document.getElementById('btnNext');
+            if (currentRound === SCENARIOS.length - 1) {
+                btnNext.innerText = 'Ver Diagnóstico Final da Matriz ➔';
+            } else {
+                btnNext.innerText = 'Avançar para Próxima Rodada →';
+            }
+        }
+
+        function updateGauges() {
+            document.getElementById('statEfficacy').innerText = statEfficacy + '%';
+            document.getElementById('labelEfficacy').innerText = statEfficacy + '%';
+            document.getElementById('barEfficacy').style.width = statEfficacy + '%';
+
+            document.getElementById('labelDacc').innerText = statDacc + '%';
+            document.getElementById('barDacc').style.width = statDacc + '%';
+
+            document.getElementById('labelDopamine').innerText = statDopamine + '%';
+            document.getElementById('barDopamine').style.width = statDopamine + '%';
+        }
+
+        function nextRound() {
+            if (currentRound < SCENARIOS.length - 1) {
+                renderRound(currentRound + 1);
+            } else {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            playVictoryFanfare();
+
+            const best = localStorage.getItem('deo_dia41_best_score') || 0;
+            if (statEfficacy > parseInt(best, 10)) {
+                localStorage.setItem('deo_dia41_best_score', statEfficacy);
+                document.getElementById('statBest').innerText = statEfficacy + '%';
+            }
+
+            const modal = document.getElementById('gameModal');
+            document.getElementById('modalFinalScore').innerText = statEfficacy + '%';
+
+            let title = '';
+            let desc = '';
+
+            if (statEfficacy >= 80) {
+                title = '🏆 Cérebro Calibrado: Autoeficácia Robusta!';
+                desc = 'Extraordinário! Você demonstrou pleno domínio metacognitivo, silenciando os falsos alarmes do dACC e canalizando o reforço dopaminérgico para sua competência real. Suas atribuições causais refletem rigor bayesiano e autocompaixão clínica.';
+            } else if (statEfficacy >= 50) {
+                title = '⚖️ Calibração Parcial: Em Transição Consciente';
+                desc = 'Bom desempenho. Você já identifica a maioria dos gatilhos do impostor e começou a desarmá-los. Para atingir a estabilidade plena, atente-se à tentação sutil do hipertrabalho defensivo (overworking) em desafios de alta visibilidade.';
+            } else {
+                title = '⚠️ Alerta de Vulnerabilidade: Impostor em Comando';
+                desc = 'Seus circuitos foram sequestrados pela narrativa de fraude e descalibração atribucional. O dACC continua operando em alerta vermelho de ameaça social. Recomendamos a leitura do artigo científico e a aplicação da Escala Psicométrica EFICA (T-42).';
+            }
+
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            modal.style.display = 'flex';
+        }
+
+        function restartGame() {
+            document.getElementById('gameModal').style.display = 'none';
+            statEfficacy = 50;
+            statDacc = 50;
+            statDopamine = 50;
+            renderRound(0);
+        }
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', loadGameState);
+    </script>
+</body>
+</html>

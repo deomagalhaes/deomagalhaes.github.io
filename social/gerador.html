@@ -499,7 +499,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="masking-burnout" selected>O Custo Oculto do Masking e o Burnout Neurodivergente</option>
+                        <option value="fenomeno-impostor" selected>A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso</option>
+                        <option value="masking-burnout">O Custo Oculto do Masking e o Burnout Neurodivergente</option>
                         <option value="fawning-apaziguamento">A Neurobiologia do Fawning e Apaziguamento Social</option>
                         <option value="janela-tolerancia">A Janela de Tolerância: Neurobiologia da Regulação Autonômica</option>
                         <option value="desfusao-cognitiva">Você Não É Seus Pensamentos: A Neurociência da Desfusão Cognitiva</option>
@@ -673,6 +674,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "fenomeno-impostor": {
+          "articleSlug": "2026-11-11-neurobiologia-fenomeno-do-impostor",
+          "articleTitle": "A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso",
+          "slides": [
+            {
+              "type": "mechanism",
+              "badge": "NEUROBIOLOGIA & AUTOEFICÁCIA",
+              "title": "Por que seu cérebro acha que você é uma fraude?",
+              "body": "Você conquista uma promoção, recebe um elogio ou conclui um projeto com êxito, mas a sensação interna é de puro pânico: \"foi pura sorte\", \"eles se enganaram\", \"logo vão descobrir que não sei nada\".\n\nA neurociência explica a raiz biológica do Fenômeno do Impostor.",
+              "footer": "Deslize para entender o que acontece no cérebro ➔"
+            },
+            {
+              "type": "concept",
+              "badge": "COGNIÇÃO SOCIAL & WEINER",
+              "title": "A Descalibração Atribucional",
+              "body": "Cérebros calibrados atribuem sucessos à competência pessoal e falhas a fatores pontuais.\n\nNo Fenômeno do Impostor, o cérebro inverte essa lógica de forma perversa:\n• Sucesso = \"Sorte, generosidade alheia ou acaso temporário\";\n• Qualquer erro sutil = \"Prova definitiva de incapacidade biológica\".\n\nVocê fica proibido de absorver seu próprio mérito.",
+              "footer": "Qual circuito comanda esse alarme? ➔"
+            },
+            {
+              "type": "mechanism",
+              "badge": "CIRCUITOS FRONTAIS & dACC",
+              "title": "O dACC em Hipervigilância",
+              "body": "O Córtex Cingulado Anterior Dorsal (dACC) é o sensor de erros do cérebro. Em quem sofre do impostor, ele dispara potenciais elétricos exagerados (ERN) diante do menor deslize.\n\nComo o dACC está conectado à ínsula e à amígdala, um erro técnico é sentido como perigo físico de rejeição tribal. Errar parece mortal.",
+              "footer": "Por que a vitória não traz prazer? ➔"
+            },
+            {
+              "type": "mechanism",
+              "badge": "SISTEMA DE RECOMPENSA",
+              "title": "O Apagão da Dopamina",
+              "body": "Quando você vence, a Área Tegmentar Ventral deveria inundar o Estriado Ventral com dopamina, consolidando a autoeficácia.\n\nNo impostor, isso não acontece. O cérebro só sente um alívio momentâneo de ter escapado da exposição: \"Desta vez deu certo, mas na próxima serei desmascarado\". O prazer é sequestrado pelo medo.",
+              "footer": "O ciclo vicioso da exaustão ➔"
+            },
+            {
+              "type": "concept",
+              "badge": "CICLO CLÍNICO DO IMPOSTOR",
+              "title": "As Duas Armadilhas Mentais",
+              "body": "Para se defender da exposição, o cérebro escolhe um de dois extremos destrutivos:\n\n1. Hiperpreparação Exaustiva: Trabalha 14 horas por dia até a exaustão para garantir que nada falhe. Quando vence, diz: \"só deu certo porque me matei de trabalhar\".\n2. Procrastinação Ansiosa: Adia o início por medo da imperfeição e conclui: \"foi pura sorte de última hora\".",
+              "footer": "A ferida da defectividade ➔"
+            },
+            {
+              "type": "concept",
+              "badge": "TERAPIA DO ESQUEMA",
+              "title": "O Esquema de Defectividade",
+              "body": "Frequentemente, o impostor carrega a crença inconsciente e arcaica de que é fundamentalmente incompleto ou imperfeito em relação aos outros (Esquema de Defectividade e Fracasso de Jeffrey Young).\n\nO sucesso profissional vira uma máscara frágil usada para encobrir a sensação infantil de desamparo.",
+              "footer": "3 passos para reeducar o cérebro ➔"
+            },
+            {
+              "type": "practical",
+              "badge": "REESTRUTURAÇÃO & ACT",
+              "title": "Resgate Sua Autoeficácia Real",
+              "body": "1. Auditoria Bayesiana de Fatos: Pergunte-se se é estatisticamente viável enganar pessoas qualificadas por anos a fio sem competência real.\n2. Desfusão Cognitiva: Trate o medo como uma narrativa automática do dACC, não como verdade ontológica.\n3. Rituais de Savoring: Dedique 3 minutos após cada conquista para registrar conscientemente seu mérito.",
+              "footer": "deomagalhaes.com.br • Leia o artigo e faça o teste T-42"
+            }
+          ],
+          "caption": "Você já sentiu que, a qualquer momento, alguém vai bater no seu ombro e dizer: \"Descobrimos que você não é tão inteligente assim; saia da sala\"?\n\nSe você convive com a sensação crônica de que suas vitórias profissionais, acadêmicas ou criativas foram fruto exclusivo de sorte, carisma circunstancial ou de um erro de avaliação dos outros, você está preso na teia do Fenômeno do Impostor.\n\nNa neurociência cognitiva, sabemos que isso não é falta de humildade nem excesso de modéstia: é uma descalibração profunda nos mecanismos de atribuição causal e recompensa pré-frontal.\n\nO psicólogo social Bernard Weiner demonstrou que o cérebro precisa de um locus de controle equilibrado para consolidar a autoeficácia. Porém, a mente sob o efeito do impostor opera sob uma assimetria cruel:\n- Quando você é bem-sucedido, o mérito é externalizado (\"a prova foi fácil\", \"eles foram generosos\", \"foi pura coincidência\");\n- Quando você comete o mais sutil dos erros, a causa é internalizada e globalizada (\"sou uma fraude incompetente\").\n\nNos bastidores do sistema nervoso, o Córtex Cingulado Anterior Dorsal (dACC) opera em hiperalerta constante, interpretando qualquer incerteza como ameaça biológica de rejeição. Ao mesmo tempo, o estriado ventral sofre um \"apagão dopaminérgico\": mesmo diante dos maiores aplausos, o cérebro não registra o prazer da vitória, apenas o alívio provisório de não ter sido desmascarado.\n\nO resultado? Uma oscilação desgastante entre a hiperpreparação exaustiva (overworking) que culmina em burnout e a procrastinação ansiosa.\n\nVocê não precisa continuar trabalhando até o colapso para justificar seu lugar à mesa.\n\nAcabei de publicar no portal um ensaio científico completo sobre a neurobiologia da descalibração atribucional e a nova Escala Psicométrica EFICA (T-42), 100% gratuita e confidencial, para você avaliar sua vulnerabilidade ao impostor e iniciar o resgate da sua autoeficácia.\n\n👉 Acesse pelo link na bio ou visite: deomagalhaes.com.br\n\nVocê se identifica com esse medo constante de \"ser descoberto\"? Deixe sua reflexão nos comentários.\n\n#neuropsicologia #fenomenodoimpostor #sindromeimpostor #autoeficacia #neurociencias #psicologiaclinica #terapiadoesquema #saudemental #carreirasaudavel #burnout #perfeccionismo #deomagalhaes #dacc #dopamina #act"
+        },
     "masking-burnout": {
         "articleSlug": "2026-11-10-neurobiologia-masking-burnout-neurodivergente",
         "articleTitle": "A Neurobiologia do Masking Social e do Burnout Neurodivergente: O Custo Metabólico e Cognitivo da Camuflagem no TEA e TDAH",
@@ -3379,9 +3436,9 @@
 };
 
         // Estado do Studio
-        let currentPresetKey = "masking-burnout";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["masking-burnout"].slides));
-        let currentCaption = PRESETS["masking-burnout"].caption;
+        let currentPresetKey = "fenomeno-impostor";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["fenomeno-impostor"].slides));
+        let currentCaption = PRESETS["fenomeno-impostor"].caption;
         let currentSlideIndex = 0;
 
         // Inicialização Robusta
