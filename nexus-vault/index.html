@@ -472,16 +472,29 @@
     <script src="js/tab-agenda.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            if (window.VaultTabPsicometria) window.VaultTabPsicometria.init();
-            if (window.VaultTabBonsai) window.VaultTabBonsai.init();
-            if (window.VaultTabViola) window.VaultTabViola.init();
-            if (window.VaultTabDesfusaoContos) window.VaultTabDesfusaoContos.init();
-            if (window.VaultTabContos) window.VaultTabContos.init();
-            if (window.VaultTabIndependencia) window.VaultTabIndependencia.init();
-            if (window.VaultTabFinancas && !window.VaultTabIndependencia) window.VaultTabFinancas.init();
-            if (window.VaultTabAgenda) window.VaultTabAgenda.init();
-            window.VaultCore.initShellEvents();
-            window.VaultCore.refreshIcons();
+            if (window.VaultCore && typeof window.VaultCore.initShellEvents === 'function') {
+                window.VaultCore.initShellEvents();
+            }
+            var safeInit = function (mod, name) {
+                try {
+                    if (mod && typeof mod.init === 'function') mod.init();
+                } catch (err) {
+                    console.error('[NexusVault] Falha isolada ao inicializar ' + name + ':', err);
+                }
+            };
+            safeInit(window.VaultTabPsicometria, 'VaultTabPsicometria');
+            safeInit(window.VaultTabBonsai, 'VaultTabBonsai');
+            safeInit(window.VaultTabViola, 'VaultTabViola');
+            safeInit(window.VaultTabDesfusaoContos, 'VaultTabDesfusaoContos');
+            safeInit(window.VaultTabContos, 'VaultTabContos');
+            safeInit(window.VaultTabIndependencia, 'VaultTabIndependencia');
+            if (window.VaultTabFinancas && !window.VaultTabIndependencia) {
+                safeInit(window.VaultTabFinancas, 'VaultTabFinancas');
+            }
+            safeInit(window.VaultTabAgenda, 'VaultTabAgenda');
+            if (window.VaultCore && typeof window.VaultCore.refreshIcons === 'function') {
+                window.VaultCore.refreshIcons();
+            }
         });
     </script>
 </body>

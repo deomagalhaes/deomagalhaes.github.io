@@ -662,105 +662,6 @@
             desc: 'Frase completa com síncopes sertanejas, repiques e cadência típica da tradição oral brasileira.'
         }
     };
-        {
-            id: 'minha_moda_caipira',
-            title: 'Minha Primeira Moda Caipira',
-            author: 'Violeiro do Nexus',
-            instrumentId: 'viola_cebolao_e',
-            timeSignature: '2/4',
-            bpm: 96,
-            key: 'Mi Maior (E) Cebolão',
-            updatedAt: '2026-11-06T14:00:00.000Z',
-            steps: [
-                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Abertura em Lá' },
-                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Terça de Mi' },
-                { measure: 1, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Terça de Si7' },
-                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Terça de Lá' },
-                { measure: 2, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.22, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Cordas soltas E/B' },
-                { measure: 2, beat: '1 e', notes: [{ c: 2, f: 1 }], d: 0.22, rh: 'p', lh: '1', chord: 'E', ann: 'Bordão Turina Lá' },
-                { measure: 2, beat: '2', notes: [{ c: 3, f: 2 }], d: 0.22, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Toeira Fá#' },
-                { measure: 2, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida no tampo [TAP]' },
-                { measure: 3, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Cascata de Mi' },
-                { measure: 3, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.22, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Descida em terças' },
-                { measure: 3, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.22, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Resolução em Lá' },
-                { measure: 3, beat: '2 e', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.24, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Acorde solto' },
-                { measure: 4, beat: '1', notes: [{ c: 3, f: 2 }, { c: 4, f: 2 }], d: 0.28, rh: 'p', lh: '2-2', chord: 'B7', ann: 'Bordão Si' },
-                { measure: 4, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.60, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado final de Mi' }
-            ]
-        },
-        {
-            id: 'ponteio_sextas_estradao',
-            title: 'Ponteio em Sextas do Estradão',
-            author: 'Violeiro do Nexus',
-            instrumentId: 'viola_cebolao_e',
-            timeSignature: '2/4',
-            bpm: 88,
-            key: 'Mi Maior (E) Cebolão',
-            updatedAt: '2026-11-06T14:00:00.000Z',
-            steps: [
-                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.25, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Sexta solta E/G#' },
-                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'F#m', ann: 'Sexta menor F#/A' },
-                { measure: 1, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'G#m', ann: 'Sexta menor G#/B' },
-                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.30, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Sexta Maior A/C#' },
-                { measure: 2, beat: '1', notes: [{ c: 0, f: 7 }, { c: 2, f: 7 }], d: 0.30, rh: 'p+i', lh: '1-1', chord: 'B', ann: 'Sexta Maior B/D#' },
-                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], d: 0.25, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Retorno A/C#' },
-                { measure: 2, beat: '2', notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'G#m', ann: 'Passagem G#/B' },
-                { measure: 2, beat: '2 e', notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], d: 0.25, rh: 'p+i', lh: '2-1', chord: 'F#m', ann: 'Passagem F#/A' },
-                { measure: 3, beat: '1', notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], d: 0.35, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Resolução E/G#' },
-                { measure: 3, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.24, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Toeira' },
-                { measure: 3, beat: '2', notes: [{ c: 4, f: 2 }], d: 0.26, rh: 'p', lh: '2', chord: 'B7', ann: 'Canotilho Si' },
-                { measure: 3, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida no tampo [TAP]' },
-                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.60, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado de Mi' }
-            ]
-        },
-        {
-            id: 'cururu_duelo_tiete',
-            title: 'Cururu do Rio Tietê',
-            author: 'Violeiro do Nexus',
-            instrumentId: 'viola_cebolao_e',
-            timeSignature: '2/4',
-            bpm: 108,
-            key: 'Mi Maior (E) Cebolão',
-            updatedAt: '2026-11-06T14:00:00.000Z',
-            steps: [
-                { measure: 1, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.18, rh: 'p+i', lh: '0-0', chord: 'E', ann: 'Abertura rápida' },
-                { measure: 1, beat: '1 e', notes: [{ c: 0, f: 2 }, { c: 1, f: 2 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'F#m', ann: 'Dueto de passagem' },
-                { measure: 1, beat: '2', notes: [{ c: 0, f: 4 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'G#m', ann: 'Subida ligeira' },
-                { measure: 1, beat: '2 e', notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], d: 0.20, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Apoio em Lá' },
-                { measure: 2, beat: '1', notes: [{ c: 0, f: 7 }, { c: 1, f: 7 }], d: 0.20, rh: 'p+i', lh: '1-1', chord: 'B', ann: 'Repique agudo' },
-                { measure: 2, beat: '1 e', notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'A', ann: 'Descida' },
-                { measure: 2, beat: '2', notes: [{ c: 0, f: 4 }, { c: 1, f: 4 }], d: 0.18, rh: 'p+i', lh: '1-1', chord: 'G#m', ann: 'Passagem' },
-                { measure: 2, beat: '2 e', notes: [], d: 0.22, rh: 'tap', lh: '—', chord: 'E', ann: 'Batida de tampo [TAP]' },
-                { measure: 3, beat: '1', notes: [{ c: 2, f: 1 }], d: 0.20, rh: 'p', lh: '1', chord: 'E', ann: 'Bordão Lá' },
-                { measure: 3, beat: '1 e', notes: [{ c: 3, f: 2 }], d: 0.20, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Fá#' },
-                { measure: 3, beat: '2', notes: [{ c: 4, f: 2 }], d: 0.22, rh: 'p', lh: '2', chord: 'B7', ann: 'Canotilho Si' },
-                { measure: 3, beat: '2 e', notes: [{ c: 4, f: 0 }], d: 0.22, rh: 'p', lh: '0', chord: 'E', ann: 'Canotilho solto Mi' },
-                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.50, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado firme' }
-            ]
-        },
-        {
-            id: 'guarania_pantaneira',
-            title: 'Guarânia Pantaneira',
-            author: 'Violeiro do Nexus',
-            instrumentId: 'viola_cebolao_e',
-            timeSignature: '3/4',
-            bpm: 76,
-            key: 'Mi Maior (E) Cebolão',
-            updatedAt: '2026-11-06T14:00:00.000Z',
-            steps: [
-                { measure: 1, beat: '1', notes: [{ c: 4, f: 0 }], d: 0.32, rh: 'p', lh: '0', chord: 'E', ann: 'Baixo Mi no tempo 1' },
-                { measure: 1, beat: '2', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], d: 0.30, rh: 'i+m', lh: '0-0', chord: 'E', ann: 'Acorde solto' },
-                { measure: 1, beat: '3', notes: [{ c: 2, f: 0 }], d: 0.28, rh: 'p', lh: '0', chord: 'E', ann: 'Turina solta' },
-                { measure: 2, beat: '1', notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], d: 0.34, rh: 'p+i', lh: '1-2', chord: 'E', ann: 'Dueto lírico em terças' },
-                { measure: 2, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], d: 0.30, rh: 'p+i', lh: '1-2', chord: 'B7', ann: 'Terça de Si7' },
-                { measure: 2, beat: '3', notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], d: 0.30, rh: 'p+i', lh: '0-2', chord: 'A', ann: 'Terça de Lá' },
-                { measure: 3, beat: '1', notes: [{ c: 3, f: 2 }], d: 0.32, rh: 'p', lh: '2', chord: 'B7', ann: 'Bordão Si' },
-                { measure: 3, beat: '2', notes: [{ c: 0, f: 2 }, { c: 1, f: 0 }], d: 0.30, rh: 'i+m', lh: '2-0', chord: 'B7', ann: 'Acorde Si7' },
-                { measure: 3, beat: '3', notes: [], d: 0.25, rh: 'tap', lh: '—', chord: 'B7', ann: 'Batida leve no tampo' },
-                { measure: 4, beat: '1', notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], d: 0.70, rh: 'rasq', lh: '0', chord: 'E', ann: 'Rasqueado de Mi profundo' }
-            ]
-        }
-    ];
 
     // =========================================================================
     // ESTRUTURAS DE DADOS: ANALISADOR DE TENSÃO & AÇÃO DE CORDAS (FASE 9)
@@ -7934,11 +7835,6 @@ const CANONICAL_VIOLAO_SHAPES_CAPO = {
     // =========================================================================
     // MÓDULO DE AFINAÇÕES HISTÓRICAS & REGIONAIS RARAS (FASE 10)
     // =========================================================================
-    let historicalLickTimer = null;
-    let sequenceTuningTimer = null;
-    let activeHistoricalTimers = [];
-    let modulationPlaybackTimer = null;
-    let activeModulationTimers = [];
 
     function stopHistoricalAudio() {
         if (historicalLickTimer) {
@@ -8692,8 +8588,6 @@ const CANONICAL_VIOLAO_SHAPES_CAPO = {
 // MOTOR DA FASE 11: GERADOR DE MODULAÇÕES & PREPARAÇÃO HARMÔNICA CAIPIRA
 // =========================================================================
 
-let modulationPlaybackTimer = null;
-let activeModulationTimers = [];
 
 function stopModulationAudio() {
     if (modulationPlaybackTimer) {
@@ -13183,7 +13077,6 @@ function setupCapoDuoListeners() {
                     }
                 }
             });
-        }
         } else if (state.displayMode === 'MODULATION') {
             // FASE 11: PROJEÇÃO DE MODULAÇÕES & PREPARAÇÃO HARMÔNICA CAIPIRA
             if (state.modulation.activeCategory === 'movable_barre') {
@@ -13302,7 +13195,6 @@ function setupCapoDuoListeners() {
                     });
                 }
             }
-        }
         } else if (state.displayMode === 'FOLIA') {
             // FASE 12: PROJEÇÃO DE LICKS & FRASES DE RESPOSTA DE FOLIA DE REIS
             const lick = FOLIA_LICKS_CATALOG[state.folia.activeLickId];
@@ -13405,7 +13297,6 @@ function setupCapoDuoListeners() {
                     }
                 }
             }
-        }
         } else if (state.displayMode === 'CAPO') {
             // FASE 13: PROJEÃ‡ÃƒO DE ACORDES COM CAPOTRASTE & TRANSPOSIÃ‡ÃƒO PARA DUPLAS
             const capoFret = state.capoDuo.capoFret || 0;
@@ -14944,7 +14835,7 @@ function setupCapoDuoListeners() {
 
         const playDuadBtn = document.getElementById('btn-viola-play-duads');
         if (playDuadBtn) {
-            playDuadBtn.addEventListener('click', playDuadScaleSequence);
+            playDuadBtn.addEventListener('click', playDuadScale);
         }
 
         // Estudo de Progressoes
@@ -14977,7 +14868,7 @@ function setupCapoDuoListeners() {
 
         const playProgBtn = document.getElementById('btn-viola-play-progression');
         if (playProgBtn) {
-            playProgBtn.addEventListener('click', toggleProgressionPlayback);
+            playProgBtn.addEventListener('click', playProgression);
         }
 
         // Dicionario Reverso

@@ -13,12 +13,14 @@
 (function (global) {
     'use strict';
 
+    const baseIndependencia = global.VaultTabIndependencia ? Object.assign({}, global.VaultTabIndependencia) : null;
+
     /**
      * Inicializa a aba de finanças e independência clínica
      */
     function init() {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.init === 'function') {
-            global.VaultTabIndependencia.init();
+        if (baseIndependencia && typeof baseIndependencia.init === 'function') {
+            baseIndependencia.init();
         }
     }
 
@@ -544,8 +546,8 @@
      * Atualiza dados de mercado ao vivo via AwesomeAPI e endpoints públicos sem backend
      */
     async function fetchLiveMarketData() {
-        if (global.VaultTabIndependencia && typeof global.VaultTabIndependencia.fetchLiveMarketData === 'function') {
-            return global.VaultTabIndependencia.fetchLiveMarketData();
+        if (baseIndependencia && typeof baseIndependencia.fetchLiveMarketData === 'function') {
+            return baseIndependencia.fetchLiveMarketData();
         }
         return null;
     }

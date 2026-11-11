@@ -420,6 +420,8 @@ if (contentBlocks.length > 0) {
             const route = decryptRoute(pin, activeCipher);
             try {
                 sessionStorage.setItem('dm_vault_auth_token', activeHash);
+                sessionStorage.setItem('dm_vault_session', activeHash);
+                localStorage.setItem('dm_vault_handoff', JSON.stringify({ hash: activeHash, ts: Date.now() }));
             } catch (_) {}
             window.location.href = resolveTargetUrl(route);
         });

@@ -10,6 +10,7 @@
     const CUSTOM_PIN_KEY = 'dm_vault_custom_pin_hash';
     const SESSION_AUTH_KEY = 'dm_vault_auth_token';
     const SESSION_COMPAT_KEY = 'dm_vault_session';
+    const HANDOFF_AUTH_KEY = 'dm_vault_handoff';
 
     const STORAGE_KEYS = {
         BONSAI: 'dm_vault_bonsai',
@@ -191,7 +192,26 @@
             const expected = getExpectedPinHash();
             const tok1 = sessionStorage.getItem(SESSION_AUTH_KEY);
             const tok2 = sessionStorage.getItem(SESSION_COMPAT_KEY);
-            return constantTimeEquals(tok1 || '', expected) || constantTimeEquals(tok2 || '', expected);
+            if (constantTimeEquals(tok1 || '', expected) || constantTimeEquals(tok2 || '', expected)) {
+                return true;
+            }
+            const rawHandoff = localStorage.getItem(HANDOFF_AUTH_KEY);
+            if (rawHandoff) {
+                localStorage.removeItem(HANDOFF_AUTH_KEY);
+                const parsed = JSON.parse(rawHandoff);
+                if (
+                    parsed &&
+                    typeof parsed.hash === 'string' &&
+                    typeof parsed.ts === 'number' &&
+                    Math.abs(Date.now() - parsed.ts) < 120000 &&
+                    constantTimeEquals(parsed.hash, expected)
+                ) {
+                    sessionStorage.setItem(SESSION_AUTH_KEY, expected);
+                    sessionStorage.setItem(SESSION_COMPAT_KEY, expected);
+                    return true;
+                }
+            }
+            return false;
         } catch (_) {
             return false;
         }
@@ -214,6 +234,7 @@
         try {
             sessionStorage.removeItem(SESSION_AUTH_KEY);
             sessionStorage.removeItem(SESSION_COMPAT_KEY);
+            localStorage.removeItem(HANDOFF_AUTH_KEY);
         } catch (_) { /* ignore */ }
         syncAuthUI();
         toast('Vault trancado. Sessão encerrada com segurança.', 'info');
