@@ -164,26 +164,113 @@ switch -Wildcard ($Theme) {
         $g.DrawRectangle($skinDarkPen, 342, 198, 222, 16)
     }
     "*bussola*" {
-        # Bússola Luminosa de Decisão Juvenil
-        $ringPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(220, 238, 155, 0), 5)
-        $innerRingPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(180, 148, 210, 189), 3)
-        $g.DrawEllipse($ringPen, 280, 50, 240, 240)
-        $g.DrawEllipse($innerRingPen, 305, 75, 190, 190)
+        # Bússola Luminosa de Decisão Juvenil (Córtex Pré-Frontal vs Impulso)
+        $outerGlowPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(60, 238, 155, 0), 12)
+        $ringPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(230, 238, 155, 0), 4)
+        $innerRingPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(180, 148, 210, 189), 2)
+        $dialPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(140, 255, 255, 255), 1.5)
+        
+        $cx = 400.0
+        $cy = 170.0
+        $r = 120.0
 
-        $northPts = @(
-            (New-Object System.Drawing.Point(400, 65)),
-            (New-Object System.Drawing.Point(425, 170)),
-            (New-Object System.Drawing.Point(375, 170))
+        # Halos circulares
+        $xOuter = [float]($cx - $r - 6)
+        $yOuter = [float]($cy - $r - 6)
+        $dOuter = [float](($r + 6) * 2)
+        $g.DrawEllipse($outerGlowPen, $xOuter, $yOuter, $dOuter, $dOuter)
+
+        $xRing = [float]($cx - $r)
+        $yRing = [float]($cy - $r)
+        $dRing = [float]($r * 2)
+        $g.DrawEllipse($ringPen, $xRing, $yRing, $dRing, $dRing)
+
+        $xInner = [float]($cx - $r + 20)
+        $yInner = [float]($cy - $r + 20)
+        $dInner = [float](($r - 20) * 2)
+        $g.DrawEllipse($innerRingPen, $xInner, $yInner, $dInner, $dInner)
+
+        # Graduação angular da bússola (traços de 30 em 30 graus)
+        for ($deg = 0; $deg -lt 360; $deg += 30) {
+            $rad = [Math]::PI * $deg / 180.0
+            $x1 = [float]($cx + ($r - 18) * [Math]::Cos($rad))
+            $y1 = [float]($cy + ($r - 18) * [Math]::Sin($rad))
+            $x2 = [float]($cx + ($r - 2) * [Math]::Cos($rad))
+            $y2 = [float]($cy + ($r - 2) * [Math]::Sin($rad))
+            $g.DrawLine($dialPen, $x1, $y1, $x2, $y2)
+        }
+
+        # Agulhas da Bússola: Norte (Dourado / Futuro & Córtex) e Sul (Ciano / Imediato)
+        [System.Drawing.PointF[]]$northPts = @(
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy - 95))),
+            (New-Object System.Drawing.PointF([float]($cx + 18), [float]$cy)),
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy - 12))),
+            (New-Object System.Drawing.PointF([float]($cx - 18), [float]$cy))
         )
-        $southPts = @(
-            (New-Object System.Drawing.Point(400, 275)),
-            (New-Object System.Drawing.Point(425, 170)),
-            (New-Object System.Drawing.Point(375, 170))
+        [System.Drawing.PointF[]]$northLightPts = @(
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy - 95))),
+            (New-Object System.Drawing.PointF([float]($cx + 18), [float]$cy)),
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy - 12)))
         )
-        $nBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 238, 155, 0))
-        $sBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 148, 210, 189))
-        $g.FillPolygon($nBrush, $northPts)
-        $g.FillPolygon($sBrush, $southPts)
+        [System.Drawing.PointF[]]$southPts = @(
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy + 95))),
+            (New-Object System.Drawing.PointF([float]($cx + 18), [float]$cy)),
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy + 12))),
+            (New-Object System.Drawing.PointF([float]($cx - 18), [float]$cy))
+        )
+        [System.Drawing.PointF[]]$southLightPts = @(
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy + 95))),
+            (New-Object System.Drawing.PointF([float]($cx + 18), [float]$cy)),
+            (New-Object System.Drawing.PointF([float]$cx, [float]($cy + 12)))
+        )
+
+        $nDarkBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 202, 103, 2))
+        $nLightBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 255, 209, 102))
+        $sDarkBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 10, 147, 150))
+        $sLightBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 148, 210, 189))
+
+        $g.FillPolygon($nDarkBrush, $northPts)
+        $g.FillPolygon($nLightBrush, $northLightPts)
+        $g.FillPolygon($sDarkBrush, $southPts)
+        $g.FillPolygon($sLightBrush, $southLightPts)
+
+        # Pivô Central
+        $centerGlow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(120, 255, 255, 255))
+        $centerBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 248, 250, 252))
+        $centerBorder = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 0, 18, 25), 3)
+        $g.FillEllipse($centerGlow, [float]($cx - 20), [float]($cy - 20), 40.0, 40.0)
+        $g.FillEllipse($centerBrush, [float]($cx - 14), [float]($cy - 14), 28.0, 28.0)
+        $g.DrawEllipse($centerBorder, [float]($cx - 14), [float]($cy - 14), 28.0, 28.0)
+
+        # Letras Cardeais N / S / L / O
+        $font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+        $textBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(240, 255, 255, 255))
+        $goldTextBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 255, 209, 102))
+        $sf = New-Object System.Drawing.StringFormat
+        $sf.Alignment = [System.Drawing.StringAlignment]::Center
+        $sf.LineAlignment = [System.Drawing.StringAlignment]::Center
+
+        $g.DrawString("FUTURO", $font, $goldTextBrush, [float]$cx, [float]($cy - $r + 14), $sf)
+        $g.DrawString("AGORA", $font, $textBrush, [float]$cx, [float]($cy + $r - 14), $sf)
+        $g.DrawString("O", $font, $textBrush, [float]($cx - $r + 14), [float]$cy, $sf)
+        $g.DrawString("L", $font, $textBrush, [float]($cx + $r - 14), [float]$cy, $sf)
+
+        # Limpeza
+        $outerGlowPen.Dispose()
+        $ringPen.Dispose()
+        $innerRingPen.Dispose()
+        $dialPen.Dispose()
+        $nDarkBrush.Dispose()
+        $nLightBrush.Dispose()
+        $sDarkBrush.Dispose()
+        $sLightBrush.Dispose()
+        $centerGlow.Dispose()
+        $centerBrush.Dispose()
+        $centerBorder.Dispose()
+        $font.Dispose()
+        $textBrush.Dispose()
+        $goldTextBrush.Dispose()
+        $sf.Dispose()
     }
     default {
         # Constelação Neurocognitiva Lúdica Padrão
