@@ -1960,6 +1960,308 @@ const FOLIA_LICKS_CATALOG = {
 };
 
 
+// =========================================================================
+// FASE 13: SIMULADOR DE CAPOTRASTE & TRANSPOSIÇÃO INTELIGENTE PARA DUPLAS
+// =========================================================================
+
+const DEFAULT_CAPO_DUO_STATE = {
+    capoFret: 2,                        // 0 (sem capo) a 9ª casa
+    targetKeyId: 'F#_maj',              // Tonalidade alvo da música / cantadores
+    vocalProfileId: 'tradicional_masculina', // 'tradicional_masculina' | 'romantica_sertaneja' | 'feminina_caipira' | 'mista_seresteira' | 'violeiro_solo'
+    preferredViolaShapeKey: 'E',        // Shape de mão da viola relativo ao capo: 'E' | 'A' | 'D'
+    violaoCapoFret: 2,                  // Capo no violão de acompanhamento (0 a 7)
+    violaoShapeKey: 'E',                // Shape de mão do violão relativo ao capo: 'E' | 'D' | 'A' | 'C' | 'G'
+    activeDegreeIdx: 0,                 // 0..5 (I, IV, V7, vi, ii, iii)
+    isPlayingVocalDemo: false,
+    vocalDemoVoiceFilter: 'both',       // 'both' (Dueto Completo) | 'v1' (Só 1ª Voz) | 'v2' (Só 2ª Voz) | 'viola' (Só Viola)
+    currentDemoStepIdx: -1,             // 0..3 durante o playback
+    playbackSpeed: 1.0,
+    isLooping: true
+};
+
+const VOCAL_DUO_PROFILES = {
+    tradicional_masculina: {
+        id: 'tradicional_masculina',
+        title: 'Dupla Tradicional Caipira (Tenor Agudo & Barítono Canto Firme)',
+        shortTitle: 'Tradicional Caipira',
+        canon: 'Tião Carreiro & Pardinho, Tonico & Tinoco, Zico & Zeca, Lourival dos Santos',
+        badge: 'Raiz Canônica',
+        icon: 'users',
+        description: 'A clássica formação do sertão. A 1ª voz destaca-se pelo falsete penetrante e agudos cortantes na requinta; a 2ª voz apoia com peso de peito e afinação firme em terças e sextas inferiores.',
+        voice1: {
+            name: '1ª Voz (Tenor Caipira / Requinta)',
+            role: 'Melodia Superior & Falsete',
+            minMidi: 48,  // C3 (130.8 Hz)
+            maxMidi: 69,  // A4 (440.0 Hz) [Com falsete até C5 / 72]
+            comfortMin: 50, // D3 (146.8 Hz)
+            comfortMax: 67, // G4 (392.0 Hz)
+            passaggioMidi: 66, // F#4 (Ponto de passagem crítico)
+            color: '#f59e0b'
+        },
+        voice2: {
+            name: '2ª Voz (Barítono / Canto Firme)',
+            role: 'Harmonia Inferior (Terças/Sextas)',
+            minMidi: 43,  // G2 (98.0 Hz)
+            maxMidi: 64,  // E4 (329.6 Hz)
+            comfortMin: 45, // A2 (110.0 Hz)
+            comfortMax: 60, // C4 (261.6 Hz)
+            passaggioMidi: 61, // C#4
+            color: '#06b6d4'
+        },
+        goldenKeys: ['E', 'F#', 'G', 'A', 'B', 'Bb'],
+        voiceTechniqueTip: 'Em tons como F# e G, o Capo 2 ou 3 na Viola Cebolão em Mi permite à 1ª voz explorar o clímax da 3ª e 5ª no registro de cabeça sem forçar a musculatura tireoaritenóidea.'
+    },
+    romantica_sertaneja: {
+        id: 'romantica_sertaneja',
+        title: 'Dupla Sertaneja Clássica / Romântica (Tenor Dramático & Tenor Lírico)',
+        shortTitle: 'Sertanejo Clássico',
+        canon: 'Milionário & José Rico, Chitãozinho & Xororó, Chrystian & Ralf, João Paulo & Daniel',
+        badge: 'Apoteose Vocal',
+        icon: 'flame',
+        description: 'Vozes agudas sustentadas com ressonância de máscara e grande pressão subglótica, alcançando notas agudíssimas de peito nos refrões de modas apaixonadas.',
+        voice1: {
+            name: '1ª Voz (Tenor Dramático)',
+            role: 'Agudos Plenos de Peito',
+            minMidi: 50,  // D3 (146.8 Hz)
+            maxMidi: 71,  // B4 (493.9 Hz)
+            comfortMin: 52, // E3 (164.8 Hz)
+            comfortMax: 69, // A4 (440.0 Hz)
+            passaggioMidi: 67, // G4
+            color: '#f59e0b'
+        },
+        voice2: {
+            name: '2ª Voz (Tenor Lírico / Segundo Tenor)',
+            role: 'Harmonia em Terça Sustentada',
+            minMidi: 45,  // A2 (110.0 Hz)
+            maxMidi: 66,  // F#4 (370.0 Hz)
+            comfortMin: 47, // B2 (123.5 Hz)
+            comfortMax: 64, // E4 (329.6 Hz)
+            passaggioMidi: 62, // D4
+            color: '#06b6d4'
+        },
+        goldenKeys: ['F#', 'G', 'Ab', 'A', 'B'],
+        voiceTechniqueTip: 'Use a braçadeira na 2ª ou 4ª casa para casar o brilho das cordas de aço com o ponto de apoio vocal entre E4 e G4.'
+    },
+    feminina_caipira: {
+        id: 'feminina_caipira',
+        title: 'Dupla Caipira Feminina (Soprano Sertanejo & Contralto Lírico)',
+        shortTitle: 'Dueto Feminino',
+        canon: 'Irmãs Galvão (As Galvão), Cascatinha & Inhana, As Marcianas, Leyde & Laura',
+        badge: 'Cristalino & Nostálgico',
+        icon: 'heart',
+        description: 'Dueto aveludado e límpido. A 1ª voz soprano/mezzo passeia com doçura e afinação pura nos agudos; a 2ª voz contralto confere sustentação quente e aveludada.',
+        voice1: {
+            name: '1ª Voz (Soprano Caipira)',
+            role: 'Melodia Cristalina',
+            minMidi: 55,  // G3 (196.0 Hz)
+            maxMidi: 76,  // E5 (659.3 Hz)
+            comfortMin: 57, // A3 (220.0 Hz)
+            comfortMax: 74, // D5 (587.3 Hz)
+            passaggioMidi: 73, // C#5 / D5
+            color: '#ec4899'
+        },
+        voice2: {
+            name: '2ª Voz (Contralto Lírico)',
+            role: 'Terça Inferior Quente',
+            minMidi: 48,  // C3 (130.8 Hz)
+            maxMidi: 69,  // A4 (440.0 Hz)
+            comfortMin: 50, // D3 (146.8 Hz)
+            comfortMax: 67, // G4 (392.0 Hz)
+            passaggioMidi: 65, // F4
+            color: '#06b6d4'
+        },
+        goldenKeys: ['A', 'Bb', 'B', 'C', 'D'],
+        voiceTechniqueTip: 'O dueto feminino floresce entre as casas 3 e 7 de capotraste na viola, preservando a doçura dos harmônicos sem estridência.'
+    },
+    mista_seresteira: {
+        id: 'mista_seresteira',
+        title: 'Dupla Mista (Mulher 1ª Voz & Homem 2ª Voz / Violeiro)',
+        shortTitle: 'Dueto Misto',
+        canon: 'Dueto Caboclo, Violeiro e Cantadeira Seresteira, Cantigas de Folia e Serenata',
+        badge: 'Contraste Timbrístico',
+        icon: 'sparkles',
+        description: 'O contraste da leveza seresteira feminina nas primas com o bordão grave do violeiro cantador, criando um tecido harmônico amplo e telúrico.',
+        voice1: {
+            name: '1ª Voz (Cantadeira Aguda)',
+            role: 'Melodia & Requinta',
+            minMidi: 57,  // A3 (220.0 Hz)
+            maxMidi: 77,  // F5 (698.5 Hz)
+            comfortMin: 59, // B3 (246.9 Hz)
+            comfortMax: 76, // E5 (659.3 Hz)
+            passaggioMidi: 74, // D5
+            color: '#ec4899'
+        },
+        voice2: {
+            name: '2ª Voz (Violeiro Grave)',
+            role: 'Bordão & Sustentação',
+            minMidi: 45,  // A2 (110.0 Hz)
+            maxMidi: 64,  // E4 (329.6 Hz)
+            comfortMin: 47, // B2 (123.5 Hz)
+            comfortMax: 62, // D4 (293.7 Hz)
+            passaggioMidi: 60, // C4
+            color: '#10b981'
+        },
+        goldenKeys: ['G', 'A', 'B', 'C', 'D'],
+        voiceTechniqueTip: 'Em duetos mistos, o capotraste alto (casas 4 a 6) permite ao violeiro manter shapes abertos de mão sem competir com os graves da voz masculina.'
+    },
+    violeiro_solo: {
+        id: 'violeiro_solo',
+        title: 'Violeiro Solista / Cantador Solitário (Barítono-Tenor Narrador)',
+        shortTitle: 'Cantador Solista',
+        canon: 'Almir Sater, Renato Teixeira, Tião Carreiro (solo), Pena Branca, Elomar',
+        badge: 'Narrativa & Toada',
+        icon: 'user',
+        description: 'Tessitura equilibrada e poética centrada no registro de fala, contação de causos e toadas introspectivas, priorizando a dicção das rimas e o timbre das cordas soltas.',
+        voice1: {
+            name: 'Voz Solista (Barítono Médio)',
+            role: 'Canto Narrativo & Dicção',
+            minMidi: 45,  // A2 (110.0 Hz)
+            maxMidi: 65,  // F4 (349.2 Hz)
+            comfortMin: 47, // B2 (123.5 Hz)
+            comfortMax: 62, // D4 (293.7 Hz)
+            passaggioMidi: 60, // C4
+            color: '#f59e0b'
+        },
+        voice2: {
+            name: 'Ressonância da Viola (Pedal Caipira)',
+            role: 'Bordão Harmônico em E/B',
+            minMidi: 40,  // E2
+            maxMidi: 59,  // B3
+            comfortMin: 40,
+            comfortMax: 59,
+            passaggioMidi: 52,
+            color: '#10b981'
+        },
+        goldenKeys: ['D', 'E', 'F#', 'G', 'A'],
+        voiceTechniqueTip: 'O violeiro solo busca tons onde possa usar bordões soltos como baixos contínuos (pedal de Mi, Lá ou Ré), permitindo soltar a mão direita.'
+    }
+};
+
+const CAPO_TARGET_KEYS = [
+    { id: 'C_maj',  root: 0,  label: 'Dó Maior (C)',   rootName: 'C' },
+    { id: 'C#_maj', root: 1,  label: 'Dó# / Ré♭ Maior (C#)', rootName: 'C#' },
+    { id: 'D_maj',  root: 2,  label: 'Ré Maior (D)',    rootName: 'D' },
+    { id: 'Eb_maj', root: 3,  label: 'Mi♭ Maior (Eb)',  rootName: 'Eb' },
+    { id: 'E_maj',  root: 4,  label: 'Mi Maior (E) — Aberta Cebolão', rootName: 'E' },
+    { id: 'F_maj',  root: 5,  label: 'Fá Maior (F)',    rootName: 'F' },
+    { id: 'F#_maj', root: 6,  label: 'Fá# Maior (F#) — Golden Dupla', rootName: 'F#' },
+    { id: 'G_maj',  root: 7,  label: 'Sol Maior (G) — Aberta Rio Abaixo', rootName: 'G' },
+    { id: 'Ab_maj', root: 8,  label: 'Lá♭ / Sol# Maior (Ab)', rootName: 'Ab' },
+    { id: 'A_maj',  root: 9,  label: 'Lá Maior (A)',    rootName: 'A' },
+    { id: 'Bb_maj', root: 10, label: 'Si♭ Maior (Bb)',  rootName: 'Bb' },
+    { id: 'B_maj',  root: 11, label: 'Si Maior (B)',    rootName: 'B' }
+];
+
+const CANONICAL_VIOLA_SHAPES_CAPO = {
+    E: {
+        id: 'E',
+        label: 'Shape de Mi (E) — Padrão Cebolão',
+        baseRootPc: 4, // E
+        degrees: [
+            { roman: 'I',   degOffset: 0, quality: 'maj',  nameRel: 'E',   voicingRel: [0, 0, 0, 0, 0], desc: 'Cordas soltas plenas, máxima ressonância' },
+            { roman: 'IV',  degOffset: 5, quality: 'maj',  nameRel: 'A',   voicingRel: [0, 1, 2, 2, 2], desc: 'Subdominante caipira aberta' },
+            { roman: 'V7',  degOffset: 7, quality: 'dom7', nameRel: 'B7',  voicingRel: [2, 0, 1, 2, 0], desc: 'Dominante tradicional com 7ª' },
+            { roman: 'vi',  degOffset: 9, quality: 'min',  nameRel: 'C#m', voicingRel: [0, 2, 1, 2, 2], desc: 'Relativo menor lírico' },
+            { roman: 'ii',  degOffset: 2, quality: 'min',  nameRel: 'F#m', voicingRel: [2, 2, 2, 4, 2], desc: 'Segundo menor de passagem' },
+            { roman: 'iii', degOffset: 4, quality: 'min',  nameRel: 'G#m', voicingRel: [4, 4, 4, 6, 4], desc: 'Terceiro menor comovente' }
+        ]
+    },
+    A: {
+        id: 'A',
+        label: 'Shape de Lá (A)',
+        baseRootPc: 9, // A
+        degrees: [
+            { roman: 'I',   degOffset: 0, quality: 'maj',  nameRel: 'A',   voicingRel: [0, 1, 2, 2, 2], desc: 'Shape de Lá tradicional' },
+            { roman: 'IV',  degOffset: 5, quality: 'maj',  nameRel: 'D',   voicingRel: [2, 3, 2, 0, 0], desc: 'Quarto grau com bordão solto' },
+            { roman: 'V7',  degOffset: 7, quality: 'dom7', nameRel: 'E7',  voicingRel: [3, 0, 0, 0, 0], desc: '7ª menor no 1º par brilhante' },
+            { roman: 'vi',  degOffset: 9, quality: 'min',  nameRel: 'F#m', voicingRel: [2, 2, 2, 4, 2], desc: 'Relativo menor' },
+            { roman: 'ii',  degOffset: 2, quality: 'min',  nameRel: 'Bm',  voicingRel: [2, 3, 4, 4, 2], desc: 'Segundo menor' },
+            { roman: 'iii', degOffset: 4, quality: 'min',  nameRel: 'C#m', voicingRel: [0, 2, 1, 2, 2], desc: 'Terceiro menor' }
+        ]
+    },
+    D: {
+        id: 'D',
+        label: 'Shape de Ré (D)',
+        baseRootPc: 2, // D
+        degrees: [
+            { roman: 'I',   degOffset: 0, quality: 'maj',  nameRel: 'D',   voicingRel: [2, 3, 2, 0, 0], desc: 'Shape de Ré caipira' },
+            { roman: 'IV',  degOffset: 5, quality: 'maj',  nameRel: 'G',   voicingRel: [3, 3, 0, 0, 1], desc: 'Subdominante de Ré' },
+            { roman: 'V7',  degOffset: 7, quality: 'dom7', nameRel: 'A7',  voicingRel: [0, 1, 0, 2, 2], desc: 'Dominante de Lá com 7ª' },
+            { roman: 'vi',  degOffset: 9, quality: 'min',  nameRel: 'Bm',  voicingRel: [2, 3, 4, 4, 2], desc: 'Relativo menor' },
+            { roman: 'ii',  degOffset: 2, quality: 'min',  nameRel: 'Em',  voicingRel: [0, 0, 0, 2, 2], desc: 'Segundo menor' },
+            { roman: 'iii', degOffset: 4, quality: 'min',  nameRel: 'F#m', voicingRel: [2, 2, 2, 4, 2], desc: 'Terceiro menor' }
+        ]
+    }
+};
+
+const CANONICAL_VIOLAO_SHAPES_CAPO = {
+    E: {
+        id: 'E',
+        label: 'Shape de Mi (E)',
+        baseRootPc: 4,
+        degrees: [
+            { roman: 'I',   nameRel: 'E',   voicingRel: [0, 0, 1, 2, 2, 0] },
+            { roman: 'IV',  nameRel: 'A',   voicingRel: [0, 2, 2, 2, 0, -1] },
+            { roman: 'V7',  nameRel: 'B7',  voicingRel: [2, 0, 2, 1, 2, -1] },
+            { roman: 'vi',  nameRel: 'C#m', voicingRel: [4, 5, 6, 6, 4, -1] },
+            { roman: 'ii',  nameRel: 'F#m', voicingRel: [2, 2, 2, 4, 4, 2] },
+            { roman: 'iii', nameRel: 'G#m', voicingRel: [4, 4, 4, 6, 6, 4] }
+        ]
+    },
+    D: {
+        id: 'D',
+        label: 'Shape de Ré (D)',
+        baseRootPc: 2,
+        degrees: [
+            { roman: 'I',   nameRel: 'D',   voicingRel: [2, 3, 2, 0, -1, -1] },
+            { roman: 'IV',  nameRel: 'G',   voicingRel: [3, 0, 0, 0, 2, 3] },
+            { roman: 'V7',  nameRel: 'A7',  voicingRel: [0, 2, 0, 2, 0, -1] },
+            { roman: 'vi',  nameRel: 'Bm',  voicingRel: [2, 3, 4, 4, 2, -1] },
+            { roman: 'ii',  nameRel: 'Em',  voicingRel: [0, 0, 0, 2, 2, 0] },
+            { roman: 'iii', nameRel: 'F#m', voicingRel: [2, 2, 2, 4, 4, 2] }
+        ]
+    },
+    A: {
+        id: 'A',
+        label: 'Shape de Lá (A)',
+        baseRootPc: 9,
+        degrees: [
+            { roman: 'I',   nameRel: 'A',   voicingRel: [0, 2, 2, 2, 0, -1] },
+            { roman: 'IV',  nameRel: 'D',   voicingRel: [2, 3, 2, 0, -1, -1] },
+            { roman: 'V7',  nameRel: 'E7',  voicingRel: [0, 0, 1, 0, 2, 0] },
+            { roman: 'vi',  nameRel: 'F#m', voicingRel: [2, 2, 2, 4, 4, 2] },
+            { roman: 'ii',  nameRel: 'Bm',  voicingRel: [2, 3, 4, 4, 2, -1] },
+            { roman: 'iii', nameRel: 'C#m', voicingRel: [4, 5, 6, 6, 4, -1] }
+        ]
+    },
+    C: {
+        id: 'C',
+        label: 'Shape de Dó (C)',
+        baseRootPc: 0,
+        degrees: [
+            { roman: 'I',   nameRel: 'C',   voicingRel: [0, 1, 0, 2, 3, -1] },
+            { roman: 'IV',  nameRel: 'F',   voicingRel: [1, 1, 2, 3, -1, -1] },
+            { roman: 'V7',  nameRel: 'G7',  voicingRel: [1, 0, 0, 0, 2, 3] },
+            { roman: 'vi',  nameRel: 'Am',  voicingRel: [0, 1, 2, 2, 0, -1] },
+            { roman: 'ii',  nameRel: 'Dm',  voicingRel: [1, 3, 2, 0, -1, -1] },
+            { roman: 'iii', nameRel: 'Em',  voicingRel: [0, 0, 0, 2, 2, 0] }
+        ]
+    },
+    G: {
+        id: 'G',
+        label: 'Shape de Sol (G)',
+        baseRootPc: 7,
+        degrees: [
+            { roman: 'I',   nameRel: 'G',   voicingRel: [3, 0, 0, 0, 2, 3] },
+            { roman: 'IV',  nameRel: 'C',   voicingRel: [0, 1, 0, 2, 3, -1] },
+            { roman: 'V7',  nameRel: 'D7',  voicingRel: [2, 1, 2, 0, -1, -1] },
+            { roman: 'vi',  nameRel: 'Em',  voicingRel: [0, 0, 0, 2, 2, 0] },
+            { roman: 'ii',  nameRel: 'Am',  voicingRel: [0, 1, 2, 2, 0, -1] },
+            { roman: 'iii', nameRel: 'Bm',  voicingRel: [2, 3, 4, 4, 2, -1] }
+        ]
+    }
+};
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -1995,7 +2297,8 @@ const FOLIA_LICKS_CATALOG = {
         tensionCalculator: Object.assign({}, DEFAULT_TENSION_STATE),
         historicalTunings: Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE),
         modulation: Object.assign({}, DEFAULT_MODULATION_STATE),
-        folia: Object.assign({}, DEFAULT_FOLIA_STATE)
+        folia: Object.assign({}, DEFAULT_FOLIA_STATE),
+        capoDuo: Object.assign({}, DEFAULT_CAPO_DUO_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -2021,6 +2324,8 @@ const FOLIA_LICKS_CATALOG = {
     let activeModulationTimers = [];
     let foliaPlaybackTimer = null;
     let activeFoliaTimers = [];
+    let capoVocalDemoTimer = null;
+    let activeCapoTimers = [];
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -9822,6 +10127,1025 @@ function setupFoliaListeners() {
 
 
 
+// =========================================================================
+// FASE 13: SIMULADOR DE CAPOTRASTE & TRANSPOSIÇÃO INTELIGENTE PARA DUPLAS
+// =========================================================================
+
+function stopCapoAudio() {
+    if (capoVocalDemoTimer) {
+        clearTimeout(capoVocalDemoTimer);
+        capoVocalDemoTimer = null;
+    }
+    activeCapoTimers.forEach((t) => clearTimeout(t));
+    activeCapoTimers = [];
+    state.capoDuo.isPlayingVocalDemo = false;
+    state.capoDuo.currentDemoStepIdx = -1;
+}
+
+function computeDuoVocalAnalysis(targetKeyId, vocalProfileId) {
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === targetKeyId) || CAPO_TARGET_KEYS[6];
+    const profile = VOCAL_DUO_PROFILES[vocalProfileId] || VOCAL_DUO_PROFILES.tradicional_masculina;
+    const rootPc = targetKey.root;
+
+    let baseMidi1 = profile.voice1.comfortMin + ((rootPc - (profile.voice1.comfortMin % 12) + 12) % 12);
+    if (baseMidi1 > profile.voice1.comfortMax) baseMidi1 -= 12;
+
+    const v1MinMidi = baseMidi1 - 5;
+    const v1ClimaxMidi = baseMidi1 + 4;
+    const v1PeakMidi = baseMidi1 + 7;
+
+    let baseMidi2 = profile.voice2.comfortMin + ((rootPc - (profile.voice2.comfortMin % 12) + 12) % 12);
+    if (baseMidi2 > profile.voice2.comfortMax) baseMidi2 -= 12;
+
+    const v2MinMidi = baseMidi2 - 5;
+    const v2ClimaxMidi = baseMidi2 + 4;
+
+    let status = 'IDEAL';
+    let statusLabel = 'Zona Áurea (Conforto & Brilho Total)';
+    let statusBadgeClass = 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+    let statusIcon = 'check-circle-2';
+    let adviceText = `A tonalidade de ${targetKey.label} assenta-se com ressonância perfeita na máscara dos cantadores da dupla, permitindo que a 1ª voz brilhe na requinta e a 2ª voz apoie com firmeza no peito sem tensão laringológica.`;
+
+    if (v1ClimaxMidi > profile.voice1.maxMidi || v1PeakMidi > profile.voice1.maxMidi + 2) {
+        status = 'CRITICAL_HIGH';
+        statusLabel = 'Extremo Agudo (Risco de Fadiga Vocal)';
+        statusBadgeClass = 'bg-rose-500/15 text-rose-300 border-rose-500/30';
+        statusIcon = 'alert-triangle';
+        adviceText = `O tom de ${targetKey.label} exige notas no extremo limite anatômico da 1ª voz (${NOTE_NAMES[v1ClimaxMidi % 12]}${Math.floor(v1ClimaxMidi / 12) - 1} / ${Math.round(midiToFreq(v1ClimaxMidi))} Hz). Recomenda-se descer 1 ou 2 semitons ou colocar o Capotraste na 2ª casa e tocar a música em Shape de Mi.`;
+    } else if (v1ClimaxMidi > profile.voice1.comfortMax) {
+        status = 'CHALLENGING_HIGH';
+        statusLabel = 'Agudos Brilhantes (Exigente / Falsete)';
+        statusBadgeClass = 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+        statusIcon = 'zap';
+        adviceText = `Tom brilhante e heroico ao estilo clássico de Tião Carreiro & Pardinho ou Milionário & José Rico. A 1ª voz atinge a nota ${NOTE_NAMES[v1ClimaxMidi % 12]}${Math.floor(v1ClimaxMidi / 12) - 1} (${Math.round(midiToFreq(v1ClimaxMidi))} Hz) no ponto de passagem; requer apoio diafragmático firme.`;
+    } else if (v2MinMidi < profile.voice2.minMidi) {
+        status = 'TOO_LOW';
+        statusLabel = 'Grave Demais (Perda de Projeção na 2ª Voz)';
+        statusBadgeClass = 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30';
+        statusIcon = 'arrow-down-circle';
+        adviceText = `A 2ª voz cai abaixo do registro confortável de peito (${NOTE_NAMES[v2MinMidi % 12]}${Math.floor(v2MinMidi / 12) - 1} / ${Math.round(midiToFreq(v2MinMidi))} Hz), perdendo presença diante da viola. Recomenda-se subir o tom com a braçadeira.`;
+    }
+
+    return {
+        status,
+        statusLabel,
+        statusBadgeClass,
+        statusIcon,
+        adviceText,
+        v1: {
+            minMidi: v1MinMidi,
+            minName: `${NOTE_NAMES[v1MinMidi % 12]}${Math.floor(v1MinMidi / 12) - 1}`,
+            minHz: Math.round(midiToFreq(v1MinMidi)),
+            climaxMidi: v1ClimaxMidi,
+            climaxName: `${NOTE_NAMES[v1ClimaxMidi % 12]}${Math.floor(v1ClimaxMidi / 12) - 1}`,
+            climaxHz: Math.round(midiToFreq(v1ClimaxMidi)),
+            peakMidi: v1PeakMidi,
+            peakName: `${NOTE_NAMES[v1PeakMidi % 12]}${Math.floor(v1PeakMidi / 12) - 1}`,
+            peakHz: Math.round(midiToFreq(v1PeakMidi)),
+            passaggioName: `${NOTE_NAMES[profile.voice1.passaggioMidi % 12]}${Math.floor(profile.voice1.passaggioMidi / 12) - 1}`
+        },
+        v2: {
+            minMidi: v2MinMidi,
+            minName: `${NOTE_NAMES[v2MinMidi % 12]}${Math.floor(v2MinMidi / 12) - 1}`,
+            minHz: Math.round(midiToFreq(v2MinMidi)),
+            climaxMidi: v2ClimaxMidi,
+            climaxName: `${NOTE_NAMES[v2ClimaxMidi % 12]}${Math.floor(v2ClimaxMidi / 12) - 1}`,
+            climaxHz: Math.round(midiToFreq(v2MinMidi)),
+            passaggioName: `${NOTE_NAMES[profile.voice2.passaggioMidi % 12]}${Math.floor(profile.voice2.passaggioMidi / 12) - 1}`
+        }
+    };
+}
+
+function computeEffectiveCapoTuning(capoFret, inst) {
+    return inst.courses.map((c) => {
+        const effMidi = c.midi[0] + capoFret;
+        const effPc = (c.pitchClass + capoFret) % 12;
+        return {
+            courseNum: c.num,
+            label: c.label,
+            noteName: NOTE_NAMES[effPc],
+            octave: Math.floor(effMidi / 12) - 1,
+            freqHz: Math.round(midiToFreq(effMidi) * 10) / 10,
+            pitchClass: effPc
+        };
+    });
+}
+
+function computeCapoRecommendations(targetKeyId, inst) {
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === targetKeyId) || CAPO_TARGET_KEYS[6];
+    const targetRootPc = targetKey.root;
+    const instBaseRoot = inst.courses[inst.courses.length - 1].pitchClass;
+
+    const recs = [];
+
+    for (let k = 0; k <= 9; k++) {
+        const effOpenPc = (instBaseRoot + k) % 12;
+        const delta = (targetRootPc - effOpenPc + 12) % 12;
+
+        let shapeViola = null;
+        let resonanceScore = 0;
+        let desc = '';
+
+        if (delta === 0) {
+            shapeViola = 'E';
+            resonanceScore = 100 - k * 3;
+            desc = `Shape de Mi (E) aberto com todas as 5 cordas soltas vibrando em simpatia. A escolha dourada dos mestres para o tom de ${targetKey.label}!`;
+        } else if (delta === 5) {
+            shapeViola = 'A';
+            resonanceScore = 86 - k * 3;
+            desc = `Shape de Lá (A) na viola: bordões cheios e primas abertas com condução confortável de terças caipiras.`;
+        } else if (delta === 10) {
+            shapeViola = 'D';
+            resonanceScore = 78 - k * 3;
+            desc = `Shape de Ré (D) com ponteios agudos fáceis e acordes compactos de mão esquerda.`;
+        }
+
+        if (shapeViola) {
+            let gCapo = 0;
+            let gShape = 'E';
+            let gDesc = '';
+
+            const violaoDelta = (targetRootPc - 4 + 12) % 12;
+            if (violaoDelta === 0) {
+                gCapo = 0; gShape = 'E'; gDesc = 'Violão solto sem capo em Shape de Mi';
+            } else if (violaoDelta === 2) {
+                gCapo = 2; gShape = 'E'; gDesc = 'Violão com Capo 2 em Shape de Mi (ou Capo 4 em D)';
+            } else if (violaoDelta === 3) {
+                gCapo = 3; gShape = 'E'; gDesc = 'Violão com Capo 3 em Shape de Mi (ou Capo 1 em G)';
+            } else if (violaoDelta === 5) {
+                gCapo = 0; gShape = 'A'; gDesc = 'Violão solto em Shape de Lá (ou Capo 5 em E)';
+            } else if (violaoDelta === 7) {
+                gCapo = 0; gShape = 'G'; gDesc = 'Violão solto em Shape de Sol clássico';
+            } else if (violaoDelta === 10) {
+                gCapo = 1; gShape = 'A'; gDesc = 'Violão com Capo 1 em Shape de Lá (ou Capo 3 em G)';
+            } else {
+                gCapo = (targetRootPc - 2 + 12) % 12;
+                gShape = 'D';
+                gDesc = `Violão com Capo na ${gCapo}ª casa em Shape de Ré`;
+            }
+
+            recs.push({
+                violaCapo: k,
+                violaShape: shapeViola,
+                violaoCapo: gCapo <= 7 ? gCapo : 0,
+                violaoShape: gShape,
+                resonanceScore,
+                title: `Viola Capo ${k === 0 ? 'Solto (0)' : k + 'ª Casa'} [Shape ${shapeViola}] + Violão Capo ${gCapo === 0 ? 'Solto' : gCapo + 'ª Casa'}`,
+                description: desc,
+                guitarDescription: gDesc
+            });
+        }
+    }
+
+    recs.sort((a, b) => b.resonanceScore - a.resonanceScore);
+    return recs.slice(0, 4);
+}
+
+function computeCapoProgressionTable(targetKeyId, capoFret, inst) {
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === targetKeyId) || CAPO_TARGET_KEYS[6];
+    const targetRootPc = targetKey.root;
+    const violaShapeKey = state.capoDuo.preferredViolaShapeKey || 'E';
+    const violaoShapeKey = state.capoDuo.violaoShapeKey || 'E';
+
+    const vShapeDef = CANONICAL_VIOLA_SHAPES_CAPO[violaShapeKey] || CANONICAL_VIOLA_SHAPES_CAPO.E;
+    const gShapeDef = CANONICAL_VIOLAO_SHAPES_CAPO[violaoShapeKey] || CANONICAL_VIOLAO_SHAPES_CAPO.E;
+
+    return vShapeDef.degrees.map((deg, dIdx) => {
+        const chordRootPc = (targetRootPc + deg.degOffset) % 12;
+        const chordSuffix = deg.quality === 'maj' ? '' : (deg.quality === 'min' ? 'm' : '7');
+        const chordName = `${NOTE_NAMES[chordRootPc]}${chordSuffix}`;
+
+        const relVoicing = deg.voicingRel;
+        const absVoicing = relVoicing.map((f) => (f >= 0 ? f + capoFret : -1));
+
+        const courseNotes = absVoicing.map((f, cIdx) => {
+            if (f < 0) return '✕';
+            const pc = (inst.courses[cIdx].pitchClass + f) % 12;
+            return NOTE_NAMES[pc];
+        });
+
+        const gDeg = gShapeDef.degrees.find((g) => g.roman === deg.roman) || gShapeDef.degrees[0];
+        const gRelVoicing = gDeg ? gDeg.voicingRel : [0, 0, 1, 2, 2, 0];
+        const gAbsVoicing = gRelVoicing.map((f) => (f >= 0 ? f + state.capoDuo.violaoCapoFret : -1));
+
+        return {
+            degreeIdx: dIdx,
+            roman: deg.roman,
+            quality: deg.quality,
+            chordName,
+            roleDesc: deg.desc,
+            relVoicing,
+            absVoicing,
+            courseNotes,
+            guitarNameRel: gDeg ? gDeg.nameRel : chordName,
+            guitarRelVoicing: gRelVoicing,
+            guitarAbsVoicing: gAbsVoicing
+        };
+    });
+}
+
+function playCapoDegreeChord(degreeIdx, delayBase = 0) {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const prog = computeCapoProgressionTable(state.capoDuo.targetKeyId, state.capoDuo.capoFret, inst);
+    const item = prog[degreeIdx];
+    if (!item || !item.absVoicing) return;
+
+    let step = 0;
+    const len = inst.courses.length;
+    for (let cIdx = len - 1; cIdx >= 0; cIdx--) {
+        const fret = item.absVoicing[cIdx];
+        if (fret !== undefined && fret >= 0) {
+            playCourseAtFret(cIdx, fret, delayBase + step * 0.042);
+            flashFretCell(cIdx, fret, (delayBase + step * 0.042) * 1000);
+            step++;
+        }
+    }
+}
+
+function playCapoOpenTuning() {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const capoFret = state.capoDuo.capoFret;
+    const len = inst.courses.length;
+    let step = 0;
+    for (let cIdx = len - 1; cIdx >= 0; cIdx--) {
+        playCourseAtFret(cIdx, capoFret, step * 0.05);
+        flashFretCell(cIdx, capoFret, step * 50);
+        step++;
+    }
+}
+
+function playVocalTone(midi, startTimeOffset = 0, duration = 0.9, voiceType = 'v1') {
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime + Math.max(0, startTimeOffset);
+    const freq = midiToFreq(midi);
+
+    const osc = ctx.createOscillator();
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+
+    lfo.frequency.setValueAtTime(voiceType === 'v1' ? 5.4 : 4.8, now);
+    lfoGain.gain.setValueAtTime(voiceType === 'v1' ? 2.4 : 1.8, now);
+    lfo.connect(osc.frequency);
+
+    osc.type = voiceType === 'v1' ? 'triangle' : 'sawtooth';
+    osc.frequency.setValueAtTime(freq, now);
+
+    const formantFilter1 = ctx.createBiquadFilter();
+    formantFilter1.type = 'bandpass';
+    formantFilter1.frequency.setValueAtTime(voiceType === 'v1' ? 820 : 550, now);
+    formantFilter1.Q.setValueAtTime(4.0, now);
+
+    const formantFilter2 = ctx.createBiquadFilter();
+    formantFilter2.type = 'bandpass';
+    formantFilter2.frequency.setValueAtTime(voiceType === 'v1' ? 1350 : 1050, now);
+    formantFilter2.Q.setValueAtTime(3.5, now);
+
+    const vocalGain = ctx.createGain();
+    const peakVol = voiceType === 'v1' ? 0.22 : 0.24;
+
+    vocalGain.gain.setValueAtTime(0.0001, now);
+    vocalGain.gain.exponentialRampToValueAtTime(peakVol, now + 0.08);
+    vocalGain.gain.setValueAtTime(peakVol * 0.9, now + duration * 0.7);
+    vocalGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.connect(formantFilter1);
+    osc.connect(formantFilter2);
+    formantFilter1.connect(vocalGain);
+    formantFilter2.connect(vocalGain);
+    vocalGain.connect(ctx.destination);
+
+    lfo.start(now);
+    osc.start(now);
+    lfo.stop(now + duration + 0.05);
+    osc.stop(now + duration + 0.05);
+}
+
+function playDuoVocalDemo() {
+    stopCapoAudio();
+    stopScalePlayback();
+    stopPonteioPlayback();
+    stopProgressionPlayback();
+    stopTabEditorPlayback();
+    stopModalPlayback();
+    stopHistoricalAudio();
+    stopModulationAudio();
+    stopFoliaAudio();
+
+    const inst = INSTRUMENTS[state.instrumentId];
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === state.capoDuo.targetKeyId) || CAPO_TARGET_KEYS[6];
+    const targetRootPc = targetKey.root;
+    const profile = VOCAL_DUO_PROFILES[state.capoDuo.vocalProfileId] || VOCAL_DUO_PROFILES.tradicional_masculina;
+    const prog = computeCapoProgressionTable(state.capoDuo.targetKeyId, state.capoDuo.capoFret, inst);
+
+    state.capoDuo.isPlayingVocalDemo = true;
+    renderCapoDuoSection();
+
+    let baseMidi1 = profile.voice1.comfortMin + ((targetRootPc - (profile.voice1.comfortMin % 12) + 12) % 12);
+    if (baseMidi1 > profile.voice1.comfortMax) baseMidi1 -= 12;
+
+    let baseMidi2 = profile.voice2.comfortMin + ((targetRootPc - (profile.voice2.comfortMin % 12) + 12) % 12);
+    if (baseMidi2 > profile.voice2.comfortMax) baseMidi2 -= 12;
+
+    const demoBars = [
+        {
+            degIdx: 0,
+            roman: 'I',
+            name: prog[0].chordName,
+            v1Midi: baseMidi1 + 4,
+            v2Midi: baseMidi2,
+            desc: 'Abertura do Dueto: 1ª voz na 3ª maior e 2ª voz na tônica'
+        },
+        {
+            degIdx: 1,
+            roman: 'IV',
+            name: prog[1].chordName,
+            v1Midi: baseMidi1 + 9,
+            v2Midi: baseMidi2 + 5,
+            desc: 'Subida pro Quarto: Terça do quarto grau em apoteose lírica'
+        },
+        {
+            degIdx: 2,
+            roman: 'V7',
+            name: prog[2].chordName,
+            v1Midi: baseMidi1 + 7,
+            v2Midi: baseMidi2 + 7,
+            desc: 'Tensão Dominante: Chamada caipira de preparação'
+        },
+        {
+            degIdx: 0,
+            roman: 'I',
+            name: prog[0].chordName,
+            v1Midi: baseMidi1 + 4,
+            v2Midi: baseMidi2,
+            desc: 'Resolução da Moda: Dueto fraterno em acorde aberto'
+        }
+    ];
+
+    const barDuration = 1.95;
+    const filter = state.capoDuo.vocalDemoVoiceFilter;
+
+    demoBars.forEach((bar, bIdx) => {
+        const offset = bIdx * barDuration;
+
+        const timer = setTimeout(() => {
+            if (!state.capoDuo.isPlayingVocalDemo) return;
+            state.capoDuo.currentDemoStepIdx = bIdx;
+            state.capoDuo.activeDegreeIdx = bar.degIdx;
+            renderCapoDuoSection();
+            if (state.displayMode === 'CAPO') {
+                renderFretboardSVG();
+            }
+
+            if (filter === 'both' || filter === 'viola') {
+                playCapoDegreeChord(bar.degIdx, 0);
+            }
+
+            if (filter === 'both' || filter === 'v1') {
+                playVocalTone(bar.v1Midi, 0.05, barDuration * 0.88, 'v1');
+            }
+
+            if (filter === 'both' || filter === 'v2') {
+                playVocalTone(bar.v2Midi, 0.06, barDuration * 0.88, 'v2');
+            }
+        }, offset * 1000);
+
+        activeCapoTimers.push(timer);
+    });
+
+    const totalDuration = demoBars.length * barDuration;
+    const finishTimer = setTimeout(() => {
+        if (!state.capoDuo.isPlayingVocalDemo) return;
+        if (state.capoDuo.isLooping) {
+            playDuoVocalDemo();
+        } else {
+            stopCapoAudio();
+            state.capoDuo.currentDemoStepIdx = -1;
+            renderCapoDuoSection();
+            if (state.displayMode === 'CAPO') {
+                renderFretboardSVG();
+            }
+        }
+    }, totalDuration * 1000);
+
+    activeCapoTimers.push(finishTimer);
+}
+
+function exportCapoToTabEditor() {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === state.capoDuo.targetKeyId) || CAPO_TARGET_KEYS[6];
+    const prog = computeCapoProgressionTable(state.capoDuo.targetKeyId, state.capoDuo.capoFret, inst);
+    const capoFret = state.capoDuo.capoFret;
+
+    const newProjId = 'capo_duo_' + Date.now();
+    const newProject = {
+        id: newProjId,
+        title: `Moda em ${targetKey.label} (Capo ${capoFret}ª Casa)`,
+        author: 'Deo Magalhães / Dupla Caipira',
+        instrumentId: state.instrumentId,
+        timeSignature: '2/4',
+        bpm: 92,
+        steps: [
+            { measure: 1, beat: '1', chord: prog[0].chordName, notes: prog[0].relVoicing.map((f, c) => ({ c, f })).filter((n) => n.f >= 0), d: 0.35, rh: 'rasq', ann: `I (${prog[0].chordName}) - Capo ${capoFret}ª` },
+            { measure: 1, beat: '2', chord: prog[0].chordName, notes: [{ c: 0, f: prog[0].relVoicing[0] }, { c: 1, f: prog[0].relVoicing[1] }], d: 0.35, rh: 'p+i', ann: 'Dueto de Terças' },
+            { measure: 2, beat: '1', chord: prog[1].chordName, notes: prog[1].relVoicing.map((f, c) => ({ c, f })).filter((n) => n.f >= 0), d: 0.35, rh: 'rasq', ann: `IV (${prog[1].chordName})` },
+            { measure: 2, beat: '2', chord: prog[1].chordName, notes: [{ c: 0, f: prog[1].relVoicing[0] }, { c: 1, f: prog[1].relVoicing[1] }], d: 0.35, rh: 'p+i', ann: 'Repique de Terças' },
+            { measure: 3, beat: '1', chord: prog[2].chordName, notes: prog[2].relVoicing.map((f, c) => ({ c, f })).filter((n) => n.f >= 0), d: 0.35, rh: 'rasq', ann: `V7 (${prog[2].chordName})` },
+            { measure: 3, beat: '2', chord: prog[2].chordName, notes: [{ c: 0, f: prog[2].relVoicing[0] }, { c: 1, f: prog[2].relVoicing[1] }], d: 0.35, rh: 'p+i', ann: 'Dominante de Preparação' },
+            { measure: 4, beat: '1', chord: prog[0].chordName, notes: prog[0].relVoicing.map((f, c) => ({ c, f })).filter((n) => n.f >= 0), d: 0.5, rh: 'rasq', ann: 'Resolução Caipira' },
+            { measure: 4, beat: '2', chord: prog[0].chordName, notes: [{ c: 4, f: prog[0].relVoicing[4] }], d: 0.5, rh: 'p', ann: 'Bordão Final' }
+        ]
+    };
+
+    if (!state.tabEditor.projects) state.tabEditor.projects = [];
+    state.tabEditor.projects.push(newProject);
+    state.tabEditor.activeProjectId = newProjId;
+    state.displayMode = 'TAB_EDITOR';
+    saveViolaState();
+    renderAll();
+
+    const tabWrap = document.getElementById('viola-tab-editor-container');
+    if (tabWrap) tabWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyCapoSummary() {
+    const inst = INSTRUMENTS[state.instrumentId];
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === state.capoDuo.targetKeyId) || CAPO_TARGET_KEYS[6];
+    const profile = VOCAL_DUO_PROFILES[state.capoDuo.vocalProfileId] || VOCAL_DUO_PROFILES.tradicional_masculina;
+    const analysis = computeDuoVocalAnalysis(state.capoDuo.targetKeyId, state.capoDuo.vocalProfileId);
+    const prog = computeCapoProgressionTable(state.capoDuo.targetKeyId, state.capoDuo.capoFret, inst);
+
+    const txt = [
+        '=========================================================================',
+        'NEXUS VAULT — MAPA DE TRANSPOSIÇÃO & DUPLA CAIPIRA (FASE 13)',
+        '=========================================================================',
+        `Tonalidade Alvo da Música: ${targetKey.label}`,
+        `Perfil Vocal da Dupla: ${profile.title}`,
+        `Diagnóstico Vocal da Dupla: ${analysis.statusLabel}`,
+        `Parecer Técnico: ${analysis.adviceText}`,
+        '',
+        'EXTENSÃO DAS VOZES NO TOM:',
+        `-> 1ª Voz (Requinta): ${analysis.v1.minName} (${analysis.v1.minHz} Hz) até ${analysis.v1.climaxName} (${analysis.v1.climaxHz} Hz) · Ponto de Passagem: ${analysis.v1.passaggioName}`,
+        `-> 2ª Voz (Canto Firme): ${analysis.v2.minName} (${analysis.v2.minHz} Hz) até ${analysis.v2.climaxName} (${analysis.v2.climaxHz} Hz) · Ponto de Passagem: ${analysis.v2.passaggioName}`,
+        '',
+        `CONFIGURAÇÃO DA VIOLA CAIPIRA (${inst.shortName}):`,
+        `-> Braçadeira / Capotraste: ${state.capoDuo.capoFret === 0 ? 'Sem Capo (Cordas Soltas Puras)' : state.capoDuo.capoFret + 'ª Casa da Viola'}`,
+        `-> Shape Relativo de Mão: Shape de ${state.capoDuo.preferredViolaShapeKey}`,
+        '-> Acordes Transpostos da Cadência:',
+        ...prog.map((p) => `   * Grau ${p.roman} (${p.chordName}): Shape Relativo [${p.relVoicing.join(' ')}] ➔ Posição Real no Braço [${p.absVoicing.join(' ')}] (${p.roleDesc})`),
+        '',
+        'VIOLÃO DE ACOMPANHAMENTO (6 Cordas):',
+        `-> Posição Recomendada: Capo na ${state.capoDuo.violaoCapoFret === 0 ? 'Sem Capo' : state.capoDuo.violaoCapoFret + 'ª Casa'} tocando Shape de ${state.capoDuo.violaoShapeKey}`,
+        '========================================================================='
+    ].join('\n');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => {
+            const btn = document.getElementById('btn-viola-capo-copy');
+            if (btn) {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-300"></i><span class="text-emerald-300">Ficha Copiada!</span>';
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = orig;
+                    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                }, 2400);
+            }
+        });
+    }
+}
+
+function renderCapoDuoSection() {
+    const container = document.getElementById('viola-capo-container');
+    if (!container) return;
+
+    const inst = INSTRUMENTS[state.instrumentId];
+    const targetKey = CAPO_TARGET_KEYS.find((k) => k.id === state.capoDuo.targetKeyId) || CAPO_TARGET_KEYS[6];
+    const profile = VOCAL_DUO_PROFILES[state.capoDuo.vocalProfileId] || VOCAL_DUO_PROFILES.tradicional_masculina;
+    const analysis = computeDuoVocalAnalysis(state.capoDuo.targetKeyId, state.capoDuo.vocalProfileId);
+    const recs = computeCapoRecommendations(state.capoDuo.targetKeyId, inst);
+    const prog = computeCapoProgressionTable(state.capoDuo.targetKeyId, state.capoDuo.capoFret, inst);
+    const effTuning = computeEffectiveCapoTuning(state.capoDuo.capoFret, inst);
+    const isPlaying = state.capoDuo.isPlayingVocalDemo;
+    const curDemoStep = state.capoDuo.currentDemoStepIdx;
+
+    let html = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-4">
+            <!-- Cabeçalho Principal -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <i data-lucide="scissors" class="w-5 h-5 text-cyan-400"></i>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Simulador de Capotraste &amp; Transposição Inteligente para Duplas</h3>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Acústica Vocal &amp; Lutheria</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Fase 13</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Cálculo de tessitura das vozes caipiras (1ª e 2ª voz), posicionamento ideal de braçadeira móvel na viola e violão, equivalência harmônica e síntese de dueto vocal demonstrativo.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" id="btn-viola-capo-clone-tab" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span>Exportar p/ Tablatura</span>
+                    </button>
+                    <button type="button" id="btn-viola-capo-copy" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5 transition">
+                        <i data-lucide="clipboard" class="w-4 h-4 text-slate-400"></i>
+                        <span>Copiar Ficha da Dupla</span>
+                    </button>
+                    <button type="button" id="btn-viola-capo-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-xs font-mono text-cyan-300 flex items-center gap-1.5 transition">
+                        <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Ver Braçadeira no Braço SVG</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Seletores Principais: Tonalidade Alvo & Perfil Vocal da Dupla -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                    <label for="viola-capo-select-key" class="text-[11px] font-mono text-cyan-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="music-2" class="w-3.5 h-3.5"></i>
+                        <span>1. Tonalidade Alvo da Música</span>
+                    </label>
+                    <select id="viola-capo-select-key" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono font-bold text-slate-100 focus:border-cyan-400 outline-none cursor-pointer">
+                        ${CAPO_TARGET_KEYS.map((k) => `<option value="${k.id}" ${k.id === state.capoDuo.targetKeyId ? 'selected' : ''}>${k.label}</option>`).join('')}
+                    </select>
+                </div>
+
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                    <label for="viola-capo-select-profile" class="text-[11px] font-mono text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                        <span>2. Perfil Vocal da Dupla</span>
+                    </label>
+                    <select id="viola-capo-select-profile" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono font-bold text-slate-100 focus:border-amber-400 outline-none cursor-pointer">
+                        ${Object.values(VOCAL_DUO_PROFILES).map((p) => `<option value="${p.id}" ${p.id === state.capoDuo.vocalProfileId ? 'selected' : ''}>${p.title}</option>`).join('')}
+                    </select>
+                </div>
+
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                    <label for="viola-capo-select-viola-shape" class="text-[11px] font-mono text-emerald-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                        <span>3. Shape de Mão Relativo da Viola</span>
+                    </label>
+                    <select id="viola-capo-select-viola-shape" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono font-bold text-slate-100 focus:border-emerald-400 outline-none cursor-pointer">
+                        ${Object.values(CANONICAL_VIOLA_SHAPES_CAPO).map((s) => `<option value="${s.id}" ${s.id === state.capoDuo.preferredViolaShapeKey ? 'selected' : ''}>${s.label}</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Régua Interativa de Posicionamento do Capotraste (0 a 9) -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono uppercase font-bold text-slate-200">Posição da Braçadeira na Viola:</span>
+                            <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+                                ${state.capoDuo.capoFret === 0 ? 'Sem Capotraste (Solto)' : state.capoDuo.capoFret + 'ª Casa'}
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Clique em qualquer casa para prender a braçadeira móvel e ver o cálculo acústico imediato</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-viola-capo-arpeggio-open" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-cyan-300 flex items-center gap-1.5 transition">
+                            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                            <span>Arpejar Cordas no Capo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">
+                    ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((f) => {
+                        const isCur = state.capoDuo.capoFret === f;
+                        const effOpenRootPc = (inst.courses[inst.courses.length - 1].pitchClass + f) % 12;
+                        const effOpenName = NOTE_NAMES[effOpenRootPc];
+                        return `
+                            <button type="button" data-capo-fret="${f}"
+                                class="rounded-lg p-2 text-center transition border flex flex-col items-center justify-between min-h-[58px] ${
+                                    isCur
+                                        ? 'bg-cyan-500/20 border-cyan-400 ring-2 ring-cyan-400 text-cyan-200 shadow-md'
+                                        : 'bg-[#0f172a] border-slate-700/80 hover:border-slate-500 text-slate-300'
+                                }">
+                                <span class="text-xs font-mono font-bold">${f === 0 ? 'Solto (0)' : f + 'ª Casa'}</span>
+                                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded ${isCur ? 'bg-cyan-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'} mt-1">
+                                    Tom ${effOpenName}
+                                </span>
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- Faixa com Afinação Efetiva das Cordas com o Capo -->
+                <div class="p-3 rounded-lg bg-[#0f172a] border border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400">Cordas Abertas com Capo na ${state.capoDuo.capoFret}ª Casa:</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        ${effTuning.map((c) => `
+                            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-200">
+                                <span class="text-slate-400">${c.courseNum}º:</span>
+                                <strong class="text-cyan-300">${c.noteName}${c.octave}</strong>
+                                <span class="text-[10px] text-slate-400">(${c.freqHz} Hz)</span>
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Diagnóstico Vocal da Dupla -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <!-- Coluna 1: Diagnóstico e Extensão das Vozes -->
+                <div class="lg:col-span-6 bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="activity" class="w-4 h-4 text-amber-400"></i>
+                            <h4 class="text-xs font-mono uppercase font-bold text-slate-200">Tessitura &amp; Conforto Vocal da Dupla</h4>
+                        </div>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded font-bold border ${analysis.statusBadgeClass}">
+                            ${analysis.statusLabel}
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-300 leading-relaxed">${analysis.adviceText}</p>
+
+                    <!-- Barras Visuais das Vozes -->
+                    <div class="space-y-3 pt-1">
+                        <!-- 1ª Voz -->
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between text-xs font-mono">
+                                <span class="font-bold text-amber-300">${profile.voice1.name}:</span>
+                                <span class="text-slate-400">Exige: <strong class="text-slate-100">${analysis.v1.minName}</strong> até <strong class="text-amber-400">${analysis.v1.climaxName}</strong></span>
+                            </div>
+                            <div class="p-2 rounded bg-[#0f172a] border border-slate-800 text-[11px] font-mono flex items-center justify-between">
+                                <span class="text-slate-400">Grave: <strong class="text-slate-200">${analysis.v1.minName}</strong> (${analysis.v1.minHz} Hz)</span>
+                                <span class="text-slate-400">Passagem: <strong class="text-cyan-300">${analysis.v1.passaggioName}</strong></span>
+                                <span class="text-slate-400">Clímax: <strong class="text-amber-300">${analysis.v1.climaxName}</strong> (${analysis.v1.climaxHz} Hz)</span>
+                            </div>
+                        </div>
+
+                        <!-- 2ª Voz -->
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between text-xs font-mono">
+                                <span class="font-bold text-cyan-300">${profile.voice2.name}:</span>
+                                <span class="text-slate-400">Exige: <strong class="text-slate-100">${analysis.v2.minName}</strong> até <strong class="text-cyan-400">${analysis.v2.climaxName}</strong></span>
+                            </div>
+                            <div class="p-2 rounded bg-[#0f172a] border border-slate-800 text-[11px] font-mono flex items-center justify-between">
+                                <span class="text-slate-400">Bordão: <strong class="text-slate-200">${analysis.v2.minName}</strong> (${analysis.v2.minHz} Hz)</span>
+                                <span class="text-slate-400">Passagem: <strong class="text-cyan-300">${analysis.v2.passaggioName}</strong></span>
+                                <span class="text-slate-400">Harmonia: <strong class="text-cyan-300">${analysis.v2.climaxName}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed font-mono">
+                        💡 <strong>Dica da Tradição:</strong> ${profile.voiceTechniqueTip}
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Recomendações Inteligentes da Dupla (Viola + Violão) -->
+                <div class="lg:col-span-6 bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+                            <h4 class="text-xs font-mono uppercase font-bold text-slate-200">Melhores Combinações de Capo (Viola + Violão)</h4>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-400">${recs.length} opções ranqueadas</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        ${recs.map((r, rIdx) => {
+                            const isApplied = state.capoDuo.capoFret === r.violaCapo && state.capoDuo.preferredViolaShapeKey === r.violaShape;
+                            return `
+                                <div class="rounded-lg p-3 transition border ${
+                                    isApplied
+                                        ? 'bg-emerald-500/15 border-emerald-500 ring-1 ring-emerald-500/40'
+                                        : 'bg-[#0f172a] border-slate-800 hover:border-slate-700'
+                                }">
+                                    <div class="flex items-start justify-between gap-2">
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${rIdx === 0 ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">
+                                                    Opção ${rIdx + 1}
+                                                </span>
+                                                <h5 class="text-xs font-mono font-bold text-slate-100">${r.title}</h5>
+                                            </div>
+                                            <p class="text-[11px] text-slate-300 mt-1 leading-snug">${r.description}</p>
+                                            <p class="text-[10px] text-emerald-300/90 mt-0.5 font-mono">🎸 Violão: ${r.guitarDescription}</p>
+                                        </div>
+                                        <button type="button" data-apply-rec-idx="${rIdx}"
+                                            class="min-h-[34px] px-2.5 py-1 rounded text-xs font-mono font-bold whitespace-nowrap transition ${
+                                                isApplied
+                                                    ? 'bg-emerald-600 text-white shadow'
+                                                    : 'bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700'
+                                            }">
+                                            ${isApplied ? '✓ Aplicado' : 'Aplicar'}
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matriz de Equivalência Harmônica dos Acordes (I, IV, V7, vi, ii, iii) -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="grid" class="w-4 h-4 text-cyan-400"></i>
+                            <h4 class="text-xs font-mono uppercase font-bold text-slate-200">Matriz de Equivalência Harmônica (Viola &amp; Violão)</h4>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Clique em qualquer acorde para projetar no braço SVG e ouvir o dedilhado com a transposição do capotraste</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] font-mono text-slate-400">Capo no Violão:</span>
+                        <select id="viola-capo-select-guitar-fret" class="min-h-[34px] px-2.5 py-1 rounded bg-[#0f172a] border border-slate-700 text-xs font-mono text-cyan-300 outline-none cursor-pointer">
+                            ${[0, 1, 2, 3, 4, 5, 6, 7].map((gf) => `<option value="${gf}" ${gf === state.capoDuo.violaoCapoFret ? 'selected' : ''}>${gf === 0 ? 'Sem Capo' : 'Capo ' + gf + 'ª'}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+                    ${prog.map((p, pIdx) => {
+                        const isCurDegree = state.capoDuo.activeDegreeIdx === pIdx;
+                        return `
+                            <div data-capo-chord-card="${pIdx}"
+                                class="cursor-pointer rounded-lg p-3 transition border flex flex-col justify-between min-h-[140px] text-left ${
+                                    isCurDegree
+                                        ? 'bg-cyan-500/20 border-cyan-400 ring-2 ring-cyan-400 shadow-md'
+                                        : 'bg-[#0f172a] border-slate-800 hover:border-slate-700'
+                                }">
+                                <div class="flex items-center justify-between pb-1 border-b border-slate-800/80">
+                                    <span class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono font-bold text-cyan-300">${p.roman}</span>
+                                    <span class="text-[10px] font-mono text-slate-400 uppercase">${p.quality}</span>
+                                </div>
+
+                                <div class="py-2 text-center">
+                                    <div class="text-base sm:text-lg font-bold font-mono text-slate-100">${p.chordName}</div>
+                                    <div class="text-[10px] font-mono text-amber-300/90 mt-0.5">Viola: [${p.relVoicing.join(' ')}]</div>
+                                    <div class="text-[10px] font-mono text-cyan-300/80 mt-0.5">Violão: [${p.guitarRelVoicing.join(' ')}]</div>
+                                </div>
+
+                                <div class="pt-1 border-t border-slate-800/60 text-center">
+                                    <span class="text-[9.5px] font-mono text-slate-400 line-clamp-1">${p.roleDesc}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- Demonstrador Auditivo de Dueto Vocal (1ª & 2ª Voz + Viola) -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-capo-toggle-demo"
+                            class="min-h-[40px] px-4 py-1.5 rounded-lg ${
+                                isPlaying
+                                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-900/30'
+                                    : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/30'
+                            } font-bold text-xs flex items-center gap-2 transition">
+                            <i data-lucide="${isPlaying ? 'square' : 'play'}" class="w-4 h-4 ${isPlaying ? 'fill-white' : 'fill-slate-950'}"></i>
+                            <span>${isPlaying ? 'Parar Dueto Vocal' : 'Ouvir Dueto Vocal & Viola (Demonstração)'}</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-capo-toggle-loop"
+                            class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition ${
+                                state.capoDuo.isLooping
+                                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                                    : 'bg-slate-800 text-slate-400 border border-slate-700'
+                            }">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                            <span>Loop Contínuo</span>
+                        </button>
+                    </div>
+
+                    <!-- Filtro de Vozes na Demonstração -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-[11px] font-mono text-slate-400">Pistas de Áudio:</span>
+                        <div class="inline-flex rounded-lg bg-[#0f172a] border border-slate-700 p-0.5" role="group">
+                            <button type="button" data-capo-filter-voice="both"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    state.capoDuo.vocalDemoVoiceFilter === 'both' ? 'bg-cyan-500 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Dueto Completo</button>
+                            <button type="button" data-capo-filter-voice="v1"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    state.capoDuo.vocalDemoVoiceFilter === 'v1' ? 'bg-amber-500 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Só 1ª Voz</button>
+                            <button type="button" data-capo-filter-voice="v2"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    state.capoDuo.vocalDemoVoiceFilter === 'v2' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Só 2ª Voz</button>
+                            <button type="button" data-capo-filter-voice="viola"
+                                class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${
+                                    state.capoDuo.vocalDemoVoiceFilter === 'viola' ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                                }">Só Viola</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Régua de 4 Compassos com Iluminação Sincronizada -->
+                <div class="space-y-1.5 pt-2">
+                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <span>Compassos da Cadência (I ➔ IV ➔ V7 ➔ I):</span>
+                        <span>Passo Ativo: ${curDemoStep >= 0 ? `${curDemoStep + 1}/4` : 'Parado'}</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                        ${[
+                            { degIdx: 0, roman: 'I', desc: '1ª Voz na 3ª / 2ª Voz na Tônica' },
+                            { degIdx: 1, roman: 'IV', desc: '1ª Voz na 6ª / 2ª Voz na 4ª' },
+                            { degIdx: 2, roman: 'V7', desc: '1ª Voz na 2ª / 2ª Voz na 5ª' },
+                            { degIdx: 0, roman: 'I', desc: 'Resolução Caipira' }
+                        ].map((b, bIdx) => {
+                            const isCur = curDemoStep === bIdx;
+                            const chName = prog[b.degIdx].chordName;
+                            return `
+                                <div class="rounded-lg p-2.5 transition border text-left flex flex-col justify-between ${
+                                    isCur
+                                        ? 'bg-cyan-500/25 border-cyan-400 ring-2 ring-cyan-400 shadow-md'
+                                        : 'bg-[#0f172a] border-slate-800'
+                                }">
+                                    <div class="flex items-center justify-between text-[10px] font-mono pb-1 border-b border-slate-800/80">
+                                        <span class="text-slate-400">Compasso ${bIdx + 1}</span>
+                                        <span class="px-1.5 py-0.5 rounded bg-slate-800 font-bold text-cyan-300">${b.roman}</span>
+                                    </div>
+                                    <div class="py-1 text-center">
+                                        <div class="text-sm font-bold font-mono text-slate-100">${chName}</div>
+                                        <div class="text-[10px] font-mono text-slate-300 mt-0.5">${b.desc}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+    setupCapoDuoListeners();
+}
+
+function setupCapoDuoListeners() {
+    const container = document.getElementById('viola-capo-container');
+    if (!container) return;
+
+    const keySelect = document.getElementById('viola-capo-select-key');
+    if (keySelect) {
+        keySelect.addEventListener('change', (e) => {
+            stopCapoAudio();
+            state.capoDuo.targetKeyId = e.target.value;
+            saveViolaState();
+            renderCapoDuoSection();
+            if (state.displayMode === 'CAPO') renderFretboardSVG();
+        });
+    }
+
+    const profSelect = document.getElementById('viola-capo-select-profile');
+    if (profSelect) {
+        profSelect.addEventListener('change', (e) => {
+            stopCapoAudio();
+            state.capoDuo.vocalProfileId = e.target.value;
+            saveViolaState();
+            renderCapoDuoSection();
+        });
+    }
+
+    const shapeSelect = document.getElementById('viola-capo-select-viola-shape');
+    if (shapeSelect) {
+        shapeSelect.addEventListener('change', (e) => {
+            stopCapoAudio();
+            state.capoDuo.preferredViolaShapeKey = e.target.value;
+            saveViolaState();
+            renderCapoDuoSection();
+            if (state.displayMode === 'CAPO') renderFretboardSVG();
+        });
+    }
+
+    const guitarCapoSelect = document.getElementById('viola-capo-select-guitar-fret');
+    if (guitarCapoSelect) {
+        guitarCapoSelect.addEventListener('change', (e) => {
+            state.capoDuo.violaoCapoFret = parseInt(e.target.value, 10) || 0;
+            saveViolaState();
+            renderCapoDuoSection();
+        });
+    }
+
+    container.querySelectorAll('[data-capo-fret]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const fret = parseInt(btn.getAttribute('data-capo-fret'), 10);
+            stopCapoAudio();
+            state.capoDuo.capoFret = fret;
+            saveViolaState();
+            renderCapoDuoSection();
+            renderFretboardSVG();
+            playCapoOpenTuning();
+        });
+    });
+
+    const arpBtn = document.getElementById('btn-viola-capo-arpeggio-open');
+    if (arpBtn) {
+        arpBtn.addEventListener('click', playCapoOpenTuning);
+    }
+
+    container.querySelectorAll('[data-apply-rec-idx]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.getAttribute('data-apply-rec-idx'), 10);
+            const inst = INSTRUMENTS[state.instrumentId];
+            const recs = computeCapoRecommendations(state.capoDuo.targetKeyId, inst);
+            const r = recs[idx];
+            if (!r) return;
+
+            stopCapoAudio();
+            state.capoDuo.capoFret = r.violaCapo;
+            state.capoDuo.preferredViolaShapeKey = r.violaShape;
+            state.capoDuo.violaoCapoFret = r.violaoCapo;
+            state.capoDuo.violaoShapeKey = r.violaoShape;
+            saveViolaState();
+            renderCapoDuoSection();
+            renderFretboardSVG();
+            playCapoDegreeChord(0, 0);
+        });
+    });
+
+    container.querySelectorAll('[data-capo-chord-card]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const degIdx = parseInt(card.getAttribute('data-capo-chord-card'), 10);
+            stopCapoAudio();
+            state.capoDuo.activeDegreeIdx = degIdx;
+            playCapoDegreeChord(degIdx, 0);
+            renderCapoDuoSection();
+            if (state.displayMode === 'CAPO') renderFretboardSVG();
+        });
+    });
+
+    const toggleDemoBtn = document.getElementById('btn-viola-capo-toggle-demo');
+    if (toggleDemoBtn) {
+        toggleDemoBtn.addEventListener('click', () => {
+            if (state.capoDuo.isPlayingVocalDemo) {
+                stopCapoAudio();
+                renderCapoDuoSection();
+                if (state.displayMode === 'CAPO') renderFretboardSVG();
+            } else {
+                playDuoVocalDemo();
+            }
+        });
+    }
+
+    const loopBtn = document.getElementById('btn-viola-capo-toggle-loop');
+    if (loopBtn) {
+        loopBtn.addEventListener('click', () => {
+            state.capoDuo.isLooping = !state.capoDuo.isLooping;
+            saveViolaState();
+            renderCapoDuoSection();
+        });
+    }
+
+    container.querySelectorAll('[data-capo-filter-voice]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const filter = btn.getAttribute('data-capo-filter-voice');
+            state.capoDuo.vocalDemoVoiceFilter = filter;
+            saveViolaState();
+            renderCapoDuoSection();
+        });
+    });
+
+    const cloneTabBtn = document.getElementById('btn-viola-capo-clone-tab');
+    if (cloneTabBtn) {
+        cloneTabBtn.addEventListener('click', exportCapoToTabEditor);
+    }
+
+    const copyBtn = document.getElementById('btn-viola-capo-copy');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyCapoSummary);
+    }
+
+    const toFretBtn = document.getElementById('btn-viola-capo-to-fretboard');
+    if (toFretBtn) {
+        toFretBtn.addEventListener('click', () => {
+            stopScalePlayback();
+            stopPonteioPlayback();
+            stopProgressionPlayback();
+            stopTabEditorPlayback();
+            stopModalPlayback();
+            stopHistoricalAudio();
+            stopModulationAudio();
+            stopFoliaAudio();
+            stopCapoAudio();
+            state.displayMode = 'CAPO';
+            saveViolaState();
+            renderAll();
+            const fboard = document.getElementById('viola-fretboard-svg-wrap');
+            if (fboard) fboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
+
     // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
     // =========================================================================
@@ -12082,11 +13406,114 @@ function setupFoliaListeners() {
                 }
             }
         }
+        } else if (state.displayMode === 'CAPO') {
+            // FASE 13: PROJEÃ‡ÃƒO DE ACORDES COM CAPOTRASTE & TRANSPOSIÃ‡ÃƒO PARA DUPLAS
+            const capoFret = state.capoDuo.capoFret || 0;
+            const shapeKey = inst.isPaired ? (state.capoDuo.preferredViolaShapeKey || 'E') : (state.capoDuo.violaoShapeKey || 'E');
+            const shapeCatalog = inst.isPaired ? CANONICAL_VIOLA_SHAPES_CAPO : CANONICAL_VIOLAO_SHAPES_CAPO;
+            const activeShape = shapeCatalog[shapeKey] || shapeCatalog['E'];
+            const degIdx = state.capoDuo.activeDegreeIdx || 0;
+            const activeDegree = activeShape.degrees[degIdx] || activeShape.degrees[0];
+
+            if (activeDegree && Array.isArray(activeDegree.voicingRel)) {
+                activeDegree.voicingRel.forEach((fRel, cIdx) => {
+                    if (cIdx >= inst.courses.length) return;
+                    if (fRel < 0) {
+                        mutedCourses.add(cIdx);
+                    } else {
+                        const absFret = capoFret + fRel;
+                        if (absFret <= maxFret) {
+                            const pc = (inst.courses[cIdx].pitchClass + absFret) % 12;
+                            const isCapoOpen = (fRel === 0 && capoFret > 0);
+                            activeMarkers.push({
+                                courseIdx: cIdx,
+                                fret: absFret,
+                                label: NOTE_NAMES[pc],
+                                sub: isCapoOpen ? 'Capo' : (fRel === 0 ? 'Solta' : `+${fRel}c`),
+                                color: isCapoOpen ? '#f59e0b' : '#10b981',
+                                stroke: '#ffffff',
+                                strokeWidth: 3.5,
+                                opacity: '1'
+                            });
+                        }
+                    }
+                });
+            }
+
+            const ghostSet = new Set();
+            activeShape.degrees.forEach((deg, dIdx) => {
+                if (dIdx === degIdx) return;
+                if (!deg.voicingRel || !Array.isArray(deg.voicingRel)) return;
+                deg.voicingRel.forEach((fRel, cIdx) => {
+                    if (fRel >= 0 && cIdx < inst.courses.length) {
+                        const absFret = capoFret + fRel;
+                        if (absFret <= maxFret) {
+                            const key = `${cIdx}_${absFret}`;
+                            if (!ghostSet.has(key)) {
+                                ghostSet.add(key);
+                                const pc = (inst.courses[cIdx].pitchClass + absFret) % 12;
+                                activeMarkers.push({
+                                    courseIdx: cIdx,
+                                    fret: absFret,
+                                    label: NOTE_NAMES[pc],
+                                    sub: deg.roman,
+                                    color: '#64748b',
+                                    opacity: '0.25'
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+        }
 
 
 
         
         // Construção SVG
+        // FASE 13: Renderizacao da Bracadeira Fisica do Capotraste e Zona Inativa Atras
+        let capoDeadZoneSvg = '';
+        let capoClampSvg = '';
+        const capoK = state.capoDuo.capoFret || 0;
+        if (capoK > 0 && capoK <= maxFret) {
+            const fretX = getFretLineX(capoK);
+            let deadX, deadW, clampX, knobX;
+
+            if (state.isLeftHanded) {
+                deadX = fretX;
+                deadW = (getNutLineX() + nutSlotW) - fretX;
+                clampX = fretX + 4;
+                knobX = clampX + 4;
+            } else {
+                deadX = getNutLineX() - nutSlotW;
+                deadW = fretX - deadX;
+                clampX = fretX - 18;
+                knobX = clampX - 4;
+            }
+
+            const deadCenter = deadX + deadW / 2;
+
+            capoDeadZoneSvg = `
+                <g class="pointer-events-none">
+                    <rect x="${deadX}" y="${topY - 10}" width="${deadW}" height="${botY - topY + 20}" fill="#020617" opacity="0.68"/>
+                    <rect x="${deadX}" y="${topY - 10}" width="${deadW}" height="${botY - topY + 20}" fill="url(#deadZonePattern)" opacity="0.35"/>
+                    <text x="${deadCenter}" y="${(topY + botY) / 2 + 4}" text-anchor="middle" fill="#94a3b8" font-family="JetBRACADEIRA Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" opacity="0.85">ATRAS DA BRACADEIRA (INATIVO)</text>
+                </g>
+            `;
+
+            capoClampSvg = `
+                <g class="pointer-events-none">
+                    <rect x="${clampX - 2}" y="${topY - 14}" width="16" height="${botY - topY + 28}" rx="6" fill="#000000" opacity="0.55"/>
+                    <rect x="${clampX}" y="${topY - 12}" width="13" height="${botY - topY + 24}" rx="5" fill="#090d16" stroke="#000" stroke-width="1"/>
+                    <rect x="${clampX + 2}" y="${topY - 14}" width="9" height="${botY - topY + 28}" rx="4" fill="url(#violaCapoGrad)" stroke="#f59e0b" stroke-width="1.2"/>
+                    <circle cx="${knobX + 4}" cy="${state.viewPerspective === 'diagram' ? (botY + 12) : (topY - 12)}" r="6.5" fill="#d97706" stroke="#fbbf24" stroke-width="1.5"/>
+                    <circle cx="${knobX + 4}" cy="${state.viewPerspective === 'diagram' ? (botY + 12) : (topY - 12)}" r="2.5" fill="#78350f"/>
+                    <rect x="${clampX - 22}" y="${state.viewPerspective === 'diagram' ? (topY - 30) : (botY + 14)}" width="56" height="18" rx="4" fill="#090d16" stroke="#f59e0b" stroke-width="1.2"/>
+                    <text x="${clampX + 6}" y="${state.viewPerspective === 'diagram' ? (topY - 18) : (botY + 26)}" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="800">CAPO ${capoK}\u00AA</text>
+                </g>
+            `;
+        }
+
         const nutX = getNutLineX();
         const bodyEndX = getFretLineX(maxFret);
         const rectX = Math.min(nutX, bodyEndX);
@@ -12193,12 +13620,23 @@ function setupFoliaListeners() {
                         <stop offset="50%" stop-color="#0d1424"/>
                         <stop offset="100%" stop-color="#141c2e"/>
                     </linearGradient>
+                    <linearGradient id="violaCapoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#334155"/>
+                        <stop offset="35%" stop-color="#64748b"/>
+                        <stop offset="70%" stop-color="#475569"/>
+                        <stop offset="100%" stop-color="#1e293b"/>
+                    </linearGradient>
+                    <pattern id="deadZonePattern" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                        <line x1="0" y1="0" x2="0" y2="10" stroke="#334155" stroke-width="1.5" />
+                    </pattern>
                 </defs>
                 <rect x="${rectX}" y="${topY - 10}" width="${rectW}" height="${botY - topY + 20}" rx="4" fill="url(#woodGrad)" stroke="#1e293b" stroke-width="1.5"/>
                 ${inlaysSvg}
                 ${fretsSvg}
+                ${capoDeadZoneSvg}
                 ${fretNumsSvg}
                 ${stringsSvg}
+                ${capoClampSvg}
                 ${markersSvg}
                 ${hitAreasSvg}
                 <text x="${svgW / 2}" y="${svgH - 10}" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="10.5">${dirText}</text>
@@ -12742,7 +14180,9 @@ function setupFoliaListeners() {
                     currentStepIdx: -1
                 });
             } else {
-                state.modulation = Object.assign({}
+                state.modulation = Object.assign({}, DEFAULT_MODULATION_STATE);
+            }
+
             if (saved.folia && typeof saved.folia === 'object') {
                 state.folia = Object.assign({}, DEFAULT_FOLIA_STATE, saved.folia, {
                     isPlaying: false,
@@ -12750,7 +14190,15 @@ function setupFoliaListeners() {
                 });
             } else {
                 state.folia = Object.assign({}, DEFAULT_FOLIA_STATE);
-            }, DEFAULT_MODULATION_STATE);
+            }
+
+            if (saved.capoDuo && typeof saved.capoDuo === 'object') {
+                state.capoDuo = Object.assign({}, DEFAULT_CAPO_DUO_STATE, saved.capoDuo, {
+                    isPlayingVocalDemo: false,
+                    currentDemoStepIdx: -1
+                });
+            } else {
+                state.capoDuo = Object.assign({}, DEFAULT_CAPO_DUO_STATE);
             }
 
             if (saved.historicalTunings && typeof saved.historicalTunings === 'object') {
@@ -12802,6 +14250,12 @@ function setupFoliaListeners() {
             copy.folia = Object.assign({}, copy.folia, {
                 isPlaying: false,
                 currentStepIdx: -1
+            });
+        }
+        if (copy.capoDuo) {
+            copy.capoDuo = Object.assign({}, copy.capoDuo, {
+                isPlayingVocalDemo: false,
+                currentDemoStepIdx: -1
             });
         }
         if (copy.historicalTunings) {
@@ -12872,6 +14326,10 @@ function setupFoliaListeners() {
                             <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
                             <span>Folia de Reis (Fase 12)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-capo" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 border border-yellow-500/40 text-yellow-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="crosshair" class="w-4 h-4 text-yellow-400"></i>
+                            <span>Capotraste &amp; Duplas (Fase 13)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -12911,7 +14369,7 @@ function setupFoliaListeners() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -13089,6 +14547,8 @@ function setupFoliaListeners() {
                 <div id="viola-modulation-container" class="space-y-4"></div>
                 <!-- Modulo de Dicionario de Licks & Frases de Resposta de Folia de Reis (Fase 12) -->
                 <div id="viola-folia-container" class="space-y-4"></div>
+                <!-- Simulador de Capotraste & Transposicao Inteligente para Duplas (Fase 13) -->
+                <div id="viola-capo-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -13228,129 +14688,299 @@ function setupFoliaListeners() {
 
         const handBadge = document.getElementById('viola-hand-badge');
         const handLabel = document.getElementById('label-viola-hand');
-        if (state.isLeftHanded) {
-            handBadge.textContent = 'Modo Canhoto Ativo (Espelhado)';
-            handBadge.className = 'px-2 py-0.5 text-[11px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-            handLabel.textContent = 'Canhoto (Pestana à Direita)';
-        } else {
-            handBadge.textContent = 'Modo Destro (Consulta Externa)';
-            handBadge.className = 'px-2 py-0.5 text-[11px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700';
-            handLabel.textContent = 'Destro (Pestana à Esquerda)';
+        if (handBadge && handLabel) {
+            if (state.isLeftHanded) {
+                handBadge.textContent = 'Modo Canhoto Ativo (Espelhado)';
+                handBadge.className = 'px-2 py-0.5 text-[11px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                handLabel.textContent = 'Canhoto (Pestana \u00E0 Direita)';
+            } else {
+                handBadge.textContent = 'Modo Destro (Consulta Externa)';
+                handBadge.className = 'px-2 py-0.5 text-[11px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700';
+                handLabel.textContent = 'Destro (Pestana \u00E0 Esquerda)';
+            }
         }
 
         const perspLabel = document.getElementById('label-viola-persp');
-        perspLabel.textContent = state.viewPerspective === 'diagram'
-            ? 'Diagrama (1º Agudo no Topo)'
-            : 'Visão Músico (Grave no Topo)';
-
-        const btnModeChord = document.getElementById('btn-viola-mode-chord');
-        const btnModeDuad = document.getElementById('btn-viola-mode-duad');
-        const btnModeReverse = document.getElementById('btn-viola-mode-reverse');
-        const btnModePonteio = document.getElementById('btn-viola-mode-ponteio');
-        if (btnModeChord && btnModeDuad && btnModeReverse) {
-            btnModeChord.className = state.displayMode === 'CHORD'
-                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-emerald-600 text-slate-950 shadow'
-                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            btnModeDuad.className = state.displayMode === 'DUAD'
-                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-cyan-600 text-slate-950 shadow'
-                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            btnModeReverse.className = state.displayMode === 'REVERSE'
-                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-500 text-slate-950 shadow'
-                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            if (btnModePonteio) {
-                btnModePonteio.className = state.displayMode === 'PONTEIO'
-                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-amber-400 text-slate-950 shadow'
-                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            }
-            const btnModeTabEditor = document.getElementById('btn-viola-mode-tab-editor');
-            if (btnModeTabEditor) {
-                btnModeTabEditor.className = state.displayMode === 'TAB_EDITOR'
-                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-violet-500 text-white shadow'
-                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            }
-            const btnModeModal = document.getElementById('btn-viola-mode-modal');
-            if (btnModeModal) {
-                btnModeModal.className = state.displayMode === 'MODAL'
-                    ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold bg-rose-600 text-white shadow'
-                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold text-slate-400 hover:text-slate-200';
-            }
-            const btnModeHistorical = document.getElementById('btn-viola-mode-historical');
-            if (btnModeHistorical) {
-                btnModeHistorical.addEventListener('click', () => {
-                    if (state.displayMode !== 'HISTORICAL') {
-                        stopScalePlayback();
-                        stopPonteioPlayback();
-                        stopProgressionPlayback();
-                        stopTabEditorPlayback();
-                        stopModalPlayback();
-                        stopHistoricalAudio();
-                        stopModulationAudio();
-                        stopFoliaAudio();
-                        state.displayMode = 'HISTORICAL';
-                        saveViolaState();
-                        renderAll();
-                        const hWrap = document.getElementById('viola-historical-tunings-container');
-                        if (hWrap) hWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-            const btnModeModulation = document.getElementById('btn-viola-mode-modulation');
-            if (btnModeModulation) {
-                btnModeModulation.addEventListener('click', () => {
-                    if (state.displayMode !== 'MODULATION') {
-                        stopScalePlayback();
-                        stopPonteioPlayback();
-                        stopProgressionPlayback();
-                        stopTabEditorPlayback();
-                        stopModalPlayback();
-                        stopHistoricalAudio();
-                        stopModulationAudio();
-                        stopFoliaAudio();
-                        state.displayMode = 'MODULATION';
-                        saveViolaState();
-                        renderAll();
-                        const mWrap = document.getElementById('viola-modulation-container');
-                        if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-            const btnScrollMod = document.getElementById('btn-viola-scroll-modulation');
-            if (btnScrollMod) {
-                btnScrollMod.addEventListener('click', () => {
-                    const mWrap = document.getElementById('viola-modulation-container');
-                    if (mWrap) mWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            }
-            const btnModeFolia = document.getElementById('btn-viola-mode-folia');
-            if (btnModeFolia) {
-                btnModeFolia.addEventListener('click', () => {
-                    if (state.displayMode !== 'FOLIA') {
-                        stopScalePlayback();
-                        stopPonteioPlayback();
-                        stopProgressionPlayback();
-                        stopTabEditorPlayback();
-                        stopModalPlayback();
-                        stopHistoricalAudio();
-                        stopModulationAudio();
-                        stopFoliaAudio();
-                        state.displayMode = 'FOLIA';
-                        saveViolaState();
-                        renderAll();
-                        const fWrap = document.getElementById('viola-folia-container');
-                        if (fWrap) fWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
-            const btnScrollFolia = document.getElementById('btn-viola-scroll-folia');
-            if (btnScrollFolia) {
-                btnScrollFolia.addEventListener('click', () => {
-                    const fWrap = document.getElementById('viola-folia-container');
-                    if (fWrap) fWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            }
+        if (perspLabel) {
+            perspLabel.textContent = state.viewPerspective === 'diagram'
+                ? 'Diagrama (1\u00BA Agudo no Topo)'
+                : 'Vis\u00E3o M\u00FAsico (Grave no Topo)';
         }
 
-        // Acoes Rapidas do Dicionario & Buscador Reverso
+        const modeButtons = [
+            { id: 'btn-viola-mode-chord', mode: 'CHORD', activeClass: 'bg-emerald-600 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-duad', mode: 'DUAD', activeClass: 'bg-cyan-600 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-reverse', mode: 'REVERSE', activeClass: 'bg-amber-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-ponteio', mode: 'PONTEIO', activeClass: 'bg-amber-400 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-tab-editor', mode: 'TAB_EDITOR', activeClass: 'bg-violet-500 text-white shadow' },
+            { id: 'btn-viola-mode-modal', mode: 'MODAL', activeClass: 'bg-rose-600 text-white shadow' },
+            { id: 'btn-viola-mode-historical', mode: 'HISTORICAL', activeClass: 'bg-amber-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-modulation', mode: 'MODULATION', activeClass: 'bg-pink-500 text-white shadow' },
+            { id: 'btn-viola-mode-folia', mode: 'FOLIA', activeClass: 'bg-amber-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-capo', mode: 'CAPO', activeClass: 'bg-yellow-500 text-slate-950 shadow' }
+        ];
+
+        modeButtons.forEach((b) => {
+            const el = document.getElementById(b.id);
+            if (el) {
+                const isActive = state.displayMode === b.mode;
+                el.className = isActive
+                    ? `px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${b.activeClass}`
+                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200';
+            }
+        });
+
+        const btnTriad = document.getElementById('btn-viola-mode-triad');
+        const btnTetrad = document.getElementById('btn-viola-mode-tetrad');
+        if (btnTriad && btnTetrad) {
+            btnTriad.className = state.harmonicExtension === 'triad'
+                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition bg-emerald-600 text-slate-950 shadow'
+                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200';
+            btnTetrad.className = state.harmonicExtension === 'tetrad'
+                ? 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition bg-purple-600 text-white shadow'
+                : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200';
+        }
+    }
+
+    function stopAllAudio() {
+        stopScalePlayback();
+        stopPonteioPlayback();
+        stopProgressionPlayback();
+        stopTabEditorPlayback();
+        stopModalPlayback();
+        stopHistoricalAudio();
+        stopModulationAudio();
+        stopFoliaAudio();
+        stopCapoAudio();
+        stopTunerTone();
+        stopEarTrainerAudio();
+    }
+
+    function bindEvents() {
+        // Selecao de Instrumento
+        const instSel = document.getElementById('viola-select-instrument');
+        if (instSel) {
+            instSel.addEventListener('change', (e) => {
+                stopAllAudio();
+                state.instrumentId = e.target.value;
+                state.voicingVariantIdx = 0;
+
+                if (state.instrumentId === 'violao_padrao' && !state.tensionCalculator.presetId.startsWith('violao_')) {
+                    state.tensionCalculator.presetId = 'violao_nylon_normal';
+                    state.tensionCalculator.scaleLengthMm = 650;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'nylon_classical';
+                } else if (state.instrumentId === 'viola_cebolao_e' && state.tensionCalculator.presetId.startsWith('violao_')) {
+                    state.tensionCalculator.presetId = 'viola_cebolao_e_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_cebolao_d') {
+                    state.tensionCalculator.presetId = 'viola_cebolao_d_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_rio_abaixo') {
+                    state.tensionCalculator.presetId = 'viola_rio_abaixo_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_boiadeira') {
+                    state.tensionCalculator.presetId = 'viola_boiadeira_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_rio_acima_c') {
+                    state.tensionCalculator.presetId = 'viola_rio_acima_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_meia_guitarra') {
+                    state.tensionCalculator.presetId = 'viola_meia_guitarra_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_sao_lourenco') {
+                    state.tensionCalculator.presetId = 'viola_sao_lourenco_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                } else if (state.instrumentId === 'viola_cana_verde') {
+                    state.tensionCalculator.presetId = 'viola_cana_verde_media';
+                    state.tensionCalculator.scaleLengthMm = 580;
+                    state.tensionCalculator.customGauges = null;
+                    state.tensionCalculator.stringMaterial = 'steel_bronze';
+                }
+
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        // Toggle Canhoto / Destro
+        const handBtn = document.getElementById('btn-viola-toggle-hand');
+        if (handBtn) {
+            handBtn.addEventListener('click', () => {
+                state.isLeftHanded = !state.isLeftHanded;
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        // Toggle Perspectiva
+        const perspBtn = document.getElementById('btn-viola-toggle-persp');
+        if (perspBtn) {
+            perspBtn.addEventListener('click', () => {
+                state.viewPerspective = state.viewPerspective === 'diagram' ? 'player' : 'diagram';
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        // Atalhos de Rolagem
+        const scrollBtns = [
+            { id: 'btn-viola-scroll-tension', targetId: 'viola-tension-calculator-container' },
+            { id: 'btn-viola-scroll-historical', targetId: 'viola-historical-tunings-container' },
+            { id: 'btn-viola-scroll-modulation', targetId: 'viola-modulation-container' },
+            { id: 'btn-viola-scroll-folia', targetId: 'viola-folia-container' },
+            { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' }
+        ];
+        scrollBtns.forEach((item) => {
+            const btn = document.getElementById(item.id);
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    const el = document.getElementById(item.targetId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+        });
+
+        // Afinador Stop
+        const stopTunerBtn = document.getElementById('btn-viola-tuner-stop');
+        if (stopTunerBtn) {
+            stopTunerBtn.addEventListener('click', stopTunerTone);
+        }
+
+        // Modos de Projecao no Braco
+        const modeList = [
+            { id: 'btn-viola-mode-chord', mode: 'CHORD' },
+            { id: 'btn-viola-mode-duad', mode: 'DUAD' },
+            { id: 'btn-viola-mode-reverse', mode: 'REVERSE' },
+            { id: 'btn-viola-mode-ponteio', mode: 'PONTEIO' },
+            { id: 'btn-viola-mode-tab-editor', mode: 'TAB_EDITOR' },
+            { id: 'btn-viola-mode-modal', mode: 'MODAL' },
+            { id: 'btn-viola-mode-historical', mode: 'HISTORICAL', scrollTarget: 'viola-historical-tunings-container' },
+            { id: 'btn-viola-mode-modulation', mode: 'MODULATION', scrollTarget: 'viola-modulation-container' },
+            { id: 'btn-viola-mode-folia', mode: 'FOLIA', scrollTarget: 'viola-folia-container' },
+            { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' }
+        ];
+
+        modeList.forEach((item) => {
+            const btn = document.getElementById(item.id);
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    stopAllAudio();
+                    state.displayMode = item.mode;
+                    saveViolaState();
+                    renderAll();
+                    if (item.scrollTarget) {
+                        const target = document.getElementById(item.scrollTarget);
+                        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+        });
+
+        // Campo Harmonico
+        const btnTriad = document.getElementById('btn-viola-mode-triad');
+        const btnTetrad = document.getElementById('btn-viola-mode-tetrad');
+        if (btnTriad && btnTetrad) {
+            btnTriad.addEventListener('click', () => {
+                if (state.harmonicExtension !== 'triad') {
+                    state.harmonicExtension = 'triad';
+                    saveViolaState();
+                    renderAll();
+                }
+            });
+            btnTetrad.addEventListener('click', () => {
+                if (state.harmonicExtension !== 'tetrad') {
+                    state.harmonicExtension = 'tetrad';
+                    saveViolaState();
+                    renderAll();
+                }
+            });
+        }
+
+        const keySelect = document.getElementById('viola-select-key');
+        if (keySelect) {
+            keySelect.addEventListener('change', (e) => {
+                state.selectedKeyId = e.target.value;
+                state.voicingVariantIdx = 0;
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        // Escalas Duadas
+        const duadTypeSel = document.getElementById('viola-select-duad-type');
+        if (duadTypeSel) {
+            duadTypeSel.addEventListener('change', (e) => {
+                state.duadType = e.target.value;
+                state.activeDuadStepIdx = -1;
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        const duadKeySel = document.getElementById('viola-select-duad-key');
+        if (duadKeySel) {
+            duadKeySel.addEventListener('change', (e) => {
+                state.duadKeyId = e.target.value;
+                state.activeDuadStepIdx = -1;
+                saveViolaState();
+                renderAll();
+            });
+        }
+
+        const playDuadBtn = document.getElementById('btn-viola-play-duads');
+        if (playDuadBtn) {
+            playDuadBtn.addEventListener('click', playDuadScaleSequence);
+        }
+
+        // Estudo de Progressoes
+        const progSelect = document.getElementById('viola-select-progression');
+        if (progSelect) {
+            progSelect.addEventListener('change', (e) => {
+                state.progressionId = e.target.value;
+                state.progressionStepIdx = -1;
+                saveViolaState();
+                renderProgressionStudyPanel();
+            });
+        }
+
+        const progBeats = document.getElementById('viola-select-prog-beats');
+        if (progBeats) {
+            progBeats.addEventListener('change', (e) => {
+                state.progressionBeatsPerChord = parseInt(e.target.value, 10) || 4;
+                saveViolaState();
+            });
+        }
+
+        const loopProgBtn = document.getElementById('btn-viola-loop-progression');
+        if (loopProgBtn) {
+            loopProgBtn.addEventListener('click', () => {
+                state.progressionLoop = !state.progressionLoop;
+                saveViolaState();
+                renderProgressionStudyPanel();
+            });
+        }
+
+        const playProgBtn = document.getElementById('btn-viola-play-progression');
+        if (playProgBtn) {
+            playProgBtn.addEventListener('click', toggleProgressionPlayback);
+        }
+
+        // Dicionario Reverso
         const btnRevStrum = document.getElementById('btn-viola-reverse-strum');
         if (btnRevStrum) {
             btnRevStrum.addEventListener('click', strumReverseChord);
@@ -13387,230 +15017,54 @@ function setupFoliaListeners() {
             btnRevClearMute.addEventListener('click', resetReverseChordToMute);
         }
 
-        const scrollTensionBtn = document.getElementById('btn-viola-scroll-tension');
-        if (scrollTensionBtn) {
-            scrollTensionBtn.addEventListener('click', () => {
-                const el = document.getElementById('viola-tension-calculator-container');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        }
-
-        const scrollHistoricalBtn = document.getElementById('btn-viola-scroll-historical');
-        if (scrollHistoricalBtn) {
-            scrollHistoricalBtn.addEventListener('click', () => {
-                const el = document.getElementById('viola-historical-tunings-container');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        }
-
-        document.getElementById('viola-select-instrument').addEventListener('change', (e) => {
-            stopScalePlayback();
-            stopPonteioPlayback();
-            stopProgressionPlayback();
-            stopTabEditorPlayback();
-            stopModalPlayback();
-            stopHistoricalAudio();
-            stopTunerTone();
-            stopEarTrainerAudio();
-            state.instrumentId = e.target.value;
-            state.voicingVariantIdx = 0;
-
-            // Sincroniza inteligentemente o preset de tensão com o instrumento selecionado
-            if (state.instrumentId === 'violao_padrao' && !state.tensionCalculator.presetId.startsWith('violao_')) {
-                state.tensionCalculator.presetId = 'violao_nylon_normal';
-                state.tensionCalculator.scaleLengthMm = 650;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'nylon_classical';
-            } else if (state.instrumentId === 'viola_cebolao_e' && state.tensionCalculator.presetId.startsWith('violao_')) {
-                state.tensionCalculator.presetId = 'viola_cebolao_e_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_cebolao_d') {
-                state.tensionCalculator.presetId = 'viola_cebolao_d_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_rio_abaixo') {
-                state.tensionCalculator.presetId = 'viola_rio_abaixo_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_boiadeira') {
-                state.tensionCalculator.presetId = 'viola_boiadeira_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_rio_acima_c') {
-                state.tensionCalculator.presetId = 'viola_rio_acima_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_meia_guitarra') {
-                state.tensionCalculator.presetId = 'viola_meia_guitarra_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_sao_lourenco') {
-                state.tensionCalculator.presetId = 'viola_sao_lourenco_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            } else if (state.instrumentId === 'viola_cana_verde') {
-                state.tensionCalculator.presetId = 'viola_cana_verde_media';
-                state.tensionCalculator.scaleLengthMm = 580;
-                state.tensionCalculator.customGauges = null;
-                state.tensionCalculator.stringMaterial = 'steel_bronze';
-            }
-
-            saveViolaState();
-            renderAll();
-        });
-
-        const stopTunerBtn = document.getElementById('btn-viola-tuner-stop');
-        if (stopTunerBtn) {
-            stopTunerBtn.addEventListener('click', stopTunerTone);
-        }
-
-        const btnTriad = document.getElementById('btn-viola-mode-triad');
-        const btnTetrad = document.getElementById('btn-viola-mode-tetrad');
-        if (btnTriad && btnTetrad) {
-            btnTriad.addEventListener('click', () => {
-                if (state.harmonicExtension !== 'triad') {
-                    state.harmonicExtension = 'triad';
-                    state.voicingVariantIdx = 0;
-                    saveViolaState();
-                    mountShell();
-                    renderAll();
-                    strumActiveChord();
-                }
-            });
-            btnTetrad.addEventListener('click', () => {
-                if (state.harmonicExtension !== 'tetrad') {
-                    state.harmonicExtension = 'tetrad';
-                    state.voicingVariantIdx = 0;
-                    saveViolaState();
-                    mountShell();
-                    renderAll();
-                    strumActiveChord();
-                }
-            });
-        }
-
-        document.getElementById('btn-viola-toggle-hand').addEventListener('click', () => {
-            state.isLeftHanded = !state.isLeftHanded;
-            saveViolaState();
-            renderAll();
-        });
-
-        document.getElementById('btn-viola-toggle-persp').addEventListener('click', () => {
-            state.viewPerspective = state.viewPerspective === 'diagram' ? 'player' : 'diagram';
-            saveViolaState();
-            renderAll();
-        });
-
-        document.getElementById('viola-select-key').addEventListener('change', (e) => {
-            stopScalePlayback();
-            stopProgressionPlayback();
-            state.displayMode = 'CHORD';
-            state.selectedKeyId = e.target.value;
-            state.selectedDegreeIdx = 0;
-            state.voicingVariantIdx = 0;
-            saveViolaState();
-            renderAll();
-            strumActiveChord();
-        });
-
-        document.getElementById('viola-select-duad-type').addEventListener('change', (e) => {
-            stopScalePlayback();
-            stopProgressionPlayback();
-            state.displayMode = 'DUAD';
-            state.duadType = e.target.value;
-            saveViolaState();
-            renderAll();
-        });
-
-        document.getElementById('viola-select-duad-key').addEventListener('change', (e) => {
-            stopScalePlayback();
-            stopProgressionPlayback();
-            state.displayMode = 'DUAD';
-            state.duadKeyId = e.target.value;
-            saveViolaState();
-            renderAll();
-        });
-
-        document.getElementById('btn-viola-play-duads').addEventListener('click', () => {
-            stopProgressionPlayback();
-            renderAll();
-            playDuadScale();
-        });
-
-        // Estudos de Progressão Harmônica & Cadências
-        const progSelect = document.getElementById('viola-select-progression');
-        if (progSelect) {
-            progSelect.addEventListener('change', (e) => {
-                stopProgressionPlayback();
-                state.progressionId = e.target.value;
-                saveViolaState();
-                renderProgressionStudyPanel();
-            });
-        }
-
-        const progBeats = document.getElementById('viola-select-prog-beats');
-        if (progBeats) {
-            progBeats.addEventListener('change', (e) => {
-                state.progressionBeatsPerChord = parseInt(e.target.value, 10) || 4;
+        // Metronomo
+        const bpmSlider = document.getElementById('viola-bpm-slider');
+        if (bpmSlider) {
+            bpmSlider.addEventListener('input', (e) => {
+                state.bpm = parseInt(e.target.value, 10);
+                const disp = document.getElementById('viola-bpm-display');
+                if (disp) disp.textContent = state.bpm;
                 saveViolaState();
             });
         }
 
-        const loopProgBtn = document.getElementById('btn-viola-loop-progression');
-        if (loopProgBtn) {
-            loopProgBtn.addEventListener('click', () => {
-                state.progressionLoop = !state.progressionLoop;
-                saveViolaState();
-                updateProgressionUIState();
-            });
-        }
-
-        const playProgBtn = document.getElementById('btn-viola-play-progression');
-        if (playProgBtn) {
-            playProgBtn.addEventListener('click', () => {
-                playProgression();
-            });
-        }
-
-        // Metrônomo
-        document.getElementById('viola-bpm-slider').addEventListener('input', (e) => {
-            state.bpm = Math.max(40, Math.min(220, parseInt(e.target.value, 10) || 92));
-            saveViolaState();
-            renderMetronomeControls();
-        });
-
-        document.querySelectorAll('[data-bpm-delta]').forEach((btn) => {
+        const deltaBtns = document.querySelectorAll('[data-bpm-delta]');
+        deltaBtns.forEach((btn) => {
             btn.addEventListener('click', () => {
                 const delta = parseInt(btn.getAttribute('data-bpm-delta'), 10);
-                state.bpm = Math.max(40, Math.min(220, state.bpm + delta));
+                state.bpm = Math.max(40, Math.min(240, state.bpm + delta));
+                const bpmInput = document.getElementById('viola-bpm-slider');
+                if (bpmInput) bpmInput.value = state.bpm;
+                const disp = document.getElementById('viola-bpm-display');
+                if (disp) disp.textContent = state.bpm;
                 saveViolaState();
-                renderMetronomeControls();
             });
         });
 
-        document.getElementById('btn-viola-tap-tempo').addEventListener('click', () => {
-            const now = performance.now();
-            tapTimestamps = tapTimestamps.filter((t) => now - t < 3000);
-            tapTimestamps.push(now);
-            if (tapTimestamps.length >= 2) {
-                let sum = 0;
-                for (let i = 1; i < tapTimestamps.length; i++) {
-                    sum += tapTimestamps[i] - tapTimestamps[i - 1];
+        const tapTempoBtn = document.getElementById('btn-viola-tap-tempo');
+        if (tapTempoBtn) {
+            tapTempoBtn.addEventListener('click', () => {
+                const now = performance.now();
+                tapTimes.push(now);
+                if (tapTimes.length > 5) tapTimes.shift();
+                if (tapTimes.length > 1) {
+                    const diffs = [];
+                    for (let i = 1; i < tapTimes.length; i++) {
+                        diffs.push(tapTimes[i] - tapTimes[i - 1]);
+                    }
+                    const avgMs = diffs.reduce((a, b) => a + b, 0) / diffs.length;
+                    const calculatedBpm = Math.round(60000 / avgMs);
+                    if (calculatedBpm >= 40 && calculatedBpm <= 240) {
+                        state.bpm = calculatedBpm;
+                        const bpmInput = document.getElementById('viola-bpm-slider');
+                        if (bpmInput) bpmInput.value = state.bpm;
+                        const disp = document.getElementById('viola-bpm-display');
+                        if (disp) disp.textContent = state.bpm;
+                        saveViolaState();
+                    }
                 }
-                const avgMs = sum / (tapTimestamps.length - 1);
-                state.bpm = Math.max(40, Math.min(220, Math.round(60000 / avgMs)));
-                saveViolaState();
-                renderMetronomeControls();
-            }
-        });
+            });
+        }
 
         const metroSigEl = document.getElementById('viola-metro-sig');
         if (metroSigEl) {
@@ -13625,23 +15079,19 @@ function setupFoliaListeners() {
         const metroSubEl = document.getElementById('viola-metro-sub');
         if (metroSubEl) {
             metroSubEl.addEventListener('change', (e) => {
-                state.subdivision = parseInt(e.target.value, 10) || 2;
+                state.subdivision = parseInt(e.target.value, 10);
                 metroCurrentSubStep = 0;
                 saveViolaState();
                 renderMetronomeControls();
             });
         }
 
-        // Modos do Metrônomo: Ritmo Caipira vs Analítico
         const btnModeRhythm = document.getElementById('btn-viola-metro-mode-rhythm');
         const btnModeClick = document.getElementById('btn-viola-metro-mode-click');
         if (btnModeRhythm && btnModeClick) {
             btnModeRhythm.addEventListener('click', () => {
                 if (state.metroMode !== 'rhythm') {
                     state.metroMode = 'rhythm';
-                    const cur = CAIPIRA_RHYTHMS[state.activeRhythmId] || CAIPIRA_RHYTHMS.cururu;
-                    state.timeSignature = cur.timeSignature;
-                    state.subdivision = cur.subdivision;
                     metroCurrentSubStep = 0;
                     saveViolaState();
                     renderMetronomeControls();
@@ -13681,8 +15131,12 @@ function setupFoliaListeners() {
             });
         }
 
-        document.getElementById('btn-viola-metro-toggle').addEventListener('click', toggleMetronome);
+        const metroToggleBtn = document.getElementById('btn-viola-metro-toggle');
+        if (metroToggleBtn) {
+            metroToggleBtn.addEventListener('click', toggleMetronome);
+        }
     }
+
 
     function renderAll() {
         syncControlValues();
@@ -13700,6 +15154,7 @@ function setupFoliaListeners() {
         renderHistoricalTuningsSection();
         renderModulationSection();
         renderFoliaSection();
+        renderCapoDuoSection();
         renderMetronomeControls();
     }
 

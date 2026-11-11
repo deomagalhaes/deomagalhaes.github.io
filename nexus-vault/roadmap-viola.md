@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 13 — Simulador de Capotraste & Transposição Inteligente para Duplas
+## 🎯 Projeto Prioritário Atual: Fase 14 — Reconhecedor Auditivo Polifônico de Acordes por Microfone
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Matriz de tessitura vocal tradicional caipira (1ª e 2ª voz caipira em intervalos de terças e sextas), permitindo ao violeiro encontrar instantaneamente o tom ideal para a extensão dos cantadores da dupla.
-  2. Simulador gráfico de braçadeira móvel (capotraste da 1ª à 9ª casa) no braço SVG (Modo Canhoto e Destro), calculando em tempo real os acordes reais gerados a partir das posições relativas dos shapes no Cebolão em Mi, Rio Abaixo e Violão.
-  3. Matriz comparativa de transposição e equivalência harmônica entre afinações caipiras e o violão de acompanhamento, com dedilhado Web Audio demonstrativo e exportação direta para o Editor de Tablaturas.
+  1. Processamento de sinal de áudio em tempo real via Web Audio API (`AnalyserNode`) com algoritmos combinados de autocorrelação temporal (YIN) e transformada rápida de Fourier (FFT) para detecção polifônica de cordas feridas.
+  2. Identificação de frequências fundamentais simultâneas dos 5 pares da viola caipira e 6 cordas do violão, mapeando as notas para digitações físicas no braço virtual.
+  3. Feedback visual em tempo real no braço SVG espelhado (Canhoto e Destro), exibindo a dedução imediata do acorde com indicação de precisão em cents e sugestões de correção postural e dedilhado.
 
 ---
 
@@ -38,14 +38,35 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
    - Laboratório analítico e prático de transição tonal com 15 fórmulas canônicas (Dominantes Secundárias V7/X, Diminutos de Passagem ♯IV°, ♯I°, ♯II°, Empréstimo Modal ♭VI, ♭VII, iv e Subidas de Tom), simulador de pestanas móveis do estradão, calculadora de pontes harmônicas livres e sequenciador Web Audio API com sincronização no braço SVG canhoto/destro.
 10. **[x] Dicionário de Licks & Frases de Resposta de Folia de Reis (Fase 12 Concluída):**
     - Mapeamento sistemático de toques litúrgicos de devoção aos Três Santos Reis (Minas Gerais, Goiás e Vale do Paraíba), diálogos em terças e sextas entre Mestre e Contra-Mestre, contracantos de turina, batidas no tampo [TAP] e abafamentos [CHOCK], sequenciador Web Audio com filtro de voz e clonagem em 1 clique para o Editor de Tablaturas.
-11. **[ ] Simulador de Capotraste & Transposição Inteligente para Duplas (Fase 13):**
-    - Cálculo de tessitura de voz (1ª e 2ª voz caipira), posicionamento ideal de braçadeira móvel e visualização imediata da equivalência harmônica.
+11. **[x] Simulador de Capotraste & Transposição Inteligente para Duplas (Fase 13 Concluída):**
+    - Matriz de tessitura vocal caipira (1ª e 2ª voz), posicionamento paramétrico de braçadeira móvel da 1ª à 9ª casa no braço SVG canhoto/destro com zona inativa sombreada, equivalência harmônica Viola (Cebolão) ⟷ Violão, sintetizador multitrack com formantes vocais e exportação em 1 clique para o Editor de Tablaturas.
 12. **[ ] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14):**
     - Processamento de sinal com FFT e autocorrelação (YIN) para detecção de notas e digitações reais captadas ao vivo pelo microfone do violeiro com feedback imediato no braço SVG.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **11/11/2026 — Sessão 13** (Fase 13 Concluída):
+  - **Simulador de Capotraste & Transposição Inteligente para Duplas**:
+    - **Matriz de Tessitura Vocal e Perfis Tradicionais de Duplas Sertanejas (`VOCAL_DUO_PROFILES`)**:
+      - Modelagem minuciosa de 5 perfis canônicos: *Dupla Tradicional Caipira (Tenor Agudo & Barítono Canto Firme — Tião Carreiro & Pardinho, Tonico & Tinoco)*, *Dupla Sertaneja Clássica / Romântica (Tenor Dramático & Tenor Lírico — Milionário & José Rico, Chitãozinho & Xororó)*, *Dupla Caipira Feminina (Soprano & Contralto — Irmãs Galvão, Cascatinha & Inhana)*, *Dupla Mista Seresteira (Voz Feminina & Voz Masculina)* e *Violeiro Solista / Solo Instrumental*.
+      - Cálculo algorítmico de extensão em Hz e notas MIDI para 1ª e 2ª voz, zonas de conforto laríngeo, pontos de passaggio críticos e diagnósticos fisiológico-musicais automáticos (Zona Áurea, Extremo Agudo, Extremo Grave, Transição Tensa) com recomendações de ajuste de tonalidade e colocação de capotraste.
+    - **Braçadeira Física Móvel no Braço SVG Espelhado (Modo Canhoto & Destro)**:
+      - Renderização realista de capotraste da 1ª à 9ª casa com barra de alumínio escovado (`#violaCapoGrad`), borracha protetora, parafuso/rebite recartilhado em latão âmbar (`#d97706`), badge luminoso `CAPO {k}ª` e camada hachurada de bloqueio sonoro na zona inativa atrás da braçadeira (`#deadZonePattern`).
+      - Compatibilidade geométrica total com modo Canhoto nativo (pestana à direita, dead-zone à direita, clamp à esquerda do traste) e modo Destro (pestana à esquerda, dead-zone à esquerda, clamp à direita do traste).
+    - **Projeção de Acordes Relativos e Equivalência Harmônica Caipira (`displayMode: 'CAPO'`)**:
+      - Seleção paramétrica de shapes de mão da Viola (Shapes de E, A, D) e do Violão (Shapes de E, D, A, C, G) com dedução matemática em tempo real dos acordes reais gerados pelo Capo (I, IV, V7, vi, ii, iii).
+      - Identificação visual das cordas soltas no Capo (`0c (Capo)`) em âmbar luminoso, notas digitas presas em esmeralda vibrante e camada fantasma com os outros graus da progressão.
+    - **Matriz de Transposição Viola (Cebolão) ⟷ Violão de Acompanhamento**:
+      - Recomendações instantâneas em 1 clique ("Usar Capo 2 na Viola e Capo 2 no Violão", "Tocar Solto na Viola e Capo 4 no Violão"), resolvendo o eterno desafio de duplas de violeiro e violonista tocarem no mesmo tom sem choques de digitação ou cordas emboladas.
+    - **Sintetizador Polifônico Multitrack Web Audio API com Formantes Vocais**:
+      - Síntese acústica demonstrativa combinando arpejo da Viola Caipira com síntese de formantes para 1ª Voz (formante agudo e ressonância de máscara) e 2ª Voz (formante encorpado de peito).
+      - Filtro de escuta seletiva: *Dueto Completo (1ª + 2ª + Viola)*, *Só 1ª Voz*, *Só 2ª Voz*, *Só Viola*, além de controle de velocidade e repetição em loop contínuo.
+    - **Exportação Direta para o Editor de Tablaturas (Fase 7)**:
+      - Botão "Exportar para Editor de Tablaturas", gerando compassos editáveis com voicings relativos e notas reais mapeadas para estudo, reprodução no metrônomo e impressão/exportação em alta definição.
+    - **Desacoplamento Arquitetural de Controle**:
+      - Eliminação de listeners redundantes em `syncControlValues()`, criando a função canônica `bindEvents()` invocada uma única vez em `mountShell()` e centralização do silenciamento sonoro na rotina `stopAllAudio()` para todos os 11 subsistemas sonoros da Aba 3.
 
 - **10/11/2026 — Sessão 12** (Fase 12 Concluída):
   - **Dicionário de Licks & Frases de Resposta de Folia de Reis**:
