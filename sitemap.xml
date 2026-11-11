@@ -175,6 +175,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-da-fadiga-empatica-e-desgaste-por-compaixao.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-da-hipervigilancia-cronica-sensibilizacao-central.html</loc>
     <lastmod>2026-11-08</lastmod>
     <changefreq>monthly</changefreq>
@@ -841,6 +847,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/testes/teste-fadiga-empatica-contagio-emocional.html</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/testes/teste-fawning-apaziguamento-social.html</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
@@ -1401,6 +1413,12 @@
   <url>
     <loc>https://deomagalhaes.com.br/jogos/jogo-regulacao-emocional.html</loc>
     <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/jogos/jogo-ressonancia-empatica.html</loc>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

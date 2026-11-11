@@ -21,6 +21,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **11/11/2026** | **A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão** | [social/2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao.md](2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao.md) | ✅ Pronto para postar |
 | **11/11/2026** | **A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional** | [social/2026-11-11-neurobiologia-fenomeno-do-impostor.md](2026-11-11-neurobiologia-fenomeno-do-impostor.md) | ✅ Pronto para postar |
 | **10/11/2026** | **A Neurobiologia do Masking Social e do Burnout Neurodivergente** | [social/2026-11-10-neurobiologia-masking-burnout-neurodivergente.md](2026-11-10-neurobiologia-masking-burnout-neurodivergente.md) | ✅ Pronto para postar |
 | **10/11/2026** | **A Neurobiologia do Fawning e o Apaziguamento Social Compulsivo** | [social/2026-11-10-neurobiologia-fawning-apaziguamento-social.md](2026-11-10-neurobiologia-fawning-apaziguamento-social.md) | ✅ Pronto para postar |

@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Pode Esgotar Seu Cérebro** (Publicado em 11/11/2026)
 - [x] **A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso** (Publicado em 11/11/2026)
 - [x] **A Neurobiologia do Masking Social e do Burnout Neurodivergente: O Custo Metabólico e Cognitivo da Camuflagem no TEA e TDAH** (Publicado em 10/11/2026)
 - [x] **A Neurobiologia da Resposta de Fawning e o Apaziguamento Social Compulsivo: Como o Trauma Transforma a Agradabilidade em Mecanismo de Sobrevivência** (Publicado em 10/11/2026)

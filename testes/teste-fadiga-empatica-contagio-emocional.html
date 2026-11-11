@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Fadiga Empática e Contágio Emocional (EFE-CE / T-43) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seus níveis de contágio emocional, dor vicária na ínsula, sobrecarga alostática do cuidador e capacidade de compaixão proativa com a escala EFE-CE / T-43.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 10px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-size: 1.02em;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #005f73;
+            color: #ffffff;
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #475569;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin: 0;
+            accent-color: #005f73;
+        }
+
+        .option-label.selected {
+            background: #e6f2f4;
+            border-color: #0a9396;
+            color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-submit-quiz {
+            display: block;
+            width: 100%;
+            max-width: 320px;
+            margin: 35px auto 10px auto;
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.3);
+        }
+
+        .btn-submit-quiz:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(10, 147, 150, 0.35);
+        }
+
+        /* Painel de Resultados */
+        .results-panel {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin-top: 35px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.09);
+        }
+
+        .overall-score-card {
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 26px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .score-pill {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .score-number {
+            font-size: 3em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 8px 0;
+            line-height: 1;
+        }
+
+        .score-sublabel {
+            color: #64748b;
+            font-size: 0.9em;
+        }
+
+        .badge-otimo { background: #dcfce7; color: #166534; }
+        .badge-moderado { background: #fef3c7; color: #92400e; }
+        .badge-elevado { background: #fee2e2; color: #991b1b; }
+        .badge-severo { background: #450a0a; color: #fecaca; }
+
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .dimension-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .dimension-card h4 {
+            margin: 0 0 6px 0;
+            color: #005f73;
+            font-size: 1em;
+        }
+
+        .dimension-bar-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .dimension-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.8s ease;
+        }
+
+        .clinical-analysis-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 25px;
+        }
+
+        .clinical-analysis-box h3 {
+            color: #166534;
+            margin-top: 0;
+        }
+
+        .clinical-analysis-box ul {
+            margin: 10px 0 0 20px;
+            padding: 0;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .btn-action-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+
+        .btn-action-primary {
+            background: #005f73;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95em;
+            transition: background 0.2s ease;
+        }
+
+        .btn-action-primary:hover {
+            background: #0a9396;
+        }
+
+        .btn-action-secondary {
+            background: #ffffff;
+            color: #005f73;
+            border: 1px solid #005f73;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-secondary:hover {
+            background: #f1f5f9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Fadiga Empática e Contágio Emocional (EFE-CE / T-43)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Publicado em 11 de Novembro, 2026</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Apresentação Clínica do Instrumento:</strong> A Escala EFE-CE (T-43) foi desenvolvida para mapear o impacto do estresse vicário no sistema nervoso de profissionais de cuidado, terapeutas, líderes e indivíduos hiper-empáticos. Fundamentada nas investigações de neuroimagem de Tania Singer e Olga Klimecki sobre a distinção neural entre Empatia (dor vicária na ínsula anterior/dACC) e Compaixão (afiliação no vmPFC e estriado ventral), bem como no modelo de fadiga por compaixão de Charles Figley e Bruce McEwen.</p>
+                <p><strong>Instruções de Preenchimento:</strong> Indique com que frequência você vivenciou cada uma das 16 situações nos últimos 30 dias. O cálculo é <strong>100% privado e client-side</strong> (nenhuma resposta é enviada para servidores externos).</p>
+            </div>
+
+            <div class="quiz-container">
+                <form id="efeceForm">
+
+                    <!-- Dimensão 1: Contágio Afetivo & Dor Vicária -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Contágio Afetivo & Dor Vicária (CADV)</h3>
+                        <p>Tendência involuntária a absorver o sofrimento alheio como dor visceral e tensão corporal própria.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">01</span> Quando vejo alguém que estimo sofrendo ou chorando, sinto um aperto físico no peito ou estômago, como se o problema estivesse acontecendo diretamente comigo.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q1" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">02</span> Fico revivendo mentalmente os relatos difíceis ou os problemas que ouvi de outras pessoas horas ou dias após a conversa ter acabado.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q2" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">03</span> Tenho dificuldade em diferenciar onde termina a minha angústia e onde começa o sofrimento da pessoa com quem convivo ou atendo.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q3" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">04</span> Notícias pesadas, tragédias coletivas ou histórias de violência afetam meu humor e minha disposição física por períodos prolongados.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q4" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2: Esgotamento Relacional & Sobrecarga Alostática -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Esgotamento Relacional & Sobrecarga Alostática (ERSA)</h3>
+                        <p>Depleção bioenergética, cansaço físico residual e sensação de dreno após exercer suporte emocional.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">05</span> Ao final do dia, sinto que minha energia vital foi completamente drenada pelas demandas emocionais de outras pessoas.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q5" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">06</span> Mesmo após uma noite de sono, acordo sentindo um peso muscular ou esgotamento quando sei que terei que lidar com crises alheias.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q6" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">07</span> Sinto uma vontade compulsiva de me isolar em um quarto escuro e em silêncio absoluto para evitar qualquer contato interpessoal.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q7" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">08</span> Percebo sintomas físicos de estresse (tensão cervical, dor de cabeça, palpitações) diretamente associados ao papel de cuidador ou ouvinte.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q8" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3: Entorpecimento Emocional Defensivo & Despersonalização -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Entorpecimento Emocional Defensivo & Despersonalização (EEDD)</h3>
+                        <p>Hipoativação protetora, perda de empatia espontânea e tendência ao cinismo defensivo diante da dor alheia.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">09</span> Percebo que me tornei mais "anestesiado" ou frio diante de pessoas desabafando comigo, como se eu não conseguisse mais me importar.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q9" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">10</span> Sinto uma irritação ou impaciência interna involuntária quando alguém começa a relatar um drama pessoal ou uma dificuldade.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q10" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">11</span> Flagro-me agindo de maneira mecânica e burocrática ao oferecer suporte, sem presença emocional genuína.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q11" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">12</span> Sinto culpa retrospectiva ao perceber que perdi a capacidade de me comover como me comovia antes.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q12" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4: Preservação de Limites & Compaixão Proativa -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Falha na Preservação de Limites & Compaixão Proativa (FPLC)</h3>
+                        <p>Dificuldade em ancorar o Self, dizer não a sobrecargas alheias e converter a dor em ação lúcida sem autoflagelo.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">13</span> Sinto remorso ou ansiedade extrema quando recuso pedidos de ajuda, mesmo quando meu corpo está no limite da exaustão.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q13" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">14</span> Costumo colocar as urgências e crises emocionais de outras pessoas sistematicamente à frente do meu próprio sono, alimentação ou descanso.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q14" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">15</span> Em vez de pensar em formas objetivas de amparo, fico paralisado pelo sofrimento alheio, sentindo-me impotente e desamparado.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q15" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">16</span> Tenho grande dificuldade em praticar rituais de descompressão ou relaxar sem a sensação de estar abandonando quem precisa de mim.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required> Raramente / Nunca (1)</label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"> Ocasionalmente (2)</label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"> Moderadamente (3)</label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"> Frequentemente (4)</label>
+                            <label class="option-label"><input type="radio" name="q16" value="5"> Quase Sempre (5)</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit-quiz">Calcular Devolutiva Neuroclínica</button>
+                </form>
+
+                <!-- Painel de Resultados -->
+                <div class="results-panel" id="resultsPanel">
+                    <div class="overall-score-card">
+                        <span class="score-pill" id="scorePill">Calculando...</span>
+                        <div class="score-number" id="scoreNumber">-- / 80</div>
+                        <div class="score-sublabel" id="scoreTitle">Índice Global de Fadiga Empática</div>
+                    </div>
+
+                    <h3>Perfil Dimensional Neuroafetivo</h3>
+                    <p style="color: #64748b; font-size: 0.9em; margin-top: -8px;">Mapeamento das 4 vias de desgaste e regulação do cuidador:</p>
+
+                    <div class="dimension-grid">
+                        <div class="dimension-card">
+                            <h4>1. Contágio & Dor Vicária (CADV)</h4>
+                            <div class="dimension-bar-track">
+                                <div class="dimension-bar-fill" id="barCADV" style="width: 0%; background: #005f73;"></div>
+                            </div>
+                            <small id="textCADV" style="color: #64748b; font-weight: 600;">Pontuação: -- / 20</small>
+                        </div>
+
+                        <div class="dimension-card">
+                            <h4>2. Esgotamento Relacional (ERSA)</h4>
+                            <div class="dimension-bar-track">
+                                <div class="dimension-bar-fill" id="barERSA" style="width: 0%; background: #0a9396;"></div>
+                            </div>
+                            <small id="textERSA" style="color: #64748b; font-weight: 600;">Pontuação: -- / 20</small>
+                        </div>
+
+                        <div class="dimension-card">
+                            <h4>3. Entorpecimento & Cinismo (EEDD)</h4>
+                            <div class="dimension-bar-track">
+                                <div class="dimension-bar-fill" id="barEEDD" style="width: 0%; background: #ee9b00;"></div>
+                            </div>
+                            <small id="textEEDD" style="color: #64748b; font-weight: 600;">Pontuação: -- / 20</small>
+                        </div>
+
+                        <div class="dimension-card">
+                            <h4>4. Falha de Limites & Proatividade (FPLC)</h4>
+                            <div class="dimension-bar-track">
+                                <div class="dimension-bar-fill" id="barFPLC" style="width: 0%; background: #ca6702;"></div>
+                            </div>
+                            <small id="textFPLC" style="color: #64748b; font-weight: 600;">Pontuação: -- / 20</small>
+                        </div>
+                    </div>
+
+                    <div class="clinical-analysis-box" id="clinicalBox">
+                        <h3 id="clinicalTitle">Devolutiva Neuropsicológica</h3>
+                        <p id="clinicalDesc">--</p>
+                        <h4>Diretrizes Clínicas Recomendadas:</h4>
+                        <ul id="clinicalGuidelines">
+                            <li>Carregando...</li>
+                        </ul>
+                    </div>
+
+                    <div class="btn-action-group">
+                        <a href="/artigos/a-neurobiologia-da-fadiga-empatica-e-desgaste-por-compaixao.html" class="btn-action-secondary">Ler Ensaio Científico Completo</a>
+                        <a href="/agendamento.html" class="btn-action-primary">Agendar Consulta com Deo Magalhães</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        document.querySelectorAll('.option-label').forEach(label => {
+            label.addEventListener('click', function() {
+                const groupName = this.querySelector('input').name;
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(inp => {
+                    inp.closest('.option-label').classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        document.getElementById('efeceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let cadv = 0, ersa = 0, eedd = 0, fplc = 0;
+
+            for (let i = 1; i <= 4; i++) {
+                const val = document.querySelector(`input[name="q${i}"]:checked`);
+                if (val) cadv += parseInt(val.value);
+            }
+            for (let i = 5; i <= 8; i++) {
+                const val = document.querySelector(`input[name="q${i}"]:checked`);
+                if (val) ersa += parseInt(val.value);
+            }
+            for (let i = 9; i <= 12; i++) {
+                const val = document.querySelector(`input[name="q${i}"]:checked`);
+                if (val) eedd += parseInt(val.value);
+            }
+            for (let i = 13; i <= 16; i++) {
+                const val = document.querySelector(`input[name="q${i}"]:checked`);
+                if (val) fplc += parseInt(val.value);
+            }
+
+            const total = cadv + ersa + eedd + fplc;
+
+            // Painel
+            const resultsPanel = document.getElementById('resultsPanel');
+            const scorePill = document.getElementById('scorePill');
+            const scoreNumber = document.getElementById('scoreNumber');
+            const scoreTitle = document.getElementById('scoreTitle');
+
+            scoreNumber.textContent = `${total} / 80`;
+
+            // Dimensões
+            document.getElementById('barCADV').style.width = `${(cadv / 20) * 100}%`;
+            document.getElementById('textCADV').textContent = `Pontuação: ${cadv} / 20 (${Math.round((cadv / 20) * 100)}%)`;
+
+            document.getElementById('barERSA').style.width = `${(ersa / 20) * 100}%`;
+            document.getElementById('textERSA').textContent = `Pontuação: ${ersa} / 20 (${Math.round((ersa / 20) * 100)}%)`;
+
+            document.getElementById('barEEDD').style.width = `${(eedd / 20) * 100}%`;
+            document.getElementById('textEEDD').textContent = `Pontuação: ${eedd} / 20 (${Math.round((eedd / 20) * 100)}%)`;
+
+            document.getElementById('barFPLC').style.width = `${(fplc / 20) * 100}%`;
+            document.getElementById('textFPLC').textContent = `Pontuação: ${fplc} / 20 (${Math.round((fplc / 20) * 100)}%)`;
+
+            const clinicalTitle = document.getElementById('clinicalTitle');
+            const clinicalDesc = document.getElementById('clinicalDesc');
+            const clinicalGuidelines = document.getElementById('clinicalGuidelines');
+            const clinicalBox = document.getElementById('clinicalBox');
+
+            if (total <= 32) {
+                scorePill.className = 'score-pill badge-otimo';
+                scorePill.textContent = 'Resiliência Compassiva Preservada';
+                scoreTitle.textContent = 'Baixo Risco de Desgaste Empático';
+                clinicalBox.style.borderLeftColor = '#16a34a';
+                clinicalBox.style.background = '#f0fdf4';
+                clinicalTitle.style.color = '#166534';
+                clinicalTitle.textContent = 'Devolutiva: Fronteiras Saudáveis e Equilíbrio Neural';
+                clinicalDesc.textContent = 'Seu perfil indica excelente discriminação entre o Self e o Outro. Você consegue testemunhar e amparar o sofrimento alheio sem permitir que a dor vicária colonize seu sistema interoceptivo (ínsula) ou esgote sua reserva alostática.';
+                clinicalGuidelines.innerHTML = `
+                    <li><strong>Manutenção de Práticas Atuais:</strong> Continue preservando seus rituais de descanso e descompressão entre os ciclos de trabalho e vida pessoal.</li>
+                    <li><strong>Compaixão Consciente:</strong> Permaneça ancorando a atitude benevolente sem assumir para si a responsabilidade ontológica pelo alívio total do outro.</li>
+                    <li><strong>Vigilância Preventiva:</strong> Em períodos de sobrecarga imprevista, monitore a primeira manifestação de aperto somático no corpo.</li>
+                `;
+            } else if (total <= 48) {
+                scorePill.className = 'score-pill badge-moderado';
+                scorePill.textContent = 'Alerta de Contágio Emocional';
+                scoreTitle.textContent = 'Desgaste Empático em Nível Moderado';
+                clinicalBox.style.borderLeftColor = '#ca6702';
+                clinicalBox.style.background = '#fffbeb';
+                clinicalTitle.style.color = '#92400e';
+                clinicalTitle.textContent = 'Devolutiva: Sobrecarga Vicária Incipiente';
+                clinicalDesc.textContent = 'Seu sistema nervoso está começando a pagar a taxa do espelhamento doloroso. Há momentos em que você absorve o cortisol e a ansiedade alheia, manifestando cansaço residual e início de esgotamento ao final de dias de alta demanda relacional.';
+                clinicalGuidelines.innerHTML = `
+                    <li><strong>Treino de Diferenciação Eu-Outro:</strong> Ao acolher desabafos, ative voluntariamente a ancoragem sensorial corporal (pés no chão, ritmo respiratório) para não fundir sua identidade com a crise.</li>
+                    <li><strong>Transição da Dor para a Agência:</strong> Redirecione a dor passiva para a pergunta objetiva: "O que posso fazer agora com clareza técnica e humana, sem me sacrificar?".</li>
+                    <li><strong>Blindagem de Janelas de Descompressão:</strong> Não consulte mensagens de clientes ou pessoas em crise nos seus momentos de refeição ou pré-sono.</li>
+                `;
+            } else if (total <= 64) {
+                scorePill.className = 'score-pill badge-elevado';
+                scorePill.textContent = 'Fadiga Empática Elevada';
+                scoreTitle.textContent = 'Risco Iminente de Colapso do Cuidador';
+                clinicalBox.style.borderLeftColor = '#dc2626';
+                clinicalBox.style.background = '#fef2f2';
+                clinicalTitle.style.color = '#991b1b';
+                clinicalTitle.textContent = 'Devolutiva: Carga Alostática Significativa e Anestesia Defensiva';
+                clinicalDesc.textContent = 'Você se encontra em estado clássico de fadiga empática. Seu encéfalo está saturado de dor vicária, e você já pode estar experimentando mecanismos de defesa protetores como entorpecimento emocional, culpa retrospectiva e exaustão física profunda.';
+                clinicalGuidelines.innerHTML = `
+                    <li><strong>Intervenção Clínica Estruturada:</strong> Recomendada psicoterapia focal e avaliação neuropsicológica para recalibrar o limiar de tolerância ao estresse vicário.</li>
+                    <li><strong>Reeducação da Compaixão:</strong> Migrar urgentemente da rede empática (dor na ínsula) para a rede compassiva (ocitocina/dopamina no vmPFC).</li>
+                    <li><strong>Imposição Rígida de Limites:</strong> Aprender a dizer não sem remorso existencial; o cuidador esgotado é biologicamente incapaz de oferecer ajuda de qualidade.</li>
+                `;
+            } else {
+                scorePill.className = 'score-pill badge-severo';
+                scorePill.textContent = 'Sobrecarga Severa / Despersonalização';
+                scoreTitle.textContent = 'Esgotamento Extremo do Sistema de Cuidado';
+                clinicalBox.style.borderLeftColor = '#7f1d1d';
+                clinicalBox.style.background = '#fdf2f8';
+                clinicalTitle.style.color = '#7f1d1d';
+                clinicalTitle.textContent = 'Devolutiva: Colapso Alostático e Desvitalização Crítica';
+                clinicalDesc.textContent = 'Seu perfil indica esgotamento severo por exposição contínua ao sofrimento sem mecanismos regulatórios. O sistema nervoso entrou em modo de desligamento defensivo (despersonalização, cinismo protetor e exaustão moral). É prioritário cessar a sobrecarga para recuperação fisiológica.';
+                clinicalGuidelines.innerHTML = `
+                    <li><strong>Afastamento e Repouso Reparador:</strong> Urgência em estabelecer pausas imediatas e interrupção temporária de novas demandas de escuta.</li>
+                    <li><strong>Acompanhamento Neuropsicológico e Médico:</strong> Investigar disautonomia, esgotamento do eixo HPA e alterações do sono com profissional habilitado.</li>
+                    <li><strong>Restauração da Janela de Tolerância:</strong> Práticas somáticas de estimulação do nervo vago e desativação do alarme da amígdala.</li>
+                `;
+            }
+
+            resultsPanel.style.display = 'block';
+            resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

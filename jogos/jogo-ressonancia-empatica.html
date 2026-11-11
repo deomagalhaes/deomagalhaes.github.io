@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 42: Matriz de Ressonância Empática e Calibração Afetiva – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para calibrar a empatia e a compaixão proativa, proteger a ínsula anterior contra a dor vicária e prevenir o burnout do cuidador com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .gauges-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .gauge-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .gauge-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .gauge-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .fill-reserva { background: #005f73; }
+        .fill-insula { background: #ee9b00; }
+        .fill-compaixao { background: #0a9396; }
+
+        /* Card do Desafio / Cenário */
+        .scenario-box {
+            background: #ffffff;
+            border: 2px solid #005f73;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .scenario-title {
+            color: #001219;
+            font-size: 1.35em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .scenario-desc {
+            color: #475569;
+            font-size: 0.98em;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .trigger-box {
+            background: #fffbeb;
+            border-left: 4px solid #ee9b00;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+
+        .options-title {
+            font-size: 0.92em;
+            font-weight: 700;
+            color: #005f73;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+        }
+
+        .tactics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tactic-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 14px 18px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .tactic-btn:hover {
+            background: #e6f2f4;
+            border-color: #0a9396;
+            transform: translateX(4px);
+        }
+
+        .tactic-letter {
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.85em;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tactic-title {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.96em;
+            margin-bottom: 3px;
+        }
+
+        .tactic-desc {
+            font-size: 0.88em;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        /* Feedback da Rodada */
+        .feedback-box {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-optimal {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .feedback-suboptimal {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .feedback-contagion {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+
+        .feedback-header {
+            font-weight: 800;
+            font-size: 1.05em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-body {
+            font-size: 0.92em;
+            line-height: 1.55;
+            margin-bottom: 15px;
+        }
+
+        .btn-next-round {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.92em;
+            transition: background 0.2s ease;
+        }
+
+        .btn-next-round:hover {
+            background: #0a9396;
+        }
+
+        /* Painel Final */
+        .game-over-panel {
+            display: none;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #cbd5e1;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .game-over-panel h2 {
+            color: #005f73;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+
+        .final-score-callout {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #0a9396;
+            margin: 12px 0;
+        }
+
+        .btn-restart {
+            background: #005f73;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1em;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 15px;
+        }
+
+        .btn-restart:hover {
+            background: #0a9396;
+        }
+
+        .sound-toggle-btn {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #475569;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-toggle-btn:hover {
+            background: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 42: Matriz de Ressonância Empática e Calibração Afetiva</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Publicado em 11 de Novembro, 2026</p>
+            </header>
+
+            <div class="game-wrapper">
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Rodada</span>
+                        <span class="stat-value" id="currentRoundDisplay">1 / 8</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Reserva do Cuidador</span>
+                        <span class="stat-value" id="statReserva">60%</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Recorde Pessoal</span>
+                        <span class="stat-value" id="statBest">--</span>
+                    </div>
+                    <div>
+                        <button id="soundToggle" class="sound-toggle-btn" onclick="toggleMute()">
+                            <span id="soundIcon">🔊</span> Som Ativo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel de Medidores ao Vivo -->
+                <div class="gauges-container">
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Reserva Alostática (vmPFC)</span>
+                            <span id="labelReserva">60%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div id="barReserva" class="gauge-fill fill-reserva" style="width: 60%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Dor Vicária (Ínsula / dACC)</span>
+                            <span id="labelInsula">40%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div id="barInsula" class="gauge-fill fill-insula" style="width: 40%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Compaixão Ativa (Estriado / VTA)</span>
+                            <span id="labelCompaixao">40%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div id="barCompaixao" class="gauge-fill fill-compaixao" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box do Cenário Atual -->
+                <div class="scenario-box" id="scenarioContainer">
+                    <span class="scenario-tag" id="scenarioCategory">Cenário 01</span>
+                    <h3 class="scenario-title" id="scenarioTitle">Carregando cenário...</h3>
+                    <p class="scenario-desc" id="scenarioDesc">Descrição do desafio.</p>
+                    
+                    <div class="trigger-box">
+                        <strong>⚠️ Gatilho de Contágio Emocional:</strong>
+                        <span id="triggerText">"O sofrimento é tão intenso que você sente um nó na garganta e vontade de absorver toda a dor para si."</span>
+                    </div>
+
+                    <div class="options-title">Selecione sua Resposta Neurocognitiva de Calibração:</div>
+                    <div class="tactics-grid" id="tacticsGrid">
+                        <!-- Injetado via JS -->
+                    </div>
+
+                    <div class="feedback-box" id="feedbackBox">
+                        <div class="feedback-header" id="feedbackHeader">
+                            <span id="feedbackIcon">💡</span>
+                            <span id="feedbackTitle">Resultado da Calibração</span>
+                        </div>
+                        <div class="feedback-body" id="feedbackBody"></div>
+                        <button class="btn-next-round" id="btnNextRound" onclick="nextRound()">Avançar para a Próxima Rodada →</button>
+                    </div>
+                </div>
+
+                <!-- Painel Final de Conclusão -->
+                <div class="game-over-panel" id="gameOverPanel">
+                    <h2>Sessão de Calibração Concluída!</h2>
+                    <p>Você completou as 8 rodadas de diferenciação neuroafetiva entre Dor Vicária e Compaixão Proativa.</p>
+                    <div class="final-score-callout" id="finalScoreDisplay">92%</div>
+                    <p id="finalFeedbackText" style="max-width: 600px; margin: 0 auto 20px auto; color: #475569; line-height: 1.6;"></p>
+                    
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn-restart" onclick="restartGame()">Treinar Novamente</button>
+                        <a href="/artigos/a-neurobiologia-da-fadiga-empatica-e-desgaste-por-compaixao.html" class="btn-restart" style="background: #0a9396; text-decoration: none; display: inline-block;">Ler Artigo Completo</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box Psicoeducativo Explicativo -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-top: 30px; text-align: left;">
+                <h3 style="color: #005f73; margin-top: 0;">Fundamentação Neuropsicológica: Empatia vs. Compaixão</h3>
+                <p style="color: #475569; line-height: 1.6; font-size: 0.95em;">
+                    Investigações conduzidas por Tania Singer no Instituto Max Planck demonstram que a <strong>empatia afetiva crua</strong> ativa a matriz da dor (ínsula anterior e dACC), reproduzindo a angústia vicária e drenando a reserva alostática do cuidador. Em contrapartida, a <strong>compaixão proativa</strong> mobiliza o córtex pré-frontal ventromedial (vmPFC) e o estriado ventral através da ocitocina e da dopamina, gerando afeto caloroso, agência e resiliência biológica sustentável.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        // Sistema Web Audio API Procedural
+        let audioCtx = null;
+        let isMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('soundIcon').textContent = isMuted ? '🔇' : '🔊';
+            document.getElementById('soundToggle').innerHTML = isMuted ? '<span id="soundIcon">🔇</span> Som Mudo' : '<span id="soundIcon">🔊</span> Som Ativo';
+        }
+
+        function playClickSound() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.09);
+            } catch (e) {}
+        }
+
+        function playOptimalChord() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                // Acorde harmonioso quente e afiliavo (Fá maior com 9ª - aconchegante)
+                const freqs = [349.23, 440.00, 523.25, 659.25];
+                freqs.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.07, ctx.currentTime + (idx * 0.03));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.03));
+                    osc.stop(ctx.currentTime + 0.46);
+                });
+            } catch (e) {}
+        }
+
+        function playContagionAlert() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(140, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(95, ctx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.26);
+            } catch (e) {}
+        }
+
+        function playVictoryFanfare() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [392.00, 523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + (i * 0.09));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.09) + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (i * 0.09));
+                    osc.stop(ctx.currentTime + (i * 0.09) + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        // Cenários Clínicos Interativos Determinísticos (8 Rodadas)
+        const SCENARIOS = [
+            {
+                tag: "Cenário 01 • Atendimento / Escuta Afetiva",
+                title: "Desabafo de Choro Inconsolável",
+                desc: "Uma pessoa muito próxima ou um paciente desaba em pranto inconsolável relatando uma perda catastrófica e diz que a vida perdeu o sentido.",
+                trigger: "\"O desespero dela invade seu peito com um aperto visceral imediato. Você sente que precisa chorar junto para provar que se importa.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Contágio Empático Desregulado (Absorção)",
+                        desc: "Permita que o desespero dela tome conta de você, chore junto até a desestabilização e sinta que a dor dela agora é sua responsabilidade.",
+                        type: "contagion",
+                        reservaDelta: -20,
+                        insulaDelta: +25,
+                        compaixaoDelta: -10,
+                        header: "Sobrecarga de Dor Vicária!",
+                        body: "A ínsula anterior e o dACC foram hiperativados. Você se fundiu à dor alheia, perdendo a lucidez executiva para oferecer suporte real e elevando o cortisol."
+                    },
+                    {
+                        letter: "B",
+                        title: "Diferenciação Somática & Compaixão Proativa (Ótima)",
+                        desc: "Sinta os pés firmes no chão, respire ritmadamente, valide o sofrimento da pessoa com acolhimento caloroso e ofereça presença atenta e segura.",
+                        type: "optimal",
+                        reservaDelta: +10,
+                        insulaDelta: -15,
+                        compaixaoDelta: +20,
+                        header: "Calibração Compassiva Perfeita (vmPFC & Ocitocina)",
+                        body: "Você manteve a distinção Eu-Outro na junção temporoparietal. Ao oferecer um porto seguro sem naufragar junto, seu cérebro liberou ocitocina e preservou a energia do cuidador."
+                    },
+                    {
+                        letter: "C",
+                        title: "Entorpecimento Defensivo (Frieza)",
+                        desc: "Mude de assunto bruscamente ou dê um conselho racional frio para interromper o choro e escapar do desconforto.",
+                        type: "suboptimal",
+                        reservaDelta: -5,
+                        insulaDelta: -10,
+                        compaixaoDelta: -15,
+                        header: "Anestesia Relacional Protetora",
+                        body: "Você evitou o contágio imediato, mas à custa da desconexão afetiva e do início de cinismo protetor, o que fragiliza o vínculo e induz culpa posterior."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 02 • Limites Interpessoais",
+                title: "Chamada de Urgência em Horário de Descanso",
+                desc: "No domingo à noite, quando você se preparava para dormir, recebe uma mensagem longa de alguém exigindo suporte emocional imediato por uma crise recorrente.",
+                trigger: "\"A culpa morde seu córtex cingulado: se você não responder agora, você se sente um monstro egoísta.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Filtro Autonômico com Acolhimento Estruturado (Ótima)",
+                        desc: "Responda com brevidade e gentileza: valide que compreende a gravidade, assegure afeto e agende um horário estruturado na manhã seguinte para conversar com dedicação.",
+                        type: "optimal",
+                        reservaDelta: +15,
+                        insulaDelta: -15,
+                        compaixaoDelta: +15,
+                        header: "Fronteira Saudável Ancorada!",
+                        body: "Você protegeu seu sono e sua homeostase biológica sem abandonar a relação. O córtex pré-frontal regulou o alarme de fawning e sustentou a agência."
+                    },
+                    {
+                        letter: "B",
+                        title: "Autoanulação por Fawning",
+                        desc: "Passe três horas da madrugada no telefone ouvindo desabafos, sacrificando o descanso do início da sua semana de trabalho.",
+                        type: "contagion",
+                        reservaDelta: -25,
+                        insulaDelta: +20,
+                        compaixaoDelta: -5,
+                        header: "Dreno Bioenergético Crítico!",
+                        body: "A submissão ao contágio alheio violou seus limites alostáticos. Você começará a semana em depleção de recursos, com alta probabilidade de irritabilidade e fadiga."
+                    },
+                    {
+                        letter: "C",
+                        title: "Ignorar com Culpa Paralisante",
+                        desc: "Silencie o celular sem avisar, mas passe a noite rolando na cama ruminando se a pessoa fará alguma besteira.",
+                        type: "suboptimal",
+                        reservaDelta: -10,
+                        insulaDelta: +10,
+                        compaixaoDelta: -10,
+                        header: "Ruminação e Resíduo de Atenção",
+                        body: "Você não atendeu fisicamente, mas sua mente permaneceu refém da ansiedade vicária. O dACC não descansou e a qualidade do sono foi prejudicada."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 03 • Exposição a Relatos Traumáticos",
+                title: "Testemunho de Violência ou Abuso Pretérito",
+                desc: "Um colega ou cliente relata detalhes viscerais de uma vivência traumática violenta que sofreu na infância.",
+                trigger: "\"Sua mente visualiza imagens vívidas do ocorrido e sua respiração fica curta e superficial.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Dissociação e Sobrecarga Vicária",
+                        desc: "Deixe sua mente absorver as imagens como se estivesse revivendo a violência no próprio corpo, sentindo náusea e tontura.",
+                        type: "contagion",
+                        reservaDelta: -25,
+                        insulaDelta: +30,
+                        compaixaoDelta: -10,
+                        header: "Estresse Traumático Secundário!",
+                        body: "A sobrecarga da rede espelho deflagrou trauma vicário. O eixo HPA disparou como se a ameaça estivesse presente na sala agora."
+                    },
+                    {
+                        letter: "B",
+                        title: "Ancoragem do Testemunho Compassivo (Ótima)",
+                        desc: "Exale longamente para ativar o nervo vago. Mantenha os olhos suaves, afirme o espaço seguro no presente e ofereça validação da bravura e sobrevivência da pessoa.",
+                        type: "optimal",
+                        reservaDelta: +10,
+                        insulaDelta: -20,
+                        compaixaoDelta: +20,
+                        header: "Testemunho Lúcido e Reparador!",
+                        body: "Ao manter-se firme no tempo presente, você amortece o trauma do outro em vez de reverberá-lo. O circuito de apego seguro é ativado."
+                    },
+                    {
+                        letter: "C",
+                        title: "Intelectualização Rígida",
+                        desc: "Trate o relato como um caso puramente técnico de manual, analisando termos abstratos e sem demonstrar qualquer emoção humana.",
+                        type: "suboptimal",
+                        reservaDelta: 0,
+                        insulaDelta: -10,
+                        compaixaoDelta: -15,
+                        header: "Mecanismo Defensivo Rígido",
+                        body: "A intelectualização protegeu temporariamente a ínsula, mas o outro sentiu a frieza relacional, enfraquecendo a aliança de cuidado."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 04 • Dinâmica Familiar",
+                title: "Clamor por Intermediação em Briga Familiar",
+                desc: "Parentes em conflito procuram você para 'tomar partido' e desabafar acusações inflamadas de lado a lado.",
+                trigger: "\"Ambos exigem que você sinta a raiva deles e valide sua indignação contra o outro.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Posicionamento Descentralizado e Firme (Ótima)",
+                        desc: "Recuse o papel de juiz emocional: afirme seu amor por ambos, decline absorver rancores cruzados e proponha que conversem diretamente com mediação profissional se desejarem.",
+                        type: "optimal",
+                        reservaDelta: +15,
+                        insulaDelta: -15,
+                        compaixaoDelta: +15,
+                        header: "Diferenciação Sistêmica do Self!",
+                        body: "Você rompeu a triangulação familiar disfuncional. O vmPFC exerceu controle inibitório sobre o impulso de apaziguamento cego."
+                    },
+                    {
+                        letter: "B",
+                        title: "Absorção dos Rancores Cruzados",
+                        desc: "Ouça horas de fofocas e acusações de cada parte, acumulando a raiva de um e a amargura do outro no seu estômago.",
+                        type: "contagion",
+                        reservaDelta: -20,
+                        insulaDelta: +25,
+                        compaixaoDelta: -10,
+                        header: "Intoxicação Sistêmica!",
+                        body: "Você se tornou a lixeira afetiva do sistema familiar. O cortisol crônico se acumula e seu corpo manifestará tensão e cefaleia."
+                    },
+                    {
+                        letter: "C",
+                        title: "Explosão Reativa de Impaciência",
+                        desc: "Grite com os dois mandando todos calarem a boca e suma por semanas sem dar explicações.",
+                        type: "suboptimal",
+                        reservaDelta: -10,
+                        insulaDelta: +15,
+                        compaixaoDelta: -20,
+                        header: "Desregulação Reativa da Amígdala",
+                        body: "O colapso da sua janela de tolerância gerou ataque reativo, alimentando a espiral de culpa e drama relacional."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 05 • Hiperconexão & Mídia",
+                title: "Enxurrada de Catástrofes nas Redes Sociais",
+                desc: "Você abre o aplicativo e é bombardeado por vídeos de guerras, acidentes e injustiças revoltantes em sequência ininterrupta.",
+                trigger: "\"O cérebro primitivo interpreta o feed como ameaça iminente à sua tribo local, gerando sensação de impotência esmagadora.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Higiene Atencional & Agência Local (Ótima)",
+                        desc: "Feche o aplicativo imediatamente. Reconheça os limites biológicos da mente de caçador-coletor e redirecione seu cuidado para pessoas reais da sua comunidade.",
+                        type: "optimal",
+                        reservaDelta: +15,
+                        insulaDelta: -20,
+                        compaixaoDelta: +15,
+                        header: "Desintoxicação Cognitiva Ativa!",
+                        body: "Você estancou a estimulação artificial contínua do alarme talâmico. O cérebro recuperou o tônus vagal e a coerência neural."
+                    },
+                    {
+                        letter: "B",
+                        title: "Doomscrolling Angustiado",
+                        desc: "Passe duas horas assistindo vídeos trágicos, sentindo-se cúmplice e culpado se desviar o olhar do horror do mundo.",
+                        type: "contagion",
+                        reservaDelta: -20,
+                        insulaDelta: +25,
+                        compaixaoDelta: -10,
+                        header: "Sequestro pelo Doomscrolling!",
+                        body: "O sistema de recompensa foi sequestrado pela antecipação de ameaça, gerando paralisia e sensação de desamparo aprendido global."
+                    },
+                    {
+                        letter: "C",
+                        title: "Comentários Irônicos ou Cínicos",
+                        desc: "Escreva deboches ou mensagens amargas nos posts para descarregar a angústia em forma de agressividade virtual.",
+                        type: "suboptimal",
+                        reservaDelta: -10,
+                        insulaDelta: +10,
+                        compaixaoDelta: -15,
+                        header: "Cinismo Digital Reativo",
+                        body: "A agressividade reativa retroalimentou a dopamina barata e a excitação simpática sem produzir nenhum alívio sustentável."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 06 • Ambiente Corporativo",
+                title: "Colega em Queixa Crônica Diária",
+                desc: "Todo dia útil, um colega senta ao seu lado e passa 40 minutos lamentando da empresa, do chefe e da vida, sem jamais buscar soluções.",
+                trigger: "\"Você sente o ambiente ficar denso e sua produtividade executiva despencar pelo resíduo atencional.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Validação Empática com Reorientação para Solução (Ótima)",
+                        desc: "Ouça com atenção por 3 minutos, valide a frustração e pergunte com firmeza carinhosa: 'O que nós vamos fazer pragmaticamente para mudar isso hoje? Vamos conversar com o gestor ou ajustar o fluxo?'.",
+                        type: "optimal",
+                        reservaDelta: +15,
+                        insulaDelta: -15,
+                        compaixaoDelta: +15,
+                        header: "Conversão Executiva da Queixa!",
+                        body: "Você transformou a ruminação improdutiva em agência do córtex dorsolateral, protegendo seu tempo de foco e interrompendo o ciclo de contágio."
+                    },
+                    {
+                        letter: "B",
+                        title: "Corressentimento Passivo",
+                        desc: "Concorde com tudo, alimente a fogueira da amargura e passe o restante do dia desmotivado e irritado com a equipe.",
+                        type: "contagion",
+                        reservaDelta: -20,
+                        insulaDelta: +20,
+                        compaixaoDelta: -10,
+                        header: "Contágio por Co-Ruminação!",
+                        body: "A co-ruminação amplifica a hiperconectividade da DMN depressiva, derrubando o foco pré-frontal e contaminando a cultura de trabalho."
+                    },
+                    {
+                        letter: "C",
+                        title: "Esquiva Passivo-Agressiva",
+                        desc: "Finja estar falando ao telefone toda vez que o colega se aproxima para não precisar encará-lo.",
+                        type: "suboptimal",
+                        reservaDelta: -5,
+                        insulaDelta: 0,
+                        compaixaoDelta: -10,
+                        header: "Esquiva com Custo de Tensão",
+                        body: "Você evitou a conversa, mas manteve o cérebro em alerta vigilante para antecipar as aproximações do colega."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 07 • Vínculo Terapêutico / Afetivo",
+                title: "Idealização Mágica e Demanda de Salvação",
+                desc: "Uma pessoa que você auxilia passa a tratá-lo como o único ser capaz de salvá-la da ruína, exigindo disponibilidade total.",
+                trigger: "\"O ego é seduzido pela vaidade de ser o 'salvador', enquanto a amígdala se aterroriza com a responsabilidade esmagadora.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Descentralização do Salvacionismo (Ótima)",
+                        desc: "Desmonte a ilusão com humildade e carinho: 'Eu sou apenas um facilitador de caminhos; a força e os passos da sua transformação pertencem a você'. Fortaleça a autonomia dela.",
+                        type: "optimal",
+                        reservaDelta: +15,
+                        insulaDelta: -20,
+                        compaixaoDelta: +20,
+                        header: "Autonomia Fortalecida!",
+                        body: "Você devolveu a agência para o indivíduo, prevenindo a dependência patológica e silenciando o delírio onipotente do cuidador."
+                    },
+                    {
+                        letter: "B",
+                        title: "Assumir o Complexo de Salvador",
+                        desc: "Acredite que o destino daquela vida repousa nos seus ombros e passe a controlar cada decisão da rotina dela.",
+                        type: "contagion",
+                        reservaDelta: -25,
+                        insulaDelta: +25,
+                        compaixaoDelta: -10,
+                        header: "Armadilha Narcísica do Salvamento!",
+                        body: "O complexo de herói é o precursor direto do colapso do cuidador. A carga alostática se torna insustentável."
+                    },
+                    {
+                        letter: "C",
+                        title: "Abandono Brusco por Susto",
+                        desc: "Assuste-se com a intensidade e corte o vínculo subitamente, bloqueando o contato sem uma devolutiva terapêutica.",
+                        type: "suboptimal",
+                        reservaDelta: -10,
+                        insulaDelta: +10,
+                        compaixaoDelta: -25,
+                        header: "Ruptura Traumática",
+                        body: "O corte abrupto gerou desamparo na outra pessoa e instaurou culpa profunda no seu próprio sistema límbico."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 08 • Autoacolhimento do Cuidador",
+                title: "O Encontro com a Própria Vulnerabilidade",
+                desc: "Após semanas dedicadas ao amparo de todos, seu corpo adoece com gripe forte e você se flagra sem forças para levantar da cama.",
+                trigger: "\"Voz interna punitiva: 'Você não pode parar, tantas pessoas dependem de você, você está sendo fraco'.\"",
+                options: [
+                    {
+                        letter: "A",
+                        title: "Autocompaixão Fisiológica Radical (Ótima)",
+                        desc: "Acolha sua humanidade: cancele compromissos sem pedir desculpas pela biologia, durma, tome um chá quente e permita-se ser cuidado por outros.",
+                        type: "optimal",
+                        reservaDelta: +25,
+                        insulaDelta: -25,
+                        compaixaoDelta: +25,
+                        header: "Restauração Alostática Plena!",
+                        body: "Você aplicou a compaixão ao próprio Self (Neff). A amígdala desarmou, o freio vagal assumiu e o sistema imunológico iniciou a cura acelerada."
+                    },
+                    {
+                        letter: "B",
+                        title: "Forçar Trabalho Medicado até o Colapso",
+                        desc: "Tome remédios para mascarar a febre e vá atender pessoas, orgulhando-se do seu 'sacrifício heroico'.",
+                        type: "contagion",
+                        reservaDelta: -30,
+                        insulaDelta: +30,
+                        compaixaoDelta: -15,
+                        header: "Colapso Alostático Iminente!",
+                        body: "Ignorar os sinais interoceptivos é a receita para o burnout profundo e sequelas imunológicas. O cérebro foi levado à exaustão física total."
+                    },
+                    {
+                        letter: "C",
+                        title: "Ficar na Cama Ruminando em Desespero",
+                        desc: "Fique deitado, mas passe o dia com o notebook no colo respondendo mensagens de texto com culpa.",
+                        type: "suboptimal",
+                        reservaDelta: -10,
+                        insulaDelta: +15,
+                        compaixaoDelta: -5,
+                        header: "Descanso Tóxico Incompleto",
+                        body: "O corpo estava parado, mas o sistema nervoso autônomo permaneceu sob estresse simpático contínuo."
+                    }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentRound = 0;
+        let reservaLevel = 60;
+        let insulaLevel = 40;
+        let compaixaoLevel = 40;
+        let totalScore = 0;
+
+        function updateGauges() {
+            reservaLevel = Math.max(0, Math.min(100, reservaLevel));
+            insulaLevel = Math.max(0, Math.min(100, insulaLevel));
+            compaixaoLevel = Math.max(0, Math.min(100, compaixaoLevel));
+
+            document.getElementById('labelReserva').textContent = `${reservaLevel}%`;
+            document.getElementById('barReserva').style.width = `${reservaLevel}%`;
+            document.getElementById('statReserva').textContent = `${reservaLevel}%`;
+
+            document.getElementById('labelInsula').textContent = `${insulaLevel}%`;
+            document.getElementById('barInsula').style.width = `${insulaLevel}%`;
+
+            document.getElementById('labelCompaixao').textContent = `${compaixaoLevel}%`;
+            document.getElementById('barCompaixao').style.width = `${compaixaoLevel}%`;
+
+            // Alertas visuais de cor
+            const barInsula = document.getElementById('barInsula');
+            if (insulaLevel >= 60) {
+                barInsula.style.background = '#dc2626';
+            } else if (insulaLevel >= 40) {
+                barInsula.style.background = '#ee9b00';
+            } else {
+                barInsula.style.background = '#0a9396';
+            }
+
+            const barReserva = document.getElementById('barReserva');
+            if (reservaLevel <= 30) {
+                barReserva.style.background = '#dc2626';
+            } else {
+                barReserva.style.background = '#005f73';
+            }
+        }
+
+        function loadRound(index) {
+            if (index >= SCENARIOS.length) {
+                finishGame();
+                return;
+            }
+
+            const sc = SCENARIOS[index];
+            document.getElementById('currentRoundDisplay').textContent = `${index + 1} / ${SCENARIOS.length}`;
+            document.getElementById('scenarioCategory').textContent = sc.tag;
+            document.getElementById('scenarioTitle').textContent = sc.title;
+            document.getElementById('scenarioDesc').textContent = sc.desc;
+            document.getElementById('triggerText').textContent = sc.trigger;
+
+            const tacticsGrid = document.getElementById('tacticsGrid');
+            tacticsGrid.innerHTML = '';
+
+            sc.options.forEach((opt, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'tactic-btn';
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `
+                    <div class="tactic-letter">${opt.letter}</div>
+                    <div>
+                        <div class="tactic-title">${opt.title}</div>
+                        <div class="tactic-desc">${opt.desc}</div>
+                    </div>
+                `;
+                tacticsGrid.appendChild(btn);
+            });
+
+            document.getElementById('feedbackBox').style.display = 'none';
+        }
+
+        function selectOption(optIndex) {
+            playClickSound();
+
+            const sc = SCENARIOS[currentRound];
+            const opt = sc.options[optIndex];
+
+            // Atualiza deltas
+            reservaLevel += opt.reservaDelta;
+            insulaLevel += opt.insulaDelta;
+            compaixaoLevel += opt.compaixaoDelta;
+            updateGauges();
+
+            // Bloqueia cliques adicionais na rodada
+            document.querySelectorAll('.tactic-btn').forEach(b => b.style.pointerEvents = 'none');
+
+            // Feedback visual e sonoro
+            const fbBox = document.getElementById('feedbackBox');
+            const fbHeader = document.getElementById('feedbackHeader');
+            const fbTitle = document.getElementById('feedbackTitle');
+            const fbBody = document.getElementById('feedbackBody');
+            const fbIcon = document.getElementById('feedbackIcon');
+
+            fbBox.className = 'feedback-box';
+            if (opt.type === 'optimal') {
+                playOptimalChord();
+                fbBox.classList.add('feedback-optimal');
+                fbIcon.textContent = '🌟';
+                totalScore += 125;
+            } else if (opt.type === 'suboptimal') {
+                fbBox.classList.add('feedback-suboptimal');
+                fbIcon.textContent = '⚠️';
+                totalScore += 50;
+            } else {
+                playContagionAlert();
+                fbBox.classList.add('feedback-contagion');
+                fbIcon.textContent = '🚨';
+                totalScore += 10;
+            }
+
+            fbTitle.textContent = opt.header;
+            fbBody.textContent = opt.body;
+            fbBox.style.display = 'block';
+            fbBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextRound() {
+            playClickSound();
+            currentRound++;
+            loadRound(currentRound);
+        }
+
+        function finishGame() {
+            playVictoryFanfare();
+
+            document.getElementById('scenarioContainer').style.display = 'none';
+            const panel = document.getElementById('gameOverPanel');
+            panel.style.display = 'block';
+
+            const maxPossible = SCENARIOS.length * 125;
+            const pct = Math.round((totalScore / maxPossible) * 100);
+
+            document.getElementById('finalScoreDisplay').textContent = `${pct}% de Eficiência Compassiva`;
+
+            const best = parseInt(localStorage.getItem('neuro_ressonancia_score') || '0', 10);
+            if (totalScore > best) {
+                localStorage.setItem('neuro_ressonancia_score', totalScore);
+                document.getElementById('statBest').textContent = `${pct}%`;
+            }
+
+            const fb = document.getElementById('finalFeedbackText');
+            if (pct >= 80) {
+                fb.innerHTML = "<strong>Excepcional Calibração Neuroafetiva!</strong> Seu córtex pré-frontal ventromedial demonstrou primorosa capacidade de diferenciar o Self do Outro. Você acolheu a dor sem permitir a colonização da ínsula anterior, mantendo a ocitocina e a agência no mais alto padrão de sustentabilidade.";
+            } else if (pct >= 55) {
+                fb.innerHTML = "<strong>Bom Desempenho com Alertas de Contágio:</strong> Você conseguiu encontrar o equilíbrio compassivo na maioria dos cenários, mas ainda cedeu ao fawning e à dor vicária em momentos de alta pressão. Continue praticando a ancoragem sensorial do corpo.";
+            } else {
+                fb.innerHTML = "<strong>Sinal de Atenção: Padrão Crônico de Fadiga Empática.</strong> Você tendeu a se fundir ao sofrimento das pessoas ou a recorrer ao cinismo defensivo. Sugerimos a leitura do artigo científico e a aplicação da escala psicométrica para reeducar seus limites neurais.";
+            }
+
+            panel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartGame() {
+            playClickSound();
+            currentRound = 0;
+            reservaLevel = 60;
+            insulaLevel = 40;
+            compaixaoLevel = 40;
+            totalScore = 0;
+            updateGauges();
+            document.getElementById('scenarioContainer').style.display = 'block';
+            document.getElementById('gameOverPanel').style.display = 'none';
+            loadRound(0);
+        }
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            const best = localStorage.getItem('neuro_ressonancia_score');
+            if (best) {
+                const maxPossible = SCENARIOS.length * 125;
+                const bestPct = Math.round((parseInt(best, 10) / maxPossible) * 100);
+                document.getElementById('statBest').textContent = `${bestPct}%`;
+            }
+            updateGauges();
+            loadRound(0);
+        });
+    </script>
+</body>
+</html>

@@ -48,6 +48,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 39** | **Matriz de Assertividade Relacional e Calibração de Limites** | Controle Inibitório Pré-Frontal, Desarme do Fawning, Calibração de Limites e dACC | `jogos/jogo-calibracao-limites-assertividade.html` | ✅ **Publicado** |
 | **Dia 40** | **Matriz de Custo Atencional e Descompressão Cognitiva** | Funções Executivas, Reserva Cognitiva, Regulação Sensorial e Alternância Atencional | `jogos/jogo-custo-atencional-descompressao.html` | ✅ **Publicado** |
 | **Dia 41** | **Matriz de Calibração Atribucional e Autoeficácia** | Córtex Cingulado Anterior Dorsal (dACC), Córtex Pré-Frontal Ventromedial (vmPFC), Estriado Ventral e Raciocínio Bayesiano de Mérito | `jogos/jogo-calibracao-atribucional.html` | ✅ **Publicado** |
+| **Dia 42** | **Matriz de Ressonância Empática e Calibração Afetiva** | Discriminação Eu-Outro, Regulação da Dor Vicária na Ínsula/dACC e Ativação Compassiva vmPFC | `jogos/jogo-ressonancia-empatica.html` | ✅ **Publicado** |
 
 ---
 
