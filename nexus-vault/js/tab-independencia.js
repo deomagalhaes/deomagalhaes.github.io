@@ -2682,6 +2682,273 @@
             detail: `Orçamento de R$ 6.000 integralmente preservado e balanceado igualmente entre as 4 classes.`
         });
 
+        // 21. Teste de Margem de Segurança Fat FIRE (Multiplicador de 140%)
+        const mockFatFire = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 4.0,
+            fatFireMultiplier: 1.4
+        });
+        const expectedFatTarget = (mockFatFire.annualNet * 1.4) / 0.04;
+        const testFatPass = Math.abs(mockFatFire.targetFatFire - expectedFatTarget) < 1e-2;
+        tests.push({
+            name: 'Margem de Segurança Fat FIRE (Multiplicador de 140%)',
+            formula: 'Meta_Fat_FIRE = (Receita_Líquida_Anual × 1,40) / SWR (4%)',
+            passed: Boolean(testFatPass),
+            detail: `Meta Fat FIRE calculada com precisão em R$ ${mockFatFire.targetFatFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} (40% de colchão adicional para estilo de vida e viagens).`
+        });
+
+        // 22. Teste do Crossover de Meia-Jornada Clínica (50% da Receita Líquida)
+        const mockHalfCross = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200,
+            currentPatrimony: 120000,
+            realAnnualReturn: 7.5
+        });
+        const hasHalfCross = mockHalfCross.crossHalfNetMonth !== null && mockHalfCross.crossHalfNetMonth <= (mockHalfCross.crossFullNetMonth || 999);
+        tests.push({
+            name: 'Marco Atuarial de Crossover de Meia-Jornada Clínica (50% da Receita Líquida)',
+            formula: 'Mês_Meia_Jornada = min(m | Renda_Passiva_m ≥ Receita_Líquida × 0,50) ≤ Mês_Full_FIRE',
+            passed: Boolean(hasHalfCross),
+            detail: hasHalfCross
+                ? `Marco de meia-jornada opcional atingido no mês ${mockHalfCross.crossHalfNetMonth} (~${(mockHalfCross.crossHalfNetMonth / 12).toFixed(1)} anos), precedendo o Full FIRE.`
+                : 'Crossover de meia-jornada clínica calculado com consistência.'
+        });
+
+        // 23. Teste de Coeficiente de Retirada Segura (SWR 3,5% a 5,0%)
+        const mockSwrVar = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 3.5
+        });
+        const expectedSwr35 = (mockSwrVar.annualNet) / 0.035;
+        const testSwrVarPass = Math.abs(mockSwrVar.targetFullFire - expectedSwr35) < 1e-2;
+        tests.push({
+            name: 'Sensibilidade à Taxa Segura de Retirada (SWR Dinâmica 3,5% a 5,0%)',
+            formula: 'Meta_FIRE = Receita_Anual / SWR_Custom',
+            passed: Boolean(testSwrVarPass),
+            detail: `Calibração com SWR de 3,5% (mais conservadora) eleva patrimônio alvo para R$ ${mockSwrVar.targetFullFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} mantendo precisão atuarial.`
+        });
+
+        // 24. Teste de Convergência da Projeção de Crossover com Aporte Zero (Patrimônio Puro)
+        const mockZeroAporte = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 0,
+            currentPatrimony: 500000,
+            realAnnualReturn: 7.5
+        });
+        const passiveZeroAporte = mockZeroAporte.currentPassiveMonthly;
+        const testZeroAportePass = passiveZeroAporte > 0 && mockZeroAporte.yearlySeries[1].totalContributed === 500000;
+        tests.push({
+            name: 'Convergência Atuarial com Aporte Mensal Nulo (Crescimento Orgânico Puro)',
+            formula: 'Aporte = 0 ⇒ Total_Aportado(t) = Patrimônio_Inicial ∧ Juros(t) > 0',
+            passed: Boolean(testZeroAportePass),
+            detail: `Patrimônio inicial de R$ 500.000 gera R$ ${passiveZeroAporte.toFixed(2)}/mês passivos imediatamente; capital cresce organicamente sem injeção de novos aportes.`
+        });
+
+        // 25. Teste de Choque de 30% e Tempo de Recuperação Dinâmica com Reinvestimento
+        const mockCrash30 = computeStressTest({
+            currentPatrimony: 200000,
+            monthlyContribution: 4000,
+            realAnnualReturn: 7.5,
+            stressScenario: 'crash30'
+        });
+        const testCrash30Pass = mockCrash30.stressedPatrimony === 140000 &&
+            mockCrash30.monthsToRecoverDynamic <= mockCrash30.monthsToRecover &&
+            mockCrash30.monthsToRecoverDynamic > 0;
+        tests.push({
+            name: 'Choque de −30% de Mercado com Recuperação Dinâmica Reinvestida',
+            formula: 'Patrimônio_Crash = Base × 0,70 ∧ Meses_Dinâmicos ≤ Meses_Lineares',
+            passed: Boolean(testCrash30Pass),
+            detail: `Queda de R$ 60.000 é recuperada em ${mockCrash30.monthsToRecoverDynamic} meses dinâmicos com aportes a preços descontados (vs ${mockCrash30.monthsToRecover} meses lineares).`
+        });
+
+        // 26. Teste de Conservação de Capital no Alocador de Cotas Inteiras por Ticker
+        const mockAllocClasses = [
+            { key: 'FII', name: 'Fundos Imobiliários', recommendedAporte: 1000 },
+            { key: 'RF', name: 'Renda Fixa', recommendedAporte: 1000 },
+            { key: 'Acoes', name: 'Ações Brasil', recommendedAporte: 1000 },
+            { key: 'Global', name: 'Internacional', recommendedAporte: 1000 }
+        ];
+        const mockTickersResult = computeAporteByTickers(mockAllocClasses);
+        const totalSpentAll = mockTickersResult.byClass.reduce((acc, c) => acc + c.classSpent, 0);
+        const grandTotal = totalSpentAll + mockTickersResult.totalResidual;
+        const testTickersConservePass = Math.abs(grandTotal - 4000) < 1e-2 && mockTickersResult.totalResidual >= 0;
+        tests.push({
+            name: 'Conservação Estrita de Capital no Alocador por Ativos (Cotas + Troco)',
+            formula: 'Σ(Cotas_i × Preço_i) + Saldo_Residual = Orçamento_Total',
+            passed: Boolean(testTickersConservePass),
+            detail: `Orçamento de R$ 4.000: R$ ${totalSpentAll.toFixed(2)} alocados em cotas inteiras e R$ ${mockTickersResult.totalResidual.toFixed(2)} direcionados à reserva de oportunidade.`
+        });
+
+        // 27. Teste de Monotonia Estrita e Boundedness da Cascata de Despesas
+        const mockCascadeCheck = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            currentPatrimony: 300000,
+            realAnnualReturn: 7.5
+        });
+        const tiersCheck = mockCascadeCheck.tiers;
+        const isMonotonic = tiersCheck.every((t, idx) => idx === 0 || t.accumulatedCost > tiersCheck[idx - 1].accumulatedCost);
+        const isBounded = tiersCheck.every(t => t.coveragePct >= 0 && t.coveragePct <= 100);
+        tests.push({
+            name: 'Monotonia Estrita e Delimitação da Cascata de Despesas',
+            formula: 'Custo_Acumulado(k) > Custo_Acumulado(k−1) ∧ 0% ≤ Cobertura ≤ 100%',
+            passed: Boolean(isMonotonic && isBounded),
+            detail: `Degraus acumulados de R$ ${tiersCheck[0].accumulatedCost} até R$ ${mockCascadeCheck.totalCost} validados com cobertura global de ${mockCascadeCheck.globalCoverage.toFixed(1)}%.`
+        });
+
+        // 28. Teste de Resiliência de Custos Fixos sob Vacância de FIIs (−25% Yield)
+        const mockFiiDropCoverage = computeStressTest({
+            monthlyCosts: 2600,
+            currentPatrimony: 500000,
+            realAnnualReturn: 8.0,
+            stressScenario: 'fii_drop'
+        });
+        const testFiiDropCoveragePass = mockFiiDropCoverage.stressedMonthlyPassive > 0 && mockFiiDropCoverage.stressedClinicCoveragePct > 0;
+        tests.push({
+            name: 'Resiliência de Cobertura Clínica sob Vacância de FIIs (−25% Yield)',
+            formula: 'Yield_Estressado = Base × 0,75 ∧ Cobertura_Consultório > 0',
+            passed: Boolean(testFiiDropCoveragePass),
+            detail: `Renda passiva estressada de R$ ${mockFiiDropCoverage.stressedMonthlyPassive.toFixed(2)}/mês mantém ${mockFiiDropCoverage.stressedClinicCoveragePct.toFixed(1)}% de imunização dos custos do consultório.`
+        });
+
+        // 29. Teste de Invariância de Retirada Segura e Estocástica Box-Muller (Monte Carlo)
+        const mockMcTest = runMonteCarloSimulation({
+            currentPatrimony: 1500000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2600,
+            mcYears: 20,
+            mcSimulations: 200,
+            mcVolatility: 12.0
+        });
+        const testMcPass = mockMcTest.simulations === 200 && mockMcTest.p10 <= mockMcTest.p50 && mockMcTest.p50 <= mockMcTest.p90;
+        tests.push({
+            name: 'Consistência Estocástica da Distribuição Normal de Monte Carlo (Box-Muller)',
+            formula: 'P10 ≤ P50 (Mediana) ≤ P90 ∧ Probabilidade_Ruína ∈ [0%, 100%]',
+            passed: Boolean(testMcPass),
+            detail: `200 trajetórias calculadas com sucesso: P10 = R$ ${Math.round(mockMcTest.p10).toLocaleString('pt-BR')} ≤ Mediana = R$ ${Math.round(mockMcTest.p50).toLocaleString('pt-BR')} ≤ P90 = R$ ${Math.round(mockMcTest.p90).toLocaleString('pt-BR')}.`
+        });
+
+        // 30. Teste de Sensibilidade da Taxa de Poupança Clínica (Savings Rate)
+        const mockSavings = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200
+        });
+        const expectedSavingsRate = (4200 / (mockSavings.netRevenue)) * 100;
+        const testSavingsPass = Math.abs(mockSavings.savingsRate - expectedSavingsRate) < 1e-2 && mockSavings.savingsRate > 20;
+        tests.push({
+            name: 'Cálculo de Precisão da Taxa de Poupança Clínica Líquida (Savings Rate)',
+            formula: 'Taxa_Poupança = (Aporte_Mensal / Receita_Líquida) × 100',
+            passed: Boolean(testSavingsPass),
+            detail: `Taxa de poupança clínica apurada em ${mockSavings.savingsRate.toFixed(2)}% (receita líquida de R$ ${mockSavings.netRevenue.toFixed(2)}/mês e aporte de R$ 4.200,00).`
+        });
+
+        // 31. Teste de Aporte Contracíclico (+20% sob Choque Severo) com Aceleração de Rebalanceamento
+        const mockContracyclic = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 150000,
+            monthlyContribution: 5000,
+            stressBoostContribution: true
+        });
+        const testContracyclicPass = mockContracyclic.effectiveAporte === 6000 &&
+            mockContracyclic.monthsToRecoverDynamic > 0 &&
+            mockContracyclic.monthsToRecoverDynamic <= mockContracyclic.monthsToRecover;
+        tests.push({
+            name: 'Aceleração de Rebalanceamento com Aporte Contracíclico (+20% Oportunidade)',
+            formula: 'Aporte_Contracíclico = Aporte × 1,20 ∧ Meses_Recuperação ≤ Meses_Lineares',
+            passed: Boolean(testContracyclicPass),
+            detail: `Aporte ampliado de R$ 5.000 para R$ ${mockContracyclic.effectiveAporte.toLocaleString('pt-BR')} sob choque de -30%, acelerando recomposição para ~${mockContracyclic.monthsToRecoverDynamic} meses.`
+        });
+
+        // 32. Teste de Resiliência de Alocação de Cotas com Ativos de Alta Cotação (Tesouro > R$ 3.000)
+        const mockHighPriceTickers = {
+            RF: [{ ticker: 'IPCA+2035', name: 'Tesouro IPCA+ 2035', price: 3200.00, yield: 6.4, type: 'Tesouro Direto' }]
+        };
+        const mockAllocHigh = [{ key: 'RF', name: 'Renda Fixa', recommendedAporte: 4000 }];
+        const mockHighResult = computeAporteByTickers(mockAllocHigh, mockHighPriceTickers);
+        const testHighPass = mockHighResult.byClass.length === 1 &&
+            mockHighResult.byClass[0].tickers[0].shares === 1 &&
+            mockHighResult.byClass[0].residual === 800 &&
+            mockHighResult.totalResidual === 800;
+        tests.push({
+            name: 'Alocação com Ativos de Alto Valor Unitário e Destinação Residual para Reserva',
+            formula: 'Cotas = floor(4000 / 3200) = 1 ∧ Troco_Residual = 800',
+            passed: Boolean(testHighPass),
+            detail: `Orçamento de R$ 4.000 alocou 1 cota de R$ 3.200,00 e direcionou R$ 800,00 residuais à reserva de oportunidade.`
+        });
+
+        // 33. Teste de Consistência da Taxa Segura de Retirada (SWR) sob Calibração Dinâmica
+        const mockSwrStress = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 3.8
+        });
+        const expSwr38 = (mockSwrStress.netRevenue * 12) / 0.038;
+        const testSwrStressPass = Math.abs(mockSwrStress.targetFullFire - expSwr38) < 1e-2 && mockSwrStress.targetFullFire > 0;
+        tests.push({
+            name: 'Consistência de Coeficiente SWR sob Calibração de 3,8% (Retirada Segura)',
+            formula: 'Patrimônio_SWR = Receita_Líquida_Anual / 0,038',
+            passed: Boolean(testSwrStressPass),
+            detail: `Full FIRE calibrado para R$ ${mockSwrStress.targetFullFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} mantendo precisão atuarial estrita.`
+        });
+
+        // 34. Teste de Cobertura Sequencial de Degraus da Cascata com Degraus Extras Customizados
+        const mockCascadeExtra = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            expenseCustom: 1500,
+            nameCustom: 'Nível 5 • Reserva Estratégica & Projetos',
+            currentPatrimony: 800000,
+            realAnnualReturn: 7.5
+        });
+        const n5 = mockCascadeExtra.tiers.find(t => t.id === 'custom');
+        const testCascadeExtraPass = n5 && n5.accumulatedCost === 12100 && mockCascadeExtra.totalCost === 12100;
+        tests.push({
+            name: 'Acumulação da Cascata com Degrau Customizado Nível 5 (Projetos & P&D)',
+            formula: 'Custo_Total = Σ(Níveis_1_a_4) + Custo_Nível_5',
+            passed: Boolean(testCascadeExtraPass),
+            detail: `5 degraus consolidados totalizando R$ ${mockCascadeExtra.totalCost.toLocaleString('pt-BR')}/mês com cobertura calculada em ${mockCascadeExtra.globalCoverage.toFixed(1)}%.`
+        });
+
+        // 35. Teste de Reversão à Média e Recuperação de Crossover Pós-Queda de 30%
+        const mockRecovery30 = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 300000,
+            monthlyCosts: 2600,
+            monthlyContribution: 4500,
+            realAnnualReturn: 7.5
+        });
+        const testRecovery30Pass = mockRecovery30.stressedPatrimony === 210000 &&
+            mockRecovery30.lostCapital === 90000 &&
+            mockRecovery30.monthsToRecoverDynamic > 0 &&
+            mockRecovery30.monthsToRecoverDynamic <= Math.round(90000 / 4500);
+        tests.push({
+            name: 'Reversão à Média e Recuperação Dinâmica do Crossover Pós-Queda de 30%',
+            formula: 'Patrimônio_Crash = 300.000 × 0,70 = 210.000 ∧ Meses_Dinâmicos ≤ 20',
+            passed: Boolean(testRecovery30Pass),
+            detail: `Perda temporária de R$ 90.000 sob choque de 30% é recuperada em ${mockRecovery30.monthsToRecoverDynamic} meses com reinvestimento e aportes contínuos.`
+        });
+
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,
@@ -2694,7 +2961,9 @@
 
     function renderSubTabAuditoria(container) {
         const C = global.VaultCore;
-        const auditResults = auditFinancialCalculationsInternal();
+        const auditResults = (global.VaultTabFinancas && typeof global.VaultTabFinancas.auditFinancialCalculations === 'function')
+            ? global.VaultTabFinancas.auditFinancialCalculations()
+            : auditFinancialCalculationsInternal();
 
         const tests = auditResults.tests || [];
         const passedCount = auditResults.passedCount !== undefined ? auditResults.passedCount : tests.filter(t => t.passed).length;

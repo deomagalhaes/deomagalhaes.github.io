@@ -1094,18 +1094,18 @@
         });
 
         // 28. Teste de Resiliência de Custos Fixos sob Vacância de FIIs (−25% Yield)
-        const mockFiiDrop = computeStressTest({
+        const mockFiiDropCoverage = computeStressTest({
             monthlyCosts: 2600,
             currentPatrimony: 500000,
             realAnnualReturn: 8.0,
             stressScenario: 'fii_drop'
         });
-        const testFiiDropPass = mockFiiDrop.stressedMonthlyPassive > 0 && mockFiiDrop.stressedClinicCoveragePct > 0;
+        const testFiiDropCoveragePass = mockFiiDropCoverage.stressedMonthlyPassive > 0 && mockFiiDropCoverage.stressedClinicCoveragePct > 0;
         tests.push({
             name: 'Resiliência de Cobertura Clínica sob Vacância de FIIs (−25% Yield)',
             formula: 'Yield_Estressado = Base × 0,75 ∧ Cobertura_Consultório > 0',
-            passed: Boolean(testFiiDropPass),
-            detail: `Renda passiva estressada de R$ ${mockFiiDrop.stressedMonthlyPassive.toFixed(2)}/mês mantém ${mockFiiDrop.stressedClinicCoveragePct.toFixed(1)}% de imunização dos custos do consultório.`
+            passed: Boolean(testFiiDropCoveragePass),
+            detail: `Renda passiva estressada de R$ ${mockFiiDropCoverage.stressedMonthlyPassive.toFixed(2)}/mês mantém ${mockFiiDropCoverage.stressedClinicCoveragePct.toFixed(1)}% de imunização dos custos do consultório.`
         });
 
         // 29. Teste de Invariância de Retirada Segura e Estocástica Box-Muller (Monte Carlo)
@@ -1140,6 +1140,96 @@
             formula: 'Taxa_Poupança = (Aporte_Mensal / Receita_Líquida) × 100',
             passed: Boolean(testSavingsPass),
             detail: `Taxa de poupança clínica apurada em ${mockSavings.savingsRate.toFixed(2)}% (receita líquida de R$ ${mockSavings.netRevenue.toFixed(2)}/mês e aporte de R$ 4.200,00).`
+        });
+
+        // 31. Teste de Aporte Contracíclico (+20% sob Choque Severo) com Aceleração de Rebalanceamento
+        const mockContracyclic = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 150000,
+            monthlyContribution: 5000,
+            stressBoostContribution: true
+        });
+        const testContracyclicPass = mockContracyclic.effectiveAporte === 6000 &&
+            mockContracyclic.monthsToRecoverDynamic > 0 &&
+            mockContracyclic.monthsToRecoverDynamic <= mockContracyclic.monthsToRecover;
+        tests.push({
+            name: 'Aceleração de Rebalanceamento com Aporte Contracíclico (+20% Oportunidade)',
+            formula: 'Aporte_Contracíclico = Aporte × 1,20 ∧ Meses_Recuperação ≤ Meses_Lineares',
+            passed: Boolean(testContracyclicPass),
+            detail: `Aporte ampliado de R$ 5.000 para R$ ${mockContracyclic.effectiveAporte.toLocaleString('pt-BR')} sob choque de -30%, acelerando recomposição para ~${mockContracyclic.monthsToRecoverDynamic} meses.`
+        });
+
+        // 32. Teste de Resiliência de Alocação de Cotas com Ativos de Alta Cotação (Tesouro > R$ 3.000)
+        const mockHighPriceTickers = {
+            RF: [{ ticker: 'IPCA+2035', name: 'Tesouro IPCA+ 2035', price: 3200.00, yield: 6.4, type: 'Tesouro Direto' }]
+        };
+        const mockAllocHigh = [{ key: 'RF', name: 'Renda Fixa', recommendedAporte: 4000 }];
+        const mockHighResult = computeAporteByTickers(mockAllocHigh, mockHighPriceTickers);
+        const testHighPass = mockHighResult.byClass.length === 1 &&
+            mockHighResult.byClass[0].tickers[0].shares === 1 &&
+            mockHighResult.byClass[0].residual === 800 &&
+            mockHighResult.totalResidual === 800;
+        tests.push({
+            name: 'Alocação com Ativos de Alto Valor Unitário e Destinação Residual para Reserva',
+            formula: 'Cotas = floor(4000 / 3200) = 1 ∧ Troco_Residual = 800',
+            passed: Boolean(testHighPass),
+            detail: `Orçamento de R$ 4.000 alocou 1 cota de R$ 3.200,00 e direcionou R$ 800,00 residuais à reserva de oportunidade.`
+        });
+
+        // 33. Teste de Consistência da Taxa Segura de Retirada (SWR) sob Calibração Dinâmica
+        const mockSwrStress = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 3.8
+        });
+        const expSwr38 = (mockSwrStress.netRevenue * 12) / 0.038;
+        const testSwrStressPass = Math.abs(mockSwrStress.targetFullFire - expSwr38) < 1e-2 && mockSwrStress.targetFullFire > 0;
+        tests.push({
+            name: 'Consistência de Coeficiente SWR sob Calibração de 3,8% (Retirada Segura)',
+            formula: 'Patrimônio_SWR = Receita_Líquida_Anual / 0,038',
+            passed: Boolean(testSwrStressPass),
+            detail: `Full FIRE calibrado para R$ ${mockSwrStress.targetFullFire.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} mantendo precisão atuarial estrita.`
+        });
+
+        // 34. Teste de Cobertura Sequencial de Degraus da Cascata com Degraus Extras Customizados
+        const mockCascadeExtra = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            expenseCustom: 1500,
+            nameCustom: 'Nível 5 • Reserva Estratégica & Projetos',
+            currentPatrimony: 800000,
+            realAnnualReturn: 7.5
+        });
+        const n5 = mockCascadeExtra.tiers.find(t => t.id === 'custom');
+        const testCascadeExtraPass = n5 && n5.accumulatedCost === 12100 && mockCascadeExtra.totalCost === 12100;
+        tests.push({
+            name: 'Acumulação da Cascata com Degrau Customizado Nível 5 (Projetos & P&D)',
+            formula: 'Custo_Total = Σ(Níveis_1_a_4) + Custo_Nível_5',
+            passed: Boolean(testCascadeExtraPass),
+            detail: `5 degraus consolidados totalizando R$ ${mockCascadeExtra.totalCost.toLocaleString('pt-BR')}/mês com cobertura calculada em ${mockCascadeExtra.globalCoverage.toFixed(1)}%.`
+        });
+
+        // 35. Teste de Reversão à Média e Recuperação de Crossover Pós-Queda de 30%
+        const mockRecovery30 = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 300000,
+            monthlyCosts: 2600,
+            monthlyContribution: 4500,
+            realAnnualReturn: 7.5
+        });
+        const testRecovery30Pass = mockRecovery30.stressedPatrimony === 210000 &&
+            mockRecovery30.lostCapital === 90000 &&
+            mockRecovery30.monthsToRecoverDynamic > 0 &&
+            mockRecovery30.monthsToRecoverDynamic <= Math.round(90000 / 4500);
+        tests.push({
+            name: 'Reversão à Média e Recuperação Dinâmica do Crossover Pós-Queda de 30%',
+            formula: 'Patrimônio_Crash = 300.000 × 0,70 = 210.000 ∧ Meses_Dinâmicos ≤ 20',
+            passed: Boolean(testRecovery30Pass),
+            detail: `Perda temporária de R$ 90.000 sob choque de 30% é recuperada em ${mockRecovery30.monthsToRecoverDynamic} meses com reinvestimento e aportes contínuos.`
         });
 
         const allPassed = tests.every(t => t.passed);

@@ -120,9 +120,17 @@
                                 <div>
                                     <div class="flex items-center justify-between mb-1">
                                         <label class="block text-xs font-semibold text-slate-300">Leitura Emocional / Impulso Reativo *</label>
-                                        <button type="button" id="btn-df-apply-defusion" class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25 transition">
-                                            Desfusão ACT (Rótulo Mental)
-                                        </button>
+                                        <div class="flex items-center gap-1">
+                                            <button type="button" id="btn-df-apply-defusion" class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25 transition" title="Rotulação Cognitiva ACT">
+                                                Rótulo
+                                            </button>
+                                            <button type="button" id="btn-df-defusion-sky" class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/25 transition" title="Eu-Contexto: Eu sou o céu; o pensamento é nuvem">
+                                                Céu &amp; Nuvens
+                                            </button>
+                                            <button type="button" id="btn-df-defusion-stream" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 transition" title="Folhas no Riacho: Deixar passar sem apego">
+                                                Riacho
+                                            </button>
+                                        </div>
                                     </div>
                                     <textarea id="df-emotional-reading" rows="3" required
                                         placeholder="Qual narrativa de afronta, urgência de retrucar ou controle imediato apareceu?"
@@ -747,7 +755,29 @@
                 if (!current.startsWith('Estou notando o pensamento de que')) {
                     emoArea.value = `Estou notando o pensamento de que "${current}"... mas pensamentos são eventos cognitivos transitórios, não ordens motoras.`;
                 }
-                C.toast('Desfusão ACT aplicada à narrativa emocional.', 'info');
+                C.toast('Desfusão ACT (Rótulo Mental) aplicada.', 'info');
+            });
+        }
+
+        const btnDefuseSky = document.getElementById('btn-df-defusion-sky');
+        if (btnDefuseSky) {
+            btnDefuseSky.addEventListener('click', () => {
+                const emoArea = document.getElementById('df-emotional-reading');
+                let current = emoArea.value.trim();
+                if (!current) current = 'preciso reagir a esta afronta ou urgência';
+                emoArea.value = `Percebo que a mente está gerando o pensamento de "${current}". Sou o céu imenso que acolhe tudo; este pensamento é só uma nuvem cinza passageira que não define minha essência nem minha ação.`;
+                C.toast('Metáfora do Céu & Nuvens (Eu-Contexto) aplicada.', 'info');
+            });
+        }
+
+        const btnDefuseStream = document.getElementById('btn-df-defusion-stream');
+        if (btnDefuseStream) {
+            btnDefuseStream.addEventListener('click', () => {
+                const emoArea = document.getElementById('df-emotional-reading');
+                let current = emoArea.value.trim();
+                if (!current) current = 'preciso controlar o que estão pensando';
+                emoArea.value = `Coloco o pensamento "${current}" em uma folha pousada sobre a água do riacho. Apenas observo a folha navegar rio abaixo ao ritmo da respiração calma, sem me apegar nem tentar empurrá-la.`;
+                C.toast('Metáfora de Folhas no Riacho (Desfusão) aplicada.', 'info');
             });
         }
 

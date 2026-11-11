@@ -1713,6 +1713,36 @@
                         score -= 40; // Sensível ao frio: transplantar apenas no calor com solo aquecido
                     }
                 }
+                if (popName.includes('acer') || popName.includes('bordo') || sciName.includes('acer')) {
+                    if (proc.id === 'DESFOLHA_TOTAL' || proc.category === 'DESFOLHA') {
+                        if (seasonInfo.season === 'Verão' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
+                            score += 26; // Desfolha de verão para redução foliar em Acer vigoroso
+                        } else {
+                            score -= 30; // Evitar desfolha fora da janela de alto vigor estival
+                        }
+                    }
+                    if (proc.id === 'PODA_ESTRUTURAL_INVERNO' && seasonInfo.season === 'Inverno') {
+                        score += 24; // Poda estrutural em dormência para evitar sangria de seiva
+                    }
+                }
+                if (popName.includes('olmo') || popName.includes('ulmus') || sciName.includes('ulmus')) {
+                    if ((proc.id === 'PINCAGEM_APICAL' || proc.category === 'PODA_RAMIFICACAO') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
+                        score += 28; // Ramificação fina explosiva em Olmo com pinçagem a 2 pares de folhas
+                    }
+                }
+                if (popName.includes('serissa') || sciName.includes('serissa')) {
+                    if (proc.category === 'PODA_RAMIFICACAO' && moon.phaseGroup === 'MINGUANTE') {
+                        score += 22; // Poda de contenção pós-florada com cicatrização rápida
+                    }
+                    if (proc.id === 'LAVAGEM_RAIZES') {
+                        score -= 35; // Raízes finas e sensíveis a dessecação
+                    }
+                }
+                if (popName.includes('resedá') || sciName.includes('lagerstroemia')) {
+                    if (proc.category === 'PODA_DRASTICA' && (seasonInfo.season === 'Inverno' || seasonInfo.season === 'Primavera')) {
+                        score += 26; // Floração ocorre nos ramos novos: corte forte pré-primavera
+                    }
+                }
 
                 if (proc.category === 'ESTRUTURA' && plant.lastStyling) {
                     const daysSinceStyle = Math.abs(global.VaultCore.daysDiffFromToday(plant.lastStyling) || 0);
@@ -2993,6 +3023,14 @@
                                     <button type="button" id="btn-bf-add-log" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-emerald-300 border border-slate-700">+ Log</button>
                                 </div>
                             </div>
+                            <!-- Chips Rápidos de Poda e Manejo Fitotécnico -->
+                            <div class="flex flex-wrap items-center gap-1 text-[10px] font-mono">
+                                <span class="text-slate-500">Atalhos de Poda &amp; Manejo:</span>
+                                <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/50" data-chip-cat="Poda de Manutenção / Pinçagem" data-chip-txt="Pinçagem de brotos apicais para indução de ramificação fina">🌿 Pinçagem</button>
+                                <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/50" data-chip-cat="Poda Estrutural" data-chip-txt="Poda estrutural de galhos concorrentes e limpeza de copa">✂️ Poda Estrutura</button>
+                                <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-800/50" data-chip-cat="Transplante & Raízes" data-chip-txt="Poda de raízes e renovação do substrato drenante">🪴 Transplante</button>
+                                <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 border border-amber-800/50" data-chip-cat="Adubação Orgânica" data-chip-txt="Adubação orgânica balanceada de liberação lenta">🌱 Adubação</button>
+                            </div>
                             <div id="bf-logs-list" class="max-h-40 overflow-y-auto space-y-1 pr-1"></div>
                         </div>
 
@@ -4130,9 +4168,29 @@
             if (cat.toLowerCase().includes('poda') || cat.toLowerCase().includes('pinçagem') || cat.toLowerCase().includes('desfolha')) {
                 target.lastPruning = logDate;
             }
+            if (cat.toLowerCase().includes('transplante') || cat.toLowerCase().includes('raiz')) {
+                target.lastRepot = logDate;
+            }
+            if (cat.toLowerCase().includes('adubação')) {
+                target.lastFertilization = logDate;
+            }
             inp.value = '';
             saveData(false);
             renderModalLogs(target);
+        });
+
+        document.querySelectorAll('.btn-quick-chip-log').forEach((chip) => {
+            chip.addEventListener('click', () => {
+                const cat = chip.getAttribute('data-chip-cat');
+                const txt = chip.getAttribute('data-chip-txt');
+                const catSel = document.getElementById('bf-quick-log-category');
+                const inp = document.getElementById('bf-quick-log-input');
+                if (catSel) catSel.value = cat;
+                if (inp) {
+                    inp.value = txt;
+                    inp.focus();
+                }
+            });
         });
 
         document.getElementById('btn-bf-clone-exec').addEventListener('click', () => {

@@ -4,7 +4,7 @@
  * 100% Client-Side • Zero-Backend • LGPD Compliant • Leitor Âmbar Offline Low-Blue-Light
  *
  * Módulos Integrados:
- * 1. Banco Expandido de 60 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
+ * 1. Banco Expandido de 100 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
  * 2. 14 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
  * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos
  * 4. Sintetizador Acústico Web Audio API Pré-Sono (Ruído Marrom, Chuva Mansa, Ondas, Grilos) com Sleep Timer
@@ -14,7 +14,7 @@
     'use strict';
 
     // =========================================================================
-    // 1. BANCO DE 60 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
+    // 1. BANCO DE 100 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
     // =========================================================================
     const STORY_THEMES = {
         frustracao: {
@@ -611,6 +611,111 @@
             defaultQuestion: 'Qual foi a travessura mais engraçada e carinhosa do seu bichinho que sempre faz você sorrir por dentro?',
             challengeAct: 'olhou para a caminha vazia do animalzinho e sentiu lágrimas quentinhas rolarem pelas bochechas, com uma saudade que parecia um nó no peito.',
             breathCue: 'abraçou uma almofada macia, puxou o ar mandando um carinho em pensamento até as estrelas e soltou um suspiro sereno e reconfortante.'
+        },
+        sobrecarga_auditiva_ruidos: {
+            label: '86. Hipersensibilidade Auditiva & Rumo ao Silêncio (A concha mansa do mar profundo)',
+            defaultMetaphor: 'A concha mágica que guarda o silêncio sereno do fundo do oceano: quando o mundo lá fora faz barulhos altos demais, a gente põe as mãos no ouvido como duas conchinhas protetoras e escuta apenas a respiração mansa como ondas distantes.',
+            defaultQuestion: 'Como é gostoso fechar os olhos e escutar o silêncio calmo que mora bem dentro do seu peito?',
+            challengeAct: 'entrou num lugar cheio de vozes falando alto, sirenes e portas batendo, sentindo os ouvidinhos doerem e querendo se esconder debaixo de uma capa.',
+            breathCue: 'pousou as palmas mornas suavemente sobre as orelhinhas, puxou o ar ouvindo o barulhinho suave da própria respiração e soltou um suspiro calmo e protegido.'
+        },
+        disregulacao_mudanca_planos: {
+            label: '87. Quebra Abrupta de Expectativa / Imprevistos (O desvio do riachinho curioso)',
+            defaultMetaphor: 'O riachinho de águas claras que encontra uma pedra enorme no caminho: ele não briga nem empaca; ele desliza de lado, contorna a pedra com um murmúrio cantante e descobre uma lagoa cheia de vitórias-régias que ninguém conhecia.',
+            defaultQuestion: 'Quando um plano muda de repente, que novidade divertida pode estar esperando pela gente na curva do caminho?',
+            challengeAct: 'ouviu que o passeio combinado precisou ser adiado por causa da chuva, sentindo o peito explodir de decepção e querendo bater o pé no chão.',
+            breathCue: 'colocou as mãos no coração, inspirou devagar contando até quatro e soprou mansinho como a água que contorna pedrinhas no riacho.'
+        },
+        medo_trovao_raio: {
+            label: '88. Trovões & Céu Noturno (O tambor gigante das nuvens de algodão)',
+            defaultMetaphor: 'O tambor mágico dos gigantes do céu: o trovão é apenas o som das nuvens fofas de algodão comemorando a chegada da água que rega as árvores e faz os ipês florescerem. Dentro de casa, o ninho é seguro, firme e quentinho.',
+            defaultQuestion: 'Você sente como a nossa casa é uma fortaleza quentinha onde nada da tempestade pode nos tocar?',
+            challengeAct: 'ouviu um estrondo forte de trovão na janela e deu um pulo assustado, cobrindo a cabeça com o cobertor com medo do barulho do céu.',
+            breathCue: 'abraçou forte o ursinho ou o travesseiro, inspirou sentindo a firmeza do colchão e expirou devagarinho ouvindo a chuva mansa lavar a terra.'
+        },
+        competitividade_escola_esportes: {
+            label: '89. Comparação com Colegas & Autoaceitação (O jacarandá e o girassol)',
+            defaultMetaphor: 'O jacarandá roxo e o girassol dourado na mesma colina: o girassol não tenta dar sombra gigante e o jacarandá não tenta seguir o sol pelo campo. Cada um tem sua própria estação de florir e sua beleza única que ninguém no mundo pode copiar.',
+            defaultQuestion: 'Qual é o seu jeitinho único e especial de brincar e fazer as coisas que faz quem ama você sorrir tanto?',
+            challengeAct: 'viu o colega correr mais rápido ou terminar o desenho primeiro na escola e achou que o seu trabalho não tinha ficado bom o bastante, murchando de cabeça baixa.',
+            breathCue: 'olhou para as próprias mãozinhas capazes, puxou o ar enchendo o peito de orgulho de quem você é e soltou um sopro sereno e contente.'
+        },
+        fobia_escuro_monstro_armario: {
+            label: '90. Acolhimento do Medo do Escuro (A capa invisível de aconchego)',
+            defaultMetaphor: 'A capa mágica da noite estelífera: a escuridão não tem dentes nem garras; ela é só o cobertor suave que o universo estende sobre a terra para que os olhinhos possam descansar do brilho do sol. Tudo continua no mesmo lugar, apenas dormindo em silêncio.',
+            defaultQuestion: 'Se você olhar para o seu quarto agora, que cantinho acolhedor parece estar mandando um abraço sonolento para você?',
+            challengeAct: 'achou que a sombra da cadeira ou da cortina era uma criatura esquisita, sentindo o coraçãozinho disparar antes de acender o abajur.',
+            breathCue: 'deu a mão para quem está ao seu lado, puxou o ar quentinho sentindo o peso gostoso do cobertor e expirou devagar, vendo que a sombra era só um casaco pendurado.'
+        },
+        sono_longe_de_casa: {
+            label: '91. Dormir Fora de Casa (A âncora de carinho que viaja junto)',
+            defaultMetaphor: 'A avezinha migratória que leva seu ninho dentro do peito: não importa se o quarto é diferente, se a cama é em outro lugar ou na casa dos vovós; o fio invisível de proteção viaja enroladinho no coração e faz qualquer cantinho virar um abrigo seguro.',
+            defaultQuestion: 'Onde quer que a gente durma hoje, como é bom saber que o nosso amor e o nosso carinho estão grudadinhos em você?',
+            challengeAct: 'estranhou o cheiro do travesseiro e o som da casa diferente, sentindo saudade do seu quartinho e querendo voltar correndo para o seu cantinho.',
+            breathCue: 'fechou os olhinhos, inspirou trazendo a lembrança do seu quartinho aconchegante e soprou devagarinho, relaxando as perninhas na cama nova.'
+        },
+        perda_objeto_favorito: {
+            label: '92. Perda de Brinquedo ou Paninho Querido (A arca dos tesouros da memória)',
+            defaultMetaphor: 'A arca invisível de tesouros do coração: quando um brinquedo ou objeto querido se perde pelo caminho, toda a alegria e os abraços que ele viveu com você não se perdem nunca; eles se mudam para dentro da sua memória e continuam morando lá para sempre.',
+            defaultQuestion: 'Qual foi o momento mais feliz que você viveu com aquele brinquedinho e que agora ficou guardado para sempre no seu coração?',
+            challengeAct: 'procurou o paninho ou brinquedo predileto em todos os cantos e não encontrou, sentindo uma dorzinha apertada no peito e vontade de chorar copiosamente.',
+            breathCue: 'pôs as mãozinhas sobre o peito sentindo o calor do coração, puxou o ar acolhendo a saudade e soltou um suspiro quentinho de gratidão.'
+        },
+        recusa_banho_sono: {
+            label: '93. Transição para o Banho Quente & Relaxamento (A lagoa morna dos patinhos)',
+            defaultMetaphor: 'A lagoa morna dos patinhos selvagens no crepúsculo: a água quentinha que escorre pelo corpo não serve só para limpar a poeira da terra; ela amolece os músculos cansados, derrete a agitação do dia e prepara o corpo para o soninho mais doce.',
+            defaultQuestion: 'Como as gotinhas mornas de água vão levando embora todo o cansaço do corpo para você deitar leve como uma pena?',
+            challengeAct: 'estava tão entretido brincando no chão da sala que ficou bravo quando ouviu que era hora do banho, cruzando os braços e dizendo que não queria sair de lá.',
+            breathCue: 'imaginou a água quentinha descendo macia pelas costas, inspirou sentindo o aroma do sabonete e soltou o ar relaxando os ombrinhos caídos.'
+        },
+        timidez_apresentacao_escolar: {
+            label: '94. Medo de Falar em Público ou Roda na Escola (O passarinho que afina a flauta)',
+            defaultMetaphor: 'O passarinho cantor que afina sua flauta antes de gorgear no topo da árvore: ele respira fundo, olha para um galho amigo e solta a primeira notinha bem baixinho. Logo a música flui natural e toda a floresta escuta com carinho e respeito.',
+            defaultQuestion: 'Quem é o amigo ou a professora carinhosa para quem você pode olhar quando for contar uma história na roda?',
+            challengeAct: 'precisou falar na frente da turma inteira ou na apresentação de fim de ano e sentiu a garganta secar e a voz sumir, com vergonha de todo mundo olhando.',
+            breathCue: 'plantou os pezinhos bem firmes no chão como raízes de árvore forte, puxou o ar enchendo o pulmão de voz clara e soprou suave com um sorriso confiante.'
+        },
+        ansiedade_separacao_materna: {
+            label: '95. Ansiedade de Separação / Pais que Saem para Trabalhar (A bússola dourada do retorno)',
+            defaultMetaphor: 'A bússola dourada que une o barco e o cais: quando papai ou mamãe saem pela manhã para trabalhar ou estudar, a bússola gira o dia todo marcando o caminho de volta. Cada ponteiro do relógio que anda é um passinho a mais em direção ao abraço do entardecer.',
+            defaultQuestion: 'Se você pudesse mandar um beijinho invisível pelo ar agora, em que bochecha ele iria pousar com carinho?',
+            challengeAct: 'viu os pais pegarem as chaves e a bolsa para sair e sentiu um nó na garganta, agarrando-se na perna deles para não deixar irem embora.',
+            breathCue: 'guardou um beijo quentinho na palma da mão e fechou os dedinhos, inspirou o amor que nunca vai embora e soltou o ar sabendo que o abraço sempre volta.'
+        },
+        hiperfoco_dificuldade_parar: {
+            label: '96. Transição de Jogos/Telas/Lego para Dormir (O trem que desacelera na estação do sono)',
+            defaultMetaphor: 'O trenzinho veloz das ideias brilhantes que viajou o dia todo pelos trilhos: mesmo o trem mais potente precisa diminuir o ritmo devagarinho, soltar uma nuvem de vapor suave e parar no hangar silencioso para que as rodas esfriem e amanhã possam correr com força total.',
+            defaultQuestion: 'Que brincadeira maravilhosa nós vamos inventar juntos amanhã com as baterias do corpo 100% recarregadas?',
+            challengeAct: 'estava montando blocos ou assistindo a um vídeo e não queria parar de jeito nenhum, sentindo a cabeça a mil por hora mesmo com os olhos piscando de sono.',
+            breathCue: 'guardou a última pecinha com cuidado, deitou na cama macia, puxou o ar contando um, dois, três, quatro… e soltou um sopro longo desacelerando o trenzinho dos pensamentos.'
+        },
+        vergonha_erro_desenho: {
+            label: '97. Frustração com Rasura ou Desenho "Errado" (A mancha que virou borboleta)',
+            defaultMetaphor: 'O pintor mestre da floresta que deixou um pingo de tinta preta cair bem no meio da folha branca: em vez de amassar o papel com raiva, ele pegou o pincel fino, desenhou duas asinhas coloridas em volta e transformou o pingo na borboleta mais linda da floresta.',
+            defaultQuestion: 'Você sabia que os erros são apenas o começo de uma descoberta que ninguém esperava?',
+            challengeAct: 'passou a canetinha fora da linha ou rasgou um pedacinho da folha ao apagar com a borracha, ficando com raiva e querendo rasgar o desenho inteiro.',
+            breathCue: 'afastou o papel suavemente, puxou o ar sentindo a calma entrar na mente e expirou devagar, pronto para inventar uma solução genial com o que aconteceu.'
+        },
+        irmandade_partilha_brinquedos: {
+            label: '98. Conflito Fraternal & Partilha de Espaço (O ninho espaçoso dos passarinhos)',
+            defaultMetaphor: 'O ninho espaçoso de ramos trançados no ipê: quando dois irmãozinhos passarinhos disputam a mesma folhinha, o ninho balança; mas quando um empresta a palha para o outro, o ninho fica o dobro mais quentinho e sobra espaço para os dois dormirem abraçados sob a mesma asa.',
+            defaultQuestion: 'Como é bom quando a gente divide um brinquedo e a brincadeira fica muito mais divertida com dois sorrisos?',
+            challengeAct: 'queria o mesmo brinquedo que o irmão estava usando e puxou com força, gerando gritos e cara feia na sala de brinquedos.',
+            breathCue: 'soltou o brinquedo com calma, respirou fundo sentindo o carinho que existe por trás da briga e soprou o ar propondo uma troca justa e amiga.'
+        },
+        angustia_fim_ferias: {
+            label: '99. Despedida do Domingo ou Fim das Férias (O baú de memórias douradas)',
+            defaultMetaphor: 'O baú secreto dos exploradores da floresta: os dias de brincadeira e liberdade não acabam quando a semana de escola começa; nós guardamos cada mergulho, cada gargalhada e cada picolé no baú do coração para que a lembrança nos dê energia a cada manhã de aula.',
+            defaultQuestion: 'Que amigo da escola você está com vontade de rever para contar as novidades do seu fim de semana?',
+            challengeAct: 'percebeu que o domingo estava acabando e a mochila estava na porta, sentindo um peso na barriga e não querendo que a segunda-feira amanhecesse.',
+            breathCue: 'ajeitou o travesseiro, inspirou sentindo a alegria dos dias descansados e soltou o ar com a certeza de que novas aventuras incríveis vão começar amanhã.'
+        },
+        sensacao_inadequacao_neurodiversa: {
+            label: '100. Sentir-se "Diferente" das Outras Crianças (A cor mágica da caixa de lápis)',
+            defaultMetaphor: 'O lápis de cor prateado fosforescente: na caixinha havia vermelhos, azuis e verdes comuns, mas quando a folha do universo precisou desenhar constelações e faíscas que ninguém mais conseguia fazer, foi exatamente o lápis diferente que fez a obra-prima mais admirada de todas.',
+            defaultQuestion: 'Como é maravilhoso o seu cérebro brilhante e único, que enxerga o mundo com detalhes mágicos que os outros nem imaginam?',
+            challengeAct: 'percebeu que as outras crianças brincavam de um jeito diferente ou não entendiam suas ideias geniais, sentindo-se sozinho como se fosse de outro planeta.',
+            breathCue: 'pousou as mãos no peito sentindo a força singular do seu ser, puxou o ar com orgulho e amor próprio e soprou macio, sabendo que você é precioso exatamente como é.'
         }
     };
 
@@ -1483,7 +1588,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pediatria do Sono &amp; Regulação Afetiva</span>
-                            <span class="text-xs font-mono text-slate-400">60 Metáforas Comportamentais &amp; 14 Biomas</span>
+                            <span class="text-xs font-mono text-slate-400">100 Metáforas Comportamentais &amp; 14 Biomas</span>
                         </div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gerador Estruturado de Cenas Terapêuticas &amp; Contos Noturnos</h2>
                     </div>
@@ -1516,7 +1621,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (60 Metáforas Clínicas) *</label>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (100 Metáforas Clínicas) *</label>
                                 <select id="ct-theme" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-300">
                                     ${Object.entries(STORY_THEMES).map(([k, v]) => `
                                         <option value="${k}">${v.label}</option>
