@@ -1,11 +1,16 @@
 param(
     [int]$Port = 8080,
-    [string]$Root = (Get-Location).Path
+    [string]$Root = (Split-Path -Parent $PSScriptRoot)
 )
 
 $listener = New-Object System.Net.HttpListener
 $prefix = "http://localhost:$Port/"
 $listener.Prefixes.Add($prefix)
+$listener.Prefixes.Add("http://127.0.0.1:$Port/")
+if ($Port -ne 5500) {
+    $listener.Prefixes.Add("http://localhost:5500/")
+    $listener.Prefixes.Add("http://127.0.0.1:5500/")
+}
 
 try {
     $listener.Start()

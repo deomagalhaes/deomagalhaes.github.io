@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Semáforo da Tartaruga (PARE, PENSE e AJA) – Deo Magalhães</title>
+    <meta name="description" content="Jogo terapêutico infantil para treino de controle inibitório, autorregulação emocional e Técnica da Tartaruga em sessão clínica e em casa com os pais.">
+
+    <link rel="icon" href="../assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --mint: #94d2bd;
+            --red-stop: #ef4444;
+            --yellow-think: #f59e0b;
+            --green-act: #10b981;
+            --surface: #ffffff;
+            --bg-soft: #f8fafc;
+        }
+
+        .game-shell {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 28px;
+            margin: 24px 0 36px 0;
+            box-shadow: 0 12px 35px rgba(0, 95, 115, 0.10);
+            border: 2px solid #e2e8f0;
+        }
+
+        .top-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: #e6f6f4;
+            color: #005f73;
+            border: 1px solid #94d2bd;
+        }
+
+        .pill-badge.amber {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .mode-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+
+        .mode-tab-btn {
+            padding: 11px 20px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-tab-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+        }
+
+        .mode-tab-btn.active {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.25);
+        }
+
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #001219;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94d2bd;
+            font-weight: 700;
+        }
+
+        .hud-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .sound-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* Painel do Semáforo Visual */
+        .traffic-stage {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 24px;
+            align-items: center;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 680px) {
+            .traffic-stage {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+            }
+        }
+
+        .traffic-box {
+            background: #0f172a;
+            border: 4px solid #ee9b00;
+            border-radius: 24px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 120px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .light-circle {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+            opacity: 0.35;
+        }
+
+        .light-circle.active-red {
+            background: var(--red-stop);
+            opacity: 1;
+            box-shadow: 0 0 24px rgba(239, 68, 68, 0.85);
+            transform: scale(1.08);
+        }
+
+        .light-circle.active-yellow {
+            background: var(--yellow-think);
+            opacity: 1;
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.85);
+            transform: scale(1.08);
+        }
+
+        .light-circle.active-green {
+            background: var(--green-act);
+            opacity: 1;
+            box-shadow: 0 0 24px rgba(16, 185, 129, 0.85);
+            transform: scale(1.08);
+        }
+
+        /* Trilha da Tartaruga */
+        .trail-track {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #e6f6f4;
+            border: 2px dashed #0a9396;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            position: relative;
+            overflow-x: auto;
+            gap: 8px;
+        }
+
+        .trail-step {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #94d2bd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #005f73;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .trail-step.completed {
+            background: #10b981;
+            color: #ffffff;
+            border-color: #059669;
+        }
+
+        .trail-step.current {
+            background: #ee9b00;
+            color: #001219;
+            border-color: #ca6702;
+            transform: scale(1.18);
+            box-shadow: 0 4px 12px rgba(238, 155, 0, 0.4);
+        }
+
+        .action-btns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .turtle-action-btn {
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            font-weight: 800;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-height: 78px;
+            justify-content: center;
+        }
+
+        .turtle-action-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+        }
+
+        .btn-stop-shell {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+
+        .btn-think-plan {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .btn-green-walk {
+            background: #ecfdf5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .feedback-banner {
+            margin-top: 18px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            line-height: 1.55;
+            display: none;
+        }
+
+        .feedback-banner.good {
+            display: block;
+            background: #ecfdf5;
+            border: 2px solid #6ee7b7;
+            color: #065f46;
+        }
+
+        .feedback-banner.calibrate {
+            display: block;
+            background: #fffbeb;
+            border: 2px solid #fde68a;
+            color: #92400e;
+        }
+
+        /* Missões da Vida Real */
+        .mission-card {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: left;
+        }
+
+        .step-pill-indicator {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .step-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .step-pill.active-red { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+        .step-pill.active-yellow { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .step-pill.active-green { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+
+        .choice-option-btn {
+            width: 100%;
+            text-align: left;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.96rem;
+            color: #1e293b;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .choice-option-btn:hover {
+            border-color: #005f73;
+            background: #f0fdfa;
+        }
+
+        /* Respiração no Casco */
+        .breath-circle-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 16px;
+            background: linear-gradient(135deg, #e6f6f4 0%, #f0fdf4 100%);
+            border-radius: 18px;
+            border: 2px solid #94d2bd;
+        }
+
+        .breath-orb {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #0a9396 0%, #005f73 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.6rem;
+            box-shadow: 0 0 35px rgba(10, 147, 150, 0.35);
+            transition: transform 3.8s ease-in-out, background 1s ease;
+            margin: 18px 0;
+        }
+
+        .breath-orb.inhale {
+            transform: scale(1.38);
+        }
+
+        .breath-orb.exhale {
+            transform: scale(0.88);
+        }
+
+        .mediation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+            margin-top: 32px;
+        }
+
+        .mediation-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-top: 5px solid #005f73;
+            border-radius: 16px;
+            padding: 24px;
+            line-height: 1.6;
+        }
+
+        .mediation-box.family {
+            background: #fffbeb;
+            border-top-color: #ee9b00;
+        }
+
+        .mediation-box h3 {
+            margin-top: 0;
+            color: #001219;
+            font-size: 1.2rem;
+        }
+
+        .toolbar-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-utility {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-utility:hover {
+            background: #0a9396;
+        }
+
+        .btn-utility.whatsapp {
+            background: #15803d;
+        }
+
+        .btn-utility.outline {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .print-certificate {
+            display: none;
+            border: 3px double #005f73;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        @media print {
+            .top-bar, #main-header, footer.main-footer, .no-print {
+                display: none !important;
+            }
+            .print-certificate {
+                display: block !important;
+            }
+            .game-shell {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar Padrão -->
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Canônico -->
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../testes.html">Testes</a>
+                <a href="../jogos.html" class="active">Jogos</a>
+                <a href="../recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <div class="top-badges-row">
+                    <span class="pill-badge">🧸 Infantil (4 a 11 anos)</span>
+                    <span class="pill-badge">🧠 Controle Inibitório & Emoções</span>
+                    <span class="pill-badge amber">🏡 Uso em Sessão & em Casa com os Pais</span>
+                </div>
+                <h1>O Semáforo da Tartaruga (PARE, PENSE e AJA)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+            </header>
+
+            <div class="game-shell">
+                <!-- Seletor de Modos Terapêuticos -->
+                <div class="mode-tabs no-print">
+                    <button class="mode-tab-btn active" id="tabBtnTrail" onclick="switchMode('trail')">
+                        🚦 1. Trilha do Freio Mágico (Ação)
+                    </button>
+                    <button class="mode-tab-btn" id="tabBtnMissions" onclick="switchMode('missions')">
+                        🏡 2. Missões do Dia a Dia (Sessão & Família)
+                    </button>
+                    <button class="mode-tab-btn" id="tabBtnBreath" onclick="switchMode('breath')">
+                        🌸 3. Casco da Calma (Respiração Guiada)
+                    </button>
+                </div>
+
+                <!-- HUD -->
+                <div class="hud-bar no-print">
+                    <div class="hud-stat">
+                        <span class="hud-label">Estrelas de Calma</span>
+                        <span class="hud-value" id="hudStars">⭐ 0</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Freios de Sucesso</span>
+                        <span class="hud-value" id="hudBrakes">🐢 0</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Recorde Familiar</span>
+                        <span class="hud-value" id="hudBest">🏆 0</span>
+                    </div>
+                    <div>
+                        <button class="sound-btn" id="btnSoundToggle" onclick="toggleAudioMute()">
+                            🔊 Som Ativo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MODO 1: TRILHA DO SEMÁFORO (GO / NO-GO LÚDICO) -->
+                <div id="sectionTrail" class="no-print">
+                    <div class="traffic-stage">
+                        <div class="traffic-box" aria-label="Semáforo da Tartaruga">
+                            <div class="light-circle" id="lightRed">🔴</div>
+                            <div class="light-circle" id="lightYellow">🟡</div>
+                            <div class="light-circle active-green" id="lightGreen">🟢</div>
+                        </div>
+
+                        <div>
+                            <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #005f73; margin-bottom: 6px;" id="signalPhaseTag">
+                                Sinal Atual da Floresta
+                            </div>
+                            <h2 style="margin: 0 0 10px 0; color: #001219; font-size: 1.55rem;" id="signalHeadline">
+                                🟢 SINAL VERDE: Caminho Livre e Consciente!
+                            </h2>
+                            <p style="margin: 0 0 14px 0; color: #334155; font-size: 1.02rem; line-height: 1.5;" id="signalInstruction">
+                                Observe a cor do semáforo antes de tocar no botão! Quando o Monstro da Pressa acender o sinal vermelho, ajude a Tartaruga Teca a entrar no casco e respirar!
+                            </p>
+
+                            <!-- Trilha Visual de 8 Passos -->
+                            <div class="trail-track" id="trailTrack">
+                                <!-- Gerado via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-btns-grid">
+                        <button class="turtle-action-btn btn-stop-shell" onclick="handleTrailAction('red')">
+                            <span style="font-size: 1.5rem;">🔴 🐢</span>
+                            <span>1. PARAR no Casco</span>
+                            <small style="font-weight: 600; opacity: 0.85;">Usar quando o sinal estiver Vermelho!</small>
+                        </button>
+
+                        <button class="turtle-action-btn btn-think-plan" onclick="handleTrailAction('yellow')">
+                            <span style="font-size: 1.5rem;">🟡 💡</span>
+                            <span>2. PENSAR e Planejar</span>
+                            <small style="font-weight: 600; opacity: 0.85;">Usar quando o sinal estiver Amarelo!</small>
+                        </button>
+
+                        <button class="turtle-action-btn btn-green-walk" onclick="handleTrailAction('green')">
+                            <span style="font-size: 1.5rem;">🟢 🐾</span>
+                            <span>3. AGIR e Dar um Passo</span>
+                            <small style="font-weight: 600; opacity: 0.85;">Usar quando o sinal estiver Verde!</small>
+                        </button>
+                    </div>
+
+                    <div id="trailFeedback" class="feedback-banner"></div>
+                </div>
+
+                <!-- MODO 2: MISSÕES DO DIA A DIA (SESSÃO & CASA) -->
+                <div id="sectionMissions" class="no-print" style="display: none;">
+                    <div class="mission-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                            <span class="pill-badge" id="missionBadgeContext">Missão 1 de 6 • Em Casa</span>
+                            <span style="font-size: 0.88rem; font-weight: 700; color: #64748b;">Passo a Passo do Córtex Pré-Frontal</span>
+                        </div>
+
+                        <h2 style="margin: 0 0 10px 0; color: #001219; font-size: 1.45rem;" id="missionTitle">Carregando missão...</h2>
+                        <p style="font-size: 1.05rem; color: #334155; line-height: 1.6; margin-bottom: 16px;" id="missionStory"></p>
+
+                        <!-- Indicador dos 3 Passos do Semáforo na Missão -->
+                        <div class="step-pill-indicator">
+                            <span class="step-pill" id="mStep1">🔴 Passo 1: Parar e Sentir</span>
+                            <span class="step-pill" id="mStep2">🟡 Passo 2: Pensar nas Escolhas</span>
+                            <span class="step-pill" id="mStep3">🟢 Passo 3: Conversar em Família</span>
+                        </div>
+
+                        <div id="missionInteractiveArea">
+                            <!-- Conteúdo dinâmico da etapa da missão -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODO 3: CASCO DA CALMA (RESPIRAÇÃO GUIADA) -->
+                <div id="sectionBreath" class="no-print" style="display: none;">
+                    <div class="breath-circle-wrap">
+                        <span class="pill-badge">🐢 Co-regulação Autonômica Infantil</span>
+                        <h2 style="margin: 10px 0 6px 0; color: #005f73;">Respiração da Florzinha e da Velinha</h2>
+                        <p style="max-width: 540px; text-align: center; color: #334155; margin: 0 0 10px 0;">
+                            Faça junto com a criança! Inspire pelo nariz cheirando a florzinha e solte o ar devagar pela boca soprando a velinha sem apagar.
+                        </p>
+
+                        <div class="breath-orb" id="breathOrb">
+                            <span id="breathEmoji">🐢</span>
+                            <span style="font-size: 0.95rem; font-weight: 800; margin-top: 4px;" id="breathTimerText">Pronto?</span>
+                        </div>
+
+                        <p style="font-size: 1.2rem; font-weight: 800; color: #001219; margin: 8px 0 16px 0;" id="breathInstruction">
+                            Toque no botão abaixo para começar 3 respirações no Casco da Calma!
+                        </p>
+
+                        <button class="btn-utility" id="btnStartBreath" onclick="toggleBreathingCycle()">
+                            🌸 Iniciar Respiração no Casco (3 Ciclos)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barra de Ferramentas para Pais e Terapeuta -->
+                <div class="toolbar-bottom no-print">
+                    <button class="btn-utility" onclick="window.print()">
+                        🖨️ Imprimir Combinado da Tartaruga (Para Geladeira / Consultório)
+                    </button>
+                    <button class="btn-utility whatsapp" onclick="shareWhatsAppSummary()">
+                        📲 Enviar Conquista para os Pais (WhatsApp)
+                    </button>
+                    <a href="../jogos.html" class="btn-utility outline">
+                        ← Voltar para Galeria de Jogos
+                    </a>
+                </div>
+
+                <!-- Certificado / Folha Imprimível A4 para Casa -->
+                <div class="print-certificate">
+                    <h2 style="color: #005f73; margin: 0 0 8px 0;">🐢 Certificado & Combinado do Semáforo da Tartaruga</h2>
+                    <p style="margin: 0 0 16px 0; color: #334155;">Treino de Autorregulação Emocional e Controle de Impulsos — Deo Magalhães (CRP 04/42784)</p>
+                    <p style="font-size: 1.1rem; font-weight: 700;">
+                        Conquista da Sessão / Família: <span id="printStarsCount">0</span> Estrelas de Calma e <span id="printBrakesCount">0</span> Freios de Sucesso!
+                    </p>
+                    <div style="text-align: left; border-top: 1px solid #cbd5e1; margin-top: 16px; padding-top: 14px;">
+                        <h4>Nossos 3 Combinados em Casa (PARE, PENSE e AJA):</h4>
+                        <ol style="line-height: 1.8;">
+                            <li><strong>🔴 VERMELHO (PARE):</strong> Quando eu sentir a raiva ou a pressa subindo no corpo, eu paro, cruzo os braços como a Tartaruga Teca no casco e faço 3 respirações da florzinha.</li>
+                            <li><strong>🟡 AMARELO (PENSE):</strong> Antes de gritar, jogar algo ou desistir, eu penso em 2 caminhos diferentes e peço ajuda com palavras.</li>
+                            <li><strong>🟢 VERDE (AJA):</strong> Eu escolho o caminho que cuida de mim e de quem está comigo!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guia Duplo Obrigatório: Terapeuta (Sessão) & Pais (Casa) -->
+            <div class="mediation-grid">
+                <div class="mediation-box">
+                    <h3>🩺 Como Usar na Sessão de Terapia (Mediação Clínica)</h3>
+                    <p>Este recurso adapta a clássica <strong>Técnica da Tartaruga (Schneider &amp; Robin)</strong> associada ao paradigma neuropsicológico <em>Go/No-Go</em>:</p>
+                    <ul>
+                        <li><strong>Observação da Impulsividade Motora:</strong> Na <em>Trilha do Freio Mágico</em>, observe se a criança clica repetidamente no botão verde sem aguardar a mudança de sinal. Use o momento em que o sinal fica vermelho para modelar a fala interna autodirigida (<em>"Opa, apareceu o vermelho! Meu cérebro freia agora!"</em>).</li>
+                        <li><strong>Externalização do Impulso:</strong> Chame a pressa de "Monstro da Pressa" ou "Motorzinho Acelerado", ajudando a criança (especialmente com TDAH ou TEA) a perceber o impulso sem se sentir culpada ou rotulada.</li>
+                        <li><strong>Andaime Metacognitivo (Scaffolding):</strong> Nas <em>Missões do Dia a Dia</em>, peça que a criança conte uma situação parecida que viveu na semana antes de revelar as alternativas do Passo Amarelo.</li>
+                    </ul>
+                </div>
+
+                <div class="mediation-box family">
+                    <h3>👨‍👩‍👧 Como os Pais Podem Usar em Casa com os Filhos</h3>
+                    <p>Recomendação prática para transformar o jogo em rotina familiar de 10 minutos:</p>
+                    <ul>
+                        <li><strong>Crie a "Palavra-Código da Tartaruga":</strong> Combinem em família que, quando alguém estiver prestes a explodir de frustração (inclusive os adultos!), qualquer um pode dizer com carinho: <em>"Hora do Casco da Tartaruga!"</em> para respirarem juntos por 10 segundos.</li>
+                        <li><strong>Elogie o Freio, Não Apenas a Perfeição:</strong> Sempre que seu filho conseguir parar por 2 segundos antes de reagir ou pedir ajuda com palavras em vez de chorar/gritar, valide imediatamente: <em>"Eu vi como você usou o freio amarelo do seu cérebro agora! Que orgulho!"</em></li>
+                        <li><strong>Pergunta para a Hora de Dormir:</strong> <em>"Qual foi o momento hoje em que a Tartaruga Teca mais ajudou você a pensar antes de agir?"</em></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Fundamentação Neuropsicológica -->
+            <article class="article-body" style="margin-top: 36px;">
+                <h2>Bases Neuropsicológicas: Como o Córtex Pré-Frontal Infantil Aprende a Frear</h2>
+                <p>Durante a infância (4 a 11 anos), as estruturas límbicas subcorticais — como a <strong>amígdala cerebral</strong>, responsável pelas respostas rápidas de frustração, medo e impulsividade — amadurecem antes das redes de controle executivo do <strong>Córtex Pré-Frontal Ventrolateral e Dorsolateral (CPF)</strong>.</p>
+                <p>Quando a criança treina de forma lúdica a sequência <strong>🔴 PARE ➔ 🟡 PENSE ➔ 🟢 AJA</strong>, ela cria um intervalo temporal essencial (de 2 a 4 segundos) que permite:</p>
+                <ul>
+                    <li><strong>Ativação do Freio Vagal:</strong> A expiração prolongada no "Casco da Calma" estimula o nervo vago, reduzindo a frequência cardíaca e devolvendo a criança à sua <em>Janela de Tolerância</em>.</li>
+                    <li><strong>Recrutamento da Memória de Trabalho:</strong> Ao comparar três atitudes possíveis no sinal amarelo, o cérebro infantil transfere o processamento da reatividade emocional imediata para o raciocínio consequencial.</li>
+                </ul>
+                <hr class="article-divider">
+                <p class="article-disclaimer"><em>Este jogo tem caráter lúdico, psicoeducativo e de apoio terapêutico familiar. Para avaliação neuropsicológica e acompanhamento clínico individualizado do desenvolvimento infantil, consulte sempre um profissional qualificado.</em></p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/script.js"></script>
+    <script>
+        // Motor de Áudio Suave (Web Audio API)
+        let audioCtx = null;
+        let isMuted = false;
+
+        function ensureAudio() {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAudioMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btnSoundToggle');
+            btn.textContent = isMuted ? '🔇 Modo Silencioso' : '🔊 Som Ativo';
+        }
+
+        function playSoftTone(freqStart, freqEnd, durationSec, waveType = 'sine') {
+            if (isMuted) return;
+            try {
+                const ctx = ensureAudio();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = waveType;
+                osc.frequency.setValueAtTime(freqStart, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(freqEnd, ctx.currentTime + durationSec);
+                gain.gain.setValueAtTime(0.10, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + durationSec);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + durationSec + 0.02);
+            } catch (e) {}
+        }
+
+        function playCelebrationChord() {
+            if (isMuted) return;
+            try {
+                const ctx = ensureAudio();
+                if (!ctx) return;
+                const notes = [523.25, 659.25, 783.99, 1046.5];
+                notes.forEach((n, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = n;
+                    const start = ctx.currentTime + idx * 0.08;
+                    gain.gain.setValueAtTime(0.09, start);
+                    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(start);
+                    osc.stop(start + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        // Estado Persistente
+        let stars = parseInt(localStorage.getItem('deo_ij01_stars') || '0', 10);
+        let brakes = parseInt(localStorage.getItem('deo_ij01_brakes') || '0', 10);
+        let bestScore = parseInt(localStorage.getItem('deo_ij01_best') || '0', 10);
+
+        function saveAndRefreshHUD() {
+            if (stars > bestScore) {
+                bestScore = stars;
+                localStorage.setItem('deo_ij01_best', String(bestScore));
+            }
+            localStorage.setItem('deo_ij01_stars', String(stars));
+            localStorage.setItem('deo_ij01_brakes', String(brakes));
+
+            document.getElementById('hudStars').textContent = `⭐ ${stars}`;
+            document.getElementById('hudBrakes').textContent = `🐢 ${brakes}`;
+            document.getElementById('hudBest').textContent = `🏆 ${bestScore}`;
+            document.getElementById('printStarsCount').textContent = String(stars);
+            document.getElementById('printBrakesCount').textContent = String(brakes);
+        }
+
+        // Alternância de Modos
+        function switchMode(mode) {
+            document.getElementById('sectionTrail').style.display = mode === 'trail' ? 'block' : 'none';
+            document.getElementById('sectionMissions').style.display = mode === 'missions' ? 'block' : 'none';
+            document.getElementById('sectionBreath').style.display = mode === 'breath' ? 'block' : 'none';
+
+            document.getElementById('tabBtnTrail').classList.toggle('active', mode === 'trail');
+            document.getElementById('tabBtnMissions').classList.toggle('active', mode === 'missions');
+            document.getElementById('tabBtnBreath').classList.toggle('active', mode === 'breath');
+
+            playSoftTone(440, 587.33, 0.12);
+        }
+
+        // MODO 1: Trilha do Freio Mágico
+        const TRAIL_TOTAL = 8;
+        let currentTrailPos = 0;
+        let currentSignal = 'green'; // 'green', 'yellow', 'red'
+
+        const SIGNAL_SCENARIOS = {
+            green: [
+                "🟢 SINAL VERDE: O caminho da floresta está calmo e seguro! Toque em AGIR (Passo Verde) para a Tartaruga Teca avançar.",
+                "🟢 SINAL VERDE: Você respirou e observou bem! Agora pode dar um passo tranquilo até a próxima pedra."
+            ],
+            yellow: [
+                "🟡 SINAL AMARELO: Uma ponte estreita apareceu na frente! Toque em PENSAR e Planejar antes de continuar.",
+                "🟡 SINAL AMARELO: Duas trilhas apareceram! Vamos parar um pouquinho e PENSAR qual é o caminho mais seguro?"
+            ],
+            red: [
+                "🔴 SINAL VERMELHO: O Monstro da Pressa quer fazer você correr sem olhar! Toque em PARAR no Casco para ativar o Super Freio!",
+                "🔴 SINAL VERMELHO: Um barulho alto assustou a floresta! Entre no Casco da Tartaruga e respire fundo antes de agir!"
+            ]
+        };
+
+        function renderTrailTrack() {
+            const track = document.getElementById('trailTrack');
+            track.innerHTML = '';
+            for (let i = 0; i <= TRAIL_TOTAL; i++) {
+                const step = document.createElement('div');
+                step.className = 'trail-step';
+                if (i < currentTrailPos) {
+                    step.classList.add('completed');
+                    step.textContent = '✓';
+                } else if (i === currentTrailPos) {
+                    step.classList.add('current');
+                    step.textContent = '🐢';
+                } else if (i === TRAIL_TOTAL) {
+                    step.textContent = '🏝️';
+                } else {
+                    step.textContent = String(i + 1);
+                }
+                track.appendChild(step);
+            }
+        }
+
+        function pickNextSignal() {
+            const roll = Math.random();
+            if (roll < 0.38) {
+                currentSignal = 'red';
+            } else if (roll < 0.68) {
+                currentSignal = 'yellow';
+            } else {
+                currentSignal = 'green';
+            }
+            updateSignalVisuals();
+        }
+
+        function updateSignalVisuals() {
+            document.getElementById('lightRed').className = 'light-circle' + (currentSignal === 'red' ? ' active-red' : '');
+            document.getElementById('lightYellow').className = 'light-circle' + (currentSignal === 'yellow' ? ' active-yellow' : '');
+            document.getElementById('lightGreen').className = 'light-circle' + (currentSignal === 'green' ? ' active-green' : '');
+
+            const headlines = {
+                red: '🔴 SINAL VERMELHO: PARE e Entre no Casco!',
+                yellow: '🟡 SINAL AMARELO: PENSE e Observe a Pista!',
+                green: '🟢 SINAL VERDE: AJA com Calma e Avance!'
+            };
+            document.getElementById('signalHeadline').textContent = headlines[currentSignal];
+            const list = SIGNAL_SCENARIOS[currentSignal];
+            document.getElementById('signalInstruction').textContent = list[Math.floor(Math.random() * list.length)];
+        }
+
+        function handleTrailAction(chosenColor) {
+            const fb = document.getElementById('trailFeedback');
+            if (chosenColor === currentSignal) {
+                stars += 2;
+                if (chosenColor === 'red') {
+                    brakes += 1;
+                    playSoftTone(392, 523.25, 0.25, 'triangle');
+                    fb.className = 'feedback-banner good';
+                    fb.innerHTML = '🐢 <strong>Super Freio Ativado!</strong> Você percebeu o Sinal Vermelho, entrou no casco e respirou fundo antes de agir! Seu córtex pré-frontal brilhou! (+2 ⭐ e +1 🐢)';
+                    // Após frear no vermelho, muda para amarelo ou verde!
+                    currentSignal = 'yellow';
+                    updateSignalVisuals();
+                } else if (chosenColor === 'yellow') {
+                    playSoftTone(440, 659.25, 0.2, 'sine');
+                    fb.className = 'feedback-banner good';
+                    fb.innerHTML = '💡 <strong>Ótimo Planejamento!</strong> Você usou o Sinal Amarelo para pensar nas opções com calma! Agora o sinal abriu para o Verde! (+2 ⭐)';
+                    currentSignal = 'green';
+                    updateSignalVisuals();
+                } else {
+                    currentTrailPos++;
+                    playSoftTone(523.25, 783.99, 0.2, 'sine');
+                    if (currentTrailPos >= TRAIL_TOTAL) {
+                        stars += 5;
+                        playCelebrationChord();
+                        fb.className = 'feedback-banner good';
+                        fb.innerHTML = '🎉 <strong>Chegada na Lagoa Cristalina!</strong> A Tartaruga Teca completou toda a trilha usando o Semáforo da Calma! Vamos jogar mais uma rodada ou testar as Missões do Dia a Dia? (+5 ⭐ Bônus)';
+                        currentTrailPos = 0;
+                    } else {
+                        fb.className = 'feedback-banner good';
+                        fb.innerHTML = `🐾 <strong>Passo Consciente!</strong> A Tartaruga Teca avançou para a casa ${currentTrailPos} de ${TRAIL_TOTAL}. Observe qual cor o semáforo vai acender agora! (+2 ⭐)`;
+                    }
+                    renderTrailTrack();
+                    pickNextSignal();
+                }
+                saveAndRefreshHUD();
+            } else {
+                playSoftTone(300, 240, 0.2, 'sine');
+                fb.className = 'feedback-banner calibrate';
+                const mapName = { red: 'VERMELHO (Parar no Casco)', yellow: 'AMARELO (Pensar e Planejar)', green: 'VERDE (Agir e Avançar)' };
+                fb.innerHTML = `💛 <strong>Quase lá! Vamos olhar juntos para o semáforo?</strong> O sinal está <strong>${mapName[currentSignal]}</strong>. Respire fundo uma vez e toque no botão da mesma cor do sinal!`;
+            }
+        }
+
+        // MODO 2: Missões do Dia a Dia (Sessão & Casa)
+        const MISSIONS = [
+            {
+                context: "Missão 1 de 6 • Em Casa (Irmãos e Brinquedos)",
+                title: "A Torre de Blocos que Caiu",
+                story: "Você passou 15 minutos montando um castelo bem alto. De repente, alguém esbarrou sem querer na mesa e a torre inteira desmoronou!",
+                bodySignal: "O coração acelera, o rosto esquenta e dá vontade de gritar ou jogar os blocos longe.",
+                options: [
+                    {
+                        text: "A) Gritar bem alto e jogar as peças que sobraram no chão.",
+                        isWise: false,
+                        feedback: "Se jogarmos as peças, podemos machucar alguém ou perder o tempo de brincadeira. Vamos tentar uma escolha que ajude você a se sentir melhor?"
+                    },
+                    {
+                        text: "B) Entrar no Casco por 3 segundos, dizer 'Fiquei chateado porque deu trabalho' e convidar para reconstruir ainda mais forte!",
+                        isWise: true,
+                        feedback: "Excelente! Nomear o sentimento com palavras e pedir ajuda ativa a parte sábia do cérebro e transforma a frustração em parceria!"
+                    },
+                    {
+                        text: "C) Chorar escondido e prometer nunca mais brincar de blocos.",
+                        isWise: false,
+                        feedback: "Ficar triste é normal, mas desistir de brincar tira a sua diversão. Vamos olhar a opção que usa a voz da Tartaruga Sábia?"
+                    }
+                ],
+                familyQuestion: "Pergunta para Pais / Terapeuta: 'O que ajuda você a acalmar as mãozinhas quando alguma coisa que você estava montando dá errado?'"
+            },
+            {
+                context: "Missão 2 de 6 • Rotina Familiar (Telas e Jogos)",
+                title: "Hora de Desligar o Tablet ou Videogame",
+                story: "O combinado de tempo acabou e o papai ou a mamãe avisou que é hora de pausar o jogo para tomar banho ou jantar.",
+                bodySignal: "O corpo fica duro, dá vontade de dizer 'NÃO!' bem forte ou fingir que não ouviu.",
+                options: [
+                    {
+                        text: "A) Respirar fundo no Sinal Vermelho, salvar a fase em 1 minutinho combinado e entregar o aparelho com calma.",
+                        isWise: true,
+                        feedback: "Show de Controle Executivo! Cumprir o combinado mostra maturidade e gera confiança para ter ótimos momentos de lazer depois!"
+                    },
+                    {
+                        text: "B) Esconder o tablet debaixo do travesseiro e continuar jogando.",
+                        isWise: false,
+                        feedback: "Quebrar o combinado gera estresse em casa e faz você perder estrelas de confiança. Vamos testar a escolha do Sinal Verde?"
+                    },
+                    {
+                        text: "C) Bater o pé no chão e dizer que tudo é chato.",
+                        isWise: false,
+                        feedback: "É difícil parar algo divertido, mas quando usamos o freio da Tartaruga o fim do jogo fica muito mais leve!"
+                    }
+                ],
+                familyQuestion: "Pergunta para Pais / Terapeuta: 'Como podemos combinar um aviso de 5 minutos antes de terminar o tempo de tela para o cérebro se preparar?'"
+            },
+            {
+                context: "Missão 3 de 6 • Na Escola e Lição de Casa",
+                title: "O Exercício que Parece Difícil Demais",
+                story: "Você abriu o caderno de atividades e viu uma questão nova que você ainda não sabe resolver de primeira.",
+                bodySignal: "Dá um aperto na barriga, vontade de rabiscar a folha ou largar o lápis.",
+                options: [
+                    {
+                        text: "A) Amassar a folha e dizer 'Eu não consigo fazer nada!'.",
+                        isWise: false,
+                        feedback: "Lembre-se: nosso cérebro cresce justamente quando tenta algo que ainda não sabe! Vamos usar o Sinal Amarelo?"
+                    },
+                    {
+                        text: "B) Parar, respirar uma vez, dividir o exercício em um pedacinho pequeno e pedir uma pista para o adulto.",
+                        isWise: true,
+                        feedback: "Perfeito! Pedir uma pista e começar pelo pedacinho mais fácil destrava a memória de trabalho sem sofrimento!"
+                    },
+                    {
+                        text: "C) Ficar olhando para o teto esperando a tarefa sumir sozinha.",
+                        isWise: false,
+                        feedback: "Adiantar um passinho pequeno deixa mais tempo livre para brincar depois! Qual opção pede ajuda de forma esperta?"
+                    }
+                ],
+                familyQuestion: "Pergunta para Pais / Terapeuta: 'Qual é a nossa frase mágica quando um dever parece grande demais? (Ex: Ainda não sei, mas vou aprender passo a passo!)'"
+            },
+            {
+                context: "Missão 4 de 6 • Jogos em Grupo e Sessão",
+                title: "Quando Outra Pessoa Ganha a Partida",
+                story: "Você jogou uma partida de tabuleiro com muita vontade de vencer, mas no último dado o outro jogador chegou primeiro ao final.",
+                bodySignal: "O peito fica quente e dá vontade de dizer que o jogo não valeu ou bagunçar o tabuleiro.",
+                options: [
+                    {
+                        text: "A) Fazer a respiração da Tartaruga, dar parabéns e convidar para uma revanche divertida.",
+                        isWise: true,
+                        feedback: "Incrível tolerância à frustração! Quem sabe lidar com a derrota joga cada vez melhor e todo mundo adora brincar junto!"
+                    },
+                    {
+                        text: "B) Jogar os dados longe e sair da sala batendo a porta.",
+                        isWise: false,
+                        feedback: "Quando saímos batendo a porta, a brincadeira acaba triste para todos. Vamos tentar o caminho da Tartaruga Teca?"
+                    },
+                    {
+                        text: "C) Inventar uma regra nova só para dizer que você ganhou.",
+                        isWise: false,
+                        feedback: "As regras combinadas deixam o jogo justo para todos. Que tal respirar e tentar a próxima partida?"
+                    }
+                ],
+                familyQuestion: "Pergunta para Pais / Terapeuta: 'Qual foi a parte mais divertida da partida, mesmo quando o resultado final não foi a vitória?'"
+            },
+            {
+                context: "Missão 5 de 6 • Espera e Paciência",
+                title: "Esperando a Vez de Falar",
+                story: "Você teve uma ideia super legal e quer contar agora mesmo, mas a mamãe, o papai ou o terapeuta está terminando de falar uma frase.",
+                bodySignal: "As palavras ficam pulando na ponta da língua querendo atropelar a conversa!",
+                options: [
+                    {
+                        text: "A) Gritar por cima da voz do adulto até ele parar de falar.",
+                        isWise: false,
+                        feedback: "Se os dois falarem juntos, ninguém consegue entender a sua grande ideia! Vamos ativar o Sinal Amarelo?"
+                    },
+                    {
+                        text: "B) Segurar a ideia na memória por alguns segundos (ou colocar a mão no ombro/levantar o dedo) até a sua vez chegar.",
+                        isWise: true,
+                        feedback: "Brilhante! Segurar a ideia na cabeça por alguns segundos exercita a Memória Operacional e o respeito ao turno do outro!"
+                    },
+                    {
+                        text: "C) Ficar emburrado e dizer 'Agora não vou falar mais nada!'.",
+                        isWise: false,
+                        feedback: "Sua ideia é muito importante! Só precisamos esperar o sinal ficar verde para todo mundo ouvir você com atenção."
+                    }
+                ],
+                familyQuestion: "Pergunta para Pais / Terapeuta: 'Qual gesto secreto podemos combinar quando você quiser muito falar algo importante sem esquecer?'"
+            },
+            {
+                context: "Missão 6 de 6 • Mudança de Planos",
+                title: "A Chuva no Dia do Passeio no Parque",
+                story: "Vocês planejaram ir ao parque à tarde, mas caiu um temporal de repente e o passeio precisou mudar para dentro de casa.",
+                bodySignal: "Sensação de decepção e vontade de reclamar a tarde inteira.",
+                options: [
+                    {
+                        text: "A) Respirar no casco para acolher a chateação e criar um 'Plano B' especial em casa (cabana de lençol ou cinema com pipoca!).",
+                        isWise: true,
+                        feedback: "Flexibilidade Cognitiva nota 10! Seu cérebro aprendeu que quando o Plano A muda, podemos inventar um Plano B incrível!"
+                    },
+                    {
+                        text: "B) Ficar chorando na janela a tarde toda brigando com a chuva.",
+                        isWise: false,
+                        feedback: "Ficar triste com a chuva é compreensível, mas nosso cérebro flexível pode descobrir uma aventura nova dentro de casa!"
+                    },
+                    {
+                        text: "C) Culpar os pais porque começou a chover.",
+                        isWise: false,
+                        feedback: "Ninguém controla o clima, mas nós controlamos como transformar nossa tarde! Vamos escolher o Plano B?"
+                    }
+                ],
+                familyQuestion: "Pergunta para Pais / Terapeuta: 'Qual é o nosso Plano B favorito em família quando um passeio precisa mudar de repente?'"
+            }
+        ];
+
+        let currentMissionIdx = 0;
+        let currentMissionStep = 1; // 1 = Parar, 2 = Pensar, 3 = Agir/Conversar
+
+        function renderMission() {
+            const m = MISSIONS[currentMissionIdx];
+            document.getElementById('missionBadgeContext').textContent = m.context;
+            document.getElementById('missionTitle').textContent = m.title;
+            document.getElementById('missionStory').textContent = m.story;
+
+            document.getElementById('mStep1').className = 'step-pill' + (currentMissionStep === 1 ? ' active-red' : '');
+            document.getElementById('mStep2').className = 'step-pill' + (currentMissionStep === 2 ? ' active-yellow' : '');
+            document.getElementById('mStep3').className = 'step-pill' + (currentMissionStep === 3 ? ' active-green' : '');
+
+            const area = document.getElementById('missionInteractiveArea');
+
+            if (currentMissionStep === 1) {
+                area.innerHTML = `
+                    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+                        <strong>🔴 O que o corpo sente nessa hora (Sinal de Alerta):</strong>
+                        <p style="margin: 6px 0 0 0; color: #7f1d1d;">${m.bodySignal}</p>
+                    </div>
+                    <button class="btn-utility" style="background: #ef4444; width: 100%; justify-content: center; padding: 14px;" onclick="advanceMissionToThink()">
+                        🐢 Entrar no Casco, Respirar Fundo e Ir para o Passo 2 (PENSAR) ➔
+                    </button>
+                `;
+            } else if (currentMissionStep === 2) {
+                let buttonsHtml = m.options.map((opt, idx) => `
+                    <button class="choice-option-btn" onclick="selectMissionOption(${idx})">
+                        <span style="font-size: 1.3rem;">🟡</span>
+                        <span>${opt.text}</span>
+                    </button>
+                `).join('');
+                area.innerHTML = `
+                    <p style="font-weight: 700; color: #92400e; margin-bottom: 12px;">
+                        🟡 Passo 2 (PENSE): Qual destas 3 atitudes a Tartaruga Sábia escolheria?
+                    </p>
+                    ${buttonsHtml}
+                    <div id="missionOptionFeedback" class="feedback-banner"></div>
+                `;
+            } else {
+                area.innerHTML = `
+                    <div class="feedback-banner good" style="display: block; margin-bottom: 18px;">
+                        🟢 <strong>Missão Concluída com Sabedoria!</strong><br>
+                        ${m.options.find(o => o.isWise).feedback}
+                    </div>
+                    <div style="background: #fffbeb; border: 2px dashed #ee9b00; border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+                        <strong>💬 Momento de Conexão (Terapeuta / Pais &amp; Filho):</strong>
+                        <p style="margin: 6px 0 0 0; color: #78350f; font-size: 1.02rem;">${m.familyQuestion}</p>
+                    </div>
+                    <button class="btn-utility" style="width: 100%; justify-content: center; padding: 14px;" onclick="nextMission()">
+                        Próxima Missão do Dia a Dia ➔
+                    </button>
+                `;
+            }
+        }
+
+        function advanceMissionToThink() {
+            brakes += 1;
+            stars += 1;
+            saveAndRefreshHUD();
+            playSoftTone(392, 523.25, 0.2, 'triangle');
+            currentMissionStep = 2;
+            renderMission();
+        }
+
+        function selectMissionOption(optIdx) {
+            const m = MISSIONS[currentMissionIdx];
+            const chosen = m.options[optIdx];
+            const fb = document.getElementById('missionOptionFeedback');
+            if (chosen.isWise) {
+                stars += 3;
+                saveAndRefreshHUD();
+                playCelebrationChord();
+                currentMissionStep = 3;
+                renderMission();
+            } else {
+                playSoftTone(320, 260, 0.18, 'sine');
+                fb.className = 'feedback-banner calibrate';
+                fb.innerHTML = `💡 <strong>Vamos pensar nas consequências:</strong> ${chosen.feedback}`;
+            }
+        }
+
+        function nextMission() {
+            currentMissionIdx = (currentMissionIdx + 1) % MISSIONS.length;
+            currentMissionStep = 1;
+            renderMission();
+        }
+
+        // MODO 3: Respiração Guiada no Casco
+        let breathInterval = null;
+        let isBreathing = false;
+
+        function toggleBreathingCycle() {
+            const btn = document.getElementById('btnStartBreath');
+            const orb = document.getElementById('breathOrb');
+            const emoji = document.getElementById('breathEmoji');
+            const timerTxt = document.getElementById('breathTimerText');
+            const instr = document.getElementById('breathInstruction');
+
+            if (isBreathing) {
+                clearInterval(breathInterval);
+                isBreathing = false;
+                orb.className = 'breath-orb';
+                emoji.textContent = '🐢';
+                timerTxt.textContent = 'Pausado';
+                instr.textContent = 'Toque abaixo quando quiser fazer mais 3 respirações no Casco da Calma!';
+                btn.textContent = '🌸 Iniciar Respiração no Casco (3 Ciclos)';
+                return;
+            }
+
+            isBreathing = true;
+            btn.textContent = '⏹️ Parar Ciclo de Respiração';
+            let cycle = 1;
+            let phase = 'inhale';
+
+            function runStep() {
+                if (!isBreathing) return;
+                if (phase === 'inhale') {
+                    orb.className = 'breath-orb inhale';
+                    emoji.textContent = '🌸';
+                    timerTxt.textContent = `Ciclo ${cycle}/3`;
+                    instr.textContent = '1. Inspire pelo nariz cheirando a florzinha... (4 segundos)';
+                    playSoftTone(392, 523.25, 0.45, 'sine');
+                    phase = 'exhale';
+                } else {
+                    orb.className = 'breath-orb exhale';
+                    emoji.textContent = '🕯️';
+                    timerTxt.textContent = `Solte o ar...`;
+                    instr.textContent = '2. Sopre a velinha bem devagar pela boca... (4 segundos)';
+                    playSoftTone(523.25, 392, 0.45, 'sine');
+                    if (cycle >= 3) {
+                        setTimeout(() => {
+                            if (!isBreathing) return;
+                            clearInterval(breathInterval);
+                            isBreathing = false;
+                            stars += 3;
+                            brakes += 1;
+                            saveAndRefreshHUD();
+                            playCelebrationChord();
+                            orb.className = 'breath-orb';
+                            emoji.textContent = '🌟';
+                            timerTxt.textContent = 'Calmo!';
+                            instr.textContent = 'Parabéns! Corpo calmo e cérebro pronto para pensar (+3 ⭐ e +1 🐢)!';
+                            btn.textContent = '🌸 Repetir Respiração no Casco';
+                        }, 3800);
+                    } else {
+                        cycle++;
+                        phase = 'inhale';
+                    }
+                }
+            }
+
+            runStep();
+            breathInterval = setInterval(runStep, 4000);
+        }
+
+        function shareWhatsAppSummary() {
+            const msg = `🐢 *Resumo do Jogo Terapêutico: O Semáforo da Tartaruga (PARE, PENSE e AJA)*\n\n` +
+                `Conquistamos hoje *${stars} Estrelas de Calma (⭐)* e *${brakes} Freios de Sucesso (🐢)*!\n\n` +
+                `🏡 *Dica para continuar em casa:* Quando surgir uma frustração ou pressa, lembrem da palavra-código *"Casco da Tartaruga"* (🔴 Parar e respirar 3x -> 🟡 Pensar nas opções -> 🟢 Agir com palavras).\n\n` +
+                `Jogue em família em: https://deomagalhaes.com.br/jogos/jogo-semaforo-tartaruga-calma.html`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            saveAndRefreshHUD();
+            renderTrailTrack();
+            updateSignalVisuals();
+            renderMission();
+        });
+    </script>
+</body>
+</html>

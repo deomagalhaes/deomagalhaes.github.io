@@ -76,6 +76,26 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
         }
 
+        .card-tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .card-tag-pill {
+            display: inline-block;
+            font-size: 0.72em;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 12px;
+            background: rgba(0, 18, 25, 0.72);
+            color: #94d2bd;
+            border: 1px solid rgba(148, 210, 189, 0.45);
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.3px;
+        }
+
         /* Hub de Categorias por Faixa Etária */
         .category-hub-grid {
             display: grid;
@@ -424,7 +444,7 @@
                         <span class="category-hub-age">Crianças (4 a 11 anos)</span>
                         <p>Jogos lúdicos focados em autorregulação emocional, psicomotricidade, atenção compartilhada e expressão de sentimentos.</p>
                         <div class="category-hub-footer">
-                            <span class="category-hub-count">10 Jogos Interativos</span>
+                            <span class="category-hub-count">11 Jogos Interativos</span>
                             <span class="category-hub-btn">Explorar ➔</span>
                         </div>
                     </div>
@@ -450,7 +470,7 @@
                         <span class="category-hub-age">Adultos & Maturidade (18+ anos)</span>
                         <p>Treinos neuropsicológicos de alta complexidade: inferência bayesiana, rotação 3D, lógica formal e controle de viés.</p>
                         <div class="category-hub-footer">
-                            <span class="category-hub-count">13 Treinos Analíticos</span>
+                            <span class="category-hub-count">28 Treinos Analíticos</span>
                             <span class="category-hub-btn">Explorar ➔</span>
                         </div>
                     </div>
@@ -462,9 +482,9 @@
                 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
                     <span style="font-size: 0.85em; font-weight: 700; color: #475569; text-transform: uppercase;">Categoria:</span>
                     <button onclick="selectAgeCategory('all', this)" class="age-filter-btn active-age-filter">Todas as Categorias</button>
-                    <button onclick="selectAgeCategory('infantil', this)" class="age-filter-btn">🧸 Infantil (10)</button>
+                    <button onclick="selectAgeCategory('infantil', this)" class="age-filter-btn">🧸 Infantil (11)</button>
                     <button onclick="selectAgeCategory('jovens', this)" class="age-filter-btn">⚡ Jovens (13)</button>
-                    <button onclick="selectAgeCategory('adultos', this)" class="age-filter-btn">🧠 Adultos (13)</button>
+                    <button onclick="selectAgeCategory('adultos', this)" class="age-filter-btn">🧠 Adultos (28)</button>
                 </div>
 
                 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
@@ -487,9 +507,24 @@
                             <p>Desenvolvimento socioemocional, psicomotricidade, regulação afetiva e atenção lúdica para crianças.</p>
                         </div>
                     </div>
-                    <span class="category-section-badge">10 Jogos Disponíveis</span>
+                    <span class="category-section-badge">11 Jogos Disponíveis</span>
                 </div>
                 <div class="resource-grid-custom" id="grid-infantil">
+                <!-- Card do Semáforo da Tartaruga (IJ-01) -->
+                <a href="jogos/jogo-semaforo-tartaruga-calma.html" 
+                   class="resource-card-bg-image" data-age-group="infantil" 
+                   data-category="emocional funcoes-executivas"
+                   style="background-image: url('assets/imagens/jogo-semaforo-tartaruga-calma.png');">
+                    <div class="card-content">
+                        <div class="card-tags-row">
+                            <span class="card-tag-pill">🧸 4–11 anos</span>
+                            <span class="card-tag-pill">Controle de Impulsos</span>
+                            <span class="card-tag-pill">Sessão &amp; Família</span>
+                        </div>
+                        <h3>O Semáforo da Tartaruga (PARE, PENSE e AJA)</h3>
+                        <p>Treine o freio inibitório, a respiração no casco e a resolução de frustrações em sessão clínica e em casa com os pais.</p>
+                    </div>
+                </a>
                 <a href="jogos/jogo-festival-pipa.html" 
                    class="resource-card-bg-image" data-age-group="infantil" 
                    data-category="emocional"
@@ -1270,8 +1305,74 @@
             });
         }
 
+        function syncCategoryCountsAndTags() {
+            const catLabels = {
+                'emocional': 'Emocional',
+                'funcoes-executivas': 'Funções Executivas',
+                'memoria': 'Memória',
+                'logica': 'Lógica',
+                'regulacao': 'Autorregulação'
+            };
+            const ageLabels = {
+                'infantil': '🧸 Infantil',
+                'jovens': '⚡ Jovens',
+                'adultos': '🧠 Adultos'
+            };
+
+            ['infantil', 'jovens', 'adultos'].forEach(age => {
+                const grid = document.getElementById('grid-' + age);
+                if (!grid) return;
+                const cards = grid.querySelectorAll('.resource-card-bg-image');
+                const count = cards.length;
+
+                const hubCount = document.querySelector('.card-' + age + ' .category-hub-count');
+                if (hubCount) {
+                    const suffix = age === 'infantil' ? 'Jogos Interativos' : (age === 'jovens' ? 'Desafios Cognitivos' : 'Treinos Analíticos');
+                    hubCount.textContent = `${count} ${suffix}`;
+                }
+
+                const secBadge = document.querySelector('#categoria-' + age + ' .category-section-badge');
+                if (secBadge) {
+                    const suffix = age === 'infantil' ? 'Jogos Disponíveis' : (age === 'jovens' ? 'Desafios Disponíveis' : 'Treinos Disponíveis');
+                    secBadge.textContent = `${count} ${suffix}`;
+                }
+
+                const ageBtns = document.querySelectorAll('.age-filter-btn');
+                ageBtns.forEach(btn => {
+                    const oc = btn.getAttribute('onclick') || '';
+                    if (oc.includes("'" + age + "'")) {
+                        const prefix = age === 'infantil' ? '🧸 Infantil' : (age === 'jovens' ? '⚡ Jovens' : '🧠 Adultos');
+                        btn.textContent = `${prefix} (${count})`;
+                    }
+                });
+
+                cards.forEach(card => {
+                    const content = card.querySelector('.card-content');
+                    if (content && !content.querySelector('.card-tags-row')) {
+                        const rawCats = (card.getAttribute('data-category') || '').trim().split(/\s+/).filter(Boolean);
+                        const row = document.createElement('div');
+                        row.className = 'card-tags-row';
+                        const agePill = document.createElement('span');
+                        agePill.className = 'card-tag-pill';
+                        agePill.textContent = ageLabels[age] || age;
+                        row.appendChild(agePill);
+                        rawCats.slice(0, 2).forEach(c => {
+                            if (catLabels[c]) {
+                                const p = document.createElement('span');
+                                p.className = 'card-tag-pill';
+                                p.textContent = catLabels[c];
+                                row.appendChild(p);
+                            }
+                        });
+                        content.insertBefore(row, content.firstChild);
+                    }
+                });
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             initDailyChallenge();
+            syncCategoryCountsAndTags();
         });
     </script>
     <script src="assets/script.js"></script>
