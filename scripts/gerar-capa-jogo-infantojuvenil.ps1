@@ -272,6 +272,142 @@ switch -Wildcard ($Theme) {
         $goldTextBrush.Dispose()
         $sf.Dispose()
     }
+    "*coqueiro*" {
+        # Campo de Futebol Encantado: Traves de Plantas Vivas, Juiz Coqueiro, Portugal (#7) & Argentina (#10)
+        # 1. Linhas do gramado sutil
+        $fieldPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(90, 255, 255, 255), 2.5)
+        $g.DrawEllipse($fieldPen, 290, 225, 220, 65)
+
+        # 2. Traves do Gol formadas por Plantas, Cipós e Flores (x=175..445, y=68..255)
+        $vinePenDark = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 21, 128, 61), 14)
+        $vinePenLight = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 74, 222, 128), 6)
+        $netPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(75, 187, 247, 208), 1.5)
+
+        # Rede de cipós finos ao fundo do gol
+        for ($nx = 195; $nx -le 425; $nx += 23) {
+            $g.DrawLine($netPen, $nx, 75, $nx, 250)
+        }
+        for ($ny = 95; $ny -le 245; $ny += 25) {
+            $g.DrawLine($netPen, 185, $ny, 435, $ny)
+        }
+
+        # Traves de troncos vivos e cipós entrelaçados
+        $g.DrawLine($vinePenDark, 185, 255, 185, 72)
+        $g.DrawLine($vinePenDark, 435, 255, 435, 72)
+        $g.DrawLine($vinePenDark, 180, 72, 440, 72)
+
+        $g.DrawLine($vinePenLight, 185, 252, 185, 74)
+        $g.DrawLine($vinePenLight, 435, 252, 435, 74)
+        $g.DrawLine($vinePenLight, 183, 72, 437, 72)
+
+        # Folhinhas e Flores nas traves de plantas
+        $leafBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 34, 197, 94))
+        $flowerPink = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 244, 114, 182))
+        $flowerGold = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 250, 204, 21))
+
+        $flowerCoords = @(
+            @(176, 64), @(250, 62), @(310, 62), @(370, 62), @(426, 64),
+            @(174, 120), @(174, 180), @(426, 120), @(426, 180)
+        )
+        foreach ($fc in $flowerCoords) {
+            $fx = [int]$fc[0]
+            $fy = [int]$fc[1]
+            $g.FillEllipse($leafBrush, $fx - 8, $fy - 4, 24, 14)
+            $g.FillEllipse($flowerPink, $fx, $fy, 14, 14)
+            $g.FillEllipse($flowerGold, $fx + 4, $fy + 4, 6, 6)
+        }
+
+        # 3. Insígnias Portugal #7 (CR7) e Argentina #10 (Messi) + Bola Central
+        $fontBadge = New-Object System.Drawing.Font("Segoe UI", 13, [System.Drawing.FontStyle]::Bold)
+        $sfCenter = New-Object System.Drawing.StringFormat
+        $sfCenter.Alignment = [System.Drawing.StringAlignment]::Center
+        $sfCenter.LineAlignment = [System.Drawing.StringAlignment]::Center
+
+        # Camisa/Orbe Portugal #7 (Vermelho Rubi & Verde)
+        $ptBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 220, 38, 38))
+        $ptRimPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 250, 204, 21), 3)
+        $g.FillEllipse($ptBrush, 215, 155, 58, 58)
+        $g.DrawEllipse($ptRimPen, 215, 155, 58, 58)
+        $whiteBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+        $g.DrawString("CR7", $fontBadge, $whiteBrush, [float]244, [float]184, $sfCenter)
+
+        # Camisa/Orbe Argentina #10 (Azul Celeste & Branco)
+        $arBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 56, 189, 248))
+        $arRimPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 255, 255, 255), 3)
+        $g.FillEllipse($arBrush, 348, 155, 58, 58)
+        $g.DrawEllipse($arRimPen, 348, 155, 58, 58)
+        $darkBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 15, 23, 42))
+        $g.DrawString("M10", $fontBadge, $darkBrush, [float]377, [float]184, $sfCenter)
+
+        # Bola de Futebol Brilhante no Centro do Gol
+        $goldGlow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(85, 250, 204, 21))
+        $g.FillEllipse($goldGlow, 280, 185, 62, 62)
+        $g.FillEllipse($whiteBrush, 290, 195, 42, 42)
+        $ballPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 15, 23, 42), 2.5)
+        $g.DrawEllipse($ballPen, 290, 195, 42, 42)
+        $g.FillEllipse($darkBrush, 304, 209, 14, 14)
+
+        # 4. O Juiz Coqueiro à Direita (x=545..665, y=65..265)
+        $trunkBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 180, 83, 9))
+        $trunkPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 120, 53, 15), 3)
+        $g.FillRectangle($trunkBrush, 575, 125, 34, 135)
+        $g.DrawRectangle($trunkPen, 575, 125, 34, 135)
+
+        # Faixas de Camisa de Juiz no Tronco do Coqueiro
+        $refStripe = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(220, 15, 23, 42))
+        $g.FillRectangle($refStripe, 577, 165, 10, 45)
+        $g.FillRectangle($refStripe, 597, 165, 10, 45)
+
+        # Copa de Folhas do Coqueiro
+        $palmBrush1 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 16, 185, 129))
+        $palmBrush2 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 52, 211, 153))
+        $g.FillPie($palmBrush1, 500, 58, 130, 90, 175, 155)
+        $g.FillPie($palmBrush1, 555, 58, 130, 90, 210, 155)
+        $g.FillPie($palmBrush2, 525, 42, 135, 95, 190, 160)
+
+        # Cocos e Rosto Amigável do Juiz Coqueiro + Apito Dourado
+        $cocoBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 120, 53, 15))
+        $g.FillEllipse($cocoBrush, 566, 108, 24, 24)
+        $g.FillEllipse($cocoBrush, 592, 108, 24, 24)
+
+        # Olhos sorridentes e Apito Dourado
+        $g.FillEllipse($whiteBrush, 579, 134, 10, 10)
+        $g.FillEllipse($whiteBrush, 595, 134, 10, 10)
+        $g.FillEllipse($darkBrush, 582, 137, 5, 5)
+        $g.FillEllipse($darkBrush, 598, 137, 5, 5)
+        $g.FillEllipse($flowerGold, 586, 148, 14, 10)
+
+        # Cartão Verde do Fair Play levantado pelo Juiz Coqueiro
+        $cardFairBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 250, 204, 21))
+        $g.FillRectangle($cardFairBrush, 528, 145, 22, 32)
+        $g.DrawRectangle($ballPen, 528, 145, 22, 32)
+
+        # Limpeza
+        $fieldPen.Dispose()
+        $vinePenDark.Dispose()
+        $vinePenLight.Dispose()
+        $netPen.Dispose()
+        $leafBrush.Dispose()
+        $flowerPink.Dispose()
+        $flowerGold.Dispose()
+        $fontBadge.Dispose()
+        $sfCenter.Dispose()
+        $ptBrush.Dispose()
+        $ptRimPen.Dispose()
+        $arBrush.Dispose()
+        $arRimPen.Dispose()
+        $whiteBrush.Dispose()
+        $darkBrush.Dispose()
+        $goldGlow.Dispose()
+        $ballPen.Dispose()
+        $trunkBrush.Dispose()
+        $trunkPen.Dispose()
+        $refStripe.Dispose()
+        $palmBrush1.Dispose()
+        $palmBrush2.Dispose()
+        $cocoBrush.Dispose()
+        $cardFairBrush.Dispose()
+    }
     default {
         # Constelação Neurocognitiva Lúdica Padrão
         $orbBrush1 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230, 238, 155, 0))

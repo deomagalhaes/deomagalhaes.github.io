@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copa Jardim Encantado: Portugal vs. Argentina com o Juiz Coqueiro – Deo Magalhães</title>
+    <meta name="description" content="Jogo terapêutico infantil com Cristiano Ronaldo, Messi, gol de plantas vivas e o Juiz Coqueiro para treino de controle de impulsos, tolerância à frustração e fair play.">
+
+    <link rel="icon" href="../assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --mint: #94d2bd;
+            --grass-dark: #15803d;
+            --grass-light: #22c55e;
+            --portugal-red: #dc2626;
+            --argentina-blue: #0284c7;
+            --surface: #ffffff;
+            --bg-soft: #f8fafc;
+        }
+
+        .game-shell {
+            background: var(--surface);
+            border-radius: 22px;
+            padding: 28px;
+            margin: 24px 0 36px 0;
+            box-shadow: 0 12px 35px rgba(0, 95, 115, 0.10);
+            border: 2px solid #e2e8f0;
+        }
+
+        .top-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: #e6f6f4;
+            color: #005f73;
+            border: 1px solid #94d2bd;
+        }
+
+        .pill-badge.amber {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .pill-badge.emerald {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+        }
+
+        /* Abas de Modo */
+        .mode-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .mode-tab-btn {
+            padding: 11px 18px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-tab-btn:hover {
+            border-color: #15803d;
+            background: #f0fdf4;
+        }
+
+        .mode-tab-btn.active {
+            background: #15803d;
+            color: #ffffff;
+            border-color: #15803d;
+            box-shadow: 0 4px 14px rgba(21, 128, 61, 0.28);
+        }
+
+        /* Placar & HUD Superior */
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #001219;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            border-bottom: 4px solid #22c55e;
+        }
+
+        .scoreboard-match {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .team-score-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 800;
+            font-size: 1.05rem;
+        }
+
+        .score-num {
+            background: #ee9b00;
+            color: #001219;
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94d2bd;
+            font-weight: 700;
+        }
+
+        .hud-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .sound-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 40px;
+        }
+
+        /* Seletor de Seleção e Jogador */
+        .team-selector-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .player-card-select {
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 14px 16px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .player-card-select:hover {
+            transform: translateY(-2px);
+        }
+
+        .player-card-select.active-portugal {
+            border-color: #dc2626;
+            background: #fef2f2;
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.15);
+        }
+
+        .player-card-select.active-argentina {
+            border-color: #0284c7;
+            background: #f0f9ff;
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.15);
+        }
+
+        .player-card-select.active-duo {
+            border-color: #ee9b00;
+            background: #fffbeb;
+            box-shadow: 0 6px 16px rgba(238, 155, 0, 0.18);
+        }
+
+        .jersey-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.05rem;
+            color: #ffffff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .jersey-pt {
+            background: linear-gradient(135deg, #dc2626 60%, #15803d 100%);
+            border: 2px solid #facc15;
+        }
+
+        .jersey-ar {
+            background: linear-gradient(135deg, #38bdf8 50%, #0284c7 100%);
+            border: 2px solid #ffffff;
+        }
+
+        .jersey-duo {
+            background: linear-gradient(135deg, #dc2626 0%, #ee9b00 50%, #0284c7 100%);
+            border: 2px solid #ffffff;
+        }
+
+        /* Campo de Futebol com Gol de Plantas e Juiz Coqueiro */
+        .stadium-canvas-wrap {
+            background: linear-gradient(180deg, #dcfce7 0%, #bbf7d0 38%, #22c55e 38%, #15803d 100%);
+            border: 3px solid #166534;
+            border-radius: 20px;
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.12);
+            margin-bottom: 20px;
+        }
+
+        .stadium-svg {
+            width: 100%;
+            max-height: 330px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Barra de Mira e Sinal do Juiz Coqueiro */
+        .referee-status-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .referee-status-banner.wait {
+            background: #fef3c7;
+            color: #92400e;
+            border: 2px solid #f59e0b;
+        }
+
+        .referee-status-banner.ready {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #22c55e;
+            box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
+        }
+
+        .aim-bar-container {
+            max-width: 520px;
+            margin: 0 auto 18px auto;
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 12px 16px;
+            border: 2px solid #334155;
+        }
+
+        .aim-track {
+            height: 28px;
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 28%, #22c55e 42%, #22c55e 58%, #f59e0b 72%, #ef4444 100%);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ffffff;
+        }
+
+        .aim-sweet-spot {
+            position: absolute;
+            left: 40%;
+            width: 20%;
+            top: 0;
+            bottom: 0;
+            border-left: 2px dashed #ffffff;
+            border-right: 2px dashed #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #001219;
+        }
+
+        .aim-cursor {
+            position: absolute;
+            top: -2px;
+            bottom: -2px;
+            width: 18px;
+            background: #ffffff;
+            border: 3px solid #001219;
+            border-radius: 9px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .kick-controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .btn-kick-main {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: #ffffff;
+            border: none;
+            padding: 15px 32px;
+            border-radius: 16px;
+            font-size: 1.12rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(21, 128, 61, 0.35);
+            transition: all 0.2s ease;
+            min-height: 54px;
+        }
+
+        .btn-kick-main:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .btn-whistle-start {
+            background: #ee9b00;
+            color: #001219;
+            border: none;
+            padding: 15px 28px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(238, 155, 0, 0.3);
+            transition: all 0.2s ease;
+            min-height: 54px;
+        }
+
+        /* Caixa de Feedback da Jogada */
+        .feedback-banner {
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .feedback-banner.goal {
+            background: #dcfce7;
+            color: #14532d;
+            border: 2px solid #22c55e;
+        }
+
+        .feedback-banner.calibrate {
+            background: #fffbeb;
+            color: #92400e;
+            border: 2px solid #f59e0b;
+        }
+
+        /* MODO 2: Decisões do Juiz Coqueiro (Fair Play) */
+        .fairplay-card {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 24px;
+        }
+
+        .dilemma-options {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .dilemma-btn {
+            text-align: left;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 15px 18px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dilemma-btn:hover {
+            border-color: #15803d;
+            background: #f0fdf4;
+        }
+
+        /* MODO 3: Brisa do Coqueiro (Respiração 4s) */
+        .breeze-stage {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(180deg, #f0fdf4 0%, #e6f6f4 100%);
+            border-radius: 18px;
+            border: 2px solid #86efac;
+        }
+
+        .palm-breath-circle {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            margin: 20px auto;
+            background: radial-gradient(circle, #dcfce7 0%, #22c55e 100%);
+            border: 5px solid #15803d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 3.8s ease-in-out, box-shadow 3.8s ease-in-out;
+            box-shadow: 0 8px 25px rgba(21, 128, 61, 0.25);
+        }
+
+        .palm-breath-circle.inhale {
+            transform: scale(1.28);
+            box-shadow: 0 0 40px rgba(34, 197, 94, 0.6);
+        }
+
+        .palm-breath-circle.exhale {
+            transform: scale(0.88);
+        }
+
+        /* Barra de Ações Finais */
+        .session-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 26px;
+            padding-top: 18px;
+            border-top: 2px dashed #e2e8f0;
+        }
+
+        .action-btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* Guia Duplo: Terapeuta & Pais */
+        .mediation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .mediation-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid #15803d;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .mediation-card.parents {
+            border-top-color: #ee9b00;
+            background: #fffbeb;
+        }
+
+        .mediation-card h3 {
+            margin-top: 0;
+            color: #001219;
+            font-size: 1.15rem;
+        }
+
+        .mediation-card ul {
+            padding-left: 18px;
+            margin: 10px 0 0 0;
+        }
+
+        .mediation-card li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-size: 0.94rem;
+            color: #334155;
+        }
+
+        @media print {
+            .top-bar, #main-header, footer.main-footer, .no-print, .mode-tabs, .kick-controls-row {
+                display: none !important;
+            }
+            .game-shell {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar Padrão -->
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Canônico -->
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../testes.html">Testes</a>
+                <a href="../jogos.html" class="active">Jogos</a>
+                <a href="../recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <div class="top-badges-row">
+                    <span class="pill-badge">🧸 Infantil (4 a 11 anos)</span>
+                    <span class="pill-badge emerald">🌴 Co-criado por Paciente (8 anos)</span>
+                    <span class="pill-badge amber">⚽ Controle de Impulsos &amp; Fair Play</span>
+                </div>
+                <h1>Copa Jardim Encantado: Portugal vs. Argentina com o Juiz Coqueiro</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) — Com inspiração criativa de sessão clínica infantil</p>
+            </header>
+
+            <div class="game-shell">
+                <!-- Abas de Modo -->
+                <div class="mode-tabs no-print" role="tablist">
+                    <button class="mode-tab-btn active" id="tab-field" onclick="switchSoccerMode('field')">
+                        ⚽ Modo 1: Chute no Gol de Plantas
+                    </button>
+                    <button class="mode-tab-btn" id="tab-referee" onclick="switchSoccerMode('referee')">
+                        🌴 Modo 2: Apito do Juiz Coqueiro (Fair Play)
+                    </button>
+                    <button class="mode-tab-btn" id="tab-breeze" onclick="switchSoccerMode('breeze')">
+                        🍃 Modo 3: Brisa da Calma (Respiração 4s)
+                    </button>
+                </div>
+
+                <!-- Placar e HUD -->
+                <div class="hud-bar">
+                    <div class="scoreboard-match">
+                        <div class="team-score-pill" title="Seleção de Portugal (Cristiano Ronaldo)">
+                            <span>🇵🇹 POR (CR7)</span>
+                            <span class="score-num" id="scorePortugal">0</span>
+                        </div>
+                        <span style="opacity:0.6; font-weight:800;">×</span>
+                        <div class="team-score-pill" title="Seleção da Argentina (Lionel Messi)">
+                            <span class="score-num" id="scoreArgentina">0</span>
+                            <span>ARG (M10) 🇦🇷</span>
+                        </div>
+                    </div>
+
+                    <div class="hud-stat">
+                        <span class="hud-label">Cartões Verdes (Fair Play)</span>
+                        <span class="hud-value" id="hudFairPlayCards">🌴 0</span>
+                    </div>
+
+                    <div class="hud-stat">
+                        <span class="hud-label">Gols no Jardim</span>
+                        <span class="hud-value" id="hudTotalFlowers">🌸 0</span>
+                    </div>
+
+                    <button class="sound-btn no-print" id="btnToggleAudio" onclick="toggleAudio()">
+                        🔊 Som Ativo
+                    </button>
+                </div>
+
+                <!-- =========================================================
+                     MODO 1: CAMPO DE FUTEBOL COM GOL DE PLANTAS E JUIZ COQUEIRO
+                     ========================================================= -->
+                <section id="section-field">
+                    <!-- Escolha de Seleção / Jogador -->
+                    <div class="team-selector-bar no-print">
+                        <button class="player-card-select active-portugal" id="btnSelectPT" onclick="selectTeamMode('PT')">
+                            <div class="jersey-avatar jersey-pt">CR7</div>
+                            <div>
+                                <div style="font-weight:800; color:#991b1b; font-size:0.95rem;">🇵🇹 Seleção de Portugal</div>
+                                <div style="font-size:0.82rem; color:#475569;"><strong>Cristiano Ronaldo (#7)</strong> • Superfoco e Determinação</div>
+                            </div>
+                        </button>
+
+                        <button class="player-card-select" id="btnSelectAR" onclick="selectTeamMode('AR')">
+                            <div class="jersey-avatar jersey-ar">M10</div>
+                            <div>
+                                <div style="font-weight:800; color:#075985; font-size:0.95rem;">🇦🇷 Seleção da Argentina</div>
+                                <div style="font-size:0.82rem; color:#475569;"><strong>Lionel Messi (#10)</strong> • Visão Mágica e Passe Calmo</div>
+                            </div>
+                        </button>
+
+                        <button class="player-card-select" id="btnSelectDUO" onclick="selectTeamMode('DUO')">
+                            <div class="jersey-avatar jersey-duo">2P</div>
+                            <div>
+                                <div style="font-weight:800; color:#92400e; font-size:0.95rem;">🤝 Partida em Dupla (Sessão/Casa)</div>
+                                <div style="font-size:0.82rem; color:#475569;">Alterna turnos entre <strong>Portugal (CR7)</strong> e <strong>Argentina (Messi)</strong>!</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Banner de Sinal do Juiz Coqueiro -->
+                    <div class="referee-status-banner wait" id="refereeBanner">
+                        <span style="font-size:1.5rem;">🌴</span>
+                        <span id="refereeBannerText">O Juiz Coqueiro está arrumando as folhas! Clique em "Pedir Apito do Juiz Coqueiro" e espere o sinal verde para chutar!</span>
+                    </div>
+
+                    <!-- Ilustração Interativa SVG do Campo, Traves de Plantas, Juiz Coqueiro, CR7 e Messi -->
+                    <div class="stadium-canvas-wrap">
+                        <svg class="stadium-svg" viewBox="0 0 760 310" aria-label="Campo de futebol com traves de plantas, Juiz Coqueiro, Cristiano Ronaldo e Messi">
+                            <!-- Céu e Sol Sorridente -->
+                            <circle cx="90" cy="48" r="28" fill="#fde047" opacity="0.9" />
+                            <ellipse cx="210" cy="42" rx="45" ry="16" fill="#ffffff" opacity="0.75" />
+                            <ellipse cx="480" cy="36" rx="55" ry="18" fill="#ffffff" opacity="0.75" />
+
+                            <!-- Linhas do Gramado -->
+                            <rect x="30" y="120" width="700" height="175" rx="14" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="3" />
+                            <rect x="155" y="120" width="350" height="95" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" />
+                            <circle cx="330" cy="215" r="5" fill="#ffffff" />
+
+                            <!-- =====================================================
+                                 TRAVES DO GOL FORMADAS POR PLANTAS, CIPÓS E FLORES VIVAS
+                                 ===================================================== -->
+                            <!-- Rede de Cipós Entrelaçados -->
+                            <g stroke="#86efac" stroke-width="1.8" opacity="0.65">
+                                <line x1="205" y1="38" x2="205" y2="145" />
+                                <line x1="235" y1="38" x2="235" y2="145" />
+                                <line x1="265" y1="38" x2="265" y2="145" />
+                                <line x1="295" y1="38" x2="295" y2="145" />
+                                <line x1="325" y1="38" x2="325" y2="145" />
+                                <line x1="355" y1="38" x2="355" y2="145" />
+                                <line x1="385" y1="38" x2="385" y2="145" />
+                                <line x1="415" y1="38" x2="415" y2="145" />
+                                <line x1="445" y1="38" x2="445" y2="145" />
+                                <line x1="185" y1="62" x2="475" y2="62" />
+                                <line x1="185" y1="90" x2="475" y2="90" />
+                                <line x1="185" y1="118" x2="475" y2="118" />
+                            </g>
+
+                            <!-- Troncos Vivos e Cipós das Traves Esquerda, Direita e Travessão -->
+                            <path d="M 185 150 Q 178 90 185 36 L 475 36 Q 482 90 475 150" fill="none" stroke="#14532d" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M 185 148 Q 192 90 185 36 L 475 36 Q 468 90 475 148" fill="none" stroke="#22c55e" stroke-width="7" stroke-linecap="round" stroke-dasharray="12 8" />
+
+                            <!-- Folhas Tropicais nas Traves -->
+                            <g fill="#16a34a">
+                                <ellipse cx="176" cy="115" rx="14" ry="7" transform="rotate(-25 176 115)" />
+                                <ellipse cx="176" cy="75" rx="14" ry="7" transform="rotate(20 176 75)" />
+                                <ellipse cx="484" cy="115" rx="14" ry="7" transform="rotate(25 484 115)" />
+                                <ellipse cx="484" cy="75" rx="14" ry="7" transform="rotate(-20 484 75)" />
+                                <ellipse cx="250" cy="28" rx="15" ry="7" />
+                                <ellipse cx="330" cy="26" rx="16" ry="7" />
+                                <ellipse cx="410" cy="28" rx="15" ry="7" />
+                            </g>
+
+                            <!-- Flores Mágicas nas Traves (Brilham quando faz Gol!) -->
+                            <g id="goalFlowersGroup">
+                                <circle cx="185" cy="36" r="11" fill="#f472b6" />
+                                <circle cx="185" cy="36" r="5" fill="#facc15" />
+                                <circle cx="265" cy="34" r="10" fill="#fb7185" />
+                                <circle cx="265" cy="34" r="4.5" fill="#fde047" />
+                                <circle cx="330" cy="34" r="12" fill="#a78bfa" />
+                                <circle cx="330" cy="34" r="5" fill="#fde047" />
+                                <circle cx="395" cy="34" r="10" fill="#fb7185" />
+                                <circle cx="395" cy="34" r="4.5" fill="#fde047" />
+                                <circle cx="475" cy="36" r="11" fill="#f472b6" />
+                                <circle cx="475" cy="36" r="5" fill="#facc15" />
+                            </g>
+
+                            <!-- =====================================================
+                                 JOGADOR 1: CRISTIANO RONALDO (PORTUGAL 🇵🇹 #7)
+                                 ===================================================== -->
+                            <g id="svgPlayerCR7" transform="translate(105, 165)">
+                                <!-- Sombra -->
+                                <ellipse cx="30" cy="98" rx="24" ry="7" fill="rgba(0,0,0,0.22)" />
+                                <!-- Calção Verde de Portugal -->
+                                <rect x="18" y="64" width="24" height="18" rx="4" fill="#15803d" />
+                                <!-- Camisa Vermelha de Portugal #7 -->
+                                <rect x="14" y="34" width="32" height="34" rx="8" fill="#dc2626" stroke="#facc15" stroke-width="2" />
+                                <text x="30" y="56" fill="#fde047" font-size="15" font-weight="900" text-anchor="middle">7</text>
+                                <!-- Cabeça e Cabelo Estilo CR7 -->
+                                <circle cx="30" cy="18" r="14" fill="#fbd38d" />
+                                <path d="M 17 14 Q 30 0 43 14 Q 36 8 20 12 Z" fill="#1e293b" />
+                                <circle cx="26" cy="17" r="2" fill="#0f172a" />
+                                <circle cx="35" cy="17" r="2" fill="#0f172a" />
+                                <path d="M 25 24 Q 30 28 35 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
+                                <!-- Legenda CR7 -->
+                                <rect x="-2" y="102" width="64" height="20" rx="6" fill="#991b1b" />
+                                <text x="30" y="116" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">🇵🇹 CR7</text>
+                            </g>
+
+                            <!-- =====================================================
+                                 JOGADOR 2: LIONEL MESSI (ARGENTINA 🇦🇷 #10)
+                                 ===================================================== -->
+                            <g id="svgPlayerMessi" transform="translate(495, 165)">
+                                <!-- Sombra -->
+                                <ellipse cx="30" cy="98" rx="24" ry="7" fill="rgba(0,0,0,0.22)" />
+                                <!-- Calção Preto/Azul da Argentina -->
+                                <rect x="18" y="64" width="24" height="18" rx="4" fill="#0f172a" />
+                                <!-- Camisa Listrada Azul-Celeste e Branca #10 -->
+                                <rect x="14" y="34" width="32" height="34" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+                                <rect x="19" y="34" width="7" height="34" fill="#38bdf8" />
+                                <rect x="34" y="34" width="7" height="34" fill="#38bdf8" />
+                                <text x="30" y="56" fill="#0f172a" font-size="14" font-weight="900" text-anchor="middle">10</text>
+                                <!-- Cabeça e Barbinha Amigável Estilo Messi -->
+                                <circle cx="30" cy="18" r="14" fill="#fbd38d" />
+                                <path d="M 16 15 Q 30 2 44 15 Z" fill="#27272a" />
+                                <circle cx="25" cy="17" r="2" fill="#0f172a" />
+                                <circle cx="34" cy="17" r="2" fill="#0f172a" />
+                                <path d="M 25 24 Q 30 28 35 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
+                                <!-- Legenda Messi -->
+                                <rect x="-4" y="102" width="68" height="20" rx="6" fill="#0369a1" />
+                                <text x="30" y="116" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">🇦🇷 MESSI 10</text>
+                            </g>
+
+                            <!-- =====================================================
+                                 O JUIZ COQUEIRO (ÁRBITRO OFICIAL COM APITO E COCOS)
+                                 ===================================================== -->
+                            <g id="svgRefereeCoqueiro" transform="translate(615, 55)">
+                                <!-- Sombra -->
+                                <ellipse cx="52" cy="210" rx="34" ry="9" fill="rgba(0,0,0,0.22)" />
+                                <!-- Tronco Curvo Anelado com Faixa de Juiz -->
+                                <path d="M 42 208 Q 36 140 50 78 L 68 78 Q 56 140 64 208 Z" fill="#b45309" stroke="#78350f" stroke-width="2.5" />
+                                <!-- Camisa Listrada de Juiz no Tronco -->
+                                <rect x="41" y="112" width="24" height="38" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="1.5" />
+                                <line x1="47" y1="112" x2="47" y2="150" stroke="#0f172a" stroke-width="4" />
+                                <line x1="55" y1="112" x2="55" y2="150" stroke="#0f172a" stroke-width="4" />
+                                <line x1="62" y1="112" x2="62" y2="150" stroke="#0f172a" stroke-width="3" />
+
+                                <!-- Folhas de Coqueiro Vibrantes -->
+                                <path d="M 58 72 Q 10 38 2 76 Q 30 62 58 76 Z" fill="#16a34a" />
+                                <path d="M 58 72 Q 15 12 0 42 Q 35 42 58 72 Z" fill="#22c55e" />
+                                <path d="M 58 72 Q 58 5 88 18 Q 72 45 58 72 Z" fill="#4ade80" />
+                                <path d="M 58 72 Q 108 22 122 58 Q 88 55 58 74 Z" fill="#22c55e" />
+                                <path d="M 58 72 Q 112 55 116 88 Q 86 72 58 78 Z" fill="#15803d" />
+
+                                <!-- Cocos Sorridentes e Apito Dourado -->
+                                <circle cx="46" cy="76" r="11" fill="#78350f" />
+                                <circle cx="68" cy="76" r="11" fill="#78350f" />
+                                <!-- Olhos Expressivos do Juiz Coqueiro -->
+                                <circle cx="49" cy="94" r="5" fill="#ffffff" />
+                                <circle cx="61" cy="94" r="5" fill="#ffffff" />
+                                <circle cx="50" cy="94" r="2.5" fill="#0f172a" />
+                                <circle cx="60" cy="94" r="2.5" fill="#0f172a" />
+                                <!-- Apito Dourado -->
+                                <circle cx="55" cy="104" r="6" fill="#facc15" stroke="#92400e" stroke-width="1.5" />
+
+                                <!-- Placa Sinalizadora do Juiz Coqueiro -->
+                                <circle id="coqueiroSignalOrb" cx="18" cy="128" r="14" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5" />
+                                <rect x="8" y="212" width="92" height="22" rx="7" fill="#001219" />
+                                <text x="54" y="227" fill="#fde047" font-size="10" font-weight="800" text-anchor="middle">🌴 JUIZ COQUEIRO</text>
+                            </g>
+
+                            <!-- =====================================================
+                                 BOLA DE FUTEBOL ANIMADA NO CAMPO
+                                 ===================================================== -->
+                            <g id="svgSoccerBall" transform="translate(330, 215)" style="transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);">
+                                <circle cx="0" cy="0" r="16" fill="#ffffff" stroke="#0f172a" stroke-width="2.5" />
+                                <polygon points="0,-7 6,-2 4,6 -4,6 -6,-2" fill="#0f172a" />
+                                <circle cx="-9" cy="-7" r="2.5" fill="#0f172a" />
+                                <circle cx="9" cy="-7" r="2.5" fill="#0f172a" />
+                                <circle cx="-9" cy="8" r="2.5" fill="#0f172a" />
+                                <circle cx="9" cy="8" r="2.5" fill="#0f172a" />
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Barra de Mira no Gol de Plantas -->
+                    <div class="aim-bar-container">
+                        <div style="display:flex; justify-content:space-between; color:#e2e8f0; font-size:0.8rem; font-weight:700; margin-bottom:6px;">
+                            <span>🌿 Cipó Esquerdo</span>
+                            <span style="color:#4ade80;">🌸 CENTRO DO GOL DE PLANTAS 🌸</span>
+                            <span>🌿 Cipó Direito</span>
+                        </div>
+                        <div class="aim-track">
+                            <div class="aim-sweet-spot">GOL!</div>
+                            <div class="aim-cursor" id="aimCursor" style="left: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Comando da Jogada -->
+                    <div class="kick-controls-row no-print">
+                        <button class="btn-whistle-start" id="btnAskWhistle" onclick="startRefereeCountdown()">
+                            🌴 1. Pedir Apito do Juiz Coqueiro
+                        </button>
+                        <button class="btn-kick-main" id="btnKickBall" onclick="attemptKickGoal()">
+                            ⚽ 2. CHUTAR NO GOL DE PLANTAS!
+                        </button>
+                    </div>
+
+                    <!-- Mensagem de Retorno Terapêutico da Jogada -->
+                    <div class="feedback-banner calibrate" id="kickFeedbackBox">
+                        👋 <strong>Bem-vindo(a) à Copa Jardim Encantado!</strong> Escolha sua Seleção acima (Portugal com <strong>Cristiano Ronaldo</strong> ou Argentina com <strong>Messi</strong>), peça o apito para o <strong>Juiz Coqueiro</strong> e espere as folhas dele ficarem verdes!
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                     MODO 2: O APITO DO JUIZ COQUEIRO (DILEMAS DE FAIR PLAY)
+                     ========================================================= -->
+                <section id="section-referee" style="display:none;">
+                    <div class="fairplay-card">
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                            <span style="font-size:2.4rem;">🌴</span>
+                            <div>
+                                <span style="font-size:0.78rem; font-weight:800; text-transform:uppercase; color:#15803d;" id="dilemmaCounter">Decisão do Juiz Coqueiro 1 de 5</span>
+                                <h2 style="margin:2px 0 0 0; font-size:1.35rem; color:#001219;" id="dilemmaTitle">Carregando lance da partida...</h2>
+                            </div>
+                        </div>
+                        <p id="dilemmaDesc" style="font-size:1.02rem; line-height:1.6; color:#334155; background:#ffffff; padding:16px; border-radius:12px; border-left:4px solid #15803d;"></p>
+
+                        <div class="dilemma-options" id="dilemmaOptionsList"></div>
+
+                        <div class="feedback-banner calibrate" id="dilemmaFeedback" style="display:none;"></div>
+
+                        <div style="text-align:right; margin-top:16px;">
+                            <button class="btn-whistle-start" id="btnNextDilemma" onclick="nextRefereeDilemma()" style="display:none; padding:10px 22px; font-size:0.95rem;">
+                                Próximo Lance da Partida ➔
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- =========================================================
+                     MODO 3: BRISA DO JUIZ COQUEIRO (RESPIRAÇÃO GUIADA 4S)
+                     ========================================================= -->
+                <section id="section-breeze" style="display:none;">
+                    <div class="breeze-stage">
+                        <h2 style="margin-top:0; color:#14532d;">🍃 Pausa da Brisa do Juiz Coqueiro</h2>
+                        <p style="max-width:560px; margin:0 auto; color:#334155; line-height:1.55;">
+                            Até os maiores craques como o <strong>Cristiano Ronaldo</strong> e o <strong>Messi</strong> respiram fundo antes de cobrar um pênalti importante! Vamos fazer 3 respirações suaves com as folhas do Juiz Coqueiro?
+                        </p>
+
+                        <div class="palm-breath-circle" id="palmBreathOrb">
+                            <span style="font-size:2.6rem;" id="palmBreathEmoji">🌴</span>
+                            <span style="font-weight:900; color:#001219; font-size:1.05rem; margin-top:4px;" id="palmBreathStatus">Pronto</span>
+                        </div>
+
+                        <p id="palmBreathInstruction" style="font-weight:800; font-size:1.08rem; color:#166534; min-height:28px;">
+                            Clique no botão abaixo para começar a Brisa da Calma!
+                        </p>
+
+                        <button class="btn-kick-main" id="btnStartBreeze" onclick="togglePalmBreeze()">
+                            🌸 Iniciar 3 Respirações no Gol de Plantas
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Ações da Sessão (Impressão, WhatsApp, Reset) -->
+                <div class="session-actions no-print">
+                    <button class="action-btn-secondary" onclick="window.print()">
+                        🖨️ Imprimir Certificado da Partida
+                    </button>
+                    <button class="action-btn-secondary" onclick="shareSoccerWhatsApp()">
+                        📲 Enviar Placar para os Pais (WhatsApp)
+                    </button>
+                    <button class="action-btn-secondary" onclick="resetSoccerMatch()">
+                        🔄 Zerar Placar da Partida
+                    </button>
+                </div>
+            </div>
+
+            <!-- Guia Duplo Obrigatório: Sessão Clínica (Terapeuta) & Casa (Pais) -->
+            <div class="mediation-grid">
+                <div class="mediation-card">
+                    <h3>🩺 Como Usar na Sessão de Terapia (Guia Clínico)</h3>
+                    <ul>
+                        <li><strong>Co-criação e Protagonismo Infantil:</strong> Este jogo nasceu da sugestão de uma paciente de 8 anos. Na clínica infantil, transformar os elementos imaginativos da criança (gol de plantas, juiz coqueiro, ídolos do futebol) em regra lúdica fortalece a aliança terapêutica e o senso de autoeficácia.</li>
+                        <li><strong>Controle Inibitório (Go/No-Go):</strong> No Modo 1, observe se a criança chuta impulsivamente antes do apito do Juiz Coqueiro. Trabalhe a fala interna reguladora: <em>"Olhos no Coqueiro, espero o apito, miro nas flores e chuto!"</em>.</li>
+                        <li><strong>Tolerância à Frustração Competitiva:</strong> Use o Modo Dupla (Criança vs. Terapeuta) para modelar como lidar com a bola na trave de cipós sem desregulação emocional.</li>
+                    </ul>
+                </div>
+
+                <div class="mediation-card parents">
+                    <h3>👨‍👩‍👧 Como Usar em Casa com os Filhos (Guia para Pais)</h3>
+                    <ul>
+                        <li><strong>Partida Cooperativa em Família (10 Minutos):</strong> Escolha o modo de 2 jogadores — um joga com Portugal (Cristiano Ronaldo) e outro com a Argentina (Messi). Celebrem tanto os gols quanto a paciência de esperar o apito do Juiz Coqueiro!</li>
+                        <li><strong>Metáfora do "Juiz Coqueiro" na Rotina:</strong> Quando a criança ficar brava porque perdeu um jogo ou teve que parar de brincar, relembre com afeto: <em>"O que o Juiz Coqueiro pediria agora? Vamos fazer a Brisa do Coqueiro por 4 segundos?"</em>.</li>
+                        <li><strong>Valorize o Fair Play Acima do Placar:</strong> Elogie sempre que seu filho(a) demonstrar espírito esportivo, paciência para esperar a vez e gentileza quando alguém erra um chute.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="article-divider" style="margin:32px 0; border:0; border-top:1px solid #e2e8f0;">
+            <p style="font-size:0.88rem; color:#64748b; text-align:center;">
+                Este jogo tem caráter reflexivo, lúdico e educacional. Para orientações específicas sobre diagnóstico e tratamento neuropsicológico ou psicoterápico infantil, consulte sempre um profissional de saúde qualificado.
+            </p>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico -->
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/script.js"></script>
+    <script>
+        // Estado Persistente do Jogo
+        const STORAGE_KEY = 'deo_jogo_copa_jardim_coqueiro_v1';
+        let scorePT = 0;
+        let scoreAR = 0;
+        let fairPlayCards = 0;
+        let totalFlowers = 0;
+        let teamMode = 'PT'; // 'PT' (Cristiano Ronaldo), 'AR' (Messi), 'DUO' (Revezamento)
+        let currentTurnTeam = 'PT';
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        // Estado do Modo 1 (Chute no Gol de Plantas)
+        let refereeState = 'IDLE'; // 'IDLE', 'WAITING_WHISTLE', 'GREEN_GO'
+        let whistleTimeout = null;
+        let aimPosition = 50;
+        let aimDirection = 1;
+        let aimAnimationId = null;
+
+        function loadMatchData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    scorePT = Number(data.scorePT) || 0;
+                    scoreAR = Number(data.scoreAR) || 0;
+                    fairPlayCards = Number(data.fairPlayCards) || 0;
+                    totalFlowers = Number(data.totalFlowers) || 0;
+                }
+            } catch (e) {}
+            refreshScoreboard();
+        }
+
+        function saveMatchData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    scorePT, scoreAR, fairPlayCards, totalFlowers
+                }));
+            } catch (e) {}
+            refreshScoreboard();
+        }
+
+        function refreshScoreboard() {
+            document.getElementById('scorePortugal').textContent = scorePT;
+            document.getElementById('scoreArgentina').textContent = scoreAR;
+            document.getElementById('hudFairPlayCards').textContent = `🌴 ${fairPlayCards}`;
+            document.getElementById('hudTotalFlowers').textContent = `🌸 ${totalFlowers}`;
+        }
+
+        // Sintetizador Web Audio API Sensorialmente Seguro
+        function playTone(fStart, fEnd, dur = 0.22, wave = 'sine') {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = wave;
+                osc.frequency.setValueAtTime(fStart, audioCtx.currentTime);
+                if (fEnd) osc.frequency.exponentialRampToValueAtTime(fEnd, audioCtx.currentTime + dur);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + dur);
+            } catch (e) {}
+        }
+
+        function playWhistleSound() {
+            playTone(784, 987.77, 0.25, 'triangle');
+        }
+
+        function playGoalCelebration() {
+            if (!soundEnabled) return;
+            const chord = [523.25, 659.25, 783.99, 1046.5];
+            chord.forEach((n, idx) => {
+                setTimeout(() => playTone(n, n * 1.03, 0.22, 'triangle'), idx * 85);
+            });
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btnToggleAudio');
+            btn.textContent = soundEnabled ? '🔊 Som Ativo' : '🔇 Modo Silencioso';
+        }
+
+        function switchSoccerMode(mode) {
+            ['field', 'referee', 'breeze'].forEach(m => {
+                document.getElementById(`section-${m}`).style.display = (m === mode) ? 'block' : 'none';
+                document.getElementById(`tab-${m}`).classList.toggle('active', m === mode);
+            });
+            playTone(440, 523.25, 0.14, 'sine');
+        }
+
+        function selectTeamMode(mode) {
+            teamMode = mode;
+            currentTurnTeam = (mode === 'AR') ? 'AR' : 'PT';
+            document.getElementById('btnSelectPT').className = 'player-card-select' + (mode === 'PT' ? ' active-portugal' : '');
+            document.getElementById('btnSelectAR').className = 'player-card-select' + (mode === 'AR' ? ' active-argentina' : '');
+            document.getElementById('btnSelectDUO').className = 'player-card-select' + (mode === 'DUO' ? ' active-duo' : '');
+
+            const playerLabel = currentTurnTeam === 'PT'
+                ? '🇵🇹 Cristiano Ronaldo (Portugal #7)'
+                : '🇦🇷 Lionel Messi (Argentina #10)';
+            const fb = document.getElementById('kickFeedbackBox');
+            fb.className = 'feedback-banner calibrate';
+            fb.innerHTML = `⚽ <strong>Jogador na bola:</strong> ${playerLabel}! Clique em <em>"1. Pedir Apito do Juiz Coqueiro"</em> para começar a jogada.`;
+            playTone(493.88, 587.33, 0.16, 'sine');
+        }
+
+        // Loop da Barra de Mira
+        function runAimBarLoop() {
+            const cursor = document.getElementById('aimCursor');
+            function step() {
+                if (refereeState === 'GREEN_GO') {
+                    aimPosition += aimDirection * 1.45;
+                    if (aimPosition >= 94) { aimPosition = 94; aimDirection = -1; }
+                    if (aimPosition <= 6) { aimPosition = 6; aimDirection = 1; }
+                    cursor.style.left = `${aimPosition}%`;
+                }
+                aimAnimationId = requestAnimationFrame(step);
+            }
+            if (!aimAnimationId) aimAnimationId = requestAnimationFrame(step);
+        }
+
+        function startRefereeCountdown() {
+            clearTimeout(whistleTimeout);
+            refereeState = 'WAITING_WHISTLE';
+
+            const banner = document.getElementById('refereeBanner');
+            const bannerTxt = document.getElementById('refereeBannerText');
+            const orb = document.getElementById('coqueiroSignalOrb');
+            const ball = document.getElementById('svgSoccerBall');
+
+            // Posiciona a bola nos pés do jogador da vez
+            const startX = currentTurnTeam === 'PT' ? 210 : 450;
+            ball.setAttribute('transform', `translate(${startX}, 225)`);
+
+            banner.className = 'referee-status-banner wait';
+            const activeHero = currentTurnTeam === 'PT' ? 'Cristiano Ronaldo (🇵🇹)' : 'Lionel Messi (🇦🇷)';
+            bannerTxt.innerHTML = `✋ <strong>ATENÇÃO, ${activeHero}!</strong> O Juiz Coqueiro levantou a folha amarela... Espere o apito sem chutar antes da hora!`;
+            orb.setAttribute('fill', '#ef4444');
+            playTone(349.23, 392.00, 0.18, 'sine');
+
+            const waitMs = 1700 + Math.floor(Math.random() * 1400);
+            whistleTimeout = setTimeout(() => {
+                refereeState = 'GREEN_GO';
+                banner.className = 'referee-status-banner ready';
+                bannerTxt.innerHTML = `🌴🎶 <strong>PRIII! APITO DO JUIZ COQUEIRO!</strong> Mire no centro florido da barra e clique em CHUTAR!`;
+                orb.setAttribute('fill', '#22c55e');
+                playWhistleSound();
+            }, waitMs);
+        }
+
+        function attemptKickGoal() {
+            const fb = document.getElementById('kickFeedbackBox');
+            const ball = document.getElementById('svgSoccerBall');
+            const orb = document.getElementById('coqueiroSignalOrb');
+            const activeHero = currentTurnTeam === 'PT' ? 'Cristiano Ronaldo (Portugal 🇵🇹)' : 'Lionel Messi (Argentina 🇦🇷)';
+
+            if (refereeState === 'IDLE') {
+                fb.className = 'feedback-banner calibrate';
+                fb.innerHTML = `🌴 <strong>O Juiz Coqueiro avisa:</strong> Primeiro clique no botão amarelo <em>"1. Pedir Apito do Juiz Coqueiro"</em> para preparar a bola no gramado!`;
+                playTone(330, 293.66, 0.18, 'sine');
+                return;
+            }
+
+            if (refereeState === 'WAITING_WHISTLE') {
+                clearTimeout(whistleTimeout);
+                refereeState = 'IDLE';
+                orb.setAttribute('fill', '#f59e0b');
+                ball.setAttribute('transform', 'translate(185, 85)');
+                fb.className = 'feedback-banner calibrate';
+                fb.innerHTML = `🐢 <strong>Quase lá! Você chutou antes do apito do Juiz Coqueiro!</strong> Os cipós macios da trave seguraram a bola com carinho. Respire fundo e tente esperar as folhas ficarem verdes!`;
+                playTone(311.13, 261.63, 0.24, 'sine');
+                return;
+            }
+
+            // Chute durante o sinal verde! Verifica a mira (Sweet spot: 36% a 64%, ou gol no canto 25% a 75%)
+            refereeState = 'IDLE';
+            const targetX = 195 + (aimPosition / 100) * 270;
+
+            if (aimPosition >= 34 && aimPosition <= 66) {
+                // GOOOOL NO CENTRO DAS FLORES!
+                ball.setAttribute('transform', `translate(${targetX.toFixed(0)}, 78)`);
+                if (currentTurnTeam === 'PT') {
+                    scorePT++;
+                } else {
+                    scoreAR++;
+                }
+                totalFlowers += 2;
+                saveMatchData();
+                playGoalCelebration();
+                animateGoalFlowers();
+
+                const celebrationText = currentTurnTeam === 'PT'
+                    ? `🇵🇹🌟 <strong>GOOOOL DE PORTUGAL!</strong> Cristiano Ronaldo esperou o apito do Juiz Coqueiro, chutou com foco total e fez o <em>"SIIIUUU da Calma"</em>! As flores da trave desabrocharam (+2 🌸)!`
+                    : `🇦🇷🌟 <strong>GOOOOL DA ARGENTINA!</strong> Lionel Messi esperou o apito do Juiz Coqueiro, colocou a bola entre as flores da trave e sorriu com toda a seleção (+2 🌸)!`;
+
+                fb.className = 'feedback-banner goal';
+                fb.innerHTML = celebrationText;
+            } else {
+                // Bateu no cipó lateral da trave
+                ball.setAttribute('transform', `translate(${targetX.toFixed(0)}, 52)`);
+                totalFlowers += 1;
+                saveMatchData();
+                playTone(392, 440, 0.22, 'triangle');
+                fb.className = 'feedback-banner calibrate';
+                fb.innerHTML = `🌿 <strong>Uau, passou raspando nas flores da trave!</strong> ${activeHero} esperou direitinho o apito do Juiz Coqueiro (+1 🌸 pela paciência!). No próximo chute, tente clicar quando o cursor branco passar bem no meio do verde!`;
+            }
+
+            // Se estiver no modo Dupla (2P), alterna entre Portugal e Argentina
+            if (teamMode === 'DUO') {
+                currentTurnTeam = (currentTurnTeam === 'PT') ? 'AR' : 'PT';
+                const nextName = currentTurnTeam === 'PT' ? '🇵🇹 Cristiano Ronaldo (Portugal)' : '🇦🇷 Lionel Messi (Argentina)';
+                fb.innerHTML += `<br><small>🔄 <strong>Próximo turno da dupla:</strong> Agora é a vez de <strong>${nextName}</strong>!</small>`;
+            }
+        }
+
+        function animateGoalFlowers() {
+            const grp = document.getElementById('goalFlowersGroup');
+            grp.style.transition = 'transform 0.35s ease';
+            grp.style.transform = 'scale(1.12)';
+            setTimeout(() => { grp.style.transform = 'scale(1)'; }, 420);
+        }
+
+        // =========================================================
+        // MODO 2: DILEMAS DO JUIZ COQUEIRO (FAIR PLAY & EMOÇÕES)
+        // =========================================================
+        const REFEREE_DILEMMAS = [
+            {
+                title: "1. A Bola Bateu no Cipó da Trave!",
+                desc: "Cristiano Ronaldo deu um chute lindo, mas a bola bateu em uma flor da trave de plantas e não entrou! O coração dele ficou acelerado de frustração. O que o Juiz Coqueiro aconselha a fazer?",
+                options: [
+                    { text: "😠 Chutar a grama com força e dizer que não quer brincar mais.", wise: false, feedback: "Quando a gente desiste ou chuta as coisas, a raiva cresce e a diversão acaba. Vamos tentar outra escolha?" },
+                    { text: "🌴 Respirar fundo como o Coqueiro, aplaudir a tentativa e se preparar para o próximo passe!", wise: true, feedback: "Cartão Verde do Juiz Coqueiro! Até o CR7 e o Messi erram chutes. Quem respira e tenta de novo vira craque!" },
+                    { text: "🙈 Culpar as plantas do gol dizendo que a trave se mexeu de propósito.", wise: false, feedback: "Colocar a culpa nas plantas não ajuda a melhorar a mira. Que tal respirar e ajustar o próximo chute?" }
+                ]
+            },
+            {
+                title: "2. Dividida entre Portugal e Argentina!",
+                desc: "Durante uma corrida pela bola, Messi tropeçou na grama perto do Cristiano Ronaldo e caiu sentado. O Juiz Coqueiro apitou para parar o lance. Qual é a atitude de Fair Play?",
+                options: [
+                    { text: "🤝 Cristiano Ronaldo estende a mão, ajuda o Messi a levantar e pergunta se ele está bem!", wise: true, feedback: "Lindo lance! No futebol de verdade e na vida, cuidar do amigo vale mais do que qualquer gol!" },
+                    { text: "🏃‍♂️ Sair correndo com a bola sem olhar para trás.", wise: false, feedback: "O Juiz Coqueiro apitou! Quando alguém machuca ou cai, a regra de ouro é parar e ajudar." },
+                    { text: "😝 Rir porque o adversário escorregou na grama.", wise: false, feedback: "Rir quando alguém cai deixa o colega triste. Os grandes capitães sempre mostram respeito!" }
+                ]
+            },
+            {
+                title: "3. O Colega da Seleção Errou o Passe!",
+                desc: "Um colega da Seleção da Argentina tentou tocar a bola para o Messi, mas o passe saiu fraco. O colega ficou com vergonha achando que iam brigar com ele. O que o Messi faz?",
+                options: [
+                    { text: "🗣️ Gritar: 'Você nunca acerta um passe! Só toca pra mim quando souber jogar!'", wise: false, feedback: "Gritar deixa o colega mais nervoso e com medo de tentar. Times campeões se apoiam!" },
+                    { text: "👍 Fazer sinal de joia e dizer: 'Boa tentativa! Na próxima a gente consegue juntos!'", wise: true, feedback: "Cartão Verde-Ouro do Juiz Coqueiro! Elogiar o esforço dá coragem para o time inteiro jogar feliz!" },
+                    { text: "😒 Cruzar os braços no meio do campo e ficar emburrado.", wise: false, feedback: "Ficar emburrado trava o jogo. Uma palavra gentil muda a energia do time!" }
+                ]
+            },
+            {
+                title: "4. O Juiz Coqueiro Marcou Toque de Mão!",
+                desc: "A bola bateu sem querer no braço do jogador e o Juiz Coqueiro apitou falta. Você queria muito continuar a jogada! Como agir com autocontrole?",
+                options: [
+                    { text: "🌴 Aceitar o apito do Juiz Coqueiro com calma, entregar a bola e se posicionar para defender.", wise: true, feedback: "Show de maturidade! Aceitar as regras e combinados mantém a brincadeira justa para todo mundo!" },
+                    { text: "😡 Esconder a bola debaixo da camisa para ninguém cobrar a falta.", wise: false, feedback: "Segurar a bola atrasa a partida e deixa todo mundo chateado. Vamos respeitar o combinado?" },
+                    { text: "😭 Jogar-se no chão chorando e batendo os pés.", wise: false, feedback: "É normal ficar chateado quando o juiz marca falta, mas respirar fundo ajuda a recuperar a bola logo depois!" }
+                ]
+            },
+            {
+                title: "5. O Apito Final da Partida!",
+                desc: "O Juiz Coqueiro deu o apito final porque o tempo da sessão (ou a hora de jantar/estudar em casa) chegou. Foi um jogaço entre Portugal e Argentina! Como encerrar como um verdadeiro campeão?",
+                options: [
+                    { text: "🏆 Cumprimentar o adversário, agradecer ao Juiz Coqueiro e combinar o dia da próxima partida!", wise: true, feedback: "Parabéns! Saber encerrar a brincadeira no horário combinado mostra que seu cérebro está forte como o de um capitão de seleção!" },
+                    { text: "😤 Dizer que só sai do campo depois de fazer mais 10 gols.", wise: false, feedback: "Quando cumprimos o horário combinado com os pais ou com o terapeuta, fica muito mais fácil brincar de novo na próxima vez!" },
+                    { text: "🦶 Chutar a bola para longe para ninguém guardar.", wise: false, feedback: "Guardar o material juntos faz parte do time dos campeões!" }
+                ]
+            }
+        ];
+
+        let currentDilemmaIndex = 0;
+
+        function renderRefereeDilemma() {
+            const d = REFEREE_DILEMMAS[currentDilemmaIndex];
+            document.getElementById('dilemmaCounter').textContent = `Decisão do Juiz Coqueiro ${currentDilemmaIndex + 1} de ${REFEREE_DILEMMAS.length}`;
+            document.getElementById('dilemmaTitle').textContent = d.title;
+            document.getElementById('dilemmaDesc').textContent = d.desc;
+
+            const list = document.getElementById('dilemmaOptionsList');
+            list.innerHTML = '';
+            const fb = document.getElementById('dilemmaFeedback');
+            fb.style.display = 'none';
+            document.getElementById('btnNextDilemma').style.display = 'none';
+
+            d.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'dilemma-btn';
+                btn.textContent = opt.text;
+                btn.onclick = () => chooseDilemmaAnswer(idx);
+                list.appendChild(btn);
+            });
+        }
+
+        function chooseDilemmaAnswer(idx) {
+            const d = REFEREE_DILEMMAS[currentDilemmaIndex];
+            const chosen = d.options[idx];
+            const fb = document.getElementById('dilemmaFeedback');
+            fb.style.display = 'block';
+
+            if (chosen.wise) {
+                fairPlayCards += 1;
+                totalFlowers += 1;
+                saveMatchData();
+                playGoalCelebration();
+                fb.className = 'feedback-banner goal';
+                fb.innerHTML = `🌴🟩 <strong>CARTÃO VERDE DO JUIZ COQUEIRO!</strong> ${chosen.feedback} (+1 🌴 Cartão de Fair Play!)`;
+                document.getElementById('btnNextDilemma').style.display = 'inline-block';
+            } else {
+                playTone(320, 260, 0.2, 'sine');
+                fb.className = 'feedback-banner calibrate';
+                fb.innerHTML = `🌴💛 <strong>Dica do Juiz Coqueiro:</strong> ${chosen.feedback}`;
+            }
+        }
+
+        function nextRefereeDilemma() {
+            currentDilemmaIndex = (currentDilemmaIndex + 1) % REFEREE_DILEMMAS.length;
+            renderRefereeDilemma();
+        }
+
+        // =========================================================
+        // MODO 3: BRISA DO JUIZ COQUEIRO (RESPIRAÇÃO 4S)
+        // =========================================================
+        let breezeInterval = null;
+        let isBreezeRunning = false;
+
+        function togglePalmBreeze() {
+            const orb = document.getElementById('palmBreathOrb');
+            const emoji = document.getElementById('palmBreathEmoji');
+            const status = document.getElementById('palmBreathStatus');
+            const instr = document.getElementById('palmBreathInstruction');
+            const btn = document.getElementById('btnStartBreeze');
+
+            if (isBreezeRunning) {
+                clearInterval(breezeInterval);
+                isBreezeRunning = false;
+                orb.className = 'palm-breath-circle';
+                emoji.textContent = '🌴';
+                status.textContent = 'Pausado';
+                instr.textContent = 'Toque abaixo quando quiser fazer a Brisa do Juiz Coqueiro!';
+                btn.textContent = '🌸 Iniciar 3 Respirações no Gol de Plantas';
+                return;
+            }
+
+            isBreezeRunning = true;
+            btn.textContent = '⏹️ Parar Ciclo de Respiração';
+            let cycle = 1;
+            let phase = 'inhale';
+
+            function stepBreeze() {
+                if (!isBreezeRunning) return;
+                if (phase === 'inhale') {
+                    orb.className = 'palm-breath-circle inhale';
+                    emoji.textContent = '🌸';
+                    status.textContent = `Inspire (${cycle}/3)`;
+                    instr.textContent = '1. Puxe o ar pelo nariz sentindo o perfume das flores do gol... (4 segundos)';
+                    playTone(392, 523.25, 0.4, 'sine');
+                    phase = 'exhale';
+                } else {
+                    orb.className = 'palm-breath-circle exhale';
+                    emoji.textContent = '🍃';
+                    status.textContent = 'Solte o ar...';
+                    instr.textContent = '2. Solte o ar devagarinho balançando as folhas do Juiz Coqueiro... (4 segundos)';
+                    playTone(523.25, 392, 0.4, 'sine');
+
+                    if (cycle >= 3) {
+                        setTimeout(() => {
+                            if (!isBreezeRunning) return;
+                            clearInterval(breezeInterval);
+                            isBreezeRunning = false;
+                            fairPlayCards += 1;
+                            totalFlowers += 2;
+                            saveMatchData();
+                            playGoalCelebration();
+                            orb.className = 'palm-breath-circle';
+                            emoji.textContent = '🏆';
+                            status.textContent = 'Pronto!';
+                            instr.textContent = 'Coração calmo e mira de campeão! Você ganhou +1 Cartão Verde (🌴) e +2 Flores (🌸)!';
+                            btn.textContent = '🌸 Repetir Brisa do Juiz Coqueiro';
+                        }, 3800);
+                    } else {
+                        cycle++;
+                        phase = 'inhale';
+                    }
+                }
+            }
+
+            stepBreeze();
+            breezeInterval = setInterval(stepBreeze, 4000);
+        }
+
+        function shareSoccerWhatsApp() {
+            const text = `⚽🌴 *Resumo da Partida Terapêutica: Copa Jardim Encantado (Juiz Coqueiro)*\n\n` +
+                `Placar de hoje: *🇵🇹 Portugal (CR7) ${scorePT} x ${scoreAR} Argentina (Messi) 🇦🇷*\n` +
+                `Conquistas de Autorregulação: *🌴 ${fairPlayCards} Cartões Verdes de Fair Play* e *🌸 ${totalFlowers} Flores no Gol de Plantas*!\n\n` +
+                `🏡 *Dica para casa:* Antes de agir com pressa ou quando surgir uma frustração, lembrem de esperar o *"Apito do Juiz Coqueiro"* e fazer a Brisa da Calma!\n\n` +
+                `Jogue em família em: https://deomagalhaes.com.br/jogos/jogo-copa-jardim-juiz-coqueiro.html`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function resetSoccerMatch() {
+            scorePT = 0;
+            scoreAR = 0;
+            fairPlayCards = 0;
+            totalFlowers = 0;
+            saveMatchData();
+            const fb = document.getElementById('kickFeedbackBox');
+            fb.className = 'feedback-banner calibrate';
+            fb.innerHTML = '🔄 Placar zerado! O Juiz Coqueiro já preparou uma nova bola no centro do gramado!';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMatchData();
+            runAimBarLoop();
+            renderRefereeDilemma();
+        });
+    </script>
+</body>
+</html>
