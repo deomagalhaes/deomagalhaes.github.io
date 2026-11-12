@@ -50,6 +50,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 41** | **Matriz de Calibração Atribucional e Autoeficácia** | Córtex Cingulado Anterior Dorsal (dACC), Córtex Pré-Frontal Ventromedial (vmPFC), Estriado Ventral e Raciocínio Bayesiano de Mérito | `jogos/jogo-calibracao-atribucional.html` | ✅ **Publicado** |
 | **Dia 42** | **Matriz de Ressonância Empática e Calibração Afetiva** | Discriminação Eu-Outro, Regulação da Dor Vicária na Ínsula/dACC e Ativação Compassiva vmPFC | `jogos/jogo-ressonancia-empatica.html` | ✅ **Publicado** |
 | **Dia 43** | **Matriz de Calibração de Probabilidades e Descatastrofização Cognitiva** | Córtex Pré-Frontal Dorsolateral (dlPFC/vmPFC), Inferência Bayesiana, Desarme da Amígdala e Heurística do Afeto | `jogos/jogo-calibracao-probabilidades-descatastrofizacao.html` | ✅ **Publicado** |
+| **Dia 44** | **Matriz de Cooperação Bayesiana e Dilema da Confiança Social** | Teoria dos Jogos, Atualização Bayesiana de Crenças Sociais, vmPFC, Ínsula Anterior e Estriado Ventral | `jogos/jogo-dilema-confianca-cooperacao.html` | ✅ **Publicado** |
 
 ---
 

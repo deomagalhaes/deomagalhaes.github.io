@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Como a Desativação do Apego e o Medo da Intimidade Aprisionam o Cérebro na Solidão Defensiva** (Publicado em 12/11/2026)
 - [x] **A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Certezas de Ameaça** (Publicado em 12/11/2026)
 - [x] **A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Pode Esgotar Seu Cérebro** (Publicado em 11/11/2026)
 - [x] **A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso** (Publicado em 11/11/2026)

@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 44: Matriz de Cooperação Bayesiana e Dilema da Confiança Social – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para superar a autossuficiência defensiva, avaliar riscos relacionais e calibrar a confiança social com a Teoria dos Jogos e Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .gauges-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .gauge-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .gauge-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .gauge-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .scenario-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .scenario-title {
+            margin: 0 0 10px 0;
+            color: #0f172a;
+            font-size: 1.25em;
+            font-weight: 700;
+        }
+
+        .scenario-desc {
+            color: #334155;
+            font-size: 0.98em;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .partner-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #f1f5f9;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ee9b00;
+        }
+
+        .partner-avatar {
+            font-size: 2em;
+        }
+
+        .partner-info h4 {
+            margin: 0;
+            color: #005f73;
+            font-size: 0.95em;
+        }
+
+        .partner-info p {
+            margin: 2px 0 0 0;
+            color: #64748b;
+            font-size: 0.82em;
+        }
+
+        .clues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .clue-item {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.88em;
+            color: #475569;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .clue-icon {
+            color: #0a9396;
+            font-weight: bold;
+        }
+
+        .decision-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .decision-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .decision-btn:hover {
+            border-color: #005f73;
+            background: #f0fdfa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.1);
+        }
+
+        .decision-btn strong {
+            color: #005f73;
+            font-size: 0.95em;
+        }
+
+        .decision-btn span {
+            color: #64748b;
+            font-size: 0.82em;
+            line-height: 1.4;
+        }
+
+        .feedback-banner {
+            display: none;
+            margin-top: 22px;
+            padding: 18px 20px;
+            border-radius: 10px;
+            line-height: 1.6;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-banner.success {
+            background: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            color: #14532d;
+        }
+
+        .feedback-banner.warning {
+            background: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            color: #78350f;
+        }
+
+        .feedback-banner.danger {
+            background: #fef2f2;
+            border-left: 5px solid #ef4444;
+            color: #7f1d1d;
+        }
+
+        .btn-next-round {
+            display: none;
+            margin: 20px auto 0 auto;
+            padding: 12px 30px;
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-next-round:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        /* End Game Modal */
+        .endgame-modal {
+            display: none;
+            background: #ffffff;
+            border: 2px solid #005f73;
+            border-radius: 14px;
+            padding: 30px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .endgame-modal h2 {
+            color: #005f73;
+            margin: 0 0 10px 0;
+            font-size: 1.8em;
+        }
+
+        .btn-sound-toggle {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.82em;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-sound-toggle:hover {
+            background: #e2e8f0;
+        }
+
+        .neuro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 18px 22px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            line-height: 1.65;
+            color: #334155;
+            font-size: 0.95em;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 44: Matriz de Cooperação Bayesiana e Dilema da Confiança Social</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) • Treino Cognitivo com Web Audio API</p>
+            </header>
+
+            <div class="neuro-box">
+                <strong>Fundamentação Neuropsicológica:</strong> Este treino cognitivo desafia a rigidez da <strong>autossuficiência compulsiva</strong> e do apego evitativo através de modelos matemáticos da <strong>Teoria dos Jogos</strong> (Dilema do Prisioneiro Repetido e Jogo da Confiança). Você deve aprender a diferenciar alianças seguras de interações exploratórias, exercitando o <strong>Córtex Pré-Frontal Ventromedial (vmPFC)</strong> e a <strong>Ínsula Anterior</strong> para tomar decisões cooperativas sem cair na paralisia do isolamento defensivo.
+            </div>
+
+            <div class="game-wrapper" id="gameContainer">
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Rodada</span>
+                        <span class="stat-value" id="roundDisplay">1 / 8</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Dividendo Relacional</span>
+                        <span class="stat-value" id="scoreDisplay">0 pts</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Precisão Social</span>
+                        <span class="stat-value" id="accuracyDisplay">100%</span>
+                    </div>
+                    <button class="btn-sound-toggle" id="soundToggle" onclick="toggleMute()">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <div class="gauges-container">
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Vínculo e Ocitocina (vmPFC & Estriado)</span>
+                            <span id="oxytocinVal">50%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div class="gauge-fill" id="oxytocinBar" style="width: 50%; background: #0a9396;"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Custo da Solidão (Carga Alostática)</span>
+                            <span id="allostaticVal">50%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div class="gauge-fill" id="allostaticBar" style="width: 50%; background: #ee9b00;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cenário Social Ativo -->
+                <div class="scenario-box" id="scenarioCard">
+                    <span class="scenario-tag" id="scenarioTag">Cenário 01 • Relações de Trabalho</span>
+                    <h2 class="scenario-title" id="scenarioTitle">Colega de Projeto com Prazo Crítico</h2>
+                    <p class="scenario-desc" id="scenarioDesc">Um colega de equipe pede sua colaboração para finalizar uma entrega complexa. O instinto evitativo diz: "não me envolvo, pois se der errado a culpa recai sobre mim". O que você faz?</p>
+
+                    <div class="partner-card">
+                        <div class="partner-avatar" id="partnerAvatar">🤝</div>
+                        <div class="partner-info">
+                            <h4 id="partnerName">Arquetipo: Cooperador Recíproco (Tit-for-Tat)</h4>
+                            <p id="partnerRep">Histórico: Sempre retribuiu ajudas anteriores e compartilha créditos com a equipe.</p>
+                        </div>
+                    </div>
+
+                    <div class="clues-grid" id="cluesContainer">
+                        <!-- Pistas injetadas dinamicamente -->
+                    </div>
+
+                    <div style="font-weight: 700; color: #1e293b; margin-top: 15px; font-size: 0.95em;">
+                        Escolha sua Ação Estratégica Interpessoal:
+                    </div>
+
+                    <div class="decision-actions-grid" id="actionsGrid">
+                        <!-- Botões de Ação Injetados Dinamicamente -->
+                    </div>
+
+                    <div class="feedback-banner" id="feedbackBox">
+                        <!-- Devolutiva da Rodada -->
+                    </div>
+
+                    <button class="btn-next-round" id="btnNext" onclick="nextRound()">Avançar para Próxima Rodada ➔</button>
+                </div>
+
+                <!-- Painel Final de Conclusão -->
+                <div class="endgame-modal" id="endgamePanel">
+                    <h2>🎉 Treino Cognitivo de Confiança Concluído!</h2>
+                    <p id="finalSummaryText" style="font-size: 1.05em; color: #334155; line-height: 1.6; max-width: 600px; margin: 0 auto 20px auto;">
+                        Você completou as 8 rodadas estratégicas.
+                    </p>
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn-action-solid" onclick="restartGame()">Jogar Novamente</button>
+                        <a href="/testes/teste-hiperindependencia-autossuficiencia.html" class="btn-action-outline">Fazer Escala EHIS-DA (T-45)</a>
+                        <a href="/artigos/a-neurobiologia-da-autossuficiencia-compulsiva-e-hiperindependencia.html" class="btn-action-outline">Ler Artigo Científico</a>
+                    </div>
+                </div>
+            </div>
+
+            <p class="article-disclaimer" style="margin-top: 40px;"><em>Este jogo é uma ferramenta neuroeducativa de reabilitação e flexibilização cognitiva embasada na Teoria dos Jogos e na Teoria da Linha de Base Social. Ele estimula o raciocínio estratégico sobre interdependência e limites interpessoais saudáveis.</em></p>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Web Audio API Procedural Audio Engine
+        let audioCtx = null;
+        let isMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('soundIcon').textContent = isMuted ? '🔇' : '🔊';
+            document.getElementById('soundToggle').style.color = isMuted ? '#94a3b8' : '#005f73';
+        }
+
+        function playClickSound() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.06);
+            } catch (e) {}
+        }
+
+        function playCooperateChime() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // Acorde C Maior Consonante
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.04));
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime + (idx * 0.04));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (idx * 0.04) + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.04));
+                    osc.stop(ctx.currentTime + (idx * 0.04) + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        function playAlertTone() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(140, ctx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.26);
+            } catch (e) {}
+        }
+
+        function playVictoryFanfare() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [440, 554.37, 659.25, 880, 1108.73];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.09, ctx.currentTime + (i * 0.08));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.08) + 0.45);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (i * 0.08));
+                    osc.stop(ctx.currentTime + (i * 0.08) + 0.46);
+                });
+            } catch (e) {}
+        }
+
+        // Banco de Cenários Interpessoais (Matematicamente Calibrados para 100% Solubilidade)
+        const SCENARIOS = [
+            {
+                tag: "Cenário 01 • Relações de Trabalho",
+                title: "Colega de Projeto com Prazo Crítico",
+                desc: "Um colega de equipe competente pede que você compartilhe um arquivo de modelo para acelerar uma entrega conjunta.",
+                avatar: "🤝",
+                partnerName: "Colega de Equipe (Perfil Cooperador Recíproco)",
+                partnerRep: "Histórico: Sempre retribui suporte e cita nominalmente todos os colaboradores.",
+                clues: [
+                    "A entrega é coletiva e impacta os bônus de ambos.",
+                    "O colega já ajudou você a revisar relatórios anteriormente.",
+                    "O tempo para fazer sozinho seria 3x maior."
+                ],
+                actions: [
+                    {
+                        title: "Compartilhar Modelo & Cooperar",
+                        desc: "Disponibilizar o arquivo e alinhar tarefas conjuntas.",
+                        isOptimal: true,
+                        points: 250,
+                        oxyDelta: +15,
+                        alloDelta: -15,
+                        feedback: "Excelente! O modelo Tit-for-Tat gera um equilíbrio de Nash cooperativo. O estriado ventral e o vmPFC ativam recompensa compartilhada, reduzindo o estresse executivo de carregar tudo sozinho."
+                    },
+                    {
+                        title: "Isolamento Autossuficiente",
+                        desc: "Recusar e fazer a sua parte inteiramente isolada.",
+                        isOptimal: false,
+                        points: 60,
+                        oxyDelta: -10,
+                        alloDelta: +15,
+                        feedback: "Custo alto! A recusa protegeu sua sensação de controle, mas forçou seu córtex pré-frontal a gastar o triplo de energia. A falta de co-regulação alimenta a fadiga sentinela."
+                    },
+                    {
+                        title: "Exigir Termo de Reconhecimento",
+                        desc: "Impor uma exigência defensiva exagerada para ceder o arquivo.",
+                        isOptimal: false,
+                        points: 100,
+                        oxyDelta: -5,
+                        alloDelta: +10,
+                        feedback: "Defesa rígida. Demonstrar desconfiança desnecessária com um parceiro recíproco gera atrito e desgasta o vínculo futuro."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 02 • Parcerias & Contratos",
+                title: "Proposta de Negócio com Sócio Ambíguo",
+                desc: "Um profissional carismático propõe sociedade em um projeto, mas esquiva-se de redigir um contrato formal com divisão de lucros.",
+                avatar: "🦊",
+                partnerName: "Parceiro Comercial (Perfil Oportunista em Potencial)",
+                partnerRep: "Histórico: Conhecido por prometer muito verbalmente e mudar acordos informalmente.",
+                clues: [
+                    "Promessas verbais excessivas com ausência de registro jurídico.",
+                    "Pressão para que você inicie o trabalho técnico imediatamente.",
+                    "O instinto hiperindependente quer fugir, mas há potencial econômico."
+                ],
+                actions: [
+                    {
+                        title: "Cooperação Condicionada a Contrato",
+                        desc: "Aceitar a parceria apenas após contrato formal e cláusulas claras.",
+                        isOptimal: true,
+                        points: 260,
+                        oxyDelta: +10,
+                        alloDelta: -10,
+                        feedback: "Decisão exemplar! A interdependência madura não é ingenuidade: é confiança baseada em salvaguardas objetivas (Córtex Orbitofrontal ativo). Você protegeu seu trabalho sem se fechar para oportunidades."
+                    },
+                    {
+                        title: "Entrega Cega por Medo de Conflito",
+                        desc: "Começar o projeto esperando que ele seja honesto no final.",
+                        isOptimal: false,
+                        points: 30,
+                        oxyDelta: -20,
+                        alloDelta: +25,
+                        feedback: "Armadilha de exploração! Ignorar pistas de risco relacional ativa a ínsula com arrependimento e vulnerabilidade danosa."
+                    },
+                    {
+                        title: "Recusa Hostil e Isolamento",
+                        desc: "Bloquear a pessoa e afirmar que nunca fará sociedade com ninguém.",
+                        isOptimal: false,
+                        points: 80,
+                        oxyDelta: -10,
+                        alloDelta: +15,
+                        feedback: "Generalização excessiva da autossuficiência. Proteger-se com limites objetivos é maduro; trancar-se para sempre é medo de negociar."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 03 • Relações Afetivas",
+                title: "Desabafo e Vulnerabilidade com Amigo Íntimo",
+                desc: "Após uma semana terrível, um amigo leal de anos percebe seu abatimento e pergunta com carinho: 'Como você realmente está?'.",
+                avatar: "🌱",
+                partnerName: "Amigo de Longa Data (Perfil Vínculo Seguro)",
+                partnerRep: "Histórico: Jamais usou segredos contra você e sempre respeitou seu espaço.",
+                clues: [
+                    "Vínculo comprovado por anos sem incidentes de traição.",
+                    "Seu corpo está em exaustão física por engolir as emoções.",
+                    "Sua couraça quer dizer 'está tudo ótimo' para manter a postura de rocha."
+                ],
+                actions: [
+                    {
+                        title: "Compartilhar a Carga com Sinceridade",
+                        desc: "Admitir o cansaço e permitir-se ser acolhido pelo amigo.",
+                        isOptimal: true,
+                        points: 280,
+                        oxyDelta: +20,
+                        alloDelta: -25,
+                        feedback: "Vitória neuroafetiva! A liberação de ocitocina inibe a amígdala e restaura a linha de base social (Coan). Segurar a mão de alguém seguro reduz o custo metabólico do sofrimento em mais de 60%."
+                    },
+                    {
+                        title: "Mascara de Ferro ('Tudo Ótimo')",
+                        desc: "Dar um sorriso falso e mudar de assunto imediatamente.",
+                        isOptimal: false,
+                        points: 40,
+                        oxyDelta: -15,
+                        alloDelta: +20,
+                        feedback: "Supressão emocional severa. O dlPFC gastou energia hercúlea para bloquear as lágrimas, mas seu cortisol basal subiu e seu corpo manteve a contratura somática."
+                    },
+                    {
+                        title: "Intelectualizar o Problema",
+                        desc: "Falar sobre teorias abstratas de trabalho sem tocar em seus sentimentos.",
+                        isOptimal: false,
+                        points: 90,
+                        oxyDelta: -5,
+                        alloDelta: +10,
+                        feedback: "Desvio pelo hemisfério esquerdo. Você falou muito, mas a ínsula permaneceu desconectada do alívio relacional."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 04 • Dinâmica de Liderança",
+                title: "Delegação de Projeto Crítico à Equipe",
+                desc: "Você é o responsável por uma entrega de alto impacto. Fazer tudo sozinho exigirá noites sem dormir; delegar exige confiar nos pares.",
+                avatar: "👥",
+                partnerName: "Equipe Técnica Interna (Perfil Cooperadores em Treinamento)",
+                partnerRep: "Histórico: Dedicados, com pequenas dúvidas técnicas fáceis de alinhar.",
+                clues: [
+                    "Fazer sozinho causará burnout e erro por fadiga executiva.",
+                    "A equipe possui competência suficiente se você fornecer diretrizes claras.",
+                    "A autossuficiência compulsiva diz: 'só sai bem feito se eu fizer'."
+                ],
+                actions: [
+                    {
+                        title: "Delegar com Checkpoints Definidos",
+                        desc: "Distribuir módulos e agendar alinhamentos diários de 15 minutos.",
+                        isOptimal: true,
+                        points: 270,
+                        oxyDelta: +15,
+                        alloDelta: -20,
+                        feedback: "Perfeita liderança interdependente! Delegar com estrutura pré-frontal (dlPFC) evita tanto o abandono displicente quanto o microgerenciamento obsessivo."
+                    },
+                    {
+                        title: "Fazer Tudo Sozinho na Madrugada",
+                        desc: "Assumir todas as etapas sem pedir nada a ninguém.",
+                        isOptimal: false,
+                        points: 50,
+                        oxyDelta: -20,
+                        alloDelta: +30,
+                        feedback: "Prejuízo alostático máximo! Você manteve a ilusão de perfeição, mas seu sono foi destruído e a equipe perdeu a chance de evoluir."
+                    },
+                    {
+                        title: "Delegar Sem Instrução e Culpar",
+                        desc: "Entregar sem orientação e criticar duramente no primeiro deslize.",
+                        isOptimal: false,
+                        points: 40,
+                        oxyDelta: -15,
+                        alloDelta: +15,
+                        feedback: "Profecia autorrealizável. Ao não instruir, o erro ocorre e você conclui erroneamente que 'ninguém presta'."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 05 • Vida Cotidiana & Saúde",
+                title: "Enfermidade Física e Oferta de Cuidado",
+                desc: "Você está com febre alta e sinusite severa. Um familiar ou parceiro se oferece para ir à farmácia e preparar uma sopa para você.",
+                avatar: "🍵",
+                partnerName: "Familiar / Parceiro (Perfil Cuidado Espontâneo)",
+                partnerRep: "Histórico: Genuinamente afetuoso, sem histórico de cobranças tóxicas.",
+                clues: [
+                    "Seu corpo necessita de repouso absoluto para combater a infecção.",
+                    "Você sente aversão por parecer dependente ou 'dar trabalho'.",
+                    "A crença do esquema diz: 'quem aceita sopa fica em dívida moral'."
+                ],
+                actions: [
+                    {
+                        title: "Aceitar o Cuidado com Gratidão",
+                        desc: "Permitir que a pessoa compre o remédio e descansar na cama.",
+                        isOptimal: true,
+                        points: 290,
+                        oxyDelta: +20,
+                        alloDelta: -25,
+                        feedback: "Excelente quebra de esquema! Desarmar a crença da dívida moral permite que o sistema imunológico economize energia. O afeto autêntico não é uma nota promissória; é fluxo de amor."
+                    },
+                    {
+                        title: "Levantar e Ir à Farmácia Sozinho",
+                        desc: "Dizer rispidamente 'eu mesmo vou, não quero dar trabalho a ninguém'.",
+                        isOptimal: false,
+                        points: 40,
+                        oxyDelta: -15,
+                        alloDelta: +25,
+                        feedback: "Autossabotagem somática. Piorar o quadro de saúde apenas para sustentar o orgulho da fortaleza inexpugnável."
+                    },
+                    {
+                        title: "Aceitar Mas Fazer Transferência Imediata",
+                        desc: "Aceitar a sopa mas pagar em dinheiro o dobro do valor para não dever nada.",
+                        isOptimal: false,
+                        points: 80,
+                        oxyDelta: -10,
+                        alloDelta: +10,
+                        feedback: "Transacionalização do afeto. Transformar amor em comércio é o subterfúgio favorito da fobia de vulnerabilidade."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 06 • Relações Familiares",
+                title: "Redistribuição de Demandas Domésticas",
+                desc: "As tarefas da casa estão concentradas em você há meses. Você sente rancor reprimido, mas nunca pediu ajuda explicitamente.",
+                avatar: "🏡",
+                partnerName: "Membros da Casa (Perfil Passivo mas Receptivo)",
+                partnerRep: "Histórico: Não notam sozinhos por desatenção, mas aceitam quando combinam.",
+                clues: [
+                    "Você nunca expressou as necessidades com clareza (esperava que 'adivinhassem').",
+                    "Carregar tudo gera explosões de irritação reativa.",
+                    "A comunicação não-violenta permite renegociar acordos."
+                ],
+                actions: [
+                    {
+                        title: "Reunião de Acordos Claros",
+                        desc: "Apresentar a lista de tarefas sem acusação e definir divisões semanais.",
+                        isOptimal: true,
+                        points: 280,
+                        oxyDelta: +15,
+                        alloDelta: -15,
+                        feedback: "Comportamento maduro! A assertividade relacional elimina o papel de vítima silenciosa e constrói cooperação mútua no lar."
+                    },
+                    {
+                        title: "Fazer Batendo Panelas com Ressentimento",
+                        desc: "Continuar fazendo tudo sozinho bufando para que percebam sua dor.",
+                        isOptimal: false,
+                        points: 30,
+                        oxyDelta: -20,
+                        alloDelta: +25,
+                        feedback: "Agressividade passiva. Gera estresse no ambiente e perpetua a crença infantil de que o mundo é injusto."
+                    },
+                    {
+                        title: "Explosão de Raiva Generalizada",
+                        desc: "Gritar que ninguém presta e que você carrega a casa nas costas.",
+                        isOptimal: false,
+                        points: 50,
+                        oxyDelta: -25,
+                        alloDelta: +30,
+                        feedback: "Desregulação límbica. A amígdala explode, ativando defesas no outro e impedindo qualquer cooperação real."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 07 • Desenvolvimento Profissional",
+                title: "Busca por Mentoria ou Orientação Técnica",
+                desc: "Você está travado em um desafio técnico novo há semanas. Um especialista sênior respeitado abre agenda para tirar dúvidas.",
+                avatar: "🎓",
+                partnerName: "Mentor Especialista (Perfil Mentor Generoso)",
+                partnerRep: "Histórico: Conhecido pela generosidade pedagógica com profissionais em evolução.",
+                clues: [
+                    "Tentar resolver na tentativa e erro custará mais 2 meses de estresse.",
+                    "Pedir orientação demonstra inteligência estratégica, não incompetência.",
+                    "O medo de parecer ignorante (síndrome do impostor) quer travar a consulta."
+                ],
+                actions: [
+                    {
+                        title: "Agendar Mentoria com Perguntas Focadas",
+                        desc: "Mapear as dúvidas específicas e aproveitar a sabedoria do mentor.",
+                        isOptimal: true,
+                        points: 300,
+                        oxyDelta: +15,
+                        alloDelta: -20,
+                        feedback: "Salto de maturidade! Reconhecer o limite do próprio conhecimento e buscar quem já trilhou o caminho economiza meses de esforço cognitivo solitário."
+                    },
+                    {
+                        title: "Continuar Sofrendo Sozinho no Sigilo",
+                        desc: "Passar semanas tentando adivinhar para não admitir que tem dúvidas.",
+                        isOptimal: false,
+                        points: 40,
+                        oxyDelta: -15,
+                        alloDelta: +25,
+                        feedback: "Orgulho cognitivo. O medo de ser visto imperfeito custa tempo de vida e produtividade real."
+                    },
+                    {
+                        title: "Desqualificar o Mentor",
+                        desc: "Dizer a si mesmo que 'ninguém ensina nada que não esteja no Google'.",
+                        isOptimal: false,
+                        points: 50,
+                        oxyDelta: -10,
+                        alloDelta: +15,
+                        feedback: "Mecanismo de desvalorização defensiva típico do apego desapegado para justificar o autoisolamento."
+                    }
+                ]
+            },
+            {
+                tag: "Cenário 08 • Síntese Existencial",
+                title: "O Ponto de Virada: Aceitar a Interdependência",
+                desc: "Diante de um grande projeto de vida, você se vê diante da encruzilhada definitiva: continuar sendo o rei de uma fortaleza vazia ou formar uma comunidade segura.",
+                avatar: "🏛️",
+                partnerName: "Rede Social Ampla (Aliança Cooperativa Madura)",
+                partnerRep: "Histórico: O somatório de pessoas confiáveis que você cultivou com limites saudáveis.",
+                clues: [
+                    "A solidão absoluta garante controle, mas garante estagnação e exaustão.",
+                    "A interdependência madura expande o impacto e protege a saúde física.",
+                    "Martin Buber: 'O homem se torna Eu na relação com o Tu'."
+                ],
+                actions: [
+                    {
+                        title: "Consolidar Alianças Seguras e Equilíbrio",
+                        desc: "Viver a autonomia com a coragem da interdependência e afeto mútuo.",
+                        isOptimal: true,
+                        points: 350,
+                        oxyDelta: +25,
+                        alloDelta: -30,
+                        feedback: "Plena integração neuropsicológica! Você superou o falso dilema entre ser capacho ou ser fortaleza. A interdependência madura é o ápice do desenvolvimento humano."
+                    },
+                    {
+                        title: "Retornar ao Bunkar Solitário",
+                        desc: "Reafirmar que no fim do dia cada um está por si e fechar as portas.",
+                        isOptimal: false,
+                        points: 50,
+                        oxyDelta: -20,
+                        alloDelta: +30,
+                        feedback: "Regressão à armadura. A fortaleza protege da dor temporária, mas condena à morte existencial do isolamento."
+                    },
+                    {
+                        title: "Fusão Ingênua Sem Critério",
+                        desc: "Confiar em todos indiscriminadamente sem avaliar os sinais de risco.",
+                        isOptimal: false,
+                        points: 60,
+                        oxyDelta: -10,
+                        alloDelta: +15,
+                        feedback: "Falta de calibração pré-frontal. O objetivo não é a ingenuidade, mas a confiança inteligente guiada por evidências."
+                    }
+                ]
+            }
+        ];
+
+        let currentRound = 0;
+        let totalScore = 0;
+        let optimalChoicesCount = 0;
+        let oxytocinLevel = 50;
+        let allostaticLevel = 50;
+
+        function loadRound(idx) {
+            if (idx >= SCENARIOS.length) {
+                finishGame();
+                return;
+            }
+
+            const scn = SCENARIOS[idx];
+
+            document.getElementById('roundDisplay').textContent = `${idx + 1} / ${SCENARIOS.length}`;
+            document.getElementById('scenarioTag').textContent = scn.tag;
+            document.getElementById('scenarioTitle').textContent = scn.title;
+            document.getElementById('scenarioDesc').textContent = scn.desc;
+            document.getElementById('partnerAvatar').textContent = scn.avatar;
+            document.getElementById('partnerName').textContent = scn.partnerName;
+            document.getElementById('partnerRep').textContent = scn.partnerRep;
+
+            // Pistas
+            const cluesContainer = document.getElementById('cluesContainer');
+            cluesContainer.innerHTML = '';
+            scn.clues.forEach(clue => {
+                const div = document.createElement('div');
+                div.className = 'clue-item';
+                div.innerHTML = `<span class="clue-icon">🔎</span> <span>${clue}</span>`;
+                cluesContainer.appendChild(div);
+            });
+
+            // Ações
+            const actionsGrid = document.getElementById('actionsGrid');
+            actionsGrid.innerHTML = '';
+            scn.actions.forEach((act, actIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'decision-btn';
+                btn.onclick = () => selectAction(act);
+                btn.innerHTML = `<strong>${act.title}</strong><span>${act.desc}</span>`;
+                actionsGrid.appendChild(btn);
+            });
+
+            // Reset de feedback
+            const fb = document.getElementById('feedbackBox');
+            fb.style.display = 'none';
+            fb.className = 'feedback-banner';
+            fb.innerHTML = '';
+
+            document.getElementById('btnNext').style.display = 'none';
+            document.getElementById('scenarioCard').style.display = 'block';
+            document.getElementById('endgamePanel').style.display = 'none';
+        }
+
+        function selectAction(action) {
+            playClickSound();
+
+            totalScore += action.points;
+            if (action.isOptimal) {
+                optimalChoicesCount++;
+                playCooperateChime();
+            } else {
+                playAlertTone();
+            }
+
+            oxytocinLevel = Math.max(10, Math.min(100, oxytocinLevel + action.oxyDelta));
+            allostaticLevel = Math.max(10, Math.min(100, allostaticLevel + action.alloDelta));
+
+            // Atualizar UI
+            document.getElementById('scoreDisplay').textContent = `${totalScore} pts`;
+            
+            const acc = Math.round((optimalChoicesCount / (currentRound + 1)) * 100);
+            document.getElementById('accuracyDisplay').textContent = `${acc}%`;
+
+            document.getElementById('oxytocinVal').textContent = `${oxytocinLevel}%`;
+            document.getElementById('oxytocinBar').style.width = `${oxytocinLevel}%`;
+
+            document.getElementById('allostaticVal').textContent = `${allostaticLevel}%`;
+            document.getElementById('allostaticBar').style.width = `${allostaticLevel}%`;
+
+            // Feedback
+            const fb = document.getElementById('feedbackBox');
+            fb.style.display = 'block';
+            fb.className = `feedback-banner ${action.isOptimal ? 'success' : (action.points >= 80 ? 'warning' : 'danger')}`;
+            fb.innerHTML = `
+                <div style="font-weight: 700; margin-bottom: 4px;">
+                    ${action.isOptimal ? '✨ Decisão de Alta Precisão Interdependente!' : '⚠️ Resposta com Custo Adaptativo Elevado:'}
+                </div>
+                <div>${action.feedback}</div>
+                <div style="font-size: 0.85em; margin-top: 8px; color: #475569;">
+                    Pontos ganhos: <strong>+${action.points} pts</strong> | Vínculo: <strong>${action.oxyDelta >= 0 ? '+' : ''}${action.oxyDelta}%</strong> | Custo da Solidão: <strong>${action.alloDelta >= 0 ? '+' : ''}${action.alloDelta}%</strong>
+                </div>
+            `;
+
+            // Desabilitar botões da rodada
+            document.querySelectorAll('.decision-btn').forEach(b => b.disabled = true);
+
+            // Exibir botão de avançar
+            document.getElementById('btnNext').style.display = 'block';
+            document.getElementById('btnNext').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextRound() {
+            playClickSound();
+            currentRound++;
+            loadRound(currentRound);
+        }
+
+        function finishGame() {
+            playVictoryFanfare();
+
+            document.getElementById('scenarioCard').style.display = 'none';
+            const panel = document.getElementById('endgamePanel');
+            panel.style.display = 'block';
+
+            const acc = Math.round((optimalChoicesCount / SCENARIOS.length) * 100);
+            let evaluation = '';
+
+            if (acc >= 85) {
+                evaluation = `Sua calibração pré-frontal atingiu excelência (Precisão Social: ${acc}% com ${totalScore} pontos). Você domina a arte da interdependência madura: consegue confiar onde há segurança, impor limites onde há risco e recusar o fardo solitário da autossuficiência compulsiva.`;
+            } else if (acc >= 60) {
+                evaluation = `Bom desempenho com traços defensivos residuais (Precisão Social: ${acc}% com ${totalScore} pontos). Em momentos de incerteza, seu cérebro ainda hesitou e tendeu a carregar a carga sozinho para evitar a vulnerabilidade. Continue praticando microrriscos de confiança.`;
+            } else {
+                evaluation = `Alerta de rigidez defensiva (Precisão Social: ${acc}% com ${totalScore} pontos). A armadura do apego evitativo ainda comandou a maioria das decisões, impondo um custo altíssimo de sobrecarga alostática e isolamento. Recomendamos o aprofundamento na leitura do artigo e na Escala EHIS-DA.`;
+            }
+
+            document.getElementById('finalSummaryText').textContent = evaluation;
+
+            // Salvar no localStorage
+            try {
+                const prev = parseInt(localStorage.getItem('dia44_high_score') || '0');
+                if (totalScore > prev) {
+                    localStorage.setItem('dia44_high_score', totalScore.toString());
+                }
+            } catch (e) {}
+
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function restartGame() {
+            playClickSound();
+            currentRound = 0;
+            totalScore = 0;
+            optimalChoicesCount = 0;
+            oxytocinLevel = 50;
+            allostaticLevel = 50;
+
+            document.getElementById('scoreDisplay').textContent = `0 pts`;
+            document.getElementById('accuracyDisplay').textContent = `100%`;
+            document.getElementById('oxytocinVal').textContent = `50%`;
+            document.getElementById('oxytocinBar').style.width = `50%`;
+            document.getElementById('allostaticVal').textContent = `50%`;
+            document.getElementById('allostaticBar').style.width = `50%`;
+
+            loadRound(0);
+        }
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            loadRound(0);
+        });
+    </script>
+</body>
+</html>

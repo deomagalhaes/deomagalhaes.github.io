@@ -130,32 +130,34 @@
             gap: 6px;
         }
 
-        /* Main Workspace Grid */
+        /* Main Workspace Grid (Coluna Esquerda Fixa + Área Restante Dividida na Horizontal) */
         .workspace-grid {
             display: grid;
-            grid-template-columns: 380px 1fr 380px;
+            grid-template-columns: 380px 1fr;
             flex: 1;
             gap: 0;
             height: calc(100vh - 67px);
+            overflow: hidden;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1024px) {
             .workspace-grid {
-                grid-template-columns: 360px 1fr;
-                height: auto;
-            }
-            .sidebar-caption {
-                grid-column: span 2;
-                height: auto;
+                grid-template-columns: 350px 1fr;
             }
         }
 
         @media (max-width: 860px) {
             .workspace-grid {
                 grid-template-columns: 1fr;
+                height: auto;
+                overflow: visible;
             }
-            .sidebar-caption {
-                grid-column: span 1;
+            .sidebar {
+                height: auto;
+            }
+            .workspace-main-content {
+                height: auto;
+                overflow: visible;
             }
         }
 
@@ -168,17 +170,40 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            height: 100%;
         }
 
-        .sidebar-caption {
-            border-right: none;
-            border-left: 1px solid var(--border-glass);
-            background: var(--bg-panel);
-            padding: 20px;
-            overflow-y: auto;
+        /* Área Restante Dividida na Horizontal (Slides em cima, Legenda embaixo) */
+        .workspace-main-content {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            height: 100%;
+            overflow-y: auto;
+            background: radial-gradient(circle at center top, #00222e 0%, #001219 100%);
+        }
+
+        .caption-panel {
+            background: var(--bg-panel);
+            border-top: 1px solid var(--border-glass);
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .caption-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .caption-actions-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .section-title {
@@ -280,38 +305,55 @@
             font-size: 0.8rem;
         }
 
-        /* Central Studio Stage */
+        /* Central Studio Stage (Bloco Superior - Slides à esquerda, Botões à direita) */
         .stage {
-            background: radial-gradient(circle at center, #00222e 0%, #001219 100%);
-            padding: 24px;
+            background: transparent;
+            padding: 16px 24px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            overflow-y: auto;
+            align-items: flex-start;
+            justify-content: flex-start;
             position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stage-inner-layout {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .stage-preview-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            flex-shrink: 0;
         }
 
         .stage-header {
             width: 100%;
-            max-width: 640px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            gap: 8px;
         }
 
         .slide-counter-badge {
             background: rgba(0, 95, 115, 0.4);
             border: 1px solid var(--border-glass);
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 30px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--cream-soft);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .canvas-container {
@@ -322,10 +364,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            max-width: 520px;
-            max-height: 520px;
-            width: 100%;
-            aspect-ratio: 1/1;
             background: #000;
         }
 
@@ -336,22 +374,65 @@
             display: block;
         }
 
-        /* Carousel Navigation Bar */
-        .carousel-nav-bar {
-            width: 100%;
-            max-width: 640px;
-            margin-top: 16px;
+        .stage-controls-column {
+            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 12px;
+            min-width: 280px;
+            max-width: 560px;
+        }
+
+        .controls-card {
+            background: rgba(0, 18, 25, 0.65);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .controls-card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--neural-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-grid-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-grid-actions .btn {
+            padding: 9px 12px;
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+
+        .nav-arrows {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nav-arrows .btn {
+            padding: 4px 10px;
+            font-size: 0.78rem;
         }
 
         .thumbs-strip {
             display: flex;
-            gap: 10px;
-            justify-content: center;
+            gap: 8px;
+            justify-content: flex-start;
             overflow-x: auto;
-            padding: 6px 2px;
+            padding: 4px 2px;
+            width: 100%;
         }
 
         .thumb-btn {
@@ -368,7 +449,8 @@
             flex-direction: column;
             align-items: center;
             gap: 2px;
-            min-width: 70px;
+            min-width: 68px;
+            flex-shrink: 0;
         }
 
         .thumb-btn.active {
@@ -383,11 +465,15 @@
             color: white;
         }
 
-        .stage-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
+        @media (max-width: 1100px) {
+            .stage-inner-layout {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .stage-controls-column {
+                max-width: 100%;
+                width: 100%;
+            }
         }
 
         /* Toast Feedback */
@@ -577,17 +663,21 @@
             margin-top: 6px;
         }
 
-        /* Suporte a proporção no Preview Container */
+        /* Suporte a proporção no Preview Container (Compacto para visualização completa na tela) */
         .canvas-container.ratio-4-5 {
             aspect-ratio: 4 / 5 !important;
-            max-width: 450px !important;
-            max-height: 562px !important;
+            max-width: 376px !important;
+            max-height: 470px !important;
+            width: 376px !important;
+            height: 470px !important;
         }
 
         .canvas-container.ratio-1-1 {
             aspect-ratio: 1 / 1 !important;
-            max-width: 520px !important;
-            max-height: 520px !important;
+            max-width: 440px !important;
+            max-height: 440px !important;
+            width: 440px !important;
+            height: 440px !important;
         }
     </style>
 </head>
@@ -628,7 +718,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="catastrofizacao-aversiva" selected>A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Ameaças</option>
+                        <option value="autossuficiencia-compulsiva" selected>A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Por Que Pedir Ajuda Parece Ameaçador</option>
+                        <option value="catastrofizacao-aversiva">A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Ameaças</option>
                         <option value="fadiga-empatica">A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Esgota Seu Cérebro</option>
                         <option value="fenomeno-impostor">A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso</option>
                         <option value="masking-burnout">O Custo Oculto do Masking e o Burnout Neurodivergente</option>
@@ -810,71 +901,118 @@
             </div>
         </aside>
 
-        <!-- PALCO CENTRAL: Renderizador Canvas Real-Time -->
-        <section class="stage">
-            <div class="stage-header">
-                <div class="slide-counter-badge" id="slideCounterDisplay">
-                    Slide 1 de 6 • Capa / Gancho
+        <!-- COLUNA PRINCIPAL: Dividida na horizontal (Slides em cima, Legenda embaixo) -->
+        <div class="workspace-main-content">
+
+            <!-- BLOCO SUPERIOR: Renderizador dos Slides (Alinhado à esquerda, Botões à direita) -->
+            <section class="stage">
+                <div class="stage-inner-layout">
+
+                    <!-- Lado Esquerdo: Canvas do Slide -->
+                    <div class="stage-preview-column">
+                        <div class="stage-header">
+                            <div class="slide-counter-badge" id="slideCounterDisplay">
+                                Slide 1 de 6 • Capa / Gancho
+                            </div>
+                            <div id="formatDisplay" style="font-size: 0.75rem; color: var(--text-muted);">
+                                Formato: 1080 x 1080 px (1:1 Oficial Instagram)
+                            </div>
+                        </div>
+
+                        <!-- Preview do Canvas com transição de aspecto -->
+                        <div class="canvas-container ratio-1-1" id="canvasContainer">
+                            <canvas id="carouselCanvas" width="1080" height="1080"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Lado Direito: Miniaturas e Todos os Botões de Ação -->
+                    <div class="stage-controls-column">
+
+                        <!-- Navegação de Slides e Miniaturas -->
+                        <div class="controls-card">
+                            <div class="controls-card-title">
+                                <span>📑 Miniaturas & Navegação</span>
+                                <div class="nav-arrows">
+                                    <button class="btn btn-outline btn-sm" onclick="prevSlide()" title="Slide Anterior">◀ Anterior</button>
+                                    <button class="btn btn-outline btn-sm" onclick="nextSlide()" title="Próximo Slide">Próximo ▶</button>
+                                </div>
+                            </div>
+                            <div class="thumbs-strip" id="thumbsStrip">
+                                <!-- Gerado dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Ações do Slide Ativo -->
+                        <div class="controls-card">
+                            <div class="controls-card-title">
+                                <span>⚡ Slide Ativo</span>
+                            </div>
+                            <div class="btn-grid-actions">
+                                <button class="btn btn-amber" onclick="downloadCurrentSlide()" title="Baixar imagem do slide ativo em PNG">
+                                    📥 Baixar Slide (.PNG)
+                                </button>
+                                <button class="btn btn-outline" onclick="copySlideImage()" title="Copiar imagem diretamente para a área de transferência">
+                                    📋 Copiar Imagem
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Exportação em Lote -->
+                        <div class="controls-card">
+                            <div class="controls-card-title">
+                                <span>📦 Exportação em Lote</span>
+                            </div>
+                            <div class="btn-grid-actions">
+                                <button class="btn btn-amber" onclick="downloadAllZip()" title="Baixar todos os slides em pacote ZIP único com legenda incluída">
+                                    📦 Baixar Todos (.ZIP)
+                                </button>
+                                <button class="btn btn-outline" onclick="downloadAllSlides()" title="Baixar todos os slides individualmente em sequência">
+                                    🔄 Downloads Individuais
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
-                <div id="formatDisplay" style="font-size: 0.75rem; color: var(--text-muted);">
-                    Formato: 1080 x 1080 px (1:1 Oficial Instagram)
+            </section>
+
+            <!-- BLOCO INFERIOR: Legenda Estratégica Pronta com Hashtags -->
+            <section class="caption-panel">
+                <div class="caption-header-row">
+                    <div class="section-title" style="margin-bottom: 0;">
+                        <span>✍️ 3. Legenda Estratégica & Hashtags</span>
+                    </div>
+                    <div class="caption-actions-group">
+                        <button class="btn btn-amber btn-sm" onclick="copyCaption()">
+                            📋 Copiar Legenda Completa
+                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="exportMarkdownFile()">
+                            💾 Exportar Roteiro (.md)
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Preview do Canvas com transição de aspecto -->
-            <div class="canvas-container ratio-1-1" id="canvasContainer">
-                <canvas id="carouselCanvas" width="1080" height="1080"></canvas>
-            </div>
-
-            <!-- Navegação e Miniaturas -->
-            <div class="carousel-nav-bar">
-                <div class="thumbs-strip" id="thumbsStrip">
-                    <!-- Gerado dinamicamente -->
+                <div class="info-pill">
+                    Legenda estrategicamente elaborada com gancho de primeira linha, narrativa neurocientífica fluida, chamada para ação e 15 hashtags para alcance orgânico.
                 </div>
 
-                <div class="stage-actions">
-                    <button class="btn btn-outline btn-sm" onclick="prevSlide()">◀ Anterior</button>
-                    <button class="btn btn-outline btn-sm" onclick="nextSlide()">Próximo ▶</button>
-                    <button class="btn btn-amber" onclick="downloadCurrentSlide()" title="Baixar imagem do slide ativo em PNG">
-                        📥 Baixar Slide (.PNG)
+                <div class="control-group">
+                    <label class="control-label" for="captionBox">Texto da Legenda (pronto para copiar e publicar):</label>
+                    <textarea id="captionBox" style="min-height: 180px; font-size: 0.88rem; line-height: 1.6;"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button class="btn btn-amber btn-sm" onclick="copyCaption()">
+                        📋 Copiar Legenda Completa
                     </button>
-                    <button class="btn btn-outline btn-sm" onclick="copySlideImage()" title="Copiar imagem diretamente para a área de transferência">
-                        📋 Copiar Imagem
-                    </button>
-                    <button class="btn btn-amber btn-sm" onclick="downloadAllZip()" title="Baixar todos os slides em pacote ZIP único com legenda incluída">
-                        📦 Baixar Todos (.ZIP)
-                    </button>
-                    <button class="btn btn-outline btn-sm" onclick="downloadAllSlides()" title="Baixar todos os slides individualmente">
-                        🔄 Downloads Individuais
+                    <button class="btn btn-outline btn-sm" onclick="exportMarkdownFile()">
+                        💾 Exportar Roteiro (.md)
                     </button>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- SIDEBAR DIREITA: Legenda Estratégica Pronta com Hashtags -->
-        <aside class="sidebar-caption">
-            <div class="section-title">
-                <span>✍️ 3. Legenda & Hashtags</span>
-            </div>
-
-            <div class="info-pill">
-                Legenda estrategicamente elaborada com gancho de primeira linha, narrativa neurocientífica fluida, chamada para ação e 15 hashtags para alcance orgânico.
-            </div>
-
-            <div class="control-group" style="flex: 1;">
-                <label class="control-label" for="captionBox">Texto para Copiar e Colar:</label>
-                <textarea id="captionBox" style="height: 100%; min-height: 280px; font-size: 0.85rem; line-height: 1.6;"></textarea>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button class="btn btn-amber" onclick="copyCaption()">
-                    📋 Copiar Legenda Completa
-                </button>
-                <button class="btn btn-outline btn-sm" onclick="exportMarkdownFile()">
-                    💾 Exportar Roteiro (.md)
-                </button>
-            </div>
-        </aside>
+        </div>
 
     </main>
 
@@ -887,6 +1025,69 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "autossuficiencia-compulsiva": {
+      "articleSlug": "2026-11-12-autossuficiencia-compulsiva-hiperindependencia",
+      "articleTitle": "A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Por Que Pedir Ajuda Parece Ameaçador",
+      "slides": [
+        {
+          "type": "cover",
+          "badge": "NEUROCIÊNCIA & APEGO",
+          "title": "Por que pedir ajuda parece *ameaçador* para o seu cérebro?",
+          "body": "\"Se eu não fizer sozinho, ninguém fará.\"\n\"Pedir favor é assinar uma promissória emocional.\"\n\nA neurobiologia da autossuficiência compulsiva revela: a hiperindependência não é sinal de maturidade; é uma blindagem neural contra a dor do desamparo precoce.",
+          "footer": "Deslize para entender sua couraça ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "A GÊNESE DO APEGO",
+          "title": "Você não nasceu autossuficiente; você foi forçado a se fechar",
+          "body": "Bebês nascem programados para a co-regulação e o afeto seguro (Bowlby & Ainsworth).\n\nQuando os cuidadores primários reagem ao choro com frieza, irritação ou rejeição, a criança aprende uma regra biológica cruel: *demonstrar necessidade traz sofrimento*.\n\nA hiperindependência adulta é a criança interior decidindo: \"nunca mais dependerei de ninguém\".",
+          "footer": "O que acontece dentro do seu cérebro? ➔"
+        },
+        {
+          "type": "mechanism",
+          "badge": "CIRCUITOS NEURAIS",
+          "title": "As estratégias de desativação do apego",
+          "body": "À luz da neurociência (Mikulincer & Shaver), o cérebro evitativo adota estratégias ativas de desativação:\n\n1. Supressão Ocitocinérgica: A proximidade e o afeto deixam de ativar o estriado ventral (recompensa) e passam a soar como perda de controle.\n2. Inibição Pré-Frontal: O dlPFC bloqueia a amígdala para reprimir a carência antes que ela chegue à consciência.",
+          "footer": "Por que você parece calmo mas adoece? ➔"
+        },
+        {
+          "type": "mechanism",
+          "badge": "FISIOLOGIA OCULTA",
+          "title": "O paradoxo da calma aparente",
+          "body": "O indivíduo hiperindependente tem fama de ser uma \"fortaleza\". Não chora, resolve tudo e narra perdas graves com frieza cirúrgica.\n\nMas monitores psicofisiológicos revelam: *o corpo está em estado de emergência autonômica sustentada*.\n\nA frequência cardíaca dispara e o cortisol basal permanece alto. A frieza não é paz; é estresse reprimido com um consumo metabólico colossal.",
+          "footer": "O custo de não dividir a carga ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "TEORIA DA LINHA DE BASE SOCIAL",
+          "title": "Fazer tudo sozinho sobrecarrega o cérebro",
+          "body": "A Social Baseline Theory (James Coan) comprova que o cérebro humano foi desenhado para dividir o esforço biológico com a tribo.\n\nAo segurar a mão de alguém seguro diante de uma ameaça, o gasto de glicose e cortisol do córtex frontal despenca.\n\nAo recusar apoio, você assume 100% da carga de vigilância. Isso gera burnout velado, dores miofasciais e exaustão permanente.",
+          "footer": "A armadura esquematizada ➔"
+        },
+        {
+          "type": "contrast",
+          "badge": "TERAPIA DO ESQUEMA",
+          "title": "A prisão do \"Protetor Desapegado\"",
+          "body": "A mente hiperindependente é refém de três esquemas rígidos (Jeffrey Young):\n\n• Privação Emocional: \"Ninguém nunca vai cuidar de mim de verdade.\"\n• Desconfiança: \"Se eu baixar a guarda, serei explorado ou traído.\"\n• Terror da Dívida: \"Receber ajuda é perder a liberdade e contrair dívida eterna.\"\n\nEssa couraça protege contra a decepção, mas condena à solidão.",
+          "footer": "Como desarmar essa blindagem? ➔"
+        },
+        {
+          "type": "steps",
+          "badge": "DIRETRIZES CLÍNICAS",
+          "title": "3 passos para a interdependência madura",
+          "body": "1. Microrriscos de Vulnerabilidade: Delegue uma pequena tarefa sem fiscalizar; admita que está cansado sem se culpar.\n\n2. Reative a Consciência Somática: Traga a atenção para as sensações corporais (ínsula) em vez de anestesiar tudo com trabalho e lógica fria.\n\n3. Resgate a Equipe: Depender não é submissão. Maturidade autêntica é a capacidade de cuidar de si e confiar no outro.",
+          "footer": "Avalie seu nível de autossuficiência ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "ESCALA CLÍNICA & ENSAIO",
+          "title": "Mapeie sua blindagem defensiva",
+          "body": "Disponibilizei no site institucional:\n\n• Ensaio Científico Completo com fundamentos de Bowlby, Damasio, James Coan e Byung-Chul Han.\n• Escala Psicométrica T-45 (EHIS-DA): avalie sua autossuficiência defensiva com devolutiva privada.\n• Jogo Cognitivo Dia 44: Dilema da Confiança Social.\n\n🔗 deomagalhaes.com.br",
+          "footer": "@deomagalhaesneuro • Compartilhe com quem carrega o mundo sozinho"
+        }
+      ],
+      "caption": "Você já sentiu uma aversão quase física à ideia de pedir ajuda a alguém?\n\n\"Deixa que eu resolvo.\" \"Se eu não fizer com as minhas próprias mãos, não fica bom.\" \"Pedir favor é assinar uma promissória emocional que vou dever pelo resto da vida.\"\n\nVivemos em uma cultura que idolatra a autossuficiência como virtude moral máxima. Mas no consultório clínico e à luz da neurociência do apego, o diagnóstico é muito diferente: a hiperindependência raramente é sinal de maturidade; é uma resposta biológica de sobrevivência.\n\nQuando crianças sofrem negligência emocional, frieza ou críticas duras sempre que expressam necessidade de afeto, o cérebro aprende uma lição gravada a ferro e fogo: mostrar vulnerabilidade é perigoso.\n\nPara sobreviver, a mente aciona o que a neurociência chama de \"estratégias de desativação do apego\" (Mikulincer & Shaver). O córtex pré-frontal bloqueia a amígdala e o corpo dessensibiliza os receptores de ocitocina. O indivíduo constrói uma couraça impenetrável de lógica, eficiência e frieza aparente.\n\nMas há um custo metabólico invisível que ninguém te conta. Conforme a Teoria da Linha de Base Social (James Coan), nosso cérebro foi desenhado para dividir o peso da sobrevivência com outros seres humanos. Quando você se recusa a segurar a mão de quem quer que seja, seu cérebro queima estoques vitais de glicose e cortisol para manter você em vigília 24 horas por dia. O resultado não é força; é burnout oculto, bruxismo, tensão crônica e uma sensação lancinante de estar sozinho no universo.\n\nA verdadeira maturidade não está em viver encastelado em uma fortaleza inexpugnável, mas na coragem da interdependência madura: saber cuidar de si e, ao mesmo tempo, ter a nobreza de confiar no outro.\n\nPubliquei hoje no site um ensaio neurocientífico denso sobre o tema, acompanhado da Escala Psicométrica T-45 (EHIS-DA) para você mapear seu nível de desativação do apego com cálculo 100% privado.\n\n🔗 O link está disponível no site: deomagalhaes.com.br\n\nVocê é do tipo que resolve tudo sozinho ou já consegue pedir ajuda sem sentir culpa? Me conte nos comentários.\n\n#neuropsicologia #apegoevitativo #hiperindependencia #autossuficiencia #saudemental #terapiadoesquema #neurociencias #deomagalhaes #psicologiaclinica #vulnerabilidade #relacionamentos #burnout #autoconhecimento #inteligenciaemocional #interdependencia"
+    },
     "catastrofizacao-aversiva": {
       "articleSlug": "2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva",
       "articleTitle": "A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Certezas de Ameaça",
@@ -3843,9 +4044,9 @@
         };
 
         // Estado do Studio
-        let currentPresetKey = "catastrofizacao-aversiva";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["catastrofizacao-aversiva"].slides));
-        let currentCaption = PRESETS["catastrofizacao-aversiva"].caption;
+        let currentPresetKey = "autossuficiencia-compulsiva";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["autossuficiencia-compulsiva"].slides));
+        let currentCaption = PRESETS["autossuficiencia-compulsiva"].caption;
         let currentSlideIndex = 0;
         let currentFormat = "1:1"; // '1:1' ou '4:5'
         let currentTheme = "deep-teal";

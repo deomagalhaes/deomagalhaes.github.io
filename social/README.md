@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **12/11/2026** | **A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência** | [social/2026-11-12-autossuficiencia-compulsiva-hiperindependencia.md](2026-11-12-autossuficiencia-compulsiva-hiperindependencia.md) | ✅ Pronto para postar |
 | **12/11/2026** | **A Neurobiologia da Catastrofização e da Simulação Aversiva** | [social/2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva.md](2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva.md) | ✅ Pronto para postar |
 | **11/11/2026** | **A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão** | [social/2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao.md](2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao.md) | ✅ Pronto para postar |
 | **11/11/2026** | **A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional** | [social/2026-11-11-neurobiologia-fenomeno-do-impostor.md](2026-11-11-neurobiologia-fenomeno-do-impostor.md) | ✅ Pronto para postar |
