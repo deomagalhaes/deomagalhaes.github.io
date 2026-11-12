@@ -1302,8 +1302,10 @@
         speechUtterance.rate = rateSelect ? parseFloat(rateSelect.value) || 0.85 : 0.85; // Leitura compassada e suave
         speechUtterance.pitch = 0.95; // Tom morno para indução ao relaxamento
 
-        const allVoices = cachedVoices.length > 0 ? cachedVoices : (window.speechSynthesis.getVoices() || []);
-        const ptVoice = allVoices.find(v => v.lang && (v.lang.toLowerCase().startsWith('pt') || v.lang.toLowerCase().replace('_', '-').startsWith('pt-br')));
+        const allVoices = (cachedVoices && cachedVoices.length > 0) ? cachedVoices : (window.speechSynthesis.getVoices() || []);
+        const ptBrVoices = allVoices.filter(v => v.lang && (v.lang.toLowerCase().includes('pt-br') || v.lang.toLowerCase().includes('pt_br')));
+        const naturalPtBr = ptBrVoices.find(v => (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Maria') || v.name.includes('Francisca') || v.name.includes('Luciana')));
+        const ptVoice = naturalPtBr || ptBrVoices[0] || allVoices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
         if (ptVoice) speechUtterance.voice = ptVoice;
 
         speechUtterance.onend = () => {

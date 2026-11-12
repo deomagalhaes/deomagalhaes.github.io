@@ -1743,6 +1743,27 @@
                         score += 26; // Floração ocorre nos ramos novos: corte forte pré-primavera
                     }
                 }
+                if (popName.includes('romã') || sciName.includes('punica')) {
+                    if (proc.id === 'ADUBACAO_FLORACAO' && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
+                        score += 26; // Estímulo a floradas vermelhas e frutificação persistente
+                    }
+                    if (proc.category === 'PODA_RAMIFICACAO' && seasonInfo.season === 'Outono') {
+                        score += 22; // Poda pós-frutificação com cicatrização eficiente
+                    }
+                }
+                if (popName.includes('azaleia') || sciName.includes('rhododendron')) {
+                    if (proc.category === 'PODA_DRASTICA' && seasonInfo.season === 'Primavera') {
+                        score += 28; // Janela cirúrgica imediata pós-queda das flores
+                    }
+                    if (proc.id === 'DESFOLHA_TOTAL') {
+                        score -= 50; // Azaleias nunca toleram desfolha total (risco de morte de galhos)
+                    }
+                }
+                if (popName.includes('pau-ferro') || sciName.includes('libidibia') || popName.includes('guatambu')) {
+                    if (proc.category === 'ESTRUTURA' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
+                        score += 20; // Madeira extremamente densa: aramação jovem e tensores de ancoragem
+                    }
+                }
 
                 if (proc.category === 'ESTRUTURA' && plant.lastStyling) {
                     const daysSinceStyle = Math.abs(global.VaultCore.daysDiffFromToday(plant.lastStyling) || 0);

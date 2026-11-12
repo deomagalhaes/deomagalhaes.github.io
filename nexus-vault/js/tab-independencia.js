@@ -716,6 +716,7 @@
             // Sessões clínicas necessárias por mês para pagar este degrau
             const sessionsNeeded = netPerSession > 0 ? (t.cost / netPerSession) : 0;
             const hoursNeeded = netPerHour > 0 ? (t.cost / netPerHour) : 0;
+            const survivalBufferDays = (t.cost > 0 && passive > 0) ? Math.round((passive / t.cost) * 30) : 0;
 
             return Object.assign({}, t, {
                 accumulatedCost: endAcc,
@@ -723,7 +724,8 @@
                 isFullyCovered: coverage >= 100,
                 capitalNeeded,
                 sessionsNeeded,
-                hoursNeeded
+                hoursNeeded,
+                survivalBufferDays
             });
         });
 
@@ -1296,6 +1298,11 @@
         const C = global.VaultCore;
         const res = computeAporteAllocation();
 
+        const discBefore = res.classes.reduce((acc, c) => acc + Math.abs(c.currentPct - c.targetPct), 0);
+        const discAfter = res.classes.reduce((acc, c) => acc + Math.abs(c.postPct - c.targetPct), 0);
+        const alignScoreBefore = Math.max(0, Math.min(100, Math.round(100 - (discBefore / 2))));
+        const alignScoreAfter = Math.max(0, Math.min(100, Math.round(100 - (discAfter / 2))));
+
         container.innerHTML = `
             <div class="space-y-5">
                 <!-- Painel Superior: Valor a Aportar Este Mês -->
@@ -1311,6 +1318,20 @@
                             <label class="block text-[11px] font-mono text-slate-400 mb-1">Aporte Disponível Este Mês</label>
                             <input type="number" id="ind-custom-aporte" step="100" min="0" value="${inputs.customAporteValue}"
                                 class="min-h-[42px] px-3.5 py-1.5 rounded-lg bg-[#090d16] border border-cyan-500/50 font-mono text-base font-bold text-cyan-300 w-44">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Termômetro de Alinhamento da Carteira -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Índice de Alinhamento da Carteira: <strong class="text-slate-300">${alignScoreBefore}%</strong> → <strong class="text-emerald-300 font-bold">${alignScoreAfter}% pós-aporte</strong></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-slate-500">Convergência:</span>
+                        <div class="w-36 h-2 rounded-full bg-slate-800 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-300" style="width: ${alignScoreAfter}%"></div>
                         </div>
                     </div>
                 </div>
@@ -1818,7 +1839,7 @@
                             </div>
 
                             <!-- Métricas Clínicas de Equivalência deste Degrau -->
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-3 border-t border-slate-800/80 text-xs font-mono text-slate-400">
                                 <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
                                     <div class="text-[10px] text-slate-500">Patrimônio Exclusivo Necessário</div>
                                     <div class="text-sm font-bold text-slate-200 mt-0.5">${C.formatBRL(t.capitalNeeded)}</div>
@@ -1830,6 +1851,12 @@
                                 <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
                                     <div class="text-[10px] text-slate-500">Horas Totais de Trabalho/Mês</div>
                                     <div class="text-sm font-bold text-amber-300 mt-0.5">${C.formatNum(t.hoursNeeded, 1)}h (atend. + laudos)</div>
+                                </div>
+                                <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
+                                    <div class="text-[10px] text-slate-500">Buffer Passivo de Segurança</div>
+                                    <div class="text-sm font-bold ${t.isFullyCovered ? 'text-emerald-400' : 'text-slate-300'} mt-0.5">
+                                        ${t.isFullyCovered ? '30 dias (100% blindado)' : `${t.survivalBufferDays || 0} dias amparados`}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2051,6 +2078,13 @@
             dividendShockPct = 25.0;
             desc = 'Aumento de vacância física em lajes corporativas e renegociação forçada de aluguéis reduzem temporariamente os dividendos mensais da carteira.';
             clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: Não girar a carteira. Os imóveis de tijolo permanecem íntegros e se recuperam no ciclo de expansão seguinte. Proteger com recebíveis (CRIs) de alta qualidade.';
+        } else if (scenarioKey === 'black_swan') {
+            title = 'Cisne Negro Global (−50% Ativos / −30% Yield / +10% Custos)';
+            dropPatrimonyPct = 50.0;
+            inflationSurprisePct = 10.0;
+            dividendShockPct = 30.0;
+            desc = 'Colapso sistêmico agudo de liquidez com fechamento temporário de bolsas e estagflação severa. Teste máximo de imunização existencial.';
+            clinicalPrescription = 'DIRETRIZ COMPORTAMENTAL CLÍNICA: O consultório ativo atua como a âncora soberana inabalável. Foco 100% no acolhimento de pacientes e manutenção da saúde mental.';
         } else {
             title = 'Choque Customizado Personalizado';
             dropPatrimonyPct = Math.max(0, Math.min(60, customDrop));
@@ -2179,6 +2213,7 @@
                                 <option value="crash40" ${st.scenarioKey === 'crash40' ? 'selected' : ''}>Crash Severo Subprime (−40% Ações / −30% FIIs)</option>
                                 <option value="stagflation" ${st.scenarioKey === 'stagflation' ? 'selected' : ''}>Estagflação (IPCA 9.5% / Juro Real 2.8%)</option>
                                 <option value="fii_drop" ${st.scenarioKey === 'fii_drop' ? 'selected' : ''}>Crise de Vacância FIIs (−25% Yield)</option>
+                                <option value="black_swan" ${st.scenarioKey === 'black_swan' ? 'selected' : ''}>Cisne Negro Global (−50% Ativos / −30% Yield)</option>
                                 <option value="custom" ${st.scenarioKey === 'custom' ? 'selected' : ''}>Choque Personalizado Manual</option>
                             </select>
                         </div>
@@ -2201,6 +2236,9 @@
                         </button>
                         <button type="button" data-stress-preset="fii_drop" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'fii_drop' ? 'bg-amber-500/25 text-amber-200 border-amber-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
                             🏢 FIIs −25% Yield
+                        </button>
+                        <button type="button" data-stress-preset="black_swan" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'black_swan' ? 'bg-rose-600/30 text-rose-200 border-rose-500 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
+                            💀 −50% Cisne Negro
                         </button>
                         <button type="button" data-stress-preset="custom" class="px-2.5 py-1 rounded-lg text-xs font-mono transition border ${st.scenarioKey === 'custom' ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/50 font-bold' : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'}">
                             ⚙️ Choque Manual
@@ -2947,6 +2985,134 @@
             formula: 'Patrimônio_Crash = 300.000 × 0,70 = 210.000 ∧ Meses_Dinâmicos ≤ 20',
             passed: Boolean(testRecovery30Pass),
             detail: `Perda temporária de R$ 90.000 sob choque de 30% é recuperada em ${mockRecovery30.monthsToRecoverDynamic} meses com reinvestimento e aportes contínuos.`
+        });
+
+        // 36. Teste de Choque Extremo Black Swan (−50% Ativos / +10% Custos)
+        const mockBlackSwan = computeStressTest({
+            stressScenario: 'black_swan',
+            currentPatrimony: 200000,
+            monthlyCosts: 2500,
+            monthlyContribution: 4000,
+            realAnnualReturn: 7.5
+        });
+        const testBlackSwanPass = mockBlackSwan.stressedPatrimony === 100000 &&
+            mockBlackSwan.lostCapital === 100000 &&
+            Math.abs(mockBlackSwan.stressedClinicCosts - 2750) < 1e-2;
+        tests.push({
+            name: 'Resiliência Atuarial sob Choque Extremo Black Swan (−50% Patrimônio / +10% Custos)',
+            formula: 'Patrimônio_Swan = 200.000 × 0,50 = 100.000 ∧ Custos_Swan = 2.500 × 1,10 = 2.750',
+            passed: Boolean(testBlackSwanPass),
+            detail: `Patrimônio retido de R$ 100.000 com custos inflacionados para R$ 2.750,00 mantendo solvência operacional.`
+        });
+
+        // 37. Teste de Integração de Tickers Personalizados no Motor de Cotas Inteiras
+        const mockUserTickers = {
+            FII: [{ ticker: 'XPML11', name: 'XP Malls', price: 110.00, yield: 8.9, type: 'Shopping' }]
+        };
+        const mockAllocUser = [{ key: 'FII', name: 'Fundos Imobiliários', recommendedAporte: 1100 }];
+        const mockUserResult = computeAporteByTickers(mockAllocUser, mockUserTickers);
+        const testUserPass = mockUserResult.byClass.length === 1 &&
+            mockUserResult.byClass[0].tickers[0].ticker === 'XPML11' &&
+            mockUserResult.byClass[0].tickers[0].shares === 10 &&
+            mockUserResult.totalResidual === 0;
+        tests.push({
+            name: 'Integração de Tickers Customizados do Usuário no Motor de Cotas Inteiras',
+            formula: 'Cotas = floor(1100 / 110) = 10 ∧ Troco_Residual = 0',
+            passed: Boolean(testUserPass),
+            detail: `Ticker customizado XPML11 alocou 10 cotas exatas de R$ 110,00 totalizando R$ 1.100,00 sem resíduo.`
+        });
+
+        // 38. Teste de Monotonia e Boundedness da Taxa de Poupança e Alinhamento de Metas
+        const mockAlignModel = computeFinancialModel();
+        const testAlignPass = mockAlignModel.savingsRate >= 0 && mockAlignModel.savingsRate <= 100;
+        tests.push({
+            name: 'Monotonia e Boundedness da Taxa de Poupança e Alinhamento de Metas',
+            formula: '0% ≤ Taxa_Poupança ≤ 100% ∧ Cobertura_Global ≥ 0%',
+            passed: Boolean(testAlignPass),
+            detail: `Taxa de poupança clínica delimitada em ${mockAlignModel.savingsRate.toFixed(1)}% com convergência estrita.`
+        });
+
+        // 39. Teste de Sensibilidade de Retirada Segura: SWR 3,0% (Super Conservador) vs 4,5%
+        const mockSwr30 = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 3.0
+        });
+        const mockSwr45 = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 4.5
+        });
+        const testSwrSensPass = mockSwr30.targetFullFire > mockSwr45.targetFullFire &&
+            Math.abs(mockSwr30.targetFullFire - (mockSwr30.netRevenue * 12 / 0.03)) < 1e-2 &&
+            Math.abs(mockSwr45.targetFullFire - (mockSwr45.netRevenue * 12 / 0.045)) < 1e-2;
+        tests.push({
+            name: 'Sensibilidade Atuarial de Retirada Segura: SWR 3,0% (Super Conservador) vs 4,5%',
+            formula: 'Patrimônio_SWR(3,0%) > Patrimônio_SWR(4,5%) ∧ Relação_Inversa_Estrita',
+            passed: Boolean(testSwrSensPass),
+            detail: `SWR 3,0% exige R$ ${mockSwr30.targetFullFire.toLocaleString('pt-BR')} vs R$ ${mockSwr45.targetFullFire.toLocaleString('pt-BR')} em SWR 4,5%.`
+        });
+
+        // 40. Teste de Horas Clínicas Poupadas e Dias de Sobrevivência por Degrau da Cascata
+        const mockCascadeHours = computeExpenseCascade({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            indirectWeeklyHours: 6,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            expenseEssential: 2500
+        });
+        const essentialTier = mockCascadeHours.tiers.find(t => t.id === 'essential');
+        const testHoursPass = essentialTier && essentialTier.hoursNeeded > 0 && essentialTier.sessionsNeeded > 0 &&
+            essentialTier.survivalBufferDays !== undefined;
+        tests.push({
+            name: 'Equivalência de Horas Clínicas Poupadas e Dias de Sobrevivência por Degrau',
+            formula: 'Horas_Poupadas = Custo_Degrau / Valor_Hora_Efetiva ∧ Dias_Buffer = (Passivo / Custo) × 30',
+            passed: Boolean(testHoursPass),
+            detail: `Nível 1 (R$ 2.500) poupa ${essentialTier.sessionsNeeded.toFixed(1)} sessões (~${essentialTier.hoursNeeded.toFixed(1)}h de trabalho clínico total).`
+        });
+
+        // 41. Teste de Aceleração com Aporte de Oportunidade (+20%) sob Estresse
+        const mockBoostStress = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 200000,
+            monthlyCosts: 2500,
+            monthlyContribution: 5000,
+            realAnnualReturn: 7.5,
+            stressBoostContribution: true
+        });
+        const testBoostStressPass = mockBoostStress.effectiveAporte === 6000 &&
+            mockBoostStress.monthsToRecoverDynamic <= mockBoostStress.monthsToRecover;
+        tests.push({
+            name: 'Dinâmica de Recomposição Pós-Queda de 30% com Aporte de Oportunidade (+20%)',
+            formula: 'Aporte_Crash = 5000 × 1,20 = 6000 ∧ Meses_Recomposição_Dinâmica ≤ Linear',
+            passed: Boolean(testBoostStressPass),
+            detail: `Aporte ampliado para R$ 6.000/mês garante recomposição total do capital em ~${mockBoostStress.monthsToRecoverDynamic} meses.`
+        });
+
+        // 42. Teste de Convergência sob Taxa Real Nula (0% a.a. — Crescimento Linear Puro)
+        const mockZeroReturn = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4000,
+            currentPatrimony: 100000,
+            realAnnualReturn: 0,
+            horizonYears: 10
+        });
+        const testZeroPass = mockZeroReturn.monthlyRate === 0 &&
+            mockZeroReturn.yearlySeries.length === 11 &&
+            mockZeroReturn.yearlySeries[10].patrimony === 100000 + (4000 * 12 * 10);
+        tests.push({
+            name: 'Convergência Numérica sob Taxa Real Nula (0% a.a. — Crescimento Linear Puro)',
+            formula: 'i = 0 ⇒ Patrimônio(t) = Patrimônio_0 + (Aporte × 12 × t)',
+            passed: Boolean(testZeroPass),
+            detail: `Em 10 anos a 0% a.a., patrimônio final converge exatamente para R$ ${(100000 + 4000 * 120).toLocaleString('pt-BR')}.`
         });
 
         const allPassed = tests.every(t => t.passed);

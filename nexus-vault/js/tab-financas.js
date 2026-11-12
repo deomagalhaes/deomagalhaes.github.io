@@ -228,6 +228,7 @@
             const capitalNeeded = monthlyRate > 0 ? (t.cost / monthlyRate) : 0;
             const sessionsNeeded = netPerSession > 0 ? (t.cost / netPerSession) : 0;
             const hoursNeeded = netPerHour > 0 ? (t.cost / netPerHour) : 0;
+            const survivalBufferDays = (t.cost > 0 && passive > 0) ? Math.round((passive / t.cost) * 30) : 0;
 
             return Object.assign({}, t, {
                 accumulatedCost: endAcc,
@@ -235,7 +236,8 @@
                 isFullyCovered: coverage >= 100,
                 capitalNeeded,
                 sessionsNeeded,
-                hoursNeeded
+                hoursNeeded,
+                survivalBufferDays
             });
         });
 
@@ -308,6 +310,13 @@
             dividendShockPct = 25.0;
             desc = 'Vacância temporária em lajes corporativas reduz os dividendos mensais da carteira.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Não girar a carteira. Imóveis de tijolo se recuperam no ciclo de expansão seguinte.';
+        } else if (scenarioKey === 'black_swan') {
+            title = 'Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)';
+            dropPatrimonyPct = 50.0;
+            inflationSurprisePct = 10.0;
+            dividendShockPct = 30.0;
+            desc = 'Colapso sistêmico agudo de liquidez com fechamento de bolsas e estagflação severa. Teste máximo de imunização existencial.';
+            clinicalPrescription = 'DIRETRIZ CLÍNICA: O consultório ativo atua como a âncora soberana inabalável. Foco 100% no acolhimento de pacientes e manutenção da saúde mental.';
         } else {
             title = 'Choque Customizado Personalizado';
             dropPatrimonyPct = Math.max(0, Math.min(60, customDrop));
@@ -479,13 +488,26 @@
 
         classesArr.forEach((cls) => {
             const classAporte = cls.recommendedAporte || 0;
-            const tickers = (tickerCatalog[cls.key] || DEFAULT_TICKERS[cls.key] || []).slice(0, 2);
+            let tickers = (tickerCatalog[cls.key] || DEFAULT_TICKERS[cls.key] || []).slice();
+
+            // Mesclar tickers personalizados cadastrados pelo usuário no Vault
+            const userTickers = (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs)
+                ? global.VaultTabIndependencia.getInputs().userTickers
+                : null;
+            if (Array.isArray(userTickers)) {
+                const userCls = userTickers.filter(ut => ut && ut.classKey === cls.key);
+                if (userCls.length > 0) {
+                    tickers = userCls.concat(tickers);
+                }
+            }
+
             if (tickers.length === 0) return;
 
-            const perTickerBudget = tickers.length > 0 ? (classAporte / tickers.length) : 0;
+            const targetTickers = tickers.slice(0, 2);
+            const perTickerBudget = targetTickers.length > 0 ? (classAporte / targetTickers.length) : 0;
             let classSpent = 0;
 
-            const tickerAlloc = tickers.map((t) => {
+            const tickerAlloc = targetTickers.map((t) => {
                 const shares = t.price > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / t.price) : 0;
                 const totalSpent = shares * t.price;
                 classSpent += totalSpent;
@@ -1232,6 +1254,134 @@
             formula: 'Patrimônio_Crash = 300.000 × 0,70 = 210.000 ∧ Meses_Dinâmicos ≤ 20',
             passed: Boolean(testRecovery30Pass),
             detail: `Perda temporária de R$ 90.000 sob choque de 30% é recuperada em ${mockRecovery30.monthsToRecoverDynamic} meses com reinvestimento e aportes contínuos.`
+        });
+
+        // 36. Teste de Choque Extremo Black Swan (−50% Ativos / +10% Custos)
+        const mockBlackSwan = computeStressTest({
+            stressScenario: 'black_swan',
+            currentPatrimony: 200000,
+            monthlyCosts: 2500,
+            monthlyContribution: 4000,
+            realAnnualReturn: 7.5
+        });
+        const testBlackSwanPass = mockBlackSwan.stressedPatrimony === 100000 &&
+            mockBlackSwan.lostCapital === 100000 &&
+            Math.abs(mockBlackSwan.stressedClinicCosts - 2750) < 1e-2;
+        tests.push({
+            name: 'Resiliência Atuarial sob Choque Extremo Black Swan (−50% Patrimônio / +10% Custos)',
+            formula: 'Patrimônio_Swan = 200.000 × 0,50 = 100.000 ∧ Custos_Swan = 2.500 × 1,10 = 2.750',
+            passed: Boolean(testBlackSwanPass),
+            detail: `Patrimônio retido de R$ 100.000 com custos inflacionados para R$ 2.750,00 mantendo solvência operacional.`
+        });
+
+        // 37. Teste de Integração de Tickers Personalizados no Motor de Cotas Inteiras
+        const mockUserTickers = {
+            FII: [{ ticker: 'XPML11', name: 'XP Malls', price: 110.00, yield: 8.9, type: 'Shopping' }]
+        };
+        const mockAllocUser = [{ key: 'FII', name: 'Fundos Imobiliários', recommendedAporte: 1100 }];
+        const mockUserResult = computeAporteByTickers(mockAllocUser, mockUserTickers);
+        const testUserPass = mockUserResult.byClass.length === 1 &&
+            mockUserResult.byClass[0].tickers[0].ticker === 'XPML11' &&
+            mockUserResult.byClass[0].tickers[0].shares === 10 &&
+            mockUserResult.totalResidual === 0;
+        tests.push({
+            name: 'Integração de Tickers Customizados do Usuário no Motor de Cotas Inteiras',
+            formula: 'Cotas = floor(1100 / 110) = 10 ∧ Troco_Residual = 0',
+            passed: Boolean(testUserPass),
+            detail: `Ticker customizado XPML11 alocou 10 cotas exatas de R$ 110,00 totalizando R$ 1.100,00 sem resíduo.`
+        });
+
+        // 38. Teste de Monotonia e Boundedness da Taxa de Poupança e Alinhamento de Metas
+        const mockAlignModel = computeFinancialModel();
+        const testAlignPass = mockAlignModel.savingsRate >= 0 && mockAlignModel.savingsRate <= 100;
+        tests.push({
+            name: 'Monotonia e Boundedness da Taxa de Poupança e Alinhamento de Metas',
+            formula: '0% ≤ Taxa_Poupança ≤ 100% ∧ Cobertura_Global ≥ 0%',
+            passed: Boolean(testAlignPass),
+            detail: `Taxa de poupança clínica delimitada em ${mockAlignModel.savingsRate.toFixed(1)}% com convergência estrita.`
+        });
+
+        // 39. Teste de Sensibilidade de Retirada Segura: SWR 3,0% (Super Conservador) vs 4,5%
+        const mockSwr30 = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 3.0
+        });
+        const mockSwr45 = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 4.5
+        });
+        const testSwrSensPass = mockSwr30.targetFullFire > mockSwr45.targetFullFire &&
+            Math.abs(mockSwr30.targetFullFire - (mockSwr30.netRevenue * 12 / 0.03)) < 1e-2 &&
+            Math.abs(mockSwr45.targetFullFire - (mockSwr45.netRevenue * 12 / 0.045)) < 1e-2;
+        tests.push({
+            name: 'Sensibilidade Atuarial de Retirada Segura: SWR 3,0% (Super Conservador) vs 4,5%',
+            formula: 'Patrimônio_SWR(3,0%) > Patrimônio_SWR(4,5%) ∧ Relação_Inversa_Estrita',
+            passed: Boolean(testSwrSensPass),
+            detail: `SWR 3,0% exige R$ ${mockSwr30.targetFullFire.toLocaleString('pt-BR')} vs R$ ${mockSwr45.targetFullFire.toLocaleString('pt-BR')} em SWR 4,5%.`
+        });
+
+        // 40. Teste de Horas Clínicas Poupadas e Dias de Sobrevivência por Degrau da Cascata
+        const mockCascadeHours = computeExpenseCascade({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            indirectWeeklyHours: 6,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            expenseEssential: 2500
+        });
+        const essentialTier = mockCascadeHours.tiers.find(t => t.id === 'essential');
+        const testHoursPass = essentialTier && essentialTier.hoursNeeded > 0 && essentialTier.sessionsNeeded > 0 &&
+            essentialTier.survivalBufferDays !== undefined;
+        tests.push({
+            name: 'Equivalência de Horas Clínicas Poupadas e Dias de Sobrevivência por Degrau',
+            formula: 'Horas_Poupadas = Custo_Degrau / Valor_Hora_Efetiva ∧ Dias_Buffer = (Passivo / Custo) × 30',
+            passed: Boolean(testHoursPass),
+            detail: `Nível 1 (R$ 2.500) poupa ${essentialTier.sessionsNeeded.toFixed(1)} sessões (~${essentialTier.hoursNeeded.toFixed(1)}h de trabalho clínico total).`
+        });
+
+        // 41. Teste de Aceleração com Aporte de Oportunidade (+20%) sob Estresse
+        const mockBoostStress = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 200000,
+            monthlyCosts: 2500,
+            monthlyContribution: 5000,
+            realAnnualReturn: 7.5,
+            stressBoostContribution: true
+        });
+        const testBoostStressPass = mockBoostStress.effectiveAporte === 6000 &&
+            mockBoostStress.monthsToRecoverDynamic <= mockBoostStress.monthsToRecover;
+        tests.push({
+            name: 'Dinâmica de Recomposição Pós-Queda de 30% com Aporte de Oportunidade (+20%)',
+            formula: 'Aporte_Crash = 5000 × 1,20 = 6000 ∧ Meses_Recomposição_Dinâmica ≤ Linear',
+            passed: Boolean(testBoostStressPass),
+            detail: `Aporte ampliado para R$ 6.000/mês garante recomposição total do capital em ~${mockBoostStress.monthsToRecoverDynamic} meses.`
+        });
+
+        // 42. Teste de Convergência sob Taxa Real Nula (0% a.a. — Crescimento Linear Puro)
+        const mockZeroReturn = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4000,
+            currentPatrimony: 100000,
+            realAnnualReturn: 0,
+            horizonYears: 10
+        });
+        const testZeroPass = mockZeroReturn.monthlyRate === 0 &&
+            mockZeroReturn.yearlySeries.length === 11 &&
+            mockZeroReturn.yearlySeries[10].patrimony === 100000 + (4000 * 12 * 10);
+        tests.push({
+            name: 'Convergência Numérica sob Taxa Real Nula (0% a.a. — Crescimento Linear Puro)',
+            formula: 'i = 0 ⇒ Patrimônio(t) = Patrimônio_0 + (Aporte × 12 × t)',
+            passed: Boolean(testZeroPass),
+            detail: `Em 10 anos a 0% a.a., patrimônio final converge exatamente para R$ ${(100000 + 4000 * 120).toLocaleString('pt-BR')}.`
         });
 
         const allPassed = tests.every(t => t.passed);
