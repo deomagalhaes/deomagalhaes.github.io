@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Gerador de Carrosséis Instagram (1080x1080) — Deo Magalhães</title>
+    <title>Studio Gerador de Carrosséis Instagram (1:1 & 4:5) — Deo Magalhães</title>
     <meta name="description" content="Pipeline automatizado para converter artigos e storybooks em carrosséis de 1080x1080 para Instagram com paleta institucional e legendas estratégicas.">
     <link rel="icon" type="image/png" href="../assets/favicon2.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -460,6 +461,134 @@
             line-height: 1.4;
             border-radius: 4px;
         }
+
+        /* Barra de Ferramentas de Slides */
+        .slide-toolbar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .btn-tool {
+            background: rgba(0, 18, 25, 0.8);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            border-radius: 8px;
+            padding: 5px 9px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+
+        .btn-tool:hover {
+            background: var(--primary-teal);
+            border-color: var(--neural-cyan);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-tool.danger:hover {
+            background: #dc2743;
+            border-color: #ff6b81;
+        }
+
+        .btn-tool.active {
+            background: var(--primary-teal);
+            border-color: var(--amber-gold);
+            color: white;
+        }
+
+        /* Seletor de Proporção (1:1 vs 4:5) */
+        .ratio-pills {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: rgba(0, 18, 25, 0.6);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-glass);
+        }
+
+        .ratio-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 7px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .ratio-btn.active {
+            background: var(--primary-teal);
+            color: white;
+            box-shadow: 0 0 10px rgba(10, 147, 150, 0.3);
+            font-weight: 700;
+        }
+
+        /* Sliders de Tipografia */
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            padding: 0;
+            height: 6px;
+            background: rgba(148, 210, 189, 0.2);
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            outline: none;
+            accent-color: var(--amber-gold);
+        }
+
+        .slider-val {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--cream-soft);
+            min-width: 44px;
+            text-align: right;
+            padding: 2px 6px;
+            background: rgba(0, 18, 25, 0.5);
+            border-radius: 6px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .info-pill-mini {
+            background: rgba(238, 155, 0, 0.08);
+            border-left: 2px solid var(--amber-gold);
+            padding: 6px 10px;
+            font-size: 0.74rem;
+            color: var(--cream-soft);
+            line-height: 1.35;
+            border-radius: 4px;
+            margin-top: 6px;
+        }
+
+        /* Suporte a proporção no Preview Container */
+        .canvas-container.ratio-4-5 {
+            aspect-ratio: 4 / 5 !important;
+            max-width: 450px !important;
+            max-height: 562px !important;
+        }
+
+        .canvas-container.ratio-1-1 {
+            aspect-ratio: 1 / 1 !important;
+            max-width: 520px !important;
+            max-height: 520px !important;
+        }
     </style>
 </head>
 <body>
@@ -469,7 +598,7 @@
         <a href="../index.html" class="brand-box">
             <div class="brand-logo">DM</div>
             <div class="brand-info">
-                <h1>Studio Carrosséis Instagram • 1080x1080</h1>
+                <h1>Studio Carrosséis Instagram • 1:1 & 4:5</h1>
                 <span>Deo Magalhães — Neuropsicólogo e Neurocientista (CRP 04/42784)</span>
             </div>
         </a>
@@ -499,7 +628,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="fadiga-empatica" selected>A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Esgota Seu Cérebro</option>
+                        <option value="catastrofizacao-aversiva" selected>A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Ameaças</option>
+                        <option value="fadiga-empatica">A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Esgota Seu Cérebro</option>
                         <option value="fenomeno-impostor">A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso</option>
                         <option value="masking-burnout">O Custo Oculto do Masking e o Burnout Neurodivergente</option>
                         <option value="fawning-apaziguamento">A Neurobiologia do Fawning e Apaziguamento Social</option>
@@ -570,8 +700,71 @@
                 </button>
             </div>
 
-            <div class="section-title" style="margin-top: 10px;">
-                <span>✏️ 2. Editar Slide Ativo</span>
+            <div class="section-title" style="margin-top: 14px;">
+                <span>📐 2. Formato & Estilo Global</span>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Proporção do Feed:</label>
+                <div class="ratio-pills">
+                    <button type="button" class="ratio-btn active" id="btnRatio11" onclick="setFormat('1:1')">1:1 Quadrado (1080²)</button>
+                    <button type="button" class="ratio-btn" id="btnRatio45" onclick="setFormat('4:5')">4:5 Retrato (1080x1350)</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="themeSelect">Paleta de Cores:</label>
+                <select id="themeSelect" onchange="onThemeChange(this.value)">
+                    <option value="deep-teal" selected>Petróleo & Âmbar (#005f73 & #ee9b00)</option>
+                    <option value="dark-obsidian">Obsidian Minimal (#001219 & #0a9396)</option>
+                    <option value="clean-light">Editorial Light (#f8fafc & #005f73)</option>
+                    <option value="terracotta">Terracota & Âmbar Quente</option>
+                    <option value="sage-clinic">Verde Sálvia & Ouro Clínico</option>
+                    <option value="indigo-night">Noturno Índigo & Ciano</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="cardStyleSelect">Estilo do Cartão:</label>
+                <select id="cardStyleSelect" onchange="onCardStyleChange(this.value)">
+                    <option value="glass" selected>Vidro Translúcido (Glassmorphism)</option>
+                    <option value="solid">Sólido com Contraste Suave</option>
+                    <option value="minimal">Minimalista (Sem Cartão / Direto no Fundo)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="fontFamilySelect">Família Tipográfica:</label>
+                <select id="fontFamilySelect" onchange="onFontFamilyChange(this.value)">
+                    <option value="modern" selected>Modern Sans (Outfit + Inter)</option>
+                    <option value="editorial">Editorial Elegante (Playfair + Inter)</option>
+                    <option value="clean">Clean Minimalista (Inter Puro)</option>
+                </select>
+            </div>
+
+            <div class="section-title" style="margin-top: 14px;">
+                <span>✏️ 3. Editar Slide Ativo</span>
+            </div>
+
+            <!-- Barra de Ferramentas de Gerenciamento de Slides -->
+            <div class="slide-toolbar">
+                <button type="button" class="btn-tool" onclick="addNewSlide()" title="Inserir novo slide após o atual">➕ Novo</button>
+                <button type="button" class="btn-tool" onclick="duplicateCurrentSlide()" title="Duplicar slide atual">📋 Duplicar</button>
+                <button type="button" class="btn-tool" onclick="moveSlideLeft()" title="Mover slide para a esquerda">◀ Mover</button>
+                <button type="button" class="btn-tool" onclick="moveSlideRight()" title="Mover slide para a direita">Mover ▶</button>
+                <button type="button" class="btn-tool danger" onclick="deleteCurrentSlide()" title="Excluir slide atual">🗑️ Excluir</button>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="editType">Layout do Slide:</label>
+                <select id="editType" onchange="onSlideTypeChange(this.value)">
+                    <option value="cover">Capa / Gancho de Alto Impacto</option>
+                    <option value="normal">Conceito / Desenvolvimento Clínico</option>
+                    <option value="steps">Lista em Passos / Tópicos Numerados</option>
+                    <option value="quote">Citação / Reflexão Destacada</option>
+                    <option value="split">Contraste Comparativo (A vs B)</option>
+                    <option value="cta">Fechamento & Chamada para Ação (CTA)</option>
+                </select>
             </div>
 
             <div class="control-group">
@@ -580,43 +773,56 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="editTitle">Título do Slide:</label>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label class="control-label" for="editTitle">Título do Slide:</label>
+                    <span class="slider-val" id="titleSizeDisplay">Auto</span>
+                </div>
                 <textarea id="editTitle" style="min-height: 55px;" oninput="updateCurrentSlideData()"></textarea>
+                <div class="slider-row">
+                    <input type="range" id="titleSizeRange" min="32" max="68" step="2" value="52" oninput="onTitleSizeChange(this.value)">
+                    <button type="button" class="btn-tool" id="btnAutoTitle" onclick="toggleAutoTitleSize()" style="padding: 2px 7px; font-size: 0.72rem;">Auto</button>
+                </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="editBody">Texto / Desenvolvimento:</label>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label class="control-label" for="editBody">Texto / Desenvolvimento:</label>
+                    <span class="slider-val" id="bodySizeDisplay">Auto</span>
+                </div>
                 <textarea id="editBody" style="min-height: 110px;" oninput="updateCurrentSlideData()"></textarea>
+                <div class="slider-row">
+                    <input type="range" id="bodySizeRange" min="20" max="44" step="2" value="34" oninput="onBodySizeChange(this.value)">
+                    <button type="button" class="btn-tool" id="btnAutoBody" onclick="toggleAutoBodySize()" style="padding: 2px 7px; font-size: 0.72rem;">Auto</button>
+                </div>
+                <div style="display: flex; gap: 6px; margin-top: 4px; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Alinhamento:</span>
+                    <button type="button" class="btn-tool" id="btnAlignLeft" onclick="setTextAlign('left')">⬅ Esquerda</button>
+                    <button type="button" class="btn-tool" id="btnAlignCenter" onclick="setTextAlign('center')">↔ Central</button>
+                </div>
+                <div class="info-pill-mini">
+                    💡 Dica: Envolva palavras com <strong>*asteriscos*</strong> (ex: <code>*dor vicária*</code>) para pintá-las com a cor âmbar de destaque.
+                </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="editFooter">Rodapé / Destaque de Ação:</label>
+                <label class="control-label" for="editFooter">Rodapé / Ação de Deslize:</label>
                 <input type="text" id="editFooter" oninput="updateCurrentSlideData()">
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="themeSelect">Paleta de Cor Visual:</label>
-                <select id="themeSelect" onchange="renderCurrentSlide()">
-                    <option value="deep-teal">Petróleo & Âmbar (#005f73 & #ee9b00)</option>
-                    <option value="dark-obsidian">Obsidian Minimal (#001219 & #0a9396)</option>
-                    <option value="clean-light">Editorial Light (#f8fafc & #005f73)</option>
-                </select>
             </div>
         </aside>
 
-        <!-- PALCO CENTRAL: Renderizador Canvas 1080x1080 Real-Time -->
+        <!-- PALCO CENTRAL: Renderizador Canvas Real-Time -->
         <section class="stage">
             <div class="stage-header">
                 <div class="slide-counter-badge" id="slideCounterDisplay">
                     Slide 1 de 6 • Capa / Gancho
                 </div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                <div id="formatDisplay" style="font-size: 0.75rem; color: var(--text-muted);">
                     Formato: 1080 x 1080 px (1:1 Oficial Instagram)
                 </div>
             </div>
 
-            <!-- Preview do Canvas -->
-            <div class="canvas-container">
+            <!-- Preview do Canvas com transição de aspecto -->
+            <div class="canvas-container ratio-1-1" id="canvasContainer">
                 <canvas id="carouselCanvas" width="1080" height="1080"></canvas>
             </div>
 
@@ -629,11 +835,17 @@
                 <div class="stage-actions">
                     <button class="btn btn-outline btn-sm" onclick="prevSlide()">◀ Anterior</button>
                     <button class="btn btn-outline btn-sm" onclick="nextSlide()">Próximo ▶</button>
-                    <button class="btn btn-amber" onclick="downloadCurrentSlide()">
-                        📥 Baixar Slide Atual (.PNG)
+                    <button class="btn btn-amber" onclick="downloadCurrentSlide()" title="Baixar imagem do slide ativo em PNG">
+                        📥 Baixar Slide (.PNG)
                     </button>
-                    <button class="btn btn-sm btn-outline" onclick="downloadAllSlides()">
-                        📦 Baixar Todos (6 Slides)
+                    <button class="btn btn-outline btn-sm" onclick="copySlideImage()" title="Copiar imagem diretamente para a área de transferência">
+                        📋 Copiar Imagem
+                    </button>
+                    <button class="btn btn-amber btn-sm" onclick="downloadAllZip()" title="Baixar todos os slides em pacote ZIP único com legenda incluída">
+                        📦 Baixar Todos (.ZIP)
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="downloadAllSlides()" title="Baixar todos os slides individualmente">
+                        🔄 Downloads Individuais
                     </button>
                 </div>
             </div>
@@ -675,6 +887,62 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "catastrofizacao-aversiva": {
+      "articleSlug": "2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva",
+      "articleTitle": "A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Certezas de Ameaça",
+      "slides": [
+        {
+          "type": "mechanism",
+          "badge": "NEUROCIÊNCIA & ANSIEDADE",
+          "title": "Por que seu cérebro transforma dúvida em catástrofe?",
+          "body": "Basta um e-mail com \"precisamos conversar\", um silêncio no WhatsApp ou uma palpitação no peito, e em segundos seu corpo reage como se a ruína total já tivesse ocorrido.\n\nA neurociência explica: sua máquina preditiva caiu em um curto-circuito de simulação aversiva.",
+          "footer": "Deslize para entender o circuito do medo ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "MÁQUINA DO TEMPO MENTAL",
+          "title": "A Simulação Episódica Prospetiva",
+          "body": "O cérebro humano evoluiu para projetar o futuro recombinando memórias passadas (Schacter & Addis).\n\nEssa dádiva evolutiva tem um custo: para a amígdala e os centros arcaicos de defesa, *imaginar nitidamente uma tragédia tem o mesmo peso biológico de vivenciá-la aqui e agora*.",
+          "footer": "Por que a razão desliga no pânico? ➔"
+        },
+        {
+          "type": "mechanism",
+          "badge": "SEQUESTRO LÍMBICO & dlPFC",
+          "title": "A Amígdala Apaga o Freio da Razão",
+          "body": "Diante de qualquer ambiguidade, a Amígdala e a Rede de Saliência (dACC + Ínsula) disparam um alarme visceral.\n\nSob o banho de adrenalina e cortisol, as sinapses inibitórias do Córtex Pré-Frontal Dorsolateral (dlPFC) sofrem um apagão temporário. Sem freio executivo, a hipótese vira certeza.",
+          "footer": "O erro de cálculo que a mente comete ➔"
+        },
+        {
+          "type": "contrast",
+          "badge": "DISTORÇÃO COGNITIVA BAYESIANA",
+          "title": "Você Confunde Gravidade com Probabilidade",
+          "body": "A mente ansiosa opera pela Heurística do Afeto: \"Se sinto um susto de intensidade 10 no corpo, a probabilidade lá fora deve ser de 100%\".\n\n• Gravidade Potencial: O quão doloroso seria o pior cenário (alto);\n• Probabilidade Real: A chance estatística real de acontecer (geralmente menor que 4%).",
+          "footer": "O preço que o corpo paga pela imaginação ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "SOBRECARGA ALOSTÁTICA",
+          "title": "O Custo Físico da Emergência Fictícia",
+          "body": "Ciclos diários de catastrofização corroem a fisiologia:\n\n1. Hiperativação Simpática: Taquicardia, aperto torácico e insônia crônica;\n2. Sensibilização Central: O limiar da dor cai e sensações neutras viram alarme;\n3. Esgotamento do Eixo HPA: Fadiga persistente e inflamação celular de baixo grau.",
+          "footer": "Como desarmar a catastrofização? ➔"
+        },
+        {
+          "type": "protocol",
+          "badge": "PROTOCOLO CLÍNICO",
+          "title": "3 Passos de Calibração Pré-Frontal",
+          "body": "1. Recalibração Bayesiana: Escreva a probabilidade estatística real do fato em um papel (força o dlPFC a acordar);\n2. Flecha Descendente: \"Se o pior acontecer, qual o plano exato para as primeiras 24h?\" (resgata a autoeficácia);\n3. Suspiro Fisiológico: 2 inspirações nasais rápidas e 1 expiração longa freiam a amígdala via nervo vago.",
+          "footer": "Artigo científico completo no site ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "ENSAIO CIENTÍFICO COMPLETO",
+          "title": "Desarme a Fábrica de Catástrofes",
+          "body": "Você não é obrigado a acreditar em todas as histórias aterrorizantes que seu cérebro conta sob estresse.\n\nPubliquei um artigo científico completo dissecando a neurobiologia da simulação aversiva e as ferramentas clínicas de descatastrofização.\n\n🔗 deomagalhaes.com.br/artigos",
+          "footer": "@deomagalhaesneuro • Toque no Link da Bio"
+        }
+      ],
+      "caption": "Basta uma mensagem sucinta dizendo \"precisamos conversar\", uma fisgada no peito ou um silêncio no WhatsApp para que seu cérebro entre em parafuso. Em frações de segundo, seu corpo se comporta como se a ruína total já tivesse ocorrido.\n\nSe você convive com essa sensação de estar sempre à beira do abismo, saiba: isso não é defeito de caráter. É a catastrofização cognitiva em ação.\n\nA neurociência explica que nosso encéfalo é uma máquina preditiva. Conforme demonstraram Schacter e Addis na teoria da Simulação Episódica Construtiva, nossa mente combina memórias do passado para simular o futuro. O problema é que, para a amígdala e a rede de saliência (dACC e ínsula), uma simulação aterrorizante produz a mesmíssima tempestade neuroquímica de uma emergência real.\n\nSob o impacto das catecolaminas do estresse, o Córtex Pré-Frontal Dorsolateral perde a capacidade de controle inibitório. É aí que caímos na Heurística do Afeto: confundimos o tamanho do medo com a probabilidade real de o evento acontecer.\n\nPara quebrar esse ciclo, precisamos treinar a recalibração bayesiana da probabilidade, descer a flecha do medo para resgatar a capacidade de ação e aplicar o freio vagal no corpo.\n\n👉 Leia o artigo científico completo no link da bio: deomagalhaes.com.br\n\nVocê costuma ser surpreendido por cenários catastróficos quando se depara com uma incerteza? Qual costuma ser o tema mais comum dessas simulações? Deixe sua experiência nos comentários.\n\n#neuropsicologia #neurociencias #catastrofizacao #ansiedade #cerebropreditivo #saudemental #terapiacognitivocomportamental #tcc #regulacaoemocional #psicologiaclinica #deomagalhaes #autoconhecimento #mindfulness #saudeintegrativa #sobrecargamental"
+    },
     "fadiga-empatica": {
       "articleSlug": "2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao",
       "articleTitle": "A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Pode Esgotar Seu Cérebro",
@@ -3492,11 +3760,97 @@
                  }
 };
 
+        // Temas Visuais Expandidos
+        const THEMES = {
+            "deep-teal": {
+                name: "Petróleo & Âmbar (#005f73 & #ee9b00)",
+                bgGradientTop: "#001219",
+                bgGradientBottom: "#002b36",
+                accent: "#ee9b00",
+                textMain: "#ffffff",
+                textMuted: "#94d2bd",
+                cardBg: "rgba(0, 95, 115, 0.35)",
+                cardBorder: "rgba(148, 210, 189, 0.3)",
+                solidCardBg: "rgba(0, 43, 54, 0.85)",
+                solidCardBorder: "rgba(148, 210, 189, 0.4)",
+                progressFill: "#ee9b00"
+            },
+            "dark-obsidian": {
+                name: "Obsidian Minimal (#001219 & #0a9396)",
+                bgGradientTop: "#0b1320",
+                bgGradientBottom: "#1c2541",
+                accent: "#0a9396",
+                textMain: "#ffffff",
+                textMuted: "#e9d8a6",
+                cardBg: "rgba(255, 255, 255, 0.05)",
+                cardBorder: "rgba(10, 147, 150, 0.4)",
+                solidCardBg: "rgba(28, 37, 65, 0.85)",
+                solidCardBorder: "rgba(10, 147, 150, 0.5)",
+                progressFill: "#0a9396"
+            },
+            "clean-light": {
+                name: "Editorial Light (#f8fafc & #005f73)",
+                bgGradientTop: "#f8fafc",
+                bgGradientBottom: "#e2e8f0",
+                accent: "#005f73",
+                textMain: "#001219",
+                textMuted: "#475569",
+                cardBg: "#ffffff",
+                cardBorder: "#cbd5e1",
+                solidCardBg: "#f1f5f9",
+                solidCardBorder: "#94a3b8",
+                progressFill: "#005f73"
+            },
+            "terracotta": {
+                name: "Terracota & Âmbar Quente",
+                bgGradientTop: "#22130c",
+                bgGradientBottom: "#3d1e13",
+                accent: "#e76f51",
+                textMain: "#ffffff",
+                textMuted: "#f4a261",
+                cardBg: "rgba(231, 111, 81, 0.15)",
+                cardBorder: "rgba(244, 162, 97, 0.3)",
+                solidCardBg: "rgba(61, 30, 19, 0.85)",
+                solidCardBorder: "rgba(244, 162, 97, 0.4)",
+                progressFill: "#e76f51"
+            },
+            "sage-clinic": {
+                name: "Verde Sálvia & Ouro Clínico",
+                bgGradientTop: "#0a1f18",
+                bgGradientBottom: "#13382c",
+                accent: "#e9d8a6",
+                textMain: "#f4f9f6",
+                textMuted: "#94d2bd",
+                cardBg: "rgba(148, 210, 189, 0.12)",
+                cardBorder: "rgba(148, 210, 189, 0.25)",
+                solidCardBg: "rgba(19, 56, 44, 0.85)",
+                solidCardBorder: "rgba(233, 216, 166, 0.4)",
+                progressFill: "#e9d8a6"
+            },
+            "indigo-night": {
+                name: "Noturno Índigo & Ciano",
+                bgGradientTop: "#080d1a",
+                bgGradientBottom: "#111c38",
+                accent: "#58a6ff",
+                textMain: "#f0f6fc",
+                textMuted: "#8b949e",
+                cardBg: "rgba(88, 166, 255, 0.12)",
+                cardBorder: "rgba(88, 166, 255, 0.25)",
+                solidCardBg: "rgba(17, 28, 56, 0.85)",
+                solidCardBorder: "rgba(88, 166, 255, 0.4)",
+                progressFill: "#58a6ff"
+            }
+        };
+
         // Estado do Studio
-        let currentPresetKey = "fadiga-empatica";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["fadiga-empatica"].slides));
-        let currentCaption = PRESETS["fadiga-empatica"].caption;
+        let currentPresetKey = "catastrofizacao-aversiva";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["catastrofizacao-aversiva"].slides));
+        let currentCaption = PRESETS["catastrofizacao-aversiva"].caption;
         let currentSlideIndex = 0;
+        let currentFormat = "1:1"; // '1:1' ou '4:5'
+        let currentTheme = "deep-teal";
+        let currentCardStyle = "glass"; // 'glass', 'solid', 'minimal'
+        let currentFontFamily = "modern"; // 'modern', 'editorial', 'clean'
 
         // Inicialização Robusta
         function initStudio() {
@@ -3565,24 +3919,24 @@
                     footer: "Arraste para o lado 👉"
                 },
                 {
-                    type: "problem",
+                    type: "normal",
                     badge: "A DOR INVISÍVEL",
                     title: "O Problema Silencioso",
                     body: paragraphs[1] ? paragraphs[1].substring(0, 220) : "Identificando a manifestação cotidiana da queixa na rotina e nas relações.",
                     footer: "Veja o que a ciência diz 👉"
                 },
                 {
-                    type: "neuro",
+                    type: "normal",
                     badge: "A NEUROBIOLOGIA",
                     title: "O Mecanismo no Cérebro",
                     body: paragraphs[2] ? paragraphs[2].substring(0, 220) : "A circuitaria neural envolvida e como as vias corticais e subcorticais interagem.",
                     footer: "Compreendendo o impacto 👉"
                 },
                 {
-                    type: "mechanism",
+                    type: "split",
                     badge: "O CONTRASTE",
                     title: "A Dinâmica Comportamental",
-                    body: paragraphs[3] ? paragraphs[3].substring(0, 220) : "A balança entre causa biológica e reforço ambiental contínuo.",
+                    body: (paragraphs[3] ? paragraphs[3].substring(0, 140) : "Reação disfuncional automática.") + "\n---\n" + (paragraphs[4] ? paragraphs[4].substring(0, 140) : "Resposta regulada consciente."),
                     footer: "Como agir na prática? 👉"
                 },
                 {
@@ -3611,14 +3965,199 @@
             showToast("Artigo sintetizado em 6 slides!");
         }
 
+        // ==========================================
+        // CONFIGURAÇÕES GLOBAIS (FORMATO, TEMA, ETC.)
+        // ==========================================
+        function setFormat(fmt) {
+            currentFormat = fmt;
+            const btn11 = document.getElementById('btnRatio11');
+            const btn45 = document.getElementById('btnRatio45');
+            const container = document.getElementById('canvasContainer');
+            const canvas = document.getElementById('carouselCanvas');
+            const formatDisplay = document.getElementById('formatDisplay');
+
+            if (fmt === '4:5') {
+                if (btn11) btn11.classList.remove('active');
+                if (btn45) btn45.classList.add('active');
+                if (container) {
+                    container.classList.remove('ratio-1-1');
+                    container.classList.add('ratio-4-5');
+                }
+                canvas.width = 1080;
+                canvas.height = 1350;
+                if (formatDisplay) formatDisplay.innerText = "Formato: 1080 x 1350 px (4:5 Retrato Instagram)";
+            } else {
+                if (btn45) btn45.classList.remove('active');
+                if (btn11) btn11.classList.add('active');
+                if (container) {
+                    container.classList.remove('ratio-4-5');
+                    container.classList.add('ratio-1-1');
+                }
+                canvas.width = 1080;
+                canvas.height = 1080;
+                if (formatDisplay) formatDisplay.innerText = "Formato: 1080 x 1080 px (1:1 Oficial Instagram)";
+            }
+            renderCurrentSlide();
+            showToast(`Formato alterado para ${fmt} (${canvas.width}x${canvas.height})!`);
+        }
+
+        function onThemeChange(val) {
+            currentTheme = val;
+            renderCurrentSlide();
+        }
+
+        function onCardStyleChange(val) {
+            currentCardStyle = val;
+            renderCurrentSlide();
+        }
+
+        function onFontFamilyChange(val) {
+            currentFontFamily = val;
+            renderCurrentSlide();
+        }
+
+        // ==========================================
+        // GERENCIAMENTO DE SLIDES (CRUD E ORDEM)
+        // ==========================================
+        function addNewSlide() {
+            const newSlide = {
+                type: "normal",
+                badge: "NEUROCIÊNCIA & CLÍNICA",
+                title: "Novo Ponto de Análise",
+                body: "Descreva o conceito clínico ou reflexão aqui.\n\nUse *palavras entre asteriscos* para destacar em âmbar.",
+                footer: "Deslize para continuar ➔"
+            };
+            currentSlides.splice(currentSlideIndex + 1, 0, newSlide);
+            currentSlideIndex++;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+            showToast(`Novo slide adicionado! (${currentSlideIndex + 1}/${currentSlides.length})`);
+        }
+
+        function duplicateCurrentSlide() {
+            const current = currentSlides[currentSlideIndex];
+            const copy = JSON.parse(JSON.stringify(current));
+            copy.title = (copy.title || "Slide") + " (Cópia)";
+            currentSlides.splice(currentSlideIndex + 1, 0, copy);
+            currentSlideIndex++;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+            showToast(`Slide duplicado com sucesso!`);
+        }
+
+        function deleteCurrentSlide() {
+            if (currentSlides.length <= 1) {
+                showToast("O carrossel precisa ter no mínimo 1 slide.");
+                return;
+            }
+            currentSlides.splice(currentSlideIndex, 1);
+            if (currentSlideIndex >= currentSlides.length) {
+                currentSlideIndex = currentSlides.length - 1;
+            }
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+            showToast(`Slide excluído. Total agora: ${currentSlides.length}`);
+        }
+
+        function moveSlideLeft() {
+            if (currentSlideIndex <= 0) return;
+            const temp = currentSlides[currentSlideIndex];
+            currentSlides[currentSlideIndex] = currentSlides[currentSlideIndex - 1];
+            currentSlides[currentSlideIndex - 1] = temp;
+            currentSlideIndex--;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+        }
+
+        function moveSlideRight() {
+            if (currentSlideIndex >= currentSlides.length - 1) return;
+            const temp = currentSlides[currentSlideIndex];
+            currentSlides[currentSlideIndex] = currentSlides[currentSlideIndex + 1];
+            currentSlides[currentSlideIndex + 1] = temp;
+            currentSlideIndex++;
+            renderThumbs();
+            populateEditorForm();
+            renderCurrentSlide();
+        }
+
+        function onSlideTypeChange(type) {
+            currentSlides[currentSlideIndex].type = type;
+            renderThumbs();
+            updateCounterDisplay();
+            renderCurrentSlide();
+        }
+
+        // ==========================================
+        // CONTROLES DE TIPOGRAFIA E ALINHAMENTO
+        // ==========================================
+        function onTitleSizeChange(val) {
+            const s = currentSlides[currentSlideIndex];
+            s.titleSize = parseInt(val, 10);
+            document.getElementById('titleSizeDisplay').innerText = val + "px";
+            renderCurrentSlide();
+        }
+
+        function toggleAutoTitleSize() {
+            const s = currentSlides[currentSlideIndex];
+            s.titleSize = null;
+            document.getElementById('titleSizeDisplay').innerText = "Auto";
+            renderCurrentSlide();
+            showToast("Título ajustado para Auto-Fit!");
+        }
+
+        function onBodySizeChange(val) {
+            const s = currentSlides[currentSlideIndex];
+            s.bodySize = parseInt(val, 10);
+            document.getElementById('bodySizeDisplay').innerText = val + "px";
+            renderCurrentSlide();
+        }
+
+        function toggleAutoBodySize() {
+            const s = currentSlides[currentSlideIndex];
+            s.bodySize = null;
+            document.getElementById('bodySizeDisplay').innerText = "Auto";
+            renderCurrentSlide();
+            showToast("Corpo ajustado para Auto-Fit!");
+        }
+
+        function setTextAlign(align) {
+            const s = currentSlides[currentSlideIndex];
+            s.textAlign = align;
+            updateAlignButtons(align);
+            renderCurrentSlide();
+        }
+
+        function updateAlignButtons(align) {
+            const btnLeft = document.getElementById('btnAlignLeft');
+            const btnCenter = document.getElementById('btnAlignCenter');
+            if (btnLeft && btnCenter) {
+                if (align === 'center') {
+                    btnLeft.classList.remove('active');
+                    btnCenter.classList.add('active');
+                } else {
+                    btnCenter.classList.remove('active');
+                    btnLeft.classList.add('active');
+                }
+            }
+        }
+
+        // ==========================================
+        // MINIATURAS E FORMULÁRIO DO EDITOR
+        // ==========================================
         function renderThumbs() {
             const strip = document.getElementById('thumbsStrip');
+            if (!strip) return;
             strip.innerHTML = "";
             currentSlides.forEach((slide, idx) => {
                 const btn = document.createElement('button');
                 btn.className = `thumb-btn ${idx === currentSlideIndex ? 'active' : ''}`;
                 btn.onclick = () => goToSlide(idx);
-                btn.innerHTML = `<span>0${idx + 1}</span><span style="font-size: 0.68rem; opacity: 0.85;">${getSlideTypeLabel(slide.type)}</span>`;
+                const num = (idx + 1).toString().padStart(2, '0');
+                btn.innerHTML = `<span>${num}</span><span style="font-size: 0.68rem; opacity: 0.85;">${getSlideTypeLabel(slide.type)}</span>`;
                 strip.appendChild(btn);
             });
             updateCounterDisplay();
@@ -3630,7 +4169,10 @@
                 case "problem": return "Problema";
                 case "neuro": return "Neurociência";
                 case "mechanism": return "Mecanismo";
-                case "steps": return "Prática";
+                case "concept": return "Conceito";
+                case "steps": return "Passos";
+                case "quote": return "Citação";
+                case "split": return "Contraste";
                 case "cta": return "CTA";
                 default: return "Slide";
             }
@@ -3638,19 +4180,56 @@
 
         function updateCounterDisplay() {
             const el = document.getElementById('slideCounterDisplay');
-            el.innerText = `Slide ${currentSlideIndex + 1} de ${currentSlides.length} • ${getSlideTypeLabel(currentSlides[currentSlideIndex].type)}`;
+            if (el && currentSlides[currentSlideIndex]) {
+                el.innerText = `Slide ${currentSlideIndex + 1} de ${currentSlides.length} • ${getSlideTypeLabel(currentSlides[currentSlideIndex].type)}`;
+            }
         }
 
         function populateEditorForm() {
             const s = currentSlides[currentSlideIndex];
+            if (!s) return;
+
             document.getElementById('editBadge').value = s.badge || "";
             document.getElementById('editTitle').value = s.title || "";
             document.getElementById('editBody').value = s.body || "";
             document.getElementById('editFooter').value = s.footer || "";
+
+            const typeSel = document.getElementById('editType');
+            if (typeSel) {
+                // Se o tipo do preset for mechanism/problem/neuro/concept mapeia corretamente
+                let val = s.type;
+                if (!['cover', 'normal', 'steps', 'quote', 'split', 'cta'].includes(val)) {
+                    val = 'normal';
+                }
+                typeSel.value = val;
+            }
+
+            const titleDisplay = document.getElementById('titleSizeDisplay');
+            const titleRange = document.getElementById('titleSizeRange');
+            if (s.titleSize) {
+                if (titleDisplay) titleDisplay.innerText = s.titleSize + "px";
+                if (titleRange) titleRange.value = s.titleSize;
+            } else {
+                if (titleDisplay) titleDisplay.innerText = "Auto";
+                if (titleRange) titleRange.value = 52;
+            }
+
+            const bodyDisplay = document.getElementById('bodySizeDisplay');
+            const bodyRange = document.getElementById('bodySizeRange');
+            if (s.bodySize) {
+                if (bodyDisplay) bodyDisplay.innerText = s.bodySize + "px";
+                if (bodyRange) bodyRange.value = s.bodySize;
+            } else {
+                if (bodyDisplay) bodyDisplay.innerText = "Auto";
+                if (bodyRange) bodyRange.value = 34;
+            }
+
+            updateAlignButtons(s.textAlign || 'left');
         }
 
         function updateCurrentSlideData() {
             const s = currentSlides[currentSlideIndex];
+            if (!s) return;
             s.badge = document.getElementById('editBadge').value;
             s.title = document.getElementById('editTitle').value;
             s.body = document.getElementById('editBody').value;
@@ -3678,81 +4257,173 @@
         }
 
         // ==========================================
-        // MOTOR DE RENDERIZAÇÃO DO CANVAS (1080x1080)
+        // MOTOR DE TOKENIZAÇÃO E AUTO-FIT DE TEXTO
+        // ==========================================
+        function parseHighlightedWords(str) {
+            const regex = /\*([^*]+)\*|([^\s*]+)/g;
+            const words = [];
+            let m;
+            while ((m = regex.exec(str)) !== null) {
+                if (m[1] !== undefined) {
+                    const subWords = m[1].split(/\s+/).filter(w => w.length > 0);
+                    subWords.forEach(w => words.push({ text: w, highlight: true }));
+                } else if (m[2] !== undefined) {
+                    words.push({ text: m[2], highlight: false });
+                }
+            }
+            return words;
+        }
+
+        function wrapParagraphTokens(ctx, paragraphStr, maxWidth) {
+            const words = parseHighlightedWords(paragraphStr);
+            const lines = [];
+            let currentLine = [];
+            let currentLineWidth = 0;
+            const spaceWidth = ctx.measureText(" ").width;
+
+            for (let i = 0; i < words.length; i++) {
+                const w = words[i];
+                const wordWidth = ctx.measureText(w.text).width;
+                const widthWithSpace = currentLine.length === 0 ? wordWidth : currentLineWidth + spaceWidth + wordWidth;
+
+                if (widthWithSpace > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = [w];
+                    currentLineWidth = wordWidth;
+                } else {
+                    currentLine.push(w);
+                    currentLineWidth = widthWithSpace;
+                }
+            }
+            if (currentLine.length > 0) {
+                lines.push(currentLine);
+            }
+            return lines;
+        }
+
+        function wrapTextTokens(ctx, text, maxWidth) {
+            const paragraphs = (text || "").split('\n');
+            const allLines = [];
+            for (let i = 0; i < paragraphs.length; i++) {
+                const p = paragraphs[i];
+                if (p.trim() === '') {
+                    allLines.push({ isBlank: true });
+                } else {
+                    const pLines = wrapParagraphTokens(ctx, p, maxWidth);
+                    pLines.forEach(l => allLines.push({ isBlank: false, tokens: l }));
+                }
+            }
+            return allLines;
+        }
+
+        function measureWrappedHeight(lines, lineHeight, blankGap) {
+            let total = 0;
+            lines.forEach(line => {
+                if (line.isBlank) {
+                    total += blankGap;
+                } else {
+                    total += lineHeight;
+                }
+            });
+            return total;
+        }
+
+        function renderTokenLines(ctx, lines, startX, startY, maxWidth, lineHeight, blankGap, align, colors) {
+            let currentY = startY;
+            const spaceWidth = ctx.measureText(" ").width;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (line.isBlank) {
+                    currentY += blankGap;
+                    continue;
+                }
+
+                let lineWidth = 0;
+                for (let j = 0; j < line.tokens.length; j++) {
+                    if (j > 0) lineWidth += spaceWidth;
+                    lineWidth += ctx.measureText(line.tokens[j].text).width;
+                }
+
+                let drawX = startX;
+                if (align === 'center') {
+                    drawX = startX + Math.max(0, (maxWidth - lineWidth) / 2);
+                }
+
+                for (let j = 0; j < line.tokens.length; j++) {
+                    const token = line.tokens[j];
+                    if (j > 0) {
+                        drawX += spaceWidth;
+                    }
+                    ctx.fillStyle = token.highlight ? colors.accent : colors.textMain;
+                    ctx.fillText(token.text, drawX, currentY);
+                    drawX += ctx.measureText(token.text).width;
+                }
+
+                currentY += lineHeight;
+            }
+            return currentY;
+        }
+
+        // ==========================================
+        // MOTOR DE RENDERIZAÇÃO DO CANVAS (1:1 & 4:5)
         // ==========================================
         function renderCurrentSlide() {
             const canvas = document.getElementById('carouselCanvas');
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
             const s = currentSlides[currentSlideIndex];
-            const theme = document.getElementById('themeSelect').value;
+            if (!s) return;
 
-            // Cores do tema
-            let colors = {
-                bgGradientTop: "#001219",
-                bgGradientBottom: "#002b36",
-                accent: "#ee9b00",
-                textMain: "#ffffff",
-                textMuted: "#94d2bd",
-                cardBg: "rgba(0, 95, 115, 0.35)",
-                cardBorder: "rgba(148, 210, 189, 0.3)",
-                progressFill: "#ee9b00"
-            };
+            const is45 = currentFormat === "4:5";
+            const canvasWidth = 1080;
+            const canvasHeight = is45 ? 1350 : 1080;
 
-            if (theme === "dark-obsidian") {
-                colors = {
-                    bgGradientTop: "#0b1320",
-                    bgGradientBottom: "#1c2541",
-                    accent: "#0a9396",
-                    textMain: "#ffffff",
-                    textMuted: "#e9d8a6",
-                    cardBg: "rgba(255, 255, 255, 0.05)",
-                    cardBorder: "rgba(10, 147, 150, 0.4)",
-                    progressFill: "#0a9396"
-                };
-            } else if (theme === "clean-light") {
-                colors = {
-                    bgGradientTop: "#f8fafc",
-                    bgGradientBottom: "#e2e8f0",
-                    accent: "#005f73",
-                    textMain: "#001219",
-                    textMuted: "#475569",
-                    cardBg: "#ffffff",
-                    cardBorder: "#cbd5e1",
-                    progressFill: "#005f73"
-                };
+            if (canvas.width !== canvasWidth) canvas.width = canvasWidth;
+            if (canvas.height !== canvasHeight) canvas.height = canvasHeight;
+
+            const colors = THEMES[currentTheme] || THEMES["deep-teal"];
+
+            // Font Families
+            let titleFontFamily = "'Outfit', 'Inter', sans-serif";
+            let bodyFontFamily = "'Inter', sans-serif";
+            if (currentFontFamily === "editorial") {
+                titleFontFamily = "'Playfair Display', serif";
+            } else if (currentFontFamily === "clean") {
+                titleFontFamily = "'Inter', sans-serif";
             }
 
             // 1. Limpa e desenha Fundo Gradiente
-            const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1080);
+            const bgGrad = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
             bgGrad.addColorStop(0, colors.bgGradientTop);
             bgGrad.addColorStop(1, colors.bgGradientBottom);
             ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 1080, 1080);
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-            // 2. Elementos Gráficos Sutis de Fundo (Padrão de Circuitos Neurais)
-            drawSubtleBackground(ctx, colors);
+            // 2. Elementos Gráficos Sutis de Fundo (Arcos Neurais adaptados à altura)
+            drawSubtleBackground(ctx, colors, canvasWidth, canvasHeight);
 
-            // 3. Barra de Progresso no Topo (1080px)
+            // 3. Barra de Progresso no Topo
             const progress = (currentSlideIndex + 1) / currentSlides.length;
             ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
             ctx.fillRect(70, 48, 940, 8);
             ctx.fillStyle = colors.progressFill;
             ctx.fillRect(70, 48, 940 * progress, 8);
 
-            // 4. Header do Slide (Categoria + Contador 01/06)
+            // 4. Header do Slide (Categoria + Contador)
             ctx.fillStyle = colors.accent;
             ctx.font = "bold 26px 'Inter', sans-serif";
             ctx.textAlign = "left";
             ctx.fillText((s.badge || "NEUROCIÊNCIA & CLÍNICA").toUpperCase(), 70, 110);
 
-            // Contador de Slide estilo pill no topo direito
-            const counterText = `0${currentSlideIndex + 1} / 0${currentSlides.length}`;
+            // Contador de Slide
+            const counterText = `${(currentSlideIndex + 1).toString().padStart(2, '0')} / ${currentSlides.length.toString().padStart(2, '0')}`;
             ctx.font = "bold 24px 'Inter', sans-serif";
             ctx.textAlign = "right";
             ctx.fillStyle = colors.textMuted;
             ctx.fillText(counterText, 1010, 110);
 
-            // 5. Linha divisória sutil
+            // 5. Linha divisória sutil superior
             ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -3760,123 +4431,369 @@
             ctx.lineTo(1010, 135);
             ctx.stroke();
 
-            // 6. Título Principal do Slide
+            // Delimitações verticais do conteúdo
+            const contentTopY = is45 ? 190 : 175;
+            const footerDividerY = canvasHeight - 110;
+            const footerTextY = canvasHeight - 55;
+            const contentBottomY = footerDividerY - 25;
+            const maxContentHeight = contentBottomY - contentTopY;
+
+            const textAlign = s.textAlign || 'left';
+            const slideType = s.type || 'normal';
+
             ctx.textAlign = "left";
-            if (s.type === "cover") {
-                // Capa com destaque âmbar e tipografia de alto impacto
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "bold 64px 'Outfit', 'Inter', sans-serif";
-                wrapText(ctx, s.title, 70, 230, 940, 78);
 
-                // Linha de Destaque
+            // 6. RENDERIZAÇÃO POR TIPO DE SLIDE COM AUTO-FIT TOTAL
+            if (slideType === "cover") {
+                // ==================== SLIDE CAPA ====================
+                let titleSize = s.titleSize || (is45 ? 68 : 62);
+                let titleLineHeight = Math.round(titleSize * 1.25);
+                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                if (!s.titleSize) {
+                    while (titleLines.length > 3 && titleSize > 44) {
+                        titleSize -= 3;
+                        titleLineHeight = Math.round(titleSize * 1.25);
+                        ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                        titleLines = wrapTextTokens(ctx, s.title, 940);
+                    }
+                }
+
+                const titleTotalHeight = measureWrappedHeight(titleLines, titleLineHeight, titleLineHeight);
+                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
+
+                // Linha de Destaque Âmbar
                 ctx.fillStyle = colors.accent;
-                ctx.fillRect(70, 490, 120, 8);
+                ctx.fillRect(70, titleDrawnEndY + 18, 130, 8);
 
-                // Subtítulo em card translúcido
-                drawRoundedRect(ctx, 70, 520, 940, 280, 20, colors.cardBg, colors.cardBorder);
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "400 36px 'Inter', sans-serif";
-                wrapText(ctx, s.body, 115, 600, 850, 54);
+                // Subtítulo em Cartão
+                const cardStartY = titleDrawnEndY + 45;
+                const availableCardHeight = contentBottomY - cardStartY;
+                const innerWidth = 850;
+                const innerMaxHeight = availableCardHeight - 90;
 
-            } else if (s.type === "steps") {
-                // Slide de Passos Práticos
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "bold 52px 'Outfit', 'Inter', sans-serif";
-                wrapText(ctx, s.title, 70, 210, 940, 64);
+                let bodySize = s.bodySize || (is45 ? 36 : 34);
+                let bodyLineHeight = Math.round(bodySize * 1.48);
+                let blankGap = Math.round(bodySize * 0.9);
+                ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
 
-                // Caixa de passos estruturada
-                drawRoundedRect(ctx, 70, 310, 940, 510, 24, colors.cardBg, colors.cardBorder);
+                let bodyLines = wrapTextTokens(ctx, s.body, innerWidth);
+                let totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
 
-                const items = s.body.split('\n').filter(i => i.trim().length > 0);
-                let startY = 380;
+                if (!s.bodySize) {
+                    while (totalBodyHeight > innerMaxHeight && bodySize > 22) {
+                        bodySize -= 2;
+                        bodyLineHeight = Math.round(bodySize * 1.48);
+                        blankGap = Math.round(bodySize * 0.9);
+                        ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
+                        bodyLines = wrapTextTokens(ctx, s.body, innerWidth);
+                        totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                    }
+                }
+
+                const cardHeight = Math.min(availableCardHeight, Math.max(160, totalBodyHeight + 90));
+                drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
+
+                renderTokenLines(ctx, bodyLines, 115, cardStartY + 50 + bodySize, innerWidth, bodyLineHeight, blankGap, textAlign, colors);
+
+            } else if (slideType === "steps") {
+                // ==================== SLIDE PASSOS ====================
+                let titleSize = s.titleSize || (is45 ? 56 : 50);
+                let titleLineHeight = Math.round(titleSize * 1.25);
+                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                if (!s.titleSize) {
+                    while (titleLines.length > 2 && titleSize > 38) {
+                        titleSize -= 3;
+                        titleLineHeight = Math.round(titleSize * 1.25);
+                        ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                        titleLines = wrapTextTokens(ctx, s.title, 940);
+                    }
+                }
+
+                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
+
+                const cardStartY = titleDrawnEndY + 30;
+                const cardHeight = contentBottomY - cardStartY;
+                drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
+
+                const items = (s.body || "").split('\n').filter(i => i.trim().length > 0);
+                const stepCount = Math.max(1, items.length);
+                const availableForSteps = cardHeight - 80;
+
+                let itemFontSize = s.bodySize || (stepCount > 3 ? 26 : 30);
+                let itemLineHeight = Math.round(itemFontSize * 1.4);
+                ctx.font = `500 ${itemFontSize}px ${bodyFontFamily}`;
+
+                const itemGap = Math.max(15, Math.min(45, (availableForSteps - (stepCount * itemLineHeight * 2)) / (stepCount + 1)));
+                let currentItemY = cardStartY + 45;
+
                 items.forEach((item, idx) => {
-                    // Ícone numérico
+                    const cleanItem = item.replace(/^\d+[\.\)]\s*/, '');
+                    const badgeY = currentItemY + 14;
+
+                    // Badge Circular Numérico
                     ctx.fillStyle = colors.accent;
                     ctx.beginPath();
-                    ctx.arc(125, startY + 12, 24, 0, Math.PI * 2);
+                    ctx.arc(125, badgeY, 24, 0, Math.PI * 2);
                     ctx.fill();
 
                     ctx.fillStyle = "#001219";
-                    ctx.font = "bold 24px 'Inter', sans-serif";
+                    ctx.font = `bold 24px 'Inter', sans-serif`;
                     ctx.textAlign = "center";
-                    ctx.fillText(`${idx + 1}`, 125, startY + 20);
+                    ctx.fillText(`${idx + 1}`, 125, badgeY + 8);
 
-                    // Texto do item
+                    // Texto do Passo com suporte a destaques
                     ctx.textAlign = "left";
-                    ctx.fillStyle = colors.textMain;
-                    ctx.font = "500 30px 'Inter', sans-serif";
-                    const cleanItem = item.replace(/^\d+[\.\)]\s*/, '');
-                    const lines = wrapText(ctx, cleanItem, 175, startY + 20, 790, 42);
-                    startY += (lines * 42) + 40;
+                    ctx.font = `500 ${itemFontSize}px ${bodyFontFamily}`;
+                    const stepLines = wrapTextTokens(ctx, cleanItem, 790);
+                    const stepTextHeight = measureWrappedHeight(stepLines, itemLineHeight, itemLineHeight);
+
+                    renderTokenLines(ctx, stepLines, 175, currentItemY + 22, 790, itemLineHeight, itemLineHeight, 'left', colors);
+                    currentItemY += stepTextHeight + itemGap;
                 });
 
-            } else if (s.type === "cta") {
-                // Slide de Fechamento & Chamada para Ação
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "bold 56px 'Outfit', 'Inter', sans-serif";
-                wrapText(ctx, s.title, 70, 210, 940, 68);
+            } else if (slideType === "quote") {
+                // ==================== SLIDE CITAÇÃO / REFLEXÃO ====================
+                let titleSize = s.titleSize || 46;
+                let titleLineHeight = Math.round(titleSize * 1.25);
+                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
 
-                // Card Central de Chamada
-                drawRoundedRect(ctx, 70, 320, 940, 480, 24, colors.cardBg, colors.cardBorder);
+                const cardStartY = titleDrawnEndY + 35;
+                const cardHeight = contentBottomY - cardStartY;
+                drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
 
-                // Avatar / Monograma no CTA
+                // Aspas Decorativas Gigantes
+                ctx.save();
+                ctx.fillStyle = colors.accent;
+                ctx.globalAlpha = 0.22;
+                ctx.font = "italic bold 150px 'Playfair Display', serif";
+                ctx.fillText("“", 115, cardStartY + 140);
+                ctx.restore();
+
+                // Barra Lateral de Citação
+                ctx.fillStyle = colors.accent;
+                ctx.fillRect(115, cardStartY + 90, 6, cardHeight - 180);
+
+                let quoteSize = s.bodySize || (is45 ? 38 : 34);
+                let quoteLineHeight = Math.round(quoteSize * 1.5);
+                let blankGap = Math.round(quoteSize * 0.9);
+                ctx.font = `italic 500 ${quoteSize}px ${titleFontFamily}`;
+
+                let quoteLines = wrapTextTokens(ctx, s.body, 800);
+                let quoteHeight = measureWrappedHeight(quoteLines, quoteLineHeight, blankGap);
+
+                if (!s.bodySize) {
+                    while (quoteHeight > (cardHeight - 200) && quoteSize > 24) {
+                        quoteSize -= 2;
+                        quoteLineHeight = Math.round(quoteSize * 1.5);
+                        ctx.font = `italic 500 ${quoteSize}px ${titleFontFamily}`;
+                        quoteLines = wrapTextTokens(ctx, s.body, 800);
+                        quoteHeight = measureWrappedHeight(quoteLines, quoteLineHeight, blankGap);
+                    }
+                }
+
+                renderTokenLines(ctx, quoteLines, 145, cardStartY + 140, 800, quoteLineHeight, blankGap, 'left', colors);
+
+            } else if (slideType === "split") {
+                // ==================== SLIDE CONTRASTE (A vs B) ====================
+                let titleSize = s.titleSize || (is45 ? 54 : 48);
+                let titleLineHeight = Math.round(titleSize * 1.25);
+                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
+
+                const cardStartY = titleDrawnEndY + 30;
+                const cardHeight = contentBottomY - cardStartY;
+
+                // Divide o corpo em duas partes (separador '---' ou quebra tripla)
+                let parts = (s.body || "").split(/---+|\n\n\n/);
+                if (parts.length < 2) {
+                    parts = [(s.body || ""), "Reflexão complementar e regulação integrada."];
+                }
+
+                const colWidth = 450;
+                const gap = 40;
+                const leftX = 70;
+                const rightX = 70 + colWidth + gap;
+
+                // Card A (Esquerda)
+                drawCardBackground(ctx, leftX, cardStartY, colWidth, cardHeight, colors, currentCardStyle);
+                ctx.fillStyle = colors.textMuted;
+                ctx.font = "bold 24px 'Inter', sans-serif";
+                ctx.fillText("PADRÃO AUTOMÁTICO", leftX + 35, cardStartY + 55);
+
+                let splitFontSize = s.bodySize || 28;
+                let splitLineHeight = Math.round(splitFontSize * 1.45);
+                ctx.font = `400 ${splitFontSize}px ${bodyFontFamily}`;
+                let linesA = wrapTextTokens(ctx, parts[0].trim(), colWidth - 70);
+                renderTokenLines(ctx, linesA, leftX + 35, cardStartY + 105, colWidth - 70, splitLineHeight, 18, 'left', colors);
+
+                // Card B (Direita - Destaque Iluminado)
+                drawRoundedRect(ctx, rightX, cardStartY, colWidth, cardHeight, 20, colors.cardBg, colors.accent);
+                ctx.fillStyle = colors.accent;
+                ctx.font = "bold 24px 'Inter', sans-serif";
+                ctx.fillText("REGULAÇÃO CLÍNICA", rightX + 35, cardStartY + 55);
+
+                ctx.font = `500 ${splitFontSize}px ${bodyFontFamily}`;
+                let linesB = wrapTextTokens(ctx, parts[1].trim(), colWidth - 70);
+                renderTokenLines(ctx, linesB, rightX + 35, cardStartY + 105, colWidth - 70, splitLineHeight, 18, 'left', colors);
+
+            } else if (slideType === "cta") {
+                // ==================== SLIDE FECHAMENTO & CTA ====================
+                let titleSize = s.titleSize || (is45 ? 60 : 54);
+                let titleLineHeight = Math.round(titleSize * 1.25);
+                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
+
+                const cardStartY = titleDrawnEndY + 30;
+                const cardHeight = contentBottomY - cardStartY;
+                drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
+
+                // Avatar Monograma DM
                 ctx.fillStyle = colors.accent;
                 ctx.beginPath();
-                ctx.arc(150, 420, 45, 0, Math.PI * 2);
+                ctx.arc(150, cardStartY + 95, 45, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.fillStyle = "#001219";
                 ctx.font = "bold 34px 'Outfit', sans-serif";
                 ctx.textAlign = "center";
-                ctx.fillText("DM", 150, 432);
+                ctx.fillText("DM", 150, cardStartY + 107);
 
                 ctx.textAlign = "left";
                 ctx.fillStyle = colors.textMain;
-                ctx.font = "bold 34px 'Inter', sans-serif";
-                ctx.fillText("Deo Magalhães", 225, 415);
+                ctx.font = `bold 34px ${titleFontFamily}`;
+                ctx.fillText("Deo Magalhães", 225, cardStartY + 90);
                 ctx.font = "500 24px 'Inter', sans-serif";
                 ctx.fillStyle = colors.textMuted;
-                ctx.fillText("Neuropsicólogo & Neurocientista • CRP 04/42784", 225, 450);
+                ctx.fillText("Neuropsicólogo & Neurocientista • CRP 04/42784", 225, cardStartY + 125);
 
-                // Texto do CTA
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "400 34px 'Inter', sans-serif";
-                wrapText(ctx, s.body, 115, 540, 850, 52);
+                // Divisória no CTA
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(115, cardStartY + 165);
+                ctx.lineTo(965, cardStartY + 165);
+                ctx.stroke();
+
+                // Corpo do CTA com Auto-Fit
+                let bodySize = s.bodySize || (is45 ? 36 : 32);
+                let bodyLineHeight = Math.round(bodySize * 1.48);
+                let blankGap = Math.round(bodySize * 0.9);
+                ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
+
+                let bodyLines = wrapTextTokens(ctx, s.body, 850);
+                let totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+
+                while (totalBodyHeight > (cardHeight - 290) && bodySize > 22) {
+                    bodySize -= 2;
+                    bodyLineHeight = Math.round(bodySize * 1.48);
+                    ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
+                    bodyLines = wrapTextTokens(ctx, s.body, 850);
+                    totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                }
+
+                const drawnBodyEnd = renderTokenLines(ctx, bodyLines, 115, cardStartY + 215, 850, bodyLineHeight, blankGap, textAlign, colors);
+
+                // Botão de Chamada para Ação no Fundo do Cartão
+                const pillY = Math.max(drawnBodyEnd + 25, cardStartY + cardHeight - 85);
+                drawRoundedRect(ctx, 115, pillY, 850, 60, 30, colors.accent, null);
+                ctx.fillStyle = "#001219";
+                ctx.font = "bold 26px 'Inter', sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("🔗 Toque no Link da Bio • deomagalhaes.com.br", 115 + 425, pillY + 39);
 
             } else {
-                // Slides Normais (Problema, Neurociência, Mecanismo)
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "bold 52px 'Outfit', 'Inter', sans-serif";
-                wrapText(ctx, s.title, 70, 220, 940, 65);
+                // ==================== SLIDE NORMAL / CONCEITO ====================
+                let titleSize = s.titleSize || (is45 ? 56 : 50);
+                let titleLineHeight = Math.round(titleSize * 1.25);
+                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
 
-                drawRoundedRect(ctx, 70, 330, 940, 490, 24, colors.cardBg, colors.cardBorder);
-                ctx.fillStyle = colors.textMain;
-                ctx.font = "400 36px 'Inter', sans-serif";
-                wrapText(ctx, s.body, 120, 410, 840, 58);
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                if (!s.titleSize) {
+                    while (titleLines.length > 2 && titleSize > 38) {
+                        titleSize -= 3;
+                        titleLineHeight = Math.round(titleSize * 1.25);
+                        ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                        titleLines = wrapTextTokens(ctx, s.title, 940);
+                    }
+                }
+
+                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
+
+                // Cartão de Conteúdo com Auto-Fit dinâmico
+                const cardStartY = titleDrawnEndY + 30;
+                const availableCardHeight = contentBottomY - cardStartY;
+                const innerWidth = 840;
+                const innerMaxHeight = availableCardHeight - 90;
+
+                let bodySize = s.bodySize || (is45 ? 36 : 34);
+                let bodyLineHeight = Math.round(bodySize * 1.5);
+                let blankGap = Math.round(bodySize * 0.9);
+                ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
+
+                let bodyLines = wrapTextTokens(ctx, s.body, innerWidth);
+                let totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+
+                if (!s.bodySize) {
+                    while (totalBodyHeight > innerMaxHeight && bodySize > 22) {
+                        bodySize -= 2;
+                        bodyLineHeight = Math.round(bodySize * 1.5);
+                        blankGap = Math.round(bodySize * 0.9);
+                        ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
+                        bodyLines = wrapTextTokens(ctx, s.body, innerWidth);
+                        totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                    }
+                }
+
+                const cardHeight = Math.min(availableCardHeight, Math.max(200, totalBodyHeight + 90));
+                drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
+
+                renderTokenLines(ctx, bodyLines, 120, cardStartY + 45 + bodySize, innerWidth, bodyLineHeight, blankGap, textAlign, colors);
             }
 
-            // 7. Rodapé Fixo Institucional
+            // 7. Rodapé Fixo Institucional Canônico
             ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.moveTo(70, 920);
-            ctx.lineTo(1010, 920);
+            ctx.moveTo(70, footerDividerY);
+            ctx.lineTo(1010, footerDividerY);
             ctx.stroke();
 
             // Identidade no rodapé esquerdo
             ctx.textAlign = "left";
             ctx.fillStyle = colors.accent;
             ctx.font = "bold 26px 'Inter', sans-serif";
-            ctx.fillText("@deomagalhaesneuro", 70, 975);
+            ctx.fillText("@deomagalhaesneuro", 70, footerTextY);
 
             // Ação ou chamada no rodapé direito
             ctx.textAlign = "right";
             ctx.fillStyle = colors.textMuted;
             ctx.font = "600 24px 'Inter', sans-serif";
-            ctx.fillText(s.footer || "deomagalhaes.com.br", 1010, 975);
+            ctx.fillText(s.footer || "deomagalhaes.com.br", 1010, footerTextY);
         }
 
-        // Funções Gráficas Utilitárias
+        // ==========================================
+        // FUNÇÕES GRÁFICAS UTILITÁRIAS
+        // ==========================================
+        function drawCardBackground(ctx, x, y, width, height, colors, style) {
+            if (style === 'minimal') {
+                return; // Sem cartão
+            }
+            if (style === 'solid') {
+                drawRoundedRect(ctx, x, y, width, height, 20, colors.solidCardBg, colors.solidCardBorder);
+                return;
+            }
+            // Padrão Glassmorphism
+            drawRoundedRect(ctx, x, y, width, height, 20, colors.cardBg, colors.cardBorder);
+        }
+
         function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke) {
             ctx.beginPath();
             ctx.moveTo(x + radius, y);
@@ -3900,89 +4817,123 @@
             }
         }
 
-        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-            const paragraphs = (text || "").split('\n');
-            let currentY = y;
-            let lineCount = 0;
-
-            for (let p of paragraphs) {
-                const words = p.split(' ');
-                let line = '';
-
-                for (let n = 0; n < words.length; n++) {
-                    const testLine = line + words[n] + ' ';
-                    const metrics = ctx.measureText(testLine);
-                    const testWidth = metrics.width;
-                    if (testWidth > maxWidth && n > 0) {
-                        ctx.fillText(line.trim(), x, currentY);
-                        line = words[n] + ' ';
-                        currentY += lineHeight;
-                        lineCount++;
-                    } else {
-                        line = testLine;
-                    }
-                }
-                ctx.fillText(line.trim(), x, currentY);
-                currentY += lineHeight;
-                lineCount++;
-            }
-            return lineCount;
-        }
-
-        function drawSubtleBackground(ctx, colors) {
+        function drawSubtleBackground(ctx, colors, canvasWidth, canvasHeight) {
             ctx.save();
             ctx.strokeStyle = "rgba(10, 147, 150, 0.07)";
             ctx.lineWidth = 1;
 
             // Arcos neurais sutis no canto superior direito
             ctx.beginPath();
-            ctx.arc(1080, 0, 320, 0, Math.PI * 2);
+            ctx.arc(canvasWidth, 0, 320, 0, Math.PI * 2);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(1080, 0, 480, 0, Math.PI * 2);
+            ctx.arc(canvasWidth, 0, 480, 0, Math.PI * 2);
             ctx.stroke();
 
             // Arcos no canto inferior esquerdo
             ctx.beginPath();
-            ctx.arc(0, 1080, 400, 0, Math.PI * 2);
+            ctx.arc(0, canvasHeight, 400, 0, Math.PI * 2);
             ctx.stroke();
 
             ctx.restore();
         }
 
         // ==========================================
-        // EXPORTAÇÕES E DOWNLOADS
+        // EXPORTAÇÕES, CLIPBOARD E DOWNLOADS
         // ==========================================
         function downloadCurrentSlide() {
             const canvas = document.getElementById('carouselCanvas');
             const link = document.createElement('a');
             const slug = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleSlug : "carrossel";
-            link.download = `${slug}-slide-0${currentSlideIndex + 1}.png`;
+            const num = (currentSlideIndex + 1).toString().padStart(2, '0');
+            const res = currentFormat === '4:5' ? '1080x1350' : '1080x1080';
+            link.download = `${slug}-slide-${num}-${res}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-            showToast(`Slide 0${currentSlideIndex + 1} baixado com sucesso em 1080x1080!`);
+            showToast(`Slide ${num} baixado com sucesso em ${res}!`);
+        }
+
+        function copySlideImage() {
+            const canvas = document.getElementById('carouselCanvas');
+            if (!navigator.clipboard || !window.ClipboardItem) {
+                showToast("Seu navegador não suporta cópia direta de imagens.");
+                return;
+            }
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    showToast("Falha ao gerar dados da imagem.");
+                    return;
+                }
+                navigator.clipboard.write([
+                    new ClipboardItem({ "image/png": blob })
+                ]).then(() => {
+                    showToast("📋 Slide copiado para a Área de Transferência! Pronto para colar.");
+                }).catch(err => {
+                    console.error(err);
+                    showToast("Permissão negada para copiar imagem.");
+                });
+            }, "image/png");
+        }
+
+        async function downloadAllZip() {
+            if (typeof JSZip === 'undefined') {
+                showToast("Carregando motor ZIP... usando download individual.");
+                downloadAllSlides();
+                return;
+            }
+            const zip = new JSZip();
+            const originalIndex = currentSlideIndex;
+            const slug = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleSlug : "carrossel";
+            const res = currentFormat === '4:5' ? '1080x1350' : '1080x1080';
+            showToast(`Gerando pacote ZIP com ${currentSlides.length} slides (${res})...`);
+
+            for (let i = 0; i < currentSlides.length; i++) {
+                goToSlide(i);
+                await new Promise(r => setTimeout(r, 120));
+                const canvas = document.getElementById('carouselCanvas');
+                const dataUrl = canvas.toDataURL('image/png');
+                const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
+                const num = (i + 1).toString().padStart(2, '0');
+                zip.file(`${slug}-slide-${num}-${res}.png`, base64Data, { base64: true });
+            }
+
+            goToSlide(originalIndex);
+
+            // Inclui a legenda no arquivo ZIP para entrega completa
+            const captionText = document.getElementById('captionBox').value;
+            if (captionText) {
+                zip.file("LEGENDA-INSTAGRAM.txt", captionText);
+            }
+
+            const content = await zip.generateAsync({ type: "blob" });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = `${slug}-carrossel-${res}.zip`;
+            link.click();
+            showToast("✨ Pacote ZIP baixado com sucesso!");
         }
 
         async function downloadAllSlides() {
             const originalIndex = currentSlideIndex;
-            showToast("Iniciando download dos 6 slides em 1080x1080...");
+            showToast(`Iniciando download dos ${currentSlides.length} slides...`);
 
             for (let i = 0; i < currentSlides.length; i++) {
                 goToSlide(i);
-                // Pequena pausa para garantir renderização do canvas
                 await new Promise(r => setTimeout(r, 200));
                 
                 const canvas = document.getElementById('carouselCanvas');
                 const link = document.createElement('a');
                 const slug = PRESETS[currentPresetKey] ? PRESETS[currentPresetKey].articleSlug : "carrossel";
-                link.download = `${slug}-slide-0${i + 1}.png`;
+                const num = (i + 1).toString().padStart(2, '0');
+                const res = currentFormat === '4:5' ? '1080x1350' : '1080x1080';
+                link.download = `${slug}-slide-${num}-${res}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             }
 
             goToSlide(originalIndex);
-            showToast("Todos os 6 slides foram baixados!");
+            showToast(`Todos os ${currentSlides.length} slides foram baixados!`);
         }
 
         function copyCaption() {
@@ -3990,7 +4941,6 @@
             navigator.clipboard.writeText(text).then(() => {
                 showToast("✨ Legenda e hashtags copiadas para a área de transferência!");
             }).catch(err => {
-                // Fallback
                 const ta = document.getElementById('captionBox');
                 ta.select();
                 document.execCommand('copy');
@@ -4008,10 +4958,10 @@
             md += `## 📸 MÓDULO 1: Roteiro de Carrossel para Instagram (${currentSlides.length} Slides)\n\n`;
 
             currentSlides.forEach((s, idx) => {
-                md += `### [SLIDE ${idx + 1} - ${s.badge}]\n`;
-                md += `* **Título:** ${s.title}\n`;
-                md += `* **Texto:**\n  ${s.body.replace(/\n/g, '\n  ')}\n`;
-                md += `* **Rodapé / Chamada:** ${s.footer}\n\n`;
+                md += `### [SLIDE ${idx + 1} - ${s.badge || 'SLIDE'}]\n`;
+                md += `* **Título:** ${s.title || ''}\n`;
+                md += `* **Texto:**\n  ${(s.body || '').replace(/\n/g, '\n  ')}\n`;
+                md += `* **Rodapé / Chamada:** ${s.footer || ''}\n\n`;
             });
 
             md += `---\n\n## ✍️ MÓDULO 2: Legenda Completa para o Instagram\n\n`;

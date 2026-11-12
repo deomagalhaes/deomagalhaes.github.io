@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 43: Matriz de Calibração de Probabilidades e Descatastrofização Cognitiva – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para desarmar a catastrofização, calibrar a probabilidade real de eventos contra o alarme da amígdala com inferência bayesiana e Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .gauges-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .gauge-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .gauge-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .gauge-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        /* Área do Cenário */
+        .scenario-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .scenario-title {
+            font-size: 1.25em;
+            color: #0f172a;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .scenario-desc {
+            font-size: 0.98em;
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .alarm-banner {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid #ef4444;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .alarm-text {
+            color: #991b1b;
+            font-size: 0.92em;
+            font-weight: 600;
+        }
+
+        .alarm-badge-number {
+            background: #dc2626;
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 1.1em;
+            padding: 4px 12px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        /* Seletor de Evidências */
+        .evidence-section {
+            margin-bottom: 25px;
+        }
+
+        .evidence-section-title {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .evidence-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #334155;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            user-select: none;
+        }
+
+        .evidence-btn:hover {
+            background: #f1f5f9;
+            border-color: #0a9396;
+        }
+
+        .evidence-btn.selected {
+            background: #e6f4f5;
+            border-color: #0a9396;
+            color: #005f73;
+            font-weight: 600;
+        }
+
+        .evidence-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #94a3b8;
+            border-radius: 4px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #ffffff;
+        }
+
+        .evidence-btn.selected .evidence-checkbox {
+            background: #0a9396;
+            border-color: #0a9396;
+        }
+
+        /* Slider de Calibração Bayesiana */
+        .slider-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .slider-label {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .slider-current-val {
+            font-size: 1.3em;
+            font-weight: 900;
+            color: #005f73;
+            background: #e6f2f4;
+            padding: 2px 14px;
+            border-radius: 6px;
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #cbd5e1;
+            outline: none;
+            cursor: pointer;
+            accent-color: #005f73;
+        }
+
+        .slider-scale-ticks {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        /* Ações e Botão */
+        .btn-confirm-round {
+            background: #005f73;
+            color: #ffffff;
+            font-size: 1.05em;
+            font-weight: 800;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.25);
+            display: inline-block;
+        }
+
+        .btn-confirm-round:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .feedback-banner {
+            display: none;
+            margin-top: 20px;
+            padding: 18px 20px;
+            border-radius: 10px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tela Final de Devolutiva */
+        .endgame-modal {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .endgame-score-badge {
+            font-size: 2.8em;
+            font-weight: 900;
+            color: #005f73;
+            margin: 15px 0;
+        }
+
+        .btn-sound-toggle {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.85em;
+            cursor: pointer;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .neuro-box {
+            background: #f8fafc;
+            border-left: 4px solid #0a9396;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 25px 0;
+            text-align: left;
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 43: Matriz de Calibração de Probabilidades e Descatastrofização Cognitiva</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) • Treino Cognitivo com Web Audio API</p>
+            </header>
+
+            <div class="neuro-box">
+                <strong>Fundamentação Neuropsicológica:</strong> Este jogo estimula o <strong>Córtex Pré-Frontal Dorsolateral (dlPFC)</strong> e o <strong>Córtex Pré-Frontal Ventromedial (vmPFC)</strong> a exercerem controle inibitório sobre a <strong>Amígdala Basolateral</strong>. Sob a ótica do cérebro preditivo e da inferência bayesiana, você deve inspecionar evidências atenuantes concretas e recalibrar a probabilidade real de eventos aversivos, desativando a Heurística do Afeto.
+            </div>
+
+            <div class="game-wrapper" id="gameContainer">
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Rodada</span>
+                        <span class="stat-value" id="roundDisplay">1 / 8</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Acurácia Bayesiana</span>
+                        <span class="stat-value" id="accuracyDisplay">100%</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Pontuação Total</span>
+                        <span class="stat-value" id="scoreDisplay">0</span>
+                    </div>
+                    <button class="btn-sound-toggle" id="soundToggle" onclick="toggleMute()">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <div class="gauges-container">
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Alarme da Amígdala (Aversão)</span>
+                            <span id="amygdalaVal">92%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div class="gauge-fill" id="amygdalaBar" style="width: 92%; background: #ef4444;"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-card">
+                        <div class="gauge-header">
+                            <span>Clareza Pré-Frontal (dlPFC/vmPFC)</span>
+                            <span id="prefrontalVal">20%</span>
+                        </div>
+                        <div class="gauge-track">
+                            <div class="gauge-fill" id="prefrontalBar" style="width: 20%; background: #0a9396;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cenário Ativo -->
+                <div class="scenario-box" id="scenarioContainer">
+                    <span class="scenario-tag" id="scenarioTag">Cenário 01 • Relações de Trabalho</span>
+                    <h2 class="scenario-title" id="scenarioTitle">Feedback Inesperado do Gestor</h2>
+                    <p class="scenario-desc" id="scenarioDesc">Você recebe uma mensagem às 18h dizendo: "Preciso falar com você amanhã às 9h na minha sala". Seu corpo entra em alarme imediato.</p>
+
+                    <div class="alarm-banner">
+                        <div class="alarm-text">
+                            <strong>Projeção Catastrófica da Amígdala:</strong>
+                            <span id="alarmNarrative">"Fui descoberto em alguma falha grave e serei demitido sumariamente amanhã de manhã."</span>
+                        </div>
+                        <div class="alarm-badge-number" id="alarmPercent">Risco Percebido: 92%</div>
+                    </div>
+
+                    <div class="evidence-section">
+                        <div class="evidence-section-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            Selecione as Evidências Factuais Reais para Recalibrar o Córtex:
+                        </div>
+                        <div class="evidence-grid" id="evidenceGrid">
+                            <!-- Injetado dinamicamente -->
+                        </div>
+                    </div>
+
+                    <div class="slider-section">
+                        <div class="slider-header">
+                            <span class="slider-label">Slider de Inferência Bayesiana (Probabilidade Real):</span>
+                            <span class="slider-current-val" id="sliderValDisplay">50%</span>
+                        </div>
+                        <input type="range" min="0" max="100" value="50" class="range-slider" id="probSlider" oninput="updateSliderDisplay(this.value)">
+                        <div class="slider-scale-ticks">
+                            <span>0% (Impossível)</span>
+                            <span>25% (Improvável)</span>
+                            <span>50% (Incerto)</span>
+                            <span>75% (Provável)</span>
+                            <span>100% (Certeza Absoluta)</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-confirm-round" id="btnConfirm" onclick="confirmCalibration()">Confirmar Calibração Pré-Frontal</button>
+
+                    <div class="feedback-banner" id="feedbackBanner">
+                        <!-- Mensagem de Devolutiva da Rodada -->
+                    </div>
+                </div>
+
+                <!-- Modal de Fim de Jogo -->
+                <div class="endgame-modal" id="endgameModal">
+                    <h2>Treino Neurocognitivo Concluído!</h2>
+                    <p>Você recalibrou com sucesso todas as 8 projeções catastróficas da amígdala.</p>
+                    <div class="endgame-score-badge" id="finalScoreVal">1.600 pts</div>
+                    <div id="endgameClassification" style="font-size: 1.2em; font-weight: 800; color: #005f73; margin-bottom: 20px;"></div>
+                    <p id="endgameInsight" style="max-width: 650px; margin: 0 auto 25px auto; color: #475569; line-height: 1.6;"></p>
+                    <button class="btn-confirm-round" onclick="restartGame()">Jogar Novamente</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        // Web Audio API Procedural
+        let audioCtx = null;
+        let isMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('soundIcon').textContent = isMuted ? '🔇' : '🔊';
+            document.getElementById('soundToggle').innerHTML = isMuted ? '<span id="soundIcon">🔇</span> Som Mudo' : '<span id="soundIcon">🔊</span> Som Ativo';
+        }
+
+        function playClickSound() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(520, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(780, ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.06);
+            } catch (e) {}
+        }
+
+        function playOptimalChord() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const freqs = [392.00, 493.88, 587.33, 783.99]; // Sol Maior com 9ª (luminoso e sereno)
+                freqs.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.07, ctx.currentTime + (idx * 0.03));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.03));
+                    osc.stop(ctx.currentTime + 0.46);
+                });
+            } catch (e) {}
+        }
+
+        function playCatastropheAlert() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(160, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.31);
+            } catch (e) {}
+        }
+
+        function playFanfareSound() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.09, ctx.currentTime + (i * 0.08));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.08) + 0.4);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (i * 0.08));
+                    osc.stop(ctx.currentTime + (i * 0.08) + 0.41);
+                });
+            } catch (e) {}
+        }
+
+        // Banco Determinístico de 8 Cenários Clínicos Solúveis
+        const SCENARIOS = [
+            {
+                tag: "Cenário 01 • Relações de Trabalho",
+                title: "Feedback Inesperado do Gestor",
+                desc: "Você recebe uma mensagem às 18h dizendo: \"Preciso falar com você amanhã às 9h na minha sala\". Seu estômago despenca.",
+                amygdalaAlarme: 92,
+                alarmNarrative: "\"Fui descoberto em alguma falha grave e serei demitido sumariamente amanhã de manhã.\"",
+                optimalRange: [3, 8], // Risco real estimado: ~5%
+                evidences: [
+                    { text: "Bati todas as metas do último trimestre e recebi elogio recente de pares.", isMitigating: true },
+                    { text: "A empresa está em fase estável e não há rumores de corte de equipe.", isMitigating: true },
+                    { text: "O gestor frequentemente convoca reuniões matinais de rotina para alinhar novos projetos.", isMitigating: true },
+                    { text: "Lembrei de um e-mail em que usei um tom ligeiramente mais seco semana passada.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 02 • Sintomas Interoceptivos",
+                title: "Palpitação Após Dia Intenso",
+                desc: "Após tomar três xícaras de café e passar por uma discussão cansativa, você sente uma fisgada no peito e taquicardia.",
+                amygdalaAlarme: 95,
+                alarmNarrative: "\"Estou tendo um infarto fulminante neste exato momento e meu coração vai parar.\"",
+                optimalRange: [1, 5], // Risco real: ~3%
+                evidences: [
+                    { text: "Realizei check-up cardiológico completo há 4 meses com ecocardiograma 100% normal.", isMitigating: true },
+                    { text: "Cafeína em excesso e estresse agudo estimulam receptores adrenérgicos benignos.", isMitigating: true },
+                    { text: "A dor piora quando pressiono o músculo peitoral, indicando tensão muscular.", isMitigating: true },
+                    { text: "Pesquisei os sintomas no Google e o primeiro resultado citava colapso cardíaco.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 03 • Relações Afetivas",
+                title: "Silêncio Prolongado no WhatsApp",
+                desc: "Você enviou uma mensagem afetuosa para seu parceiro há 4 horas. Ele visualizou e ainda não respondeu.",
+                amygdalaAlarme: 88,
+                alarmNarrative: "\"Ele se cansou de mim, está me rejeitando e vai terminar nosso relacionamento hoje.\"",
+                optimalRange: [2, 7], // Risco real: ~4%
+                evidences: [
+                    { text: "Ele avisou pela manhã que teria uma tarde lotada de reuniões com clientes.", isMitigating: true },
+                    { text: "Nosso relacionamento é estável e tivemos uma noite carinhosa ontem sem nenhum atrito.", isMitigating: true },
+                    { text: "Muitas vezes ele visualiza mensagens rapidamente na correria e responde com calma à noite.", isMitigating: true },
+                    { text: "Uma amiga terminou um namoro no ano passado após um vácuo no aplicativo.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 04 • Julgamento Social & Desempenho",
+                title: "Pequena Gaffe em Apresentação",
+                desc: "Durante a apresentação de um projeto para a equipe, você gaguejou em um slide e trocou o nome de uma tabela.",
+                amygdalaAlarme: 85,
+                alarmNarrative: "\"Fui humilhado na frente de todos, perdi a credibilidade e serei motivo de chacota para sempre.\"",
+                optimalRange: [2, 8], // Risco real: ~5%
+                evidences: [
+                    { text: "A apresentação durou 40 minutos com conteúdo sólido e elogios nas perguntas finais.", isMitigating: true },
+                    { text: "O Efeito Holofote (Spotlight Effect) faz a gente superestimar a atenção alheia aos nossos deslizes.", isMitigating: true },
+                    { text: "Pessoas normais trocam palavras e gaguejam diariamente sem qualquer prejuízo moral.", isMitigating: true },
+                    { text: "Um colega no fundo da sala olhou para o lado e deu um sorriso no momento do erro.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 05 • Saúde Preventiva",
+                title: "Solicitação de Exame Complementar",
+                desc: "Em uma consulta de rotina, o médico pede uma ultrassonografia de controle para reavaliar uma alteração leve.",
+                amygdalaAlarme: 94,
+                alarmNarrative: "\"O médico sabe que é um tumor maligno e só não quis me assustar agora.\"",
+                optimalRange: [3, 9], // Risco real: ~6%
+                evidences: [
+                    { text: "Exames de imagem complementares são protocolo médico padrão de prudência e prevenção.", isMitigating: true },
+                    { text: "Mais de 90% dos achados de triagem preventiva revelam-se cistos benignos ou variações normais.", isMitigating: true },
+                    { text: "Não apresento perda de peso, febre persistente ou sintomas constitucionais graves.", isMitigating: true },
+                    { text: "Um conhecido distante recebeu um diagnóstico severo a partir de um exame de imagem.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 06 • Segurança Financeira",
+                title: "Despesa Imprevista do Carro",
+                desc: "O carro quebrou e o conserto custará o equivalente a metade do seu salário do mês.",
+                amygdalaAlarme: 89,
+                alarmNarrative: "\"Minha vida financeira vai colapsar, vou me endividar sem volta e perder tudo.\"",
+                optimalRange: [4, 10], // Risco real: ~7%
+                evidences: [
+                    { text: "Possuo uma reserva de emergência guardada justamente para incidentes mecânicos.", isMitigating: true },
+                    { text: "Posso renegociar despesas supérfluas e equilibrar as contas nos próximos 60 dias.", isMitigating: true },
+                    { text: "Tenho emprego formal estável e histórico contínuo de responsabilidade orçamentária.", isMitigating: true },
+                    { text: "Assisti a um vídeo alarmista na internet sobre a crise econômica global.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 07 • Dinâmica Social",
+                title: "Silêncio Momentâneo em Roda de Conversa",
+                desc: "Você fez um comentário sobre um assunto e se seguiu um silêncio de 3 segundos antes de alguém mudar de tema.",
+                amygdalaAlarme: 86,
+                alarmNarrative: "\"Falei algo horrível, todos me acham esquisito e serei excluído do círculo de amizade.\"",
+                optimalRange: [2, 8], // Risco real: ~5%
+                evidences: [
+                    { text: "As pessoas estavam comendo e checando notificações, o ritmo da conversa varia naturalmente.", isMitigating: true },
+                    { text: "O grupo me convidou espontaneamente para outro encontro no próximo fim de semana.", isMitigating: true },
+                    { text: "Pausas de silêncio de poucos segundos são eventos banais em qualquer conversa humana.", isMitigating: true },
+                    { text: "Fiquei com vergonha imediata e meu rosto esquentou, parecendo que cometi um crime.", isMitigating: false }
+                ]
+            },
+            {
+                tag: "Cenário 08 • Segurança em Viagens",
+                title: "Turbulência em Voo Comercial",
+                desc: "O avião passa por uma zona de instabilidade atmosférica, sacode com força e acende o sinal de cintos.",
+                amygdalaAlarme: 98,
+                alarmNarrative: "\"As asas vão quebrar e o avião vai despencar agora em queda livre.\"",
+                optimalRange: [0, 3], // Risco real estatístico: < 1%
+                evidences: [
+                    { text: "Aeronaves modernas são projetadas para resistir a turbulências 10 vezes mais severas.", isMitigating: true },
+                    { text: "Estatisticamente, a chance de queda em voo comercial é de 1 em 11 milhões.", isMitigating: true },
+                    { text: "Os comissários permanecem calmos e a rotação dos motores segue constante e estável.", isMitigating: true },
+                    { text: "A sensação visceral de gravidade negativa faz parecer que caímos 1.000 metros.", isMitigating: false }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentRound = 0;
+        let userScore = 0;
+        let cumulativeAccuracy = [];
+        let selectedEvidences = new Set();
+
+        function initGame() {
+            currentRound = 0;
+            userScore = 0;
+            cumulativeAccuracy = [];
+            document.getElementById('endgameModal').style.display = 'none';
+            document.getElementById('scenarioContainer').style.display = 'block';
+            loadRound(0);
+        }
+
+        function loadRound(idx) {
+            currentRound = idx;
+            selectedEvidences.clear();
+
+            const scn = SCENARIOS[idx];
+
+            document.getElementById('roundDisplay').textContent = `${idx + 1} / ${SCENARIOS.length}`;
+            document.getElementById('scoreDisplay').textContent = userScore;
+            document.getElementById('scenarioTag').textContent = scn.tag;
+            document.getElementById('scenarioTitle').textContent = scn.title;
+            document.getElementById('scenarioDesc').textContent = scn.desc;
+            document.getElementById('alarmNarrative').textContent = scn.alarmNarrative;
+            document.getElementById('alarmPercent').textContent = `Alarme Amígdala: ${scn.amygdalaAlarme}%`;
+
+            document.getElementById('amygdalaVal').textContent = `${scn.amygdalaAlarme}%`;
+            document.getElementById('amygdalaBar').style.width = `${scn.amygdalaAlarme}%`;
+
+            document.getElementById('prefrontalVal').textContent = `20%`;
+            document.getElementById('prefrontalBar').style.width = `20%`;
+
+            // Reset do Slider
+            const slider = document.getElementById('probSlider');
+            slider.value = 50;
+            document.getElementById('sliderValDisplay').textContent = `50%`;
+
+            // Montar Lista de Evidências
+            const grid = document.getElementById('evidenceGrid');
+            grid.innerHTML = '';
+
+            scn.evidences.forEach((ev, i) => {
+                const btn = document.createElement('div');
+                btn.className = 'evidence-btn';
+                btn.onclick = () => toggleEvidence(i, btn);
+                btn.innerHTML = `
+                    <div class="evidence-checkbox" id="chk-${i}"></div>
+                    <div>${ev.text}</div>
+                `;
+                grid.appendChild(btn);
+            });
+
+            // Ocultar feedback da rodada anterior
+            const fb = document.getElementById('feedbackBanner');
+            fb.style.display = 'none';
+            fb.innerHTML = '';
+            document.getElementById('btnConfirm').style.display = 'inline-block';
+        }
+
+        function toggleEvidence(idx, elem) {
+            playClickSound();
+            if (selectedEvidences.has(idx)) {
+                selectedEvidences.delete(idx);
+                elem.classList.remove('selected');
+                document.getElementById(`chk-${idx}`).textContent = '';
+            } else {
+                selectedEvidences.add(idx);
+                elem.classList.add('selected');
+                document.getElementById(`chk-${idx}`).textContent = '✓';
+            }
+
+            // Atualiza medidor pré-frontal em tempo real
+            const pfVal = Math.min(20 + (selectedEvidences.size * 25), 95);
+            document.getElementById('prefrontalVal').textContent = `${pfVal}%`;
+            document.getElementById('prefrontalBar').style.width = `${pfVal}%`;
+        }
+
+        function updateSliderDisplay(val) {
+            document.getElementById('sliderValDisplay').textContent = `${val}%`;
+        }
+
+        function confirmCalibration() {
+            const scn = SCENARIOS[currentRound];
+            const sliderVal = parseInt(document.getElementById('probSlider').value);
+
+            // Validação de Evidências (precisa ter selecionado pelo menos 2 evidências atenuantes legítimas)
+            let correctEvidencesCount = 0;
+            let falseAlarmsCount = 0;
+
+            selectedEvidences.forEach(idx => {
+                if (scn.evidences[idx].isMitigating) correctEvidencesCount++;
+                else falseAlarmsCount++;
+            });
+
+            const optMin = scn.optimalRange[0];
+            const optMax = scn.optimalRange[1];
+            const optCenter = (optMin + optMax) / 2;
+
+            // Distância da calibração real
+            const dist = Math.abs(sliderVal - optCenter);
+            let roundAcc = 0;
+
+            if (dist <= 4) roundAcc = 100;
+            else if (dist <= 10) roundAcc = 85;
+            else if (dist <= 20) roundAcc = 65;
+            else if (dist <= 35) roundAcc = 40;
+            else roundAcc = 15;
+
+            // Penalidade se selecionou distorções ou não selecionou fatos atenuantes
+            if (falseAlarmsCount > 0) roundAcc = Math.max(roundAcc - 20, 10);
+            if (correctEvidencesCount < 2) roundAcc = Math.max(roundAcc - 25, 10);
+
+            cumulativeAccuracy.push(roundAcc);
+
+            // Média de acurácia
+            const avgAcc = Math.round(cumulativeAccuracy.reduce((a, b) => a + b, 0) / cumulativeAccuracy.length);
+            document.getElementById('accuracyDisplay').textContent = `${avgAcc}%`;
+
+            // Pontos da rodada
+            const roundScore = Math.round((roundAcc * 2) + (correctEvidencesCount * 30) - (falseAlarmsCount * 20));
+            userScore += Math.max(roundScore, 50);
+            document.getElementById('scoreDisplay').textContent = userScore;
+
+            // Feedback Visual e Sonoro
+            const fb = document.getElementById('feedbackBanner');
+            fb.style.display = 'block';
+
+            if (roundAcc >= 80) {
+                playOptimalChord();
+                fb.style.background = '#f0fdf4';
+                fb.style.border = '1px solid #bbf7d0';
+                fb.style.color = '#166534';
+                fb.innerHTML = `
+                    <strong>✓ Calibração Bayesiana de Alta Precisão! (+${roundScore} pts)</strong><br>
+                    Você reduziu a probabilidade estimada de ${scn.amygdalaAlarme}% para ${sliderVal}%, alinhando-se à faixa estatística real (${optMin}% a ${optMax}%). O córtex pré-frontal reassumiu o comando inibitório da amígdala.
+                `;
+                // Baixa amígdala e sobe pré-frontal
+                document.getElementById('amygdalaBar').style.width = '15%';
+                document.getElementById('amygdalaVal').textContent = '15%';
+                document.getElementById('prefrontalBar').style.width = '95%';
+                document.getElementById('prefrontalVal').textContent = '95%';
+            } else {
+                playCatastropheAlert();
+                fb.style.background = '#fff7ed';
+                fb.style.border = '1px solid #fed7aa';
+                fb.style.color = '#9a3412';
+                fb.innerHTML = `
+                    <strong>Atenção: Resíduo de Viés Catastrófico (+${roundScore} pts)</strong><br>
+                    Você calibrou a probabilidade em ${sliderVal}%, mas a chance estatística real com base nos fatos é de apenas ${optMin}% a ${optMax}%. Lembre-se: sentir medo intenso não torna a catástrofe provável.
+                `;
+            }
+
+            document.getElementById('btnConfirm').style.display = 'none';
+
+            // Próxima Rodada ou Fim
+            setTimeout(() => {
+                if (currentRound + 1 < SCENARIOS.length) {
+                    loadRound(currentRound + 1);
+                } else {
+                    finishGame();
+                }
+            }, 3200);
+        }
+
+        function finishGame() {
+            playFanfareSound();
+            document.getElementById('scenarioContainer').style.display = 'none';
+            const modal = document.getElementById('endgameModal');
+            modal.style.display = 'block';
+
+            document.getElementById('finalScoreVal').textContent = `${userScore} pts`;
+
+            const avg = Math.round(cumulativeAccuracy.reduce((a, b) => a + b, 0) / cumulativeAccuracy.length);
+            const classElem = document.getElementById('endgameClassification');
+            const insightElem = document.getElementById('endgameInsight');
+
+            if (avg >= 85) {
+                classElem.textContent = "Classificação: Córtex Pré-Frontal Calibrado e Resiliente";
+                insightElem.textContent = "Excelente acurácia bayesiana! Você demonstrou forte capacidade de discriminar fatos de projeções afetivas, mantendo o controle inibitório da amígdala mesmo sob gatilhos aversivos intensos.";
+            } else if (avg >= 65) {
+                classElem.textContent = "Classificação: Calibração Moderada / Hipervigilância Reativa";
+                insightElem.textContent = "Você consegue recrutar evidências contrárias, mas ainda preserva uma tendência a superestimar a gravidade dos riscos. Praticar o cálculo de probabilidade real no dia a dia ajudará a diminuir a reatividade da rede de saliência.";
+            } else {
+                classElem.textContent = "Classificação: Predomínio do Alarme Límbico (Heurística do Afeto)";
+                insightElem.textContent = "A intensidade das emoções ainda domina a percepção de probabilidade na sua mente. Recomendamos a leitura do nosso ensaio sobre a neurobiologia da simulação aversiva e a aplicação da técnica da flecha descendente.";
+            }
+
+            // Persistência em localStorage
+            try {
+                const prevBest = localStorage.getItem('dia43_best_score') || 0;
+                if (userScore > prevBest) {
+                    localStorage.setItem('dia43_best_score', userScore);
+                }
+            } catch (e) {}
+        }
+
+        function restartGame() {
+            playClickSound();
+            initGame();
+        }
+
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

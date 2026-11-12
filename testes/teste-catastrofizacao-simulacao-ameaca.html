@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Catastrofização Cognitiva e Simulação de Ameaça (ECC-SA / T-44) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu nível de catastrofização mental, ruminação antecipatória, desamparo preditivo e reatividade visceral com a escala ECC-SA / T-44 por Deo Magalhães.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 10px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-size: 1.02em;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 0.8em;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #475569;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin: 0;
+            accent-color: #005f73;
+        }
+
+        .option-label.selected {
+            background: #e6f2f4;
+            border-color: #0a9396;
+            color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-submit-quiz {
+            display: block;
+            width: 100%;
+            max-width: 320px;
+            margin: 35px auto 10px auto;
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.2);
+            text-align: center;
+        }
+
+        .btn-submit-quiz:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 147, 150, 0.3);
+        }
+
+        /* Área de Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            margin: 30px 0;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .score-banner {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 2.4em;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .score-status-title {
+            font-size: 1.35em;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .score-status-desc {
+            font-size: 0.98em;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .dimension-bars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 30px 0;
+        }
+
+        .dimension-bar-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .dimension-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .progress-track {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.6s ease;
+        }
+
+        .clinical-insights-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 22px;
+            border-radius: 0 10px 10px 0;
+            margin: 30px 0;
+        }
+
+        .clinical-insights-box h4 {
+            color: #166534;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+
+        .clinical-insights-box ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+            color: #1e293b;
+            line-height: 1.65;
+        }
+
+        .cta-consultation-box {
+            text-align: center;
+            background: linear-gradient(135deg, #001219, #005f73);
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 35px;
+        }
+
+        .cta-consultation-box h3 {
+            color: #ee9b00;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+
+        .btn-cta-agendar {
+            display: inline-block;
+            background: #ee9b00;
+            color: #001219;
+            font-weight: 800;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta-agendar:hover {
+            background: #ca6702;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Catastrofização Cognitiva e Simulação de Ameaça (ECC-SA / T-44)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) • Instrumento Psicométrico Privado e Autoaplicável</p>
+            </header>
+
+            <div class="test-intro-box">
+                <strong>Fundamentação Psicométrica:</strong> Este instrumento foi estruturado a partir dos modelos clínicos da <em>Pain Catastrophizing Scale</em> (Sullivan et al., 1995) e da Terapia Cognitiva dos Transtornos de Ansiedade (Beck & Clark, 2012), adaptado para mapear a tendência do cérebro preditivo de transformar incertezas cotidianas em convicções de desastre iminente.
+                <br><br>
+                🔒 <strong>Privacidade Absoluta:</strong> A apuração ocorre 100% no seu navegador. Nenhuma resposta é gravada ou enviada para servidores externos.
+            </div>
+
+            <form id="quizForm" class="quiz-container">
+                <!-- Dimensão 1: Magnificação da Ameaça e Superestimação de Risco -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Magnificação da Ameaça e Superestimação de Risco (MASR)</h3>
+                    <p>Tendência a inflacionar a gravidade e a probabilidade de eventos desfavoráveis antes de averiguar os fatos.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">01</span> Quando recebo uma mensagem sucinta de trabalho (como "precisamos conversar"), meu cérebro assume imediatamente que serei demitido ou duramente punido.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q1" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q1" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">02</span> Ao notar um sintoma físico incomum (como uma pontada no peito ou dor de cabeça), imagino de pronto um quadro terminal ou irreversível.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q2" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q2" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">03</span> Tenho dificuldade em considerar desfechos intermediários ou neutros: para mim, as situações tendem a ser um sucesso absoluto ou uma ruína completa.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q3" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q3" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">04</span> Se algo dá errado em uma pequena etapa do dia, sinto que tudo o mais entrará em colapso como um efeito dominó inevitável.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q4" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q4" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 2: Ruminação Antecipatória e Hiperfoco no Perigo -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Ruminação Antecipatória e Hiperfoco no Perigo (RAHP)</h3>
+                    <p>Incapacidade de interromper pensamentos intrusivos e simulações repetitivas de tragédia futura.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">05</span> Fico repassando mentalmente o pior cenário possível dezenas de vezes antes de reuniões, viagens ou conversas delicadas.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q5" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q5" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">06</span> Mesmo quando recebo dados estatísticos ou garantias lógicas de que o risco é mínimo, minha mente insiste: "mas e se desta vez acontecer?".</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q6" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q6" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">07</span> Perco o sono à noite imaginando desgraças futuras com meus familiares, finanças ou saúde.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q7" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q7" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">08</span> Sinto que, se eu relaxar e parar de prever o pior, serei pego desprevenido e o desastre inevitavelmente acontecerá.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q8" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q8" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 3: Desamparo Preditivo e Sensação de Incompetência -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Desamparo Preditivo e Sensação de Incompetência (DPSI)</h3>
+                    <p>Crença de que, caso a adversidade ocorra, você não terá recursos psicológicos para suportar o impacto.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">09</span> Acredito profundamente que, se eu enfrentar uma decepção grave ou rejeição, minha vida perderá o sentido e eu não aguentarei.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q9" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q9" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">10</span> Em vez de pensar em soluções práticas diante de uma crise, sinto uma paralisia imediata e sensação de impotência total.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q10" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q10" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">11</span> Subestimo sistematicamente minha capacidade de superação, esquecendo adversidades graves que já venci no passado.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q11" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q11" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">12</span> Dependo da aprovação e tranquilização contínua de outras pessoas para não afundar no desespero diante de dúvidas.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q12" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q12" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 4: Reatividade Somática e Alarme Visceral -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Reatividade Somática e Alarme Visceral (RSAV)</h3>
+                    <p>Manifestação corporal imediata da amígdala (taquicardia, aperto gástrico, sufocamento) diante da imaginação.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">13</span> Meu coração dispara e sinto um aperto no estômago apenas ao pensar em um problema que talvez aconteça semanas à frente.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q13" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q13" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">14</span> Sinto tensão constante nos ombros, mandíbula travada ou dores musculares que aumentam quando fico prevendo crises.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q14" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q14" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">15</span> Diante de incertezas, percebo episódios de respiração curta, mãos geladas ou sudorese fria repentina.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q15" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q15" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text"><span class="question-number">16</span> Fico tão fisicamente esgotado por sustos imaginados que termino o dia com a sensação de ter corrido uma maratona.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q16" value="1" required> Raramente / Nunca (1)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"> Ocasionalmente (2)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"> Moderadamente (3)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="4"> Frequentemente (4)</label>
+                        <label class="option-label"><input type="radio" name="q16" value="5"> Quase Sempre (5)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit-quiz">Calcular Devolutiva Psicométrica</button>
+            </form>
+
+            <!-- Área de Resultados -->
+            <section id="resultsSection" class="results-section">
+                <div id="scoreBanner" class="score-banner">
+                    <span class="score-badge" id="scoreValue">0</span>
+                    <div class="score-status-title" id="scoreTitle">Processando...</div>
+                    <p class="score-status-desc" id="scoreDesc"></p>
+                </div>
+
+                <h3>Desempenho por Dimensões Clínicas</h3>
+                <div class="dimension-bars-grid">
+                    <div class="dimension-bar-card">
+                        <div class="dimension-bar-header">
+                            <span>1. Magnificação de Risco (MASR)</span>
+                            <span id="scoreDim1">0 / 20</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="barDim1" style="width: 0%; background: #005f73;"></div>
+                        </div>
+                        <small style="color: #64748b;">Inflação da gravidade de eventos cotidianos.</small>
+                    </div>
+
+                    <div class="dimension-bar-card">
+                        <div class="dimension-bar-header">
+                            <span>2. Ruminação Antecipatória (RAHP)</span>
+                            <span id="scoreDim2">0 / 20</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="barDim2" style="width: 0%; background: #0a9396;"></div>
+                        </div>
+                        <small style="color: #64748b;">Hiperfoco em cenários de desastre ("e se...?").</small>
+                    </div>
+
+                    <div class="dimension-bar-card">
+                        <div class="dimension-bar-header">
+                            <span>3. Desamparo Preditivo (DPSI)</span>
+                            <span id="scoreDim3">0 / 20</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="barDim3" style="width: 0%; background: #ee9b00;"></div>
+                        </div>
+                        <small style="color: #64748b;">Crença de incapacidade de lidar com a dor.</small>
+                    </div>
+
+                    <div class="dimension-bar-card">
+                        <div class="dimension-bar-header">
+                            <span>4. Alarme Visceral Somático (RSAV)</span>
+                            <span id="scoreDim4">0 / 20</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="barDim4" style="width: 0%; background: #ca6702;"></div>
+                        </div>
+                        <small style="color: #64748b;">Reatividade da amígdala e eixo do estresse.</small>
+                    </div>
+                </div>
+
+                <div class="clinical-insights-box">
+                    <h4>Orientações Neuroclínicas e Práticas de Descatastrofização:</h4>
+                    <ul id="recommendationsList">
+                        <li>Aguardando cálculo...</li>
+                    </ul>
+                </div>
+
+                <div class="cta-consultation-box">
+                    <h3>Deseja Aprofundar Esse Mapeamento em Consulta?</h3>
+                    <p>A catastrofização crônica pode ser desfeita por meio de reabilitação cognitiva, calibração bayesiana e regulação autonômica do sistema nervoso.</p>
+                    <a href="/agendamento.html" class="btn-cta-agendar">Agendar Consulta com Deo Magalhães</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        // Realce de seleção de opções
+        document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const name = this.getAttribute('name');
+                document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                    r.closest('.option-label').classList.remove('selected');
+                });
+                this.closest('.option-label').classList.add('selected');
+            });
+        });
+
+        // Apuração e Cálculo Psicométrico
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let dim1 = 0, dim2 = 0, dim3 = 0, dim4 = 0;
+
+            for (let i = 1; i <= 16; i++) {
+                const val = parseInt(document.querySelector(`input[name="q${i}"]:checked`).value);
+                if (i <= 4) dim1 += val;
+                else if (i <= 8) dim2 += val;
+                else if (i <= 12) dim3 += val;
+                else dim4 += val;
+            }
+
+            const totalScore = dim1 + dim2 + dim3 + dim4; // Faixa: 16 a 80
+
+            // Atualização dos Medidores por Dimensão
+            document.getElementById('scoreDim1').textContent = `${dim1} / 20`;
+            document.getElementById('barDim1').style.width = `${((dim1 - 4) / 16) * 100}%`;
+
+            document.getElementById('scoreDim2').textContent = `${dim2} / 20`;
+            document.getElementById('barDim2').style.width = `${((dim2 - 4) / 16) * 100}%`;
+
+            document.getElementById('scoreDim3').textContent = `${dim3} / 20`;
+            document.getElementById('barDim3').style.width = `${((dim3 - 4) / 16) * 100}%`;
+
+            document.getElementById('scoreDim4').textContent = `${dim4} / 20`;
+            document.getElementById('barDim4').style.width = `${((dim4 - 4) / 16) * 100}%`;
+
+            // Classificação Clínica
+            const banner = document.getElementById('scoreBanner');
+            const scoreVal = document.getElementById('scoreValue');
+            const scoreTitle = document.getElementById('scoreTitle');
+            const scoreDesc = document.getElementById('scoreDesc');
+            const recList = document.getElementById('recommendationsList');
+
+            scoreVal.textContent = `${totalScore} / 80`;
+
+            if (totalScore <= 32) {
+                banner.style.background = '#f0fdf4';
+                banner.style.border = '2px solid #16a34a';
+                scoreVal.style.color = '#16a34a';
+                scoreTitle.textContent = 'Simulação Adaptativa e Resiliência Preditiva (Catastrofização Mínima)';
+                scoreDesc.textContent = 'Seu cérebro preditivo preserva excelente calibração executiva. Diante de incertezas ou dados ambíguos, seu córtex pré-frontal avalia evidências factuais com serenidade, sem permitir que a amígdala sequestre o julgamento da realidade.';
+                recList.innerHTML = `
+                    <li><strong>Manutenção da Flexibilidade Epistêmica:</strong> Continue distinguindo a magnitude imaginada da probabilidade estatística concreta.</li>
+                    <li><strong>Preservação da Ancoragem Somática:</strong> Seus circuitos de regulação vagal operam de maneira eficiente, prevenindo a sobrecarga alostática.</li>
+                    <li><strong>Prática de Apoio:</strong> Explore nossos jogos cognitivos diários de lógica bayesiana para manter o cérebro afiado.</li>
+                `;
+            } else if (totalScore <= 48) {
+                banner.style.background = '#fefce8';
+                banner.style.border = '2px solid #ca8a04';
+                scoreVal.style.color = '#ca8a04';
+                scoreTitle.textContent = 'Hipervigilância Cognitiva Moderada (Alarme Situacional)';
+                scoreDesc.textContent = 'Você apresenta episódios frequentes em que pequenas dúvidas ou silêncios desencadeiam projeções aversivas exageradas. Embora você ainda consiga recuperar a razão após algum tempo, o custo bioenergético da ruminação antecipatória já é perceptível.';
+                recList.innerHTML = `
+                    <li><strong>Registro de Pensamentos e Descatastrofização:</strong> Quando a mente projetar um desfecho trágico, escreva a probabilidade matemática real do fato ocorrer. O ato de escrever força o córtex pré-frontal (dlPFC) a entrar em atividade.</li>
+                    <li><strong>Desarme da Flecha Descendente:</strong> Pergunte-se conscientemente: "Mesmo que o pior aconteça, quais são os 3 passos práticos que darei nas primeiras 24 horas?". Isso desmonta a sensação de desamparo.</li>
+                    <li><strong>Higiene da Incerteza:</strong> Reduza a busca compulsiva por garantias e mensagens de confirmação; tolere pequenas ambiguidades por 15 minutos antes de agir.</li>
+                `;
+            } else if (totalScore <= 64) {
+                banner.style.background = '#fff7ed';
+                banner.style.border = '2px solid #ea580c';
+                scoreVal.style.color = '#ea580c';
+                scoreTitle.textContent = 'Catastrofização Elevada / Sequestro da Amígdala Basolateral';
+                scoreDesc.textContent = 'Há uma desregulação perceptível entre a amígdala e o córtex pré-frontal dorsolateral. A Heurística do Afeto predomina: você sente o perigo no corpo e assume imediatamente que a ruína é certa. O desgaste fisiológico (tensão muscular, taquicardia e insônia) está cobrando um preço elevado da sua saúde.';
+                recList.innerHTML = `
+                    <li><strong>Suspiro Fisiológico Imediato:</strong> Ao notar o alarme no corpo, realize duas inspirações nasais rápidas e uma expiração bucal longa e lenta para frear a descarga adrenérgica via nervo vago.</li>
+                    <li><strong>Desfusão Cognitiva da Mente Contadora de Histórias:</strong> Trate os pensamentos de tragédia como roteiros fictícios gerados pelo cérebro em modo de defesa, não como profecias da realidade.</li>
+                    <li><strong>Avaliação Especializada:</strong> Recomenda-se acompanhamento psicoterapêutico baseado em TCC ou ACT para reestruturar crenças de incompetência e vulnerabilidade.</li>
+                `;
+            } else {
+                banner.style.background = '#fef2f2';
+                banner.style.border = '2px solid #dc2626';
+                scoreVal.style.color = '#dc2626';
+                scoreTitle.textContent = 'Catastrofização Severa / Paralisia por Imaginação Aversiva';
+                scoreDesc.textContent = 'Seu cérebro opera em estado de emergência crônica quase permanente. Qualquer evento neutro é filtrado como prenúncio de catástrofe inevitável, resultando em sobrecarga alostática severa, exaustão do eixo HPA e acentuada sensação de desamparo pessoal.';
+                recList.innerHTML = `
+                    <li><strong>Intervenção Somática Prioritária:</strong> Antes de qualquer tentativa de reestruturação lógica, é imperativo acalmar o tronco encefálico com ancoragem sensorial e regulação fisiológica.</li>
+                    <li><strong>Interrupção do Isolamento e da Verificação Compulsiva:</strong> A busca contínua por tranquilização alimenta o ciclo de pânico da rede de saliência.</li>
+                    <li><strong>Encaminhamento Clínico Urgente:</strong> Indicamos vivamente a realização de uma consulta neuropsicológica e psicológica especializada para instituir um protocolo intensivo de reabilitação da regulação emocional.</li>
+                `;
+            }
+
+            // Exibir a seção de resultados com rolagem suave
+            const resSec = document.getElementById('resultsSection');
+            resSec.style.display = 'block';
+            resSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
+</body>
+</html>

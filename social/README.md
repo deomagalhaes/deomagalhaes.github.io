@@ -4,16 +4,19 @@ Este diretório gerencia os roteiros de carrosséis, legendas estratégicas, scr
 
 ---
 
-## 🎨 Studio Visual de Carrosséis (1080x1080)
+## 🎨 Studio Visual de Carrosséis (1:1 & 4:5)
 Acesse a aplicação visual interativa diretamente no navegador:
 * **[Abrir Studio Gerador de Carrosséis (social/gerador.html)](gerador.html)**
 
 ### Recursos do Studio:
-* **Renderização Real-Time 1080x1080**: gera os slides quadrados oficiais com tipografia refinada e paleta institucional (`#005f73`, `#001219`, `#ee9b00`).
-* **Ingestão Automática**: seletor de ensaios pré-carregados ou campo para colar qualquer texto/artigo novo e sintetizar em 6 slides.
-* **Download em Lote (.PNG)**: baixe o slide ativo ou todos os 6 slides numerados prontos para publicar no carrossel.
+* **Renderização Real-Time 1080x1080 (1:1) e 1080x1350 (4:5)**: gera slides quadrados ou retrato com pré-visualização adaptada instantânea.
+* **Auto-Fit Inteligente + Ajuste Manual**: calcula e adapta o tamanho da tipografia e do cartão para que o texto nunca vase ou sobreponha elementos, com sliders de controle fino (Auto / 20px a 68px) e alinhamento (esquerda/central).
+* **Destaques com Asteriscos**: termos entre `*asteriscos*` são pintados automaticamente na cor âmbar/destaque da paleta.
+* **Gerenciamento Completo de Slides**: adicione, duplique, reordene (◀/▶), exclua e selecione o layout específico de cada slide (Capa, Conceito, Passos Numerados, Citação, Contraste A vs B, CTA).
+* **Temas & Estilos Visuais**: 6 paletas de cores institucionais (Petróleo & Âmbar, Obsidian Minimal, Editorial Light, Terracota, Sálvia Clínica, Noturno Índigo), 3 famílias tipográficas e 3 estilos de cartão (Glass, Sólido, Minimalista).
+* **Exportação Otimizada**: download do slide ativo (.PNG), cópia direta da imagem para a Área de Transferência (Clipboard), download de todos os slides em lote único compactado (.ZIP) com a legenda inclusa, ou download individual.
 * **Cópia de Legenda com 1 Clique**: gancho, narrativa científica, chamada para ação e 15 hashtags estratégicas.
-* **Exportação Markdown**: baixa o arquivo `.md` padronizado.
+* **Exportação Markdown**: baixa o roteiro `.md` padronizado.
 
 ---
 
@@ -21,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **12/11/2026** | **A Neurobiologia da Catastrofização e da Simulação Aversiva** | [social/2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva.md](2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva.md) | ✅ Pronto para postar |
 | **11/11/2026** | **A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão** | [social/2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao.md](2026-11-11-neurobiologia-fadiga-empatica-desgaste-compaixao.md) | ✅ Pronto para postar |
 | **11/11/2026** | **A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional** | [social/2026-11-11-neurobiologia-fenomeno-do-impostor.md](2026-11-11-neurobiologia-fenomeno-do-impostor.md) | ✅ Pronto para postar |
 | **10/11/2026** | **A Neurobiologia do Masking Social e do Burnout Neurodivergente** | [social/2026-11-10-neurobiologia-masking-burnout-neurodivergente.md](2026-11-10-neurobiologia-masking-burnout-neurodivergente.md) | ✅ Pronto para postar |
