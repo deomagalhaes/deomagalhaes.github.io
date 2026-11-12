@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 14 — Reconhecedor Auditivo Polifônico de Acordes por Microfone
+## 🎯 Projeto Prioritário Atual: Fase 15 — Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Processamento de sinal de áudio em tempo real via Web Audio API (`AnalyserNode`) com algoritmos combinados de autocorrelação temporal (YIN) e transformada rápida de Fourier (FFT) para detecção polifônica de cordas feridas.
-  2. Identificação de frequências fundamentais simultâneas dos 5 pares da viola caipira e 6 cordas do violão, mapeando as notas para digitações físicas no braço virtual.
-  3. Feedback visual em tempo real no braço SVG espelhado (Canhoto e Destro), exibindo a dedução imediata do acorde com indicação de precisão em cents e sugestões de correção postural e dedilhado.
+  1. Motor de contraponto estrito adaptado à música tradicional caipira (movimento contrário, oblíquo e direto controlado em terças e sextas diatônicas).
+  2. Geração automática de arranjo em duas vozes instrumentais independentes (1ª Viola Requinteira / Solista e 2ª Viola de Base / Resposta), com distribuição inteligente de registros para evitar choques com as cordas oitavadas.
+  3. Sequenciador estéreo binaural Web Audio (pan 1ª viola à esquerda, 2ª viola à direita), sincronização com o braço SVG virtual e exportação em 1 clique para o Editor de Tablaturas (Fase 7).
 
 ---
 
@@ -40,12 +40,45 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Mapeamento sistemático de toques litúrgicos de devoção aos Três Santos Reis (Minas Gerais, Goiás e Vale do Paraíba), diálogos em terças e sextas entre Mestre e Contra-Mestre, contracantos de turina, batidas no tampo [TAP] e abafamentos [CHOCK], sequenciador Web Audio com filtro de voz e clonagem em 1 clique para o Editor de Tablaturas.
 11. **[x] Simulador de Capotraste & Transposição Inteligente para Duplas (Fase 13 Concluída):**
     - Matriz de tessitura vocal caipira (1ª e 2ª voz), posicionamento paramétrico de braçadeira móvel da 1ª à 9ª casa no braço SVG canhoto/destro com zona inativa sombreada, equivalência harmônica Viola (Cebolão) ⟷ Violão, sintetizador multitrack com formantes vocais e exportação em 1 clique para o Editor de Tablaturas.
-12. **[ ] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14):**
-    - Processamento de sinal com FFT e autocorrelação (YIN) para detecção de notas e digitações reais captadas ao vivo pelo microfone do violeiro com feedback imediato no braço SVG.
+12. **[x] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14 Concluída):**
+    - Processamento de sinal com FFT e autocorrelação (YIN) para detecção de notas e digitações reais captadas ao vivo pelo microfone do violeiro com feedback imediato no braço SVG, desvio em cents por ordem e diagnóstico postural.
+13. **[ ] Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas (Fase 15):**
+    - Geração algorítmica de duetos contrapontísticos com separação estéreo binaural, condução de vozes em terças e sextas, distribuição sem choque de oitavadas e exportação para tablatura.
+14. **[ ] Simulador Acústico de Madeiras & Ressonâncias Lutherísticas (Fase 16):**
+    - Física dos tampos (Pinho Spruce vs Cedro Canadense), fundos (Jacarandá da Bahia vs Mogno vs Caviúna), leque harmônico e análise modal de padrões de Chladni.
+15. **[ ] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17):**
+    - Percepção intervalar das modas de viola e treino auditivo de terças e sextas com resposta interativa no braço.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **12/11/2026 — Sessão 14** (Fase 14 Concluída):
+  - **Reconhecedor Auditivo Polifônico de Acordes por Microfone (Live Audio & Polyphonic Chord Pitch Recognizer)**:
+    - **Processamento de Sinal de Áudio em Tempo Real (DSP Web Audio API)**:
+      - Captura de áudio do microfone em baixa latência (`<20ms`), pré-filtragem passa-altas de 55 Hz (`BiquadFilterNode`, Q=0.7) para corte de ruído mecânico e sub-graves espúrios, controle digital de ganho (`GainNode` com sensibilidade de 50% a 250%) e análise de sinal com buffer de 4096 bins (`AnalyserNode`, smoothing time constant de 0.55).
+      - Roteamento passivo de escuta analítica sem envio para `destination`, prevenindo microfonias ou realimentação acústica nos alto-falantes.
+    - **Algoritmo Híbrido YIN de Autocorrelação & Peneira Harmônica FFT**:
+      - *YIN Temporal de Alta Precisão*: cálculo analítico da função de diferença cumulativa normalizada $d'(\tau)$ com limiar absoluto $\tau = 0.16$ e interpolação parabólica sub-amostra para identificação contínua da frequência fundamental $f_0$, pitch class (0..11) e microdesvio em cents ($\pm 50$ cents).
+      - *Peneira Harmônica Espectral (Harmonic Sieve)*: varredura harmônica com ponderação decrescente de energia ($f, 2f, 3f, 4f$) acumulada em vetor cromático normalizado ($\vec{C}[0..11]$), isolando múltiplos harmônicos e identificando notas simultâneas dos 5 pares da viola e 6 cordas do violão.
+    - **Motor de Dedução Harmônica & Identificação de Inversões**:
+      - Avaliação contínua de matriz de acordes (Tríades Maiores, Menores, Tétrades Dominantes com 7ª, 7M, m7, Extensões add9, sus4 e Diminutos) com cálculo de escore probabilístico e penalização de ruído exterior.
+      - Detecção do baixo acústico real para identificação imediata de inversões (Estado Fundamental, 1ª Inversão, 2ª Inversão, 3ª Inversão) e cálculo de percentual de confiança analítica.
+    - **Mapeamento Físico de Ordens e Parecer do Mestre Violeiro**:
+      - Tradução automática do acorde detectado para a digitação física no instrumento atualmente selecionado (Viola Cebolão em Mi, Ré, Rio Abaixo, Violão, etc.).
+      - Avaliação de consonância par a par com classificação cromática em tempo real: Consonância Perfeita (0 a $\pm 5$ cents em esmeralda), Ligeiramente Alta/Baixa ($\pm 6$ a $\pm 20$ cents em âmbar), Desafinada ($> \pm 20$ cents em rosa) ou Abafada/Sem Ataque.
+      - Diagnóstico postural e ergonômico em tempo real com dicas sobre pressão de dedos, posicionamento de polegar e compensação de cravelhas.
+    - **Canvas Osciloscópico e Medidor Analógico de Cents**:
+      - Renderização responsiva a 60 FPS com forma de onda temporal em verde neon, espectro FFT em barras graduadas ciano, pinos luminosos dourados com badges das notas fundamentais identificadas e linha de limiar de ruído (Gate).
+      - Medidor analógico com agulha indicadora e display digital em tempo real.
+    - **Simulador Acústico Integrado (Acesso Completo Sem Microfone)**:
+      - Sintetizador com 8 presets canônicos de viola e violão (E cebolão aberto, B7 tradicional, A caipira, C♯m lamento, F♯m, G♯m, Aadd9 pantaneiro, D folia), simulação de micro-delay de rasqueado e slider de desafinação proposital para testes didáticos e validação sem microfone físico.
+    - **Integração Total com o Braço SVG Virtual (Modo Canhoto & Destro)**:
+      - Novo modo de projeção no topo do braço: `🎙️ Reconhecedor Polifônico` (`displayMode: 'MIC'`).
+      - Visualização imediata das digitações reconhecidas ao vivo com código cromático de intervalos (Tônica esmeralda, Terça ciano, Quinta âmbar, Sétima roxo, Desafinação rosa) e desvio em cents exibido diretamente em cada marcador.
+      - Compatibilidade total com Modo Canhoto (`isLeftHanded`) e Destro.
+    - **Histórico de Sessão e Clonagem para Tablatura (Fase 7)**:
+      - Registro cronológico dos acordes captados na sessão com timestamps e botão "Exportar p/ Tablatura" gerando novo projeto no Editor da Fase 7 em 1 clique, além de exportação de relatório lutherístico para a área de transferência.
 
 - **11/11/2026 — Sessão 13** (Fase 13 Concluída):
   - **Simulador de Capotraste & Transposição Inteligente para Duplas**:

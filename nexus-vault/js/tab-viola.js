@@ -2163,6 +2163,116 @@ const CANONICAL_VIOLAO_SHAPES_CAPO = {
     }
 };
 
+// =========================================================================
+// FASE 14: RECONHECEDOR AUDITIVO POLIFÔNICO DE ACORDES POR MICROFONE
+// =========================================================================
+const DEFAULT_MIC_RECOGNIZER_STATE = {
+    isListening: false,
+    sensitivity: 1.2,              // Multiplicador de ganho digital (0.5 a 3.0)
+    noiseThreshold: 0.015,         // Limiar de corte RMS (Gate) (0.005 a 0.060)
+    algorithmMode: 'hybrid',       // 'hybrid' (YIN + FFT Polifônico) | 'monophonic' (YIN Nota a Nota) | 'polyphonic' (FFT Sieve)
+    toleranceCents: 20,            // Janela de afinação em cents (±5 verde, ±20 amarelo, >20 vermelho)
+    simulatedChordKey: 'E',        // Acorde selecionado para o gerador de teste acústico
+    simulatedDetuneCents: 0,       // Desafinação opcional no teste (-25 a +25 cents)
+    detectedPitch: null,           // { freq, midi, pc, noteName, noteNamePt, cents, confidence }
+    detectedPolyPitches: [],       // [ { freq, midi, noteName, noteNamePt, cents, amplitude, role, isDominant } ]
+    detectedChord: null,           // Objeto completo retornado pelo dedutor harmônico
+    detectedCourses: [],           // Mapeamento físico nas 5 ordens da viola ou 6 do violão
+    statusText: 'Microfone inativo. Clique em "Iniciar Escuta ao Vivo" para afinar ou reconhecer acordes.',
+    history: []                    // Histórico dos últimos acordes reconhecidos
+};
+
+const MIC_CHORD_SIMULATION_PRESETS = {
+    E: {
+        id: 'E',
+        label: 'Mi Maior (E) — Cebolão Aberto',
+        chordName: 'E',
+        quality: 'Maior',
+        roman: 'I',
+        rootPc: 4,
+        violaFrets: [0, 0, 0, 0, 0],
+        violaoFrets: [0, 0, 1, 2, 2, 0],
+        desc: 'Ressonância plena das cordas soltas com batimentos naturais dos pares oitavados'
+    },
+    B7: {
+        id: 'B7',
+        label: 'Si com Sétima (B7) — Dominante Canônica',
+        chordName: 'B7',
+        quality: 'Dominante 7ª',
+        roman: 'V7',
+        rootPc: 11,
+        violaFrets: [2, 1, 2, 0, 2],
+        violaoFrets: [2, 0, 2, 1, 2, -1],
+        desc: 'Preparação clássica da moda de viola (Tião Carreiro e Pardinho)'
+    },
+    A: {
+        id: 'A',
+        label: 'Lá Maior (A) — Subdominante Caipira',
+        chordName: 'A',
+        quality: 'Maior',
+        roman: 'IV',
+        rootPc: 9,
+        violaFrets: [5, 5, 5, 5, 5],
+        violaoFrets: [0, 2, 2, 2, 0, -1],
+        desc: 'Pestana reta na 5ª casa ou forma aberta tradicional'
+    },
+    Csharp_m: {
+        id: 'Csharp_m',
+        label: 'Dó♯ Menor (C♯m) — Relativo Menor',
+        chordName: 'C#m',
+        quality: 'Menor',
+        roman: 'vi',
+        rootPc: 1,
+        violaFrets: [0, 2, 1, 2, 2],
+        violaoFrets: [4, 5, 6, 6, 4, -1],
+        desc: 'Lamento contemplativo em toadas pantaneiras (Almir Sater)'
+    },
+    Fsharp_m: {
+        id: 'Fsharp_m',
+        label: 'Fá♯ Menor (F♯m) — Segundo Grau',
+        chordName: 'F#m',
+        quality: 'Menor',
+        roman: 'ii',
+        rootPc: 6,
+        violaFrets: [2, 2, 2, 4, 2],
+        violaoFrets: [2, 2, 2, 4, 4, 2],
+        desc: 'Acorde de passagem seresteiro refinado'
+    },
+    Gsharp_m: {
+        id: 'Gsharp_m',
+        label: 'Sol♯ Menor (G♯m) — Terceiro Grau',
+        chordName: 'G#m',
+        quality: 'Menor',
+        roman: 'iii',
+        rootPc: 8,
+        violaFrets: [4, 4, 4, 6, 4],
+        violaoFrets: [4, 4, 4, 6, 6, 4],
+        desc: 'Lirismo modal no estradão'
+    },
+    Aadd9: {
+        id: 'Aadd9',
+        label: 'Lá com Nona (Aadd9) — Cor Pantaneira',
+        chordName: 'Aadd9',
+        quality: 'Add9',
+        roman: 'IV(add9)',
+        rootPc: 9,
+        violaFrets: [7, 7, 6, 7, 7],
+        violaoFrets: [0, 0, 2, 2, 0, -1],
+        desc: 'Harmonia aberta com atmosfera de cerrado'
+    },
+    D: {
+        id: 'D',
+        label: 'Ré Maior (D) — Subtonal da Folia',
+        chordName: 'D',
+        quality: 'Maior (Subtonal)',
+        roman: '♭VII',
+        rootPc: 2,
+        violaFrets: [3, 3, 3, 3, 3],
+        violaoFrets: [2, 3, 2, 0, -1, -1],
+        desc: 'Sabor modal de devoção nas Folias de Minas e Goiás'
+    }
+};
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -2199,7 +2309,8 @@ const CANONICAL_VIOLAO_SHAPES_CAPO = {
         historicalTunings: Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE),
         modulation: Object.assign({}, DEFAULT_MODULATION_STATE),
         folia: Object.assign({}, DEFAULT_FOLIA_STATE),
-        capoDuo: Object.assign({}, DEFAULT_CAPO_DUO_STATE)
+        capoDuo: Object.assign({}, DEFAULT_CAPO_DUO_STATE),
+        micRecognizer: Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -2227,6 +2338,17 @@ const CANONICAL_VIOLAO_SHAPES_CAPO = {
     let activeFoliaTimers = [];
     let capoVocalDemoTimer = null;
     let activeCapoTimers = [];
+    let micStream = null;
+    let micSourceNode = null;
+    let micFilterNode = null;
+    let micGainNode = null;
+    let micAnalyserNode = null;
+    let micRafId = null;
+    let micTimeData = null;
+    let micFreqData = null;
+    let micSimSynthTimer = null;
+    let micLastDetectedChordName = '';
+    let micChordStabilityCounter = 0;
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -2303,6 +2425,20 @@ const CANONICAL_VIOLAO_SHAPES_CAPO = {
             pluckMidiNote(course.midi[1] + fret, delaySec + 0.011, 1.85, 1.6, 0.16);
         } else {
             pluckMidiNote(course.midi[0] + fret, delaySec, 1.95, 0, 0.24);
+        }
+    }
+
+    function playCourseAtFretWithDetune(courseIdx, fret, delaySec = 0, detuneCents = 0) {
+        if (fret < 0) return;
+        const inst = INSTRUMENTS[state.instrumentId];
+        const course = inst.courses[courseIdx];
+        if (!course) return;
+
+        if (inst.isPaired && course.midi.length === 2) {
+            pluckMidiNote(course.midi[0] + fret, delaySec, 1.85, -1.6 + detuneCents, 0.17);
+            pluckMidiNote(course.midi[1] + fret, delaySec + 0.011, 1.85, 1.6 + detuneCents, 0.16);
+        } else {
+            pluckMidiNote(course.midi[0] + fret, delaySec, 1.95, detuneCents, 0.24);
         }
     }
 
@@ -11039,6 +11175,1408 @@ function setupCapoDuoListeners() {
     }
 }
 
+// =========================================================================
+// FASE 14: RECONHECEDOR AUDITIVO POLIFÔNICO DE ACORDES POR MICROFONE
+// =========================================================================
+
+function stopMicCapture() {
+    if (micRafId) {
+        cancelAnimationFrame(micRafId);
+        micRafId = null;
+    }
+    if (micSimSynthTimer) {
+        clearTimeout(micSimSynthTimer);
+        micSimSynthTimer = null;
+    }
+    if (micStream) {
+        try {
+            micStream.getTracks().forEach((track) => track.stop());
+        } catch (_) {}
+        micStream = null;
+    }
+    if (micSourceNode) {
+        try { micSourceNode.disconnect(); } catch (_) {}
+        micSourceNode = null;
+    }
+    if (micFilterNode) {
+        try { micFilterNode.disconnect(); } catch (_) {}
+        micFilterNode = null;
+    }
+    if (micGainNode) {
+        try { micGainNode.disconnect(); } catch (_) {}
+        micGainNode = null;
+    }
+    if (micAnalyserNode) {
+        try { micAnalyserNode.disconnect(); } catch (_) {}
+        micAnalyserNode = null;
+    }
+    state.micRecognizer.isListening = false;
+    state.micRecognizer.statusText = 'Escuta ao vivo interrompida.';
+    updateMicUI();
+}
+
+async function startMicCapture() {
+    stopAllAudio();
+    const ctx = ensureAudioContext();
+    if (!ctx) {
+        state.micRecognizer.statusText = 'Web Audio API não suportada neste navegador.';
+        updateMicUI();
+        return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        state.micRecognizer.statusText = 'Captura de microfone não suportada ou restrita pelo navegador. Use o Simulador Acústico de Teste abaixo!';
+        state.micRecognizer.isListening = false;
+        updateMicUI();
+        return;
+    }
+
+    try {
+        state.micRecognizer.statusText = 'Solicitando acesso ao microfone...';
+        updateMicUI();
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                echoCancellation: false,
+                noiseSuppression: false,
+                autoGainControl: false,
+                channelCount: 1
+            }
+        });
+
+        micStream = stream;
+        micSourceNode = ctx.createMediaStreamSource(stream);
+
+        micFilterNode = ctx.createBiquadFilter();
+        micFilterNode.type = 'highpass';
+        micFilterNode.frequency.setValueAtTime(55, ctx.currentTime);
+        micFilterNode.Q.setValueAtTime(0.7, ctx.currentTime);
+
+        micGainNode = ctx.createGain();
+        const sens = state.micRecognizer.sensitivity || 1.2;
+        micGainNode.gain.setValueAtTime(sens, ctx.currentTime);
+
+        micAnalyserNode = ctx.createAnalyser();
+        micAnalyserNode.fftSize = 4096;
+        micAnalyserNode.smoothingTimeConstant = 0.55;
+
+        micSourceNode.connect(micFilterNode);
+        micFilterNode.connect(micGainNode);
+        micGainNode.connect(micAnalyserNode);
+
+        micTimeData = new Float32Array(micAnalyserNode.fftSize);
+        micFreqData = new Float32Array(micAnalyserNode.frequencyBinCount);
+
+        state.micRecognizer.isListening = true;
+        state.micRecognizer.statusText = 'Escuta ao vivo ativa! Toque qualquer acorde ou corda da viola ou violão.';
+        updateMicUI();
+
+        micAnalysisLoop();
+    } catch (err) {
+        console.warn('Erro ao acessar microfone:', err);
+        stopMicCapture();
+        state.micRecognizer.statusText = `Acesso ao microfone indisponível (${err.name || 'Permissão recusada'}). Você pode experimentar todas as funcionalidades usando o Simulador Acústico de Teste abaixo!`;
+        updateMicUI();
+    }
+}
+
+function detectYinPitch(timeBuffer, sampleRate) {
+    const halfW = 1024;
+    if (!timeBuffer || timeBuffer.length < halfW * 2) return null;
+
+    const d = new Float32Array(halfW);
+    for (let tau = 0; tau < halfW; tau++) {
+        let sum = 0;
+        for (let j = 0; j < halfW; j++) {
+            const delta = timeBuffer[j] - timeBuffer[j + tau];
+            sum += delta * delta;
+        }
+        d[tau] = sum;
+    }
+
+    const dPrime = new Float32Array(halfW);
+    dPrime[0] = 1;
+    let runningSum = 0;
+    for (let tau = 1; tau < halfW; tau++) {
+        runningSum += d[tau];
+        dPrime[tau] = runningSum > 0 ? (d[tau] / (runningSum / tau)) : 1;
+    }
+
+    const threshold = 0.16;
+    let foundTau = -1;
+    const minTau = Math.max(2, Math.floor(sampleRate / 1150));
+    const maxTau = Math.min(halfW - 2, Math.ceil(sampleRate / 68));
+
+    for (let tau = minTau; tau <= maxTau; tau++) {
+        if (dPrime[tau] < threshold) {
+            while (tau + 1 <= maxTau && dPrime[tau + 1] < dPrime[tau]) {
+                tau++;
+            }
+            foundTau = tau;
+            break;
+        }
+    }
+
+    if (foundTau === -1) {
+        let minVal = 999;
+        for (let tau = minTau; tau <= maxTau; tau++) {
+            if (dPrime[tau] < minVal) {
+                minVal = dPrime[tau];
+                foundTau = tau;
+            }
+        }
+        if (minVal > 0.38) return null;
+    }
+
+    const alpha = dPrime[foundTau - 1];
+    const beta = dPrime[foundTau];
+    const gamma = dPrime[foundTau + 1];
+    const denom = 2 * (alpha - 2 * beta + gamma);
+    const delta = denom !== 0 ? (alpha - gamma) / denom : 0;
+    const trueTau = foundTau + (Math.abs(delta) < 1 ? delta : 0);
+
+    const f0 = sampleRate / trueTau;
+    if (f0 < 65 || f0 > 1200) return null;
+
+    const midi = 69 + 12 * Math.log2(f0 / 440);
+    const nearestMidi = Math.round(midi);
+    const cents = Math.round((midi - nearestMidi) * 100);
+    const pc = ((nearestMidi % 12) + 12) % 12;
+
+    return {
+        freq: f0,
+        midi,
+        nearestMidi,
+        pc,
+        noteName: NOTE_NAMES[pc],
+        noteNamePt: NOTE_NAMES_PT[pc],
+        cents,
+        confidence: Math.max(0, Math.min(1, 1 - beta))
+    };
+}
+
+function detectPolyphonicPitches(freqBuffer, sampleRate) {
+    if (!freqBuffer) return { chromaVector: new Float32Array(12), polyPitches: [] };
+
+    const binCount = freqBuffer.length;
+    const df = sampleRate / (binCount * 2);
+    const chroma = new Float32Array(12);
+    const peakList = [];
+
+    const minBin = Math.max(2, Math.floor(65 / df));
+    const maxBin = Math.min(binCount - 2, Math.ceil(1250 / df));
+
+    for (let k = minBin; k <= maxBin; k++) {
+        const val = freqBuffer[k];
+        if (val > -65 && val > freqBuffer[k - 1] && val > freqBuffer[k + 1]) {
+            const a = freqBuffer[k - 1];
+            const b = val;
+            const c = freqBuffer[k + 1];
+            const deltaK = (c - a) / (2 * (2 * b - a - c));
+            const exactBin = k + (Math.abs(deltaK) < 1 ? deltaK : 0);
+            const freq = exactBin * df;
+            const magLinear = Math.pow(10, (b + 65) / 25);
+
+            const midi = 69 + 12 * Math.log2(freq / 440);
+            const nearestMidi = Math.round(midi);
+            const cents = Math.round((midi - nearestMidi) * 100);
+            const pc = ((nearestMidi % 12) + 12) % 12;
+
+            peakList.push({
+                freq,
+                bin: k,
+                db: b,
+                mag: magLinear,
+                midi,
+                nearestMidi,
+                pc,
+                cents,
+                noteName: NOTE_NAMES[pc],
+                noteNamePt: NOTE_NAMES_PT[pc]
+            });
+        }
+    }
+
+    peakList.sort((p1, p2) => p2.mag - p1.mag);
+    const topPeaks = peakList.slice(0, 16);
+
+    for (let m = 38; m <= 76; m++) {
+        const fFund = 440 * Math.pow(2, (m - 69) / 12);
+        let noteEnergy = 0;
+
+        const harmonics = [
+            { mult: 1, weight: 1.0 },
+            { mult: 2, weight: 0.65 },
+            { mult: 3, weight: 0.40 },
+            { mult: 4, weight: 0.25 }
+        ];
+
+        harmonics.forEach((h) => {
+            const targetF = fFund * h.mult;
+            const k = Math.round(targetF / df);
+            if (k >= 1 && k < binCount - 1) {
+                const localMax = Math.max(freqBuffer[k - 1], freqBuffer[k], freqBuffer[k + 1]);
+                if (localMax > -65) {
+                    const lin = Math.pow(10, (localMax + 65) / 25);
+                    noteEnergy += lin * h.weight;
+                }
+            }
+        });
+
+        const pc = ((m % 12) + 12) % 12;
+        chroma[pc] += noteEnergy;
+    }
+
+    let maxChroma = 0;
+    for (let i = 0; i < 12; i++) {
+        if (chroma[i] > maxChroma) maxChroma = chroma[i];
+    }
+    if (maxChroma > 0) {
+        for (let i = 0; i < 12; i++) {
+            chroma[i] = chroma[i] / maxChroma;
+        }
+    }
+
+    return {
+        chromaVector: chroma,
+        polyPitches: topPeaks
+    };
+}
+
+function deduceChordFromPitches(chromaVector, dominantPitch, polyPitches, inst) {
+    if (!chromaVector) return null;
+
+    const CHORD_FORMULAS = [
+        { id: 'maj', label: 'Maior', intervals: [0, 4, 7], suffix: '', weight: 1.0 },
+        { id: 'min', label: 'Menor', intervals: [0, 3, 7], suffix: 'm', weight: 1.0 },
+        { id: 'dom7', label: 'Dominante com 7ª', intervals: [0, 4, 7, 10], suffix: '7', weight: 1.15 },
+        { id: 'min7', label: 'Menor com 7ª', intervals: [0, 3, 7, 10], suffix: 'm7', weight: 1.1 },
+        { id: 'maj7', label: 'Maior com 7ª Maior', intervals: [0, 4, 7, 11], suffix: '7M', weight: 1.05 },
+        { id: 'add9', label: 'com Nona Adicionada', intervals: [0, 4, 7, 2], suffix: 'add9', weight: 1.1 },
+        { id: 'sus4', label: 'Suspensa com 4ª', intervals: [0, 5, 7], suffix: 'sus4', weight: 0.95 },
+        { id: 'dim', label: 'Diminuta', intervals: [0, 3, 6], suffix: '°', weight: 0.9 }
+    ];
+
+    let bestCandidate = null;
+    let highestScore = -999;
+    const domPc = dominantPitch ? dominantPitch.pc : null;
+
+    for (let r = 0; r < 12; r++) {
+        const rootChroma = chromaVector[r];
+        if (rootChroma < 0.22) continue;
+
+        CHORD_FORMULAS.forEach((formula) => {
+            let formulaEnergy = 0;
+            let missingTones = 0;
+
+            formula.intervals.forEach((iv) => {
+                const tonePc = (r + iv) % 12;
+                const e = chromaVector[tonePc];
+                if (e >= 0.20) {
+                    formulaEnergy += e;
+                } else {
+                    missingTones++;
+                }
+            });
+
+            let penalty = 0;
+            for (let otherPc = 0; otherPc < 12; otherPc++) {
+                const isChordTone = formula.intervals.some((iv) => (r + iv) % 12 === otherPc);
+                if (!isChordTone && chromaVector[otherPc] > 0.45) {
+                    penalty += chromaVector[otherPc] * 0.45;
+                }
+            }
+
+            let bonus = 0;
+            if (domPc === r) bonus += 0.35;
+            if (domPc === (r + 7) % 12) bonus += 0.20;
+
+            const score = (formulaEnergy / formula.intervals.length) * formula.weight - (missingTones * 0.30) - penalty + bonus;
+
+            if (score > highestScore) {
+                highestScore = score;
+                bestCandidate = {
+                    rootPc: r,
+                    rootName: NOTE_NAMES[r],
+                    rootNamePt: NOTE_NAMES_PT[r],
+                    formula,
+                    score
+                };
+            }
+        });
+    }
+
+    if (!bestCandidate || highestScore < 0.35) {
+        if (dominantPitch && dominantPitch.confidence > 0.55) {
+            return {
+                isSingleNote: true,
+                rootPc: dominantPitch.pc,
+                rootName: dominantPitch.noteName,
+                rootNamePt: dominantPitch.noteNamePt,
+                chordName: `${dominantPitch.noteName} (Nota Simples)`,
+                chordNamePt: `Nota ${dominantPitch.noteNamePt} Isolada`,
+                quality: 'Monofônica',
+                inversionLabel: 'Fundamental Pura',
+                confidence: Math.round(dominantPitch.confidence * 100),
+                matchScore: Math.round(dominantPitch.confidence * 100),
+                tones: [{ pc: dominantPitch.pc, name: dominantPitch.noteName, role: 'Tônica' }]
+            };
+        }
+        return null;
+    }
+
+    let bassPc = bestCandidate.rootPc;
+    if (polyPitches && polyPitches.length > 0) {
+        const validPeaks = polyPitches.filter((p) => p.freq >= 70 && p.db > -55);
+        if (validPeaks.length > 0) {
+            const lowest = validPeaks.slice().sort((a, b) => a.freq - b.freq)[0];
+            bassPc = lowest.pc;
+        }
+    } else if (domPc != null) {
+        bassPc = domPc;
+    }
+
+    const isInverted = bassPc !== bestCandidate.rootPc;
+    let inversionLabel = 'Estado Fundamental';
+    if (isInverted) {
+        const bassInterval = (bassPc - bestCandidate.rootPc + 12) % 12;
+        if (bassInterval === 4 || bassInterval === 3) inversionLabel = `1ª Inversão (Baixo em ${NOTE_NAMES[bassPc]})`;
+        else if (bassInterval === 7) inversionLabel = `2ª Inversão (Baixo em ${NOTE_NAMES[bassPc]})`;
+        else if (bassInterval === 10 || bassInterval === 11) inversionLabel = `3ª Inversão (Baixo em ${NOTE_NAMES[bassPc]})`;
+        else inversionLabel = `Baixo em ${NOTE_NAMES[bassPc]}`;
+    }
+
+    const chordName = `${bestCandidate.rootName}${bestCandidate.formula.suffix}${isInverted ? '/' + NOTE_NAMES[bassPc] : ''}`;
+    const chordNamePt = `${bestCandidate.rootNamePt} ${bestCandidate.formula.label}${isInverted ? ' com Baixo em ' + NOTE_NAMES_PT[bassPc] : ''}`;
+
+    const confidencePct = Math.min(99, Math.max(50, Math.round((highestScore / 1.6) * 100)));
+
+    const tones = bestCandidate.formula.intervals.map((iv) => {
+        const pc = (bestCandidate.rootPc + iv) % 12;
+        let role = 'T';
+        if (iv === 4) role = '3M';
+        else if (iv === 3) role = '3m';
+        else if (iv === 7) role = '5J';
+        else if (iv === 10) role = '7m';
+        else if (iv === 11) role = '7M';
+        else if (iv === 2) role = '9M';
+        else if (iv === 5) role = '4J';
+        else if (iv === 6) role = 'dim5';
+        return {
+            pc,
+            name: NOTE_NAMES[pc],
+            namePt: NOTE_NAMES_PT[pc],
+            role,
+            isBass: pc === bassPc
+        };
+    });
+
+    return {
+        isSingleNote: false,
+        rootPc: bestCandidate.rootPc,
+        rootName: bestCandidate.rootName,
+        rootNamePt: bestCandidate.rootNamePt,
+        chordName,
+        chordNamePt,
+        quality: bestCandidate.formula.label,
+        inversionLabel,
+        isInverted,
+        bassPc,
+        bassName: NOTE_NAMES[bassPc],
+        confidence: confidencePct,
+        matchScore: confidencePct,
+        tones
+    };
+}
+
+function mapChordToPhysicalCourses(chord, inst, polyPitches, toleranceCents) {
+    if (!chord || !inst || !inst.courses) return [];
+
+    const courses = inst.courses;
+    const mappedCourses = [];
+
+    let expectedFrets = null;
+    if (chord.rootName === 'E' && chord.quality === 'Maior') {
+        expectedFrets = inst.isPaired ? [0, 0, 0, 0, 0] : [0, 0, 1, 2, 2, 0];
+    } else if (chord.rootName === 'B' && chord.chordName.includes('7')) {
+        expectedFrets = inst.isPaired ? [2, 1, 2, 0, 2] : [2, 0, 2, 1, 2, -1];
+    } else if (chord.rootName === 'A' && chord.quality === 'Maior') {
+        expectedFrets = inst.isPaired ? [5, 5, 5, 5, 5] : [0, 2, 2, 2, 0, -1];
+    } else if (chord.rootName === 'C#' && chord.quality === 'Menor') {
+        expectedFrets = inst.isPaired ? [0, 2, 1, 2, 2] : [4, 5, 6, 6, 4, -1];
+    } else if (chord.rootName === 'F#' && chord.quality === 'Menor') {
+        expectedFrets = inst.isPaired ? [2, 2, 2, 4, 2] : [2, 2, 2, 4, 4, 2];
+    } else if (chord.rootName === 'G#' && chord.quality === 'Menor') {
+        expectedFrets = inst.isPaired ? [4, 4, 4, 6, 4] : [4, 4, 4, 6, 6, 4];
+    } else if (chord.rootName === 'D' && chord.quality === 'Maior') {
+        expectedFrets = inst.isPaired ? [3, 3, 3, 3, 3] : [2, 3, 2, 0, -1, -1];
+    } else if (chord.rootName === 'A' && chord.quality === 'Add9') {
+        expectedFrets = inst.isPaired ? [7, 7, 6, 7, 7] : [0, 0, 2, 2, 0, -1];
+    } else {
+        expectedFrets = courses.map((crs) => {
+            const openPc = crs.pitchClass;
+            for (let f = 0; f <= 9; f++) {
+                const pc = (openPc + f) % 12;
+                if (chord.tones.some((t) => t.pc === pc)) {
+                    return f;
+                }
+            }
+            return -1;
+        });
+    }
+
+    courses.forEach((crs, cIdx) => {
+        const expFret = (expectedFrets && expectedFrets[cIdx] !== undefined) ? expectedFrets[cIdx] : 0;
+        if (expFret < 0) {
+            mappedCourses.push({
+                courseIdx: cIdx,
+                courseLabel: crs.label,
+                fret: -1,
+                targetNote: 'Abafada',
+                targetHz: 0,
+                detectedHz: 0,
+                cents: 0,
+                status: 'muted',
+                statusText: 'Cordas Abafadas (Muda)'
+            });
+            return;
+        }
+
+        const targetMidi = crs.midi[0] + expFret;
+        const targetHz = 440 * Math.pow(2, (targetMidi - 69) / 12);
+        const targetPc = (crs.pitchClass + expFret) % 12;
+        const toneObj = chord.tones.find((t) => t.pc === targetPc);
+        const role = toneObj ? toneObj.role : 'Nota';
+
+        let nearestPeak = null;
+        let minDiffHz = 999;
+        if (polyPitches && polyPitches.length > 0) {
+            polyPitches.forEach((p) => {
+                const diff = Math.abs(p.freq - targetHz);
+                if (diff < targetHz * 0.08 && diff < minDiffHz) {
+                    minDiffHz = diff;
+                    nearestPeak = p;
+                }
+            });
+        }
+
+        let detectedHz = nearestPeak ? nearestPeak.freq : targetHz;
+        let cents = nearestPeak ? Math.round(1200 * Math.log2(detectedHz / targetHz)) : 0;
+        if (Math.abs(cents) > 50) cents = 0;
+
+        let status = 'in_tune';
+        let statusText = 'Afinada (Consonância Pura)';
+        const tol = toleranceCents || 20;
+
+        if (!nearestPeak) {
+            status = 'undetected';
+            statusText = 'Aguardando Ataque / Ressonância';
+        } else if (Math.abs(cents) <= 5) {
+            status = 'in_tune';
+            statusText = 'Consonância Perfeita (0 a ±5¢)';
+        } else if (cents > 5 && cents <= tol) {
+            status = 'sharp_slight';
+            statusText = `Ligeiramente Alta (+${cents}¢)`;
+        } else if (cents < -5 && cents >= -tol) {
+            status = 'flat_slight';
+            statusText = `Ligeiramente Baixa (${cents}¢)`;
+        } else {
+            status = 'out_of_tune';
+            statusText = `Desafinada (${cents > 0 ? '+' : ''}${cents}¢)`;
+        }
+
+        mappedCourses.push({
+            courseIdx: cIdx,
+            courseLabel: crs.label,
+            fret: expFret,
+            targetNote: `${NOTE_NAMES[targetPc]} (${targetHz.toFixed(1)} Hz)`,
+            targetHz,
+            detectedHz: nearestPeak ? detectedHz : 0,
+            cents,
+            role,
+            status,
+            statusText
+        });
+    });
+
+    return mappedCourses;
+}
+
+function generateVioleiroErgonomicAdvice(chord, courses, inst) {
+    if (!chord) return 'Toque as cordas com o polegar ou indicador para calibrar a leitura acústica.';
+
+    const tips = [];
+    const outOfTune = courses.filter((c) => c.status === 'out_of_tune');
+    const flatSlight = courses.filter((c) => c.status === 'flat_slight');
+    const sharpSlight = courses.filter((c) => c.status === 'sharp_slight');
+
+    if (outOfTune.length > 0) {
+        const names = outOfTune.map((c) => `${c.courseLabel} (${c.cents > 0 ? '+' : ''}${c.cents}¢)`).join(', ');
+        tips.push(`Atenção à afinação: ${names}. Ajuste a cravelha correspondente com micro-giro suave.`);
+    } else if (flatSlight.length > 0) {
+        tips.push(`${flatSlight[0].courseLabel} está ligeiramente baixa (${flatSlight[0].cents}¢). Tensione de leve a cravelha.`);
+    } else if (sharpSlight.length > 0) {
+        tips.push(`${sharpSlight[0].courseLabel} está ligeiramente alta (+${sharpSlight[0].cents}¢). Alivie a cravelha.`);
+    } else {
+        tips.push('Afinação impecável! Todas as cordas soando em consonância e batimentos harmônicos puros.');
+    }
+
+    if (chord.chordName === 'E') {
+        tips.push('Cebolão aberto: deixe todas as cordas vibrarem livremente com a mão direita em rasqueado ou arpejo lírico.');
+    } else if (chord.chordName === 'B7') {
+        tips.push('Forma de B7: mantenha o polegar atrás do braço apoiado na altura média para dar pressão perpendicular nos trastes 1 e 2 sem esbarrar nas cordas vizinhas.');
+    } else if (chord.chordName === 'A') {
+        tips.push('Pestana de Lá na 5ª casa: pressione o indicador reto e firme logo atrás do 5º traste para evitar trastejamento nas cantadeiras.');
+    } else if (chord.chordName === 'C#m') {
+        tips.push('Dó♯ Menor: preserve o bordão solto como pedal contemplativo se desejar aprofundar o clima de lamento pantaneiro.');
+    }
+
+    if (state.isLeftHanded) {
+        tips.push('Modo Canhoto Ativo: braço espelhado com pestana à direita para leitura postural ergonômica natural.');
+    }
+
+    return tips.join(' • ');
+}
+
+function drawMicCanvas(canvas, timeData, freqData, detectedPolyPitches, rms, noiseThreshold) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.fillStyle = '#070b12';
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.5);
+    ctx.lineTo(w, h * 0.5);
+    ctx.moveTo(0, h * 0.25);
+    ctx.lineTo(w, h * 0.25);
+    ctx.moveTo(0, h * 0.75);
+    ctx.lineTo(w, h * 0.75);
+    ctx.stroke();
+
+    if (freqData) {
+        const barCount = 80;
+        const step = Math.floor(Math.min(freqData.length, 1200) / barCount);
+        const barW = (w / barCount) - 1;
+
+        for (let i = 0; i < barCount; i++) {
+            const db = freqData[i * step] || -100;
+            const norm = Math.max(0, Math.min(1, (db + 75) / 65));
+            const barH = norm * (h * 0.82);
+
+            const grad = ctx.createLinearGradient(0, h, 0, h - barH);
+            grad.addColorStop(0, '#0e7490');
+            grad.addColorStop(1, '#06b6d4');
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(i * (barW + 1), h - barH, barW, barH);
+        }
+    }
+
+    if (timeData) {
+        ctx.strokeStyle = '#10b981';
+        ctx.shadowColor = '#10b981';
+        ctx.shadowBlur = 5;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+
+        const sliceW = w / (timeData.length * 0.5);
+        let x = 0;
+        for (let i = 0; i < timeData.length * 0.5; i++) {
+            const v = timeData[i] || 0;
+            const y = (h * 0.5) + v * (h * 0.42);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            x += sliceW;
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+    }
+
+    if (detectedPolyPitches && detectedPolyPitches.length > 0) {
+        detectedPolyPitches.slice(0, 6).forEach((p) => {
+            const logMin = Math.log10(70);
+            const logMax = Math.log10(1100);
+            const curLog = Math.log10(Math.max(70, Math.min(1100, p.freq)));
+            const pinX = ((curLog - logMin) / (logMax - logMin)) * (w - 24) + 12;
+            const pinY = h * 0.28;
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(pinX, pinY, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(pinX, pinY);
+            ctx.lineTo(pinX, h - 8);
+            ctx.stroke();
+
+            ctx.fillStyle = '#fef08a';
+            ctx.font = 'bold 10px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${p.noteName}`, pinX, pinY - 8);
+        });
+    }
+
+    const gateNorm = Math.min(1, noiseThreshold * 15);
+    const gateY = (h * 0.5) - gateNorm * (h * 0.38);
+    ctx.strokeStyle = '#f43f5e';
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, gateY);
+    ctx.lineTo(w, gateY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#f43f5e';
+    ctx.font = '9px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('Limiar Gate', w - 8, gateY - 4);
+}
+
+function updateMicMeterLive(rms, cents, chord) {
+    const rmsBar = document.getElementById('viola-mic-rms-bar');
+    if (rmsBar) {
+        const pct = Math.min(100, Math.round(rms * 2000));
+        rmsBar.style.width = `${pct}%`;
+    }
+
+    const rmsVal = document.getElementById('viola-mic-rms-val');
+    if (rmsVal) {
+        rmsVal.textContent = (rms * 1000).toFixed(0);
+    }
+
+    const needle = document.getElementById('viola-mic-cents-needle');
+    if (needle) {
+        const clampedCents = Math.max(-50, Math.min(50, cents || 0));
+        needle.style.transform = `translateX(-50%) rotate(${clampedCents * 1.6}deg)`;
+    }
+
+    const centsVal = document.getElementById('viola-mic-cents-value');
+    if (centsVal) {
+        const c = cents || 0;
+        centsVal.textContent = `${c > 0 ? '+' : ''}${c}¢`;
+        if (Math.abs(c) <= 5) {
+            centsVal.className = 'text-base font-mono font-bold text-emerald-400';
+        } else if (Math.abs(c) <= 20) {
+            centsVal.className = 'text-base font-mono font-bold text-amber-400';
+        } else {
+            centsVal.className = 'text-base font-mono font-bold text-rose-400';
+        }
+    }
+
+    const nameEl = document.getElementById('viola-mic-chord-name');
+    if (nameEl) {
+        nameEl.textContent = chord ? chord.chordName : '—';
+    }
+
+    const qualEl = document.getElementById('viola-mic-chord-quality');
+    if (qualEl) {
+        qualEl.textContent = chord ? `${chord.quality} • ${chord.inversionLabel}` : 'Aguardando sinal sonoro...';
+    }
+
+    const confEl = document.getElementById('viola-mic-chord-conf');
+    if (confEl) {
+        confEl.textContent = chord ? `${chord.confidence}% Confiança` : '0%';
+    }
+
+    const statusEl = document.getElementById('viola-mic-status-label');
+    if (statusEl) {
+        statusEl.textContent = state.micRecognizer.statusText;
+    }
+}
+
+function micAnalysisLoop() {
+    if (!state.micRecognizer.isListening) return;
+
+    if (micAnalyserNode && micTimeData && micFreqData) {
+        micAnalyserNode.getFloatTimeDomainData(micTimeData);
+        micAnalyserNode.getFloatFrequencyData(micFreqData);
+
+        let sumSq = 0;
+        const N = micTimeData.length;
+        for (let i = 0; i < N; i++) {
+            const val = micTimeData[i];
+            sumSq += val * val;
+        }
+        const rms = Math.sqrt(sumSq / N);
+        state.micRecognizer.signalRms = rms;
+
+        const noiseThreshold = state.micRecognizer.noiseThreshold || 0.015;
+        const canvas = document.getElementById('viola-mic-canvas');
+
+        if (rms < noiseThreshold) {
+            state.micRecognizer.statusText = `Aguardando toque no instrumento... (Nível: ${(rms * 1000).toFixed(0)} | Gate: ${(noiseThreshold * 1000).toFixed(0)})`;
+            drawMicCanvas(canvas, micTimeData, micFreqData, state.micRecognizer.detectedPolyPitches, rms, noiseThreshold);
+            updateMicMeterLive(rms, 0, null);
+        } else {
+            const sampleRate = (audioCtx && audioCtx.sampleRate) || 44100;
+            const inst = INSTRUMENTS[state.instrumentId];
+
+            const domPitch = detectYinPitch(micTimeData, sampleRate);
+            state.micRecognizer.detectedPitch = domPitch;
+
+            const polyRes = detectPolyphonicPitches(micFreqData, sampleRate);
+            state.micRecognizer.detectedPolyPitches = polyRes.polyPitches;
+
+            const chord = deduceChordFromPitches(polyRes.chromaVector, domPitch, polyRes.polyPitches, inst);
+            if (chord) {
+                if (chord.chordName === micLastDetectedChordName) {
+                    micChordStabilityCounter++;
+                } else {
+                    micLastDetectedChordName = chord.chordName;
+                    micChordStabilityCounter = 1;
+                }
+
+                if (micChordStabilityCounter >= 2) {
+                    state.micRecognizer.detectedChord = chord;
+                    const mapped = mapChordToPhysicalCourses(chord, inst, polyRes.polyPitches, state.micRecognizer.toleranceCents);
+                    state.micRecognizer.detectedCourses = mapped;
+                    pushMicHistory(chord.chordName, chord.confidence);
+
+                    if (state.displayMode === 'MIC') {
+                        renderFretboardSVG();
+                    }
+                }
+            }
+
+            state.micRecognizer.statusText = chord
+                ? `Detectado: ${chord.chordName} (${chord.confidence}% de precisão)`
+                : (domPitch ? `Nota Detectada: ${domPitch.noteName} (${domPitch.cents > 0 ? '+' : ''}${domPitch.cents}¢)` : 'Analisando sinal acústico...');
+
+            drawMicCanvas(canvas, micTimeData, micFreqData, polyRes.polyPitches, rms, noiseThreshold);
+            updateMicMeterLive(rms, domPitch ? domPitch.cents : 0, state.micRecognizer.detectedChord);
+        }
+    }
+
+    micRafId = requestAnimationFrame(micAnalysisLoop);
+}
+
+function pushMicHistory(chordName, confidence) {
+    if (!chordName || chordName.includes('Nota Simples')) return;
+    const hist = state.micRecognizer.history;
+    if (hist.length > 0 && hist[0].chordName === chordName) return;
+
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+    hist.unshift({
+        chordName,
+        timeStr,
+        confidence
+    });
+
+    if (hist.length > 8) hist.pop();
+    renderMicHistoryStrip();
+}
+
+function renderMicHistoryStrip() {
+    const wrap = document.getElementById('viola-mic-history-strip');
+    if (!wrap) return;
+
+    const hist = state.micRecognizer.history;
+    if (!hist || hist.length === 0) {
+        wrap.innerHTML = '<span class="text-xs text-slate-500 font-mono italic">Nenhum acorde registrado ainda no histórico ao vivo.</span>';
+        return;
+    }
+
+    wrap.innerHTML = hist.map((item) => `
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono shadow-sm">
+            <span class="font-bold text-amber-300">${item.chordName}</span>
+            <span class="text-[10px] text-slate-400">${item.confidence}%</span>
+            <span class="text-[9.5px] text-slate-500">${item.timeStr}</span>
+        </span>
+    `).join('<span class="text-slate-600 font-mono text-xs">➔</span>');
+}
+
+function simulateMicChord(presetKey, isStrum) {
+    stopAllAudio();
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const preset = MIC_CHORD_SIMULATION_PRESETS[presetKey] || MIC_CHORD_SIMULATION_PRESETS.E;
+    const inst = INSTRUMENTS[state.instrumentId];
+    const frets = inst.isPaired ? preset.violaFrets : preset.violaoFrets;
+    const detune = state.micRecognizer.simulatedDetuneCents || 0;
+
+    frets.forEach((f, cIdx) => {
+        if (f >= 0 && cIdx < inst.courses.length) {
+            const delay = isStrum ? (cIdx * 0.022) : 0;
+            const courseDetune = (cIdx === 2 && detune !== 0) ? detune : 0;
+            playCourseAtFretWithDetune(cIdx, f, delay, courseDetune);
+        }
+    });
+
+    const synthChroma = new Float32Array(12);
+    const synthPeaks = [];
+
+    frets.forEach((f, cIdx) => {
+        if (f >= 0 && cIdx < inst.courses.length) {
+            const course = inst.courses[cIdx];
+            const baseMidi = course.midi[0] + f;
+            const courseDetune = (cIdx === 2 && detune !== 0) ? detune : 0;
+            const freq = 440 * Math.pow(2, (baseMidi - 69 + courseDetune / 100) / 12);
+            const pc = (course.pitchClass + f) % 12;
+
+            synthChroma[pc] = 1.0;
+            synthPeaks.push({
+                freq,
+                mag: 1.0,
+                db: -18,
+                midi: baseMidi + courseDetune / 100,
+                nearestMidi: baseMidi,
+                pc,
+                cents: courseDetune,
+                noteName: NOTE_NAMES[pc],
+                noteNamePt: NOTE_NAMES_PT[pc]
+            });
+
+            if (course.octaved) {
+                const octFreq = freq * 2;
+                synthPeaks.push({
+                    freq: octFreq,
+                    mag: 0.7,
+                    db: -24,
+                    midi: baseMidi + 12 + courseDetune / 100,
+                    nearestMidi: baseMidi + 12,
+                    pc,
+                    cents: courseDetune,
+                    noteName: NOTE_NAMES[pc],
+                    noteNamePt: NOTE_NAMES_PT[pc]
+                });
+            }
+        }
+    });
+
+    const domPitch = synthPeaks[0] || null;
+    const deducedChord = deduceChordFromPitches(synthChroma, domPitch, synthPeaks, inst);
+    const mappedCourses = mapChordToPhysicalCourses(deducedChord, inst, synthPeaks, state.micRecognizer.toleranceCents);
+
+    state.micRecognizer.detectedPitch = domPitch;
+    state.micRecognizer.detectedPolyPitches = synthPeaks;
+    state.micRecognizer.detectedChord = deducedChord;
+    state.micRecognizer.detectedCourses = mappedCourses;
+    state.micRecognizer.statusText = `Simulação Acústica Ativa: Acorde ${deducedChord ? deducedChord.chordName : preset.label} deduzido com sucesso!`;
+
+    if (deducedChord) {
+        pushMicHistory(deducedChord.chordName, deducedChord.confidence);
+    }
+
+    updateMicUI();
+    if (state.displayMode === 'MIC') {
+        renderFretboardSVG();
+    }
+
+    const canvas = document.getElementById('viola-mic-canvas');
+    if (canvas) {
+        const dummyTime = new Float32Array(512);
+        for (let i = 0; i < dummyTime.length; i++) {
+            dummyTime[i] = Math.sin(i * 0.12) * 0.45 * Math.exp(-i / 300);
+        }
+        const dummyFreq = new Float32Array(256);
+        for (let i = 0; i < dummyFreq.length; i++) {
+            dummyFreq[i] = -80 + Math.random() * 8;
+        }
+        synthPeaks.forEach((p) => {
+            const k = Math.min(255, Math.round(p.freq / 12));
+            if (k >= 0 && k < 256) dummyFreq[k] = -18;
+        });
+        drawMicCanvas(canvas, dummyTime, dummyFreq, synthPeaks, 0.08, state.micRecognizer.noiseThreshold);
+    }
+}
+
+function exportMicToTabEditor() {
+    const hist = state.micRecognizer.history;
+    if (!hist || hist.length === 0) {
+        alert('Nenhum acorde registrado no histórico para exportar. Toque ou simule acordes primeiro!');
+        return;
+    }
+
+    const inst = INSTRUMENTS[state.instrumentId];
+    const newProjId = 'proj_mic_' + Date.now();
+    const reversedHist = hist.slice().reverse();
+
+    const steps = [];
+    let curMeasure = 1;
+    let curBeat = 1;
+
+    reversedHist.forEach((item) => {
+        let preset = Object.values(MIC_CHORD_SIMULATION_PRESETS).find((p) => p.chordName === item.chordName);
+        let frets = preset ? (inst.isPaired ? preset.violaFrets : preset.violaoFrets) : [0, 0, 0, 0, 0];
+
+        steps.push({
+            measure: curMeasure,
+            beat: String(curBeat),
+            chord: item.chordName,
+            notes: frets.map((f, c) => ({ c, f })).filter((n) => n.f >= 0),
+            d: 0.5,
+            rh: 'rasq',
+            ann: `Ouvido (${item.confidence}%)`
+        });
+
+        curBeat++;
+        if (curBeat > 2) {
+            curBeat = 1;
+            curMeasure++;
+        }
+    });
+
+    const newProject = {
+        id: newProjId,
+        title: `Captação ao Vivo — ${reversedHist.map((h) => h.chordName).join(' ➔ ')}`,
+        author: 'Microfone Violeiro (Fase 14)',
+        tuningId: state.instrumentId,
+        bpm: state.bpm || 92,
+        timeSignature: '2/4',
+        steps
+    };
+
+    if (!state.tabEditor.projects) state.tabEditor.projects = [];
+    state.tabEditor.projects.push(newProject);
+    state.tabEditor.activeProjectId = newProjId;
+    state.displayMode = 'TAB_EDITOR';
+    saveViolaState();
+    renderAll();
+
+    const tabWrap = document.getElementById('viola-tab-editor-container');
+    if (tabWrap) tabWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyMicDiagnostics() {
+    const mic = state.micRecognizer;
+    const chord = mic.detectedChord;
+    const inst = INSTRUMENTS[state.instrumentId];
+    const courses = mic.detectedCourses || [];
+
+    const txt = [
+        '=========================================================================',
+        'NEXUS VAULT — DIAGNÓSTICO AUDITIVO POLIFÔNICO & AFINAÇÃO (FASE 14)',
+        '=========================================================================',
+        `Instrumento Selecionado: ${inst.name} (${inst.shortName})`,
+        `Modo de Mão: ${state.isLeftHanded ? 'Canhoto (Pestana à Direita)' : 'Destro (Pestana à Esquerda)'}`,
+        `Status do Reconhecedor: ${mic.statusText}`,
+        `Acorde Identificado: ${chord ? chord.chordName + ' (' + chord.quality + ')' : 'Nenhum acorde consolidado'}`,
+        `Inversão: ${chord ? chord.inversionLabel : '—'}`,
+        `Confiança Algorítmica: ${chord ? chord.confidence + '%' : '—'}`,
+        `Nota Dominante Fundam.: ${mic.detectedPitch ? mic.detectedPitch.noteName + ' (' + mic.detectedPitch.freq.toFixed(1) + ' Hz) Desvio: ' + mic.detectedPitch.cents + ' cents' : 'Nenhuma'}`,
+        '',
+        'MAPA FÍSICO DE ORDENS / CORDAS & PRECISÃO EM CENTS:',
+        ...courses.map((c) => `-> ${c.courseLabel}: Alvo [${c.targetNote}] | Fret [Casa ${c.fret >= 0 ? c.fret : 'X'}] | Desvio [${c.cents > 0 ? '+' : ''}${c.cents} cents] ➔ Status: ${c.statusText}`),
+        '',
+        'ORIENTAÇÕES POSTURAIS & ERGONÔMICAS DO VIOLEIRO:',
+        `-> ${generateVioleiroErgonomicAdvice(chord, courses, inst)}`,
+        '========================================================================='
+    ].join('\n');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => {
+            const btn = document.getElementById('btn-viola-mic-copy');
+            if (btn) {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-300"></i><span class="text-emerald-300">Ficha Copiada!</span>';
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = orig;
+                    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                }, 2400);
+            }
+        });
+    }
+}
+
+function updateMicUI() {
+    const toggleBtn = document.getElementById('btn-viola-mic-toggle');
+    if (toggleBtn) {
+        const isListening = state.micRecognizer.isListening;
+        toggleBtn.className = isListening
+            ? 'min-h-[44px] px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg shadow-rose-900/40 ring-2 ring-rose-400'
+            : 'min-h-[44px] px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg shadow-red-900/30';
+        toggleBtn.innerHTML = isListening
+            ? '<span class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span><span>Interromper Captura de Microfone</span>'
+            : '<i data-lucide="mic" class="w-4 h-4"></i><span>Iniciar Escuta ao Vivo pelo Microfone</span>';
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    const statusLabel = document.getElementById('viola-mic-status-label');
+    if (statusLabel) {
+        statusLabel.textContent = state.micRecognizer.statusText;
+    }
+
+    const chord = state.micRecognizer.detectedChord;
+    const nameEl = document.getElementById('viola-mic-chord-name');
+    if (nameEl) nameEl.textContent = chord ? chord.chordName : '—';
+
+    const qualEl = document.getElementById('viola-mic-chord-quality');
+    if (qualEl) qualEl.textContent = chord ? `${chord.quality} • ${chord.inversionLabel}` : 'Toque uma corda ou acorde';
+
+    const confEl = document.getElementById('viola-mic-chord-conf');
+    if (confEl) confEl.textContent = chord ? `${chord.confidence}% Confiança` : '0%';
+
+    const coursesGrid = document.getElementById('viola-mic-courses-grid');
+    if (coursesGrid) {
+        const courses = state.micRecognizer.detectedCourses || [];
+        if (courses.length === 0) {
+            coursesGrid.innerHTML = '<div class="col-span-full text-center text-xs text-slate-500 font-mono py-4">Nenhuma corda processada ainda. Toque seu instrumento ou acione o simulador de teste.</div>';
+        } else {
+            coursesGrid.innerHTML = courses.map((c) => {
+                let badgeClass = 'bg-slate-800 text-slate-400 border-slate-700';
+                if (c.status === 'in_tune') badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+                else if (c.status === 'sharp_slight' || c.status === 'flat_slight') badgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                else if (c.status === 'out_of_tune') badgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+
+                return `
+                    <div class="p-2.5 rounded-lg bg-[#0f172a] border border-slate-800 flex flex-col justify-between text-left min-h-[90px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-mono text-slate-300 font-bold">${c.courseLabel}</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono border ${badgeClass}">
+                                ${c.cents != null ? (c.cents > 0 ? `+${c.cents}¢` : `${c.cents}¢`) : '0¢'}
+                            </span>
+                        </div>
+                        <div class="py-1">
+                            <div class="text-xs font-mono font-bold text-slate-100">${c.targetNote}</div>
+                            <div class="text-[10px] font-mono text-slate-400">Casa ${c.fret >= 0 ? c.fret : 'X'} • Papel: ${c.role || '—'}</div>
+                        </div>
+                        <div class="text-[9.5px] font-mono text-slate-500 truncate">${c.statusText}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    const adviceBox = document.getElementById('viola-mic-advice-box');
+    if (adviceBox) {
+        adviceBox.textContent = generateVioleiroErgonomicAdvice(chord, state.micRecognizer.detectedCourses || [], INSTRUMENTS[state.instrumentId]);
+    }
+
+    renderMicHistoryStrip();
+}
+
+function renderMicRecognizerSection() {
+    const container = document.getElementById('viola-mic-tuner-container');
+    if (!container) return;
+
+    const isListening = state.micRecognizer.isListening;
+    const presets = Object.values(MIC_CHORD_SIMULATION_PRESETS);
+
+    const html = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-4">
+            <!-- Cabeçalho Principal -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <i data-lucide="mic" class="w-5 h-5 text-red-400"></i>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Reconhecedor Auditivo Polifônico de Acordes por Microfone</h3>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-red-500/15 text-red-300 border border-red-500/30">DSP Web Audio API</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Fase 14</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Latência &lt; 20ms</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Processamento de sinal em tempo real combinando autocorrelação YIN para fundamental dominante e FFT harmônica para separação polifônica das 5 ordens da viola ou 6 do violão, projeção no braço SVG espelhado e diagnóstico postural.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" id="btn-viola-mic-clone-tab" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span>Exportar p/ Tablatura</span>
+                    </button>
+                    <button type="button" id="btn-viola-mic-copy" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition">
+                        <i data-lucide="clipboard" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span>Copiar Diagnóstico</span>
+                    </button>
+                    <button type="button" id="btn-viola-mic-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 border border-red-500/40 text-red-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i data-lucide="eye" class="w-4 h-4 text-red-400"></i>
+                        <span>Ver no Braço SVG</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de Controle Central e Parâmetros DSP -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-3">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                    <button type="button" id="btn-viola-mic-toggle"
+                        class="min-h-[44px] px-5 py-2 rounded-xl ${
+                            isListening
+                                ? 'bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg shadow-rose-900/40 ring-2 ring-rose-400'
+                                : 'bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg shadow-red-900/30'
+                        }">
+                        ${isListening
+                            ? '<span class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span><span>Interromper Captura de Microfone</span>'
+                            : '<i data-lucide="mic" class="w-4 h-4"></i><span>Iniciar Escuta ao Vivo pelo Microfone</span>'}
+                    </button>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[11px] font-mono text-slate-400">Algoritmo:</span>
+                            <select id="viola-mic-select-mode" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-cyan-300 outline-none cursor-pointer">
+                                <option value="hybrid" ${state.micRecognizer.algorithmMode === 'hybrid' ? 'selected' : ''}>Híbrido Polifônico (YIN + FFT)</option>
+                                <option value="monophonic" ${state.micRecognizer.algorithmMode === 'monophonic' ? 'selected' : ''}>Monofônico (YIN Nota a Nota)</option>
+                                <option value="polyphonic" ${state.micRecognizer.algorithmMode === 'polyphonic' ? 'selected' : ''}>Sieve Harmônica (FFT Puro)</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-mono text-slate-400">Ganho Mic:</span>
+                            <input type="range" id="viola-mic-slider-sens" min="0.5" max="2.5" step="0.1" value="${state.micRecognizer.sensitivity || 1.2}" class="w-20 accent-red-400 cursor-pointer">
+                            <span id="viola-mic-sens-val" class="text-[11px] font-mono text-red-300 w-8">${Math.round((state.micRecognizer.sensitivity || 1.2) * 100)}%</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-mono text-slate-400">Gate Ruído:</span>
+                            <input type="range" id="viola-mic-slider-gate" min="0.005" max="0.045" step="0.005" value="${state.micRecognizer.noiseThreshold || 0.015}" class="w-20 accent-amber-400 cursor-pointer">
+                            <span id="viola-mic-gate-val" class="text-[11px] font-mono text-amber-300 w-8">${Math.round((state.micRecognizer.noiseThreshold || 0.015) * 1000)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-800/80 font-mono">
+                    <span id="viola-mic-status-label" class="text-slate-300 truncate">${state.micRecognizer.statusText}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-slate-500">RMS:</span>
+                        <div class="w-24 h-2 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="viola-mic-rms-bar" class="h-full bg-emerald-400 transition-all duration-75" style="width: 0%;"></div>
+                        </div>
+                        <span id="viola-mic-rms-val" class="text-[10px] text-slate-400 w-6 text-right">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid de Visualização em Tempo Real (Canvas + Medidores) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <div class="lg:col-span-7 space-y-3">
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-2">
+                        <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                            <span>Osciloscópio &amp; Espectro Harmônico em Tempo Real</span>
+                            <span class="text-cyan-400">Resolução: 4096 bins</span>
+                        </div>
+                        <canvas id="viola-mic-canvas" width="600" height="150" class="w-full h-[150px] rounded-lg bg-[#070b12] block"></canvas>
+                    </div>
+
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-center sm:text-left">
+                            <span class="text-[10px] font-mono uppercase text-slate-400 tracking-wider">Acorde Reconhecido ao Vivo</span>
+                            <div id="viola-mic-chord-name" class="text-3xl sm:text-4xl font-extrabold font-mono text-emerald-300 tracking-wide mt-0.5">
+                                ${state.micRecognizer.detectedChord ? state.micRecognizer.detectedChord.chordName : '—'}
+                            </div>
+                            <div id="viola-mic-chord-quality" class="text-xs font-mono text-slate-300 mt-1">
+                                ${state.micRecognizer.detectedChord ? `${state.micRecognizer.detectedChord.quality} • ${state.micRecognizer.detectedChord.inversionLabel}` : 'Aguardando toque na viola...'}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#0f172a] border border-slate-800 w-full sm:w-48 text-center">
+                            <span class="text-[10px] font-mono uppercase text-slate-400">Precisão de Centelha</span>
+                            <div class="relative w-36 h-12 mt-1">
+                                <div class="absolute inset-x-0 bottom-2 h-1 bg-slate-800 rounded-full"></div>
+                                <div class="absolute left-1/2 bottom-1 h-3 w-0.5 bg-emerald-400 -translate-x-1/2"></div>
+                                <div class="absolute left-1/4 bottom-1 h-2 w-0.5 bg-amber-400 -translate-x-1/2"></div>
+                                <div class="absolute left-3/4 bottom-1 h-2 w-0.5 bg-amber-400 -translate-x-1/2"></div>
+                                <div id="viola-mic-cents-needle" class="absolute left-1/2 bottom-2 w-1.5 h-6 bg-red-400 origin-bottom rounded -translate-x-1/2 transition-transform duration-75" style="transform: translateX(-50%) rotate(0deg);"></div>
+                            </div>
+                            <div class="flex items-center justify-between w-full px-2 text-[9px] font-mono text-slate-500">
+                                <span>-50¢</span>
+                                <span id="viola-mic-cents-value" class="text-sm font-mono font-bold text-emerald-400">0¢</span>
+                                <span>+50¢</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-3">
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-2">
+                        <div class="flex items-center justify-between pb-1 border-b border-slate-800">
+                            <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Ordens Mapeadas &amp; Afinação</h4>
+                            <span id="viola-mic-chord-conf" class="text-[10px] font-mono text-emerald-400 font-bold">
+                                ${state.micRecognizer.detectedChord ? `${state.micRecognizer.detectedChord.confidence}% Confiança` : '0%'}
+                            </span>
+                        </div>
+                        <div id="viola-mic-courses-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+                    </div>
+
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 sm:p-4 space-y-1.5">
+                        <div class="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-300">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+                            <span>Orientações Ergonômicas do Mestre Violeiro</span>
+                        </div>
+                        <p id="viola-mic-advice-box" class="text-xs text-slate-300 font-mono leading-relaxed">
+                            ${generateVioleiroErgonomicAdvice(state.micRecognizer.detectedChord, state.micRecognizer.detectedCourses || [], INSTRUMENTS[state.instrumentId])}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulador Acústico Integrado -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="play-circle" class="w-4 h-4 text-cyan-400"></i>
+                            <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Simulador Acústico &amp; Teste Imediato do Motor DSP</h4>
+                            <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono">Acesso Sem Microfone</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Sintetize acordes canônicos com pares oitavados e teste o algoritmo de reconhecimento e visualização instantânea.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="viola-mic-select-sim-chord" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-emerald-300 outline-none cursor-pointer">
+                            ${presets.map((p) => `<option value="${p.id}" ${p.id === state.micRecognizer.simulatedChordKey ? 'selected' : ''}>${p.label}</option>`).join('')}
+                        </select>
+
+                        <div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#0f172a] border border-slate-700">
+                            <span class="text-[10px] font-mono text-slate-400">Desafinar 3º Par:</span>
+                            <input type="range" id="viola-mic-slider-sim-detune" min="-30" max="30" step="5" value="${state.micRecognizer.simulatedDetuneCents || 0}" class="w-16 accent-amber-400 cursor-pointer">
+                            <span id="viola-mic-sim-detune-val" class="text-[10px] font-mono text-amber-300 w-8">${state.micRecognizer.simulatedDetuneCents || 0}¢</span>
+                        </div>
+
+                        <button type="button" id="btn-viola-mic-sim-pluck" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                            <span>Dedilhar Teste</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-mic-sim-strum" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                            <span>Rasquear Teste</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5 pt-1">
+                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <span>Histórico de Acordes Ouvidos em Sessão:</span>
+                        <button type="button" id="btn-viola-mic-clear-hist" class="text-[10px] text-slate-400 hover:text-slate-200 underline">Limpar Histórico</button>
+                    </div>
+                    <div id="viola-mic-history-strip" class="flex flex-wrap items-center gap-2 p-2.5 rounded-lg bg-[#070b12] border border-slate-800/80 min-h-[42px]"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+    updateMicUI();
+    setupMicRecognizerListeners();
+}
+
+function setupMicRecognizerListeners() {
+    const container = document.getElementById('viola-mic-tuner-container');
+    if (!container) return;
+
+    const toggleBtn = document.getElementById('btn-viola-mic-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            if (state.micRecognizer.isListening) {
+                stopMicCapture();
+            } else {
+                startMicCapture();
+            }
+        });
+    }
+
+    const modeSel = document.getElementById('viola-mic-select-mode');
+    if (modeSel) {
+        modeSel.addEventListener('change', (e) => {
+            state.micRecognizer.algorithmMode = e.target.value;
+            saveViolaState();
+        });
+    }
+
+    const sensSlider = document.getElementById('viola-mic-slider-sens');
+    if (sensSlider) {
+        sensSlider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value) || 1.2;
+            state.micRecognizer.sensitivity = val;
+            const disp = document.getElementById('viola-mic-sens-val');
+            if (disp) disp.textContent = `${Math.round(val * 100)}%`;
+            if (micGainNode && audioCtx) {
+                micGainNode.gain.setValueAtTime(val, audioCtx.currentTime);
+            }
+            saveViolaState();
+        });
+    }
+
+    const gateSlider = document.getElementById('viola-mic-slider-gate');
+    if (gateSlider) {
+        gateSlider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value) || 0.015;
+            state.micRecognizer.noiseThreshold = val;
+            const disp = document.getElementById('viola-mic-gate-val');
+            if (disp) disp.textContent = Math.round(val * 1000);
+            saveViolaState();
+        });
+    }
+
+    const simChordSel = document.getElementById('viola-mic-select-sim-chord');
+    if (simChordSel) {
+        simChordSel.addEventListener('change', (e) => {
+            state.micRecognizer.simulatedChordKey = e.target.value;
+            saveViolaState();
+        });
+    }
+
+    const simDetuneSlider = document.getElementById('viola-mic-slider-sim-detune');
+    if (simDetuneSlider) {
+        simDetuneSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value, 10) || 0;
+            state.micRecognizer.simulatedDetuneCents = val;
+            const disp = document.getElementById('viola-mic-sim-detune-val');
+            if (disp) disp.textContent = `${val > 0 ? '+' : ''}${val}¢`;
+            saveViolaState();
+        });
+    }
+
+    const simPluckBtn = document.getElementById('btn-viola-mic-sim-pluck');
+    if (simPluckBtn) {
+        simPluckBtn.addEventListener('click', () => {
+            simulateMicChord(state.micRecognizer.simulatedChordKey, false);
+        });
+    }
+
+    const simStrumBtn = document.getElementById('btn-viola-mic-sim-strum');
+    if (simStrumBtn) {
+        simStrumBtn.addEventListener('click', () => {
+            simulateMicChord(state.micRecognizer.simulatedChordKey, true);
+        });
+    }
+
+    const cloneTabBtn = document.getElementById('btn-viola-mic-clone-tab');
+    if (cloneTabBtn) {
+        cloneTabBtn.addEventListener('click', exportMicToTabEditor);
+    }
+
+    const copyBtn = document.getElementById('btn-viola-mic-copy');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyMicDiagnostics);
+    }
+
+    const toFretBtn = document.getElementById('btn-viola-mic-to-fretboard');
+    if (toFretBtn) {
+        toFretBtn.addEventListener('click', () => {
+            stopAllAudio();
+            state.displayMode = 'MIC';
+            saveViolaState();
+            renderAll();
+            const fboard = document.getElementById('viola-fretboard-svg-wrap');
+            if (fboard) fboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    const clearHistBtn = document.getElementById('btn-viola-mic-clear-hist');
+    if (clearHistBtn) {
+        clearHistBtn.addEventListener('click', () => {
+            state.micRecognizer.history = [];
+            renderMicHistoryStrip();
+        });
+    }
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
 
     // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
@@ -13356,6 +14894,76 @@ function setupCapoDuoListeners() {
                     }
                 });
             });
+        } else if (state.displayMode === 'MIC') {
+            // FASE 14: PROJEÇÃO DO RECONHECEDOR AUDITIVO POLIFÔNICO AO VIVO
+            const mic = state.micRecognizer;
+            const chord = mic.detectedChord;
+            const courses = mic.detectedCourses;
+            const domPitch = mic.detectedPitch;
+
+            if (courses && courses.length > 0) {
+                courses.forEach((c) => {
+                    if (c.courseIdx < numCourses && c.fret >= 0 && c.fret <= maxFret) {
+                        const pc = (inst.courses[c.courseIdx].pitchClass + c.fret) % 12;
+                        const isRoot = chord && chord.rootPc === pc;
+                        const isThird = chord && ((pc - chord.rootPc + 12) % 12 === 4 || (pc - chord.rootPc + 12) % 12 === 3);
+                        const isFifth = chord && ((pc - chord.rootPc + 12) % 12 === 7);
+                        const isSeventh = chord && ((pc - chord.rootPc + 12) % 12 === 10 || (pc - chord.rootPc + 12) % 12 === 11);
+
+                        let color = '#10b981';
+                        if (isRoot) color = '#10b981';
+                        else if (isThird) color = '#06b6d4';
+                        else if (isFifth) color = '#f59e0b';
+                        else if (isSeventh) color = '#a855f7';
+
+                        if (c.status === 'out_of_tune' || Math.abs(c.cents || 0) > 20) {
+                            color = '#f43f5e';
+                        }
+
+                        const centStr = c.cents != null ? (c.cents > 0 ? `+${c.cents}¢` : `${c.cents}¢`) : '0¢';
+
+                        activeMarkers.push({
+                            courseIdx: c.courseIdx,
+                            fret: c.fret,
+                            label: NOTE_NAMES[pc],
+                            sub: `${c.role || ''} (${centStr})`,
+                            color,
+                            stroke: '#ffffff',
+                            strokeWidth: 3.5,
+                            opacity: '1'
+                        });
+                    }
+                });
+            } else if (domPitch && domPitch.midi) {
+                inst.courses.forEach((crs, cIdx) => {
+                    const openPc = crs.pitchClass;
+                    const targetPc = domPitch.pc;
+                    const fret = (targetPc - openPc + 12) % 12;
+                    if (fret <= maxFret) {
+                        activeMarkers.push({
+                            courseIdx: cIdx,
+                            fret,
+                            label: NOTE_NAMES[targetPc],
+                            sub: domPitch.cents > 0 ? `+${domPitch.cents}¢` : `${domPitch.cents}¢`,
+                            color: Math.abs(domPitch.cents) <= 5 ? '#10b981' : (Math.abs(domPitch.cents) <= 20 ? '#f59e0b' : '#f43f5e'),
+                            stroke: '#ffffff',
+                            strokeWidth: 3.2,
+                            opacity: cIdx === 0 ? '1' : '0.5'
+                        });
+                    }
+                });
+            } else {
+                inst.courses.forEach((crs, cIdx) => {
+                    activeMarkers.push({
+                        courseIdx: cIdx,
+                        fret: 0,
+                        label: NOTE_NAMES[crs.pitchClass],
+                        sub: 'Escutando...',
+                        color: '#475569',
+                        opacity: '0.35'
+                    });
+                });
+            }
         }
 
 
@@ -14101,6 +15709,14 @@ function setupCapoDuoListeners() {
             } else {
                 state.historicalTunings = Object.assign({}, DEFAULT_HISTORICAL_TUNINGS_STATE);
             }
+
+            if (saved.micRecognizer && typeof saved.micRecognizer === 'object') {
+                state.micRecognizer = Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE, saved.micRecognizer, {
+                    isListening: false
+                });
+            } else {
+                state.micRecognizer = Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE);
+            }
         }
     }
 
@@ -14154,6 +15770,11 @@ function setupCapoDuoListeners() {
                 isPlayingLick: false,
                 activeLickId: null,
                 isSequenceTuning: false
+            });
+        }
+        if (copy.micRecognizer) {
+            copy.micRecognizer = Object.assign({}, copy.micRecognizer, {
+                isListening: false
             });
         }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
@@ -14221,6 +15842,10 @@ function setupCapoDuoListeners() {
                             <i data-lucide="crosshair" class="w-4 h-4 text-yellow-400"></i>
                             <span>Capotraste &amp; Duplas (Fase 13)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-mic" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-red-500/15 hover:bg-red-500/25 border border-red-500/40 text-red-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="mic" class="w-4 h-4 text-red-400"></i>
+                            <span>Reconhecedor Polif&ocirc;nico (Fase 14)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -14260,7 +15885,7 @@ function setupCapoDuoListeners() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -14440,6 +16065,8 @@ function setupCapoDuoListeners() {
                 <div id="viola-folia-container" class="space-y-4"></div>
                 <!-- Simulador de Capotraste & Transposicao Inteligente para Duplas (Fase 13) -->
                 <div id="viola-capo-container" class="space-y-4"></div>
+                <!-- Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14) -->
+                <div id="viola-mic-tuner-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -14608,7 +16235,8 @@ function setupCapoDuoListeners() {
             { id: 'btn-viola-mode-historical', mode: 'HISTORICAL', activeClass: 'bg-amber-500 text-slate-950 shadow' },
             { id: 'btn-viola-mode-modulation', mode: 'MODULATION', activeClass: 'bg-pink-500 text-white shadow' },
             { id: 'btn-viola-mode-folia', mode: 'FOLIA', activeClass: 'bg-amber-500 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-capo', mode: 'CAPO', activeClass: 'bg-yellow-500 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-capo', mode: 'CAPO', activeClass: 'bg-yellow-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-mic', mode: 'MIC', activeClass: 'bg-red-600 text-white shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -14645,6 +16273,7 @@ function setupCapoDuoListeners() {
         stopCapoAudio();
         stopTunerTone();
         stopEarTrainerAudio();
+        stopMicCapture();
     }
 
     function bindEvents() {
@@ -14734,7 +16363,8 @@ function setupCapoDuoListeners() {
             { id: 'btn-viola-scroll-historical', targetId: 'viola-historical-tunings-container' },
             { id: 'btn-viola-scroll-modulation', targetId: 'viola-modulation-container' },
             { id: 'btn-viola-scroll-folia', targetId: 'viola-folia-container' },
-            { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' }
+            { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' },
+            { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -14763,7 +16393,8 @@ function setupCapoDuoListeners() {
             { id: 'btn-viola-mode-historical', mode: 'HISTORICAL', scrollTarget: 'viola-historical-tunings-container' },
             { id: 'btn-viola-mode-modulation', mode: 'MODULATION', scrollTarget: 'viola-modulation-container' },
             { id: 'btn-viola-mode-folia', mode: 'FOLIA', scrollTarget: 'viola-folia-container' },
-            { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' }
+            { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' },
+            { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' }
         ];
 
         modeList.forEach((item) => {
@@ -15046,6 +16677,7 @@ function setupCapoDuoListeners() {
         renderModulationSection();
         renderFoliaSection();
         renderCapoDuoSection();
+        renderMicRecognizerSection();
         renderMetronomeControls();
     }
 
