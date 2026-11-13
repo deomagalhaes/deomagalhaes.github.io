@@ -718,7 +718,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="autossuficiencia-compulsiva" selected>A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Por Que Pedir Ajuda Parece Ameaçador</option>
+                        <option value="dissonancia-cognitiva" selected>A Neurobiologia da Dissonância Cognitiva e da Autoilusão Defensiva: Por Que Justificamos o Injustificável</option>
+                        <option value="autossuficiencia-compulsiva">A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Por Que Pedir Ajuda Parece Ameaçador</option>
                         <option value="catastrofizacao-aversiva">A Neurobiologia da Catastrofização e da Simulação Aversiva: Como o Cérebro Transforma Hipóteses em Ameaças</option>
                         <option value="fadiga-empatica">A Neurobiologia da Fadiga Empática e do Desgaste por Compaixão: Por Que Cuidar do Outro Esgota Seu Cérebro</option>
                         <option value="fenomeno-impostor">A Neurobiologia do Fenômeno do Impostor e a Descalibração Atribucional: Por Que o Cérebro Recusa o Próprio Sucesso</option>
@@ -1025,6 +1026,69 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "dissonancia-cognitiva": {
+      "articleSlug": "2026-11-13-dissonancia-cognitiva-autoilusao",
+      "articleTitle": "A Neurobiologia da Dissonância Cognitiva e da Autoilusão Defensiva: Por Que Justificamos o Injustificável",
+      "slides": [
+        {
+          "type": "cover",
+          "badge": "NEUROCIÊNCIA & COMPORTAMENTO",
+          "title": "Por que justificamos o *injustificável*?",
+          "body": "\"Eu sei que isso faz mal, mas foi só desta vez.\"\n\"No fundo ele é bom, só estava nervoso.\"\n\nA neurobiologia da dissonância cognitiva revela: quando nossas ações colidem com nossas crenças, o cérebro prefere reescrever a realidade a admitir um erro.",
+          "footer": "Deslize para entender por que você se engana ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "PSICOLOGIA CIENTÍFICA",
+          "title": "A mente humana odeia a incoerência interna",
+          "body": "Em 1957, Leon Festinger descobriu que sustentar duas ideias opostas ao mesmo tempo — ou agir contra os próprios valores — causa uma dor psíquica imediata: a *dissonância cognitiva*.\n\nEsse estado aversivo funciona como fome ou sede: o organismo é forçado a agir para eliminar o incômodo.\n\nE quando mudar de atitude é trabalhoso demais, o cérebro escolhe o atalho mais sedutor: *inventar uma desculpa perfeita para se sentir em paz*.",
+          "footer": "O que acontece na circuitaria neural? ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "ANATOMIA DO CONFLITO",
+          "title": "Quando a contradição dói como dor física",
+          "body": "Estudos de ressonância magnética funcional revelam o que acontece no cérebro em dissonância:\n\n1. Córtex Cingulado Anterior Dorsal (dACC): É o monitor de erros da mente. Dispara em alarme máximo ao detectar que sua ação violou seu valor.\n2. Ínsula Anterior: Conectada às vísceras, traduz o conflito lógico em aperto no peito, nó na garganta ou mal-estar moral.\n\nPara o cérebro, estar errado ameaça a própria segurança identitária.",
+          "footer": "Como a mente silencia esse alarme? ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "AUTOILUSÃO DEFENSIVA",
+          "title": "O pré-frontal não é um juiz justo; é seu advogado de defesa",
+          "body": "Esperamos que nosso raciocínio seja lógico e objetivo. Mas a neurociência mostra que o Córtex Pré-Frontal (dlPFC) e o Ventromedial (vmPFC) funcionam como advogados corporativos do Ego.\n\nDiante da contradição, eles vasculham a memória em busca de justificativas plausíveis:\n\n\"Eu só fiz isso porque fui provocado.\"\n\"Se eu não fizesse, alguém faria pior.\"\n\nAssim que a mentira faz sentido, o alarme do dACC desliga e o estriado libera alívio dopaminérgico.",
+          "footer": "O sequestro da sua memória ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "HIPOCAMPO & NARRATIVA",
+          "title": "O \"Intérprete\" que reescreve o seu passado",
+          "body": "O neurocientista Michael Gazzaniga descobriu que o hemisfério esquerdo possui um módulo chamado *O Intérprete*.\n\nEle cria narrativas automáticas para dar sentido a tudo o que fazemos.\n\nSe necessário, ele instrui o hipocampo a apagar detalhes constrangedores e realçar fatos convenientes. Você não se lembra das coisas como foram; lembra da versão que melhor preserva a imagem de que você é coerente, justo e bom.",
+          "footer": "O custo nas relações e na vida ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "IMPACTO CLÍNICO",
+          "title": "As ciladas da justificação no dia a dia",
+          "body": "Na clínica, a autoilusão contínua cria armadilhas destrutivas:\n\n• Relações Tóxicas: \"Ele só agiu assim porque a infância foi dura\" (justificando o desrespeito para evitar a dor do término).\n• Hábitos Nocivos: \"Eu mereço esse excesso porque tive um dia difícil\".\n• Má-Fé Existencial (Sartre): Fingir para si mesmo que \"não tinha escolha\", fugindo da angústia da responsabilidade pessoal.",
+          "footer": "Como quebrar esse ciclo de desculpas? ➔"
+        },
+        {
+          "type": "steps",
+          "badge": "FLEXIBILIDADE MENTAL",
+          "title": "3 passos para desarmar a autoilusão",
+          "body": "1. Tolere o Pique do Erro: Quando sentir o aperto do dACC, respire. Errar não faz de você um monstro; apenas indica um dado descalibrado.\n\n2. Metacognição Desfundida: Flagrou-se justificando? Diga a si mesmo: \"Olhe meu cérebro inventando teses para proteger meu orgulho\".\n\n3. Atualização Bayesiana: Troque o orgulho de \"estar certo\" pelo prazer de \"aprender com os fatos\". A maturidade real começa quando você tem coragem de rever suas certezas.",
+          "footer": "Avalie sua tendência à racionalização ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "TESTE CLÍNICO & ENSAIO",
+          "title": "Faça o teste de dissonância e leia o artigo",
+          "body": "No ecossistema deomagalhaes.com.br você encontra:\n\n• Artigo Científico Aprofundado: As bases neurais de Festinger, Gazzaniga e Sartre.\n• Escala Psicométrica T-46: Escala de Dissonância Cognitiva e Racionalização Defensiva (EDC-RD) com resultado 100% privado.\n• Jogo Cognitivo Dia 45: Matriz de Resolução de Dissonância e Coerência Bayesiana.\n\n🔗 Acesse deomagalhaes.com.br",
+          "footer": "@deomagalhaesneuro • Compartilhe com quem precisa sair do autoengano"
+        }
+      ],
+      "caption": "Por que você é tão rápido em encontrar desculpas impecáveis para as suas próprias incoerências?\n\nTodos nós temos valores que consideramos inegociáveis. Dizemos que prezamos a saúde, mas comemos o que nos inflama. Dizemos que valorizamos a honestidade, mas omitimos a verdade quando é conveniente. Prometemos impor limites no amor, mas toleramos o intolerável no dia seguinte.\n\nO que acontece no seu cérebro no exato momento em que sua ação trai suas crenças?\n\nA neurociência comprova que a contradição interna aciona o Córtex Cingulado Anterior Dorsal (dACC) e a Ínsula Anterior. Essas estruturas monitoram discrepâncias e dor física. Sustentar duas ideias incompatíveis não é apenas desconfortável: para o sistema nervoso, dói como um sinal aversivo concreto.\n\nPara calar essa dor sem ter o trabalho de mudar hábitos difíceis, seu Córtex Pré-Frontal entra em ação como um advogado do Ego. Ele fabrica justificativas em tempo real: \"Foi só uma exceção\", \"Eu não tinha outra saída\", \"Ele me provocou\".\n\nAssim que a narrativa cola, o alarme do cérebro desliga. Você sente alívio dopaminérgico. Mas a longo prazo, essa autoilusão crônica perpetua relacionamentos destrutivos, procrastinação e a chamada \"má-fé\" existencial — a recusa em assumir a autoria da própria vida.\n\nA verdadeira maturidade psicológica não consiste em nunca errar, mas em sustentar o desconforto de admitir a falha sem recorrer a mentiras confortáveis.\n\n👉 Acabei de publicar no site o ensaio completo sobre a neurobiologia da dissonância cognitiva, acompanhado da nova Escala Psicométrica T-46 (Escala de Dissonância Cognitiva e Racionalização Defensiva) e do Jogo Cognitivo do Dia 45.\n\n🔗 Link completo no site: deomagalhaes.com.br\n\nComo seu cérebro costuma reagir quando você percebe que agiu contra o que acredita? Você admite ou arruma uma explicação elegante? Deixe sua reflexão nos comentários.\n\n#neuropsicologia #dissonanciacognitiva #neurociencias #psicologiaclinica #deomagalhaes #autoconhecimento #autocrítica #terapiadocognitivo #flexibilidademental #metacognicao #saudemental #filosofiaexistencial #tomadadedecisao #neurobiologia #comportamentohumano"
+    },
     "autossuficiencia-compulsiva": {
       "articleSlug": "2026-11-12-autossuficiencia-compulsiva-hiperindependencia",
       "articleTitle": "A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Por Que Pedir Ajuda Parece Ameaçador",
@@ -4044,9 +4108,9 @@
         };
 
         // Estado do Studio
-        let currentPresetKey = "autossuficiencia-compulsiva";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["autossuficiencia-compulsiva"].slides));
-        let currentCaption = PRESETS["autossuficiencia-compulsiva"].caption;
+        let currentPresetKey = "dissonancia-cognitiva";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["dissonancia-cognitiva"].slides));
+        let currentCaption = PRESETS["dissonancia-cognitiva"].caption;
         let currentSlideIndex = 0;
         let currentFormat = "1:1"; // '1:1' ou '4:5'
         let currentTheme = "deep-teal";

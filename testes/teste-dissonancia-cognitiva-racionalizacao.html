@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Dissonância Cognitiva e Racionalização Defensiva (EDC-RD / T-46) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua tendência à autojustificação inconsciente, sensibilidade à contradição interna e mecanismos de racionalização defensiva com a escala EDC-RD / T-46.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 10px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-size: 1.02em;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-weight: 700;
+            font-size: 0.82em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #334155;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            font-weight: 600;
+        }
+
+        .btn-submit-test {
+            background: #ee9b00;
+            color: #001219;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px 36px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            max-width: 320px;
+            margin: 35px auto 10px auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(238, 155, 0, 0.35);
+        }
+
+        .btn-submit-test:hover {
+            background: #ca6702;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(202, 103, 2, 0.4);
+        }
+
+        /* Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin-top: 35px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-hero {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f0fdfa;
+            border-radius: 12px;
+            border: 1px solid #99f6e4;
+            margin-bottom: 30px;
+        }
+
+        .score-hero.score-critico {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .score-hero.score-elevado {
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .score-hero.score-moderado {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+        }
+
+        .score-badge-val {
+            font-size: 3em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .score-hero.score-critico .score-badge-val {
+            color: #b91c1c;
+        }
+
+        .score-hero.score-elevado .score-badge-val {
+            color: #c2410c;
+        }
+
+        .score-hero.score-moderado .score-badge-val {
+            color: #b45309;
+        }
+
+        .dimension-bars-grid {
+            display: grid;
+            gap: 16px;
+            margin: 25px 0;
+        }
+
+        .dimension-bar-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dim-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.92em;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .progress-track {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .clinical-analysis-box {
+            background: #f8fafc;
+            border-left: 4px solid #0a9396;
+            padding: 22px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .clinical-analysis-box h4 {
+            margin: 0 0 10px 0;
+            color: #005f73;
+            font-size: 1.15em;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-action-outline {
+            padding: 12px 22px;
+            border-radius: 25px;
+            border: 1px solid #005f73;
+            background: #ffffff;
+            color: #005f73;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-outline:hover {
+            background: #e0f2fe;
+        }
+
+        .btn-action-solid {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-solid:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Dissonância Cognitiva e Racionalização Defensiva (EDC-RD / T-46)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - CRP 04/42784</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Psicoeducativo:</strong> A <em>Escala de Dissonância Cognitiva e Racionalização Defensiva (EDC-RD)</em> avalia como seu cérebro lida com contradições internas, erros de conduta e informações que ameaçam seu autoconceito. Quando nossas ações colidem com nossos valores, o córtex cingulado anterior dorsal (dACC) e a ínsula disparam um sinal de alarme que a mente tenta calar através de justificativas, minimizações ou reescrita de memórias.</p>
+                <p><strong>Privacidade Total:</strong> Este teste roda 100% no seu navegador (client-side). Nenhuma resposta é enviada para servidores ou gravada externamente. Responda com honestidade absoluta para obter um perfil fidedigno.</p>
+            </div>
+
+            <div class="quiz-container">
+                <form id="edcForm">
+                    <!-- Dimensão 1 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Tensão de Incoerência e Alarme Aversivo (TIAA)</h3>
+                        <p>Monitora a reatividade afetiva e física imediata ao perceber incoerências entre ações e valores (eixo dACC-Ínsula).</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">01</span> Quando ajo de forma contrária a um princípio meu, sinto um aperto físico imediato ou mal-estar visceral.</div>
+                        <div class="options-grid" data-q="q1">
+                            <label class="option-label"><input type="radio" name="q1" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q1" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">02</span> Fico inquieto e agitado mentalmente quando percebo que quebrei uma promessa que fiz a mim mesmo.</div>
+                        <div class="options-grid" data-q="q2">
+                            <label class="option-label"><input type="radio" name="q2" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q2" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">03</span> Saber que cometi um deslize ético ou moral consome minha atenção e dificulta meu foco em outras tarefas.</div>
+                        <div class="options-grid" data-q="q3">
+                            <label class="option-label"><input type="radio" name="q3" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q3" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">04</span> Experimento uma urgência interna quase insuportável de resolver ou remediar qualquer contradição em minhas atitudes.</div>
+                        <div class="options-grid" data-q="q4">
+                            <label class="option-label"><input type="radio" name="q4" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q4" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">05</span> A percepção de que posso estar sendo hipócrita em alguma área da minha vida me provoca forte angústia existencial.</div>
+                        <div class="options-grid" data-q="q5">
+                            <label class="option-label"><input type="radio" name="q5" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q5" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Racionalização Pós-Decisão e Supressão da Dúvida (RPDD)</h3>
+                        <p>Avalia a velocidade com que a mente recruta defesas verbais para justificar escolhas incoerentes (dlPFC defensivo).</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">06</span> Logo após fazer algo que não deveria, encontro rapidamente uma justificativa racional que me faz sentir em paz.</div>
+                        <div class="options-grid" data-q="q6">
+                            <label class="option-label"><input type="radio" name="q6" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q6" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">07</span> Costumo usar frases como "eu mereço isso hoje" ou "foi uma exceção necessária" para atenuar a quebra de regras pessoais.</div>
+                        <div class="options-grid" data-q="q7">
+                            <label class="option-label"><input type="radio" name="q7" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q7" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">08</span> Quando escolho um caminho e ele dá errado, convenço-me de que "as circunstâncias externas tornavam qualquer outra opção impossível".</div>
+                        <div class="options-grid" data-q="q8">
+                            <label class="option-label"><input type="radio" name="q8" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q8" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">09</span> Após tomar uma decisão difícil, desvalorizo imediatamente todas as qualidades da alternativa que rejeitei.</div>
+                        <div class="options-grid" data-q="q9">
+                            <label class="option-label"><input type="radio" name="q9" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q9" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">10</span> Tenho facilidade em argumentar logicamente para defender decisões que, no íntimo, sei que foram tomadas por pura impulsividade.</div>
+                        <div class="options-grid" data-q="q10">
+                            <label class="option-label"><input type="radio" name="q10" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q10" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Blindagem Identitária e Rejeição de Evidências (BIRE)</h3>
+                        <p>Mede a relutância em admitir equívocos conceituais e a tendência a desqualificar fatos que contrariam crenças do Ego.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">11</span> Quando alguém aponta um erro objetivo em algo que afirmei, minha primeira reação espontânea é rebater ou desqualificar a pessoa.</div>
+                        <div class="options-grid" data-q="q11">
+                            <label class="option-label"><input type="radio" name="q11" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q11" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">12</span> Admitir publicamente que mudei de opinião porque estava errado sobre um tema central parece uma derrota dolorosa.</div>
+                        <div class="options-grid" data-q="q12">
+                            <label class="option-label"><input type="radio" name="q12" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q12" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">13</span> Tendo a ignorar ou desmerecer notícias e estudos científicos que contradigam meus posicionamentos prévios.</div>
+                        <div class="options-grid" data-q="q13">
+                            <label class="option-label"><input type="radio" name="q13" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q13" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">14</span> Em discussões acaloradas, foco mais em encontrar falhas na fala do outro do que em verificar se meu próprio argumento se sustenta.</div>
+                        <div class="options-grid" data-q="q14">
+                            <label class="option-label"><input type="radio" name="q14" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q14" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">15</span> A ideia de que posso ter passado anos sustentando uma ilusão sobre alguém ou sobre mim mesmo me apavora a ponto de preferir não investigar.</div>
+                        <div class="options-grid" data-q="q15">
+                            <label class="option-label"><input type="radio" name="q15" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q15" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Distorção Retrospectiva da Memória e Autoengano (DRMA)</h3>
+                        <p>Avalia a tendência a reescrever o passado para manter uma narrativa de coerência contínua (o "Intérprete" hipocampal).</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">16</span> Percebo com frequência que minha memória de uma discussão suavizou minhas próprias falhas e amplificou os excessos do outro.</div>
+                        <div class="options-grid" data-q="q16">
+                            <label class="option-label"><input type="radio" name="q16" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q16" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">17</span> Quando um projeto dá certo, afirmo para mim mesmo que "eu já sabia desde o começo", mesmo que estivesse cheio de dúvidas.</div>
+                        <div class="options-grid" data-q="q17">
+                            <label class="option-label"><input type="radio" name="q17" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q17" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q17" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q17" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q17" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">18</span> Costumo reinterpretar minhas motivações antigas para que elas pareçam mais nobres e calculadas do que realmente foram na época.</div>
+                        <div class="options-grid" data-q="q18">
+                            <label class="option-label"><input type="radio" name="q18" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q18" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q18" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q18" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q18" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">19</span> Prefiro acreditar em uma versão romantizada do meu passado do que admitir períodos em que agi com covardia ou egoísmo.</div>
+                        <div class="options-grid" data-q="q19">
+                            <label class="option-label"><input type="radio" name="q19" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q19" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q19" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q19" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q19" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text"><span class="question-number">20</span> Quando sou confrontado com gravações, mensagens antigas ou registros que desmentem minha versão, sinto uma desorientação profunda e tento achar brechas no registro.</div>
+                        <div class="options-grid" data-q="q20">
+                            <label class="option-label"><input type="radio" name="q20" value="1"> 1 - Discordo Totalmente</label>
+                            <label class="option-label"><input type="radio" name="q20" value="2"> 2 - Discordo</label>
+                            <label class="option-label"><input type="radio" name="q20" value="3"> 3 - Neutro / Às vezes</label>
+                            <label class="option-label"><input type="radio" name="q20" value="4"> 4 - Concordo</label>
+                            <label class="option-label"><input type="radio" name="q20" value="5"> 5 - Concordo Totalmente</label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-submit-test" onclick="calcularResultado()">Calcular Meu Perfil</button>
+                </form>
+            </div>
+
+            <!-- Seção de Resultados -->
+            <div class="results-section" id="resultsSection">
+                <div class="score-hero" id="scoreHeroBox">
+                    <h2 id="resultTierTitle">Calculando...</h2>
+                    <div class="score-badge-val" id="totalScoreVal">0</div>
+                    <p id="resultTierSubtitle" style="font-weight: 600; color: #475569; font-size: 1.1em;"></p>
+                </div>
+
+                <h3>Mapeamento Dimensional de Dissonância e Autoilusão</h3>
+                <div class="dimension-bars-grid">
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>1. Tensão de Incoerência e Alarme Aversivo (TIAA)</span>
+                            <span id="dim1ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim1Bar" style="width: 0%; background: #005f73;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>2. Racionalização Pós-Decisão e Supressão da Dúvida (RPDD)</span>
+                            <span id="dim2ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim2Bar" style="width: 0%; background: #ee9b00;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>3. Blindagem Identitária e Rejeição de Evidências (BIRE)</span>
+                            <span id="dim3ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim3Bar" style="width: 0%; background: #94d2bd;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>4. Distorção Retrospectiva da Memória e Autoengano (DRMA)</span>
+                            <span id="dim4ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim4Bar" style="width: 0%; background: #ca6702;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clinical-analysis-box" id="clinicalAnalysisText">
+                    <!-- Injetado dinamicamente -->
+                </div>
+
+                <div class="action-buttons-group">
+                    <button class="btn-action-outline" onclick="window.print()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        Imprimir / Salvar em PDF
+                    </button>
+                    <a href="/artigos/a-neurobiologia-da-dissonancia-cognitiva-e-autoilusao-defensiva.html" class="btn-action-outline">
+                        Ler Artigo Científico Completo
+                    </a>
+                    <a href="/jogos/jogo-dissonancia-coerencia.html" class="btn-action-outline">
+                        Treinar no Jogo de Coerência Bayesiana
+                    </a>
+                    <a href="/agendamento.html" class="btn-action-solid">
+                        Agendar Consulta Especializada
+                    </a>
+                </div>
+            </div>
+
+            <p class="article-disclaimer" style="margin-top: 40px;"><em>Este teste é um instrumento psicoeducativo de triagem e autorreflexão embasado em literatura científica (Festinger, 1957; van Veen et al., 2009; Gazzaniga, 2017). Ele não substitui uma avaliação neuropsicológica clínica ou diagnóstico formal.</em></p>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Interatividade de seleção visual nas opções
+        document.querySelectorAll('.options-grid').forEach(grid => {
+            grid.querySelectorAll('.option-label').forEach(label => {
+                label.addEventListener('click', function() {
+                    grid.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = true;
+                });
+            });
+        });
+
+        function calcularResultado() {
+            let dim1 = 0, dim2 = 0, dim3 = 0, dim4 = 0;
+            let respondidas = 0;
+
+            for (let i = 1; i <= 20; i++) {
+                const checked = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checked) {
+                    const val = parseInt(checked.value, 10);
+                    respondidas++;
+                    if (i <= 5) dim1 += val;
+                    else if (i <= 10) dim2 += val;
+                    else if (i <= 15) dim3 += val;
+                    else dim4 += val;
+                }
+            }
+
+            if (respondidas < 20) {
+                alert(`Por favor, responda a todas as 20 questões antes de calcular. Faltam ${20 - respondidas} questão(ões).`);
+                return;
+            }
+
+            const total = dim1 + dim2 + dim3 + dim4; // 20 a 100
+
+            // Atualiza barras
+            document.getElementById('dim1ScoreText').textContent = `${dim1} / 25 (${Math.round((dim1/25)*100)}%)`;
+            document.getElementById('dim1Bar').style.width = `${(dim1/25)*100}%`;
+
+            document.getElementById('dim2ScoreText').textContent = `${dim2} / 25 (${Math.round((dim2/25)*100)}%)`;
+            document.getElementById('dim2Bar').style.width = `${(dim2/25)*100}%`;
+
+            document.getElementById('dim3ScoreText').textContent = `${dim3} / 25 (${Math.round((dim3/25)*100)}%)`;
+            document.getElementById('dim3Bar').style.width = `${(dim3/25)*100}%`;
+
+            document.getElementById('dim4ScoreText').textContent = `${dim4} / 25 (${Math.round((dim4/25)*100)}%)`;
+            document.getElementById('dim4Bar').style.width = `${(dim4/25)*100}%`;
+
+            document.getElementById('totalScoreVal').textContent = `${total} / 100`;
+
+            const heroBox = document.getElementById('scoreHeroBox');
+            heroBox.className = 'score-hero';
+
+            let tierTitle = '';
+            let tierSubtitle = '';
+            let analysisHTML = '';
+
+            if (total <= 39) {
+                heroBox.classList.add('score-equilibrado');
+                tierTitle = 'Alta Flexibilidade Epistêmica & Consciência Reflexiva';
+                tierSubtitle = 'Pontuação 20 a 39: Baixa tendência à autoilusão defensiva';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Maturidade Reflexiva e Abertura ao Erro</h4>
+                    <p>Seus resultados sugerem uma mente com alta flexibilidade cognitiva e notável tolerância ao desconforto de estar errado. Diante de inconsistências, seu córtex pré-frontal não se apressa em fabricar desculpas esfarrapadas para salvar seu orgulho; você consegue sustentar o sinal de alarme do dACC e avaliar os fatos com relativa imparcialidade.</p>
+                    <p><strong>Recomendação Clínica:</strong> Mantenha essa mentalidade científica em relação à própria vida. Continue cultivando a humildade socrática de atualizar crenças quando surgem evidências melhores (raciocínio bayesiano), preservando o espaço para o aprendizado genuíno.</p>
+                `;
+            } else if (total <= 59) {
+                heroBox.classList.add('score-moderado');
+                tierTitle = 'Dissonância Moderada & Autojustificação Situacional';
+                tierSubtitle = 'Pontuação 40 a 59: Racionalização defensiva em contextos específicos';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Conflito Saudável com Vieses Esporádicos</h4>
+                    <p>Você apresenta uma sensibilidade normal à dissonância cognitiva. Na maior parte das vezes, você reconhece quando erra, mas em assuntos que tocam de perto sua identidade, seus relacionamentos mais íntimos ou suas escolhas profissionais, seu cérebro pode recrutar justificativas pós-decisórias para aliviar a tensão interna.</p>
+                    <p><strong>Recomendação Clínica:</strong> Observe atentamente em quais áreas da vida você usa com frequência frases como "eu não tive escolha" ou "foi por uma boa causa". Essas são as fronteiras onde a autoilusão costuma se instalar silenciosamente para blindar fragilidades não resolvidas.</p>
+                `;
+            } else if (total <= 79) {
+                heroBox.classList.add('score-elevado');
+                tierTitle = 'Racionalização Defensiva Significativa & Blindagem do Ego';
+                tierSubtitle = 'Pontuação 60 a 79: Forte tendência a inventar teses para proteger a autoimagem';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Hiperatividade do Advogado Pré-Frontal</h4>
+                    <p>Seus resultados indicam uma dificuldade expressiva em sustentar o desconforto da incoerência. Para não encarar a dor do erro (dACC/Ínsula), seu encéfalo mobiliza rapidamente o dlPFC para fabricar teorias elaboradas, desqualificar críticas válidas e minimizar inconsistências gritantes de conduta.</p>
+                    <p><strong>Recomendação Clínica:</strong> Pratique a pausa metacognitiva: sempre que perceber que está defendendo uma atitude com veemência excessiva, pergunte-se honestamente: <em>"Estou buscando a verdade ou apenas tentando não me sentir inadequado?"</em> Tolerar a imperfeição é o antídoto mais eficaz contra o autoengano crônico.</p>
+                `;
+            } else {
+                heroBox.classList.add('score-critico');
+                tierTitle = 'Autoilusão Compulsiva & Rigidez Epistêmica Severa';
+                tierSubtitle = 'Pontuação 80 a 100: Reescrita ativa da realidade e alta vulnerabilidade';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Blindagem Hermética e Desconexão Factual</h4>
+                    <p>Sua pontuação revela um padrão acentuado de autoengano protetivo e reescrita de memórias. É provável que você sinta qualquer contradição como uma ameaça existencial devastadora à sua integridade, o que força seu cérebro a adotar uma postura de "má-fé" sistemática (Sartre), culpabilizando fatores externos e negando evidências concretas.</p>
+                    <p><strong>Recomendação Clínica:</strong> Esse nível de blindagem costuma gerar armadilhas dolorosas a longo prazo, como a manutenção de vínculos destrutivos, estagnação profissional e isolamento emocional. Um acompanhamento neuropsicológico e psicoterapêutico (focado em ACT e Terapia do Esquema) é altamente recomendado para desarmar as couraças do Ego com segurança e acolhimento.</p>
+                `;
+            }
+
+            document.getElementById('resultTierTitle').textContent = tierTitle;
+            document.getElementById('resultTierSubtitle').textContent = tierSubtitle;
+            document.getElementById('clinicalAnalysisText').innerHTML = analysisHTML;
+
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>

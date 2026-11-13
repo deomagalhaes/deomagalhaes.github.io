@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 45: Matriz de Dissonância Cognitiva e Calibração de Coerência – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para desarmar autojustificativas, resolver conflitos internos no dACC e restaurar a coerência bayesiana com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #005f73;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* Medidores de Tensão e Coerência */
+        .meters-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .meters-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .meter-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .meter-bar-track {
+            background: #e2e8f0;
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-bar-fill {
+            height: 100%;
+            border-radius: 7px;
+            transition: width 0.4s ease, background 0.4s ease;
+        }
+
+        /* Card do Cenário / Conflito */
+        .conflict-card {
+            background: #001219;
+            color: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 18, 25, 0.2);
+            border-left: 5px solid #ee9b00;
+        }
+
+        .conflict-badge {
+            display: inline-block;
+            background: rgba(238, 155, 0, 0.2);
+            color: #ee9b00;
+            font-weight: 700;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(238, 155, 0, 0.4);
+            margin-bottom: 12px;
+        }
+
+        .conflict-title {
+            font-size: 1.25em;
+            margin: 0 0 10px 0;
+            color: #94d2bd;
+        }
+
+        .conflict-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 650px) {
+            .conflict-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .conflict-col {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 210, 189, 0.15);
+        }
+
+        .conflict-col-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #ee9b00;
+            margin-bottom: 6px;
+        }
+
+        .conflict-col-text {
+            font-size: 0.92em;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        /* Cartas de Processamento Cognitivo */
+        .cards-container-title {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #005f73;
+            margin-bottom: 15px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .options-grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .cognition-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .cognition-card:hover {
+            transform: translateY(-3px);
+            border-color: #0a9396;
+            box-shadow: 0 6px 16px rgba(10, 147, 150, 0.12);
+        }
+
+        .cognition-card.discarded {
+            opacity: 0.35;
+            pointer-events: none;
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            text-decoration: line-through;
+        }
+
+        .cognition-card.activated {
+            border-color: #22c55e;
+            background: #f0fdf4;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+            pointer-events: none;
+        }
+
+        .card-type-tag {
+            font-size: 0.7em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: fit-content;
+            margin-bottom: 8px;
+        }
+
+        .tag-desculpa {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .tag-verdade {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .tag-reparacao {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .card-body-text {
+            font-size: 0.9em;
+            color: #334155;
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-card-action {
+            flex: 1;
+            padding: 7px 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.78em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-discard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-discard:hover {
+            background: #fecaca;
+        }
+
+        .btn-integrate {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .btn-integrate:hover {
+            background: #bae6fd;
+        }
+
+        /* Banner de Devolutiva / Feedback */
+        .feedback-banner {
+            display: none;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.5;
+            font-size: 0.95em;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-banner.success {
+            background: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            color: #14532d;
+        }
+
+        .feedback-banner.danger {
+            background: #fef2f2;
+            border-left: 5px solid #ef4444;
+            color: #7f1d1d;
+        }
+
+        .btn-next-stage {
+            background: #005f73;
+            color: #ffffff;
+            font-size: 1.05em;
+            font-weight: 700;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-next-stage:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        /* Tela Final */
+        .final-screen {
+            display: none;
+            background: #f0fdfa;
+            border: 2px solid #0a9396;
+            border-radius: 12px;
+            padding: 35px 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .final-screen h2 {
+            color: #005f73;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .final-score-val {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: #0a9396;
+            margin: 15px 0;
+        }
+
+        .final-analysis {
+            max-width: 640px;
+            margin: 0 auto 30px auto;
+            color: #334155;
+            line-height: 1.7;
+            text-align: left;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccfbf1;
+        }
+
+        .final-btns-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 45: Matriz de Dissonância Cognitiva e Calibração de Coerência</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - CRP 04/42784</p>
+            </header>
+
+            <div class="game-wrapper">
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Fase</span>
+                        <span class="stat-value" id="stageNumber">1 / 10</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Pontos</span>
+                        <span class="stat-value" id="scoreVal">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Sequência Limpa</span>
+                        <span class="stat-value" id="comboVal">x1</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Recorde</span>
+                        <span class="stat-value" id="bestScoreVal">0</span>
+                    </div>
+                    <button class="sound-btn" id="soundToggle" onclick="toggleMute()">
+                        <span id="soundIcon">🔊</span> Som Ativo
+                    </button>
+                </div>
+
+                <!-- Painel dos Medidores -->
+                <div class="meters-panel">
+                    <div class="meter-box">
+                        <div class="meter-header">
+                            <span style="color: #b91c1c;">⚠️ Tensão Neural (dACC / Ínsula)</span>
+                            <span id="dissonanceVal" style="color: #b91c1c;">100%</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" id="dissonanceBar" style="width: 100%; background: #ef4444;"></div>
+                        </div>
+                    </div>
+                    <div class="meter-box">
+                        <div class="meter-header">
+                            <span style="color: #15803d;">🧠 Coerência Bayesiana (Integração)</span>
+                            <span id="coherenceVal" style="color: #15803d;">0%</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" id="coherenceBar" style="width: 0%; background: #22c55e;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cenário em Conflito -->
+                <div class="conflict-card" id="conflictCard">
+                    <span class="conflict-badge" id="conflictBadge">Cenário Clínico</span>
+                    <h3 class="conflict-title" id="conflictTitle">O Dilema do Hábito Saudável</h3>
+                    <div class="conflict-grid">
+                        <div class="conflict-col">
+                            <div class="conflict-col-label">Crença Declarada (Valor)</div>
+                            <div class="conflict-col-text" id="beliefText">"Tenho compromisso absoluto com minha saúde física e bem-estar."</div>
+                        </div>
+                        <div class="conflict-col">
+                            <div class="conflict-col-label">Evidência / Conduta Real</div>
+                            <div class="conflict-col-text" id="actionText">"Fumei um maço de cigarros após 3 meses de abstinência ontem."</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartas de Opção -->
+                <div class="cards-container-title">
+                    <span>Processamento Cognitivo: Descarte as Racionalizações e Integre a Verdade</span>
+                </div>
+                <div class="options-grid-cards" id="cardsGrid">
+                    <!-- Geradas dinamicamente -->
+                </div>
+
+                <!-- Banner de Feedback -->
+                <div class="feedback-banner" id="feedbackBanner"></div>
+
+                <div id="nextStageWrapper" style="display: none; margin-top: 20px;">
+                    <button class="btn-next-stage" onclick="nextStage()">
+                        Avançar para Próxima Fase →
+                    </button>
+                </div>
+
+                <!-- Tela Final de Vitória -->
+                <div class="final-screen" id="finalScreen">
+                    <h2>🏆 Calibração de Coerência Concluída!</h2>
+                    <p style="color: #005f73; font-weight: 600;">Seu cérebro metacognitivo superou as armadilhas da autojustificação.</p>
+                    <div class="final-score-val" id="finalScoreVal">0</div>
+                    <div class="final-analysis" id="finalAnalysis">
+                        <!-- Análise clínica final -->
+                    </div>
+                    <div class="final-btns-group">
+                        <button class="btn-next-stage" onclick="restartGame()">Jogar Novamente</button>
+                        <a href="/artigos/a-neurobiologia-da-dissonancia-cognitiva-e-autoilusao-defensiva.html" class="btn-next-stage" style="background: #005f73; text-decoration: none;">Ler Artigo Completo</a>
+                        <a href="/testes/teste-dissonancia-cognitiva-racionalizacao.html" class="btn-next-stage" style="background: #ee9b00; color: #001219; text-decoration: none;">Fazer Teste T-46</a>
+                    </div>
+                </div>
+            </div>
+
+            <p class="article-disclaimer" style="margin-top: 35px;"><em>Este jogo cognitivo é fundamentado nos modelos matemáticos de inferência bayesiana ativa (Friston, 2010) e na Teoria da Dissonância Cognitiva (Festinger, 1957). Cada rodada possui 100% de consistência lógica demonstrável.</em></p>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Web Audio API Procedural
+        let audioCtx = null;
+        let isMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('soundIcon').textContent = isMuted ? '🔇' : '🔊';
+            document.getElementById('soundToggle').style.color = isMuted ? '#94a3b8' : '#005f73';
+        }
+
+        function playClickSound() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(520, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(260, ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.06);
+            } catch (e) {}
+        }
+
+        function playDiscardSound() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(320, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(640, ctx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.09, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.13);
+            } catch (e) {}
+        }
+
+        function playIntegrateChime() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [523.25, 659.25, 783.99]; // C - E - G acorde consonante
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.03));
+                    gain.gain.setValueAtTime(0.07, ctx.currentTime + (idx * 0.03));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (idx * 0.03) + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.03));
+                    osc.stop(ctx.currentTime + (idx * 0.03) + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        function playDissonanceBuzz() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(140, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.22);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.23);
+            } catch (e) {}
+        }
+
+        function playVictoryFanfare() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [440, 554.37, 659.25, 880, 1108.73];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.09, ctx.currentTime + (i * 0.07));
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.07) + 0.45);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (i * 0.07));
+                    osc.stop(ctx.currentTime + (i * 0.07) + 0.46);
+                });
+            } catch (e) {}
+        }
+
+        // Banco de Fases (10 Cenários Clínicos Garantidamente Resolúveis)
+        const STAGES = [
+            {
+                badge: "Hábito & Saúde",
+                title: "1. O Dilema do Hábito Saudável",
+                belief: "\"Tenho compromisso absoluto com minha saúde física e longevidade.\"",
+                action: "\"Fumei um maço de cigarros ontem após três meses sem fumar.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"O estresse do meu chefe ontem foi absurdo; qualquer pessoa no meu lugar fumaria para não enlouquecer.\"" },
+                    { id: 2, type: "desculpa", text: "\"Cigarro nem é tão prejudicial se eu compensar bebendo bastante água e fazendo academia amanhã.\"" },
+                    { id: 3, type: "verdade", text: "\"Tive uma recaída sob estresse agudo. Isso demonstra que meus recursos de enfrentamento ainda precisam de treino.\"" },
+                    { id: 4, type: "reparacao", text: "\"Descartar os cigarros restantes, perdoar a falha pontual sem me rotular de incapaz e rever meus gatilhos.\"" }
+                ]
+            },
+            {
+                badge: "Relacionamentos",
+                title: "2. A Justificativa do Desrespeito",
+                belief: "\"Exijo respeito mútuo e reciprocidade em todas as minhas relações íntimas.\"",
+                action: "\"Tolerei gritos e ofensas humilhantes do parceiro ontem sem impor limites.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"No fundo ele me ama muito; só falou daquele jeito porque teve um dia difícil no trabalho.\"" },
+                    { id: 2, type: "desculpa", text: "\"Eu provavelmente o provoquei demais, então a culpa pela explosão foi minha.\"" },
+                    { id: 3, type: "verdade", text: "\"Fiquei paralisado pelo medo do abandono e falhei em defender minha dignidade básica.\"" },
+                    { id: 4, type: "reparacao", text: "\"Pontuar claramente que agressões não serão mais toleradas e buscar apoio para sustentar limites.\"" }
+                ]
+            },
+            {
+                badge: "Carreira & Prazos",
+                title: "3. A Autossabotagem no Trabalho",
+                belief: "\"Sou um profissional rigoroso, altamente focado e confiável.\"",
+                action: "\"Passei 4 horas rolando o feed de redes sociais e entreguei o relatório atrasado e incompleto.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"O cliente fez exigências absurdas de última hora; ninguém conseguiria entregar aquilo com perfeição.\"" },
+                    { id: 2, type: "verdade", text: "\"Evitei o projeto por medo inconsciente de não ser bom o bastante e procrastinei como alívio imediato.\"" },
+                    { id: 3, type: "reparacao", text: "\"Assumir o atraso sem desculpas, reorganizar minha rotina de trabalho em blocos Pomodoro e entregar hoje.\"" }
+                ]
+            },
+            {
+                badge: "Ética Comercial",
+                title: "4. A Omissão Conveniente",
+                belief: "\"Minha integridade moral e honestidade estão acima do dinheiro.\"",
+                action: "\"Vendi um carro usado sem avisar o comprador sobre um defeito mecânico oculto.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"O comprador negociou duro e me pagou menos do que eu queria, então estamos quites.\"" },
+                    { id: 2, type: "desculpa", text: "\"É responsabilidade de quem compra levar o carro a um mecânico antes de fechar negócio.\"" },
+                    { id: 3, type: "verdade", text: "\"Coloquei meu ganho financeiro acima da ética e violei meu próprio código de conduta moral.\"" },
+                    { id: 4, type: "reparacao", text: "\"Contatar o comprador, informar o defeito e arcar com o custo justo do conserto na oficina.\"" }
+                ]
+            },
+            {
+                badge: "Finanças Pessoais",
+                title: "5. O Consumo Emocional Compulsivo",
+                belief: "\"Prezo pela segurança financeira e estou focado em criar uma reserva de emergência.\"",
+                action: "\"Gastei metade do meu salário em roupas e eletrônicos supérfluos no cartão de crédito.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"Eu trabalhei duro o mês inteiro, mereço um agrado para me sentir vivo.\"" },
+                    { id: 2, type: "verdade", text: "\"Usei a dopamina da compra para anestesiar a sensação de solidão e vazio do fim de semana.\"" },
+                    { id: 3, type: "reparacao", text: "\"Devolver os itens dentro do prazo de 7 dias, quitar a fatura e mapear alternativas saudáveis de lazer.\"" }
+                ]
+            },
+            {
+                badge: "Perfeccionismo",
+                title: "6. A Tirania da Paralisia",
+                belief: "\"Tenho vocação para realizar grandes projetos e compartilhar conhecimento.\"",
+                action: "\"Há dois anos não publico meu livro porque 'ainda não está perfeito'.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"O mercado editorial atual só consome mediocridade; lançar algo excelente agora seria um desperdício.\"" },
+                    { id: 2, type: "verdade", text: "\"Meu perfeccionismo não é busca por excelência; é um escudo fóbico contra o julgamento público.\"" },
+                    { id: 3, type: "reparacao", text: "\"Concluir a versão atual, pedir revisão a dois colegas de confiança e estabelecer uma data final de lançamento.\"" }
+                ]
+            },
+            {
+                badge: "Comunicação",
+                title: "7. A Falsa Mentira Compassiva",
+                belief: "\"A transparência e a lealdade são a base de qualquer amizade sólida.\"",
+                action: "\"Menti deliberadamente para meu melhor amigo para não comparecer ao aniversário dele.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"Foi uma 'mentira branca' piedosa; dizer que eu queria ficar em casa dormindo iria magoá-lo muito mais.\"" },
+                    { id: 2, type: "verdade", text: "\"Fui covarde para sustentar minha necessidade de descanso com honestidade e preferi o atalho do engano.\"" },
+                    { id: 3, type: "reparacao", text: "\"Procurar meu amigo, pedir desculpas pela mentira e combinar um almoço sincero para celebrar.\"" }
+                ]
+            },
+            {
+                badge: "Ambiência Social",
+                title: "8. A Fofoca Justificada",
+                belief: "\"Não alimento maledicências e respeito a privacidade dos meus colegas.\"",
+                action: "\"Participei ativamente de uma conversa espalhando um boato sobre a vida íntima de um par.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"Eu só estava ouvindo; e além do mais, todo mundo no escritório já sabia daquilo.\"" },
+                    { id: 2, type: "verdade", text: "\"Rendi-me à busca por aceitação e validação do grupo através da degradação de um terceiro.\"" },
+                    { id: 3, type: "reparacao", text: "\"Desvencilhar-me de grupos de fofoca e desmentir o boato publicamente caso seja indagado.\"" }
+                ]
+            },
+            {
+                badge: "Higiene Digital",
+                title: "9. O Vício em Notícias Aversivas",
+                belief: "\"Protejo minha mente da toxicidade e prezo por serenidade e foco profundo.\"",
+                action: "\"Passei 3 horas antes de dormir consumindo tragédias e discussões políticas agressivas na internet.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"Um cidadão consciente tem o dever de se manter informado sobre o caos do mundo.\"" },
+                    { id: 2, type: "verdade", text: "\"Meu cérebro foi sequestrado pelo ciclo dopaminérgico de ameaça (doomscrolling) e perdi o controle inibitório.\"" },
+                    { id: 3, type: "reparacao", text: "\"Deixar o celular fora do quarto à noite e adotar 30 minutos de leitura analógica antes de dormir.\"" }
+                ]
+            },
+            {
+                badge: "Existencial",
+                title: "10. A Má-Fé e a Fuga da Liberdade",
+                belief: "\"Sou o protagonista e responsável exclusivo pelos rumos da minha vida.\"",
+                action: "\"Culpei meus pais e o governo pela minha infelicidade e falta de realizações aos 35 anos.\"",
+                cards: [
+                    { id: 1, type: "desculpa", text: "\"Minha criação determinou quem eu sou; com o passado que tive, é biologicamente impossível prosperar.\"" },
+                    { id: 2, type: "verdade", text: "\"Estou em 'má-fé' (Sartre), refugiando-me no papel de vítima para não encarar o peso de construir meu destino.\"" },
+                    { id: 3, type: "reparacao", text: "\"Acolher o passado com compaixão e assumir hoje, no presente, a responsabilidade integral por cada escolha futura.\"" }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentStageIdx = 0;
+        let score = 0;
+        let combo = 1;
+        let bestScore = parseInt(localStorage.getItem('dissonancia_game_best_score') || '0', 10);
+
+        let stageRemainingRationalizations = 0;
+        let stageRemainingIntegrations = 0;
+        let stageTotalSteps = 0;
+        let stageCompletedSteps = 0;
+
+        document.getElementById('bestScoreVal').textContent = bestScore;
+
+        function initStage(idx) {
+            currentStageIdx = idx;
+            const stage = STAGES[idx];
+
+            document.getElementById('stageNumber').textContent = `${idx + 1} / ${STAGES.length}`;
+            document.getElementById('conflictBadge').textContent = stage.badge;
+            document.getElementById('conflictTitle').textContent = stage.title;
+            document.getElementById('beliefText').textContent = stage.belief;
+            document.getElementById('actionText').textContent = stage.action;
+
+            const feedback = document.getElementById('feedbackBanner');
+            feedback.style.display = 'none';
+            document.getElementById('nextStageWrapper').style.display = 'none';
+
+            // Contabilizar passos necessários
+            stageRemainingRationalizations = stage.cards.filter(c => c.type === 'desculpa').length;
+            stageRemainingIntegrations = stage.cards.filter(c => c.type === 'verdade' || c.type === 'reparacao').length;
+            stageTotalSteps = stageRemainingRationalizations + stageRemainingIntegrations;
+            stageCompletedSteps = 0;
+
+            updateMeters();
+            renderCards(stage.cards);
+        }
+
+        function updateMeters() {
+            const dissPercent = Math.round(((stageTotalSteps - stageCompletedSteps) / stageTotalSteps) * 100);
+            const cohPercent = 100 - dissPercent;
+
+            document.getElementById('dissonanceVal').textContent = `${dissPercent}%`;
+            document.getElementById('dissonanceBar').style.width = `${dissPercent}%`;
+            document.getElementById('coherenceVal').textContent = `${cohPercent}%`;
+            document.getElementById('coherenceBar').style.width = `${cohPercent}%`;
+
+            if (dissPercent > 60) {
+                document.getElementById('dissonanceBar').style.background = '#ef4444';
+            } else if (dissPercent > 20) {
+                document.getElementById('dissonanceBar').style.background = '#f59e0b';
+            } else {
+                document.getElementById('dissonanceBar').style.background = '#0a9396';
+            }
+        }
+
+        function renderCards(cards) {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'cognition-card';
+                cardEl.id = `card-${card.id}`;
+
+                let tagClass = 'tag-desculpa';
+                let tagText = 'Racionalização Protetiva';
+                if (card.type === 'verdade') {
+                    tagClass = 'tag-verdade';
+                    tagText = 'Verdade Factual (Admissão)';
+                } else if (card.type === 'reparacao') {
+                    tagClass = 'tag-reparacao';
+                    tagText = 'Ação Bayesiana (Reparação)';
+                }
+
+                cardEl.innerHTML = `
+                    <div>
+                        <span class="card-type-tag ${tagClass}">${tagText}</span>
+                        <div class="card-body-text">${card.text}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-card-action btn-discard" onclick="handleCardAction(${card.id}, 'discard')">🗑️ Descartar Autoengano</button>
+                        <button class="btn-card-action btn-integrate" onclick="handleCardAction(${card.id}, 'integrate')">⚡ Integrar Verdade</button>
+                    </div>
+                `;
+
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function handleCardAction(cardId, action) {
+            const stage = STAGES[currentStageIdx];
+            const card = stage.cards.find(c => c.id === cardId);
+            const cardEl = document.getElementById(`card-${cardId}`);
+            const feedback = document.getElementById('feedbackBanner');
+
+            if (!card || !cardEl) return;
+
+            if (action === 'discard') {
+                if (card.type === 'desculpa') {
+                    // Acerto: descartou desculpa
+                    playDiscardSound();
+                    cardEl.classList.add('discarded');
+                    stageCompletedSteps++;
+                    score += 150 * combo;
+                    combo++;
+                    showFeedback(true, '🎯 <strong>Autoengano Desarmado!</strong> Você reconheceu a desculpa que o pré-frontal tentou usar para silenciar a contradição.');
+                } else {
+                    // Erro: tentou descartar uma verdade ou ação
+                    playDissonanceBuzz();
+                    combo = 1;
+                    score = Math.max(0, score - 50);
+                    showFeedback(false, '❌ <strong>Atenção Metacognitiva!</strong> Você tentou descartar um fato real ou uma ação necessária. O cérebro precisa integrar a realidade, não fugir dela.');
+                }
+            } else if (action === 'integrate') {
+                if (card.type === 'verdade' || card.type === 'reparacao') {
+                    // Acerto: integrou verdade
+                    playIntegrateChime();
+                    cardEl.classList.add('activated');
+                    stageCompletedSteps++;
+                    score += 200 * combo;
+                    combo++;
+                    showFeedback(true, '🧠 <strong>Coerência Restaurada!</strong> O dACC acalma e a identidade se atualiza com humildade e coragem socrática.');
+                } else {
+                    // Erro: tentou integrar uma desculpa como se fosse verdade
+                    playDissonanceBuzz();
+                    combo = 1;
+                    score = Math.max(0, score - 70);
+                    showFeedback(false, '⚠️ <strong>Armadilha do Ego!</strong> Você comprou uma justificativa ilusória. Adotar essa desculpa perpetuará o ciclo de incoerência e anestesiará seu crescimento.');
+                }
+            }
+
+            document.getElementById('scoreVal').textContent = score;
+            document.getElementById('comboVal').textContent = `x${combo}`;
+            updateMeters();
+
+            // Checar se a fase foi concluída
+            if (stageCompletedSteps >= stageTotalSteps) {
+                stageCompleted();
+            }
+        }
+
+        function showFeedback(isSuccess, htmlMsg) {
+            const fb = document.getElementById('feedbackBanner');
+            fb.className = `feedback-banner ${isSuccess ? 'success' : 'danger'}`;
+            fb.innerHTML = htmlMsg;
+            fb.style.display = 'block';
+        }
+
+        function stageCompleted() {
+            playVictoryFanfare();
+            const fb = document.getElementById('feedbackBanner');
+            fb.className = 'feedback-banner success';
+            fb.innerHTML = '🎉 <strong>Fase Concluída com Coerência Bayesiana Máxima!</strong> O conflito foi resolvido pela via da verdade e da ação ética.';
+            fb.style.display = 'block';
+
+            if (currentStageIdx + 1 < STAGES.length) {
+                document.getElementById('nextStageWrapper').style.display = 'block';
+            } else {
+                finishGame();
+            }
+        }
+
+        function nextStage() {
+            playClickSound();
+            initStage(currentStageIdx + 1);
+        }
+
+        function finishGame() {
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem('dissonancia_game_best_score', bestScore.toString());
+                document.getElementById('bestScoreVal').textContent = bestScore;
+            }
+
+            document.getElementById('conflictCard').style.display = 'none';
+            document.getElementById('cardsGrid').style.display = 'none';
+            document.getElementById('feedbackBanner').style.display = 'none';
+            document.getElementById('nextStageWrapper').style.display = 'none';
+
+            const finalScreen = document.getElementById('finalScreen');
+            document.getElementById('finalScoreVal').textContent = `${score} pts`;
+
+            let analysis = '';
+            if (score >= 4000) {
+                analysis = `
+                    <h4 style="color: #005f73; margin-top: 0;">Mestre da Coerência Epistêmica</h4>
+                    <p>Você demonstrou extrema lucidez metacognitiva. Identificou todas as armadilhas de autojustificação com rapidez e restaurou a coerência sem recorrer a panos quentes. Essa flexibilidade é a chave para a integridade nas relações e para a maturidade emocional.</p>
+                `;
+            } else {
+                analysis = `
+                    <h4 style="color: #005f73; margin-top: 0;">Boa Consciência Reflexiva</h4>
+                    <p>Você conseguiu superar a maioria das justificativas automáticas. Continue praticando o hábito de pausar quando sentir a vontade de dar uma desculpa: a verdade dói no primeiro minuto, mas liberta para o resto da vida.</p>
+                `;
+            }
+
+            document.getElementById('finalAnalysis').innerHTML = analysis;
+            finalScreen.style.display = 'block';
+            finalScreen.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartGame() {
+            score = 0;
+            combo = 1;
+            document.getElementById('scoreVal').textContent = '0';
+            document.getElementById('comboVal').textContent = 'x1';
+            document.getElementById('conflictCard').style.display = 'block';
+            document.getElementById('cardsGrid').style.display = 'grid';
+            document.getElementById('finalScreen').style.display = 'none';
+            initStage(0);
+        }
+
+        // Inicia na fase 1
+        window.addEventListener('DOMContentLoaded', () => {
+            initStage(0);
+        });
+    </script>
+</body>
+</html>
