@@ -2273,6 +2273,654 @@ const MIC_CHORD_SIMULATION_PRESETS = {
     }
 };
 
+// =========================================================================
+// FASE 15: CONSTANTES & CATÁLOGO DE ARRANJOS POLIFÔNICOS & CONTRAPONTO CAIPIRA
+// =========================================================================
+
+const DEFAULT_POLYPHONIC_STATE = {
+    activeArrangementId: 'dueto_cururu_rio_tiete',
+    isPlaying: false,
+    currentStepIdx: -1,
+    playbackSpeed: 1.0,           // 0.5, 0.75, 1.0, 1.25
+    isLooping: true,
+    voiceFilter: 'both',          // 'both' (Dueto Completo) | 'v1' (Solo 1ª Viola) | 'v2' (Solo 2ª Viola)
+    v1Volume: 0.90,               // 0.0 a 1.0
+    v2Volume: 0.90,               // 0.0 a 1.0
+    v1Pan: -0.50,                 // Pan estéreo 1ª Viola (esquerda: -0.50)
+    v2Pan: 0.50,                  // Pan estéreo 2ª Viola (direita: +0.50)
+    activeCategory: 'all',        // 'all' | 'contrary' | 'oblique' | 'antiphonal' | 'pagode' | 'liturgical' | 'choro'
+    generatorKeyId: 'E_maj',      // Tonalidade do gerador algorítmico
+    generatorMotionType: 'contrary', // 'contrary' | 'oblique' | 'antiphonal' | 'thirds_sixths'
+    generatorMeter: '2/4',        // '2/4' | '3/4'
+    generatorMeasures: 4,         // 4 ou 8 compassos
+    generatorVirtuosity: 'standard' // 'standard' | 'virtuoso'
+};
+
+const POLYPHONIC_CATEGORIES = {
+    all: { id: 'all', label: 'Todos os Arranjos', icon: 'layers' },
+    contrary: { id: 'contrary', label: 'Movimento Contrário', icon: 'arrow-up-right' },
+    oblique: { id: 'oblique', label: 'Movimento Oblíquo & Pedais', icon: 'anchor' },
+    antiphonal: { id: 'antiphonal', label: 'Duelos & Antifonia', icon: 'message-square' },
+    pagode: { id: 'pagode', label: 'Pagode & Repiques', icon: 'zap' },
+    liturgical: { id: 'liturgical', label: 'Folia Litúrgica & Modais', icon: 'crown' },
+    choro: { id: 'choro', label: 'Chorinho & Baixaria', icon: 'music' }
+};
+
+const POLYPHONIC_ARRANGEMENTS_CATALOG = {
+    dueto_cururu_rio_tiete: {
+        id: 'dueto_cururu_rio_tiete',
+        title: 'Duelo Fluvial no Rio Tietê',
+        subtitle: 'Cururu Antifônico com Diálogo Rápido, Repiques e Batidas no Tampo',
+        category: 'antiphonal',
+        genre: 'Cururu Tradicional',
+        keyId: 'E_maj',
+        keyName: 'Mi Maior (E)',
+        tuning: 'viola_cebolao_e',
+        timeSignature: '2/4',
+        bpm: 96,
+        canon: 'Tião Carreiro & Pardinho, Zé Carreiro & Carreirinho, Vieira & Vieirinha',
+        counterpointStyle: 'Antifonia Caipira com Movimento Contrário nos Fechamentos',
+        description: 'O clássico duelo de perguntas e respostas nas barrancas do Tietê: a 1ª Viola (Requinteira) ataca com ponteios rápidos e ligados nos pares agudos, enquanto a 2ª Viola responde com baixaria sincopada nos bordões e batidas no tampo [TAP], culminando em dueto cerrado em terças e sextas.',
+        steps: [
+            {
+                measure: 1, beat: 1,
+                motionType: 'antiphonal', motionLabel: '💬 Pergunta V1',
+                intervalLabel: '8ª Justa', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], rh: 'p+i', role: 'Pergunta do Solista' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Bordão Pedal' },
+                percussion: null,
+                ann: 'V1 ataca tema nas cordas soltas agudas; V2 ancora no bordão fundamental Mi.'
+            },
+            {
+                measure: 1, beat: 2,
+                motionType: 'antiphonal', motionLabel: '💬 Resposta Rítmica',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }], rh: 'i', role: 'Ponteio Sol#4' },
+                v2: { notes: [], rh: 'tap', role: 'Batida de Tampo' },
+                percussion: 'tap',
+                ann: 'V1 ponteia na 4ª casa (Sol#); V2 responde imediatamente com corte percussivo de tampo [TAP].'
+            },
+            {
+                measure: 2, beat: 1,
+                motionType: 'antiphonal', motionLabel: '💬 Resposta V2',
+                intervalLabel: '6ª Menor', harmonicContext: 'V7 (B7)',
+                v1: { notes: [], rh: 'pause', role: 'Pausa Atenta' },
+                v2: { notes: [{ c: 3, f: 2 }, { c: 4, f: 2 }], rh: 'p', role: 'Baixaria F#3/C#3' },
+                percussion: null,
+                ann: 'V2 assume a voz principal com frase rápida de bordão conectando Fá# e Dó#.'
+            },
+            {
+                measure: 2, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Contrário',
+                intervalLabel: '12ª Composta', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }], rh: 'i', role: 'Sensível F#4' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'p', role: 'Bordão Si2' },
+                percussion: 'chock',
+                ann: 'Movimento contrário: V1 sobe para o Fá#; V2 desce para o Si grave com abafamento [CHOCK].'
+            },
+            {
+                measure: 3, beat: 1,
+                motionType: 'parallel_3rd', motionLabel: '⥤ Terça Diatônica',
+                intervalLabel: '3ª Menor', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], rh: 'p+i', role: 'Terças F#4/D#4' },
+                v2: { notes: [{ c: 3, f: 4 }], rh: 'p', role: 'Baixo Sol#3' },
+                percussion: null,
+                ann: 'Dueto cerrado: V1 em terças na 2ª e 4ª casa sobre o baixo caminhante de V2.'
+            },
+            {
+                measure: 3, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Contrário',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Terças G#4/E4' },
+                v2: { notes: [{ c: 3, f: 2 }], rh: 'p', role: 'Baixo F#3' },
+                percussion: null,
+                ann: 'Movimento contrário puro: V1 sobe em terças enquanto V2 desce pelos bordões.'
+            },
+            {
+                measure: 4, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Clímax Contrário',
+                intervalLabel: '17ª (2 Oitavas+3ª)', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], rh: 'p+i', role: 'Agudo Si4/Sol#4' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'p', role: 'Bordão Grave Si2' },
+                percussion: null,
+                ann: 'Abertura total do leque: V1 atinge a 7ª casa no agudo e V2 firma no bordão Si ultragrave.'
+            },
+            {
+                measure: 4, beat: 2,
+                motionType: 'parallel_6th', motionLabel: '✨ Cadência Final',
+                intervalLabel: 'Acorde Pleno', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }], rh: 'rasq', role: 'Rasqueado Aberto' },
+                v2: { notes: [{ c: 3, f: 0 }, { c: 4, f: 0 }], rh: 'rasq', role: 'Bordões Abertos + Tap' },
+                percussion: 'tap',
+                ann: 'Fechamento apoteótico: ambas as violas soam o acorde pleno de Mi Maior com batida no tampo [TAP].'
+            }
+        ]
+    },
+
+    dueto_moda_sete_quedas: {
+        id: 'dueto_moda_sete_quedas',
+        title: 'Contraponto das Sete Quedas',
+        subtitle: 'Moda Monumental em Movimento Contrário Estrito (Abertura em Leque)',
+        category: 'contrary',
+        genre: 'Moda de Viola Contrapontística',
+        keyId: 'E_maj',
+        keyName: 'Mi Maior (E)',
+        tuning: 'viola_cebolao_e',
+        timeSignature: '2/4',
+        bpm: 84,
+        canon: 'Inspirada nas grandes introduções de Almir Sater, Tião Carreiro e Zé Coco do Riachão',
+        counterpointStyle: 'Movimento Contrário Canônico em Leque Sonoro',
+        description: 'Condução rigorosa e solene de vozes independentes: enquanto a 1ª Viola sobe em terças diatônicas da 2ª até a 9ª casa nas primas e segundinhas, a 2ª Viola desce pelos bordões em baixaria majestosa, abrindo um leque sonoro sem atritos com as cantadeiras oitavadas.',
+        steps: [
+            {
+                measure: 1, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Início do Leque',
+                intervalLabel: '7ª Menor', harmonicContext: 'V7/IV (E7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], rh: 'p+i', role: 'Terça F#4/D#4' },
+                v2: { notes: [{ c: 3, f: 4 }], rh: 'p', role: 'Bordão Sol#3' },
+                percussion: null,
+                ann: 'V1 ataca terças preparatórias; V2 ancora no Sol# do 4º par iniciando o movimento divergente.'
+            },
+            {
+                measure: 1, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Contrário',
+                intervalLabel: '9ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Terça G#4/E4' },
+                v2: { notes: [{ c: 3, f: 2 }], rh: 'p', role: 'Bordão F#3' },
+                percussion: null,
+                ann: 'Movimento contrário límpido: V1 sobe (+2 casas) enquanto V2 desce (-2 casas).'
+            },
+            {
+                measure: 2, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Expansão',
+                intervalLabel: '11ª Justa', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Terça Lá4/Mi4' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Toeira Mi3 Solta' },
+                percussion: null,
+                ann: 'V1 avança para a 5ª casa (Lá Maior); V2 atinge a corda solta do 4º par em leque sonoro.'
+            },
+            {
+                measure: 2, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Abertura Máxima',
+                intervalLabel: '17ª Composta', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], rh: 'p+i', role: 'Clímax Si4/Sol#4' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'p', role: 'Canotilho Si2 Solto' },
+                percussion: null,
+                ann: 'Ponto máximo de divergência: intervalo de mais de duas oitavas com máxima pureza harmônica.'
+            },
+            {
+                measure: 3, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Retorno Convergente',
+                intervalLabel: '10ª Maior', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 9 }, { c: 1, f: 10 }], rh: 'p+i', role: 'C#5/A4' },
+                v2: { notes: [{ c: 3, f: 5 }, { c: 2, f: 1 }], rh: 'p', role: 'Arpejo Lá3' },
+                percussion: null,
+                ann: 'Subdominante gloriosa: V1 brilha na 9ª casa e V2 sustenta arpejo no 4º e 3º par.'
+            },
+            {
+                measure: 3, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Contrário',
+                intervalLabel: '8ª Justa', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], rh: 'p+i', role: 'Descida Si4/Sol#4' },
+                v2: { notes: [{ c: 4, f: 2 }, { c: 4, f: 4 }], rh: 'p', role: 'Subida C#3/D#3' },
+                percussion: null,
+                ann: 'Convergência: V1 desce pelas primas enquanto V2 sobe pelos bordões para preparar o V7.'
+            },
+            {
+                measure: 4, beat: 1,
+                motionType: 'parallel_3rd', motionLabel: '⥤ Preparação V7',
+                intervalLabel: '6ª Maior', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], rh: 'p+i', role: 'F#4/D#4' },
+                v2: { notes: [{ c: 4, f: 0 }, { c: 3, f: 2 }], rh: 'p', role: 'Baixo Si2/F#3' },
+                percussion: 'chock',
+                ann: 'Tensão cadencial perfeita de Si com Sétima preparando o repouso com abafamento [CHOCK].'
+            },
+            {
+                measure: 4, beat: 2,
+                motionType: 'parallel_6th', motionLabel: '✨ Resolução em Mi',
+                intervalLabel: 'Acorde Pleno', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], rh: 'rasq', role: 'Primas Soltas' },
+                v2: { notes: [{ c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], rh: 'rasq', role: 'Bordões Soltos + Tap' },
+                percussion: 'tap',
+                ann: 'Repouso canônico em Mi Maior com decaimento longo e batida no tampo [TAP].'
+            }
+        ]
+    },
+
+    dueto_pagode_tiao_lourival: {
+        id: 'dueto_pagode_tiao_lourival',
+        title: 'Pagode Contrapontístico',
+        subtitle: 'Repiques em Cascata, Contratempos Sincopados e Abafamentos Secos [CHOCK]',
+        category: 'pagode',
+        genre: 'Pagode Caipira Virtuoso',
+        keyId: 'E_maj',
+        keyName: 'Mi Maior (E)',
+        tuning: 'viola_cebolao_e',
+        timeSignature: '2/4',
+        bpm: 104,
+        canon: 'Tião Carreiro & Lourival dos Santos',
+        counterpointStyle: 'Síncope Contrapontística & Repiques Alternados',
+        description: 'O ápice da dinâmica rítmica do pagode caipira: repiques em semicolcheias na 1ª Viola respondidos por contracantos sincopados nos pares graves da 2ª Viola, com batidas de tampo [TAP] e cortes secos [CHOCK] rigorosamente intercalados.',
+        steps: [
+            {
+                measure: 1, beat: 1,
+                motionType: 'antiphonal', motionLabel: '⚡ Repique V1',
+                intervalLabel: '8ª Justa', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 0, f: 2 }], rh: 'i', role: 'Repique de Prima' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Bordão de Ataque' },
+                percussion: null,
+                ann: 'V1 dispara o clássico repique de pagode; V2 ancora no bordão do 4º par.'
+            },
+            {
+                measure: 1, beat: 2,
+                motionType: 'antiphonal', motionLabel: '💥 Contratempo V2',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [], rh: 'tap', role: 'Batida de Tampo' },
+                v2: { notes: [{ c: 3, f: 2 }], rh: 'p', role: 'Contratempo F#3' },
+                percussion: 'tap',
+                ann: 'V1 estala o tampo [TAP]; V2 executa o contratempo sincopado cortando o compasso.'
+            },
+            {
+                measure: 2, beat: 1,
+                motionType: 'antiphonal', motionLabel: '⚡ Baixaria V2',
+                intervalLabel: 'Pausa / Baixo', harmonicContext: 'V7 (B7)',
+                v1: { notes: [], rh: 'chock', role: 'Corte Chock' },
+                v2: { notes: [{ c: 4, f: 2 }, { c: 3, f: 0 }], rh: 'p', role: 'Lick de Bordão' },
+                percussion: 'chock',
+                ann: 'V1 abafa as cordas [CHOCK]; V2 executa resposta virtuosística nos bordões 5 e 4.'
+            },
+            {
+                measure: 2, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Resposta V1',
+                intervalLabel: '14ª Composta', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 7 }, { c: 1, f: 7 }], rh: 'p+i', role: 'Terceto Agudo' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'tap', role: 'Tap no Bordão' },
+                percussion: 'tap',
+                ann: 'V1 responde na 7ª casa com brilho cortante; V2 bate no tampo [TAP].'
+            },
+            {
+                measure: 3, beat: 1,
+                motionType: 'parallel_3rd', motionLabel: '⥤ Cascata Terças',
+                intervalLabel: '3ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 7 }, { c: 1, f: 9 }], rh: 'p+i', role: 'Terças 7ª/9ª' },
+                v2: { notes: [{ c: 4, f: 2 }], rh: 'p', role: 'Contratempo C#3' },
+                percussion: null,
+                ann: 'Cascata veloz em terças caipiras: V1 na 7ª/9ª casa com síncope de V2 no 5º par.'
+            },
+            {
+                measure: 3, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Descida Rápida',
+                intervalLabel: '8ª Justa', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 4 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Terças 4ª/5ª' },
+                v2: { notes: [{ c: 3, f: 2 }, { c: 4, f: 0 }], rh: 'p', role: 'Baixaria F#3/Si2' },
+                percussion: null,
+                ann: 'Descida rápida para a 4ª casa enquanto V2 prepara a resolução no bordão Si.'
+            },
+            {
+                measure: 4, beat: 1,
+                motionType: 'parallel_3rd', motionLabel: '⚡ Síncope Tutti',
+                intervalLabel: '10ª Maior', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], rh: 'p+i', role: 'Terças 2ª/4ª' },
+                v2: { notes: [{ c: 4, f: 2 }], rh: 'p', role: 'Bordão C#3' },
+                percussion: 'chock',
+                ann: 'Síncope simultânea das duas violas com corte abafado seco [CHOCK].'
+            },
+            {
+                measure: 4, beat: 2,
+                motionType: 'parallel_6th', motionLabel: '✨ Arremate de Pagode',
+                intervalLabel: 'Acorde Pleno', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], rh: 'rasq', role: 'Rasqueado Curto' },
+                v2: { notes: [{ c: 3, f: 0 }, { c: 4, f: 0 }], rh: 'rasq', role: 'Rasqueado + Tap' },
+                percussion: 'tap',
+                ann: 'Arremate clássico de pagode com batida dupla no tampo [TAP] e rasqueado de Mi Maior!'
+            }
+        ]
+    },
+
+    dueto_toada_estrelas_pantanal: {
+        id: 'dueto_toada_estrelas_pantanal',
+        title: 'Toada das Estrelas do Pantanal',
+        subtitle: 'Lamento Seresteiro em 3/4 com Movimento Oblíquo e Cordas Soltas',
+        category: 'oblique',
+        genre: 'Toada / Querência Caipira',
+        keyId: 'E_maj',
+        keyName: 'Mi Maior (E)',
+        tuning: 'viola_cebolao_e',
+        timeSignature: '3/4',
+        bpm: 76,
+        canon: 'Almir Sater, Renato Teixeira, Helena Meirelles',
+        counterpointStyle: 'Movimento Oblíquo com Pedais Abertos',
+        description: 'Movimento oblíquo lírico em compasso ternário: a 2ª Viola sustenta bordões e pedais abertos nas cordas soltas da afinação Cebolão (Mi e Si), enquanto a 1ª Viola dedilha sextas dolentes nos pares 1 e 3, evocando a vastidão da noite pantaneira.',
+        steps: [
+            {
+                measure: 1, beat: 1,
+                motionType: 'oblique', motionLabel: '⇥ Pedal E3',
+                intervalLabel: '8ª Justa', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 2, f: 0 }], rh: 'p+i', role: 'Sexta E4/G#3' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Bordão Pedal Mi3' },
+                percussion: null,
+                ann: 'V2 instala o pedal hipnótico no 4º par solto; V1 abre sexta solta no Cebolão.'
+            },
+            {
+                measure: 1, beat: 2,
+                motionType: 'oblique', motionLabel: '⇥ Movimento V1',
+                intervalLabel: '9ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], rh: 'p+i', role: 'Sexta F#4/A3' },
+                v2: { notes: [], rh: 'hold', role: 'Sustentação do Pedal' },
+                percussion: null,
+                ann: 'Movimento oblíquo: V1 desliza para a 2ª e 1ª casa enquanto o pedal de V2 segue soando.'
+            },
+            {
+                measure: 1, beat: 3,
+                motionType: 'oblique', motionLabel: '⇥ Sexta Ascendente',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], rh: 'p+i', role: 'Sexta G#4/B3' },
+                v2: { notes: [{ c: 2, f: 0 }], rh: 'p', role: 'Turina Solta G#3' },
+                percussion: null,
+                ann: 'V1 atinge a 4ª casa com expressividade lírica; V2 complementa com o 3º par solto.'
+            },
+            {
+                measure: 2, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Subdominante IV',
+                intervalLabel: '8ª Justa', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 5 }, { c: 2, f: 5 }], rh: 'p+i', role: 'Sexta A4/C#4' },
+                v2: { notes: [{ c: 3, f: 5 }], rh: 'p', role: 'Baixo Lá3' },
+                percussion: null,
+                ann: 'Mudança luminosa para o quarto grau (Lá Maior): ambas as violas convergem na 5ª casa.'
+            },
+            {
+                measure: 2, beat: 2,
+                motionType: 'oblique', motionLabel: '⇥ Arpejo Seresteiro',
+                intervalLabel: '12ª Composta', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 5 }], rh: 'i', role: 'Melodia Lá4' },
+                v2: { notes: [{ c: 1, f: 0 }], rh: 'p', role: 'Segundinha Si3' },
+                percussion: null,
+                ann: 'V2 dedilha a corda solta do 2º par em contracanto aveludado.'
+            },
+            {
+                measure: 2, beat: 3,
+                motionType: 'contrary', motionLabel: '⤢ Descida Lírica',
+                intervalLabel: '10ª Maior', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 4 }, { c: 2, f: 3 }], rh: 'p+i', role: 'Sexta G#4/B3' },
+                v2: { notes: [{ c: 3, f: 4 }], rh: 'p', role: 'Baixo Sol#3' },
+                percussion: null,
+                ann: 'Descida suave de ambas as vozes preparando a dominante.'
+            },
+            {
+                measure: 3, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Dominante V7',
+                intervalLabel: '12ª Composta', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 2, f: 1 }], rh: 'p+i', role: 'Sexta F#4/A3' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'p', role: 'Bordão Pedal Si2' },
+                percussion: null,
+                ann: 'Entrada da dominante com bordão Si grave na 2ª viola e sexta seresteira na 1ª.'
+            },
+            {
+                measure: 3, beat: 2,
+                motionType: 'oblique', motionLabel: '⇥ Sensível D#4',
+                intervalLabel: '10ª Menor', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 1, f: 4 }], rh: 'i', role: 'Sensível Ré#4' },
+                v2: { notes: [{ c: 3, f: 2 }], rh: 'p', role: 'Baixo F#3' },
+                percussion: null,
+                ann: 'V1 destaca a nota sensível Ré# na 4ª casa do 2º par com vibrato sutil.'
+            },
+            {
+                measure: 3, beat: 3,
+                motionType: 'parallel_3rd', motionLabel: '⥤ Fechamento V7',
+                intervalLabel: '3ª Maior', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }], rh: 'i', role: 'Fá#4' },
+                v2: { notes: [{ c: 2, f: 3 }], rh: 'p', role: 'Si3' },
+                percussion: null,
+                ann: 'Suspensão poética sobre o quinto grau antes do repouso final.'
+            },
+            {
+                measure: 4, beat: 1,
+                motionType: 'parallel_6th', motionLabel: '✨ Resolução Poética',
+                intervalLabel: 'Acorde Pleno', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], rh: 'p+i', role: 'Primas E4/B3' },
+                v2: { notes: [{ c: 3, f: 0 }, { c: 4, f: 0 }], rh: 'p', role: 'Bordões E3/B2' },
+                percussion: null,
+                ann: 'Repouso sereno das cordas soltas ressoando em plena afinação Cebolão.'
+            },
+            {
+                measure: 4, beat: 2,
+                motionType: 'oblique', motionLabel: '⇥ Sustentação',
+                intervalLabel: 'Ressonância', harmonicContext: 'I (E)',
+                v1: { notes: [], rh: 'hold', role: 'Decaimento Natural' },
+                v2: { notes: [{ c: 2, f: 0 }], rh: 'p', role: 'Turina Solta G#3' },
+                percussion: null,
+                ann: 'Ressonância profunda com eco natural do corpo de jacarandá.'
+            },
+            {
+                measure: 4, beat: 3,
+                motionType: 'oblique', motionLabel: '✨ Harmônico Final',
+                intervalLabel: 'Harmônico 12ª', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 12 }], rh: 'i', role: 'Harmônico Mi5' },
+                v2: { notes: [{ c: 3, f: 12 }], rh: 'p', role: 'Harmônico Mi4' },
+                percussion: null,
+                ann: 'Toque final com harmônicos naturais na 12ª casa flutuando no ar da seresta.'
+            }
+        ]
+    },
+
+    dueto_folia_liturgica: {
+        id: 'dueto_folia_liturgica',
+        title: 'Devoção dos Três Reis Santos',
+        subtitle: 'Polifonia Litúrgica em Modo Lídio com a 4ª Aumentada (Lá♯)',
+        category: 'liturgical',
+        genre: 'Toque de Folia de Reis',
+        keyId: 'E_maj',
+        keyName: 'Mi Maior (Modo Lídio)',
+        tuning: 'viola_cebolao_e',
+        timeSignature: '3/4',
+        bpm: 80,
+        canon: 'Mestres de Folia de Minas Gerais e Goiás',
+        counterpointStyle: 'Contraponto Modal e Imitação Canônica',
+        description: 'O contraponto devocional das romarias do sertão: o Mestre (1ª Viola) profere a melodia com a 4ª aumentada lídia (Lá♯ na 3ª casa do 2º par), e o Contra-Mestre (2ª Viola) realiza a resposta contrapontística imitativa, culminando em bênção com acorde aberto.',
+        steps: [
+            {
+                measure: 1, beat: 1,
+                motionType: 'antiphonal', motionLabel: '👑 Chamada Mestre',
+                intervalLabel: '8ª Justa', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }], rh: 'i', role: 'Canto Solene Mi4' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Bordão Sacro Mi3' },
+                percussion: null,
+                ann: 'O Mestre (V1) abre o canto devocional; o Contra-Mestre (V2) ancora no bordão solene.'
+            },
+            {
+                measure: 1, beat: 2,
+                motionType: 'antiphonal', motionLabel: '👑 Melodia Mestre',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }], rh: 'i', role: 'Ponteio Sol#4' },
+                v2: { notes: [], rh: 'hold', role: 'Ressonância' },
+                percussion: null,
+                ann: 'Melodia ascendente nas primas reverenciando o Menino Deus.'
+            },
+            {
+                measure: 1, beat: 3,
+                motionType: 'antiphonal', motionLabel: '★ Nota Lídia A#4',
+                intervalLabel: '11ª Aumentada', harmonicContext: 'II (F#)',
+                v1: { notes: [{ c: 0, f: 6 }], rh: 'i', role: 'Trítono Lídio Lá#4' },
+                v2: { notes: [{ c: 4, f: 2 }], rh: 'p', role: 'Baixo Dó#3' },
+                percussion: null,
+                ann: 'A nota característica celestial da Folia: Lá# na 6ª casa gerando a atmosfera modal sacra.'
+            },
+            {
+                measure: 2, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Resposta Contra',
+                intervalLabel: '12ª Composta', harmonicContext: 'II (F#)',
+                v1: { notes: [{ c: 0, f: 7 }], rh: 'i', role: 'Repouso Si4' },
+                v2: { notes: [{ c: 3, f: 4 }, { c: 2, f: 1 }], rh: 'p', role: 'Resposta Imitativa' },
+                percussion: null,
+                ann: 'O Contra-Mestre (V2) imita o contorno da frase nos pares médios em movimento contrário.'
+            },
+            {
+                measure: 2, beat: 2,
+                motionType: 'oblique', motionLabel: '⇥ Contracanto V2',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }], rh: 'i', role: 'Sol#4' },
+                v2: { notes: [{ c: 3, f: 2 }], rh: 'p', role: 'Fá#3' },
+                percussion: null,
+                ann: 'Diálogo canônico afetuoso entre o Mestre e o Contra-Mestre.'
+            },
+            {
+                measure: 2, beat: 3,
+                motionType: 'antiphonal', motionLabel: '💬 Batida de Bastão',
+                intervalLabel: '10ª Maior', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }], rh: 'i', role: 'Mi4' },
+                v2: { notes: [], rh: 'tap', role: 'Batida no Tampo' },
+                percussion: 'tap',
+                ann: 'Batida percussiva no tampo [TAP] evocando os bastões decorados dos palhaços da folia.'
+            },
+            {
+                measure: 3, beat: 1,
+                motionType: 'parallel_3rd', motionLabel: '⥤ Dueto em Terças',
+                intervalLabel: '3ª Maior', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Lá4/Mi4' },
+                v2: { notes: [{ c: 3, f: 5 }], rh: 'p', role: 'Baixo Lá3' },
+                percussion: null,
+                ann: 'Louvação conjunta em terças diatônicas sobre a subdominante.'
+            },
+            {
+                measure: 3, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Descida Solene',
+                intervalLabel: '8ª Justa', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], rh: 'p+i', role: 'Fá#4/Ré#4' },
+                v2: { notes: [{ c: 4, f: 0 }, { c: 3, f: 2 }], rh: 'p', role: 'Baixo Si2/Fá#3' },
+                percussion: null,
+                ann: 'Descida cadencial solene em terças e quintas contrárias.'
+            },
+            {
+                measure: 3, beat: 3,
+                motionType: 'contrary', motionLabel: '⤢ Corte de Palma',
+                intervalLabel: 'Suspensão', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }], rh: 'chock', role: 'Corte Chock' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'chock', role: 'Bordão Abafado' },
+                percussion: 'chock',
+                ann: 'Abafamento solene de reverência [CHOCK] antes da bênção final.'
+            },
+            {
+                measure: 4, beat: 1,
+                motionType: 'parallel_6th', motionLabel: '✨ Bênção Final',
+                intervalLabel: 'Acorde Pleno', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }], rh: 'rasq', role: 'Rasqueado de Glória' },
+                v2: { notes: [{ c: 2, f: 0 }, { c: 3, f: 0 }, { c: 4, f: 0 }], rh: 'rasq', role: 'Bordões Abertos + Tap' },
+                percussion: 'tap',
+                ann: 'Bênção final aos moradores com acorde aberto pleno de Mi Maior e batida de tampo [TAP].'
+            },
+            {
+                measure: 4, beat: 2,
+                motionType: 'oblique', motionLabel: '⇥ Ressonância Sacra',
+                intervalLabel: 'Ressonância', harmonicContext: 'I (E)',
+                v1: { notes: [], rh: 'hold', role: 'Sustentação' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Bordão Sustentado' },
+                percussion: null,
+                ann: 'Ressonância contínua como sino de igreja na alvorada.'
+            },
+            {
+                measure: 4, beat: 3,
+                motionType: 'oblique', motionLabel: '✨ Amém Caboclo',
+                intervalLabel: 'Harmônico 12ª', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 12 }, { c: 1, f: 12 }], rh: 'i', role: 'Harmônico Primas' },
+                v2: { notes: [{ c: 3, f: 12 }, { c: 4, f: 12 }], rh: 'p', role: 'Harmônico Bordões' },
+                percussion: null,
+                ann: 'Toque de harmônicos nas quatro ordens selando a bênção da romaria.'
+            }
+        ]
+    },
+
+    dueto_choro_cerrado: {
+        id: 'dueto_choro_cerrado',
+        title: 'Chorinho do Cerrado',
+        subtitle: 'Baixaria Contrapontística e Arpejos em Diálogo Polifônico',
+        category: 'choro',
+        genre: 'Choro Caipira / Polifonia Sertaneja',
+        keyId: 'E_maj',
+        keyName: 'Mi Maior (E)',
+        tuning: 'viola_cebolao_e',
+        timeSignature: '2/4',
+        bpm: 92,
+        canon: 'Tradição instrumental de Waldir Azevedo, Paulinho Nogueira e Zé Coco do Riachão',
+        counterpointStyle: 'Contraponto Linear Contínuo & Baixaria Caipira',
+        description: 'A fascinante fusão do choro brasileiro com a viola caipira: a 2ª Viola assume a função de bordão solista com linhas de baixo contrapontísticas móveis e cromatismos, enquanto a 1ª Viola tece arpejos rápidos e resoluções harmônicas de alta sofisticação.',
+        steps: [
+            {
+                measure: 1, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Baixaria Inicial',
+                intervalLabel: '8ª Justa', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 4 }, { c: 1, f: 0 }], rh: 'p+i', role: 'Arpejo G#4/B3' },
+                v2: { notes: [{ c: 3, f: 0 }], rh: 'p', role: 'Baixaria Mi3' },
+                percussion: null,
+                ann: 'V1 abre arpejo sincopado; V2 inicia a linha de baixo móvel do choro.'
+            },
+            {
+                measure: 1, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Cromatismo V2',
+                intervalLabel: '10ª Menor', harmonicContext: 'I7 (E7)',
+                v1: { notes: [{ c: 0, f: 7 }, { c: 1, f: 0 }], rh: 'p+i', role: 'Agudo Si4/B3' },
+                v2: { notes: [{ c: 4, f: 4 }], rh: 'p', role: 'Baixo Cromático Ré#3' },
+                percussion: null,
+                ann: 'V2 desce cromaticamente pelo Ré# nos bordões; V1 estende o arpejo no agudo.'
+            },
+            {
+                measure: 2, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Resolução IV',
+                intervalLabel: '8ª Justa', harmonicContext: 'IV (A)',
+                v1: { notes: [{ c: 0, f: 5 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Arpejo Lá4/Mi4' },
+                v2: { notes: [{ c: 4, f: 2 }], rh: 'p', role: 'Baixo Dó#3' },
+                percussion: null,
+                ann: 'Resolução no acorde de Lá Maior com o baixo na 1ª inversão (Dó#).'
+            },
+            {
+                measure: 2, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Passagem Diminuta',
+                intervalLabel: '6ª Menor', harmonicContext: '#IV° (A#°)',
+                v1: { notes: [{ c: 0, f: 6 }, { c: 1, f: 5 }], rh: 'p+i', role: 'Lá#4/Mi4' },
+                v2: { notes: [{ c: 3, f: 3 }], rh: 'p', role: 'Baixo Lá#3' },
+                percussion: 'chock',
+                ann: 'O icônico diminuto de passagem do choro brasileiro com corte sincopado [CHOCK].'
+            },
+            {
+                measure: 3, beat: 1,
+                motionType: 'contrary', motionLabel: '⤢ Cadência ii - V7',
+                intervalLabel: '11ª Justa', harmonicContext: 'ii (F#m)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 2 }], rh: 'p+i', role: 'Fá#4/Dó#4' },
+                v2: { notes: [{ c: 3, f: 2 }], rh: 'p', role: 'Baixo Fá#3' },
+                percussion: null,
+                ann: 'Cadência seresteira ii - V7 com as vozes dialogando em contraponto linear.'
+            },
+            {
+                measure: 3, beat: 2,
+                motionType: 'contrary', motionLabel: '⤢ Dominante B7',
+                intervalLabel: '9ª Maior', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 2 }, { c: 1, f: 4 }], rh: 'p+i', role: 'Fá#4/Ré#4' },
+                v2: { notes: [{ c: 4, f: 0 }], rh: 'p', role: 'Bordão Si2' },
+                percussion: null,
+                ann: 'Dominante plena com a sensível Ré# na 1ª viola e o baixo fundamental Si na 2ª.'
+            },
+            {
+                measure: 4, beat: 1,
+                motionType: 'parallel_3rd', motionLabel: '⥤ Frase Sincopada',
+                intervalLabel: '3ª Menor', harmonicContext: 'V7 (B7)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 2 }], rh: 'p+i', role: 'Mi4/Dó#4' },
+                v2: { notes: [{ c: 4, f: 2 }], rh: 'p', role: 'Bordão Dó#3' },
+                percussion: null,
+                ann: 'Síncope elegante de retorno à tônica.'
+            },
+            {
+                measure: 4, beat: 2,
+                motionType: 'parallel_6th', motionLabel: '✨ Final de Chorinho',
+                intervalLabel: 'Acorde Pleno', harmonicContext: 'I (E)',
+                v1: { notes: [{ c: 0, f: 0 }, { c: 1, f: 0 }, { c: 2, f: 0 }], rh: 'rasq', role: 'Dedilhado Rápido' },
+                v2: { notes: [{ c: 3, f: 0 }, { c: 4, f: 0 }], rh: 'p', role: 'Bordão Fundamental + Tap' },
+                percussion: 'tap',
+                ann: 'Fechamento refinado com arpejo rápido nas primas e batida no cavalete [TAP]!'
+            }
+        ]
+    }
+};
+
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -2310,7 +2958,8 @@ const MIC_CHORD_SIMULATION_PRESETS = {
         modulation: Object.assign({}, DEFAULT_MODULATION_STATE),
         folia: Object.assign({}, DEFAULT_FOLIA_STATE),
         capoDuo: Object.assign({}, DEFAULT_CAPO_DUO_STATE),
-        micRecognizer: Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE)
+        micRecognizer: Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE),
+        polyphonic: Object.assign({}, DEFAULT_POLYPHONIC_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -2338,6 +2987,8 @@ const MIC_CHORD_SIMULATION_PRESETS = {
     let activeFoliaTimers = [];
     let capoVocalDemoTimer = null;
     let activeCapoTimers = [];
+    let polyphonicPlaybackTimer = null;
+    let activePolyphonicTimers = [];
     let micStream = null;
     let micSourceNode = null;
     let micFilterNode = null;
@@ -11275,6 +11926,7 @@ async function startMicCapture() {
     } catch (err) {
         console.warn('Erro ao acessar microfone:', err);
         stopMicCapture();
+        stopPolyphonicAudio();
         state.micRecognizer.statusText = `Acesso ao microfone indisponível (${err.name || 'Permissão recusada'}). Você pode experimentar todas as funcionalidades usando o Simulador Acústico de Teste abaixo!`;
         updateMicUI();
     }
@@ -12575,6 +13227,1161 @@ function setupMicRecognizerListeners() {
     if (window.lucide && window.lucide.createIcons) {
         window.lucide.createIcons();
     }
+}
+
+
+// =========================================================================
+// FASE 15: GERADOR DE ARRANJOS POLIFÔNICOS & CONTRAPONTO CAIPIRA A DUAS VIOLAS
+// =========================================================================
+
+function stopPolyphonicAudio() {
+    if (polyphonicPlaybackTimer) {
+        clearTimeout(polyphonicPlaybackTimer);
+        polyphonicPlaybackTimer = null;
+    }
+    if (activePolyphonicTimers && activePolyphonicTimers.length > 0) {
+        activePolyphonicTimers.forEach((t) => clearTimeout(t));
+        activePolyphonicTimers = [];
+    }
+    state.polyphonic.isPlaying = false;
+    state.polyphonic.currentStepIdx = -1;
+    updatePolyphonicUIProgress();
+    if (state.displayMode === 'POLYPHONIC') {
+        renderFretboardSVG();
+    }
+}
+
+function pluckMidiNoteSpatial(midi, startTimeOffset = 0, duration = 1.9, detuneCents = 0, gainLevel = 0.22, pan = 0, voiceType = 'v1') {
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime + Math.max(0, startTimeOffset);
+    const freq = midiToFreq(midi);
+
+    const masterGain = ctx.createGain();
+    const bodyFilter = ctx.createBiquadFilter();
+    bodyFilter.type = 'lowpass';
+
+    if (voiceType === 'v1') {
+        // 1ª Viola Requinteira: mais brilhante, ataque cortante, harmônicos agudos
+        bodyFilter.frequency.setValueAtTime(Math.min(7200, freq * 7.5), now);
+        bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(500, freq * 2.2), now + duration * 0.7);
+        bodyFilter.Q.setValueAtTime(1.8, now);
+    } else {
+        // 2ª Viola Contra-Mestre: timbre aveludado, encorpado, ênfase no grave e sustentação
+        bodyFilter.frequency.setValueAtTime(Math.min(4800, freq * 5.0), now);
+        bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(280, freq * 1.4), now + duration * 0.85);
+        bodyFilter.Q.setValueAtTime(1.2, now);
+    }
+
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'triangle';
+    osc2.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(freq, now);
+    osc2.frequency.setValueAtTime(freq, now);
+    osc1.detune.setValueAtTime(detuneCents, now);
+    osc2.detune.setValueAtTime(detuneCents + (voiceType === 'v1' ? 2.0 : 1.0), now);
+
+    const g1 = ctx.createGain();
+    const g2 = ctx.createGain();
+    if (voiceType === 'v1') {
+        g1.gain.value = 0.65;
+        g2.gain.value = 0.35;
+    } else {
+        g1.gain.value = 0.82;
+        g2.gain.value = 0.18;
+    }
+
+    masterGain.gain.setValueAtTime(0.0001, now);
+    masterGain.gain.linearRampToValueAtTime(gainLevel, now + 0.005);
+    masterGain.gain.exponentialRampToValueAtTime(gainLevel * 0.40, now + 0.20);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc1.connect(g1);
+    osc2.connect(g2);
+    g1.connect(bodyFilter);
+    g2.connect(bodyFilter);
+    bodyFilter.connect(masterGain);
+
+    // Conexão com StereoPannerNode para separação binaural em estéreo real
+    if (typeof ctx.createStereoPanner === 'function') {
+        try {
+            const panner = ctx.createStereoPanner();
+            const clampedPan = Math.max(-1.0, Math.min(1.0, pan));
+            panner.pan.setValueAtTime(clampedPan, now);
+            masterGain.connect(panner);
+            panner.connect(ctx.destination);
+        } catch (_) {
+            masterGain.connect(ctx.destination);
+        }
+    } else {
+        masterGain.connect(ctx.destination);
+    }
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + duration + 0.05);
+    osc2.stop(now + duration + 0.05);
+}
+
+function playPolyphonicCourse(courseIdx, fret, delaySec = 0, voiceType = 'v1', pan = 0, gainLevel = 0.20) {
+    if (fret < 0) return;
+    const inst = INSTRUMENTS[state.instrumentId];
+    const course = inst.courses[courseIdx];
+    if (!course) return;
+
+    if (inst.isPaired && course.midi.length === 2) {
+        // Par oitavado ou uníssono
+        pluckMidiNoteSpatial(course.midi[0] + fret, delaySec, 1.85, -1.6, gainLevel * 0.9, pan, voiceType);
+        pluckMidiNoteSpatial(course.midi[1] + fret, delaySec + 0.010, 1.85, 1.6, gainLevel * 0.85, pan, voiceType);
+    } else {
+        pluckMidiNoteSpatial(course.midi[0] + fret, delaySec, 1.95, 0, gainLevel, pan, voiceType);
+    }
+}
+
+function playPolyphonicStep(step) {
+    if (!step) return;
+    const vf = state.polyphonic.voiceFilter;
+    const v1Vol = state.polyphonic.v1Volume;
+    const v2Vol = state.polyphonic.v2Volume;
+    const v1Pan = state.polyphonic.v1Pan;
+    const v2Pan = state.polyphonic.v2Pan;
+
+    // 1ª Viola (V1)
+    if ((vf === 'both' || vf === 'v1') && step.v1 && step.v1.notes && step.v1.notes.length > 0) {
+        step.v1.notes.forEach((n, idx) => {
+            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                playPolyphonicCourse(n.c, n.f, idx * 0.008, 'v1', v1Pan, 0.22 * v1Vol);
+            }
+        });
+    }
+
+    // 2ª Viola (V2)
+    if ((vf === 'both' || vf === 'v2') && step.v2 && step.v2.notes && step.v2.notes.length > 0) {
+        step.v2.notes.forEach((n, idx) => {
+            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                playPolyphonicCourse(n.c, n.f, idx * 0.008, 'v2', v2Pan, 0.22 * v2Vol);
+            }
+        });
+    }
+
+    // Efeitos percussivos tradicionais
+    if (step.percussion === 'tap') {
+        playWoodTap(0, 0.85 * v2Vol);
+    } else if (step.percussion === 'chock') {
+        playMuteChock(0, 0.80 * v2Vol);
+    }
+}
+
+function playSinglePolyphonicStep(idx) {
+    const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[state.polyphonic.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+    if (!arr || !arr.steps || !arr.steps[idx]) return;
+
+    stopPolyphonicAudio();
+    state.polyphonic.currentStepIdx = idx;
+    playPolyphonicStep(arr.steps[idx]);
+    updatePolyphonicUIProgress();
+
+    if (state.displayMode === 'POLYPHONIC') {
+        renderFretboardSVG();
+    }
+}
+
+function playPolyphonicSequence() {
+    const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[state.polyphonic.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+    if (!arr || !arr.steps || arr.steps.length === 0) return;
+
+    stopPolyphonicAudio();
+    state.polyphonic.isPlaying = true;
+    state.polyphonic.currentStepIdx = 0;
+
+    const baseBpm = arr.bpm || 90;
+    const speed = state.polyphonic.playbackSpeed || 1.0;
+    const effectiveBpm = baseBpm * speed;
+    const stepDurationMs = (60000 / effectiveBpm) * (arr.timeSignature === '3/4' ? 1.0 : 0.85);
+
+    function executeStep(idx) {
+        if (!state.polyphonic.isPlaying) return;
+
+        state.polyphonic.currentStepIdx = idx;
+        const currentStep = arr.steps[idx];
+        playPolyphonicStep(currentStep);
+        updatePolyphonicUIProgress();
+
+        if (state.displayMode === 'POLYPHONIC') {
+            renderFretboardSVG();
+        }
+
+        const nextIdx = idx + 1;
+        if (nextIdx < arr.steps.length) {
+            polyphonicPlaybackTimer = setTimeout(() => {
+                executeStep(nextIdx);
+            }, stepDurationMs);
+        } else {
+            if (state.polyphonic.isLooping) {
+                polyphonicPlaybackTimer = setTimeout(() => {
+                    executeStep(0);
+                }, stepDurationMs * 1.25);
+            } else {
+                polyphonicPlaybackTimer = setTimeout(() => {
+                    stopPolyphonicAudio();
+                }, stepDurationMs);
+            }
+        }
+    }
+
+    executeStep(0);
+}
+
+function updatePolyphonicUIProgress() {
+    const container = document.getElementById('viola-polyphony-container');
+    if (!container) return;
+
+    const playBtn = document.getElementById('btn-viola-polyphony-toggle-play');
+    if (playBtn) {
+        if (state.polyphonic.isPlaying) {
+            playBtn.className = 'min-h-[42px] px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-rose-900/30 transition';
+            playBtn.innerHTML = '<i data-lucide="square" class="w-4 h-4 fill-white"></i><span>Parar Reprodução</span>';
+        } else {
+            playBtn.className = 'min-h-[42px] px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-indigo-900/30 transition';
+            playBtn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-white"></i><span>Tocar Dueto Estéreo</span>';
+        }
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    const curIdx = state.polyphonic.currentStepIdx;
+    container.querySelectorAll('[data-poly-step-card]').forEach((card) => {
+        const idx = parseInt(card.getAttribute('data-poly-step-card'), 10);
+        if (idx === curIdx) {
+            card.classList.add('ring-2', 'ring-indigo-400', 'bg-indigo-500/20', 'border-indigo-400', 'scale-[1.02]');
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+            card.classList.remove('ring-2', 'ring-indigo-400', 'bg-indigo-500/20', 'border-indigo-400', 'scale-[1.02]');
+        }
+    });
+}
+
+function clonePolyphonyToTabEditor(mode = 'duet') {
+    const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[state.polyphonic.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+    if (!arr || !arr.steps) return;
+
+    const projectId = `poly_${arr.id}_${mode}_${Date.now().toString(36)}`;
+    const convertedSteps = arr.steps.map((st) => {
+        let combinedNotes = [];
+        let rh = 'p+i';
+        let ann = '';
+
+        if (mode === 'duet') {
+            const v1Notes = (st.v1 && st.v1.notes) ? st.v1.notes.map((n) => ({ c: n.c, f: n.f })) : [];
+            const v2Notes = (st.v2 && st.v2.notes) ? st.v2.notes.map((n) => ({ c: n.c, f: n.f })) : [];
+            combinedNotes = [...v1Notes, ...v2Notes];
+            rh = 'p+i';
+            ann = `${st.motionLabel || ''} [${st.intervalLabel || ''}]`;
+        } else if (mode === 'v1') {
+            combinedNotes = (st.v1 && st.v1.notes) ? st.v1.notes.map((n) => ({ c: n.c, f: n.f })) : [];
+            rh = (st.v1 && st.v1.rh) || 'i';
+            ann = `1ª Viola (${(st.v1 && st.v1.role) || 'Solo'})`;
+        } else if (mode === 'v2') {
+            combinedNotes = (st.v2 && st.v2.notes) ? st.v2.notes.map((n) => ({ c: n.c, f: n.f })) : [];
+            rh = (st.v2 && st.v2.rh) || 'p';
+            ann = `2ª Viola (${(st.v2 && st.v2.role) || 'Base'})`;
+        }
+
+        return {
+            measure: st.measure,
+            beat: st.beat,
+            notes: combinedNotes,
+            rh: rh,
+            ann: ann
+        };
+    });
+
+    const modeLabels = {
+        duet: 'Dueto a Duas Violas (Mesclado)',
+        v1: '1ª Viola Solo (Requinteira)',
+        v2: '2ª Viola Base (Contra-Mestre)'
+    };
+
+    const newProject = {
+        id: projectId,
+        title: `${arr.title} — ${modeLabels[mode] || 'Dueto'}`,
+        timeSignature: arr.timeSignature || '2/4',
+        bpm: arr.bpm || 92,
+        instrumentId: arr.tuning || state.instrumentId || 'viola_cebolao_e',
+        notes: `Arranjo polifônico gerado no laboratório de contraponto caipira (Fase 15). Estilo: ${arr.counterpointStyle}. Referência: ${arr.canon}.`,
+        steps: convertedSteps
+    };
+
+    if (!Array.isArray(state.tabEditor.projects)) {
+        state.tabEditor.projects = [];
+    }
+    state.tabEditor.projects.unshift(newProject);
+    state.tabEditor.activeProjectId = projectId;
+    state.displayMode = 'TAB_EDITOR';
+    saveViolaState();
+    renderAll();
+
+    const edWrap = document.getElementById('viola-tab-editor-container');
+    if (edWrap) edWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyPolyphonyAnalysis() {
+    const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[state.polyphonic.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+    if (!arr) return;
+
+    let text = `========================================================================\n`;
+    text += `NEXUS VAULT — ESTÚDIO DE VIOLA CAIPIRA & VIOLÃO\n`;
+    text += `ANÁLISE DE CONTRAPONTO CAIPIRA & DUETO POLIFÔNICO (FASE 15)\n`;
+    text += `========================================================================\n\n`;
+    text += `Obra: ${arr.title}\n`;
+    text += `Subtítulo: ${arr.subtitle}\n`;
+    text += `Gênero: ${arr.genre} | Métrica: ${arr.timeSignature} | Andamento: ${arr.bpm} BPM\n`;
+    text += `Tonalidade: ${arr.keyName} | Afinação Alvo: ${arr.tuning || 'Cebolão em Mi'}\n`;
+    text += `Estilo Contrapontístico: ${arr.counterpointStyle}\n`;
+    text += `Canone / Referências: ${arr.canon}\n\n`;
+    text += `DESCRIÇÃO DA PEÇA:\n${arr.description}\n\n`;
+    text += `------------------------------------------------------------------------\n`;
+    text += `DIRETRIZES TÉCNICAS DE EXECUÇÃO:\n`;
+    text += `- 1ª Viola (Requinteira): Posicionamento estéreo L (-50%). Ataque ágil, ponteio brillante em terças e sextas.\n`;
+    text += `- 2ª Viola (Contra-Mestre): Posicionamento estéreo R (+50%). Timbre aveludado, condução de baixaria nos bordões.\n`;
+    text += `- Prevenção de Choques: Mapeamento algorítmico prevenindo colisões de semitom com cantadeiras oitavadas dos pares 3, 4 e 5.\n\n`;
+    text += `------------------------------------------------------------------------\n`;
+    text += `GRADE DE PASSOS & INTERVALOS HARMÔNICOS:\n`;
+
+    arr.steps.forEach((st, idx) => {
+        const v1Desc = (st.v1 && st.v1.notes && st.v1.notes.length > 0)
+            ? st.v1.notes.map((n) => `Par ${n.c + 1} c${n.f}`).join('+')
+            : 'Pausa';
+        const v2Desc = (st.v2 && st.v2.notes && st.v2.notes.length > 0)
+            ? st.v2.notes.map((n) => `Par ${n.c + 1} c${n.f}`).join('+')
+            : (st.percussion ? `[${st.percussion.toUpperCase()}]` : 'Pausa');
+        text += `Passo ${idx + 1} (Comp ${st.measure}.${st.beat}): Movimento ${st.motionLabel} | Intervalo: ${st.intervalLabel} | Harmonia: ${st.harmonicContext}\n`;
+        text += `  • 1ª Viola: ${v1Desc} (${(st.v1 && st.v1.role) || ''})\n`;
+        text += `  • 2ª Viola: ${v2Desc} (${(st.v2 && st.v2.role) || ''})\n`;
+        text += `  • Comentário: ${st.ann || ''}\n\n`;
+    });
+
+    text += `Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} pelo Nexus Vault Tab 3.`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('btn-viola-polyphony-copy-analysis');
+            if (btn) {
+                const oldHtml = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i><span class="text-emerald-400">Copiado com Sucesso!</span>';
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = oldHtml;
+                    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                }, 2200);
+            }
+        });
+    }
+}
+
+// =========================================================================
+// MOTOR DO GERADOR ALGORÍTMICO DE CONTRAPONTO CAIPIRA
+// =========================================================================
+
+function checkOctaveClash(v1Course, v1Fret, v2Course, v2Fret, inst) {
+    if (!inst || !inst.courses || v1Fret < 0 || v2Fret < 0) return false;
+    const c1 = inst.courses[v1Course];
+    const c2 = inst.courses[v2Course];
+    if (!c1 || !c2) return false;
+
+    const midi1 = c1.midi[0] + v1Fret;
+    // Se o par da 2ª viola for oitavado (pares 2, 3, 4 da viola)
+    if (c2.octaved && c2.midi.length === 2) {
+        const bassMidi2 = c2.midi[0] + v2Fret;
+        const cantadeiraMidi2 = c2.midi[1] + v2Fret;
+        // Choque de semitom (segunda menor) com a cantadeira aguda
+        if (Math.abs(midi1 - cantadeiraMidi2) === 1) return true;
+        // Choque de semitom com o bordão
+        if (Math.abs(midi1 - bassMidi2) === 1) return true;
+    }
+    return false;
+}
+
+function getDegreeIntervalName(semitones) {
+    const s = Math.abs(semitones) % 12;
+    const octaves = Math.floor(Math.abs(semitones) / 12);
+    const baseNames = {
+        0: 'Uníssono',
+        1: '2ª Menor',
+        2: '2ª Maior',
+        3: '3ª Menor',
+        4: '3ª Maior',
+        5: '4ª Justa',
+        6: 'Trítono',
+        7: '5ª Justa',
+        8: '6ª Menor',
+        9: '6ª Maior',
+        10: '7ª Menor',
+        11: '7ª Maior'
+    };
+    if (octaves === 0) return baseNames[s];
+    if (octaves === 1) {
+        if (s === 0) return '8ª Justa';
+        if (s === 3 || s === 4) return s === 4 ? '10ª Maior' : '10ª Menor';
+        if (s === 7) return '12ª Composta';
+        return `${baseNames[s]} Composta`;
+    }
+    return `17ª (+2 Oitavas)`;
+}
+
+function generateCaipiraCounterpoint(params = {}) {
+    const keyId = params.keyId || state.polyphonic.generatorKeyId || 'E_maj';
+    const motionType = params.motionType || state.polyphonic.generatorMotionType || 'contrary';
+    const meter = params.meter || state.polyphonic.generatorMeter || '2/4';
+    const measures = parseInt(params.measures || state.polyphonic.generatorMeasures || 4, 10);
+    const virtuosity = params.virtuosity || state.polyphonic.generatorVirtuosity || 'standard';
+
+    const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS['viola_cebolao_e'];
+    const keyObj = HARMONIC_KEYS.find((k) => k.id === keyId) || HARMONIC_KEYS[0];
+    const rootPc = keyObj.root;
+    // Escala maior diatônica
+    const diatonicPcs = [0, 2, 4, 5, 7, 9, 11].map((s) => (rootPc + s) % 12);
+    const beatsPerMeasure = meter === '3/4' ? 3 : 2;
+    const totalSteps = measures * beatsPerMeasure;
+
+    const steps = [];
+    let prevV1Pitch = null;
+    let prevV2Pitch = null;
+
+    for (let sIdx = 0; sIdx < totalSteps; sIdx++) {
+        const measure = Math.floor(sIdx / beatsPerMeasure) + 1;
+        const beat = (sIdx % beatsPerMeasure) + 1;
+        const progress = sIdx / (totalSteps - 1);
+        const isCadence = (sIdx === totalSteps - 1);
+
+        let v1Notes = [];
+        let v2Notes = [];
+        let motionLabel = '⤢ Contrário';
+        let stepMotionType = motionType;
+        let percussion = null;
+        let rhV1 = 'i';
+        let rhV2 = 'p';
+
+        if (isCadence) {
+            // Cadência final triunfal
+            v1Notes = [{ c: 0, f: 0 }, { c: 1, f: 0 }];
+            v2Notes = [{ c: 3, f: 0 }, { c: 4, f: 0 }];
+            motionLabel = '✨ Cadência Final';
+            percussion = 'tap';
+            rhV1 = 'rasq';
+            rhV2 = 'rasq';
+        } else {
+            let v1DegreeIdx = 0;
+            let v2DegreeIdx = 0;
+
+            if (motionType === 'contrary') {
+                if (progress < 0.55) {
+                    // Leque abrindo: V1 sobe, V2 desce
+                    v1DegreeIdx = Math.min(6, Math.floor(progress * 2 * 6));
+                    v2DegreeIdx = Math.max(0, 6 - Math.floor(progress * 2 * 6));
+                } else {
+                    // Leque fechando: V1 desce, V2 sobe
+                    v1DegreeIdx = Math.max(0, 6 - Math.floor((progress - 0.5) * 2 * 6));
+                    v2DegreeIdx = Math.min(6, Math.floor((progress - 0.5) * 2 * 6));
+                }
+                motionLabel = '⤢ Contrário';
+                stepMotionType = 'contrary';
+            } else if (motionType === 'oblique') {
+                // V2 sustenta tônica ou dominante (grau 0 ou 4) enquanto V1 se move
+                v2DegreeIdx = (measure % 2 === 1) ? 0 : 4;
+                v1DegreeIdx = (sIdx * 2) % 7;
+                motionLabel = '⇥ Oblíquo';
+                stepMotionType = 'oblique';
+            } else if (motionType === 'antiphonal') {
+                // Diálogo: compassos ímpares pergunta V1; compassos pares resposta V2
+                if (measure % 2 === 1) {
+                    v1DegreeIdx = (beat * 2) % 7;
+                    v2DegreeIdx = 0;
+                    motionLabel = '💬 Pergunta V1';
+                    if (beat === beatsPerMeasure) percussion = 'tap';
+                } else {
+                    v1DegreeIdx = 0;
+                    v2DegreeIdx = (beat * 2) % 7;
+                    motionLabel = '💬 Resposta V2';
+                    if (beat === beatsPerMeasure) percussion = 'chock';
+                }
+                stepMotionType = 'antiphonal';
+            } else {
+                // thirds_sixths
+                v1DegreeIdx = (sIdx) % 7;
+                v2DegreeIdx = (v1DegreeIdx + 5) % 7; // Terça diatônica abaixo
+                motionLabel = '⥤ Terça Diatônica';
+                stepMotionType = 'parallel_3rd';
+            }
+
+            // Mapeamento físico nas cordas da Viola
+            const v1TargetPc = diatonicPcs[v1DegreeIdx];
+            const v2TargetPc = diatonicPcs[v2DegreeIdx];
+
+            // V1 busca par agudo (0 ou 1)
+            let v1Course = 0;
+            let v1Fret = (v1TargetPc - inst.courses[0].pitchClass + 12) % 12;
+            if (v1Fret > 9 && inst.courses[1]) {
+                v1Course = 1;
+                v1Fret = (v1TargetPc - inst.courses[1].pitchClass + 12) % 12;
+            }
+
+            // V2 busca par grave (3 ou 4)
+            let v2Course = 3;
+            let v2Fret = (v2TargetPc - inst.courses[3].pitchClass + 12) % 12;
+            if (v2Fret > 7 && inst.courses[4]) {
+                v2Course = 4;
+                v2Fret = (v2TargetPc - inst.courses[4].pitchClass + 12) % 12;
+            }
+
+            // Verificação algorítmica de choque de oitavadas
+            if (checkOctaveClash(v1Course, v1Fret, v2Course, v2Fret, inst)) {
+                // Se houver choque, ajusta a nota da 1ª viola para a terça superior
+                v1Fret = (v1Fret + 4) % 12;
+            }
+
+            v1Notes = [{ c: v1Course, f: v1Fret }];
+            v2Notes = [{ c: v2Course, f: v2Fret }];
+
+            if (virtuosity === 'virtuoso' && sIdx % 2 === 1) {
+                // Adiciona nota dupla ou terça na V1
+                const secCourse = (v1Course === 0) ? 1 : 0;
+                const secFret = (diatonicPcs[(v1DegreeIdx + 2) % 7] - inst.courses[secCourse].pitchClass + 12) % 12;
+                v1Notes.push({ c: secCourse, f: secFret });
+                rhV1 = 'p+i';
+            }
+        }
+
+        // Cálculo analítico do intervalo vertical
+        const midiV1 = (v1Notes[0] && inst.courses[v1Notes[0].c]) ? inst.courses[v1Notes[0].c].midi[0] + v1Notes[0].f : 64;
+        const midiV2 = (v2Notes[0] && inst.courses[v2Notes[0].c]) ? inst.courses[v2Notes[0].c].midi[0] + v2Notes[0].f : 52;
+        const intervalLabel = getDegreeIntervalName(midiV1 - midiV2);
+
+        steps.push({
+            measure: measure,
+            beat: beat,
+            motionType: stepMotionType,
+            motionLabel: motionLabel,
+            intervalLabel: intervalLabel,
+            harmonicContext: `${keyObj.label.split(' ')[0]} Maior`,
+            v1: { notes: v1Notes, rh: rhV1, role: '1ª Viola' },
+            v2: { notes: v2Notes, rh: rhV2, role: '2ª Viola' },
+            percussion: percussion,
+            ann: `Comp ${measure}.${beat}: ${motionLabel} com intervalo de ${intervalLabel}.`
+        });
+
+        prevV1Pitch = midiV1;
+        prevV2Pitch = midiV2;
+    }
+
+    const genId = `gen_custom_${Date.now().toString(36)}`;
+    const motionTitles = {
+        contrary: 'Contraponto em Movimento Contrário',
+        oblique: 'Contraponto Oblíquo com Pedais',
+        antiphonal: 'Dueto Antifônico (Duelo de Violas)',
+        thirds_sixths: 'Canto em Terças e Sextas Caipiras'
+    };
+
+    const newArrangement = {
+        id: genId,
+        title: `Arranjo Algorítmico em ${keyObj.label.split(' ')[0]}`,
+        subtitle: `${motionTitles[motionType] || 'Contraponto Caipira'} (${measures} Compassos)`,
+        category: motionType,
+        genre: meter === '3/4' ? 'Toada / Valsa Caipira' : 'Moda / Cururu Procedural',
+        keyId: keyId,
+        keyName: `${keyObj.label.split(' ')[0]} Maior`,
+        tuning: state.instrumentId,
+        timeSignature: meter,
+        bpm: meter === '3/4' ? 80 : 92,
+        canon: 'Gerado proceduralmente pelo motor contrapontístico com proteção anti-choque de oitavadas',
+        counterpointStyle: motionTitles[motionType] || 'Contraponto Diatônico Caipira',
+        description: `Arranjo calculado matematicamente em tempo real: ${measures} compassos em métrica ${meter}, distribuindo vozes independentes em estéreo binaural com proteção estrita contra dissonâncias entre primas e cantadeiras oitavadas.`,
+        steps: steps
+    };
+
+    POLYPHONIC_ARRANGEMENTS_CATALOG[genId] = newArrangement;
+    state.polyphonic.activeArrangementId = genId;
+    saveViolaState();
+    renderAll();
+
+    const stripEl = document.getElementById('viola-polyphony-strip');
+    if (stripEl) stripEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// =========================================================================
+// RENDERIZAÇÃO DA INTERFACE DA FASE 15
+// =========================================================================
+
+function renderPolyphonySection() {
+    const container = document.getElementById('viola-polyphony-container');
+    if (!container) return;
+
+    const poly = state.polyphonic;
+    const arrangements = Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG);
+    const activeArr = POLYPHONIC_ARRANGEMENTS_CATALOG[poly.activeArrangementId] || arrangements[0];
+
+    const html = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-4">
+            <!-- Cabeçalho Principal -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <i data-lucide="layers" class="w-5 h-5 text-indigo-400"></i>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Gerador de Arranjos Polifônicos &amp; Contraponto Caipira a Duas Violas</h3>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">Fase 15</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Áudio Estéreo Binaural 3D</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Anti-Choque Oitavadas</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Condução canônica de vozes a duas violas independentes (1ª Viola Requinteira / Solista à esquerda e 2ª Viola de Base / Resposta à direita), motor de contraponto estrito caipira, sequenciador binaural e exportação em 1 clique para tablatura.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" id="btn-viola-polyphony-to-fretboard" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/40 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i data-lucide="crosshair" class="w-4 h-4 text-indigo-400"></i>
+                        <span>Projetar no Braço</span>
+                    </button>
+                    <button type="button" id="btn-viola-polyphony-copy-analysis" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i data-lucide="clipboard" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Copiar Análise</span>
+                    </button>
+                    <button type="button" id="btn-viola-polyphony-clone-tab" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span>Exportar p/ Tablatura</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de Seleção de Categorias & Repertório -->
+            <div class="space-y-2">
+                <div class="flex flex-wrap items-center gap-1.5" id="viola-polyphony-cat-filter">
+                    ${Object.values(POLYPHONIC_CATEGORIES).map((cat) => `
+                        <button type="button" data-poly-cat="${cat.id}"
+                            class="px-2.5 py-1 rounded-lg text-xs font-mono transition ${
+                                (poly.activeCategory || 'all') === cat.id
+                                    ? 'bg-indigo-600 text-white font-bold shadow'
+                                    : 'bg-[#090d16] text-slate-400 hover:text-slate-200 border border-slate-800'
+                            }">
+                            ${cat.label}
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                    <div class="md:col-span-8">
+                        <select id="viola-polyphony-select-arr" aria-label="Selecione o arranjo polifônico"
+                            class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm font-medium text-slate-100 focus:border-indigo-500">
+                            ${arrangements
+                                .filter((a) => (poly.activeCategory === 'all' || !poly.activeCategory || a.category === poly.activeCategory))
+                                .map((a) => `
+                                    <option value="${a.id}" ${a.id === activeArr.id ? 'selected' : ''}>
+                                        ${a.title} — ${a.genre} (${a.keyName})
+                                    </option>
+                                `).join('')}
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-4 flex items-center gap-2">
+                        <button type="button" id="btn-viola-polyphony-export-v1" class="flex-1 min-h-[42px] px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-mono flex items-center justify-center gap-1 transition" title="Exportar apenas a pauta da 1ª Viola solo para tablatura">
+                            <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            <span>Só 1ª Viola</span>
+                        </button>
+                        <button type="button" id="btn-viola-polyphony-export-v2" class="flex-1 min-h-[42px] px-2.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 text-xs font-mono flex items-center justify-center gap-1 transition" title="Exportar apenas a pauta da 2ª Viola base para tablatura">
+                            <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Só 2ª Viola</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ficha Analítica da Obra Ativa -->
+            <div id="viola-polyphony-analysis-card" class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3">
+                ${renderPolyphonyAnalysisCard(activeArr)}
+            </div>
+
+            <!-- Console de Mixagem Estéreo Binaural & Controles de Playback -->
+            <div class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3.5 space-y-3">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-polyphony-toggle-play" class="min-h-[42px] px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-indigo-900/30 transition">
+                            <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                            <span>Tocar Dueto Estéreo</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-polyphony-prev" class="min-h-[42px] px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1 transition" title="Passo anterior">
+                            <i data-lucide="skip-back" class="w-3.5 h-3.5"></i>
+                            <span>Anterior</span>
+                        </button>
+
+                        <button type="button" id="btn-viola-polyphony-next" class="min-h-[42px] px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1 transition" title="Próximo passo">
+                            <span>Próximo</span>
+                            <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
+                        </button>
+
+                        <button type="button" id="btn-viola-polyphony-loop" class="min-h-[42px] px-3 py-2 rounded-lg ${poly.isLooping ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold' : 'bg-slate-800 text-slate-400 border border-slate-700'} text-xs font-mono flex items-center gap-1.5 transition">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                            <span>Loop</span>
+                        </button>
+
+                        <select id="viola-polyphony-speed" aria-label="Velocidade didática"
+                            class="min-h-[42px] px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-cyan-300">
+                            <option value="0.5" ${poly.playbackSpeed === 0.5 ? 'selected' : ''}>0.5x (Estudo Lento)</option>
+                            <option value="0.75" ${poly.playbackSpeed === 0.75 ? 'selected' : ''}>0.75x (Moderado)</option>
+                            <option value="1.0" ${poly.playbackSpeed === 1.0 ? 'selected' : ''}>1.0x (Tempo Real)</option>
+                            <option value="1.25" ${poly.playbackSpeed === 1.25 ? 'selected' : ''}>1.25x (Virtuosismo)</option>
+                        </select>
+                    </div>
+
+                    <!-- Modo de Escuta (Dueto / Solo 1ª / Solo 2ª) -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono text-slate-400 hidden sm:inline">Modo de Escuta:</span>
+                        <div class="inline-flex rounded-lg bg-slate-900 border border-slate-700 p-0.5" role="group">
+                            <button type="button" id="btn-poly-voice-both" class="px-2.5 py-1 text-xs font-mono rounded font-semibold transition ${poly.voiceFilter === 'both' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}">Dueto Completo</button>
+                            <button type="button" id="btn-poly-voice-v1" class="px-2.5 py-1 text-xs font-mono rounded font-semibold transition ${poly.voiceFilter === 'v1' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}" title="Silencia a 2ª viola para você tocar a base no seu instrumento">Só 1ª Viola</button>
+                            <button type="button" id="btn-poly-voice-v2" class="px-2.5 py-1 text-xs font-mono rounded font-semibold transition ${poly.voiceFilter === 'v2' ? 'bg-cyan-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}" title="Silencia a 1ª viola para você solar no seu instrumento">Só 2ª Viola</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Faders Estéreo Binaurais -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800/80">
+                    <!-- Fader 1ª Viola -->
+                    <div class="bg-slate-900/80 border border-emerald-500/30 rounded-lg p-2.5 flex items-center justify-between gap-3">
+                        <div class="shrink-0 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <div>
+                                <div class="text-xs font-bold text-emerald-300 font-mono">1ª Viola (Requinteira)</div>
+                                <div class="text-[10px] text-slate-400 font-mono">Pan: -50% (Palco Esquerdo / L)</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 w-32 sm:w-40">
+                            <input type="range" id="viola-slider-poly-v1-vol" min="0" max="100" value="${Math.round(poly.v1Volume * 100)}"
+                                class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
+                            <span id="label-poly-v1-vol" class="text-xs font-mono text-emerald-400 w-8 text-right">${Math.round(poly.v1Volume * 100)}%</span>
+                        </div>
+                    </div>
+
+                    <!-- Fader 2ª Viola -->
+                    <div class="bg-slate-900/80 border border-cyan-500/30 rounded-lg p-2.5 flex items-center justify-between gap-3">
+                        <div class="shrink-0 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-cyan-500"></span>
+                            <div>
+                                <div class="text-xs font-bold text-cyan-300 font-mono">2ª Viola (Contra-Mestre)</div>
+                                <div class="text-[10px] text-slate-400 font-mono">Pan: +50% (Palco Direito / R)</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 w-32 sm:w-40">
+                            <input type="range" id="viola-slider-poly-v2-vol" min="0" max="100" value="${Math.round(poly.v2Volume * 100)}"
+                                class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                            <span id="label-poly-v2-vol" class="text-xs font-mono text-cyan-400 w-8 text-right">${Math.round(poly.v2Volume * 100)}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Régua Interativa de Compassos e Passos (Score Strip) -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+                    <span class="flex items-center gap-1.5">
+                        <i data-lucide="music-2" class="w-3.5 h-3.5 text-indigo-400"></i>
+                        <span>Pauta Interativa do Dueto (Clique em qualquer tempo para soar em estéreo):</span>
+                    </span>
+                    <span class="text-indigo-300 font-semibold">${activeArr.steps.length} tempos mapeados</span>
+                </div>
+
+                <div id="viola-polyphony-strip" class="flex gap-2 overflow-x-auto pb-2 pt-1 scroll-smooth">
+                    ${renderPolyphonyStrip(activeArr)}
+                </div>
+            </div>
+
+            <!-- Gerador Algorítmico de Contraponto Caipira (Estúdio Procedural) -->
+            <div class="bg-gradient-to-r from-indigo-950/30 to-slate-900 border border-indigo-500/30 rounded-xl p-4 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i>
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-200 uppercase tracking-wider font-mono">Estúdio do Gerador Algorítmico de Contraponto</h4>
+                    </div>
+                    <span class="text-[11px] text-indigo-300 font-mono">Geração instantânea respeitando condução diatônica caipira</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2.5 text-xs font-mono">
+                    <!-- Tonalidade -->
+                    <div>
+                        <label class="block text-slate-400 text-[10px] uppercase mb-1">Tonalidade:</label>
+                        <select id="viola-gen-key" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-emerald-300 font-bold">
+                            <option value="E_maj" ${poly.generatorKeyId === 'E_maj' ? 'selected' : ''}>Mi Maior (E nativo)</option>
+                            <option value="A_maj" ${poly.generatorKeyId === 'A_maj' ? 'selected' : ''}>Lá Maior (A)</option>
+                            <option value="B_maj" ${poly.generatorKeyId === 'B_maj' ? 'selected' : ''}>Si Maior (B)</option>
+                            <option value="D_maj" ${poly.generatorKeyId === 'D_maj' ? 'selected' : ''}>Ré Maior (D)</option>
+                            <option value="G_maj" ${poly.generatorKeyId === 'G_maj' ? 'selected' : ''}>Sol Maior (G)</option>
+                        </select>
+                    </div>
+
+                    <!-- Estilo de Movimento -->
+                    <div>
+                        <label class="block text-slate-400 text-[10px] uppercase mb-1">Condução de Vozes:</label>
+                        <select id="viola-gen-motion" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-indigo-300 font-bold">
+                            <option value="contrary" ${poly.generatorMotionType === 'contrary' ? 'selected' : ''}>Movimento Contrário</option>
+                            <option value="oblique" ${poly.generatorMotionType === 'oblique' ? 'selected' : ''}>Movimento Oblíquo (Pedais)</option>
+                            <option value="antiphonal" ${poly.generatorMotionType === 'antiphonal' ? 'selected' : ''}>Diálogo Antifônico</option>
+                            <option value="thirds_sixths" ${poly.generatorMotionType === 'thirds_sixths' ? 'selected' : ''}>Terças e Sextas Conduzidas</option>
+                        </select>
+                    </div>
+
+                    <!-- Métrica -->
+                    <div>
+                        <label class="block text-slate-400 text-[10px] uppercase mb-1">Métrica Rítmica:</label>
+                        <select id="viola-gen-meter" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-200">
+                            <option value="2/4" ${poly.generatorMeter === '2/4' ? 'selected' : ''}>2/4 (Cururu / Pagode)</option>
+                            <option value="3/4" ${poly.generatorMeter === '3/4' ? 'selected' : ''}>3/4 (Toada / Folia)</option>
+                        </select>
+                    </div>
+
+                    <!-- Compassos -->
+                    <div>
+                        <label class="block text-slate-400 text-[10px] uppercase mb-1">Extensão:</label>
+                        <select id="viola-gen-measures" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-200">
+                            <option value="4" ${poly.generatorMeasures === 4 ? 'selected' : ''}>4 Compassos</option>
+                            <option value="8" ${poly.generatorMeasures === 8 ? 'selected' : ''}>8 Compassos (Estendido)</option>
+                        </select>
+                    </div>
+
+                    <!-- Virtuosismo -->
+                    <div>
+                        <label class="block text-slate-400 text-[10px] uppercase mb-1">Nível de Requinta:</label>
+                        <select id="viola-gen-virtuosity" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-amber-300">
+                            <option value="standard" ${poly.generatorVirtuosity === 'standard' ? 'selected' : ''}>Padrão Caipira</option>
+                            <option value="virtuoso" ${poly.generatorVirtuosity === 'virtuoso' ? 'selected' : ''}>Virtuoso (Dobrado)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-1">
+                    <button type="button" id="btn-viola-polyphony-generate" class="min-h-[40px] px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs font-mono flex items-center gap-2 shadow-lg shadow-indigo-900/40 transition">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+                        <span>Gerar Novo Arranjo Caipira</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+
+    // Vinculação de eventos da seção
+    const selArr = document.getElementById('viola-polyphony-select-arr');
+    if (selArr) {
+        selArr.addEventListener('change', (e) => {
+            stopPolyphonicAudio();
+            state.polyphonic.activeArrangementId = e.target.value;
+            saveViolaState();
+            renderAll();
+        });
+    }
+
+    // Filtros de categoria
+    container.querySelectorAll('[data-poly-cat]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            state.polyphonic.activeCategory = btn.getAttribute('data-poly-cat');
+            renderPolyphonySection();
+        });
+    });
+
+    // Controles de Playback
+    const playBtn = document.getElementById('btn-viola-polyphony-toggle-play');
+    if (playBtn) {
+        playBtn.addEventListener('click', () => {
+            if (state.polyphonic.isPlaying) {
+                stopPolyphonicAudio();
+            } else {
+                playPolyphonicSequence();
+            }
+        });
+    }
+
+    const prevBtn = document.getElementById('btn-viola-polyphony-prev');
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[state.polyphonic.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+            if (!arr || !arr.steps) return;
+            let targetIdx = state.polyphonic.currentStepIdx - 1;
+            if (targetIdx < 0) targetIdx = arr.steps.length - 1;
+            playSinglePolyphonicStep(targetIdx);
+        });
+    }
+
+    const nextBtn = document.getElementById('btn-viola-polyphony-next');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[state.polyphonic.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+            if (!arr || !arr.steps) return;
+            let targetIdx = state.polyphonic.currentStepIdx + 1;
+            if (targetIdx >= arr.steps.length) targetIdx = 0;
+            playSinglePolyphonicStep(targetIdx);
+        });
+    }
+
+    const loopBtn = document.getElementById('btn-viola-polyphony-loop');
+    if (loopBtn) {
+        loopBtn.addEventListener('click', () => {
+            state.polyphonic.isLooping = !state.polyphonic.isLooping;
+            loopBtn.className = `min-h-[42px] px-3 py-2 rounded-lg ${state.polyphonic.isLooping ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold' : 'bg-slate-800 text-slate-400 border border-slate-700'} text-xs font-mono flex items-center gap-1.5 transition`;
+            saveViolaState();
+        });
+    }
+
+    const speedSel = document.getElementById('viola-polyphony-speed');
+    if (speedSel) {
+        speedSel.addEventListener('change', (e) => {
+            state.polyphonic.playbackSpeed = parseFloat(e.target.value) || 1.0;
+            saveViolaState();
+        });
+    }
+
+    // Modo de escuta (both / v1 / v2)
+    const btnBoth = document.getElementById('btn-poly-voice-both');
+    const btnV1 = document.getElementById('btn-poly-voice-v1');
+    const btnV2 = document.getElementById('btn-poly-voice-v2');
+    if (btnBoth && btnV1 && btnV2) {
+        btnBoth.addEventListener('click', () => {
+            state.polyphonic.voiceFilter = 'both';
+            renderPolyphonySection();
+            saveViolaState();
+        });
+        btnV1.addEventListener('click', () => {
+            state.polyphonic.voiceFilter = 'v1';
+            renderPolyphonySection();
+            saveViolaState();
+        });
+        btnV2.addEventListener('click', () => {
+            state.polyphonic.voiceFilter = 'v2';
+            renderPolyphonySection();
+            saveViolaState();
+        });
+    }
+
+    // Sliders de volume
+    const v1Slider = document.getElementById('viola-slider-poly-v1-vol');
+    if (v1Slider) {
+        v1Slider.addEventListener('input', (e) => {
+            state.polyphonic.v1Volume = (parseInt(e.target.value, 10) || 0) / 100;
+            const lbl = document.getElementById('label-poly-v1-vol');
+            if (lbl) lbl.textContent = `${Math.round(state.polyphonic.v1Volume * 100)}%`;
+            saveViolaState();
+        });
+    }
+
+    const v2Slider = document.getElementById('viola-slider-poly-v2-vol');
+    if (v2Slider) {
+        v2Slider.addEventListener('input', (e) => {
+            state.polyphonic.v2Volume = (parseInt(e.target.value, 10) || 0) / 100;
+            const lbl = document.getElementById('label-poly-v2-vol');
+            if (lbl) lbl.textContent = `${Math.round(state.polyphonic.v2Volume * 100)}%`;
+            saveViolaState();
+        });
+    }
+
+    // Exportações para Tablatura
+    const cloneTabBtn = document.getElementById('btn-viola-polyphony-clone-tab');
+    if (cloneTabBtn) {
+        cloneTabBtn.addEventListener('click', () => clonePolyphonyToTabEditor('duet'));
+    }
+    const cloneV1Btn = document.getElementById('btn-viola-polyphony-export-v1');
+    if (cloneV1Btn) {
+        cloneV1Btn.addEventListener('click', () => clonePolyphonyToTabEditor('v1'));
+    }
+    const cloneV2Btn = document.getElementById('btn-viola-polyphony-export-v2');
+    if (cloneV2Btn) {
+        cloneV2Btn.addEventListener('click', () => clonePolyphonyToTabEditor('v2'));
+    }
+
+    // Copiar Análise
+    const copyBtn = document.getElementById('btn-viola-polyphony-copy-analysis');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyPolyphonyAnalysis);
+    }
+
+    // Projetar no Braço
+    const toFretBtn = document.getElementById('btn-viola-polyphony-to-fretboard');
+    if (toFretBtn) {
+        toFretBtn.addEventListener('click', () => {
+            stopAllAudio();
+            state.displayMode = 'POLYPHONIC';
+            saveViolaState();
+            renderAll();
+            const fboard = document.getElementById('viola-fretboard-svg-wrap');
+            if (fboard) fboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    // Clique individual nos cards da régua
+    container.querySelectorAll('[data-poly-step-card]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const idx = parseInt(card.getAttribute('data-poly-step-card'), 10);
+            playSinglePolyphonicStep(idx);
+        });
+    });
+
+    // Botão Gerar
+    const genBtn = document.getElementById('btn-viola-polyphony-generate');
+    if (genBtn) {
+        genBtn.addEventListener('click', () => {
+            const keySel = document.getElementById('viola-gen-key');
+            const motionSel = document.getElementById('viola-gen-motion');
+            const meterSel = document.getElementById('viola-gen-meter');
+            const measuresSel = document.getElementById('viola-gen-measures');
+            const virtSel = document.getElementById('viola-gen-virtuosity');
+
+            state.polyphonic.generatorKeyId = keySel ? keySel.value : 'E_maj';
+            state.polyphonic.generatorMotionType = motionSel ? motionSel.value : 'contrary';
+            state.polyphonic.generatorMeter = meterSel ? meterSel.value : '2/4';
+            state.polyphonic.generatorMeasures = measuresSel ? parseInt(measuresSel.value, 10) : 4;
+            state.polyphonic.generatorVirtuosity = virtSel ? virtSel.value : 'standard';
+
+            generateCaipiraCounterpoint({
+                keyId: state.polyphonic.generatorKeyId,
+                motionType: state.polyphonic.generatorMotionType,
+                meter: state.polyphonic.generatorMeter,
+                measures: state.polyphonic.generatorMeasures,
+                virtuosity: state.polyphonic.generatorVirtuosity
+            });
+        });
+    }
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
+function renderPolyphonyAnalysisCard(arr) {
+    if (!arr) return '';
+
+    // Contagem de tipos de movimento
+    let contraryCount = 0;
+    let obliqueCount = 0;
+    let parallelCount = 0;
+    let antiphonalCount = 0;
+
+    if (arr.steps && arr.steps.length > 0) {
+        arr.steps.forEach((st) => {
+            if (st.motionType === 'contrary') contraryCount++;
+            else if (st.motionType === 'oblique') obliqueCount++;
+            else if (st.motionType === 'antiphonal') antiphonalCount++;
+            else parallelCount++;
+        });
+    }
+    const total = arr.steps ? arr.steps.length : 1;
+    const contraryPct = Math.round((contraryCount / total) * 100);
+    const obliquePct = Math.round((obliqueCount / total) * 100);
+    const parallelPct = Math.round((parallelCount / total) * 100);
+
+    return `
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 pb-3 border-b border-slate-800">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">${arr.genre}</span>
+                    <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700">${arr.timeSignature} · ${arr.bpm} BPM</span>
+                    <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">${arr.keyName}</span>
+                </div>
+                <h4 class="text-base font-bold text-slate-100 mt-1 font-mono">${arr.title}</h4>
+                <p class="text-xs text-slate-400">${arr.subtitle}</p>
+            </div>
+            <div class="text-right text-[11px] font-mono text-slate-400">
+                <div class="text-slate-300 font-semibold">Canone / Inspiração:</div>
+                <div class="text-amber-300/90">${arr.canon}</div>
+            </div>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">${arr.description}</p>
+
+        <!-- Indicadores Analíticos de Contraponto -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-xs">
+            <div class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-center">
+                <div class="text-[10px] text-slate-400 uppercase">Mov. Contrário</div>
+                <div class="text-sm font-bold text-indigo-400 mt-0.5">${contraryPct}%</div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-center">
+                <div class="text-[10px] text-slate-400 uppercase">Mov. Oblíquo</div>
+                <div class="text-sm font-bold text-amber-400 mt-0.5">${obliquePct}%</div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-center">
+                <div class="text-[10px] text-slate-400 uppercase">Terças/Sextas</div>
+                <div class="text-sm font-bold text-emerald-400 mt-0.5">${parallelPct}%</div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-center">
+                <div class="text-[10px] text-slate-400 uppercase">Choque Oitavadas</div>
+                <div class="text-sm font-bold text-emerald-300 mt-0.5">0 (Blindado)</div>
+            </div>
+        </div>
+    `;
+}
+
+function renderPolyphonyStrip(arr) {
+    if (!arr || !arr.steps || arr.steps.length === 0) {
+        return '<div class="text-xs text-slate-400 py-3 text-center w-full">Nenhum passo de contraponto carregado.</div>';
+    }
+
+    const curIdx = state.polyphonic.currentStepIdx;
+
+    return arr.steps.map((st, idx) => {
+        const isCurrent = idx === curIdx;
+        const v1Note = (st.v1 && st.v1.notes && st.v1.notes[0]) || null;
+        const v2Note = (st.v2 && st.v2.notes && st.v2.notes[0]) || null;
+
+        const v1FretStr = v1Note ? (v1Note.f === 0 ? 'Solto' : `Casa ${v1Note.f}`) : '—';
+        const v1CourseStr = v1Note ? `${v1Note.c + 1}º Par` : 'Pausa';
+
+        const v2FretStr = v2Note ? (v2Note.f === 0 ? 'Solto' : `Casa ${v2Note.f}`) : (st.percussion ? `[${st.percussion.toUpperCase()}]` : '—');
+        const v2CourseStr = v2Note ? `${v2Note.c + 1}º Par` : (st.percussion ? 'Percussão' : 'Pausa');
+
+        const motionBadgeColors = {
+            contrary: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+            oblique: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+            antiphonal: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+            parallel_3rd: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+            parallel_6th: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+        };
+        const badgeClass = motionBadgeColors[st.motionType] || 'bg-slate-800 text-slate-300 border-slate-700';
+
+        return `
+            <div data-poly-step-card="${idx}"
+                class="min-w-[130px] sm:min-w-[145px] max-w-[150px] p-2.5 rounded-xl border cursor-pointer select-none transition shrink-0 ${
+                    isCurrent
+                        ? 'bg-indigo-500/20 border-indigo-400 ring-2 ring-indigo-400/50 shadow-lg'
+                        : 'bg-[#090d16] border-slate-800 hover:border-slate-700'
+                }">
+                <!-- Topo: Compasso e Movimento -->
+                <div class="flex items-center justify-between gap-1 pb-1.5 border-b border-slate-800 text-[10px] font-mono">
+                    <span class="text-slate-400 font-semibold">C${st.measure}.${st.beat}</span>
+                    <span class="px-1.5 py-0.2 rounded border text-[9px] font-bold ${badgeClass}">${st.motionLabel}</span>
+                </div>
+
+                <!-- 1ª Viola (V1 Requinteira) -->
+                <div class="py-1.5 border-b border-slate-800/60 font-mono">
+                    <div class="flex items-center justify-between text-[10px] text-emerald-400">
+                        <span class="font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>V1 (L)</span>
+                        <span class="text-slate-400">${(st.v1 && st.v1.rh) || 'i'}</span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-100">${v1CourseStr}</div>
+                    <div class="text-[10px] text-slate-400">${v1FretStr}</div>
+                </div>
+
+                <!-- 2ª Viola (V2 Base) -->
+                <div class="py-1.5 border-b border-slate-800/60 font-mono">
+                    <div class="flex items-center justify-between text-[10px] text-cyan-400">
+                        <span class="font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>V2 (R)</span>
+                        <span class="text-slate-400">${(st.v2 && st.v2.rh) || 'p'}</span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-100">${v2CourseStr}</div>
+                    <div class="text-[10px] text-slate-400">${v2FretStr}</div>
+                </div>
+
+                <!-- Rodapé: Intervalo Harmônico -->
+                <div class="pt-1 text-center font-mono">
+                    <span class="text-[10px] text-amber-300 font-bold">${st.intervalLabel}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 
@@ -14969,6 +16776,96 @@ function setupMicRecognizerListeners() {
 
 
         
+                } else if (state.displayMode === 'POLYPHONIC') {
+            // FASE 15: PROJEÃ‡ÃƒO DE CONTRAPONTO A DUAS VIOLAS
+            const poly = state.polyphonic;
+            const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[poly.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
+            if (arr && arr.steps) {
+                const curStepIdx = poly.currentStepIdx;
+                const activeStep = (curStepIdx >= 0 && curStepIdx < arr.steps.length) ? arr.steps[curStepIdx] : null;
+
+                // 1. Marcacoes fantasma de todos os passos
+                const ghostKeys = new Set();
+                arr.steps.forEach((st) => {
+                    if (st.v1 && st.v1.notes) {
+                        st.v1.notes.forEach((n) => {
+                            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                                const key = 'v1_' + n.c + '_' + n.f;
+                                if (!ghostKeys.has(key)) {
+                                    ghostKeys.add(key);
+                                    const pc = (inst.courses[n.c] ? inst.courses[n.c].pitchClass + n.f : n.f) % 12;
+                                    activeMarkers.push({
+                                        courseIdx: n.c,
+                                        fret: n.f,
+                                        label: NOTE_NAMES[pc],
+                                        sub: 'V1',
+                                        color: '#10b981',
+                                        opacity: '0.28'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    if (st.v2 && st.v2.notes) {
+                        st.v2.notes.forEach((n) => {
+                            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                                const key = 'v2_' + n.c + '_' + n.f;
+                                if (!ghostKeys.has(key)) {
+                                    ghostKeys.add(key);
+                                    const pc = (inst.courses[n.c] ? inst.courses[n.c].pitchClass + n.f : n.f) % 12;
+                                    activeMarkers.push({
+                                        courseIdx: n.c,
+                                        fret: n.f,
+                                        label: NOTE_NAMES[pc],
+                                        sub: 'V2',
+                                        color: '#06b6d4',
+                                        opacity: '0.28'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // 2. Passo ativo em destaque maximo
+                if (activeStep) {
+                    if (activeStep.v1 && activeStep.v1.notes) {
+                        activeStep.v1.notes.forEach((n) => {
+                            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                                const pc = (inst.courses[n.c] ? inst.courses[n.c].pitchClass + n.f : n.f) % 12;
+                                activeMarkers.push({
+                                    courseIdx: n.c,
+                                    fret: n.f,
+                                    label: NOTE_NAMES[pc],
+                                    sub: '1u{AA} Viola',
+                                    color: '#10b981',
+                                    stroke: '#ffffff',
+                                    strokeWidth: 3.5,
+                                    opacity: '1'
+                                });
+                            }
+                        });
+                    }
+                    if (activeStep.v2 && activeStep.v2.notes) {
+                        activeStep.v2.notes.forEach((n) => {
+                            if (n.c !== undefined && n.f !== undefined && n.f >= 0) {
+                                const pc = (inst.courses[n.c] ? inst.courses[n.c].pitchClass + n.f : n.f) % 12;
+                                activeMarkers.push({
+                                    courseIdx: n.c,
+                                    fret: n.f,
+                                    label: NOTE_NAMES[pc],
+                                    sub: '2u{AA} Viola',
+                                    color: '#06b6d4',
+                                    stroke: '#a855f7',
+                                    strokeWidth: 3.5,
+                                    opacity: '1'
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+
         // Construção SVG
         // FASE 13: Renderizacao da Bracadeira Fisica do Capotraste e Zona Inativa Atras
         let capoDeadZoneSvg = '';
@@ -15717,6 +17614,15 @@ function setupMicRecognizerListeners() {
             } else {
                 state.micRecognizer = Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE);
             }
+
+            if (saved.polyphonic && typeof saved.polyphonic === 'object') {
+                state.polyphonic = Object.assign({}, DEFAULT_POLYPHONIC_STATE, saved.polyphonic, {
+                    isPlaying: false,
+                    currentStepIdx: -1
+                });
+            } else {
+                state.polyphonic = Object.assign({}, DEFAULT_POLYPHONIC_STATE);
+            }
         }
     }
 
@@ -15775,6 +17681,12 @@ function setupMicRecognizerListeners() {
         if (copy.micRecognizer) {
             copy.micRecognizer = Object.assign({}, copy.micRecognizer, {
                 isListening: false
+            });
+        }
+        if (copy.polyphonic) {
+            copy.polyphonic = Object.assign({}, copy.polyphonic, {
+                isPlaying: false,
+                currentStepIdx: -1
             });
         }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
@@ -15846,6 +17758,10 @@ function setupMicRecognizerListeners() {
                             <i data-lucide="mic" class="w-4 h-4 text-red-400"></i>
                             <span>Reconhecedor Polif&ocirc;nico (Fase 14)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-polyphony" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/40 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="layers" class="w-4 h-4 text-indigo-400"></i>
+                            <span>Contraponto Caipira (Fase 15)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -15885,7 +17801,7 @@ function setupMicRecognizerListeners() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -16067,6 +17983,8 @@ function setupMicRecognizerListeners() {
                 <div id="viola-capo-container" class="space-y-4"></div>
                 <!-- Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14) -->
                 <div id="viola-mic-tuner-container" class="space-y-4"></div>
+                <!-- Modulo de Arranjos Polifonicos & Contraponto Caipira a Duas Violas (Fase 15) -->
+                <div id="viola-polyphony-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -16236,7 +18154,8 @@ function setupMicRecognizerListeners() {
             { id: 'btn-viola-mode-modulation', mode: 'MODULATION', activeClass: 'bg-pink-500 text-white shadow' },
             { id: 'btn-viola-mode-folia', mode: 'FOLIA', activeClass: 'bg-amber-500 text-slate-950 shadow' },
             { id: 'btn-viola-mode-capo', mode: 'CAPO', activeClass: 'bg-yellow-500 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-mic', mode: 'MIC', activeClass: 'bg-red-600 text-white shadow' }
+            { id: 'btn-viola-mode-mic', mode: 'MIC', activeClass: 'bg-red-600 text-white shadow' },
+            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', activeClass: 'bg-indigo-600 text-white shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -16364,7 +18283,8 @@ function setupMicRecognizerListeners() {
             { id: 'btn-viola-scroll-modulation', targetId: 'viola-modulation-container' },
             { id: 'btn-viola-scroll-folia', targetId: 'viola-folia-container' },
             { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' },
-            { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' }
+            { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' },
+            { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -16394,7 +18314,8 @@ function setupMicRecognizerListeners() {
             { id: 'btn-viola-mode-modulation', mode: 'MODULATION', scrollTarget: 'viola-modulation-container' },
             { id: 'btn-viola-mode-folia', mode: 'FOLIA', scrollTarget: 'viola-folia-container' },
             { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' },
-            { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' }
+            { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' },
+            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' }
         ];
 
         modeList.forEach((item) => {
@@ -16678,6 +18599,7 @@ function setupMicRecognizerListeners() {
         renderFoliaSection();
         renderCapoDuoSection();
         renderMicRecognizerSection();
+        renderPolyphonySection();
         renderMetronomeControls();
     }
 

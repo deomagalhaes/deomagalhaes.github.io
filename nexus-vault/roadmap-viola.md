@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 15 — Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas
+## 🎯 Projeto Prioritário Atual: Fase 16 — Simulador Acústico de Madeiras & Ressonâncias Lutherísticas
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Motor de contraponto estrito adaptado à música tradicional caipira (movimento contrário, oblíquo e direto controlado em terças e sextas diatônicas).
-  2. Geração automática de arranjo em duas vozes instrumentais independentes (1ª Viola Requinteira / Solista e 2ª Viola de Base / Resposta), com distribuição inteligente de registros para evitar choques com as cordas oitavadas.
-  3. Sequenciador estéreo binaural Web Audio (pan 1ª viola à esquerda, 2ª viola à direita), sincronização com o braço SVG virtual e exportação em 1 clique para o Editor de Tablaturas (Fase 7).
+  1. Modelagem física da resposta acústica e timbre de tampos tradicionais (Pinho Spruce / Abeto vs Cedro Canadense vs Pinho Brasileiro / Araucária) e fundos/laterais (Jacarandá da Bahia vs Mogno vs Caviúna vs Imbuia).
+  2. Simulação gráfica interativa de padrões nodais de ressonância de Chladni em Canvas 2D com visualização de modos de vibração do tampo ((0,0), (1,0), (0,1), (1,1)) sob excitação de frequências fundamentais da viola.
+  3. Filtros convolutivos / EQ biquad dinâmico no sintetizador Web Audio simulando o "color" tonal de cada madeira e espessura do tampo, com laudo lutherístico sobre resposta a transientes, sustentação ("sustain") e projeção acústica no estradão.
 
 ---
 
@@ -42,16 +42,60 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Matriz de tessitura vocal caipira (1ª e 2ª voz), posicionamento paramétrico de braçadeira móvel da 1ª à 9ª casa no braço SVG canhoto/destro com zona inativa sombreada, equivalência harmônica Viola (Cebolão) ⟷ Violão, sintetizador multitrack com formantes vocais e exportação em 1 clique para o Editor de Tablaturas.
 12. **[x] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14 Concluída):**
     - Processamento de sinal com FFT e autocorrelação (YIN) para detecção de notas e digitações reais captadas ao vivo pelo microfone do violeiro com feedback imediato no braço SVG, desvio em cents por ordem e diagnóstico postural.
-13. **[ ] Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas (Fase 15):**
-    - Geração algorítmica de duetos contrapontísticos com separação estéreo binaural, condução de vozes em terças e sextas, distribuição sem choque de oitavadas e exportação para tablatura.
+13. **[x] Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas (Fase 15 Concluída):**
+    - Geração algorítmica de duetos contrapontísticos com separação estéreo binaural real (pan 1ª viola -50% e 2ª viola +50%), condução de vozes em movimento contrário, oblíquo e antifonia, algoritmo anti-choque de oitavadas e exportação para tablatura.
 14. **[ ] Simulador Acústico de Madeiras & Ressonâncias Lutherísticas (Fase 16):**
-    - Física dos tampos (Pinho Spruce vs Cedro Canadense), fundos (Jacarandá da Bahia vs Mogno vs Caviúna), leque harmônico e análise modal de padrões de Chladni.
+    - Física dos tampos (Pinho Spruce vs Cedro Canadense vs Araucária), fundos (Jacarandá da Bahia vs Mogno vs Caviúna), leque harmônico e análise modal de padrões nodais de Chladni.
 15. **[ ] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17):**
     - Percepção intervalar das modas de viola e treino auditivo de terças e sextas com resposta interativa no braço.
+16. **[ ] Gerador de Introduções Clássicas em Pagode de Viola (Fase 18):**
+    - Motor algorítmico de licks em semicolcheias com repique, contratempos e batidas de tampo.
+17. **[ ] Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (Fase 19):**
+    - Visualizador circular estroboscópico para entonação de escala e compensação de rastilho.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **13/11/2026 — Sessão 15** (Fase 15 Concluída):
+  - **Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas (Polyphonic Duet & Caipira Counterpoint Studio)**:
+    - **Motor de Contraponto Estrito Adaptado à Música Caipira Tradicional**:
+      - Modelagem minuciosa dos 4 estilos canônicos de condução de vozes da viola de arame e música caipira de raiz:
+        - *Movimento Contrário Estrito (Leque Sonoro)*: enquanto a 1ª Viola sobe em terças melódicas pelas primas e segundinhas, a 2ª Viola desce pelos bordões em baixaria majestosa (ou vice-versa), expandindo o espectro harmônico sem choques de digitação.
+        - *Movimento Oblíquo com Pedais Abertos*: sustentação contínua de cordas soltas da afinação Cebolão em Mi (pedal fundamental Mi no 4º par ou pedal dominante Si no 5º par) na 2ª Viola enquanto a 1ª Viola dedilha sextas caipiras lentas.
+        - *Diálogo Antifônico (Duelo Fluvial de Violas)*: alternância rápida de pergunta e resposta em semínimas e colcheias com batidas percussivas no tampo [TAP] e abafamentos secos [CHOCK].
+        - *Terças & Sextas Diatônicas Conduzidas*: paralelismo vocal canônico caipira em terças nos pares 1 e 2 ou sextas nos pares 1 e 3 com cadência final apoteótica em acorde aberto pleno.
+    - **Algoritmo Inteligente Anti-Choque de Cordas Oitavadas (`checkOctaveClash`)**:
+      - Mapeamento lutherístico específico para as ordens da viola caipira: os pares 3 (Turina), 4 (Toeira) e 5 (Canotilho) contêm uma corda grave e uma cantadeira fina afinada 12 semitones acima.
+      - O motor calcula em tempo real os pitch classes e frequências de ambas as cordas de cada par e previne colisões de semitom (segunda menor dissonante ou atrito acústico áspero) entre a cantadeira aguda do bordão de V2 e as notas dedilhadas por V1 nas primas e segundinhas.
+    - **Catálogo Canônico de 6 Duetos Caipiras Curados (`POLYPHONIC_ARRANGEMENTS_CATALOG`)**:
+      - `dueto_cururu_rio_tiete`: *Duelo Fluvial no Rio Tietê* (Cururu Antifônico, 2/4 sincopado, 96 BPM) — Perguntas cortantes de V1 respondidas por baixaria de V2 nos bordões e batidas de tampo [TAP].
+      - `dueto_moda_sete_quedas`: *Contraponto das Sete Quedas* (Moda Monumental em Movimento Contrário, 2/4 cadenciado, 84 BPM) — Condução severa em leque sonoro abrindo da 2ª até a 9ª casa com clímax em intervalo de 17ª composta.
+      - `dueto_pagode_tiao_lourival`: *Pagode Contrapontístico* (Pagode Caipira Virtuoso, 2/4 rápido, 104 BPM) — Repiques em cascata na requinta acompanhados de contratempos sincopados, abafamentos [CHOCK] e [TAP] duplo.
+      - `dueto_toada_estrelas_pantanal`: *Toada das Estrelas do Pantanal* (Toada / Querência em 3/4 lírico, 76 BPM) — Movimento oblíquo seresteiro com pedais abertos no Cebolão e sextas dolentes.
+      - `dueto_folia_liturgica`: *Devoção dos Três Reis Santos* (Toque de Folia em Modo Lídio, 3/4 solene, 80 BPM) — Contraponto modal canônico com a 4ª aumentada (Lá♯) e imitação canônica entre Mestre e Contra-Mestre.
+      - `dueto_choro_cerrado`: *Chorinho do Cerrado* (Choro Caipira, 2/4 sincopado, 92 BPM) — Baixaria contrapontística móvel com cromatismos descendentes em V2 dialogando com arpejos ágeis em V1.
+    - **Estúdio do Gerador Algorítmico Procedural de Contraponto (`generateCaipiraCounterpoint`)**:
+      - Geração dinâmica de arranjos sob demanda a partir da seleção de parâmetros: Tonalidade (Mi, Lá, Si, Ré, Sol), Condução de Vozes (Contrário, Oblíquo, Antifônico, Terças/Sextas), Métrica (2/4 ou 3/4), Extensão (4 ou 8 compassos) e Nível de Requinta (Padrão ou Virtuoso dobrado).
+      - Mapeamento físico automático nos 5 pares da viola na afinação ativa, cálculo analítico de intervalos verticais a cada tempo e inserção instantânea no catálogo com audição imediata.
+    - **Sequenciador de Áudio Estéreo Binaural Web Audio API (`pluckMidiNoteSpatial`)**:
+      - Palco sonoro imersivo 3D com posicionamento estéreo real via `StereoPannerNode`:
+        - 1ª Viola (Requinteira): Palco Esquerdo (Pan = -50%), ataque veloz, ressonância aguda cortante.
+        - 2ª Viola (Contra-Mestre): Palco Direito (Pan = +50%), timbre aveludado, encorpado e rico em frequências graves.
+      - Mesa de mixagem independente com sliders de volume de 0 a 100% por viola e seletor de modo de escuta comutável: *Dueto Completo (1ª + 2ª Viola)*, *Solo 1ª Viola (Mute V2)* para o usuário treinar a base no instrumento real, e *Solo 2ª Viola (Mute V1)* para o usuário praticar o ponteio solista.
+      - Controles didáticos: Play/Pause, Passo a Passo (Anterior/Próximo) com audição isolada do dueto, seletor de velocidade (0.5x, 0.75x, 1.0x, 1.25x) e repetição contínua (Loop).
+    - **Régua Interativa de Partitura & Linha do Tempo (`viola-polyphony-strip`)**:
+      - Grade com scroll horizontal fluido exibindo cada tempo/compasso com sub-painéis coloridos para V1 (esmeralda/dourado) e V2 (ciano/azul), badges do tipo de movimento, intervalo harmônico resultante e técnicas de mão direita (`p`, `i`, `p+i`, `tap`, `chock`).
+      - Cursor neon com animação suave e auto-scroll que acompanha a reprodução de áudio, além de clique em qualquer card para audição instantânea em estéreo.
+    - **Integração Plena com o Braço SVG Virtual (Modo Canhoto & Destro)**:
+      - Novo modo de projeção: `🎻 Contraponto a Duas Violas` (`displayMode: 'POLYPHONIC'`).
+      - Marcações em camada fantasma de todas as posições da peça ao longo das 14 casas com diferenciação cromática entre V1 (`#10b981`) e V2 (`#06b6d4`).
+      - Destaque vibrante em tempo real no momento exato em que as notas soam: anel branco e badge `1ª Viola` para a requinta e anel roxo com badge `2ª Viola` para a resposta.
+      - Compatibilidade nativa e validada com o Modo Canhoto (`isLeftHanded`) e Destro.
+    - **Exportação Multimodal para o Editor de Tablaturas (Fase 7)**:
+      - Botão de exportação em 1 clique permitindo escolher entre 3 perspectivas de estudo: *Dueto Mesclado (Ambas as Violas)*, *1ª Viola Solo (Requinta)* ou *2ª Viola Solo (Base/Baixaria)*.
+      - Criação automática de novo projeto no Editor de Tablaturas pronto para estudo no metrônomo, edição de novos compassos e download em Canvas HD PNG, PDF ou ASCII.
+      - Botão "Copiar Análise" gerando relatório musicológico e contrapontístico completo formatado na área de transferência.
 
 - **12/11/2026 — Sessão 14** (Fase 14 Concluída):
   - **Reconhecedor Auditivo Polifônico de Acordes por Microfone (Live Audio & Polyphonic Chord Pitch Recognizer)**:
