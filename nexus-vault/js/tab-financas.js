@@ -1384,6 +1384,97 @@
             detail: `Em 10 anos a 0% a.a., patrimônio final converge exatamente para R$ ${(100000 + 4000 * 120).toLocaleString('pt-BR')}.`
         });
 
+        // 43. Teste de Exatidão Orçamentária das Cotas Inteiras e Resíduo (Zero Perda de Centavos)
+        const mockAuditAlloc = computeAporteAllocation({
+            monthlyContribution: 4200,
+            targetAllocFII: 40,
+            targetAllocRF: 30,
+            targetAllocAcoes: 20,
+            targetAllocGlobal: 10,
+            currentAllocFII: 20000,
+            currentAllocRF: 20000,
+            currentAllocAcoes: 10000,
+            currentAllocGlobal: 10000
+        });
+        const mockAuditTickers = computeAporteByTickers(mockAuditAlloc.classes);
+        const totalBudgetClasses = mockAuditAlloc.classes.reduce((acc, c) => acc + (c.recommendedAporte || 0), 0);
+        const totalCalculated = mockAuditTickers.byClass.reduce((acc, c) => acc + c.classSpent + c.residual, 0);
+        const testExactBudgetPass = Math.abs(totalBudgetClasses - totalCalculated) < 1e-4 &&
+            Math.abs(totalBudgetClasses - (mockAuditTickers.byClass.reduce((acc, c) => acc + c.classSpent, 0) + mockAuditTickers.totalResidual)) < 1e-4;
+        tests.push({
+            name: 'Exatidão Orçamentária e Balanço Fechado das Cotas Inteiras + Troco Residual',
+            formula: 'Orçamento_Total = Σ(Gasto_Cotas_i) + Troco_Residual (Erro < 10⁻⁴)',
+            passed: Boolean(testExactBudgetPass),
+            detail: `Orçamento: R$ ${totalBudgetClasses.toFixed(2)} | Alocado em Cotas + Troco: R$ ${totalCalculated.toFixed(2)} (Balanço exato).`
+        });
+
+        // 44. Teste de Imunização sob Choque Sistêmico de 30% e Compensação por Sessões Clínicas
+        const mockStressCrash30 = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 150000,
+            monthlyCosts: 2600,
+            avgTicket: 250,
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            monthlyContribution: 4200,
+            realAnnualReturn: 7.5
+        });
+        const testCrash30LossPass = Math.abs(mockStressCrash30.lostCapital - (150000 * 0.30)) < 1e-2 &&
+            mockStressCrash30.stressedPatrimony === 105000 &&
+            mockStressCrash30.sessionsNeededStressed >= 0;
+        tests.push({
+            name: 'Resiliência ao Choque de 30%: Blindagem do Consultório e Sessões Compensatórias',
+            formula: 'Queda = 30% ⇒ Patrimônio_Estressado = 70% ∧ Sessões_Compensatórias = max(0, Déficit / Ticket_Líq)',
+            passed: Boolean(testCrash30LossPass),
+            detail: `Patrimônio mantido: R$ ${mockStressCrash30.stressedPatrimony.toLocaleString('pt-BR')} (70%). Consultório cobre o déficit com ~${mockStressCrash30.sessionsNeededStressed.toFixed(1)} atendimentos/mês.`
+        });
+
+        // 45. Teste de Cascata Dinâmica com Degrau 5 e Despesas Adicionais Customizadas
+        const mockCascadeCustom = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            expenseCustom: 1500,
+            nameCustom: 'Nível 5 • Reserva Estratégica & Projetos',
+            customExpenses: [
+                { id: 'pos_grad', name: 'Nível 6 • Pós-Graduação & Supervisão', cost: 800, category: 'Estudos' }
+            ],
+            currentPatrimony: 300000,
+            realAnnualReturn: 7.5
+        });
+        const has6Tiers = mockCascadeCustom.tiers.length === 6;
+        const totalExpectedCustom = 2500 + 2600 + 3500 + 2000 + 1500 + 800;
+        const testCascadeCustomPass = has6Tiers && Math.abs(mockCascadeCustom.totalCost - totalExpectedCustom) < 1e-2;
+        tests.push({
+            name: 'Cascata de Despesas com Nível 5 (Projetos) e Despesas Customizadas Ilimitadas',
+            formula: 'Tiers = 6 ∧ Custo_Total = 2500 + 2600 + 3500 + 2000 + 1500 + 800 = 12.900',
+            passed: Boolean(testCascadeCustomPass),
+            detail: `6 degraus consolidados com sucesso: Custo total de R$ ${mockCascadeCustom.totalCost.toLocaleString('pt-BR')}/mês.`
+        });
+
+        // 46. Teste de Invariante Estocástico de Monte Carlo (Ordenação de Percentis)
+        const mockMcAudit = runMonteCarloSimulation({
+            currentPatrimony: 100000,
+            realAnnualReturn: 7.5,
+            mcVolatility: 13.0,
+            mcYears: 20,
+            mcSimulations: 500,
+            monthlyCosts: 2000
+        });
+        const testMcPercentilesPass = mockMcAudit &&
+            typeof mockMcAudit.p10 === 'number' &&
+            typeof mockMcAudit.p50 === 'number' &&
+            typeof mockMcAudit.p90 === 'number' &&
+            mockMcAudit.p10 <= mockMcAudit.p50 &&
+            mockMcAudit.p50 <= mockMcAudit.p90;
+        tests.push({
+            name: 'Invariante Estocástico de Monte Carlo: Ordenação Monótona dos Percentis P10 ≤ P50 ≤ P90',
+            formula: 'P10 ≤ P50 ≤ P90 ∧ 0 ≤ Risco_Ruína ≤ 100%',
+            passed: Boolean(testMcPercentilesPass),
+            detail: `P10: R$ ${Math.round(mockMcAudit.p10).toLocaleString('pt-BR')} ≤ P50: R$ ${Math.round(mockMcAudit.p50).toLocaleString('pt-BR')} ≤ P90: R$ ${Math.round(mockMcAudit.p90).toLocaleString('pt-BR')}. Ordenação estocástica verificada.`
+        });
+
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,

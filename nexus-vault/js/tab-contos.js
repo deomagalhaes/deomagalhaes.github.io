@@ -4,7 +4,7 @@
  * 100% Client-Side • Zero-Backend • LGPD Compliant • Leitor Âmbar Offline Low-Blue-Light
  *
  * Módulos Integrados:
- * 1. Banco Expandido de 100 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
+ * 1. Banco Expandido de 106 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
  * 2. 14 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
  * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos
  * 4. Sintetizador Acústico Web Audio API Pré-Sono (Ruído Marrom, Chuva Mansa, Ondas, Grilos) com Sleep Timer
@@ -14,7 +14,7 @@
     'use strict';
 
     // =========================================================================
-    // 1. BANCO DE 100 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
+    // 1. BANCO DE 106 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
     // =========================================================================
     const STORY_THEMES = {
         frustracao: {
@@ -716,6 +716,48 @@
             defaultQuestion: 'Como é maravilhoso o seu cérebro brilhante e único, que enxerga o mundo com detalhes mágicos que os outros nem imaginam?',
             challengeAct: 'percebeu que as outras crianças brincavam de um jeito diferente ou não entendiam suas ideias geniais, sentindo-se sozinho como se fosse de outro planeta.',
             breathCue: 'pousou as mãos no peito sentindo a força singular do seu ser, puxou o ar com orgulho e amor próprio e soprou macio, sabendo que você é precioso exatamente como é.'
+        },
+        respiracao_urso_sabio: {
+            label: '101. Respiração do Urso Sábio (Regulação Vagal & Desaceleração Pré-Sono)',
+            defaultMetaphor: 'O grande urso da montanha que, antes de deitar na sua caverna macia forrada de folhas secas, solta três suspiros longos e sonolentos: ele sabe que quando o corpo sopra o ar devagar, o coração bate mansas canções e toda a floresta adormece segura.',
+            defaultQuestion: 'Como o seu corpinho fica gostoso e pesado no colchão quando a gente respira devagarzinho como o urso sábio?',
+            challengeAct: 'estava com as perninhas inquietas e os pensamentos correndo velozes como formiguinhas agitadas, achando que o sono nunca chegaria.',
+            breathCue: 'puxou o ar pelo nariz contando quatro passinhos lentos… segurou o quentinho no peito por dois segundos… e soltou num sopro morno e comprido como o urso na montanha.'
+        },
+        vagalume_foco_ludico: {
+            label: '102. O Vaga-lume e a Folha Única (Manejo Lúdico da Atenção & TDAH Gentil)',
+            defaultMetaphor: 'O pequeno vaga-lume dourado da beira do riacho: no começo da noite ele queria piscar sua luz em vinte árvores ao mesmo tempo e ficava cansado; até que descobriu o segredo de pousar numa folha de cada vez, iluminando aquele único cantinho com a calma mais bonita de toda a mata.',
+            defaultQuestion: 'Qual foi a coisa mais bonita e especial que a sua luz de vaga-lume iluminou hoje?',
+            challengeAct: 'queria fazer mil coisas ao mesmo tempo na hora de deitar, pulando de um brinquedo para outro porque a mente estava cheia de faíscas coloridas.',
+            breathCue: 'escolheu fechar os olhos e imaginar sua luz pousando calma em uma única folhinha de ipê, respirando no ritmo manso da brisa.'
+        },
+        concha_sensorial_suave: {
+            label: '103. A Concha do Mar Protetora (Acolhimento da Sobrecarga Sensorial / TEA)',
+            defaultMetaphor: 'A conchinha prateada que descansa na areia macia: quando a praia fica com vento forte ou barulhos altos demais, ela fecha suas abas suavemente e guarda lá dentro um silêncio fresco e protegido, onde só se escuta a música calma do mar.',
+            defaultQuestion: 'Você sente como o seu quarto agora é a nossa conchinha quentinha e protegida, onde nada de fora pode incomodar?',
+            challengeAct: 'teve um dia cheio de ruídos, luzes fortes e conversas agitadas, sentindo a cabeça cheia demais e a pele pedindo calma e silêncio.',
+            breathCue: 'abraçou o travesseiro macio, fechou os olhinhos e respirou fundo ouvindo o ritmo sereno da própria respiração como onda mansa.'
+        },
+        barquinho_flexibilidade: {
+            label: '104. O Barquinho que Aprendeu a Curva (Flexibilidade Cognitiva & Mudança de Planos)',
+            defaultMetaphor: 'O barquinho de casca de noz no riacho límpido: quando uma pedrinha apareceu no meio da correnteza onde ele queria passar reto, ele não bateu com raiva; fez uma curva suave e elegante, descobrindo que o novo caminho tinha peixinhos dourados que ele nunca teria visto.',
+            defaultQuestion: 'Que coisa legal e diferente aconteceu hoje só porque o plano original mudou de rumo?',
+            challengeAct: 'ficou muito chateado quando um combinado precisou ser alterado de última hora, sentindo que o dia todo tinha perdido a graça.',
+            breathCue: 'soltou o ar como quem sopra as velas do barquinho, sentindo que contornar a curva traz surpresas boas e novas alegrias.'
+        },
+        ceu_nuvens_desfusao: {
+            label: '105. O Céu Azul que Nunca Muda (Desfusão Cognitiva Infantil / ACT)',
+            defaultMetaphor: 'O céu azul grandioso da tarde: nuvens cinzentas, brancas ou de chuva passam por ele o tempo todo voando com o vento, mas o céu não se transforma em nuvem; ele continua azul, espaçoso e sereno, observando cada uma passar sem nunca perder a sua paz.',
+            defaultQuestion: 'Se nós somos o céu azul gigante, você consegue ver aquele pensamento chato indo embora como uma nuvenzinha soprada pelo vento?',
+            challengeAct: 'ficou preso numa ideia preocupada que não saía da cabeça, achando que aquela preocupação era maior que o mundo inteiro.',
+            breathCue: 'imaginou o pensamento colado numa nuvem de algodão, inspirou com calma e soprou bem devagarzinho vendo a nuvem voar para longe no horizonte.'
+        },
+        abraco_ancora_noturna: {
+            label: '106. A Âncora do Abraço Noturno (Segurança de Vínculo & Apego Seguro)',
+            defaultMetaphor: 'A âncora de carinho no porto seguro: mesmo quando o navio desliga os motores e fica no escuro do mar, a corrente dourada de amor mantém tudo firme no cais quentinho, garantindo que o acordar será cheio de beijos e sorrisos.',
+            defaultQuestion: 'Você sente como a nossa mãozinha dada guarda toda a proteção do mundo enquanto você viaja pelos sonhos?',
+            challengeAct: 'sentiu um aperto no peito querendo que o papai ou a mamãe ficassem acordados a noite inteira bem do ladinho da cama.',
+            breathCue: 'apertou a mãozinha com carinho, sentiu a presença mansa e respirou fundo com a certeza inabalável de que o amor nunca vai embora.'
         }
     };
 
@@ -1590,7 +1632,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pediatria do Sono &amp; Regulação Afetiva</span>
-                            <span class="text-xs font-mono text-slate-400">100 Metáforas Comportamentais &amp; 14 Biomas</span>
+                            <span class="text-xs font-mono text-slate-400">106 Metáforas Comportamentais &amp; 14 Biomas</span>
                         </div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gerador Estruturado de Cenas Terapêuticas &amp; Contos Noturnos</h2>
                     </div>
@@ -1623,7 +1665,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (100 Metáforas Clínicas) *</label>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (106 Metáforas Clínicas) *</label>
                                 <select id="ct-theme" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-300">
                                     ${Object.entries(STORY_THEMES).map(([k, v]) => `
                                         <option value="${k}">${v.label}</option>

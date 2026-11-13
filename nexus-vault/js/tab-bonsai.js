@@ -3032,6 +3032,7 @@
                                     <select id="bf-quick-log-category" class="px-2 py-1 rounded bg-[#090d16] border border-slate-700 text-xs text-cyan-300">
                                         <option value="Poda de Manutenção / Pinçagem">Poda Manutenção</option>
                                         <option value="Poda Estrutural">Poda Estrutural</option>
+                                        <option value="Desfolha Parcial / Total">Desfolha Parcial / Total</option>
                                         <option value="Aramação">Aramação</option>
                                         <option value="Desaramamento">Desaramamento</option>
                                         <option value="Transplante & Raízes">Transplante</option>
@@ -3051,6 +3052,8 @@
                                 <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/50" data-chip-cat="Poda Estrutural" data-chip-txt="Poda estrutural de galhos concorrentes e limpeza de copa">✂️ Poda Estrutura</button>
                                 <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-800/50" data-chip-cat="Transplante & Raízes" data-chip-txt="Poda de raízes e renovação do substrato drenante">🪴 Transplante</button>
                                 <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 border border-amber-800/50" data-chip-cat="Adubação Orgânica" data-chip-txt="Adubação orgânica balanceada de liberação lenta">🌱 Adubação</button>
+                                <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 border border-purple-800/50" data-chip-cat="Desfolha Parcial / Total" data-chip-txt="Desfolha parcial de verão para redução foliar e ramificação terciária">🍃 Desfolha</button>
+                                <button type="button" class="btn-quick-chip-log px-2 py-0.5 rounded bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-300 border border-indigo-800/50" data-chip-cat="Poda Estrutural" data-chip-txt="Corte com alicate côncavo e aplicação de pasta cicatrizante japonesa">🩹 Selamento</button>
                             </div>
                             <div id="bf-logs-list" class="max-h-40 overflow-y-auto space-y-1 pr-1"></div>
                         </div>

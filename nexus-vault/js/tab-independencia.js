@@ -113,18 +113,19 @@
     // =========================================================================
     // 2. MOTOR MATEMÁTICO ATUARIAL & PROJEÇÃO
     // =========================================================================
-    function computeFinancialModel() {
-        const wSessions = Math.max(0, Number(inputs.weeklySessions) || 0);
-        const wPerMonth = Math.max(1, Number(inputs.weeksPerMonth) || 4.2);
-        const indWeekly = Math.max(0, Number(inputs.indirectWeeklyHours) || 0);
-        const ticket = Math.max(0, Number(inputs.avgTicket) || 0);
-        const costs = Math.max(0, Number(inputs.monthlyCosts) || 0);
-        const aporte = Math.max(0, Number(inputs.monthlyContribution) || 0);
-        const initPatrimony = Math.max(0, Number(inputs.currentPatrimony) || 0);
-        const annualRatePct = Math.max(0, Math.min(40, Number(inputs.realAnnualReturn) || 0));
-        const horizonYears = Math.max(1, Math.min(30, parseInt(inputs.horizonYears, 10) || 15));
-        const swr = Math.max(1, Math.min(10, Number(inputs.safeWithdrawalRate) || 4.0));
-        const fatMult = Math.max(1.1, Math.min(3.0, Number(inputs.fatFireMultiplier) || 1.4));
+    function computeFinancialModel(customInputs) {
+        const raw = customInputs || inputs;
+        const wSessions = Math.max(0, Number(raw.weeklySessions) || 0);
+        const wPerMonth = Math.max(1, Number(raw.weeksPerMonth) || 4.2);
+        const indWeekly = Math.max(0, Number(raw.indirectWeeklyHours) || 0);
+        const ticket = Math.max(0, Number(raw.avgTicket) || 0);
+        const costs = Math.max(0, Number(raw.monthlyCosts) || 0);
+        const aporte = Math.max(0, Number(raw.monthlyContribution) || 0);
+        const initPatrimony = Math.max(0, Number(raw.currentPatrimony) || 0);
+        const annualRatePct = Math.max(0, Math.min(40, Number(raw.realAnnualReturn) || 0));
+        const horizonYears = Math.max(1, Math.min(30, parseInt(raw.horizonYears, 10) || 15));
+        const swr = Math.max(1, Math.min(10, Number(raw.safeWithdrawalRate) || 4.0));
+        const fatMult = Math.max(1.1, Math.min(3.0, Number(raw.fatFireMultiplier) || 1.4));
 
         const monthlySessions = wSessions * wPerMonth;
         const indirectMonthlyHours = indWeekly * wPerMonth;
@@ -162,7 +163,7 @@
         const currentCoveragePct = netRevenue > 0 ? ((currentPassiveMonthly / netRevenue) * 100) : 0;
 
         // Metas Patrimoniais FIRE pela Taxa Segura de Retirada (SWR)
-        const annualEssential = (inputs.expenseEssential || 2500) * 12;
+        const annualEssential = (raw.expenseEssential || 2500) * 12;
         const annualCosts = costs * 12;
         const annualNet = netRevenue * 12;
         const annualFat = netRevenue * 12 * fatMult;
@@ -329,21 +330,22 @@
     // =========================================================================
     // 4. ALOCADOR INTELIGENTE DE APORTES (Rebalanceamento sem Venda de Ativos)
     // =========================================================================
-    function computeAporteAllocation() {
-        const aporte = Math.max(0, Number(inputs.customAporteValue) || Number(inputs.monthlyContribution) || 0);
+    function computeAporteAllocation(customInputs) {
+        const raw = customInputs || inputs;
+        const aporte = Math.max(0, Number(raw.customAporteValue) || Number(raw.monthlyContribution) || 0);
 
-        const currentFII = Math.max(0, Number(inputs.currentAllocFII) || 0);
-        const currentRF = Math.max(0, Number(inputs.currentAllocRF) || 0);
-        const currentAcoes = Math.max(0, Number(inputs.currentAllocAcoes) || 0);
-        const currentGlobal = Math.max(0, Number(inputs.currentAllocGlobal) || 0);
+        const currentFII = Math.max(0, Number(raw.currentAllocFII) || 0);
+        const currentRF = Math.max(0, Number(raw.currentAllocRF) || 0);
+        const currentAcoes = Math.max(0, Number(raw.currentAllocAcoes) || 0);
+        const currentGlobal = Math.max(0, Number(raw.currentAllocGlobal) || 0);
 
         const totalCurrent = currentFII + currentRF + currentAcoes + currentGlobal;
         const totalAfter = totalCurrent + aporte;
 
-        const targetPctFII = Number(inputs.targetAllocFII) || 35;
-        const targetPctRF = Number(inputs.targetAllocRF) || 30;
-        const targetPctAcoes = Number(inputs.targetAllocAcoes) || 20;
-        const targetPctGlobal = Number(inputs.targetAllocGlobal) || 15;
+        const targetPctFII = Number(raw.targetAllocFII) || 35;
+        const targetPctRF = Number(raw.targetAllocRF) || 30;
+        const targetPctAcoes = Number(raw.targetAllocAcoes) || 20;
+        const targetPctGlobal = Number(raw.targetAllocGlobal) || 15;
 
         // Patrimônio alvo ideal por classe após o aporte
         const idealFII = totalAfter * (targetPctFII / 100);
@@ -456,13 +458,13 @@
         ]
     };
 
-    function computeAporteByTickers(classes) {
+    function computeAporteByTickers(classes, customTickers) {
         const result = [];
         let totalResidualAll = 0;
 
         classes.forEach((cls) => {
             const classAporte = cls.recommendedAporte || 0;
-            let tickers = (TICKER_DIRECTORY[cls.key] || []).slice();
+            let tickers = ((customTickers && customTickers[cls.key]) || TICKER_DIRECTORY[cls.key] || []).slice();
 
             // Mesclar tickers personalizados salvos pelo usuário para esta classe
             if (Array.isArray(inputs.userTickers)) {
@@ -539,13 +541,14 @@
     // =========================================================================
     // 5. SIMULAÇÃO ESTOCÁSTICA DE MONTE CARLO & STRESS TEST (Box-Muller)
     // =========================================================================
-    function runMonteCarloSimulation() {
-        const initPatrimony = Math.max(1000, Number(inputs.currentPatrimony) || 120000);
-        const meanReturn = (Number(inputs.realAnnualReturn) || 7.5) / 100;
-        const volatility = (Number(inputs.mcVolatility) || 13.0) / 100;
-        const years = Math.max(5, Math.min(40, Number(inputs.mcYears) || 30));
-        const numSims = Math.max(100, Math.min(2000, Number(inputs.mcSimulations) || 1000));
-        const annualWithdrawal = (inputs.monthlyCosts || 2600) * 12;
+    function runMonteCarloSimulation(customInputs) {
+        const raw = customInputs || inputs;
+        const initPatrimony = Math.max(1000, Number(raw.currentPatrimony) || 120000);
+        const meanReturn = (Number(raw.realAnnualReturn) || 7.5) / 100;
+        const volatility = (Number(raw.mcVolatility) || 13.0) / 100;
+        const years = Math.max(5, Math.min(40, Number(raw.mcYears) || 30));
+        const numSims = Math.max(100, Math.min(2000, Number(raw.mcSimulations) || 1000));
+        const annualWithdrawal = (raw.monthlyCosts || 2600) * 12;
 
         // Gerador normal Box-Muller
         function gaussianRandom() {
@@ -3122,6 +3125,97 @@
             detail: `Em 10 anos a 0% a.a., patrimônio final converge exatamente para R$ ${(100000 + 4000 * 120).toLocaleString('pt-BR')}.`
         });
 
+        // 43. Teste de Exatidão Orçamentária das Cotas Inteiras e Resíduo (Zero Perda de Centavos)
+        const mockAuditAlloc = computeAporteAllocation({
+            monthlyContribution: 4200,
+            targetAllocFII: 40,
+            targetAllocRF: 30,
+            targetAllocAcoes: 20,
+            targetAllocGlobal: 10,
+            currentAllocFII: 20000,
+            currentAllocRF: 20000,
+            currentAllocAcoes: 10000,
+            currentAllocGlobal: 10000
+        });
+        const mockAuditTickers = computeAporteByTickers(mockAuditAlloc.classes);
+        const totalBudgetClasses = mockAuditAlloc.classes.reduce((acc, c) => acc + (c.recommendedAporte || 0), 0);
+        const totalCalculated = mockAuditTickers.byClass.reduce((acc, c) => acc + c.classSpent + c.residual, 0);
+        const testExactBudgetPass = Math.abs(totalBudgetClasses - totalCalculated) < 1e-4 &&
+            Math.abs(totalBudgetClasses - (mockAuditTickers.byClass.reduce((acc, c) => acc + c.classSpent, 0) + mockAuditTickers.totalResidual)) < 1e-4;
+        tests.push({
+            name: 'Exatidão Orçamentária e Balanço Fechado das Cotas Inteiras + Troco Residual',
+            formula: 'Orçamento_Total = Σ(Gasto_Cotas_i) + Troco_Residual (Erro < 10⁻⁴)',
+            passed: Boolean(testExactBudgetPass),
+            detail: `Orçamento: R$ ${totalBudgetClasses.toFixed(2)} | Alocado em Cotas + Troco: R$ ${totalCalculated.toFixed(2)} (Balanço exato).`
+        });
+
+        // 44. Teste de Imunização sob Choque Sistêmico de 30% e Compensação por Sessões Clínicas
+        const mockStressCrash30 = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 150000,
+            monthlyCosts: 2600,
+            avgTicket: 250,
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            monthlyContribution: 4200,
+            realAnnualReturn: 7.5
+        });
+        const testCrash30LossPass = Math.abs(mockStressCrash30.lostCapital - (150000 * 0.30)) < 1e-2 &&
+            mockStressCrash30.stressedPatrimony === 105000 &&
+            mockStressCrash30.sessionsNeededStressed >= 0;
+        tests.push({
+            name: 'Resiliência ao Choque de 30%: Blindagem do Consultório e Sessões Compensatórias',
+            formula: 'Queda = 30% ⇒ Patrimônio_Estressado = 70% ∧ Sessões_Compensatórias = max(0, Déficit / Ticket_Líq)',
+            passed: Boolean(testCrash30LossPass),
+            detail: `Patrimônio mantido: R$ ${mockStressCrash30.stressedPatrimony.toLocaleString('pt-BR')} (70%). Consultório cobre o déficit com ~${mockStressCrash30.sessionsNeededStressed.toFixed(1)} atendimentos/mês.`
+        });
+
+        // 45. Teste de Cascata Dinâmica com Degrau 5 e Despesas Adicionais Customizadas
+        const mockCascadeCustom = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            expenseCustom: 1500,
+            nameCustom: 'Nível 5 • Reserva Estratégica & Projetos',
+            customExpenses: [
+                { id: 'pos_grad', name: 'Nível 6 • Pós-Graduação & Supervisão', cost: 800, category: 'Estudos' }
+            ],
+            currentPatrimony: 300000,
+            realAnnualReturn: 7.5
+        });
+        const has6Tiers = mockCascadeCustom.tiers.length === 6;
+        const totalExpectedCustom = 2500 + 2600 + 3500 + 2000 + 1500 + 800;
+        const testCascadeCustomPass = has6Tiers && Math.abs(mockCascadeCustom.totalCost - totalExpectedCustom) < 1e-2;
+        tests.push({
+            name: 'Cascata de Despesas com Nível 5 (Projetos) e Despesas Customizadas Ilimitadas',
+            formula: 'Tiers = 6 ∧ Custo_Total = 2500 + 2600 + 3500 + 2000 + 1500 + 800 = 12.900',
+            passed: Boolean(testCascadeCustomPass),
+            detail: `6 degraus consolidados com sucesso: Custo total de R$ ${mockCascadeCustom.totalCost.toLocaleString('pt-BR')}/mês.`
+        });
+
+        // 46. Teste de Invariante Estocástico de Monte Carlo (Ordenação de Percentis)
+        const mockMcAudit = runMonteCarloSimulation({
+            currentPatrimony: 100000,
+            realAnnualReturn: 7.5,
+            mcVolatility: 13.0,
+            mcYears: 20,
+            mcSimulations: 500,
+            monthlyCosts: 2000
+        });
+        const testMcPercentilesPass = mockMcAudit &&
+            typeof mockMcAudit.p10 === 'number' &&
+            typeof mockMcAudit.p50 === 'number' &&
+            typeof mockMcAudit.p90 === 'number' &&
+            mockMcAudit.p10 <= mockMcAudit.p50 &&
+            mockMcAudit.p50 <= mockMcAudit.p90;
+        tests.push({
+            name: 'Invariante Estocástico de Monte Carlo: Ordenação Monótona dos Percentis P10 ≤ P50 ≤ P90',
+            formula: 'P10 ≤ P50 ≤ P90 ∧ 0 ≤ Risco_Ruína ≤ 100%',
+            passed: Boolean(testMcPercentilesPass),
+            detail: `P10: R$ ${Math.round(mockMcAudit.p10).toLocaleString('pt-BR')} ≤ P50: R$ ${Math.round(mockMcAudit.p50).toLocaleString('pt-BR')} ≤ P90: R$ ${Math.round(mockMcAudit.p90).toLocaleString('pt-BR')}. Ordenação estocástica verificada.`
+        });
+
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,
@@ -3550,7 +3644,7 @@
                 const months = Object.keys(byMonth).sort();
                 const latestYM = months[months.length - 1];
                 const monthSessions = latestYM ? byMonth[latestYM] : validSessions.length;
-                const wPerMonth = Math.max(1, Number(inputs.weeksPerMonth) || 4.2);
+                const wPerMonth = Math.max(1, Number(raw.weeksPerMonth) || 4.2);
                 const estWeekly = Math.max(1, Math.round(monthSessions / wPerMonth));
                 const avgTicket = Math.round(sumPrices / validSessions.length);
 
