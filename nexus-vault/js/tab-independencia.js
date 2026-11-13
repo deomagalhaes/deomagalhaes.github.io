@@ -932,11 +932,18 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <!-- Coluna de Inputs -->
                     <div class="lg:col-span-4 bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
                             <h3 class="text-xs font-bold font-mono uppercase tracking-wider text-cyan-300">
                                 Parâmetros Clínicos &amp; Taxas
                             </h3>
-                            <span class="text-[10px] font-mono text-emerald-400">Poupança: ${C.formatNum(m.savingsRate, 1)}%</span>
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="btn-ind-sync-agenda" title="Importar média real de sessões e ticket da Aba 7 (Agenda)"
+                                    class="px-2 py-1 rounded-md bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/35 text-sky-300 text-[10px] font-mono flex items-center gap-1 transition">
+                                    <i data-lucide="calendar-sync" class="w-3 h-3"></i>
+                                    <span>Sincronizar Agenda</span>
+                                </button>
+                                <span class="text-[10px] font-mono text-emerald-400">Poupança: ${C.formatNum(m.savingsRate, 1)}%</span>
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2.5">
@@ -3488,6 +3495,70 @@
             btnToggleTable.addEventListener('click', () => {
                 tableExpanded = !tableExpanded;
                 if (lastModel) renderAnnualTable(lastModel);
+            });
+        }
+
+        const btnSyncAgenda = document.getElementById('btn-ind-sync-agenda');
+        if (btnSyncAgenda) {
+            btnSyncAgenda.addEventListener('click', () => {
+                const C = global.VaultCore;
+                if (!C || !C.store) return;
+                const agenda = C.store.get(C.STORAGE_KEYS.AGENDA, null);
+                if (!agenda || typeof agenda !== 'object') {
+                    C.toast('Nenhum dado encontrado na Aba 7 (Agenda). Sincronize sua agenda primeiro.', 'warning');
+                    return;
+                }
+                const defaultPrice = Number(agenda.config && agenda.config.defaultSessionPrice) || 200;
+                const pCfg = agenda.patientsConfig || {};
+                const ignoredKw = ['apae', 'psiquiatra', 'consultoria ladoso', 'serelepe', 'reunião', 'supervisão', 'almoço', 'pessoal', 'feriado', 'compromisso', 'estudo'];
+
+                const allSessions = []
+                    .concat(Array.isArray(agenda.events) ? agenda.events : [])
+                    .concat(Array.isArray(agenda.manualSessions) ? agenda.manualSessions : []);
+
+                const validSessions = allSessions.filter((ev) => {
+                    if (!ev || ev.status === 'cancelled' || ev.isAbsent) return false;
+                    const title = String(ev.summary || ev.patientName || ev.title || '').trim();
+                    if (!title) return false;
+                    const cfg = pCfg[title];
+                    if (cfg && cfg.isIgnored) return false;
+                    const low = title.toLowerCase();
+                    if (!cfg && ignoredKw.some((kw) => low.includes(kw))) return false;
+                    return true;
+                });
+
+                if (validSessions.length === 0) {
+                    C.toast('Nenhuma sessão clínica válida encontrada na Agenda para calcular a média.', 'warning');
+                    return;
+                }
+
+                // Agrupa por mês (YYYY-MM) e usa o mês mais recente com atendimentos
+                const byMonth = {};
+                let sumPrices = 0;
+                validSessions.forEach((ev) => {
+                    const dt = String(ev.startDate || ev.date || (ev.start && (ev.start.dateTime || ev.start.date)) || '');
+                    const ym = dt.slice(0, 7);
+                    if (/^\d{4}-\d{2}$/.test(ym)) {
+                        byMonth[ym] = (byMonth[ym] || 0) + 1;
+                    }
+                    const title = String(ev.summary || ev.patientName || ev.title || '').trim();
+                    const cfg = pCfg[title];
+                    const price = (cfg && Number(cfg.customPrice) > 0) ? Number(cfg.customPrice) : (Number(ev.price) > 0 ? Number(ev.price) : defaultPrice);
+                    sumPrices += price;
+                });
+
+                const months = Object.keys(byMonth).sort();
+                const latestYM = months[months.length - 1];
+                const monthSessions = latestYM ? byMonth[latestYM] : validSessions.length;
+                const wPerMonth = Math.max(1, Number(inputs.weeksPerMonth) || 4.2);
+                const estWeekly = Math.max(1, Math.round(monthSessions / wPerMonth));
+                const avgTicket = Math.round(sumPrices / validSessions.length);
+
+                inputs.weeklySessions = estWeekly;
+                inputs.avgTicket = avgTicket;
+                saveInputs();
+                renderSubTabContent();
+                C.toast(`Sincronizado (${latestYM || 'Agenda'}): ${estWeekly} sessões/sem • Ticket médio ${C.formatBRL(avgTicket)}.`, 'success', 4200);
             });
         }
     }

@@ -188,12 +188,28 @@
                             <div class="w-20 h-1.5 rounded-full bg-slate-800 overflow-hidden hidden sm:block">
                                 <div id="vault-storage-bar" class="h-full bg-cyan-400 transition-all" style="width: 4%"></div>
                             </div>
+                            <span id="vault-backup-badge" class="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-900 border border-slate-800 text-slate-400" title="Status do último backup .json exportado">
+                                Backup: —
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Botões Globais: Backup JSON (Google Drive Sync), PIN, Limpeza e Trancar -->
+                <!-- Botões Globais: Radar, Comandos, Backup JSON, PIN, Auto-Lock, Limpeza e Trancar -->
                 <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <button type="button" id="btn-vault-radar" title="Briefing Executivo / Radar do Dia (Alt+0)"
+                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-semibold text-xs flex items-center gap-1.5 transition">
+                        <i data-lucide="radar" class="w-4 h-4"></i>
+                        <span class="hidden lg:inline">Radar</span>
+                    </button>
+
+                    <button type="button" id="btn-vault-palette" title="Command Palette (Ctrl+K ou Alt+K)"
+                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-mono text-xs flex items-center gap-1.5 transition">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5 text-cyan-400"></i>
+                        <span class="hidden xl:inline">Ir para...</span>
+                        <kbd class="hidden sm:inline px-1.5 py-0.5 text-[10px] rounded bg-slate-950 border border-slate-800 text-slate-400">Ctrl+K</kbd>
+                    </button>
+
                     <button type="button" id="btn-vault-export-json" title="Atalho: Alt+B • Salvar arquivo para Google Drive"
                         class="min-h-[40px] px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
                         <i data-lucide="download-cloud" class="w-4 h-4"></i>
@@ -208,6 +224,12 @@
                         <span class="sm:hidden">Importar</span>
                     </button>
                     <input type="file" id="input-vault-import-json" accept=".json,application/json" class="hidden">
+
+                    <button type="button" id="btn-vault-autolock" title="Auto-Lock por Inatividade (15 min)"
+                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-emerald-300 text-xs font-mono flex items-center gap-1 transition">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                        <span id="vault-autolock-label" class="hidden xl:inline">Auto-Lock 15m</span>
+                    </button>
 
                     <button type="button" id="btn-vault-open-pin-modal" title="Alterar PIN Local neste navegador"
                         class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs flex items-center gap-1 transition">
@@ -228,7 +250,7 @@
                 </div>
             </div>
 
-            <!-- NAVEGAÇÃO DESKTOP DAS 6 ABAS (Alt+1 a Alt+6) -->
+            <!-- NAVEGAÇÃO DESKTOP DAS 7 ABAS (Alt+1 a Alt+7) -->
             <nav id="vault-desktop-tabs" aria-label="Módulos do Lab Pessoal" class="hidden md:block border-t border-slate-800/80 bg-[#0b101b]">
                 <div class="max-w-[1440px] mx-auto px-6 py-2 flex items-center gap-2 overflow-x-auto">
                     <button type="button" data-vault-tab-btn="psicometria" class="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-slate-200 text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition">
@@ -453,6 +475,45 @@
                 <div class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Sussurro Final de Boa-Noite</div>
                 <p id="amber-reader-question" class="font-serif italic text-lg text-[#fbe0b4] leading-relaxed"></p>
             </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- 5. COMMAND PALETTE GLOBAL (Ctrl+K / Alt+K)                            -->
+    <!-- ===================================================================== -->
+    <div id="modal-command-palette" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-start justify-center pt-16 sm:pt-24 p-4">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden">
+            <div class="flex items-center gap-3 px-4 py-3 border-b border-slate-800 bg-[#090d16]">
+                <i data-lucide="search" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                <input type="text" id="command-palette-input" autocomplete="off"
+                    placeholder="Buscar aba, instrumento, ferramenta ou comando (ex: WASI, Bonsai, Backup, Faturamento)..."
+                    class="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none">
+                <kbd class="px-2 py-0.5 text-[10px] font-mono rounded bg-slate-900 border border-slate-800 text-slate-500">ESC</kbd>
+            </div>
+            <div id="command-palette-list" class="max-h-[58vh] overflow-y-auto p-2 space-y-1"></div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- 6. RADAR DO DIA / BRIEFING EXECUTIVO CROSS-MÓDULOS (Alt+0)            -->
+    <!-- ===================================================================== -->
+    <div id="modal-vault-radar" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-4xl max-h-[88vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800 bg-[#090d16]">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+                        <i data-lucide="radar" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-100">Radar do Dia • Briefing Executivo</h3>
+                        <p id="radar-subtitle" class="text-xs font-mono text-slate-400">Telemetria consolidada em tempo real dos 7 módulos</p>
+                    </div>
+                </div>
+                <button type="button" id="btn-close-radar-modal" class="min-h-[38px] min-w-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="radar-body-content" class="p-5 overflow-y-auto space-y-4"></div>
         </div>
     </div>
 

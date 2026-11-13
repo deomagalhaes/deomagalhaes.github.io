@@ -22,7 +22,8 @@
         INDEPENDENCIA: 'dm_vault_independencia',
         PSICOMETRIA: 'dm_vault_psicometria',
         PROFILE: 'dm_vault_profile',
-        AGENDA: 'dm_vault_agenda'
+        AGENDA: 'dm_vault_agenda',
+        META: 'dm_vault_meta'
     };
 
     const ALL_MANAGED_KEYS = [
@@ -35,7 +36,8 @@
         STORAGE_KEYS.INDEPENDENCIA,
         STORAGE_KEYS.PSICOMETRIA,
         STORAGE_KEYS.PROFILE,
-        STORAGE_KEYS.AGENDA
+        STORAGE_KEYS.AGENDA,
+        STORAGE_KEYS.META
     ];
 
     // =========================================================================
@@ -365,6 +367,37 @@
         }
     };
 
+    function getMeta() {
+        return Object.assign({ autoLockEnabled: true, lastBackupAt: null, lastBackupSizeKB: null }, store.get(STORAGE_KEYS.META, {}) || {});
+    }
+
+    function updateMeta(partial) {
+        const next = Object.assign(getMeta(), partial || {});
+        store.set(STORAGE_KEYS.META, next);
+        return next;
+    }
+
+    function updateBackupBadge() {
+        const badge = document.getElementById('vault-backup-badge');
+        if (!badge) return;
+        const meta = getMeta();
+        if (!meta.lastBackupAt) {
+            badge.textContent = 'Backup: nunca exportado';
+            badge.className = 'hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono bg-amber-500/10 border border-amber-500/30 text-amber-300';
+            badge.title = 'Exporte um backup completo (.json) para proteger seus dados locais (Alt+B).';
+            return;
+        }
+        const diffDays = Math.floor((Date.now() - new Date(meta.lastBackupAt).getTime()) / 86400000);
+        const label = diffDays <= 0 ? 'hoje' : (diffDays === 1 ? 'há 1 dia' : `há ${diffDays}d`);
+        badge.textContent = `Backup: ${label}`;
+        badge.title = `Último backup: ${new Date(meta.lastBackupAt).toLocaleString('pt-BR')} (${meta.lastBackupSizeKB || '?'} KB)`;
+        if (diffDays >= 7) {
+            badge.className = 'hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono bg-amber-500/15 border border-amber-500/40 text-amber-300';
+        } else {
+            badge.className = 'hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-300';
+        }
+    }
+
     function updateStorageMeter() {
         const stats = store.getStorageStats();
         const kbEl = document.getElementById('vault-storage-kb');
@@ -376,12 +409,18 @@
         if (barEl) {
             barEl.style.width = `${Math.max(3, parseFloat(stats.pctQuota))}%`;
         }
+        updateBackupBadge();
     }
 
     // =========================================================================
     // 4. BACKUP COMPLETO (.JSON) E EXPORTADOR .CSV (UTF-8 BOM)
     // =========================================================================
     function exportFullDatabase() {
+        const now = new Date();
+        const stamp = now.toISOString();
+        const statsBefore = store.getStorageStats();
+        updateMeta({ lastBackupAt: stamp, lastBackupSizeKB: statsBefore.vaultKB });
+
         const dataPayload = {};
         ALL_MANAGED_KEYS.forEach((key) => {
             const raw = localStorage.getItem(key);
@@ -401,8 +440,6 @@
 
         const canonicalData = JSON.stringify(dataPayload);
         const checksum = sha256Hex(canonicalData);
-        const now = new Date();
-        const stamp = now.toISOString();
         const fileStamp = stamp.slice(0, 16).replace('T', '-').replace(':', '');
 
         const envelope = {
@@ -415,6 +452,7 @@
 
         const blob = new Blob([JSON.stringify(envelope, null, 2)], { type: 'application/json;charset=utf-8' });
         triggerDownload(blob, `nexus-vault-backup-${fileStamp}.json`);
+        updateStorageMeter();
         toast('Banco completo exportado (.json) com assinatura SHA-256.', 'success');
     }
 
@@ -742,13 +780,347 @@
         if (btnWipeAll) {
             btnWipeAll.addEventListener('click', () => {
                 const ok = window.confirm(
-                    'ATENÇÃO: Deseja limpar todos os dados locais das 6 abas neste navegador? Recomendamos exportar um backup (.json) antes de prosseguir.'
+                    'ATENÇÃO: Deseja limpar todos os dados locais das 7 abas neste navegador? Recomendamos exportar um backup (.json) antes de prosseguir.'
                 );
                 if (!ok) return;
                 ALL_MANAGED_KEYS.forEach((k) => localStorage.removeItem(k));
                 updateStorageMeter();
                 window.dispatchEvent(new CustomEvent('vault:restored'));
                 toast('Dados locais do navegador redefinidos.', 'warning');
+            });
+        }
+
+        // Auto-Lock por Inatividade (15 min)
+        const INACTIVITY_LIMIT_MS = 15 * 60 * 1000;
+        const INACTIVITY_WARN_MS = 14 * 60 * 1000;
+        let inactivityWarnTimer = null;
+        let inactivityLockTimer = null;
+
+        const updateAutoLockUI = () => {
+            const btn = document.getElementById('btn-vault-autolock');
+            const lbl = document.getElementById('vault-autolock-label');
+            const enabled = getMeta().autoLockEnabled !== false;
+            if (btn) {
+                btn.className = enabled
+                    ? 'min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-emerald-300 text-xs font-mono flex items-center gap-1 transition'
+                    : 'min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-amber-500/35 text-amber-300 text-xs font-mono flex items-center gap-1 transition';
+                btn.title = enabled
+                    ? 'Auto-Lock por Inatividade ATIVO (15 min) — Clique para pausar'
+                    : 'Auto-Lock por Inatividade PAUSADO — Clique para reativar';
+            }
+            if (lbl) {
+                lbl.textContent = enabled ? 'Auto-Lock 15m' : 'Auto-Lock OFF';
+            }
+        };
+
+        const resetInactivityTimers = () => {
+            if (inactivityWarnTimer) clearTimeout(inactivityWarnTimer);
+            if (inactivityLockTimer) clearTimeout(inactivityLockTimer);
+            if (!isUnlocked() || getMeta().autoLockEnabled === false) return;
+
+            inactivityWarnTimer = setTimeout(() => {
+                if (isUnlocked() && getMeta().autoLockEnabled !== false) {
+                    toast('Inatividade detectada: o Vault será trancado em 60 segundos.', 'warning', 4500);
+                }
+            }, INACTIVITY_WARN_MS);
+
+            inactivityLockTimer = setTimeout(() => {
+                if (isUnlocked() && getMeta().autoLockEnabled !== false) {
+                    lockVault();
+                    toast('Vault trancado automaticamente após 15 minutos de inatividade.', 'info');
+                }
+            }, INACTIVITY_LIMIT_MS);
+        };
+
+        const toggleAutoLock = () => {
+            const next = !(getMeta().autoLockEnabled !== false);
+            updateMeta({ autoLockEnabled: next });
+            updateAutoLockUI();
+            if (next) {
+                resetInactivityTimers();
+                toast('Auto-Lock de segurança ativado (15 min).', 'success');
+            } else {
+                if (inactivityWarnTimer) clearTimeout(inactivityWarnTimer);
+                if (inactivityLockTimer) clearTimeout(inactivityLockTimer);
+                toast('Auto-Lock pausado para esta sessão.', 'warning');
+            }
+        };
+
+        const btnAutoLock = document.getElementById('btn-vault-autolock');
+        if (btnAutoLock) {
+            btnAutoLock.addEventListener('click', toggleAutoLock);
+        }
+        ['pointerdown', 'keydown', 'scroll'].forEach((evtName) => {
+            document.addEventListener(evtName, resetInactivityTimers, { passive: true });
+        });
+        window.addEventListener('vault:unlocked', () => {
+            updateAutoLockUI();
+            resetInactivityTimers();
+        });
+        updateAutoLockUI();
+
+        // Command Palette Global (Ctrl+K / Alt+K)
+        const paletteModal = document.getElementById('modal-command-palette');
+        const paletteInput = document.getElementById('command-palette-input');
+        const paletteList = document.getElementById('command-palette-list');
+        let paletteSelectedIdx = 0;
+        let paletteFiltered = [];
+
+        const COMMAND_ITEMS = [
+            { id: 'tab-psi', group: 'Módulos', title: '1. Estação Psicométrica (WASI • FDT • SRS-2)', hint: 'Alt+1', icon: 'brain-circuit', keywords: 'wasi fdt srs2 bpa ravlt laudo abnt neuropsicologia', run: () => switchTab('psicometria') },
+            { id: 'tab-bon', group: 'Módulos', title: '2. Gestão Fitotécnica de Bonsai', hint: 'Alt+2', icon: 'trees', keywords: 'bonsai planta adubacao transplante bancada', run: () => switchTab('bonsai') },
+            { id: 'tab-vio', group: 'Módulos', title: '3. Viola Cebolão & Violão (Canhoto)', hint: 'Alt+3', icon: 'music', keywords: 'viola violao cebolao acorde escala metronomo afinador', run: () => switchTab('viola') },
+            { id: 'tab-des', group: 'Módulos', title: '4. Desfusão & Decisão 24h', hint: 'Alt+4', icon: 'scale', keywords: 'desfusao decisao clivagem tradeoff', run: () => switchTab('desfusao') },
+            { id: 'tab-con', group: 'Módulos', title: '5. Contos Noturnos (Leitor Âmbar)', hint: 'Alt+5', icon: 'moon-star', keywords: 'contos historia dormir ambar sono', run: () => switchTab('contos') },
+            { id: 'tab-ind', group: 'Módulos', title: '6. Independência Clínica & Mercado', hint: 'Alt+6', icon: 'trending-up', keywords: 'independencia fire renda passiva monte carlo alocador estresse', run: () => switchTab('independencia') },
+            { id: 'tab-age', group: 'Módulos', title: '7. Sessões, Agenda & Faturamento', hint: 'Alt+7', icon: 'calendar-check-2', keywords: 'agenda sessoes faturamento pix recibo whatsapp paciente', run: () => switchTab('agenda') },
+            { id: 'sub-laudo', group: 'Atalhos Rápidos', title: 'Psicometria → Compositor de Laudo ABNT', hint: 'Sub-aba', icon: 'file-spreadsheet', keywords: 'laudo tabela abnt png curva', run: () => { switchTab('psicometria'); setTimeout(() => { const b = document.querySelector('[data-psy-subtab="laudo"]'); if (b) b.click(); }, 40); } },
+            { id: 'sub-mc', group: 'Atalhos Rápidos', title: 'Independência → Simulação Monte Carlo', hint: 'Sub-aba', icon: 'activity', keywords: 'monte carlo sorr ruina', run: () => { switchTab('independencia'); setTimeout(() => { const b = document.querySelector('[data-ind-subtab="montecarlo"]'); if (b) b.click(); }, 40); } },
+            { id: 'act-radar', group: 'Sistema', title: 'Abrir Radar do Dia (Briefing Executivo)', hint: 'Alt+0', icon: 'radar', keywords: 'radar briefing resumo hoje status', run: () => openRadarBriefing() },
+            { id: 'act-export', group: 'Sistema', title: 'Exportar Banco Completo (.json)', hint: 'Alt+B', icon: 'download-cloud', keywords: 'backup exportar json drive', run: () => exportFullDatabase() },
+            { id: 'act-import', group: 'Sistema', title: 'Importar Banco (.json)', hint: 'Restaurar', icon: 'upload-cloud', keywords: 'importar restaurar json backup', run: () => { const f = document.getElementById('input-vault-import-json'); if (f) f.click(); } },
+            { id: 'act-autolock', group: 'Sistema', title: 'Alternar Auto-Lock de Inatividade (15m)', hint: 'Segurança', icon: 'shield-check', keywords: 'autolock seguranca inatividade', run: () => toggleAutoLock() },
+            { id: 'act-pin', group: 'Sistema', title: 'Alterar PIN Local (SHA-256)', hint: 'PIN', icon: 'key-round', keywords: 'pin senha hash sha256', run: () => { const b = document.getElementById('btn-vault-open-pin-modal'); if (b) b.click(); } },
+            { id: 'act-lock', group: 'Sistema', title: 'Trancar Vault Agora', hint: 'Alt+L', icon: 'lock', keywords: 'trancar sair bloquear lock', run: () => lockVault() }
+        ];
+
+        function renderCommandPaletteList() {
+            if (!paletteList) return;
+            const q = (paletteInput ? paletteInput.value : '').trim().toLowerCase();
+            paletteFiltered = COMMAND_ITEMS.filter((item) => {
+                if (!q) return true;
+                return (item.title + ' ' + item.group + ' ' + item.keywords).toLowerCase().includes(q);
+            });
+            if (paletteSelectedIdx >= paletteFiltered.length) paletteSelectedIdx = 0;
+
+            if (paletteFiltered.length === 0) {
+                paletteList.innerHTML = '<div class="px-4 py-6 text-center text-xs font-mono text-slate-500">Nenhum comando correspondente.</div>';
+                return;
+            }
+
+            paletteList.innerHTML = paletteFiltered.map((item, idx) => {
+                const active = idx === paletteSelectedIdx;
+                return `
+                    <button type="button" data-cmd-idx="${idx}"
+                        class="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition ${active ? 'bg-cyan-500/15 border border-cyan-500/40 text-cyan-100' : 'border border-transparent text-slate-300 hover:bg-slate-800/70'}">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <i data-lucide="${esc(item.icon)}" class="w-4 h-4 ${active ? 'text-cyan-300' : 'text-slate-400'} shrink-0"></i>
+                            <div class="min-w-0">
+                                <div class="text-xs sm:text-sm font-medium truncate">${esc(item.title)}</div>
+                                <div class="text-[10px] font-mono text-slate-500">${esc(item.group)}</div>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400 shrink-0">${esc(item.hint)}</span>
+                    </button>
+                `;
+            }).join('');
+
+            paletteList.querySelectorAll('[data-cmd-idx]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.getAttribute('data-cmd-idx'), 10);
+                    const cmd = paletteFiltered[idx];
+                    closeCommandPalette();
+                    if (cmd && typeof cmd.run === 'function') cmd.run();
+                });
+            });
+            refreshIcons(paletteList);
+        }
+
+        function openCommandPalette() {
+            if (!isUnlocked() || !paletteModal) return;
+            paletteSelectedIdx = 0;
+            if (paletteInput) paletteInput.value = '';
+            paletteModal.classList.remove('hidden');
+            renderCommandPaletteList();
+            if (paletteInput) setTimeout(() => paletteInput.focus(), 30);
+        }
+
+        function closeCommandPalette() {
+            if (paletteModal) paletteModal.classList.add('hidden');
+        }
+
+        const btnPalette = document.getElementById('btn-vault-palette');
+        if (btnPalette) btnPalette.addEventListener('click', openCommandPalette);
+        if (paletteModal) {
+            paletteModal.addEventListener('click', (e) => {
+                if (e.target === paletteModal) closeCommandPalette();
+            });
+        }
+        if (paletteInput) {
+            paletteInput.addEventListener('input', () => {
+                paletteSelectedIdx = 0;
+                renderCommandPaletteList();
+            });
+            paletteInput.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (paletteFiltered.length > 0) {
+                        paletteSelectedIdx = (paletteSelectedIdx + 1) % paletteFiltered.length;
+                        renderCommandPaletteList();
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (paletteFiltered.length > 0) {
+                        paletteSelectedIdx = (paletteSelectedIdx - 1 + paletteFiltered.length) % paletteFiltered.length;
+                        renderCommandPaletteList();
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const cmd = paletteFiltered[paletteSelectedIdx];
+                    closeCommandPalette();
+                    if (cmd && typeof cmd.run === 'function') cmd.run();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeCommandPalette();
+                }
+            });
+        }
+
+        // Radar do Dia / Briefing Executivo Cross-Módulos (Alt+0)
+        const radarModal = document.getElementById('modal-vault-radar');
+        const radarBody = document.getElementById('radar-body-content');
+        const btnRadar = document.getElementById('btn-vault-radar');
+        const btnCloseRadar = document.getElementById('btn-close-radar-modal');
+
+        function openRadarBriefing() {
+            if (!isUnlocked() || !radarModal || !radarBody) return;
+
+            const psy = store.get(STORAGE_KEYS.PSICOMETRIA, {}) || {};
+            const psyCases = Array.isArray(psy.cases) ? psy.cases : [];
+            const activeCase = psyCases.find((c) => c.id === psy.activeCaseId) || psyCases[0];
+
+            const bonsaiRaw = store.get(STORAGE_KEYS.BONSAI, {}) || {};
+            const plants = Array.isArray(bonsaiRaw) ? bonsaiRaw : (Array.isArray(bonsaiRaw.plants) ? bonsaiRaw.plants : []);
+            let fertLate = 0;
+            let repotLate = 0;
+            plants.forEach((p) => {
+                if (p.lastFertilization && p.fertCycleDays) {
+                    const due = addDaysISO(p.lastFertilization, Number(p.fertCycleDays) || 30);
+                    if (daysDiffFromToday(due) < 0) fertLate++;
+                }
+                if (p.lastRepot && p.repotCycleMonths) {
+                    const dueR = addMonthsISO(p.lastRepot, Number(p.repotCycleMonths) || 24);
+                    if (daysDiffFromToday(dueR) < 0) repotLate++;
+                }
+            });
+
+            const agenda = store.get(STORAGE_KEYS.AGENDA, {}) || {};
+            const agendaEvents = Array.isArray(agenda.events) ? agenda.events.length : 0;
+            const agendaManual = Array.isArray(agenda.manualSessions) ? agenda.manualSessions.length : 0;
+            const patientsCfgCount = agenda.patientsConfig ? Object.keys(agenda.patientsConfig).length : 0;
+
+            const desfusao = store.get(STORAGE_KEYS.DESFUSAO, []);
+            const desfusaoArr = Array.isArray(desfusao) ? desfusao : (Array.isArray(desfusao.entries) ? desfusao.entries : []);
+            const lastDesfusao = desfusaoArr[0] || null;
+
+            const contos = store.get(STORAGE_KEYS.CONTOS, {}) || {};
+            const savedStories = Array.isArray(contos.savedStories) ? contos.savedStories.length : 0;
+
+            const ind = store.get(STORAGE_KEYS.INDEPENDENCIA, {}) || {};
+            const patrimony = Number(ind.currentPatrimony) || 0;
+            const weeklySess = Number(ind.weeklySessions) || 0;
+
+            const stats = store.getStorageStats();
+            const meta = getMeta();
+            const backupText = meta.lastBackupAt
+                ? `${new Date(meta.lastBackupAt).toLocaleString('pt-BR')} (${meta.lastBackupSizeKB || stats.vaultKB} KB)`
+                : 'Nenhum backup exportado ainda neste navegador';
+
+            radarBody.innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-cyan-300">
+                            <span>1. PSICOMETRIA</span>
+                            <button type="button" data-radar-go="psicometria" class="text-[11px] underline hover:text-cyan-200">Abrir</button>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-100">${psyCases.length} <span class="text-xs font-normal text-slate-400">protocolos</span></div>
+                        <div class="text-xs text-slate-400 truncate">Ativo: <strong class="text-slate-200">${esc(activeCase ? (activeCase.code || activeCase.label || 'Sem código') : 'Nenhum')}</strong></div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-emerald-400">
+                            <span>2. ACERVO BONSAI</span>
+                            <button type="button" data-radar-go="bonsai" class="text-[11px] underline hover:text-emerald-300">Abrir</button>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-100">${plants.length} <span class="text-xs font-normal text-slate-400">plantas</span></div>
+                        <div class="text-xs ${fertLate + repotLate > 0 ? 'text-amber-300' : 'text-emerald-300'}">
+                            ${fertLate} adubação(ões) • ${repotLate} transplante(s) atrasados
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-sky-400">
+                            <span>7. AGENDA &amp; HONORÁRIOS</span>
+                            <button type="button" data-radar-go="agenda" class="text-[11px] underline hover:text-sky-300">Abrir</button>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-100">${agendaEvents + agendaManual} <span class="text-xs font-normal text-slate-400">sessões/eventos</span></div>
+                        <div class="text-xs text-slate-400">${patientsCfgCount} pacientes configurados</div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-emerald-300">
+                            <span>6. INDEPENDÊNCIA CLÍNICA</span>
+                            <button type="button" data-radar-go="independencia" class="text-[11px] underline hover:text-emerald-200">Abrir</button>
+                        </div>
+                        <div class="text-xl font-bold text-slate-100">${formatBRL(patrimony)}</div>
+                        <div class="text-xs text-slate-400">Meta simulada: ${weeklySess || '—'} sessões/sem</div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-amber-400">
+                            <span>4. DESFUSÃO &amp; DECISÃO 24H</span>
+                            <button type="button" data-radar-go="desfusao" class="text-[11px] underline hover:text-amber-300">Abrir</button>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-100">${desfusaoArr.length} <span class="text-xs font-normal text-slate-400">registros</span></div>
+                        <div class="text-xs text-slate-400 truncate">${esc(lastDesfusao && (lastDesfusao.decision || lastDesfusao.action) ? (lastDesfusao.decision || lastDesfusao.action) : 'Sem decisão registrada')}</div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-[#090d16] border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-mono text-amber-300">
+                            <span>5. CONTOS NOTURNOS</span>
+                            <button type="button" data-radar-go="contos" class="text-[11px] underline hover:text-amber-200">Abrir</button>
+                        </div>
+                        <div class="text-2xl font-bold text-slate-100">${savedStories} <span class="text-xs font-normal text-slate-400">salvos</span></div>
+                        <div class="text-xs text-slate-400">Leitor Âmbar Low-Blue-Light pronto</div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                    <div class="space-y-0.5">
+                        <div class="text-xs font-mono text-slate-300">Saúde de Armazenamento &amp; Backup Portátil</div>
+                        <div class="text-xs text-slate-400">Uso Vault: <strong class="text-cyan-300">${stats.vaultKB} KB</strong> (${stats.pctQuota}% da cota) • Último backup: <strong class="text-slate-200">${esc(backupText)}</strong></div>
+                    </div>
+                    <button type="button" id="radar-btn-export-now" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5">
+                        <i data-lucide="download-cloud" class="w-4 h-4"></i>
+                        <span>Exportar Backup Agora</span>
+                    </button>
+                </div>
+            `;
+
+            radarBody.querySelectorAll('[data-radar-go]').forEach((b) => {
+                b.addEventListener('click', () => {
+                    const tab = b.getAttribute('data-radar-go');
+                    radarModal.classList.add('hidden');
+                    switchTab(tab);
+                });
+            });
+            const btnExpNow = document.getElementById('radar-btn-export-now');
+            if (btnExpNow) {
+                btnExpNow.addEventListener('click', () => {
+                    exportFullDatabase();
+                    radarModal.classList.add('hidden');
+                });
+            }
+
+            radarModal.classList.remove('hidden');
+            refreshIcons(radarBody);
+        }
+
+        if (btnRadar) btnRadar.addEventListener('click', openRadarBriefing);
+        if (btnCloseRadar && radarModal) btnCloseRadar.addEventListener('click', () => radarModal.classList.add('hidden'));
+        if (radarModal) {
+            radarModal.addEventListener('click', (e) => {
+                if (e.target === radarModal) radarModal.classList.add('hidden');
             });
         }
 
@@ -818,14 +1190,25 @@
             });
         }
 
-        // Atalhos Globais de Teclado (Alt+1..6, Alt+L, Alt+B)
+        // Atalhos Globais de Teclado (Ctrl+K, Alt+K, Alt+0, Alt+1..7, Alt+L, Alt+B)
         document.addEventListener('keydown', (e) => {
             if (!isUnlocked()) return;
+            if ((e.ctrlKey || e.metaKey) && !e.altKey && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                openCommandPalette();
+                return;
+            }
             if (e.altKey && !e.ctrlKey && !e.metaKey) {
                 if (e.key >= '1' && e.key <= '7') {
                     e.preventDefault();
                     const idx = parseInt(e.key, 10) - 1;
                     if (VALID_TABS[idx]) switchTab(VALID_TABS[idx]);
+                } else if (e.key === '0') {
+                    e.preventDefault();
+                    openRadarBriefing();
+                } else if (e.key.toLowerCase() === 'k') {
+                    e.preventDefault();
+                    openCommandPalette();
                 } else if (e.key.toLowerCase() === 'l') {
                     e.preventDefault();
                     lockVault();
@@ -846,6 +1229,8 @@
         isUnlocked,
         lockVault,
         store,
+        getMeta,
+        updateMeta,
         updateStorageMeter,
         exportFullDatabase,
         importFullDatabaseFromFile,
