@@ -13,6 +13,8 @@ description: >-
 
 Esta skill orquestra de ponta a ponta o planejamento, design, engenharia client-side, geração de arte de capa e publicação diária de jogos interativos para **crianças (4 a 11 anos)** e **adolescentes/jovens (12 a 17 anos)** no ecossistema `deomagalhaes.github.io`.
 
+> **Diretriz de Execução Autônoma Imediata:** Nunca peça permissão nem faça perguntas antes de iniciar. Ao ser acionado para atuar na esteira de jogos infantojuvenis, inicie diretamente pelo próximo item `⏳ **Próximo da fila**` em `jogos-infantojuvenis-planejamento.md` e execute todo o fluxo até o Quality Gate (0 erros) e atualização da fila.
+
 ---
 
 ## 🎯 Passo 1: Seleção na Esteira Independente (`jogos-infantojuvenis-planejamento.md`)

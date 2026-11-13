@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detetive das Expressões e Pistas Sociais – Deo Magalhães</title>
+    <meta name="description" content="Jogo terapêutico infantil para treino de Teoria da Mente, leitura de expressões faciais, tom de voz e habilidades sociais (TEA e TDAH) em sessão e em casa.">
+
+    <link rel="icon" href="../assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --mint: #94d2bd;
+            --surface: #ffffff;
+            --bg-soft: #f8fafc;
+            --ink: #0f172a;
+        }
+
+        .game-shell {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 28px;
+            margin: 24px 0 36px 0;
+            box-shadow: 0 12px 35px rgba(0, 95, 115, 0.10);
+            border: 2px solid #e2e8f0;
+        }
+
+        .top-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: #e6f6f4;
+            color: #005f73;
+            border: 1px solid #94d2bd;
+        }
+
+        .pill-badge.amber {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .mode-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+
+        .mode-tab-btn {
+            padding: 11px 20px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-tab-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+        }
+
+        .mode-tab-btn.active {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.25);
+        }
+
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #001219;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hud-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #94d2bd;
+            font-weight: 700;
+        }
+
+        .hud-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .sound-btn {
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Palco Modo 1: Laboratório das Expressões */
+        .detective-stage {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+            align-items: center;
+            background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
+            border: 2px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .face-card-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 16px;
+            border: 3px solid #0a9396;
+            box-shadow: 0 10px 24px rgba(0, 95, 115, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .face-svg-wrap {
+            width: 190px;
+            height: 190px;
+        }
+
+        .clue-highlight-ring {
+            position: absolute;
+            border: 3px dashed #ee9b00;
+            border-radius: 16px;
+            background: rgba(238, 155, 0, 0.12);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .clue-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .clue-chip {
+            background: #ffffff;
+            border: 1.5px solid #94d2bd;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            color: #0f172a;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lupa-btn {
+            background: #fef3c7;
+            color: #92400e;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lupa-btn:hover {
+            background: #fde68a;
+            transform: translateY(-1px);
+        }
+
+        .lupa-hint-box {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #fffbeb;
+            border: 1.5px solid #f59e0b;
+            color: #78350f;
+            font-size: 0.94rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .choice-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            min-height: 58px;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            border-color: #0a9396;
+            background: #f0fdfa;
+            transform: translateY(-2px);
+        }
+
+        .choice-btn.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .choice-btn.calibrate {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        /* Palco Modo 2: Radar do Tom de Voz e Situações Sociais */
+        .social-scene-card {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 24px;
+        }
+
+        .speech-bubble {
+            background: #ffffff;
+            border: 2px solid #0a9396;
+            border-radius: 16px;
+            padding: 18px 22px;
+            position: relative;
+            margin: 14px 0;
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.08);
+        }
+
+        .voice-tone-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .feedback-banner {
+            display: none;
+            margin-top: 18px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-size: 0.98rem;
+            line-height: 1.55;
+            font-weight: 600;
+        }
+
+        .feedback-banner.success {
+            display: block;
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .feedback-banner.gentle {
+            display: block;
+            background: #fffbeb;
+            border: 2px solid #f59e0b;
+            color: #78350f;
+        }
+
+        .next-case-btn {
+            margin-top: 14px;
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 22px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .next-case-btn:hover {
+            background: #0a9396;
+        }
+
+        /* Modo 3: Pausa do Detetive Calmo */
+        .breath-circle-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);
+            border-radius: 18px;
+            border: 2px solid #94d2bd;
+        }
+
+        .breath-orb {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #94d2bd 0%, #0a9396 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 2.6rem;
+            margin: 22px 0;
+            box-shadow: 0 0 30px rgba(10, 147, 150, 0.35);
+            transition: transform 3.8s ease-in-out, box-shadow 3.8s ease-in-out;
+        }
+
+        .breath-orb.inhale {
+            transform: scale(1.26);
+            box-shadow: 0 0 50px rgba(10, 147, 150, 0.55);
+        }
+
+        .breath-orb.exhale {
+            transform: scale(0.92);
+            box-shadow: 0 0 18px rgba(10, 147, 150, 0.22);
+        }
+
+        /* Ferramentas inferiores */
+        .toolbar-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-utility {
+            padding: 11px 18px;
+            border-radius: 12px;
+            border: 2px solid #005f73;
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-utility:hover {
+            background: #0a9396;
+            border-color: #0a9396;
+        }
+
+        .btn-utility.outline {
+            background: #ffffff;
+            color: #005f73;
+        }
+
+        .btn-utility.outline:hover {
+            background: #f0fdfa;
+        }
+
+        .btn-utility.whatsapp {
+            background: #16a34a;
+            border-color: #16a34a;
+        }
+
+        .btn-utility.whatsapp:hover {
+            background: #15803d;
+        }
+
+        /* Blocos de Mediação */
+        .mediation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 20px;
+            margin-top: 28px;
+        }
+
+        .mediation-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 22px;
+            border: 2px solid #e2e8f0;
+            border-top: 5px solid #005f73;
+        }
+
+        .mediation-box.family {
+            border-top-color: #ee9b00;
+        }
+
+        .mediation-box h3 {
+            margin: 0 0 12px 0;
+            color: #001219;
+            font-size: 1.15rem;
+        }
+
+        .mediation-box ul {
+            margin: 0;
+            padding-left: 18px;
+            color: #334155;
+            line-height: 1.65;
+            font-size: 0.95rem;
+        }
+
+        .mediation-box li {
+            margin-bottom: 8px;
+        }
+
+        /* Certificado Imprimível */
+        .print-certificate {
+            display: none;
+            border: 3px double #005f73;
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 24px;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .detective-stage {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .face-card-box {
+                margin: 0 auto;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .game-shell {
+                padding: 18px;
+            }
+        }
+
+        @media print {
+            .no-print, #main-header, .top-bar, .main-footer {
+                display: none !important;
+            }
+            .print-certificate {
+                display: block !important;
+            }
+            .game-shell {
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="contact-info">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    (35) 9 3300-3807
+                </a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    contato@deomagalhaes.com.br
+                </a>
+            </div>
+            <div class="social-links">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    @deomagalhaesneuro
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../testes.html">Testes</a>
+                <a href="../jogos.html" class="active">Jogos</a>
+                <a href="../recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <div class="top-badges-row">
+                    <span class="pill-badge">🧸 Infantil (5 a 11 anos)</span>
+                    <span class="pill-badge">🔎 Teoria da Mente &amp; Empatia (TEA/TDAH)</span>
+                    <span class="pill-badge amber">🏡 Uso em Sessão &amp; em Casa com os Pais</span>
+                </div>
+                <h1>Detetive das Expressões e Pistas Sociais</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+            </header>
+
+            <div class="game-shell">
+                <!-- Seletor de Modos -->
+                <div class="mode-tabs no-print">
+                    <button class="mode-tab-btn active" id="tabBtnFaces" onclick="switchMode('faces')">
+                        🔎 1. Laboratório das Expressões
+                    </button>
+                    <button class="mode-tab-btn" id="tabBtnSocial" onclick="switchMode('social')">
+                        🗣️ 2. Radar do Tom de Voz &amp; Pistas (Teoria da Mente)
+                    </button>
+                    <button class="mode-tab-btn" id="tabBtnBreath" onclick="switchMode('breath')">
+                        🌬️ 3. Pausa do Detetive Calmo (4s)
+                    </button>
+                </div>
+
+                <!-- HUD -->
+                <div class="hud-bar no-print">
+                    <div class="hud-stat">
+                        <span class="hud-label">Estrelas de Empatia</span>
+                        <span class="hud-value" id="hudStars">⭐ 0</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Casos Resolvidos</span>
+                        <span class="hud-value" id="hudCases">🔎 0</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Recorde Familiar</span>
+                        <span class="hud-value" id="hudBest">🏆 0</span>
+                    </div>
+                    <div>
+                        <button class="sound-btn" id="btnSoundToggle" onclick="toggleAudioMute()">
+                            🔊 Som Ativo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MODO 1: LABORATÓRIO DAS EXPRESSÕES -->
+                <div id="sectionFaces" class="no-print">
+                    <div class="detective-stage">
+                        <div class="face-card-box">
+                            <span style="font-size: 0.78rem; font-weight: 800; color: #005f73; text-transform: uppercase; margin-bottom: 6px;" id="faceCaseCounter">Caso 1 de 8</span>
+                            <div class="face-svg-wrap" id="faceSvgContainer">
+                                <!-- SVG dinâmico da expressão facial -->
+                            </div>
+                            <div class="clue-highlight-ring" id="clueRing"></div>
+                        </div>
+
+                        <div>
+                            <h2 style="margin: 0 0 8px 0; color: #001219; font-size: 1.45rem;" id="facePromptTitle">
+                                O que o(a) amigo(a) está sentindo agora?
+                            </h2>
+                            <p style="margin: 0 0 12px 0; color: #334155; font-size: 1rem; line-height: 1.55;" id="faceSituation">
+                                Carregando pista social...
+                            </p>
+
+                            <div class="clue-chips">
+                                <span class="clue-chip" id="faceBodyClue">🧍 Pista do Corpo: ...</span>
+                            </div>
+
+                            <button class="lupa-btn" onclick="activateLupaHint()">
+                                🔎 Usar Lupa de Pistas (Dica do Detetive)
+                            </button>
+
+                            <div class="lupa-hint-box" id="lupaHintBox"></div>
+                        </div>
+                    </div>
+
+                    <div class="options-grid" id="faceOptionsGrid">
+                        <!-- Opções geradas via JS -->
+                    </div>
+
+                    <div id="faceFeedback" class="feedback-banner"></div>
+                </div>
+
+                <!-- MODO 2: RADAR DO TOM DE VOZ & SITUAÇÕES SOCIAIS -->
+                <div id="sectionSocial" class="no-print" style="display: none;">
+                    <div class="social-scene-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                            <span class="pill-badge" id="socialBadge">Cena 1 de 8 • Pátio da Escola</span>
+                            <span style="font-size: 0.86rem; font-weight: 700; color: #475569;">Observe as palavras + o tom de voz + o contexto</span>
+                        </div>
+
+                        <h2 style="margin: 0 0 8px 0; color: #001219; font-size: 1.38rem;" id="socialSceneTitle">Carregando cena...</h2>
+                        <p style="margin: 0 0 12px 0; color: #334155; font-size: 1.02rem; line-height: 1.6;" id="socialSceneContext"></p>
+
+                        <div class="speech-bubble">
+                            <div class="voice-tone-badge" id="socialToneBadge">🎵 Tom de voz: ...</div>
+                            <p style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #005f73;" id="socialSpokenText">
+                                "..."
+                            </p>
+                        </div>
+
+                        <p style="font-weight: 800; color: #0f172a; margin: 16px 0 8px 0;" id="socialQuestionText">
+                            Como detetive social, qual é a pista verdadeira por trás dessa fala?
+                        </p>
+
+                        <div class="options-grid" id="socialOptionsGrid">
+                            <!-- Opções via JS -->
+                        </div>
+
+                        <div id="socialFeedback" class="feedback-banner"></div>
+                    </div>
+                </div>
+
+                <!-- MODO 3: PAUSA DO DETETIVE CALMO -->
+                <div id="sectionBreath" class="no-print" style="display: none;">
+                    <div class="breath-circle-wrap">
+                        <span class="pill-badge">🔎 Regulação Autonômica do Detetive</span>
+                        <h2 style="margin: 10px 0 6px 0; color: #005f73;">Pausa de Regulação (Respiração 4-4)</h2>
+                        <p style="max-width: 540px; text-align: center; color: #334155; margin: 0 0 10px 0;">
+                            Quando uma pista social parecer difícil ou der vontade de desistir, um bom detetive acalma o corpo para enxergar melhor!
+                        </p>
+
+                        <div class="breath-orb" id="breathOrb">
+                            <span id="breathEmoji">🔎</span>
+                            <span style="font-size: 0.95rem; font-weight: 800; margin-top: 4px;" id="breathTimerText">Pronto?</span>
+                        </div>
+
+                        <p style="font-size: 1.15rem; font-weight: 800; color: #001219; margin: 8px 0 16px 0; text-align: center;" id="breathInstruction">
+                            Toque abaixo para fazer 3 respirações tranquilas juntos!
+                        </p>
+
+                        <button class="btn-utility" id="btnStartBreath" onclick="toggleBreathingCycle()">
+                            🌬️ Iniciar Pausa de Regulação (3 Ciclos)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barra de Ferramentas -->
+                <div class="toolbar-bottom no-print">
+                    <button class="btn-utility" onclick="window.print()">
+                        🖨️ Imprimir Distintivo &amp; Guia de Pistas
+                    </button>
+                    <button class="btn-utility whatsapp" onclick="shareWhatsAppSummary()">
+                        📲 Enviar Conquista para os Pais (WhatsApp)
+                    </button>
+                    <a href="../jogos.html" class="btn-utility outline">
+                        ← Voltar para Galeria de Jogos
+                    </a>
+                </div>
+
+                <!-- Certificado Imprimível A4 -->
+                <div class="print-certificate">
+                    <h2 style="color: #005f73; margin: 0 0 8px 0;">🔎 Distintivo Oficial: Detetive das Expressões e Pistas Sociais</h2>
+                    <p style="margin: 0 0 16px 0; color: #334155;">Treino de Teoria da Mente, Empatia e Leitura Emocional — Deo Magalhães (CRP 04/42784)</p>
+                    <p style="font-size: 1.12rem; font-weight: 700;">
+                        Conquistas da Sessão / Família: <span id="printStarsCount">0</span> Estrelas de Empatia (⭐) e <span id="printCasesCount">0</span> Casos Resolvidos (🔎)!
+                    </p>
+                    <div style="text-align: left; border-top: 1px solid #cbd5e1; margin-top: 16px; padding-top: 14px;">
+                        <h4>As 3 Regras de Ouro do Detetive Social em Casa:</h4>
+                        <ol style="line-height: 1.8;">
+                            <li><strong>👀 Olhar para o Rosto Completo:</strong> Não olhe só para a boca; as sobrancelhas e os olhos revelam se o sorriso é de alegria, surpresa ou timidez.</li>
+                            <li><strong>🎵 Ouvir a Música da Voz:</strong> Às vezes a palavra diz "tudo bem", mas o tom baixinho ou cansado avisa que a pessoa precisa de um abraço ou ajuda.</li>
+                            <li><strong>💬 Perguntar com Curiosidade:</strong> Quando não tiver certeza do que o outro sentiu, pergunte com carinho: <em>"Você está bem ou ficou chateado com alguma coisa?"</em></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guia Duplo Obrigatório: Terapeuta & Pais -->
+            <div class="mediation-grid">
+                <div class="mediation-box">
+                    <h3>🩺 Como Usar na Sessão de Terapia (Mediação Clínica)</h3>
+                    <p>Recurso estruturado para treino de <strong>Teoria da Mente (ToM)</strong>, cognição social e decodificação afetiva (especialmente indicado para TEA nível 1, TDAH e ansiedade social):</p>
+                    <ul>
+                        <li><strong>Scaffolding pela Lupa de Pistas:</strong> Caso a criança responda por tentativa e erro ou foque apenas na região da boca, acione a <em>Lupa de Pistas</em> e peça que descreva em voz alta a posição das sobrancelhas e do olhar.</li>
+                        <li><strong>Decodificação de Prosódia e Ironia:</strong> No <em>Radar do Tom de Voz</em>, leia as falas em voz alta exagerando sutilmente a entonação (tom cansado, irônico, tímido) para que o paciente treine a integração entre semântica e prosódia emocional.</li>
+                        <li><strong>Generalização Autobiográfica:</strong> Após acertar um caso, pergunte: <em>"Você já se sentiu assim na escola ou em casa? O que o seu corpo fez nessa hora?"</em></li>
+                    </ul>
+                </div>
+
+                <div class="mediation-box family">
+                    <h3>👨‍👩‍👧 Como os Pais Podem Usar em Casa com os Filhos</h3>
+                    <p>Sugestão leve e divertida de 10 minutos para fortalecer a empatia sem cobranças:</p>
+                    <ul>
+                        <li><strong>Brincadeira do "Filme Sem Som":</strong> Assistam juntos a 2 minutos de um desenho animado no mudo e brinquem de adivinhar o que os personagens estão sentindo só pelas expressões e postura!</li>
+                        <li><strong>Traduza Sinais Sutis na Rotina:</strong> Em vez de exigir "olhe para mim!", aponte pistas concretas com afeto: <em>"Olha para o rosto da mamãe: minha sobrancelha está juntinha porque estou cansada, mas não estou brava com você."</em></li>
+                        <li><strong>Valide o Esforço de Leitura:</strong> Sempre que a criança perguntar como alguém está ou perceber uma emoção alheia, celebre: <em>"Uau, você usou a sua lupa de detetive social agora!"</em></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Fundamentação Neuropsicológica -->
+            <article class="article-body" style="margin-top: 36px;">
+                <h2>Bases Neuropsicológicas: A Rede do Cérebro Social e a Teoria da Mente</h2>
+                <p>Reconhecer estados mentais em outras pessoas — o que na neuropsicologia chamamos de <strong>Teoria da Mente (Theory of Mind)</strong> — depende da integração entre o <strong>sulco temporal superior (STS)</strong>, que rastreia direção do olhar e movimento facial, o <strong>giro fusiforme</strong> (processamento de faces), a <strong>amígdala</strong> (saliência afetiva) e o <strong>córtex pré-frontal medial</strong> (inferência de intenções).</p>
+                <p>Em crianças com Transtorno do Espectro Autista (TEA) ou TDAH, o processamento rápido e implícito dessas micro-pistas pode ocorrer de forma fragmentada ou mais lenta. O treino explícito e lúdico por meio de pistas visuais segmentadas (olhos, sobrancelhas, postura corporal e prosódia) oferece uma via compensatória de alta eficácia para a autonomia social.</p>
+                <hr class="article-divider">
+                <p class="article-disclaimer"><em>Este jogo tem caráter lúdico, psicoeducativo e de apoio terapêutico familiar. Para avaliação neuropsicológica e acompanhamento clínico individualizado do desenvolvimento infantil, consulte sempre um profissional qualificado.</em></p>
+            </article>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/script.js"></script>
+    <script>
+        // Motor de Áudio Sensorialmente Seguro (Web Audio API)
+        let audioCtx = null;
+        let isMuted = false;
+
+        function ensureAudio() {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSoftTone(startFreq, endFreq, duration = 0.25, type = 'sine') {
+            if (isMuted) return;
+            const ctx = ensureAudio();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(startFreq, now);
+            osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.08, now + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + duration + 0.02);
+        }
+
+        function playCelebrationChord() {
+            if (isMuted) return;
+            [523.25, 659.25, 783.99].forEach((freq, i) => {
+                setTimeout(() => playSoftTone(freq, freq * 1.02, 0.3, 'triangle'), i * 75);
+            });
+        }
+
+        function toggleAudioMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btnSoundToggle');
+            btn.textContent = isMuted ? '🔇 Modo Silencioso' : '🔊 Som Ativo';
+        }
+
+        // Persistência Local
+        const STORE_KEY = 'deo_detetive_pistas_v1';
+        let stars = 0;
+        let casesSolved = 0;
+        let bestScore = 0;
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+            stars = saved.stars || 0;
+            casesSolved = saved.casesSolved || 0;
+            bestScore = saved.bestScore || 0;
+        } catch (e) {}
+
+        function saveAndRefreshHUD() {
+            if (stars > bestScore) bestScore = stars;
+            try {
+                localStorage.setItem(STORE_KEY, JSON.stringify({ stars, casesSolved, bestScore }));
+            } catch (e) {}
+            document.getElementById('hudStars').textContent = `⭐ ${stars}`;
+            document.getElementById('hudCases').textContent = `🔎 ${casesSolved}`;
+            document.getElementById('hudBest').textContent = `🏆 ${bestScore}`;
+            document.getElementById('printStarsCount').textContent = stars;
+            document.getElementById('printCasesCount').textContent = casesSolved;
+        }
+
+        // Troca de Modos
+        function switchMode(mode) {
+            document.getElementById('sectionFaces').style.display = mode === 'faces' ? 'block' : 'none';
+            document.getElementById('sectionSocial').style.display = mode === 'social' ? 'block' : 'none';
+            document.getElementById('sectionBreath').style.display = mode === 'breath' ? 'block' : 'none';
+
+            document.getElementById('tabBtnFaces').classList.toggle('active', mode === 'faces');
+            document.getElementById('tabBtnSocial').classList.toggle('active', mode === 'social');
+            document.getElementById('tabBtnBreath').classList.toggle('active', mode === 'breath');
+
+            playSoftTone(440, 520, 0.12, 'sine');
+        }
+
+        // ============================================================
+        // MODO 1: LABORATÓRIO DAS EXPRESSÕES (8 CASOS)
+        // ============================================================
+        const FACE_CASES = [
+            {
+                id: 'alegria',
+                situation: 'O amigo abriu a mochila e encontrou o desenho que ele tanto queria mostrar para a turma.',
+                bodyClue: 'Ombros relaxados, mãos abertas e sorriso que levanta as bochechas',
+                lupaHint: 'Olhe para os olhos e bochechas! Quando o sorriso é verdadeiro, os olhos ficam bem brilhantes e as bochechas sobem.',
+                focusZone: 'eyes',
+                correctId: 'alegria',
+                explain: 'Isso mesmo! O sorriso largo com olhos brilhantes e ombros soltos mostra Alegria Genuína.',
+                options: [
+                    { id: 'alegria', label: '😄 Alegria / Entusiasmo' },
+                    { id: 'tedio', label: '😐 Tédio / Sono' },
+                    { id: 'medo', label: '😨 Medo / Susto' },
+                    { id: 'raiva', label: '😠 Raiva / Irritação' }
+                ]
+            },
+            {
+                id: 'tristeza',
+                situation: 'O brinquedo favorito caiu no chão e uma peça soltou bem na hora do recreio.',
+                bodyClue: 'Cabeça um pouco abaixada e braços caídos ao lado do corpo',
+                lupaHint: 'Observe o canto interno das sobrancelhas (levantado para o centro) e os cantinhos da boca apontando para baixo.',
+                focusZone: 'brows',
+                correctId: 'tristeza',
+                explain: 'Muito bem! Sobrancelhas inclinadas para cima no centro e boca curvada para baixo indicam Tristeza.',
+                options: [
+                    { id: 'surpresa', label: '😮 Surpresa' },
+                    { id: 'tristeza', label: '😢 Tristeza / Desânimo' },
+                    { id: 'alegria', label: '😄 Alegria' },
+                    { id: 'duvida', label: '🤨 Dúvida' }
+                ]
+            },
+            {
+                id: 'raiva',
+                situation: 'Alguém pegou o lápis sem pedir enquanto ele ainda estava terminando de pintar.',
+                bodyClue: 'Punhos fechados, rosto esquentando e respiração mais rápida',
+                lupaHint: 'Repare nas sobrancelhas bem franzidas para baixo em forma de "V" e na boca apertada.',
+                focusZone: 'brows',
+                correctId: 'raiva',
+                explain: 'Boa leitura! Sobrancelhas em "V" e lábios firmes mostram Frustração ou Raiva — hora de respirar fundo.',
+                options: [
+                    { id: 'timidez', label: '😳 Vergonha / Timidez' },
+                    { id: 'alegria', label: '😄 Alegria' },
+                    { id: 'raiva', label: '😠 Frustração / Raiva' },
+                    { id: 'surpresa', label: '😮 Surpresa' }
+                ]
+            },
+            {
+                id: 'surpresa',
+                situation: 'A professora entrou na sala trazendo um convidado especial que ninguém esperava!',
+                bodyClue: 'Corpo deu um pequeno pulinho para trás e mãos perto do rosto',
+                lupaHint: 'Veja como as sobrancelhas subiram bem alto, os olhos estão bem abertos e a boca formou um "O".',
+                focusZone: 'mouth',
+                correctId: 'surpresa',
+                explain: 'Acertou! Olhos arregalados, sobrancelhas altas e boca em "O" são a marca clássica da Surpresa.',
+                options: [
+                    { id: 'surpresa', label: '😮 Surpresa / Espanto' },
+                    { id: 'tristeza', label: '😢 Tristeza' },
+                    { id: 'tedio', label: '😐 Tédio' },
+                    { id: 'raiva', label: '😠 Raiva' }
+                ]
+            },
+            {
+                id: 'timidez',
+                situation: 'Todo mundo olhou para ele(a) para cantar parabéns e ele(a) não sabia onde colocar as mãos.',
+                bodyClue: 'Ombros encolhidos e olhar desviado para o ladinho',
+                lupaHint: 'Olhe para as bochechas bem rosadas e para as pupilas olhando de lado, evitando encarar de frente.',
+                focusZone: 'eyes',
+                correctId: 'timidez',
+                explain: 'Excelente! Bochechas coradas, sorriso tímido e olhar desviado mostram Vergonha ou Timidez.',
+                options: [
+                    { id: 'raiva', label: '😠 Raiva' },
+                    { id: 'timidez', label: '😳 Timidez / Vergonha' },
+                    { id: 'tedio', label: '😐 Tédio' },
+                    { id: 'duvida', label: '🤨 Dúvida' }
+                ]
+            },
+            {
+                id: 'tedio',
+                situation: 'Já faz 20 minutos esperando na fila e não há nada para fazer ou conversar.',
+                bodyClue: 'Queixo apoiado na mão e um suspiro comprido',
+                lupaHint: 'Repare nas pálpebras meio caídas (olhos cansados) e na boca em linha reta, sem curva para cima ou para baixo.',
+                focusZone: 'eyes',
+                correctId: 'tedio',
+                explain: 'Isso aí! Olhos semicerrados e boca neutra em linha reta são pistas de Tédio ou Cansaço.',
+                options: [
+                    { id: 'surpresa', label: '😮 Surpresa' },
+                    { id: 'medo', label: '😨 Medo' },
+                    { id: 'tedio', label: '😑 Tédio / Cansaço' },
+                    { id: 'alegria', label: '😄 Alegria' }
+                ]
+            },
+            {
+                id: 'medo',
+                situation: 'A luz da sala apagou de repente durante uma chuva forte com trovão.',
+                bodyClue: 'Corpo congelado e braços bem perto do peito para se proteger',
+                lupaHint: 'Observe que as sobrancelhas subiram juntas no centro, os olhos estão bem abertos e a boca está tensa para os lados.',
+                focusZone: 'brows',
+                correctId: 'medo',
+                explain: 'Muito bem! Sobrancelhas tensas e erguidas com boca esticada mostram Medo ou Preocupação.',
+                options: [
+                    { id: 'medo', label: '😨 Medo / Preocupação' },
+                    { id: 'alegria', label: '😄 Alegria' },
+                    { id: 'tedio', label: '😐 Tédio' },
+                    { id: 'timidez', label: '😳 Timidez' }
+                ]
+            },
+            {
+                id: 'duvida',
+                situation: 'O adulto explicou uma regra nova do jogo bem rápido e o amigo não entendeu direito.',
+                bodyClue: 'Cabeça levemente inclinada e dedo no queixo',
+                lupaHint: 'Repare que UMA sobrancelha subiu mais que a outra e a boca está tortinha para o lado!',
+                focusZone: 'brows',
+                correctId: 'duvida',
+                explain: 'Perfeito! Uma sobrancelha erguida e boca de lado mostram Dúvida ou Confusão — hora de explicar com calma.',
+                options: [
+                    { id: 'tristeza', label: '😢 Tristeza' },
+                    { id: 'duvida', label: '🤨 Dúvida / Confusão' },
+                    { id: 'alegria', label: '😄 Alegria' },
+                    { id: 'raiva', label: '😠 Raiva' }
+                ]
+            }
+        ];
+
+        let faceIdx = 0;
+        let faceAnswered = false;
+
+        function buildFaceSVG(emotionId) {
+            // SVG lúdico, limpo e expressivo (190x190)
+            let brows = '';
+            let eyes = '';
+            let mouth = '';
+            let extras = '';
+
+            switch (emotionId) {
+                case 'alegria':
+                    brows = `<path d="M52 68 Q68 58 84 66" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>
+                             <path d="M106 66 Q122 58 138 68" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    eyes = `<path d="M56 88 Q68 74 80 88" stroke="#0f172a" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                            <path d="M110 88 Q122 74 134 88" stroke="#0f172a" stroke-width="5.5" fill="none" stroke-linecap="round"/>`;
+                    mouth = `<path d="M62 118 Q95 152 128 118 Z" fill="#ef4444" stroke="#0f172a" stroke-width="4" stroke-linejoin="round"/>
+                             <path d="M72 122 Q95 130 118 122" stroke="#ffffff" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    extras = `<ellipse cx="52" cy="108" rx="11" ry="6" fill="#fda4af" opacity="0.75"/>
+                              <ellipse cx="138" cy="108" rx="11" ry="6" fill="#fda4af" opacity="0.75"/>`;
+                    break;
+                case 'tristeza':
+                    brows = `<path d="M50 72 Q68 68 84 58" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>
+                             <path d="M106 58 Q122 68 140 72" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    eyes = `<circle cx="68" cy="88" r="8" fill="#0f172a"/><circle cx="65" cy="85" r="2.5" fill="#fff"/>
+                            <circle cx="122" cy="88" r="8" fill="#0f172a"/><circle cx="119" cy="85" r="2.5" fill="#fff"/>`;
+                    mouth = `<path d="M70 132 Q95 112 120 132" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    extras = `<path d="M60 100 Q55 112 60 116 Q65 112 60 100 Z" fill="#38bdf8"/>`;
+                    break;
+                case 'raiva':
+                    brows = `<path d="M52 60 L84 74" stroke="#1e293b" stroke-width="6" fill="none" stroke-linecap="round"/>
+                             <path d="M138 60 L106 74" stroke="#1e293b" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+                    eyes = `<circle cx="68" cy="90" r="8" fill="#0f172a"/><circle cx="66" cy="87" r="2.5" fill="#fff"/>
+                            <circle cx="122" cy="90" r="8" fill="#0f172a"/><circle cx="120" cy="87" r="2.5" fill="#fff"/>`;
+                    mouth = `<path d="M68 128 Q95 120 122 128" stroke="#0f172a" stroke-width="5.5" fill="none" stroke-linecap="round"/>`;
+                    extras = `<ellipse cx="52" cy="108" rx="10" ry="6" fill="#f87171" opacity="0.65"/>
+                              <ellipse cx="138" cy="108" rx="10" ry="6" fill="#f87171" opacity="0.65"/>`;
+                    break;
+                case 'surpresa':
+                    brows = `<path d="M52 56 Q68 44 84 56" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>
+                             <path d="M106 56 Q122 44 138 56" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    eyes = `<circle cx="68" cy="86" r="12" fill="#fff" stroke="#0f172a" stroke-width="3.5"/><circle cx="68" cy="86" r="6" fill="#0f172a"/>
+                            <circle cx="122" cy="86" r="12" fill="#fff" stroke="#0f172a" stroke-width="3.5"/><circle cx="122" cy="86" r="6" fill="#0f172a"/>`;
+                    mouth = `<ellipse cx="95" cy="128" rx="13" ry="17" fill="#ef4444" stroke="#0f172a" stroke-width="4"/>`;
+                    break;
+                case 'timidez':
+                    brows = `<path d="M52 68 Q68 62 84 68" stroke="#1e293b" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                             <path d="M106 68 Q122 62 138 68" stroke="#1e293b" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+                    eyes = `<circle cx="68" cy="88" r="10" fill="#fff" stroke="#0f172a" stroke-width="3"/><circle cx="73" cy="89" r="5" fill="#0f172a"/>
+                            <circle cx="122" cy="88" r="10" fill="#fff" stroke="#0f172a" stroke-width="3"/><circle cx="127" cy="89" r="5" fill="#0f172a"/>`;
+                    mouth = `<path d="M78 124 Q95 133 112 122" stroke="#0f172a" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+                    extras = `<ellipse cx="52" cy="108" rx="14" ry="8" fill="#fb7185" opacity="0.75"/>
+                              <ellipse cx="138" cy="108" rx="14" ry="8" fill="#fb7185" opacity="0.75"/>`;
+                    break;
+                case 'tedio':
+                    brows = `<line x1="52" y1="68" x2="84" y2="68" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+                             <line x1="106" y1="68" x2="138" y2="68" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>`;
+                    eyes = `<path d="M54 86 L82 86" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
+                            <path d="M58 86 A10 10 0 0 0 78 86 Z" fill="#0f172a"/>
+                            <path d="M108 86 L136 86" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
+                            <path d="M112 86 A10 10 0 0 0 132 86 Z" fill="#0f172a"/>`;
+                    mouth = `<line x1="74" y1="126" x2="116" y2="126" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>`;
+                    break;
+                case 'medo':
+                    brows = `<path d="M52 68 Q68 54 84 60" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>
+                             <path d="M106 60 Q122 54 138 68" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    eyes = `<circle cx="68" cy="86" r="12" fill="#fff" stroke="#0f172a" stroke-width="3.5"/><circle cx="68" cy="86" r="4.5" fill="#0f172a"/>
+                            <circle cx="122" cy="86" r="12" fill="#fff" stroke="#0f172a" stroke-width="3.5"/><circle cx="122" cy="86" r="4.5" fill="#0f172a"/>`;
+                    mouth = `<path d="M68 128 Q81 118 95 128 Q109 118 122 128" stroke="#0f172a" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+                    extras = `<path d="M148 56 Q143 68 148 73 Q153 68 148 56 Z" fill="#38bdf8"/>`;
+                    break;
+                case 'duvida':
+                    brows = `<path d="M52 60 Q68 48 84 62" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/>
+                             <line x1="106" y1="70" x2="138" y2="68" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>`;
+                    eyes = `<circle cx="68" cy="86" r="8.5" fill="#0f172a"/><circle cx="65" cy="83" r="2.5" fill="#fff"/>
+                            <circle cx="122" cy="88" r="8" fill="#0f172a"/><circle cx="119" cy="85" r="2.5" fill="#fff"/>`;
+                    mouth = `<path d="M74 128 Q95 126 116 118" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+                    break;
+            }
+
+            return `
+            <svg viewBox="0 0 190 190" xmlns="http://www.w3.org/2000/svg" aria-label="Expressão facial do personagem">
+                <circle cx="95" cy="95" r="76" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
+                <circle cx="20" cy="95" r="11" fill="#fcd34d" stroke="#d97706" stroke-width="3"/>
+                <circle cx="170" cy="95" r="11" fill="#fcd34d" stroke="#d97706" stroke-width="3"/>
+                ${extras}
+                ${brows}
+                ${eyes}
+                ${mouth}
+            </svg>`;
+        }
+
+        function renderFaceCase() {
+            faceAnswered = false;
+            const item = FACE_CASES[faceIdx];
+            document.getElementById('faceCaseCounter').textContent = `Caso ${faceIdx + 1} de ${FACE_CASES.length}`;
+            document.getElementById('faceSvgContainer').innerHTML = buildFaceSVG(item.id);
+            document.getElementById('faceSituation').textContent = item.situation;
+            document.getElementById('faceBodyClue').textContent = `🧍 Pista do Corpo: ${item.bodyClue}`;
+
+            const hintBox = document.getElementById('lupaHintBox');
+            hintBox.style.display = 'none';
+            hintBox.textContent = `🔎 Pista da Lupa: ${item.lupaHint}`;
+
+            const ring = document.getElementById('clueRing');
+            ring.style.display = 'none';
+
+            const fb = document.getElementById('faceFeedback');
+            fb.className = 'feedback-banner';
+            fb.innerHTML = '';
+
+            const grid = document.getElementById('faceOptionsGrid');
+            grid.innerHTML = '';
+            item.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = opt.label;
+                btn.onclick = () => checkFaceAnswer(opt.id, btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function activateLupaHint() {
+            const item = FACE_CASES[faceIdx];
+            const hintBox = document.getElementById('lupaHintBox');
+            hintBox.style.display = 'block';
+
+            const ring = document.getElementById('clueRing');
+            ring.style.display = 'block';
+            if (item.focusZone === 'brows') {
+                ring.style.top = '72px'; ring.style.left = '42px'; ring.style.width = '140px'; ring.style.height = '42px';
+            } else if (item.focusZone === 'eyes') {
+                ring.style.top = '94px'; ring.style.left = '42px'; ring.style.width = '140px'; ring.style.height = '48px';
+            } else {
+                ring.style.top = '136px'; ring.style.left = '60px'; ring.style.width = '104px'; ring.style.height = '44px';
+            }
+            playSoftTone(587.33, 783.99, 0.2, 'sine');
+        }
+
+        function checkFaceAnswer(selectedId, btn) {
+            if (faceAnswered) return;
+            const item = FACE_CASES[faceIdx];
+            const fb = document.getElementById('faceFeedback');
+
+            if (selectedId === item.correctId) {
+                faceAnswered = true;
+                btn.classList.add('correct');
+                stars += 2;
+                casesSolved += 1;
+                saveAndRefreshHUD();
+                playCelebrationChord();
+
+                fb.className = 'feedback-banner success';
+                fb.innerHTML = `
+                    <div>🌟 <strong>Excelente leitura social!</strong> ${item.explain} (+2 ⭐)</div>
+                    <button class="next-case-btn" onclick="nextFaceCase()">Próximo Caso ➔</button>
+                `;
+            } else {
+                btn.classList.add('calibrate');
+                playSoftTone(330, 293.66, 0.22, 'sine');
+                fb.className = 'feedback-banner gentle';
+                fb.innerHTML = `🔎 <strong>Quase lá, detetive!</strong> Vamos olhar novamente para as sobrancelhas e para a pista do corpo? Se quiser, use a <em>Lupa de Pistas</em> ali em cima!`;
+            }
+        }
+
+        function nextFaceCase() {
+            faceIdx = (faceIdx + 1) % FACE_CASES.length;
+            renderFaceCase();
+        }
+
+        // ============================================================
+        // MODO 2: RADAR DO TOM DE VOZ & PISTAS SOCIAIS (8 CENAS)
+        // ============================================================
+        const SOCIAL_CASES = [
+            {
+                badge: 'Cena 1 de 8 • Mesa do Lanche',
+                title: 'A Palavra Positiva com Tom Cansado (Ironia Leve)',
+                context: 'Lucas tropeçou sem querer e derrubou o suco bem em cima do caderno de desenho de Sofia. Sofia suspira fundo, olha para o caderno molhado e diz:',
+                tone: '🎵 Tom de voz: Lento, suspirando e sem sorriso',
+                spoken: '"Nossa, que maravilha... era tudo o que eu precisava hoje."',
+                question: 'O que Sofia realmente está sentindo e qual é a melhor atitude?',
+                correctId: 'frustrada',
+                explain: 'Perfeito! Quando alguém usa uma palavra positiva ("maravilha") com voz cansada e sem sorriso, é ironia: ela está chateada e precisa de ajuda e empatia.',
+                options: [
+                    { id: 'feliz', label: '😄 Ela adorou que o suco molhou o caderno.' },
+                    { id: 'frustrada', label: '😔 Ela está frustrada/chateada e precisa de um pedido de desculpas e ajuda para secar.' },
+                    { id: 'brincando', label: '🤣 Ela quer que derrubem mais suco para brincar.' },
+                    { id: 'sono', label: '😴 Ela só está com sono e não ligou para o desenho.' }
+                ]
+            },
+            {
+                badge: 'Cena 2 de 8 • Pátio da Escola',
+                title: 'O Convite Silencioso (Ler Além das Palavras)',
+                context: 'Três amigos estão montando uma torre gigante de blocos. Pedro chega perto, olha para os blocos com vontade, mas fala bem baixinho olhando para os pés:',
+                tone: '🎵 Tom de voz: Baixinho, tímido e hesitante',
+                spoken: '"Tudo bem... podem continuar brincando sem mim."',
+                question: 'Qual é a pista escondida por trás dessa frase?',
+                correctId: 'quer-brincar',
+                explain: 'Excelente leitura! Muitas crianças tímidas dizem "tudo bem" por vergonha de pedir. Convidar com carinho ("Vem ajudar a gente na torre!") faz toda diferença.',
+                options: [
+                    { id: 'nao-gosta', label: '🚫 Ele não gosta de blocos e quer ir embora.' },
+                    { id: 'quer-brincar', label: '🤝 Ele quer muito participar, mas está com vergonha de pedir; podemos convidá-lo!' },
+                    { id: 'bravo', label: '😠 Ele está bravo com todo mundo.' },
+                    { id: 'fome', label: '🍎 Ele só está procurando a lancheira.' }
+                ]
+            },
+            {
+                badge: 'Cena 3 de 8 • Sala de Casa',
+                title: 'Percebendo o Limite do Outro',
+                context: 'Você está muito animado contando sobre seu jogo favorito, mas seu irmão está tentando ler uma lição difícil. Ele franze a testa e diz firme:',
+                tone: '🎵 Tom de voz: Firme, rápido e com a mão na testa',
+                spoken: '"Espera um pouco, agora eu preciso terminar essa página!"',
+                question: 'O que essa pista social avisa para o nosso cérebro?',
+                correctId: 'pausa-espaco',
+                explain: 'Muito bem! Ele não deixou de gostar de você; o cérebro dele só precisa de silêncio por alguns minutos para se concentrar.',
+                options: [
+                    { id: 'falar-alto', label: '📢 Devo falar mais alto para ele ouvir a história.' },
+                    { id: 'pausa-espaco', label: '⏳ Ele precisa de um tempinho de foco; posso esperar ele terminar e contar depois.' },
+                    { id: 'nunca-mais', label: '😢 Ele nunca mais quer conversar comigo.' },
+                    { id: 'pular', label: '🤸 Ele quer brincar de pega-pega agora.' }
+                ]
+            },
+            {
+                badge: 'Cena 4 de 8 • Festa de Aniversário',
+                title: 'Quando o Barulho Fica Demais',
+                context: 'A festa está com música bem alta e muita gente gritando. Clara coloca as mãos nos ouvidos e se senta num cantinho mais longe da mesa:',
+                tone: '🎵 Tom de voz: Curto e apertando os olhos',
+                spoken: '"Eu só quero ficar aqui no cantinho um pouquinho..."',
+                question: 'O que o corpo e a fala de Clara estão comunicando?',
+                correctId: 'sobrecarga',
+                explain: 'Isso mesmo! Ela está com sobrecarga sensorial pelo barulho. Respeitar a pausa no cantinho calmo é um gesto lindo de cuidado.',
+                options: [
+                    { id: 'sobrecarga', label: '🎧 Os sons estão muito fortes para ela; ela precisa de um lugar calmo para descansar.' },
+                    { id: 'desrespeito', label: '😒 Ela não gostou do bolo de aniversário.' },
+                    { id: 'esconde', label: '🙈 Ela começou uma brincadeira de esconde-esconde.' },
+                    { id: 'festa-ruim', label: '👎 Ela quer que todos parem de se divertir.' }
+                ]
+            },
+            {
+                badge: 'Cena 5 de 8 • Brincadeira em Dupla',
+                title: 'A Troca de Turnos (Reciprocidade)',
+                context: 'Faz 15 minutos que você escolheu todas as regras da brincadeira. Seu amigo olha para o relógio, dá um sorriso pequeno e pergunta:',
+                tone: '🎵 Tom de voz: Educado, mas com pouca energia',
+                spoken: '"Será que agora a gente pode tentar o meu jeito de jogar?"',
+                question: 'Por que ele fez essa pergunta e o que ajuda a amizade a continuar legal?',
+                correctId: 'revezar',
+                explain: 'Perfeito! Amizades funcionam como uma gangorra: quando revezamos quem escolhe as regras, os dois se sentem importantes.',
+                options: [
+                    { id: 'mandar', label: '👑 Ele quer mandar em tudo sozinho.' },
+                    { id: 'revezar', label: '⚖️ Ele também quer participar das decisões; combinar de revezar as rodadas deixa o jogo justo!' },
+                    { id: 'chato', label: '🥱 Ele acha que você não sabe brincar.' },
+                    { id: 'sair', label: '🚪 Ele quer ir para casa imediatamente.' }
+                ]
+            },
+            {
+                badge: 'Cena 6 de 8 • Em Casa com os Pais',
+                title: 'Lendo a Preocupação vs. Falta de Carinho',
+                context: 'Você quase atravessou a rua sem olhar para os lados. A mamãe segurou seu braço rápido e falou com a voz bem forte e olhos arregalados:',
+                tone: '🎵 Tom de voz: Alto, rápido e com o coração acelerado',
+                spoken: '"Para! Você precisa olhar antes de dar um passo na rua!"',
+                question: 'Por que a voz dela saiu tão forte nessa hora?',
+                correctId: 'protecao',
+                explain: 'Excelente compreensão! Quando os pais se assustam com um perigo, o corpo dispara um alerta para proteger quem eles amam.',
+                options: [
+                    { id: 'protecao', label: '🛡️ Ela levou um susto enorme e falou forte para proteger você do perigo.' },
+                    { id: 'nao-ama', label: '💔 Ela não gosta mais de passear com você.' },
+                    { id: 'brincadeira', label: '🎭 Ela estava treinando teatro.' },
+                    { id: 'pressa', label: '⏰ Ela só queria correr mais rápido.' }
+                ]
+            },
+            {
+                badge: 'Cena 7 de 8 • Trabalho em Grupo',
+                title: 'Percebendo Quando Alguém Precisa de Ajuda',
+                context: 'Na aula de artes, Marina está olhando para a tesoura e para o papel faz tempo, mordendo o lábio e sem conseguir recortar a curva:',
+                tone: '🎵 Tom de voz: Suspiro baixinho',
+                spoken: '"Acho que esse recorte é difícil demais pra mim..."',
+                question: 'Qual é a pista social e a atitude empática de detetive?',
+                correctId: 'oferecer-apoio',
+                explain: 'Muito bem! Perceber o desânimo antes de a pessoa chorar e oferecer apoio gentil fortalece muito os vínculos.',
+                options: [
+                    { id: 'rir', label: '😆 Rir porque ela ainda não conseguiu recortar.' },
+                    { id: 'fazer-tudo', label: '✂️ Tomar o papel da mão dela e fazer tudo sem perguntar.' },
+                    { id: 'oferecer-apoio', label: '🌟 Perguntar com carinho: "Quer que eu segure o papel enquanto você recorta?"' },
+                    { id: 'ignorar', label: '🙈 Fingir que não viu nada.' }
+                ]
+            },
+            {
+                badge: 'Cena 8 de 8 • Hora de Guardar os Brinquedos',
+                title: 'Entendendo o Combinado em Família',
+                context: 'O relógio tocou avisando que acabou o tempo de tela. O papai aponta para o relógio com calma e diz:',
+                tone: '🎵 Tom de voz: Calmo e firme',
+                spoken: '"Combinado é combinado: salve o jogo e vamos jantar juntos."',
+                question: 'O que o tom calmo e o gesto do papai mostram?',
+                correctId: 'combinado',
+                explain: 'Parabéns, detetive! Um limite dado com calma mostra cuidado com sua rotina e saúde, e cumprir o combinado constrói confiança.',
+                options: [
+                    { id: 'combinado', label: '🤝 Ele está mantendo o combinado de forma justa para cuidarmos da rotina em família.' },
+                    { id: 'castigo', label: '🚫 Ele nunca mais vai deixar você jogar.' },
+                    { id: 'esquecimento', label: '❓ Ele esqueceu o que era o jogo.' },
+                    { id: 'desafio', label: '🏁 Ele quer ver se você consegue esconder o controle.' }
+                ]
+            }
+        ];
+
+        let socialIdx = 0;
+        let socialAnswered = false;
+
+        function renderSocialCase() {
+            socialAnswered = false;
+            const c = SOCIAL_CASES[socialIdx];
+            document.getElementById('socialBadge').textContent = c.badge;
+            document.getElementById('socialSceneTitle').textContent = c.title;
+            document.getElementById('socialSceneContext').textContent = c.context;
+            document.getElementById('socialToneBadge').textContent = c.tone;
+            document.getElementById('socialSpokenText').textContent = c.spoken;
+            document.getElementById('socialQuestionText').textContent = c.question;
+
+            const fb = document.getElementById('socialFeedback');
+            fb.className = 'feedback-banner';
+            fb.innerHTML = '';
+
+            const grid = document.getElementById('socialOptionsGrid');
+            grid.innerHTML = '';
+            c.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = opt.label;
+                btn.onclick = () => checkSocialAnswer(opt.id, btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function checkSocialAnswer(selectedId, btn) {
+            if (socialAnswered) return;
+            const c = SOCIAL_CASES[socialIdx];
+            const fb = document.getElementById('socialFeedback');
+
+            if (selectedId === c.correctId) {
+                socialAnswered = true;
+                btn.classList.add('correct');
+                stars += 3;
+                casesSolved += 1;
+                saveAndRefreshHUD();
+                playCelebrationChord();
+
+                fb.className = 'feedback-banner success';
+                fb.innerHTML = `
+                    <div>🌟 <strong>Pista Decifrada!</strong> ${c.explain} (+3 ⭐)</div>
+                    <button class="next-case-btn" onclick="nextSocialCase()">Próxima Cena ➔</button>
+                `;
+            } else {
+                btn.classList.add('calibrate');
+                playSoftTone(330, 293.66, 0.22, 'sine');
+                fb.className = 'feedback-banner gentle';
+                fb.innerHTML = `🔎 <strong>Boa tentativa!</strong> Vamos ler novamente a pista do <em>Tom de Voz</em> na caixinha azul? Às vezes o jeito de falar conta mais do que as palavras!`;
+            }
+        }
+
+        function nextSocialCase() {
+            socialIdx = (socialIdx + 1) % SOCIAL_CASES.length;
+            renderSocialCase();
+        }
+
+        // ============================================================
+        // MODO 3: PAUSA DE REGULAÇÃO (4s)
+        // ============================================================
+        let breathInterval = null;
+        let isBreathing = false;
+
+        function toggleBreathingCycle() {
+            const btn = document.getElementById('btnStartBreath');
+            const orb = document.getElementById('breathOrb');
+            const emoji = document.getElementById('breathEmoji');
+            const timerTxt = document.getElementById('breathTimerText');
+            const instr = document.getElementById('breathInstruction');
+
+            if (isBreathing) {
+                clearInterval(breathInterval);
+                isBreathing = false;
+                orb.className = 'breath-orb';
+                emoji.textContent = '🔎';
+                timerTxt.textContent = 'Pausado';
+                instr.textContent = 'Toque abaixo quando quiser fazer mais 3 respirações tranquilas!';
+                btn.textContent = '🌬️ Iniciar Pausa de Regulação (3 Ciclos)';
+                return;
+            }
+
+            isBreathing = true;
+            btn.textContent = '⏹️ Parar Ciclo de Respiração';
+            let cycle = 1;
+            let phase = 'inhale';
+
+            function runStep() {
+                if (!isBreathing) return;
+                if (phase === 'inhale') {
+                    orb.className = 'breath-orb inhale';
+                    emoji.textContent = '🌸';
+                    timerTxt.textContent = `Ciclo ${cycle}/3`;
+                    instr.textContent = '1. Inspire devagar pelo nariz sentindo o ar encher a barriga... (4s)';
+                    playSoftTone(392, 523.25, 0.45, 'sine');
+                    phase = 'exhale';
+                } else {
+                    orb.className = 'breath-orb exhale';
+                    emoji.textContent = '🌬️';
+                    timerTxt.textContent = 'Solte o ar...';
+                    instr.textContent = '2. Solte o ar bem devagar pela boca como uma brisa calma... (4s)';
+                    playSoftTone(523.25, 392, 0.45, 'sine');
+                    if (cycle >= 3) {
+                        setTimeout(() => {
+                            if (!isBreathing) return;
+                            clearInterval(breathInterval);
+                            isBreathing = false;
+                            stars += 2;
+                            saveAndRefreshHUD();
+                            playCelebrationChord();
+                            orb.className = 'breath-orb';
+                            emoji.textContent = '🌟';
+                            timerTxt.textContent = 'Mente Clara!';
+                            instr.textContent = 'Parabéns! Corpo regulado e atenção pronta para novas pistas (+2 ⭐)!';
+                            btn.textContent = '🌬️ Repetir Pausa de Regulação';
+                        }, 3800);
+                    } else {
+                        cycle++;
+                        phase = 'inhale';
+                    }
+                }
+            }
+
+            runStep();
+            breathInterval = setInterval(runStep, 4000);
+        }
+
+        function shareWhatsAppSummary() {
+            const msg = `🔎 *Resumo do Jogo Terapêutico: Detetive das Expressões e Pistas Sociais*\n\n` +
+                `Resolvemos *${casesSolved} Casos Sociais (🔎)* e conquistamos *${stars} Estrelas de Empatia (⭐)*!\n\n` +
+                `🏡 *Dica para continuar em casa:* Brinquem de pausar um desenho animado por 10 segundos para adivinhar o que os personagens estão sentindo pelas sobrancelhas e postura.\n\n` +
+                `Jogue em família em: https://deomagalhaes.com.br/jogos/jogo-detetive-pistas-sociais.html`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            saveAndRefreshHUD();
+            renderFaceCase();
+            renderSocialCase();
+        });
+    </script>
+</body>
+</html>
