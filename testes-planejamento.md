@@ -53,6 +53,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-44** | **Escala de Catastrofização Cognitiva e Simulação de Ameaça (ECC-SA)** | Catastrofização, Heurística do Afeto, Desamparo Preditivo e Cérebro Preditivo | `testes/teste-catastrofizacao-simulacao-ameaca.html` | ✅ Concluído |
 | **T-45** | **Escala de Hiperindependência Defensiva e Desativação do Apego (EHIS-DA)** | Apego Evitativo, Autossuficiência Compulsiva, Supressão de Vulnerabilidade e Linha de Base Social | `testes/teste-hiperindependencia-autossuficiencia.html` | ✅ Concluído |
 | **T-46** | **Escala de Dissonância Cognitiva e Racionalização Defensiva (EDC-RD)** | Dissonância Cognitiva, Alarme do dACC / Ínsula, Justificação Pós-Decisão e Supressão da Dúvida | `testes/teste-dissonancia-cognitiva-racionalizacao.html` | ✅ Concluído |
+| **T-47** | **Escala de Vulnerabilidade ao Gaslighting e Autodúvida Epistêmica (EVGAE)** | Gaslighting, Injustiça Epistêmica, Monitoramento de Realidade (BA 10 / vmPFC) e Invalidação | `testes/teste-gaslighting-invalidacao-epistemica.html` | ✅ Concluído |
 
 ---
 

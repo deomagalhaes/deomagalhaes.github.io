@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **13/11/2026** | **A Neurobiologia do Gaslighting Epistêmico e da Invalidação Emocional** | [social/2026-11-13-gaslighting-epistemico-invalidacao.md](2026-11-13-gaslighting-epistemico-invalidacao.md) | ✅ Pronto para postar |
 | **13/11/2026** | **A Neurobiologia da Dissonância Cognitiva e da Autoilusão Defensiva** | [social/2026-11-13-dissonancia-cognitiva-autoilusao.md](2026-11-13-dissonancia-cognitiva-autoilusao.md) | ✅ Pronto para postar |
 | **12/11/2026** | **A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência** | [social/2026-11-12-autossuficiencia-compulsiva-hiperindependencia.md](2026-11-12-autossuficiencia-compulsiva-hiperindependencia.md) | ✅ Pronto para postar |
 | **12/11/2026** | **A Neurobiologia da Catastrofização e da Simulação Aversiva** | [social/2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva.md](2026-11-12-neurobiologia-catastrofizacao-simulacao-aversiva.md) | ✅ Pronto para postar |

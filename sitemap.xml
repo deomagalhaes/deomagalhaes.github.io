@@ -241,6 +241,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-do-gaslighting-epistemico-e-invalidacao-emocional.html</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-do-masking-e-burnout-neurodivergente.html</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
@@ -913,6 +919,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/testes/teste-gaslighting-invalidacao-epistemica.html</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/testes/teste-granularidade-emocional-alexitimia.html</loc>
     <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -1527,6 +1539,12 @@
   <url>
     <loc>https://deomagalhaes.com.br/jogos/jogo-transitividade-logica.html</loc>
     <lastmod>2026-11-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/jogos/jogo-verificacao-realidade.html</loc>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

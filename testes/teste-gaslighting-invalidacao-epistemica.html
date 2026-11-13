@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Vulnerabilidade ao Gaslighting e Autodúvida Epistêmica (EVGAE / T-47) – Deo Magalhães</title>
+    <meta name="description" content="Avalie a erosão da confiança em seus sentidos, terceirização de julgamento e sobrecarga por invalidação emocional com a escala EVGAE / T-47.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 10px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-size: 1.02em;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 680px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 6px;
+            cursor: pointer;
+            font-size: 0.82em;
+            color: #475569;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #e0f2fe;
+            border-color: #0a9396;
+            color: #005f73;
+        }
+
+        .option-label.selected {
+            background: #005f73;
+            border-color: #005f73;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .btn-calc-box {
+            text-align: center;
+            margin: 35px 0 20px 0;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px 36px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.4);
+        }
+
+        /* Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin-top: 35px;
+            border: 2px solid #005f73;
+            box-shadow: 0 6px 25px rgba(0, 95, 115, 0.12);
+        }
+
+        .score-hero {
+            text-align: center;
+            padding: 24px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .score-hero.score-critico {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .score-hero.score-elevado {
+            background: #fff7ed;
+            border-color: #ffedd5;
+        }
+
+        .score-hero.score-moderado {
+            background: #fefce8;
+            border-color: #fef08a;
+        }
+
+        .score-hero h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #005f73;
+        }
+
+        .score-hero.score-critico h2 {
+            color: #991b1b;
+        }
+
+        .score-hero.score-elevado h2 {
+            color: #c2410c;
+        }
+
+        .score-hero.score-moderado h2 {
+            color: #854d0e;
+        }
+
+        .score-badge-val {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin: 10px 0;
+            color: #005f73;
+        }
+
+        .score-hero.score-critico .score-badge-val {
+            color: #dc2626;
+        }
+
+        .score-hero.score-elevado .score-badge-val {
+            color: #ea580c;
+        }
+
+        .score-hero.score-moderado .score-badge-val {
+            color: #ca8a04;
+        }
+
+        .dimension-bars-grid {
+            display: grid;
+            gap: 16px;
+            margin: 25px 0;
+        }
+
+        .dimension-bar-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dim-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.92em;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .progress-track {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .clinical-analysis-box {
+            background: #f8fafc;
+            border-left: 4px solid #0a9396;
+            padding: 22px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .clinical-analysis-box h4 {
+            margin: 0 0 10px 0;
+            color: #005f73;
+            font-size: 1.15em;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-action-outline {
+            padding: 12px 22px;
+            border-radius: 25px;
+            border: 1px solid #005f73;
+            background: #ffffff;
+            color: #005f73;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-outline:hover {
+            background: #e0f2fe;
+        }
+
+        .btn-action-solid {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-solid:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Vulnerabilidade ao Gaslighting e Autodúvida Epistêmica (EVGAE / T-47)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Instrumento Psicométrico T-47</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Psicoeducativo:</strong> O <em>gaslighting epistêmico</em> é uma forma de manipulação e invalidação na qual a vítima é levada a desacreditar de suas próprias percepções sensoriais, memórias e sentimentos legítimos. Este instrumento autoaplicável avalia o nível de erosão da certeza interna, a hiperativação do alarme de conflito no dACC e a terceirização do julgamento de realidade para terceiros.</p>
+                <p><strong>Instruções:</strong> Leia cada uma das 20 afirmações abaixo e assinale a frequência com que você vivenciou esses sentimentos ou comportamentos nos últimos meses, considerando seus relacionamentos amorosos, familiares ou profissionais mais significativos.</p>
+                <p><em>Privacidade garantida: todas as respostas são processadas exclusivamente no seu navegador. Nenhum dado é enviado ou armazenado em servidores externos.</em></p>
+            </div>
+
+            <form id="evgaeForm" class="quiz-container" onsubmit="event.preventDefault(); calcularResultado();">
+                <!-- Dimensão 1 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Erosão da Confiança Perceptiva e Sensorial (ECPS)</h3>
+                    <p>Avalia a frequência com que você duvida do que viu, ouviu ou sentiu após ser contrariado.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">1. Quando alguém nega com firmeza ter dito algo que me magoou, começo a achar que posso ter interpretado mal ou inventado a lembrança.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q1" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">2. Sinto necessidade frequente de conferir mensagens antigas, fotos ou registros para provar a mim mesmo que determinados fatos realmente aconteceram.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q2" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">3. Ao relatar um acontecimento importante, uso ressalvas constantes como "posso estar enganado" ou "talvez seja só impressão minha".</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q3" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">4. Se o outro afirma que minha reação emocional é "exagerada" ou "loucura", passo a me culpar e desconsidero o que meu corpo estava sentindo.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q4" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">5. Tenho a sensação assustadora de que minha memória recente está falhando gravemente nas discussões do dia a dia.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q5" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 2 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Terceirização do Critério de Realidade (TCRV)</h3>
+                    <p>Mede a dependência da aprovação e versão do outro para validar a própria vida.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">6. Costumo perguntar a terceiros se determinada atitude ou sentimento meu foi normal ou se estou de fato "fora da realidade".</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q6" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">7. Sinto que a versão que o outro apresenta sobre os conflitos soa sempre mais articulada, lógica e autorizada do que a minha.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q7" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">8. Adoto a opinião do outro mesmo quando minhas impressões mais íntimas apontavam para o sentido exatamente oposto.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q8" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">9. Evito expressar pontos de vista em público por medo de ser corrigido e exposto como alguém confuso ou desinformado.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q9" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">10. Tenho a sensação de que dependo do consentimento de outra pessoa para ter certeza de quem eu sou e do que estou fazendo.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q10" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 3 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Alarme Contínuo e Hipervigilância de Autoculpa (ACHA)</h3>
+                    <p>Avalia o estado de alerta, desculpas compulsivas e resposta de fawning/apaziguamento.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">11. Peço desculpas repetidamente ao longo do dia, mesmo quando não sei claramente o que posso ter feito de errado.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q11" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">12. Vivo com a sensação constante de "pisar em ovos", calculando minuciosamente cada palavra para evitar reações de desdém ou raiva.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q12" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">13. Quando há qualquer tensão ou mau humor no ambiente, assumo imediatamente a hipótese de que a culpa é minha.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q13" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">14. Sinto um aperto visceral no peito ou estômago antes de conversar sobre qualquer assunto delicado ou discordância.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q14" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">15. Tento justificar e defender os comportamentos grosseiros de terceiros para amigos e familiares, escondendo o que realmente acontece.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q15" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 4 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Supressão da Agência Decisória e Paralisia Metacognitiva (SADPM)</h3>
+                    <p>Avalia a inibição da autonomia de escolha e a perda da autoridade em primeira pessoa.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">16. Sinto uma angústia desproporcional para tomar decisões simples (como escolher uma roupa, o que almoçar ou planejar o fim de semana).</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q16" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">17. Tenho a sensação de que antes eu era uma pessoa muito mais confiante, decidida e alegre, e que me transformei em alguém frágil e inseguro.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q17" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">18. Fico paralisado diante de cobranças ou prazos no trabalho por medo extremo de que meu raciocínio esteja fundamentalmente errado.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q18" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">19. Abandonei atividades, amizades ou interesses que eu gostava porque o outro criticava ou afirmava que eram fúteis.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q19" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">20. Sinto que perdi o direito legítimo de dizer "não" ou de sustentar minha palavra quando alguém manifesta descontentamento.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q20" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="btn-calc-box">
+                    <button type="submit" class="btn-calculate">Calcular Meu Índice de Autodúvida Epistêmica</button>
+                </div>
+            </form>
+
+            <!-- Seção de Resultados -->
+            <div id="resultsSection" class="results-section">
+                <div id="scoreHeroBox" class="score-hero">
+                    <h2 id="resultTierTitle">Resultado da Escala EVGAE</h2>
+                    <div class="score-badge-val" id="totalScoreVal">0 / 100</div>
+                    <p id="resultTierSubtitle" style="margin: 0; font-weight: 600; font-size: 1.05em;"></p>
+                </div>
+
+                <h3>Perfil Dimensional Neuropsicológico:</h3>
+                <div class="dimension-bars-grid">
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>1. Erosão da Confiança Perceptiva e Sensorial (ECPS)</span>
+                            <span id="dim1ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim1Bar" style="width: 0%; background: #0a9396;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>2. Terceirização do Critério de Realidade (TCRV)</span>
+                            <span id="dim2ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim2Bar" style="width: 0%; background: #005f73;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>3. Alarme Contínuo e Hipervigilância de Autoculpa (ACHA)</span>
+                            <span id="dim3ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim3Bar" style="width: 0%; background: #ee9b00;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>4. Supressão da Agência Decisória e Paralisia (SADPM)</span>
+                            <span id="dim4ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim4Bar" style="width: 0%; background: #ca6702;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clinical-analysis-box" id="clinicalAnalysisText">
+                    <!-- Injetado dinamicamente -->
+                </div>
+
+                <div class="action-buttons-group">
+                    <button class="btn-action-outline" onclick="window.print()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        Imprimir / Salvar em PDF
+                    </button>
+                    <a href="/artigos/a-neurobiologia-do-gaslighting-epistemico-e-invalidacao-emocional.html" class="btn-action-outline">
+                        Ler Artigo Científico Completo
+                    </a>
+                    <a href="/jogos/jogo-verificacao-realidade.html" class="btn-action-outline">
+                        Treinar Verificação de Realidade no Jogo
+                    </a>
+                    <a href="/agendamento.html" class="btn-action-solid">
+                        Agendar Avaliação Clínica Especializada
+                    </a>
+                </div>
+            </div>
+
+            <p class="article-disclaimer" style="margin-top: 40px;"><em>Este teste é um instrumento psicoeducativo de triagem e autorreflexão embasado em literatura científica (Fricker, 2007; Abramson, 2014; Damasio, 2012; Stern, 2007). Ele não substitui uma avaliação neuropsicológica clínica ou diagnóstico formal.</em></p>
+        </div>
+    </main>
+
+    <!-- Rodapé Padrão Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // Interatividade de seleção visual nas opções
+        document.querySelectorAll('.options-grid').forEach(grid => {
+            grid.querySelectorAll('.option-label').forEach(label => {
+                label.addEventListener('click', function() {
+                    grid.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = true;
+                });
+            });
+        });
+
+        function calcularResultado() {
+            let dim1 = 0, dim2 = 0, dim3 = 0, dim4 = 0;
+            let respondidas = 0;
+
+            for (let i = 1; i <= 20; i++) {
+                const checked = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checked) {
+                    const val = parseInt(checked.value, 10);
+                    respondidas++;
+                    if (i <= 5) dim1 += val;
+                    else if (i <= 10) dim2 += val;
+                    else if (i <= 15) dim3 += val;
+                    else dim4 += val;
+                }
+            }
+
+            if (respondidas < 20) {
+                alert(`Por favor, responda a todas as 20 questões antes de calcular. Faltam ${20 - respondidas} questão(ões).`);
+                return;
+            }
+
+            const total = dim1 + dim2 + dim3 + dim4; // 20 a 100
+
+            // Atualiza barras
+            document.getElementById('dim1ScoreText').textContent = `${dim1} / 25 (${Math.round((dim1/25)*100)}%)`;
+            document.getElementById('dim1Bar').style.width = `${(dim1/25)*100}%`;
+
+            document.getElementById('dim2ScoreText').textContent = `${dim2} / 25 (${Math.round((dim2/25)*100)}%)`;
+            document.getElementById('dim2Bar').style.width = `${(dim2/25)*100}%`;
+
+            document.getElementById('dim3ScoreText').textContent = `${dim3} / 25 (${Math.round((dim3/25)*100)}%)`;
+            document.getElementById('dim3Bar').style.width = `${(dim3/25)*100}%`;
+
+            document.getElementById('dim4ScoreText').textContent = `${dim4} / 25 (${Math.round((dim4/25)*100)}%)`;
+            document.getElementById('dim4Bar').style.width = `${(dim4/25)*100}%`;
+
+            document.getElementById('totalScoreVal').textContent = `${total} / 100`;
+
+            const heroBox = document.getElementById('scoreHeroBox');
+            heroBox.className = 'score-hero';
+
+            let tierTitle = '';
+            let tierSubtitle = '';
+            let analysisHTML = '';
+
+            if (total <= 39) {
+                heroBox.classList.add('score-equilibrado');
+                tierTitle = 'Alta Agência Epistêmica & Ancoragem Perceptiva Sólida';
+                tierSubtitle = 'Pontuação 20 a 39: Baixa vulnerabilidade ao gaslighting e forte autoridade interna';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Estabilidade do vmPFC e Discriminação Factual Resiliente</h4>
+                    <p>Seus resultados indicam uma sólida confiança na própria percepção sensorial e capacidade de raciocínio. Diante de contradições ou pressões de figuras manipuladoras, seu Córtex Frontopolar (BA 10) sustenta a clareza sobre o que você de fato vivenciou, sem ceder à tentação de terceirizar a verdade para apaziguar o outro.</p>
+                    <p><strong>Recomendação Clínica:</strong> Mantenha essa integridade epistêmica. Continue validando seus marcadores somáticos (Damásio) e estabelecendo limites relacionais firmes sempre que perceber tentativas de distorção factual.</p>
+                `;
+            } else if (total <= 59) {
+                heroBox.classList.add('score-moderado');
+                tierTitle = 'Vulnerabilidade Moderada & Insegurança Situacional';
+                tierSubtitle = 'Pontuação 40 a 59: Suscetibilidade à autodúvida diante de figuras de autoridade ou apego íntimo';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Conflito no dACC com Oscilação de Certeza</h4>
+                    <p>Você apresenta uma integridade básica de julgamento, mas pode vivenciar crises de autodúvida quando confrontado por pessoas que exercem forte ascendência afetiva ou hierárquica. Em situações de conflito intenso, seu cérebro pode ativar o apaziguamento (fawning), fazendo você hesitar e pedir desculpas antes de checar os fatos.</p>
+                    <p><strong>Recomendação Clínica:</strong> Pratique o hábito do "diário epistêmico": anote fatos objetivos e acontecimentos logo após ocorrerem. Isso desonera a memória de trabalho e impede que a retórica alheia reescreva a sua percepção retrospectiva.</p>
+                `;
+            } else if (total <= 79) {
+                heroBox.classList.add('score-elevado');
+                tierTitle = 'Autodúvida Epistêmica Elevada & Erosão do Julgamento';
+                tierSubtitle = 'Pontuação 60 a 79: Vulnerabilidade expressiva com necessidade crônica de validação externa';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Supressão Metacognitiva e Hipervigilância do Eixo HPA</h4>
+                    <p>Seus resultados revelam que a sua certeza interna foi seriamente impactada. Você frequentemente questiona sua própria sanidade, memória e direito de se sentir incomodado. A ativação crônica da amígdala e o alarme constante no dACC induzem você a crer que qualquer conflito é fruto de um defeito ou confusão exclusivamente sua.</p>
+                    <p><strong>Recomendação Clínica:</strong> É urgente interromper a busca por aprovação de quem invalida você. Recupere a escuta do seu corpo: a reação fisiológica que você sente é real e legítima. Buscar acompanhamento psicoterapêutico especializado (TCC, ACT e Trauma) é um passo fundamental para reconstruir a sua bússola de autoridade.</p>
+                `;
+            } else {
+                heroBox.classList.add('score-critico');
+                tierTitle = 'Descalibração Epistêmica Severa & Dependência de Validação';
+                tierSubtitle = 'Pontuação 80 a 100: Colapso agudo da autoridade em primeira pessoa e submissão à narrativa alheia';
+                analysisHTML = `
+                    <h4>Perfil Neuropsicológico: Sequestro da Agência e Paralisia Decisória</h4>
+                    <p>Sua pontuação aponta para um quadro agudo de esgotamento e despersonalização epistêmica. Você se encontra em um estado de dúvida crônica e paralisante sobre quem é, o que pensa e o que de fato aconteceu. Esse padrão costuma ser o resultado acumulado de longos períodos de exposição a ambientes relacionais manipulativos e predatórios.</p>
+                    <p><strong>Recomendação Clínica:</strong> Você precisa de um espaço seguro de acolhimento e reconstrução imediata. Não tente debater nem convencer o manipulador de sua lucidez: sua prioridade biológica deve ser proteger seu sistema nervoso e resgatar o apoio de profissionais e pessoas de confiança incondicional. Uma avaliação neuropsicológica clínica e psicoterapia continuada são altamente recomendadas.</p>
+                `;
+            }
+
+            document.getElementById('resultTierTitle').textContent = tierTitle;
+            document.getElementById('resultTierSubtitle').textContent = tierSubtitle;
+            document.getElementById('clinicalAnalysisText').innerHTML = analysisHTML;
+
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
