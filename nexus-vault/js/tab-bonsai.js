@@ -1794,6 +1794,13 @@
                         : ' • Sem podas recentes na copa.';
                     let repotContext = m.isRepotOverdue ? ' • [Transplante Atrasado: Janela Ideal]' : '';
 
+                    // Alerta Astrobotânico de Sangria Vascular e Proteção Cambial
+                    let sapBleedWarning = null;
+                    const isLactescentOrHighVascular = popName.includes('ficus') || popName.includes('figueira') || popName.includes('acer') || popName.includes('serissa');
+                    if (isLactescentOrHighVascular && (moon.phaseGroup === 'CHEIA' || moon.phaseGroup === 'CRESCENTE') && (proc.category === 'PODA_DRASTICA' || proc.category === 'DESFOLHA' || proc.category === 'ESTRUTURA')) {
+                        sapBleedWarning = `Alerta Fitotécnico de Sangria: Espécie com pressão vascular lactescente sob turgor de ${moon.phaseName}. Selar cortes imediatamente com pasta cicatrizante cúprica para impedir dessecação cambial retrógrada.`;
+                    }
+
                     results.push({
                         score: finalScore,
                         procedure: proc,
@@ -1801,6 +1808,7 @@
                         metrics: m,
                         moon,
                         seasonInfo,
+                        sapBleedWarning,
                         whyNow: `${moon.phaseName} (${moon.illumination}% iluminada • ${moon.phaseGroup}) + ${seasonInfo.season}: ${proc.biologicalNote}${pruneContext}${repotContext}`
                     });
                 }
@@ -3939,6 +3947,12 @@
                                     Confluência Cósmica & Biológica (Por Que Agora?):
                                 </span>
                                 <p class="text-xs text-slate-200 leading-relaxed">${rec.whyNow}</p>
+                                ${rec.sapBleedWarning ? `
+                                    <div class="mt-2.5 p-2.5 rounded-lg bg-rose-950/40 border border-rose-500/40 text-xs text-rose-200 flex items-start gap-2">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i>
+                                        <span>${C.esc(rec.sapBleedWarning)}</span>
+                                    </div>
+                                ` : ''}
                             </div>
 
                             <div class="pt-2 border-t border-slate-800/80">

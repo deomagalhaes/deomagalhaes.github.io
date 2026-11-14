@@ -758,6 +758,104 @@
             defaultQuestion: 'Você sente como a nossa mãozinha dada guarda toda a proteção do mundo enquanto você viaja pelos sonhos?',
             challengeAct: 'sentiu um aperto no peito querendo que o papai ou a mamãe ficassem acordados a noite inteira bem do ladinho da cama.',
             breathCue: 'apertou a mãozinha com carinho, sentiu a presença mansa e respirou fundo com a certeza inabalável de que o amor nunca vai embora.'
+        },
+        cinema_mental_catastrofe: {
+            label: '107. O Cinema Mental e a Troca de Fita (Desfusão de Pensamentos Catastróficos / "E se?")',
+            defaultMetaphor: 'O projetor de imagens da gruta encantada: às vezes ele coloca na parede um filme de tempestade inventada que assusta, mas a mãozinha sábia pode apertar o botão de pausa, trocar a fita e projetar um lago sereno com patinhos nadando em paz.',
+            defaultQuestion: 'Qual é o filme mais gostoso e engraçado que o seu pensamento quer projetar na hora de dormir?',
+            challengeAct: 'começou a imaginar que algo muito ruim aconteceria amanhã, com o coração acelerado e a cabeça inventando monstros que nem existiam.',
+            breathCue: 'apertou suavemente o botão imaginário no meio do peito, soprou o ar bem devagarzinho e viu a tela cinzenta se encher de luz dourada e calma.'
+        },
+        orquestra_passarada: {
+            label: '108. A Orquestra da Passarada (Manejo de Ansiedade de Desempenho & Comparação)',
+            defaultMetaphor: 'A grande árvore cantante da floresta: o canário tem um trinado agudo, o sabiá canta grave e a corujinha faz um som macio; ninguém tenta imitar ninguém porque a harmonia mais linda acontece quando cada um oferece a sua própria voz única com alegria.',
+            defaultQuestion: 'O que o seu coração mais gosta em ser exatamente você, com o seu jeito especial de falar, rir e brincar?',
+            challengeAct: 'ficou com vergonha de falar ou cantar na roda de amigos, achando que a sua voz não era tão afinada ou bonita quanto a dos outros passarinhos.',
+            breathCue: 'soltou o queixo e os ombros, inspirou sentindo a música doce que mora no próprio peito e soltou um murmúrio suave sentindo-se acolhido pela mata inteira.'
+        },
+        tartaruga_ritmo_proprio: {
+            label: '109. O Passo da Tartaruga Sábia (Ritmo Orgânico & Desaceleração de Cobranças)',
+            defaultMetaphor: 'A tartaruga anciã que cruza as pedras musgosas do riacho: os coelhos passam correndo e tropeçam, mas ela dá um passinho firme de cada vez, sentindo a textura da terra e desfrutando o perfume das flores sem nenhuma pressa de chegar.',
+            defaultQuestion: 'Como é tranquilo saber que você não precisa correr; cada dia tem o seu tempo certinho de aprender e saborear?',
+            challengeAct: 'ficou aflito achando que estava demorando demais para terminar uma tarefa e que todo mundo estava na frente, com vontade de chorar no meio do caminho.',
+            breathCue: 'pousou os pés firmes no chão, respirou como a tartaruga serena e deu um passinho manso de cada vez com total tranquilidade.'
+        },
+        mancha_tinta_asa: {
+            label: '110. A Mancha que Virou Asa de Dragão (Acolhimento do Erro & Curiosidade Gentil)',
+            defaultMetaphor: 'O pintor aprendiz que derramou uma gota preta no meio do papel branco: em vez de amassar a folha com raiva, pegou o pincel de ponta fina, puxou dois traços e aquela mancha virou a asa mais incrível de um dragão protetor que soprava flores.',
+            defaultQuestion: 'Você já viu que quando algo sai diferente do esperado, a gente pode inventar uma brincadeira ainda mais genial com isso?',
+            challengeAct: 'errou o traço do desenho ou o encaixe da pecinha e sentiu uma raiva repentina, com vontade de jogar o papel longe e desistir de criar.',
+            breathCue: 'olhou para o erro com olhos curiosos de cientista brincalhão, soltou o ar rindo baixinho e perguntou: que coisa mágica essa manchinha quer virar?'
+        },
+        piquenique_lona: {
+            label: '111. O Piquenique debaixo da Lona (Tolerância a Mudanças Imprevistas de Planos)',
+            defaultMetaphor: 'A família de quatis que preparou um banquete de frutas no gramado quando caiu uma chuva de surpresa: eles esticaram uma lona de folhas de bananeira na varanda e descobriram que comer frutas ouvindo o barulho da chuva era cem vezes mais gostoso do que no sol.',
+            defaultQuestion: 'Qual foi uma surpresa inesperada de hoje que no final das contas acabou sendo divertida?',
+            challengeAct: 'ouviu que o passeio no parque precisou ser cancelado por causa do tempo e cruzou os braços com cara amarrada, sentindo que o dia estava arruinado.',
+            breathCue: 'abriu os braços devagarzinho, puxou o cheiro gostoso da terra molhada e soprou o ar inventando um castelo seguro dentro da sala.'
+        },
+        clube_arvore_oca: {
+            label: '112. O Clube da Árvore Oca (Acolhimento da Exclusão & Sentimento de Rejeição)',
+            defaultMetaphor: 'O tronco da sumaúma que guarda um abrigo secreto: quando uma brincadeira no pátio não tem espaço, a floresta abre a porta da árvore oca onde os amigos mais leais, carinhosos e gentis se reúnem para contar histórias que curam qualquer tristeza.',
+            defaultQuestion: 'Quem são as pessoas e bichinhos que fazem você se sentir o ser mais querido e importante do universo?',
+            challengeAct: 'viu dois colegas cochichando e não foi chamado para a brincadeira, sentindo um nó gelado na garganta e a sensação de estar sozinho no mundo.',
+            breathCue: 'abraçou os joelhos bem quentinho, respirou fundo lembrando do abraço seguro de quem te ama de verdade e sentiu o calor voltar ao peito.'
+        },
+        onda_massagem_praia: {
+            label: '113. A Onda que Massageia a Areia (Consciência Corporal & Regulação Vagal)',
+            defaultMetaphor: 'A maré mansa do entardecer: ela sobe devagarzinho molhando a areia e soltando cada grãozinho duro, e quando recua leva embora as conchinhas pesadas, deixando a praia perfeitamente lisa, fresca e relaxada de ponta a ponta.',
+            defaultQuestion: 'Se uma onda quentinha de carinho passar pelos seus pés, joelhos e bracinhos agora, onde ela vai deixar você mais relaxado?',
+            challengeAct: 'deitou na cama com os punhos cerrados, as pernas rígidas e a mandíbula travada, sem conseguir perceber onde o corpinho estava guardando tensão.',
+            breathCue: 'imaginou uma onda morna subindo dos pezinhos até a cabeça no inspirar… e derretendo todo o peso do corpo no colchão no expirar suave.'
+        },
+        semaforo_coruja_sabia: {
+            label: '114. O Semáforo da Coruja Guardiã (Pausa Pré-Ação & Manejo de Impulsividade)',
+            defaultMetaphor: 'A luz de três cores no alto do galho da coruja: o vermelho diz "pare e congele os pezinhos", o amarelo diz "respire e pense numa escolha amiga" e o verde diz "aja com o coração calmo". Três segundos de pausa mudam o destino da floresta inteira.',
+            defaultQuestion: 'Como é bom quando a gente dá uma paradinha de três segundos antes de falar ou empurrar, e escolhe um caminho de paz?',
+            challengeAct: 'sentiu vontade de arrancar o brinquedo da mão do amigo ou gritar no meio da sala quando a ansiedade tomou conta do corpinho.',
+            breathCue: 'viu a luz amarela da coruja acender na mente, contou um, dois, três tempos respirando mansinho e escolheu falar com palavras calmas.'
+        },
+        escudo_vagalumes: {
+            label: '115. O Escudo Dourado dos Vaga-lumes (Proteção Contra Pesadelos & Medo Noturno)',
+            defaultMetaphor: 'O círculo brilhante de cem vaga-lumes amigos: quando a noite fica profunda, eles pousam na cabeceira da cama e tecem uma cúpula de fios luminosos dourados onde nenhum sonho feio consegue entrar; só pensamentos doces e estrelas prateadas têm passagem.',
+            defaultQuestion: 'Que sonho bonito você vai convidar para entrar pela portinha dourada do seu escudo esta noite?',
+            challengeAct: 'lembrou de uma cena feia de um desenho animado antes de fechar os olhos e ficou com medo de apagar a luz do abajur.',
+            breathCue: 'fechou as pálpebras, imaginou o brilho quentinho dos vaga-lumes em volta do travesseiro e respirou sentindo a proteção inabalável da noite.'
+        },
+        mapa_texturas_noite: {
+            label: '116. O Mapa das Texturas da Noite (Desconexão Sensorial de Telas & Presença Plena)',
+            defaultMetaphor: 'O explorador da toca perfumada: quando as luzes elétricas se apagam, os dedos descobrem a maciez do lençol de algodão, o nariz sente o cheirinho de lavanda no travesseiro e os ouvidos escutam a cantoria doce dos grilos no jardim.',
+            defaultQuestion: 'Qual é a textura ou o cheirinho mais gostoso que você está sentindo aqui na sua caminha agora?',
+            challengeAct: 'estava com os olhos vidrados na telinha luminosa, achando o mundo real sem graça e sem querer desligar o aparelho.',
+            breathCue: 'passou a mãozinha suavemente pelo lençol, respirou fundo sentindo o ar fresco entrar pelo nariz e soltou o ar aconchegando-se no ninho fofo.'
+        },
+        curativo_folhas_hortela: {
+            label: '117. O Curativo de Folhas de Hortelã (Gentileza Consigo Mesmo & Autocompaixão)',
+            defaultMetaphor: 'O ursinho curandeiro que carrega folhas frescas de hortelã e mel: quando alguém se machuca por fora ou por dentro, ele não briga nem culpa ninguém; ele apenas encosta a folhinha fresca na ferida, sopra com ternura e diz "vai passar, estou aqui com você".',
+            defaultQuestion: 'Se você pudesse colocar uma folhinha de carinho no seu próprio peito agora, que palavra doce ela diria para você?',
+            challengeAct: 'disse palavras duras sobre si mesmo depois de derrubar um copo ou errar na tarefa, achando que fazia tudo errado.',
+            breathCue: 'pousou a mãozinha no peito com gentileza infinita, respirou o perfume suave da hortelã imaginária e sentiu o calor do perdão e da ternura.'
+        },
+        carvalho_pequenino: {
+            label: '118. O Carvalho que Aproveita o Sol de Hoje (Paciência com o Próprio Crescimento)',
+            defaultMetaphor: 'A plantinha de carvalho na encosta da montanha: ela não fica esticando as folhas para tentar ser tão alta quanto as árvores centenárias hoje à noite; ela sabe que para ser forte amanhã, o melhor trabalho de hoje é beber a água mansa e dormir profundamente.',
+            defaultQuestion: 'O que o seu corpinho mais gostou de fazer hoje enquanto foi criança?',
+            challengeAct: 'queria fazer coisas de gente grande agora mesmo, frustrado porque certas brincadeiras ainda eram difíceis para o seu tamanho.',
+            breathCue: 'espreguiçou as patinhas no colchão, inspirou sentindo as raízes calmas crescerem na terra e soltou o ar entregando o descanso à noite.'
+        },
+        beijo_invisivel_palma: {
+            label: '119. O Beijo Invisível na Palma da Mão (Vínculo Seguro em Dias Corridos)',
+            defaultMetaphor: 'O carimbo de coração invisível no centro da mãozinha: mesmo quando o dia foi cheio de correrias e compromissos, aquele beijo carinhoso depositado na palma fica pulsando quentinho; basta encostar a mão no rosto para sentir o abraço completo.',
+            defaultQuestion: 'Você consegue sentir o calorzinho gostoso do nosso beijo na palma da sua mãozinha agora?',
+            challengeAct: 'sentiu saudade durante a tarde corrida e achou que o tempo com a família tinha sido curto demais antes de dormir.',
+            breathCue: 'fechou a mãozinha suavemente como quem guarda uma joia preciosa, encostou na bochecha, respirou fundo e sorriu em paz.'
+        },
+        barquinho_algodao_sono: {
+            label: '120. O Barquinho de Algodão (Entrega Mansa à Gravidade & Sono Reparador)',
+            defaultMetaphor: 'O barquinho feito de plumas de algodão que desce o riacho dos sonhos: ele não precisa de remos, nem de motor, nem de mapa; a correnteza mansa sabe exatamente o caminho até a ilha das estrelas cadentes, e o único trabalho do passageiro é deitar, fechar os olhos e se deixar levar.',
+            defaultQuestion: 'Para onde o seu barquinho de algodão vai navegar bem levinho esta noite?',
+            challengeAct: 'estava tentando controlar o sono, com medo de fechar os olhos e perder alguma coisa do dia.',
+            breathCue: 'soltou todo o peso do corpinho no colchão, deu um suspiro longo e gostoso, e deixou o riacho da noite embalar o sono mais doce do mundo.'
         }
     };
 
@@ -1440,13 +1538,39 @@
             metaEl.textContent = `⏱️ ~${readMins} min de leitura suave • ${words} palavras • ${target.source || 'Modo Offline'}`;
         }
 
-        // Progresso de rolagem
+        // Progresso de rolagem e persistência de posição
         overlay.onscroll = () => {
             const maxScroll = overlay.scrollHeight - overlay.clientHeight;
             const pct = maxScroll > 0 ? (overlay.scrollTop / maxScroll) * 100 : 0;
             const pb = document.getElementById('amber-scroll-progress');
             if (pb) pb.style.width = `${pct}%`;
+
+            if (target && target.title && maxScroll > 0) {
+                try {
+                    const scrollKey = 'dm_vault_amber_pos_' + encodeURIComponent(target.title.slice(0, 32));
+                    sessionStorage.setItem(scrollKey, String(overlay.scrollTop));
+                } catch (_) {}
+            }
         };
+
+        // Restaura posição prévia de leitura do conto se disponível
+        if (target && target.title) {
+            try {
+                const scrollKey = 'dm_vault_amber_pos_' + encodeURIComponent(target.title.slice(0, 32));
+                const savedPos = parseInt(sessionStorage.getItem(scrollKey) || '0', 10);
+                if (savedPos > 0) {
+                    setTimeout(() => {
+                        overlay.scrollTo({ top: savedPos, behavior: 'smooth' });
+                    }, 120);
+                } else {
+                    overlay.scrollTop = 0;
+                }
+            } catch (_) {
+                overlay.scrollTop = 0;
+            }
+        } else {
+            overlay.scrollTop = 0;
+        }
 
         // Pausa autoscroll suave se o usuário rolar com o dedo ou mouse
         const handleManualScroll = () => {
@@ -1480,9 +1604,28 @@
             } else if (e.key === 'f' || e.key === 'F') {
                 e.preventDefault();
                 toggleAmberFullscreen();
+            } else if (e.key === 't' || e.key === 'T') {
+                e.preventDefault();
+                const themesCycle = ['amber', 'red', 'sage', 'dark'];
+                const curIdx = themesCycle.indexOf(activeAmberTheme);
+                const nextTheme = themesCycle[(curIdx + 1) % themesCycle.length];
+                applyAmberThermalPalette(nextTheme);
+                if (C) C.toast(`Paleta térmica: ${nextTheme}`, 'info', 1000);
             } else if (e.key === 'm' || e.key === 'M') {
                 e.preventDefault();
+                const btnAudio = document.getElementById('btn-audio-toggle');
+                if (btnAudio) btnAudio.click();
+            } else if (e.key === 'n' || e.key === 'N') {
+                e.preventDefault();
                 toggleSpeechNarration();
+            } else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 'j') {
+                e.preventDefault();
+                stopAutoScroll();
+                overlay.scrollBy({ top: 90, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                stopAutoScroll();
+                overlay.scrollBy({ top: -90, behavior: 'smooth' });
             }
         };
         document.addEventListener('keydown', readerKeyHandler);

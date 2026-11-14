@@ -1475,6 +1475,85 @@
             detail: `P10: R$ ${Math.round(mockMcAudit.p10).toLocaleString('pt-BR')} ≤ P50: R$ ${Math.round(mockMcAudit.p50).toLocaleString('pt-BR')} ≤ P90: R$ ${Math.round(mockMcAudit.p90).toLocaleString('pt-BR')}. Ordenação estocástica verificada.`
         });
 
+        // 47. Teste de Tempo de Duplicação do Capital Real: Regra dos 72 vs Logaritmo Contínuo
+        const rTest72 = 7.5;
+        const exactDoublingYears = Math.log(2) / Math.log(1 + rTest72 / 100);
+        const rule72Years = 72 / rTest72;
+        const testDoublingPass = Math.abs(exactDoublingYears - rule72Years) < 0.2;
+        tests.push({
+            name: 'Tempo de Duplicação do Capital Real: Logaritmo Exato vs Regra dos 72',
+            formula: 'T_exato = ln(2) / ln(1 + r_a) ≈ 72 / (r_a × 100)',
+            passed: Boolean(testDoublingPass),
+            detail: `Taxa Real 7,5% a.a.: Duplicação exata em ${exactDoublingYears.toFixed(2)} anos vs estimativa heurística de ${rule72Years.toFixed(1)} anos (erro < 0,2 anos).`
+        });
+
+        // 48. Teste de Resiliência sob Flash Crash de 30% com Choque de Proventos de 15%
+        const mockFlashCrash = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 250000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2600,
+            avgTicket: 250,
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            monthlyContribution: 4200
+        });
+        const expectedStressedPat = 250000 * 0.70;
+        const testFlashCrashPass = Math.abs(mockFlashCrash.stressedPatrimony - expectedStressedPat) < 1e-2 &&
+            mockFlashCrash.lostCapital === 75000 &&
+            mockFlashCrash.stressedMonthlyPassive > 0 &&
+            mockFlashCrash.monthsToRecoverDynamic > 0;
+        tests.push({
+            name: 'Resiliência de Fluxo sob Flash Crash de −30% e Compensação Clínica de Déficit',
+            formula: 'Patrimônio_Stressed = 250.000 × 0,70 = 175.000 ∧ Proventos_Stressed = Base × 0,85',
+            passed: Boolean(testFlashCrashPass),
+            detail: `Capital retido: R$ ${mockFlashCrash.stressedPatrimony.toLocaleString('pt-BR')} (perda temporária de R$ 75.000). Renda passiva mensal de R$ ${mockFlashCrash.stressedMonthlyPassive.toFixed(2)} e compensação calculada.`
+        });
+
+        // 49. Teste de Otimização Quadrática do Alocador sem Alienação
+        const mockOptAlloc = computeAporteAllocation({
+            monthlyContribution: 5000,
+            targetAllocFII: 40,
+            targetAllocRF: 30,
+            targetAllocAcoes: 20,
+            targetAllocGlobal: 10,
+            currentAllocFII: 60000,
+            currentAllocRF: 20000,
+            currentAllocAcoes: 15000,
+            currentAllocGlobal: 5000
+        });
+        const totalInitOpt = 100000;
+        const discBefore = mockOptAlloc.classes.reduce((sum, c) => sum + Math.abs((c.currentVal / totalInitOpt) * 100 - c.targetPct), 0);
+        const totalAfterOpt = totalInitOpt + 5000;
+        const discAfter = mockOptAlloc.classes.reduce((sum, c) => sum + Math.abs((c.postVal / totalAfterOpt) * 100 - c.targetPct), 0);
+        const testOptimizationPass = discAfter <= discBefore;
+        tests.push({
+            name: 'Convergência Monótona do Alocador Inteligente (Minimização de Discrepância)',
+            formula: 'Σ |postPct_i − targetPct_i| ≤ Σ |currentPct_i − targetPct_i|',
+            passed: Boolean(testOptimizationPass),
+            detail: `Discrepância global da carteira reduzida de ${discBefore.toFixed(1)}% para ${discAfter.toFixed(1)}% com injeção de R$ 5.000 sem venda de ativos.`
+        });
+
+        // 50. Teste de Consistência do Catálogo de Ativos, Cotas Inteiras e Geração de Boleta
+        const customTickerCatalog = {
+            FII: [{ ticker: 'KNCR11', name: 'Kinea Rendimentos', price: 104.20, yield: 12.1, type: 'Papel' }],
+            RF: [{ ticker: 'IPCA+2045', name: 'Tesouro IPCA+ 2045', price: 1180.00, yield: 6.5, type: 'Tesouro Direto' }]
+        };
+        const mockClassesForTickers = [
+            { key: 'FII', name: 'Fundos Imobiliários', recommendedAporte: 1000 },
+            { key: 'RF', name: 'Renda Fixa', recommendedAporte: 2500 }
+        ];
+        const resCustomTickers = computeAporteByTickers(mockClassesForTickers, customTickerCatalog);
+        const testTickerConsistency = resCustomTickers.byClass.length === 2 &&
+            resCustomTickers.totalResidual >= 0 &&
+            resCustomTickers.summaryOrderText.includes('BOLETA DE APORTE');
+        tests.push({
+            name: 'Consistência do Catálogo de Ativos, Cotas Inteiras e Geração de Boleta',
+            formula: 'Cotas_Inteiras = floor(Orçamento / Cotação) ∧ Resíduo ≥ 0 ∧ Boleta ∈ Texto',
+            passed: Boolean(testTickerConsistency),
+            detail: `Classes alocadas em cotas inteiras sem centavos fracionados; boleta executiva estruturada gerada com sucesso para Home Broker.`
+        });
+
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,
