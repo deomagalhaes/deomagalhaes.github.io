@@ -55,6 +55,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-46** | **Escala de Dissonância Cognitiva e Racionalização Defensiva (EDC-RD)** | Dissonância Cognitiva, Alarme do dACC / Ínsula, Justificação Pós-Decisão e Supressão da Dúvida | `testes/teste-dissonancia-cognitiva-racionalizacao.html` | ✅ Concluído |
 | **T-47** | **Escala de Vulnerabilidade ao Gaslighting e Autodúvida Epistêmica (EVGAE)** | Gaslighting, Injustiça Epistêmica, Monitoramento de Realidade (BA 10 / vmPFC) e Invalidação | `testes/teste-gaslighting-invalidacao-epistemica.html` | ✅ Concluído |
 | **T-48** | **Escala Multidimensional de Comparação Social e Vulnerabilidade ao Status Relativo (EMCS-VSR)** | Comparação Social, Dor de Status Relativo (dACC), Aversão à Iniquidade e Autoestima Contingente (vmPFC) | `testes/teste-comparacao-social-status-relativo.html` | ✅ Concluído |
+| **T-49** | **Escala Multidimensional de Auto-Sabotagem, Aversão à Serenidade e Tolerância ao Bem-Estar (EMAS-AS)** | Aversão à Serenidade, Alarme do BNST, Descompasso do Freio Vagal e Auto-Sabotagem | `testes/teste-auto-sabotagem-medo-serenidade.html` | ✅ Concluído |
 
 ---
 

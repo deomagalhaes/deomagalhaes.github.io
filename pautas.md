@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Auto-Sabotagem e do Medo da Serenidade: Por Que o Cérebro Traumatizado Interpreta a Calmaria Como Ameaça e Como Reeducar o Sistema de Segurança Interna** (Publicado em 14/11/2026)
 - [x] **A Neurobiologia da Comparação Social Compulsiva e da Dor do Status Relativo: Como o Cérebro Processa a Desvantagem, a Inveja e a Descalibração do Valor Próprio** (Publicado em 14/11/2026)
 - [x] **A Neurobiologia do Gaslighting Epistêmico e da Invalidação Emocional: Como a Manipulação Psicológica Descalibra a Percepção da Realidade e Destrói a Agência Metacognitiva** (Publicado em 13/11/2026)
 - [x] **A Neurobiologia da Dissonância Cognitiva e da Autoilusão Defensiva: Como o Cérebro Justifica Contradições e Reescreve a Realidade para Proteger a Identidade** (Publicado em 13/11/2026)

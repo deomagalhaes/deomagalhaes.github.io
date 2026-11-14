@@ -718,7 +718,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="comparacao-social-status-relativo" selected>A Neurobiologia da Comparação Social e Status Relativo: Por Que o Sucesso Alheio Dói no Seu Cérebro</option>
+                        <option value="auto-sabotagem-medo-serenidade" selected>A Neurobiologia da Auto-Sabotagem e do Medo da Serenidade: Por Que o Cérebro Sabota a Própria Paz</option>
+                        <option value="comparacao-social-status-relativo">A Neurobiologia da Comparação Social e Status Relativo: Por Que o Sucesso Alheio Dói no Seu Cérebro</option>
                         <option value="gaslighting-epistemico">A Neurobiologia do Gaslighting Epistêmico e da Invalidação: Por Que a Manipulação Faz Você Duvidar de Si Mesmo</option>
                         <option value="dissonancia-cognitiva">A Neurobiologia da Dissonância Cognitiva e da Autoilusão Defensiva: Por Que Justificamos o Injustificável</option>
                         <option value="autossuficiencia-compulsiva">A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência: Por Que Pedir Ajuda Parece Ameaçador</option>
@@ -1028,6 +1029,66 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "auto-sabotagem-medo-serenidade": {
+      "articleSlug": "2026-11-14-auto-sabotagem-medo-da-serenidade",
+      "articleTitle": "A Neurobiologia da Auto-Sabotagem e do Medo da Serenidade: Por Que o Cérebro Sabota a Própria Paz",
+      "slides": [
+        {
+          "type": "cover",
+          "badge": "NEUROCIÊNCIA DO TRAUMA & APEGO",
+          "title": "Por que a *calmaria* parece tão perigosa para o seu cérebro?",
+          "body": "As contas estão pagas, o relacionamento vai bem e nada está pegando fogo.\n\nEntão por que seu peito aperta como se uma catástrofe fosse acontecer a qualquer segundo?\n\nEntenda por que cérebros condicionados ao estresse confundem paz com perigo iminente.",
+          "footer": "Deslize para entender a neurobiologia da auto-sabotagem ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "O PARADOXO BIOLÓGICO",
+          "title": "Quando o caos se torna a sua linha de base previsível",
+          "body": "Se você cresceu em ambientes voláteis ou sob apego imprevisível, o estresse tornou-se seu estado familiar de sobrevivência.\n\nNo combate, o cérebro sabe o que fazer: adrenalina circula e os reflexos estão ativos.\n\nNa paz, o escudo defensivo perde a função. Para um sistema nervoso traumatizado, abaixar a guarda não é relaxar: é risco de ser aniquilado de surpresa.",
+          "footer": "O cérebro prefere um caos previsível à calmaria ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "CIRCUITARIA DO MEDO",
+          "title": "O BNST e o alarme somático da ausência de perigo",
+          "body": "O *Núcleo Leito da Estria Terminal (BNST)* monitora perigos difusos e incertezas prolongadas.\n\nEm pessoas hipervigilantes, o BNST permanece ligado: quando não há ameaça evidente, ele suspeita de uma emboscada oculta.\n\nAo deitar no sofá para relaxar, o BNST recruta o *Locus Coeruleus*, descarregando noradrenalina: o coração dispara e o peito aperta sem motivo aparente.",
+          "footer": "A falsa urgência que obriga você a agir ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "PROCESSAMENTO PREDITIVO",
+          "title": "Por que o cérebro sabota o que está dando certo?",
+          "body": "O cérebro é uma máquina bayesiana: ele prefere um desastre familiar a uma felicidade que não confia que vai durar.\n\nSe seu modelo interno dita que \"tudo que é bom termina em desastre\", a serenidade gera erro preditivo insuportável no *dACC*.\n\nA auto-sabotagem — criar uma briga à toa, procrastinar ou gastar impulsivamente — serve para restaurar a profecia. O cérebro suspira aliviado no sofrimento: \"Eu sabia!\".",
+          "footer": "O mecanismo reflexo do controle ilusório ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "TEORIA POLIVAGAL",
+          "title": "A neurocepção descalibrada e o pânico de soltar o corpo",
+          "body": "A *Teoria Polivagal* (Porges) ensina que relaxar exige a ativação do freio vagal ventral da segurança social.\n\nPorém, em sistemas nervosos feridos, a sensação de fraqueza muscular e relaxamento dispara um violento *rebote simpático*.\n\nO cérebro interpreta a moleza física como vulnerabilidade e provoca crises para reativar a adrenalina que o faz se sentir seguro.",
+          "footer": "Como ensinar o corpo a tolerar a paz ➔"
+        },
+        {
+          "type": "steps",
+          "badge": "INTERVENÇÃO CLÍNICA",
+          "title": "3 passos para expandir sua tolerância ao bem-estar",
+          "steps": [
+            "Titulação da Serenidade: comece com microdoses de 2 a 5 minutos de pausa consciente antes de tentar longos descansos.",
+            "Nomeação Metacognitiva: diga a si mesmo: 'Meu BNST detectou a paz e está dando um alarme falso de vulnerabilidade'.",
+            "Aceitação Estoica do Imponderável: desfrute da bonança presente; as tempestades você enfrentará apenas se e quando chegarem."
+          ],
+          "footer": "Reeduque seu sistema de segurança interna ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "PORTAL DEO MAGALHÃES",
+          "title": "Você não precisa viver em alerta para merecer existir",
+          "body": "A calmaria não é a antesala do desastre. Ela é o solo seguro onde a vida de verdade acontece.\n\nAvalie sua aversão à serenidade com a Escala Psicométrica EMAS-AS (T-49) e treine seu cérebro no jogo de calibração cognitiva no site deomagalhaes.com.br.\n\nToque no link da bio para ler o artigo científico completo.",
+          "footer": "Salve este post e compartilhe com quem precisa • @deomagalhaesneuro"
+        }
+      ],
+      "caption": "Você já sentiu que, quando tudo finalmente começa a dar certo, uma angústia inexplicável toma conta do seu peito?\n\nAs contas estão pagas, o relacionamento está em um momento calmo, o trabalho está estável. Não há emergências. E, no entanto, em vez de relaxar, você sente um aperto no peito, uma hipervigilância somática e o pensamento obsessivo: 'É bom demais para ser verdade. O próximo golpe está chegando.'\n\nPara não aguentar a tensão da espera, você subitamente puxa uma briga com o parceiro por causa de uma louça suja, procrastina um projeto crucial ou cria um drama artificial. E assim que o caos se instala... seu corpo estranhamente se acalma.\n\nIsso não é loucura, nem ingratidão ou falha moral. Isso é Neurobiologia da Auto-Sabotagem.\n\nQuando crescemos em ambientes voláteis, imprevisíveis ou sob apego inseguro, o nosso sistema nervoso adota o estresse e a prontidão de combate como linha de base. No caos, você sabe exatamente quem é e como se defender.\n\nNa paz, suas armaduras perdem o alvo — e desarmar o sistema defensivo é interpretado pelo cérebro como risco iminente de ser pego desprevenido.\n\nO artigo completo, a Escala Psicométrica EMAS-AS (T-49) e o Jogo Cognitivo de Tolerância ao Bem-Estar estão disponíveis em deomagalhaes.com.br.\n\n#neuropsicologia #autosabotagem #traumadeapego #saudemental #teoriapolivagal #ansiedade #neurociencias #deomagalhaes #psicologiaclinica #regulacaoemocional #metacognicao #desenvolvimentopessoal"
+    },
     "comparacao-social-status-relativo": {
       "articleSlug": "2026-11-14-comparacao-social-status-relativo",
       "articleTitle": "A Neurobiologia da Comparação Social e Status Relativo: Por Que o Sucesso Alheio Dói no Seu Cérebro",
@@ -4226,9 +4287,9 @@
         };
 
         // Estado do Studio
-        let currentPresetKey = "comparacao-social-status-relativo";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["comparacao-social-status-relativo"].slides));
-        let currentCaption = PRESETS["comparacao-social-status-relativo"].caption;
+        let currentPresetKey = "auto-sabotagem-medo-serenidade";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["auto-sabotagem-medo-serenidade"].slides));
+        let currentCaption = PRESETS["auto-sabotagem-medo-serenidade"].caption;
 
 
         let currentSlideIndex = 0;

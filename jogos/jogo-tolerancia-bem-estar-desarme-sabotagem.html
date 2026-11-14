@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 48: Matriz de Tolerância ao Bem-Estar e Desarme de Auto-Sabotagem – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para desarmar o alarme falso do BNST, expandir a tolerância à serenidade (vmPFC) e inibir a auto-sabotagem com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #005f73;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .phase-indicator {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .scenario-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .scenario-title {
+            font-size: 1.15em;
+            color: #005f73;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .scenario-context {
+            font-size: 1.02em;
+            color: #1e293b;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .bnst-alert-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92em;
+            color: #991b1b;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .vagal-calibration-box {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .vagal-label {
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #166534;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .vagal-slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #cbd5e1;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .vagal-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #005f73;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border: 2px solid #ffffff;
+        }
+
+        .vagal-feedback-text {
+            font-size: 0.85em;
+            color: #15803d;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .choice-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+            position: relative;
+        }
+
+        .choice-card:hover {
+            border-color: #0a9396;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 147, 150, 0.12);
+        }
+
+        .choice-badge {
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #e2e8f0;
+            color: #475569;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .choice-text {
+            font-size: 0.95em;
+            color: #1e293b;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .feedback-banner {
+            display: none;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            font-weight: 600;
+            line-height: 1.5;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-correct {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .feedback-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .btn-next-phase {
+            display: none;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 14px 32px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-next-phase:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.45);
+        }
+
+        .victory-modal {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px 25px;
+            border: 2px solid #005f73;
+            margin-top: 25px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .victory-badge {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        .neuro-explanation-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 35px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .neuro-explanation-box h3 {
+            color: #005f73;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 860px; margin: 40px auto; padding: 0 20px;">
+        <header class="article-header" style="text-align: center; margin-bottom: 25px;">
+            <span class="phase-indicator">Treino Neurocognitivo • Dia 48</span>
+            <h1 style="font-size: 2.2em; color: #005f73; margin-bottom: 8px;">Matriz de Tolerância ao Bem-Estar e Desarme de Auto-Sabotagem</h1>
+            <p style="color: #64748b; font-size: 1.05em; margin: 0;">Iniba o alarme reflexo do BNST, estabilize seu tônus vagal e treine seu córtex pré-frontal para sustentar a paz.</p>
+        </header>
+
+        <div class="game-wrapper">
+            <div class="game-header-bar">
+                <div class="stat-badge">
+                    <span class="stat-label">Fase Atual</span>
+                    <span class="stat-value" id="currentPhaseVal">1 / 5</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Pontuação</span>
+                    <span class="stat-value" id="currentScoreVal">0</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Sequência (Combo)</span>
+                    <span class="stat-value" id="comboVal">x1</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Recorde</span>
+                    <span class="stat-value" id="highScoreVal">0</span>
+                </div>
+                <button id="soundToggleBtn" class="sound-btn" onclick="toggleAudio()">
+                    <span id="soundIcon">🔊</span> Som
+                </button>
+            </div>
+
+            <!-- Cenário Ativo -->
+            <div id="gamePlayArea">
+                <div class="scenario-box">
+                    <div class="scenario-title" id="scenarioTitleText">Fase 1: O Voo em Céu de Brigadeiro</div>
+                    <div class="scenario-context" id="scenarioContextText">
+                        Suas finanças estão completamente estabilizadas e você acumulou 6 meses de despesas em uma reserva de emergência sólida.
+                    </div>
+                    <div class="bnst-alert-box" id="bnstAlertText">
+                        <strong>⚠️ Alarme do BNST:</strong> "Dinheiro parado atrai desastre ou azar! Preciso gastar logo antes que algo terrível aconteça!"
+                    </div>
+                </div>
+
+                <!-- Slider de Calibração Vagal -->
+                <div class="vagal-calibration-box">
+                    <div class="vagal-label">
+                        <span>Calibração do Freio Vagal (0.1 Hz):</span>
+                        <span id="vagalCoherenceVal">Neutro (50%)</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="vagal-slider" id="vagalSlider" oninput="updateVagalCoherence(this.value)">
+                    <div class="vagal-feedback-text" id="vagalStatusText">
+                        Ajuste o controle para a faixa de regulação parassimpática (65%–85%) para estabilizar a resposta.
+                    </div>
+                </div>
+
+                <div class="options-container" id="optionsContainer">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+
+                <div class="feedback-banner" id="feedbackBanner"></div>
+
+                <button class="btn-next-phase" id="nextPhaseBtn" onclick="advancePhase()">
+                    Avançar para a Próxima Fase ➔
+                </button>
+            </div>
+
+            <!-- Modal de Vitória Final -->
+            <div class="victory-modal" id="victoryModal">
+                <div class="victory-badge">🌿</div>
+                <h2 style="color: #005f73; margin: 0 0 10px 0;">Matriz Estabilizada com Sucesso!</h2>
+                <p style="color: #334155; font-size: 1.1em; line-height: 1.6; max-width: 600px; margin: 0 auto 20px auto;">
+                    Você demonstrou excelente controle inibitório pré-frontal, desativou os alarmes de catástrofe do BNST e calibrou a capacidade biológica do seu sistema nervoso para sustentar o bem-estar.
+                </p>
+                <div style="font-size: 2em; font-weight: 800; color: #0a9396; margin-bottom: 25px;" id="finalScoreVal">
+                    Pontuação Final: 1500 pts
+                </div>
+                <button class="btn-next-phase" style="display: inline-block;" onclick="restartGame()">
+                    Jogar Novamente ↺
+                </button>
+            </div>
+        </div>
+
+        <section class="neuro-explanation-box">
+            <h3>Fundamentação Neurocognitiva do Jogo (Dia 48)</h3>
+            <p>
+                <strong>O Núcleo Leito da Estria Terminal (BNST) e a Homeostase do Caos:</strong> Enquanto a amígdala reage a ameaças pontuais e tangíveis, o BNST é responsável por sustentar estados crônicos de apreensão diante de incertezas difusas. Em pessoas acostumadas à volatilidade de traumas pregressos, a ausência de crises é interpretada pelo cérebro como desproteção.
+            </p>
+            <p>
+                <strong>O Freio Vagal e a Teoria Polivagal:</strong> A ativação do nervo vago ventral desacelera a frequência cardíaca e permite a neurocepção de segurança. Ao exercitar o ajuste do slider de coerência somática em sincronia com a escolha pré-frontal consciente (vmPFC), você condiciona seu encéfalo a não recorrer a crises artificiais para aplacar a inquietação.
+            </p>
+            <p>
+                <strong>Processamento Preditivo e Desarme do Erro no dACC:</strong> Toda vez que você escolhe a resposta de sustentação da serenidade, você atualiza os <em>priors</em> bayesianos do cérebro, ensinando-o a não temer a própria felicidade.
+            </p>
+        </section>
+    </main>
+
+    <!-- Rodapé Canônico Padronizado -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Web Audio API
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
+            document.getElementById('soundToggleBtn').style.opacity = soundEnabled ? '1' : '0.6';
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function soundClick() {
+            playTone(480, 'sine', 0.08, 0.08);
+        }
+
+        function soundSuccess() {
+            playTone(523.25, 'sine', 0.12, 0.12);
+            setTimeout(() => playTone(659.25, 'sine', 0.15, 0.12), 100);
+            setTimeout(() => playTone(783.99, 'sine', 0.25, 0.15), 200);
+        }
+
+        function soundAlert() {
+            playTone(280, 'sawtooth', 0.15, 0.1);
+            setTimeout(() => playTone(220, 'sawtooth', 0.2, 0.1), 120);
+        }
+
+        function soundFanfare() {
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((n, idx) => {
+                setTimeout(() => playTone(n, 'triangle', 0.35, 0.15), idx * 130);
+            });
+        }
+
+        // Cenários e Lógica
+        const SCENARIOS = [
+            {
+                title: "Fase 1: O Voo em Céu de Brigadeiro",
+                context: "Suas finanças estão completamente estabilizadas e você acumulou 6 meses de despesas em uma reserva de emergência sólida.",
+                alert: "⚠️ Alarme do BNST: 'Dinheiro parado atrai desastre ou azar! Preciso gastar logo antes que algo terrível aconteça!'",
+                targetVagalMin: 65,
+                targetVagalMax: 85,
+                correctIndex: 0,
+                options: [
+                    {
+                        tag: "Soberania do vmPFC",
+                        text: "Titulação somática: reconhecer o alarme falso do BNST, ancorar o alívio no corpo e manter o dinheiro aplicado com serenidade.",
+                        feedback: "Excelente! Você acolheu a ativação somática sem capitular à urgência motora. A reserva continua intacta."
+                    },
+                    {
+                        tag: "Auto-Sabotagem Ativa",
+                        text: "Comprar um item supérfluo de alto valor parcelado em 12 vezes para acabar com a agonia da 'estabilidade' financeira.",
+                        feedback: "Sabotagem! O cérebro provocou uma dívida artificial apenas para restabelecer a urgência financeira familiar."
+                    },
+                    {
+                        tag: "Racionalização Evitativa",
+                        text: "Transferir todo o dinheiro para a conta corrente para fingir que ele é volátil e não confrontar a sensação de segurança.",
+                        feedback: "Evitação! Essa manobra mantém a sensação fictícia de escassez sem atualizar o modelo preditivo."
+                    }
+                ]
+            },
+            {
+                title: "Fase 2: A Bonança Relacional",
+                context: "Você e seu parceiro tiveram três semanas seguidas de harmonia, risos e cumplicidade sem qualquer atrito.",
+                alert: "⚠️ Rebote Simpático: 'É perfeito demais para ser verdade. Ele(a) com certeza vai me trair ou cansar de mim.'",
+                targetVagalMin: 70,
+                targetVagalMax: 88,
+                correctIndex: 1,
+                options: [
+                    {
+                        tag: "Retirada Defensiva",
+                        text: "Ficar frio, monossilábico e distante para não se machucar caso o relacionamento termine no futuro.",
+                        feedback: "Desativação de apego! O distanciamento frio sabota a intimidade antes que o outro possa se aproximar."
+                    },
+                    {
+                        tag: "Soberania do vmPFC",
+                        text: "Decentering metacognitivo: nomear a vulnerabilidade com afeto, aceitar a boa fase e compartilhar gratidão com o parceiro.",
+                        feedback: "Perfeito! Você sustentou a intimidade e ensinou seu nervo vago ventral que amar em paz é seguro."
+                    },
+                    {
+                        tag: "Auto-Sabotagem Ativa",
+                        text: "Puxar uma discussão áspera sobre uma toalha molhada para testar a lealdade e a paciência do parceiro.",
+                        feedback: "Sabotagem clássica! Provocar brigas preventivas é o método do trauma para testar se o outro vai embora."
+                    }
+                ]
+            },
+            {
+                title: "Fase 3: O Pódio Merecido",
+                context: "Seu projeto profissional foi aplaudido de pé pela diretoria executiva e uma promoção de destaque foi oficializada.",
+                alert: "⚠️ Dissonância do Upper Limit: 'Eu sou uma fraude. Logo vão descobrir que foi sorte e serei desmascarado em público.'",
+                targetVagalMin: 65,
+                targetVagalMax: 85,
+                correctIndex: 2,
+                options: [
+                    {
+                        tag: "Auto-Sabotagem Ativa",
+                        text: "Faltar à reunião de transição ou atrasar a entrega inicial do novo cargo para rebaixar as expectativas da equipe.",
+                        feedback: "Sabotagem! Você recuou diante da expansão do seu potencial por medo de sustentar o pódio."
+                    },
+                    {
+                        tag: "Desvalorização Atribucional",
+                        text: "Minimizar o triunfo repetindo a todos que 'foi pura sorte e qualquer estagiário faria muito melhor'.",
+                        feedback: "Descalibração! Desqualificar o mérito priva o estriado ventral da recompensa dopaminérgica legítima."
+                    },
+                    {
+                        tag: "Soberania do vmPFC",
+                        text: "Calibração Bayesiana: assimilar as evidências concretas de competência, agradecer os aplausos e sustentar a visibilidade.",
+                        feedback: "Brilhante! O vmPFC assumiu o controle das evidências materiais, superando a barreira do Upper Limit."
+                    }
+                ]
+            },
+            {
+                title: "Fase 4: O Domingo Silencioso",
+                context: "Tarde ensolarada de domingo. Todas as pendências foram resolvidas e você não tem nenhum compromisso nas próximas 6 horas.",
+                alert: "⚠️ Falha do Freio Vagal: 'Não consigo ficar parado no sofá. Sinto uma culpa insuportável por não estar produzindo nada!'",
+                targetVagalMin: 60,
+                targetVagalMax: 80,
+                correctIndex: 0,
+                options: [
+                    {
+                        tag: "Soberania do vmPFC",
+                        text: "Microdose de quietude somática: pousar os pés no chão, respirar devagar e autorizar o corpo a descansar sem justificativas.",
+                        feedback: "Sensacional! Você ativou a neurocepção de segurança corporal, vencendo a tirania da ocupação contínua."
+                    },
+                    {
+                        tag: "Compulsão por Ocupação",
+                        text: "Abrir o e-mail corporativo e adiantar planilhas da semana seguinte para anestesiar a culpa do repouso.",
+                        feedback: "Workaholismo de alívio! A hiperatividade foi usada para fugir do contato íntimo com o silêncio."
+                    },
+                    {
+                        tag: "Agitação Compensatória",
+                        text: "Marcar três compromissos sociais apressados e estressantes para não ter que enfrentar a quietude da casa.",
+                        feedback: "Inquietação motora! O cérebro preferiu a estafa social à serenidade do descanso profundo."
+                    }
+                ]
+            },
+            {
+                title: "Fase 5: O Horizonte Aberto",
+                context: "Você superou com sucesso um longo período de crises sucessivas e sua vida agora oferece horizonte estável e aberto.",
+                alert: "⚠️ Saudade do Caos: 'A paz parece tão sem graça... Cadê o perigo e a adrenalina que me faziam sentir vivo?'",
+                targetVagalMin: 70,
+                targetVagalMax: 90,
+                correctIndex: 1,
+                options: [
+                    {
+                        tag: "Auto-Sabotagem Ativa",
+                        text: "Buscar atritos em discussões online ou reatar contato com um ex-parceiro turbulento apenas para sentir adrenalina.",
+                        feedback: "Vício em caos! Seu cérebro buscou a droga da turbulência porque desacostumou com a dopamina da calmaria."
+                    },
+                    {
+                        tag: "Soberania do vmPFC",
+                        text: "Reconciliação existencial: compreender que paz não é vazio ou tédio, mas o solo fértil onde a vida autêntica é construída.",
+                        feedback: "Extraordinário! Você concluiu a jornada de reeducação neurobiológica. A serenidade agora é o seu lar seguro."
+                    },
+                    {
+                        tag: "Paranoia Preditiva",
+                        text: "Procurar minuciosamente defeitos ocultos em amigos leais até encontrar motivos para romper relações por precaução.",
+                        feedback: "Hipervigilância destrutiva! Procurar problemas onde não há nada quebra alianças seguras."
+                    }
+                ]
+            }
+        ];
+
+        let currentPhase = 0;
+        let score = 0;
+        let combo = 1;
+        let answered = false;
+        let vagalSliderValue = 50;
+
+        const highScoreKey = "deo_game_dia48_highScore";
+        let highScore = parseInt(localStorage.getItem(highScoreKey) || "0");
+
+        function initGame() {
+            document.getElementById('highScoreVal').textContent = highScore;
+            loadPhase(0);
+        }
+
+        function updateVagalCoherence(val) {
+            vagalSliderValue = parseInt(val);
+            const statusEl = document.getElementById('vagalStatusText');
+            const coherenceEl = document.getElementById('vagalCoherenceVal');
+            coherenceEl.textContent = val + '%';
+
+            const sc = SCENARIOS[currentPhase];
+            if (vagalSliderValue >= sc.targetVagalMin && vagalSliderValue <= sc.targetVagalMax) {
+                statusEl.textContent = "✓ Faixa Ótima de Coerência Vagal Atingida (" + sc.targetVagalMin + "%–" + sc.targetVagalMax + "%). Freio parassimpático ativado!";
+                statusEl.style.color = "#16a34a";
+            } else if (vagalSliderValue < sc.targetVagalMin) {
+                statusEl.textContent = "Tônus simpático ainda elevado. Deslize para a direita para aumentar a ativação do Vago Ventral.";
+                statusEl.style.color = "#d97706";
+            } else {
+                statusEl.textContent = "Hipoativação excessiva. Recue ligeiramente para a faixa balanceada de presença consciente.";
+                statusEl.style.color = "#d97706";
+            }
+        }
+
+        function loadPhase(idx) {
+            currentPhase = idx;
+            answered = false;
+            const sc = SCENARIOS[idx];
+
+            document.getElementById('currentPhaseVal').textContent = (idx + 1) + " / " + SCENARIOS.length;
+            document.getElementById('scenarioTitleText').textContent = sc.title;
+            document.getElementById('scenarioContextText').textContent = sc.context;
+            document.getElementById('bnstAlertText').innerHTML = "<strong>⚠️ Alarme do BNST:</strong> " + sc.alert.replace('⚠️ Alarme do BNST: ', '').replace('⚠️ Rebote Simpático: ', '').replace('⚠️ Dissonância do Upper Limit: ', '').replace('⚠️ Falha do Freio Vagal: ', '').replace('⚠️ Saudade do Caos: ', '');
+
+            // Reset vagal slider
+            const slider = document.getElementById('vagalSlider');
+            slider.value = 50;
+            updateVagalCoherence(50);
+
+            // Hide feedback & next button
+            const banner = document.getElementById('feedbackBanner');
+            banner.style.display = 'none';
+            banner.className = 'feedback-banner';
+            document.getElementById('nextPhaseBtn').style.display = 'none';
+
+            // Render options
+            const optCont = document.getElementById('optionsContainer');
+            optCont.innerHTML = '';
+
+            sc.options.forEach((opt, oIdx) => {
+                const card = document.createElement('div');
+                card.className = 'choice-card';
+                card.onclick = () => selectOption(oIdx);
+
+                card.innerHTML = 
+                    '<span class="choice-badge">' + opt.tag + '</span>' +
+                    '<div class="choice-text">' + opt.text + '</div>';
+
+                optCont.appendChild(card);
+            });
+        }
+
+        function selectOption(oIdx) {
+            if (answered) return;
+            soundClick();
+
+            const sc = SCENARIOS[currentPhase];
+            const isCorrect = (oIdx === sc.correctIndex);
+            const inVagalZone = (vagalSliderValue >= sc.targetVagalMin && vagalSliderValue <= sc.targetVagalMax);
+
+            answered = true;
+
+            const banner = document.getElementById('feedbackBanner');
+            banner.style.display = 'block';
+
+            const cards = document.querySelectorAll('.choice-card');
+            cards.forEach((c, i) => {
+                c.style.cursor = 'default';
+                if (i === sc.correctIndex) {
+                    c.style.borderColor = '#16a34a';
+                    c.style.background = '#f0fdf4';
+                } else if (i === oIdx && !isCorrect) {
+                    c.style.borderColor = '#dc2626';
+                    c.style.background = '#fef2f2';
+                } else {
+                    c.style.opacity = '0.6';
+                }
+            });
+
+            if (isCorrect) {
+                soundSuccess();
+                let earned = 200 * combo;
+                if (inVagalZone) {
+                    earned += 100 * combo;
+                }
+                score += earned;
+                combo++;
+                document.getElementById('comboVal').textContent = 'x' + combo;
+                document.getElementById('currentScoreVal').textContent = score;
+
+                banner.className = 'feedback-banner feedback-correct';
+                banner.innerHTML = '<strong>Correto! +' + earned + ' pts ' + (inVagalZone ? '(Bônus de Coerência Vagal Ativado)' : '') + '</strong><br>' + sc.options[oIdx].feedback;
+            } else {
+                soundAlert();
+                combo = 1;
+                document.getElementById('comboVal').textContent = 'x' + combo;
+
+                banner.className = 'feedback-banner feedback-wrong';
+                banner.innerHTML = '<strong>Atenção: Resposta Defensiva!</strong><br>' + sc.options[oIdx].feedback;
+            }
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem(highScoreKey, highScore.toString());
+                document.getElementById('highScoreVal').textContent = highScore;
+            }
+
+            const nextBtn = document.getElementById('nextPhaseBtn');
+            nextBtn.style.display = 'inline-block';
+            if (currentPhase === SCENARIOS.length - 1) {
+                nextBtn.textContent = 'Ver Resultado Final 🏆';
+            } else {
+                nextBtn.textContent = 'Avançar para a Próxima Fase ➔';
+            }
+        }
+
+        function advancePhase() {
+            soundClick();
+            if (currentPhase < SCENARIOS.length - 1) {
+                loadPhase(currentPhase + 1);
+            } else {
+                // Fim de jogo
+                soundFanfare();
+                document.getElementById('gamePlayArea').style.display = 'none';
+                document.getElementById('victoryModal').style.display = 'block';
+                document.getElementById('finalScoreVal').textContent = 'Pontuação Final: ' + score + ' pts';
+            }
+        }
+
+        function restartGame() {
+            score = 0;
+            combo = 1;
+            document.getElementById('currentScoreVal').textContent = score;
+            document.getElementById('comboVal').textContent = 'x' + combo;
+            document.getElementById('victoryModal').style.display = 'none';
+            document.getElementById('gamePlayArea').style.display = 'block';
+            loadPhase(0);
+        }
+
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>
