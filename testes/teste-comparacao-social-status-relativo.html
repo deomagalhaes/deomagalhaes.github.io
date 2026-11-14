@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala Multidimensional de Comparação Social e Vulnerabilidade ao Status Relativo (EMCS-VSR / T-48) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua vulnerabilidade à comparação social, a dor do status relativo no dACC e a descalibração do valor intrínseco com a escala EMCS-VSR / T-48.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            font-size: 1.02em;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 680px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            text-align: center;
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .option-label:hover {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .option-label input[type="radio"] {
+            margin-bottom: 6px;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            color: #005f73;
+            font-weight: 700;
+        }
+
+        .btn-calc-box {
+            text-align: center;
+            margin: 35px 0 20px 0;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.1em;
+            padding: 16px 36px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 95, 115, 0.45);
+        }
+
+        /* Seção de Resultados */
+        .results-section {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 35px;
+            margin: 35px 0;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .score-hero {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            background: #f1f5f9;
+        }
+
+        .score-hero h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+
+        .score-badge-val {
+            font-size: 2.8em;
+            font-weight: 800;
+            margin: 10px 0;
+            color: #005f73;
+        }
+
+        .dimension-bars-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .dimension-bars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dimension-bar-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dim-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .progress-track {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .clinical-analysis-box {
+            background: #f8fafc;
+            border-left: 4px solid #0a9396;
+            padding: 22px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .clinical-analysis-box h4 {
+            margin: 0 0 10px 0;
+            color: #005f73;
+            font-size: 1.15em;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-action-outline {
+            padding: 12px 22px;
+            border-radius: 25px;
+            border: 1px solid #005f73;
+            background: #ffffff;
+            color: #005f73;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-outline:hover {
+            background: #e0f2fe;
+        }
+
+        .btn-action-solid {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-solid:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala Multidimensional de Comparação Social e Vulnerabilidade ao Status Relativo (EMCS-VSR / T-48)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Instrumento Psicométrico T-48</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Objetivo Psicoeducativo:</strong> A comparação social compulsiva ocorre quando a percepção de valor pessoal deixa de ser ancorada em princípios intrínsecos e passa a depender do status relativo frente a terceiros. Este instrumento autoaplicável avalia o nível de vigilância comparativa, o alarme somático de desvantagem no dACC, a presença de ressentimento defensivo e a dependência do pódio alheio.</p>
+                <p><strong>Instruções:</strong> Leia cada uma das 20 afirmações com atenção e assinale a opção que melhor reflete seus sentimentos, pensamentos e reações cotidianas nas últimas semanas.</p>
+                <p><em>Privacidade garantida: todas as respostas são calculadas exclusivamente no seu navegador. Nenhum dado pessoal é transmitido ou gravado externamente.</em></p>
+            </div>
+
+            <form id="emcsForm" class="quiz-container" onsubmit="event.preventDefault(); calcularResultado();">
+                <!-- Dimensão 1 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 1: Monitoramento Compulsivo do Outro e Comparação Ascendente (MCCA)</h3>
+                    <p>Avalia a frequência e intensidade com que você monitora o progresso, posses e estilo de vida alheios.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">1. Ao abrir redes sociais, pego-me checando involuntariamente o sucesso profissional, estilo de vida ou bens materiais de pessoas da minha idade.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q1" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q1" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">2. Costumo medir a qualidade das minhas conquistas comparando-as imediatamente com o que meus colegas ou amigos estão alcançando.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q2" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q2" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">3. Presto atenção minuciosa em detalhes como marcas de roupas, veículos, viagens e cargos das pessoas ao meu redor em eventos ou reuniões.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q3" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q3" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">4. Sinto um impulso persistente de descobrir quanto outras pessoas da minha área ganham ou quanto cobraram por determinados serviços.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q4" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q4" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">5. Mesmo quando algo vai bem na minha vida, minha mente busca alguém que tenha feito melhor ou de forma mais rápida.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q5" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q5" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 2 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 2: Dor Social de Desvantagem e Alarme Cingulado (DSAC)</h3>
+                    <p>Avalia a repercussão somática, o aperto visceral e a angústia ao constatar desvantagem relativa.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">6. Saber do sucesso estrondoso de alguém próximo me gera uma sensação física de peso no peito, desânimo ou aperto no estômago.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q6" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q6" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">7. Sinto uma sensação dolorosa de estar 'ficando para trás' na vida enquanto todos ao meu redor parecem avançar a passos largos.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q7" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q7" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">8. A notícia de uma grande conquista de terceiros já arruinou o meu bom humor ou a produtividade pelo restante do dia.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q8" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q8" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">9. Experimento um sentimento difuso de vergonha ou inadequação quando preciso relatar minha rotina simples perto de pessoas de alto prestígio.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q9" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q9" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">10. Tenho a sensação de que, não importa o quanto eu trabalhe, nunca será suficiente para me equiparar aos meus padrões de referência.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q10" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q10" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 3 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 3: Ressentimento Defensivo, Inveja Maligna e Schadenfreude (RDIM)</h3>
+                    <p>Avalia a presença de hostilidade velada, desqualificação defensiva do outro e alívio com o tropeço alheio.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">11. Quando vejo alguém ser muito elogiado, minha mente tenta encontrar defeitos ocultos, privilégios familiares ou atalhos que essa pessoa usou.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q11" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q11" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">12. Já experimentei um alívio secreto ou discreta satisfação ao saber que uma pessoa de grande sucesso cometeu um erro grave ou passou por um revés.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q12" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q12" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">13. Custa-me parabenizar genuinamente e com entusiasmo sincero amigos que conseguiram vitórias que eu desejava para mim.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q13" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q13" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">14. Tendo a achar injusto que pessoas que considero intelectualmente ou tecnicamente inferiores a mim tenham mais visibilidade ou dinheiro.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q14" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q14" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">15. Sinto que o mundo distribui recompensas de forma totalmente arbitrária e isso me deixa amargurado ou com vontade de desistir.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q15" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q15" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <!-- Dimensão 4 -->
+                <div class="dimension-header-box">
+                    <h3>Dimensão 4: Autoestima Contingente e Flutuação de Valor (ACFV)</h3>
+                    <p>Avalia a fragilidade do autoconceito e a dependência do reconhecimento comparativo externo para se sentir digno.</p>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">16. Minha sensação de valor pessoal oscila drasticamente dependendo de eu estar em vantagem ou em desvantagem no meu grupo social.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q16" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q16" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">17. Tenho dificuldade de desfrutar de momentos simples se sinto que eles não são 'instagramáveis' ou impressionantes para os outros.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q17" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q17" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">18. Se alguém do meu convívio adquire um bem superior ao meu (ex: celular, carro, viagem), sinto necessidade quase imediata de atualizar os meus.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q18" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q18" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">19. Preciso que pessoas influentes ou admiradas validem explicitamente o meu trabalho para que eu acredite que ele realmente tem valor.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q19" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q19" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">20. Sinto que minha identidade é frágil e que posso ser 'apagado' ou esquecido se parar de competir e exibir resultados públicos.</div>
+                    <div class="options-grid">
+                        <label class="option-label"><input type="radio" name="q20" value="1" required><span>1<br>Nunca / Raramente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="2"><span>2<br>Ocasionalmente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="3"><span>3<br>Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="4"><span>4<br>Muito Frequentemente</span></label>
+                        <label class="option-label"><input type="radio" name="q20" value="5"><span>5<br>Quase Sempre</span></label>
+                    </div>
+                </div>
+
+                <div class="btn-calc-box">
+                    <button type="submit" class="btn-calculate">Calcular Meu Índice de Comparação e Status Relativo</button>
+                </div>
+            </form>
+
+            <!-- Seção de Resultados -->
+            <div id="resultsSection" class="results-section">
+                <div id="scoreHeroBox" class="score-hero">
+                    <h2 id="resultTierTitle">Resultado da Escala EMCS-VSR</h2>
+                    <div class="score-badge-val" id="totalScoreVal">0 / 100</div>
+                    <p id="resultTierSubtitle" style="margin: 0; font-weight: 600; font-size: 1.05em;"></p>
+                </div>
+
+                <h3>Perfil Dimensional Neuropsicológico:</h3>
+                <div class="dimension-bars-grid">
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>1. Monitoramento Compulsivo do Outro (MCCA)</span>
+                            <span id="dim1ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim1Bar" style="width: 0%; background: #0a9396;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>2. Dor Social e Alarme Cingulado (DSAC)</span>
+                            <span id="dim2ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim2Bar" style="width: 0%; background: #005f73;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>3. Ressentimento e Schadenfreude (RDIM)</span>
+                            <span id="dim3ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim3Bar" style="width: 0%; background: #ee9b00;"></div>
+                        </div>
+                    </div>
+
+                    <div class="dimension-bar-item">
+                        <div class="dim-bar-header">
+                            <span>4. Autoestima Contingente de Status (ACFV)</span>
+                            <span id="dim4ScoreText">0 / 25</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="dim4Bar" style="width: 0%; background: #ca6702;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clinical-analysis-box" id="clinicalAnalysisText">
+                    <!-- Injetado dinamicamente -->
+                </div>
+
+                <div class="action-buttons-group">
+                    <button class="btn-action-outline" onclick="window.print()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        Imprimir / Salvar em PDF
+                    </button>
+                    <a href="/artigos/a-neurobiologia-da-comparacao-social-e-status-relativo.html" class="btn-action-outline">
+                        Ler Artigo Científico Completo
+                    </a>
+                    <a href="/jogos/jogo-calibracao-valor-comparacao.html" class="btn-action-outline">
+                        Treinar Calibração de Valor no Jogo
+                    </a>
+                    <a href="/agendamento.html" class="btn-action-solid">
+                        Agendar Avaliação Clínica Especializada
+                    </a>
+                </div>
+            </div>
+
+            <p class="article-disclaimer" style="margin-top: 40px;"><em>Este teste é um instrumento psicoeducativo de triagem e autorreflexão embasado em literatura neurocientífica (Festinger, 1954; Eisenberger et al., 2003; Takahashi et al., 2009; Sapolsky, 2003). Ele não substitui uma avaliação neuropsicológica clínica ou diagnóstico formal.</em></p>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Padronizado -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        function calcularResultado() {
+            let dim1 = 0, dim2 = 0, dim3 = 0, dim4 = 0;
+            const form = document.getElementById('emcsForm');
+
+            // Dimensao 1 (q1 a q5)
+            for (let i = 1; i <= 5; i++) {
+                const val = form.elements['q' + i].value;
+                dim1 += parseInt(val, 10);
+            }
+
+            // Dimensao 2 (q6 a q10)
+            for (let i = 6; i <= 10; i++) {
+                const val = form.elements['q' + i].value;
+                dim2 += parseInt(val, 10);
+            }
+
+            // Dimensao 3 (q11 a q15)
+            for (let i = 11; i <= 15; i++) {
+                const val = form.elements['q' + i].value;
+                dim3 += parseInt(val, 10);
+            }
+
+            // Dimensao 4 (q16 a q20)
+            for (let i = 16; i <= 20; i++) {
+                const val = form.elements['q' + i].value;
+                dim4 += parseInt(val, 10);
+            }
+
+            const total = dim1 + dim2 + dim3 + dim4;
+
+            // Renderizar valores
+            document.getElementById('totalScoreVal').textContent = total + " / 100";
+            document.getElementById('dim1ScoreText').textContent = dim1 + " / 25";
+            document.getElementById('dim2ScoreText').textContent = dim2 + " / 25";
+            document.getElementById('dim3ScoreText').textContent = dim3 + " / 25";
+            document.getElementById('dim4ScoreText').textContent = dim4 + " / 25";
+
+            // Percentuais das barras
+            document.getElementById('dim1Bar').style.width = ((dim1 / 25) * 100) + "%";
+            document.getElementById('dim2Bar').style.width = ((dim2 / 25) * 100) + "%";
+            document.getElementById('dim3Bar').style.width = ((dim3 / 25) * 100) + "%";
+            document.getElementById('dim4Bar').style.width = ((dim4 / 25) * 100) + "%";
+
+            const heroBox = document.getElementById('scoreHeroBox');
+            const titleEl = document.getElementById('resultTierTitle');
+            const subEl = document.getElementById('resultTierSubtitle');
+            const analysisEl = document.getElementById('clinicalAnalysisText');
+
+            let tierTitle = "";
+            let tierSub = "";
+            let analysisHtml = "";
+
+            if (total <= 39) {
+                heroBox.style.background = "#e6f4ea";
+                heroBox.style.color = "#137333";
+                tierTitle = "Nível 1: Ancoragem Saudável e Foco Intrínseco";
+                tierSub = "Excelente soberania pré-frontal e baixa vulnerabilidade à tirania de status alheia.";
+                analysisHtml = `
+                    <h4>Interpretação Neuropsicológica:</h4>
+                    <p>Sua pontuação indica que o <strong>Córtex Pré-Frontal Ventromedial (vmPFC)</strong> mantém uma bússola de valor autônoma, sustentada por metas intrínsecas e autorreferenciadas. O Córtex Cingulado Anterior Dorsal (dACC) raramente entra em alarme aversivo diante das vitórias de terceiros, preservando o tônus autonômico e o equilíbrio do eixo neuroendócrino.</p>
+                    <p><strong>Recomendação Preventiva:</strong> Mantenha essa higidez selecionando ambientes que cultivem o mérito construtivo e a cooperação desinteressada, protegendo seu tempo de tela contra a toxicidade de feeds ultrafiltrados.</p>
+                `;
+            } else if (total <= 59) {
+                heroBox.style.background = "#e0f2fe";
+                heroBox.style.color = "#0369a1";
+                tierTitle = "Nível 2: Vulnerabilidade Comparativa Moderada (Sensibilidade Situacional)";
+                tierSub = "Oscilações ocasionais de autoconfiança quando exposto a gatilhos intensos de prestígio social.";
+                analysisHtml = `
+                    <h4>Interpretação Neuropsicológica:</h4>
+                    <p>Você apresenta uma linha de base funcional, mas o seu circuito cingulado dorsal e insular é suscetível a disparos de desconforto em domínios específicos (como conquistas financeiras ou sucesso de pares próximos). Nesses momentos, a mente tende a acionar microcomparações que drenam a energia psíquica e criam sensações transitórias de urgência e insuficiência.</p>
+                    <p><strong>Direcionamento Clínico:</strong> Exercite a técnica de <em>decomposição do pacote</em> descrita no artigo: ao notar inveja ou frustração, recorde-se de que nenhum recorte público reflete a totalidade da condição humana do outro. Fortaleça seu locus de controle interno.</p>
+                `;
+            } else if (total <= 79) {
+                heroBox.style.background = "#fef3c7";
+                heroBox.style.color = "#b45309";
+                tierTitle = "Nível 3: Hipervigilância de Status e Dor Social Cingulada Elevada";
+                tierSub = "Sobrecarga alostática crônica; tendência a medir seu mérito pela régua dos concorrentes.";
+                analysisHtml = `
+                    <h4>Interpretação Neuropsicológica:</h4>
+                    <p>Sua pontuação revela que o sistema neural de detecção de iniquidade está em regime de hiperativação. O dACC e a amígdala registram a vantagem alheia como uma ameaça quase diária ao seu pertencimento, disparando cortisol e fadiga decisória. O estriado ventral pode oscilar entre a desmotivação (anedonia comparativa) e o alívio secreto quando concorrentes falham (<em>Schadenfreude</em> defensivo).</p>
+                    <p><strong>Conduta Recomendada:</strong> É imperativo realizar um <em>jejum digital de status</em>, silenciando perfis e ambientes que funcionem como vitrines aversivas. A prática clínica com ACT (Terapia de Aceitação e Compromisso) é altamente benéfica para desfundir sua identidade do desempenho relativo.</p>
+                `;
+            } else {
+                heroBox.style.background = "#fee2e2";
+                heroBox.style.color = "#b91c1c";
+                tierTitle = "Nível 4: Aprisionamento Comparativo Severo e Colapso de Autonomia (vmPFC Descalibrado)";
+                tierSub = "Esgotamento neuroemocional profundo; dependência quase absoluta de validação e pódio para sustentar a dignidade.";
+                analysisHtml = `
+                    <h4>Interpretação Neuropsicológica:</h4>
+                    <p>Os dados apontam para uma terceirização crítica do critério de valor pessoal. O Córtex Pré-Frontal Ventromedial encontra-se descalibrado, operando sob uma lógica de <em>autoestima contingente severa</em>. A sensação de dignidade tornou-se refém perpétua do olhar e da vitória de terceiros, gerando sentimentos de amargura existencial, esgotamento somático e risco de quadros depressivos e ansiosos crônicos.</p>
+                    <p><strong>Encaminhamento Especializado:</strong> Recomenda-se acompanhamento psicoterapêutico especializado com foco em neuropsicologia clínica e reestruturação cognitiva para reconstruir as bases ontológicas do Self e desarmar o ciclo de comparação compulsiva.</p>
+                `;
+            }
+
+            titleEl.textContent = tierTitle;
+            subEl.textContent = tierSub;
+            analysisEl.innerHTML = analysisHtml;
+
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

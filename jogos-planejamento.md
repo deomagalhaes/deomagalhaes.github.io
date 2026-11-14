@@ -53,6 +53,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 44** | **Matriz de Cooperação Bayesiana e Dilema da Confiança Social** | Teoria dos Jogos, Atualização Bayesiana de Crenças Sociais, vmPFC, Ínsula Anterior e Estriado Ventral | `jogos/jogo-dilema-confianca-cooperacao.html` | ✅ **Publicado** |
 | **Dia 45** | **Matriz de Dissonância Cognitiva e Calibração de Coerência** | Resolução de Conflitos Conceituais (dACC), Desarme de Racionalizações Defensivas e Atualização Bayesiana | `jogos/jogo-dissonancia-coerencia.html` | ✅ **Publicado** |
 | **Dia 46** | **Matriz de Verificação de Realidade e Discriminação de Evidências** | Signal Detection Theory, Monitoramento de Realidade (BA 10 / vmPFC) e Desarme de Ruído Manipulativo | `jogos/jogo-verificacao-realidade.html` | ✅ **Publicado** |
+| **Dia 47** | **Matriz de Calibração de Valor Intrínseco e Discriminação de Status Relativo** | Tomada de Decisão Sob Comparação Social, Inibição de Iniquidade (dACC) e Soberania Pré-Frontal (vmPFC) | `jogos/jogo-calibracao-valor-comparacao.html` | ✅ **Publicado** |
 
 ---
 

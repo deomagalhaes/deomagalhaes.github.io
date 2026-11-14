@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 47: Matriz de Calibração de Valor Intrínseco e Discriminação de Status Relativo – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para inibir vieses de iniquidade (dACC), blindar o valor intrínseco (vmPFC) e tomar decisões com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #005f73;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .phase-indicator {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .scenario-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .scenario-context {
+            font-size: 1.1em;
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .scenario-challenge {
+            font-size: 0.95em;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .choice-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+            position: relative;
+        }
+
+        .choice-card:hover {
+            border-color: #0a9396;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 147, 150, 0.12);
+        }
+
+        .choice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .choice-tag {
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .choice-title {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .choice-metrics {
+            font-size: 0.9em;
+            color: #334155;
+            line-height: 1.5;
+        }
+
+        .feedback-banner {
+            display: none;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            font-weight: 600;
+            line-height: 1.5;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-correct {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .feedback-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .btn-next-round {
+            display: none;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            font-weight: 700;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 25px;
+            font-size: 1.05em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 95, 115, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .btn-next-round:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.35);
+        }
+
+        /* Tela Final de Conclusão */
+        .game-end-screen {
+            display: none;
+            text-align: center;
+            padding: 30px 10px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .end-trophy {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+        }
+
+        .final-score-box {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 24px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        .final-score-val {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .neuro-insight-box {
+            background: #f8fafc;
+            border-left: 4px solid #ee9b00;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+            margin: 25px auto;
+            max-width: 680px;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .neuro-insight-box h4 {
+            color: #005f73;
+            margin: 0 0 8px 0;
+        }
+
+        .end-actions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-action-outline {
+            padding: 12px 22px;
+            border-radius: 25px;
+            border: 1px solid #005f73;
+            background: #ffffff;
+            color: #005f73;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-outline:hover {
+            background: #e0f2fe;
+        }
+
+        .btn-action-solid {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-solid:hover {
+            background: #0a9396;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 47: Matriz de Calibração de Valor Intrínseco e Discriminação de Status Relativo</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista - Treino Neurocognitivo Dia 47</p>
+            </header>
+
+            <div class="test-intro-box">
+                <p><strong>Desafio Neuropsicológico:</strong> Diante de decisões sociais e econômicas, o <em>Córtex Cingulado Anterior Dorsal (dACC)</em> é frequentemente sequestrado por vieses de iniquidade relativa — levando indivíduos a rejeitar ganhos substanciais próprios apenas porque terceiros ganharam um pouco mais. Este treino desafia você a inibir o impulso primata de queimar recursos por inveja, calibrando a soberania do <em>Córtex Pré-Frontal Ventromedial (vmPFC)</em> e o foco no valor absoluto real.</p>
+                <p><strong>Mecânica:</strong> Analise cada um dos 10 dilemas sociais e tome a decisão que maximiza o crescimento real, a sustentabilidade e a reserva de valor intrínseco, sem cair nas armadilhas de status aparente ou sabotagem comparativa.</p>
+            </div>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status do Jogo -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Rodada</span>
+                        <span class="stat-value" id="currentRoundEl">1 / 10</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Soberania vmPFC</span>
+                        <span class="stat-value" id="soberaniaEl">100%</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Pontos de Valor</span>
+                        <span class="stat-value" id="scoreEl">0</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-label">Sequência (Streak)</span>
+                        <span class="stat-value" id="streakEl">0 🔥</span>
+                    </div>
+                    <button class="sound-btn" id="soundToggleBtn" onclick="toggleAudio()">
+                        <span id="soundIcon">🔊</span> Som
+                    </button>
+                </div>
+
+                <!-- Painel Ativo do Dilema -->
+                <div id="gamePlayPanel">
+                    <div class="phase-indicator" id="phaseIndicatorEl">Fase 1: Dilema de Iniquidade (Dilema do Pepino e da Uva)</div>
+                    
+                    <div class="scenario-box">
+                        <div class="scenario-context" id="scenarioTitle">Contexto do Dilema</div>
+                        <div class="scenario-challenge" id="scenarioDesc">Descrição do desafio...</div>
+                    </div>
+
+                    <div class="options-container" id="optionsContainer">
+                        <!-- Injetado dinamicamente -->
+                    </div>
+
+                    <div id="feedbackBanner" class="feedback-banner"></div>
+
+                    <button id="btnNextRound" class="btn-next-round" onclick="proximaRodada()">Avançar para Próximo Dilema →</button>
+                </div>
+
+                <!-- Painel de Conclusão -->
+                <div id="gameEndPanel" class="game-end-screen">
+                    <div class="end-trophy">⚖️</div>
+                    <h2>Calibração Concluída com Sucesso!</h2>
+                    <p style="color: #64748b; font-size: 1.05em;">Seu córtex pré-frontal concluiu a bateria de decisões de valor e status.</p>
+
+                    <div class="final-score-box">
+                        <div style="font-size: 0.85em; text-transform: uppercase; color: #64748b; font-weight: 700;">Pontuação Final de Valor Intrínseco</div>
+                        <div class="final-score-val" id="finalScoreVal">0 pts</div>
+                        <div style="font-size: 0.95em; color: #334155; margin-top: 6px;" id="finalAccuracyVal">Precisão Pré-Frontal: 100%</div>
+                        <div style="font-size: 0.85em; color: #0a9396; font-weight: 600; margin-top: 4px;" id="highScoreNotice"></div>
+                    </div>
+
+                    <div class="neuro-insight-box">
+                        <h4>Mapeamento Neuropsicológico do Desempenho:</h4>
+                        <p id="neuroInsightFeedback">Análise clínica da sua capacidade de tomada de decisão sob pressão comparativa e inibição da inveja destrutiva.</p>
+                    </div>
+
+                    <div class="end-actions-grid">
+                        <button class="btn-action-solid" onclick="reiniciarJogo()">
+                            🔄 Treinar Novamente
+                        </button>
+                        <a href="/artigos/a-neurobiologia-da-comparacao-social-e-status-relativo.html" class="btn-action-outline">
+                            📖 Ler Artigo Científico
+                        </a>
+                        <a href="/testes/teste-comparacao-social-status-relativo.html" class="btn-action-outline">
+                            📊 Fazer Teste EMCS-VSR (T-48)
+                        </a>
+                        <a href="/agendamento.html" class="btn-action-outline">
+                            📅 Agendar Consulta Especializada
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <p class="article-disclaimer" style="margin-top: 40px;"><em>Este jogo é uma ferramenta neuroeducativa projetada para estimular o controle inibitório pré-frontal, a regulação da aversão à desigualdade relativa e a tomada de decisão utilitária saudável.</em></p>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Padronizado -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <!-- Script de Lógica do Jogo com Web Audio API -->
+    <script>
+        // Web Audio API Procedural Synthesizer
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
+            document.getElementById('soundToggleBtn').style.opacity = soundEnabled ? '1' : '0.6';
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function soundClick() {
+            playTone(480, 'sine', 0.08, 0.08);
+        }
+
+        function soundSuccess() {
+            playTone(523.25, 'triangle', 0.15, 0.12);
+            setTimeout(() => playTone(659.25, 'triangle', 0.2, 0.12), 80);
+            setTimeout(() => playTone(783.99, 'sine', 0.35, 0.14), 160);
+        }
+
+        function soundError() {
+            playTone(220, 'sawtooth', 0.25, 0.12);
+            setTimeout(() => playTone(185, 'sawtooth', 0.35, 0.12), 100);
+        }
+
+        function soundVictory() {
+            const notes = [523.25, 659.25, 783.99, 1046.5];
+            notes.forEach((f, idx) => {
+                setTimeout(() => playTone(f, 'triangle', 0.3, 0.15), idx * 120);
+            });
+        }
+
+        // Banco Determinístico de 10 Dilemas com Solubilidade Matemática Comprovada
+        const DILEMAS = [
+            // Fase 1: Dilema de Iniquidade Básica
+            {
+                fase: "Fase 1: Dilema de Iniquidade Básica",
+                titulo: "Dilema 1: A Partilha do Bônus Anual",
+                desc: "Você e um colega lideraram um projeto de inovação. A diretoria oferece duas opções contratuais finais para distribuição de recursos de premiação:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Simétrica Baixa)",
+                        titulo: "Igualdade com Ganho Reduzido",
+                        metricas: "Você recebe R$ 15.000 | Seu colega recebe R$ 15.000. Diferença relativa: R$ 0.",
+                        correto: false,
+                        feedback: "Armadilha da iniquidade! Escolher R$ 15.000 apenas para não ver o colega ganhar mais representa uma perda voluntária de R$ 15.000 de recurso absoluto real."
+                    },
+                    {
+                        tag: "Opção B (Assimétrica Otimizada)",
+                        titulo: "Ganho Absoluto Superior",
+                        metricas: "Você recebe R$ 30.000 | Seu colega recebe R$ 45.000. Diferença relativa: +R$ 15.000 para o colega.",
+                        correto: true,
+                        feedback: "Excelente soberania pré-frontal! O vmPFC priorizou o seu ganho absoluto (+R$ 30.000), inibindo o impulso primitivo do dACC de queimar R$ 15.000 apenas para manter simetria."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 1: Dilema de Iniquidade Básica",
+                titulo: "Dilema 2: A Bolsa de Especialização Internacional",
+                desc: "Uma instituição abre oportunidade de capacitação acadêmica no exterior com duas fórmulas de fomento institucional:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Foco no Recurso Absoluto)",
+                        titulo: "Bolsa Plena com Assimetria Alheia",
+                        metricas: "Você ganha uma bolsa integral de US$ 20.000 | O concorrente do laboratório parceiro recebe US$ 30.000 de auxílio extra.",
+                        correto: true,
+                        feedback: "Correto! Seu aprendizado, titulação e avanço profissional independem do auxílio extra recebido pelo outro. Seu recurso absoluto é maximizado."
+                    },
+                    {
+                        tag: "Opção B (Veto Rancoroso)",
+                        titulo: "Veto com Nivelamento por Baixo",
+                        metricas: "Você recusa o edital e entra com recurso para que ambos recebam apenas uma bolsa modesta de US$ 8.000.",
+                        correto: false,
+                        feedback: "Prejuízo autoinfligido! Ao focar no rebaixamento do concorrente, você abriu mão de US$ 12.000 de patrimônio educacional próprio."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 1: Dilema de Iniquidade Básica",
+                titulo: "Dilema 3: A Parceria Estratégica de Consultoria",
+                desc: "Um cliente de prestígio internacional contrata sua consultoria conjunta para uma reestruturação:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Simetria Fictícia)",
+                        titulo: "Exigência de Teto Rígido",
+                        metricas: "Exigir que ambos recebam honorários idênticos de R$ 10.000, fazendo o cliente diminuir o escopo geral do projeto.",
+                        correto: false,
+                        feedback: "Inibição falha! Reduzir o escopo geral apenas para blindar o Ego da diferença gera mediocridade relacional."
+                    },
+                    {
+                        tag: "Opção B (Maximização de Valor Real)",
+                        titulo: "Honorário Elevado com Assimetria Natural",
+                        metricas: "Você fatura R$ 25.000 | O consultor sênior parceiro fatura R$ 35.000 devido à reputação prévia.",
+                        correto: true,
+                        feedback: "Muito bem! O valor absoluto de R$ 25.000 fortalece sua empresa. A diferença reflete tempo de mercado, não diminuição do seu trabalho."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 1: Dilema de Iniquidade Básica",
+                titulo: "Dilema 4: O Dilema de Recompensa nos Primatas",
+                desc: "Inspirado no experimento de Frans de Waal: você concluiu sua jornada de trabalho diária com êxito e recebe a devida remuneração contratada:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Foco na Própria Nutrição)",
+                        titulo: "Desfrutar da Conquista Legítima",
+                        metricas: "Reconhecer que seu alimento/recurso é suficiente e nutritivo, mantendo foco na própria evolução sem gastar energia com o prato vizinho.",
+                        correto: true,
+                        feedback: "Perfeito! O valor intrínseco de uma refeição saudável reside no seu poder nutritivo, e não na iguaria que o outro consome."
+                    },
+                    {
+                        tag: "Opção B (Revolta Destrutiva)",
+                        titulo: "Aversão Primitiva à Iniquidade",
+                        metricas: "Sentir desgosto pela própria conquista e trabalhar desmotivado porque alguém da equipe ganhou um elogio mais efusivo.",
+                        correto: false,
+                        feedback: "Ativação tóxica do dACC! A revolta contra o sucesso alheio deteriora sua própria linha de base dopaminérgica."
+                    }
+                ]
+            },
+            // Fase 2: Discriminação de Sinal vs. Ruído de Status
+            {
+                fase: "Fase 2: Sinal Real vs. Ruído de Status",
+                titulo: "Dilema 5: O Investimento Pessoal de Longo Prazo",
+                desc: "Você dispõe de capital para investimento e avalia duas alternativas para o próximo ciclo de 5 anos:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Ostentação de Status)",
+                        titulo: "Ativo de Alto Prestígio Social",
+                        metricas: "Adquirir veículo de luxo importado que impressiona no feed, com custo de manutenção altíssimo e desvalorização de 25% ao ano.",
+                        correto: false,
+                        feedback: "Armadilha da autoestima contingente! O prazer efêmero de validação externa custa a ruína da sua soberania financeira de longo prazo."
+                    },
+                    {
+                        tag: "Opção B (Valor Intrínseco)",
+                        titulo: "Ativo Gerador de Autonomia",
+                        metricas: "Investir em carteira sólida e formação clínica avançada, invisível nas redes mas gerando 14% de rendimento sustentável e liberdade.",
+                        correto: true,
+                        feedback: "Excelente! O vmPFC ancorou a escolha em liberdade e solidez intrínseca, rejeitando o ruído de aplausos efêmeros."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 2: Sinal Real vs. Ruído de Status",
+                titulo: "Dilema 6: O Convite para a Mesa de Palestrantes",
+                desc: "Você recebe dois convites conflitantes para o mesmo sábado:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Foco em Conteúdo Real)",
+                        titulo: "Seminário Acadêmico com Profundidade",
+                        metricas: "Apresentar para 30 pesquisadores e clínicos sérios, com debate denso e colaborações metodológicas reais, sem transmissão ao vivo.",
+                        correto: true,
+                        feedback: "Exato! Priorizar a substância clínica e a aprendizagem genuína constrói autoridade técnica sólida, muito além de métricas de vaidade."
+                    },
+                    {
+                        tag: "Opção B (Vitrine Estética)",
+                        titulo: "Painel de Celebridades Digitais",
+                        metricas: "Evento de autopromoção com foto em tapete vermelho, mas conteúdo raso de autoajuda comercial e 5 minutos de fala cronometrada.",
+                        correto: false,
+                        feedback: "Ilusão de status! O ganho de dopamina social digital é passageiro e corrói a densidade técnica da sua reputação profissional."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 2: Sinal Real vs. Ruído de Status",
+                titulo: "Dilema 7: A Estruturação do Ambiente de Trabalho",
+                desc: "Ao planejar a expansão do seu consultório ou estúdio profissional:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Fachada de Prestígio)",
+                        titulo: "Endereço Aristocrático Inviável",
+                        metricas: "Alugar sala suntuosa no bairro mais caro apenas para exibir o logotipo, comprometendo 70% do faturamento em condomínio e aluguel.",
+                        correto: false,
+                        feedback: "Hipertrofia de status! Gastar a maior parte da energia para manter aparências cria vulnerabilidade constante e ansiedade crônica."
+                    },
+                    {
+                        tag: "Opção B (Eficiência e Acolhimento)",
+                        titulo: "Espaço Ergonômico e Sustentável",
+                        metricas: "Espaço acolhedor, com isolamento acústico de ponta, custo fixo de 20% e total tranquilidade para atender seus pacientes com calma.",
+                        correto: true,
+                        feedback: "Soberania pré-frontal impecável! A qualidade do atendimento clínico e a paz de espírito são os verdadeiros pilares da excelência."
+                    }
+                ]
+            },
+            // Fase 3: Calibração Bayesiana de Valor Intrínseco
+            {
+                fase: "Fase 3: Calibração Bayesiana de Valor Intrínseco",
+                titulo: "Dilema 8: A Desfusão Diante do Pódio Alheio",
+                desc: "Um profissional do seu círculo social acaba de ser incluído em uma lista de 'jovens de destaque'. Sua mente é invadida por autocrítica:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Desconstrução Estoica)",
+                        titulo: "Desmontar o Pacote Alheio",
+                        metricas: "Reconhecer que você admira a conquista pontual, mas não deseja assumir a rotina, a renúncia familiar e a vida interior daquela pessoa.",
+                        correto: true,
+                        feedback: "Perfeito! Sabedoria junguiana e estoica: ao constatar que você não quer o pacote completo do outro, a inveja perde todo o seu poder de paralisia."
+                    },
+                    {
+                        tag: "Opção B (Ressentimento e Desqualificação)",
+                        titulo: "Inveja Maligna Defensiva",
+                        metricas: "Falar mal da lista em grupos de WhatsApp, dizendo que foi 'comprada', gastando 2 horas ruminando amargura.",
+                        correto: false,
+                        feedback: "Ativação tóxica! A tentativa de rebaixar o mérito alheio é uma confissão involuntária de que a sua própria autoestima foi abalada."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 3: Calibração Bayesiana de Valor Intrínseco",
+                titulo: "Dilema 9: A Reação ao 'Schadenfreude'",
+                desc: "Aquele concorrente que ostentava lucros astronômicos sofreu um processo administrativo e teve a reputação questionada publicamente:",
+                opcoes: [
+                    {
+                        tag: "Opção A (Prazer Vingativo)",
+                        titulo: "Saborear a Queda Alheia",
+                        metricas: "Comemorar secretamente o tropeço do rival como se isso elevasse a qualidade real do seu próprio trabalho.",
+                        correto: false,
+                        feedback: "Falso ganho dopaminérgico! O estriado celebra a ilusão de vitória, mas o seu trabalho real continua no mesmo lugar. Schadenfreude não gera mérito."
+                    },
+                    {
+                        tag: "Opção B (Foco na Autonomia Ética)",
+                        titulo: "Neutralidade e Foco na Própria Prática",
+                        metricas: "Observar com serenidade a fragilidade das aparências e reforçar o compromisso com a ética e a consistência no seu cotidiano.",
+                        correto: true,
+                        feedback: "Notável maturidade pré-frontal! O tropeço do outro não melhora seu caráter; o que sustenta sua vida é a sua própria integridade."
+                    }
+                ]
+            },
+            {
+                fase: "Fase 3: Calibração Bayesiana de Valor Intrínseco",
+                titulo: "Dilema 10: O Julgamento de Vida e a Dicotomia do Controle",
+                desc: "Chegando ao final de mais um ano de trabalho, qual é a métrica definitiva que guiará seu planejamento existencial para o próximo ciclo?",
+                opcoes: [
+                    {
+                        tag: "Opção A (Métrica Externa e Competitiva)",
+                        titulo: "Superar os Concorrentes Diretos",
+                        metricas: "Estar à frente de pelo menos 80% do meu grupo de pares em seguidores, visibilidade e bens materiais.",
+                        correto: false,
+                        feedback: "Aprisionamento perpétuo! Ancorar a felicidade em métricas externas que você não controla é receita certa para a ansiedade de status."
+                    },
+                    {
+                        tag: "Opção B (Métrica Intrínseca e Ética)",
+                        titulo: "Ser Fiel aos Próprios Princípios e Evoluir",
+                        metricas: "Aprofundar minha competência técnica, honrar meus vínculos afetivos reais e ser melhor do que a minha versão do ano anterior.",
+                        correto: true,
+                        feedback: "Vitória absoluta da soberania pré-frontal! O valor intrínseco blindou seu cérebro contra qualquer tirania comparativa."
+                    }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentRound = 0;
+        let score = 0;
+        let streak = 0;
+        let correctAnswers = 0;
+
+        function carregarRodada() {
+            if (currentRound >= DILEMAS.length) {
+                finalizarJogo();
+                return;
+            }
+
+            const dilema = DILEMAS[currentRound];
+            document.getElementById('currentRoundEl').textContent = (currentRound + 1) + " / " + DILEMAS.length;
+            document.getElementById('phaseIndicatorEl').textContent = dilema.fase;
+            document.getElementById('scenarioTitle').textContent = dilema.titulo;
+            document.getElementById('scenarioDesc').textContent = dilema.desc;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            const feedback = document.getElementById('feedbackBanner');
+            feedback.style.display = 'none';
+            document.getElementById('btnNextRound').style.display = 'none';
+
+            // Embaralhamento determinístico visual das opções para não viciar a posição
+            const indices = [0, 1];
+            if (currentRound % 2 === 1) indices.reverse();
+
+            indices.forEach(idx => {
+                const opt = dilema.opcoes[idx];
+                const card = document.createElement('div');
+                card.className = 'choice-card';
+                card.onclick = () => selecionarOpcao(idx, card);
+
+                card.innerHTML = `
+                    <div class="choice-header">
+                        <span class="choice-tag">${opt.tag}</span>
+                    </div>
+                    <div class="choice-title">${opt.titulo}</div>
+                    <div class="choice-metrics">${opt.metricas}</div>
+                `;
+                optionsContainer.appendChild(card);
+            });
+        }
+
+        function selecionarOpcao(idx, cardEl) {
+            // Desativar cliques adicionais
+            const allCards = document.querySelectorAll('.choice-card');
+            allCards.forEach(c => c.style.pointerEvents = 'none');
+
+            const dilema = DILEMAS[currentRound];
+            const opt = dilema.opcoes[idx];
+            const feedback = document.getElementById('feedbackBanner');
+
+            if (opt.correto) {
+                soundSuccess();
+                streak++;
+                correctAnswers++;
+                score += 100 + (streak * 20);
+                cardEl.style.borderColor = '#16a34a';
+                cardEl.style.background = '#f0fdf4';
+
+                feedback.className = 'feedback-banner feedback-correct';
+                feedback.innerHTML = `<strong>Decisão Soberana!</strong> ${opt.feedback}`;
+            } else {
+                soundError();
+                streak = 0;
+                cardEl.style.borderColor = '#dc2626';
+                cardEl.style.background = '#fef2f2';
+
+                feedback.className = 'feedback-banner feedback-wrong';
+                feedback.innerHTML = `<strong>Armadilha de Status!</strong> ${opt.feedback}`;
+            }
+
+            // Atualizar status
+            document.getElementById('scoreEl').textContent = score;
+            document.getElementById('streakEl').textContent = streak + " 🔥";
+
+            const percent = Math.round((correctAnswers / (currentRound + 1)) * 100);
+            document.getElementById('soberaniaEl').textContent = percent + "%";
+
+            feedback.style.display = 'block';
+            document.getElementById('btnNextRound').style.display = 'inline-block';
+        }
+
+        function proximaRodada() {
+            soundClick();
+            currentRound++;
+            carregarRodada();
+        }
+
+        function finalizarJogo() {
+            soundVictory();
+            document.getElementById('gamePlayPanel').style.display = 'none';
+            document.getElementById('gameEndPanel').style.display = 'block';
+
+            document.getElementById('finalScoreVal').textContent = score + " pts";
+            const accuracy = Math.round((correctAnswers / DILEMAS.length) * 100);
+            document.getElementById('finalAccuracyVal').textContent = `Precisão Pré-Frontal: ${accuracy}% (${correctAnswers} de ${DILEMAS.length} decisões corretas)`;
+
+            // Highscore
+            const savedHighScore = localStorage.getItem('deo_game_dia47_highscore') || 0;
+            if (score > savedHighScore) {
+                localStorage.setItem('deo_game_dia47_highscore', score);
+                document.getElementById('highScoreNotice').textContent = "🎉 Novo Recorde Pessoal Registrado!";
+            } else {
+                document.getElementById('highScoreNotice').textContent = `Melhor pontuação anterior: ${savedHighScore} pts`;
+            }
+
+            // Feedback neuropsicológico
+            const insightEl = document.getElementById('neuroInsightFeedback');
+            if (accuracy >= 90) {
+                insightEl.innerHTML = "<strong>Soberania Pré-Frontal Excepcional (vmPFC Maduro):</strong> Você demonstrou capacidade exemplar de inibir o alarme destrutivo do dACC e da amígdala. Suas decisões foram calibradas estritamente pelo valor absoluto real e pela solidez intrínseca, rejeitando as armadilhas de inveja, iniquidade punitiva e necessidade de aplauso efêmero.";
+            } else if (accuracy >= 70) {
+                insightEl.innerHTML = "<strong>Bom Controle com Vulnerabilidades Pontuais:</strong> Seu cérebro foi capaz de tomar decisões racionais na maioria dos cenários, mas oscilou em dilemas de forte apelo estético ou prestígio social. Praticar a decomposição do pacote alheio ajudará a blindar as decisões mais sensíveis.";
+            } else {
+                insightEl.innerHTML = "<strong>Alta Suscetibilidade à Dor de Status Relativo:</strong> Seu sistema neural de detecção de iniquidade tendeu a sabotar ganhos próprios superiores em favor de simetrias defensivas. Recomendamos a leitura cuidadosa do artigo sobre a neurobiologia da comparação e a prática continuada para reprogramar o foco no valor intrínseco.";
+            }
+        }
+
+        function reiniciarJogo() {
+            soundClick();
+            currentRound = 0;
+            score = 0;
+            streak = 0;
+            correctAnswers = 0;
+
+            document.getElementById('scoreEl').textContent = "0";
+            document.getElementById('streakEl').textContent = "0 🔥";
+            document.getElementById('soberaniaEl').textContent = "100%";
+
+            document.getElementById('gamePlayPanel').style.display = 'block';
+            document.getElementById('gameEndPanel').style.display = 'none';
+
+            carregarRodada();
+        }
+
+        // Iniciar
+        carregarRodada();
+    </script>
+</body>
+</html>

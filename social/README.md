@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **14/11/2026** | **A Neurobiologia da Comparação Social Compulsiva e do Status Relativo** | [social/2026-11-14-comparacao-social-status-relativo.md](2026-11-14-comparacao-social-status-relativo.md) | ✅ Pronto para postar |
 | **13/11/2026** | **A Neurobiologia do Gaslighting Epistêmico e da Invalidação Emocional** | [social/2026-11-13-gaslighting-epistemico-invalidacao.md](2026-11-13-gaslighting-epistemico-invalidacao.md) | ✅ Pronto para postar |
 | **13/11/2026** | **A Neurobiologia da Dissonância Cognitiva e da Autoilusão Defensiva** | [social/2026-11-13-dissonancia-cognitiva-autoilusao.md](2026-11-13-dissonancia-cognitiva-autoilusao.md) | ✅ Pronto para postar |
 | **12/11/2026** | **A Neurobiologia da Autossuficiência Compulsiva e da Hiperindependência** | [social/2026-11-12-autossuficiencia-compulsiva-hiperindependencia.md](2026-11-12-autossuficiencia-compulsiva-hiperindependencia.md) | ✅ Pronto para postar |
