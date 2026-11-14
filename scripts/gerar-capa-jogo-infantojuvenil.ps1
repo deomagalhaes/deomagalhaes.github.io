@@ -408,6 +408,151 @@ switch -Wildcard ($Theme) {
         $cocoBrush.Dispose()
         $cardFairBrush.Dispose()
     }
+    "*mochila*" {
+        # Mochila Executiva Infantil: Organização, Memória Operacional, Checklist Visual e Itens Escolares
+        # 1. Prancheta de Checklist Visual à Esquerda (x=160..310, y=70..280)
+        $clipBoardBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 217, 119, 6))
+        $paperBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 248, 250, 252))
+        $clipBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 148, 163, 184))
+        $checkGreen = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 16, 185, 129))
+        $linePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(180, 203, 213, 225), 3)
+        $boardPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 180, 83, 9), 3)
+
+        # Base da prancheta
+        $g.FillRectangle($clipBoardBrush, 165, 75, 140, 195)
+        $g.DrawRectangle($boardPen, 165, 75, 140, 195)
+
+        # Folha de papel
+        $g.FillRectangle($paperBrush, 175, 88, 120, 172)
+
+        # Clipe superior da prancheta
+        $g.FillRectangle($clipBrush, 210, 68, 50, 18)
+
+        # 3 Itens do Checklist com Caixas e Tiques Verdes
+        $checkPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 16, 185, 129), 3.5)
+        $boxPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 100, 116, 139), 2)
+        
+        $itemY = @(112, 152, 192)
+        foreach ($iy in $itemY) {
+            # Quadrinho de checkbox
+            $g.DrawRectangle($boxPen, 188, $iy, 18, 18)
+            # Tique verde (check mark)
+            $g.DrawLine($checkPen, 190, $iy + 9, 195, $iy + 15)
+            $g.DrawLine($checkPen, 195, $iy + 15, 204, $iy + 4)
+            # Linha representando o item da rotina
+            $g.DrawLine($linePen, 216, $iy + 9, 280, $iy + 9)
+        }
+
+        # Estrela de Missão Cumprida no rodapé da prancheta
+        $starBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 245, 158, 11))
+        $g.FillEllipse($starBrush, 224, 230, 22, 22)
+
+        # 2. Mochila Executiva Central (x=330..530, y=65..280)
+        # Alça Superior da Mochila
+        $strapPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 0, 43, 54), 8)
+        $g.DrawArc($strapPen, 395, 52, 70, 50, 180, 180)
+
+        # Corpo Principal da Mochila (Azul Petróleo Arredondado)
+        $packBodyBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 0, 95, 115))
+        $packBodyPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 148, 210, 189), 4)
+        $g.FillPie($packBodyBrush, 335, 75, 190, 160, 180, 180)
+        $g.FillRectangle($packBodyBrush, 335, 150, 190, 125)
+        $g.DrawArc($packBodyPen, 335, 75, 190, 160, 180, 180)
+        $g.DrawLine($packBodyPen, 335, 155, 335, 275)
+        $g.DrawLine($packBodyPen, 525, 155, 525, 275)
+        $g.DrawLine($packBodyPen, 335, 275, 525, 275)
+
+        # Bolsinho Frontal da Mochila (Laranja Âmbar Vibrante)
+        $frontPocketBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 238, 155, 0))
+        $frontPocketPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 254, 243, 199), 3)
+        $g.FillRectangle($frontPocketBrush, 360, 185, 140, 80)
+        $g.DrawRectangle($frontPocketPen, 360, 185, 140, 80)
+
+        # Linha de Zíper Dourada e Puxador
+        $zipPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 255, 255, 255), 2.5)
+        $zipPen.DashStyle = [System.Drawing.Drawing2D.DashStyle]::Dash
+        $g.DrawLine($zipPen, 370, 200, 490, 200)
+        $zipPuller = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 248, 250, 252))
+        $g.FillEllipse($zipPuller, 435, 196, 12, 12)
+
+        # Emblema da Mochila: Cérebro / Lâmpada de Ideias
+        $badgeBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 10, 147, 150))
+        $g.FillEllipse($badgeBrush, 415, 115, 30, 30)
+        $badgePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 255, 209, 102), 2)
+        $g.DrawEllipse($badgePen, 415, 115, 30, 30)
+
+        # 3. Itens Flutuantes Escolares à Direita (x=550..680, y=75..275)
+        # Caderno Escolar com Espiral
+        $bookBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 224, 76, 56))
+        $bookPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 254, 202, 202), 2)
+        $g.FillRectangle($bookBrush, 560, 85, 95, 120)
+        $g.DrawRectangle($bookPen, 560, 85, 95, 120)
+
+        # Espiral do caderno
+        $spiralPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 255, 255, 255), 3)
+        for ($sy = 95; $sy -le 195; $sy += 14) {
+            $g.DrawArc($spiralPen, 552, $sy, 16, 10, 90, 270)
+        }
+
+        # Estrela no Caderno
+        $g.FillEllipse($starBrush, 595, 130, 26, 26)
+
+        # Lápis Colorido e Régua
+        $pencilBody = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 250, 204, 21))
+        $pencilTip = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 254, 215, 170))
+        $pencilLead = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 15, 23, 42))
+        $pencilEraser = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 244, 114, 182))
+        
+        # Lápis inclinado (representado horizontal/diagonal)
+        $g.FillRectangle($pencilEraser, 560, 225, 16, 20)
+        $g.FillRectangle($pencilBody, 576, 225, 70, 20)
+        [System.Drawing.Point[]]$tipPts = @(
+            (New-Object System.Drawing.Point(646, 225)),
+            (New-Object System.Drawing.Point(666, 235)),
+            (New-Object System.Drawing.Point(646, 245))
+        )
+        $g.FillPolygon($pencilTip, $tipPts)
+        [System.Drawing.Point[]]$leadPts = @(
+            (New-Object System.Drawing.Point(658, 231)),
+            (New-Object System.Drawing.Point(666, 235)),
+            (New-Object System.Drawing.Point(658, 239))
+        )
+        $g.FillPolygon($pencilLead, $leadPts)
+
+        # Brilhos e Faíscas de Concentração
+        $sparkleBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(220, 255, 255, 255))
+        $g.FillEllipse($sparkleBrush, 535, 95, 10, 10)
+        $g.FillEllipse($sparkleBrush, 675, 160, 8, 8)
+        $g.FillEllipse($sparkleBrush, 325, 200, 10, 10)
+
+        # Limpeza
+        $clipBoardBrush.Dispose()
+        $paperBrush.Dispose()
+        $clipBrush.Dispose()
+        $checkGreen.Dispose()
+        $linePen.Dispose()
+        $boardPen.Dispose()
+        $checkPen.Dispose()
+        $boxPen.Dispose()
+        $starBrush.Dispose()
+        $strapPen.Dispose()
+        $packBodyBrush.Dispose()
+        $packBodyPen.Dispose()
+        $frontPocketBrush.Dispose()
+        $frontPocketPen.Dispose()
+        $zipPen.Dispose()
+        $zipPuller.Dispose()
+        $badgeBrush.Dispose()
+        $badgePen.Dispose()
+        $bookBrush.Dispose()
+        $bookPen.Dispose()
+        $spiralPen.Dispose()
+        $pencilBody.Dispose()
+        $pencilTip.Dispose()
+        $pencilLead.Dispose()
+        $pencilEraser.Dispose()
+        $sparkleBrush.Dispose()
+    }
     default {
         # Constelação Neurocognitiva Lúdica Padrão
         $orbBrush1 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230, 238, 155, 0))

@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mochila Executiva: Missão Sem Esquecimento – Deo Magalhães</title>
+    <meta name="description" content="Jogo terapêutico neurocognitivo para treino de memória operacional, funções executivas e rotina escolar no TDAH infantil. Para uso em clínica e família.">
+
+    <link rel="icon" href="../assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --accent-warm: #ca6702;
+            --mint: #94d2bd;
+            --mint-light: #e6f6f4;
+            --surface: #ffffff;
+            --bg-soft: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        .game-shell {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 28px;
+            margin: 24px 0 36px 0;
+            box-shadow: 0 12px 35px rgba(0, 95, 115, 0.10);
+            border: 2px solid #e2e8f0;
+        }
+
+        .top-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: var(--mint-light);
+            color: var(--primary);
+            border: 1px solid var(--mint);
+        }
+
+        .pill-badge.amber {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .pill-badge.purple {
+            background: #ede9fe;
+            color: #5b21b6;
+            border-color: #ddd6fe;
+        }
+
+        .mode-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+
+        .mode-tab-btn {
+            padding: 11px 22px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.94rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-tab-btn:hover {
+            border-color: var(--primary-hover);
+            background: #f0fdfa;
+        }
+
+        .mode-tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.25);
+        }
+
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #001219;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--mint);
+            font-weight: 700;
+        }
+
+        .hud-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .hud-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .hud-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 7px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hud-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .hud-btn.active-breath {
+            background: #0a9396;
+            border-color: var(--mint);
+        }
+
+        /* CARD DE MISSÃO E CALENDÁRIO ESCOLAR */
+        .mission-header-card {
+            background: linear-gradient(135deg, #e6f6f4 0%, #fef3c7 100%);
+            border: 2px solid #94d2bd;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .mission-info h3 {
+            margin: 0 0 6px 0;
+            color: #001219;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mission-info p {
+            margin: 0;
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        .memory-toggle-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #005f73;
+        }
+
+        /* ÁREA DE JOGO PRINCIPAL */
+        .game-play-area {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .game-play-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Quarto / Mesa com Itens */
+        .room-shelf {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .shelf-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .shelf-title h4 {
+            margin: 0;
+            font-size: 1.05rem;
+            color: #001219;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .shelf-hint {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .item-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: #0a9396;
+            box-shadow: 0 8px 20px rgba(10, 147, 150, 0.15);
+        }
+
+        .item-card:active {
+            transform: scale(0.97);
+        }
+
+        .item-card.packed {
+            opacity: 0.35;
+            filter: grayscale(1);
+            pointer-events: none;
+            transform: scale(0.92);
+        }
+
+        .item-icon {
+            font-size: 2.2rem;
+            line-height: 1;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .item-name {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .item-type-badge {
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* MOCHILA EXECUTIVA VIRTUAL */
+        .backpack-panel {
+            background: #ffffff;
+            border: 2px solid #005f73;
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 8px 24px rgba(0, 95, 115, 0.08);
+        }
+
+        .backpack-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        .backpack-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #005f73;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slots-summary {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #ee9b00;
+            background: #fffbeb;
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid #fde68a;
+        }
+
+        .backpack-visual {
+            background: linear-gradient(180deg, #005f73 0%, #0a9396 100%);
+            border-radius: 16px;
+            padding: 16px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .compartment-box {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 10px 12px;
+            min-height: 72px;
+        }
+
+        .compartment-label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #94d2bd;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .compartment-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 40px;
+            align-items: center;
+        }
+
+        .empty-slot-msg {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .packed-item-pill {
+            background: #ffffff;
+            color: #001219;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .packed-remove-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.85rem;
+            line-height: 1;
+            padding: 0 2px;
+            font-weight: 900;
+        }
+
+        /* CHECKLIST DA MISSÃO (Apoio Metacognitivo) */
+        .checklist-board {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .checklist-board h5 {
+            margin: 0 0 10px 0;
+            font-size: 0.92rem;
+            color: #1e293b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .checklist-items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .checklist-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+        }
+
+        .checklist-row.done {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #065f46;
+            text-decoration: line-through;
+        }
+
+        .check-state {
+            font-weight: 800;
+        }
+
+        /* FEEDBACK TOAST / AVISOS EDUCATIVOS */
+        .feedback-banner {
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-banner.success {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+
+        .feedback-banner.calm-distractor {
+            background: #fffbeb;
+            border: 2px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .feedback-banner.info {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* MODAL DE RESPIRAÇÃO GUIADA (TÉCNICA DO CASCO) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 18, 25, 0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 32px;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+            border: 3px solid #94d2bd;
+            position: relative;
+        }
+
+        .breath-orb-container {
+            width: 170px;
+            height: 170px;
+            margin: 22px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breath-orb {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #94d2bd 0%, #005f73 100%);
+            box-shadow: 0 0 35px rgba(10, 147, 150, 0.5);
+            transition: all 4s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 2.2rem;
+        }
+
+        .breath-orb.expand {
+            transform: scale(1.6);
+            background: radial-gradient(circle, #ee9b00 0%, #ca6702 100%);
+            box-shadow: 0 0 50px rgba(238, 155, 0, 0.6);
+        }
+
+        .breath-phase-text {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #005f73;
+            min-height: 38px;
+            margin: 12px 0 6px 0;
+        }
+
+        .breath-timer {
+            font-size: 0.95rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* MODO 2: MONTADOR DE CHECKLIST VISUAL DA FAMÍLIA */
+        .checklist-maker-panel {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 24px;
+        }
+
+        .checklist-maker-intro {
+            margin-bottom: 20px;
+        }
+
+        .checklist-maker-intro h3 {
+            margin: 0 0 8px 0;
+            color: #001219;
+            font-size: 1.3rem;
+        }
+
+        .custom-items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .custom-item-option {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .custom-item-option:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+        }
+
+        .custom-item-option.selected {
+            border-color: #005f73;
+            background: #e6f6f4;
+            font-weight: 700;
+        }
+
+        .print-checklist-preview {
+            background: #ffffff;
+            border: 2px dashed #005f73;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .print-header {
+            text-align: center;
+            border-bottom: 2px solid #005f73;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .print-header h4 {
+            margin: 0;
+            color: #005f73;
+            font-size: 1.35rem;
+        }
+
+        .print-checklist-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .print-check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .print-check-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #005f73;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* CERTIFICADO & CONQUISTAS */
+        .certificate-sheet {
+            background: #ffffff;
+            border: 6px double #005f73;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .certificate-title {
+            color: #005f73;
+            font-size: 1.6rem;
+            margin: 12px 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 900;
+        }
+
+        .certificate-recipient {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ee9b00;
+            margin: 14px 0;
+            text-decoration: underline;
+        }
+
+        /* MEDIAÇÃO: GUIA TERAPEUTA & PAIS */
+        .mediation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+            margin-top: 36px;
+        }
+
+        .mediation-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: 5px solid #0a9396;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .mediation-card.parents {
+            border-top-color: #ee9b00;
+            background: #fffdf7;
+        }
+
+        .mediation-card h3 {
+            margin-top: 0;
+            color: #001219;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mediation-card ul {
+            padding-left: 20px;
+            line-height: 1.6;
+            color: #334155;
+            font-size: 0.94rem;
+        }
+
+        .references-box {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 22px;
+            margin-top: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .references-box h4 {
+            margin-top: 0;
+            color: #001219;
+            font-size: 1.05rem;
+        }
+
+        .references-list {
+            padding-left: 20px;
+            color: #475569;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        @media print {
+            .top-bar, #main-header, footer.main-footer, .no-print, .mode-tabs, .hud-bar, .room-shelf, .feedback-banner {
+                display: none !important;
+            }
+            .game-shell {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            .print-checklist-preview, .certificate-sheet {
+                border: 2px solid #000000 !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar Canônica -->
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Canônico Obrigatório -->
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../testes.html">Testes</a>
+                <a href="../jogos.html" class="active">Jogos</a>
+                <a href="../recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <div class="top-badges-row">
+                    <span class="pill-badge">🧸 6–11 anos</span>
+                    <span class="pill-badge amber">🧠 Memória Operacional & Rotina</span>
+                    <span class="pill-badge purple">🏡 Sessão Clínica & Família</span>
+                </div>
+                <h1>Mochila Executiva: Missão Sem Esquecimento</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) • Atualizado em 2026</p>
+            </header>
+
+            <!-- CONTAINER CENTRAL DO JOGO -->
+            <div class="game-shell">
+                <!-- Abas de Navegação entre Modos -->
+                <div class="mode-tabs no-print">
+                    <button class="mode-tab-btn active" id="tabMode1" onclick="switchMode('game')">
+                        🎒 Modo Missão: Arrumar a Mochila
+                    </button>
+                    <button class="mode-tab-btn" id="tabMode2" onclick="switchMode('custom')">
+                        📋 Montador de Checklist da Família
+                    </button>
+                    <button class="mode-tab-btn" id="tabMode3" onclick="switchMode('certificate')">
+                        🏆 Conquistas & Certificado
+                    </button>
+                </div>
+
+                <!-- HUD Bar -->
+                <div class="hud-bar no-print">
+                    <div class="hud-stat">
+                        <span class="hud-label">Missão / Nível</span>
+                        <span class="hud-value" id="hudLevelText">Nível 1</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Itens na Mochila</span>
+                        <span class="hud-value" id="hudItemsText">0 / 4</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Estrelas de Foco</span>
+                        <span class="hud-value" id="hudStarsText">⭐ 0</span>
+                    </div>
+                    <div class="hud-actions">
+                        <button class="hud-btn" id="btnSoundToggle" onclick="toggleAudioMute()">
+                            🔊 Som Ativo
+                        </button>
+                        <button class="hud-btn" id="btnBreathModal" onclick="openBreathModal()">
+                            🐢 Pausa da Tartaruga (4s)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 1: MODO JOGO PRINCIPAL (TREINO DE MEMÓRIA E FILTRO) -->
+                <div id="sectionGame">
+                    <!-- Banner de Missão do Dia -->
+                    <div class="mission-header-card">
+                        <div class="mission-info">
+                            <h3 id="missionTitle">🎒 Missão 1: Segunda-feira de Descobertas</h3>
+                            <p id="missionDesc">Aulas de Português e Desenho! Não esqueça seu estojo e a garrafinha para manter a mente hidratada.</p>
+                        </div>
+                        <div class="memory-toggle-box">
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="chkNinjaMemory" onchange="toggleNinjaMemory()">
+                                <span>Modo Ninja (Esconder lista para testar a memória pura)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Banner Dinâmico -->
+                    <div id="feedbackBanner" class="feedback-banner info" style="display: none;">
+                        <span id="feedbackIcon" style="font-size: 1.5rem;">💡</span>
+                        <span id="feedbackText">Selecione os itens necessários na mesa e guarde nos bolsos da mochila.</span>
+                    </div>
+
+                    <div class="game-play-area">
+                        <!-- Quarto / Mesa com Itens e Distratores -->
+                        <div class="room-shelf">
+                            <div class="shelf-title">
+                                <h4>🗄️ Quarto & Mesa de Estudos</h4>
+                                <span class="shelf-hint">Toque no objeto para colocá-lo na mochila</span>
+                            </div>
+                            <div class="items-grid" id="itemsGrid">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Mochila Virtual e Checklist -->
+                        <div class="backpack-panel">
+                            <div class="backpack-header">
+                                <h4>🎒 Minha Mochila</h4>
+                                <span class="slots-summary" id="slotsBadge">Faltam 4 itens</span>
+                            </div>
+
+                            <div class="backpack-visual">
+                                <!-- Compartimento Principal -->
+                                <div class="compartment-box">
+                                    <div class="compartment-label">
+                                        <span>📁 Compartimento Principal (Cadernos & Pastas)</span>
+                                    </div>
+                                    <div class="compartment-items" id="slotMain">
+                                        <span class="empty-slot-msg">Nenhum livro ou caderno guardado ainda.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Bolso Frontal -->
+                                <div class="compartment-box">
+                                    <div class="compartment-label">
+                                        <span>✏️ Bolso Frontal (Estojo, Agenda & Pequenos Itens)</span>
+                                    </div>
+                                    <div class="compartment-items" id="slotFront">
+                                        <span class="empty-slot-msg">Bolso frontal vazio.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Bolso Lateral -->
+                                <div class="compartment-box">
+                                    <div class="compartment-label">
+                                        <span>🥤 Bolso Lateral (Garrafinha & Lancheira)</span>
+                                    </div>
+                                    <div class="compartment-items" id="slotSide">
+                                        <span class="empty-slot-msg">Bolso lateral livre.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lista de Conferência (Checklist da Missão) -->
+                            <div class="checklist-board" id="checklistBoard">
+                                <h5>
+                                    <span>📋 Lista de Conferência</span>
+                                    <span id="checkProgressText" style="font-size: 0.8rem; color: #0a9396; font-weight: 800;">0/4 OK</span>
+                                </h5>
+                                <ul class="checklist-items-list" id="missionChecklist">
+                                    <!-- Itens da missão -->
+                                </ul>
+                            </div>
+
+                            <!-- Botão de Próxima Missão -->
+                            <div style="text-align: center; margin-top: 8px;">
+                                <button id="btnNextLevel" class="hud-btn" style="background: #005f73; border-color: #94d2bd; font-size: 0.95rem; padding: 10px 20px; display: none; width: 100%; justify-content: center;" onclick="advanceNextLevel()">
+                                    🎉 Missão Concluída! Avançar para o Próximo Dia ➔
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 2: MONTADOR DE CHECKLIST VISUAL DA FAMÍLIA -->
+                <div id="sectionCustom" style="display: none;">
+                    <div class="checklist-maker-panel">
+                        <div class="checklist-maker-intro">
+                            <h3>👨‍👩‍👧 Montador de Checklist Visual da Família</h3>
+                            <p style="color: #475569; font-size: 0.95rem; margin: 0 0 14px 0;">
+                                Selecione com seu filho(a) os itens que <strong>sempre precisam ir na mochila da sua rotina real</strong>.
+                                Em seguida, imprima ou salve para colar na porta do quarto ou na geladeira!
+                            </p>
+                        </div>
+
+                        <h4 style="margin: 0 0 10px 0; color: #005f73;">1. Toque para incluir os itens na rotina:</h4>
+                        <div class="custom-items-grid" id="customItemsGrid">
+                            <!-- Opções pré-definidas com checkboxes lúdicos -->
+                        </div>
+
+                        <!-- Adicionar item personalizado -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap;">
+                            <input type="text" id="inputCustomItem" placeholder="Ex.: Óculos, Crachá do transporte, Medicamento..." style="flex: 1; min-width: 240px; padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 0.9rem;">
+                            <button class="hud-btn" style="background: #0a9396; border-color: #94d2bd;" onclick="addCustomItemUser()">
+                                ➕ Adicionar Item Próprio
+                            </button>
+                        </div>
+
+                        <!-- Pré-visualização da Folha Imprimível -->
+                        <div class="print-checklist-preview" id="printableFamilyChecklist">
+                            <div class="print-header">
+                                <h4>🎒 CHECKLIST VISUAL DA MINHA MOCHILA</h4>
+                                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 0.88rem;">
+                                    "Missão 3 Passos: Olhar a lista ➔ Conferir a mochila ➔ Fechar o zíper com calma!"
+                                </p>
+                            </div>
+                            <div class="print-checklist-list" id="printPreviewList">
+                                <!-- Lista gerada -->
+                            </div>
+                            <div style="margin-top: 18px; padding-top: 10px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.82rem; color: #64748b;">
+                                <span>Neuropsicólogo Deo Magalhães • deomagalhaes.com.br</span>
+                                <span>Parceria Família & Terapia</span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;" class="no-print">
+                            <button class="hud-btn" style="background: #005f73; border-color: #94d2bd; padding: 12px 24px; font-size: 0.95rem;" onclick="window.print()">
+                                🖨️ Imprimir Checklist para a Porta do Quarto
+                            </button>
+                            <button class="hud-btn" style="background: #10b981; border-color: #a7f3d0; padding: 12px 24px; font-size: 0.95rem;" onclick="shareChecklistFamily()">
+                                📲 Enviar Rotina no WhatsApp da Família
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 3: CONQUISTAS E CERTIFICADO -->
+                <div id="sectionCertificate" style="display: none;">
+                    <div class="certificate-sheet" id="printableCertificate">
+                        <div style="font-size: 3rem;">🌟 🎒 🌟</div>
+                        <h2 class="certificate-title">Certificado de Mestre da Organização</h2>
+                        <p style="color: #475569; font-size: 1.05rem; margin: 8px 0;">
+                            Este certificado especial declara com muito orgulho que:
+                        </p>
+                        <div class="certificate-recipient" id="certChildName">Grande Campeão(ã) da Rotina</div>
+                        <p style="color: #334155; font-size: 1rem; max-width: 580px; margin: 0 auto; line-height: 1.6;">
+                            Treinou seu <strong>córtex pré-frontal</strong>, controlou os distratores, utilizou a memória operacional
+                            com maestria e preparou sua mochila sem nenhum esquecimento!
+                        </p>
+                        <div style="display: flex; justify-content: center; gap: 20px; margin: 24px 0 10px 0; font-weight: 700; color: #005f73;">
+                            <span id="certStarsCount">⭐ 0 Estrelas de Foco</span>
+                            <span>•</span>
+                            <span id="certDateText">Novembro de 2026</span>
+                        </div>
+                        <div style="margin-top: 24px; border-top: 2px dashed #cbd5e1; padding-top: 14px; font-size: 0.85rem; color: #64748b;">
+                            Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;" class="no-print">
+                        <button class="hud-btn" style="background: #005f73; border-color: #94d2bd; padding: 11px 22px; font-size: 0.92rem;" onclick="window.print()">
+                            🖨️ Imprimir Certificado de Conquista
+                        </button>
+                        <button class="hud-btn" style="background: #ee9b00; border-color: #fde68a; color: #001219; padding: 11px 22px; font-size: 0.92rem;" onclick="promptChangeName()">
+                            ✏️ Trocar Nome no Certificado
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL DE RESPIRAÇÃO GUIADA DA TARTARUGA -->
+            <div class="modal-overlay" id="breathModal">
+                <div class="modal-card">
+                    <h3 style="margin-top: 0; color: #005f73; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        🐢 Pausa da Tartaruga (4s)
+                    </h3>
+                    <p style="color: #475569; font-size: 0.92rem; margin: 0 0 12px 0;">
+                        Quando a bagunça ou a pressa tentarem acelerar sua mente, faça como a tartaruga: entre no casco, respire fundo e acalme o coração.
+                    </p>
+
+                    <div class="breath-orb-container">
+                        <div class="breath-orb" id="breathOrb">🐢</div>
+                    </div>
+
+                    <div class="breath-phase-text" id="breathPhaseText">Inspire devagar...</div>
+                    <div class="breath-timer" id="breathTimer">4 segundos</div>
+
+                    <div style="margin-top: 22px;">
+                        <button class="hud-btn" style="background: #005f73; border-color: #94d2bd; padding: 8px 24px;" onclick="closeBreathModal()">
+                            Voltar para o Jogo com Calma ✓
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO DE MEDIAÇÃO OBRIGATÓRIA: TERAPEUTA & FAMÍLIA -->
+            <div class="mediation-grid no-print">
+                <!-- Card Clínico do Terapeuta -->
+                <div class="mediation-card">
+                    <h3>🩺 Como Usar na Sessão de Terapia (Guia Clínico)</h3>
+                    <p style="color: #475569; font-size: 0.92rem;">
+                        O esquecimento recorrente de materiais escolares não decorre de "preguiça" ou "desinteresse", mas sim da imaturidade ou disfunção na <strong>memória operacional visuoespacial e fonológica</strong> e no <strong>controle inibitório frontoestriatal</strong> (típicos do TDAH).
+                    </p>
+                    <ul>
+                        <li><strong>Observação da Varredura Visual:</strong> Observe se a criança busca os itens de forma caótica ou se utiliza estratégias de categorização (livros primeiro, estojo depois, lanche por último).</li>
+                        <li><strong>Treino da Fala Interna (Auto-Instrução):</strong> Estimule a criança a narrar em voz alta: <em>"Hoje tenho artes, então preciso do avental; meu estojo precisa estar no bolso da frente"</em>. A externalização verbal atua como andaime (scaffolding) para o lobo frontal.</li>
+                        <li><strong>Manejo dos Distratores sem Culpa:</strong> Quando a criança clica no videogame ou gibi, explore a metacognição: <em>"O que esse gibi tem que atrai tanto seus olhos? Onde ele pode ficar guardado em casa para não te atrapalhar na hora da lição?"</em></li>
+                        <li><strong>Modo Ninja da Memória:</strong> Utilize o Modo Ninja para avaliar a retenção imediata de 3 a 5 estímulos sequenciais e treinar a alça fonológica em ordem direta.</li>
+                    </ul>
+                </div>
+
+                <!-- Card para os Pais em Casa -->
+                <div class="mediation-card parents">
+                    <h3>👨‍👩‍👧 Como Usar em Casa com os Filhos (Guia para Pais)</h3>
+                    <p style="color: #78350f; font-size: 0.92rem;">
+                        A melhor maneira de eliminar brigas matinais e esquecimentos escolares é transformar a organização em um ritual calmo e visual na noite anterior.
+                    </p>
+                    <ul>
+                        <li><strong>A Regra dos 10 Minutos Noturnos:</strong> Jamais arrume a mochila na correria da manhã antes de sair. Estabeleça o horário fixo das 19h ou 20h para a "Missão Mochila Pronta".</li>
+                        <li><strong>O Posto de Controle da Casa:</strong> Escolha um lugar fixo perto da porta do quarto ou na sala onde a mochila sempre deve "dormir" fechada com o checklist conferido.</li>
+                        <li><strong>Substitua Cobranças por Pistas Visuais:</strong> Em vez de perguntar com irritação: <em>"Você pegou o estojo de novo?!"</em>, pergunte apontando para a folha: <em>"Dê uma olhada no seu checklist: qual é o item número 2?"</em>. Isso ensina autorregulação e tira o pai do papel de fiscal.</li>
+                        <li><strong>Validação e Celebração do Esforço:</strong> Imprima o Certificado de Mestre da Organização e comemore uma semana inteira sem materiais esquecidos com um passeio ou momento especial em família.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Referências Científicas Canônicas ABNT -->
+            <div class="references-box no-print">
+                <h4>📚 Referências Bibliográficas (Neuropsicologia & Funções Executivas)</h4>
+                <ol class="references-list">
+                    <li>BADDELEY, Alan. <em>Working Memory, Thought, and Action</em>. Oxford: Oxford University Press, 2007.</li>
+                    <li>BARKLEY, Russell A. <em>Transtorno de Déficit de Atenção/Hiperatividade: Manual para Diagnóstico e Tratamento</em>. 3. ed. Porto Alegre: Artmed, 2008.</li>
+                    <li>DIAMOND, Adele. Executive functions. <em>Annual Review of Psychology</em>, v. 64, p. 135-168, 2013.</li>
+                    <li>FUENTES, Daniel et al. <em>Neuropsicologia Clínica</em>. 2. ed. Porto Alegre: Artmed, 2014.</li>
+                    <li>MEICHENBAUM, Donald. <em>Cognitive-Behavior Modification: An Integrative Approach</em>. New York: Plenum Press, 1977.</li>
+                </ol>
+                <hr class="article-divider" style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                <p style="font-size: 0.85rem; color: #64748b; font-style: italic; margin-bottom: 0;">
+                    Este recurso lúdico e psicoeducativo foi desenvolvido pelo neuropsicólogo Deo Magalhães com finalidade terapêutica e pedagógica. Para avaliação e diagnóstico formal de TDAH ou transtornos do neurodesenvolvimento, consulte sempre um profissional especializado.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÓGICA INTERATIVA DO JOGO & WEB AUDIO API -->
+    <script>
+        /* --- ESTADO DO JOGO E PERSISTÊNCIA --- */
+        const STORAGE_KEY = 'deo_mochila_executiva_state';
+        let isMuted = false;
+        let audioCtx = null;
+        let currentLevelIndex = 0;
+        let starsCount = 0;
+        let isNinjaMode = false;
+        let currentPacked = []; // IDs dos itens na mochila
+
+        // Definição das Missões Educativas Progressivas
+        const MISSIONS = [
+            {
+                id: 1,
+                title: "🎒 Missão 1: Segunda-feira de Descobertas",
+                desc: "Aulas de Língua Portuguesa e Desenho! Pegue seus materiais essenciais e não esqueça de se hidratar.",
+                requiredItems: ['livro_port', 'estojo', 'garrafinha', 'caderno_pauta'],
+                roomItems: [
+                    { id: 'livro_port', name: 'Livro de Português', icon: '📖', compartment: 'main', type: 'Aula do Dia', isRequired: true },
+                    { id: 'estojo', name: 'Estojo Completo', icon: '✏️', compartment: 'front', type: 'Material Básico', isRequired: true },
+                    { id: 'garrafinha', name: 'Garrafinha d\'Água', icon: '🥤', compartment: 'side', type: 'Hidratação', isRequired: true },
+                    { id: 'caderno_pauta', name: 'Caderno de Linhas', icon: '📒', compartment: 'main', type: 'Aula do Dia', isRequired: true },
+                    { id: 'videogame', name: 'Videogame Portátil', icon: '🎮', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'O videogame é super legal para o sábado, mas hoje na aula ele pode te distrair! Vamos deixar descansando na mesa.' },
+                    { id: 'gibi', name: 'Gibi de Quadrinhos', icon: '🦸', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'Adoramos quadrinhos! Mas hoje a professora pediu o livro didático. Guarde o gibi na estante para ler depois da lição.' },
+                    { id: 'meia_solta', name: 'Meia Solta', icon: '🧦', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'Uma meia solta? Ela pertence à gaveta de roupas limpas, e não à mochila da escola!' }
+                ]
+            },
+            {
+                id: 2,
+                title: "🏃 Missão 2: Quarta-feira com Educação Física & Ciências",
+                desc: "Dia agitado! Hoje tem experimento no laboratório de ciências e aula prática de esportes na quadra.",
+                requiredItems: ['livro_cie', 'tenis_ed_fis', 'lancheira', 'lupa_cie', 'agenda'],
+                roomItems: [
+                    { id: 'livro_cie', name: 'Livro de Ciências', icon: '🔬', compartment: 'main', type: 'Aula do Dia', isRequired: true },
+                    { id: 'tenis_ed_fis', name: 'Tênis de Ginástica', icon: '👟', compartment: 'main', type: 'Ed. Física', isRequired: true },
+                    { id: 'lancheira', name: 'Lancheira Saudável', icon: '🍎', compartment: 'side', type: 'Lanche', isRequired: true },
+                    { id: 'lupa_cie', name: 'Lupa do Laboratório', icon: '🔍', compartment: 'front', type: 'Experimento', isRequired: true },
+                    { id: 'agenda', name: 'Agenda Escolar', icon: '📅', compartment: 'front', type: 'Organização', isRequired: true },
+                    { id: 'carrinho', name: 'Carrinho de Controle', icon: '🏎️', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'Carrinho rápido! Mas na aula de ciências precisamos de muita atenção aos frascos. Deixe o carrinho na garagem do quarto.' },
+                    { id: 'fone_gamer', name: 'Fone de Ouvido Grande', icon: '🎧', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'Fone gigante! A aula de hoje é de correr e pular na quadra, o fone pode cair e quebrar. Foco no tênis!' },
+                    { id: 'bala_aberta', name: 'Pacote de Balas', icon: '🍬', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'Balas antes do almoço podem tirar seu apetite saudável. Leve frutas na lancheira!' }
+                ]
+            },
+            {
+                id: 3,
+                title: "🎨 Missão 3: Sexta-feira de Projetos & Pintura Criativa",
+                desc: "Fechamento de semana! Apresentação do projeto de história e aula livre de pintura com tintas.",
+                requiredItems: ['avental_tinta', 'pincel_tinta', 'pasta_trabalho', 'estojo', 'garrafinha'],
+                roomItems: [
+                    { id: 'avental_tinta', name: 'Avental de Pintura', icon: '🥼', compartment: 'main', type: 'Arte', isRequired: true },
+                    { id: 'pincel_tinta', name: 'Estojo de Pincéis', icon: '🖌️', compartment: 'front', type: 'Arte', isRequired: true },
+                    { id: 'pasta_trabalho', name: 'Pasta do Trabalho', icon: '📂', compartment: 'main', type: 'História', isRequired: true },
+                    { id: 'estojo', name: 'Estojo Completo', icon: '✏️', compartment: 'front', type: 'Material Básico', isRequired: true },
+                    { id: 'garrafinha', name: 'Garrafinha d\'Água', icon: '🥤', compartment: 'side', type: 'Hidratação', isRequired: true },
+                    { id: 'pelucia', name: 'Urso de Pelúcia Gigante', icon: '🧸', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'Que fofinho! Mas o ursinho vai se sujar de tinta guache na aula de artes! Melhor deixá-lo na cama te esperando.' },
+                    { id: 'skate_dedo', name: 'Skate de Dedo', icon: '🛹', compartment: 'distractor', type: 'Distrator', isRequired: false,
+                      msg: 'O skate faz barulho na mesa e pode desconcentrar os colegas durante a apresentação do trabalho. Guarde no estojo de brinquedos.' }
+                ]
+            }
+        ];
+
+        // Itens Padrão para o Montador de Checklist da Família
+        const DEFAULT_FAMILY_ITEMS = [
+            { id: 'fam_cadernos', label: 'Cadernos & Livros do Dia', icon: '📚', selected: true },
+            { id: 'fam_estojo', label: 'Estojo com Lápis e Borracha', icon: '✏️', selected: true },
+            { id: 'fam_licao', label: 'Lição de Casa Conferida', icon: '📝', selected: true },
+            { id: 'fam_garrafa', label: 'Garrafinha com Água Fresca', icon: '🥤', selected: true },
+            { id: 'fam_lanche', label: 'Lancheira na Geladeira / Mochila', icon: '🍎', selected: true },
+            { id: 'fam_agenda', label: 'Agenda Escolar Assinada', icon: '📅', selected: true },
+            { id: 'fam_uniforme', label: 'Uniforme / Tênis de Ed. Física', icon: '👟', selected: false },
+            { id: 'fam_cracha', label: 'Crachá / Carteirinha de Estudante', icon: '🪪', selected: false },
+            { id: 'fam_casaco', label: 'Casaco para Mudança de Clima', icon: '🧥', selected: false }
+        ];
+
+        let familyChecklist = [...DEFAULT_FAMILY_ITEMS];
+
+        /* --- WEB AUDIO API SEGURO E SENSORIALMENTE ACOLHEDOR --- */
+        function ensureAudio() {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAudioMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btnSoundToggle');
+            btn.textContent = isMuted ? '🔇 Silencioso' : '🔊 Som Ativo';
+        }
+
+        function playSoftTone(freqStart, freqEnd, durationSec, wave = 'sine') {
+            if (isMuted) return;
+            try {
+                const ctx = ensureAudio();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = wave;
+                osc.frequency.setValueAtTime(freqStart, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(freqEnd, ctx.currentTime + durationSec);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + durationSec);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + durationSec);
+            } catch (e) {
+                // Silencioso em caso de restrição do navegador
+            }
+        }
+
+        function soundSuccessItem() {
+            playSoftTone(440, 660, 0.22, 'triangle');
+        }
+
+        function soundCalmDistractor() {
+            playSoftTone(320, 240, 0.35, 'sine');
+        }
+
+        function soundVictoryLevel() {
+            if (isMuted) return;
+            setTimeout(() => playSoftTone(440, 554, 0.2, 'triangle'), 0);
+            setTimeout(() => playSoftTone(554, 659, 0.2, 'triangle'), 150);
+            setTimeout(() => playSoftTone(659, 880, 0.35, 'triangle'), 300);
+        }
+
+        /* --- CARREGAMENTO E INICIALIZAÇÃO --- */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedState();
+            renderLevel(currentLevelIndex);
+            renderCustomItemsList();
+            renderPrintableChecklist();
+            updateCertDisplay();
+        });
+
+        function loadSavedState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed.starsCount !== undefined) starsCount = parsed.starsCount;
+                    if (parsed.familyChecklist) familyChecklist = parsed.familyChecklist;
+                }
+            } catch (e) {}
+            updateHud();
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    starsCount: starsCount,
+                    familyChecklist: familyChecklist
+                }));
+            } catch (e) {}
+        }
+
+        function updateHud() {
+            const mission = MISSIONS[currentLevelIndex];
+            document.getElementById('hudLevelText').textContent = `Nível ${currentLevelIndex + 1}`;
+            document.getElementById('hudItemsText').textContent = `${currentPacked.length} / ${mission.requiredItems.length}`;
+            document.getElementById('hudStarsText').textContent = `⭐ ${starsCount}`;
+        }
+
+        /* --- CONTROLE DE ABAS / MODOS --- */
+        function switchMode(mode) {
+            document.getElementById('tabMode1').classList.toggle('active', mode === 'game');
+            document.getElementById('tabMode2').classList.toggle('active', mode === 'custom');
+            document.getElementById('tabMode3').classList.toggle('active', mode === 'certificate');
+
+            document.getElementById('sectionGame').style.display = (mode === 'game') ? 'block' : 'none';
+            document.getElementById('sectionCustom').style.display = (mode === 'custom') ? 'block' : 'none';
+            document.getElementById('sectionCertificate').style.display = (mode === 'certificate') ? 'block' : 'none';
+
+            if (mode === 'certificate') {
+                updateCertDisplay();
+            }
+        }
+
+        /* --- RENDERIZAÇÃO DO MODO MISSÃO --- */
+        function renderLevel(idx) {
+            currentLevelIndex = idx;
+            currentPacked = [];
+            const mission = MISSIONS[idx];
+
+            document.getElementById('missionTitle').textContent = mission.title;
+            document.getElementById('missionDesc').textContent = mission.desc;
+            document.getElementById('btnNextLevel').style.display = 'none';
+
+            // Limpa compartimentos
+            document.getElementById('slotMain').innerHTML = '<span class="empty-slot-msg">Nenhum livro ou caderno guardado ainda.</span>';
+            document.getElementById('slotFront').innerHTML = '<span class="empty-slot-msg">Bolso frontal vazio.</span>';
+            document.getElementById('slotSide').innerHTML = '<span class="empty-slot-msg">Bolso lateral livre.</span>';
+
+            // Quarto com itens
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = '';
+            mission.roomItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.id = `itemCard_${item.id}`;
+                card.onclick = () => onSelectItem(item);
+
+                card.innerHTML = `
+                    <span class="item-icon">${item.icon}</span>
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-type-badge">${item.type}</span>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Checklist de Apoio
+            renderChecklist();
+            updateSlotsBadge();
+            updateHud();
+            hideFeedback();
+        }
+
+        function renderChecklist() {
+            const mission = MISSIONS[currentLevelIndex];
+            const list = document.getElementById('missionChecklist');
+            list.innerHTML = '';
+
+            let doneCount = 0;
+            mission.requiredItems.forEach(reqId => {
+                const itemObj = mission.roomItems.find(i => i.id === reqId);
+                const isPacked = currentPacked.includes(reqId);
+                if (isPacked) doneCount++;
+
+                const li = document.createElement('li');
+                li.className = `checklist-row ${isPacked ? 'done' : ''}`;
+                li.innerHTML = `
+                    <span>${itemObj.icon} ${itemObj.name}</span>
+                    <span class="check-state">${isPacked ? '✓ Guardado' : '⏳ Falta'}</span>
+                `;
+                list.appendChild(li);
+            });
+
+            document.getElementById('checkProgressText').textContent = `${doneCount}/${mission.requiredItems.length} OK`;
+        }
+
+        function updateSlotsBadge() {
+            const mission = MISSIONS[currentLevelIndex];
+            const remaining = mission.requiredItems.length - currentPacked.length;
+            const badge = document.getElementById('slotsBadge');
+            if (remaining <= 0) {
+                badge.textContent = '🎉 Mochila 100% Pronta!';
+                badge.style.color = '#10b981';
+                badge.style.background = '#ecfdf5';
+                badge.style.borderColor = '#a7f3d0';
+            } else {
+                badge.textContent = `Faltam ${remaining} item(s)`;
+                badge.style.color = '#ee9b00';
+                badge.style.background = '#fffbeb';
+                badge.style.borderColor = '#fde68a';
+            }
+        }
+
+        /* --- CLIQUE E INTERAÇÃO COM OBJETOS --- */
+        function onSelectItem(item) {
+            ensureAudio();
+            const mission = MISSIONS[currentLevelIndex];
+
+            // Distrator
+            if (!item.isRequired) {
+                soundCalmDistractor();
+                showFeedback('calm-distractor', '🐢 ' + item.msg, '🎮');
+                return;
+            }
+
+            // Já está na mochila?
+            if (currentPacked.includes(item.id)) {
+                return;
+            }
+
+            // Adiciona à mochila
+            currentPacked.push(item.id);
+            soundSuccessItem();
+            showFeedback('success', `Muito bem! ${item.name} guardado no lugar certo!`, '✓');
+
+            // Marca o card como colocado
+            const card = document.getElementById(`itemCard_${item.id}`);
+            if (card) card.classList.add('packed');
+
+            // Coloca no compartimento visual
+            addItemToSlot(item);
+            renderChecklist();
+            updateSlotsBadge();
+            updateHud();
+
+            // Verifica vitória da missão
+            if (currentPacked.length === mission.requiredItems.length) {
+                handleMissionComplete();
+            }
+        }
+
+        function addItemToSlot(item) {
+            let containerId = 'slotMain';
+            if (item.compartment === 'front') containerId = 'slotFront';
+            if (item.compartment === 'side') containerId = 'slotSide';
+
+            const container = document.getElementById(containerId);
+            // Remove mensagem de vazio se existir
+            const emptyMsg = container.querySelector('.empty-slot-msg');
+            if (emptyMsg) emptyMsg.remove();
+
+            const pill = document.createElement('span');
+            pill.className = 'packed-item-pill';
+            pill.id = `pill_${item.id}`;
+            pill.innerHTML = `
+                <span>${item.icon} ${item.name}</span>
+                <button class="packed-remove-btn" onclick="removeItemFromBag('${item.id}', event)" title="Tirar da mochila">✕</button>
+            `;
+            container.appendChild(pill);
+        }
+
+        function removeItemFromBag(itemId, evt) {
+            if (evt) evt.stopPropagation();
+            const mission = MISSIONS[currentLevelIndex];
+            const idx = currentPacked.indexOf(itemId);
+            if (idx !== -1) {
+                currentPacked.splice(idx, 1);
+            }
+
+            // Remove o pill
+            const pill = document.getElementById(`pill_${itemId}`);
+            if (pill) pill.remove();
+
+            // Reativa o card no quarto
+            const card = document.getElementById(`itemCard_${itemId}`);
+            if (card) card.classList.remove('packed');
+
+            // Se o compartimento ficar vazio, reexibe a mensagem
+            ['slotMain', 'slotFront', 'slotSide'].forEach(cid => {
+                const c = document.getElementById(cid);
+                if (c.children.length === 0) {
+                    let msg = 'Compartimento livre.';
+                    if (cid === 'slotMain') msg = 'Nenhum livro ou caderno guardado ainda.';
+                    if (cid === 'slotFront') msg = 'Bolso frontal vazio.';
+                    if (cid === 'slotSide') msg = 'Bolso lateral livre.';
+                    c.innerHTML = `<span class="empty-slot-msg">${msg}</span>`;
+                }
+            });
+
+            renderChecklist();
+            updateSlotsBadge();
+            updateHud();
+            document.getElementById('btnNextLevel').style.display = 'none';
+        }
+
+        function handleMissionComplete() {
+            soundVictoryLevel();
+            starsCount += 5;
+            saveState();
+            updateHud();
+            showFeedback('success', '🌟 Parabéns! Mochila organizada perfeitamente sem nenhum esquecimento!', '🏆');
+            const nextBtn = document.getElementById('btnNextLevel');
+            if (currentLevelIndex < MISSIONS.length - 1) {
+                nextBtn.textContent = '🎉 Missão Concluída! Avançar para o Próximo Dia ➔';
+            } else {
+                nextBtn.textContent = '🏆 Todas as Missões Concluídas! Ver Meu Certificado ➔';
+            }
+            nextBtn.style.display = 'inline-flex';
+        }
+
+        function advanceNextLevel() {
+            if (currentLevelIndex < MISSIONS.length - 1) {
+                renderLevel(currentLevelIndex + 1);
+            } else {
+                switchMode('certificate');
+            }
+        }
+
+        function toggleNinjaMemory() {
+            const chk = document.getElementById('chkNinjaMemory');
+            isNinjaMode = chk.checked;
+            const board = document.getElementById('checklistBoard');
+            if (isNinjaMode) {
+                board.style.opacity = '0.15';
+                board.style.filter = 'blur(4px)';
+                showFeedback('info', '🥷 Modo Ninja ativado! Tente lembrar quais itens faltam sem olhar a lista!', '⭐');
+            } else {
+                board.style.opacity = '1';
+                board.style.filter = 'none';
+                hideFeedback();
+            }
+        }
+
+        function showFeedback(type, text, icon) {
+            const banner = document.getElementById('feedbackBanner');
+            banner.className = `feedback-banner ${type}`;
+            document.getElementById('feedbackIcon').textContent = icon || '💡';
+            document.getElementById('feedbackText').textContent = text;
+            banner.style.display = 'flex';
+        }
+
+        function hideFeedback() {
+            document.getElementById('feedbackBanner').style.display = 'none';
+        }
+
+        /* --- MODAL DE RESPIRAÇÃO (TÉCNICA DO CASCO) --- */
+        let breathInterval = null;
+        let breathPhaseIndex = 0;
+        const breathPhases = [
+            { text: "Inspire o ar devagar... (pelo nariz)", expand: true },
+            { text: "Segure o ar com calma no peito...", expand: true },
+            { text: "Solte o ar suavemente... (pela boca)", expand: false },
+            { text: "Corpo relaxado e mente tranquila...", expand: false }
+        ];
+
+        function openBreathModal() {
+            ensureAudio();
+            document.getElementById('breathModal').style.display = 'flex';
+            startBreathLoop();
+        }
+
+        function closeBreathModal() {
+            document.getElementById('breathModal').style.display = 'none';
+            if (breathInterval) clearInterval(breathInterval);
+        }
+
+        function startBreathLoop() {
+            breathPhaseIndex = 0;
+            tickBreathPhase();
+            if (breathInterval) clearInterval(breathInterval);
+            breathInterval = setInterval(tickBreathPhase, 4000);
+        }
+
+        function tickBreathPhase() {
+            const phase = breathPhases[breathPhaseIndex % 4];
+            const orb = document.getElementById('breathOrb');
+            const txt = document.getElementById('breathPhaseText');
+
+            txt.textContent = phase.text;
+            if (phase.expand) {
+                orb.classList.add('expand');
+            } else {
+                orb.classList.remove('expand');
+            }
+
+            playSoftTone(phase.expand ? 300 : 400, phase.expand ? 400 : 300, 3.8, 'sine');
+            breathPhaseIndex++;
+        }
+
+        /* --- MODO 2: MONTADOR DE CHECKLIST VISUAL DA FAMÍLIA --- */
+        function renderCustomItemsList() {
+            const grid = document.getElementById('customItemsGrid');
+            grid.innerHTML = '';
+            familyChecklist.forEach((item, idx) => {
+                const opt = document.createElement('div');
+                opt.className = `custom-item-option ${item.selected ? 'selected' : ''}`;
+                opt.onclick = () => toggleFamilyItem(idx);
+                opt.innerHTML = `
+                    <span style="font-size: 1.4rem;">${item.icon}</span>
+                    <span style="flex: 1;">${item.label}</span>
+                    <span style="font-weight: 800; color: ${item.selected ? '#005f73' : '#cbd5e1'};">${item.selected ? '✓' : '○'}</span>
+                `;
+                grid.appendChild(opt);
+            });
+        }
+
+        function toggleFamilyItem(idx) {
+            familyChecklist[idx].selected = !familyChecklist[idx].selected;
+            saveState();
+            renderCustomItemsList();
+            renderPrintableChecklist();
+        }
+
+        function addCustomItemUser() {
+            const input = document.getElementById('inputCustomItem');
+            const val = input.value.trim();
+            if (!val) return;
+            familyChecklist.push({
+                id: 'user_' + Date.now(),
+                label: val,
+                icon: '📌',
+                selected: true
+            });
+            input.value = '';
+            saveState();
+            renderCustomItemsList();
+            renderPrintableChecklist();
+            showFeedback('success', `Item "${val}" adicionado à sua rotina!`, '✓');
+        }
+
+        function renderPrintableChecklist() {
+            const container = document.getElementById('printPreviewList');
+            container.innerHTML = '';
+            const activeItems = familyChecklist.filter(i => i.selected);
+
+            if (activeItems.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-style: italic;">Selecione pelo menos um item acima para montar a lista da porta do quarto.</p>';
+                return;
+            }
+
+            activeItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'print-check-item';
+                div.innerHTML = `
+                    <span class="print-check-box"></span>
+                    <span style="font-size: 1.2rem;">${item.icon}</span>
+                    <span>${item.label}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function shareChecklistFamily() {
+            const activeItems = familyChecklist.filter(i => i.selected).map(i => `▫️ ${i.icon} ${i.label}`).join('\n');
+            const text = `🎒 *Checklist Visual da Mochila (Família)*\n\n${activeItems}\n\nConferido com foco e calma no site Deo Magalhães: https://deomagalhaes.com.br/jogos/jogo-mochila-executiva.html`;
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        /* --- CERTIFICADO & CONQUISTAS --- */
+        function updateCertDisplay() {
+            document.getElementById('certStarsCount').textContent = `⭐ ${starsCount} Estrelas de Foco`;
+            const now = new Date();
+            const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            document.getElementById('certDateText').textContent = `${months[now.getMonth()]} de ${now.getFullYear()}`;
+        }
+
+        function promptChangeName() {
+            const cur = document.getElementById('certChildName').textContent;
+            const res = prompt('Digite o nome da criança para o Certificado:', cur);
+            if (res && res.trim() !== '') {
+                document.getElementById('certChildName').textContent = res.trim();
+            }
+        }
+    </script>
+    <script src="../assets/script.js"></script>
+</body>
+</html>
