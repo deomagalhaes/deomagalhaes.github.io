@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 16 — Simulador Acústico de Madeiras & Ressonâncias Lutherísticas
+## 🎯 Projeto Prioritário Atual: Fase 17 — Treinador de Solfejo & Ditado Melódico Caipira
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Modelagem física da resposta acústica e timbre de tampos tradicionais (Pinho Spruce / Abeto vs Cedro Canadense vs Pinho Brasileiro / Araucária) e fundos/laterais (Jacarandá da Bahia vs Mogno vs Caviúna vs Imbuia).
-  2. Simulação gráfica interativa de padrões nodais de ressonância de Chladni em Canvas 2D com visualização de modos de vibração do tampo ((0,0), (1,0), (0,1), (1,1)) sob excitação de frequências fundamentais da viola.
-  3. Filtros convolutivos / EQ biquad dinâmico no sintetizador Web Audio simulando o "color" tonal de cada madeira e espessura do tampo, com laudo lutherístico sobre resposta a transientes, sustentação ("sustain") e projeção acústica no estradão.
+  1. Módulo interativo de treinamento auditivo e percepção de intervalos caipiras característicos (terças maiores/menores, sextas caipiras, quartas aumentadas de folia e quintas justas).
+  2. Ditado melódico progressivo com frases curtas de modas canônicas e ponteios, exigindo que o violeiro identifique as notas de ouvido e responda clicando no braço SVG virtual ou no teclado melódico.
+  3. Sistema de pontuação, feedback pedagógico imediato com solfejo cantado/sintetizado e níveis graduais de dificuldade (Iniciante, Boiadeiro, Cantador e Mestre do Estradão).
 
 ---
 
@@ -44,8 +44,8 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Processamento de sinal com FFT e autocorrelação (YIN) para detecção de notas e digitações reais captadas ao vivo pelo microfone do violeiro com feedback imediato no braço SVG, desvio em cents por ordem e diagnóstico postural.
 13. **[x] Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas (Fase 15 Concluída):**
     - Geração algorítmica de duetos contrapontísticos com separação estéreo binaural real (pan 1ª viola -50% e 2ª viola +50%), condução de vozes em movimento contrário, oblíquo e antifonia, algoritmo anti-choque de oitavadas e exportação para tablatura.
-14. **[ ] Simulador Acústico de Madeiras & Ressonâncias Lutherísticas (Fase 16):**
-    - Física dos tampos (Pinho Spruce vs Cedro Canadense vs Araucária), fundos (Jacarandá da Bahia vs Mogno vs Caviúna), leque harmônico e análise modal de padrões nodais de Chladni.
+14. **[x] Simulador Acústico de Madeiras & Ressonâncias Lutherísticas de Chladni (Fase 16 Concluída):**
+    - Física e propriedades acústicas de tampos (Spruce/Abeto, Cedro Canadense, Pinho Brasileiro/Araucária, Engelmann) e fundos/laterais (Jacarandá da Bahia, Caviúna Paulista, Mogno, Imbuia, Maple). Simulação gráfica interativa de padrões nodais de Chladni com 1400 partículas em Canvas 2D, síntese Web Audio API (Tap Tone, Arpejo Cebolão, Rasqueado e Comparador A/B), laudo lutherístico com 4 medidores analíticos e integração com o braço SVG virtual no modo `displayMode: 'TONEWOOD'` com nós harmônicos naturais.
 15. **[ ] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17):**
     - Percepção intervalar das modas de viola e treino auditivo de terças e sextas com resposta interativa no braço.
 16. **[ ] Gerador de Introduções Clássicas em Pagode de Viola (Fase 18):**
@@ -56,6 +56,35 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **14/11/2026 — Sessão 16** (Fase 16 Concluída):
+  - **Simulador Acústico de Madeiras & Ressonâncias Lutherísticas de Chladni (Acoustic Tonewood & Chladni Resonance Simulator)**:
+    - **Modelagem Física e Físico-Química de Madeiras Tradicionais da Lutheria de Violas e Violões**:
+      - Catálogo paramétrico de tampos: *Pinho Abeto Europeu / Sitka Spruce* (densidade ρ = 430 kg/m³, velocidade do som c = 5200 m/s, módulo de Young E = 12.0 GPa, rigidez flexural D = 28.1 N·m), *Cedro Vermelho Canadense* (ρ = 370, c = 4700, E = 10.2, D = 23.9), *Pinho Araucária / Pinho Brasileiro* (ρ = 510, c = 4900, E = 11.5, D = 26.9) e *Abeto Engelmann* (ρ = 390, c = 5050, E = 11.0, D = 25.8).
+      - Catálogo paramétrico de fundos e laterais: *Jacarandá da Bahia* (ρ = 860, c = 4100, E = 12.8, damping η = 0.0055, ressonância cristalina nobre), *Caviúna Paulista* (ρ = 820, c = 4250, E = 13.2, damping η = 0.0058, estalo metálico percussivo), *Mogno Brasileiro* (ρ = 540, c = 4400, E = 10.5, damping η = 0.0080, médios quentes terrosos), *Imbuia Nobre* (ρ = 670, c = 4150, E = 11.2, damping η = 0.0072, grave aveludado profundo) e *Maple Rajado* (ρ = 640, c = 4600, E = 12.2, damping η = 0.0062, definição cirúrgica de requinta).
+      - Configuração detalhada de espessura de tampo (2.2 mm refinada de concerto até 3.2 mm robusta de estradão) e sistemas de leque harmônico interno (Leque Tradicional Espanhol, Barragem Radial em X, Leque Caipira Reforçado e Barragem Lattice Reticulada moderna).
+      - 5 presets de lutheria consagrados: *Viola Clássica Caipira de Concerto*, *Viola Romântica Canção de Toada*, *Viola Caipira Tradicional do Estradão*, *Viola Sertaneja Moderna de Requinta* e *Violão Clássico de Acompanhamento*.
+    - **Simulador Gráfico Interativo de Padrões Nodais de Chladni em Canvas 2D (`viola-chladni-canvas`)**:
+      - Simulação física em tempo real de 1.400 partículas de areia fina / sílica livre sobre o tampo da viola com contorno de silhueta de bojo clássico, cintura delgada, roseta decorada e cavalete em jacarandá.
+      - Campo de gradiente de força nodal bidimensional F(x,y) = -∇|Ψ(x,y)| que empurra suavemente as partículas para longe das áreas de máxima amplitude vibratória (ventres) em direção às linhas e nós de calmaria vibratória (nós de Chladni).
+      - Suporte aos 5 modos canônicos de ressonância modal: *(0,0) Respiratório de Helmholtz / Abertura de Bojo* (~196 Hz), *(1,0) Longitudinal Principal / Balanceio de Tampo* (~293 Hz), *(0,1) Transversal / Flexão de Ombros* (~392 Hz), *(1,1) Anelar de Cavalete / Nó de Cintura* (~523 Hz), *(2,0) Superior de Requinta / Modo de Brilho* (~659 Hz) e modo de *Varredura Livre* (80 Hz a 1000 Hz) ajustável por slider milimétrico.
+      - Ativação de excitação vibratória, controle de perturbação estocástica / dispersão de partículas e renderização a 60 FPS com coloração dinâmica por gradiente nodal.
+    - **Síntese Acústica Convolutiva & Modelagem Tonal Web Audio API**:
+      - Sintetizador com modelagem física de resposta em frequência via cascata de biquad filters: passa-baixas modulado por rigidez flexural (fc em [3400, 6800] Hz), passa-altas de acoplamento de caixa acústica (fc em [70, 105] Hz), pico de ressonância de tampo e pico de corte dos médios de fundo/laterais.
+      - 4 modos de audição analítica:
+        - *Tap Tone do Tampo*: simulação de pancada percussiva no nó nodal do cavalete para aferição da frequência fundamental f0 de afinação do tampo solto.
+        - *Arpejo Caipira Cebolão*: arpejo dedilhado em Mi maior aberto com 5 notas soando a riqueza espectral da madeira selecionada.
+        - *Rasqueado Aberto de Viola*: batida rítmica completa em leque caipira com decaimento harmônico dependente do fator Q e sustain da combinação.
+        - *Comparador A/B de Madeiras*: alternância instantânea entre duas combinações distintas para percepção fina de ataque, brilho e calor harmônico.
+    - **Laudo Lutherístico Analítico & Medidores de Performance Acústica**:
+      - 4 medidores visuais com preenchimento em gradiente: Velocidade de Resposta a Transientes (%), Sustentação Harmônica / Sustain (%), Projeção e Ganho Acústico no Estradão (%) e Equilíbrio Tonal Espectral (Graves / Médios / Agudos).
+      - Tabela de especificações físicas quantitativas (f0 fundamental do tampo, rigidez flexural D, velocidade do som c, densidade média e amortecimento interno η).
+      - Parecer do Mestre Luthier com recomendações estilísticas (adequado para pagode, toada, ponteio solo ou serenata) e botão de cópia do relatório técnico formatado para a área de transferência.
+    - **Integração Plena com o Braço SVG Virtual (Modo Canhoto & Destro)**:
+      - Novo modo de projeção: `🪵 Ressonância Lutherística` (`displayMode: 'TONEWOOD'`).
+      - Visualização luminosa dos nós harmônicos naturais da escala acústica nos trastes 12 (1/2 da corda - Harmônico 1 / Oitava, âmbar dourado), 7 (1/3 da corda - Harmônico 2 / Quinta, ciano), 5 (1/4 da corda - Harmônico 3 / Dupla Oitava, esmeralda), 4 e 9 (1/5 da corda - Harmônico 4 / Terça Maior, rosa magenta).
+      - Clique interativo nos nós harmônicos reproduzindo o harmônico cristalino natural com filtragem tonal da madeira ativa.
+      - Compatibilidade nativa completa com o modo Canhoto espelhado (`isLeftHanded`) e modo Destro.
 
 - **13/11/2026 — Sessão 15** (Fase 15 Concluída):
   - **Gerador de Arranjos Polifônicos & Contraponto Caipira a Duas Violas (Polyphonic Duet & Caipira Counterpoint Studio)**:

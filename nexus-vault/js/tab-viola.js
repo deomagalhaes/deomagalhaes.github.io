@@ -2921,6 +2921,347 @@ const POLYPHONIC_ARRANGEMENTS_CATALOG = {
 };
 
 
+// =========================================================================
+// FASE 16: CONSTANTES & MODELAGEM ACÚSTICA DE MADEIRAS E RESSONÂNCIAS DE CHLADNI
+// =========================================================================
+
+const DEFAULT_TONEWOOD_STATE = {
+    topWoodId: 'spruce_abeto',
+    backSidesId: 'jacaranda_bahia',
+    thicknessId: 'balanced',
+    bracingId: 'caipira_v_brace',
+    chladniMode: 'mode_0_0',
+    excitationFreq: 110,
+    vibrationIntensity: 0.85,
+    isPlaying: false,
+    activeDemoType: null,
+    comparePresetA: 'spruce_jacaranda',
+    comparePresetB: 'araucaria_caviuna',
+    activeCompareSlot: 'A'
+};
+
+const TONEWOOD_TOPS = {
+    spruce_abeto: {
+        id: 'spruce_abeto',
+        name: 'Pinho Spruce / Abeto',
+        scientificName: 'Picea abies / Sitka',
+        origin: 'Europa Central e Alpes / América do Norte',
+        density: 440,
+        soundSpeed: 5450,
+        youngModulus: 12.2,
+        radiationRatio: 12.39,
+        qFactor: 145,
+        eqPeak: { freq: 3400, gain: 3.5, q: 1.6 },
+        highShelf: { freq: 6200, gain: 2.0 },
+        airCoupling: 1.05,
+        sustainMod: 1.15,
+        tag: 'Clássico Nobre',
+        badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        timbreDescription: 'Ataque cristalino, agudos ricos com presença límpida na requinta, excelente separação polifônica em terças e amplo headroom dinâmico.',
+        lutherieNote: 'O padrão áureo da lutheria clássica e moderna. Exige cerca de 1 a 2 anos de prática constante para "abrir" o leque sonoro pleno.'
+    },
+    cedro_canadense: {
+        id: 'cedro_canadense',
+        name: 'Cedro Canadense',
+        scientificName: 'Thuja plicata / Western Red Cedar',
+        origin: 'Noroeste Pacífico / Canadá',
+        density: 380,
+        soundSpeed: 4950,
+        youngModulus: 9.8,
+        radiationRatio: 13.03,
+        qFactor: 110,
+        eqPeak: { freq: 680, gain: 4.2, q: 1.3 },
+        highShelf: { freq: 5200, gain: -2.5 },
+        airCoupling: 1.12,
+        sustainMod: 1.08,
+        tag: 'Calor Aveludado',
+        badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+        timbreDescription: 'Doçura aveludada, médios quentes aconchegantes e resposta imediata a toques sutis de dedos, perfeito para toadas, querências e serenatas.',
+        lutherieNote: 'Nasce com timbre maduro desde a bancada do luthier. Possui maior amortecimento interno, saturando mais cedo sob palhetadas violentas de aço.'
+    },
+    araucaria_pinho_brasil: {
+        id: 'araucaria_pinho_brasil',
+        name: 'Pinho Brasileiro / Araucária',
+        scientificName: 'Araucaria angustifolia',
+        origin: 'Mata das Araucárias / Sul de Minas e Paraná',
+        density: 510,
+        soundSpeed: 4850,
+        youngModulus: 11.4,
+        radiationRatio: 9.51,
+        qFactor: 135,
+        eqPeak: { freq: 1400, gain: 4.4, q: 2.1 },
+        highShelf: { freq: 5800, gain: 0.8 },
+        airCoupling: 0.96,
+        sustainMod: 1.02,
+        tag: 'Raiz Caipira & Estradão',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        timbreDescription: 'Graves rústicos e terrosos, médios secos cortantes com punch penetrante de estradão e resposta rápida em batidas rítmicas de tampo.',
+        lutherieNote: 'Madeira matriz das autênticas violas paulistas e mineiras dos séculos XIX e XX. Estabilidade estrutural hercúlea contra a umidade sertaneja.'
+    },
+    engelmann_spruce: {
+        id: 'engelmann_spruce',
+        name: 'Pinho Engelmann',
+        scientificName: 'Picea engelmannii',
+        origin: 'Montanhas Rochosas da América do Norte',
+        density: 395,
+        soundSpeed: 5200,
+        youngModulus: 10.6,
+        radiationRatio: 13.16,
+        qFactor: 130,
+        eqPeak: { freq: 2200, gain: 2.8, q: 1.4 },
+        highShelf: { freq: 6500, gain: 1.5 },
+        airCoupling: 1.08,
+        sustainMod: 1.12,
+        tag: 'Híbrido Lírico',
+        badgeColor: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+        timbreDescription: 'Fusão admirável entre a doçura aveludada do cedro e a claridade harmônica do abeto. Ideal para concertistas que mesclam dedilhado e voz.',
+        lutherieNote: 'Menor rigidez que o Sitka, respondendo com extrema sensibilidade a toques de dedos leves e médios.'
+    }
+};
+
+const TONEWOOD_BACK_SIDES = {
+    jacaranda_bahia: {
+        id: 'jacaranda_bahia',
+        name: 'Jacarandá da Bahia',
+        scientificName: 'Dalbergia nigra / Brazilian Rosewood',
+        origin: 'Mata Atlântica da Bahia e Espírito Santo',
+        density: 880,
+        youngModulus: 14.5,
+        sustainFactor: 1.45,
+        eqLow: { freq: 108, gain: 4.2, q: 2.6 },
+        eqMid: { freq: 4800, gain: 2.8, q: 1.5 },
+        tag: 'Rainha da Lutheria',
+        badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        acousticDescription: 'Ressonância profunda como sino de bronze, graves opulentos e sustentação infinita, separando as ordens oitavadas da viola com clareza tridimensional.',
+        lutherieNote: 'A madeira mais reverenciada na história dos instrumentos de corda acústicos mundiais. Riqueza harmônica inigualável.'
+    },
+    caviuna_paulista: {
+        id: 'caviuna_paulista',
+        name: 'Caviúna / Jacarandá Paulista',
+        scientificName: 'Machaerium villosum',
+        origin: 'Cerrado e Floresta Estacional de SP e MG',
+        density: 850,
+        youngModulus: 13.2,
+        sustainFactor: 1.25,
+        eqLow: { freq: 160, gain: 2.8, q: 2.0 },
+        eqMid: { freq: 2100, gain: 2.4, q: 1.8 },
+        tag: 'Nobreza Sertaneja',
+        badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        acousticDescription: 'Timbre focado com excelente equilíbrio, médios cantantes firmes e graves enxutos sem embolar, conferindo presença firme à 2ª viola.',
+        lutherieNote: 'Madeira nobre tradicional dos melhores artesãos do interior paulista. Altíssima estabilidade mecânica.'
+    },
+    mogno_brasileiro: {
+        id: 'mogno_brasileiro',
+        name: 'Mogno Brasileiro',
+        scientificName: 'Swietenia macrophylla',
+        origin: 'Bacia Amazônica',
+        density: 580,
+        youngModulus: 10.2,
+        sustainFactor: 0.90,
+        eqLow: { freq: 240, gain: 3.5, q: 1.6 },
+        eqMid: { freq: 1200, gain: 2.5, q: 1.4 },
+        tag: 'Punch & Foco de Estúdio',
+        badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-500/40',
+        acousticDescription: 'Ataque seco e percussivo, resposta concentrada nas frequências fundamentais médias e decaimento rápido, evitando sobra sonora em pagodes velozes.',
+        lutherieNote: 'A queridinha dos engenheiros de áudio para estúdio de gravação. Não ressoa excessivamente, mantendo as semicolcheias legíveis.'
+    },
+    imbuia_sul: {
+        id: 'imbuia_sul',
+        name: 'Imbuia Nobre',
+        scientificName: 'Ocotea porosa',
+        origin: 'Florestas com Araucária do Paraná e Santa Catarina',
+        density: 680,
+        youngModulus: 11.8,
+        sustainFactor: 1.15,
+        eqLow: { freq: 180, gain: 2.2, q: 1.8 },
+        eqMid: { freq: 1600, gain: 2.2, q: 1.6 },
+        tag: 'Doçura Aveludada',
+        badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+        acousticDescription: 'Doçura melodiosa aliando o aconchego caloroso do mogno com a projeção espacial do jacarandá, ideal para toadas líricas e valsas caipiras.',
+        lutherieNote: 'Madeira de grã magnífica e aroma característico inesquecível na oficina. Excelente elasticidade.'
+    },
+    maple_flame: {
+        id: 'maple_flame',
+        name: 'Maple / Acer Flamejado',
+        scientificName: 'Acer saccharum',
+        origin: 'América do Norte e Europa',
+        density: 710,
+        youngModulus: 12.6,
+        sustainFactor: 1.05,
+        eqLow: { freq: 320, gain: 2.0, q: 1.5 },
+        eqMid: { freq: 4200, gain: 3.2, q: 1.4 },
+        tag: 'Transparência Cristalina',
+        badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+        acousticDescription: 'Linearidade acústica neutra e reflexão ultrarrápida sem coloração artificial excessiva, revelando a personalidade pura das cordas de aço.',
+        lutherieNote: 'Clássico na lutheria de arcos (violinos) e violões folk. Visual flamejado deslumbrante.'
+    }
+};
+
+const TONEWOOD_THICKNESS_OPTIONS = {
+    thin: {
+        id: 'thin',
+        thicknessMm: 2.2,
+        label: '2.2 mm (Ultra-Fino / Ressonância de Concerto)',
+        stiffnessRatio: 0.54,
+        description: 'Máxima flexibilidade do tampo, maior sensibilidade a toques leves e graves encorpados. Exige encordoamento leve (.009) para evitar fadiga estrutural.'
+    },
+    balanced: {
+        id: 'balanced',
+        thicknessMm: 2.7,
+        label: '2.7 mm (Padrão Caipira Versátil / Recomendado)',
+        stiffnessRatio: 1.00,
+        description: 'Equilíbrio áureo entre projeção dinâmica, sustentação e estabilidade mecânica. Suporta encordoamento médio (.010) com segurança.'
+    },
+    thick: {
+        id: 'thick',
+        thicknessMm: 3.2,
+        label: '3.2 mm (Robusto / Estradão & Pagode de Viola)',
+        stiffnessRatio: 1.66,
+        description: 'Alta rigidez flexural, excelente sustentação de agudos e resistência a batidas pesadas de dedeira e cordas de alta tensão (.011).'
+    }
+};
+
+const TONEWOOD_BRACING_OPTIONS = {
+    caipira_v_brace: {
+        id: 'caipira_v_brace',
+        name: 'Leque Caipira em V com Barra Harmônica Reforçada',
+        origin: 'Tradição Caipira Paulista e Mineira',
+        stiffnessMod: 1.10,
+        qFactorMod: 1.15,
+        desc: 'Desenvolvido especificamente para suportar o torque dos 5 pares de aço da viola caipira, canalizando o ataque para as terças no cavalete.'
+    },
+    torres_fan: {
+        id: 'torres_fan',
+        name: 'Leque Tradicional Espanhol (Torres 7 Varetas)',
+        origin: 'Antonio de Torres (Espanha, séc. XIX)',
+        stiffnessMod: 0.95,
+        qFactorMod: 1.05,
+        desc: 'Varejamento clássico aberto com 7 varetas radiais, proporcionando resposta homogênea e respiração lírica do tampo.'
+    },
+    x_brace_steel: {
+        id: 'x_brace_steel',
+        name: 'X-Brace Cruzado (Reforçado p/ Alta Tensão)',
+        origin: 'Martin & Co. (EUA / Adaptação Viola de Aço)',
+        stiffnessMod: 1.25,
+        qFactorMod: 1.20,
+        desc: 'Duas barras principais cruzadas sob a boca e cavalete, garantindo máxima blindagem contra empenamento de tampos sob tração pesada.'
+    },
+    radial_lattice: {
+        id: 'radial_lattice',
+        name: 'Radial Lattice Contemporâneo',
+        origin: 'Greg Smallman (Austrália / Lutheria Moderna)',
+        stiffnessMod: 1.35,
+        qFactorMod: 1.30,
+        desc: 'Malha quadriculada de alta tecnologia em fibra de carbono ou balsa/abeto, multiplicando a velocidade de radiação acústica frontal.'
+    }
+};
+
+const CHLADNI_MODES_CATALOG = {
+    mode_0_0: {
+        id: 'mode_0_0',
+        name: 'Modo (0,0) — Modo Respiratório & Helmholtz Acoplado',
+        nominalFreq: 110,
+        badge: '95–118 Hz',
+        desc: 'O tampo inteiro sobe e desce em fase com a cavidade interna de ar. As linhas nodais formam um anel oval periférico delimitando a área vibrante principal do lobo inferior.',
+        violaCoupling: 'Acoplamento com o 5º Par Canotilho (B2 = 123.5 Hz) e bordões graves.'
+    },
+    mode_1_0: {
+        id: 'mode_1_0',
+        name: 'Modo (1,0) — Dipolo Longitudinal',
+        nominalFreq: 195,
+        badge: '180–225 Hz',
+        desc: 'Os lobos superior e inferior vibram em oposição de fase. A linha nodal corta horizontalmente o tampo na altura da cintura estreita da viola.',
+        violaCoupling: 'Ressonância fundamental do 4º Par Toeira (E3 = 164.8 Hz) e 3º Par Turina (G#3 = 207.7 Hz).'
+    },
+    mode_0_1: {
+        id: 'mode_0_1',
+        name: 'Modo (0,1) — Dipolo Transversal',
+        nominalFreq: 260,
+        badge: '240–295 Hz',
+        desc: 'Os lados esquerdo e direito vibram em fases opostas. A linha nodal corre verticalmente ao longo da emenda central e dos veios longitudinais da madeira.',
+        violaCoupling: 'Excitação direta pelo 2º Par Segundinha (B3 = 246.9 Hz).'
+    },
+    mode_1_1: {
+        id: 'mode_1_1',
+        name: 'Modo (1,1) — Modo Anelar de Cavalete ("Cross Mode")',
+        nominalFreq: 380,
+        badge: '350–430 Hz',
+        desc: 'Quatro quadrantes de vibração alternada formando uma cruz ou sino invertido ao redor do cavalete de jacarandá, controlando o balanço de sustentação.',
+        violaCoupling: 'Ressonância do 1º Par Prima (E4 = 329.6 Hz) e ponteios em terças na 2ª e 4ª casa.'
+    },
+    mode_2_0: {
+        id: 'mode_2_0',
+        name: 'Modo (2,0) — Modo Superior de Requinta',
+        nominalFreq: 590,
+        badge: '520–700 Hz',
+        desc: 'Padrão com múltiplos nós transversais acima e abaixo do cavalete, responsável pelo brilho dos harmônicos superiores e sustentação das notas acima da 7ª casa.',
+        violaCoupling: 'Harmônicos naturais de 12ª casa (E5 = 659.3 Hz) e requintas cortantes de pagode.'
+    },
+    mode_free: {
+        id: 'mode_free',
+        name: 'Varredura Contínua por Frequência Livre (Hz)',
+        nominalFreq: 110,
+        badge: '80–1000 Hz',
+        desc: 'Excitação por gerador contínuo de frequência senoidal, permitindo encontrar pontos de ressonância exatos do instrumento montado.',
+        violaCoupling: 'Ajuste livre pelo slider de Hz ou botões de notas da viola.'
+    }
+};
+
+const VIOLA_RESONANCE_FREQUENCIES = [
+    { label: 'B2 (123.5 Hz)', freq: 123.5, note: 'B2', desc: '5º Par Canotilho', modeId: 'mode_0_0' },
+    { label: 'E3 (164.8 Hz)', freq: 164.8, note: 'E3', desc: '4º Par Toeira', modeId: 'mode_1_0' },
+    { label: 'G#3 (207.7 Hz)', freq: 207.7, note: 'G#3', desc: '3º Par Turina', modeId: 'mode_1_0' },
+    { label: 'B3 (246.9 Hz)', freq: 246.9, note: 'B3', desc: '2º Par Segundinha', modeId: 'mode_0_1' },
+    { label: 'E4 (329.6 Hz)', freq: 329.6, note: 'E4', desc: '1º Par Prima', modeId: 'mode_1_1' },
+    { label: 'G#4 (415.3 Hz)', freq: 415.3, note: 'G#4', desc: 'Requinta 4ª Casa', modeId: 'mode_1_1' },
+    { label: 'B4 (493.9 Hz)', freq: 493.9, note: 'B4', desc: 'Prima 7ª Casa', modeId: 'mode_2_0' },
+    { label: 'E5 (659.3 Hz)', freq: 659.3, note: 'E5', desc: '12ª Casa / Harmônico', modeId: 'mode_2_0' }
+];
+
+const TONEWOOD_PRESETS = {
+    spruce_jacaranda: {
+        id: 'spruce_jacaranda',
+        name: 'Clássico Nobre: Spruce + Jacarandá',
+        topId: 'spruce_abeto',
+        backId: 'jacaranda_bahia',
+        thicknessId: 'balanced',
+        bracingId: 'caipira_v_brace',
+        tag: 'Padrão de Concerto',
+        desc: 'Brilho cortante nas terças, sustentação como sino de bronze e projeção nobre de estradão.'
+    },
+    araucaria_caviuna: {
+        id: 'araucaria_caviuna',
+        name: 'Sertanejo Raiz: Araucária + Caviúna',
+        topId: 'araucaria_pinho_brasil',
+        backId: 'caviuna_paulista',
+        thicknessId: 'thick',
+        bracingId: 'caipira_v_brace',
+        tag: 'Autenticidade Cabocla',
+        desc: 'Graves terrosos, médios secos e penetrantes, punch vigoroso para batidas rítmicas de cururu.'
+    },
+    cedro_imbuia: {
+        id: 'cedro_imbuia',
+        name: 'Lírico Seresteiro: Cedro + Imbuia',
+        topId: 'cedro_canadense',
+        backId: 'imbuia_sul',
+        thicknessId: 'thin',
+        bracingId: 'torres_fan',
+        tag: 'Toada & Serenata',
+        desc: 'Calor aveludado, doçura harmônica aconchegante e resposta ultra-sensível a toques leves de dedos.'
+    },
+    spruce_mogno: {
+        id: 'spruce_mogno',
+        name: 'Pagode & Estúdio: Spruce + Mogno',
+        topId: 'spruce_abeto',
+        backId: 'mogno_brasileiro',
+        thicknessId: 'balanced',
+        bracingId: 'x_brace_steel',
+        tag: 'Precisão & Gravação',
+        desc: 'Ataque veloz, fundamentais focadas sem sobra de graves e articulação cirúrgica para repiques rápidos.'
+    }
+};
+
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -2959,7 +3300,8 @@ const POLYPHONIC_ARRANGEMENTS_CATALOG = {
         folia: Object.assign({}, DEFAULT_FOLIA_STATE),
         capoDuo: Object.assign({}, DEFAULT_CAPO_DUO_STATE),
         micRecognizer: Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE),
-        polyphonic: Object.assign({}, DEFAULT_POLYPHONIC_STATE)
+        polyphonic: Object.assign({}, DEFAULT_POLYPHONIC_STATE),
+        tonewood: Object.assign({}, DEFAULT_TONEWOOD_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -2989,6 +3331,7 @@ const POLYPHONIC_ARRANGEMENTS_CATALOG = {
     let activeCapoTimers = [];
     let polyphonicPlaybackTimer = null;
     let activePolyphonicTimers = [];
+    let activeTonewoodTimers = [];
     let micStream = null;
     let micSourceNode = null;
     let micFilterNode = null;
@@ -14384,6 +14727,1443 @@ function renderPolyphonyStrip(arr) {
     }).join('');
 }
 
+// =========================================================================
+// FASE 16: MÉTODOS DE SIMULAÇÃO ACÚSTICA, CHLADNI 2D E DSP LUTHERÍSTICO
+// =========================================================================
+
+const CHLADNI_PARTICLE_COUNT = 1400;
+let chladniParticles = null;
+let chladniCanvasRef = null;
+let chladniImpulse = 0;
+
+function createChladniParticles() {
+    const pts = [];
+    for (let i = 0; i < CHLADNI_PARTICLE_COUNT; i++) {
+        const nx = (Math.random() * 2 - 1) * 0.82;
+        const ny = (Math.random() * 2 - 1) * 1.15;
+        pts.push({
+            x: nx,
+            y: ny,
+            vx: (Math.random() - 0.5) * 0.002,
+            vy: (Math.random() - 0.5) * 0.002,
+            size: 1.1 + Math.random() * 1.2,
+            alpha: 0.65 + Math.random() * 0.35
+        });
+    }
+    return pts;
+}
+
+function isInsideSoundboard(nx, ny) {
+    if (ny < -1.18 || ny > 1.25) return false;
+    let maxWidth = 0.50;
+    if (ny < -0.30) {
+        const t = (ny - (-0.74)) / 0.44;
+        maxWidth = 0.68 * Math.sqrt(Math.max(0, 1 - t * t * 0.8));
+    } else if (ny <= 0.15) {
+        const t = (ny - (-0.08)) / 0.23;
+        maxWidth = 0.48 + 0.08 * (t * t);
+    } else {
+        const t = (ny - 0.70) / 0.55;
+        maxWidth = 0.84 * Math.sqrt(Math.max(0, 1 - t * t * 0.9));
+    }
+
+    if (Math.abs(nx) > maxWidth) return false;
+
+    const soundholeDistSq = nx * nx + Math.pow(ny - (-0.15), 2);
+    if (soundholeDistSq < 0.048) return false;
+
+    return true;
+}
+
+function evaluateChladniNodalField(nx, ny, modeId, freqHz, rep) {
+    const x = nx;
+    const y = ny;
+
+    switch (modeId) {
+        case 'mode_0_0': {
+            const r = Math.sqrt(x * x * 1.4 + Math.pow(y - 0.55, 2));
+            return Math.cos(r * 2.8) - 0.35;
+        }
+        case 'mode_1_0': {
+            return Math.sin((y - 0.05) * 3.1) * Math.cos(x * 1.4);
+        }
+        case 'mode_0_1': {
+            return Math.sin(x * 3.8) * Math.cos(y * 1.6);
+        }
+        case 'mode_1_1': {
+            const term1 = Math.cos(x * 3.2) * Math.cos((y - 0.5) * 2.8);
+            const term2 = Math.cos(x * 1.8) * Math.sin(y * 2.4);
+            return term1 - term2;
+        }
+        case 'mode_2_0': {
+            return Math.cos((y - 0.2) * 5.2) * Math.cos(x * 2.2) - 0.22;
+        }
+        case 'mode_free':
+        default: {
+            const f = freqHz || 110;
+            const w00 = Math.exp(-Math.pow(f - rep.f0, 2) / 3200);
+            const w10 = Math.exp(-Math.pow(f - rep.f10, 2) / 3800);
+            const w01 = Math.exp(-Math.pow(f - rep.f01, 2) / 4500);
+            const w11 = Math.exp(-Math.pow(f - rep.f11, 2) / 6000);
+            const w20 = Math.exp(-Math.pow(f - rep.f20, 2) / 9000);
+
+            let sumW = w00 + w10 + w01 + w11 + w20;
+            if (sumW < 0.001) sumW = 0.001;
+
+            const psi00 = Math.cos(Math.sqrt(x * x * 1.4 + Math.pow(y - 0.55, 2)) * 2.8) - 0.35;
+            const psi10 = Math.sin((y - 0.05) * 3.1) * Math.cos(x * 1.4);
+            const psi01 = Math.sin(x * 3.8) * Math.cos(y * 1.6);
+            const psi11 = Math.cos(x * 3.2) * Math.cos((y - 0.5) * 2.8) - Math.cos(x * 1.8) * Math.sin(y * 2.4);
+            const psi20 = Math.cos((y - 0.2) * 5.2) * Math.cos(x * 2.2) - 0.22;
+
+            return (w00 * psi00 + w10 * psi10 + w01 * psi01 + w11 * psi11 + w20 * psi20) / sumW;
+        }
+    }
+}
+
+function getTonewoodAcousticReport() {
+    const tonewood = state.tonewood;
+    const top = TONEWOOD_TOPS[tonewood.topWoodId] || TONEWOOD_TOPS.spruce_abeto;
+    const back = TONEWOOD_BACK_SIDES[tonewood.backSidesId] || TONEWOOD_BACK_SIDES.jacaranda_bahia;
+    const thk = TONEWOOD_THICKNESS_OPTIONS[tonewood.thicknessId] || TONEWOOD_THICKNESS_OPTIONS.balanced;
+    const brace = TONEWOOD_BRACING_OPTIONS[tonewood.bracingId] || TONEWOOD_BRACING_OPTIONS.caipira_v_brace;
+
+    const hMeter = thk.thicknessMm * 1e-3;
+    const ePa = top.youngModulus * 1e9;
+    const nuSq = 0.09;
+    const rigidityD = (ePa * Math.pow(hMeter, 3)) / (12 * (1 - nuSq));
+
+    const L = 0.45;
+    const W = 0.31;
+    const rho = top.density;
+    const geomFactor = (1 / (L * L)) + (1 / (W * W));
+    const baseFreq = (Math.PI / 2) * Math.sqrt(rigidityD / (rho * hMeter)) * geomFactor * 0.115;
+    const f0 = Math.round(baseFreq * brace.stiffnessMod * top.airCoupling);
+
+    const f10 = Math.round(f0 * 1.78);
+    const f01 = Math.round(f0 * 2.36);
+    const f11 = Math.round(f0 * 3.45);
+    const f20 = Math.round(f0 * 5.35);
+
+    const rawProj = (top.radiationRatio / 13.5) * 55 + (back.youngModulus / 15) * 30 + (thk.thicknessMm / 3.0) * 15;
+    const projectionIndex = Math.min(99, Math.max(60, Math.round(rawProj)));
+
+    const rawWarmth = (180 - top.qFactor) * 0.55 + (back.sustainFactor * 25) + (3.5 - thk.thicknessMm) * 12;
+    const warmthIndex = Math.min(98, Math.max(50, Math.round(rawWarmth)));
+
+    const attackMs = ((6000 - top.soundSpeed) / 1000 * 2.2 + (thk.thicknessMm * 0.8)).toFixed(1);
+    const sustainSec = (2.2 * back.sustainFactor * top.sustainMod * (thk.thicknessMm / 2.7)).toFixed(2);
+
+    let recommendedGauge = '.010 Média (Tensão ~58 kgf)';
+    let tensionSafety = 'Segurança Lutherística: Ótima';
+    let tensionBadgeColor = 'text-emerald-400';
+    if (tonewood.thicknessId === 'thin') {
+        recommendedGauge = '.009 Leve (Tensão ~50 kgf)';
+        tensionSafety = 'Atenção: Tampo ultra-fino, evitar encordoamento pesado';
+        tensionBadgeColor = 'text-amber-400';
+    } else if (tonewood.thicknessId === 'thick') {
+        recommendedGauge = '.011 Pesada ou .010 Média (Tensão ~64 kgf)';
+        tensionSafety = 'Tampo robusto: Suporta alta tração e batidas fortes';
+        tensionBadgeColor = 'text-cyan-400';
+    }
+
+    let opinion = '';
+    if (top.id === 'spruce_abeto' && back.id === 'jacaranda_bahia') {
+        opinion = 'Combinação monumental consagrada pela história da lutheria. O Pinho Spruce confere separação cirúrgica em terças e sextas nos pares agudos, enquanto o Jacarandá da Bahia fornece sustentação como sino de bronze e graves que preenchem a sala sem distorcer. Ideal para solistas virtuosos e modas clássicas.';
+    } else if (top.id === 'araucaria_pinho_brasil') {
+        opinion = 'A alma genuína da música caipira de raiz do cerrado e sul de Minas. O tampo de Araucária entrega um punch médio terroso e seco, com transientes rústicos que cortam o estradão sem necessidade de microfone. Casamento perfeito com Caviúna para ritmos acelerados de Cururu e Pagode Caipira.';
+    } else if (top.id === 'cedro_canadense') {
+        opinion = 'Timbre envolvente e intimista. O Cedro Canadense dissipa os harmônicos com calor aveludado imediato, respondendo ao toque mais suave da ponta dos dedos. Casado com Imbuia ou Jacarandá, produz uma atmosfera comovente para toadas pantaneiras, querências líricas e causos noturnos.';
+    } else if (back.id === 'mogno_brasileiro') {
+        opinion = 'Configuração cirúrgica para gravação e palhetadas rápidas. O Mogno dissipa rapidamente os graves desnecessários, concentrando a energia acústica no registro fundamental médio. Elimina embolamento em semicolcheias de Pagode de Viola.';
+    } else {
+        opinion = `Configuração balanceada e expressiva reunindo ${top.name} no tampo e ${back.name} na caixa harmônica. Rigidez flexural calibrada em ${rigidityD.toFixed(1)} N·m, com excelente balanço entre projeção frontal e sustentação natural.`;
+    }
+
+    return {
+        top,
+        back,
+        thk,
+        brace,
+        rigidityD,
+        f0,
+        f10,
+        f01,
+        f11,
+        f20,
+        projectionIndex,
+        warmthIndex,
+        attackMs,
+        sustainSec,
+        recommendedGauge,
+        tensionSafety,
+        tensionBadgeColor,
+        opinion
+    };
+}
+
+function drawSoundboardSilhouette(ctx, cx, cy, scale, rep) {
+    const top = rep.top;
+    ctx.save();
+
+    let woodGrad1 = '#281a10';
+    let woodGrad2 = '#170f09';
+    let grainColor = 'rgba(217, 119, 6, 0.08)';
+
+    if (top.id === 'cedro_canadense') {
+        woodGrad1 = '#381c14';
+        woodGrad2 = '#200e0a';
+        grainColor = 'rgba(244, 63, 94, 0.07)';
+    } else if (top.id === 'araucaria_pinho_brasil') {
+        woodGrad1 = '#2c2212';
+        woodGrad2 = '#19130a';
+        grainColor = 'rgba(16, 185, 129, 0.07)';
+    } else if (top.id === 'engelmann_spruce') {
+        woodGrad1 = '#262018';
+        woodGrad2 = '#16120d';
+        grainColor = 'rgba(6, 182, 212, 0.07)';
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 1.18 * scale);
+
+    ctx.bezierCurveTo(cx + 0.45 * scale, cy - 1.18 * scale, cx + 0.70 * scale, cy - 0.95 * scale, cx + 0.68 * scale, cy - 0.65 * scale);
+    ctx.bezierCurveTo(cx + 0.66 * scale, cy - 0.42 * scale, cx + 0.54 * scale, cy - 0.22 * scale, cx + 0.48 * scale, cy - 0.08 * scale);
+
+    ctx.bezierCurveTo(cx + 0.44 * scale, cy + 0.04 * scale, cx + 0.48 * scale, cy + 0.16 * scale, cx + 0.58 * scale, cy + 0.28 * scale);
+
+    ctx.bezierCurveTo(cx + 0.84 * scale, cy + 0.46 * scale, cx + 0.86 * scale, cy + 0.88 * scale, cx + 0.70 * scale, cy + 1.12 * scale);
+    ctx.bezierCurveTo(cx + 0.52 * scale, cy + 1.25 * scale, cx + 0.25 * scale, cy + 1.25 * scale, cx, cy + 1.25 * scale);
+
+    ctx.bezierCurveTo(cx - 0.25 * scale, cy + 1.25 * scale, cx - 0.52 * scale, cy + 1.25 * scale, cx - 0.70 * scale, cy + 1.12 * scale);
+    ctx.bezierCurveTo(cx - 0.86 * scale, cy + 0.88 * scale, cx - 0.84 * scale, cy + 0.46 * scale, cx - 0.58 * scale, cy + 0.28 * scale);
+
+    ctx.bezierCurveTo(cx - 0.48 * scale, cy + 0.16 * scale, cx - 0.44 * scale, cy + 0.04 * scale, cx - 0.48 * scale, cy - 0.08 * scale);
+
+    ctx.bezierCurveTo(cx - 0.54 * scale, cy - 0.22 * scale, cx - 0.66 * scale, cy - 0.42 * scale, cx - 0.68 * scale, cy - 0.65 * scale);
+    ctx.bezierCurveTo(cx - 0.70 * scale, cy - 0.95 * scale, cx - 0.45 * scale, cy - 1.18 * scale, cx, cy - 1.18 * scale);
+
+    ctx.closePath();
+
+    const bgGrad = ctx.createRadialGradient(cx, cy, scale * 0.2, cx, cy, scale * 1.2);
+    bgGrad.addColorStop(0, woodGrad1);
+    bgGrad.addColorStop(1, woodGrad2);
+    ctx.fillStyle = bgGrad;
+    ctx.fill();
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#334155';
+    ctx.stroke();
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#d97706';
+    ctx.stroke();
+
+    ctx.strokeStyle = grainColor;
+    ctx.lineWidth = 1;
+    for (let gx = -0.75; gx <= 0.75; gx += 0.035) {
+        ctx.beginPath();
+        ctx.moveTo(cx + gx * scale, cy - 1.15 * scale);
+        ctx.lineTo(cx + gx * scale, cy + 1.22 * scale);
+        ctx.stroke();
+    }
+
+    ctx.restore();
+}
+
+function drawSoundholeAndBridge(ctx, cx, cy, scale, rep) {
+    ctx.save();
+
+    const holeX = cx;
+    const holeY = cy - 0.15 * scale;
+    const holeR = 0.22 * scale;
+
+    ctx.beginPath();
+    ctx.arc(holeX, holeY, holeR + 14, 0, Math.PI * 2);
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#b45309';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(holeX, holeY, holeR + 8, 0, Math.PI * 2);
+    ctx.setLineDash([4, 3]);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#fef08a';
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+    ctx.arc(holeX, holeY, holeR + 2, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#1e293b';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(holeX, holeY, holeR, 0, Math.PI * 2);
+    const holeGrad = ctx.createRadialGradient(holeX, holeY, 0, holeX, holeY, holeR);
+    holeGrad.addColorStop(0, '#030712');
+    holeGrad.addColorStop(1, '#090d16');
+    ctx.fillStyle = holeGrad;
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#0f172a';
+    ctx.stroke();
+
+    const brX = cx;
+    const brY = cy + 0.70 * scale;
+    const brW = 0.50 * scale;
+    const brH = 0.12 * scale;
+
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(brX - brW / 2, brY - brH / 2, brW, brH, 6);
+    } else {
+        ctx.rect(brX - brW / 2, brY - brH / 2, brW, brH);
+    }
+    const bridgeGrad = ctx.createLinearGradient(0, brY - brH / 2, 0, brY + brH / 2);
+    bridgeGrad.addColorStop(0, '#2d180d');
+    bridgeGrad.addColorStop(0.5, '#190d07');
+    bridgeGrad.addColorStop(1, '#2d180d');
+    ctx.fillStyle = bridgeGrad;
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#d97706';
+    ctx.stroke();
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(brX - brW * 0.38, brY - brH * 0.28, brW * 0.76, 3.5);
+
+    const pinSpacing = (brW * 0.65) / 9;
+    const startPinX = brX - (brW * 0.65) / 2;
+    for (let p = 0; p < 10; p++) {
+        const px = startPinX + p * pinSpacing;
+        const py = brY + brH * 0.18;
+        ctx.beginPath();
+        ctx.arc(px, py, 2.0, 0, Math.PI * 2);
+        ctx.fillStyle = '#030712';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(px, py, 0.8, 0, Math.PI * 2);
+        ctx.fillStyle = '#fef08a';
+        ctx.fill();
+    }
+
+    ctx.restore();
+}
+
+function updateAndDrawChladni(canvas, rep) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const scale = Math.min(w * 0.46, h * 0.38);
+
+    ctx.fillStyle = '#080d1a';
+    ctx.fillRect(0, 0, w, h);
+
+    drawSoundboardSilhouette(ctx, cx, cy, scale, rep);
+
+    if (!chladniParticles || chladniParticles.length === 0) {
+        chladniParticles = createChladniParticles();
+    }
+
+    const tonewood = state.tonewood;
+    const modeId = tonewood.chladniMode;
+    const freqHz = tonewood.excitationFreq;
+    const intensity = tonewood.vibrationIntensity + chladniImpulse;
+
+    if (chladniImpulse > 0.01) {
+        chladniImpulse *= 0.94;
+    } else {
+        chladniImpulse = 0;
+    }
+
+    const delta = 0.015;
+    ctx.fillStyle = '#fef08a';
+
+    chladniParticles.forEach((p) => {
+        if (!isInsideSoundboard(p.x, p.y)) {
+            p.x = (Math.random() * 2 - 1) * 0.75;
+            p.y = (Math.random() * 2 - 1) * 1.05;
+            p.vx = 0;
+            p.vy = 0;
+            return;
+        }
+
+        const psi = evaluateChladniNodalField(p.x, p.y, modeId, freqHz, rep);
+        const psiRight = evaluateChladniNodalField(p.x + delta, p.y, modeId, freqHz, rep);
+        const psiDown = evaluateChladniNodalField(p.x, p.y + delta, modeId, freqHz, rep);
+
+        const gradX = (Math.abs(psiRight) - Math.abs(psi)) / delta;
+        const gradY = (Math.abs(psiDown) - Math.abs(psi)) / delta;
+
+        const forceMagnitude = Math.abs(psi) * intensity * 0.0018;
+        p.vx -= gradX * forceMagnitude;
+        p.vy -= gradY * forceMagnitude;
+
+        if (intensity > 0.15) {
+            p.vx += (Math.random() - 0.5) * intensity * 0.0012;
+            p.vy += (Math.random() - 0.5) * intensity * 0.0012;
+        }
+
+        p.vx *= 0.86;
+        p.vy *= 0.86;
+
+        const nextX = p.x + p.vx;
+        const nextY = p.y + p.vy;
+
+        if (isInsideSoundboard(nextX, nextY)) {
+            p.x = nextX;
+            p.y = nextY;
+        } else {
+            p.vx = -p.vx * 0.5;
+            p.vy = -p.vy * 0.5;
+        }
+
+        const px = cx + p.x * scale;
+        const py = cy + p.y * scale;
+
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    ctx.globalAlpha = 1.0;
+
+    drawSoundholeAndBridge(ctx, cx, cy, scale, rep);
+}
+
+function startChladniLoop() {
+    if (chladniRafId) {
+        cancelAnimationFrame(chladniRafId);
+        chladniRafId = null;
+    }
+    function loop() {
+        const canvas = document.getElementById('viola-chladni-canvas');
+        if (!canvas) {
+            chladniRafId = null;
+            return;
+        }
+        chladniCanvasRef = canvas;
+        const rep = getTonewoodAcousticReport();
+        updateAndDrawChladni(canvas, rep);
+        chladniRafId = requestAnimationFrame(loop);
+    }
+    chladniRafId = requestAnimationFrame(loop);
+}
+
+function stopTonewoodAudio() {
+    if (activeTonewoodTimers && activeTonewoodTimers.length > 0) {
+        activeTonewoodTimers.forEach((t) => clearTimeout(t));
+        activeTonewoodTimers = [];
+    }
+    state.tonewood.isPlaying = false;
+    state.tonewood.activeDemoType = null;
+    updateTonewoodPlayButtons();
+}
+
+function playTonewoodAudioNote(freq, startTimeOffset = 0, duration = 1.9, options = {}) {
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const rep = getTonewoodAcousticReport();
+    const top = rep.top;
+    const back = rep.back;
+
+    const now = ctx.currentTime + Math.max(0, startTimeOffset);
+    const gainLevel = options.gainLevel || 0.22;
+    const detuneCents = options.detuneCents || 0;
+
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'triangle';
+    osc2.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(freq, now);
+    osc2.frequency.setValueAtTime(freq, now);
+    osc1.detune.setValueAtTime(detuneCents, now);
+    osc2.detune.setValueAtTime(detuneCents + 1.5, now);
+
+    const g1 = ctx.createGain();
+    const g2 = ctx.createGain();
+    g1.gain.value = 0.70;
+    g2.gain.value = 0.30;
+
+    const topEq = ctx.createBiquadFilter();
+    topEq.type = 'peaking';
+    topEq.frequency.setValueAtTime(top.eqPeak.freq, now);
+    topEq.gain.setValueAtTime(top.eqPeak.gain, now);
+    topEq.Q.setValueAtTime(top.eqPeak.q, now);
+
+    const backEq = ctx.createBiquadFilter();
+    backEq.type = 'peaking';
+    backEq.frequency.setValueAtTime(back.eqLow.freq, now);
+    backEq.gain.setValueAtTime(back.eqLow.gain, now);
+    backEq.Q.setValueAtTime(back.eqLow.q, now);
+
+    const bodyFilter = ctx.createBiquadFilter();
+    bodyFilter.type = 'lowpass';
+    const cutoffBase = Math.min(6200, freq * 7.0);
+    bodyFilter.frequency.setValueAtTime(cutoffBase, now);
+    bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(380, freq * 1.6), now + duration * 0.8);
+    bodyFilter.Q.setValueAtTime(1.2 + (top.qFactor / 180), now);
+
+    const masterGain = ctx.createGain();
+    const attackTime = Math.max(0.003, parseFloat(rep.attackMs) * 0.001);
+    const effDuration = duration * back.sustainFactor * top.sustainMod;
+
+    masterGain.gain.setValueAtTime(0.0001, now);
+    masterGain.gain.linearRampToValueAtTime(gainLevel, now + attackTime);
+    masterGain.gain.exponentialRampToValueAtTime(gainLevel * 0.45, now + attackTime + 0.16);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + effDuration);
+
+    osc1.connect(g1);
+    osc2.connect(g2);
+    g1.connect(topEq);
+    g2.connect(topEq);
+    topEq.connect(backEq);
+    backEq.connect(bodyFilter);
+    bodyFilter.connect(masterGain);
+    masterGain.connect(ctx.destination);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + effDuration + 0.05);
+    osc2.stop(now + effDuration + 0.05);
+
+    const delayMs = startTimeOffset * 1000;
+    const timer = setTimeout(() => {
+        chladniImpulse = Math.min(1.4, chladniImpulse + 0.55);
+        state.tonewood.excitationFreq = Math.round(freq);
+        const freqSlider = document.getElementById('viola-tonewood-freq-slider');
+        if (freqSlider) freqSlider.value = String(state.tonewood.excitationFreq);
+        const freqVal = document.getElementById('viola-tonewood-freq-val');
+        if (freqVal) freqVal.textContent = `${state.tonewood.excitationFreq} Hz`;
+    }, delayMs);
+    activeTonewoodTimers.push(timer);
+}
+
+function playChladniTapTone() {
+    stopTonewoodAudio();
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const rep = getTonewoodAcousticReport();
+    const now = ctx.currentTime;
+    state.tonewood.isPlaying = true;
+    state.tonewood.activeDemoType = 'tap';
+
+    const oscClick = ctx.createOscillator();
+    const gainClick = ctx.createGain();
+    oscClick.type = 'triangle';
+    oscClick.frequency.setValueAtTime(145, now);
+    oscClick.frequency.exponentialRampToValueAtTime(42, now + 0.045);
+    gainClick.gain.setValueAtTime(0.40, now);
+    gainClick.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+    oscClick.connect(gainClick);
+    gainClick.connect(ctx.destination);
+    oscClick.start(now);
+    oscClick.stop(now + 0.05);
+
+    const bufferSize = Math.floor(ctx.sampleRate * 0.65);
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+    }
+    const whiteNoise = ctx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+
+    const bp0 = ctx.createBiquadFilter();
+    bp0.type = 'bandpass';
+    bp0.frequency.setValueAtTime(rep.f0, now);
+    bp0.Q.setValueAtTime(16 + (rep.top.qFactor / 10), now);
+
+    const bp10 = ctx.createBiquadFilter();
+    bp10.type = 'bandpass';
+    bp10.frequency.setValueAtTime(rep.f10, now);
+    bp10.Q.setValueAtTime(22, now);
+
+    const bp01 = ctx.createBiquadFilter();
+    bp01.type = 'bandpass';
+    bp01.frequency.setValueAtTime(rep.f01, now);
+    bp01.Q.setValueAtTime(20, now);
+
+    const tapGain = ctx.createGain();
+    const tapDecay = 0.55 * rep.back.sustainFactor;
+    tapGain.gain.setValueAtTime(0.48, now);
+    tapGain.gain.exponentialRampToValueAtTime(0.0001, now + tapDecay);
+
+    whiteNoise.connect(bp0);
+    whiteNoise.connect(bp10);
+    whiteNoise.connect(bp01);
+    bp0.connect(tapGain);
+    bp10.connect(tapGain);
+    bp01.connect(tapGain);
+    tapGain.connect(ctx.destination);
+
+    whiteNoise.start(now);
+    whiteNoise.stop(now + tapDecay + 0.05);
+
+    chladniImpulse = 1.35;
+    state.tonewood.excitationFreq = rep.f0;
+    const freqSlider = document.getElementById('viola-tonewood-freq-slider');
+    if (freqSlider) freqSlider.value = String(rep.f0);
+    const freqVal = document.getElementById('viola-tonewood-freq-val');
+    if (freqVal) freqVal.textContent = `${rep.f0} Hz`;
+
+    const endTimer = setTimeout(() => {
+        state.tonewood.isPlaying = false;
+        state.tonewood.activeDemoType = null;
+        updateTonewoodPlayButtons();
+    }, tapDecay * 1000);
+    activeTonewoodTimers.push(endTimer);
+    updateTonewoodPlayButtons();
+}
+
+function playTonewoodArpeggioInner() {
+    const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS['viola_cebolao_e'];
+    const courses = inst.courses;
+
+    courses.forEach((c, cIdx) => {
+        const offsetSec = cIdx * 0.18;
+        const baseMidi = c.midi[0];
+        playTonewoodAudioNote(midiToFreq(baseMidi), offsetSec, 1.9, { gainLevel: 0.22 });
+        if (inst.isPaired && c.midi.length === 2) {
+            playTonewoodAudioNote(midiToFreq(c.midi[1]), offsetSec + 0.012, 1.8, { gainLevel: 0.17, detuneCents: 1.8 });
+        }
+    });
+
+    const strumOffset = courses.length * 0.18 + 0.25;
+    courses.forEach((c, cIdx) => {
+        const microDelay = strumOffset + cIdx * 0.015;
+        const baseMidi = c.midi[0];
+        playTonewoodAudioNote(midiToFreq(baseMidi), microDelay, 2.2, { gainLevel: 0.16 });
+        if (inst.isPaired && c.midi.length === 2) {
+            playTonewoodAudioNote(midiToFreq(c.midi[1]), microDelay + 0.008, 2.0, { gainLevel: 0.14, detuneCents: 1.8 });
+        }
+    });
+}
+
+function playTonewoodArpeggio() {
+    stopTonewoodAudio();
+    state.tonewood.isPlaying = true;
+    state.tonewood.activeDemoType = 'arpeggio';
+    updateTonewoodPlayButtons();
+
+    playTonewoodArpeggioInner();
+
+    const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS['viola_cebolao_e'];
+    const totalDurationMs = (inst.courses.length * 0.18 + 0.25 + 2.4) * 1000;
+
+    const timer = setTimeout(() => {
+        state.tonewood.isPlaying = false;
+        state.tonewood.activeDemoType = null;
+        updateTonewoodPlayButtons();
+    }, totalDurationMs);
+    activeTonewoodTimers.push(timer);
+}
+
+function playTonewoodRasqueado() {
+    stopTonewoodAudio();
+    state.tonewood.isPlaying = true;
+    state.tonewood.activeDemoType = 'rasqueado';
+    updateTonewoodPlayButtons();
+
+    const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS['viola_cebolao_e'];
+    const courses = inst.courses;
+
+    // Batida no tampo inicial
+    playWoodTap(0, 0.75);
+
+    // Rasqueado rápido descendente
+    courses.forEach((c, cIdx) => {
+        const delay = 0.05 + cIdx * 0.014;
+        const baseMidi = c.midi[0];
+        playTonewoodAudioNote(midiToFreq(baseMidi), delay, 2.5, { gainLevel: 0.24 });
+        if (inst.isPaired && c.midi.length === 2) {
+            playTonewoodAudioNote(midiToFreq(c.midi[1]), delay + 0.008, 2.2, { gainLevel: 0.18, detuneCents: 2.0 });
+        }
+    });
+
+    const timer = setTimeout(() => {
+        state.tonewood.isPlaying = false;
+        state.tonewood.activeDemoType = null;
+        updateTonewoodPlayButtons();
+    }, 2600);
+    activeTonewoodTimers.push(timer);
+}
+
+function playTonewoodCompareAB() {
+    stopTonewoodAudio();
+    const presetA = TONEWOOD_PRESETS[state.tonewood.comparePresetA] || TONEWOOD_PRESETS.spruce_jacaranda;
+    const presetB = TONEWOOD_PRESETS[state.tonewood.comparePresetB] || TONEWOOD_PRESETS.araucaria_caviuna;
+
+    state.tonewood.isPlaying = true;
+    state.tonewood.activeDemoType = 'compare';
+    updateTonewoodPlayButtons();
+
+    state.tonewood.activeCompareSlot = 'A';
+    state.tonewood.topWoodId = presetA.topId;
+    state.tonewood.backSidesId = presetA.backId;
+    state.tonewood.thicknessId = presetA.thicknessId;
+    state.tonewood.bracingId = presetA.bracingId;
+    saveViolaState();
+    renderTonewoodSection();
+
+    playTonewoodArpeggioInner();
+
+    const timerB = setTimeout(() => {
+        state.tonewood.activeCompareSlot = 'B';
+        state.tonewood.topWoodId = presetB.topId;
+        state.tonewood.backSidesId = presetB.backId;
+        state.tonewood.thicknessId = presetB.thicknessId;
+        state.tonewood.bracingId = presetB.bracingId;
+        saveViolaState();
+        renderTonewoodSection();
+
+        playTonewoodArpeggioInner();
+
+        const finishTimer = setTimeout(() => {
+            state.tonewood.isPlaying = false;
+            state.tonewood.activeDemoType = null;
+            updateTonewoodPlayButtons();
+        }, 2200);
+        activeTonewoodTimers.push(finishTimer);
+    }, 2200);
+    activeTonewoodTimers.push(timerB);
+}
+
+function playTonewoodHarmonicOrNote(courseIdx, fret) {
+    const inst = INSTRUMENTS[state.instrumentId];
+    if (!inst || !inst.courses || !inst.courses[courseIdx]) return;
+    const course = inst.courses[courseIdx];
+    const baseMidi = course.midi[0];
+
+    let isHarmonic = false;
+    let harmFreq = 0;
+    const fundamentalFreq = midiToFreq(baseMidi);
+
+    if (fret === 12) {
+        isHarmonic = true;
+        harmFreq = fundamentalFreq * 2;
+    } else if (fret === 7) {
+        isHarmonic = true;
+        harmFreq = fundamentalFreq * 3;
+    } else if (fret === 5) {
+        isHarmonic = true;
+        harmFreq = fundamentalFreq * 4;
+    } else if (fret === 4 || fret === 9) {
+        isHarmonic = true;
+        harmFreq = fundamentalFreq * 5;
+    }
+
+    if (isHarmonic) {
+        playTonewoodAudioNote(harmFreq, 0, 2.4, { gainLevel: 0.28, detuneCents: 0 });
+        if (inst.isPaired && course.midi.length === 2 && course.octaved) {
+            const cantadeiraBase = course.midi[1];
+            const cantadeiraHarm = midiToFreq(cantadeiraBase) * (fret === 12 ? 2 : (fret === 7 ? 3 : 2));
+            playTonewoodAudioNote(cantadeiraHarm, 0.015, 2.0, { gainLevel: 0.16, detuneCents: 1.5 });
+        }
+    } else {
+        const noteMidi = baseMidi + fret;
+        playTonewoodAudioNote(midiToFreq(noteMidi), 0, 1.9, { gainLevel: 0.22 });
+        if (inst.isPaired && course.midi.length === 2) {
+            const cantMidi = course.midi[1] + fret;
+            playTonewoodAudioNote(midiToFreq(cantMidi), 0.012, 1.8, { gainLevel: 0.18, detuneCents: 1.8 });
+        }
+    }
+}
+
+function updateTonewoodPlayButtons() {
+    const btnTap = document.getElementById('btn-viola-tonewood-tap');
+    const btnArp = document.getElementById('btn-viola-tonewood-arpeggio');
+    const btnRasq = document.getElementById('btn-viola-tonewood-rasqueado');
+    const btnComp = document.getElementById('btn-viola-tonewood-compare');
+    const btnStop = document.getElementById('btn-viola-tonewood-stop');
+
+    const isPlaying = state.tonewood.isPlaying;
+    const demo = state.tonewood.activeDemoType;
+
+    if (btnTap) {
+        btnTap.className = (isPlaying && demo === 'tap')
+            ? 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-950/40'
+            : 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition';
+    }
+    if (btnArp) {
+        btnArp.className = (isPlaying && demo === 'arpeggio')
+            ? 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-950/40'
+            : 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 transition';
+    }
+    if (btnRasq) {
+        btnRasq.className = (isPlaying && demo === 'rasqueado')
+            ? 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-cyan-950/40'
+            : 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/30 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition';
+    }
+    if (btnComp) {
+        btnComp.className = (isPlaying && demo === 'compare')
+            ? 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-950/40'
+            : 'min-h-[40px] px-3.5 py-1.5 rounded-lg bg-indigo-600/15 hover:bg-indigo-600/25 border border-indigo-500/30 text-indigo-300 text-xs font-semibold flex items-center gap-1.5 transition';
+    }
+    if (btnStop) {
+        btnStop.className = isPlaying
+            ? 'min-h-[40px] px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-semibold flex items-center gap-1.5 transition'
+            : 'min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 text-xs font-semibold flex items-center gap-1.5 transition opacity-60';
+    }
+}
+
+function copyTonewoodReport() {
+    const rep = getTonewoodAcousticReport();
+    let text = `========================================================================\n`;
+    text += `NEXUS VAULT — ESTÚDIO DE VIOLA CAIPIRA & VIOLÃO\n`;
+    text += `FICHA TÉCNICA LUTHERÍSTICA DE MADEIRAS & RESSONÂNCIAS (FASE 16)\n`;
+    text += `========================================================================\n\n`;
+
+    text += `CONFIGURAÇÃO SELECIONADA:\n`;
+    text += `• Madeira do Tampo: ${rep.top.name} (${rep.top.scientificName}) — Origem: ${rep.top.origin}\n`;
+    text += `• Madeira do Fundo/Laterais: ${rep.back.name} (${rep.back.scientificName})\n`;
+    text += `• Espessura do Tampo: ${rep.thk.label}\n`;
+    text += `• Arquitetura do Leque Harmônico: ${rep.brace.name}\n\n`;
+
+    text += `------------------------------------------------------------------------\n`;
+    text += `PROPRIEDADES FÍSICO-ACÚSTICAS CALCULADAS:\n`;
+    text += `• Densidade do Tampo (ρ): ${rep.top.density} kg/m³\n`;
+    text += `• Velocidade Longitudinal do Som (c): ${rep.top.soundSpeed} m/s\n`;
+    text += `• Módulo de Elasticidade de Young (E): ${rep.top.youngModulus} GPa\n`;
+    text += `• Coeficiente de Radiação Acústica (R = c/ρ): ${rep.top.radiationRatio} m⁴/(kg·s)\n`;
+    text += `• Rigidez Flexural do Tampo (D): ${rep.rigidityD.toFixed(1)} N·m\n`;
+    text += `• Frequência Fundamental do Tampo (f₀ Helmholtz): ${rep.f0} Hz\n`;
+    text += `• Frequências Modais Estimadas de Chladni: f(1,0)=${rep.f10} Hz | f(0,1)=${rep.f01} Hz | f(1,1)=${rep.f11} Hz | f(2,0)=${rep.f20} Hz\n\n`;
+
+    text += `------------------------------------------------------------------------\n`;
+    text += `DIAGNÓSTICO ACÚSTICO & DESEMPENHO NO ESTRADÃO:\n`;
+    text += `• Índice de Projeção no Estradão: ${rep.projectionIndex}%\n`;
+    text += `• Calor Harmônico & Aconchego: ${rep.warmthIndex}%\n`;
+    text += `• Resposta a Transientes (Ataque): ${rep.attackMs} ms\n`;
+    text += `• Tempo Médio de Sustentação ("Sustain"): ${rep.sustainSec} s\n`;
+    text += `• Calibre Recomendado de Cordas: ${rep.recommendedGauge}\n`;
+    text += `• Diagnóstico Estrutural: ${rep.tensionSafety}\n\n`;
+
+    text += `------------------------------------------------------------------------\n`;
+    text += `PARECER TÉCNICO DO MESTRE LUTHIER:\n${rep.opinion}\n\n`;
+    text += `Laudo gerado em ${new Date().toLocaleDateString('pt-BR')} pelo Nexus Vault Tab 3 (Viola Cebolão & Violão).`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('btn-viola-tonewood-copy-report');
+            if (btn) {
+                const oldHtml = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i><span class="text-emerald-400">Ficha Copiada com Sucesso!</span>';
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = oldHtml;
+                    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                }, 2200);
+            }
+        });
+    }
+}
+
+function renderTonewoodSection() {
+    const container = document.getElementById('viola-tonewood-container');
+    if (!container) return;
+
+    const tonewood = state.tonewood;
+    const rep = getTonewoodAcousticReport();
+
+    const html = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 sm:p-5 space-y-4">
+            <!-- Cabeçalho Principal -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Simulador Acústico de Madeiras &amp; Ressonâncias Lutherísticas</h3>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Fase 16</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Padrões Nodais de Chladni</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Física do Tampo</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Modelagem física da resposta acústica e timbre de tampos (Spruce, Cedro, Araucária, Engelmann) e fundos (Jacarandá, Caviúna, Mogno, Imbuia), simulação gráfica interativa de padrões nodais de ressonância de Chladni em Canvas 2D e laudo lutherístico com síntese Web Audio API.</p>
+                </div>
+
+                <!-- Presets Rápidos de Lutheria -->
+                <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+                    <span class="text-[11px] font-mono text-slate-400 mr-1">Presets:</span>
+                    ${Object.values(TONEWOOD_PRESETS).map((p) => {
+                        const isPresetActive = tonewood.topWoodId === p.topId && tonewood.backSidesId === p.backId;
+                        return `
+                            <button type="button" data-tonewood-preset="${p.id}" title="${p.desc}"
+                                class="min-h-[34px] px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition border ${
+                                    isPresetActive
+                                        ? 'bg-amber-500/20 border-amber-400 text-amber-200 shadow'
+                                        : 'bg-[#090d16] border-slate-800 text-slate-400 hover:text-slate-200'
+                                }">
+                                ${p.tag}
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- Grid Principal: Laboratório Chladni (Esq) + Controles de Madeira & Síntese (Dir) -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+                <!-- Coluna Esquerda: Laboratório Gráfico de Chladni (5 colunas) -->
+                <div class="xl:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-4 flex flex-col space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                            <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Padrões Nodais de Chladni (Canvas 2D)</h4>
+                        </div>
+                        <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                            f₀ ≈ ${rep.f0} Hz
+                        </span>
+                    </div>
+
+                    <!-- Canvas do Tampo da Viola & Areia de Chladni -->
+                    <div class="relative w-full flex items-center justify-center bg-[#070b14] border border-slate-800 rounded-lg overflow-hidden py-2">
+                        <canvas id="viola-chladni-canvas" width="440" height="520" class="max-w-full h-auto select-none"></canvas>
+                        
+                        <!-- Overlay Informativo Flutuante -->
+                        <div class="absolute top-2 left-2 bg-slate-900/90 border border-slate-800/80 rounded-md px-2 py-1 text-[10px] font-mono text-slate-300 backdrop-blur-sm pointer-events-none">
+                            <span class="text-cyan-400 font-bold">${CHLADNI_MODES_CATALOG[tonewood.chladniMode].name.split('—')[0]}</span>
+                            <span class="text-slate-500">|</span>
+                            <span class="text-amber-300 font-bold" id="viola-tonewood-freq-badge">${tonewood.excitationFreq} Hz</span>
+                        </div>
+
+                        <!-- Botão Dispersar Areia Flutuante -->
+                        <button type="button" id="btn-viola-chladni-scatter" title="Dispersar areia aleatoriamente no tampo"
+                            class="absolute top-2 right-2 min-h-[30px] px-2 py-1 rounded-md bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-[10px] font-mono text-slate-300 flex items-center gap-1 backdrop-blur-sm transition">
+                            <i data-lucide="refresh-cw" class="w-3 h-3 text-cyan-400"></i>
+                            <span>Dispersar</span>
+                        </button>
+                    </div>
+
+                    <!-- Seletores dos 5 Modos Canônicos de Chladni -->
+                    <div class="space-y-1.5">
+                        <div class="text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                            <span>Modos Nodais de Vibração do Tampo:</span>
+                            <span class="text-amber-400 font-semibold">${CHLADNI_MODES_CATALOG[tonewood.chladniMode].badge}</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                            ${Object.values(CHLADNI_MODES_CATALOG).map((m) => {
+                                const isCurrent = tonewood.chladniMode === m.id;
+                                return `
+                                    <button type="button" data-chladni-mode="${m.id}"
+                                        class="p-1.5 rounded-lg text-[10px] font-mono border text-left transition ${
+                                            isCurrent
+                                                ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 font-bold shadow'
+                                                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                                        }">
+                                        <div class="truncate">${m.name.split('—')[0]}</div>
+                                        <div class="text-[9px] text-slate-500 truncate">${m.badge}</div>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Excitação por Frequências Fundamentais da Viola -->
+                    <div class="space-y-1.5 pt-1 border-t border-slate-800">
+                        <div class="text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                            <span>Excitação por Ordens da Viola (Cebolão):</span>
+                            <span class="text-[10px] text-slate-500">1 Clique p/ Frequência</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1">
+                            ${VIOLA_RESONANCE_FREQUENCIES.map((fItem) => {
+                                const isFreqActive = tonewood.excitationFreq === Math.round(fItem.freq);
+                                return `
+                                    <button type="button" data-chladni-freq="${fItem.freq}" data-chladni-mode-hint="${fItem.modeId}"
+                                        class="p-1 rounded text-center font-mono text-[10px] border transition ${
+                                            isFreqActive
+                                                ? 'bg-amber-500/25 border-amber-400 text-amber-200 font-bold shadow-sm'
+                                                : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200'
+                                        }">
+                                        <div class="text-slate-200 font-bold">${fItem.note}</div>
+                                        <div class="text-[9px] text-slate-500">${Math.round(fItem.freq)}Hz</div>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Slider de Frequência Contínua (80 a 1000 Hz) -->
+                    <div class="space-y-1 pt-1 border-t border-slate-800">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400">Varredura Contínua (Hz):</span>
+                            <span class="text-cyan-300 font-bold" id="viola-tonewood-freq-val">${tonewood.excitationFreq} Hz</span>
+                        </div>
+                        <input type="range" id="viola-tonewood-freq-slider" min="80" max="1000" value="${tonewood.excitationFreq}"
+                            class="w-full accent-cyan-400 cursor-pointer">
+                    </div>
+
+                    <!-- Slider de Intensidade de Vibração -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400">Intensidade do Oscilador Acústico:</span>
+                            <span class="text-amber-300 font-bold" id="viola-tonewood-intensity-val">${Math.round(tonewood.vibrationIntensity * 100)}%</span>
+                        </div>
+                        <input type="range" id="viola-tonewood-intensity-slider" min="20" max="150" value="${Math.round(tonewood.vibrationIntensity * 100)}"
+                            class="w-full accent-amber-400 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Bancada do Luthier, Seletores de Madeira & Síntese Web Audio (7 colunas) -->
+                <div class="xl:col-span-7 space-y-4">
+                    <!-- Seletor 1: Madeira do Tampo Harmônico -->
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">1. Madeira do Tampo Harmônico (Top Soundboard)</h4>
+                            </div>
+                            <span class="text-[10px] font-mono text-slate-400">Responsável por ~80% da resposta acústica</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            ${Object.values(TONEWOOD_TOPS).map((t) => {
+                                const isSelected = tonewood.topWoodId === t.id;
+                                return `
+                                    <div data-select-top-wood="${t.id}"
+                                        class="p-2.5 rounded-xl border cursor-pointer select-none transition ${
+                                            isSelected
+                                                ? 'bg-amber-500/15 border-amber-400 shadow'
+                                                : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                                        }">
+                                        <div class="flex items-center justify-between gap-1">
+                                            <span class="text-xs font-bold font-mono text-slate-100">${t.name}</span>
+                                            <span class="px-1.5 py-0.5 text-[9px] font-mono rounded border ${t.badgeColor}">${t.tag}</span>
+                                        </div>
+                                        <div class="text-[10px] text-slate-400 italic mt-0.5 truncate">${t.scientificName}</div>
+                                        <div class="grid grid-cols-3 gap-1 mt-2 text-[9px] font-mono text-slate-400 pt-1.5 border-t border-slate-800/80">
+                                            <div>ρ: <strong class="text-slate-200">${t.density}</strong> kg/m³</div>
+                                            <div>c: <strong class="text-slate-200">${t.soundSpeed}</strong> m/s</div>
+                                            <div>R: <strong class="text-amber-300">${t.radiationRatio}</strong></div>
+                                        </div>
+                                        <div class="text-[10px] text-slate-300 mt-1.5 line-clamp-2 leading-tight">${t.timbreDescription}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Seletor 2: Madeira do Fundo & Faixas Laterais -->
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                                <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">2. Madeira do Fundo &amp; Faixas Laterais (Back &amp; Sides)</h4>
+                            </div>
+                            <span class="text-[10px] font-mono text-slate-400">Sustentação, reflexão e graves</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                            ${Object.values(TONEWOOD_BACK_SIDES).map((b) => {
+                                const isSelected = tonewood.backSidesId === b.id;
+                                return `
+                                    <div data-select-back-wood="${b.id}"
+                                        class="p-2 rounded-xl border cursor-pointer select-none transition text-center ${
+                                            isSelected
+                                                ? 'bg-cyan-500/20 border-cyan-400 shadow'
+                                                : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                                        }">
+                                        <div class="text-xs font-bold font-mono text-slate-100 truncate">${b.name.split(' ')[0]}</div>
+                                        <div class="text-[9px] text-slate-400 truncate">${b.tag}</div>
+                                        <div class="mt-1 text-[10px] font-mono text-cyan-300">
+                                            Sustain: <strong>${b.sustainFactor}x</strong>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Seletor 3: Espessura do Tampo & Leque Harmônico -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Espessura -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                            <div class="flex items-center justify-between text-xs font-mono">
+                                <span class="text-slate-300 font-bold">Espessura do Tampo:</span>
+                                <span class="text-emerald-400 font-bold">D ≈ ${rep.rigidityD.toFixed(1)} N·m</span>
+                            </div>
+                            <select id="viola-tonewood-select-thickness" aria-label="Espessura do tampo"
+                                class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-slate-200">
+                                ${Object.values(TONEWOOD_THICKNESS_OPTIONS).map((opt) => `
+                                    <option value="${opt.id}" ${tonewood.thicknessId === opt.id ? 'selected' : ''}>${opt.label}</option>
+                                `).join('')}
+                            </select>
+                            <p class="text-[10px] text-slate-400 leading-tight">${rep.thk.description}</p>
+                        </div>
+
+                        <!-- Varejamento / Leque -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-1.5">
+                            <div class="flex items-center justify-between text-xs font-mono">
+                                <span class="text-slate-300 font-bold">Leque Harmônico:</span>
+                                <span class="text-cyan-400 font-bold">${rep.brace.stiffnessMod}x Rigidez</span>
+                            </div>
+                            <select id="viola-tonewood-select-bracing" aria-label="Varejamento do tampo"
+                                class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-slate-200">
+                                ${Object.values(TONEWOOD_BRACING_OPTIONS).map((opt) => `
+                                    <option value="${opt.id}" ${tonewood.bracingId === opt.id ? 'selected' : ''}>${opt.name}</option>
+                                `).join('')}
+                            </select>
+                            <p class="text-[10px] text-slate-400 leading-tight">${rep.brace.desc}</p>
+                        </div>
+                    </div>
+
+                    <!-- Estúdio de Síntese Web Audio Lutherístico & Comparador A/B -->
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800/80">
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Síntese Acústica com Modelagem de Timbre (Web Audio API)</h4>
+                                <p class="text-[11px] text-slate-400">Ouça o som real filtrado pelas propriedades físicas da madeira selecionada</p>
+                            </div>
+                            <button type="button" id="btn-viola-tonewood-stop"
+                                class="min-h-[34px] px-3 py-1 rounded-lg bg-slate-800 text-slate-400 text-xs font-semibold flex items-center gap-1.5 transition">
+                                <i data-lucide="square" class="w-3.5 h-3.5 text-rose-400"></i>
+                                <span>Parar Áudio</span>
+                            </button>
+                        </div>
+
+                        <!-- Botões de Demonstração Acústica -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <button type="button" id="btn-viola-tonewood-tap"
+                                class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="activity" class="w-4 h-4"></i>
+                                <span>Tap Tone do Tampo</span>
+                            </button>
+
+                            <button type="button" id="btn-viola-tonewood-arpeggio"
+                                class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="music" class="w-4 h-4"></i>
+                                <span>Arpejo Caipira</span>
+                            </button>
+
+                            <button type="button" id="btn-viola-tonewood-rasqueado"
+                                class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/30 text-cyan-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                <span>Rasqueado Aberto</span>
+                            </button>
+                        </div>
+
+                        <!-- Comparador A/B em 1 Clique -->
+                        <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">Comparador A/B</span>
+                                <span class="text-[11px] font-mono text-slate-400">Alternância sequencial automática:</span>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <select id="viola-tonewood-select-compare-a" aria-label="Preset A" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[11px] font-mono text-amber-300">
+                                    ${Object.values(TONEWOOD_PRESETS).map((p) => `<option value="${p.id}" ${tonewood.comparePresetA === p.id ? 'selected' : ''}>A: ${p.tag}</option>`).join('')}
+                                </select>
+                                <span class="text-slate-500 font-mono text-xs">vs</span>
+                                <select id="viola-tonewood-select-compare-b" aria-label="Preset B" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[11px] font-mono text-cyan-300">
+                                    ${Object.values(TONEWOOD_PRESETS).map((p) => `<option value="${p.id}" ${tonewood.comparePresetB === p.id ? 'selected' : ''}>B: ${p.tag}</option>`).join('')}
+                                </select>
+
+                                <button type="button" id="btn-viola-tonewood-compare"
+                                    class="min-h-[34px] px-3.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                                    <i data-lucide="play" class="w-3.5 h-3.5 text-indigo-400"></i>
+                                    <span>Comparar A/B</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel Inferior: Laudo Lutherístico, Medidores Analíticos & Parecer -->
+            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 sm:p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="scale" class="w-4 h-4 text-emerald-400"></i>
+                            <h4 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Laudo Lutherístico Analítico &amp; Diagnóstico de Ressonância</h4>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Avaliação física computada por equações mecânicas de Mersenne, Chladni e acoplamento modal de placas</p>
+                    </div>
+
+                    <button type="button" id="btn-viola-tonewood-copy-report"
+                        class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5 transition">
+                        <i data-lucide="copy" class="w-4 h-4 text-cyan-400"></i>
+                        <span>Copiar Ficha Lutherística</span>
+                    </button>
+                </div>
+
+                <!-- 4 Medidores Analíticos (Gauges) -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <!-- Gauge 1: Projeção no Estradão -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400 uppercase">Projeção no Estradão</span>
+                            <span class="font-bold text-amber-400">${rep.projectionIndex}%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-amber-500 to-yellow-400 h-2 rounded-full transition-all duration-500" style="width: ${rep.projectionIndex}%"></div>
+                        </div>
+                        <div class="text-[10px] text-slate-500">Radiação R: ${rep.top.radiationRatio} m⁴/(kg·s)</div>
+                    </div>
+
+                    <!-- Gauge 2: Calor Harmônico -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400 uppercase">Calor Harmônico</span>
+                            <span class="font-bold text-rose-400">${rep.warmthIndex}%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-rose-500 to-amber-500 h-2 rounded-full transition-all duration-500" style="width: ${rep.warmthIndex}%"></div>
+                        </div>
+                        <div class="text-[10px] text-slate-500">Amortecimento Q: ${rep.top.qFactor}</div>
+                    </div>
+
+                    <!-- Gauge 3: Resposta a Transientes -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400 uppercase">Ataque a Transientes</span>
+                            <span class="font-bold text-cyan-400">${rep.attackMs} ms</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-2 rounded-full transition-all duration-500" style="width: ${Math.min(100, Math.round((8.0 - parseFloat(rep.attackMs)) / 5.0 * 100))}%"></div>
+                        </div>
+                        <div class="text-[10px] text-slate-500">Velocidade c: ${rep.top.soundSpeed} m/s</div>
+                    </div>
+
+                    <!-- Gauge 4: Sustentação -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400 uppercase">Sustentação ("Sustain")</span>
+                            <span class="font-bold text-emerald-400">${rep.sustainSec} s</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-2 rounded-full transition-all duration-500" style="width: ${Math.min(100, Math.round((parseFloat(rep.sustainSec) / 3.5) * 100))}%"></div>
+                        </div>
+                        <div class="text-[10px] text-slate-500">Fator Fundo: ${rep.back.sustainFactor}x</div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Propriedades Lutherísticas -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-xs">
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-2.5">
+                        <div class="text-[10px] text-slate-500 uppercase">Rigidez Flexural (D)</div>
+                        <div class="text-sm font-bold text-slate-200 mt-0.5">${rep.rigidityD.toFixed(1)} N·m</div>
+                        <div class="text-[10px] text-slate-400">Espessura: ${rep.thk.thicknessMm} mm</div>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-2.5">
+                        <div class="text-[10px] text-slate-500 uppercase">Modo Respiratório (f₀)</div>
+                        <div class="text-sm font-bold text-amber-400 mt-0.5">${rep.f0} Hz</div>
+                        <div class="text-[10px] text-slate-400">Dipolo (1,0): ${rep.f10} Hz</div>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-2.5">
+                        <div class="text-[10px] text-slate-500 uppercase">Modos Superiores</div>
+                        <div class="text-sm font-bold text-cyan-400 mt-0.5">${rep.f01} Hz / ${rep.f11} Hz</div>
+                        <div class="text-[10px] text-slate-400">Requinta: ${rep.f20} Hz</div>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-2.5">
+                        <div class="text-[10px] text-slate-500 uppercase">Calibre Recomendado</div>
+                        <div class="text-xs font-bold ${rep.tensionBadgeColor} mt-0.5">${rep.recommendedGauge}</div>
+                        <div class="text-[10px] text-slate-400 truncate">${rep.tensionSafety.split(':')[0]}</div>
+                    </div>
+                </div>
+
+                <!-- Parecer Técnico em Destaque -->
+                <div class="bg-slate-900/40 border-l-2 border-amber-500/80 p-3 rounded-r-lg text-xs leading-relaxed">
+                    <span class="font-mono font-bold text-amber-300">Parecer Técnico do Mestre Luthier: </span>
+                    <span class="text-slate-300">${rep.opinion}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+
+    // Inicializa o loop de animação do Canvas Chladni 2D
+    const canvas = document.getElementById('viola-chladni-canvas');
+    if (canvas) {
+        startChladniLoop();
+    }
+
+    // Bindings de Eventos da Seção
+    bindTonewoodSectionEvents(container);
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
+}
+
+function bindTonewoodSectionEvents(container) {
+    if (!container) return;
+
+    // Presets rápidos
+    container.querySelectorAll('[data-tonewood-preset]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const pId = btn.getAttribute('data-tonewood-preset');
+            const p = TONEWOOD_PRESETS[pId];
+            if (!p) return;
+            state.tonewood.topWoodId = p.topId;
+            state.tonewood.backSidesId = p.backId;
+            state.tonewood.thicknessId = p.thicknessId;
+            state.tonewood.bracingId = p.bracingId;
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    });
+
+    // Seletor Tampo
+    container.querySelectorAll('[data-select-top-wood]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const id = card.getAttribute('data-select-top-wood');
+            state.tonewood.topWoodId = id;
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    });
+
+    // Seletor Fundo
+    container.querySelectorAll('[data-select-back-wood]').forEach((card) => {
+        card.addEventListener('click', () => {
+            const id = card.getAttribute('data-select-back-wood');
+            state.tonewood.backSidesId = id;
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    });
+
+    // Seletor Espessura
+    const thkSel = document.getElementById('viola-tonewood-select-thickness');
+    if (thkSel) {
+        thkSel.addEventListener('change', (e) => {
+            state.tonewood.thicknessId = e.target.value;
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    }
+
+    // Seletor Leque
+    const braceSel = document.getElementById('viola-tonewood-select-bracing');
+    if (braceSel) {
+        braceSel.addEventListener('change', (e) => {
+            state.tonewood.bracingId = e.target.value;
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    }
+
+    // Modos de Chladni
+    container.querySelectorAll('[data-chladni-mode]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const mId = btn.getAttribute('data-chladni-mode');
+            state.tonewood.chladniMode = mId;
+            const m = CHLADNI_MODES_CATALOG[mId];
+            if (m && mId !== 'mode_free') {
+                state.tonewood.excitationFreq = m.nominalFreq;
+                const s = document.getElementById('viola-tonewood-freq-slider');
+                if (s) s.value = String(m.nominalFreq);
+                const v = document.getElementById('viola-tonewood-freq-val');
+                if (v) v.textContent = `${m.nominalFreq} Hz`;
+            }
+            chladniImpulse = 1.1;
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    });
+
+    // Frequências pré-definidas das ordens da viola
+    container.querySelectorAll('[data-chladni-freq]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const freq = parseFloat(btn.getAttribute('data-chladni-freq'));
+            const hintMode = btn.getAttribute('data-chladni-mode-hint') || 'mode_free';
+            state.tonewood.excitationFreq = Math.round(freq);
+            state.tonewood.chladniMode = hintMode;
+            chladniImpulse = 1.25;
+
+            const s = document.getElementById('viola-tonewood-freq-slider');
+            if (s) s.value = String(state.tonewood.excitationFreq);
+            const v = document.getElementById('viola-tonewood-freq-val');
+            if (v) v.textContent = `${state.tonewood.excitationFreq} Hz`;
+
+            saveViolaState();
+            renderTonewoodSection();
+        });
+    });
+
+    // Slider de Frequência Contínua
+    const freqSlider = document.getElementById('viola-tonewood-freq-slider');
+    if (freqSlider) {
+        freqSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value, 10) || 110;
+            state.tonewood.excitationFreq = val;
+            state.tonewood.chladniMode = 'mode_free';
+            const v = document.getElementById('viola-tonewood-freq-val');
+            if (v) v.textContent = `${val} Hz`;
+            const badge = document.getElementById('viola-tonewood-freq-badge');
+            if (badge) badge.textContent = `${val} Hz`;
+        });
+    }
+
+    // Slider de Intensidade
+    const intSlider = document.getElementById('viola-tonewood-intensity-slider');
+    if (intSlider) {
+        intSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value, 10) || 85;
+            state.tonewood.vibrationIntensity = val / 100;
+            const v = document.getElementById('viola-tonewood-intensity-val');
+            if (v) v.textContent = `${val}%`;
+        });
+    }
+
+    // Dispersar areia
+    const scatterBtn = document.getElementById('btn-viola-chladni-scatter');
+    if (scatterBtn) {
+        scatterBtn.addEventListener('click', () => {
+            chladniParticles = createChladniParticles();
+            chladniImpulse = 1.35;
+        });
+    }
+
+    // Botões de Áudio
+    const btnTap = document.getElementById('btn-viola-tonewood-tap');
+    if (btnTap) btnTap.addEventListener('click', playChladniTapTone);
+
+    const btnArp = document.getElementById('btn-viola-tonewood-arpeggio');
+    if (btnArp) btnArp.addEventListener('click', playTonewoodArpeggio);
+
+    const btnRasq = document.getElementById('btn-viola-tonewood-rasqueado');
+    if (btnRasq) btnRasq.addEventListener('click', playTonewoodRasqueado);
+
+    const btnStop = document.getElementById('btn-viola-tonewood-stop');
+    if (btnStop) btnStop.addEventListener('click', stopTonewoodAudio);
+
+    // Comparador A/B
+    const cmpA = document.getElementById('viola-tonewood-select-compare-a');
+    if (cmpA) {
+        cmpA.addEventListener('change', (e) => {
+            state.tonewood.comparePresetA = e.target.value;
+            saveViolaState();
+        });
+    }
+    const cmpB = document.getElementById('viola-tonewood-select-compare-b');
+    if (cmpB) {
+        cmpB.addEventListener('change', (e) => {
+            state.tonewood.comparePresetB = e.target.value;
+            saveViolaState();
+        });
+    }
+    const btnCompare = document.getElementById('btn-viola-tonewood-compare');
+    if (btnCompare) btnCompare.addEventListener('click', playTonewoodCompareAB);
+
+    // Copiar laudo
+    const copyBtn = document.getElementById('btn-viola-tonewood-copy-report');
+    if (copyBtn) copyBtn.addEventListener('click', copyTonewoodReport);
+}
+
+
 
     // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
@@ -16865,6 +18645,36 @@ function renderPolyphonyStrip(arr) {
                     }
                 }
             }
+            } else if (state.displayMode === 'TONEWOOD') {
+                // FASE 16: PROJEÃ‡ÃƒO DE NÃ“S DE RESSONÃ‚NCIA E HARMÃ”NICOS NATURAIS
+                const harmonicNodes = [
+                    { fret: 12, ratio: '1/2', labelSub: 'Harm 1 (Oitava)', color: '#f59e0b', stroke: '#ffffff', strokeWidth: 3.5 },
+                    { fret: 7, ratio: '1/3', labelSub: 'Harm 2 (Quinta)', color: '#06b6d4', stroke: '#ffffff', strokeWidth: 2.5 },
+                    { fret: 5, ratio: '1/4', labelSub: 'Harm 3 (2x Oit)', color: '#10b981', stroke: '#ffffff', strokeWidth: 2.5 },
+                    { fret: 4, ratio: '1/5', labelSub: 'Harm 4 (3M)', color: '#ec4899', stroke: '#ffffff', strokeWidth: 2.0 },
+                    { fret: 9, ratio: '1/5', labelSub: 'Harm 4 (3M)', color: '#ec4899', stroke: '#ffffff', strokeWidth: 2.0 }
+                ];
+                harmonicNodes.forEach((node) => {
+                    inst.courses.forEach((c, cIdx) => {
+                        const basePc = c.pitchClass;
+                        let semitonesAbove = 0;
+                        if (node.fret === 12) semitonesAbove = 12;
+                        else if (node.fret === 7) semitonesAbove = 19;
+                        else if (node.fret === 5) semitonesAbove = 24;
+                        else if (node.fret === 4 || node.fret === 9) semitonesAbove = 28;
+                        const harmPc = (basePc + semitonesAbove) % 12;
+                        activeMarkers.push({
+                            courseIdx: cIdx,
+                            fret: node.fret,
+                            label: NOTE_NAMES[harmPc],
+                            sub: node.ratio,
+                            color: node.color,
+                            stroke: node.stroke,
+                            strokeWidth: node.strokeWidth,
+                            opacity: '0.95'
+                        });
+                    });
+                });
 
         // Construção SVG
         // FASE 13: Renderizacao da Bracadeira Fisica do Capotraste e Zona Inativa Atras
@@ -17043,6 +18853,11 @@ function renderPolyphonyStrip(arr) {
             node.addEventListener('click', () => {
                 const cIdx = parseInt(node.getAttribute('data-click-course'), 10);
                 const f = parseInt(node.getAttribute('data-click-fret'), 10);
+                if (state.displayMode === 'TONEWOOD') {
+                    playTonewoodHarmonicOrNote(cIdx, f);
+                    flashFretCell(cIdx, f, 0);
+                    return;
+                }
                 playCourseAtFret(cIdx, f, 0);
                 flashFretCell(cIdx, f, 0);
 
@@ -17623,6 +19438,15 @@ function renderPolyphonyStrip(arr) {
             } else {
                 state.polyphonic = Object.assign({}, DEFAULT_POLYPHONIC_STATE);
             }
+
+            if (saved.tonewood && typeof saved.tonewood === 'object') {
+                state.tonewood = Object.assign({}, DEFAULT_TONEWOOD_STATE, saved.tonewood, {
+                    isPlaying: false,
+                    activeDemoType: null
+                });
+            } else {
+                state.tonewood = Object.assign({}, DEFAULT_TONEWOOD_STATE);
+            }
         }
     }
 
@@ -17687,6 +19511,12 @@ function renderPolyphonyStrip(arr) {
             copy.polyphonic = Object.assign({}, copy.polyphonic, {
                 isPlaying: false,
                 currentStepIdx: -1
+            });
+        }
+        if (copy.tonewood) {
+            copy.tonewood = Object.assign({}, copy.tonewood, {
+                isPlaying: false,
+                activeDemoType: null
             });
         }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
@@ -17762,6 +19592,10 @@ function renderPolyphonyStrip(arr) {
                             <i data-lucide="layers" class="w-4 h-4 text-indigo-400"></i>
                             <span>Contraponto Caipira (Fase 15)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-tonewood" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-600/15 hover:bg-amber-600/25 border border-amber-600/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+                            <span>Madeiras &amp; Chladni (Fase 16)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -17801,7 +19635,7 @@ function renderPolyphonyStrip(arr) {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -17985,6 +19819,8 @@ function renderPolyphonyStrip(arr) {
                 <div id="viola-mic-tuner-container" class="space-y-4"></div>
                 <!-- Modulo de Arranjos Polifonicos & Contraponto Caipira a Duas Violas (Fase 15) -->
                 <div id="viola-polyphony-container" class="space-y-4"></div>
+                <!-- Simulador Acustico de Madeiras & Ressonancias Lutheristicas (Fase 16) -->
+                <div id="viola-tonewood-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -18155,7 +19991,8 @@ function renderPolyphonyStrip(arr) {
             { id: 'btn-viola-mode-folia', mode: 'FOLIA', activeClass: 'bg-amber-500 text-slate-950 shadow' },
             { id: 'btn-viola-mode-capo', mode: 'CAPO', activeClass: 'bg-yellow-500 text-slate-950 shadow' },
             { id: 'btn-viola-mode-mic', mode: 'MIC', activeClass: 'bg-red-600 text-white shadow' },
-            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', activeClass: 'bg-indigo-600 text-white shadow' }
+            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', activeClass: 'bg-indigo-600 text-white shadow' },
+            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', activeClass: 'bg-amber-600 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -18193,6 +20030,8 @@ function renderPolyphonyStrip(arr) {
         stopTunerTone();
         stopEarTrainerAudio();
         stopMicCapture();
+        stopPolyphonicAudio();
+        stopTonewoodAudio();
     }
 
     function bindEvents() {
@@ -18284,7 +20123,8 @@ function renderPolyphonyStrip(arr) {
             { id: 'btn-viola-scroll-folia', targetId: 'viola-folia-container' },
             { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' },
             { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' },
-            { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' }
+            { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' },
+            { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -18315,7 +20155,8 @@ function renderPolyphonyStrip(arr) {
             { id: 'btn-viola-mode-folia', mode: 'FOLIA', scrollTarget: 'viola-folia-container' },
             { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' },
             { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' },
-            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' }
+            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' },
+            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' }
         ];
 
         modeList.forEach((item) => {
@@ -18600,6 +20441,7 @@ function renderPolyphonyStrip(arr) {
         renderCapoDuoSection();
         renderMicRecognizerSection();
         renderPolyphonySection();
+        renderTonewoodSection();
         renderMetronomeControls();
     }
 
