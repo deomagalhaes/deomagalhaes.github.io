@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Culpa do Sobrevivente e Lealdades Invisíveis (EMCS-LIDE / T-50) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua culpa por prosperar, emaranhamento transgeracional, lealdades invisíveis e auto-sabotagem com a escala clínica EMCS-LIDE / T-50.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            font-size: 1.02em;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 680px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            text-align: center;
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .option-label:hover {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .option-label input[type="radio"] {
+            margin-bottom: 6px;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            color: #005f73;
+            font-weight: 700;
+        }
+
+        .btn-calc-box {
+            text-align: center;
+            margin: 35px 0 20px 0;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.1em;
+            padding: 16px 36px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-calculate:hover {
+            background: linear-gradient(135deg, #0a9396, #005f73);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0, 95, 115, 0.4);
+        }
+
+        /* Resultados */
+        .results-box {
+            display: none;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin-top: 35px;
+            border: 2px solid #0a9396;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            font-size: 2.4em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .classification-tag {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .class-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .class-mod {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .class-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .dimension-bars-container {
+            margin: 30px 0;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .dim-bar-item {
+            margin-bottom: 16px;
+        }
+
+        .dim-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .dim-bar-track {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .dim-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a9396, #ee9b00);
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .feedback-section {
+            line-height: 1.7;
+            color: #334155;
+            margin: 25px 0;
+        }
+
+        .feedback-section h4 {
+            color: #005f73;
+            margin: 20px 0 10px 0;
+            font-size: 1.15em;
+        }
+
+        .clinical-steps-box {
+            background: #ecfdf5;
+            border-left: 4px solid #059669;
+            padding: 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .clinical-steps-box h4 {
+            margin: 0 0 10px 0;
+            color: #065f46;
+        }
+
+        .clinical-steps-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #047857;
+        }
+
+        .clinical-steps-box li {
+            margin-bottom: 8px;
+        }
+
+        .btn-restart-box {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn-restart {
+            background: #e2e8f0;
+            color: #334155;
+            padding: 10px 24px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restart:hover {
+            background: #cbd5e1;
+        }
+
+        .cta-consult-box {
+            background: #f0fdfa;
+            border: 1px solid #99f6e4;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cta-consult-box h4 {
+            color: #0f766e;
+            margin-top: 0;
+        }
+
+        .btn-consult {
+            display: inline-block;
+            background: #0d9488;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-consult:hover {
+            background: #0f766e;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding: 40px 20px; max-width: 860px;">
+        <header class="article-header" style="text-align: center; margin-bottom: 25px;">
+            <span style="display: inline-block; background: #e0f2fe; color: #0369a1; padding: 4px 14px; border-radius: 16px; font-size: 0.85em; font-weight: 700; margin-bottom: 12px;">ESCALA PSICOMÉTRICA CLÍNICA • T-50</span>
+            <h1 style="color: #005f73; font-size: 2.1em; line-height: 1.25;">Escala Multidimensional de Culpa do Sobrevivente, Lealdades Invisíveis e Dívida Existencial (EMCS-LIDE)</h1>
+            <p class="article-author-date">Desenvolvido por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+        </header>
+
+        <div class="test-intro-box">
+            <strong>Orientações para Preenchimento:</strong><br>
+            Este instrumento clínico avalia como seu sistema nervoso e seus esquemas relacionais processam o sucesso, a estabilidade material e a felicidade pessoal em relação à sua família de origem e grupo de pertencimento. Responda a cada uma das 20 afirmações com base no que você realmente sente no corpo e vivencia na prática, e não no que considera ideal. Não há respostas certas ou erradas.<br><br>
+            <em>Privacidade Absoluta:</em> O cálculo da pontuação é processado 100% de forma local no seu navegador. Nenhuma resposta é transmitida ou gravada em servidores externos.
+        </div>
+
+        <form id="quizForm" class="quiz-container" onsubmit="calculateScore(event)">
+            <!-- Dimensão 1 -->
+            <div class="dimension-header-box">
+                <h3>Dimensão 1: Culpa por Prosperidade e Dissenso de Destino</h3>
+                <p>Mede a aflição e o constrangimento somático ao atingir patamares de vida superiores aos dos familiares de origem.</p>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">1. Quando as coisas dão muito certo para mim (dinheiro, carreira ou amor), sinto um incômodo inexplicável ou vergonha ao encontrar meus familiares.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q1" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q1" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q1" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q1" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q1" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">2. Sinto-me desconfortável em falar sobre minhas conquistas ou meu conforto material para meus pais ou irmãos, temendo feri-los ou parecer arrogante.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q2" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q2" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q2" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q2" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q2" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">3. Costumo esconder compras de itens de maior valor ou viagens para não parecer que estou "abandonando" a simplicidade da minha família de origem.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q3" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q3" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q3" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q3" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q3" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">4. A pergunta "por que eu tive essas chances se meus pais sofreram tanto?" ecoa por dentro com um sentimento corrosivo de injustiça e peso moral.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q4" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q4" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q4" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q4" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q4" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">5. Ao receber elogios ou bônus relevantes, a primeira reação física é um aperto na garganta ou no peito, como se estivesse usurpando algo alheio.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q5" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q5" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q5" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q5" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q5" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <!-- Dimensão 2 -->
+            <div class="dimension-header-box">
+                <h3>Dimensão 2: Lealdade pelo Sofrimento Compartilhado</h3>
+                <p>Avalia a crença inconsciente de que o pertencimento à família exige carregar dores e limitações semelhantes.</p>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">6. No fundo, sinto que ter uma vida leve e despreocupada seria uma traição invisível ao sacrifício e sofrimento dos meus antepassados.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q6" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q6" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q6" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q6" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q6" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">7. Sinto-me mais conectado e acolhido no meu clã quando também tenho problemas graves para lamentar em conjunto nas reuniões de família.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q7" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q7" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q7" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q7" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q7" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">8. Experimentar alegria plena sem ressalvas gera um receio imediato de que algo terrível vai acontecer para me castigar.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q8" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q8" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">9. Percebo que repito certos hábitos de escassez (guardar comida vencida, usar roupas gastas, recusar conforto) apenas para manter fidelidade às minhas origens.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q9" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q9" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q9" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q9" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q9" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">10. Quando penso em morar longe ou construir um estilo de vida diferente do padrão familiar, sinto um medo infantil de ser rejeitado ou excluído.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q10" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q10" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q10" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q10" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q10" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <!-- Dimensão 3 -->
+            <div class="dimension-header-box">
+                <h3>Dimensão 3: Responsabilidade Onipotente e Papel de Salvador</h3>
+                <p>Mede a compulsão de resgatar familiares adultos, assumindo o papel de sustentáculo e amortecedor de crises.</p>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">11. Sinto que é minha obrigação moral e financeira resolver as crises de parentes adultos que tomam decisões imprudentes de forma crônica.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q11" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q11" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">12. Dizer "não" a um pedido de ajuda financeira ou emocional da minha família me causa uma angústia somática tão insuportável que acabo cedendo.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q12" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q12" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q12" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q12" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q12" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">13. Assumo com frequência o papel de terapeuta, advogado ou provedor de pais e irmãos, colocando meus próprios planos em segundo plano.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q13" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q13" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q13" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q13" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q13" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">14. Se alguém da minha família sofre ou fracassa, sinto-me pessoalmente culpado, como se eu tivesse negligenciado minha responsabilidade de salvação.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q14" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q14" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">15. Sinto que ganho meu direito de existir na família apenas quando estou sendo útil, socorrendo ou resolvendo emergências alheias.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q15" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q15" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q15" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q15" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q15" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <!-- Dimensão 4 -->
+            <div class="dimension-header-box">
+                <h3>Dimensão 4: Auto-Repressão do Merecimento e Tributo Inconsciente</h3>
+                <p>Avalia atos de sabotagem orçamentária, somatizações ou boicote afetivo como compensação por estar bem.</p>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">16. Pouco tempo depois de alcançar uma conquista importante, cometo erros financeiros graves, desorganizo meu orçamento ou perco recursos.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q16" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q16" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q16" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q16" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q16" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">17. Desenvolvo dores físicas inexplicáveis, enxaquecas ou fadiga incapacitante justamente quando a minha rotina profissional e pessoal está estável.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q17" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q17" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q17" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q17" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q17" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">18. Costumo escolher relacionamentos afetivos caóticos, desgastantes ou financeiramente dependentes que reproduzem o sofrimento da minha infância.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q18" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q18" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q18" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q18" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q18" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">19. Empresto dinheiro que me fará falta para pessoas que claramente não têm como pagar, apenas para me desvencilhar da culpa de ter acumulado reserva.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q19" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q19" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">20. Sinto uma estranha sensação de alívio psíquico quando passo por uma crise ou prejuízo material, como se a dívida moral tivesse sido temporariamente paga.</div>
+                <div class="options-grid">
+                    <label class="option-label"><input type="radio" name="q20" value="1" required><span>Discordo Totalmente (1)</span></label>
+                    <label class="option-label"><input type="radio" name="q20" value="2"><span>Discordo Parcialmente (2)</span></label>
+                    <label class="option-label"><input type="radio" name="q20" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                    <label class="option-label"><input type="radio" name="q20" value="4"><span>Concordo Parcialmente (4)</span></label>
+                    <label class="option-label"><input type="radio" name="q20" value="5"><span>Concordo Totalmente (5)</span></label>
+                </div>
+            </div>
+
+            <div class="btn-calc-box">
+                <button type="submit" class="btn-calculate">Calcular Índice e Gerar Relatório Clínico</button>
+            </div>
+        </form>
+
+        <!-- Caixa de Resultados -->
+        <div id="resultsContainer" class="results-box">
+            <div class="results-header">
+                <h2 style="color: #005f73; margin-bottom: 5px;">Relatório de Avaliação Neuropsicológica</h2>
+                <div id="totalScoreBadge" class="score-badge">0 / 100</div>
+                <div><span id="classificationTag" class="classification-tag">Classificação</span></div>
+            </div>
+
+            <!-- Gráfico de Dimensões -->
+            <div class="dimension-bars-container">
+                <h4 style="margin: 0 0 15px 0; color: #1e293b; font-size: 1.05em;">Perfil Dimensional (Escores Parciais):</h4>
+
+                <div class="dim-bar-item">
+                    <div class="dim-bar-label">
+                        <span>D1: Culpa por Prosperidade e Dissenso</span>
+                        <span id="dim1Val">0 / 25</span>
+                    </div>
+                    <div class="dim-bar-track">
+                        <div id="dim1Bar" class="dim-bar-fill"></div>
+                    </div>
+                </div>
+
+                <div class="dim-bar-item">
+                    <div class="dim-bar-label">
+                        <span>D2: Lealdade pelo Sofrimento Compartilhado</span>
+                        <span id="dim2Val">0 / 25</span>
+                    </div>
+                    <div class="dim-bar-track">
+                        <div id="dim2Bar" class="dim-bar-fill"></div>
+                    </div>
+                </div>
+
+                <div class="dim-bar-item">
+                    <div class="dim-bar-label">
+                        <span>D3: Responsabilidade Onipotente e Papel de Salvador</span>
+                        <span id="dim3Val">0 / 25</span>
+                    </div>
+                    <div class="dim-bar-track">
+                        <div id="dim3Bar" class="dim-bar-fill"></div>
+                    </div>
+                </div>
+
+                <div class="dim-bar-item">
+                    <div class="dim-bar-label">
+                        <span>D4: Auto-Repressão e Tributo Inconsciente</span>
+                        <span id="dim4Val">0 / 25</span>
+                    </div>
+                    <div class="dim-bar-track">
+                        <div id="dim4Bar" class="dim-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Síntese Diagnóstica -->
+            <div class="feedback-section">
+                <h4>Interpretação Clínica e Circuitaria Neurobiológica</h4>
+                <div id="feedbackText">Texto explicativo...</div>
+            </div>
+
+            <!-- Diretrizes Clínicas -->
+            <div class="clinical-steps-box">
+                <h4>Protocolo de Diferenciação do Self (Murray Bowen &amp; Ivan Boszormenyi-Nagy)</h4>
+                <ul id="recommendationsList">
+                    <li>Recomendações clínicas personalizadas...</li>
+                </ul>
+            </div>
+
+            <div class="cta-consult-box">
+                <h4>Deseja aprofundar a diferenciação do self em psicoterapia clínica?</h4>
+                <p style="color: #475569; font-size: 0.95em; max-width: 600px; margin: 0 auto 15px auto;">Compreender a origem transgeracional da culpa e reorganizar a circuitaria pré-frontal ventromedial é o primeiro passo para sustentar o merecimento de forma saudável e ética.</p>
+                <a href="/agendamento.html" class="btn-consult">Agendar Sessão de Avaliação</a>
+            </div>
+
+            <div class="btn-restart-box">
+                <button type="button" class="btn-restart" onclick="restartQuiz()">Reiniciar Teste</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Padronizado -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function calculateScore(e) {
+            e.preventDefault();
+
+            let d1 = 0, d2 = 0, d3 = 0, d4 = 0;
+
+            for (let i = 1; i <= 5; i++) {
+                const val = document.querySelector('input[name="q' + i + '"]:checked');
+                if (val) d1 += parseInt(val.value);
+            }
+            for (let i = 6; i <= 10; i++) {
+                const val = document.querySelector('input[name="q' + i + '"]:checked');
+                if (val) d2 += parseInt(val.value);
+            }
+            for (let i = 11; i <= 15; i++) {
+                const val = document.querySelector('input[name="q' + i + '"]:checked');
+                if (val) d3 += parseInt(val.value);
+            }
+            for (let i = 16; i <= 20; i++) {
+                const val = document.querySelector('input[name="q' + i + '"]:checked');
+                if (val) d4 += parseInt(val.value);
+            }
+
+            const total = d1 + d2 + d3 + d4;
+
+            const p1 = Math.round(((d1 - 5) / 20) * 100);
+            const p2 = Math.round(((d2 - 5) / 20) * 100);
+            const p3 = Math.round(((d3 - 5) / 20) * 100);
+            const p4 = Math.round(((d4 - 5) / 20) * 100);
+
+            document.getElementById('dim1Val').textContent = d1 + ' / 25 (' + p1 + '%)';
+            document.getElementById('dim1Bar').style.width = p1 + '%';
+
+            document.getElementById('dim2Val').textContent = d2 + ' / 25 (' + p2 + '%)';
+            document.getElementById('dim2Bar').style.width = p2 + '%';
+
+            document.getElementById('dim3Val').textContent = d3 + ' / 25 (' + p3 + '%)';
+            document.getElementById('dim3Bar').style.width = p3 + '%';
+
+            document.getElementById('dim4Val').textContent = d4 + ' / 25 (' + p4 + '%)';
+            document.getElementById('dim4Bar').style.width = p4 + '%';
+
+            document.getElementById('totalScoreBadge').textContent = total + ' / 100';
+
+            const tag = document.getElementById('classificationTag');
+            const feedback = document.getElementById('feedbackText');
+            const recs = document.getElementById('recommendationsList');
+
+            tag.className = 'classification-tag';
+
+            if (total <= 44) {
+                tag.textContent = 'Baixa Vulnerabilidade • Diferenciação Saudável do Self';
+                tag.classList.add('class-low');
+                feedback.innerHTML = '<p>Seu perfil indica uma sólida diferenciação do Self e capacidade de desfrutar de suas conquistas materiais, intelectuais e afetivas sem acionar respostas disfuncionais de dor social ou vergonha. Seu córtex pré-frontal ventromedial (vmPFC) opera com boa regulação sobre os sinais de alarme do dACC e da ínsula anterior, permitindo que a dopamina do estriado ventral valide suas vitórias de forma legítima. Você consegue amar e manter vínculos afetivos seguros com sua família de origem sem necessitar mimetizar suas escassezes ou assumir dívidas alheias.</p>';
+                recs.innerHTML = '<li>Mantenha o diálogo generoso e empático com seus familiares, sustentando seus limites com serenidade.</li><li>Continue utilizando seus recursos para expandir sua vida e construir um legado positivo que honre seus ancestrais através da prosperidade.</li><li>Observe se em períodos de estresse agudo surgem pequenas tentativas reflexas de auto-sabotagem para revalidar sua segurança.</li>';
+            } else if (total <= 70) {
+                tag.textContent = 'Vulnerabilidade Moderada • Conflito Ativo de Pertencimento';
+                tag.classList.add('class-mod');
+                feedback.innerHTML = '<p>Seu resultado revela uma tensão latente significativa entre o desejo legítimo de prosperar e o medo biológico ancestral de exclusão do clã. Quando você atinge estabilidade ou usufrui de momentos felizes, seu córtex cingulado anterior dorsal (dACC) interpreta a discrepância socioemocional em relação à família como uma quebra do contrato implícito de lealdade. É frequente a sensação de "peso no peito", o impulso de esconder suas conquistas ou a necessidade de justificar seu conforto através de um cansaço extenuante.</p>';
+                recs.innerHTML = '<li><strong>Pratique a Desfusão de Mandatos:</strong> Lembre-se conscientemente de que o sofrimento dos seus familiares não diminui quando você se sabota ou adoece.</li><li><strong>Substitua o Resgate pelo Afeto:</strong> Diferencie empatia de sobrecarga. Quando solicitado a salvar financeiramente familiares adultos, ofereça escuta e limites amorosos claros.</li><li><strong>Treino da Titulação do Merecimento:</strong> Permita-se desfrutar de itens de conforto e lazer sem inventar justificativas utilitaristas ou autoflagelações posteriores.</li>';
+            } else {
+                tag.textContent = 'Severa Culpa do Sobrevivente • Emaranhamento e Auto-Punição';
+                tag.classList.add('class-high');
+                feedback.innerHTML = '<p>Seu perfil apresenta índices severos de <strong>Culpa do Sobrevivente e Lealdades Invisíveis Cegas</strong>. Há uma forte captura dos seus circuitos de recompensa (estriado ventral e vmPFC) por esquemas inconscientes de sacrifício: a mente aprendeu que ter sucesso, saúde ou alegria é uma deserção imperdoável da dor familiar. Essa dinâmica manifesta-se em frequentes "tributos inconscientes" — perdas financeiras auto-induzidas, dores somáticas crônicas, parentificação abusiva ou escolha de relações tóxicas —, numa tentativa desesperada do cérebro de saldar uma dívida existencial impagável.</p>';
+                recs.innerHTML = '<li><strong>Ressignificação Ética da Lealdade:</strong> Compreenda na raiz que honrar os antepassados significa frutificar a árvore com integridade, e não secar os próprios galhos para igualar-se à raiz ferida.</li><li><strong>Interrupção do Resgate Compulsivo:</strong> Suspenda imediatamente empréstimos ou assunção de dívidas que comprometam sua própria sobrevivência; você não é o progenitor dos seus pais nem o juiz do destino deles.</li><li><strong>Acompanhamento Psicoterapêutico Especializado:</strong> Recomenda-se fortemente processo psicoterapêutico com ênfase sistêmica e regulação neuroafetiva para reestruturar as fronteiras do Self e curar o trauma transgeracional.</li>';
+            }
+
+            const resultsBox = document.getElementById('resultsContainer');
+            resultsBox.style.display = 'block';
+            resultsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function restartQuiz() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('resultsContainer').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

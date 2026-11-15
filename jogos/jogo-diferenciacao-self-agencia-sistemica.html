@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 49: Matriz de Diferenciação do Self e Agência Sistêmica – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para desatar nós de lealdade invisível, regular a dor social no dACC e consolidar a diferenciação do self com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #005f73;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .phase-indicator {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Painel Gráfico Visual da Rede */
+        .network-canvas-container {
+            background: radial-gradient(circle at center, #073b4c 0%, #051826 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #0a9396;
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .network-node-visual {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 580px;
+            position: relative;
+        }
+
+        .node-bubble {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .node-clan {
+            background: #005f73;
+            border: 2px solid #94d2bd;
+        }
+
+        .node-self {
+            background: #ee9b00;
+            border: 3px solid #ffffff;
+            transform: scale(1.15);
+            box-shadow: 0 0 25px rgba(238, 155, 0, 0.6);
+        }
+
+        .node-demand {
+            background: #9b2226;
+            border: 2px solid #ca6702;
+        }
+
+        .connection-line {
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            right: 15%;
+            height: 3px;
+            background: linear-gradient(90deg, #94d2bd, #ee9b00, #ca6702);
+            z-index: 1;
+            transform: translateY(-50%);
+            opacity: 0.7;
+        }
+
+        /* Medidores */
+        .meters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 680px) {
+            .meters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .meter-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .meter-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .meter-track {
+            background: #cbd5e1;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .meter-fill-differentiation {
+            height: 100%;
+            background: linear-gradient(90deg, #0a9396, #005f73);
+            width: 50%;
+            transition: width 0.4s ease;
+        }
+
+        .meter-fill-social-pain {
+            height: 100%;
+            background: linear-gradient(90deg, #ee9b00, #ae2012);
+            width: 60%;
+            transition: width 0.4s ease;
+        }
+
+        .meter-fill-delegated-burden {
+            height: 100%;
+            background: linear-gradient(90deg, #ca6702, #9b2226);
+            width: 70%;
+            transition: width 0.4s ease;
+        }
+
+        /* Cartão de Cenário */
+        .scenario-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 25px;
+            border-left: 5px solid #005f73;
+        }
+
+        .scenario-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #005f73;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .scenario-desc {
+            color: #334155;
+            font-size: 0.98em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .scenario-dilemma-alert {
+            background: #fffbeb;
+            border-left: 3px solid #f59e0b;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: #b45309;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Opções de Decisão */
+        .decisions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .decision-btn {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .decision-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 147, 150, 0.1);
+        }
+
+        .decision-tag {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .tag-subjugation {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .tag-cutoff {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tag-differentiation {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .decision-text {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.45;
+        }
+
+        /* Feedback da Rodada */
+        .round-feedback-card {
+            display: none;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1.5px solid #0a9396;
+            margin-top: 20px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .round-feedback-title {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+
+        .round-feedback-desc {
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 15px;
+        }
+
+        .btn-next-phase {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            font-weight: 700;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+
+        .btn-next-phase:hover {
+            background: linear-gradient(135deg, #0a9396, #005f73);
+            transform: translateY(-2px);
+        }
+
+        /* Tela Final de Vitória / Conclusão */
+        .game-over-box {
+            display: none;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            border: 2px solid #059669;
+            text-align: center;
+        }
+
+        .game-over-title {
+            color: #065f46;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .final-score-display {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 15px 0;
+        }
+
+        .neuro-summary-box {
+            background: #f0fdfa;
+            border: 1px solid #99f6e4;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+            margin: 25px 0;
+            color: #134e4a;
+            line-height: 1.65;
+            font-size: 0.95em;
+        }
+
+        .btn-restart-game {
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restart-game:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding: 40px 20px; max-width: 860px;">
+        <header class="article-header" style="text-align: center; margin-bottom: 25px;">
+            <span class="phase-indicator">JOGO DE TREINAMENTO COGNITIVO • DIA 49</span>
+            <h1 style="color: #005f73; font-size: 2.1em; line-height: 1.25;">Matriz de Diferenciação do Self e Agência Sistêmica</h1>
+            <p class="article-author-date">Desenvolvido por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+        </header>
+
+        <div class="game-wrapper">
+            <!-- Barra de Status Superior -->
+            <div class="game-header-bar">
+                <div class="stat-badge">
+                    <span class="stat-label">Fase</span>
+                    <span id="phaseDisplay" class="stat-value">1 / 5</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Pontuação</span>
+                    <span id="scoreDisplay" class="stat-value">0</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Recorde</span>
+                    <span id="highScoreDisplay" class="stat-value">0</span>
+                </div>
+                <div>
+                    <button id="soundToggleBtn" class="sound-btn" onclick="toggleSound()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        <span>Som: Ativo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grafo Visual dos Nós Sistêmicos -->
+            <div class="network-canvas-container">
+                <div class="network-node-visual">
+                    <div class="node-bubble node-clan" id="nodeClan">
+                        <span>Clã</span>
+                        <small style="font-size: 0.68em; opacity: 0.85;">Origem</small>
+                    </div>
+                    <div class="connection-line" id="connectionLine"></div>
+                    <div class="node-bubble node-self" id="nodeSelf">
+                        <span>Self</span>
+                        <small style="font-size: 0.68em; opacity: 0.9;">Você</small>
+                    </div>
+                    <div class="node-bubble node-demand" id="nodeDemand">
+                        <span>Carga</span>
+                        <small style="font-size: 0.68em; opacity: 0.85;">Dívida</small>
+                    </div>
+                </div>
+                <div id="graphStatusText" style="color: #94d2bd; font-size: 0.82em; margin-top: 15px; font-weight: 500;">
+                    Status da Rede: Tensão Relacional Ativa • Calibre as Fronteiras do Self
+                </div>
+            </div>
+
+            <!-- Medidores Neurobiológicos -->
+            <div class="meters-grid">
+                <div class="meter-card">
+                    <div class="meter-label-row">
+                        <span>Diferenciação (vmPFC / TPJ)</span>
+                        <span id="diffVal">50%</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="diffBar" class="meter-fill-differentiation" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div class="meter-card">
+                    <div class="meter-label-row">
+                        <span>Dor Social (dACC / Ínsula)</span>
+                        <span id="painVal">60%</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="painBar" class="meter-fill-social-pain" style="width: 60%;"></div>
+                    </div>
+                </div>
+                <div class="meter-card">
+                    <div class="meter-label-row">
+                        <span>Carga Delegada Externa</span>
+                        <span id="burdenVal">70%</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="burdenBar" class="meter-fill-delegated-burden" style="width: 70%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Cenário da Fase -->
+            <div id="scenarioContainer" class="scenario-box">
+                <h3 id="scenarioTitle" class="scenario-title">Fase 1: O Pedido de Resgate Financeiro</h3>
+                <p id="scenarioDesc" class="scenario-desc">Carregando cenário...</p>
+                <div id="scenarioAlert" class="scenario-dilemma-alert">Alerta...</div>
+
+                <!-- Lista de Escolhas Estratégicas -->
+                <div id="decisionsList" class="decisions-list"></div>
+
+                <!-- Feedback da Rodada -->
+                <div id="roundFeedback" class="round-feedback-card">
+                    <div id="roundFeedbackTitle" class="round-feedback-title">Resultado</div>
+                    <div id="roundFeedbackDesc" class="round-feedback-desc">Descrição...</div>
+                    <button id="btnNextPhase" class="btn-next-phase" onclick="nextPhase()">Avançar para a Próxima Fase →</button>
+                </div>
+            </div>
+
+            <!-- Tela de Vitória / Conclusão -->
+            <div id="gameOverBox" class="game-over-box">
+                <h2 class="game-over-title">🎉 Calibração Sistêmica Concluída!</h2>
+                <p style="color: #475569; font-size: 1.05em;">Você desatou os nós de lealdade cega, regulou a dor social no dACC e estabeleceu uma soberania ética e madura para o seu Self.</p>
+                
+                <div class="final-score-display">
+                    <span id="finalScoreVal">0</span> <small style="font-size: 0.4em; color: #64748b;">pontos</small>
+                </div>
+
+                <div class="neuro-summary-box">
+                    <h4 style="margin-top: 0; color: #0f766e;">Síntese Neuropsicológica da Sua Performance:</h4>
+                    <p id="neuroSummaryText">Seu córtex pré-frontal ventromedial (vmPFC) assumiu o comando sobre os reflexos automáticos de apaziguamento tribal. Você aprendeu a sustentar o vínculo com seus entes queridos sem necessitar carregar a dívida existencial alheia nem recorrer ao rompimento cínico (corte afetivo). A verdadeira honra à ancestralidade é a frutificação dos seus dons.</p>
+                </div>
+
+                <button type="button" class="btn-restart-game" onclick="restartGame()">Jogar Novamente</button>
+            </div>
+        </div>
+
+        <!-- Seção Teórica Psicoeducativa -->
+        <section class="test-intro-box" style="margin-top: 30px;">
+            <h3 style="color: #005f73; margin-top: 0;">Fundamentação Neurocognitiva do Treino:</h3>
+            <p>A <strong>Matriz de Diferenciação do Self</strong> exercita a Junção Temporoparietal (TPJ) e o Córtex Frontopolar (BA 10) na distinção metacognitiva entre a própria agência e as demandas projetadas pelo grupo familiar (Teoria da Mente). Simultaneamente, treina o Córtex Cingulado Anterior Dorsal (dACC) a não interpretar o estabelecimento de limites saudáveis como um ato criminoso de traição, reduzindo a necessidade de auto-sabotagens compensatórias.</p>
+        </section>
+    </main>
+
+    <!-- Rodapé Canônico Padronizado -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Lógica do Jogo e Web Audio API -->
+    <script>
+        // Web Audio API
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggleBtn');
+            btn.innerHTML = soundEnabled ?
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> <span>Som: Ativo</span>' :
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg> <span>Som: Mudo</span>';
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.15, gain = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+                g.gain.setValueAtTime(gain, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+                osc.connect(g);
+                g.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                console.warn('Audio error:', e);
+            }
+        }
+
+        function soundClick() {
+            playTone(520, 'sine', 0.08, 0.07);
+        }
+
+        function soundHarmonic() {
+            // Acorde de Diferenciação Saudável (Dó Maior / 523.25, 659.25, 783.99)
+            playTone(523.25, 'sine', 0.2, 0.1);
+            setTimeout(() => playTone(659.25, 'sine', 0.25, 0.1), 80);
+            setTimeout(() => playTone(783.99, 'sine', 0.35, 0.12), 160);
+        }
+
+        function soundWarning() {
+            playTone(260, 'sawtooth', 0.16, 0.08);
+            setTimeout(() => playTone(210, 'sawtooth', 0.2, 0.08), 120);
+        }
+
+        function soundVictory() {
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((n, idx) => {
+                setTimeout(() => playTone(n, 'triangle', 0.35, 0.12), idx * 120);
+            });
+        }
+
+        // Fases e Cenários Clínicos
+        const PHASES = [
+            {
+                title: "Fase 1: O Pedido de Resgate Financeiro",
+                desc: "Seu irmão mais velho contraiu dívidas com compras supérfluas e solicita que você empreste suas economias reservadas para os estudos dos seus filhos.",
+                alert: "⚠️ Alarme do dACC: 'Se você negar ajuda, será um traidor ingrato que abandonou o próprio sangue.'",
+                options: [
+                    {
+                        type: "subjugation",
+                        tag: "Subjugação por Lealdade Cega",
+                        text: "Entregar todo o dinheiro guardado e contrair um empréstimo pessoal para cobrir o restante da dívida dele.",
+                        diffDelta: -20,
+                        painDelta: +10,
+                        burdenDelta: +30,
+                        score: 0,
+                        feedbackTitle: "Emaranhamento e Perda de Fronteiras",
+                        feedbackDesc: "Você agiu como provedor salvacionista, infantilizou seu irmão adulto e comprometeu o futuro da sua própria família. A dor social deu um alívio momentâneo falso, mas o custo biológico foi devastador."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Corte Afetivo Reativo",
+                        text: "Bloquear o contato, insultá-lo por sua irresponsabilidade e prometer nunca mais pisar na casa da família.",
+                        diffDelta: -10,
+                        painDelta: +35,
+                        burdenDelta: -10,
+                        score: 10,
+                        feedbackTitle: "Pseudodiferenciação por Ruptura",
+                        feedbackDesc: "Murray Bowen alertava: o corte afetivo é uma ilusão de liberdade. A agressividade reativa revela que o vínculo continua sequestrando seu sistema nervoso, aumentando a dor no dACC."
+                    },
+                    {
+                        type: "differentiation",
+                        tag: "Diferenciação Madura do Self",
+                        text: "Dizer com serenidade e afeto: 'Eu amo você e me importo com sua vida, mas não posso emprestar o dinheiro dos meus filhos. Posso ajudá-lo a planejar um plano de renegociação.'",
+                        diffDelta: +25,
+                        painDelta: -20,
+                        burdenDelta: -25,
+                        score: 100,
+                        feedbackTitle: "Soberania do vmPFC com Presença Amorosa",
+                        feedbackDesc: "Excelente! Você manteve a proximidade afetiva sem capitular ao resgate desordenado. Respeitou a agência adulta do seu irmão e protegeu as fronteiras do seu núcleo familiar."
+                    }
+                ]
+            },
+            {
+                title: "Fase 2: O Almoço de Família e o Conforto Material",
+                desc: "No almoço de domingo, seus parentes passam duas horas se lamentando sobre a vida difícil e perguntam como está seu trabalho recente.",
+                alert: "⚠️ Alarme de Iniquidade: 'Se você admitir que está bem e prosperando, parecerá um esnobe insensível.'",
+                options: [
+                    {
+                        type: "subjugation",
+                        tag: "Mimetismo de Escassez",
+                        text: "Inventar problemas inexistentes, reclamar de cansaço extremo e fingir que sua vida financeira está à beira da ruína.",
+                        diffDelta: -15,
+                        painDelta: +15,
+                        burdenDelta: +20,
+                        score: 0,
+                        feedbackTitle: "Tributo de Sofrimento Compartilhado",
+                        feedbackDesc: "Ao mentir sobre suas vitórias para se igualar à dor do grupo, você valida a crença de que a prosperidade é criminosa e reforça o tabu da alegria no clã."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Superioridade Defensiva",
+                        text: "Fazer um discurso arrogante dizendo que eles só sofrem porque não têm ambição ou método de produtividade.",
+                        diffDelta: -10,
+                        painDelta: +40,
+                        burdenDelta: -10,
+                        score: 15,
+                        feedbackTitle: "Agressão Compensatória",
+                        feedbackDesc: "A arrogância é a casca frágil da culpa do sobrevivente. Disparou o alarme de rejeição no clã e aumentou o isolamento."
+                    },
+                    {
+                        type: "differentiation",
+                        tag: "Diferenciação Madura do Self",
+                        text: "Compartilhar com gratidão e simplicidade: 'O trabalho tem sido intenso, mas tenho conquistado bons frutos e me sinto muito grato.' Ouvir as dores alheias com compaixão sem absorver a queixa.",
+                        diffDelta: +25,
+                        painDelta: -20,
+                        burdenDelta: -20,
+                        score: 100,
+                        feedbackTitle: "Habitando a Própria Vida com Dignidade",
+                        feedbackDesc: "Perfeito! Você não precisou nem ostentar nem se encolher. A serenidade em admitir a estabilidade ensina ao sistema familiar que prosperar é uma possibilidade viável."
+                    }
+                ]
+            },
+            {
+                title: "Fase 3: O Convite para a Parceria Estratégica",
+                desc: "Você recebe uma proposta profissional para liderar uma expansão internacional. A remuneração é alta, mas exige viajar com frequência.",
+                alert: "⚠️ Alarme do BNST: 'Quem sou eu para ir tão longe se meus pais nem terminaram o ensino básico? Vou quebrar a linhagem.'",
+                options: [
+                    {
+                        type: "subjugation",
+                        tag: "Auto-Sabotagem por Lealdade",
+                        text: "Recusar a proposta ou perder o prazo de resposta por 'esquecimento' súbito para continuar na mesma cidade.",
+                        diffDelta: -25,
+                        painDelta: +10,
+                        burdenDelta: +30,
+                        score: 0,
+                        feedbackTitle: "Paralisia por Mandato Transgeracional",
+                        feedbackDesc: "Você pagou o tributo da invisibilidade: sacrificou a sua vocação para não superar o teto de realizações dos seus antepassados."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Aceitação sem Conexão",
+                        text: "Aceitar a proposta e cortar contato com os pais, afirmando que eles são atrasados e não entendem o mundo globalizado.",
+                        diffDelta: 0,
+                        painDelta: +30,
+                        burdenDelta: -15,
+                        score: 25,
+                        feedbackTitle: "Sucesso com Fratura Afetiva",
+                        feedbackDesc: "Você conquistou o avanço externo, mas ao custo de uma ferida no dACC que cobrará seu preço em solidão e ansiedade difusa."
+                    },
+                    {
+                        type: "differentiation",
+                        tag: "Diferenciação Madura do Self",
+                        text: "Aceitar a proposta honrando suas origens: 'Meus pais trabalharam duro para que eu tivesse as asas que eles não tiveram. Frutificar essa oportunidade é a maior honra ao esforço deles.'",
+                        diffDelta: +30,
+                        painDelta: -25,
+                        burdenDelta: -25,
+                        score: 100,
+                        feedbackTitle: "Honrando a Raiz com Frutos Frondosos",
+                        feedbackDesc: "Extraordinário! Você ressignificou a balança de Boszormenyi-Nagy: sua ascensão não é deserção, mas a realização do projeto de sobrevivência dos seus ancestrais."
+                    }
+                ]
+            },
+            {
+                title: "Fase 4: A Mediação de Conflitos Conjugais dos Pais",
+                desc: "Sua mãe liga chorando pedindo que você intervenha e repreenda duramente seu pai por uma briga conjugal entre eles.",
+                alert: "⚠️ Parentificação Tóxica: 'Se você não consertar o casamento dos seus pais, a família vai desmoronar.'",
+                options: [
+                    {
+                        type: "subjugation",
+                        tag: "Parentificação e Triangulação",
+                        text: "Assumir o papel de juiz, ligar brigando com o pai e passar noites sem dormir tentando gerenciar o casamento deles.",
+                        diffDelta: -20,
+                        painDelta: +20,
+                        burdenDelta: +35,
+                        score: 0,
+                        feedbackTitle: "Triangulação e Perda de Agência",
+                        feedbackDesc: "Você virou o cônjuge simbólico dos seus pais. Salvador sacrificial que consome sua saúde mental para sustentar uma dinâmica adulta que não lhe cabe."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Rejeição Insensível",
+                        text: "Dizer rispidamente: 'Vocês que se virem, já estou farto dos dramas de vocês' e desligar o telefone na cara dela.",
+                        diffDelta: -5,
+                        painDelta: +25,
+                        burdenDelta: -10,
+                        score: 20,
+                        feedbackTitle: "Corte Ríspido",
+                        feedbackDesc: "Embora a recusa em triangular fosse correta, a reatividade hostil revelou um dACC sobrecarregado de mágoa e culpa não processada."
+                    },
+                    {
+                        type: "differentiation",
+                        tag: "Diferenciação Madura do Self",
+                        text: "Acolher com ternura e firmeza: 'Mãe, sinto muito que vocês estejam tristes, mas esse é um assunto entre você e o papai. Eu amo vocês dois como filho e posso ajudá-la a encontrar um terapeuta de casal.'",
+                        diffDelta: +25,
+                        painDelta: -25,
+                        burdenDelta: -30,
+                        score: 100,
+                        feedbackTitle: "Destriangulação Assertiva",
+                        feedbackDesc: "Brilhante destriangulação (Murray Bowen). Você ofereceu afeto filial legítimo, mas devolveu a responsabilidade do matrimônio aos seus legítimos donos."
+                    }
+                ]
+            },
+            {
+                title: "Fase 5: O Estabelecimento de Tradições Próprias",
+                desc: "Você e seu(sua) parceiro(a) decidem passar o feriado de fim de ano em sua própria casa para descansar, mas seus sogros e pais exigem presença obrigatória em duas cidades diferentes.",
+                alert: "⚠️ Alarme de Tirania Familiar: 'Quem coloca o próprio descanso antes da tradição do clã é egoísta e destruidor de lares.'",
+                options: [
+                    {
+                        type: "subjugation",
+                        tag: "Subjugação por Fawning",
+                        text: "Viajar 1.200 km de carro em dois dias, passar o feriado exausto e brigar com o parceiro para agradar a todos os familiares.",
+                        diffDelta: -25,
+                        painDelta: +15,
+                        burdenDelta: +35,
+                        score: 0,
+                        feedbackTitle: "Exaustão por Apaziguamento",
+                        feedbackDesc: "O 'fawning' relacional sacrificou a intimidade e a energia do seu casal para manter a ilusão infantil de que você ainda pertence apenas ao clã original."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Boicote Cínico",
+                        text: "Sumir sem dar satisfações, viajar para o exterior e postar fotos provocativas nas redes com legendas irônicas.",
+                        diffDelta: -5,
+                        painDelta: +30,
+                        burdenDelta: -10,
+                        score: 20,
+                        feedbackTitle: "Rebeldia Imatura",
+                        feedbackDesc: "Provocar o clã é o reverso da subjugação: você ainda está preso à necessidade de validação ou de choque, sem real autonomia."
+                    },
+                    {
+                        type: "differentiation",
+                        tag: "Diferenciação Madura do Self",
+                        text: "Comunicar com antecedência e carinho: 'Neste ano ficaremos em casa para recarregar as energias e celebrar nossa primeira tradição como casal. Em janeiro marcaremos um almoço especial com vocês.'",
+                        diffDelta: +30,
+                        painDelta: -25,
+                        burdenDelta: -25,
+                        score: 100,
+                        feedbackTitle: "Fundação de um Novo Núcleo Autônomo",
+                        feedbackDesc: "Perfeito! Você exerceu a diferenciação conjugal: priorizou a segurança do seu lar imediato sem agredir as raízes familiares. Um triunfo do vmPFC."
+                    }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentPhaseIndex = 0;
+        let score = 0;
+        let differentiation = 50; // %
+        let socialPain = 60;      // %
+        let delegatedBurden = 70;  // %
+        let canChoose = true;
+
+        const HIGH_SCORE_KEY = 'deo_game_dia49_highscore';
+
+        function initGame() {
+            const savedHighScore = localStorage.getItem(HIGH_SCORE_KEY) || 0;
+            document.getElementById('highScoreDisplay').textContent = savedHighScore;
+            loadPhase(currentPhaseIndex);
+        }
+
+        function loadPhase(idx) {
+            canChoose = true;
+            document.getElementById('roundFeedback').style.display = 'none';
+
+            const phase = PHASES[idx];
+            document.getElementById('phaseDisplay').textContent = (idx + 1) + ' / ' + PHASES.length;
+            document.getElementById('scenarioTitle').textContent = phase.title;
+            document.getElementById('scenarioDesc').textContent = phase.desc;
+            document.getElementById('scenarioAlert').textContent = phase.alert;
+
+            // Renderizar Decisões
+            const list = document.getElementById('decisionsList');
+            list.innerHTML = '';
+
+            phase.options.forEach((opt, optIdx) => {
+                const btn = document.createElement('div');
+                btn.className = 'decision-btn';
+                btn.onclick = () => selectOption(optIdx);
+
+                let tagClass = 'tag-subjugation';
+                if (opt.type === 'cutoff') tagClass = 'tag-cutoff';
+                if (opt.type === 'differentiation') tagClass = 'tag-differentiation';
+
+                btn.innerHTML = `
+                    <span class="decision-tag ${tagClass}">${opt.tag}</span>
+                    <div class="decision-text">${opt.text}</div>
+                `;
+                list.appendChild(btn);
+            });
+
+            updateMeters();
+            updateVisualGraph();
+        }
+
+        function selectOption(optIdx) {
+            if (!canChoose) return;
+            canChoose = false;
+
+            soundClick();
+
+            const phase = PHASES[currentPhaseIndex];
+            const opt = phase.options[optIdx];
+
+            // Atualização dos medidores
+            differentiation = Math.max(0, Math.min(100, differentiation + opt.diffDelta));
+            socialPain = Math.max(0, Math.min(100, socialPain + opt.painDelta));
+            delegatedBurden = Math.max(0, Math.min(100, delegatedBurden + opt.burdenDelta));
+            score += opt.score;
+
+            document.getElementById('scoreDisplay').textContent = score;
+
+            updateMeters();
+            updateVisualGraph();
+
+            // Áudio e Feedback
+            if (opt.type === 'differentiation') {
+                soundHarmonic();
+            } else {
+                soundWarning();
+            }
+
+            const feedbackCard = document.getElementById('roundFeedback');
+            const feedbackTitle = document.getElementById('roundFeedbackTitle');
+            const feedbackDesc = document.getElementById('roundFeedbackDesc');
+
+            feedbackTitle.textContent = opt.feedbackTitle;
+            feedbackTitle.style.color = (opt.type === 'differentiation') ? '#065f46' : '#991b1b';
+            feedbackDesc.textContent = opt.feedbackDesc;
+
+            feedbackCard.style.display = 'block';
+            feedbackCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function updateMeters() {
+            document.getElementById('diffVal').textContent = differentiation + '%';
+            document.getElementById('diffBar').style.width = differentiation + '%';
+
+            document.getElementById('painVal').textContent = socialPain + '%';
+            document.getElementById('painBar').style.width = socialPain + '%';
+
+            document.getElementById('burdenVal').textContent = delegatedBurden + '%';
+            document.getElementById('burdenBar').style.width = delegatedBurden + '%';
+        }
+
+        function updateVisualGraph() {
+            const nodeSelf = document.getElementById('nodeSelf');
+            const nodeClan = document.getElementById('nodeClan');
+            const nodeDemand = document.getElementById('nodeDemand');
+            const connLine = document.getElementById('connectionLine');
+            const textStatus = document.getElementById('graphStatusText');
+
+            if (differentiation >= 75) {
+                nodeSelf.style.boxShadow = '0 0 35px rgba(10, 147, 150, 0.9)';
+                nodeSelf.style.borderColor = '#94d2bd';
+                connLine.style.background = 'linear-gradient(90deg, #94d2bd, #0a9396)';
+                textStatus.textContent = 'Status da Rede: Soberania do Self Consolidada • Fronteiras Seguras e Afeto Saudável';
+                textStatus.style.color = '#94d2bd';
+            } else if (differentiation <= 35) {
+                nodeSelf.style.boxShadow = '0 0 25px rgba(155, 34, 38, 0.7)';
+                nodeSelf.style.borderColor = '#ae2012';
+                connLine.style.background = 'linear-gradient(90deg, #9b2226, #ca6702)';
+                textStatus.textContent = 'Status da Rede: Emaranhamento Sistêmico Crítico • Vulnerabilidade a Auto-Sabotagem';
+                textStatus.style.color = '#fca5a5';
+            } else {
+                nodeSelf.style.boxShadow = '0 0 25px rgba(238, 155, 0, 0.6)';
+                nodeSelf.style.borderColor = '#ffffff';
+                connLine.style.background = 'linear-gradient(90deg, #94d2bd, #ee9b00, #ca6702)';
+                textStatus.textContent = 'Status da Rede: Tensão Relacional Ativa • Calibre as Fronteiras do Self';
+                textStatus.style.color = '#fde68a';
+            }
+        }
+
+        function nextPhase() {
+            soundClick();
+            currentPhaseIndex++;
+
+            if (currentPhaseIndex < PHASES.length) {
+                loadPhase(currentPhaseIndex);
+            } else {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            soundVictory();
+
+            document.getElementById('scenarioContainer').style.display = 'none';
+            document.getElementById('gameOverBox').style.display = 'block';
+
+            document.getElementById('finalScoreVal').textContent = score;
+
+            // Salvar HighScore
+            const currentHigh = parseInt(localStorage.getItem(HIGH_SCORE_KEY) || '0');
+            if (score > currentHigh) {
+                localStorage.setItem(HIGH_SCORE_KEY, score);
+                document.getElementById('highScoreDisplay').textContent = score;
+            }
+
+            const summary = document.getElementById('neuroSummaryText');
+            if (score >= 400) {
+                summary.textContent = 'Desempenho Magistral! Seu córtex pré-frontal ventromedial (vmPFC) e sua junção temporoparietal (TPJ) alcançaram índices ideais de diferenciação ética. Você protegeu a si mesmo e a seus entes queridos das armadilhas da culpa sacrificial e do corte afetivo.';
+            } else if (score >= 250) {
+                summary.textContent = 'Bom Desempenho! Você conseguiu manter limites na maior parte das situações, mas ainda cedeu parcialmente aos reflexos ancestrais de apaziguamento tribal. Pratique a titulação do merecimento no seu cotidiano.';
+            } else {
+                summary.textContent = 'Atenção Clínica: Os esquemas de emaranhamento e lealdades cegas ainda exercem forte atração gravitacional sobre suas escolhas. Recomenda-se a leitura atenta do artigo de fundamentação e o acompanhamento terapêutico focado em diferenciação do self.';
+            }
+
+            document.getElementById('gameOverBox').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartGame() {
+            soundClick();
+            currentPhaseIndex = 0;
+            score = 0;
+            differentiation = 50;
+            socialPain = 60;
+            delegatedBurden = 70;
+            document.getElementById('scoreDisplay').textContent = '0';
+            document.getElementById('scenarioContainer').style.display = 'block';
+            document.getElementById('gameOverBox').style.display = 'none';
+            loadPhase(0);
+        }
+
+        // Iniciação no carregamento
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
