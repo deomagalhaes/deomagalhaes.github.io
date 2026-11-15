@@ -4,14 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 17 — Treinador de Solfejo & Ditado Melódico Caipira
+## 🎯 Projeto Prioritário Atual: Fase 18 — Gerador de Introduções Clássicas em Pagode de Viola
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Módulo interativo de treinamento auditivo e percepção de intervalos caipiras característicos (terças maiores/menores, sextas caipiras, quartas aumentadas de folia e quintas justas).
-  2. Ditado melódico progressivo com frases curtas de modas canônicas e ponteios, exigindo que o violeiro identifique as notas de ouvido e responda clicando no braço SVG virtual ou no teclado melódico.
-  3. Sistema de pontuação, feedback pedagógico imediato com solfejo cantado/sintetizado e níveis graduais de dificuldade (Iniciante, Boiadeiro, Cantador e Mestre do Estradão).
-
+  1. Motor algorítmico e banco canônico de introduções de pagode caipira com digitações em semicolcheias sincopadas, repiques de mão direita (p, i, m, a) e batidas secas no tampo [TAP].
+  2. Mapeamento passo a passo no braço SVG (Canhoto/Destro) com indicação visual de digitações de mão esquerda nas primeiras posições e pestanas altas do estradão.
+  3. Sintetizador rítmico Web Audio API com controle de andamento progressivo (60 a 140 BPM), modo looping de treino de velocidade e exportação em 1 clique para o Editor de Tablaturas.
 ---
 
 ## 📋 Backlog de Inovações Futuras (Projetos Proativos)
@@ -46,8 +45,8 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Geração algorítmica de duetos contrapontísticos com separação estéreo binaural real (pan 1ª viola -50% e 2ª viola +50%), condução de vozes em movimento contrário, oblíquo e antifonia, algoritmo anti-choque de oitavadas e exportação para tablatura.
 14. **[x] Simulador Acústico de Madeiras & Ressonâncias Lutherísticas de Chladni (Fase 16 Concluída):**
     - Física e propriedades acústicas de tampos (Spruce/Abeto, Cedro Canadense, Pinho Brasileiro/Araucária, Engelmann) e fundos/laterais (Jacarandá da Bahia, Caviúna Paulista, Mogno, Imbuia, Maple). Simulação gráfica interativa de padrões nodais de Chladni com 1400 partículas em Canvas 2D, síntese Web Audio API (Tap Tone, Arpejo Cebolão, Rasqueado e Comparador A/B), laudo lutherístico com 4 medidores analíticos e integração com o braço SVG virtual no modo `displayMode: 'TONEWOOD'` com nós harmônicos naturais.
-15. **[ ] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17):**
-    - Percepção intervalar das modas de viola e treino auditivo de terças e sextas com resposta interativa no braço.
+15. **[x] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17 Concluída):**
+    - Percepção intervalar das modas de viola e treino auditivo de intervalos típicos (terças maiores/menores, sextas caipiras, quartas aumentadas de folia, quintas de bordão e oitavas). Síntese vocal de solfejo com formantes acústicos (F1/F2) e vibrato natural caipira, estúdio de ditado melódico com 10 clássicos (Chico Mineiro, Menino da Porteira, Pagode em Brasília, etc.) e gerador procedural. Entrada dupla interativa via braço virtual SVG e teclado de solfejo de 12 notas, gamificação com 4 patentes de violeiro (Iniciante da Roça até Mestre Tião Carreiro) e persistência total no Vault.
 16. **[ ] Gerador de Introduções Clássicas em Pagode de Viola (Fase 18):**
     - Motor algorítmico de licks em semicolcheias com repique, contratempos e batidas de tampo.
 17. **[ ] Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (Fase 19):**
@@ -56,6 +55,31 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **15/11/2026 — Sessão 17** (Fase 17 Concluída):
+  - **Treinador de Solfejo & Ditado Melódico Caipira (Caipira Solfège, Ear Training & Melodic Dictation Studio)**:
+    - **Catálogo Sistemático de 12 Intervalos Caipiras Canônicos (`CAIPIRA_INTERVALS_CATALOG`)**:
+      - Modelagem etnomusicológica de todos os intervalos da música sertaneja tradicional: *Uníssono Puro (1ª Justa)* (ressonância dos pares 1 e 2 no Cebolão em Mi), *2ª Menor de Apojatura (2m)* (tensão de apojaturas caipiras e lamentos cromáticos), *2ª Maior de Ligadura (2M)* (passo melódico dos ligados e floreios rápidos), *3ª Menor da Saudade (3m)* (nostalgia das modas em tom menor como Moda da Mula Preta), *3ª Maior Caipira (3M)* (a alma dos duetos em terças caboclas), *4ª Justa da Folia (4J)* (solenidade dos hinos rurais de Folia de Reis), *Trítono Caipira / 4ª Aumentada (4A/5d)* (a 4ª lídea característica do sertão e tensão do acorde dominante B7), *5ª Justa do Bordão (5J)* (consonância aberta e sustentação dos bordões soltos), *6ª Menor de Toada (6m)* (salto expressivo e dramático antes do repouso na quinta), *6ª Maior do Estradão (6M)* (o brilho luminoso dos ponteios em sextas de Tião Carreiro), *7ª Menor de Pagode (7m)* (tensão azulada da dominante com sétima propulsora do pagode e cururu), *7ª Maior Romântica (7M)* (a sensível lírica das guarânias e canções modernas de viola) e *8ª Justa Pura (8J)* (a assinatura cósmica dos pares oitavados 3, 4 e 5).
+      - Quatro níveis de dificuldade progressiva: *Iniciante da Roça* (1ª, 2M, 3M, 5J, 8J), *Boiadeiro Violeiro* (+ 3m, 4J, 6M), *Cantador do Estradão* (+ 4A/Trítono, 6m, 7m) e *Mestre Tião Carreiro* (todos os 12 intervalos).
+    - **Síntese Vocal Acústica de Solfejo por Formantes (`singSolfègeVowel`)**:
+      - Modelagem física do trato vocal humano com síntese subtrativa via cascata de filtros passa-faixa ressonantes (`BiquadFilterNode`, Q = 6.0 a 8.0) calibrados nas frequências dos formantes F1 e F2 de cada vogal do português brasileiro (Dó, Dó♯, Ré, Ré♯, Mi, Fá, Fá♯, Sol, Sol♯, Lá, Lá♯, Si).
+      - LFO de vibrato laríngeo caipira operando a 5.3 Hz com profundidade de 5.5 cents e curva de início suave após 160ms.
+      - Osciladores duplos (dente de serra para riqueza de pregas vocais e triangular para corpo) e envoltória com ataque humano de 60ms.
+      - 3 modos de escuta comutáveis: *Viola + Canto (Dueto Acústico)*, *Somente Viola Caipira* (plucked string metálico com tampo de madeira) e *Somente Canto Solfejado*.
+      - 3 modos de reprodução intervalar: *Harmônico (Simultâneo)*, *Melódico Ascendente* e *Melódico Descendente*.
+    - **Estúdio de Ditado Melódico Caipira & 10 Solos Históricos (`CAIPIRA_DICTATION_PHRASES`)**:
+      - Banco de dados curado com temas fundamentais da viola: *Chico Mineiro (Toada de Tonico & Tinoco)*, *O Menino da Porteira (Cururu de Teddy Vieira)*, *Pagode em Brasília (Pagode Virtuoso de Tião Carreiro)*, *Folia de Reis (Melodia Lídea Sagrada)*, *Tristeza do Jeca (Valsa de Angelino de Oliveira)*, *O Rei do Gado (Rasqueado do Sertão)*, *Cururu do Tietê (Ponteio Ribeirinho)*, *Ferrugem (Ponteio Moderno de Almir Sater)*, *Luar do Sertão (Canção Caipira Tradicional)* e *Duelo Canavieiro (Desafio Virtuoso em Pagode)*.
+      - *Gerador Procedural Caipira (`generateProceduralDictation`)*: composição algorítmica em tempo real de motivos melódicos inéditos de 5 a 8 notas respeitando os passos conjuntos, saltos típicos e resoluções cadenciais na tônica Mi do Cebolão.
+      - Reprodutor dinâmico com controle de velocidade didática (0.75x, 1.0x, 1.25x), realce de notas em sincronismo com o áudio e repetição de notas.
+    - **Entrada Dupla Interativa e Braço SVG Virtual (Canhoto & Destro)**:
+      - Teclado tártil de 12 notas de solfejo na interface com audição instantânea de sílabas cantadas.
+      - Integração direta com o Braço SVG: ao ativar o modo `🎙️ Solfejo & Ditado` (`displayMode: 'SOLFEGE'`), o violeiro pode clicar diretamente nas casas e trastes do braço da viola (espelhado para canhoto ou destro) para transcrever auditivamente as notas do ditado!
+      - Marcação visual no braço destacando a tônica em esmeralda, o intervalo em âmbar e as notas ativas da melodia durante a reprodução.
+    - **Gamificação de Maestria de Ouvido & Persistência LocalStorage**:
+      - Sistema de progressão com 4 patentes: *Iniciante da Roça* (🌱), *Boiadeiro Violeiro* (🐎), *Cantador do Estradão* (🪕) e *Mestre Tião Carreiro* (👑).
+      - Recompensas de XP por acertos, contadores de sequência em chamas (streak com multiplicador), total de testes e taxa de precisão percentual.
+      - Avaliação analítica passo a passo do ditado com feedback comparativo entre notas esperadas e notas digitadas pelo violeiro.
+      - Persistência total e restauração de estado no cofre via `loadViolaState()` e `saveViolaState()`.
 
 - **14/11/2026 — Sessão 16** (Fase 16 Concluída):
   - **Simulador Acústico de Madeiras & Ressonâncias Lutherísticas de Chladni (Acoustic Tonewood & Chladni Resonance Simulator)**:

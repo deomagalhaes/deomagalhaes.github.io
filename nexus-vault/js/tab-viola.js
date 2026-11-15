@@ -3262,6 +3262,344 @@ const TONEWOOD_PRESETS = {
 };
 
 
+// =========================================================================
+// FASE 17: CONSTANTES & MODELAGEM DE TREINADOR DE SOLFEJO E DITADO CAIPIRA
+// =========================================================================
+
+const DEFAULT_SOLFEGE_STATE = {
+    subTab: 'interval', // 'interval' | 'dictation'
+    difficulty: 'iniciante', // 'iniciante' | 'boiadeiro' | 'cantador' | 'mestre'
+    soundMode: 'both', // 'viola' | 'vocal' | 'both'
+    intervalPlayMode: 'harmonic', // 'harmonic' | 'ascending' | 'descending'
+    activeIntervalId: 'major_third',
+    intervalQuestion: null,
+    intervalRevealed: false,
+    intervalSelectedOption: null,
+    intervalIsCorrect: null,
+    activeDictationId: 'chico_mineiro_intro',
+    dictationPlaying: false,
+    dictationStepIdx: -1,
+    dictationSpeed: 1.0,
+    userNotes: [],
+    dictationEvaluated: false,
+    dictationScore: 0,
+    dictationFeedback: [],
+    xp: 0,
+    streak: 0,
+    bestStreak: 0,
+    totalTests: 0,
+    totalCorrect: 0
+};
+
+const SOLFEGE_SYLLABLES = ['Dó', 'Dó#', 'Ré', 'Ré#', 'Mi', 'Fá', 'Fá#', 'Sol', 'Sol#', 'Lá', 'Lá#', 'Si'];
+
+const SOLFEGE_VOWEL_FORMANTS = {
+    'Dó': { f1: 570, f2: 840, vowel: 'o' },
+    'Dó#': { f1: 570, f2: 840, vowel: 'o' },
+    'Ré': { f1: 530, f2: 1840, vowel: 'e' },
+    'Ré#': { f1: 530, f2: 1840, vowel: 'e' },
+    'Mi': { f1: 270, f2: 2290, vowel: 'i' },
+    'Fá': { f1: 730, f2: 1090, vowel: 'a' },
+    'Fá#': { f1: 730, f2: 1090, vowel: 'a' },
+    'Sol': { f1: 450, f2: 800, vowel: 'o' },
+    'Sol#': { f1: 450, f2: 800, vowel: 'o' },
+    'Lá': { f1: 730, f2: 1090, vowel: 'a' },
+    'Lá#': { f1: 730, f2: 1090, vowel: 'a' },
+    'Si': { f1: 270, f2: 2290, vowel: 'i' }
+};
+
+const CAIPIRA_INTERVALS_CATALOG = {
+    unison: {
+        id: 'unison',
+        name: 'Uníssono Puro (1ª)',
+        semitones: 0,
+        tier: 'iniciante',
+        tag: 'Afinação',
+        description: 'Pares uníssonos da viola (1º e 2º pares em Mi e Si). Ressonância direta de fase pura.',
+        example: 'Ponteado do 1º par solto (Mi-Mi)'
+    },
+    minor_second: {
+        id: 'minor_second',
+        name: '2ª Menor de Apojatura (2m)',
+        semitones: 1,
+        tier: 'mestre',
+        tag: 'Tensão Cromática',
+        description: 'Semitom tenso usado em apojaturas caipiras, passagens cromáticas e lamentos profundos.',
+        example: 'Ligado rápido Fá-Mi ou Dó#-Dó'
+    },
+    major_second: {
+        id: 'major_second',
+        name: '2ª Maior de Ligadura (2M)',
+        semitones: 2,
+        tier: 'iniciante',
+        tag: 'Floreio Melódico',
+        description: 'Passo melódico diatônico fundamental. Motor dos ligados rápidos e floreios do pagode.',
+        example: 'Frase clássica Fá# para Sol# na toada'
+    },
+    minor_third: {
+        id: 'minor_third',
+        name: '3ª Menor da Saudade (3m)',
+        semitones: 3,
+        tier: 'boiadeiro',
+        tag: 'Moda Triste',
+        description: 'O intervalo nostálgico das modas em tom menor e passagens de sensibilidade sertaneja.',
+        example: 'Moda da Mula Preta, Triste Berrante'
+    },
+    major_third: {
+        id: 'major_third',
+        name: '3ª Maior Caipira (3M)',
+        semitones: 4,
+        tier: 'iniciante',
+        tag: 'Alma da Viola',
+        description: 'O intervalo rei da música sertaneja de raiz. Base dos duetos de vozes e ponteios em terças.',
+        example: 'Dueto clássico Mi e Sol# em Chico Mineiro'
+    },
+    perfect_fourth: {
+        id: 'perfect_fourth',
+        name: '4ª Justa da Folia (4J)',
+        semitones: 5,
+        tier: 'boiadeiro',
+        tag: 'Toada & Folia',
+        description: 'Salto nobre e contemplativo característico dos hinos rurais e cantos de Folia de Reis.',
+        example: 'Chamada de Folia de Reis (Si para Mi)'
+    },
+    tritone: {
+        id: 'tritone',
+        name: 'Trítono Caipira / 4ª Aum. (4A/5d)',
+        semitones: 6,
+        tier: 'cantador',
+        tag: 'Modo Lídio & Tensão',
+        description: 'A 4ª aumentada do modo lídio sertanejo ou a tensão dominante do acorde com sétima (B7).',
+        example: 'Mi para Lá# / Sol# para Ré (preparação de E)'
+    },
+    perfect_fifth: {
+        id: 'perfect_fifth',
+        name: '5ª Justa do Bordão (5J)',
+        semitones: 7,
+        tier: 'iniciante',
+        tag: 'Bordão & Harmonia',
+        description: 'Intervalo consonante aberto. Ressonância acústica de bordões e sustentação harmônica.',
+        example: 'Bordão Mi com Si (5º e 4º pares)'
+    },
+    minor_sixth: {
+        id: 'minor_sixth',
+        name: '6ª Menor de Toada (6m)',
+        semitones: 8,
+        tier: 'cantador',
+        tag: 'Expressão Lírica',
+        description: 'Salto dramático e expressivo que prepara o repouso na quinta em modas introspectivas.',
+        example: 'Mi para Dó natural no acorde Am/E'
+    },
+    major_sixth: {
+        id: 'major_sixth',
+        name: '6ª Maior do Estradão (6M)',
+        semitones: 9,
+        tier: 'boiadeiro',
+        tag: 'Ponteio de Sextas',
+        description: 'Intervalo radiante dos ponteios em sextas paralelas imortalizados por Tião Carreiro.',
+        example: 'Ponteio em sextas (Sol# no 1º par com Si no 3º)'
+    },
+    minor_seventh: {
+        id: 'minor_seventh',
+        name: '7ª Menor de Pagode (7m)',
+        semitones: 10,
+        tier: 'cantador',
+        tag: 'Pagode Caipira',
+        description: 'A tensão azulada da dominante com sétima que propulsiona o pagode e o cururu.',
+        example: 'Lá para Sol na preparação dominante de B7'
+    },
+    major_seventh: {
+        id: 'major_seventh',
+        name: '7ª Maior Romântica (7M)',
+        semitones: 11,
+        tier: 'mestre',
+        tag: 'Sensível Sertaneja',
+        description: 'A sensível refinada das guarânias e canções líricas contemporâneas de viola caipira.',
+        example: 'Mi para Ré# na cadência suave de guarânia'
+    },
+    octave: {
+        id: 'octave',
+        name: '8ª Justa Pura (8J)',
+        semitones: 12,
+        tier: 'iniciante',
+        tag: 'Pares Oitavados',
+        description: 'A assinatura tímbrica inconfundível dos pares oitavados (3º, 4º e 5º pares do Cebolão).',
+        example: 'Ressonância do par de bordão Mi2 e Mi3'
+    }
+};
+
+const CAIPIRA_DICTATION_PHRASES = [
+    {
+        id: 'chico_mineiro_intro',
+        name: 'Chico Mineiro (Introdução de Toada)',
+        key: 'E',
+        tempo: 88,
+        difficulty: 'iniciante',
+        description: 'Toada lírica de Tonico & Tinoco. Melodia baseada no dueto em terças com cadência suave.',
+        notes: [
+            { note: 'Mi', octave: 4, duration: 1.0, syllable: 'Mi' },
+            { note: 'Sol#', octave: 4, duration: 1.0, syllable: 'Sol#' },
+            { note: 'Si', octave: 4, duration: 1.0, syllable: 'Si' },
+            { note: 'Sol#', octave: 4, duration: 1.0, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 4, duration: 1.0, syllable: 'Fá#' },
+            { note: 'Mi', octave: 4, duration: 2.0, syllable: 'Mi' }
+        ]
+    },
+    {
+        id: 'menino_da_porteira',
+        name: 'O Menino da Porteira (Tema do Cururu)',
+        key: 'E',
+        tempo: 108,
+        difficulty: 'iniciante',
+        description: 'Cururu vigoroso de Teddy Vieira. Fraseio direto com apoio nos bordões e salto de quinta.',
+        notes: [
+            { note: 'Mi', octave: 3, duration: 0.5, syllable: 'Mi' },
+            { note: 'Sol#', octave: 3, duration: 0.5, syllable: 'Sol#' },
+            { note: 'Si', octave: 3, duration: 1.0, syllable: 'Si' },
+            { note: 'Mi', octave: 4, duration: 1.0, syllable: 'Mi' },
+            { note: 'Ré#', octave: 4, duration: 0.5, syllable: 'Ré#' },
+            { note: 'Dó#', octave: 4, duration: 0.5, syllable: 'Dó#' },
+            { note: 'Si', octave: 3, duration: 1.5, syllable: 'Si' }
+        ]
+    },
+    {
+        id: 'pagode_em_brasilia',
+        name: 'Pagode em Brasília (Solo Histórico)',
+        key: 'E',
+        tempo: 128,
+        difficulty: 'boiadeiro',
+        description: 'Obra fundadora do pagode caipira por Tião Carreiro. Ataque rítmico percussivo e síncopa.',
+        notes: [
+            { note: 'Si', octave: 3, duration: 0.5, syllable: 'Si' },
+            { note: 'Mi', octave: 4, duration: 0.5, syllable: 'Mi' },
+            { note: 'Fá#', octave: 4, duration: 0.5, syllable: 'Fá#' },
+            { note: 'Sol#', octave: 4, duration: 0.5, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 4, duration: 0.5, syllable: 'Fá#' },
+            { note: 'Mi', octave: 4, duration: 0.5, syllable: 'Mi' },
+            { note: 'Ré#', octave: 4, duration: 0.5, syllable: 'Ré#' },
+            { note: 'Mi', octave: 4, duration: 1.0, syllable: 'Mi' }
+        ]
+    },
+    {
+        id: 'folia_de_reis_lidica',
+        name: 'Folia de Reis (Melodia Lídea Sagrada)',
+        key: 'E',
+        tempo: 78,
+        difficulty: 'cantador',
+        description: 'Tema tradicional de devoção caipira. Uso expressivo da 4ª aumentada lídea (Lá#) sobre o pedal de Mi.',
+        notes: [
+            { note: 'Mi', octave: 3, duration: 1.5, syllable: 'Mi' },
+            { note: 'Sol#', octave: 3, duration: 1.0, syllable: 'Sol#' },
+            { note: 'Lá#', octave: 3, duration: 1.0, syllable: 'Lá#' },
+            { note: 'Si', octave: 3, duration: 1.5, syllable: 'Si' },
+            { note: 'Sol#', octave: 3, duration: 1.0, syllable: 'Sol#' },
+            { note: 'Mi', octave: 3, duration: 2.0, syllable: 'Mi' }
+        ]
+    },
+    {
+        id: 'tristeza_do_jeca',
+        name: 'Tristeza do Jeca (Lamento Caipira)',
+        key: 'A',
+        tempo: 92,
+        difficulty: 'boiadeiro',
+        description: 'Valsa sertaneja imortal de Angelino de Oliveira. Desenho melódico em arpejo melancólico.',
+        notes: [
+            { note: 'Mi', octave: 3, duration: 1.0, syllable: 'Mi' },
+            { note: 'Lá', octave: 3, duration: 1.0, syllable: 'Lá' },
+            { note: 'Dó#', octave: 4, duration: 1.0, syllable: 'Dó#' },
+            { note: 'Mi', octave: 4, duration: 1.5, syllable: 'Mi' },
+            { note: 'Ré', octave: 4, duration: 0.5, syllable: 'Ré' },
+            { note: 'Dó#', octave: 4, duration: 1.0, syllable: 'Dó#' },
+            { note: 'Si', octave: 3, duration: 2.0, syllable: 'Si' }
+        ]
+    },
+    {
+        id: 'o_rei_do_gado',
+        name: 'O Rei do Gado (Rasqueado do Sertão)',
+        key: 'E',
+        tempo: 114,
+        difficulty: 'iniciante',
+        description: 'Ponteio marcante de rasqueado. Movimento descendente clássico em graus conjuntos.',
+        notes: [
+            { note: 'Si', octave: 4, duration: 0.5, syllable: 'Si' },
+            { note: 'Lá', octave: 4, duration: 0.5, syllable: 'Lá' },
+            { note: 'Sol#', octave: 4, duration: 1.0, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 4, duration: 1.0, syllable: 'Fá#' },
+            { note: 'Mi', octave: 4, duration: 1.0, syllable: 'Mi' },
+            { note: 'Si', octave: 3, duration: 1.0, syllable: 'Si' },
+            { note: 'Mi', octave: 4, duration: 1.5, syllable: 'Mi' }
+        ]
+    },
+    {
+        id: 'cururu_do_tiete',
+        name: 'Cururu do Tietê (Ponteio Ribeirinho)',
+        key: 'E',
+        tempo: 104,
+        difficulty: 'boiadeiro',
+        description: 'Tradição do verso improvisado nos rios paulistas. Fraseio em terças soltas alternadas.',
+        notes: [
+            { note: 'Mi', octave: 4, duration: 0.5, syllable: 'Mi' },
+            { note: 'Sol#', octave: 4, duration: 0.5, syllable: 'Sol#' },
+            { note: 'Si', octave: 4, duration: 1.0, syllable: 'Si' },
+            { note: 'Lá', octave: 4, duration: 0.5, syllable: 'Lá' },
+            { note: 'Sol#', octave: 4, duration: 0.5, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 4, duration: 1.0, syllable: 'Fá#' },
+            { note: 'Mi', octave: 4, duration: 1.5, syllable: 'Mi' }
+        ]
+    },
+    {
+        id: 'ferrugem_sater',
+        name: 'Ferrugem (Ponteio Moderno de Almir Sater)',
+        key: 'E',
+        tempo: 96,
+        difficulty: 'cantador',
+        description: 'Viola contemporânea e pantaneira. Saltos amplos de sexta e resolução poética em acorde suspenso.',
+        notes: [
+            { note: 'Si', octave: 3, duration: 1.0, syllable: 'Si' },
+            { note: 'Sol#', octave: 4, duration: 1.0, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 4, duration: 0.5, syllable: 'Fá#' },
+            { note: 'Mi', octave: 4, duration: 1.5, syllable: 'Mi' },
+            { note: 'Dó#', octave: 4, duration: 1.0, syllable: 'Dó#' },
+            { note: 'Si', octave: 3, duration: 2.0, syllable: 'Si' }
+        ]
+    },
+    {
+        id: 'luar_do_sertao',
+        name: 'Luar do Sertão (Canção Caipira Tradicional)',
+        key: 'E',
+        tempo: 84,
+        difficulty: 'iniciante',
+        description: 'Canção de Catulo da Paixão Cearense. Melodia suave que repousa na tônica Mi com pureza.',
+        notes: [
+            { note: 'Mi', octave: 3, duration: 1.0, syllable: 'Mi' },
+            { note: 'Fá#', octave: 3, duration: 1.0, syllable: 'Fá#' },
+            { note: 'Sol#', octave: 3, duration: 1.5, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 3, duration: 0.5, syllable: 'Fá#' },
+            { note: 'Mi', octave: 3, duration: 2.0, syllable: 'Mi' }
+        ]
+    },
+    {
+        id: 'duelo_canavieiro',
+        name: 'Duelo Canavieiro (Desafio Virtuoso em Pagode)',
+        key: 'E',
+        tempo: 136,
+        difficulty: 'mestre',
+        description: 'Desafio técnico de alta velocidade. Síncopas, ligados velozes e resolução cortante.',
+        notes: [
+            { note: 'Si', octave: 3, duration: 0.5, syllable: 'Si' },
+            { note: 'Ré#', octave: 4, duration: 0.5, syllable: 'Ré#' },
+            { note: 'Fá#', octave: 4, duration: 0.5, syllable: 'Fá#' },
+            { note: 'Lá', octave: 4, duration: 0.5, syllable: 'Lá' },
+            { note: 'Sol#', octave: 4, duration: 0.5, syllable: 'Sol#' },
+            { note: 'Fá#', octave: 4, duration: 0.5, syllable: 'Fá#' },
+            { note: 'Mi', octave: 4, duration: 0.5, syllable: 'Mi' },
+            { note: 'Si', octave: 3, duration: 0.5, syllable: 'Si' },
+            { note: 'Mi', octave: 4, duration: 1.0, syllable: 'Mi' }
+        ]
+    }
+];
+
+
     let state = {
         instrumentId: 'viola_cebolao_e',
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
@@ -3301,7 +3639,8 @@ const TONEWOOD_PRESETS = {
         capoDuo: Object.assign({}, DEFAULT_CAPO_DUO_STATE),
         micRecognizer: Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE),
         polyphonic: Object.assign({}, DEFAULT_POLYPHONIC_STATE),
-        tonewood: Object.assign({}, DEFAULT_TONEWOOD_STATE)
+        tonewood: Object.assign({}, DEFAULT_TONEWOOD_STATE),
+        solfege: Object.assign({}, DEFAULT_SOLFEGE_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -3332,6 +3671,7 @@ const TONEWOOD_PRESETS = {
     let polyphonicPlaybackTimer = null;
     let activePolyphonicTimers = [];
     let activeTonewoodTimers = [];
+    let activeSolfegeTimers = [];
     let micStream = null;
     let micSourceNode = null;
     let micFilterNode = null;
@@ -16165,6 +16505,993 @@ function bindTonewoodSectionEvents(container) {
 
 
 
+// =========================================================================
+// FASE 17: MÉTODOS DO TREINADOR DE SOLFEJO & DITADO MELÓDICO CAIPIRA
+// =========================================================================
+
+function getSolfegeRank(xp) {
+    if (xp >= 1500) {
+        return { rank: 'Mestre Tião Carreiro', icon: '👑', color: '#f59e0b', nextTier: null, progress: 100 };
+    }
+    if (xp >= 700) {
+        return { rank: 'Cantador do Estradão', icon: '🪕', color: '#10b981', nextTier: 'Mestre Tião Carreiro (1500 XP)', progress: Math.min(100, Math.round(((xp - 700) / 800) * 100)) };
+    }
+    if (xp >= 250) {
+        return { rank: 'Boiadeiro Violeiro', icon: '🐎', color: '#06b6d4', nextTier: 'Cantador do Estradão (700 XP)', progress: Math.min(100, Math.round(((xp - 250) / 450) * 100)) };
+    }
+    return { rank: 'Iniciante da Roça', icon: '🌱', color: '#94a3b8', nextTier: 'Boiadeiro Violeiro (250 XP)', progress: Math.min(100, Math.round((xp / 250) * 100)) };
+}
+
+function noteToMidiHelper(noteName, octave = 4) {
+    const clean = String(noteName).trim();
+    let idx = NOTE_NAMES_PT.indexOf(clean);
+    if (idx === -1) {
+        idx = NOTE_NAMES.indexOf(clean.toUpperCase());
+    }
+    if (idx === -1) {
+        const map = { 'Do': 0, 'Re': 2, 'Fa': 5, 'La': 9, 'Eb': 3, 'Bb': 10, 'Ab': 8, 'Db': 1, 'Gb': 6 };
+        if (map[clean] !== undefined) idx = map[clean];
+        else idx = 4;
+    }
+    return (octave + 1) * 12 + idx;
+}
+
+function stopSolfegeAudio() {
+    activeSolfegeTimers.forEach(id => clearTimeout(id));
+    activeSolfegeTimers = [];
+    if (state.solfege) {
+        state.solfege.dictationPlaying = false;
+        state.solfege.dictationStepIdx = -1;
+    }
+}
+
+// Síntese vocal de solfejo com formantes acústicos (F1/F2) e vibrato natural caipira
+function singSolfègeVowel(noteName, octave = 4, duration = 0.85, volume = 0.32, isVocalOnly = false) {
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const midi = noteToMidiHelper(noteName, octave);
+    const freq = midiToFreq(midi);
+    const now = ctx.currentTime;
+
+    const cleanSyllable = String(noteName).trim();
+    const formant = SOLFEGE_VOWEL_FORMANTS[cleanSyllable] || { f1: 530, f2: 1840, vowel: 'e' };
+
+    // Ganho mestre com envelope vocal humano (ataque suave de 60ms e decaimento natural)
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.0001, now);
+    masterGain.gain.linearRampToValueAtTime(volume, now + 0.06);
+    masterGain.gain.setValueAtTime(volume * 0.9, now + duration * 0.7);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    // LFO de vibrato laríngeo caipira (5.3 Hz com amplitude de 5.5 cents)
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.frequency.setValueAtTime(5.3, now);
+    lfoGain.gain.setValueAtTime(0, now);
+    lfoGain.gain.linearRampToValueAtTime(5.5, now + 0.16); // Início suave do vibrato
+    lfo.connect(lfoGain);
+
+    // Osciladores duplos (sawtooth para riqueza harmônica de pregas vocais + triangle para calor)
+    const oscSaw = ctx.createOscillator();
+    const oscTri = ctx.createOscillator();
+    oscSaw.type = 'sawtooth';
+    oscTri.type = 'triangle';
+    oscSaw.frequency.setValueAtTime(freq, now);
+    oscTri.frequency.setValueAtTime(freq, now);
+
+    lfoGain.connect(oscSaw.detune);
+    lfoGain.connect(oscTri.detune);
+
+    // Filtros passa-faixa em cascata modelando os formantes F1 e F2 do trato vocal humano
+    const filterF1 = ctx.createBiquadFilter();
+    filterF1.type = 'bandpass';
+    filterF1.frequency.setValueAtTime(formant.f1, now);
+    filterF1.Q.setValueAtTime(6.0, now);
+
+    const filterF2 = ctx.createBiquadFilter();
+    filterF2.type = 'bandpass';
+    filterF2.frequency.setValueAtTime(formant.f2, now);
+    filterF2.Q.setValueAtTime(8.0, now);
+
+    const gF1 = ctx.createGain();
+    const gF2 = ctx.createGain();
+    gF1.gain.setValueAtTime(0.68, now);
+    gF2.gain.setValueAtTime(0.48, now);
+
+    oscSaw.connect(filterF1);
+    oscTri.connect(filterF1);
+    oscSaw.connect(filterF2);
+    oscTri.connect(filterF2);
+
+    filterF1.connect(gF1);
+    filterF2.connect(gF2);
+
+    gF1.connect(masterGain);
+    gF2.connect(masterGain);
+
+    masterGain.connect(ctx.destination);
+
+    lfo.start(now);
+    oscSaw.start(now);
+    oscTri.start(now);
+
+    const stopTime = now + duration + 0.08;
+    lfo.stop(stopTime);
+    oscSaw.stop(stopTime);
+    oscTri.stop(stopTime);
+
+    // Se modo híbrido (ambos), aciona também o dedilhado metálico característico da viola caipira
+    if (!isVocalOnly) {
+        pluckMidiNote(midi, 0, duration, 0, 0.20);
+    }
+}
+
+// Reprodução do intervalo caipira (harmônico ou melódico ascendente/descendente)
+function playCaipiraInterval(intervalKey, baseNote = 'Mi', baseOctave = 3, playMode = 'harmonic', soundMode = 'both') {
+    stopSolfegeAudio();
+    const baseMidi = noteToMidiHelper(baseNote, baseOctave);
+    const info = CAIPIRA_INTERVALS_CATALOG[intervalKey];
+    const semitones = info ? info.semitones : 4;
+    const targetMidi = baseMidi + semitones;
+
+    const baseSyllable = NOTE_NAMES_PT[baseMidi % 12];
+    const targetSyllable = NOTE_NAMES_PT[targetMidi % 12];
+    const targetOctave = Math.floor(targetMidi / 12) - 1;
+
+    const playSingle = (noteName, octave, midiVal, delaySec = 0) => {
+        const timer = setTimeout(() => {
+            if (soundMode === 'viola') {
+                pluckMidiNote(midiVal, 0, 1.8, 0, 0.25);
+            } else if (soundMode === 'vocal') {
+                singSolfègeVowel(noteName, octave, 1.3, 0.35, true);
+            } else {
+                singSolfègeVowel(noteName, octave, 1.3, 0.35, false);
+            }
+        }, delaySec * 1000);
+        activeSolfegeTimers.push(timer);
+    };
+
+    if (playMode === 'harmonic') {
+        playSingle(baseSyllable, baseOctave, baseMidi, 0);
+        playSingle(targetSyllable, targetOctave, targetMidi, 0);
+    } else if (playMode === 'ascending') {
+        playSingle(baseSyllable, baseOctave, baseMidi, 0);
+        playSingle(targetSyllable, targetOctave, targetMidi, 0.55);
+    } else if (playMode === 'descending') {
+        playSingle(targetSyllable, targetOctave, targetMidi, 0);
+        playSingle(baseSyllable, baseOctave, baseMidi, 0.55);
+    }
+}
+
+// Gerador de perguntas de intervalo caipira por nível de dificuldade
+function generateIntervalQuestion(difficulty = 'iniciante') {
+    const keys = Object.keys(CAIPIRA_INTERVALS_CATALOG);
+    let allowedKeys = keys.filter(k => {
+        const item = CAIPIRA_INTERVALS_CATALOG[k];
+        if (difficulty === 'iniciante') return item.tier === 'iniciante';
+        if (difficulty === 'boiadeiro') return item.tier === 'iniciante' || item.tier === 'boiadeiro';
+        if (difficulty === 'cantador') return item.tier === 'iniciante' || item.tier === 'boiadeiro' || item.tier === 'cantador';
+        return true; // mestre inclui todos
+    });
+    if (allowedKeys.length === 0) allowedKeys = keys;
+
+    const chosenKey = allowedKeys[Math.floor(Math.random() * allowedKeys.length)];
+    const chosenInterval = CAIPIRA_INTERVALS_CATALOG[chosenKey];
+
+    // Raízes típicas caipiras (E, A, B, D, G)
+    const roots = ['Mi', 'Lá', 'Si', 'Ré', 'Sol'];
+    const chosenRoot = roots[Math.floor(Math.random() * roots.length)];
+    const baseOctave = 3;
+
+    // Distratores (3 opções erradas)
+    const otherKeys = keys.filter(k => k !== chosenKey);
+    const shuffledOthers = otherKeys.sort(() => 0.5 - Math.random());
+    const distractors = shuffledOthers.slice(0, 3).map(k => CAIPIRA_INTERVALS_CATALOG[k]);
+
+    const options = [chosenInterval, ...distractors].sort(() => 0.5 - Math.random());
+
+    return {
+        intervalKey: chosenKey,
+        intervalName: chosenInterval.name,
+        intervalSemitones: chosenInterval.semitones,
+        intervalTag: chosenInterval.tag,
+        intervalDesc: chosenInterval.description,
+        intervalExample: chosenInterval.example,
+        rootNote: chosenRoot,
+        baseOctave: baseOctave,
+        options: options
+    };
+}
+
+// Gerador procedural de motivos melódicos caipiras
+function generateProceduralDictation(difficulty = 'iniciante', key = 'E') {
+    const baseRoot = 'Mi';
+    const numNotes = difficulty === 'iniciante' ? 5 : (difficulty === 'boiadeiro' ? 6 : 8);
+    // Escala maior caipira (graus 1, 2, 3, 4/4#, 5, 6, 7)
+    const scale = [
+        { note: 'Mi', octave: 3, syllable: 'Mi' },
+        { note: 'Fá#', octave: 3, syllable: 'Fá#' },
+        { note: 'Sol#', octave: 3, syllable: 'Sol#' },
+        { note: 'Si', octave: 3, syllable: 'Si' },
+        { note: 'Dó#', octave: 4, syllable: 'Dó#' },
+        { note: 'Mi', octave: 4, syllable: 'Mi' },
+        { note: 'Fá#', octave: 4, syllable: 'Fá#' },
+        { note: 'Sol#', octave: 4, syllable: 'Sol#' }
+    ];
+
+    const notes = [];
+    let currentIdx = Math.floor(Math.random() * 3);
+    for (let i = 0; i < numNotes; i++) {
+        const item = scale[currentIdx];
+        const dur = (i === numNotes - 1) ? 1.5 : (Math.random() > 0.4 ? 1.0 : 0.5);
+        notes.push({
+            note: item.note,
+            octave: item.octave,
+            duration: dur,
+            syllable: item.syllable
+        });
+        // Passo melódico conjunto (-1, 0, +1 ou salto para tônica/quinta)
+        const step = (Math.random() > 0.3) ? (Math.random() > 0.5 ? 1 : -1) : 0;
+        currentIdx = Math.max(0, Math.min(scale.length - 1, currentIdx + step));
+    }
+    // Garante resolução na tônica Mi no final
+    notes[numNotes - 1] = { note: 'Mi', octave: 3, duration: 1.5, syllable: 'Mi' };
+
+    return {
+        id: 'procedural_' + Date.now(),
+        name: 'Motivo Procedural Caipira (' + difficulty.toUpperCase() + ')',
+        key: 'E',
+        tempo: 96,
+        difficulty: difficulty,
+        description: 'Frase melódica improvisada gerada proceduralmente respeitando as cadências do Cebolão em Mi.',
+        notes: notes
+    };
+}
+
+// Reprodução do ditado melódico passo a passo com sincronismo visual
+function playCaipiraDictationPhrase(phraseId, onNoteStep, onComplete) {
+    stopSolfegeAudio();
+    let phrase = null;
+    if (phraseId.startsWith('procedural_') && state.solfege.activeProceduralPhrase) {
+        phrase = state.solfege.activeProceduralPhrase;
+    } else {
+        phrase = CAIPIRA_DICTATION_PHRASES.find(p => p.id === phraseId) || CAIPIRA_DICTATION_PHRASES[0];
+    }
+    if (!phrase) return;
+
+    state.solfege.dictationPlaying = true;
+    const speed = state.solfege.dictationSpeed || 1.0;
+    const beatMs = (60000 / phrase.tempo) / speed;
+    let accumulatedTimeMs = 0;
+
+    phrase.notes.forEach((n, idx) => {
+        const durSec = (n.duration * (beatMs / 1000)) * 0.9;
+        const midiVal = noteToMidiHelper(n.note, n.octave);
+        const timer = setTimeout(() => {
+            if (!state.solfege.dictationPlaying) return;
+            state.solfege.dictationStepIdx = idx;
+            if (typeof onNoteStep === 'function') onNoteStep(idx);
+
+            const sMode = state.solfege.soundMode;
+            if (sMode === 'viola') {
+                pluckMidiNote(midiVal, 0, durSec, 0, 0.25);
+            } else if (sMode === 'vocal') {
+                singSolfègeVowel(n.syllable, n.octave, durSec, 0.35, true);
+            } else {
+                singSolfègeVowel(n.syllable, n.octave, durSec, 0.35, false);
+            }
+        }, accumulatedTimeMs);
+
+        activeSolfegeTimers.push(timer);
+        accumulatedTimeMs += n.duration * beatMs;
+    });
+
+    const finishTimer = setTimeout(() => {
+        state.solfege.dictationPlaying = false;
+        state.solfege.dictationStepIdx = -1;
+        if (typeof onComplete === 'function') onComplete();
+    }, accumulatedTimeMs + 200);
+
+    activeSolfegeTimers.push(finishTimer);
+}
+
+// Inserção de nota através de clique no braço virtual SVG quando em modo SOLFEGE
+function handleFretboardSolfegeClick(courseIdx, fret) {
+    if (state.displayMode !== 'SOLFEGE') return;
+    const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+    const c = inst.courses[courseIdx];
+    if (!c) return;
+
+    const notePc = (c.pitchClass + fret) % 12;
+    const syl = NOTE_NAMES_PT[notePc];
+    const octave = Math.floor((c.baseMidi + fret) / 12) - 1;
+
+    // Toca som vocal + viola
+    singSolfègeVowel(syl, octave, 0.7, 0.32, false);
+
+    // Se estiver na sub-aba de ditado, adiciona ao vetor de notas do usuário
+    if (state.solfege.subTab === 'dictation') {
+        if (!Array.isArray(state.solfege.userNotes)) state.solfege.userNotes = [];
+        state.solfege.userNotes.push({ syllable: syl, octave: octave });
+        state.solfege.dictationEvaluated = false;
+        updateSolfegeDictationStrip();
+        saveViolaState();
+    }
+}
+
+function updateSolfegeDictationStrip() {
+    const strip = document.getElementById('solfege-user-notes-strip');
+    if (!strip) return;
+
+    const notes = state.solfege.userNotes || [];
+    if (notes.length === 0) {
+        strip.innerHTML = '<span class="text-xs text-slate-500 italic">Nenhuma nota inserida ainda. Toque no teclado abaixo ou clique nas casas do Brao Virtual acima!</span>';
+        return;
+    }
+
+    strip.innerHTML = notes.map((n, idx) => {
+        let borderClass = 'border-amber-500/40 bg-amber-500/15 text-amber-200';
+        let feedbackIcon = '';
+        if (state.solfege.dictationEvaluated && state.solfege.dictationFeedback[idx]) {
+            const fb = state.solfege.dictationFeedback[idx];
+            if (fb.isCorrect) {
+                borderClass = 'border-emerald-500/60 bg-emerald-500/20 text-emerald-200';
+                feedbackIcon = '<i data-lucide="check" class="w-3 h-3 text-emerald-400 inline"></i>';
+            } else {
+                borderClass = 'border-rose-500/60 bg-rose-500/20 text-rose-200';
+                feedbackIcon = '<i data-lucide="x" class="w-3 h-3 text-rose-400 inline"></i>';
+            }
+        }
+        return `
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-mono font-bold shadow-sm ${borderClass}">
+                <span>${idx + 1}.</span>
+                <span class="text-sm font-extrabold">${n.syllable}</span>
+                ${feedbackIcon}
+            </div>
+        `;
+    }).join('');
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons({ root: strip });
+    }
+}
+
+// Renderização HTML da Sub-Aba 1: Reconhecimento de Intervalos Caipiras
+function renderIntervalTrainerHtml() {
+    const s = state.solfege;
+    const q = s.intervalQuestion;
+
+    let questionHtml = '';
+    if (!q) {
+        questionHtml = `
+            <div class="p-6 rounded-xl border border-dashed border-slate-700 text-center space-y-3">
+                <i data-lucide="headphones" class="w-8 h-8 text-amber-400 mx-auto"></i>
+                <p class="text-sm text-slate-300 font-semibold">Pronto para afiar seu ouvido aos intervalos típicos do sertão?</p>
+                <p class="text-xs text-slate-400 max-w-md mx-auto">Escolha o nível de dificuldade e o modo sonoro acima e clique em "Novo Desafio de Intervalo" para começar.</p>
+                <button type="button" id="btn-solfege-start-interval" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg inline-flex items-center gap-2">
+                    <i data-lucide="play" class="w-4 h-4"></i> Iniciar Desafio de Intervalos
+                </button>
+            </div>
+        `;
+    } else {
+        const optionCards = q.options.map(opt => {
+            const isSelected = s.intervalSelectedOption === opt.id;
+            let cardClasses = 'bg-[#1e293b]/50 hover:bg-[#1e293b] border-slate-700 text-slate-200';
+            let badge = '';
+
+            if (s.intervalRevealed) {
+                if (opt.id === q.intervalKey) {
+                    cardClasses = 'bg-emerald-950/50 border-emerald-500 text-emerald-100 shadow-md ring-1 ring-emerald-500';
+                    badge = '<span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 ml-auto">✓ Correto</span>';
+                } else if (isSelected) {
+                    cardClasses = 'bg-rose-950/50 border-rose-500 text-rose-100 shadow-md';
+                    badge = '<span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 ml-auto">✗ Incorreto</span>';
+                } else {
+                    cardClasses = 'opacity-40 border-slate-800 text-slate-400';
+                }
+            }
+
+            return `
+                <button type="button" data-solfege-option="${opt.id}" ${s.intervalRevealed ? 'disabled' : ''}
+                    class="p-3 rounded-xl border text-left transition flex flex-col justify-between group ${cardClasses}">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-xs font-bold text-slate-100 group-hover:text-amber-300">${opt.name}</span>
+                        ${badge}
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2">
+                        <span class="font-mono text-amber-400">${opt.semitones} semitons</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">${opt.tag}</span>
+                    </div>
+                </button>
+            `;
+        }).join('');
+
+        let feedbackBanner = '';
+        if (s.intervalRevealed) {
+            const isCorrect = s.intervalIsCorrect;
+            feedbackBanner = `
+                <div class="p-4 rounded-xl border ${isCorrect ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-200' : 'bg-rose-950/40 border-rose-500/50 text-rose-200'} space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="${isCorrect ? 'check-circle' : 'alert-circle'}" class="w-5 h-5 ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}"></i>
+                            <span class="text-sm font-bold">${isCorrect ? 'Perfeito! Você reconheceu o intervalo!' : 'Não foi dessa vez! Ouça com atenção:'}</span>
+                        </div>
+                        <span class="text-xs font-mono font-bold">${isCorrect ? '+25 XP' : '0 XP'}</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed"><strong class="text-amber-300">${q.intervalName}:</strong> ${q.intervalDesc}</p>
+                    <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-400">
+                        <span>Exemplo clássico: <strong class="text-slate-200">${q.intervalExample}</strong></span>
+                        <span>Raiz: <strong class="text-amber-400">${q.rootNote}3</strong> (${q.intervalSemitones}st)</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        questionHtml = `
+            <div class="space-y-4">
+                <div class="bg-[#141d30] border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <span class="text-[11px] font-mono text-amber-400 uppercase tracking-widest">Desafio Auditivo</span>
+                        <h4 class="text-sm font-bold text-slate-100">Qual intervalo caipira foi tocado?</h4>
+                        <p class="text-xs text-slate-400 mt-0.5">Nota base: <strong class="text-emerald-400">${q.rootNote}3</strong> • Ouça e clique na alternativa correta abaixo</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-solfege-replay-interval" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition shadow">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i> Ouvir Novamente
+                        </button>
+                        <button type="button" id="btn-solfege-next-interval" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-1.5 transition border border-slate-700">
+                            <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i> Próximo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${optionCards}
+                </div>
+
+                ${feedbackBanner}
+            </div>
+        `;
+    }
+
+    return `
+        <div class="space-y-4">
+            <!-- Barra de Controles do Treinador -->
+            <div class="bg-[#141d30] border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex items-center gap-1.5">
+                        <label for="viola-solfege-diff" class="text-xs font-mono text-slate-400">Nível:</label>
+                        <select id="viola-solfege-diff" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono focus:ring-1 focus:ring-amber-500">
+                            <option value="iniciante" ${s.difficulty === 'iniciante' ? 'selected' : ''}>Iniciante (1ª, 2M, 3M, 5J, 8J)</option>
+                            <option value="boiadeiro" ${s.difficulty === 'boiadeiro' ? 'selected' : ''}>Boiadeiro (+ 3m, 4J, 6M)</option>
+                            <option value="cantador" ${s.difficulty === 'cantador' ? 'selected' : ''}>Cantador (+ 4A/Trítono, 6m, 7m)</option>
+                            <option value="mestre" ${s.difficulty === 'mestre' ? 'selected' : ''}>Mestre (Todos os 12 Intervalos)</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <label for="viola-solfege-sound" class="text-xs font-mono text-slate-400">Timbre:</label>
+                        <select id="viola-solfege-sound" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono focus:ring-1 focus:ring-amber-500">
+                            <option value="both" ${s.soundMode === 'both' ? 'selected' : ''}>Viola + Canto (Dueto Acústico)</option>
+                            <option value="viola" ${s.soundMode === 'viola' ? 'selected' : ''}>Somente Viola Caipira</option>
+                            <option value="vocal" ${s.soundMode === 'vocal' ? 'selected' : ''}>Somente Canto Solfejado</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <label for="viola-solfege-playmode" class="text-xs font-mono text-slate-400">Modo:</label>
+                        <select id="viola-solfege-playmode" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono focus:ring-1 focus:ring-amber-500">
+                            <option value="harmonic" ${s.intervalPlayMode === 'harmonic' ? 'selected' : ''}>Harmônico (Simultâneo)</option>
+                            <option value="ascending" ${s.intervalPlayMode === 'ascending' ? 'selected' : ''}>Melódico Ascendente</option>
+                            <option value="descending" ${s.intervalPlayMode === 'descending' ? 'selected' : ''}>Melódico Descendente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button" id="btn-solfege-new-interval" class="px-4 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Novo Desafio
+                </button>
+            </div>
+
+            <!-- Corpo da Pergunta / Opções -->
+            ${questionHtml}
+        </div>
+    `;
+}
+
+// Renderização HTML da Sub-Aba 2: Ditado Melódico & Solfejo Interativo
+function renderDictationTrainerHtml() {
+    const s = state.solfege;
+    const phrases = CAIPIRA_DICTATION_PHRASES;
+    const activePhrase = phrases.find(p => p.id === s.activeDictationId) || (s.activeProceduralPhrase ? s.activeProceduralPhrase : phrases[0]);
+
+    const phraseOptions = phrases.map(p => `
+        <option value="${p.id}" ${s.activeDictationId === p.id ? 'selected' : ''}>
+            ${p.name} (${p.difficulty.toUpperCase()})
+        </option>
+    `).join('') + `
+        <option value="procedural" ${s.activeDictationId.startsWith('procedural') ? 'selected' : ''}>
+            ✨ Motivo Procedural Improvisado
+        </option>
+    `;
+
+    // Teclado tártil de 12 notas de solfejo
+    const solfegeKeyButtons = SOLFEGE_SYLLABLES.map(syl => `
+        <button type="button" data-solfege-key="${syl}"
+            class="min-h-[46px] p-2 rounded-xl bg-slate-900/90 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 hover:border-amber-400 text-slate-200 text-xs font-bold font-mono transition flex flex-col items-center justify-center shadow-sm">
+            <span class="text-sm font-extrabold">${syl}</span>
+            <span class="text-[9px] opacity-60">Solfejar</span>
+        </button>
+    `).join('');
+
+    return `
+        <div class="space-y-4">
+            <!-- Barra Superior do Ditado -->
+            <div class="bg-[#141d30] border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex items-center gap-1.5">
+                        <label for="viola-dictation-select" class="text-xs font-mono text-slate-400">Ponteio:</label>
+                        <select id="viola-dictation-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono focus:ring-1 focus:ring-amber-500">
+                            ${phraseOptions}
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <label for="viola-dictation-speed" class="text-xs font-mono text-slate-400">Velocidade:</label>
+                        <select id="viola-dictation-speed" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono focus:ring-1 focus:ring-amber-500">
+                            <option value="0.75" ${s.dictationSpeed === 0.75 ? 'selected' : ''}>0.75x (Lento)</option>
+                            <option value="1.0" ${s.dictationSpeed === 1.0 ? 'selected' : ''}>1.0x (Padrão)</option>
+                            <option value="1.25" ${s.dictationSpeed === 1.25 ? 'selected' : ''}>1.25x (Rápido)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="button" id="btn-dictation-play" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="${s.dictationPlaying ? 'square' : 'play'}" class="w-4 h-4"></i>
+                        <span>${s.dictationPlaying ? 'Parar Reprodução' : 'Tocar Melodia'}</span>
+                    </button>
+                    <button type="button" id="btn-dictation-new-procedural" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-1.5 transition border border-slate-700">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Gerar Novo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Informações do Ponteio Ativo -->
+            <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] font-mono text-amber-400 uppercase tracking-wider">Ponteio Caipira Selecionado</span>
+                        <h4 class="text-sm font-bold text-slate-100">${activePhrase.name}</h4>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs font-mono">
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Tom: ${activePhrase.key}</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">${activePhrase.notes.length} Notas</span>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-400">${activePhrase.description}</p>
+            </div>
+
+            <!-- Faixa de Notas Inseridas pelo Usuário -->
+            <div class="bg-[#141d30] border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-4 h-4 text-amber-400"></i>
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Sua Transcrição Auditiva:</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-dictation-clear-last" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-mono transition border border-slate-700">
+                            ⌫ Apagar Última
+                        </button>
+                        <button type="button" id="btn-dictation-clear-all" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-mono transition border border-slate-700">
+                            🗑 Limpar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="solfege-user-notes-strip" class="min-h-[50px] p-3 rounded-lg bg-slate-950/70 border border-slate-800 flex flex-wrap items-center gap-2">
+                    <!-- Notas atualizadas dinamicamente por updateSolfegeDictationStrip -->
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
+                    <p class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-sky-400"></i>
+                        <span>Ouça o ponteio, identifique a sequência e digite as notas usando o teclado abaixo ou o Braço Virtual da Viola acima.</span>
+                    </p>
+                    <button type="button" id="btn-dictation-evaluate" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> Avaliar Ditado
+                    </button>
+                </div>
+            </div>
+
+            <!-- Teclado de Solfejo Caipira (12 Tons) -->
+            <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Teclado Melódico de Solfejo (Voz + Viola):</span>
+                    <span class="text-[11px] text-amber-400 font-mono">Cebolão em Mi</span>
+                </div>
+                <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-2">
+                    ${solfegeKeyButtons}
+                </div>
+            </div>
+
+            <!-- Card de Avaliação / Feedback (se avaliado) -->
+            ${s.dictationEvaluated ? `
+                <div class="p-4 rounded-xl border ${s.dictationScore >= 80 ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-200' : 'bg-amber-950/40 border-amber-500/50 text-amber-200'} space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="${s.dictationScore >= 80 ? 'award' : 'alert-triangle'}" class="w-5 h-5 ${s.dictationScore >= 80 ? 'text-emerald-400' : 'text-amber-400'}"></i>
+                            <h4 class="text-sm font-bold">Resultado da Avaliação do Ditado: ${s.dictationScore}% de Precisão</h4>
+                        </div>
+                        <span class="text-xs font-mono font-bold">${s.dictationScore >= 80 ? '+50 XP' : '+15 XP'}</span>
+                    </div>
+                    <p class="text-xs text-slate-300">
+                        ${s.dictationScore === 100 ? 'Incrível! Transcrição 100% perfeita! Você domina o solfejo do ponteio caipira.' : (s.dictationScore >= 60 ? 'Bom resultado! Algumas notas divergiram do ponteio original. Compare as notas corretas acima e tente novamente.' : 'Treine seu ouvido repetindo a melodia nota a nota e utilize as terças do braço da viola como referência.')}
+                    </p>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+// Renderização Geral do Módulo de Solfejo & Ditado Caipira
+function renderSolfegeSection() {
+    const container = document.getElementById('viola-solfege-container');
+    if (!container) return;
+
+    const s = state.solfege;
+    const rankInfo = getSolfegeRank(s.xp || 0);
+
+    container.innerHTML = `
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
+            <!-- Cabeçalho do Módulo & Gamificação -->
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-3 border-b border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
+                        <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Treinador de Solfejo &amp; Ditado Mel&oacute;dico Caipira (Fase 17)</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-0.5">Treinamento auditivo de intervalos t&iacute;picos, s&iacute;ntese vocal por formantes (F1/F2) e transcri&ccedil;&atilde;o mel&oacute;dica interativa</p>
+                </div>
+
+                <!-- Painel de Maestria & XP -->
+                <div class="flex flex-wrap items-center gap-3 bg-[#141d30] border border-slate-800 rounded-xl px-3.5 py-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">${rankInfo.icon}</span>
+                        <div>
+                            <span class="text-[10px] text-slate-400 uppercase font-mono block">Grau de Ouvido:</span>
+                            <span class="text-xs font-bold font-mono" style="color: ${rankInfo.color}">${rankInfo.rank}</span>
+                        </div>
+                    </div>
+                    <div class="h-6 w-[1px] bg-slate-800 mx-1 hidden sm:block"></div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-mono block">Experi&ecirc;ncia:</span>
+                        <span class="text-xs font-bold text-amber-400 font-mono">${s.xp || 0} XP</span>
+                    </div>
+                    <div class="h-6 w-[1px] bg-slate-800 mx-1 hidden sm:block"></div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-mono block">Sequ&ecirc;ncia:</span>
+                        <span class="text-xs font-bold text-emerald-400 font-mono">${s.streak || 0}🔥</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seletor de Sub-Abas -->
+            <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+                <button type="button" id="btn-solfege-subtab-interval" class="px-4 py-2 rounded-lg text-xs font-mono font-bold transition flex items-center gap-2 ${s.subTab === 'interval' ? 'bg-amber-600 text-slate-950 shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200'}">
+                    <i data-lucide="target" class="w-3.5 h-3.5"></i> 1. Reconhecimento de Intervalos
+                </button>
+                <button type="button" id="btn-solfege-subtab-dictation" class="px-4 py-2 rounded-lg text-xs font-mono font-bold transition flex items-center gap-2 ${s.subTab === 'dictation' ? 'bg-amber-600 text-slate-950 shadow' : 'bg-slate-900 text-slate-400 hover:text-slate-200'}">
+                    <i data-lucide="music" class="w-3.5 h-3.5"></i> 2. Ditado Mel&oacute;dico &amp; Solfejo
+                </button>
+            </div>
+
+            <!-- Conteúdo da Sub-Aba Ativa -->
+            <div id="solfege-subtab-content">
+                ${s.subTab === 'interval' ? renderIntervalTrainerHtml() : renderDictationTrainerHtml()}
+            </div>
+        </div>
+    `;
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons({ root: container });
+    }
+
+    bindSolfegeEvents();
+    if (s.subTab === 'dictation') {
+        updateSolfegeDictationStrip();
+    }
+}
+
+// Vinculação de eventos interativos do Treinador de Solfejo
+function bindSolfegeEvents() {
+    const s = state.solfege;
+
+    // Sub-abas
+    const btnInterval = document.getElementById('btn-solfege-subtab-interval');
+    if (btnInterval) {
+        btnInterval.addEventListener('click', () => {
+            stopSolfegeAudio();
+            s.subTab = 'interval';
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+        });
+    }
+
+    const btnDictation = document.getElementById('btn-solfege-subtab-dictation');
+    if (btnDictation) {
+        btnDictation.addEventListener('click', () => {
+            stopSolfegeAudio();
+            s.subTab = 'dictation';
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+        });
+    }
+
+    // Intervalo: Dificuldade
+    const selDiff = document.getElementById('viola-solfege-diff');
+    if (selDiff) {
+        selDiff.addEventListener('change', (e) => {
+            s.difficulty = e.target.value;
+            s.intervalQuestion = generateIntervalQuestion(s.difficulty);
+            s.intervalRevealed = false;
+            s.intervalSelectedOption = null;
+            s.intervalIsCorrect = null;
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+        });
+    }
+
+    // Intervalo: Timbre sonoro
+    const selSound = document.getElementById('viola-solfege-sound');
+    if (selSound) {
+        selSound.addEventListener('change', (e) => {
+            s.soundMode = e.target.value;
+            saveViolaState();
+        });
+    }
+
+    // Intervalo: Modo harmônico ou melódico
+    const selPlayMode = document.getElementById('viola-solfege-playmode');
+    if (selPlayMode) {
+        selPlayMode.addEventListener('change', (e) => {
+            s.intervalPlayMode = e.target.value;
+            saveViolaState();
+        });
+    }
+
+    // Intervalo: Novo Desafio
+    const btnNewInterval = document.getElementById('btn-solfege-new-interval') || document.getElementById('btn-solfege-start-interval');
+    if (btnNewInterval) {
+        btnNewInterval.addEventListener('click', () => {
+            s.intervalQuestion = generateIntervalQuestion(s.difficulty);
+            s.intervalRevealed = false;
+            s.intervalSelectedOption = null;
+            s.intervalIsCorrect = null;
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+            playCaipiraInterval(s.intervalQuestion.intervalKey, s.intervalQuestion.rootNote, s.intervalQuestion.baseOctave, s.intervalPlayMode, s.soundMode);
+        });
+    }
+
+    // Intervalo: Ouvir Novamente
+    const btnReplayInterval = document.getElementById('btn-solfege-replay-interval');
+    if (btnReplayInterval && s.intervalQuestion) {
+        btnReplayInterval.addEventListener('click', () => {
+            playCaipiraInterval(s.intervalQuestion.intervalKey, s.intervalQuestion.rootNote, s.intervalQuestion.baseOctave, s.intervalPlayMode, s.soundMode);
+        });
+    }
+
+    // Intervalo: Próximo
+    const btnNextInterval = document.getElementById('btn-solfege-next-interval');
+    if (btnNextInterval) {
+        btnNextInterval.addEventListener('click', () => {
+            s.intervalQuestion = generateIntervalQuestion(s.difficulty);
+            s.intervalRevealed = false;
+            s.intervalSelectedOption = null;
+            s.intervalIsCorrect = null;
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+            playCaipiraInterval(s.intervalQuestion.intervalKey, s.intervalQuestion.rootNote, s.intervalQuestion.baseOctave, s.intervalPlayMode, s.soundMode);
+        });
+    }
+
+    // Intervalo: Clique em Opção
+    document.querySelectorAll('[data-solfege-option]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (s.intervalRevealed || !s.intervalQuestion) return;
+            const chosenId = btn.getAttribute('data-solfege-option');
+            s.intervalSelectedOption = chosenId;
+            s.intervalRevealed = true;
+            s.intervalIsCorrect = (chosenId === s.intervalQuestion.intervalKey);
+
+            s.totalTests = (s.totalTests || 0) + 1;
+            if (s.intervalIsCorrect) {
+                s.totalCorrect = (s.totalCorrect || 0) + 1;
+                s.streak = (s.streak || 0) + 1;
+                if (s.streak > (s.bestStreak || 0)) s.bestStreak = s.streak;
+                s.xp = (s.xp || 0) + 25;
+            } else {
+                s.streak = 0;
+            }
+
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+        });
+    });
+
+    // Ditado: Seletor de Ponteio
+    const selDictation = document.getElementById('viola-dictation-select');
+    if (selDictation) {
+        selDictation.addEventListener('change', (e) => {
+            stopSolfegeAudio();
+            const val = e.target.value;
+            if (val === 'procedural') {
+                s.activeProceduralPhrase = generateProceduralDictation(s.difficulty, 'E');
+                s.activeDictationId = s.activeProceduralPhrase.id;
+            } else {
+                s.activeDictationId = val;
+            }
+            s.userNotes = [];
+            s.dictationEvaluated = false;
+            s.dictationScore = 0;
+            s.dictationFeedback = [];
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+        });
+    }
+
+    // Ditado: Velocidade
+    const selSpeed = document.getElementById('viola-dictation-speed');
+    if (selSpeed) {
+        selSpeed.addEventListener('change', (e) => {
+            s.dictationSpeed = parseFloat(e.target.value) || 1.0;
+            saveViolaState();
+        });
+    }
+
+    // Ditado: Tocar Melodia
+    const btnPlayDictation = document.getElementById('btn-dictation-play');
+    if (btnPlayDictation) {
+        btnPlayDictation.addEventListener('click', () => {
+            if (s.dictationPlaying) {
+                stopSolfegeAudio();
+                renderSolfegeSection();
+                if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+            } else {
+                playCaipiraDictationPhrase(s.activeDictationId, (stepIdx) => {
+                    if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+                }, () => {
+                    renderSolfegeSection();
+                    if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+                });
+                renderSolfegeSection();
+            }
+        });
+    }
+
+    // Ditado: Gerar Novo Procedural
+    const btnNewProcedural = document.getElementById('btn-dictation-new-procedural');
+    if (btnNewProcedural) {
+        btnNewProcedural.addEventListener('click', () => {
+            stopSolfegeAudio();
+            s.activeProceduralPhrase = generateProceduralDictation(s.difficulty, 'E');
+            s.activeDictationId = s.activeProceduralPhrase.id;
+            s.userNotes = [];
+            s.dictationEvaluated = false;
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+            playCaipiraDictationPhrase(s.activeDictationId, null, () => {
+                renderSolfegeSection();
+            });
+        });
+    }
+
+    // Ditado: Teclado Tártil de 12 Notas
+    document.querySelectorAll('[data-solfege-key]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const syl = btn.getAttribute('data-solfege-key');
+            // Toca com síntese vocal + viola
+            singSolfègeVowel(syl, 4, 0.75, 0.35, false);
+
+            if (!Array.isArray(s.userNotes)) s.userNotes = [];
+            s.userNotes.push({ syllable: syl, octave: 4 });
+            s.dictationEvaluated = false;
+            updateSolfegeDictationStrip();
+            saveViolaState();
+        });
+    });
+
+    // Ditado: Apagar Última Nota
+    const btnClearLast = document.getElementById('btn-dictation-clear-last');
+    if (btnClearLast) {
+        btnClearLast.addEventListener('click', () => {
+            if (Array.isArray(s.userNotes) && s.userNotes.length > 0) {
+                s.userNotes.pop();
+                s.dictationEvaluated = false;
+                updateSolfegeDictationStrip();
+                saveViolaState();
+            }
+        });
+    }
+
+    // Ditado: Limpar Tudo
+    const btnClearAll = document.getElementById('btn-dictation-clear-all');
+    if (btnClearAll) {
+        btnClearAll.addEventListener('click', () => {
+            s.userNotes = [];
+            s.dictationEvaluated = false;
+            s.dictationScore = 0;
+            s.dictationFeedback = [];
+            updateSolfegeDictationStrip();
+            saveViolaState();
+        });
+    }
+
+    // Ditado: Avaliar Transcrição
+    const btnEvaluate = document.getElementById('btn-dictation-evaluate');
+    if (btnEvaluate) {
+        btnEvaluate.addEventListener('click', () => {
+            let phrase = null;
+            if (s.activeDictationId.startsWith('procedural') && s.activeProceduralPhrase) {
+                phrase = s.activeProceduralPhrase;
+            } else {
+                phrase = CAIPIRA_DICTATION_PHRASES.find(p => p.id === s.activeDictationId) || CAIPIRA_DICTATION_PHRASES[0];
+            }
+            if (!phrase) return;
+
+            const targetNotes = phrase.notes;
+            const userNotes = s.userNotes || [];
+            let matches = 0;
+            const feedback = [];
+
+            const maxLen = Math.max(targetNotes.length, userNotes.length);
+            for (let i = 0; i < maxLen; i++) {
+                const target = targetNotes[i];
+                const user = userNotes[i];
+                const isCorrect = (target && user && target.syllable === user.syllable);
+                if (isCorrect) matches++;
+                feedback.push({
+                    index: i,
+                    target: target ? target.syllable : null,
+                    user: user ? user.syllable : null,
+                    isCorrect: isCorrect
+                });
+            }
+
+            const score = targetNotes.length > 0 ? Math.round((matches / targetNotes.length) * 100) : 0;
+            s.dictationEvaluated = true;
+            s.dictationScore = score;
+            s.dictationFeedback = feedback;
+
+            s.totalTests = (s.totalTests || 0) + 1;
+            if (score >= 80) {
+                s.totalCorrect = (s.totalCorrect || 0) + 1;
+                s.streak = (s.streak || 0) + 1;
+                if (s.streak > (s.bestStreak || 0)) s.bestStreak = s.streak;
+                s.xp = (s.xp || 0) + (score === 100 ? 50 : 30);
+            } else {
+                s.streak = 0;
+                s.xp = (s.xp || 0) + 10;
+            }
+
+            saveViolaState();
+            renderSolfegeSection();
+            if (state.displayMode === 'SOLFEGE') renderFretboardSVG();
+        });
+    }
+}
+
+
     // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
     // =========================================================================
@@ -18645,6 +19972,55 @@ function bindTonewoodSectionEvents(container) {
                     }
                 }
             }
+            } else if (state.displayMode === 'SOLFEGE') {
+                // FASE 17: PROJECAO VISUAL DE SOLFEJO E NOTAS DO EXERCICIO
+                inst.courses.forEach((c, cIdx) => {
+                    for (let f = 0; f <= maxFret; f++) {
+                        const notePc = (c.pitchClass + f) % 12;
+                        const syl = NOTE_NAMES_PT[notePc];
+                        let highlight = false;
+                        let customColor = '#f59e0b';
+                        let subLabel = syl;
+
+                        if (state.solfege.subTab === 'interval' && state.solfege.intervalQuestion) {
+                            const q = state.solfege.intervalQuestion;
+                            const rootPc = NOTE_NAMES_PT.indexOf(q.rootNote);
+                            const targetPc = (rootPc + q.intervalSemitones) % 12;
+                            if (notePc === rootPc) {
+                                highlight = true;
+                                customColor = '#10b981';
+                                subLabel = 'Tonica';
+                            } else if (state.solfege.intervalRevealed && notePc === targetPc) {
+                                highlight = true;
+                                customColor = '#f59e0b';
+                                subLabel = q.intervalTag || 'Intervalo';
+                            }
+                        } else if (state.solfege.subTab === 'dictation') {
+                            const activePhrase = CAIPIRA_DICTATION_PHRASES.find(p => p.id === state.solfege.activeDictationId);
+                            if (activePhrase && state.solfege.dictationStepIdx >= 0) {
+                                const stepNote = activePhrase.notes[state.solfege.dictationStepIdx];
+                                if (stepNote && NOTE_NAMES_PT.indexOf(stepNote.syllable) === notePc) {
+                                    highlight = true;
+                                    customColor = '#f59e0b';
+                                    subLabel = 'Tocado';
+                                }
+                            }
+                        }
+
+                        if (highlight) {
+                            activeMarkers.push({
+                                courseIdx: cIdx,
+                                fret: f,
+                                label: syl,
+                                sub: subLabel,
+                                color: customColor,
+                                stroke: '#ffffff',
+                                strokeWidth: 2.2,
+                                opacity: '0.98'
+                            });
+                        }
+                    }
+                });
             } else if (state.displayMode === 'TONEWOOD') {
                 // FASE 16: PROJEÃ‡ÃƒO DE NÃ“S DE RESSONÃ‚NCIA E HARMÃ”NICOS NATURAIS
                 const harmonicNodes = [
@@ -18861,7 +20237,9 @@ function bindTonewoodSectionEvents(container) {
                 playCourseAtFret(cIdx, f, 0);
                 flashFretCell(cIdx, f, 0);
 
-                if (state.displayMode === 'REVERSE') {
+                if (state.displayMode === 'SOLFEGE') {
+                    handleFretboardSolfegeClick(cIdx, f);
+                } else if (state.displayMode === 'REVERSE') {
                     const arr = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
                     arr[cIdx] = arr[cIdx] === f ? -1 : f;
                     saveViolaState();
@@ -19447,6 +20825,19 @@ function bindTonewoodSectionEvents(container) {
             } else {
                 state.tonewood = Object.assign({}, DEFAULT_TONEWOOD_STATE);
             }
+
+            if (saved.solfege && typeof saved.solfege === 'object') {
+                state.solfege = Object.assign({}, DEFAULT_SOLFEGE_STATE, saved.solfege, {
+                    dictationPlaying: false,
+                    dictationStepIdx: -1,
+                    intervalQuestion: null,
+                    intervalRevealed: false,
+                    intervalSelectedOption: null,
+                    intervalIsCorrect: null
+                });
+            } else {
+                state.solfege = Object.assign({}, DEFAULT_SOLFEGE_STATE);
+            }
         }
     }
 
@@ -19466,6 +20857,16 @@ function bindTonewoodSectionEvents(container) {
         if (copy.tabEditor) {
             copy.tabEditor = Object.assign({}, copy.tabEditor, {
                 isPlaying: false
+            });
+        }
+        if (copy.solfege) {
+            copy.solfege = Object.assign({}, copy.solfege, {
+                dictationPlaying: false,
+                dictationStepIdx: -1,
+                intervalQuestion: null,
+                intervalRevealed: false,
+                intervalSelectedOption: null,
+                intervalIsCorrect: null
             });
         }
         if (copy.modalTrainer) {
@@ -19596,6 +20997,10 @@ function bindTonewoodSectionEvents(container) {
                             <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
                             <span>Madeiras &amp; Chladni (Fase 16)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-solfege" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
+                            <span>Solfejo &amp; Ditado (Fase 17)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -19635,7 +21040,7 @@ function bindTonewoodSectionEvents(container) {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -19821,6 +21226,8 @@ function bindTonewoodSectionEvents(container) {
                 <div id="viola-polyphony-container" class="space-y-4"></div>
                 <!-- Simulador Acustico de Madeiras & Ressonancias Lutheristicas (Fase 16) -->
                 <div id="viola-tonewood-container" class="space-y-4"></div>
+                <!-- Treinador de Solfejo & Ditado Melodico Caipira (Fase 17) -->
+                <div id="viola-solfege-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -19992,7 +21399,8 @@ function bindTonewoodSectionEvents(container) {
             { id: 'btn-viola-mode-capo', mode: 'CAPO', activeClass: 'bg-yellow-500 text-slate-950 shadow' },
             { id: 'btn-viola-mode-mic', mode: 'MIC', activeClass: 'bg-red-600 text-white shadow' },
             { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', activeClass: 'bg-indigo-600 text-white shadow' },
-            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', activeClass: 'bg-amber-600 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', activeClass: 'bg-amber-600 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', activeClass: 'bg-amber-600 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -20032,6 +21440,7 @@ function bindTonewoodSectionEvents(container) {
         stopMicCapture();
         stopPolyphonicAudio();
         stopTonewoodAudio();
+        stopSolfegeAudio();
     }
 
     function bindEvents() {
@@ -20124,7 +21533,8 @@ function bindTonewoodSectionEvents(container) {
             { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' },
             { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' },
             { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' },
-            { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' }
+            { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' },
+            { id: 'btn-viola-scroll-solfege', targetId: 'viola-solfege-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -20156,7 +21566,8 @@ function bindTonewoodSectionEvents(container) {
             { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' },
             { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' },
             { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' },
-            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' }
+            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' },
+            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', scrollTarget: 'viola-solfege-container' }
         ];
 
         modeList.forEach((item) => {
@@ -20442,6 +21853,7 @@ function bindTonewoodSectionEvents(container) {
         renderMicRecognizerSection();
         renderPolyphonySection();
         renderTonewoodSection();
+        renderSolfegeSection();
         renderMetronomeControls();
     }
 
