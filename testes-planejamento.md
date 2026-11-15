@@ -57,6 +57,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-48** | **Escala Multidimensional de Comparação Social e Vulnerabilidade ao Status Relativo (EMCS-VSR)** | Comparação Social, Dor de Status Relativo (dACC), Aversão à Iniquidade e Autoestima Contingente (vmPFC) | `testes/teste-comparacao-social-status-relativo.html` | ✅ Concluído |
 | **T-49** | **Escala Multidimensional de Auto-Sabotagem, Aversão à Serenidade e Tolerância ao Bem-Estar (EMAS-AS)** | Aversão à Serenidade, Alarme do BNST, Descompasso do Freio Vagal e Auto-Sabotagem | `testes/teste-auto-sabotagem-medo-serenidade.html` | ✅ Concluído |
 | **T-50** | **Escala Multidimensional de Culpa do Sobrevivente, Lealdades Invisíveis e Dívida Existencial (EMCS-LIDE)** | Culpa do Sobrevivente, Diferenciação do Self, Dívida Existencial e Lealdades Sistêmicas | `testes/teste-culpa-sobrevivente-lealdades-invisiveis.html` | ✅ Concluído |
+| **T-51** | **Escala Multidimensional de Codependência, Papel de Salvador e Desconexão do Self (EMCS-PS)** | Codependência, Compulsão por Resgate, Ansiedade de Separação (dACC) e Parentificação | `testes/teste-codependencia-papel-salvador.html` | ✅ Concluído |
 
 ---
 

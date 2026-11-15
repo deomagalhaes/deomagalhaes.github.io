@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 50: Matriz de Individuação Relacional e Desarme do Salvador – Deo Magalhães</title>
+    <meta name="description" content="Treine seu cérebro para desarmar o papel de salvador, sustentar fronteiras saudáveis e regular a ansiedade de separação no dACC com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .sound-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #005f73;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .phase-indicator {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Painel Gráfico Visual da Rede */
+        .network-canvas-container {
+            background: radial-gradient(circle at center, #073b4c 0%, #051826 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #0a9396;
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .network-node-visual {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 580px;
+            position: relative;
+        }
+
+        .node-bubble {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: #ffffff;
+            z-index: 2;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .node-other {
+            background: #ca6702;
+            border: 3px solid #ee9b00;
+        }
+
+        .node-self {
+            background: #005f73;
+            border: 4px solid #94d2bd;
+            width: 86px;
+            height: 86px;
+            font-size: 1.05em;
+            box-shadow: 0 0 25px rgba(10, 147, 150, 0.6);
+        }
+
+        .node-demand {
+            background: #9b2226;
+            border: 3px solid #ae2012;
+        }
+
+        .connection-line {
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            right: 15%;
+            height: 4px;
+            background: linear-gradient(90deg, #ee9b00, #94d2bd, #9b2226);
+            z-index: 1;
+            transform: translateY(-50%);
+            transition: all 0.4s ease;
+        }
+
+        /* Medidores Dinâmicos */
+        .meters-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 680px) {
+            .meters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .meter-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .meter-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82em;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .meter-track {
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .meter-fill-individuation {
+            height: 100%;
+            background: #0a9396;
+            transition: width 0.4s ease;
+        }
+
+        .meter-fill-separation-pain {
+            height: 100%;
+            background: #ca6702;
+            transition: width 0.4s ease;
+        }
+
+        .meter-fill-delegated-burden {
+            height: 100%;
+            background: #9b2226;
+            transition: width 0.4s ease;
+        }
+
+        /* Cenário e Opções */
+        .scenario-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .scenario-title {
+            color: #005f73;
+            font-size: 1.25em;
+            margin: 0 0 8px 0;
+        }
+
+        .scenario-desc {
+            color: #334155;
+            font-size: 0.98em;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .scenario-dilemma-alert {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 10px 14px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.88em;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+
+        .decisions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .decision-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .decision-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.12);
+        }
+
+        .decision-tag {
+            display: inline-block;
+            font-size: 0.72em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .tag-rescue {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .tag-cutoff {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .tag-individuation {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .decision-text {
+            color: #1e293b;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        /* Card de Feedback da Rodada */
+        .feedback-card {
+            display: none;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .feedback-header {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .feedback-body {
+            font-size: 0.92em;
+            line-height: 1.6;
+            color: #475569;
+        }
+
+        .btn-next-phase {
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 10px 24px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .btn-next-phase:hover {
+            background: #0a9396;
+        }
+
+        /* Tela Final */
+        .game-over-panel {
+            display: none;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .final-score-badge {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .btn-restart-game {
+            background: #005f73;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restart-game:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding: 40px 20px; max-width: 860px;">
+        <header class="article-header" style="text-align: center; margin-bottom: 25px;">
+            <span class="phase-indicator">JOGO DE TREINAMENTO COGNITIVO • DIA 50</span>
+            <h1 style="color: #005f73; font-size: 2.1em; line-height: 1.25;">Matriz de Individuação Relacional e Desarme do Salvador</h1>
+            <p class="article-author-date">Desenvolvido por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+        </header>
+
+        <div class="game-wrapper">
+            <!-- Barra de Status Superior -->
+            <div class="game-header-bar">
+                <div class="stat-badge">
+                    <span class="stat-label">Fase</span>
+                    <span id="phaseDisplay" class="stat-value">1 / 5</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Pontuação</span>
+                    <span id="scoreDisplay" class="stat-value">0</span>
+                </div>
+                <div class="stat-badge">
+                    <span class="stat-label">Recorde</span>
+                    <span id="highScoreDisplay" class="stat-value">0</span>
+                </div>
+                <div>
+                    <button id="soundToggleBtn" class="sound-btn" onclick="toggleSound()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        <span>Som: Ativo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grafo Visual dos Nós Relacionais -->
+            <div class="network-canvas-container">
+                <div class="network-node-visual">
+                    <div class="node-bubble node-other" id="nodeOther">
+                        <span>Outro</span>
+                        <small style="font-size: 0.68em; opacity: 0.85;">Vínculo</small>
+                    </div>
+                    <div class="connection-line" id="connectionLine"></div>
+                    <div class="node-bubble node-self" id="nodeSelf">
+                        <span>Self</span>
+                        <small style="font-size: 0.68em; opacity: 0.9;">Você</small>
+                    </div>
+                    <div class="node-bubble node-demand" id="nodeDemand">
+                        <span>Crise</span>
+                        <small style="font-size: 0.68em; opacity: 0.85;">Demanda</small>
+                    </div>
+                </div>
+                <div id="graphStatusText" style="color: #94d2bd; font-size: 0.82em; margin-top: 15px; font-weight: 500;">
+                    Status da Rede: Calibração de Fronteiras • Sustente a Soberania do Self
+                </div>
+            </div>
+
+            <!-- Medidores Neurobiológicos -->
+            <div class="meters-grid">
+                <div class="meter-card">
+                    <div class="meter-label-row">
+                        <span>Individuação (vmPFC / dlPFC)</span>
+                        <span id="indivVal">50%</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="indivBar" class="meter-fill-individuation" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div class="meter-card">
+                    <div class="meter-label-row">
+                        <span>Ansiedade de Separação (dACC)</span>
+                        <span id="painVal">55%</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="painBar" class="meter-fill-separation-pain" style="width: 55%;"></div>
+                    </div>
+                </div>
+                <div class="meter-card">
+                    <div class="meter-label-row">
+                        <span>Carga de Resgate Assumida</span>
+                        <span id="burdenVal">65%</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="burdenBar" class="meter-fill-delegated-burden" style="width: 65%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Cenário da Fase -->
+            <div id="scenarioContainer" class="scenario-box">
+                <h3 id="scenarioTitle" class="scenario-title">Fase 1: O Pedido de Socorro Financeiro</h3>
+                <p id="scenarioDesc" class="scenario-desc">Carregando cenário...</p>
+                <div id="scenarioAlert" class="scenario-dilemma-alert">Alerta...</div>
+
+                <!-- Lista de Escolhas Estratégicas -->
+                <div id="decisionsList" class="decisions-list"></div>
+
+                <!-- Feedback da Rodada -->
+                <div id="roundFeedback" class="feedback-card">
+                    <div id="roundFeedbackTitle" class="feedback-header">Título do Feedback</div>
+                    <div id="roundFeedbackDesc" class="feedback-body">Descrição detalhada...</div>
+                    <button class="btn-next-phase" onclick="nextPhase()">Avançar para o Próximo Dilema →</button>
+                </div>
+            </div>
+
+            <!-- Painel de Conclusão do Treino -->
+            <div id="gameOverBox" class="game-over-panel">
+                <h2 style="color: #005f73; margin-top: 0;">Treino Cognitivo Concluído!</h2>
+                <p style="color: #475569; font-size: 0.95em;">Sua pontuação na Matriz de Individuação Relacional:</p>
+                <div id="finalScoreVal" class="final-score-badge">0</div>
+                <div id="neuroSummaryText" style="color: #334155; font-size: 0.95em; max-width: 620px; margin: 15px auto 25px auto; line-height: 1.6;"></div>
+                <button class="btn-restart-game" onclick="restartGame()">Jogar Novamente</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Padronizado -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Web Audio API
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggleBtn');
+            btn.innerHTML = soundEnabled ?
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> <span>Som: Ativo</span>' :
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg> <span>Som: Mudo</span>';
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.15, gain = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+                g.gain.setValueAtTime(gain, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+                osc.connect(g);
+                g.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                console.warn('Audio error:', e);
+            }
+        }
+
+        function soundClick() {
+            playTone(520, 'sine', 0.08, 0.07);
+        }
+
+        function soundHarmonic() {
+            // Acorde de Individuação Saudável (Dó Maior / 523.25, 659.25, 783.99)
+            if (!soundEnabled) return;
+            const ctx = getAudioContext();
+            [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                setTimeout(() => playTone(freq, 'sine', 0.35, 0.08), idx * 70);
+            });
+        }
+
+        function soundWarning() {
+            // Tom de Tensão / Regressão Relacional
+            if (!soundEnabled) return;
+            playTone(280, 'triangle', 0.25, 0.12);
+            setTimeout(() => playTone(240, 'triangle', 0.3, 0.12), 140);
+        }
+
+        function soundVictory() {
+            if (!soundEnabled) return;
+            [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+                setTimeout(() => playTone(freq, 'triangle', 0.45, 0.1), idx * 110);
+            });
+        }
+
+        // Banco de Dilemas Clínicos da Esteira Contínua
+        const PHASES = [
+            {
+                title: "Fase 1: O Pedido de Socorro Financeiro Crônico",
+                desc: "Seu parceiro ou irmão com histórico crônico de compras impulsivas e dívidas não planejadas pede que você pague o cartão de crédito dele deste mês, alegando que 'senão ele entrará no SPC e não conseguirá trabalhar'.",
+                alert: "⚠️ Alarme do dACC: 'Se você não pagar, você é uma pessoa fria e ele vai sofrer por sua culpa.'",
+                options: [
+                    {
+                        type: "rescue",
+                        tag: "Resgate Codependente (Salvador)",
+                        text: "Transferir o dinheiro da sua reserva de emergência imediatamente, assumir a fatura e não tocar mais no assunto para evitar conflito.",
+                        indivDelta: -20,
+                        painDelta: +10,
+                        burdenDelta: +30,
+                        score: 0,
+                        feedbackTitle: "Armadilha da Salvação e Infantilização do Outro",
+                        feedbackDesc: "Ao pagar a dívida, você aliviou momentaneamente sua própria ansiedade de separação, mas roubou do outro a oportunidade de amadurecer. O padrão de irresponsabilidade foi reforçado e sua reserva vital foi drenada."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Corte Afetivo Reativo",
+                        text: "Humilhá-lo asperamente, dizer que ele é um fracassado e prometer nunca mais falar com ele enquanto não aprender a ser adulto.",
+                        indivDelta: -10,
+                        painDelta: +35,
+                        burdenDelta: -10,
+                        score: 15,
+                        feedbackTitle: "Pseudodiferenciação por Agressividade",
+                        feedbackDesc: "A agressividade reativa não é soberania do self: é a casca frágil da dor social. O vínculo permanece sequestrando seu sistema nervoso, aumentando a culpa no dACC."
+                    },
+                    {
+                        type: "individuation",
+                        tag: "Individuação Madura do Self",
+                        text: "Dizer com serenidade e afeto firme: 'Eu amo você e sei que é uma situação difícil, mas não posso assumir sua fatura. Posso sentar com você amanhã para renegociar essa dívida com o banco e montar um plano financeiro.'",
+                        indivDelta: +25,
+                        painDelta: -20,
+                        burdenDelta: -25,
+                        score: 100,
+                        feedbackTitle: "Soberania do vmPFC com Presença Amorosa",
+                        feedbackDesc: "Excelente! Você manteve a proximidade afetiva sem capitular à salvação infantilizadora. Respeitou a agência adulta do outro e protegeu as fronteiras da sua própria estabilidade."
+                    }
+                ]
+            },
+            {
+                title: "Fase 2: O Desabafo Noturno Interminável",
+                desc: "São 23h30 de uma terça-feira e você acorda às 6h para um dia exaustivo. Um amigo liga aos prantos para reclamar pela décima vez do mesmo relacionamento tóxico, ignorando seu cansaço.",
+                alert: "⚠️ Gatilho de Parentificação: 'Amigo de verdade não dorme enquanto o outro chora. Você não pode desligar.'",
+                options: [
+                    {
+                        type: "rescue",
+                        tag: "Auto-Sacrifício Compulsivo",
+                        text: "Ficar na ligação até as 2h da madrugada ouvindo as mesmas queixas, ignorando sua necessidade de repouso e trabalhando exausto no dia seguinte.",
+                        indivDelta: -15,
+                        painDelta: +15,
+                        burdenDelta: +25,
+                        score: 0,
+                        feedbackTitle: "Apagão Interoceptivo e Abuso de Fronteiras",
+                        feedbackDesc: "Você sacrificou a saúde do seu cérebro (sono NREM/REM) para alimentar um ciclo estéril de desabafo que não produz nenhuma mudança concreta no seu amigo."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Ruptura Cínica",
+                        text: "Silenciar o celular sem avisar, bloquear o contato por 3 dias e postar indiretas nas redes sociais sobre 'amigos vampiros de energia'.",
+                        indivDelta: -10,
+                        painDelta: +30,
+                        burdenDelta: -10,
+                        score: 20,
+                        feedbackTitle: "Comportamento Passivo-Agressivo",
+                        feedbackDesc: "Bloquear sem comunicação clara revela incapacidade de sustentar limites de forma madura. Gera desconexão e aumenta a ansiedade de ambos."
+                    },
+                    {
+                        type: "individuation",
+                        tag: "Individuação Madura do Self",
+                        text: "Interromper com carinho e clareza: 'Amigo, eu me importo profundamente com sua dor, mas preciso dormir agora porque acordo às 6h. Vamos marcar um café no sábado à tarde para conversarmos com a atenção que você merece?'",
+                        indivDelta: +25,
+                        painDelta: -20,
+                        burdenDelta: -20,
+                        score: 100,
+                        feedbackTitle: "Honrando os Limites Biológicos com Afeto",
+                        feedbackDesc: "Perfeito! Você validou o sofrimento do outro sem anular seu limite neurobiológico de descanso. Estabeleceu um contorno seguro no tempo e no espaço."
+                    }
+                ]
+            },
+            {
+                title: "Fase 3: A Cobrança para Mediar Conflitos Familiares",
+                desc: "Sua mãe liga angustiada pedindo que você intervenha na briga crônica dela com seu pai, dizendo: 'Você é a única pessoa lúcida desta família; fale com seu pai porque ele só escuta você'.",
+                alert: "⚠️ Triângulo de Karpman Ativo: O convite explícito para reassumir o papel infantil de mediador parentificado.",
+                options: [
+                    {
+                        type: "rescue",
+                        tag: "Parentificação Reativa",
+                        text: "Concordar em ligar imediatamente para o pai, repreendê-lo e tentar 'consertar' o casamento dos pais como você fazia na adolescência.",
+                        indivDelta: -25,
+                        painDelta: +15,
+                        burdenDelta: +35,
+                        score: 0,
+                        feedbackTitle: "Regressão à Parentificação Tóxica",
+                        feedbackDesc: "Você saiu do seu lugar de filho e voltou a carregar a conjugalidade disfuncional dos seus pais. Esse emaranhamento destrói sua diferenciação e alimenta o ciclo neurótico familiar."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Ataque Furioso",
+                        text: "Gritar com a mãe dizendo que não aguenta mais essa ladainha familiar e que eles deveriam se divorciar logo de uma vez.",
+                        indivDelta: -5,
+                        painDelta: +35,
+                        burdenDelta: -10,
+                        score: 15,
+                        feedbackTitle: "Explosão Reativa de Impotência",
+                        feedbackDesc: "A raiva explosiva decorre do acúmulo de fronteiras invadidas no passado. Dispara culpa corrosiva e mantém a família refém do drama."
+                    },
+                    {
+                        type: "individuation",
+                        tag: "Individuação Madura do Self",
+                        text: "Responder com empatia filial e limite ético: 'Mãe, eu entendo que vocês estão passando por um momento doloroso, mas eu sou apenas filho de vocês. Esse é um assunto do casal de vocês e eu não vou me colocar no meio. Recomendo muito que busquem uma terapia de casal.'",
+                        indivDelta: +30,
+                        painDelta: -25,
+                        burdenDelta: -30,
+                        score: 100,
+                        feedbackTitle: "Desarmando o Triângulo Dramático",
+                        feedbackDesc: "Magnífico! Você recusou o papel de salvador/mediador, respeitou a hierarquia sistêmica e devolveu aos seus pais a responsabilidade pelo próprio relacionamento."
+                    }
+                ]
+            },
+            {
+                title: "Fase 4: A Sobrecarga no Ambiente de Trabalho",
+                desc: "Um colega de projeto que procrastina sistematicamente procura você na véspera da entrega dizendo que 'não conseguiu terminar a parte dele e que a apresentação vai ser um desastre se você não fizer o relatório por ele'.",
+                alert: "⚠️ Alarme de Invalidação: 'Se o projeto for mal, o chefe vai achar que a culpa foi de toda a equipe.'",
+                options: [
+                    {
+                        type: "rescue",
+                        tag: "Assunção da Incompetência Alheia",
+                        text: "Virar a noite fazendo o relatório do colega sozinho, entregar o trabalho e colocar o nome dele nos créditos para não criar inimizade.",
+                        indivDelta: -20,
+                        painDelta: +10,
+                        burdenDelta: +30,
+                        score: 0,
+                        feedbackTitle: "Cúmplice da Própria Exploração",
+                        feedbackDesc: "Você recompensou a negligência do colega, acumulou estresse oxidativo no cérebro e gerou um precedente perigoso de servilismo profissional."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Denúncia Pública Hostil",
+                        text: "Enviar um e-mail com cópia para toda a diretoria expondo o colega de forma agressiva antes mesmo de tentar qualquer conversa.",
+                        indivDelta: 0,
+                        painDelta: +25,
+                        burdenDelta: -15,
+                        score: 25,
+                        feedbackTitle: "Hostilidade Reativa Corporativa",
+                        feedbackDesc: "Embora proteja suas tarefas imediatas, a humilhação pública cria animosidade no ambiente de trabalho e ativa vigilância defensiva desnecessária."
+                    },
+                    {
+                        type: "individuation",
+                        tag: "Individuação Madura do Self",
+                        text: "Manter a calma profissional: 'Minha parte está concluída e revisada. Posso tirar 20 minutos agora para tirar dúvidas sobre a estrutura, mas você precisa redigir a sua parte. Se não der tempo, explicaremos honestamente na reunião onde paramos.'",
+                        indivDelta: +25,
+                        painDelta: -20,
+                        burdenDelta: -25,
+                        score: 100,
+                        feedbackTitle: "Fronteiras Profissionais Invioláveis",
+                        feedbackDesc: "Excelente! Você ofereceu mentoria pontual sem assumir o esforço do colega. Permitiu que a realidade do desempenho aparecesse sem maquiagem salvacionista."
+                    }
+                ]
+            },
+            {
+                title: "Fase 5: O Estabelecimento de Tradições Próprias e o Não Festivo",
+                desc: "No final de ano, você planeja passar um feriado calmo descansando em sua casa para recarregar as energias. Seus parentes exigem sua presença em uma festa caótica de três dias em outra cidade, acusando você de 'não amar a família'.",
+                alert: "⚠️ Chantagem Emocional: 'Quem não vai na ceia da família é egoísta e esqueceu de onde veio.'",
+                options: [
+                    {
+                        type: "rescue",
+                        tag: "Subjugação por Fawning",
+                        text: "Ceder à chantagem, cancelar seus planos de descanso, viajar exausto e passar o feriado inteiro sorrindo por fora enquanto ferve por dentro.",
+                        indivDelta: -25,
+                        painDelta: +15,
+                        burdenDelta: +35,
+                        score: 0,
+                        feedbackTitle: "A Rendição do Self ao Clã",
+                        feedbackDesc: "O apaziguamento social (fawning) venceu. Você ensinou ao sistema familiar que basta chantagem e pressão para você capitular e anular suas vontades."
+                    },
+                    {
+                        type: "cutoff",
+                        tag: "Rebeldia Imatura",
+                        text: "Mandar uma mensagem ácida no grupo da família xingando todos de hipócritas e sair do grupo do WhatsApp.",
+                        indivDelta: -5,
+                        painDelta: +30,
+                        burdenDelta: -10,
+                        score: 20,
+                        feedbackTitle: "Reação Infantil ao Apego",
+                        feedbackDesc: "Sair do grupo batendo a porta é o oposto da maturidade: revela que a opinião do clã ainda desregula você intensamente."
+                    },
+                    {
+                        type: "individuation",
+                        tag: "Individuação Madura do Self",
+                        text: "Comunicar com doçura e firmeza inegociável: 'Amo muito todos vocês, mas neste ano meu corpo e minha mente precisam de silêncio e repouso. Não irei à viagem, mas ligarei no dia para desejar um feliz feriado e em breve almoçamos juntos.'",
+                        indivDelta: +30,
+                        painDelta: -25,
+                        burdenDelta: -25,
+                        score: 100,
+                        feedbackTitle: "Consolidação da Soberania do Self",
+                        feedbackDesc: "Perfeito! Triunfo do córtex pré-frontal ventromedial (vmPFC) e do freio vagal. Você acolheu o afeto sem negociar sua autonomia biológica e existencial."
+                    }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentPhaseIndex = 0;
+        let score = 0;
+        let individuation = 50; // %
+        let separationPain = 55; // %
+        let delegatedBurden = 65; // %
+        let canChoose = true;
+
+        const HIGH_SCORE_KEY = 'deo_game_dia50_highscore';
+
+        function initGame() {
+            const savedHighScore = localStorage.getItem(HIGH_SCORE_KEY) || 0;
+            document.getElementById('highScoreDisplay').textContent = savedHighScore;
+            loadPhase(currentPhaseIndex);
+        }
+
+        function loadPhase(idx) {
+            canChoose = true;
+            document.getElementById('roundFeedback').style.display = 'none';
+
+            const phase = PHASES[idx];
+            document.getElementById('phaseDisplay').textContent = (idx + 1) + ' / ' + PHASES.length;
+            document.getElementById('scenarioTitle').textContent = phase.title;
+            document.getElementById('scenarioDesc').textContent = phase.desc;
+            document.getElementById('scenarioAlert').textContent = phase.alert;
+
+            // Renderizar Decisões
+            const list = document.getElementById('decisionsList');
+            list.innerHTML = '';
+
+            phase.options.forEach((opt, optIdx) => {
+                const btn = document.createElement('div');
+                btn.className = 'decision-btn';
+                btn.onclick = () => selectOption(optIdx);
+
+                let tagClass = 'tag-rescue';
+                if (opt.type === 'cutoff') tagClass = 'tag-cutoff';
+                if (opt.type === 'individuation') tagClass = 'tag-individuation';
+
+                btn.innerHTML = `
+                    <span class="decision-tag ${tagClass}">${opt.tag}</span>
+                    <div class="decision-text">${opt.text}</div>
+                `;
+                list.appendChild(btn);
+            });
+
+            updateMeters();
+            updateVisualGraph();
+        }
+
+        function selectOption(optIdx) {
+            if (!canChoose) return;
+            canChoose = false;
+
+            soundClick();
+
+            const phase = PHASES[currentPhaseIndex];
+            const opt = phase.options[optIdx];
+
+            // Atualização dos medidores
+            individuation = Math.max(0, Math.min(100, individuation + opt.indivDelta));
+            separationPain = Math.max(0, Math.min(100, separationPain + opt.painDelta));
+            delegatedBurden = Math.max(0, Math.min(100, delegatedBurden + opt.burdenDelta));
+            score += opt.score;
+
+            document.getElementById('scoreDisplay').textContent = score;
+
+            updateMeters();
+            updateVisualGraph();
+
+            // Áudio e Feedback
+            if (opt.type === 'individuation') {
+                soundHarmonic();
+            } else {
+                soundWarning();
+            }
+
+            const feedbackCard = document.getElementById('roundFeedback');
+            const feedbackTitle = document.getElementById('roundFeedbackTitle');
+            const feedbackDesc = document.getElementById('roundFeedbackDesc');
+
+            feedbackTitle.textContent = opt.feedbackTitle;
+            feedbackTitle.style.color = (opt.type === 'individuation') ? '#065f46' : '#991b1b';
+            feedbackDesc.textContent = opt.feedbackDesc;
+
+            feedbackCard.style.display = 'block';
+            feedbackCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function updateMeters() {
+            document.getElementById('indivVal').textContent = individuation + '%';
+            document.getElementById('indivBar').style.width = individuation + '%';
+
+            document.getElementById('painVal').textContent = separationPain + '%';
+            document.getElementById('painBar').style.width = separationPain + '%';
+
+            document.getElementById('burdenVal').textContent = delegatedBurden + '%';
+            document.getElementById('burdenBar').style.width = delegatedBurden + '%';
+        }
+
+        function updateVisualGraph() {
+            const nodeSelf = document.getElementById('nodeSelf');
+            const nodeOther = document.getElementById('nodeOther');
+            const nodeDemand = document.getElementById('nodeDemand');
+            const connLine = document.getElementById('connectionLine');
+            const textStatus = document.getElementById('graphStatusText');
+
+            if (individuation >= 75) {
+                nodeSelf.style.boxShadow = '0 0 35px rgba(10, 147, 150, 0.9)';
+                nodeSelf.style.borderColor = '#94d2bd';
+                connLine.style.background = 'linear-gradient(90deg, #94d2bd, #0a9396)';
+                textStatus.textContent = 'Status da Rede: Fronteiras Íntegras Consolidadas • Soberania do Self com Conexão Afetiva';
+                textStatus.style.color = '#94d2bd';
+            } else if (individuation <= 35) {
+                nodeSelf.style.boxShadow = '0 0 25px rgba(155, 34, 38, 0.7)';
+                nodeSelf.style.borderColor = '#ae2012';
+                connLine.style.background = 'linear-gradient(90deg, #9b2226, #ca6702)';
+                textStatus.textContent = 'Status da Rede: Colapso de Fronteiras • Sequestro pelo Papel de Salvador / Fawning';
+                textStatus.style.color = '#fca5a5';
+            } else {
+                nodeSelf.style.boxShadow = '0 0 25px rgba(238, 155, 0, 0.6)';
+                nodeSelf.style.borderColor = '#ffffff';
+                connLine.style.background = 'linear-gradient(90deg, #94d2bd, #ee9b00, #ca6702)';
+                textStatus.textContent = 'Status da Rede: Tensão Relacional Ativa • Calibre as Fronteiras do Self';
+                textStatus.style.color = '#fde68a';
+            }
+        }
+
+        function nextPhase() {
+            soundClick();
+            currentPhaseIndex++;
+
+            if (currentPhaseIndex < PHASES.length) {
+                loadPhase(currentPhaseIndex);
+            } else {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            soundVictory();
+
+            document.getElementById('scenarioContainer').style.display = 'none';
+            document.getElementById('gameOverBox').style.display = 'block';
+
+            document.getElementById('finalScoreVal').textContent = score;
+
+            // Salvar HighScore
+            const currentHigh = parseInt(localStorage.getItem(HIGH_SCORE_KEY) || '0');
+            if (score > currentHigh) {
+                localStorage.setItem(HIGH_SCORE_KEY, score);
+                document.getElementById('highScoreDisplay').textContent = score;
+            }
+
+            const summary = document.getElementById('neuroSummaryText');
+            if (score >= 400) {
+                summary.textContent = 'Desempenho Magistral! Seu córtex pré-frontal dorsolateral (dlPFC) e ventromedial (vmPFC) demonstraram soberania absoluta sobre os reflexos arcaicos de salvação. Você exerceu compaixão autêntica com fronteiras inegociáveis, libertando a si mesmo e ao outro.';
+            } else if (score >= 250) {
+                summary.textContent = 'Bom Desempenho! Você conseguiu sustentar limites na maior parte dos cenários, embora ainda tenha sentido a atração gravitacional do resgate em momentos de estresse agudo. Continue praticando a pausa reflexiva dos 10 segundos.';
+            } else {
+                summary.textContent = 'Atenção Clínica: Os esquemas de auto-sacrifício e o medo visceral de separação ainda exercem sequestro predominante sobre suas escolhas relacionais. Recomenda-se a leitura atenta do artigo de fundamentação e o acompanhamento psicoterapêutico para individuação do self.';
+            }
+
+            document.getElementById('gameOverBox').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartGame() {
+            soundClick();
+            currentPhaseIndex = 0;
+            score = 0;
+            individuation = 50;
+            separationPain = 55;
+            delegatedBurden = 65;
+            document.getElementById('scoreDisplay').textContent = '0';
+            document.getElementById('scenarioContainer').style.display = 'block';
+            document.getElementById('gameOverBox').style.display = 'none';
+            loadPhase(0);
+        }
+
+        // Iniciação no carregamento
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

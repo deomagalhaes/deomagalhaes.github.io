@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Codependência e do Papel de Salvador: Como a Compulsão por Cuidar e Reparar o Outro Mascara o Pavor do Abandono e a Desconexão do Self** (Publicado em 15/11/2026)
 - [x] **A Neurobiologia da Culpa do Sobrevivente e das Lealdades Invisíveis: Por Que Prosperar Dói e Como o Cérebro Processa o Sucesso Como Traição ao Clã** (Publicado em 15/11/2026)
 - [x] **A Neurobiologia da Auto-Sabotagem e do Medo da Serenidade: Por Que o Cérebro Traumatizado Interpreta a Calmaria Como Ameaça e Como Reeducar o Sistema de Segurança Interna** (Publicado em 14/11/2026)
 - [x] **A Neurobiologia da Comparação Social Compulsiva e da Dor do Status Relativo: Como o Cérebro Processa a Desvantagem, a Inveja e a Descalibração do Valor Próprio** (Publicado em 14/11/2026)
