@@ -553,6 +553,170 @@ switch -Wildcard ($Theme) {
         $pencilEraser.Dispose()
         $sparkleBrush.Dispose()
     }
+    "*radar*" {
+        # Radar Anti-Ruminação e Desfusão Cognitiva Teen (ACT & TCC)
+        $cx = 400.0
+        $cy = 175.0
+        $rMax = 130.0
+
+        # Halos do Sonar / Radar
+        $outerGlowPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(60, 10, 147, 150), 16)
+        $radarBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 148, 210, 189), 3.5)
+        $ringPen1 = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(120, 10, 147, 150), 2)
+        $ringPen2 = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(90, 148, 210, 189), 1.5)
+        $ringPen2.DashStyle = [System.Drawing.Drawing2D.DashStyle]::Dash
+        $axisPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(140, 148, 210, 189), 1.5)
+        $diagPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(70, 148, 210, 189), 1)
+        $diagPen.DashStyle = [System.Drawing.Drawing2D.DashStyle]::Dot
+
+        # Fundo do mostrador do Radar
+        $radarBgBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(240, 2, 20, 30))
+        $g.FillEllipse($radarBgBrush, [float]($cx - $rMax), [float]($cy - $rMax), [float]($rMax * 2), [float]($rMax * 2))
+        $g.DrawEllipse($outerGlowPen, [float]($cx - $rMax - 4), [float]($cy - $rMax - 4), [float](($rMax + 4) * 2), [float](($rMax + 4) * 2))
+        $g.DrawEllipse($radarBorderPen, [float]($cx - $rMax), [float]($cy - $rMax), [float]($rMax * 2), [float]($rMax * 2))
+
+        # Círculos concêntricos de alcance do sonar
+        $radii = @(35.0, 70.0, 105.0)
+        foreach ($r in $radii) {
+            $penToUse = if ($r -eq 70.0) { $ringPen2 } else { $ringPen1 }
+            $g.DrawEllipse($penToUse, [float]($cx - $r), [float]($cy - $r), [float]($r * 2), [float]($r * 2))
+        }
+
+        # Eixos em cruz e diagonais
+        $g.DrawLine($axisPen, [float]($cx - $rMax), [float]$cy, [float]($cx + $rMax), [float]$cy)
+        $g.DrawLine($axisPen, [float]$cx, [float]($cy - $rMax), [float]$cx, [float]($cy + $rMax))
+        $dOff = [float]($rMax * 0.7071)
+        $g.DrawLine($diagPen, [float]($cx - $dOff), [float]($cy - $dOff), [float]($cx + $dOff), [float]($cy + $dOff))
+        $g.DrawLine($diagPen, [float]($cx - $dOff), [float]($cy + $dOff), [float]($cx + $dOff), [float]($cy - $dOff))
+
+        # Feixe Varredor do Radar (Scanner Sweep Pie - Gradiente Suave)
+        $sweepPath = New-Object System.Drawing.Drawing2D.GraphicsPath
+        $sweepPath.AddPie([float]($cx - $rMax), [float]($cy - $rMax), [float]($rMax * 2), [float]($rMax * 2), 220.0, 55.0)
+        $sweepFill = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(65, 148, 210, 189))
+        $g.FillPath($sweepFill, $sweepPath)
+        $sweepLeadPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 233, 216, 166), 2.5)
+        $leadRad = [Math]::PI * 275.0 / 180.0
+        $g.DrawLine($sweepLeadPen, [float]$cx, [float]$cy, [float]($cx + $rMax * [Math]::Cos($leadRad)), [float]($cy + $rMax * [Math]::Sin($leadRad)))
+
+        # Alvo 1: Blip Vermelho/Âmbar (Ruminação / Pensamento Intrusivo Detectado)
+        $bx1 = [float]330.0
+        $by1 = [float]118.0
+        $blipRedGlow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(80, 239, 68, 68))
+        $blipRed = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 248, 113, 113))
+        $redPulsePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(200, 239, 68, 68), 2)
+        $redPulsePen.DashStyle = [System.Drawing.Drawing2D.DashStyle]::Dash
+        $g.FillEllipse($blipRedGlow, ($bx1 - 22), ($by1 - 22), 44, 44)
+        $g.DrawEllipse($redPulsePen, ($bx1 - 18), ($by1 - 18), 36, 36)
+        $g.FillEllipse($blipRed, ($bx1 - 8), ($by1 - 8), 16, 16)
+
+        # Mira visual no blip de ruminação
+        $lockPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(240, 254, 202, 202), 1.5)
+        $g.DrawRectangle($lockPen, [int]($bx1 - 13), [int]($by1 - 13), 26, 26)
+
+        # Alvo 2: Blip Dourado (Desfusão Cognitiva em Ação / Desarmando Rádio Tagarela)
+        $bx2 = [float]475.0
+        $by2 = [float]135.0
+        $blipGoldGlow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(90, 238, 155, 0))
+        $blipGold = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 255, 209, 102))
+        $goldPulsePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(220, 238, 155, 0), 2)
+        $g.FillEllipse($blipGoldGlow, ($bx2 - 20), ($by2 - 20), 40, 40)
+        $g.DrawEllipse($goldPulsePen, ($bx2 - 16), ($by2 - 16), 32, 32)
+        $g.FillEllipse($blipGold, ($bx2 - 7), ($by2 - 7), 14, 14)
+
+        # Alvo 3: Blip Esmeralda/Ciano (Âncora no Presente / Aterrisagem Sensorial)
+        $bx3 = [float]395.0
+        $by3 = [float]245.0
+        $blipGrnGlow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(90, 16, 185, 129))
+        $blipGrn = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 52, 211, 153))
+        $grnPulsePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(220, 52, 211, 153), 2)
+        $g.FillEllipse($blipGrnGlow, ($bx3 - 18), ($by3 - 18), 36, 36)
+        $g.DrawEllipse($grnPulsePen, ($bx3 - 14), ($by3 - 14), 28, 28)
+        $g.FillEllipse($blipGrn, ($bx3 - 6), ($by3 - 6), 12, 12)
+
+        # Centro do Radar (Núcleo Pré-Frontal / Observador Consciente)
+        $coreGlow = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(120, 148, 210, 189))
+        $coreBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 248, 250, 252))
+        $corePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 0, 95, 115), 3)
+        $g.FillEllipse($coreGlow, [float]($cx - 16), [float]($cy - 16), 32.0, 32.0)
+        $g.FillEllipse($coreBrush, [float]($cx - 10), [float]($cy - 10), 20.0, 20.0)
+        $g.DrawEllipse($corePen, [float]($cx - 10), [float]($cy - 10), 20.0, 20.0)
+
+        # Osciloscópio Mental nas Laterais (Esquerda: Onda Beta Caótica / Direita: Onda Alfa Calma)
+        $wavePenRed = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(180, 248, 113, 113), 2.5)
+        $wavePenGrn = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(220, 52, 211, 153), 2.5)
+        
+        # Onda caótica da ruminação (esquerda: x=90..230, y=175)
+        [System.Drawing.PointF[]]$rumPts = @(
+            (New-Object System.Drawing.PointF(90, 175)),
+            (New-Object System.Drawing.PointF(110, 150)),
+            (New-Object System.Drawing.PointF(125, 200)),
+            (New-Object System.Drawing.PointF(145, 140)),
+            (New-Object System.Drawing.PointF(160, 205)),
+            (New-Object System.Drawing.PointF(180, 155)),
+            (New-Object System.Drawing.PointF(200, 190)),
+            (New-Object System.Drawing.PointF(225, 175))
+        )
+        $g.DrawCurve($wavePenRed, $rumPts, 0.4)
+
+        # Onda suave de desfusão (direita: x=575..715, y=175)
+        [System.Drawing.PointF[]]$calmPts = @(
+            (New-Object System.Drawing.PointF(575, 175)),
+            (New-Object System.Drawing.PointF(605, 158)),
+            (New-Object System.Drawing.PointF(645, 192)),
+            (New-Object System.Drawing.PointF(685, 158)),
+            (New-Object System.Drawing.PointF(715, 175))
+        )
+        $g.DrawCurve($wavePenGrn, $calmPts, 0.5)
+
+        # Textos e Badges HUD Laterais
+        $fontHud = New-Object System.Drawing.Font("Segoe UI", 9.5, [System.Drawing.FontStyle]::Bold)
+        $fontTitle = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+        $textMuted = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(200, 148, 210, 189))
+        $textGold = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 255, 209, 102))
+        $textRed = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 252, 165, 165))
+        $textGrn = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 110, 231, 183))
+        $sfC = New-Object System.Drawing.StringFormat
+        $sfC.Alignment = [System.Drawing.StringAlignment]::Center
+
+        $g.DrawString("RUMINAÇÃO (LOOP)", $fontHud, $textRed, 155.0, 115.0, $sfC)
+        $g.DrawString("DESFUSÃO (ÂNCORA)", $fontHud, $textGrn, 645.0, 115.0, $sfC)
+        $g.DrawString("RADAR COGNITIVO TEEN", $fontTitle, $textGold, [float]$cx, 35.0, $sfC)
+        $g.DrawString("TCC & TERAPIA DE ACEITAÇÃO E COMPROMISSO", $fontHud, $textMuted, [float]$cx, [float]($cy + $rMax + 14), $sfC)
+
+        # Descarte de recursos gráficos
+        $outerGlowPen.Dispose()
+        $radarBorderPen.Dispose()
+        $ringPen1.Dispose()
+        $ringPen2.Dispose()
+        $axisPen.Dispose()
+        $diagPen.Dispose()
+        $radarBgBrush.Dispose()
+        $sweepPath.Dispose()
+        $sweepFill.Dispose()
+        $sweepLeadPen.Dispose()
+        $blipRedGlow.Dispose()
+        $blipRed.Dispose()
+        $redPulsePen.Dispose()
+        $lockPen.Dispose()
+        $blipGoldGlow.Dispose()
+        $blipGold.Dispose()
+        $goldPulsePen.Dispose()
+        $blipGrnGlow.Dispose()
+        $blipGrn.Dispose()
+        $grnPulsePen.Dispose()
+        $coreGlow.Dispose()
+        $coreBrush.Dispose()
+        $corePen.Dispose()
+        $wavePenRed.Dispose()
+        $wavePenGrn.Dispose()
+        $fontHud.Dispose()
+        $fontTitle.Dispose()
+        $textMuted.Dispose()
+        $textGold.Dispose()
+        $textRed.Dispose()
+        $textGrn.Dispose()
+        $sfC.Dispose()
+    }
     default {
         # Constelação Neurocognitiva Lúdica Padrão
         $orbBrush1 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230, 238, 155, 0))
