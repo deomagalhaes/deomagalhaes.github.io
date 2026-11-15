@@ -38,20 +38,20 @@
         const lv = Number(level) || 5;
         if (lv <= 3) {
             return {
-                badge: '1–3 • Ventral Vagal / Córtex Pré-Frontal Íntegro',
+                badge: '1–3 • Ventral Vagal (Córtex Ativo • Comunicação Social • Engajamento Seguro)',
                 cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-                latency: 'Deliberação liberada com clareza executiva.'
+                latency: 'Deliberação liberada com clareza executiva e regulação autonômica íntegra.'
             };
         }
         if (lv <= 6) {
             return {
-                badge: '4–6 • Alerta Simpático Moderado',
+                badge: '4–6 • Alerta Simpático (Luta/Fuga • Respiração Rápida • Delay de 60m Recomendado)',
                 cls: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
                 latency: 'Recomendado intervalo de 60 min e respiração fisiológica antes de responder.'
             };
         }
         return {
-            badge: '7–10 • Hiperativação Amigdaliana (Risco de Erro Tático)',
+            badge: '7–10 • Dorsal Vagal / Amigdaliano (Hiperativação • MORATÓRIA DE 24h OBRIGATÓRIA)',
             cls: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
             latency: 'MORATÓRIA OBRIGATÓRIA DE 12h A 24h: Nenhuma mensagem, ligação ou decisão irreversível agora.'
         };
@@ -73,6 +73,12 @@
                             <span class="text-xs font-mono text-slate-400">Uso Rápido de Bolso</span>
                         </div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Protocolo de Desfusão Cognitiva, Trade-offs e Veredito 24h</h2>
+                        <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                            <span id="df-draft-status-badge" class="px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300 bg-cyan-950/40 border border-cyan-500/30">✓ Rascunho salvo no LocalStorage</span>
+                            <button type="button" id="btn-df-clear-draft" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Limpar rascunho atual e iniciar novo registro em branco">
+                                Limpar Rascunho
+                            </button>
+                        </div>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2 bg-[#090d16] border border-slate-800 rounded-xl px-3 py-2">
@@ -851,6 +857,23 @@
             });
             draft.checks = checks;
             C.store.set('dm_vault_desfusao_draft', draft);
+            const badge = document.getElementById('df-draft-status-badge');
+            if (badge) badge.textContent = `✓ Rascunho salvo às ${new Date().toLocaleTimeString('pt-BR')}`;
+        }
+
+        const btnClearDraft = document.getElementById('btn-df-clear-draft');
+        if (btnClearDraft) {
+            btnClearDraft.addEventListener('click', () => {
+                if (!confirm('Deseja limpar todos os campos do rascunho atual para iniciar um novo registro?')) return;
+                C.store.remove('dm_vault_desfusao_draft');
+                const form = document.getElementById('desfusao-form');
+                if (form) form.reset();
+                document.querySelectorAll('#df-distortions-chips input').forEach(c => c.checked = false);
+                updateDesfusaoLiveMetrics();
+                const badge = document.getElementById('df-draft-status-badge');
+                if (badge) badge.textContent = 'Rascunho limpo';
+                C.toast('Rascunho resetado com sucesso.', 'info', 1500);
+            });
         }
 
         function restoreDesfusaoDraft() {

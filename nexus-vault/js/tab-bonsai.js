@@ -3621,9 +3621,14 @@
         else if (modalLogsFilter === 'REPOT') displayedLogs = repotLogs;
 
         const summaryHtml = `
-            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 pb-1.5 border-b border-slate-800">
-                <span>Histórico: <strong>${plant.logs.length}</strong> manejos (<strong>${pruningLogs.length}</strong> podas)</span>
-                <div class="flex items-center gap-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pb-1.5 border-b border-slate-800">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span>Histórico: <strong>${plant.logs.length}</strong> manejos (<strong>${pruningLogs.length}</strong> podas)</span>
+                    <button type="button" id="btn-modal-quick-prune" class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 flex items-center gap-1 font-bold transition">
+                        <span>✂️</span><span>+ Registrar Poda Hoje</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1 flex-wrap">
                     <button type="button" data-modal-log-filter="ALL" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'ALL' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Todos</button>
                     <button type="button" data-modal-log-filter="PRUNING" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'PRUNING' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Podas (${pruningLogs.length})</button>
                     <button type="button" data-modal-log-filter="FERT" class="px-1.5 py-0.5 rounded text-[10px] ${modalLogsFilter === 'FERT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'}">Adubação (${fertLogs.length})</button>
@@ -3664,6 +3669,25 @@
                 renderModalLogs(plant);
             });
         });
+
+        const btnPruneNow = listEl.querySelector('#btn-modal-quick-prune');
+        if (btnPruneNow) {
+            btnPruneNow.addEventListener('click', () => {
+                const today = C.todayISO();
+                const moon = getMoonPhase();
+                plant.lastPruning = today;
+                if (!Array.isArray(plant.logs)) plant.logs = [];
+                plant.logs.unshift({
+                    date: today,
+                    type: 'Poda de Manutenção / Pinçagem',
+                    detail: `Poda registrada no histórico sob ${moon.phaseName}`
+                });
+                saveData(false);
+                renderModalLogs(plant);
+                renderAll();
+                C.toast(`Poda registrada hoje para ${plant.id} (${plant.popularName})!`, 'success', 2200);
+            });
+        }
     }
 
     function closeModal() {

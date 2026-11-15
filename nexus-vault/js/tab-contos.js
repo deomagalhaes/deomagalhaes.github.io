@@ -856,6 +856,48 @@
             defaultQuestion: 'Para onde o seu barquinho de algodão vai navegar bem levinho esta noite?',
             challengeAct: 'estava tentando controlar o sono, com medo de fechar os olhos e perder alguma coisa do dia.',
             breathCue: 'soltou todo o peso do corpinho no colchão, deu um suspiro longo e gostoso, e deixou o riacho da noite embalar o sono mais doce do mundo.'
+        },
+        sensibilidade_auditiva: {
+            label: '121. A Concha Acústica da Coruja (Filtro Sensorial & Proteção Contra Barulhos do Dia)',
+            defaultMetaphor: 'A penugem macia e aveludada em volta das orelhinhas da coruja guardiã: ela funciona como um filtro mágico que deixa passar apenas o canto manso do vento e transforma os barulhos pontudos do mundo num sussurro morno e acolhedor.',
+            defaultQuestion: 'Como é gostoso sentir as suas orelhinhas e a sua cabecinha envoltas num silêncio quentinho de algodão?',
+            challengeAct: 'ouviu muitos sons altos e conversas misturadas ao longo do dia, sentindo a cabecinha zumbir e as orelhinhas cansadas querendo paz.',
+            breathCue: 'fechou os olhinhos de manso, respirou o ar puro sentindo a maciez do travesseiro abraçar a cabeça e soltou um suspiro de veludo protetor.'
+        },
+        procedimento_medico: {
+            label: '122. A Armadura Prateada do Tatu-Peba (Coragem no Médico, Vacina & Exames)',
+            defaultMetaphor: 'O escudo prateado e brilhante do tatu guerreiro da mata: ele sabe que uma picadinha rápida dura menos que três batidas do coração, e que o escudo da coragem deixa entrar apenas o remédio protetor que cuida da saúde para continuar correndo livre.',
+            defaultQuestion: 'Você sente o quanto você é corajoso e forte mesmo quando o desafio dá um friozinho na barriga?',
+            challengeAct: 'lembrou de ter que ir ao médico ou tomar uma picadinha de remédio e sentiu as perninhas tremerem, querendo fugir dali.',
+            breathCue: 'segurou bem firme a mão quentinha de quem te ama, puxou o ar enchendo o peito de coragem por três segundos e soltou um sopro vitorioso e calmo.'
+        },
+        transicao_sono_telas: {
+            label: '123. O Manto Estrelado da Noite Sem Telas (Desaceleração Visual & Melatonina Mansa)',
+            defaultMetaphor: 'O véu de veludo azul-profundo que a noite estende sobre as colinas: quando os vaga-lumes e as telinhas descansam suas luzes elétricas, a luz mágica das estrelas e os sonhos mais bonitos finalmente conseguem descer devagarinho para abraçar a cama.',
+            defaultQuestion: 'Que imagem gostosa e mansa você quer pintar com o seu pensamento agora que a tela apagou?',
+            challengeAct: 'queria ficar mais um tempinho olhando para as cores rápidas da telinha mágica, sentindo os olhinhos arderem e o coração inquieto.',
+            breathCue: 'pousou as mãozinhas sobre os olhos fechados por cinco segundos, respirou fundo sentindo o escuro morno relaxar as pálpebras e soltou o ar em paz.'
+        },
+        respiracao_mariposa: {
+            label: '124. As Asas Aveludadas da Mariposa-Lunar (Respiração Lúdica 4 Tempos & Ancoragem Vagal)',
+            defaultMetaphor: 'A mariposa-lunar de asas prateadas na relva do cerrado: para voar até as estrelas mais altas ela abre as asas em quatro tempos calmos, segura a brisa por quatro tempos, fecha as asas em quatro tempos e descansa em silêncio. Um ritmo tão suave que embala o coração como um balanço morno.',
+            defaultQuestion: 'Você sentiu as batidinhas do seu coraçãozinho ficando cada vez mais mansas e tranquilas, como passos na relva?',
+            challengeAct: 'deitou com o coração acelerado e a respiração curtinha, como se tivesse acabado de correr uma maratona inteira pela sala.',
+            breathCue: 'inspirou contando um, dois, três, quatro… segurou o ar bem macio… e soltou devagarinho contando um, dois, três, quatro até derreter no colchão.'
+        },
+        seguranca_vinculo: {
+            label: '125. A Cabaninha de Folhas de Sumaúma (Vínculo Seguro & Amor Presente em Todo Canto)',
+            defaultMetaphor: 'A cabana de folhas gigantes da sumaúma protetora: mesmo quando os adultos estão no cômodo ao lado preparando o dia de amanhã, o abraço e o carinho permanecem cobrindo o quarto como uma tenda invisível que protege cada segundo do descanso.',
+            defaultQuestion: 'Você sabe que o nosso amor e o nosso abraço estão sempre com você, aqui bem pertinho, a noite inteira?',
+            challengeAct: 'olhou para a porta do quarto e sentiu vontade de chamar três vezes, com receio de ficar sozinho na caminha.',
+            breathCue: 'abraçou o travesseiro sentindo o calor do nosso abraço guardado dentro dele, respirou fundo sentindo segurança total e aconchegou o queixinho sorrindo.'
+        },
+        flexibilidade_tdah: {
+            label: '126. O Cipó que Dança com o Vento (Flexibilidade Cognitiva & Mente Criativa Mansa)',
+            defaultMetaphor: 'O cipó verdejante que balança no alto da gameleira: quando o vento sopra forte para a direita ele dança para a direita, quando sopra para a esquerda ele faz um laço engraçado; ele nunca quebra porque tem a sabedoria da flexibilidade e o coração leve como pluma.',
+            defaultQuestion: 'Como é divertido quando o nosso plano muda e a gente transforma tudo numa brincadeira nova e surpreendente?',
+            challengeAct: 'ficou irritado porque a regra do jogo mudou ou o horário da brincadeira precisou ser ajustado, com vontade de cruzar os braços e emburrar.',
+            breathCue: 'soltou os braços e as pernas como se fossem cipós bem moles, respirou fundo soprando a teimosia para o céu e sorriu pronto para inventar uma rota nova.'
         }
     };
 
@@ -1001,7 +1043,8 @@
         const ctx = getOrCreateAudioContext();
         stopRelaxationAudio();
 
-        const bufferSize = ctx.sampleRate * 2;
+        const durationSec = mode === 'wave' ? 6 : 4;
+        const bufferSize = ctx.sampleRate * durationSec;
         const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
         const output = noiseBuffer.getChannelData(0);
 
@@ -1029,17 +1072,18 @@
                 b6 = white * 0.115926;
             }
         } else if (mode === 'wave') {
-            // Ondas Noturnas Suaves (modulação senoidal lenta de baixa frequência)
+            // Ondas Noturnas Suaves (maré mansa com ciclo lento de 6 segundos)
             let lastOut = 0.0;
             for (let i = 0; i < bufferSize; i++) {
                 const white = Math.random() * 2 - 1;
                 output[i] = (lastOut + (0.02 * white)) / 1.02;
                 lastOut = output[i];
-                const waveMod = Math.sin((i / bufferSize) * Math.PI * 4) * 0.35 + 0.65;
-                output[i] *= waveMod * 3.0;
+                const waveCycle = Math.sin((i / bufferSize) * Math.PI * 2);
+                const waveMod = (waveCycle * 0.42 + 0.58);
+                output[i] *= waveMod * 3.2;
             }
         } else {
-            // Grilos & Brisa da Floresta
+            // Grilos & Brisa do Cerrado
             let lastOut = 0.0;
             for (let i = 0; i < bufferSize; i++) {
                 const white = Math.random() * 2 - 1;
@@ -1048,6 +1092,14 @@
                 const cricketPulse = (i % (ctx.sampleRate / 8) < (ctx.sampleRate / 24)) ? (Math.sin(i * 0.3) * 0.08) : 0;
                 output[i] = output[i] * 1.8 + cricketPulse;
             }
+        }
+
+        // Aplica janela cosseno suave de 50ms nas extremidades para eliminar cliques de loop
+        const fadeLen = Math.floor(ctx.sampleRate * 0.05);
+        for (let i = 0; i < fadeLen; i++) {
+            const factor = 0.5 * (1 - Math.cos((i / fadeLen) * Math.PI));
+            output[i] *= factor;
+            output[bufferSize - 1 - i] *= factor;
         }
 
         const source = ctx.createBufferSource();

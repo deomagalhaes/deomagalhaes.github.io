@@ -31,17 +31,17 @@
     function computeFinancialModel(customInputs) {
         // Engine matemático autônomo auditado
         const base = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
-        const wSessions = Math.max(0, Number(base.weeklySessions) || 16);
-        const wPerMonth = Math.max(1, Number(base.weeksPerMonth) || 4.2);
-        const indWeekly = Math.max(0, Number(base.indirectWeeklyHours) || 6);
-        const ticket = Math.max(0, Number(base.avgTicket) || 250);
-        const costs = Math.max(0, Number(base.monthlyCosts) || 2600);
-        const aporte = Math.max(0, Number(base.monthlyContribution) || 4200);
-        const initPatrimony = Math.max(0, Number(base.currentPatrimony) || 120000);
-        const annualRatePct = Math.max(0, Math.min(40, Number(base.realAnnualReturn) || 7.5));
-        const horizonYears = Math.max(1, Math.min(30, parseInt(base.horizonYears, 10) || 15));
-        const swr = Math.max(1, Math.min(10, Number(base.safeWithdrawalRate) || 4.0));
-        const fatMult = Math.max(1.1, Math.min(3.0, Number(base.fatFireMultiplier) || 1.4));
+        const wSessions = base.weeklySessions !== undefined ? Math.max(0, Number(base.weeklySessions)) : 16;
+        const wPerMonth = base.weeksPerMonth !== undefined ? Math.max(0.1, Number(base.weeksPerMonth)) : 4.2;
+        const indWeekly = base.indirectWeeklyHours !== undefined ? Math.max(0, Number(base.indirectWeeklyHours)) : 6;
+        const ticket = base.avgTicket !== undefined ? Math.max(0, Number(base.avgTicket)) : 250;
+        const costs = base.monthlyCosts !== undefined ? Math.max(0, Number(base.monthlyCosts)) : 2600;
+        const aporte = base.monthlyContribution !== undefined ? Math.max(0, Number(base.monthlyContribution)) : 4200;
+        const initPatrimony = base.currentPatrimony !== undefined ? Math.max(0, Number(base.currentPatrimony)) : 120000;
+        const annualRatePct = base.realAnnualReturn !== undefined ? Math.max(0, Math.min(40, Number(base.realAnnualReturn))) : 7.5;
+        const horizonYears = base.horizonYears !== undefined ? Math.max(1, Math.min(30, parseInt(base.horizonYears, 10))) : 15;
+        const swr = base.safeWithdrawalRate !== undefined ? Math.max(0.1, Math.min(10, Number(base.safeWithdrawalRate))) : 4.0;
+        const fatMult = base.fatFireMultiplier !== undefined ? Math.max(1.1, Math.min(3.0, Number(base.fatFireMultiplier))) : 1.4;
 
         const monthlySessions = wSessions * wPerMonth;
         const indirectMonthlyHours = indWeekly * wPerMonth;
@@ -184,10 +184,50 @@
 
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
         const tiers = [
-            { id: 'essential', level: 1, name: raw.nameEssential || 'Nível 1 • Sobrevivência Essencial', cost: Math.max(0, Number(raw.expenseEssential) || 2500) },
-            { id: 'clinic', level: 2, name: raw.nameClinic || 'Nível 2 • Sustentação do Consultório', cost: Math.max(0, Number(raw.expenseClinic) || 2600) },
-            { id: 'family', level: 3, name: raw.nameFamily || 'Nível 3 • Família & Saúde Plena', cost: Math.max(0, Number(raw.expenseFamily) || 3500) },
-            { id: 'lifestyle', level: 4, name: raw.nameLifestyle || 'Nível 4 • Liberdade & Estilo de Vida', cost: Math.max(0, Number(raw.expenseLifestyle) || 2000) }
+            {
+                id: 'essential',
+                level: 1,
+                name: raw.nameEssential || 'Nível 1 • Sobrevivência Essencial',
+                desc: 'Moradia, serviços básicos, alimentação essencial e sobrevivência digna.',
+                cost: Math.max(0, Number(raw.expenseEssential) || 2500),
+                inputKey: 'expenseEssential',
+                nameKey: 'nameEssential',
+                color: 'emerald',
+                badgeClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+            },
+            {
+                id: 'clinic',
+                level: 2,
+                name: raw.nameClinic || 'Nível 2 • Sustentação do Consultório',
+                desc: 'Custos operacionais fixos do consultório, laudos, plataformas, tributos e anuidade CRP.',
+                cost: Math.max(0, Number(raw.expenseClinic) || 2600),
+                inputKey: 'expenseClinic',
+                nameKey: 'nameClinic',
+                color: 'cyan',
+                badgeClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+            },
+            {
+                id: 'family',
+                level: 3,
+                name: raw.nameFamily || 'Nível 3 • Família & Saúde Plena',
+                desc: 'Plano de saúde, farmácia, educação, segurança e suporte familiar.',
+                cost: Math.max(0, Number(raw.expenseFamily) || 3500),
+                inputKey: 'expenseFamily',
+                nameKey: 'nameFamily',
+                color: 'amber',
+                badgeClass: 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+            },
+            {
+                id: 'lifestyle',
+                level: 4,
+                name: raw.nameLifestyle || 'Nível 4 • Liberdade & Estilo de Vida',
+                desc: 'Viagens, congressos internacionais, hobbies, bonsai, música e lazer sem culpa.',
+                cost: Math.max(0, Number(raw.expenseLifestyle) || 2000),
+                inputKey: 'expenseLifestyle',
+                nameKey: 'nameLifestyle',
+                color: 'purple',
+                badgeClass: 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+            }
         ];
 
         if (Number(raw.expenseCustom) > 0 || (raw.nameCustom && raw.nameCustom.trim())) {
@@ -195,7 +235,12 @@
                 id: 'custom',
                 level: 5,
                 name: raw.nameCustom || 'Nível 5 • Reserva Estratégica & Projetos',
-                cost: Math.max(0, Number(raw.expenseCustom) || 0)
+                desc: 'Aportes em novos projetos, filantropia, investimentos especiais e expansão patrimonial.',
+                cost: Math.max(0, Number(raw.expenseCustom) || 0),
+                inputKey: 'expenseCustom',
+                nameKey: 'nameCustom',
+                color: 'rose',
+                badgeClass: 'bg-rose-500/15 text-rose-300 border-rose-500/30'
             });
         }
 
@@ -206,8 +251,12 @@
                     id: ce.id || `custom_exp_${idx}`,
                     level: lvl,
                     name: ce.name || `Nível ${lvl} • ${ce.category || 'Despesa Adicional'}`,
+                    desc: ce.desc || 'Despesa adicional personalizada pelo usuário.',
                     cost: Math.max(0, Number(ce.cost) || 0),
-                    isCustomItem: true
+                    isCustomItem: true,
+                    customIndex: idx,
+                    color: 'indigo',
+                    badgeClass: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
                 });
             });
         }
@@ -403,20 +452,22 @@
      */
     function computeAporteAllocation(customInputs) {
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
-        const aporte = Math.max(0, Number(raw.customAporteValue) || Number(raw.monthlyContribution) || 4200);
+        const aporte = raw.customAporteValue !== undefined
+            ? Math.max(0, Number(raw.customAporteValue))
+            : (raw.monthlyContribution !== undefined ? Math.max(0, Number(raw.monthlyContribution)) : 4200);
 
-        const currentFII = Math.max(0, Number(raw.currentAllocFII) || 42000);
-        const currentRF = Math.max(0, Number(raw.currentAllocRF) || 40000);
-        const currentAcoes = Math.max(0, Number(raw.currentAllocAcoes) || 23000);
-        const currentGlobal = Math.max(0, Number(raw.currentAllocGlobal) || 15000);
+        const currentFII = raw.currentAllocFII !== undefined ? Math.max(0, Number(raw.currentAllocFII)) : 42000;
+        const currentRF = raw.currentAllocRF !== undefined ? Math.max(0, Number(raw.currentAllocRF)) : 40000;
+        const currentAcoes = raw.currentAllocAcoes !== undefined ? Math.max(0, Number(raw.currentAllocAcoes)) : 23000;
+        const currentGlobal = raw.currentAllocGlobal !== undefined ? Math.max(0, Number(raw.currentAllocGlobal)) : 15000;
 
         const totalCurrent = currentFII + currentRF + currentAcoes + currentGlobal;
         const totalAfter = totalCurrent + aporte;
 
-        const targetPctFII = Number(raw.targetAllocFII) || 35;
-        const targetPctRF = Number(raw.targetAllocRF) || 30;
-        const targetPctAcoes = Number(raw.targetAllocAcoes) || 20;
-        const targetPctGlobal = Number(raw.targetAllocGlobal) || 15;
+        const targetPctFII = raw.targetAllocFII !== undefined ? Number(raw.targetAllocFII) : 35;
+        const targetPctRF = raw.targetAllocRF !== undefined ? Number(raw.targetAllocRF) : 30;
+        const targetPctAcoes = raw.targetAllocAcoes !== undefined ? Number(raw.targetAllocAcoes) : 20;
+        const targetPctGlobal = raw.targetAllocGlobal !== undefined ? Number(raw.targetAllocGlobal) : 15;
 
         const idealFII = totalAfter * (targetPctFII / 100);
         const idealRF = totalAfter * (targetPctRF / 100);
@@ -444,16 +495,23 @@
             allocGlobal = aporte * (targetPctGlobal / 100);
         }
 
+        const classes = [
+            { key: 'FII', name: 'Fundos Imobiliários (FIIs)', targetPct: targetPctFII, currentVal: currentFII, recommendedAporte: allocFII, postVal: currentFII + allocFII, bgBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30', color: 'text-cyan-300' },
+            { key: 'RF', name: 'Renda Fixa IPCA+ / Tesouro', targetPct: targetPctRF, currentVal: currentRF, recommendedAporte: allocRF, postVal: currentRF + allocRF, bgBadge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', color: 'text-emerald-300' },
+            { key: 'Acoes', name: 'Ações Brasileiras / Dividendos', targetPct: targetPctAcoes, currentVal: currentAcoes, recommendedAporte: allocAcoes, postVal: currentAcoes + allocAcoes, bgBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30', color: 'text-amber-300' },
+            { key: 'Global', name: 'Ativos Globais / Dólar / ETFs', targetPct: targetPctGlobal, currentVal: currentGlobal, recommendedAporte: allocGlobal, postVal: currentGlobal + allocGlobal, bgBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/30', color: 'text-purple-300' }
+        ];
+
+        classes.forEach((cls) => {
+            cls.currentPct = totalCurrent > 0 ? (cls.currentVal / totalCurrent) * 100 : 0;
+            cls.postPct = totalAfter > 0 ? (cls.postVal / totalAfter) * 100 : 0;
+        });
+
         return {
             aporte,
             totalCurrent,
             totalAfter,
-            classes: [
-                { key: 'FII', name: 'Fundos Imobiliários (FIIs)', targetPct: targetPctFII, currentVal: currentFII, recommendedAporte: allocFII, postVal: currentFII + allocFII },
-                { key: 'RF', name: 'Renda Fixa IPCA+ / Tesouro', targetPct: targetPctRF, currentVal: currentRF, recommendedAporte: allocRF, postVal: currentRF + allocRF },
-                { key: 'Acoes', name: 'Ações Brasileiras / Dividendos', targetPct: targetPctAcoes, currentVal: currentAcoes, recommendedAporte: allocAcoes, postVal: currentAcoes + allocAcoes },
-                { key: 'Global', name: 'Ativos Globais / Dólar / ETFs', targetPct: targetPctGlobal, currentVal: currentGlobal, recommendedAporte: allocGlobal, postVal: currentGlobal + allocGlobal }
-            ]
+            classes
         };
     }
 
@@ -583,12 +641,14 @@
             return global.VaultTabIndependencia._runMonteCarloSimulationInternal(customInputs);
         }
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
-        const initPatrimony = Math.max(1000, Number(raw.currentPatrimony) || 120000);
-        const meanReturn = (Number(raw.realAnnualReturn) || 7.5) / 100;
-        const volatility = (Number(raw.mcVolatility) || 13.0) / 100;
+        const initPatrimony = raw.currentPatrimony !== undefined ? Math.max(0, Number(raw.currentPatrimony)) : 120000;
+        const meanReturn = (raw.realAnnualReturn !== undefined ? Number(raw.realAnnualReturn) : 7.5) / 100;
+        const volatility = (raw.mcVolatility !== undefined ? Number(raw.mcVolatility) : 13.0) / 100;
         const years = Math.max(5, Math.min(40, Number(raw.mcYears) || 30));
         const numSims = Math.max(100, Math.min(2000, Number(raw.mcSimulations) || 1000));
-        const annualWithdrawal = (raw.monthlyCosts || 2600) * 12;
+        const annualWithdrawal = raw.annualWithdrawal !== undefined
+            ? Math.max(0, Number(raw.annualWithdrawal))
+            : (raw.monthlyCosts !== undefined ? Math.max(0, Number(raw.monthlyCosts) * 12) : 31200);
 
         function gaussianRandom() {
             let u = 0, v = 0;
@@ -623,9 +683,13 @@
 
         return {
             simulations: numSims,
+            numSims,
             years,
+            annualWithdrawal,
             ruinedCount: ruinCount,
             ruinProbability,
+            ruinRate: ruinProbability,
+            successRate: 100 - ruinProbability,
             p10,
             p50,
             p90,
@@ -777,8 +841,15 @@
         });
 
         // 9. Teste de Simulação de Risco de Sequência de Retornos (SORR / Monte Carlo)
-        const mcResult = runMonteCarloSimulation();
-        const mcValid = mcResult && typeof mcResult.ruinProbability === 'number' && mcResult.p50 > 0;
+        const mcResult = runMonteCarloSimulation({
+            currentPatrimony: 800000,
+            monthlyCosts: 2600,
+            realAnnualReturn: 7.5,
+            mcVolatility: 12.0,
+            mcYears: 25,
+            mcSimulations: 1000
+        });
+        const mcValid = mcResult && (typeof mcResult.ruinProbability === 'number' || typeof mcResult.ruinRate === 'number') && mcResult.p50 > 0;
         tests.push({
             name: 'Simulação Estocástica de Monte Carlo & Risco de Sequência (SORR)',
             formula: 'Trajetórias = 1.000 (Box-Muller) | Avaliação de P10, P50, P90 e Risco de Ruína',
