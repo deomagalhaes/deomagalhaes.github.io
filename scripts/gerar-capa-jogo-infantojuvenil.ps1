@@ -717,6 +717,209 @@ switch -Wildcard ($Theme) {
         $textGrn.Dispose()
         $sfC.Dispose()
     }
+    "*vulcao*" {
+        # O Vulcão Calmo: Interocepção Infantil, Termômetro de Raiva e Kit de Resfriamento Vagal
+        # 1. Termômetro de Emoções à Esquerda (x=170..280, y=65..280)
+        $thermoFrameBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(240, 15, 23, 42))
+        $thermoBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 238, 155, 0), 3.5)
+        $g.FillRectangle($thermoFrameBrush, 175, 65, 80, 215)
+        $g.DrawRectangle($thermoBorderPen, 175, 65, 80, 215)
+
+        # Tubo de vidro do termômetro
+        $glassTubeBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(220, 30, 41, 59))
+        $g.FillRectangle($glassTubeBrush, 203, 75, 24, 150)
+        $g.FillEllipse($glassTubeBrush, 193, 210, 44, 44)
+
+        # Gradiente de Temperatura no Tubo: Base Azul/Verde (Calma), Meio Laranja (Alerta), Topo Vermelho (Erupção)
+        $levelCalm = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 14, 165, 233))
+        $levelWarm = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 245, 158, 11))
+        $levelHot  = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 239, 68, 68))
+        
+        $g.FillEllipse($levelCalm, 197, 214, 36, 36)
+        $g.FillRectangle($levelCalm, 207, 160, 16, 60)
+        $g.FillRectangle($levelWarm, 207, 120, 16, 40)
+        $g.FillRectangle($levelHot, 207, 85, 16, 35)
+
+        # Marcadores de Nível (1 a 5)
+        $tickPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(240, 255, 255, 255), 2)
+        $fontTick = New-Object System.Drawing.Font("Segoe UI", 8.5, [System.Drawing.FontStyle]::Bold)
+        $tickBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(240, 255, 255, 255))
+        $sfR = New-Object System.Drawing.StringFormat
+        $sfR.Alignment = [System.Drawing.StringAlignment]::Far
+        $sfR.LineAlignment = [System.Drawing.StringAlignment]::Center
+
+        $ticks = @(
+            @{ Y = 90;  Num = "5" },
+            @{ Y = 120; Num = "4" },
+            @{ Y = 150; Num = "3" },
+            @{ Y = 180; Num = "2" },
+            @{ Y = 210; Num = "1" }
+        )
+        foreach ($t in $ticks) {
+            $g.DrawLine($tickPen, 227, [int]$t.Y, 237, [int]$t.Y)
+            $g.DrawString($t.Num, $fontTick, $tickBrush, 201.0, [float]$t.Y, $sfR)
+        }
+
+        # 2. O Vulcãozinho Amigável Central (x=305..520, y=75..295)
+        # Halos de resfriamento e calma ao redor do cume
+        $auraPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(90, 148, 210, 189), 2.5)
+        $auraPen.DashStyle = [System.Drawing.Drawing2D.DashStyle]::Dash
+        $g.DrawEllipse($auraPen, 320, 50, 180, 80)
+        $g.DrawEllipse($auraPen, 295, 35, 230, 110)
+
+        # Encosta do Vulcão (Polígono em Trapézio Arredondado)
+        [System.Drawing.PointF[]]$volcanoPts = @(
+            (New-Object System.Drawing.PointF(355, 120)),
+            (New-Object System.Drawing.PointF(465, 120)),
+            (New-Object System.Drawing.PointF(535, 285)),
+            (New-Object System.Drawing.PointF(285, 285))
+        )
+        $volcanoBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
+            (New-Object System.Drawing.PointF(410, 120)),
+            (New-Object System.Drawing.PointF(410, 285)),
+            [System.Drawing.Color]::FromArgb(255, 180, 83, 9),
+            [System.Drawing.Color]::FromArgb(255, 15, 118, 110)
+        )
+        $volcanoPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 254, 243, 199), 3.5)
+        $g.FillPolygon($volcanoBrush, $volcanoPts)
+        $g.DrawPolygon($volcanoPen, $volcanoPts)
+
+        # Cratera Suave e Calma no topo (com água cristalina e estrelinhas)
+        $craterBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 13, 148, 136))
+        $craterInner = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 56, 189, 248))
+        $craterPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 255, 255, 255), 2.5)
+        $g.FillEllipse($craterBrush, 355, 105, 110, 32)
+        $g.DrawEllipse($craterPen, 355, 105, 110, 32)
+        $g.FillEllipse($craterInner, 370, 111, 80, 20)
+
+        # Fumacinha de Calma e Cristais subindo da cratera
+        $steamBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(180, 224, 242, 254))
+        $g.FillEllipse($steamBrush, 395, 78, 30, 26)
+        $g.FillEllipse($steamBrush, 412, 60, 26, 22)
+        $g.FillEllipse($steamBrush, 385, 52, 22, 18)
+
+        # Rosto Amigável do Vulcãozinho (Olhos Brilhantes e Sorriso Sereno)
+        $eyeWhite = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+        $eyeDark  = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 15, 23, 42))
+        $blushPink = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(160, 251, 113, 133))
+
+        # Olho esquerdo
+        $g.FillEllipse($eyeWhite, 370, 172, 24, 24)
+        $g.FillEllipse($eyeDark, 377, 176, 14, 14)
+        $g.FillEllipse($eyeWhite, 380, 178, 6, 6)
+        # Olho direito
+        $g.FillEllipse($eyeWhite, 426, 172, 24, 24)
+        $g.FillEllipse($eyeDark, 433, 176, 14, 14)
+        $g.FillEllipse($eyeWhite, 436, 178, 6, 6)
+
+        # Bochechinhas coradas de quem está respirando fundo
+        $g.FillEllipse($blushPink, 356, 195, 18, 12)
+        $g.FillEllipse($blushPink, 446, 195, 18, 12)
+
+        # Sorriso sereno
+        $mouthPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 15, 23, 42), 3.5)
+        $g.DrawArc($mouthPen, 392, 192, 36, 26, 20, 140)
+
+        # Plantinhas floridas crescendo na base do vulcão resfriado
+        $leafBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 34, 197, 94))
+        $flowerBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 244, 114, 182))
+        $g.FillEllipse($leafBrush, 320, 268, 22, 12)
+        $g.FillEllipse($flowerBrush, 326, 262, 14, 14)
+        $g.FillEllipse($leafBrush, 480, 268, 22, 12)
+        $g.FillEllipse($flowerBrush, 484, 262, 14, 14)
+
+        # 3. Kit de Resfriamento Vagal à Direita (x=545..710, y=65..280)
+        # Cartão Flutuante do Kit de Calma
+        $kitCardBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(240, 240, 253, 250))
+        $kitBorderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 148, 210, 189), 3)
+        $g.FillRectangle($kitCardBrush, 555, 68, 150, 210)
+        $g.DrawRectangle($kitBorderPen, 555, 68, 150, 210)
+
+        # Título do Kit
+        $fontKit = New-Object System.Drawing.Font("Segoe UI", 9.5, [System.Drawing.FontStyle]::Bold)
+        $fontItem = New-Object System.Drawing.Font("Segoe UI", 8.5, [System.Drawing.FontStyle]::Bold)
+        $textDark = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 15, 23, 42))
+        $textTeal = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 13, 148, 136))
+        $sfC = New-Object System.Drawing.StringFormat
+        $sfC.Alignment = [System.Drawing.StringAlignment]::Center
+
+        $g.DrawString("KIT RESFRIAMENTO", $fontKit, $textTeal, 630.0, 78.0, $sfC)
+
+        # Item 1: Cristais de Gelo / Respiração Geladinha (x=570, y=108)
+        $iceBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 56, 189, 248))
+        $icePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 14, 165, 233), 2.5)
+        $g.DrawLine($icePen, 580, 112, 596, 128)
+        $g.DrawLine($icePen, 596, 112, 580, 128)
+        $g.DrawLine($icePen, 588, 108, 588, 132)
+        $g.FillEllipse($iceBrush, 584, 116, 8, 8)
+        $sfL = New-Object System.Drawing.StringFormat
+        $sfL.Alignment = [System.Drawing.StringAlignment]::Near
+        $sfL.LineAlignment = [System.Drawing.StringAlignment]::Center
+        $g.DrawString("Vento do Gelo 4s", $fontItem, $textDark, 608.0, 120.0, $sfL)
+
+        # Item 2: Copo d'Água Fresca (x=572, y=152)
+        $glassPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 2, 132, 199), 2)
+        $waterBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(200, 56, 189, 248))
+        $g.FillRectangle($waterBrush, 582, 158, 16, 16)
+        $g.DrawRectangle($glassPen, 580, 152, 20, 24)
+        $g.DrawString("Água Fresca", $fontItem, $textDark, 608.0, 164.0, $sfL)
+
+        # Item 3: Estrela do Mar Relaxada (Soltar os punhos) (x=572, y=198)
+        $starBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 251, 146, 60))
+        $starPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 234, 88, 12), 2)
+        $g.FillEllipse($starBrush, 580, 196, 20, 20)
+        $g.DrawEllipse($starPen, 580, 196, 20, 20)
+        $g.DrawString("Mãos Estrela", $fontItem, $textDark, 608.0, 206.0, $sfL)
+
+        # Selo de Mestre da Calma no rodapé do kit
+        $badgeCalmBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 16, 185, 129))
+        $g.FillRectangle($badgeCalmBrush, 570, 240, 120, 24)
+        $fontBadgeSmall = New-Object System.Drawing.Font("Segoe UI", 7.8, [System.Drawing.FontStyle]::Bold)
+        $whiteText = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+        $g.DrawString("AUTORREGULAÇÃO", $fontBadgeSmall, $whiteText, 630.0, 252.0, $sfC)
+
+        # Limpeza de recursos gráficos
+        $thermoFrameBrush.Dispose()
+        $thermoBorderPen.Dispose()
+        $glassTubeBrush.Dispose()
+        $levelCalm.Dispose()
+        $levelWarm.Dispose()
+        $levelHot.Dispose()
+        $tickPen.Dispose()
+        $fontTick.Dispose()
+        $tickBrush.Dispose()
+        $sfR.Dispose()
+        $auraPen.Dispose()
+        $volcanoBrush.Dispose()
+        $volcanoPen.Dispose()
+        $craterBrush.Dispose()
+        $craterInner.Dispose()
+        $craterPen.Dispose()
+        $steamBrush.Dispose()
+        $eyeWhite.Dispose()
+        $eyeDark.Dispose()
+        $blushPink.Dispose()
+        $mouthPen.Dispose()
+        $leafBrush.Dispose()
+        $flowerBrush.Dispose()
+        $kitCardBrush.Dispose()
+        $kitBorderPen.Dispose()
+        $fontKit.Dispose()
+        $fontItem.Dispose()
+        $textDark.Dispose()
+        $textTeal.Dispose()
+        $sfC.Dispose()
+        $iceBrush.Dispose()
+        $icePen.Dispose()
+        $sfL.Dispose()
+        $glassPen.Dispose()
+        $waterBrush.Dispose()
+        $starBrush.Dispose()
+        $starPen.Dispose()
+        $badgeCalmBrush.Dispose()
+        $fontBadgeSmall.Dispose()
+        $whiteText.Dispose()
+    }
     default {
         # Constelação Neurocognitiva Lúdica Padrão
         $orbBrush1 = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(230, 238, 155, 0))

@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Vulcão Calmo: Termômetro Corporal da Raiva – Deo Magalhães</title>
+    <meta name="description" content="Jogo terapêutico infantil para treino de interocepção, manejo da raiva, termômetro corporal e kit de resfriamento vagal em sessão clínica e em família.">
+
+    <link rel="icon" href="../assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../assets/style.css">
+
+    <style>
+        :root {
+            --primary: #005f73;
+            --primary-hover: #0a9396;
+            --accent: #ee9b00;
+            --mint: #94d2bd;
+            --surface: #ffffff;
+            --bg-soft: #f8fafc;
+            --volcano-calm: #0ea5e9;
+            --volcano-warm: #f59e0b;
+            --volcano-hot: #ef4444;
+            --volcano-steam: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        .game-shell {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 28px;
+            margin: 24px 0 36px 0;
+            box-shadow: 0 12px 35px rgba(0, 95, 115, 0.10);
+            border: 2px solid #e2e8f0;
+        }
+
+        .top-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: #e6f6f4;
+            color: #005f73;
+            border: 1px solid #94d2bd;
+        }
+
+        .pill-badge.amber {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .pill-badge.rose {
+            background: #ffe4e6;
+            color: #9f1239;
+            border-color: #fecdd3;
+        }
+
+        .mode-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+
+        .mode-tab-btn {
+            padding: 11px 20px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-tab-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+        }
+
+        .mode-tab-btn.active {
+            background: #005f73;
+            color: #ffffff;
+            border-color: #005f73;
+            box-shadow: 0 4px 14px rgba(0, 95, 115, 0.25);
+        }
+
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #001219;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hud-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94d2bd;
+            font-weight: 700;
+        }
+
+        .hud-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .sound-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* Palco Principal do Vulcão e Termômetro */
+        .volcano-stage {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 24px;
+            align-items: center;
+            background: linear-gradient(180deg, #f0fdfa 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 720px) {
+            .volcano-stage {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+            }
+        }
+
+        /* Termômetro Vertical */
+        .thermo-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #ffffff;
+            padding: 16px 12px;
+            border-radius: 18px;
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 130px;
+        }
+
+        .thermo-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .thermo-glass {
+            width: 32px;
+            height: 190px;
+            background: #f1f5f9;
+            border: 3px solid #64748b;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .thermo-fill {
+            width: 100%;
+            background: linear-gradient(180deg, #ef4444 0%, #f59e0b 50%, #0ea5e9 100%);
+            height: 20%;
+            transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 0 0 12px 12px;
+        }
+
+        .thermo-bulb {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            border: 3px solid #64748b;
+            margin-top: -12px;
+            z-index: 2;
+            transition: background 0.4s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .thermo-levels-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 12px;
+            width: 100%;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .level-tag {
+            padding: 3px 6px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .level-5 { background: #fee2e2; color: #991b1b; }
+        .level-4 { background: #ffedd5; color: #9a3412; }
+        .level-3 { background: #fef3c7; color: #92400e; }
+        .level-2 { background: #e0f2fe; color: #075985; }
+        .level-1 { background: #dcfce7; color: #166534; }
+
+        /* Ilustração Interativa do Vulcão Koko */
+        .volcano-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .volcano-svg-wrap {
+            width: 100%;
+            max-width: 380px;
+            height: 240px;
+        }
+
+        .volcano-bubble {
+            animation: floatBubble 2s infinite ease-in-out;
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .volcano-steam-cloud {
+            opacity: 0.7;
+            transition: all 0.5s ease;
+        }
+
+        .volcano-status-card {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 14px 20px;
+            margin-top: 14px;
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+        }
+
+        .volcano-status-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #001219;
+            margin-bottom: 4px;
+        }
+
+        .volcano-status-desc {
+            font-size: 0.92rem;
+            color: #475569;
+            line-height: 1.45;
+        }
+
+        /* Seção do Cenário Atual */
+        .scenario-box {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .scenario-icon-orb {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .scenario-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #001219;
+            margin: 0;
+        }
+
+        .scenario-text {
+            font-size: 1.05rem;
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #ee9b00;
+        }
+
+        /* Trilha Interoceptiva em 3 Passos */
+        .interactive-steps-hub {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step-section-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .step-section-card.active-step {
+            background: #ffffff;
+            border-color: #005f73;
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.08);
+        }
+
+        .step-heading {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #005f73;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .body-parts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .body-part-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-height: 76px;
+        }
+
+        .body-part-btn:hover {
+            border-color: #0a9396;
+            background: #f0fdfa;
+            transform: translateY(-2px);
+        }
+
+        .body-part-btn.selected {
+            border-color: #ee9b00;
+            background: #fffbeb;
+            box-shadow: 0 0 10px rgba(238, 155, 0, 0.25);
+        }
+
+        .body-part-icon {
+            font-size: 1.5rem;
+        }
+
+        .body-part-name {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Seletor de Níveis do Termômetro */
+        .thermo-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+        }
+
+        .thermo-select-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 10px 6px;
+            font-weight: 800;
+            font-size: 0.86rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 48px;
+        }
+
+        .thermo-select-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .thermo-select-btn.selected {
+            border-width: 3px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Kit de Resfriamento Vagal */
+        .cooling-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .cooling-tool-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 64px;
+        }
+
+        .cooling-tool-btn:hover {
+            border-color: #005f73;
+            background: #f0fdfa;
+            transform: translateY(-2px);
+        }
+
+        .cooling-tool-btn.selected-calm {
+            border-color: #10b981;
+            background: #ecfdf5;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .cooling-tool-btn.selected-impulsive {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .tool-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .tool-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-title {
+            font-size: 0.94rem;
+            font-weight: 800;
+            color: #001219;
+        }
+
+        .tool-sub {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Feedback Construtivo / Calibrador */
+        .feedback-banner {
+            margin-top: 20px;
+            padding: 18px 22px;
+            border-radius: 14px;
+            font-weight: 600;
+            line-height: 1.55;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-banner.good {
+            display: block;
+            background: #ecfdf5;
+            border: 2px solid #6ee7b7;
+            color: #065f46;
+        }
+
+        .feedback-banner.calibrate {
+            display: block;
+            background: #fffbeb;
+            border: 2px solid #fde68a;
+            color: #92400e;
+        }
+
+        /* Respiração do Vento Geladinho (Modo 3) */
+        .breath-shell {
+            background: linear-gradient(135deg, #e6f6f4 0%, #f0fdf4 100%);
+            border: 2px solid #94d2bd;
+            border-radius: 20px;
+            padding: 32px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .breath-volcano-orb {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #38bdf8 0%, #005f73 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+            transition: transform 4s ease-in-out, background 1s ease;
+            margin: 24px 0;
+        }
+
+        .breath-volcano-orb.inhale {
+            transform: scale(1.42);
+            background: radial-gradient(circle, #94d2bd 0%, #0a9396 100%);
+            box-shadow: 0 0 50px rgba(148, 210, 189, 0.7);
+        }
+
+        .breath-volcano-orb.hold {
+            transform: scale(1.42);
+            background: radial-gradient(circle, #fde047 0%, #d97706 100%);
+            box-shadow: 0 0 45px rgba(245, 158, 11, 0.5);
+        }
+
+        .breath-volcano-orb.exhale {
+            transform: scale(0.88);
+            background: radial-gradient(circle, #67e8f9 0%, #0369a1 100%);
+            box-shadow: 0 0 25px rgba(103, 232, 249, 0.4);
+        }
+
+        .breath-action-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #001219;
+            margin-bottom: 8px;
+            min-height: 38px;
+        }
+
+        .breath-sub-text {
+            font-size: 0.95rem;
+            color: #475569;
+            max-width: 520px;
+            line-height: 1.5;
+        }
+
+        /* Cartas de Missões da Vida Real (Modo 2) */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .mission-item-card {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .mission-item-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 6px 18px rgba(0, 95, 115, 0.08);
+        }
+
+        .mission-badge {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: #e0f2fe;
+            color: #0369a1;
+            margin-bottom: 10px;
+        }
+
+        .mission-title {
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: #001219;
+            margin-bottom: 8px;
+        }
+
+        .mission-desc {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .mission-btn {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .mission-btn:hover {
+            background: #0a9396;
+        }
+
+        /* Botão de Emergência / Pausa de Calma */
+        .quick-pause-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #005f73;
+            color: #ffffff;
+            border: 2px solid #94d2bd;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            box-shadow: 0 6px 20px rgba(0, 95, 115, 0.35);
+            cursor: pointer;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .quick-pause-btn:hover {
+            background: #0a9396;
+            transform: scale(1.06);
+        }
+
+        /* Guias de Mediação */
+        .mediation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+            margin-top: 36px;
+        }
+
+        .mediation-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-top: 5px solid #005f73;
+            border-radius: 16px;
+            padding: 24px;
+            line-height: 1.6;
+        }
+
+        .mediation-box.family {
+            background: #fffbeb;
+            border-top-color: #ee9b00;
+        }
+
+        .mediation-box h3 {
+            margin-top: 0;
+            color: #001219;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-utility {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            min-height: 44px;
+        }
+
+        .btn-utility:hover {
+            background: #0a9396;
+        }
+
+        .btn-utility.whatsapp {
+            background: #15803d;
+        }
+
+        .btn-utility.whatsapp:hover {
+            background: #16a34a;
+        }
+
+        .btn-utility.outline {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-utility.outline:hover {
+            background: #e2e8f0;
+        }
+
+        /* Diário do Vulcão e Certificado Imprimível */
+        .print-certificate {
+            display: none;
+            border: 3px double #005f73;
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 28px;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        .print-certificate h2 {
+            color: #005f73;
+            font-size: 1.6rem;
+            margin: 0 0 10px 0;
+        }
+
+        @media print {
+            .top-bar, #main-header, footer.main-footer, .no-print, .quick-pause-btn {
+                display: none !important;
+            }
+            .print-certificate {
+                display: block !important;
+            }
+            .game-shell {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar Padrão -->
+    <div class="top-bar no-print">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Canônico -->
+    <header id="main-header" class="no-print">
+        <div class="header-content container">
+            <a href="../index.html" class="logo-container">
+                <img src="../assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="../index.html">Home</a>
+                <a href="../sobre.html">Sobre</a>
+                <a href="../servicos.html">Serviços</a>
+                <a href="../agendamento.html">Agendamento</a>
+                <a href="../artigos.html">Artigos</a>
+                <a href="../testes.html">Testes</a>
+                <a href="../jogos.html" class="active">Jogos</a>
+                <a href="../recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <div class="top-badges-row">
+                    <span class="pill-badge">🧸 Infantil (4 a 10 anos)</span>
+                    <span class="pill-badge rose">🌋 Manejo da Raiva & Interocepção</span>
+                    <span class="pill-badge amber">🏡 Uso em Sessão & em Família</span>
+                </div>
+                <h1>O Vulcão Calmo: Termômetro Corporal da Raiva</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784)</p>
+            </header>
+
+            <div class="game-shell">
+                <!-- Abas dos Modos de Jogo -->
+                <div class="mode-tabs no-print">
+                    <button class="mode-tab-btn active" id="tabBtnScanner" onclick="switchGameMode('scanner')">
+                        🌋 1. Detetive do Corpo & Termômetro
+                    </button>
+                    <button class="mode-tab-btn" id="tabBtnMissions" onclick="switchGameMode('missions')">
+                        🏡 2. Missões da Vida Real (Família & Sessão)
+                    </button>
+                    <button class="mode-tab-btn" id="tabBtnBreath" onclick="switchGameMode('breath')">
+                        ❄️ 3. Vento Geladinho (Respiração Vagal 4s)
+                    </button>
+                </div>
+
+                <!-- HUD Superior com Estatísticas -->
+                <div class="hud-bar no-print">
+                    <div class="hud-stat">
+                        <span class="hud-label">Gotas de Calma</span>
+                        <span class="hud-value" id="hudDrops">0 ❄️</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Nível de Lava Atual</span>
+                        <span class="hud-value" id="hudLevel">Nível 1 (Brisa)</span>
+                    </div>
+                    <div class="hud-stat">
+                        <span class="hud-label">Cenário</span>
+                        <span class="hud-value" id="hudScenario">1 / 8</span>
+                    </div>
+                    <button class="sound-btn" id="soundToggleBtn" onclick="toggleAudio()" title="Alternar som">
+                        🔊 Som Ativo
+                    </button>
+                </div>
+
+                <!-- PAINEL 1: DETETIVE DO CORPO & TERMÔMETRO -->
+                <div id="panelScanner">
+                    <!-- Palco Visual do Vulcão Koko e Termômetro -->
+                    <div class="volcano-stage">
+                        <!-- Termômetro Corporal -->
+                        <div class="thermo-column">
+                            <span class="thermo-title">Termômetro da Raiva</span>
+                            <div class="thermo-glass">
+                                <div class="thermo-fill" id="thermoFill"></div>
+                            </div>
+                            <div class="thermo-bulb" id="thermoBulb"></div>
+                            <div class="thermo-levels-legend">
+                                <span class="level-tag level-5">5 Erupção!</span>
+                                <span class="level-tag level-4">4 Muito Quente</span>
+                                <span class="level-tag level-3">3 Esquentando</span>
+                                <span class="level-tag level-2">2 Fumacinha</span>
+                                <span class="level-tag level-1">1 Brisa Serena</span>
+                            </div>
+                        </div>
+
+                        <!-- Ilustração SVG Dinâmica do Vulcãozinho Koko -->
+                        <div class="volcano-display">
+                            <div class="volcano-svg-wrap">
+                                <svg viewBox="0 0 400 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Céu suave de fundo -->
+                                    <defs>
+                                        <linearGradient id="volcanoGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#b45309" id="volcanoGradTop" />
+                                            <stop offset="100%" stop-color="#0f766e" id="volcanoGradBot" />
+                                        </linearGradient>
+                                        <radialGradient id="lavaGlow" cx="50%" cy="50%" r="50%">
+                                            <stop offset="0%" stop-color="#f87171" stop-opacity="0.9" />
+                                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+                                        </radialGradient>
+                                    </defs>
+
+                                    <!-- Aura de Resfriamento / Emoção -->
+                                    <ellipse id="volcanoAura" cx="200" cy="80" rx="90" ry="35" fill="none" stroke="#94d2bd" stroke-width="3" stroke-dasharray="6,4" />
+
+                                    <!-- Fumacinha / Vento / Cristais -->
+                                    <g id="steamGroup" class="volcano-steam-cloud">
+                                        <circle cx="190" cy="55" r="16" fill="#e0f2fe" class="volcano-bubble" />
+                                        <circle cx="215" cy="40" r="14" fill="#bae6fd" class="volcano-bubble" style="animation-delay: 0.5s;" />
+                                        <circle cx="180" cy="30" r="12" fill="#e0f2fe" class="volcano-bubble" style="animation-delay: 1s;" />
+                                    </g>
+
+                                    <!-- Corpo do Vulcão -->
+                                    <polygon points="150,85 250,85 330,225 70,225" fill="url(#volcanoGrad)" stroke="#fef3c7" stroke-width="4" stroke-linejoin="round" />
+
+                                    <!-- Cratera e Lava/Água -->
+                                    <ellipse cx="200" cy="85" rx="55" ry="18" fill="#0d9488" id="craterBase" stroke="#ffffff" stroke-width="2.5" />
+                                    <ellipse cx="200" cy="86" rx="42" ry="12" fill="#38bdf8" id="craterLava" />
+
+                                    <!-- Rosto do Vulcãozinho Koko -->
+                                    <!-- Olho Esquerdo -->
+                                    <ellipse cx="178" cy="145" rx="14" ry="14" fill="#ffffff" />
+                                    <circle id="pupilL" cx="181" cy="147" r="7.5" fill="#0f172a" />
+                                    <circle cx="183" cy="145" r="3" fill="#ffffff" />
+
+                                    <!-- Olho Direito -->
+                                    <ellipse cx="222" cy="145" rx="14" ry="14" fill="#ffffff" />
+                                    <circle id="pupilR" cx="225" cy="147" r="7.5" fill="#0f172a" />
+                                    <circle cx="227" cy="145" r="3" fill="#ffffff" />
+
+                                    <!-- Bochechas Coradas -->
+                                    <ellipse id="blushL" cx="165" cy="160" rx="9" ry="6" fill="#fb7185" opacity="0.6" />
+                                    <ellipse id="blushR" cx="235" cy="160" rx="9" ry="6" fill="#fb7185" opacity="0.6" />
+
+                                    <!-- Boca Expressiva -->
+                                    <path id="volcanoMouth" d="M 188 165 Q 200 180 212 165" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round" />
+
+                                    <!-- Plantinhas na Encosta (Brotam com a calma) -->
+                                    <g id="plantsGroup">
+                                        <ellipse cx="110" cy="216" rx="14" ry="7" fill="#22c55e" />
+                                        <circle cx="116" cy="210" r="7" fill="#f472b6" />
+                                        <ellipse cx="290" cy="216" rx="14" ry="7" fill="#22c55e" />
+                                        <circle cx="294" cy="210" r="7" fill="#f472b6" />
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <div class="volcano-status-card">
+                                <div class="volcano-status-title" id="statusTitle">Vulcão Koko está Sereno! 🌿</div>
+                                <div class="volcano-status-desc" id="statusDesc">Corpo relaxado, respiração calma e coração no ritmo suave da música.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caixa do Cenário Atual -->
+                    <div class="scenario-box">
+                        <div class="scenario-header">
+                            <div class="scenario-icon-orb" id="scenIcon">🧸</div>
+                            <div>
+                                <h3 class="scenario-title" id="scenTitle">Cenário 1: O Brinquedo Emprestado</h3>
+                                <span style="font-size: 0.82rem; color: #64748b; font-weight: 700;">Desafio de Interocepção & Regulação</span>
+                            </div>
+                        </div>
+
+                        <div class="scenario-text" id="scenText">
+                            Seu irmão ou colega puxou o brinquedo que você estava usando sem pedir licença e saiu correndo pela sala.
+                        </div>
+
+                        <!-- Trilha dos 3 Passos Interativos -->
+                        <div class="interactive-steps-hub">
+                            <!-- Passo A: Scanner do Corpo -->
+                            <div class="step-section-card active-step" id="stepCardA">
+                                <div class="step-heading">
+                                    <span>🔍 Passo 1: Onde o seu corpo começou a avisar primeiro?</span>
+                                </div>
+                                <p style="font-size: 0.88rem; color: #64748b; margin-top: 0; margin-bottom: 12px;">
+                                    As emoções sempre dão pistas no nosso corpo antes de explodirem. O que você sentiu?
+                                </p>
+                                <div class="body-parts-grid">
+                                    <button class="body-part-btn" onclick="selectBodyPart(this, 'bochechas', 'Bochechas Quentes')">
+                                        <span class="body-part-icon">🔥</span>
+                                        <span class="body-part-name">Rosto / Bochechas Quentes</span>
+                                    </button>
+                                    <button class="body-part-btn" onclick="selectBodyPart(this, 'punhos', 'Punhos Fechados')">
+                                        <span class="body-part-icon">✊</span>
+                                        <span class="body-part-name">Punhos Cerrados</span>
+                                    </button>
+                                    <button class="body-part-btn" onclick="selectBodyPart(this, 'coracao', 'Coração Disparado')">
+                                        <span class="body-part-icon">💓</span>
+                                        <span class="body-part-name">Coração Acelerado</span>
+                                    </button>
+                                    <button class="body-part-btn" onclick="selectBodyPart(this, 'respiracao', 'Respiração Curta')">
+                                        <span class="body-part-icon">💨</span>
+                                        <span class="body-part-name">Respiração Ofegante</span>
+                                    </button>
+                                    <button class="body-part-btn" onclick="selectBodyPart(this, 'dentes', 'Dentes Apertados')">
+                                        <span class="body-part-icon">😬</span>
+                                        <span class="body-part-name">Mandíbula Apertada</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Passo B: Medição no Termômetro -->
+                            <div class="step-section-card" id="stepCardB">
+                                <div class="step-heading">
+                                    <span>🌡️ Passo 2: Em que nível do termômetro a lava está agora?</span>
+                                </div>
+                                <div class="thermo-selector-grid">
+                                    <button class="thermo-select-btn level-1" onclick="selectThermoLevel(1, this)">Nível 1 (Brisa)</button>
+                                    <button class="thermo-select-btn level-2" onclick="selectThermoLevel(2, this)">Nível 2 (Fumacinha)</button>
+                                    <button class="thermo-select-btn level-3" onclick="selectThermoLevel(3, this)">Nível 3 (Água Morna)</button>
+                                    <button class="thermo-select-btn level-4" onclick="selectThermoLevel(4, this)">Nível 4 (Lava Quente)</button>
+                                    <button class="thermo-select-btn level-5" onclick="selectThermoLevel(5, this)">Nível 5 (Erupção!)</button>
+                                </div>
+                            </div>
+
+                            <!-- Passo C: Escolha do Kit de Resfriamento Vagal -->
+                            <div class="step-section-card" id="stepCardC">
+                                <div class="step-heading">
+                                    <span>❄️ Passo 3: O que você escolhe para resfriar o vulcão antes de explodir?</span>
+                                </div>
+                                <div class="cooling-tools-grid" id="coolingToolsContainer">
+                                    <!-- Gerado dinamicamente por cenário -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Educativo e Regulador -->
+                        <div class="feedback-banner" id="feedbackBanner"></div>
+
+                        <!-- Botão de Próximo Cenário -->
+                        <div style="margin-top: 20px; text-align: right;" id="nextBtnWrap" style="display: none;">
+                            <button class="btn-utility" id="nextScenarioBtn" onclick="nextScenario()" style="display: none;">
+                                Próximo Desafio ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAINEL 2: MISSÕES DA VIDA REAL (DILEMAS FAMILIARES & CLÍNICOS) -->
+                <div id="panelMissions" style="display: none;">
+                    <div style="margin-bottom: 22px; text-align: center;">
+                        <h3 style="font-size: 1.4rem; color: #001219; margin: 0 0 6px 0;">🏡 Missões do Diário da Calma</h3>
+                        <p style="color: #64748b; font-size: 0.95rem; max-width: 620px; margin: 0 auto;">
+                            Dilemas reais para conversar com os pais em casa ou com o neuropsicólogo no consultório. Escolha uma missão para treinar a resposta sábia!
+                        </p>
+                    </div>
+
+                    <div class="mission-grid" id="missionsCardsGrid">
+                        <!-- Carregado via JS -->
+                    </div>
+                </div>
+
+                <!-- PAINEL 3: VENTO GELADINHO (RESPIRAÇÃO VAGAL GUIADA) -->
+                <div id="panelBreath" style="display: none;">
+                    <div class="breath-shell">
+                        <span class="pill-badge" style="background: #ffffff;">❄️ Treino Vagal Parassimpático</span>
+                        <h3 style="font-size: 1.5rem; color: #001219; margin: 12px 0 4px 0;">O Vento Gelado que Apaga a Lava</h3>
+                        <p class="breath-sub-text">
+                            Quando o ar entra frio pelo nariz e sai bem devagarzinho pela boca, o cérebro manda uma mensagem mágica: <em>"O perigo passou, o vulcão pode descansar"</em>.
+                        </p>
+
+                        <div class="breath-volcano-orb" id="breathOrb">
+                            🌋
+                        </div>
+
+                        <div class="breath-action-text" id="breathActionText">Pronto para começar?</div>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: #005f73; margin-bottom: 18px;" id="breathCountdown">Clique no botão abaixo</div>
+
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                            <button class="btn-utility" id="breathStartBtn" onclick="toggleBreathExercise()">
+                                ▶️ Iniciar 4 Ciclos de Resfriamento
+                            </button>
+                            <button class="btn-utility outline" onclick="resetBreathExercise()">
+                                🔄 Reiniciar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARRA DE UTILITÁRIOS (PRINT, WHATSAPP, REINICIAR) -->
+                <div class="toolbar-bottom no-print">
+                    <button class="btn-utility outline" onclick="printVolcanoDiary()">
+                        🖨️ Imprimir Diário do Vulcão
+                    </button>
+                    <a href="#" class="btn-utility whatsapp" id="btnShareWhatsApp" target="_blank" onclick="shareOnWhatsApp(event)">
+                        📲 Enviar Conquista para a Família (WhatsApp)
+                    </a>
+                    <button class="btn-utility outline" onclick="resetGameProgress()">
+                        🔄 Reiniciar Pontos
+                    </button>
+                </div>
+
+                <!-- CERTIFICADO / DIÁRIO IMPRIMÍVEL (@media print) -->
+                <div class="print-certificate" id="printCertificateArea">
+                    <h2>🌋 Diário do Vulcão Calmo & Certificado de Maestria</h2>
+                    <p style="font-size: 1.05rem; color: #475569; margin-bottom: 20px;">
+                        Certificamos com muito orgulho que este jovem explorador treinou a sua interocepção e aprendeu a identificar os sinais do corpo antes da erupção!
+                    </p>
+
+                    <div style="background: #f8fafc; border: 2px dashed #94d2bd; border-radius: 14px; padding: 18px; margin-bottom: 24px; text-align: left; display: inline-block; width: 90%;">
+                        <p style="margin: 6px 0;"><strong>Nome da Criança:</strong> ____________________________________________________</p>
+                        <p style="margin: 6px 0;"><strong>Data da Sessão / Atividade:</strong> _________________________________________</p>
+                        <p style="margin: 6px 0;"><strong>Gotas de Calma Conquistadas:</strong> <span id="certDrops">0 ❄️</span></p>
+                        <p style="margin: 6px 0;"><strong>Meu Sinal do Corpo Favorito para Observar:</strong> _______________________</p>
+                        <p style="margin: 6px 0;"><strong>Minha Ferramenta Favorita do Kit de Resfriamento:</strong> _________________</p>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-around; margin-top: 40px;">
+                        <div style="border-top: 1px solid #1e293b; width: 220px; padding-top: 8px; font-size: 0.9rem;">
+                            Assinatura da Criança
+                        </div>
+                        <div style="border-top: 1px solid #1e293b; width: 220px; padding-top: 8px; font-size: 0.9rem;">
+                            Deo Magalhães / Terapeuta / Pais
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO DE MEDIAÇÃO OBRIGATÓRIA (TERAPEUTA & PAIS) -->
+            <div class="mediation-grid no-print">
+                <div class="mediation-box">
+                    <h3>🩺 Como Usar na Sessão de Terapia (Guia Clínico)</h3>
+                    <p>
+                        <strong>Objetivo Neuropsicológico:</strong> Fortalecer o circuito fronto-insular (ínsula anterior e córtex cingulado anterior dorsal), desenvolvendo a <em>interocepção</em> — a capacidade de mapear a ativação autonômica simpática prévia ao sequestro amigdaliano.
+                    </p>
+                    <ul>
+                        <li><strong>Scaffolding Interoceptivo:</strong> Quando a criança relata uma briga ou frustração, não pergunte diretamente <em>"O que você pensou?"</em>. Pergunte primeiro: <em>"Onde no seu corpo a lava começou a subir? Seu coração virou tambor ou as mãos viraram pedras?"</em>.</li>
+                        <li><strong>Diferenciação Somática:</strong> Crianças com TDAH ou TEA costumam ter dificuldade na leitura dos próprios estados viscerais. Use o termômetro de 1 a 5 para ancorar escalas perceptivas concretas.</li>
+                        <li><strong>Validação Afetiva Precede a Mudança:</strong> Ensine à criança que <em>"Sentir raiva é normal e todo ser humano sente; o que aprendemos a controlar é o que fazemos com a lava"</em>.</li>
+                    </ul>
+                </div>
+
+                <div class="mediation-box family">
+                    <h3>👨‍👩‍👧 Como Usar em Casa com os Filhos (Guia para Pais)</h3>
+                    <p>
+                        <strong>Dica de Ouro em Família:</strong> O jogo funciona como uma linguagem neutra e sem cobrança moral. Evite dizer <em>"Pare de birra!"</em> e substitua por: <em>"Filho, parece que seu vulcão está no nível 3 agora. Vamos pegar um copo d'água fresca juntos?"</em>.
+                    </p>
+                    <ul>
+                        <li><strong>O Cantinho do Resfriamento:</strong> Em vez de colocar no "cantinho do castigo", crie o "Cantinho do Vulcão Calmo" com uma almofada macia, água fresca e um dente-de-leão ou bolhas de sabão para soprar devagar.</li>
+                        <li><strong>Co-regulação dos Pais:</strong> O sistema nervoso da criança se regula pelo sistema nervoso do adulto. Se você gritar, a lava do vulcão sobe para o nível 5. Respire fundo na frente do seu filho para ser a âncora de segurança.</li>
+                        <li><strong>Jogo Rápido de 10 Minutos:</strong> Jogue 1 ou 2 cenários por dia antes da tarefa de casa ou antes de dormir, conversando sobre o que aconteceu de desafiador no colégio.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Referências Bibliográficas Científicas (ABNT) -->
+            <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid #e2e8f0;" class="no-print">
+                <h4 style="color: #005f73; font-size: 1.05rem; margin-bottom: 12px;">Referências Bibliográficas Selecionadas</h4>
+                <ol class="references-list" style="font-size: 0.85rem; color: #64748b; line-height: 1.6; padding-left: 20px;">
+                    <li>DAMÁSIO, António R. <strong>O Sentimento de Si: O Corpo e a Emoção no Domínio da Consciência</strong>. São Paulo: Companhia das Letras, 2000.</li>
+                    <li>LINEHAN, Marsha M. <strong>Treinamento de Habilidades em DBT: Manual de Terapia Cognitivo-Comportamental</strong>. 2. ed. Porto Alegre: Artmed, 2018.</li>
+                    <li>PORGES, Stephen W. <strong>The Polyvagal Theory: Neurophysiological Foundations of Emotions, Attachment, Communication, and Self-regulation</strong>. New York: W. W. Norton &amp; Company, 2011.</li>
+                    <li>SIEGEL, Daniel J.; BRYSON, Tina Payne. <strong>O Cérebro da Criança: 12 Estratégias Revolucionárias para Nutrir a Mente em Desenvolvimento do seu Filho</strong>. São Paulo: nVersos, 2015.</li>
+                </ol>
+                <hr class="article-divider" style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+                <p style="font-size: 0.82rem; color: #94a3b8; font-style: italic;">
+                    Este jogo tem caráter reflexivo, neuroeducacional e de treino cognitivo lúdico. Para avaliações diagnósticas ou orientações individualizadas de saúde mental infantil, consulte sempre um neuropsicólogo ou médico qualificado.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Botão Flutuante de Emergência / Pausa de Calma -->
+    <button class="quick-pause-btn no-print" onclick="openQuickBreathModal()" title="Pausa Rápida para Respirar">
+        🌋 Pausa do Vulcão (Respiração 4s)
+    </button>
+
+    <!-- Rodapé Canônico -->
+    <footer class="main-footer no-print">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Interatividade e Áudio Sensorial -->
+    <script>
+        /* -------------------------------------------------------------
+           ESTADO GLOBAL DO JOGO & BANCO DE DADOS CLÍNICO
+        ------------------------------------------------------------- */
+        const scenarios = [
+            {
+                id: 1,
+                title: "O Brinquedo Puxado sem Pedir",
+                icon: "🧸",
+                text: "Seu irmãozinho ou colega puxou o brinquedo que você estava usando bem no meio da brincadeira e saiu correndo pela sala.",
+                expectedLevel: 3,
+                tools: [
+                    { id: "breath", title: "Vento do Gelo 4s", sub: "Puxar o ar frio pelo nariz e soprar bem devagar", isCalm: true, feedback: "Muito sábio! A respiração desacelera os batimentos do coração e impede a lava de explodir em empurrões." },
+                    { id: "hands", title: "Abrir as Mãos como Estrela do Mar", sub: "Soltar os punhos fechados e sacudir de leve", isCalm: true, feedback: "Excelente! Quando você relaxa os dedos, o cérebro percebe que não precisa bater nem lutar." },
+                    { id: "hit", title: "Puxar de volta com força e gritar", sub: "Reação rápida e impulsiva", isCalm: false, feedback: "Quase lá! Puxar com raiva faz a lava subir pro nível 5 e quebrar o brinquedo. Vamos respirar fundo e pedir com calma ou chamar um adulto?" },
+                    { id: "adult", title: "Pedir ajuda a um adulto com voz firme", sub: "Explicar sem chorar nem atacar", isCalm: true, feedback: "Incrível! Falar o que sente com firmeza e calma é a verdadeira força do Mestre do Vulcão." }
+                ]
+            },
+            {
+                id: 2,
+                title: "Fim do Tempo da Tela / Desenho",
+                icon: "📺",
+                text: "A mãe ou o pai avisou: 'O tempo do desenho acabou, hora de desligar a televisão e vir almoçar!'. Você queria ver o final do episódio.",
+                expectedLevel: 3,
+                tools: [
+                    { id: "water", title: "Beber um Copo d'Água Fresca", sub: "Engolir a água devagar sentindo o geladinho descer", isCalm: true, feedback: "Sensacional! A água fresca acalma a garganta e a temperatura corporal rapidamente." },
+                    { id: "scream", title: "Jogar o controle no sofá e bater a porta", sub: "Explosão de fúria", isCalm: false, feedback: "Opa, a lava quase derramou! Bater portas assusta a casa toda. Que tal dizer: 'Fiquei triste porque não vi o final, podemos ver amanhã?'." },
+                    { id: "breath", title: "Soprar 3 Velinhas Imaginárias", sub: "Soltar o ar devagarzinho pela boca", isCalm: true, feedback: "Perfeito! Apagar as velinhas ajuda o corpo a aceitar que amanhã terá mais tempo." },
+                    { id: "ask", title: "Pedir para salvar onde parou", sub: "Combinar o combinado com os pais", isCalm: true, feedback: "Fantástico! Negociar com calma mostra maturidade e flexibilidade cognitiva." }
+                ]
+            },
+            {
+                id: 3,
+                title: "O Nó Embolado no Tênis",
+                icon: "👟",
+                text: "Você tentou amarrar o tênis sozinho para ir ao parque, mas a corda embolou num nó cego e você não consegue desatar.",
+                expectedLevel: 3,
+                tools: [
+                    { id: "shake", title: "Sacudir os Ombros e Soltar o Ar", sub: "Desmanchar a tensão do pescoço", isCalm: true, feedback: "Muito bem! O estresse do perfeccionismo esquenta o pescoço. Sacudir os ombros devolve a paciência." },
+                    { id: "kick", title: "Chutar o chão e dizer que não vai mais", sub: "Desistência com raiva", isCalm: false, feedback: "Calma no casco! O nó não tem culpa. Vamos respirar fundo 2 vezes e tentar com os dedinhos relaxados?" },
+                    { id: "help", title: "Pedir: 'Pai, me ajuda com a pontinha?'", sub: "Parceria sem sofrimento", isCalm: true, feedback: "Brilhante! Pedir ajuda na hora certa é sinal de inteligência emocional." },
+                    { id: "breath", title: "Pausa de 10 Segundos do Vulcão", sub: "Afastar as mãos e olhar pela janela", isCalm: true, feedback: "Ótimo! Fazer uma micro-pausa reinicia o córtex pré-frontal para resolver o problema." }
+                ]
+            },
+            {
+                id: 4,
+                title: "A Torre de Blocos que Caiu",
+                icon: "🏰",
+                text: "Você passou 15 minutos empilhando blocos com muito cuidado. Bem no último bloco, a torre balançou e caiu todinha no chão.",
+                expectedLevel: 4,
+                tools: [
+                    { id: "breath", title: "Respiração da Neve Serena", sub: "Puxar o ar fresco e esfriar o peito", isCalm: true, feedback: "Uau, parabéns! Derrubar torres faz parte de construir castelos ainda mais fortes." },
+                    { id: "break", title: "Pisar em todos os blocos com raiva", sub: "Destruição por frustração", isCalm: false, feedback: "Cuidado com a lava quente! Destruir os blocos pode machucar seu pé. Vamos respirar e pensar: 'Eu consigo fazer de novo!'." },
+                    { id: "redesign", title: "Transformar os blocos caídos em uma estrada", sub: "Flexibilidade mental criativa", isCalm: true, feedback: "Genial! Mudar o plano sem rigidez é a maior vitória da mente flexível!" },
+                    { id: "hug", title: "Pedir um abraço quentinho de reconexão", sub: "Acolhimento com os pais ou terapeuta", isCalm: true, feedback: "Lindo! O abraço libera oxitocina e resfria qualquer vulcão em segundos." }
+                ]
+            },
+            {
+                id: 5,
+                title: "O Desenho que Borrou",
+                icon: "🎨",
+                text: "Você estava fazendo um desenho maravilhoso para presentear alguém querido, mas a canetinha espirrou uma mancha preta no meio da folha.",
+                expectedLevel: 3,
+                tools: [
+                    { id: "creative", title: "Transformar a mancha em um detalhe legal", sub: "Criar um monstrinho ou estrela ali", isCalm: true, feedback: "Magnífico! Erros são apenas novas ideias disfarçadas. Você resfriou o vulcão com pura arte!" },
+                    { id: "rip", title: "Amasse a folha e rasgue em pedacinhos", sub: "Raiva perfeccionista", isCalm: false, feedback: "Quase lá! Rasgar a folha traz tristeza depois. Vamos dar 3 suspiros bem lentos e ver como consertar?" },
+                    { id: "breath", title: "Cheirar a Flor e Soprar a Vela", sub: "Técnica da florzinha calmante", isCalm: true, feedback: "Excelente! Cheirar a flor imaginária acalma a amígdala e devolve o bom humor." },
+                    { id: "water", title: "Lavar o rosto na pia com água fresca", sub: "Estímulo tátil no nervo vago", isCalm: true, feedback: "Muito científico! A água fresca no rosto ativa o reflexo do mergulhador e desacelera o corpo." }
+                ]
+            },
+            {
+                id: 6,
+                title: "Fila do Recreio / Parquinho",
+                icon: "🛝",
+                text: "Você esperou pacientemente sua vez de descer no tobogã, mas uma criança maior passou na sua frente e não respeitou a fila.",
+                expectedLevel: 4,
+                tools: [
+                    { id: "voice", title: "Falar firme: 'Oi, eu sou o próximo da fila!'", sub: "Assertividade sem violência", isCalm: true, feedback: "Perfeito! Comunicação assertiva: defender seu espaço com palavras claras e sem agressão." },
+                    { id: "push", title: "Empurrar a criança com força pelas costas", sub: "Ataque perigoso", isCalm: false, feedback: "Atenção ao perigo! Empurrar pode machucar de verdade. Usar a voz com firmeza e calma é muito mais poderoso." },
+                    { id: "breath", title: "Pisar firme no chão e respirar no 4s", sub: "Aterrisagem sensorial corporal", isCalm: true, feedback: "Sensacional! Sentir os pés no chão dá estabilidade e freia qualquer impulso." },
+                    { id: "monitor", title: "Avisar o monitor ou professor do pátio", sub: "Recorrer às regras sociais", isCalm: true, feedback: "Muito prudente! Autoridades do parquinho existem para garantir que todos brinquem em paz." }
+                ]
+            },
+            {
+                id: 7,
+                title: "A Hora de Guardar a Brincadeira",
+                icon: "📦",
+                text: "Estava uma delícia brincar de faz de conta, mas agora é hora de recolher as peças do chão para a casa ficar organizada.",
+                expectedLevel: 2,
+                tools: [
+                    { id: "game", title: "Fazer o jogo do 'Robô Guardador em 2 Minutos'", sub: "Transformar rotina em diversão", isCalm: true, feedback: "Incrível! Fazer da tarefa um jogo ativa a dopamina e ninguém fica irritado." },
+                    { id: "cry", title: "Jogar os brinquedos longe e choramingar", sub: "Resistência à frustração", isCalm: false, feedback: "Vulcãozinho aquecendo! Guardar as coisas cuida do seu espaço. Que tal apostar uma corrida com a mamãe?" },
+                    { id: "breath", title: "Fazer 2 respirações do vento com a família", sub: "Pausa conjunta de transição", isCalm: true, feedback: "Maravilhoso! Transições de atividade ficam muito mais fáceis com uma pausa de calma." },
+                    { id: "music", title: "Pedir para colocar uma música animada", sub: "Música reguladora de ambiente", isCalm: true, feedback: "Fantástico! O ritmo musical sincroniza o cérebro e faz a tarefa voar de tão rápida." }
+                ]
+            },
+            {
+                id: 8,
+                title: "Perder a Rodada no Jogo",
+                icon: "🎲",
+                text: "Você estava jogando um jogo de cartas ou videogame com um amigo. No último lance, ele tirou o número maior e venceu a partida.",
+                expectedLevel: 4,
+                tools: [
+                    { id: "fairplay", title: "Dar um 'Toca Aqui!' e parabenizar o amigo", sub: "Espírito esportivo e fair play", isCalm: true, feedback: "Espetacular! Saber perder é a maior marca de um campeão. O jogo fica divertido pra todo mundo!" },
+                    { id: "rage", title: "Desligar o videogame no botão e gritar que foi roubado", sub: "Não aceitar a derrota", isCalm: false, feedback: "Erupção detectada! Ninguém gosta de brincar com quem quebra as regras da amizade. Respire fundo e diga: 'Na próxima eu tento de novo!'." },
+                    { id: "breath", title: "Respiração do Campeão Vagal", sub: "Manter o sorriso e o coração estável", isCalm: true, feedback: "Brilhante! O valor de uma partida está na alegria de jogar junto, não apenas no placar final." },
+                    { id: "rematch", title: "Pedir uma revanche amigável com um sorriso", sub: "Persistência e perseverança", isCalm: true, feedback: "Grande atitude! Tentar de novo com bom humor treina a resiliência pra vida inteira!" }
+                ]
+            }
+        ];
+
+        const missionDilemmas = [
+            {
+                id: 1,
+                badge: "Em Público / Escola",
+                title: "O que fazer quando sinto a lava subir no meio da aula?",
+                desc: "A professora chamou sua atenção na frente dos colegas e você sentiu vergonha e raiva.",
+                action: "Técnica da Tartaruga Discreta: Cruze os braços no peito, aperte os pés no chão e solte o ar 3 vezes sem fazer barulho."
+            },
+            {
+                id: 2,
+                badge: "Em Casa com os Pais",
+                title: "A Frase Secreta do Termômetro Familiar",
+                desc: "Quando sentir que vai explodir, ensine seus pais a ouvirem seu código de calma.",
+                action: "Combine a frase: 'Papai/Mamãe, meu vulcão tá no nível 4! Preciso de 2 minutos no meu cantinho da calma'."
+            },
+            {
+                id: 3,
+                badge: "Conflito com Irmãos",
+                title: "O Tratado da Paz dos Brinquedos",
+                desc: "Como resolver quando dois querem o mesmo brinquedo ao mesmo tempo sem briga.",
+                action: "Coloquem o alarme do celular para 5 minutos: 5 minutos com um, 5 minutos com o outro!"
+            },
+            {
+                id: 4,
+                badge: "Hora da Lição de Casa",
+                title: "A Raiva de Não Entender o Exercício",
+                desc: "A matemática parece difícil e dá vontade de rabiscar a folha inteira.",
+                action: "Pausa do copo d'água: beba meio copo, respire fundo e circule a dúvida com lápis colorido para perguntar."
+            }
+        ];
+
+        let state = {
+            currentScenarioIndex: 0,
+            drops: 0,
+            currentLevel: 1,
+            selectedBodyPart: null,
+            selectedLevel: null,
+            selectedTool: null,
+            soundEnabled: true,
+            audioCtx: null,
+            breathTimer: null,
+            breathCycle: 0,
+            isBreathing: false
+        };
+
+        /* -------------------------------------------------------------
+           INICIALIZAÇÃO & PERSISTÊNCIA LOCAL (localStorage)
+        ------------------------------------------------------------- */
+        document.addEventListener("DOMContentLoaded", () => {
+            loadSavedProgress();
+            renderScenario(state.currentScenarioIndex);
+            renderMissions();
+            updateHud();
+        });
+
+        function loadSavedProgress() {
+            try {
+                const saved = localStorage.getItem("deo_volcano_calm_progress");
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    state.drops = parsed.drops || 0;
+                }
+            } catch (e) {
+                console.warn("Storage não acessível:", e);
+            }
+        }
+
+        function saveProgress() {
+            try {
+                localStorage.setItem("deo_volcano_calm_progress", JSON.stringify({
+                    drops: state.drops
+                }));
+            } catch (e) {
+                console.warn("Falha ao salvar progresso:", e);
+            }
+        }
+
+        /* -------------------------------------------------------------
+           WEB AUDIO API SENSORIAL (SUAVE & HARMÔNICA)
+        ------------------------------------------------------------- */
+        function getAudioContext() {
+            if (!state.audioCtx) {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtxClass) {
+                    state.audioCtx = new AudioCtxClass();
+                }
+            }
+            if (state.audioCtx && state.audioCtx.state === 'suspended') {
+                state.audioCtx.resume();
+            }
+            return state.audioCtx;
+        }
+
+        function toggleAudio() {
+            state.soundEnabled = !state.soundEnabled;
+            const btn = document.getElementById("soundToggleBtn");
+            if (state.soundEnabled) {
+                btn.textContent = "🔊 Som Ativo";
+                btn.style.opacity = "1";
+                playNote(523.25, 'triangle', 0.15, 0.08); // Dó suave
+            } else {
+                btn.textContent = "🔇 Modo Silencioso";
+                btn.style.opacity = "0.75";
+            }
+        }
+
+        function playNote(freq, type = 'sine', duration = 0.2, gainVol = 0.08) {
+            if (!state.soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+                gain.gain.setValueAtTime(gainVol, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (err) {
+                console.warn("Audio note err:", err);
+            }
+        }
+
+        function playArpeggioCalm() {
+            if (!state.soundEnabled) return;
+            const notes = [440, 554.37, 659.25, 880]; // A4, C#5, E5, A5 (Acorde Calmo e Suave)
+            notes.forEach((freq, idx) => {
+                setTimeout(() => playNote(freq, 'sine', 0.35, 0.07), idx * 110);
+            });
+        }
+
+        function playCalibrateTone() {
+            if (!state.soundEnabled) return;
+            playNote(349.23, 'triangle', 0.25, 0.05); // Fá suave e acolhedor
+        }
+
+        /* -------------------------------------------------------------
+           LÓGICA DOS MODOS & NAVEGAÇÃO
+        ------------------------------------------------------------- */
+        function switchGameMode(mode) {
+            document.querySelectorAll(".mode-tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.getElementById("panelScanner").style.display = "none";
+            document.getElementById("panelMissions").style.display = "none";
+            document.getElementById("panelBreath").style.display = "none";
+
+            if (mode === 'scanner') {
+                document.getElementById("tabBtnScanner").classList.add("active");
+                document.getElementById("panelScanner").style.display = "block";
+            } else if (mode === 'missions') {
+                document.getElementById("tabBtnMissions").classList.add("active");
+                document.getElementById("panelMissions").style.display = "block";
+            } else if (mode === 'breath') {
+                document.getElementById("tabBtnBreath").classList.add("active");
+                document.getElementById("panelBreath").style.display = "block";
+            }
+            playNote(493.88, 'sine', 0.15, 0.05);
+        }
+
+        /* -------------------------------------------------------------
+           RENDERIZAÇÃO DO CENÁRIO E INTERATIVIDADE
+        ------------------------------------------------------------- */
+        function renderScenario(idx) {
+            const scen = scenarios[idx];
+            state.selectedBodyPart = null;
+            state.selectedLevel = null;
+            state.selectedTool = null;
+
+            document.getElementById("scenIcon").textContent = scen.icon;
+            document.getElementById("scenTitle").textContent = `Cenário ${scen.id}: ${scen.title}`;
+            document.getElementById("scenText").textContent = scen.text;
+            document.getElementById("hudScenario").textContent = `${scen.id} / ${scenarios.length}`;
+
+            // Reset dos cartões dos passos
+            document.querySelectorAll(".body-part-btn").forEach(b => b.classList.remove("selected"));
+            document.querySelectorAll(".thermo-select-btn").forEach(b => b.classList.remove("selected"));
+
+            const toolsContainer = document.getElementById("coolingToolsContainer");
+            toolsContainer.innerHTML = "";
+
+            scen.tools.forEach(tool => {
+                const btn = document.createElement("button");
+                btn.className = "cooling-tool-btn";
+                btn.onclick = () => selectCoolingTool(tool, btn);
+
+                const iconMap = {
+                    "breath": "❄️", "hands": "🖐️", "water": "💧", "ask": "🤝",
+                    "voice": "🗣️", "shake": "🌊", "creative": "🎨", "fairplay": "🏆",
+                    "rematch": "🎲", "hug": "🤗", "game": "🤖", "music": "🎵",
+                    "monitor": "🛡️", "redesign": "📐", "hit": "💥", "scream": "🚪",
+                    "kick": "👟", "break": "🧱", "rip": "📄", "push": "⚠️",
+                    "cry": "😭", "rage": "😡"
+                };
+
+                const ic = iconMap[tool.id] || "✨";
+
+                btn.innerHTML = `
+                    <span class="tool-icon">${ic}</span>
+                    <div class="tool-content">
+                        <span class="tool-title">${tool.title}</span>
+                        <span class="tool-sub">${tool.sub}</span>
+                    </div>
+                `;
+                toolsContainer.appendChild(btn);
+            });
+
+            // Oculta feedback e botão de próximo
+            const fb = document.getElementById("feedbackBanner");
+            fb.style.display = "none";
+            fb.className = "feedback-banner";
+
+            document.getElementById("nextScenarioBtn").style.display = "none";
+
+            // Seta o vulcão no nível esperado do desafio
+            setVolcanoLevel(scen.expectedLevel, "O Vulcão Koko está esquentando!", "Perceba as pistas no corpo e escolha o kit de resfriamento.");
+        }
+
+        function selectBodyPart(btn, partKey, partName) {
+            document.querySelectorAll(".body-part-btn").forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            state.selectedBodyPart = partKey;
+
+            playNote(587.33, 'triangle', 0.15, 0.06);
+
+            // Destaca passo B
+            document.getElementById("stepCardB").classList.add("active-step");
+        }
+
+        function selectThermoLevel(levelNum, btn) {
+            document.querySelectorAll(".thermo-select-btn").forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            state.selectedLevel = levelNum;
+
+            const descMap = {
+                1: "Nível 1: Brisa Serena. Corpo relaxado e tranquilo.",
+                2: "Nível 2: Fumacinha. Pequeno incômodo ou suspiro.",
+                3: "Nível 3: Água Morna. Rosto quente e coração apressado.",
+                4: "Nível 4: Lava Quente! Vontade forte de gritar ou bater.",
+                5: "Nível 5: Alerta de Erupção! Perigo de explosão impulsiva!"
+            };
+
+            setVolcanoLevel(levelNum, `Termômetro no Nível ${levelNum}`, descMap[levelNum]);
+            playNote(440 + levelNum * 60, 'sine', 0.2, 0.07);
+
+            // Destaca passo C
+            document.getElementById("stepCardC").classList.add("active-step");
+        }
+
+        function selectCoolingTool(tool, btn) {
+            document.querySelectorAll(".cooling-tool-btn").forEach(b => {
+                b.classList.remove("selected-calm", "selected-impulsive");
+            });
+
+            state.selectedTool = tool;
+            const fb = document.getElementById("feedbackBanner");
+
+            if (tool.isCalm) {
+                btn.classList.add("selected-calm");
+                fb.className = "feedback-banner good";
+                fb.innerHTML = `<strong>❄️ Muito Bem!</strong> ${tool.feedback}`;
+                fb.style.display = "block";
+
+                // Resfria o vulcão para nível 1
+                setVolcanoLevel(1, "Vulcão Koko Esfriou com Sucesso! 🌿", "A lava virou pedrinha lisa e o coração voltou a bater sereno.");
+                playArpeggioCalm();
+
+                state.drops += 10;
+                saveProgress();
+                updateHud();
+
+                document.getElementById("nextScenarioBtn").style.display = "inline-flex";
+            } else {
+                btn.classList.add("selected-impulsive");
+                fb.className = "feedback-banner calibrate";
+                fb.innerHTML = `<strong>🌋 O Vulcão Sentiu Muito Calor!</strong> ${tool.feedback}`;
+                fb.style.display = "block";
+
+                // Eleva a lava para nível 5 momentâneo para calibração reflexiva
+                setVolcanoLevel(5, "Atenção: Erupção Quase Acontecendo!", "Reações impulsivas alimentam o fogo. Vamos respirar e tentar uma ferramenta de resfriamento?");
+                playCalibrateTone();
+            }
+        }
+
+        function nextScenario() {
+            if (state.currentScenarioIndex < scenarios.length - 1) {
+                state.currentScenarioIndex++;
+                renderScenario(state.currentScenarioIndex);
+            } else {
+                // Fim da trilha de cenários
+                alert("🎉 Parabéns! Você completou todos os cenários do Vulcão Calmo e se tornou um Mestre da Calma!");
+                state.currentScenarioIndex = 0;
+                renderScenario(0);
+            }
+            window.scrollTo({ top: 320, behavior: 'smooth' });
+        }
+
+        /* -------------------------------------------------------------
+           DINÂMICA VISUAL DO VULCÃO & TERMÔMETRO SVG
+        ------------------------------------------------------------- */
+        function setVolcanoLevel(level, title, desc) {
+            state.currentLevel = level;
+
+            const thermoFill = document.getElementById("thermoFill");
+            const thermoBulb = document.getElementById("thermoBulb");
+            const gradTop = document.getElementById("volcanoGradTop");
+            const gradBot = document.getElementById("volcanoGradBot");
+            const craterLava = document.getElementById("craterLava");
+            const volcanoAura = document.getElementById("volcanoAura");
+            const mouth = document.getElementById("volcanoMouth");
+            const plants = document.getElementById("plantsGroup");
+            const steamGroup = document.getElementById("steamGroup");
+
+            // Altura do preenchimento do termômetro
+            const heightPercentages = { 1: 20, 2: 40, 3: 60, 4: 80, 5: 100 };
+            thermoFill.style.height = `${heightPercentages[level]}%`;
+
+            // Cores e Emoções do Vulcão Koko
+            if (level === 1) {
+                thermoBulb.style.background = "#0ea5e9";
+                gradTop.setAttribute("stop-color", "#0f766e");
+                gradBot.setAttribute("stop-color", "#005f73");
+                craterLava.setAttribute("fill", "#38bdf8");
+                volcanoAura.setAttribute("stroke", "#94d2bd");
+                mouth.setAttribute("d", "M 188 165 Q 200 180 212 165"); // Sorriso
+                plants.style.display = "block";
+                steamGroup.style.opacity = "0.7";
+            } else if (level === 2) {
+                thermoBulb.style.background = "#38bdf8";
+                gradTop.setAttribute("stop-color", "#0284c7");
+                gradBot.setAttribute("stop-color", "#0f766e");
+                craterLava.setAttribute("fill", "#67e8f9");
+                volcanoAura.setAttribute("stroke", "#38bdf8");
+                mouth.setAttribute("d", "M 188 168 Q 200 174 212 168"); // Neutro
+                plants.style.display = "block";
+                steamGroup.style.opacity = "0.8";
+            } else if (level === 3) {
+                thermoBulb.style.background = "#f59e0b";
+                gradTop.setAttribute("stop-color", "#d97706");
+                gradBot.setAttribute("stop-color", "#b45309");
+                craterLava.setAttribute("fill", "#fbbf24");
+                volcanoAura.setAttribute("stroke", "#f59e0b");
+                mouth.setAttribute("d", "M 188 172 Q 200 166 212 172"); // Preocupado
+                plants.style.display = "none";
+                steamGroup.style.opacity = "0.9";
+            } else if (level === 4) {
+                thermoBulb.style.background = "#ea580c";
+                gradTop.setAttribute("stop-color", "#c2410c");
+                gradBot.setAttribute("stop-color", "#9a3412");
+                craterLava.setAttribute("fill", "#f97316");
+                volcanoAura.setAttribute("stroke", "#ea580c");
+                mouth.setAttribute("d", "M 188 174 Q 200 164 212 174"); // Boca tensa
+                plants.style.display = "none";
+                steamGroup.style.opacity = "1";
+            } else if (level === 5) {
+                thermoBulb.style.background = "#ef4444";
+                gradTop.setAttribute("stop-color", "#dc2626");
+                gradBot.setAttribute("stop-color", "#991b1b");
+                craterLava.setAttribute("fill", "#ef4444");
+                volcanoAura.setAttribute("stroke", "#ef4444");
+                mouth.setAttribute("d", "M 186 176 Q 200 160 214 176"); // Boca aberta brava
+                plants.style.display = "none";
+                steamGroup.style.opacity = "1";
+            }
+
+            document.getElementById("statusTitle").textContent = title;
+            document.getElementById("statusDesc").textContent = desc;
+
+            const hudLevelText = {
+                1: "Nível 1 (Brisa)",
+                2: "Nível 2 (Fumaça)",
+                3: "Nível 3 (Morna)",
+                4: "Nível 4 (Quente)",
+                5: "Nível 5 (Erupção!)"
+            };
+            document.getElementById("hudLevel").textContent = hudLevelText[level];
+        }
+
+        /* -------------------------------------------------------------
+           RESPIRAÇÃO DO VENTO GELADINHO (MODO 3 - CICLO 4-2-5)
+        ------------------------------------------------------------- */
+        function toggleBreathExercise() {
+            if (state.isBreathing) {
+                resetBreathExercise();
+            } else {
+                startBreathExercise();
+            }
+        }
+
+        function startBreathExercise() {
+            state.isBreathing = true;
+            state.breathCycle = 0;
+            document.getElementById("breathStartBtn").textContent = "⏸️ Pausar Exercício";
+            runBreathCycle();
+        }
+
+        function runBreathCycle() {
+            if (!state.isBreathing) return;
+            state.breathCycle++;
+
+            if (state.breathCycle > 4) {
+                // Completou os 4 ciclos
+                state.isBreathing = false;
+                document.getElementById("breathStartBtn").textContent = "▶️ Iniciar 4 Ciclos Novamente";
+                document.getElementById("breathActionText").textContent = "🎉 Missão Cumprida! Seu Vulcão está Totalmente Calmo!";
+                document.getElementById("breathCountdown").textContent = "+20 Gotas de Neve Serena Conquistadas!";
+                document.getElementById("breathOrb").className = "breath-volcano-orb";
+                document.getElementById("breathOrb").textContent = "🌿";
+
+                state.drops += 20;
+                saveProgress();
+                updateHud();
+                playArpeggioCalm();
+                return;
+            }
+
+            const orb = document.getElementById("breathOrb");
+            const actionText = document.getElementById("breathActionText");
+            const countText = document.getElementById("breathCountdown");
+
+            // Fase 1: Puxe o ar fresco pelo nariz (4s)
+            orb.className = "breath-volcano-orb inhale";
+            orb.textContent = "❄️";
+            actionText.textContent = `Ciclo ${state.breathCycle} de 4: Puxe o ar fresco pelo nariz...`;
+            playNote(440, 'sine', 3.8, 0.06);
+
+            let remaining = 4;
+            countText.textContent = `Enchendo o vulcão de brisa: ${remaining}s`;
+            const intervalInhale = setInterval(() => {
+                remaining--;
+                if (remaining > 0) {
+                    countText.textContent = `Enchendo o vulcão de brisa: ${remaining}s`;
+                } else {
+                    clearInterval(intervalInhale);
+                }
+            }, 1000);
+
+            // Fase 2: Segure a calma (2s)
+            state.breathTimer = setTimeout(() => {
+                if (!state.isBreathing) return;
+                orb.className = "breath-volcano-orb hold";
+                orb.textContent = "✨";
+                actionText.textContent = "Segure a calma no peito...";
+                countText.textContent = "Cristalizando o gelinho: 2s";
+
+                // Fase 3: Solte o ar bem devagar pela boca (5s)
+                state.breathTimer = setTimeout(() => {
+                    if (!state.isBreathing) return;
+                    orb.className = "breath-volcano-orb exhale";
+                    orb.textContent = "💨";
+                    actionText.textContent = "Sopre devagar como quem esfria uma sopa...";
+                    playNote(349.23, 'triangle', 4.8, 0.04);
+
+                    let remExhale = 5;
+                    countText.textContent = `A lava está virando pedra lisa: ${remExhale}s`;
+                    const intervalExhale = setInterval(() => {
+                        remExhale--;
+                        if (remExhale > 0) {
+                            countText.textContent = `A lava está virando pedra lisa: ${remExhale}s`;
+                        } else {
+                            clearInterval(intervalExhale);
+                        }
+                    }, 1000);
+
+                    // Próximo Ciclo após os 5 segundos
+                    state.breathTimer = setTimeout(() => {
+                        if (state.isBreathing) {
+                            runBreathCycle();
+                        }
+                    }, 5200);
+
+                }, 2000);
+
+            }, 4000);
+        }
+
+        function resetBreathExercise() {
+            state.isBreathing = false;
+            clearTimeout(state.breathTimer);
+            document.getElementById("breathStartBtn").textContent = "▶️ Iniciar 4 Ciclos de Resfriamento";
+            document.getElementById("breathActionText").textContent = "Pronto para recomeçar?";
+            document.getElementById("breathCountdown").textContent = "Clique no botão acima para iniciar";
+            const orb = document.getElementById("breathOrb");
+            orb.className = "breath-volcano-orb";
+            orb.textContent = "🌋";
+        }
+
+        function openQuickBreathModal() {
+            switchGameMode('breath');
+            window.scrollTo({ top: 280, behavior: 'smooth' });
+            setTimeout(() => {
+                if (!state.isBreathing) {
+                    startBreathExercise();
+                }
+            }, 300);
+        }
+
+        /* -------------------------------------------------------------
+           MISSÕES DA VIDA REAL (PAINEL 2)
+        ------------------------------------------------------------- */
+        function renderMissions() {
+            const grid = document.getElementById("missionsCardsGrid");
+            grid.innerHTML = "";
+
+            missionDilemmas.forEach(m => {
+                const card = document.createElement("div");
+                card.className = "mission-item-card";
+                card.innerHTML = `
+                    <div>
+                        <span class="mission-badge">${m.badge}</span>
+                        <h4 class="mission-title">${m.title}</h4>
+                        <p class="mission-desc">${m.desc}</p>
+                    </div>
+                    <div>
+                        <div style="background: #f0fdf4; border-left: 3px solid #22c55e; padding: 10px; border-radius: 8px; font-size: 0.85rem; color: #166534; margin-bottom: 12px;">
+                            <strong>Estratégia do Mestre:</strong> ${m.action}
+                        </div>
+                        <button class="mission-btn" onclick="completeMissionCard(this, ${m.id})">
+                            ✨ Combinar com Pais / Terapeuta (+15 ❄️)
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function completeMissionCard(btn, id) {
+            btn.textContent = "✅ Missão Combinada!";
+            btn.style.background = "#15803d";
+            btn.disabled = true;
+
+            state.drops += 15;
+            saveProgress();
+            updateHud();
+            playArpeggioCalm();
+        }
+
+        /* -------------------------------------------------------------
+           HUD & UTILITÁRIOS (PRINT, WHATSAPP, RESET)
+        ------------------------------------------------------------- */
+        function updateHud() {
+            document.getElementById("hudDrops").textContent = `${state.drops} ❄️`;
+            const certDrops = document.getElementById("certDrops");
+            if (certDrops) certDrops.textContent = `${state.drops} ❄️`;
+        }
+
+        function printVolcanoDiary() {
+            window.print();
+        }
+
+        function shareOnWhatsApp(e) {
+            e.preventDefault();
+            const text = encodeURIComponent(
+                `🌋 Olha só, família! Eu joguei 'O Vulcão Calmo: Termômetro Corporal da Raiva' no site do neuropsicólogo Deo Magalhães e conquistei ${state.drops} Gotas de Calma! Aprendi a sentir quando a lava está subindo no corpo e a usar o Vento Gelado de 4s para me autorregular!`
+            );
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }
+
+        function resetGameProgress() {
+            if (confirm("Deseja zerar os pontos do Diário do Vulcão e recomeçar a trilha?")) {
+                state.drops = 0;
+                state.currentScenarioIndex = 0;
+                saveProgress();
+                updateHud();
+                renderScenario(0);
+                alert("Progresso reiniciado com sucesso!");
+            }
+        }
+    </script>
+</body>
+</html>
