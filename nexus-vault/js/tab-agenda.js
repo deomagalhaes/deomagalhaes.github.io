@@ -255,7 +255,11 @@
                 date: ms.date,
                 end: ms.end || null,
                 status: ms.status || 'realizada',
-                note: ms.note || ''
+                note: ms.note || '',
+                paid: Boolean(ms.paid),
+                paidAt: ms.paidAt || '',
+                paymentMethod: ms.paymentMethod || 'PIX',
+                paidAmount: ms.paidAmount !== undefined ? ms.paidAmount : null
             });
         }
         return result;
@@ -669,7 +673,7 @@
     }
 
     /**
-     * Resolve o status efetivo e nota de uma sessão (combinando override por ID, override por slot ou default cronológico)
+     * Resolve o status efetivo, nota e confirmação de pagamento de uma sessão (combinando override por ID, override por slot ou default cronológico)
      */
     function resolveSessionState(rawId, patientName, dateObj, defaultStatusOverride) {
         const slotKey = getSessionSlotOverrideKey(patientName, dateObj);
@@ -682,12 +686,20 @@
 
         let effectiveStatus = defaultStatusOverride || (isFuture ? 'agendada' : 'realizada');
         let note = '';
+        let paid = false;
+        let paidAt = '';
+        let paymentMethod = 'PIX';
+        let paidAmount = null;
 
-        if (ov && ov.status) {
-            effectiveStatus = ov.status;
-        }
-        if (ov && ov.note) {
-            note = ov.note;
+        if (ov) {
+            if (ov.status) effectiveStatus = ov.status;
+            if (ov.note) note = ov.note;
+            if (ov.paid !== undefined) paid = Boolean(ov.paid);
+            if (ov.paidAt) paidAt = ov.paidAt;
+            if (ov.paymentMethod) paymentMethod = ov.paymentMethod;
+            if (ov.paidAmount !== undefined && ov.paidAmount !== null && ov.paidAmount !== '') {
+                paidAmount = Number(ov.paidAmount);
+            }
         }
 
         // Define se a sessão entra na cobrança financeira
@@ -702,6 +714,10 @@
         return {
             status: effectiveStatus,
             note,
+            paid,
+            paidAt,
+            paymentMethod,
+            paidAmount,
             isFuture,
             isDeleted,
             isExempt,
@@ -711,7 +727,7 @@
     }
 
     /**
-     * Atualiza o status ou observação de uma sessão individual (Google Calendar ou Manual)
+     * Atualiza o status, observação ou confirmação de pagamento de uma sessão individual (Google Calendar ou Manual)
      */
     function setSessionOverride(sessionId, patientName, dateIso, patch) {
         const d = new Date(dateIso);
@@ -739,6 +755,10 @@
             } else {
                 if (patch.status) state.manualSessions[manualIdx].status = patch.status;
                 if (patch.note !== undefined) state.manualSessions[manualIdx].note = patch.note;
+                if (patch.paid !== undefined) state.manualSessions[manualIdx].paid = patch.paid;
+                if (patch.paidAt !== undefined) state.manualSessions[manualIdx].paidAt = patch.paidAt;
+                if (patch.paymentMethod !== undefined) state.manualSessions[manualIdx].paymentMethod = patch.paymentMethod;
+                if (patch.paidAmount !== undefined) state.manualSessions[manualIdx].paidAmount = patch.paidAmount;
             }
         }
 
@@ -781,6 +801,10 @@
                 isIgnored: isIgnoredTitle(title),
                 status: resolved.status,
                 note: resolved.note,
+                paid: resolved.paid,
+                paidAt: resolved.paidAt,
+                paymentMethod: resolved.paymentMethod,
+                paidAmount: resolved.paidAmount,
                 isFuture: resolved.isFuture,
                 isDeleted: resolved.isDeleted,
                 isExempt: resolved.isExempt,
@@ -821,6 +845,10 @@
                 isIgnored: false,
                 status: resolved.status,
                 note: ms.note || resolved.note || '',
+                paid: resolved.paid !== undefined ? resolved.paid : Boolean(ms.paid),
+                paidAt: resolved.paidAt || ms.paidAt || '',
+                paymentMethod: resolved.paymentMethod || ms.paymentMethod || 'PIX',
+                paidAmount: resolved.paidAmount !== null ? resolved.paidAmount : (ms.paidAmount != null ? Number(ms.paidAmount) : null),
                 isFuture: resolved.isFuture,
                 isDeleted: resolved.isDeleted,
                 isExempt: resolved.isExempt,
@@ -912,9 +940,38 @@
             const billableCount = pData.billableSessions.length;
             const totalToBill = billableCount * unitPrice;
             const currentStatus = mStat.status || 'pendente';
-            const effectivePaid = (currentStatus === 'pago')
-                ? (mStat.paidAmount !== undefined && mStat.paidAmount !== null && mStat.paidAmount !== '' ? Number(mStat.paidAmount) : totalToBill)
-                : 0;
+
+            // Apuração detalhada de sessões faturáveis pagas individualmente
+            const paidBillableSessions = pData.billableSessions.filter(s => s.paid);
+            const paidSessionsCount = paidBillableSessions.length;
+            const sessionsPaidAmount = paidBillableSessions.reduce((sum, s) => {
+                const val = (s.paidAmount !== null && s.paidAmount !== undefined) ? Number(s.paidAmount) : unitPrice;
+                return sum + val;
+            }, 0);
+
+            let effectivePaid = 0;
+            let effectiveStatus = currentStatus;
+
+            if (currentStatus === 'pago') {
+                effectivePaid = (mStat.paidAmount !== undefined && mStat.paidAmount !== null && mStat.paidAmount !== '')
+                    ? Number(mStat.paidAmount)
+                    : (sessionsPaidAmount > 0 ? Math.max(sessionsPaidAmount, totalToBill) : totalToBill);
+            } else if (currentStatus === 'isento') {
+                effectivePaid = 0;
+            } else {
+                // Se todas as sessões faturáveis foram quitadas individualmente
+                if (billableCount > 0 && paidSessionsCount === billableCount) {
+                    effectiveStatus = 'pago';
+                    effectivePaid = sessionsPaidAmount || totalToBill;
+                } else if (sessionsPaidAmount > 0) {
+                    effectivePaid = sessionsPaidAmount;
+                } else {
+                    effectivePaid = 0;
+                }
+            }
+
+            const remainingToPay = Math.max(0, totalToBill - effectivePaid);
+            const isPartial = (effectiveStatus !== 'pago' && effectiveStatus !== 'isento' && paidSessionsCount > 0);
 
             pData.unitPrice = unitPrice;
             pData.sessionCount = billableCount; // sessões faturáveis
@@ -922,15 +979,19 @@
             pData.realizedCount = pData.realizedSessions.length;
             pData.scheduledCount = pData.scheduledSessions.length;
             pData.exemptCount = pData.exemptSessions.length;
+            pData.paidSessionsCount = paidSessionsCount;
+            pData.sessionsPaidAmount = sessionsPaidAmount;
+            pData.remainingToPay = remainingToPay;
+            pData.isPartial = isPartial;
             pData.totalToBill = totalToBill;
             pData.guardian = pConf.guardian || '';
             pData.phone = pConf.phone || '';
             pData.category = pConf.category || 'Neuropsicologia';
             pData.clinicalNotes = pConf.notes || '';
-            pData.billingStatus = currentStatus;
+            pData.billingStatus = effectiveStatus;
             pData.paidAmount = effectivePaid;
-            pData.paymentDate = mStat.paymentDate || '';
-            pData.paymentMethod = mStat.paymentMethod || 'PIX';
+            pData.paymentDate = mStat.paymentDate || (paidBillableSessions.length > 0 ? (paidBillableSessions[paidBillableSessions.length - 1].paidAt || '') : '');
+            pData.paymentMethod = mStat.paymentMethod || (paidBillableSessions.length > 0 ? (paidBillableSessions[paidBillableSessions.length - 1].paymentMethod || 'PIX') : 'PIX');
             pData.receiptNum = mStat.receiptNum || '';
             pData.statusNotes = mStat.notes || '';
 
@@ -942,8 +1003,8 @@
             totalExemptCount += pData.exemptCount;
             totalForecastBRL += totalToBill;
             totalReceivedBRL += effectivePaid;
-            if (currentStatus !== 'pago' && currentStatus !== 'isento') {
-                totalPendingBRL += totalToBill;
+            if (effectiveStatus !== 'pago' && effectiveStatus !== 'isento') {
+                totalPendingBRL += remainingToPay;
             }
         });
 
@@ -992,6 +1053,7 @@
             const grp = byMonthMap.get(ym);
             grp.sessions.push(s);
             if (s.isBillable && !s.isDeleted) grp.billableCount++;
+            if (s.paid && !s.isDeleted) grp.paidCount = (grp.paidCount || 0) + 1;
         });
 
         const monthsList = Array.from(byMonthMap.values()).sort((a, b) => b.ym.localeCompare(a.ym));
@@ -999,6 +1061,7 @@
             patientName: normalizePatientName(patientName),
             totalSessions: patientSessions.filter(s => !s.isDeleted).length,
             totalBillable: patientSessions.filter(s => s.isBillable && !s.isDeleted).length,
+            totalPaidSessions: patientSessions.filter(s => s.paid && !s.isDeleted).length,
             sessions: patientSessions,
             monthsList
         };
@@ -1424,7 +1487,10 @@
 
         let statusBadge = '';
         if (p.billingStatus === 'pago') {
-            statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 mx-auto justify-center w-fit"><i data-lucide="check" class="w-3 h-3"></i>Pago</span>`;
+            const countText = (p.paidSessionsCount && p.paidSessionsCount === p.sessionCount) ? ` (${p.sessionCount}/${p.sessionCount})` : '';
+            statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 mx-auto justify-center w-fit"><i data-lucide="check" class="w-3 h-3"></i>Pago${countText}</span>`;
+        } else if (p.isPartial) {
+            statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 flex items-center gap-1 mx-auto justify-center w-fit" title="${p.paidSessionsCount} de ${p.sessionCount} sessões pagas (${formatBRL(p.paidAmount)})"><i data-lucide="pie-chart" class="w-3 h-3"></i>Parcial (${p.paidSessionsCount}/${p.sessionCount})</span>`;
         } else if (p.billingStatus === 'cobrado') {
             statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-mono bg-sky-500/15 text-sky-300 border border-sky-500/30 flex items-center gap-1 mx-auto justify-center w-fit"><i data-lucide="send" class="w-3 h-3"></i>Cobrado</span>`;
         } else if (p.billingStatus === 'isento') {
@@ -1465,12 +1531,13 @@
                 <!-- Sessões Faturáveis e Datas (CLICÁVEL TAMBÉM) -->
                 <td class="py-3 px-3 text-center">
                     <button type="button" data-open-patient-sessions="${escapeHtml(p.name)}"
-                        title="Clique para inspecionar datas, horários e status de cada sessão"
+                        title="Clique para inspecionar datas, horários e pagamentos de cada sessão"
                         class="inline-flex flex-col items-center group/sess cursor-pointer hover:scale-[1.02] transition">
                         <div class="flex items-center gap-1">
                             <span class="px-2.5 py-0.5 rounded-lg bg-sky-500/10 group-hover/sess:bg-sky-500/25 border border-sky-500/25 group-hover/sess:border-sky-400/50 font-mono font-bold text-sky-300 text-xs transition">
                                 ${p.sessionCount} ${p.sessionCount === 1 ? 'sessão' : 'sessões'}
                             </span>
+                            ${p.paidSessionsCount > 0 ? `<span class="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[10px] text-emerald-300 font-semibold" title="${p.paidSessionsCount} de ${p.sessionCount} sessões pagas">${p.paidSessionsCount} paga${p.paidSessionsCount > 1 ? 's' : ''}</span>` : ''}
                             ${p.exemptCount > 0 ? `<span class="px-1.5 py-0.5 rounded bg-purple-500/15 border border-purple-500/30 font-mono text-[10px] text-purple-300" title="${p.exemptCount} falta(s)/desmarcação(ões) isenta(s)">+${p.exemptCount} isenta</span>` : ''}
                         </div>
                         <span class="text-[10px] text-slate-400 group-hover/sess:text-cyan-300 mt-1 max-w-[180px] truncate" title="${escapeHtml(billableDatesPreview || 'Nenhuma sessão faturável')}">
@@ -1497,7 +1564,12 @@
                         ${formatBRL(p.totalToBill)}
                     </div>
                     ${p.billingStatus === 'pago' ? `
-                        <div class="text-[10px] text-emerald-400">Liquidado</div>
+                        <div class="text-[10px] text-emerald-400 font-semibold">Liquidado</div>
+                    ` : p.isPartial ? `
+                        <div class="text-[10px] text-cyan-400 font-mono" title="Recebido: ${formatBRL(p.paidAmount)} | Restante: ${formatBRL(p.remainingToPay)}">
+                            Pago: ${formatBRL(p.paidAmount)}
+                        </div>
+                        <div class="text-[9px] text-amber-400/90 font-mono">Saldo: ${formatBRL(p.remainingToPay)}</div>
                     ` : p.billingStatus === 'isento' ? `
                         <div class="text-[10px] text-purple-400">Cortesia / Isento</div>
                     ` : `
@@ -1598,6 +1670,7 @@
                                                     <span>${escapeHtml(s.title)}</span>
                                                 `}
                                                 ${isIgnored ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-slate-800 text-slate-400">Compromisso Não Faturável</span>' : getSessionStatusBadgeHtml(s.status)}
+                                                ${s.paid ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center gap-0.5"><i data-lucide="check" class="w-2.5 h-2.5"></i>Pago (${escapeHtml(s.paymentMethod || 'PIX')})</span>` : ''}
                                                 ${s.source === 'manual' ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800">Manual</span>' : ''}
                                             </div>
                                             <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
@@ -1773,11 +1846,19 @@
         const realizedMonthSessions = activeMonthSessions.filter(s => s.status === 'realizada' || s.status === 'falta_cobravel');
         const scheduledMonthSessions = activeMonthSessions.filter(s => s.status === 'agendada');
         const exemptMonthSessions = activeMonthSessions.filter(s => s.isExempt);
+        const paidMonthSessions = billableMonthSessions.filter(s => s.paid);
 
         const totalMonthBill = billableMonthSessions.length * unitPrice;
+        const totalMonthPaidFromSessions = paidMonthSessions.reduce((sum, s) => {
+            return sum + (s.paidAmount != null ? s.paidAmount : unitPrice);
+        }, 0);
+
         const statusKey = `${report.targetKey}_${pName}`;
         const mStat = state.monthlyStatus[statusKey] || {};
-        const currentBillingStatus = mStat.status || 'pendente';
+        let currentBillingStatus = mStat.status || 'pendente';
+        if (currentBillingStatus !== 'pago' && currentBillingStatus !== 'isento' && billableMonthSessions.length > 0 && paidMonthSessions.length === billableMonthSessions.length) {
+            currentBillingStatus = 'pago';
+        }
 
         // Histórico completo do paciente em todos os meses
         const fullHistory = getPatientFullHistory(pName, state.patientModalShowDeleted);
@@ -1846,17 +1927,19 @@
                                 <div class="text-[10px] text-slate-500">${realizedMonthSessions.length} realizadas • ${scheduledMonthSessions.length} agendadas</div>
                             </div>
                             <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800/90">
-                                <div class="text-[10px] font-mono uppercase text-slate-400">Total a Cobrar no Mês</div>
-                                <div class="text-lg font-bold font-mono text-emerald-300 mt-0.5">${formatBRL(totalMonthBill)}</div>
-                                <div class="text-[10px] text-slate-500">${billableMonthSessions.length} × ${formatBRL(unitPrice)}</div>
+                                <div class="text-[10px] font-mono uppercase text-slate-400">Recebido das Sessões</div>
+                                <div class="text-lg font-bold font-mono text-emerald-300 mt-0.5">${formatBRL(totalMonthPaidFromSessions)}</div>
+                                <div class="text-[10px] text-emerald-400/90 font-mono">${paidMonthSessions.length} de ${billableMonthSessions.length} sessões pagas</div>
                             </div>
                             <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800/90">
-                                <div class="text-[10px] font-mono uppercase text-slate-400">Faltas Isentas / Desmarcadas</div>
-                                <div class="text-lg font-bold font-mono text-purple-300 mt-0.5">${exemptMonthSessions.length}</div>
-                                <div class="text-[10px] text-slate-500">Não cobradas no fechamento</div>
+                                <div class="text-[10px] font-mono uppercase text-slate-400">Saldo a Receber</div>
+                                <div class="text-lg font-bold font-mono ${totalMonthBill - totalMonthPaidFromSessions > 0 ? 'text-amber-300' : 'text-slate-400'} mt-0.5">
+                                    ${formatBRL(Math.max(0, totalMonthBill - totalMonthPaidFromSessions))}
+                                </div>
+                                <div class="text-[10px] text-slate-500">Total previsto: ${formatBRL(totalMonthBill)}</div>
                             </div>
                             <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800/90">
-                                <div class="text-[10px] font-mono uppercase text-slate-400 mb-1">Status Financeiro (${getMonthName(state.selectedMonth)})</div>
+                                <div class="text-[10px] font-mono uppercase text-slate-400 mb-1">Status Geral (${getMonthName(state.selectedMonth)})</div>
                                 <select id="pmodal-status-select" data-pmodal-patient="${escapeHtml(pName)}"
                                     class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs font-mono text-slate-100 focus:outline-none focus:border-sky-400">
                                     <option value="pendente" ${currentBillingStatus === 'pendente' ? 'selected' : ''}>🟡 Pendente</option>
@@ -1867,7 +1950,7 @@
                             </div>
                         </div>
 
-                        <!-- Sub-navegação do Modal: Sessões do Mês vs Histórico Completo -->
+                        <!-- Sub-navegação do Modal: Sessões do Mês vs Histórico Completo e Ações de Quitação Rápida -->
                         <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                             <div class="flex items-center gap-2">
                                 <button type="button" data-pmodal-tab="month"
@@ -1878,21 +1961,41 @@
                                 <button type="button" data-pmodal-tab="history"
                                     class="px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${state.patientModalTab === 'history' ? 'bg-sky-500/20 border border-sky-400/50 text-sky-200' : 'text-slate-400 hover:text-slate-200'}">
                                     <i data-lucide="history" class="w-3.5 h-3.5"></i>
-                                    <span>Histórico Completo Todos os Meses (${fullHistory.totalSessions})</span>
+                                    <span>Histórico Completo (${fullHistory.totalSessions})</span>
                                 </button>
                             </div>
 
-                            <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 cursor-pointer">
-                                <input type="checkbox" id="chk-pmodal-show-deleted" ${state.patientModalShowDeleted ? 'checked' : ''}
-                                    class="rounded border-slate-700 text-sky-500">
-                                <span>Mostrar sessões excluídas/ocultas</span>
-                            </label>
+                            <div class="flex items-center gap-2.5">
+                                ${billableMonthSessions.length > 0 ? `
+                                    <div class="inline-flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+                                        <button type="button" id="btn-pmodal-mark-all-paid" data-pmodal-patient="${escapeHtml(pName)}"
+                                            title="Confirmar pagamento de todas as sessões deste mês"
+                                            class="px-2.5 py-1 rounded text-[11px] font-mono font-semibold bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 transition cursor-pointer">
+                                            <i data-lucide="check-check" class="w-3 h-3"></i>
+                                            <span>Quitar Todas</span>
+                                        </button>
+                                        ${paidMonthSessions.length > 0 ? `
+                                            <button type="button" id="btn-pmodal-clear-all-paid" data-pmodal-patient="${escapeHtml(pName)}"
+                                                title="Desmarcar pagamentos de todas as sessões deste mês"
+                                                class="px-2 py-1 rounded text-[11px] font-mono text-slate-400 hover:text-rose-300 hover:bg-slate-800 transition cursor-pointer">
+                                                <span>Desmarcar</span>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
+
+                                <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 cursor-pointer">
+                                    <input type="checkbox" id="chk-pmodal-show-deleted" ${state.patientModalShowDeleted ? 'checked' : ''}
+                                        class="rounded border-slate-700 text-sky-500">
+                                    <span>Excluídas</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Corpo Rolável com a Lista de Sessões do Paciente -->
                     <div class="p-5 overflow-y-auto flex-1 space-y-4">
-                        ${state.patientModalTab === 'history' ? renderPatientHistoryTabContent(fullHistory, unitPrice) : renderPatientMonthTabContent(pName, monthSessionsAll, currentMonthLabel)}
+                        ${state.patientModalTab === 'history' ? renderPatientHistoryTabContent(fullHistory, unitPrice) : renderPatientMonthTabContent(pName, monthSessionsAll, currentMonthLabel, unitPrice)}
                     </div>
 
                     <!-- Rodapé de Ações Rápidas do Paciente -->
@@ -1923,7 +2026,7 @@
         `;
     }
 
-    function renderPatientMonthTabContent(pName, monthSessions, currentMonthLabel) {
+    function renderPatientMonthTabContent(pName, monthSessions, currentMonthLabel, unitPrice) {
         if (monthSessions.length === 0) {
             return `
                 <div class="text-center py-10 space-y-2 bg-[#090d16]/60 border border-slate-800/80 rounded-2xl">
@@ -1941,6 +2044,7 @@
                     const dateBR = formatFullDateBR(s.date);
                     const timeStr = formatTimeBR(s.date);
                     const endTimeStr = s.end ? formatTimeBR(s.end) : '';
+                    const sessionPrice = s.paidAmount != null ? s.paidAmount : unitPrice;
 
                     return `
                         <div class="p-3.5 rounded-xl ${s.isDeleted ? 'bg-rose-950/20 border border-rose-500/30 opacity-65' : s.isExempt ? 'bg-slate-900/70 border border-slate-800/80' : 'bg-[#090d16] border border-slate-800 hover:border-sky-500/40'} flex flex-col md:flex-row md:items-center justify-between gap-3 transition">
@@ -1955,6 +2059,17 @@
                                             ${timeStr}${endTimeStr ? ` – ${endTimeStr}` : ''}
                                         </span>
                                         ${getSessionStatusBadgeHtml(s.status)}
+                                        ${s.paid ? `
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center gap-1 font-bold">
+                                                <i data-lucide="check" class="w-3 h-3"></i>
+                                                <span>Paga (${escapeHtml(s.paymentMethod || 'PIX')}${s.paidAt ? ' • ' + formatDateBR(new Date(s.paidAt + 'T12:00:00')) : ''})</span>
+                                            </span>
+                                        ` : s.isBillable ? `
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30 inline-flex items-center gap-1">
+                                                <i data-lucide="clock" class="w-3 h-3"></i>
+                                                <span>A Pagar (${formatBRL(sessionPrice)})</span>
+                                            </span>
+                                        ` : ''}
                                         ${s.source === 'manual' ? '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800">Manual</span>' : '<span class="px-1.5 py-0.2 rounded text-[10px] font-mono bg-slate-900 text-slate-400 border border-slate-800">Google Agenda</span>'}
                                     </div>
                                     <div class="flex flex-wrap items-center gap-2 mt-1.5">
@@ -1963,25 +2078,64 @@
                                             data-session-patient="${escapeHtml(s.title)}"
                                             data-session-date="${escapeHtml(s.dateIso)}"
                                             value="${escapeHtml(s.note || '')}"
-                                            placeholder="Adicionar anotação da sessão (ex: Remarcada, Devolutiva, Atestado)..."
+                                            placeholder="Adicionar observação da sessão (ex: Remarcada, Devolutiva, Atestado)..."
                                             class="w-full sm:w-72 px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-800 focus:border-cyan-400 focus:outline-none text-[11px] text-slate-200 placeholder-slate-600">
                                         ${s.htmlLink ? `<a href="${s.htmlLink}" target="_blank" class="text-[11px] font-mono text-sky-400 hover:text-sky-300 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i>Ver no Calendar</a>` : ''}
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-2 self-end md:self-center shrink-0">
+                            <div class="flex flex-wrap items-center gap-2 self-end md:self-center shrink-0">
+                                <!-- Status da Sessão (Realizada, Agendada, etc.) -->
                                 <select data-pmodal-session-status="${escapeHtml(s.id)}"
                                     data-session-patient="${escapeHtml(s.title)}"
                                     data-session-date="${escapeHtml(s.dateIso)}"
                                     class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-200 focus:outline-none focus:border-sky-400 cursor-pointer">
-                                    <option value="realizada" ${s.status === 'realizada' ? 'selected' : ''}>✅ Realizada (Faturar)</option>
-                                    <option value="agendada" ${s.status === 'agendada' ? 'selected' : ''}>🗓️ Agendada (Faturar)</option>
-                                    <option value="falta_cobravel" ${s.status === 'falta_cobravel' ? 'selected' : ''}>⚠️ Falta s/ Aviso (Faturar)</option>
-                                    <option value="falta_justificada" ${s.status === 'falta_justificada' ? 'selected' : ''}>🛡️ Falta Isenta (Não cobrar)</option>
-                                    <option value="desmarcada" ${s.status === 'desmarcada' ? 'selected' : ''}>🚫 Desmarcada (Não cobrar)</option>
-                                    <option value="excluida" ${s.status === 'excluida' ? 'selected' : ''}>🗑️ Excluir / Duplicada</option>
+                                    <option value="realizada" ${s.status === 'realizada' ? 'selected' : ''}>✅ Realizada</option>
+                                    <option value="agendada" ${s.status === 'agendada' ? 'selected' : ''}>🗓️ Agendada</option>
+                                    <option value="falta_cobravel" ${s.status === 'falta_cobravel' ? 'selected' : ''}>⚠️ Falta s/ Aviso</option>
+                                    <option value="falta_justificada" ${s.status === 'falta_justificada' ? 'selected' : ''}>🛡️ Falta Isenta</option>
+                                    <option value="desmarcada" ${s.status === 'desmarcada' ? 'selected' : ''}>🚫 Desmarcada</option>
+                                    <option value="excluida" ${s.status === 'excluida' ? 'selected' : ''}>🗑️ Excluir</option>
                                 </select>
+
+                                <!-- Confirmação de Pagamento Individual por Sessão -->
+                                ${!s.isDeleted && !s.isExempt ? `
+                                    <div class="inline-flex items-center gap-1.5 p-1 rounded-lg ${s.paid ? 'bg-emerald-950/40 border border-emerald-500/40' : 'bg-slate-900/90 border border-slate-800'}">
+                                        <button type="button"
+                                            data-pmodal-session-pay-toggle="${escapeHtml(s.id)}"
+                                            data-session-patient="${escapeHtml(s.title)}"
+                                            data-session-date="${escapeHtml(s.dateIso)}"
+                                            data-current-paid="${s.paid ? 'true' : 'false'}"
+                                            title="${s.paid ? 'Clique para desmarcar o pagamento desta sessão' : 'Clique para confirmar recebimento desta sessão'}"
+                                            class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold flex items-center gap-1.5 transition cursor-pointer ${s.paid ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-sm' : 'bg-slate-800 hover:bg-emerald-950/60 text-slate-300 hover:text-emerald-300 border border-slate-700 hover:border-emerald-500/50'}">
+                                            <i data-lucide="${s.paid ? 'check-circle-2' : 'circle-dollar-sign'}" class="w-3.5 h-3.5"></i>
+                                            <span>${s.paid ? 'Pago' : 'Confirmar Pgto'}</span>
+                                        </button>
+
+                                        ${s.paid ? `
+                                            <select
+                                                data-pmodal-session-pay-method="${escapeHtml(s.id)}"
+                                                data-session-patient="${escapeHtml(s.title)}"
+                                                data-session-date="${escapeHtml(s.dateIso)}"
+                                                title="Forma de pagamento desta sessão"
+                                                class="bg-slate-900 border border-emerald-500/40 rounded px-1.5 py-1 text-[11px] font-mono text-emerald-300 focus:outline-none focus:border-emerald-400 cursor-pointer">
+                                                <option value="PIX" ${s.paymentMethod === 'PIX' ? 'selected' : ''}>PIX</option>
+                                                <option value="Dinheiro" ${s.paymentMethod === 'Dinheiro' ? 'selected' : ''}>Dinheiro</option>
+                                                <option value="Cartão" ${s.paymentMethod === 'Cartão' ? 'selected' : ''}>Cartão</option>
+                                                <option value="Transferência" ${s.paymentMethod === 'Transferência' ? 'selected' : ''}>Transf.</option>
+                                            </select>
+
+                                            <input type="date"
+                                                data-pmodal-session-pay-date="${escapeHtml(s.id)}"
+                                                data-session-patient="${escapeHtml(s.title)}"
+                                                data-session-date="${escapeHtml(s.dateIso)}"
+                                                value="${s.paidAt || (new Date(s.date).toISOString().split('T')[0])}"
+                                                title="Data do recebimento desta sessão"
+                                                class="bg-slate-900 border border-emerald-500/40 rounded px-1.5 py-1 text-[11px] font-mono text-emerald-300 focus:outline-none focus:border-emerald-400">
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -2010,6 +2164,11 @@
                                     <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-900 border border-slate-700 text-cyan-300">
                                         ${mGrp.billableCount} faturáveis (${formatBRL(monthTotalBRL)})
                                     </span>
+                                    ${mGrp.paidCount ? `
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                                            ${mGrp.paidCount} paga${mGrp.paidCount > 1 ? 's' : ''}
+                                        </span>
+                                    ` : ''}
                                     <span class="px-2 py-0.5 rounded-full text-[10px] font-mono uppercase ${mStat === 'pago' ? 'bg-emerald-500/15 text-emerald-300' : mStat === 'cobrado' ? 'bg-sky-500/15 text-sky-300' : 'bg-amber-500/15 text-amber-300'}">
                                         ${escapeHtml(mStat)}
                                     </span>
@@ -2026,7 +2185,10 @@
                                             <span class="font-mono font-bold text-slate-200">${formatFullDateBR(s.date)}</span>
                                             <span class="text-slate-400 font-mono text-[11px] ml-1">${formatTimeBR(s.date)}</span>
                                         </div>
-                                        ${getSessionStatusBadgeHtml(s.status)}
+                                        <div class="flex items-center gap-1.5">
+                                            ${getSessionStatusBadgeHtml(s.status)}
+                                            ${s.paid ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">✓ Pago</span>' : ''}
+                                        </div>
                                     </div>
                                 `).join('')}
                             </div>
@@ -2556,8 +2718,20 @@
                     const statusKey = `${report.targetKey}_${pName}`;
                     if (!state.monthlyStatus[statusKey]) state.monthlyStatus[statusKey] = {};
                     state.monthlyStatus[statusKey].status = newStatus;
+                    const todayIso = new Date().toISOString().split('T')[0];
                     if (newStatus === 'pago') {
-                        state.monthlyStatus[statusKey].paymentDate = new Date().toISOString().split('T')[0];
+                        state.monthlyStatus[statusKey].paymentDate = todayIso;
+                        // Sincroniza todas as sessões faturáveis deste mês como pagas
+                        const cKey = canonicalPatientKey(pName);
+                        const monthSessions = collectUnifiedSessions(state.selectedYear, state.selectedMonth, false)
+                            .filter(s => s.canonicalName === cKey && s.isBillable);
+                        monthSessions.forEach(s => {
+                            setSessionOverride(s.id, pName, s.dateIso, {
+                                paid: true,
+                                paidAt: todayIso,
+                                paymentMethod: state.monthlyStatus[statusKey].paymentMethod || 'PIX'
+                            });
+                        });
                     }
                     saveState();
                     render();
@@ -2592,6 +2766,127 @@
                     }
                 });
             });
+
+            // Toggle de confirmação de pagamento por sessão individual
+            modalPatient.querySelectorAll('[data-pmodal-session-pay-toggle]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const sId = btn.getAttribute('data-pmodal-session-pay-toggle');
+                    const pName = btn.getAttribute('data-session-patient');
+                    const dateIso = btn.getAttribute('data-session-date');
+                    const isPaid = btn.getAttribute('data-current-paid') === 'true';
+
+                    if (isPaid) {
+                        setSessionOverride(sId, pName, dateIso, {
+                            paid: false,
+                            paidAt: '',
+                            paymentMethod: ''
+                        });
+                        if (global.VaultCore) {
+                            global.VaultCore.toast('Pagamento da sessão desmarcado.', 'info');
+                        }
+                    } else {
+                        const todayIso = new Date().toISOString().split('T')[0];
+                        setSessionOverride(sId, pName, dateIso, {
+                            paid: true,
+                            paidAt: todayIso,
+                            paymentMethod: 'PIX'
+                        });
+                        if (global.VaultCore) {
+                            global.VaultCore.toast('Pagamento da sessão confirmado via PIX!', 'success');
+                        }
+                    }
+                    render();
+                });
+            });
+
+            // Alterar método de pagamento da sessão individual
+            modalPatient.querySelectorAll('[data-pmodal-session-pay-method]').forEach(sel => {
+                sel.addEventListener('change', (e) => {
+                    const sId = sel.getAttribute('data-pmodal-session-pay-method');
+                    const pName = sel.getAttribute('data-session-patient');
+                    const dateIso = sel.getAttribute('data-session-date');
+                    const newMethod = e.target.value;
+                    setSessionOverride(sId, pName, dateIso, { paymentMethod: newMethod });
+                    if (global.VaultCore) {
+                        global.VaultCore.toast(`Forma de pagamento da sessão atualizada para "${newMethod}".`, 'info');
+                    }
+                });
+            });
+
+            // Alterar data de pagamento da sessão individual
+            modalPatient.querySelectorAll('[data-pmodal-session-pay-date]').forEach(inp => {
+                inp.addEventListener('change', (e) => {
+                    const sId = inp.getAttribute('data-pmodal-session-pay-date');
+                    const pName = inp.getAttribute('data-session-patient');
+                    const dateIso = inp.getAttribute('data-session-date');
+                    const newDate = e.target.value;
+                    setSessionOverride(sId, pName, dateIso, { paidAt: newDate });
+                    if (global.VaultCore) {
+                        global.VaultCore.toast('Data de pagamento da sessão atualizada.', 'info');
+                    }
+                });
+            });
+
+            // Botão Quitar Todas as Sessões do mês
+            const btnMarkAllPaid = document.getElementById('btn-pmodal-mark-all-paid');
+            if (btnMarkAllPaid) {
+                btnMarkAllPaid.addEventListener('click', () => {
+                    const pName = btnMarkAllPaid.getAttribute('data-pmodal-patient');
+                    const cKey = canonicalPatientKey(pName);
+                    const todayIso = new Date().toISOString().split('T')[0];
+                    const monthSessions = collectUnifiedSessions(state.selectedYear, state.selectedMonth, false)
+                        .filter(s => s.canonicalName === cKey && s.isBillable);
+
+                    monthSessions.forEach(s => {
+                        setSessionOverride(s.id, pName, s.dateIso, {
+                            paid: true,
+                            paidAt: todayIso,
+                            paymentMethod: 'PIX'
+                        });
+                    });
+
+                    const statusKey = `${report.targetKey}_${pName}`;
+                    if (!state.monthlyStatus[statusKey]) state.monthlyStatus[statusKey] = {};
+                    state.monthlyStatus[statusKey].status = 'pago';
+                    state.monthlyStatus[statusKey].paymentDate = todayIso;
+                    state.monthlyStatus[statusKey].paymentMethod = 'PIX';
+                    saveState();
+                    render();
+
+                    if (global.VaultCore) {
+                        global.VaultCore.toast(`Todas as ${monthSessions.length} sessões de ${pName} foram marcadas como pagas!`, 'success');
+                    }
+                });
+            }
+
+            // Botão Limpar / Desmarcar todos os pagamentos do mês
+            const btnClearAllPaid = document.getElementById('btn-pmodal-clear-all-paid');
+            if (btnClearAllPaid) {
+                btnClearAllPaid.addEventListener('click', () => {
+                    const pName = btnClearAllPaid.getAttribute('data-pmodal-patient');
+                    const cKey = canonicalPatientKey(pName);
+                    const monthSessions = collectUnifiedSessions(state.selectedYear, state.selectedMonth, false)
+                        .filter(s => s.canonicalName === cKey);
+
+                    monthSessions.forEach(s => {
+                        setSessionOverride(s.id, pName, s.dateIso, {
+                            paid: false,
+                            paidAt: '',
+                            paymentMethod: ''
+                        });
+                    });
+
+                    const statusKey = `${report.targetKey}_${pName}`;
+                    if (!state.monthlyStatus[statusKey]) state.monthlyStatus[statusKey] = {};
+                    state.monthlyStatus[statusKey].status = 'pendente';
+                    saveState();
+                    render();
+
+                    if (global.VaultCore) {
+                        global.VaultCore.toast(`Confirmações de pagamento de ${pName} foram reiniciadas.`, 'info');
+                    }
+                });
+            }
 
             // Botão + Nova Sessão pré-preenchida para o paciente
             const btnPModalAdd = document.getElementById('btn-pmodal-add-session');
@@ -2911,8 +3206,13 @@
             const dateStr = formatDateBR(s.date);
             const timeStr = formatTimeBR(s.date);
             const extra = s.status === 'falta_cobravel' ? ' (Falta sem aviso prévio)' : '';
-            return `• ${dateStr} (${formatWeekdayBR(s.date)}) às ${timeStr}${extra}`;
+            const payStatus = s.paid ? ' [✓ Paga via ' + (s.paymentMethod || 'PIX') + ']' : '';
+            return `• ${dateStr} (${formatWeekdayBR(s.date)}) às ${timeStr}${extra}${payStatus}`;
         }).join('\n');
+
+        const totalStr = p.isPartial
+            ? `${formatBRL(p.remainingToPay)} (Saldo a liquidar • ${formatBRL(p.paidAmount)} já quitado)`
+            : formatBRL(p.totalToBill);
 
         const tpl = state.config.whatsappTemplate;
         const msg = tpl
@@ -2921,7 +3221,7 @@
             .replace(/{mes_ano}/g, `${getMonthName(state.selectedMonth)}/${state.selectedYear}`)
             .replace(/{qtd_sessoes}/g, p.sessionCount)
             .replace(/{lista_datas}/g, datesFormatted || '• Nenhuma sessão faturável no período')
-            .replace(/{valor_total}/g, formatBRL(p.totalToBill))
+            .replace(/{valor_total}/g, totalStr)
             .replace(/{valor_unitario}/g, formatBRL(p.unitPrice))
             .replace(/{chave_pix}/g, state.config.pixKey)
             .replace(/{beneficiario}/g, state.config.pixBeneficiary)
@@ -3000,18 +3300,27 @@
         const receiptCode = `REC-${state.selectedYear}${String(state.selectedMonth + 1).padStart(2, '0')}-${p.name.replace(/[^A-Za-z]/g, '').slice(0, 4).toUpperCase()}`;
         docNumber.textContent = `Nº de Controle: ${receiptCode}`;
 
-        const isPaid = p.billingStatus === 'pago';
-        const receiverText = isPaid ? 'Recebi de' : 'Declaro para os devidos fins a apuração de honorários referentes a';
-        const quittanceText = isPaid
+        const isFullyPaid = p.billingStatus === 'pago' || (p.totalToBill > 0 && p.paidAmount >= p.totalToBill);
+        const isPartial = p.isPartial;
+        const receiverText = isFullyPaid
+            ? 'Recebi de'
+            : isPartial
+                ? 'Declaro o recebimento parcial de honorários referente a'
+                : 'Declaro para os devidos fins a apuração de honorários referentes a';
+
+        const quittanceText = isFullyPaid
             ? 'dando plena e rasa quitação pelo presente documento referente aos atendimentos prestados no período.'
-            : 'aguardando a devida liquidação dos honorários clínicos profissionais acordados.';
+            : isPartial
+                ? `dando quitação correspondente ao valor de ${formatBRL(p.paidAmount)} (${p.paidSessionsCount} sessões liquidadas), restando o saldo de ${formatBRL(p.remainingToPay)} a liquidar.`
+                : 'aguardando a devida liquidação dos honorários clínicos profissionais acordados.';
 
         const guardianMention = p.guardian ? ` (responsável financeiro: ${escapeHtml(p.guardian)})` : '';
+        const receiptAmountBRL = isFullyPaid ? formatBRL(p.totalToBill) : (isPartial ? formatBRL(p.paidAmount) : formatBRL(p.totalToBill));
 
         docBody.innerHTML = `
             <p>
                 ${receiverText} <strong>${escapeHtml(p.name)}</strong>${guardianMention}, a importância de
-                <strong class="text-base">${formatBRL(p.totalToBill)}</strong>, referente a
+                <strong class="text-base">${receiptAmountBRL}</strong>, referente a
                 <strong>${p.sessionCount} (${numberToWords(p.sessionCount)})</strong> sessões de atendimento neuropsicológico / intervenção clínica no mês de
                 <strong>${getMonthName(state.selectedMonth)} de ${state.selectedYear}</strong>, ${quittanceText}
             </p>
@@ -3020,7 +3329,10 @@
         docSessions.innerHTML = p.billableSessions.map((s, idx) => {
             const dateStr = s.date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
             const timeStr = formatTimeBR(s.date);
-            return `<div><strong>${idx + 1}ª Sessão:</strong> ${dateStr} às ${timeStr} • Modalidade: Neuropsicologia Clínica</div>`;
+            const payInfo = s.paid
+                ? `<span style="color:#059669; font-weight:600;">[LIQUIDADA via ${escapeHtml(s.paymentMethod || 'PIX')}${s.paidAt ? ' em ' + formatDateBR(new Date(s.paidAt + 'T12:00:00')) : ''}]</span>`
+                : `<span style="color:#d97706;">[Aguardando liquidação]</span>`;
+            return `<div><strong>${idx + 1}ª Sessão:</strong> ${dateStr} às ${timeStr} • ${payInfo} • Modalidade: Neuropsicologia Clínica</div>`;
         }).join('');
 
         const today = new Date();
