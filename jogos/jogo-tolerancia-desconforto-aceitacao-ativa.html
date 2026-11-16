@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 52: Matriz de Tolerância ao Desconforto e Aceitação Ativa – Deo Magalhães</title>
+    <meta name="description" content="Treine a flexibilidade psicológica, controle inibitório e tolerância somática no cérebro com o jogo Dia 52 e efeitos procedurais Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .vagal-tank-container {
+            width: 100%;
+            max-width: 200px;
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .vagal-tank-fill {
+            height: 100%;
+            background: #0a9396;
+            width: 100%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .trial-prompt-card {
+            background: #f0fdfa;
+            border-left: 4px solid #0a9396;
+            padding: 18px 22px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .trial-prompt-card h3 {
+            margin: 0 0 6px 0;
+            color: #005f73;
+            font-size: 1.15em;
+        }
+
+        .trial-prompt-card p {
+            margin: 0;
+            color: #334155;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .matrix-board-container {
+            display: inline-block;
+            background: #031d24;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+            margin: 15px auto 25px auto;
+        }
+
+        .matrix-grid {
+            display: grid;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .matrix-cell {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            background: rgba(10, 147, 150, 0.15);
+            border: 2px solid rgba(148, 210, 189, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            user-select: none;
+            color: #ffffff;
+        }
+
+        .matrix-cell:hover:not(.disabled):not(.visited) {
+            transform: scale(1.05);
+            border-color: #ee9b00;
+            background: rgba(238, 155, 0, 0.25);
+            box-shadow: 0 0 15px rgba(238, 155, 0, 0.5);
+        }
+
+        .matrix-cell.player-here {
+            background: #0a9396 !important;
+            border-color: #94d2bd !important;
+            box-shadow: 0 0 20px #0a9396;
+            animation: pulse-node 1.5s infinite alternate;
+        }
+
+        .matrix-cell.visited {
+            background: rgba(10, 147, 150, 0.4);
+            border-color: rgba(148, 210, 189, 0.6);
+            opacity: 0.8;
+            cursor: default;
+        }
+
+        .matrix-cell.disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        .matrix-cell.target-goal {
+            background: rgba(238, 155, 0, 0.3);
+            border-color: #ee9b00;
+            box-shadow: 0 0 15px rgba(238, 155, 0, 0.4);
+        }
+
+        .matrix-cell.recovery-node {
+            border-color: #94d2bd;
+            background: rgba(148, 210, 189, 0.25);
+        }
+
+        .cell-icon {
+            font-size: 1.4em;
+            margin-bottom: 2px;
+        }
+
+        .cell-cost {
+            font-size: 0.7em;
+            font-weight: 700;
+            color: #94d2bd;
+        }
+
+        .cell-cost.high {
+            color: #ee9b00;
+        }
+
+        .cell-cost.rec {
+            color: #5eead4;
+        }
+
+        @keyframes pulse-node {
+            0% { transform: scale(1); box-shadow: 0 0 10px #0a9396; }
+            100% { transform: scale(1.06); box-shadow: 0 0 25px #94d2bd; }
+        }
+
+        .controls-toolbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn-game-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-breathe {
+            background: #005f73;
+            color: #ffffff;
+        }
+
+        .btn-breathe:hover:not(:disabled) {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .btn-escape {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .btn-escape:hover:not(:disabled) {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+
+        .btn-game-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .breathing-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .breathing-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 35px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .breathing-circle-anim {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #0a9396;
+            margin: 25px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.2em;
+            transition: transform 3s ease, background 3s ease;
+        }
+
+        .victory-panel {
+            display: none;
+            background: #f8fafc;
+            border: 2px solid #0a9396;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .victory-panel h2 {
+            color: #005f73;
+            margin-top: 0;
+        }
+
+        .neuro-explanation-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 28px;
+            margin: 35px 0;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .neuro-explanation-box h3 {
+            color: #005f73;
+            margin-top: 0;
+            border-bottom: 2px solid #0a9396;
+            padding-bottom: 8px;
+        }
+
+        .neuro-grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .neuro-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .neuro-card h4 {
+            color: #005f73;
+            margin: 0 0 8px 0;
+            font-size: 0.98em;
+        }
+
+        .neuro-card p {
+            color: #475569;
+            margin: 0;
+            font-size: 0.88em;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 52: Matriz de Tolerância ao Desconforto e Aceitação Ativa</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Treinamento Cognitivo Diário</p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status do Jogo -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Nível Atual</span>
+                        <span id="levelDisplay" class="stat-value">1 / 5</span>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Tolerância Vagal</span>
+                        <span id="toleranceDisplay" class="stat-value">100 / 100</span>
+                        <div class="vagal-tank-container">
+                            <div id="vagalFill" class="vagal-tank-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Escore Eudaimônico</span>
+                        <span id="scoreDisplay" class="stat-value">0 pts</span>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Fugas Usadas</span>
+                        <span id="escapesDisplay" class="stat-value" style="color: #ca6702;">0</span>
+                    </div>
+                </div>
+
+                <!-- Card de Cenário Clínico / Prompt -->
+                <div class="trial-prompt-card">
+                    <h3 id="scenarioTitle">Fase 1: O Primeiro Encontro com a Onda</h3>
+                    <p id="scenarioDesc">Você precisa atravessar a matriz até o nó de Valores (estrela dourada). Cada passo através do desconforto consome tolerância somática, mas gera pontos de maturidade pré-frontal. Evite usar o botão de fuga anestésica!</p>
+                </div>
+
+                <!-- Tabuleiro da Matriz Cognitiva -->
+                <div class="matrix-board-container">
+                    <div id="matrixGrid" class="matrix-grid"></div>
+                </div>
+
+                <!-- Barra de Ferramentas / Ações Clínicas -->
+                <div class="controls-toolbar">
+                    <button id="btnBreathe" class="btn-game-action btn-breathe" onclick="triggerBreathing()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        Respirar em 0,1 Hz (+20 Tolerância)
+                    </button>
+
+                    <button id="btnEscape" class="btn-game-action btn-escape" onclick="triggerEscape()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                        Anestésico Imediato (Fuga / Penalidade)
+                    </button>
+
+                    <button class="btn-game-action" style="background: #e2e8f0; color: #334155;" onclick="restartLevel()">
+                        Reiniciar Nível
+                    </button>
+                </div>
+
+                <!-- Painel de Vitória / Finalização -->
+                <div id="victoryPanel" class="victory-panel">
+                    <h2>Jornada Concluída: Soberania da Aceitação Ativa!</h2>
+                    <p id="victoryReport" style="font-size: 1.05em; color: #334155; line-height: 1.6; max-width: 650px; margin: 0 auto 20px auto;"></p>
+                    <div style="margin: 20px 0;">
+                        <span style="font-size: 1.8em; font-weight: 800; color: #005f73;" id="finalScoreVal">0 pts</span>
+                        <div style="font-size: 0.85em; color: #64748b;" id="recordStatus">Recorde Pessoal Salvo!</div>
+                    </div>
+                    <button class="btn-game-action btn-breathe" onclick="restartFullGame()">Jogar Novamente</button>
+                </div>
+            </div>
+
+            <!-- Modal de Respiração 0,1 Hz -->
+            <div id="breathingModal" class="breathing-modal-overlay">
+                <div class="breathing-card">
+                    <h3 style="color: #005f73; margin-top: 0;">Coerência Vagal (0,1 Hz)</h3>
+                    <p style="color: #64748b; font-size: 0.9em;">Acompanhe o círculo para restabelecer o freio parassimpático e expandir sua janela de tolerância somática.</p>
+                    <div id="breathingAnimCircle" class="breathing-circle-anim">Inspire...</div>
+                    <div id="breathingCounter" style="font-size: 0.85em; font-weight: 700; color: #0a9396;">Tempo restante: 6s</div>
+                </div>
+            </div>
+
+            <!-- Fundamentação Neuropsicológica -->
+            <div class="neuro-explanation-box">
+                <h3>Arquitetura Neurocognitiva do Treino</h3>
+                <p>O paradigma da <strong>Matriz de Tolerância ao Desconforto e Aceitação Ativa</strong> foi projetado para modelar o conflito neurobiológico entre o impulso subcortical de fuga imediata (reforço negativo límbico) e a deliberação orientada por valores (Córtex Pré-Frontal Ventromedial e Dorsolateral):</p>
+                <div class="neuro-grid-cards">
+                    <div class="neuro-card">
+                        <h4>1. Córtex Cingulado Anterior Dorsal (dACC)</h4>
+                        <p>Responsável pelo registro de conflito, erro e desconforto físico/social. O treino ensina o dACC a modular o alarme interno sem transformá-lo em pânico catastrófico.</p>
+                    </div>
+                    <div class="neuro-card">
+                        <h4>2. Dessensibilização da Ínsula Anterior</h4>
+                        <p>Processa os marcadores somáticos da angústia. Ao tolerar o custo passageiro de cada nó, o cérebro extingue o medo condicionado das próprias reações viscerais.</p>
+                    </div>
+                    <div class="neuro-card">
+                        <h4>3. Fortalecimento do Freio Vagal</h4>
+                        <p>A respiração em 0,1 Hz estimula o nervo vago ventral, aumentando a variabilidade da frequência cardíaca (VFC) e permitindo agir com calma mesmo sob tensão.</p>
+                    </div>
+                    <div class="neuro-card">
+                        <h4>4. Soberania do vmPFC vs. Fuga</h4>
+                        <p>Recorrer ao anestésico temporário alivia a dor na hora, mas mina a integridade psíquica. O jogo comprova matematicamente que a aceitação deliberada maximiza o ganho existencial.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // ==========================================
+        // Web Audio API Synthesizer (Procedural)
+        // ==========================================
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+            gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start();
+            osc.stop(ctx.currentTime + duration);
+        }
+
+        function playChord(frequencies, duration = 0.4, gainVal = 0.08) {
+            frequencies.forEach(f => playTone(f, 'sine', duration, gainVal));
+        }
+
+        function playStepSound() {
+            playTone(440, 'sine', 0.12, 0.08);
+            setTimeout(() => playTone(554, 'sine', 0.12, 0.06), 40);
+        }
+
+        function playStressSound() {
+            playTone(180, 'triangle', 0.25, 0.12);
+        }
+
+        function playBreatheSound() {
+            playChord([261.63, 329.63, 392.00], 0.6, 0.08); // Dó maior
+        }
+
+        function playEscapeSound() {
+            playTone(280, 'sawtooth', 0.3, 0.15);
+            setTimeout(() => playTone(140, 'sawtooth', 0.4, 0.12), 100);
+        }
+
+        function playGoalSound() {
+            playChord([523.25, 659.25, 783.99, 1046.50], 0.8, 0.1);
+        }
+
+        // ==========================================
+        // Game Engine: 5 Níveis Progressivos
+        // ==========================================
+        const LEVELS_DATA = [
+            {
+                level: 1,
+                size: 3,
+                title: "Fase 1: Reconhecendo a Onda",
+                desc: "Caminho introdutório. Avance pelos nós cinzentos suportando a leve tensão inicial até alcançar o nó dourado de Valores.",
+                nodes: [
+                    { r: 0, c: 0, type: 'start', icon: '👤', cost: 0, val: 0 },
+                    { r: 0, c: 1, type: 'step', icon: '💭', cost: 10, val: 20 },
+                    { r: 0, c: 2, type: 'step', icon: '⚡', cost: 15, val: 25 },
+                    { r: 1, c: 0, type: 'step', icon: '💭', cost: 10, val: 20 },
+                    { r: 1, c: 1, type: 'step', icon: '🧘', cost: 12, val: 30 },
+                    { r: 1, c: 2, type: 'step', icon: '💭', cost: 10, val: 20 },
+                    { r: 2, c: 0, type: 'step', icon: '⚡', cost: 15, val: 25 },
+                    { r: 2, c: 1, type: 'step', icon: '💭', cost: 10, val: 20 },
+                    { r: 2, c: 2, type: 'goal', icon: '⭐', cost: 0, val: 60 }
+                ]
+            },
+            {
+                level: 2,
+                size: 3,
+                title: "Fase 2: O Canto da Fuga Fácil",
+                desc: "Alguns nós oferecem alívios temporários ilusórios, mas exigem desvios que consomem mais tempo. Mantenha o foco nos seus princípios.",
+                nodes: [
+                    { r: 0, c: 0, type: 'start', icon: '👤', cost: 0, val: 0 },
+                    { r: 0, c: 1, type: 'step', icon: '📱', cost: 14, val: 15 },
+                    { r: 0, c: 2, type: 'step', icon: '⚡', cost: 16, val: 25 },
+                    { r: 1, c: 0, type: 'step', icon: '💭', cost: 12, val: 25 },
+                    { r: 1, c: 1, type: 'step', icon: '🌊', cost: 12, val: 30 },
+                    { r: 1, c: 2, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 2, c: 0, type: 'step', icon: '⚡', cost: 15, val: 20 },
+                    { r: 2, c: 1, type: 'step', icon: '💭', cost: 12, val: 30 },
+                    { r: 2, c: 2, type: 'goal', icon: '⭐', cost: 0, val: 70 }
+                ]
+            },
+            {
+                level: 3,
+                size: 4,
+                title: "Fase 3: Turbulência e Ancoragem",
+                desc: "Matriz 4x4. O nó com a âncora verde (⚓) representa uma oportunidade de regulação que restaura +20 pontos de tolerância.",
+                nodes: [
+                    { r: 0, c: 0, type: 'start', icon: '👤', cost: 0, val: 0 },
+                    { r: 0, c: 1, type: 'step', icon: '💭', cost: 14, val: 20 },
+                    { r: 0, c: 2, type: 'step', icon: '⚡', cost: 18, val: 25 },
+                    { r: 0, c: 3, type: 'step', icon: '💭', cost: 15, val: 20 },
+                    { r: 1, c: 0, type: 'step', icon: '💭', cost: 12, val: 20 },
+                    { r: 1, c: 1, type: 'recovery', icon: '⚓', cost: -20, val: 35 },
+                    { r: 1, c: 2, type: 'step', icon: '⚡', cost: 16, val: 25 },
+                    { r: 1, c: 3, type: 'step', icon: '💭', cost: 14, val: 20 },
+                    { r: 2, c: 0, type: 'step', icon: '⚡', cost: 18, val: 25 },
+                    { r: 2, c: 1, type: 'step', icon: '💭', cost: 15, val: 25 },
+                    { r: 2, c: 2, type: 'step', icon: '🌊', cost: 14, val: 30 },
+                    { r: 2, c: 3, type: 'step', icon: '⚡', cost: 16, val: 25 },
+                    { r: 3, c: 0, type: 'step', icon: '💭', cost: 14, val: 20 },
+                    { r: 3, c: 1, type: 'step', icon: '⚡', cost: 16, val: 25 },
+                    { r: 3, c: 2, type: 'step', icon: '💭', cost: 12, val: 30 },
+                    { r: 3, c: 3, type: 'goal', icon: '⭐', cost: 0, val: 90 }
+                ]
+            },
+            {
+                level: 4,
+                size: 4,
+                title: "Fase 4: O Dilema da Vulnerabilidade",
+                desc: "Tensão elevada. Há caminhos de alto custo que oferecem maior clareza moral. Use o botão de respiração caso sua tolerância caia abaixo de 35.",
+                nodes: [
+                    { r: 0, c: 0, type: 'start', icon: '👤', cost: 0, val: 0 },
+                    { r: 0, c: 1, type: 'step', icon: '⚡', cost: 18, val: 30 },
+                    { r: 0, c: 2, type: 'step', icon: '💭', cost: 15, val: 20 },
+                    { r: 0, c: 3, type: 'step', icon: '⚡', cost: 20, val: 35 },
+                    { r: 1, c: 0, type: 'step', icon: '💭', cost: 14, val: 20 },
+                    { r: 1, c: 1, type: 'step', icon: '🌊', cost: 16, val: 30 },
+                    { r: 1, c: 2, type: 'recovery', icon: '⚓', cost: -20, val: 40 },
+                    { r: 1, c: 3, type: 'step', icon: '💭', cost: 15, val: 25 },
+                    { r: 2, c: 0, type: 'step', icon: '⚡', cost: 18, val: 25 },
+                    { r: 2, c: 1, type: 'step', icon: '💭', cost: 15, val: 25 },
+                    { r: 2, c: 2, type: 'step', icon: '⚡', cost: 17, val: 30 },
+                    { r: 2, c: 3, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 3, c: 0, type: 'step', icon: '💭', cost: 16, val: 25 },
+                    { r: 3, c: 1, type: 'step', icon: '⚡', cost: 18, val: 30 },
+                    { r: 3, c: 2, type: 'step', icon: '💭', cost: 12, val: 35 },
+                    { r: 3, c: 3, type: 'goal', icon: '⭐', cost: 0, val: 110 }
+                ]
+            },
+            {
+                level: 5,
+                size: 5,
+                title: "Fase 5: Maestria da Aceitação Radical",
+                desc: "Matriz 5x5 de alta complexidade. Dois nós de âncora verde (⚓) e sua habilidade de regular a respiração permitirão cruzar o campo sem sucumbir ao anestésico.",
+                nodes: [
+                    { r: 0, c: 0, type: 'start', icon: '👤', cost: 0, val: 0 },
+                    { r: 0, c: 1, type: 'step', icon: '💭', cost: 14, val: 20 },
+                    { r: 0, c: 2, type: 'step', icon: '⚡', cost: 16, val: 25 },
+                    { r: 0, c: 3, type: 'step', icon: '💭', cost: 15, val: 20 },
+                    { r: 0, c: 4, type: 'step', icon: '⚡', cost: 18, val: 30 },
+                    { r: 1, c: 0, type: 'step', icon: '💭', cost: 12, val: 20 },
+                    { r: 1, c: 1, type: 'recovery', icon: '⚓', cost: -25, val: 40 },
+                    { r: 1, c: 2, type: 'step', icon: '🌊', cost: 15, val: 30 },
+                    { r: 1, c: 3, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 1, c: 4, type: 'step', icon: '⚡', cost: 17, val: 30 },
+                    { r: 2, c: 0, type: 'step', icon: '⚡', cost: 16, val: 25 },
+                    { r: 2, c: 1, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 2, c: 2, type: 'step', icon: '⚡', cost: 15, val: 30 },
+                    { r: 2, c: 3, type: 'recovery', icon: '⚓', cost: -25, val: 45 },
+                    { r: 2, c: 4, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 3, c: 0, type: 'step', icon: '💭', cost: 15, val: 20 },
+                    { r: 3, c: 1, type: 'step', icon: '⚡', cost: 17, val: 30 },
+                    { r: 3, c: 2, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 3, c: 3, type: 'step', icon: '🌊', cost: 16, val: 35 },
+                    { r: 3, c: 4, type: 'step', icon: '⚡', cost: 18, val: 30 },
+                    { r: 4, c: 0, type: 'step', icon: '⚡', cost: 18, val: 25 },
+                    { r: 4, c: 1, type: 'step', icon: '💭', cost: 14, val: 25 },
+                    { r: 4, c: 2, type: 'step', icon: '⚡', cost: 16, val: 30 },
+                    { r: 4, c: 3, type: 'step', icon: '💭', cost: 12, val: 40 },
+                    { r: 4, c: 4, type: 'goal', icon: '⭐', cost: 0, val: 150 }
+                ]
+            }
+        ];
+
+        // Estado do Jogo
+        let currentLevelIdx = 0;
+        let playerPos = { r: 0, c: 0 };
+        let tolerance = 100;
+        let score = 0;
+        let escapesCount = 0;
+        let visitedNodes = new Set();
+        let breatheUsesInLevel = 0;
+        let isBreathing = false;
+
+        function initGame() {
+            currentLevelIdx = 0;
+            score = 0;
+            escapesCount = 0;
+            loadLevel(currentLevelIdx);
+        }
+
+        function loadLevel(idx) {
+            const data = LEVELS_DATA[idx];
+            playerPos = { r: 0, c: 0 };
+            tolerance = 100;
+            visitedNodes.clear();
+            visitedNodes.add("0,0");
+            breatheUsesInLevel = 0;
+
+            document.getElementById('levelDisplay').textContent = `${idx + 1} / ${LEVELS_DATA.length}`;
+            document.getElementById('scenarioTitle').textContent = data.title;
+            document.getElementById('scenarioDesc').textContent = data.desc;
+            document.getElementById('victoryPanel').style.display = 'none';
+
+            updateUI();
+            renderGrid(data);
+        }
+
+        function renderGrid(data) {
+            const gridEl = document.getElementById('matrixGrid');
+            gridEl.innerHTML = '';
+            gridEl.style.gridTemplateColumns = `repeat(${data.size}, 72px)`;
+
+            data.nodes.forEach(node => {
+                const cell = document.createElement('div');
+                cell.className = 'matrix-cell';
+                cell.id = `cell-${node.r}-${node.c}`;
+
+                const isCurrent = (node.r === playerPos.r && node.c === playerPos.c);
+                const isVisited = visitedNodes.has(`${node.r},${node.c}`);
+                const isAdjacent = isNodeAdjacent(playerPos, node);
+
+                if (isCurrent) cell.classList.add('player-here');
+                else if (isVisited) cell.classList.add('visited');
+                else if (!isAdjacent) cell.classList.add('disabled');
+
+                if (node.type === 'goal') cell.classList.add('target-goal');
+                if (node.type === 'recovery') cell.classList.add('recovery-node');
+
+                let costLabel = '';
+                if (node.cost > 0) costLabel = `-${node.cost}`;
+                else if (node.cost < 0) costLabel = `+${Math.abs(node.cost)}`;
+                else costLabel = '';
+
+                let costClass = node.cost > 15 ? 'high' : (node.cost < 0 ? 'rec' : '');
+
+                cell.innerHTML = `
+                    <div class="cell-icon">${isCurrent ? '🧍' : node.icon}</div>
+                    <div class="cell-cost ${costClass}">${costLabel}</div>
+                `;
+
+                cell.onclick = () => onCellClick(node);
+                gridEl.appendChild(cell);
+            });
+        }
+
+        function isNodeAdjacent(posA, posB) {
+            const dr = Math.abs(posA.r - posB.r);
+            const dc = Math.abs(posA.c - posB.c);
+            return (dr + dc === 1);
+        }
+
+        function onCellClick(node) {
+            if (isBreathing) return;
+            if (!isNodeAdjacent(playerPos, node)) return;
+
+            // Movimento Válido
+            playerPos = { r: node.r, c: node.c };
+            visitedNodes.add(`${node.r},${node.c}`);
+
+            if (node.cost > 0) {
+                tolerance = Math.max(0, tolerance - node.cost);
+                score += node.val;
+                playStressSound();
+            } else if (node.cost < 0) {
+                tolerance = Math.min(100, tolerance + Math.abs(node.cost));
+                score += node.val;
+                playBreatheSound();
+            } else {
+                score += node.val;
+                playStepSound();
+            }
+
+            // Verifica se atingiu a meta do nível
+            if (node.type === 'goal') {
+                playGoalSound();
+                if (currentLevelIdx < LEVELS_DATA.length - 1) {
+                    currentLevelIdx++;
+                    setTimeout(() => {
+                        loadLevel(currentLevelIdx);
+                    }, 500);
+                } else {
+                    finishGame();
+                }
+                return;
+            }
+
+            // Verifica colapso por esgotamento de tolerância
+            if (tolerance <= 0) {
+                playEscapeSound();
+                alert("Sua Janela de Tolerância colapsou! O sistema nervoso foi sequestrado pelo alarme límbico. O nível será reiniciado para nova tentativa.");
+                restartLevel();
+                return;
+            }
+
+            updateUI();
+            renderGrid(LEVELS_DATA[currentLevelIdx]);
+        }
+
+        function triggerBreathing() {
+            if (isBreathing) return;
+            isBreathing = true;
+
+            const modal = document.getElementById('breathingModal');
+            const anim = document.getElementById('breathingAnimCircle');
+            const counter = document.getElementById('breathingCounter');
+
+            modal.style.display = 'flex';
+            playBreatheSound();
+
+            let timeLeft = 6;
+            anim.style.transform = 'scale(1.35)';
+            anim.style.background = '#005f73';
+            anim.textContent = 'Inspire...';
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                counter.textContent = `Tempo restante: ${timeLeft}s`;
+
+                if (timeLeft === 3) {
+                    anim.style.transform = 'scale(0.9)';
+                    anim.style.background = '#0a9396';
+                    anim.textContent = 'Expire...';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    modal.style.display = 'none';
+                    isBreathing = false;
+                    tolerance = Math.min(100, tolerance + 20);
+                    breatheUsesInLevel++;
+                    updateUI();
+                }
+            }, 1000);
+        }
+
+        function triggerEscape() {
+            if (isBreathing) return;
+            playEscapeSound();
+            escapesCount++;
+            tolerance = 100;
+            score = Math.max(0, score - 50);
+
+            alert("Você acionou o 'Anestésico Imediato' (Fuga Comportamental). A dor foi zerada na hora, mas seu cérebro sofreu uma penalidade de -50 pontos e reforçou a esquiva.");
+            updateUI();
+        }
+
+        function restartLevel() {
+            loadLevel(currentLevelIdx);
+        }
+
+        function restartFullGame() {
+            initGame();
+        }
+
+        function updateUI() {
+            document.getElementById('toleranceDisplay').textContent = `${tolerance} / 100`;
+            document.getElementById('scoreDisplay').textContent = `${score} pts`;
+            document.getElementById('escapesDisplay').textContent = `${escapesCount}`;
+
+            const fill = document.getElementById('vagalFill');
+            fill.style.width = `${tolerance}%`;
+            if (tolerance > 60) fill.style.background = '#0a9396';
+            else if (tolerance > 30) fill.style.background = '#ee9b00';
+            else fill.style.background = '#9b2226';
+        }
+
+        function finishGame() {
+            document.getElementById('victoryPanel').style.display = 'block';
+            document.getElementById('finalScoreVal').textContent = `${score} pts`;
+
+            let report = "";
+            if (escapesCount === 0) {
+                report = "Desempenho Extraordinário! Você atravessou os 5 estágios sem utilizar nenhuma fuga anestésica, demonstrando altíssima flexibilidade psicológica (ACT) e controle inibitório pré-frontal exemplar.";
+            } else if (escapesCount <= 2) {
+                report = "Ótimo Desempenho! Você precisou de poucas intervenções de fuga e conseguiu manter sua rota de valores, absorvendo a maior parte das ondas de desconforto com sucesso.";
+            } else {
+                report = "Jornada Concluída! Você chegou ao final, mas recorreu com frequência aos anestésicos rápidos. Use essa experiência para treinar sua respiração de coerência vagal na próxima rodada!";
+            }
+            document.getElementById('victoryReport').textContent = report;
+
+            // Salvar no LocalStorage
+            try {
+                const prev = parseInt(localStorage.getItem('game_dia52_score') || '0', 10);
+                if (score > prev) {
+                    localStorage.setItem('game_dia52_score', score.toString());
+                    document.getElementById('recordStatus').textContent = `Novo Recorde Pessoal Salvo: ${score} pts!`;
+                } else {
+                    document.getElementById('recordStatus').textContent = `Recorde Atual: ${prev} pts`;
+                }
+            } catch (e) {
+                // Storage desativado
+            }
+        }
+
+        // Inicia o jogo ao carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            initGame();
+        });
+    </script>
+</body>
+</html>

@@ -59,6 +59,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-50** | **Escala Multidimensional de Culpa do Sobrevivente, Lealdades Invisíveis e Dívida Existencial (EMCS-LIDE)** | Culpa do Sobrevivente, Diferenciação do Self, Dívida Existencial e Lealdades Sistêmicas | `testes/teste-culpa-sobrevivente-lealdades-invisiveis.html` | ✅ Concluído |
 | **T-51** | **Escala Multidimensional de Codependência, Papel de Salvador e Desconexão do Self (EMCS-PS)** | Codependência, Compulsão por Resgate, Ansiedade de Separação (dACC) e Parentificação | `testes/teste-codependencia-papel-salvador.html` | ✅ Concluído |
 | **T-52** | **Escala Multidimensional de Sentido de Vida, Vazio Existencial e Vontade de Sentido (EMSV-VE)** | Logoterapia, Vontade de Sentido, vácuo noogênico e Eudaimonia (vmPFC) | `testes/teste-vazio-existencial-sentido-de-vida.html` | ✅ Concluído |
+| **T-53** | **Escala Multidimensional de Esquiva Experiencial, Anestesia Afetiva e Supressão Emocional (EME-AA)** | Esquiva Experiencial, ACT, Aversão ao Desconforto, Numbing na Ínsula e Flexibilidade | `testes/teste-esquiva-experiencial-anestesia-afetiva.html` | ✅ Concluído |
 
 ---
 

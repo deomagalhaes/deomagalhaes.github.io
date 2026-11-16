@@ -4,11 +4,15 @@
 
 param(
     [string]$CalendarId = "f518acb6bf4c0e38b2ae92bc8c85c007c9bcf00592b97233c53bfcbfbec2dcdd@group.calendar.google.com",
-    [int]$MonthsBack = 3,
-    [int]$MonthsForward = 2
+    [int]$MonthsBack = 6,
+    [int]$MonthsForward = 3
 )
 
 $ErrorActionPreference = 'Stop'
+[Console]::InputEncoding  = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding           = [System.Text.Encoding]::UTF8
+
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoDir = Split-Path -Parent $scriptDir
 $cacheDir = Join-Path $repoDir "nexus-vault\data"
@@ -61,17 +65,24 @@ try {
 
 Write-Host "Sucesso: $($events.Count) eventos encontrados no periodo." -ForegroundColor Green
 
-# 3. Estruturar e Higienizar os Dados
+# 3. Estruturar, Higienizar e Deduplicar os Dados
 $cleanedEvents = @()
+$seenKeys = @{}
 
 foreach ($ev in $events) {
     if (-not $ev.summary -or $ev.status -eq 'cancelled') {
         continue
     }
 
-    $title = $ev.summary.Trim()
+    $title = ($ev.summary -replace '\s+', ' ').Trim()
     $startStr = if ($ev.start.dateTime) { $ev.start.dateTime } else { $ev.start.date }
     $endStr = if ($ev.end.dateTime) { $ev.end.dateTime } else { $ev.end.date }
+
+    $dedupKey = "$($title.ToLowerInvariant())|$startStr"
+    if ($seenKeys.ContainsKey($dedupKey)) {
+        continue
+    }
+    $seenKeys[$dedupKey] = $true
 
     $cleanedEvents += [PSCustomObject]@{
         id = $ev.id
@@ -86,7 +97,8 @@ foreach ($ev in $events) {
 
 # 4. Consolidar Metadados e Payload
 $payload = [PSCustomObject]@{
-    version = "1.0.0"
+    version = "2.0.0"
+    authoritative = $true
     lastSyncedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:sszzz")
     calendarId = $CalendarId
     totalEvents = $cleanedEvents.Count
