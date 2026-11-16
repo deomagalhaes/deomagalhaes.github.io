@@ -3266,6 +3266,302 @@ const TONEWOOD_PRESETS = {
 // FASE 17: CONSTANTES & MODELAGEM DE TREINADOR DE SOLFEJO E DITADO CAIPIRA
 // =========================================================================
 
+// ==========================================
+// FASE 18: CATÁLOGO DE INTRODUÇÕES CLÁSSICAS EM PAGODE DE VIOLA
+// ==========================================
+const PAGODE_INTRO_CATALOG = [
+  {
+    id: 'pagode-em-brasilia',
+    title: 'Pagode em Brasília',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1960,
+    tonality: 'E',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Avançado',
+    baseBpm: 124,
+    description: 'A matriz canônica do pagode de viola. Ataque incisivo no 1º e 2º pares com rasqueado sincopado e repiques estalados no tampo.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 1, fret: 12, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E5' },
+      { id: 2, par: 2, fret: 12, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'B4' },
+      { id: 3, par: 1, fret: 11, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'D#5' },
+      { id: 4, par: 1, fret: 12, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E5' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'E_rasq' },
+      { id: 6, par: 0, fret: 0, time: 1.25, dur: 0.25, technique: 'abafado', dynamic: 'p', label: 'Chicote' },
+      { id: 7, par: 3, fret: 12, time: 1.5, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'G#4' },
+      { id: 8, par: 2, fret: 12, time: 1.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'B4' },
+      { id: 9, par: 1, fret: 9, time: 2.0, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'C#5' },
+      { id: 10, par: 1, fret: 11, time: 2.25, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'D#5' },
+      { id: 11, par: 1, fret: 12, time: 2.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E5' },
+      { id: 12, par: 2, fret: 10, time: 2.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'A4' },
+      { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'repiquena', dynamic: 'ff', label: 'Baque' },
+      { id: 14, par: 1, fret: 7, time: 3.25, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'B4/G#4' },
+      { id: 15, par: 1, fret: 4, time: 3.5, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'G#4/E4' },
+      { id: 16, par: 1, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Mi_Solto' }
+    ],
+    teachingTips: 'Treine a alternância de polegar e indicador nos pares 1 e 2 antes de acelerar. O "chicote" com a mão direita na tampa dá a assinatura rítmica.',
+    culturalContext: 'Composto em 1960 por Lourival dos Santos e Tião Carreiro, eternizou a introdução em terças e sextas da viola moderna.'
+  },
+  {
+    id: 'a-vaca-ja-foi-pro-brejo',
+    title: 'A Vaca Já Foi pro Brejo',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1983,
+    tonality: 'E',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Intermediário',
+    baseBpm: 118,
+    description: 'Ponteio ágil em terças cromáticas e resposta sincopada no bordão. Símbolo da crítica social sertaneja.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 1, fret: 0, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'E4' },
+      { id: 2, par: 2, fret: 2, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'C#4' },
+      { id: 3, par: 1, fret: 2, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'f', label: 'F#4' },
+      { id: 4, par: 1, fret: 4, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'G#4' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasq_E' },
+      { id: 6, par: 1, fret: 5, time: 1.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'A4' },
+      { id: 7, par: 1, fret: 7, time: 1.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 8, par: 2, fret: 7, time: 1.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'F#4' },
+      { id: 9, par: 1, fret: 9, time: 2.0, dur: 0.25, technique: 'dueto', dynamic: 'ff', label: 'C#5/A4' },
+      { id: 10, par: 1, fret: 7, time: 2.25, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'B4/G#4' },
+      { id: 11, par: 1, fret: 5, time: 2.5, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'A4/F#4' },
+      { id: 12, par: 1, fret: 4, time: 2.75, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'G#4/E4' },
+      { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'abafado', dynamic: 'p', label: 'Abaf' },
+      { id: 14, par: 4, fret: 2, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'F#3' },
+      { id: 15, par: 5, fret: 2, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'B2' },
+      { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E2' }
+    ],
+    teachingTips: 'Foque na descida simétrica dos duetos de terças na 1ª e 2ª cordas entre as casas 9 e 4.',
+    culturalContext: 'Composta por Tião Carreiro e Lourival dos Santos, é um dos pagodes mais regravados da música brasileira.'
+  },
+  {
+    id: 'chora-viola',
+    title: 'Chora Viola',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1966,
+    tonality: 'E',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Avançado',
+    baseBpm: 126,
+    description: 'Dueto de décimas e oitavas agudas intercaladas com repiques rápidos de polegar.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 1, fret: 7, time: 0.0, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'B4' },
+      { id: 2, par: 3, fret: 8, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'E4' },
+      { id: 3, par: 1, fret: 9, time: 0.5, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'C#5' },
+      { id: 4, par: 3, fret: 10, time: 0.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'F#4' },
+      { id: 5, par: 1, fret: 11, time: 1.0, dur: 0.25, technique: 'dueto', dynamic: 'ff', label: 'D#5' },
+      { id: 6, par: 0, fret: 0, time: 1.25, dur: 0.25, technique: 'rasqueado', dynamic: 'f', label: 'Rasq' },
+      { id: 7, par: 1, fret: 12, time: 1.5, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E5' },
+      { id: 8, par: 2, fret: 12, time: 1.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'B4' },
+      { id: 9, par: 0, fret: 0, time: 2.0, dur: 0.25, technique: 'repiquena', dynamic: 'f', label: 'Golpe' },
+      { id: 10, par: 1, fret: 11, time: 2.25, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'D#5' },
+      { id: 11, par: 1, fret: 9, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'C#5' },
+      { id: 12, par: 1, fret: 7, time: 2.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 13, par: 2, fret: 9, time: 3.0, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'G#4' },
+      { id: 14, par: 3, fret: 8, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'E4' },
+      { id: 15, par: 4, fret: 9, time: 3.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B3' },
+      { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E2' }
+    ],
+    teachingTips: 'A afinação precisa do 3º par em Sol sustenido é crítica para a consonância brilhante das décimas.',
+    culturalContext: 'Letra de Lourival dos Santos e Tião Carreiro, reverencia o próprio instrumento como confidente da alma do violeiro.'
+  },
+  {
+    id: 'carreiro-marvado',
+    title: 'Carreiro Marvado',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1968,
+    tonality: 'B7',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Intermediário',
+    baseBpm: 120,
+    description: 'Passagem cromática incisiva preparando a dominante Si com Sétima (B7) para resolver no acorde fundamental Mi Maior.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 2, fret: 4, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'D#4' },
+      { id: 2, par: 1, fret: 2, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'F#4' },
+      { id: 3, par: 1, fret: 5, time: 0.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'A4' },
+      { id: 4, par: 2, fret: 4, time: 0.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'D#4' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasq_B7' },
+      { id: 6, par: 0, fret: 0, time: 1.25, dur: 0.25, technique: 'abafado', dynamic: 'p', label: 'Baque' },
+      { id: 7, par: 1, fret: 7, time: 1.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 8, par: 1, fret: 5, time: 1.75, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'A4' },
+      { id: 9, par: 1, fret: 4, time: 2.0, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'G#4' },
+      { id: 10, par: 1, fret: 2, time: 2.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'F#4' },
+      { id: 11, par: 2, fret: 4, time: 2.5, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'D#4' },
+      { id: 12, par: 3, fret: 3, time: 2.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'A3' },
+      { id: 13, par: 4, fret: 4, time: 3.0, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'F#3' },
+      { id: 14, par: 5, fret: 2, time: 3.25, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'B2' },
+      { id: 15, par: 0, fret: 0, time: 3.5, dur: 0.25, technique: 'repiquena', dynamic: 'ff', label: 'Estalo' },
+      { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E2' }
+    ],
+    teachingTips: 'Excelente estudo para fixar a digitação do acorde dominante Si com Sétima (B7) conectando ao Mi solto.',
+    culturalContext: 'Evoca o vigor das disputas de comitiva e o trabalho árduo dos condutores de boiada do sertão.'
+  },
+  {
+    id: 'cabelo-loiro',
+    title: 'Cabelo Loiro',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1961,
+    tonality: 'A',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Iniciante',
+    baseBpm: 115,
+    description: 'Introdução melódica de grande clareza e ritmo marcante na subdominante Lá Maior (A), ideal para quem inicia no pagode.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 1, fret: 5, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'A4' },
+      { id: 2, par: 2, fret: 5, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'E4' },
+      { id: 3, par: 3, fret: 5, time: 0.5, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'C#4' },
+      { id: 4, par: 1, fret: 7, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasq_A' },
+      { id: 6, par: 0, fret: 0, time: 1.25, dur: 0.25, technique: 'abafado', dynamic: 'p', label: 'Abaf' },
+      { id: 7, par: 1, fret: 9, time: 1.5, dur: 0.25, technique: 'dueto', dynamic: 'ff', label: 'C#5' },
+      { id: 8, par: 1, fret: 7, time: 1.75, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'B4' },
+      { id: 9, par: 1, fret: 5, time: 2.0, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'A4' },
+      { id: 10, par: 2, fret: 5, time: 2.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'E4' },
+      { id: 11, par: 1, fret: 4, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'G#4' },
+      { id: 12, par: 1, fret: 5, time: 2.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'A4' },
+      { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'repiquena', dynamic: 'f', label: 'Baque' },
+      { id: 14, par: 4, fret: 5, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'A3' },
+      { id: 15, par: 5, fret: 5, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'A2' },
+      { id: 16, par: 1, fret: 5, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'A4_Final' }
+    ],
+    teachingTips: 'Perfeito para dominar o acorde de Lá com pestana na 5ª casa e entender as respostas dos bordões.',
+    culturalContext: 'Parceria de Tião Carreiro e Zé Carreiro, uma das canções de amor caipira mais emblemáticas dos anos 60.'
+  },
+  {
+    id: 'pretinho-aleijado',
+    title: 'Pretinho Aleijado',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1964,
+    tonality: 'E',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Intermediário',
+    baseBpm: 122,
+    description: 'Introdução em staccato enérgico com ponteio entre o 1º e 3º pares, transmitindo pungência dramática.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 1, fret: 12, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E5' },
+      { id: 2, par: 3, fret: 12, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'G#4' },
+      { id: 3, par: 1, fret: 11, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'D#5' },
+      { id: 4, par: 1, fret: 9, time: 0.75, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'C#5' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasq' },
+      { id: 6, par: 1, fret: 7, time: 1.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 7, par: 2, fret: 9, time: 1.5, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'G#4' },
+      { id: 8, par: 1, fret: 5, time: 1.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'A4' },
+      { id: 9, par: 1, fret: 4, time: 2.0, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'G#4' },
+      { id: 10, par: 1, fret: 2, time: 2.25, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'F#4' },
+      { id: 11, par: 1, fret: 0, time: 2.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E4' },
+      { id: 12, par: 2, fret: 2, time: 2.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'C#4' },
+      { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'repiquena', dynamic: 'f', label: 'Repique' },
+      { id: 14, par: 3, fret: 1, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'A3' },
+      { id: 15, par: 4, fret: 2, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'F#3' },
+      { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E2' }
+    ],
+    teachingTips: 'Observe como o staccato dá a sensação de marcha. Não deixe as notas soarem além da sua duração.',
+    culturalContext: 'Grande clássico da moda de viola e pagode comovente, exaltando a lealdade e a superação humana.'
+  },
+  {
+    id: 'amargurado',
+    title: 'Amargurado',
+    artist: 'Tião Carreiro & Dino Franco',
+    year: 1973,
+    tonality: 'E',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Intermediário',
+    baseBpm: 110,
+    description: 'Introdução cadenciada de pagode lento/cururu com arpejos aveludados e fraseado de intensa expressividade lírica.',
+    rhythm: 'Pagode Lento / Toada',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 2, fret: 0, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'B3' },
+      { id: 2, par: 1, fret: 0, time: 0.25, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'E4' },
+      { id: 3, par: 1, fret: 4, time: 0.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'G#4' },
+      { id: 4, par: 1, fret: 7, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'mf', label: 'Rasq_Suave' },
+      { id: 6, par: 1, fret: 9, time: 1.25, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'C#5' },
+      { id: 7, par: 1, fret: 11, time: 1.5, dur: 0.25, technique: 'dueto', dynamic: 'ff', label: 'D#5' },
+      { id: 8, par: 1, fret: 12, time: 1.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E5' },
+      { id: 9, par: 2, fret: 12, time: 2.0, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'B4' },
+      { id: 10, par: 1, fret: 11, time: 2.25, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'D#5' },
+      { id: 11, par: 1, fret: 9, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'C#5' },
+      { id: 12, par: 1, fret: 7, time: 2.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 13, par: 2, fret: 9, time: 3.0, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'G#4' },
+      { id: 14, par: 1, fret: 4, time: 3.25, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'G#4/E4' },
+      { id: 15, par: 1, fret: 2, time: 3.5, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'F#4/D#4' },
+      { id: 16, par: 1, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E4_Final' }
+    ],
+    teachingTips: 'O fraseado pede sustentação e vibrato sutil nas notas longas, com ataque menos cortante.',
+    culturalContext: 'Composições de Dino Franco e Tião Carreiro que se tornou o hino das dores amorosas do cancioneiro rural.'
+  },
+  {
+    id: 'oi-paixao',
+    title: 'Oi Paixão',
+    artist: 'Tião Carreiro & Pardinho',
+    year: 1970,
+    tonality: 'E',
+    tuning: 'Cebolão em Mi',
+    difficulty: 'Avançado',
+    baseBpm: 128,
+    description: 'Ponteio vertiginoso com palhetada/unhada dupla e síncopes explosivas no 1º par e no tampo.',
+    rhythm: 'Pagode Caipira',
+    measureCount: 4,
+    notes: [
+      { id: 1, par: 1, fret: 12, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E5' },
+      { id: 2, par: 1, fret: 12, time: 0.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E5' },
+      { id: 3, par: 1, fret: 11, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'D#5' },
+      { id: 4, par: 1, fret: 12, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E5' },
+      { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'repiquena', dynamic: 'ff', label: 'Tampo_Forte' },
+      { id: 6, par: 2, fret: 12, time: 1.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'B4' },
+      { id: 7, par: 1, fret: 9, time: 1.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'C#5' },
+      { id: 8, par: 1, fret: 7, time: 1.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'B4' },
+      { id: 9, par: 0, fret: 0, time: 2.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasq_Giro' },
+      { id: 10, par: 1, fret: 5, time: 2.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'A4' },
+      { id: 11, par: 1, fret: 4, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'G#4' },
+      { id: 12, par: 1, fret: 2, time: 2.75, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'F#4' },
+      { id: 13, par: 1, fret: 0, time: 3.0, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'E4' },
+      { id: 14, par: 2, fret: 0, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'B3' },
+      { id: 15, par: 3, fret: 0, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'G#3' },
+      { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'E2_Final' }
+    ],
+    teachingTips: 'Velocidade e precisão rítmica extremas. Comece no Speed Ladder em 60% e aumente gradualmente.',
+    culturalContext: 'Exemplo máximo da velocidade e virtuosismo do pagode de viola paulista e mineiro.'
+  }
+];
+
+const PROCEDURAL_PAGODE_STYLES = [
+  { id: 'tradicional', name: 'Tradicional (Tião Carreiro)', description: 'Arpejos no 1º e 2º par com descida em terças e rasqueado no 2º tempo.' },
+  { id: 'moderno', name: 'Moderno / Universitário', description: 'Cromatismi rápidos, licks sincopados e slap/repiquena percussiva.' },
+  { id: 'serrano', name: 'Serrano / Cururu', description: 'Cadência melódica mais aberta com foco nos graves e bordões soltos.' },
+  { id: 'vertiginoso', name: 'Vertiginoso (Ataque Triplo)', description: 'Palhetada veloz nas casas agudas (casas 9 a 14) com repique dobrado.' },
+  { id: 'lirico', name: 'Lírico / Sentimental', description: 'Duetos em sextas aveludadas, tempo rubato e finalização em arpejo suave.' }
+];
+
+const DEFAULT_PAGODE_STATE = {
+  selectedCatalogId: 'pagode-em-brasilia',
+  activeStyle: 'tradicional',
+  targetTonality: 'E',
+  ladderActive: false,
+  ladderStartBpm: 70,
+  ladderCurrentBpm: 70,
+  ladderTargetBpm: 120,
+  ladderStepBpm: 5,
+  ladderRepsPerStep: 2,
+  ladderCurrentRep: 1,
+  activeNoteIndex: -1,
+  isPlaying: false,
+  loop: true,
+  customIntroNotes: null
+};
+
+
 const DEFAULT_SOLFEGE_STATE = {
     subTab: 'interval', // 'interval' | 'dictation'
     difficulty: 'iniciante', // 'iniciante' | 'boiadeiro' | 'cantador' | 'mestre'
@@ -3640,7 +3936,8 @@ const CAIPIRA_DICTATION_PHRASES = [
         micRecognizer: Object.assign({}, DEFAULT_MIC_RECOGNIZER_STATE),
         polyphonic: Object.assign({}, DEFAULT_POLYPHONIC_STATE),
         tonewood: Object.assign({}, DEFAULT_TONEWOOD_STATE),
-        solfege: Object.assign({}, DEFAULT_SOLFEGE_STATE)
+        solfege: Object.assign({}, DEFAULT_SOLFEGE_STATE),
+        pagode: Object.assign({}, DEFAULT_PAGODE_STATE)
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -3672,6 +3969,8 @@ const CAIPIRA_DICTATION_PHRASES = [
     let activePolyphonicTimers = [];
     let activeTonewoodTimers = [];
     let activeSolfegeTimers = [];
+    let pagodePlaybackTimer = null;
+    let activePagodeTimers = [];
     let micStream = null;
     let micSourceNode = null;
     let micFilterNode = null;
@@ -17494,6 +17793,671 @@ function bindSolfegeEvents() {
 
     // =========================================================================
     // AFINADOR ACÚSTICO DE PRECISÃO (PITCH REFERENCE POR CORDA / PAR)
+      // ==========================================
+  // FASE 18: ENGINE PROCEDURAL E PLAYER DE INTRODUÇÕES EM PAGODE DE VIOLA
+  // ==========================================
+  function generateProceduralPagodeIntro(styleId, tonality) {
+    var ton = tonality || 'E';
+    var style = styleId || 'tradicional';
+    var seedNotes = [];
+    var fretShift = (ton === 'A') ? 5 : ((ton === 'B7') ? 7 : 0);
+
+    if (style === 'tradicional') {
+      seedNotes = [
+        { id: 1, par: 1, fret: (12 + fretShift) % 15, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Nota 1' },
+        { id: 2, par: 2, fret: (12 + fretShift) % 15, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Nota 2' },
+        { id: 3, par: 1, fret: (11 + fretShift) % 15, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Cromático' },
+        { id: 4, par: 1, fret: (12 + fretShift) % 15, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Tônica' },
+        { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasqueado' },
+        { id: 6, par: 0, fret: 0, time: 1.25, dur: 0.25, technique: 'abafado', dynamic: 'p', label: 'Baque' },
+        { id: 7, par: 2, fret: (10 + fretShift) % 15, time: 1.5, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Terça' },
+        { id: 8, par: 1, fret: (9 + fretShift) % 15, time: 1.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Quinta' },
+        { id: 9, par: 1, fret: (7 + fretShift) % 15, time: 2.0, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'Dueto 1' },
+        { id: 10, par: 1, fret: (5 + fretShift) % 15, time: 2.25, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'Dueto 2' },
+        { id: 11, par: 1, fret: (4 + fretShift) % 15, time: 2.5, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'Dueto 3' },
+        { id: 12, par: 1, fret: (2 + fretShift) % 15, time: 2.75, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Passagem' },
+        { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'repiquena', dynamic: 'ff', label: 'Estalo' },
+        { id: 14, par: 3, fret: (3 + fretShift) % 15, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Bordão 1' },
+        { id: 15, par: 4, fret: (2 + fretShift) % 15, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'Bordão 2' },
+        { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Tônica Bordão' }
+      ];
+    } else if (style === 'vertiginoso') {
+      seedNotes = [
+        { id: 1, par: 1, fret: (14 + fretShift) % 15, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Agudo Top' },
+        { id: 2, par: 1, fret: (12 + fretShift) % 15, time: 0.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Agudo' },
+        { id: 3, par: 1, fret: (11 + fretShift) % 15, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'f', label: 'Semi-tom' },
+        { id: 4, par: 1, fret: (12 + fretShift) % 15, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Repique' },
+        { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'repiquena', dynamic: 'ff', label: 'Tampo Forte' },
+        { id: 6, par: 2, fret: (12 + fretShift) % 15, time: 1.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Par 2' },
+        { id: 7, par: 1, fret: (9 + fretShift) % 15, time: 1.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Veloz' },
+        { id: 8, par: 1, fret: (7 + fretShift) % 15, time: 1.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Centro' },
+        { id: 9, par: 0, fret: 0, time: 2.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Giro Rápido' },
+        { id: 10, par: 1, fret: (5 + fretShift) % 15, time: 2.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Descida' },
+        { id: 11, par: 1, fret: (4 + fretShift) % 15, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Terça Maior' },
+        { id: 12, par: 1, fret: (2 + fretShift) % 15, time: 2.75, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Segunda' },
+        { id: 13, par: 1, fret: 0, time: 3.0, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Solto' },
+        { id: 14, par: 2, fret: 0, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Par 2 Solto' },
+        { id: 15, par: 3, fret: 0, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Par 3 Solto' },
+        { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Bordão E' }
+      ];
+    } else if (style === 'serrano') {
+      seedNotes = [
+        { id: 1, par: 3, fret: 0, time: 0.0, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Sol# Base' },
+        { id: 2, par: 2, fret: 0, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Si Base' },
+        { id: 3, par: 1, fret: 0, time: 0.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Mi Canto' },
+        { id: 4, par: 1, fret: 4, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Sol#' },
+        { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'mf', label: 'Cururu Rasq' },
+        { id: 6, par: 1, fret: 5, time: 1.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Lá' },
+        { id: 7, par: 1, fret: 7, time: 1.5, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Si Alto' },
+        { id: 8, par: 2, fret: 7, time: 1.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Fa#' },
+        { id: 9, par: 1, fret: 9, time: 2.0, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'Dó# Agudo' },
+        { id: 10, par: 1, fret: 7, time: 2.25, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'Si Dueto' },
+        { id: 11, par: 1, fret: 5, time: 2.5, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'Lá Dueto' },
+        { id: 12, par: 1, fret: 4, time: 2.75, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'Sol# Dueto' },
+        { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'abafado', dynamic: 'p', label: 'Baque Baixo' },
+        { id: 14, par: 4, fret: 2, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Fa# Baixo' },
+        { id: 15, par: 5, fret: 2, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'Si Grave' },
+        { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Mi Profundo' }
+      ];
+    } else if (style === 'lirico') {
+      seedNotes = [
+        { id: 1, par: 2, fret: 0, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'p', label: 'Si Arpejo' },
+        { id: 2, par: 1, fret: 0, time: 0.25, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'Mi Arpejo' },
+        { id: 3, par: 1, fret: 4, time: 0.5, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'Sol# Aveludado' },
+        { id: 4, par: 1, fret: 7, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Si Canto' },
+        { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'rasqueado', dynamic: 'mf', label: 'Rasqueado Doce' },
+        { id: 6, par: 1, fret: 9, time: 1.25, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'Sexta Doce' },
+        { id: 7, par: 1, fret: 11, time: 1.5, dur: 0.25, technique: 'dueto', dynamic: 'f', label: 'Sexta Tensao' },
+        { id: 8, par: 1, fret: 12, time: 1.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Clímax' },
+        { id: 9, par: 2, fret: 12, time: 2.0, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Sustentação' },
+        { id: 10, par: 1, fret: 11, time: 2.25, dur: 0.25, technique: 'ligado', dynamic: 'p', label: 'Ligado Melífluo' },
+        { id: 11, par: 1, fret: 9, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'p', label: 'Descida' },
+        { id: 12, par: 1, fret: 7, time: 2.75, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'Resolução' },
+        { id: 13, par: 2, fret: 9, time: 3.0, dur: 0.25, technique: 'dedilhado', dynamic: 'p', label: 'Harmonia' },
+        { id: 14, par: 1, fret: 4, time: 3.25, dur: 0.25, technique: 'dueto', dynamic: 'mf', label: 'Terça Doce' },
+        { id: 15, par: 1, fret: 2, time: 3.5, dur: 0.25, technique: 'dueto', dynamic: 'p', label: 'Preparação' },
+        { id: 16, par: 1, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'Acorde Final' }
+      ];
+    } else {
+      // moderno
+      seedNotes = [
+        { id: 1, par: 1, fret: (12 + fretShift) % 15, time: 0.0, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Ataque Slap' },
+        { id: 2, par: 2, fret: (10 + fretShift) % 15, time: 0.25, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Syncop 1' },
+        { id: 3, par: 1, fret: (11 + fretShift) % 15, time: 0.5, dur: 0.25, technique: 'ligado', dynamic: 'f', label: 'Blue Note' },
+        { id: 4, par: 1, fret: (12 + fretShift) % 15, time: 0.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Accent' },
+        { id: 5, par: 0, fret: 0, time: 1.0, dur: 0.25, technique: 'repiquena', dynamic: 'ff', label: 'Percussão Tampo' },
+        { id: 6, par: 1, fret: (10 + fretShift) % 15, time: 1.25, dur: 0.25, technique: 'puxado', dynamic: 'mf', label: 'Sétima Menor' },
+        { id: 7, par: 1, fret: (9 + fretShift) % 15, time: 1.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Slide Rápido' },
+        { id: 8, par: 2, fret: (9 + fretShift) % 15, time: 1.75, dur: 0.25, technique: 'dedilhado', dynamic: 'mf', label: 'Intercalação' },
+        { id: 9, par: 0, fret: 0, time: 2.0, dur: 0.25, technique: 'rasqueado', dynamic: 'ff', label: 'Rasq Moderno' },
+        { id: 10, par: 1, fret: (7 + fretShift) % 15, time: 2.25, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Quinta' },
+        { id: 11, par: 1, fret: (5 + fretShift) % 15, time: 2.5, dur: 0.25, technique: 'ligado', dynamic: 'mf', label: 'Quarta' },
+        { id: 12, par: 1, fret: (4 + fretShift) % 15, time: 2.75, dur: 0.25, technique: 'puxado', dynamic: 'f', label: 'Terça Maior' },
+        { id: 13, par: 0, fret: 0, time: 3.0, dur: 0.25, technique: 'abafado', dynamic: 'mf', label: 'Chicote Duplo' },
+        { id: 14, par: 3, fret: (5 + fretShift) % 15, time: 3.25, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'Groove 1' },
+        { id: 15, par: 4, fret: (4 + fretShift) % 15, time: 3.5, dur: 0.25, technique: 'dedilhado', dynamic: 'f', label: 'Groove 2' },
+        { id: 16, par: 5, fret: 0, time: 3.75, dur: 0.25, technique: 'puxado', dynamic: 'ff', label: 'Hit Final' }
+      ];
+    }
+    return seedNotes;
+  }
+
+  function getCurrentPagodeNotes() {
+    if (state.pagode.selectedCatalogId === 'procedural') {
+      if (!state.pagode.customIntroNotes) {
+        state.pagode.customIntroNotes = generateProceduralPagodeIntro(state.pagode.activeStyle, state.pagode.targetTonality);
+      }
+      return state.pagode.customIntroNotes;
+    }
+    var found = PAGODE_INTRO_CATALOG.find(function (item) { return item.id === state.pagode.selectedCatalogId; });
+    return (found && found.notes) ? found.notes : PAGODE_INTRO_CATALOG[0].notes;
+  }
+
+  function getCurrentPagodeMetadata() {
+    if (state.pagode.selectedCatalogId === 'procedural') {
+      var st = PROCEDURAL_PAGODE_STYLES.find(function (s) { return s.id === state.pagode.activeStyle; }) || PROCEDURAL_PAGODE_STYLES[0];
+      return {
+        id: 'procedural',
+        title: 'Introdução Gerada: ' + st.name,
+        artist: 'Gerador Algorítmico Nexus Vault',
+        year: 2026,
+        tonality: state.pagode.targetTonality,
+        tuning: 'Cebolão em Mi',
+        difficulty: 'Customizável',
+        baseBpm: state.pagode.ladderActive ? state.pagode.ladderCurrentBpm : state.bpm,
+        description: st.description,
+        rhythm: 'Pagode Caipira',
+        measureCount: 4,
+        teachingTips: 'Esta introdução foi sintetizada algorítmica e dinamicamente. Treine compasso a compasso.',
+        culturalContext: 'Síntese computacional baseada nas regras consagradas da escola paulista e mineira de viola caipira.'
+      };
+    }
+    var found = PAGODE_INTRO_CATALOG.find(function (item) { return item.id === state.pagode.selectedCatalogId; });
+    return found || PAGODE_INTRO_CATALOG[0];
+  }
+
+  function playPagodeSound(note) {
+    initAudio();
+    if (!audioCtx) return;
+    var now = audioCtx.currentTime;
+
+    if (note.par === 0 || note.technique === 'rasqueado' || note.technique === 'repiquena' || note.technique === 'abafado') {
+      // Síntese percussiva / rasqueado de viola no tampo
+      var noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.12, audioCtx.sampleRate);
+      var output = noiseBuffer.getChannelData(0);
+      for (var i = 0; i < noiseBuffer.length; i++) {
+        output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.03));
+      }
+      var whiteNoise = audioCtx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+      var filter = audioCtx.createBiquadFilter();
+      filter.type = (note.technique === 'abafado') ? 'lowpass' : 'bandpass';
+      filter.frequency.setValueAtTime((note.technique === 'repiquena') ? 2400 : 1200, now);
+      filter.Q.setValueAtTime(3, now);
+
+      var pGain = audioCtx.createGain();
+      var peakVol = (note.dynamic === 'ff') ? 0.9 : ((note.dynamic === 'p') ? 0.3 : 0.6);
+      pGain.gain.setValueAtTime(peakVol * (state.volume / 100), now);
+      pGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+      whiteNoise.connect(filter);
+      filter.connect(pGain);
+      pGain.connect(masterGain);
+      whiteNoise.start(now);
+      whiteNoise.stop(now + 0.13);
+
+      // Ressonância de caixa de madeira
+      var bodyOsc = audioCtx.createOscillator();
+      var bodyGain = audioCtx.createGain();
+      bodyOsc.type = 'triangle';
+      bodyOsc.frequency.setValueAtTime(160, now);
+      bodyGain.gain.setValueAtTime(peakVol * 0.7 * (state.volume / 100), now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      bodyOsc.connect(bodyGain);
+      bodyGain.connect(masterGain);
+      bodyOsc.start(now);
+      bodyOsc.stop(now + 0.11);
+      return;
+    }
+
+    // Frequência base calculada da afinação do par
+    var pairFreqs = [329.63, 246.94, 196.00, 164.81, 123.47]; // Cebolão em Mi aproximado: E4, B3, G#3, E3, B2
+    var baseF = pairFreqs[Math.min(note.par - 1, 4)] || 329.63;
+    var freq = baseF * Math.pow(2, note.fret / 12);
+
+    // Síntese de par duplo encordoado (duas cordas com micro desafinação de coro)
+    var osc1 = audioCtx.createOscillator();
+    var osc2 = audioCtx.createOscillator();
+    var noteGain = audioCtx.createGain();
+
+    osc1.type = 'sawtooth';
+    osc2.type = 'triangle';
+
+    osc1.frequency.setValueAtTime(freq, now);
+    osc2.frequency.setValueAtTime(freq * 1.002, now); // micro-detune para brilho de par duplo de aço
+
+    var volScale = (note.dynamic === 'ff') ? 0.85 : ((note.dynamic === 'f') ? 0.7 : ((note.dynamic === 'p') ? 0.3 : 0.5));
+    var vol = volScale * (state.volume / 100);
+    var duration = Math.max(0.18, (note.dur || 0.25) * (60 / Math.max(40, state.bpm)));
+
+    noteGain.gain.setValueAtTime(0.001, now);
+    noteGain.gain.linearRampToValueAtTime(vol, now + 0.015);
+    noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    // Filtro para simular timbre metálico de cordas de aço Rostan/D'Addario
+    var toneFilter = audioCtx.createBiquadFilter();
+    toneFilter.type = 'lowpass';
+    toneFilter.frequency.setValueAtTime(4500, now);
+
+    osc1.connect(toneFilter);
+    osc2.connect(toneFilter);
+    toneFilter.connect(noteGain);
+    noteGain.connect(masterGain);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + duration + 0.02);
+    osc2.stop(now + duration + 0.02);
+  }
+
+  function stopPagodeAudio() {
+    state.pagode.isPlaying = false;
+    state.pagode.activeNoteIndex = -1;
+    if (pagodePlaybackTimer) {
+      clearInterval(pagodePlaybackTimer);
+      pagodePlaybackTimer = null;
+    }
+    activePagodeTimers.forEach(function (t) { clearTimeout(t); });
+    activePagodeTimers = [];
+    renderPagodeTimeline();
+    renderFretboardSVG();
+    var playBtn = document.getElementById('btn-pagode-play');
+    if (playBtn) playBtn.innerHTML = '▶ Reproduzir Introdução';
+  }
+
+  function startPagodePlayback() {
+    stopPagodeAudio();
+    var notes = getCurrentPagodeNotes();
+    if (!notes || notes.length === 0) return;
+
+    var curBpm = state.pagode.ladderActive ? state.pagode.ladderCurrentBpm : (state.bpm || 120);
+    var secPerBeat = 60 / curBpm;
+    var totalDurationSec = 4 * secPerBeat; // 4 tempos
+
+    state.pagode.isPlaying = true;
+    var playBtn = document.getElementById('btn-pagode-play');
+    if (playBtn) playBtn.innerHTML = '⏹ Parar Reprodução';
+
+    var schedulePass = function () {
+      notes.forEach(function (n, idx) {
+        var noteDelayMs = n.time * secPerBeat * 1000;
+        var tId = setTimeout(function () {
+          if (!state.pagode.isPlaying) return;
+          state.pagode.activeNoteIndex = idx;
+          playPagodeSound(n);
+          renderPagodeTimeline();
+          renderFretboardSVG();
+        }, noteDelayMs);
+        activePagodeTimers.push(tId);
+      });
+
+      var loopDelayMs = totalDurationSec * 1000;
+      var endId = setTimeout(function () {
+        if (!state.pagode.isPlaying) return;
+        state.pagode.activeNoteIndex = -1;
+
+        if (state.pagode.ladderActive) {
+          state.pagode.ladderCurrentRep++;
+          if (state.pagode.ladderCurrentRep > state.pagode.ladderRepsPerStep) {
+            state.pagode.ladderCurrentRep = 1;
+            if (state.pagode.ladderCurrentBpm < state.pagode.ladderTargetBpm) {
+              state.pagode.ladderCurrentBpm = Math.min(state.pagode.ladderTargetBpm, state.pagode.ladderCurrentBpm + state.pagode.ladderStepBpm);
+            }
+          }
+          renderPagodeSection();
+        }
+
+        if (state.pagode.loop) {
+          activePagodeTimers = [];
+          schedulePass();
+        } else {
+          stopPagodeAudio();
+        }
+      }, loopDelayMs);
+      activePagodeTimers.push(endId);
+    };
+
+    schedulePass();
+  }
+
+  function togglePagodePlayback() {
+    if (state.pagode.isPlaying) {
+      stopPagodeAudio();
+    } else {
+      startPagodePlayback();
+    }
+  }
+
+  function exportPagodeToTabEditor() {
+    var notes = getCurrentPagodeNotes();
+    var meta = getCurrentPagodeMetadata();
+    if (!notes || notes.length === 0) return;
+
+    state.notes = [];
+    var curBpm = state.pagode.ladderActive ? state.pagode.ladderCurrentBpm : (state.bpm || 120);
+    var secPerBeat = 60 / curBpm;
+
+    notes.forEach(function (n, i) {
+      if (n.par > 0) {
+        state.notes.push({
+          id: Date.now() + i,
+          string: n.par - 1, // 0-based corda
+          fret: n.fret,
+          time: n.time * secPerBeat,
+          duration: n.dur * secPerBeat,
+          velocity: (n.dynamic === 'ff') ? 1.0 : ((n.dynamic === 'f') ? 0.8 : 0.6)
+        });
+      }
+    });
+
+    state.activeMode = 'tab';
+    syncControlValues();
+    renderAll();
+    var tabSec = document.getElementById('viola-tab-editor-container');
+    if (tabSec) {
+      tabSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    showToast('Introdução "' + meta.title + '" importada com sucesso para o Editor de Tablaturas!');
+  }
+
+  function copyPagodeTabAscii() {
+    var notes = getCurrentPagodeNotes();
+    var meta = getCurrentPagodeMetadata();
+    var lines = [
+      '1º par (e) |' + new Array(17).fill('-').join('') + '|',
+      '2º par (B) |' + new Array(17).fill('-').join('') + '|',
+      '3º par (G#)|' + new Array(17).fill('-').join('') + '|',
+      '4º par (E) |' + new Array(17).fill('-').join('') + '|',
+      '5º par (B) |' + new Array(17).fill('-').join('') + '|'
+    ];
+
+    var stringRows = [
+      lines[0].split(''),
+      lines[1].split(''),
+      lines[2].split(''),
+      lines[3].split(''),
+      lines[4].split('')
+    ];
+
+    notes.forEach(function (n, idx) {
+      var col = 13 + (idx * 2);
+      if (n.par > 0 && n.par <= 5) {
+        var row = n.par - 1;
+        var fStr = String(n.fret);
+        if (col < stringRows[row].length) {
+          stringRows[row][col] = fStr.charAt(0);
+          if (fStr.length > 1 && col + 1 < stringRows[row].length) {
+            stringRows[row][col + 1] = fStr.charAt(1);
+          }
+        }
+      }
+    });
+
+    var asciiOutput = [
+      '# ========================================================',
+      '# INTRODUÇÃO DE PAGODE DE VIOLA: ' + meta.title.toUpperCase(),
+      '# Artista/Mestre: ' + meta.artist + ' (' + meta.year + ')',
+      '# Afinação: ' + meta.tuning + ' | Tom: ' + meta.tonality + ' | BPM: ' + (state.pagode.ladderActive ? state.pagode.ladderCurrentBpm : meta.baseBpm),
+      '# Nexus Vault - Aba 3 (Viola Caipira & Violão)',
+      '# ========================================================',
+      '',
+      stringRows[0].join(''),
+      stringRows[1].join(''),
+      stringRows[2].join(''),
+      stringRows[3].join(''),
+      stringRows[4].join(''),
+      '',
+      'Dicas Técnicas: ' + meta.teachingTips,
+      'Contexto Histórico: ' + meta.culturalContext
+    ].join('\n');
+
+    navigator.clipboard.writeText(asciiOutput).then(function () {
+      showToast('Tablatura ASCII copiada para a área de transferência!');
+    }).catch(function () {
+      showToast('Falha ao copiar tablatura ASCII.');
+    });
+  }
+
+  function copyPagodeTechnicalAnalysis() {
+    var meta = getCurrentPagodeMetadata();
+    var notes = getCurrentPagodeNotes();
+    var summary = [
+      'RELATÓRIO MUSICOLÓGICO: ' + meta.title,
+      '------------------------------------------------------------',
+      'Tom: ' + meta.tonality + ' | Afinação: ' + meta.tuning,
+      'Dificuldade: ' + meta.difficulty + ' | Ritmo: ' + meta.rhythm,
+      'BPM Canônico: ' + meta.baseBpm + ' | Compassos: ' + meta.measureCount,
+      'Número de Eventos / Golpes: ' + notes.length,
+      '',
+      'Descrição Musicológica:',
+      meta.description,
+      '',
+      'Orientações Pedagógicas para Mão Direita e Esquerda:',
+      meta.teachingTips,
+      '',
+      'Relevância Cultural e Histórica:',
+      meta.culturalContext,
+      '',
+      'Nexus Vault - Módulo de Introduções em Pagode de Viola (Fase 18)'
+    ].join('\n');
+
+    navigator.clipboard.writeText(summary).then(function () {
+      showToast('Análise técnica copiada com sucesso!');
+    }).catch(function () {
+      showToast('Falha ao copiar análise técnica.');
+    });
+  }
+
+  function renderPagodeTimeline() {
+    var timelineContainer = document.getElementById('viola-pagode-timeline');
+    if (!timelineContainer) return;
+    var notes = getCurrentPagodeNotes();
+    var activeIdx = state.pagode.activeNoteIndex;
+
+    var html = '<div class="grid grid-cols-4 sm:grid-cols-8 md:grid-cols-16 gap-1.5 p-3 bg-slate-900/90 rounded-lg border border-amber-900/40">';
+    notes.forEach(function (n, idx) {
+      var isActive = (idx === activeIdx);
+      var techBadge = '';
+      if (n.technique === 'rasqueado') techBadge = 'bg-amber-600 text-white';
+      else if (n.technique === 'repiquena') techBadge = 'bg-rose-600 text-white';
+      else if (n.technique === 'abafado') techBadge = 'bg-slate-700 text-slate-300';
+      else if (n.technique === 'dueto') techBadge = 'bg-cyan-600 text-white';
+      else if (n.technique === 'ligado') techBadge = 'bg-emerald-600 text-white';
+      else techBadge = 'bg-amber-950 text-amber-300';
+
+      var borderClass = isActive ? 'border-2 border-amber-400 bg-amber-500/20 shadow-lg shadow-amber-500/30 scale-105 transition-all' : 'border border-slate-800 hover:border-slate-700';
+      var parDisplay = n.par > 0 ? (n.par + 'º par') : 'Tampo';
+      var casaDisplay = n.par > 0 ? ('C.' + n.fret) : 'Perc.';
+
+      html += '<div class="flex flex-col items-center justify-between p-2 rounded text-center cursor-pointer ' + borderClass + '" onclick="window.NexusViola.previewPagodeNote(' + idx + ')">';
+      html += '<span class="text-[9px] font-mono text-slate-400">#' + (idx + 1) + '</span>';
+      html += '<span class="text-xs font-bold text-amber-200 mt-0.5">' + parDisplay + '</span>';
+      html += '<span class="text-[13px] font-mono font-extrabold text-amber-400">' + casaDisplay + '</span>';
+      html += '<span class="text-[9px] px-1 py-0.5 rounded mt-1 ' + techBadge + '">' + n.technique + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    timelineContainer.innerHTML = html;
+  }
+
+  function renderPagodeSection() {
+    var container = document.getElementById('viola-pagode-container');
+    if (!container) return;
+
+    var meta = getCurrentPagodeMetadata();
+    var curBpm = state.pagode.ladderActive ? state.pagode.ladderCurrentBpm : (state.bpm || 120);
+
+    var catalogOptions = PAGODE_INTRO_CATALOG.map(function (item) {
+      var sel = (item.id === state.pagode.selectedCatalogId) ? 'selected' : '';
+      return '<option value="' + item.id + '" ' + sel + '>' + item.title + ' (' + item.artist + ' - ' + item.year + ')</option>';
+    }).join('');
+    var procSel = (state.pagode.selectedCatalogId === 'procedural') ? 'selected' : '';
+    catalogOptions += '<option value="procedural" ' + procSel + '>⚡ Gerador Algorítmico Procedural (Criar Nova)</option>';
+
+    var styleOptions = PROCEDURAL_PAGODE_STYLES.map(function (st) {
+      var sel = (st.id === state.pagode.activeStyle) ? 'selected' : '';
+      return '<option value="' + st.id + '" ' + sel + '>' + st.name + '</option>';
+    }).join('');
+
+    var tonalityOptions = ['E', 'A', 'B7'].map(function (ton) {
+      var sel = (ton === state.pagode.targetTonality) ? 'selected' : '';
+      return '<option value="' + ton + '" ' + sel + '>' + ton + ' (' + (ton === 'E' ? 'Padrão Cebolão' : (ton === 'A' ? 'Subdominante' : 'Dominante B7')) + ')</option>';
+    }).join('');
+
+    var isProcedural = (state.pagode.selectedCatalogId === 'procedural');
+
+    var html = '' +
+      '<div class="bg-gradient-to-br from-slate-900 via-amber-950/20 to-slate-900 border border-amber-800/40 rounded-xl p-5 shadow-2xl space-y-5">' +
+        '<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-amber-900/40 pb-4">' +
+          '<div>' +
+            '<div class="flex items-center gap-2">' +
+              '<span class="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30">Fase 18 • Tião Carreiro Edition</span>' +
+              '<span class="text-xs text-slate-400">Afinação ' + meta.tuning + '</span>' +
+            '</div>' +
+            '<h3 class="text-xl font-bold text-amber-200 mt-1 flex items-center gap-2">' +
+              '<span>🪕 ' + meta.title + '</span>' +
+              '<span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-normal">' + meta.difficulty + '</span>' +
+            '</h3>' +
+            '<p class="text-xs text-slate-400 mt-0.5">' + meta.artist + ' (' + meta.year + ') • Tom: <strong class="text-amber-300">' + meta.tonality + '</strong> • Ritmo: ' + meta.rhythm + '</p>' +
+          '</div>' +
+
+          '<div class="flex flex-wrap items-center gap-2">' +
+            '<button id="btn-pagode-play" onclick="window.NexusViola.togglePagodePlayback()" class="px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-900 font-bold rounded-lg shadow-md hover:shadow-amber-500/20 transition-all text-xs flex items-center gap-2">' +
+              (state.pagode.isPlaying ? '⏹ Parar Reprodução' : '▶ Reproduzir Introdução') +
+            '</button>' +
+            '<button onclick="window.NexusViola.exportPagodeToTabEditor()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-amber-900/50 rounded-lg text-xs transition-all flex items-center gap-1.5" title="Abrir esta introdução no Editor de Tablaturas">' +
+              '🎼 Exportar p/ Tab' +
+            '</button>' +
+            '<button onclick="window.NexusViola.copyPagodeTabAscii()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs transition-all flex items-center gap-1.5" title="Copiar Tablatura ASCII">' +
+              '📋 Copiar ASCII' +
+            '</button>' +
+            '<button onclick="window.NexusViola.copyPagodeTechnicalAnalysis()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs transition-all flex items-center gap-1.5" title="Copiar análise musicológica completa">' +
+              '📖 Análise' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="grid grid-cols-1 md:grid-cols-3 gap-3 p-3.5 bg-slate-950/60 rounded-lg border border-amber-900/30 text-xs">' +
+          '<div>' +
+            '<label class="block text-slate-400 font-semibold mb-1">Selecione a Introdução Clássica:</label>' +
+            '<select id="select-pagode-catalog" onchange="window.NexusViola.changePagodeCatalog(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-amber-200 focus:border-amber-500 focus:outline-none">' +
+              catalogOptions +
+            '</select>' +
+          '</div>' +
+
+          (isProcedural ?
+            '<div>' +
+              '<label class="block text-slate-400 font-semibold mb-1">Estilo / Escola Procedural:</label>' +
+              '<select id="select-pagode-style" onchange="window.NexusViola.changePagodeStyle(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-amber-200 focus:border-amber-500">' +
+                styleOptions +
+              '</select>' +
+            '</div>' +
+            '<div>' +
+              '<label class="block text-slate-400 font-semibold mb-1">Tonalidade Alvo:</label>' +
+              '<select id="select-pagode-tonality" onchange="window.NexusViola.changePagodeTonality(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-amber-200 focus:border-amber-500">' +
+                tonalityOptions +
+              '</select>' +
+            '</div>'
+          :
+            '<div class="md:col-span-2 flex items-center text-slate-300 italic bg-amber-950/30 p-2.5 rounded border border-amber-900/40">' +
+              '<span>' + meta.description + '</span>' +
+            '</div>'
+          ) +
+        '</div>' +
+
+        // Speed Ladder Trainer Box
+        '<div class="p-3.5 bg-amber-950/20 border border-amber-800/40 rounded-lg space-y-2.5">' +
+          '<div class="flex flex-wrap items-center justify-between gap-2">' +
+            '<div class="flex items-center gap-2">' +
+              '<input type="checkbox" id="chk-pagode-ladder" ' + (state.pagode.ladderActive ? 'checked' : '') + ' onchange="window.NexusViola.togglePagodeLadder(this.checked)" class="rounded text-amber-500 focus:ring-amber-400 h-4 w-4 bg-slate-900 border-slate-700">' +
+              '<label for="chk-pagode-ladder" class="text-xs font-bold text-amber-300 cursor-pointer">🪜 Ativar Speed Ladder (Treinador de Velocidade Progressiva)</label>' +
+            '</div>' +
+            '<div class="text-xs font-mono text-amber-400">' +
+              'BPM Atual: <strong class="text-white text-sm">' + curBpm + '</strong> ' +
+              (state.pagode.ladderActive ? ('(Passo ' + state.pagode.ladderCurrentRep + '/' + state.pagode.ladderRepsPerStep + ')') : '') +
+            '</div>' +
+          '</div>' +
+
+          (state.pagode.ladderActive ?
+            '<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px]">' +
+              '<div class="bg-slate-900/80 p-2 rounded border border-slate-800">' +
+                '<span class="text-slate-400 block">BPM Inicial:</span>' +
+                '<input type="number" min="50" max="180" step="5" value="' + state.pagode.ladderStartBpm + '" onchange="window.NexusViola.updateLadderParam(\'ladderStartBpm\', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300">' +
+              '</div>' +
+              '<div class="bg-slate-900/80 p-2 rounded border border-slate-800">' +
+                '<span class="text-slate-400 block">BPM Alvo:</span>' +
+                '<input type="number" min="60" max="220" step="5" value="' + state.pagode.ladderTargetBpm + '" onchange="window.NexusViola.updateLadderParam(\'ladderTargetBpm\', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300">' +
+              '</div>' +
+              '<div class="bg-slate-900/80 p-2 rounded border border-slate-800">' +
+                '<span class="text-slate-400 block">Incremento (BPM):</span>' +
+                '<input type="number" min="1" max="20" step="1" value="' + state.pagode.ladderStepBpm + '" onchange="window.NexusViola.updateLadderParam(\'ladderStepBpm\', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300">' +
+              '</div>' +
+              '<div class="bg-slate-900/80 p-2 rounded border border-slate-800">' +
+                '<span class="text-slate-400 block">Repetições/Passo:</span>' +
+                '<input type="number" min="1" max="8" step="1" value="' + state.pagode.ladderRepsPerStep + '" onchange="window.NexusViola.updateLadderParam(\'ladderRepsPerStep\', this.value)" class="w-full bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-amber-300">' +
+              '</div>' +
+            '</div>'
+          : '') +
+        '</div>' +
+
+        // Timeline de Notas Interativa
+        '<div class="space-y-1.5">' +
+          '<div class="flex items-center justify-between text-xs">' +
+            '<span class="text-slate-400 font-semibold">Linha do Tempo de Execução (Clique em qualquer nota para ouvi-la):</span>' +
+            '<span class="text-[11px] text-amber-400/80">4 Tempos (1 Compasso Canônico de Pagode)</span>' +
+          '</div>' +
+          '<div id="viola-pagode-timeline"></div>' +
+        '</div>' +
+
+        // Box de Dicas Pedagógicas e Culturais
+        '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs text-slate-300">' +
+          '<div class="p-3 bg-slate-950/70 rounded-lg border border-slate-800">' +
+            '<span class="font-bold text-amber-400 block mb-1">💡 Dicas Pedagógicas de Execução:</span>' +
+            '<p class="leading-relaxed text-slate-300">' + meta.teachingTips + '</p>' +
+          '</div>' +
+          '<div class="p-3 bg-slate-950/70 rounded-lg border border-slate-800">' +
+            '<span class="font-bold text-amber-400 block mb-1">📜 Tradição e Contexto Cultural:</span>' +
+            '<p class="leading-relaxed text-slate-300">' + meta.culturalContext + '</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    container.innerHTML = html;
+    renderPagodeTimeline();
+  }
+
+  // Registro público para eventos do DOM (Fase 18)
+  window.NexusViola = window.NexusViola || {};
+  window.NexusViola.togglePagodePlayback = togglePagodePlayback;
+  window.NexusViola.startPagodePlayback = startPagodePlayback;
+  window.NexusViola.stopPagodeAudio = stopPagodeAudio;
+  window.NexusViola.exportPagodeToTabEditor = exportPagodeToTabEditor;
+  window.NexusViola.copyPagodeTabAscii = copyPagodeTabAscii;
+  window.NexusViola.copyPagodeTechnicalAnalysis = copyPagodeTechnicalAnalysis;
+  window.NexusViola.changePagodeCatalog = function (val) {
+    state.pagode.selectedCatalogId = val;
+    stopPagodeAudio();
+    saveViolaState();
+    renderPagodeSection();
+    renderFretboardSVG();
+  };
+  window.NexusViola.changePagodeStyle = function (val) {
+    state.pagode.activeStyle = val;
+    state.pagode.customIntroNotes = null;
+    stopPagodeAudio();
+    saveViolaState();
+    renderPagodeSection();
+    renderFretboardSVG();
+  };
+  window.NexusViola.changePagodeTonality = function (val) {
+    state.pagode.targetTonality = val;
+    state.pagode.customIntroNotes = null;
+    stopPagodeAudio();
+    saveViolaState();
+    renderPagodeSection();
+    renderFretboardSVG();
+  };
+  window.NexusViola.togglePagodeLadder = function (chk) {
+    state.pagode.ladderActive = !!chk;
+    if (state.pagode.ladderActive) {
+      state.pagode.ladderCurrentBpm = state.pagode.ladderStartBpm;
+      state.pagode.ladderCurrentRep = 1;
+    }
+    saveViolaState();
+    renderPagodeSection();
+  };
+  window.NexusViola.updateLadderParam = function (param, val) {
+    var num = parseInt(val, 10);
+    if (!isNaN(num) && num > 0) {
+      state.pagode[param] = num;
+      if (param === 'ladderStartBpm' && !state.pagode.isPlaying) {
+        state.pagode.ladderCurrentBpm = num;
+      }
+      saveViolaState();
+      renderPagodeSection();
+    }
+  };
+  window.NexusViola.previewPagodeNote = function (idx) {
+    var notes = getCurrentPagodeNotes();
+    if (notes && notes[idx]) {
+      state.pagode.activeNoteIndex = idx;
+      playPagodeSound(notes[idx]);
+      renderPagodeTimeline();
+      renderFretboardSVG();
+    }
+  };
+
+
     // =========================================================================
     let tunerOsc = null;
     let tunerGain = null;
@@ -20049,6 +21013,25 @@ function bindSolfegeEvents() {
                             strokeWidth: node.strokeWidth,
                             opacity: '0.95'
                         });
+                if (state.activeMode === 'pagode') {
+                    var pNotes = getCurrentPagodeNotes();
+                    var pActiveIdx = state.pagode.activeNoteIndex;
+                    pNotes.forEach(function (pn, pidx) {
+                        if (pn.par > 0 && pn.par <= currentInstrument.courses.length) {
+                            var isCurrent = (pidx === pActiveIdx);
+                            activeMarkers.push({
+                                courseIdx: pn.par - 1,
+                                fret: pn.fret,
+                                label: pn.label || (pn.par + 'P'),
+                                sub: isCurrent ? 'TOCANDO' : ('#' + (pidx + 1)),
+                                color: isCurrent ? '#fbbf24' : '#d97706',
+                                stroke: isCurrent ? '#ffffff' : '#78350f',
+                                strokeWidth: isCurrent ? 3.5 : 1.5,
+                                opacity: isCurrent ? '1.0' : '0.85'
+                            });
+                        }
+                    });
+                }
                     });
                 });
 
@@ -20239,6 +21222,8 @@ function bindSolfegeEvents() {
 
                 if (state.displayMode === 'SOLFEGE') {
                     handleFretboardSolfegeClick(cIdx, f);
+                } else if (state.activeMode === 'pagode') {
+                    playPagodeSound({ par: cIdx + 1, fret: f, dur: 0.5, dynamic: 'f' });
                 } else if (state.displayMode === 'REVERSE') {
                     const arr = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
                     arr[cIdx] = arr[cIdx] === f ? -1 : f;
@@ -20826,7 +21811,13 @@ function bindSolfegeEvents() {
                 state.tonewood = Object.assign({}, DEFAULT_TONEWOOD_STATE);
             }
 
-            if (saved.solfege && typeof saved.solfege === 'object') {
+            if (saved.solfeg
+            if (saved.pagode && typeof saved.pagode === 'object') {
+                state.pagode = Object.assign({}, DEFAULT_PAGODE_STATE, saved.pagode, {
+                    isPlaying: false,
+                    activeNoteIndex: -1
+                });
+            }e && typeof saved.solfege === 'object') {
                 state.solfege = Object.assign({}, DEFAULT_SOLFEGE_STATE, saved.solfege, {
                     dictationPlaying: false,
                     dictationStepIdx: -1,
@@ -20867,7 +21858,13 @@ function bindSolfegeEvents() {
                 intervalRevealed: false,
                 intervalSelectedOption: null,
                 intervalIsCorrect: null
+            }
+        if (copy.pagode) {
+            copy.pagode = Object.assign({}, copy.pagode, {
+                isPlaying: false,
+                activeNoteIndex: -1
             });
+        });
         }
         if (copy.modalTrainer) {
             copy.modalTrainer = Object.assign({}, copy.modalTrainer, {
@@ -21001,6 +21998,10 @@ function bindSolfegeEvents() {
                             <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
                             <span>Solfejo &amp; Ditado (Fase 17)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-pagode" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="music-2" class="w-4 h-4 text-amber-400"></i>
+                            <span>Introdu&ccedil;&otilde;es Pagode</span>
+                        </button>
                     </div>
                 </div>
 
@@ -21040,7 +22041,7 @@ function bindSolfegeEvents() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button> <button type="button" id="btn-viola-mode-pagode" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Pagode de Viola</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -21228,6 +22229,7 @@ function bindSolfegeEvents() {
                 <div id="viola-tonewood-container" class="space-y-4"></div>
                 <!-- Treinador de Solfejo & Ditado Melodico Caipira (Fase 17) -->
                 <div id="viola-solfege-container" class="space-y-4"></div>
+            <div id="viola-pagode-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -21400,7 +22402,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-mic', mode: 'MIC', activeClass: 'bg-red-600 text-white shadow' },
             { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', activeClass: 'bg-indigo-600 text-white shadow' },
             { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', activeClass: 'bg-amber-600 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', activeClass: 'bg-amber-600 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', activeClass: 'bg-amber-600 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -21441,6 +22444,7 @@ function bindSolfegeEvents() {
         stopPolyphonicAudio();
         stopTonewoodAudio();
         stopSolfegeAudio();
+        stopPagodeAudio();
     }
 
     function bindEvents() {
@@ -21534,7 +22538,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' },
             { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' },
             { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' },
-            { id: 'btn-viola-scroll-solfege', targetId: 'viola-solfege-container' }
+            { id: 'btn-viola-scroll-solfege', targetId: 'viola-solfege-container' },
+            { id: 'btn-viola-scroll-pagode', targetId: 'viola-pagode-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -21567,7 +22572,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' },
             { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' },
             { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' },
-            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', scrollTarget: 'viola-solfege-container' }
+            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', scrollTarget: 'viola-solfege-container' },
+            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', scrollTarget: 'viola-pagode-container' }
         ];
 
         modeList.forEach((item) => {
@@ -21854,6 +22860,7 @@ function bindSolfegeEvents() {
         renderPolyphonySection();
         renderTonewoodSection();
         renderSolfegeSection();
+        renderPagodeSection();
         renderMetronomeControls();
     }
 

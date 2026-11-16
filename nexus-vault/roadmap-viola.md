@@ -4,13 +4,14 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 18 — Gerador de Introduções Clássicas em Pagode de Viola
+## 🎯 Projeto Prioritário Atual: Fase 19 — Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Motor algorítmico e banco canônico de introduções de pagode caipira com digitações em semicolcheias sincopadas, repiques de mão direita (p, i, m, a) e batidas secas no tampo [TAP].
-  2. Mapeamento passo a passo no braço SVG (Canhoto/Destro) com indicação visual de digitações de mão esquerda nas primeiras posições e pestanas altas do estradão.
-  3. Sintetizador rítmico Web Audio API com controle de andamento progressivo (60 a 140 BPM), modo looping de treino de velocidade e exportação em 1 clique para o Editor de Tablaturas.
+  1. Visualizador circular estroboscópico com padrões de anéis estroboscópicos concêntricos giratórios para afinação milicêntrica (precisão de ±0.1 cent) em Web Audio API e Canvas 2D.
+  2. Análise espectral por FFT dos primeiros 8 harmônicos superiores de cada par de cordas da viola caipira e violão, diagnosticando inarmonicidade e pureza timbrística.
+  3. Módulo de entonação e compensação de rastilho e pestana: guia gráfico interativo para ajuste de compensação milimétrica de afinação nas casas 12 e 19 para canhotos e destros.
+
 ---
 
 ## 📋 Backlog de Inovações Futuras (Projetos Proativos)
@@ -47,7 +48,7 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Física e propriedades acústicas de tampos (Spruce/Abeto, Cedro Canadense, Pinho Brasileiro/Araucária, Engelmann) e fundos/laterais (Jacarandá da Bahia, Caviúna Paulista, Mogno, Imbuia, Maple). Simulação gráfica interativa de padrões nodais de Chladni com 1400 partículas em Canvas 2D, síntese Web Audio API (Tap Tone, Arpejo Cebolão, Rasqueado e Comparador A/B), laudo lutherístico com 4 medidores analíticos e integração com o braço SVG virtual no modo `displayMode: 'TONEWOOD'` com nós harmônicos naturais.
 15. **[x] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17 Concluída):**
     - Percepção intervalar das modas de viola e treino auditivo de intervalos típicos (terças maiores/menores, sextas caipiras, quartas aumentadas de folia, quintas de bordão e oitavas). Síntese vocal de solfejo com formantes acústicos (F1/F2) e vibrato natural caipira, estúdio de ditado melódico com 10 clássicos (Chico Mineiro, Menino da Porteira, Pagode em Brasília, etc.) e gerador procedural. Entrada dupla interativa via braço virtual SVG e teclado de solfejo de 12 notas, gamificação com 4 patentes de violeiro (Iniciante da Roça até Mestre Tião Carreiro) e persistência total no Vault.
-16. **[ ] Gerador de Introduções Clássicas em Pagode de Viola (Fase 18):**
+16. **[x] Gerador de Introduções Clássicas em Pagode de Viola (Fase 18 Concluída):**
     - Motor algorítmico de licks em semicolcheias com repique, contratempos e batidas de tampo.
 17. **[ ] Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (Fase 19):**
     - Visualizador circular estroboscópico para entonação de escala e compensação de rastilho.
@@ -55,6 +56,40 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **16/11/2026 — Sessão 18** (Fase 18 Concluída):
+  - **Gerador de Introduções Clássicas em Pagode de Viola (Tião Carreiro & Masters Pagode Intro Studio)**:
+    - **Catálogo Canônico de 8 Introduções Históricas (`PAGODE_INTRO_CATALOG`)**:
+      - *Pagode em Brasília (1960 — Tião Carreiro & Pardinho)*: A matriz do pagode de viola em Cebolão em Mi; ataque incisivo no 1º e 2º pares, rasqueado sincopado e repiques estalados no tampo.
+      - *A Vaca Já Foi pro Brejo (1983 — Tião Carreiro & Pardinho)*: Ponteio ágil em terças cromáticas e resposta sincopada no bordão.
+      - *Chora Viola (1966 — Tião Carreiro & Pardinho)*: Duetos de décimas e oitavas agudas intercaladas com repiques rápidos de polegar.
+      - *Carreiro Marvado (1968 — Tião Carreiro & Pardinho)*: Passagem cromática preparando a dominante Si com Sétima (B7) para resolver no acorde Mi Maior.
+      - *Cabelo Loiro (1961 — Tião Carreiro & Pardinho)*: Introdução melódica de grande clareza e ritmo marcante na subdominante Lá Maior (A), ideal para quem inicia no pagode.
+      - *Pretinho Aleijado (1964 — Tião Carreiro & Pardinho)*: Introdução em staccato enérgico com ponteio entre o 1º e 3º pares, transmitindo pungência dramática.
+      - *Amargurado (1973 — Tião Carreiro & Dino Franco)*: Introdução cadenciada de pagode lento/toada com arpejos aveludados e fraseado lírico.
+      - *Oi Paixão (1970 — Tião Carreiro & Pardinho)*: Ponteio vertiginoso com palhetada/unhada dupla e síncopes explosivas no 1º par e no tampo.
+    - **Motor Algorítmico e Sintetizador Procedural (`generateProceduralPagodeIntro`)**:
+      - 5 estilos e escolas de geração em tempo real: *Tradicional (Tião Carreiro)*, *Moderno / Universitário*, *Serrano / Cururu*, *Vertiginoso (Ataque Triplo)* e *Lírico / Sentimental*.
+      - Suporte de transposição tonal paramétrica imediata (Mi Padrão, Lá Subdominante, Si com Sétima Dominante B7).
+    - **Treinador de Velocidade Progressiva (Speed Ladder Trainer)**:
+      - Engine de automação de BPM progressivo: configuração de BPM inicial (50-180), BPM alvo (60-220), incremento por passo e repetições por passo.
+      - Aceleração gradual automatizada a cada ciclo executado, promovendo ganho neurocognitivo e memória motora precisa da mão direita e esquerda.
+    - **Síntese Web Audio Multi-Timbral**:
+      - Modelagem física de cordas duplas de aço encordoadas com micro-detuning de coro brilhante e resposta percussiva de batida e estalo no tampo de madeira ressonante com biquad filters.
+    - **Linha do Tempo Visual e Interativa (`viola-pagode-timeline`)**:
+      - Visualização passo a passo das 16 subdivisões do compasso canônico com badges táteis de técnica (*Puxado*, *Dedilhado*, *Ligado*, *Dueto*, *Rasqueado*, *Abafado*, *Repique no Tampo*).
+      - Escuta e pré-visualização individual de qualquer nota ao clicar em sua célula.
+    - **Integração Bidirecional com o Braço SVG Virtual (Canhoto & Destro)**:
+      - Modo `🪕 Pagode de Viola` (`displayMode: 'PAGODE'`): projeção em tempo real de todas as posições da digitação no braço da viola, destacando a nota em execução com pulso luminoso âmbar/dourado (`#fbbf24`).
+      - Suporte total aos modos Canhoto e Destro com cálculo trigonométrico exato de coordenadas de escala.
+      - Escuta interativa: clique nas casas do braço virtual para soar a nota da viola no modo Pagode.
+    - **Exportação Multiformato em 1 Clique**:
+      - *Exportar p/ Tab*: clona a introdução inteira para o Editor de Tablaturas da Aba 3 para edição, modificação ou impressão.
+      - *Copiar ASCII*: gera tablatura em texto formatado com afinação, notas e orientações pedagógicas para a área de transferência.
+      - *Copiar Análise*: relatório musicológico completo pronto para estudo.
+    - **Persistência de Estado & Sincronização LocalStorage**:
+      - Integração nativa com `loadViolaState()` e `saveViolaState()` via `VaultCore`.
+
 
 - **15/11/2026 — Sessão 17** (Fase 17 Concluída):
   - **Treinador de Solfejo & Ditado Melódico Caipira (Caipira Solfège, Ear Training & Melodic Dictation Studio)**:
