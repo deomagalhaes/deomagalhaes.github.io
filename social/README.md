@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **16/11/2026** | **A Neurobiologia do Vazio Existencial e da Busca de Sentido** | [social/2026-11-16-vazio-existencial-e-busca-de-sentido.md](2026-11-16-vazio-existencial-e-busca-de-sentido.md) | ✅ Pronto para postar |
 | **15/11/2026** | **A Neurobiologia da Codependência e do Papel de Salvador** | [social/2026-11-15-codependencia-e-papel-de-salvador.md](2026-11-15-codependencia-e-papel-de-salvador.md) | ✅ Pronto para postar |
 | **15/11/2026** | **A Neurobiologia da Culpa do Sobrevivente e das Lealdades Invisíveis** | [social/2026-11-15-culpa-do-sobrevivente-lealdades-invisiveis.md](2026-11-15-culpa-do-sobrevivente-lealdades-invisiveis.md) | ✅ Pronto para postar |
 | **14/11/2026** | **A Neurobiologia da Auto-Sabotagem e do Medo da Serenidade** | [social/2026-11-14-auto-sabotagem-medo-da-serenidade.md](2026-11-14-auto-sabotagem-medo-da-serenidade.md) | ✅ Pronto para postar |

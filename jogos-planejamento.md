@@ -57,6 +57,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 48** | **Matriz de Tolerância ao Bem-Estar e Desarme de Auto-Sabotagem** | Inibição de Alarme do BNST, Coerência Vagal Ventral (0.1 Hz), Desarme de Sabotagem e Soberania do vmPFC | `jogos/jogo-tolerancia-bem-estar-desarme-sabotagem.html` | ✅ **Publicado** |
 | **Dia 49** | **Matriz de Diferenciação do Self e Agência Sistêmica** | Diferenciação do Self (Bowen), Lealdades Invisíveis, Inibição de Iniquidade (dACC) e Soberania do vmPFC | `jogos/jogo-diferenciacao-self-agencia-sistemica.html` | ✅ **Publicado** |
 | **Dia 50** | **Matriz de Individuação Relacional e Desarme do Salvador** | Discriminação Eu-Outro, Inibição da Compulsão por Resgate (dACC/dlPFC) e Calibração de Limites | `jogos/jogo-individuacao-relacional-salvador.html` | ✅ **Publicado** |
+| **Dia 51** | **Matriz de Significado Existencial e Calibração de Valores** | Tomada de Decisão Eudaimônica, Integração de Valores no vmPFC e Logoterapia de Frankl | `jogos/jogo-matriz-significado-valores.html` | ✅ **Publicado** |
 
 ---
 

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Sentido de Vida e Vazio Existencial (EMSV-VE / T-52) – Deo Magalhães</title>
+    <meta name="description" content="Avalie sua coerência de propósito, a presença de vazio existencial e sua força de vontade de sentido com a escala clínica EMSV-VE / T-52.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            font-size: 1.02em;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 680px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.82em;
+            color: #475569;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        .option-label input[type="radio"] {
+            margin-bottom: 6px;
+            accent-color: #005f73;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option-label.selected {
+            background: #e0f2fe;
+            border-color: #0284c7;
+            color: #0369a1;
+            font-weight: 700;
+        }
+
+        .btn-submit-test {
+            background: #005f73;
+            color: #ffffff;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 95, 115, 0.25);
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .result-score-banner {
+            text-align: center;
+            padding: 24px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .result-score-num {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .result-level-title {
+            font-size: 1.35em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dimension-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 680px) {
+            .dimension-scores-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dim-card {
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dim-card h4 {
+            margin: 0 0 6px 0;
+            color: #1e293b;
+            font-size: 0.98em;
+        }
+
+        .dim-progress-track {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0 6px 0;
+        }
+
+        .dim-progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.6s ease;
+        }
+
+        .clinical-notes-card {
+            background: #ffffff;
+            border-left: 4px solid #ee9b00;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .clinical-notes-card h4 {
+            color: #ca6702;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+
+        .action-cta-box {
+            background: linear-gradient(135deg, #005f73 0%, #0a9396 100%);
+            color: #ffffff;
+            padding: 24px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .action-cta-box h3 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+
+        .action-cta-box p {
+            margin: 0 0 18px 0;
+            font-size: 0.95em;
+            color: #e0f2fe;
+        }
+
+        .btn-cta-white {
+            background: #ffffff;
+            color: #005f73;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta-white:hover {
+            background: #ee9b00;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala Multidimensional de Sentido de Vida, Vazio Existencial e Vontade de Sentido (EMSV-VE / T-52)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Instrumento Psicoeducativo</p>
+            </header>
+
+            <div class="quiz-container">
+                <div class="test-intro-box">
+                    <strong>Aviso Científico e Psicoeducativo:</strong> Esta escala foi estruturada com base nos postulados da <strong>Logoterapia e Análise Existencial de Viktor Frankl</strong>, no <em>Purpose in Life Test</em> (PIL - Crumbaugh & Maholick) e nas pesquisas contemporâneas em neurociência afetiva sobre bem-estar eudaimônico (vmPFC e estriado ventral).
+                    <br><br>
+                    <strong>Privacidade Absoluta:</strong> A apuração dos dados é realizada <strong>100% no seu navegador</strong>. Nenhuma informação pessoal ou resposta individual é enviada a servidores ou gravada em bancos de dados externos.
+                </div>
+
+                <form id="emsvForm" onsubmit="calculateEmsv(event)">
+
+                    <!-- Dimensão 1 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Presença de Sentido e Propósito Eudaimônico (vmPFC / Coerência)</h3>
+                        <p>Mede a clareza sobre seus objetivos vitais e a sensação de que seu cotidiano possui relevância e direção duradoura.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">1. Tenho uma compreensão clara daquilo que torna a minha vida significativa e digna de ser vivida.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">2. As metas e projetos pelos quais trabalho refletem genuinamente meus valores mais profundos, e não apenas pressões sociais.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">3. Ao acordar pela manhã, sinto entusiasmo por saber que minhas ações do dia farão diferença para alguém ou para o mundo.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">4. Mesmo nos dias exaustivos, consigo reconhecer que meu cansaço foi investido em algo que realmente importa.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Frustração Existencial e Sensação de Vazio (Vácuo Noogênico)</h3>
+                        <p>Mede a intensidade de sensações de desvitalização, futilidade, cinismo defensivo e tédio crônico (itens invertidos no cálculo global).</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">5. Com frequência sou assaltado por uma sensação silenciosa de que minha rotina é um teatro sem sentido ou relevância real.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">6. Recorro com frequência a distrações digitais, compras ou comida para silenciar um sentimento incômodo de vazio interior.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">7. Sinto que conquistei estabilidade material ou profissional, mas essas conquistas não preencheram o descompasso que sinto por dentro.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">8. Pego-me frequentemente pensando com cinismo: 'Tanto faz o que eu faço, nada realmente importa no final das contas'.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Vontade de Sentido e Agência Autodirigida (dlPFC / Autonomia)</h3>
+                        <p>Mede a determinação ativa em buscar significado, aprender com a vida e agir com responsabilidade pessoal.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">9. Não espero passivamente que as circunstâncias me façam feliz; assumo a responsabilidade por construir meu próprio horizonte.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">10. Dedico tempo e esforço para projetos de aprendizado ou contribuição social que não visam apenas ganho financeiro imediato.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">11. Quando descubro que um caminho profissional ou pessoal perdeu a coerência ética, tenho coragem de recalcular a rota.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">12. Sinto que sou autor das minhas escolhas e recuso o papel de vítima indefesa das circunstâncias cotidianas.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Resiliência Axiológica e Valores de Atitude (Frankl / Soberania)</h3>
+                        <p>Mede a capacidade de sustentar integridade moral, dignidade e propósito mesmo diante de perdas, crises e dores inevitáveis.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">13. Quando enfrento um sofrimento que não posso mudar, busco transformar essa dor em amadurecimento moral e empatia com o outro.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">14. Encontro força interior para persistir em momentos difíceis lembrando das pessoas que amo ou das causas pelas quais luto.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">15. Acredito firmemente que mesmo as experiências mais duras e traumáticas do meu passado podem ser resignificadas para servir ao bem de outros.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">16. Sei que ninguém pode me tirar a liberdade de escolher qual atitude adotarei frente a qualquer situação adversa.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"><span>Neutro / Às Vezes (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"><span>Concordo Parcialmente (4)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="5"><span>Concordo Totalmente (5)</span></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit-test">Calcular Meu Índice de Sentido e Vazio Existencial (EMSV-VE)</button>
+                </form>
+
+                <!-- Container de Resultados -->
+                <div id="resultContainer" class="result-container">
+                    <div class="result-score-banner">
+                        <span style="font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 700;">Índice Global de Sentido de Vida</span>
+                        <div id="scoreNumber" class="result-score-num">-- / 80</div>
+                        <div id="levelTitle" class="result-level-title">Calculando...</div>
+                        <p id="levelDesc" style="color: #475569; font-size: 0.95em; max-width: 650px; margin: 0 auto; line-height: 1.5;"></p>
+                    </div>
+
+                    <h3 style="color: #005f73; margin-top: 30px; font-size: 1.2em;">Detalhamento por Dimensão Clínica</h3>
+                    <div class="dimension-scores-grid">
+                        <div class="dim-card">
+                            <h4>1. Presença de Sentido Eudaimônico</h4>
+                            <div style="font-size: 0.85em; color: #64748b;">Itens 1 a 4</div>
+                            <div class="dim-progress-track">
+                                <div id="dim1Bar" class="dim-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div id="dim1Score" style="font-size: 0.9em; font-weight: 700; color: #005f73;">-- / 20</div>
+                            <p id="dim1Desc" style="font-size: 0.82em; color: #475569; margin-top: 6px;"></p>
+                        </div>
+
+                        <div class="dim-card">
+                            <h4>2. Frustração Existencial / Vazio</h4>
+                            <div style="font-size: 0.85em; color: #64748b;">Itens 5 a 8 (Escala de Vácuo)</div>
+                            <div class="dim-progress-track">
+                                <div id="dim2Bar" class="dim-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div id="dim2Score" style="font-size: 0.9em; font-weight: 700; color: #005f73;">-- / 20</div>
+                            <p id="dim2Desc" style="font-size: 0.82em; color: #475569; margin-top: 6px;"></p>
+                        </div>
+
+                        <div class="dim-card">
+                            <h4>3. Vontade de Sentido & Agência</h4>
+                            <div style="font-size: 0.85em; color: #64748b;">Itens 9 a 12</div>
+                            <div class="dim-progress-track">
+                                <div id="dim3Bar" class="dim-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div id="dim3Score" style="font-size: 0.9em; font-weight: 700; color: #005f73;">-- / 20</div>
+                            <p id="dim3Desc" style="font-size: 0.82em; color: #475569; margin-top: 6px;"></p>
+                        </div>
+
+                        <div class="dim-card">
+                            <h4>4. Resiliência Axiológica & Atitude</h4>
+                            <div style="font-size: 0.85em; color: #64748b;">Itens 13 a 16</div>
+                            <div class="dim-progress-track">
+                                <div id="dim4Bar" class="dim-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div id="dim4Score" style="font-size: 0.9em; font-weight: 700; color: #005f73;">-- / 20</div>
+                            <p id="dim4Desc" style="font-size: 0.82em; color: #475569; margin-top: 6px;"></p>
+                        </div>
+                    </div>
+
+                    <div class="clinical-notes-card">
+                        <h4>Diretrizes Clínicas e Psicoeducativas</h4>
+                        <div id="clinicalAdviceText" style="font-size: 0.92em; line-height: 1.6; color: #334155;"></div>
+                    </div>
+
+                    <div class="action-cta-box">
+                        <h3>Deseja aprofundar seu projeto de vida e resgatar sua clareza existencial?</h3>
+                        <p>A neuropsicologia clínica e a Logoterapia oferecem protocolos consistentes para reestruturar objetivos vitais e superar o vácuo noogênico.</p>
+                        <a href="/agendamento.html" class="btn-cta-white">Agendar Consulta Especializada</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+
+    <script>
+        // Realce das opções selecionadas
+        document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const name = this.getAttribute('name');
+                document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                    r.closest('.option-label').classList.remove('selected');
+                });
+                this.closest('.option-label').classList.add('selected');
+            });
+        });
+
+        function calculateEmsv(event) {
+            event.preventDefault();
+
+            let d1 = 0; // Presença de Sentido (q1 a q4)
+            let d2 = 0; // Frustração / Vazio (q5 a q8)
+            let d3 = 0; // Vontade de Sentido & Agência (q9 a q12)
+            let d4 = 0; // Resiliência Axiológica & Atitude (q13 a q16)
+
+            for (let i = 1; i <= 4; i++) {
+                const el = document.querySelector(`input[name="q${i}"]:checked`);
+                if (el) d1 += parseInt(el.value, 10);
+            }
+            for (let i = 5; i <= 8; i++) {
+                const el = document.querySelector(`input[name="q${i}"]:checked`);
+                if (el) d2 += parseInt(el.value, 10);
+            }
+            for (let i = 9; i <= 12; i++) {
+                const el = document.querySelector(`input[name="q${i}"]:checked`);
+                if (el) d3 += parseInt(el.value, 10);
+            }
+            for (let i = 13; i <= 16; i++) {
+                const el = document.querySelector(`input[name="q${i}"]:checked`);
+                if (el) d4 += parseInt(el.value, 10);
+            }
+
+            // O escore global de Sentido de Vida inverte a dimensão de frustração/vazio:
+            // d2_invertido = 24 - d2 (pois min 4 vira 20, max 20 vira 4)
+            const d2Inv = 24 - d2;
+            const globalScore = d1 + d2Inv + d3 + d4; // 16 a 80
+
+            const scoreNumber = document.getElementById('scoreNumber');
+            const levelTitle = document.getElementById('levelTitle');
+            const levelDesc = document.getElementById('levelDesc');
+            const clinicalAdviceText = document.getElementById('clinicalAdviceText');
+
+            scoreNumber.textContent = `${globalScore} / 80`;
+
+            if (globalScore >= 62) {
+                levelTitle.textContent = "Alto Índice de Sentido e Coerência Eudaimônica";
+                levelTitle.style.color = "#0a9396";
+                levelDesc.textContent = "Seu sistema nervoso opera com forte ancoramento axiológico. Há clareza sobre seus valores estruturantes, baixa vulnerabilidade à anedonia de sentido e capacidade resiliente de transformar adversidades em crescimento moral.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Consolidação de Legado:</strong> Você já possui uma base pré-frontal robusta de propósito. O desafio contemporâneo é proteger esse foco contra a sobrecarga de demandas utilitárias superficiais.</li><li><strong>Transmissão e Mentoria:</strong> Seus valores encontram expansão natural no serviço à comunidade e na inspiração de pessoas que ainda navegam no vácuo de sentido.</li><li><strong>Vigilância aos Excessos de Cobrança:</strong> Ter um propósito forte não deve anular o direito ao descanso e à contemplação descompromissada da vida.</li></ul>";
+            } else if (globalScore >= 42) {
+                levelTitle.textContent = "Sentido Moderado / Transição Existencial Flutuante";
+                levelTitle.style.color = "#ee9b00";
+                levelDesc.textContent = "Você experimenta momentos genuínos de realização, mas também é assaltado periodicamente por períodos de desvitalização psíquica, tédio e sensação de esforço sem recompensa duradoura.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Auditoria Axiológica das Rotinas:</strong> Identifique quais tarefas do seu dia consomem energia sem estar vinculadas a nenhum princípio ético ou projeto pessoal querido.</li><li><strong>Desarme da Dopamina de Fuga:</strong> Reduza o tempo de tela e o consumo compensatório quando o tédio surgir; substitua pelo cultivo de relacionamentos profundos e leitura substancial.</li><li><strong>Pequenas Ações Eudaimônicas:</strong> Comprometa-se com uma ação diária de contribuição real sem finalidade de aplauso externo para reativar o tônus dopaminérgico do vmPFC.</li></ul>";
+            } else {
+                levelTitle.textContent = "Vácuo Existencial Agudo e Frustração Noogênica Severa";
+                levelTitle.style.color = "#9b2226";
+                levelDesc.textContent = "Indicativo de crise existencial profunda e perda de horizonte de sentido. Há forte prevalência de anedonia existencial, cinismo defensivo e desvitalização, mesmo que a vida externa aparente normalidade.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Reconhecimento sem Culpa:</strong> Entenda que o vazio existencial não é ingratidão ou preguiça, mas um chamado urgente do seu self pedindo uma reorientação profunda de rota.</li><li><strong>Cessar o Niilismo Defensivo:</strong> Pensamentos como 'nada importa' são apenas escudos da mente para evitar a dor de desejar e não saber onde encontrar sentido.</li><li><strong>Apoio Psicoterapêutico Especializado:</strong> Recomenda-se fortemente a busca de psicoterapia com base em Logoterapia, Análise Existencial ou TCC Contextual (ACT) para remapear valores e resgatar a vontade de sentido.</li></ul>";
+            }
+
+            // Atualização das Barras de Dimensão
+            updateBar('dim1Bar', 'dim1Score', 'dim1Desc', d1, 20, "#0a9396", "Presença de metas claras e significado");
+            updateBar('dim2Bar', 'dim2Score', 'dim2Desc', d2, 20, d2 > 13 ? "#9b2226" : "#ee9b00", "Intensidade de tédio e vácuo noogênico");
+            updateBar('dim3Bar', 'dim3Score', 'dim3Desc', d3, 20, "#005f73", "Grau de agência e autonomia executiva");
+            updateBar('dim4Bar', 'dim4Score', 'dim4Desc', d4, 20, "#0a9396", "Capacidade de manter dignidade na adversidade");
+
+            const rc = document.getElementById('resultContainer');
+            rc.style.display = 'block';
+            rc.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateBar(barId, scoreId, descId, val, max, color, label) {
+            const pct = Math.round((val / max) * 100);
+            const bar = document.getElementById(barId);
+            bar.style.width = pct + '%';
+            bar.style.backgroundColor = color;
+            document.getElementById(scoreId).textContent = `${val} / ${max} (${pct}%)`;
+            document.getElementById(descId).textContent = `${label}: nível ${pct < 45 ? 'Baixo' : pct < 75 ? 'Moderado' : 'Elevado'}.`;
+        }
+    </script>
+</body>
+</html>
