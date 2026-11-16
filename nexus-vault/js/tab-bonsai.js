@@ -1763,6 +1763,27 @@
                     if (proc.category === 'ESTRUTURA' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
                         score += 20; // Madeira extremamente densa: aramação jovem e tensores de ancoragem
                     }
+                    if (proc.category === 'MADEIRA_MORTA' && (moon.phaseGroup === 'NOVA' || moon.phaseGroup === 'MINGUANTE')) {
+                        score += 26; // Escultura de Shari e Jin em madeira nobre ultradensa
+                    }
+                }
+                if (popName.includes('cereja') || sciName.includes('involucrata')) {
+                    if (proc.category === 'PODA_RAMIFICACAO' && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
+                        score += 25; // Ramificação fina vigorosa pós-brotação em Cereja-do-Rio-Grande
+                    }
+                    if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && seasonInfo.season === 'Inverno') {
+                        score -= 35; // Sensível a frio radicular: transplantar apenas no calor úmido
+                    }
+                }
+                if (popName.includes('jabuticaba') || sciName.includes('plinia')) {
+                    if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
+                        if (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão') {
+                            score += 28; // Enraizamento rápido e vigoroso sob solo aquecido no Minguante
+                        }
+                    }
+                    if (proc.id === 'PINCAGEM_APICAL' && (moon.phaseGroup === 'MINGUANTE')) {
+                        score += 22; // Contenção de entrenós longos mantendo copa globular densa
+                    }
                 }
 
                 if (proc.category === 'ESTRUTURA' && plant.lastStyling) {

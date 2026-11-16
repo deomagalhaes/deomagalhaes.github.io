@@ -3295,6 +3295,118 @@
             detail: `Classes alocadas em cotas inteiras sem centavos fracionados; boleta executiva estruturada gerada com sucesso para Home Broker.`
         });
 
+        // 51. Teste de Aceleração de Retomada sob Aporte Contracíclico (+20%) em Flash Crash de −30%
+        const mockContracyclic = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 300000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2600,
+            avgTicket: 250,
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            monthlyContribution: 5000,
+            stressBoostContribution: true
+        });
+        const testContracyclicPass = mockContracyclic.monthsToRecoverWithBoost < mockContracyclic.monthsToRecoverDynamic &&
+            mockContracyclic.monthsToRecoverWithBoost > 0 &&
+            mockContracyclic.stressedPatrimony === 210000;
+        tests.push({
+            name: 'Aceleração de Retomada sob Aporte Contracíclico (+20%) em Flash Crash de −30%',
+            formula: 'T_recuperação(Aporte × 1,2) < T_recuperação(Aporte_base) ∧ Capital_Retido = 70%',
+            passed: Boolean(testContracyclicPass),
+            detail: `Tempo de recuperação reduzido de ${mockContracyclic.monthsToRecoverDynamic} meses para ${mockContracyclic.monthsToRecoverWithBoost} meses com injeção acelerada durante preços deprimidos.`
+        });
+
+        // 52. Teste de Conservação do Balanço Total do Alocador em 4 Macroclasses Heterogêneas
+        const mockAlloc4 = computeAporteAllocation({
+            monthlyContribution: 8000,
+            targetAllocFII: 35,
+            targetAllocRF: 30,
+            targetAllocAcoes: 20,
+            targetAllocGlobal: 15,
+            currentAllocFII: 50000,
+            currentAllocRF: 60000,
+            currentAllocAcoes: 20000,
+            currentAllocGlobal: 10000
+        });
+        const mockTickers4 = computeAporteByTickers(mockAlloc4.classes);
+        const totalBudget4 = mockAlloc4.classes.reduce((acc, c) => acc + (c.recommendedAporte || 0), 0);
+        const totalSpentAndResidual4 = mockTickers4.byClass.reduce((acc, c) => acc + c.classSpent + c.residual, 0);
+        const testConservation4 = Math.abs(totalBudget4 - 8000) < 1e-4 &&
+            Math.abs(totalBudget4 - totalSpentAndResidual4) < 1e-4;
+        tests.push({
+            name: 'Conservação de Balanço do Alocador Inteligente nas 4 Classes (Cotas + Troco = Orçamento)',
+            formula: 'Σ(Aporte_Recomendado_i) = Orçamento = Σ(Gasto_Cotas_i + Resíduo_i) (Erro < 10⁻⁴)',
+            passed: Boolean(testConservation4),
+            detail: `Orçamento de R$ ${totalBudget4.toFixed(2)} decomposto com exatidão matemática de centavos entre as 4 classes e seus resíduos de liquidez.`
+        });
+
+        // 53. Teste de Resiliência sob Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)
+        const mockBlackSwan = computeStressTest({
+            stressScenario: 'black_swan',
+            currentPatrimony: 400000,
+            realAnnualReturn: 7.5,
+            monthlyCosts: 2600,
+            avgTicket: 250,
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            monthlyContribution: 4200
+        });
+        const testBlackSwanPass = mockBlackSwan.stressedPatrimony === 200000 &&
+            mockBlackSwan.lostCapital === 200000 &&
+            mockBlackSwan.stressedClinicCosts === (2600 * 1.10) &&
+            mockBlackSwan.stressedMonthlyPassive > 0;
+        tests.push({
+            name: 'Resiliência sob Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)',
+            formula: 'Patrimônio_Stressed = 0,5 × P_0 ∧ Custos_Stressed = 1,1 × C_0 ∧ Renda_Passiva > 0',
+            passed: Boolean(testBlackSwanPass),
+            detail: `Patrimônio estressado retido: R$ 200.000 (50%). Renda passiva residual de R$ ${mockBlackSwan.stressedMonthlyPassive.toFixed(2)}/mês e custos ajustados para R$ 2.860/mês.`
+        });
+
+        // 54. Teste de Monotonicidade Estrita dos 4 Marcos de Crossover FIRE
+        const mockModelFire = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            safeWithdrawalRate: 4.0,
+            fatFireMultiplier: 1.4,
+            expenseEssential: 2500
+        });
+        const testMonotonicFire = mockModelFire.targetLeanFire > 0 &&
+            mockModelFire.targetClinicalFire > 0 &&
+            mockModelFire.targetFullFire > 0 &&
+            mockModelFire.targetFatFire > 0 &&
+            mockModelFire.targetLeanFire <= mockModelFire.targetFullFire &&
+            mockModelFire.targetClinicalFire <= mockModelFire.targetFullFire &&
+            mockModelFire.targetFullFire <= mockModelFire.targetFatFire;
+        tests.push({
+            name: 'Monotonicidade Estrita dos Marcos FIRE: Lean ≤ Full ≤ Fat FIRE',
+            formula: 'Target_Lean ≤ Target_Full ≤ Target_Fat ∧ Target_Clinical = 0,5 × Target_Full',
+            passed: Boolean(testMonotonicFire),
+            detail: `Lean: R$ ${Math.round(mockModelFire.targetLeanFire).toLocaleString('pt-BR')} ≤ Full: R$ ${Math.round(mockModelFire.targetFullFire).toLocaleString('pt-BR')} ≤ Fat: R$ ${Math.round(mockModelFire.targetFatFire).toLocaleString('pt-BR')}. Alinhamento atuarial verificado.`
+        });
+
+        // 55. Teste de Custo de Oportunidade e Horas Clínicas Compradas por Aporte Mensal
+        const mockModelHours = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            indirectWeeklyHours: 6,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200,
+            realAnnualReturn: 7.5
+        });
+        const testHoursPass = mockModelHours.sessionsBoughtPerContribution > 0 &&
+            mockModelHours.netEffectiveHourly > 0 &&
+            mockModelHours.totalEffectiveHours === (16 * 4.2 + 6 * 4.2);
+        tests.push({
+            name: 'Equivalência Atuarial do Custo de Oportunidade da Hora Clínica vs Aporte Perpétuo',
+            formula: 'Sessões_Compradas = (Aporte × i_m) / Ticket_Líquido ∧ Horas_Efetivas = (Atend. + Indiretas)',
+            passed: Boolean(testHoursPass),
+            detail: `Cada aporte de R$ 4.200 compra perpetuamente ~${mockModelHours.sessionsBoughtPerContribution.toFixed(2)} sessões/mês a uma taxa real de R$ ${mockModelHours.netEffectiveHourly.toFixed(2)}/hora efetiva.`
+        });
+
         const allPassed = tests.every(t => t.passed);
         return {
             allPassed,

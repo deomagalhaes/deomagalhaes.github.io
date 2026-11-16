@@ -898,6 +898,76 @@
             defaultQuestion: 'Como é divertido quando o nosso plano muda e a gente transforma tudo numa brincadeira nova e surpreendente?',
             challengeAct: 'ficou irritado porque a regra do jogo mudou ou o horário da brincadeira precisou ser ajustado, com vontade de cruzar os braços e emburrar.',
             breathCue: 'soltou os braços e as pernas como se fossem cipós bem moles, respirou fundo soprando a teimosia para o céu e sorriu pronto para inventar uma rota nova.'
+        },
+        luto_pet: {
+            label: '127. O Colar Invisível de Estrelas (Luto Afetivo & Saudade Mansa do Bichinho Querido)',
+            defaultMetaphor: 'A caixinha de prata invisível que mora no centro do peito: cada lambida gostosa, cada corrida na relva e cada afago macio do bichinho viraram estrelas pequeninas que nunca se apagam. Elas dormem dentro do coração e iluminam o caminho para sempre.',
+            defaultQuestion: 'Qual é a lembrança mais engraçada e quentinha do seu bichinho que faz o seu peito sorrir agora?',
+            challengeAct: 'olhou para a caminha vazia no canto da sala e sentiu uma lágrima silenciosa rolar na bochecha, com uma saudade comprida apertando o peito.',
+            breathCue: 'pôs a mãozinha onde o coração bate manso, puxou o ar sentindo o amor infinito guardado ali dentro e soprou suave como quem manda um beijinho de luz para o céu.'
+        },
+        mudanca_casa: {
+            label: '128. A Semente Viajante do Ipê (Adaptação a Nova Casa / Nova Cidade)',
+            defaultMetaphor: 'A sementinha com asas de algodão que voa no vento morno: ela viaja por colinas e rios até encontrar um quintal acolhedor. Ali na terra nova ela estica as raízes e descobre que a sua flor é linda em qualquer jardim.',
+            defaultQuestion: 'Qual cantinho da sua nova caminha você mais gosta de enfeitar com a sua imaginação?',
+            challengeAct: 'viu as caixas empilhadas e as paredes diferentes, sentindo uma estranheza esquisita na garganta e com medo de não conseguir se acostumar.',
+            breathCue: 'respirou o ar fresquinho da noite no quarto novo, sentiu o chão firme debaixo da cama e soltou o ar sabendo que onde a gente ama é sempre o nosso lar.'
+        },
+        tedio_descanso: {
+            label: '129. O Lago Espelhado da Montanha (Tolerância ao Silêncio, Tédio & Descanso sem Telas)',
+            defaultMetaphor: 'O lago de águas paradas no topo da serra: ele não precisa correr feito cachoeira o tempo todo. Quando fica imóvel e sem agitação nenhuma, reflete a lua cheia e as estrelas com uma beleza mágica que a pressa não consegue ver.',
+            defaultQuestion: 'Como é gostoso deixar o pensamento flutuar livre, sem pressa nenhuma de fazer coisa alguma?',
+            challengeAct: 'ficou inquieto porque não tinha nenhum joguinho nem vídeo novo para ver, achando o silêncio do quarto comprido e sem graça.',
+            breathCue: 'fechou os olhos, respirou bem devagar ouvindo o murmúrio manso da noite e sentiu a imaginação criar formas mágicas e tranquilas.'
+        },
+        pensamentos_riacho: {
+            label: '130. As Folhas que Boiam no Riacho (Desfusão Cognitiva de Ruminações Noturnas)',
+            defaultMetaphor: 'O riacho transparente da floresta: cada pensamento que vem na cabeça é como uma folha dourada que caiu na água. A gente senta na margem macia, olha a folhinha boiando e deixa a correnteza levar embora, sem precisar pular no rio.',
+            defaultQuestion: 'Qual folhinha de pensamento você quer ver deslizar mansinha pelo riacho até sumir na curva?',
+            challengeAct: 'começou a lembrar de coisas que precisava fazer ou de palavras que disseram durante o dia, com a cabecinha dando voltas feito carrossel sem parar.',
+            breathCue: 'imaginou cada pensamento pousando numa folha de lótus na água, respirou fundo e soprou de leve, vendo a água calma levar tudo embora.'
+        },
+        vergonha_acolhida: {
+            label: '131. A Pirueta Engraçada do Bem-te-vi (Acolhimento da Vergonha & Erros Públicos)',
+            defaultMetaphor: 'O bem-te-vi jovem que escorregou no galho molhado durante o pouso: em vez de se esconder atrás das folhas, deu uma cambalhota no ar e inventou um passo de dança tão engraçado que todos os passarinhos bateram asas de alegria.',
+            defaultQuestion: 'Você sabe que errar ou tropeçar faz parte de toda brincadeira linda e que todo mundo já tropeçou um dia?',
+            challengeAct: 'tropeçou ou errou uma palavra na frente dos outros e sentiu as bochechas queimarem de calor, com vontade de sumir dentro de um buraco escuro.',
+            breathCue: 'soltou um suspiro quentinho sorrindo, abraçou o próprio peito com carinho e lembrou que a ternura da gente é maior do que qualquer tropeço.'
+        },
+        sensibilidade_sons: {
+            label: '132. O Fone Aveludado da Lebre Noturna (Sensibilidade Auditiva & Fogos/Barulhos)',
+            defaultMetaphor: 'A lebrezinha da campina que tem orelhas compridas e delicadas: quando os trovões ou os rojões fazem estrondos no céu, ela coloca seu cobertor de musgo fofo sobre a cabeça e entra na sua toca macia, onde os sons altos viram apenas batidinhas de tambor distante.',
+            defaultQuestion: 'Como é gostoso sentir o aconchego fofo do travesseiro abafando todos os barulhos lá de fora?',
+            challengeAct: 'ouviu um som alto e repentino na rua e sentiu o corpo inteiro tremer, puxando o cobertor com o coração disparado.',
+            breathCue: 'pousou as mãos suaves sobre as orelhinhas, respirou três vezes num ritmo de berço e sentiu a proteção quente do seu ninho.'
+        },
+        coragem_medico: {
+            label: '133. A Gotinha Mágica do Curandeiro da Mata (Coragem para Médico / Dentista / Vacina)',
+            defaultMetaphor: 'A plantinha no canteiro da floresta que recebeu uma gota de orvalho medicinal na raiz: foi só uma picadinha rápida de nada, e em poucos minutos ela ficou forte, com folhas verdes brilhantes e imune a todos os ventos fortes.',
+            defaultQuestion: 'Qual superpoder de cura mora escondidinho no seu corpo que cuida de você o tempo todo?',
+            challengeAct: 'pensou na visita ao médico ou no remedinho com gosto esquisito e sentiu as mãozinhas suarem frio de nervoso.',
+            breathCue: 'apertou a mão de quem ama sentindo proteção total, respirou fundo enchendo o peito de força e soltou o ar como um guerreiro tranquilo.'
+        },
+        aquarela_livre: {
+            label: '134. A Tinta que Dança na Água (Perfeccionismo Criativo & Amor pelo Rascunho)',
+            defaultMetaphor: 'A aquarela mágica que se espalha no papel molhado: ela não segue linhas retas de régua. Quando uma cor encosta na outra, cria um tom lilás ou esmeralda novo que ninguém havia planejado, e esse é exatamente o maior encanto da arte.',
+            defaultQuestion: 'Que cor bonita a sua mente quer pintar nos seus sonhos desta noite?',
+            challengeAct: 'apagou o desenho tantas vezes que a folha quase rasgou, achando que nada do que fazia ficava perfeito como queria.',
+            breathCue: 'olhou para o desenho com olhar de carinho, respirou fundo sentindo a liberdade de criar e soltou o ar com um sorriso de paz.'
+        },
+        desapego_leve: {
+            label: '135. A Mochilinha Leve da Andorinha (Desapego Carinhoso de Objetos e Brinquedos Velhos)',
+            defaultMetaphor: 'A andorinha viajante que adora voar entre nuvens douradas: ela sabe que para voar alto e livre não precisa carregar todas as pedrinhas do chão; ela guarda a gratidão no peito e viaja com as asas leves.',
+            defaultQuestion: 'Como é gostoso abrir espaço na prateleira para coisas novas e saber que o carinho das lembranças nunca se perde?',
+            challengeAct: 'precisou doar um brinquedo de quando era bebê e sentiu um apego apertado, com medo de perder aquele pedacinho de história.',
+            breathCue: 'abraçou o objeto com gratidão, respirou fundo agradecendo pelos momentos felizes e soltou o ar sentindo as mãozinhas leves.'
+        },
+        apresentacao_escolar: {
+            label: '136. O Canto do Sabiá no Galho Aberto (Segurança em Apresentações & Voz Própria)',
+            defaultMetaphor: 'O sabiá-laranjeira no topo do ipê: ele não canta para provar nada para ninguém; ele canta porque a floresta é acolhedora e a sua melodia traz alegria para quem ouve. A sua voz é um presente doce para o mundo.',
+            defaultQuestion: 'Qual é a historinha ou música que você mais gosta de compartilhar com quem você ama?',
+            challengeAct: 'lembrou que teria de falar ou cantar na frente da sala toda no dia seguinte e sentiu um nó na garganta e os joelhos bambos.',
+            breathCue: 'pôs a mão no centro do peito, sentiu o ar entrar limpo e fresco, e soltou soprando uma brisa mansa que destravou a coragem de ser quem é.'
         }
     };
 
@@ -994,6 +1064,7 @@
     let savedStories = [];
     let currentComposedStory = { title: '', text: '', question: '', theme: '', scenario: '', source: 'Modular Offline' };
     let amberFontSizeRem = 1.25;
+    let amberLineHeight = 1.85;
     let activeAmberTheme = 'amber';
     let autoScrollInterval = null;
     let isAutoScrolling = false;
@@ -1007,6 +1078,7 @@
         const saved = C.store.get(AMBER_PREFS_KEY, null);
         if (saved && typeof saved === 'object') {
             if (saved.fontSizeRem) amberFontSizeRem = Math.max(0.85, Math.min(2.4, Number(saved.fontSizeRem)));
+            if (saved.lineHeight) amberLineHeight = Math.max(1.4, Math.min(2.6, Number(saved.lineHeight)));
             if (saved.theme && AMBER_PALETTES[saved.theme]) activeAmberTheme = saved.theme;
         }
     }
@@ -1016,6 +1088,7 @@
         if (!C || !C.store) return;
         C.store.set(AMBER_PREFS_KEY, {
             fontSizeRem: amberFontSizeRem,
+            lineHeight: amberLineHeight,
             theme: activeAmberTheme
         });
     }
@@ -1198,6 +1271,13 @@
             boxBg: '#1b1209',
             boxBorder: 'rgba(146, 64, 14, 0.4)'
         },
+        candle: {
+            bg: '#130803',
+            text: '#fed7aa',
+            title: '#ffedd5',
+            boxBg: '#1f0c05',
+            boxBorder: 'rgba(234, 88, 12, 0.4)'
+        },
         red: {
             bg: '#0c0402',
             text: '#fca5a5',
@@ -1211,6 +1291,13 @@
             title: '#86efac',
             boxBg: '#0c1a11',
             boxBorder: 'rgba(5, 150, 105, 0.4)'
+        },
+        sepia: {
+            bg: '#14100c',
+            text: '#e7d8c9',
+            title: '#f5ebe0',
+            boxBg: '#1c1611',
+            boxBorder: 'rgba(168, 140, 116, 0.4)'
         },
         dark: {
             bg: '#020617',
@@ -1578,17 +1665,26 @@
         if (tEl) tEl.textContent = target.title;
         if (bEl) {
             bEl.style.fontSize = `${amberFontSizeRem}rem`;
+            bEl.style.lineHeight = `${amberLineHeight}`;
             const pars = target.text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
             bEl.innerHTML = pars.map((p) => `<p class="leading-relaxed my-4 text-justify font-serif">${C.esc(p)}</p>`).join('');
         }
         if (qEl) qEl.textContent = target.question;
 
         // Metadados de leitura suave (palavras e minutos estimados)
-        if (metaEl && target.text) {
+        if (target.text) {
             const words = target.text.trim().split(/\s+/).filter(Boolean).length;
             const readMins = Math.max(1, Math.round(words / 130));
-            metaEl.textContent = `⏱️ ~${readMins} min de leitura suave • ${words} palavras • ${target.source || 'Modo Offline'}`;
+            if (metaEl) {
+                metaEl.textContent = `⏱️ ~${readMins} min de leitura suave • ${words} palavras • ${target.source || 'Modo Offline'}`;
+            }
+            const estTopEl = document.getElementById('amber-reading-time-est');
+            if (estTopEl) {
+                estTopEl.textContent = `⏱️ ~${readMins} min (${words} pal.)`;
+            }
         }
+        const lhSel = document.getElementById('amber-line-height-select');
+        if (lhSel) lhSel.value = String(amberLineHeight);
 
         // Progresso de rolagem e persistência de posição
         overlay.onscroll = () => {
@@ -2166,6 +2262,19 @@
                 applyAmberThermalPalette(btn.getAttribute('data-amber-theme'));
             });
         });
+
+        const lineHSelect = document.getElementById('amber-line-height-select');
+        if (lineHSelect) {
+            lineHSelect.addEventListener('change', () => {
+                const val = parseFloat(lineHSelect.value);
+                if (Number.isFinite(val)) {
+                    amberLineHeight = val;
+                    const bEl = document.getElementById('amber-reader-body');
+                    if (bEl) bEl.style.lineHeight = String(amberLineHeight);
+                    saveAmberPrefs();
+                }
+            });
+        }
 
         const btnAudioToggle = document.getElementById('btn-audio-toggle');
         if (btnAudioToggle) {
