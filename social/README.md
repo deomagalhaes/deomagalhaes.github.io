@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **17/11/2026** | **A Neurobiologia da Limerência e da Idealização Romântica Compulsiva** | [social/2026-11-17-limerencia-idealizacao-romantica-compulsiva.md](2026-11-17-limerencia-idealizacao-romantica-compulsiva.md) | ✅ Pronto para postar |
 | **17/11/2026** | **A Neurobiologia da Hiper-Racionalização e da Intelectualização Defensiva** | [social/2026-11-17-hiper-racionalizacao-intelectualizacao-defensiva.md](2026-11-17-hiper-racionalizacao-intelectualizacao-defensiva.md) | ✅ Pronto para postar |
 | **16/11/2026** | **A Neurobiologia da Esquiva Experiencial e da Anestesia Afetiva** | [social/2026-11-16-esquiva-experiencial-anestesia-emocional.md](2026-11-16-esquiva-experiencial-anestesia-emocional.md) | ✅ Pronto para postar |
 | **16/11/2026** | **A Neurobiologia do Vazio Existencial e da Busca de Sentido** | [social/2026-11-16-vazio-existencial-e-busca-de-sentido.md](2026-11-16-vazio-existencial-e-busca-de-sentido.md) | ✅ Pronto para postar |
