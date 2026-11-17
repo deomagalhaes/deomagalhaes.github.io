@@ -1984,6 +1984,13 @@
                                     </div>
                                 ` : ''}
 
+                                <button type="button" id="btn-pmodal-resync-patient" data-pmodal-patient="${escapeHtml(pName)}"
+                                    title="Limpar anotações/sessões manuais deste paciente e restaurar fielmente as do Google Calendar"
+                                    class="px-2 py-1 rounded text-[11px] font-mono text-slate-400 hover:text-sky-300 hover:bg-slate-800 border border-slate-800 transition cursor-pointer flex items-center gap-1">
+                                    <i data-lucide="rotate-ccw" class="w-3 h-3 text-sky-400"></i>
+                                    <span>Resetar ao Calendar</span>
+                                </button>
+
                                 <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 cursor-pointer">
                                     <input type="checkbox" id="chk-pmodal-show-deleted" ${state.patientModalShowDeleted ? 'checked' : ''}
                                         class="rounded border-slate-700 text-sky-500">
@@ -2884,6 +2891,28 @@
 
                     if (global.VaultCore) {
                         global.VaultCore.toast(`Confirmações de pagamento de ${pName} foram reiniciadas.`, 'info');
+                    }
+                });
+            }
+
+            // Botão Restaurar / Resetar sessões do paciente fielmente ao Google Calendar
+            const btnPModalResync = document.getElementById('btn-pmodal-resync-patient');
+            if (btnPModalResync) {
+                btnPModalResync.addEventListener('click', () => {
+                    const pName = btnPModalResync.getAttribute('data-pmodal-patient');
+                    const cKey = canonicalPatientKey(pName);
+                    // Remove sessões manuais deste paciente
+                    state.manualSessions = (state.manualSessions || []).filter(ms => canonicalPatientKey(ms.patient) !== cKey);
+                    // Remove overrides deste paciente
+                    Object.keys(state.sessionOverrides || {}).forEach(k => {
+                        if (k.includes(cKey)) {
+                            delete state.sessionOverrides[k];
+                        }
+                    });
+                    saveState();
+                    render();
+                    if (global.VaultCore) {
+                        global.VaultCore.toast(`Sessões de ${pName} restauradas com fidelidade total ao Google Calendar!`, 'success');
                     }
                 });
             }
