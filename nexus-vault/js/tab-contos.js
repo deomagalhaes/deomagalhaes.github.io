@@ -4,17 +4,17 @@
  * 100% Client-Side • Zero-Backend • LGPD Compliant • Leitor Âmbar Offline Low-Blue-Light
  *
  * Módulos Integrados:
- * 1. Banco Expandido de 106 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
+ * 1. Banco Expandido de 150 Metáforas Terapêuticas Comportamentais & Regulação Autonômica
  * 2. 14 Cenários Poéticos de Biomas Brasileiros e Céu Noturno
- * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos
+ * 3. Motor Modular Instantâneo de Geração Offline em 4 Atos Fluidos (Adaptado por Faixa Etária)
  * 4. Sintetizador Acústico Web Audio API Pré-Sono (Ruído Marrom, Chuva Mansa, Ondas, Grilos) com Sleep Timer
- * 5. Leitor Âmbar Imersivo com Paletas Térmicas Melatonina, Auto-Scroll Lento e Gestão de Favoritos Local
+ * 5. Leitor Âmbar Imersivo com 6 Paletas Térmicas Melatonina, Wake Lock, Auto-Scroll Lento e Gestão de Favoritos Local
  */
 (function (global) {
     'use strict';
 
     // =========================================================================
-    // 1. BANCO DE 106 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
+    // 1. BANCO DE 150 METÁFORAS TERAPÊUTICAS COMPORTAMENTAIS INFANTIS
     // =========================================================================
     const STORY_THEMES = {
         frustracao: {
@@ -968,6 +968,104 @@
             defaultQuestion: 'Qual é a historinha ou música que você mais gosta de compartilhar com quem você ama?',
             challengeAct: 'lembrou que teria de falar ou cantar na frente da sala toda no dia seguinte e sentiu um nó na garganta e os joelhos bambos.',
             breathCue: 'pôs a mão no centro do peito, sentiu o ar entrar limpo e fresco, e soltou soprando uma brisa mansa que destravou a coragem de ser quem é.'
+        },
+        duas_casas_porto: {
+            label: '137. O Farol que Guia os Dois Portos (Transição entre Casas & Previsibilidade Afetiva)',
+            defaultMetaphor: 'O barquinho iluminado que navega entre duas enseadas seguras: em cada margem há um farol aceso, um cais macio e um abraço esperando, e o mar inteiro entre elas carrega o mesmo amor que nunca muda.',
+            defaultQuestion: 'Qual coisinha especial você gosta de levar com você entre os seus dois cantinhos seguros?',
+            challengeAct: 'olhou para a mochila arrumada de viagem entre as rotinas da semana e sentiu uma saudade misturada com incerteza no peito.',
+            breathCue: 'abraçou o próprio peito com carinho, puxou o ar imaginando uma ponte de luz dourada ligando os dois ninhos e soltou com tranquilidade.'
+        },
+        cuidado_sensorial_corte: {
+            label: '138. A Ovelhinha e a Brisa da Tosquia (Aceitação Sensorial: Corte de Cabelo, Unhas e Banho)',
+            defaultMetaphor: 'A ovelhinha da serra que sentia o pelo ficar pesado no verão: quando o vento morno passou penteando e aparando só as pontinhas com cuidado de pluma, ela sentiu a pele respirar fresquinha e leve como nuvem.',
+            defaultQuestion: 'Qual sensação gostosa de água morninha ou massagem calma ajuda o seu corpo a ficar bem relaxado?',
+            challengeAct: 'ouviu o barulhinho da tesoura ou sentiu o toque frio da água nas orelhas e encolheu os ombrinhos querendo sair correndo do lugar.',
+            breathCue: 'segurou uma mão quentinha de confiança, inspirou devagar imaginando plumas macias nos ombros e soltou o ar derretendo a tensão.'
+        },
+        letrinhas_vagalumes: {
+            label: '139. A Trilha das Letrinhas Vagalumes (Paciência na Leitura, Escrita e Tarefa Escolar)',
+            defaultMetaphor: 'As letrinhas brilhantes que pousam na folha de papel como vaga-lumes tímidos: no começo elas piscam devagarinho uma por uma, mas quando a gente olha com calma e sem pressa, elas dão as mãos e formam pontes mágicas de histórias.',
+            defaultQuestion: 'Qual palavra bonita ou descoberta nova deu alegria aos seus olhos hoje?',
+            challengeAct: 'tropeçou duas vezes numa palavra comprida do caderno e quis fechar o livro com raiva achando que nunca ia aprender rápido.',
+            breathCue: 'descansou os olhinhos por três segundos, inspirou fundo dando tempo à mente curiosa e soltou num suspiro amigo e paciente.'
+        },
+        esquilinho_ideias: {
+            label: '140. O Esquilinho das Muitas Ideias (Esquecimento & Gentileza Consigo no TDAH)',
+            defaultMetaphor: 'O esquilinho inventor que tinha um cérebro cheio de foguetes dourados pulando ao mesmo tempo: às vezes uma noz ficava esquecida num galho porque ele já estava imaginando dez pontes novas; com uma cestinha de lembretes e um sorriso gentil, cada ideia acha seu lugar.',
+            defaultQuestion: 'Qual ideia criativa e brilhante passou pela sua cabecinha hoje que fez você sorrir?',
+            challengeAct: 'esqueceu o casaco ou o recado na mochila mais uma vez e ficou bravo consigo mesmo achando que sua cabeça era distraída demais.',
+            breathCue: 'pousou a mão carinhosa na testa, respirou devagarinho agradecendo à sua mente inventiva e soltou o ar acolhendo seu ritmo único.'
+        },
+        lua_nao_larga: {
+            label: '141. A Lua que Nunca Solta a Terra (Medo Noturno de Perder os Cuidadores)',
+            defaultMetaphor: 'A lua prateada que gira silenciosa ao redor da terra a noite inteira: mesmo quando uma nuvem passa na frente por um instante, a corda invisível de gravidade e carinho continua intacta até o sol voltar.',
+            defaultQuestion: 'Você sente como estamos sempre ligadinhos pelo coração, mesmo quando cada um dorme no seu quarto?',
+            challengeAct: 'sentiu um aperto súbito na hora de apagar a luz, com medo de que algo mudasse ou de ficar sozinho durante a madrugada.',
+            breathCue: 'sentiu o cheirinho do travesseiro seguro, inspirou contando quatro batidas calmas do coração e soltou num suspiro de confiança.'
+        },
+        tartaruga_viagem: {
+            label: '142. A Tartaruga Navegadora do Tempo (Impaciência em Filas, Trânsito e Esperas)',
+            defaultMetaphor: 'A tartaruga sábia do rio manso: ela sabe que bater o casco não faz a correnteza correr mais depressa, então aproveita o caminho para contar as nuvens que parecem bichinhos e inventar músicas no silêncio.',
+            defaultQuestion: 'Qual brincadeira de imaginação a gente pode inventar quando precisa esperar um tempinho no caminho?',
+            challengeAct: 'ficou inquieto na cadeirinha ou na fila demorada, perguntando a cada minuto se já tinha chegado a hora de sair.',
+            breathCue: 'encostou as costas confortáveis no apoio, respirou sentindo o tempo desacelerar e soltou o ar num ritmo calmo de passeio.'
+        },
+        escudo_mangueira: {
+            label: '143. O Escudo de Luz da Mangueira (Proteção Emocional contra Provocações e Apelidos)',
+            defaultMetaphor: 'A mangueira antiga do pomar: quando alguém joga uma pedrinha ou uma palavra sem cuidado, as folhas não guardam o espinho; a brisa sacode o galho, a palavra cai no chão e a árvore continua doce dando frutos de luz.',
+            defaultQuestion: 'Que coisa verdadeira e bonita você sabe sobre você mesmo que nenhuma palavra boba pode apagar?',
+            challengeAct: 'ouviu um comentário chato ou risadinha de um colega e ficou repetindo aquela frase na cabeça na hora de dormir.',
+            breathCue: 'imaginou um escudo transparente e morno ao redor do peito, respirou fundo limpando a mente e soltou deixando a palavra chata ir para longe.'
+        },
+        boto_correnteza: {
+            label: '144. O Boto que Aprende na Correnteza (Frustração em Esportes e Coordenação Motora)',
+            defaultMetaphor: 'O boto-cor-de-rosa jovem treinando seus primeiros saltos no rio: nas primeiras tentativas ele espirra água para todo lado e cai de barriga, mas cada mergulho ensina um músculo novo até o salto ficar leve feito dança.',
+            defaultQuestion: 'Qual movimento do seu corpo ficou um pouquinho melhor hoje só porque você continuou brincando?',
+            challengeAct: 'errou o chute ou deixou a torre cair na brincadeira e sentiu vontade de abandonar o jogo na mesma hora.',
+            breathCue: 'sacudiu os bracinhos soltando a tensão dos músculos, inspirou com coragem tranquila e soltou o ar pronto para descansar forte.'
+        },
+        cachoeira_curativa: {
+            label: '145. O Banho Morno da Cachoeira Curativa (Acolhimento durante Gripes, Febre ou Mal-Estar)',
+            defaultMetaphor: 'A toquinha morna de folhas macias onde o filhote descansa quando está dodói: por dentro do corpinho trabalham milhares de pequenas luzinhas guardiãs limpando tudo devagar, enquanto o sono traz força nova para amanhã.',
+            defaultQuestion: 'Onde o seu corpinho está precisando de mais aconchego e descanso gostoso esta noite?',
+            challengeAct: 'sentiu o corpo molinho, o nariz trancado ou o calor da febre, ficando choroso e impaciente para voltar a correr.',
+            breathCue: 'fechou os olhos sentindo a água imaginária fresquinha na testa, inspirou mansinho e soltou entregando o corpo ao repouso curativo.'
+        },
+        joaninha_jardim: {
+            label: '146. A Joaninha Guardiã das Flores (Curiosidade Gentil diante de Insetos e Pequenos Seres)',
+            defaultMetaphor: 'A joaninha de pintinhas pretas pousada na folha de hortelã: ela é pequenina como uma gota d’água, tem muito mais medo de nós do que nós dela, e passa o dia cuidando do jardim para as flores crescerem sadias.',
+            defaultQuestion: 'Qual bichinho pequeno da natureza você acha mais curioso e interessante de observar de longe?',
+            challengeAct: 'viu uma mariposa ou formiguinha perto da janela e deu um pulo assustado, imaginando que todo bichinho pequeno pudesse machucar.',
+            breathCue: 'observou de longe com segurança, puxou o ar devagar sentindo respeito pela natureza e soltou num suspiro tranquilo e protetor.'
+        },
+        barraca_estrelas: {
+            label: '147. A Barraca das Estrelas Amigas (Segurança ao Dormir Fora ou Acampar pela Primeira Vez)',
+            defaultMetaphor: 'A cabaninha iluminada sob o mesmo céu de sempre: mesmo em uma cama diferente ou na casa dos avós, o céu acima do telhado tem as mesmas constelações vigilantes e o coração leva o cheiro de casa guardado por dentro.',
+            defaultQuestion: 'Qual objeto ou pensamento gostoso de casa acompanha você onde quer que você vá dormir?',
+            challengeAct: 'sentiu estranheza com os sons e cheiros de um quarto diferente na hora de deitar, sentindo o peito apertado de saudade.',
+            breathCue: 'abraçou o cobertor bem macio, inspirou lembrando do rosto de quem ama e soltou o ar transformando a novidade em aventura serena.'
+        },
+        abraco_corpo: {
+            label: '148. O Boa-Noite para Cada Partezinha do Corpo (Gratidão Somática & Relaxamento Muscular)',
+            defaultMetaphor: 'Os operários gentis do castelo do corpo: os pezinhos que correram o dia todo, as mãozinhas que desenharam e abraçaram, e os olhinhos que viram tantas cores agora vestem pijamas de algodão e desligam as luzes um por um.',
+            defaultQuestion: 'Se você desse um boa-noite carinhoso para os seus pés e suas mãos agora, como eles responderiam descansando?',
+            challengeAct: 'deitou com a mente ainda elétrica querendo lembrar do dia inteiro, sem perceber que os músculos ainda estavam apertados no colchão.',
+            breathCue: 'soltou os dedinhos dos pés, depois os joelhos, os ombros e o queixo, expirando longo até o corpo afundar macio no travesseiro.'
+        },
+        cerca_florida: {
+            label: '149. A Cerca Florida do Pomar (Acolhendo Limites e o "Não" com Segurança)',
+            defaultMetaphor: 'A cerquinha baixa coberta de jasmins ao redor do jardim: ela não existe para tirar a liberdade de quem brinca, mas para mostrar onde termina a grama segura e onde começa o barranco, protegendo cada passo com amor firme.',
+            defaultQuestion: 'Você percebe como quem cuida de você diz "não" quando quer proteger a sua saúde e alegria?',
+            challengeAct: 'ouviu um limite claro na hora de encerrar um doce ou uma brincadeira e sentiu o peito ferver querendo negociar sem parar.',
+            breathCue: 'respirou fundo sentindo a firmeza gentil do abraço que protege, soltou a teimosia no ar e acolheu o descanso com paz.'
+        },
+        orvalho_amanha: {
+            label: '150. O Orvalho que Prepara o Sol da Manhã (Esperança Serena para o Novo Dia)',
+            defaultMetaphor: 'As gotinhas silenciosas de orvalho que se formam na madrugada escura: ninguém ouve o barulho delas nascendo na grama, mas quando o primeiro raio dourado toca o horizonte, o campo inteiro brilha feito diamantes de alegria.',
+            defaultQuestion: 'Que coisinha boa e simples você gostaria de viver quando o sol gentil acordar amanhã?',
+            challengeAct: 'terminou o dia cansado de tantas tarefas e pensou que amanhã teria de recomeçar tudo de novo sem descanso suficiente.',
+            breathCue: 'fechou as pálpebras pesadas como pétalas dobradas, inspirou fundo a calma da madrugada e soltou num sono profundo, leve e reparador.'
         }
     };
 
@@ -1066,9 +1164,16 @@
     let amberFontSizeRem = 1.25;
     let amberLineHeight = 1.85;
     let activeAmberTheme = 'amber';
+    let amberNarrateRate = 0.85;
+    let amberAudioMode = 'brown';
+    let amberAudioVolume = 30;
     let autoScrollInterval = null;
     let isAutoScrolling = false;
     let sleepTimerTimeout = null;
+    let sleepCountdownInterval = null;
+    let sleepEndTimeMs = 0;
+    let wakeLockSentinel = null;
+    let amberEventsBound = false;
 
     const AMBER_PREFS_KEY = 'dm_vault_amber_prefs';
 
@@ -1080,6 +1185,9 @@
             if (saved.fontSizeRem) amberFontSizeRem = Math.max(0.85, Math.min(2.4, Number(saved.fontSizeRem)));
             if (saved.lineHeight) amberLineHeight = Math.max(1.4, Math.min(2.6, Number(saved.lineHeight)));
             if (saved.theme && AMBER_PALETTES[saved.theme]) activeAmberTheme = saved.theme;
+            if (saved.narrateRate) amberNarrateRate = Math.max(0.6, Math.min(1.2, Number(saved.narrateRate)));
+            if (saved.audioMode) amberAudioMode = String(saved.audioMode);
+            if (saved.audioVolume !== undefined) amberAudioVolume = Math.max(0, Math.min(100, Number(saved.audioVolume)));
         }
     }
 
@@ -1089,7 +1197,10 @@
         C.store.set(AMBER_PREFS_KEY, {
             fontSizeRem: amberFontSizeRem,
             lineHeight: amberLineHeight,
-            theme: activeAmberTheme
+            theme: activeAmberTheme,
+            narrateRate: amberNarrateRate,
+            audioMode: amberAudioMode,
+            audioVolume: amberAudioVolume
         });
     }
 
@@ -1229,11 +1340,40 @@
         if (label) label.textContent = playing ? 'Pausar Som' : 'Áudio Relaxante';
     }
 
+    function clearSleepCountdownUI() {
+        if (sleepCountdownInterval) {
+            clearInterval(sleepCountdownInterval);
+            sleepCountdownInterval = null;
+        }
+        sleepEndTimeMs = 0;
+        const cdEl = document.getElementById('amber-sleep-countdown');
+        if (cdEl) {
+            cdEl.textContent = '';
+            cdEl.classList.add('hidden');
+        }
+    }
+
     function setSleepTimer(minutes) {
         if (sleepTimerTimeout) clearTimeout(sleepTimerTimeout);
+        clearSleepCountdownUI();
         if (!minutes || minutes <= 0) return;
 
+        sleepEndTimeMs = Date.now() + minutes * 60 * 1000;
+        const cdEl = document.getElementById('amber-sleep-countdown');
+        const updateCountdown = () => {
+            if (!cdEl || !sleepEndTimeMs) return;
+            const remMs = Math.max(0, sleepEndTimeMs - Date.now());
+            const totalSec = Math.ceil(remMs / 1000);
+            const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+            const ss = String(totalSec % 60).padStart(2, '0');
+            cdEl.textContent = `⏳ ${mm}:${ss}`;
+            cdEl.classList.remove('hidden');
+        };
+        updateCountdown();
+        sleepCountdownInterval = setInterval(updateCountdown, 1000);
+
         sleepTimerTimeout = setTimeout(() => {
+            clearSleepCountdownUI();
             stopSpeechNarration();
             stopAutoScroll();
 
@@ -1325,6 +1465,13 @@
             qBox.style.borderColor = pal.boxBorder;
         }
         if (qText) qText.style.color = pal.title;
+
+        document.querySelectorAll('[data-amber-theme]').forEach((btn) => {
+            const isSel = btn.getAttribute('data-amber-theme') === activeAmberTheme;
+            btn.classList.toggle('ring-2', isSel);
+            btn.classList.toggle('ring-amber-400', isSel);
+            btn.classList.toggle('font-bold', isSel);
+        });
         saveAmberPrefs();
     }
 
@@ -1351,16 +1498,25 @@
         const protagonist = params.childName ? params.childName : 'pequeno(a) viajante';
         const ageNum = Number(params.childAge) || 5;
 
-        const paceNote = ageNum <= 4
-            ? 'Cada palavra soava redonda, curtinha e mansa como um balanço devagar.'
-            : 'O silêncio gostoso da noite deixava cada pensamento desacelerar sem nenhuma pressa.';
+        let paceNote = '';
+        let bridgeClosing = '';
+        if (ageNum <= 4) {
+            paceNote = 'Cada palavra soava redonda, curtinha e mansa como um balanço devagar no colo.';
+            bridgeClosing = 'Agora, com os olhinhos ficando bem pesadinhos, macios e quentinhos, só restava o aconchego do travesseiro e um sono manso até o sol voltar.';
+        } else if (ageNum <= 7) {
+            paceNote = 'O silêncio gostoso da noite deixava cada pensamento desacelerar sem nenhuma pressa.';
+            bridgeClosing = 'Agora, com as pálpebras ficando pesadas, calmas e protegidas, só restava o aconchego do travesseiro e a certeza de que amanhã será um dia gentil.';
+        } else {
+            paceNote = 'A quietude da noite abria um espaço sereno para observar os pensamentos de longe, sem precisar resolver nada antes de dormir.';
+            bridgeClosing = 'Com a respiração profunda e os músculos completamente soltos no colchão, a mente sabia que podia entregar o dia inteiro ao descanso reparador.';
+        }
 
         const title = `${params.childName ? params.childName + ' e ' : 'O Segredo d'}o Descanso em ${sc.label.split('&')[0].trim()}`;
 
-        const act1 = `${sc.opening} ${paceNote} Ali caminhava ${protagonist}, sentindo a terra fresca sob os pés e observando as primeiras luzes douradas e calmas do entardecer.`;
+        const act1 = `${sc.opening} ${paceNote} Ali caminhava ${protagonist}, sentindo o frescor da noite sob os pés e observando as primeiras luzes douradas e calmas do entardecer.`;
         const act2 = `Mais cedo naquele dia, ${protagonist} ${th.challengeAct}`;
         const act3 = `Foi então que se aproximou ${sc.guide}. Com voz baixinha e acolhedora, mostrou um segredo da natureza: "${params.metaphor}". Juntos, praticaram a pausa mágica: ${protagonist} ${th.breathCue} Pouco a pouco, os ombros soltaram todo o peso e o coração encontrou um ritmo quentinho e seguro.`;
-        const act4 = `${sc.closing} Agora, com as pálpebras ficando pesadas, calmas e protegidas, só restava o aconchego do travesseiro e a certeza de que amanhã será um dia gentil.`;
+        const act4 = `${sc.closing} ${bridgeClosing}`;
 
         const fullText = `${act1}\n\n${act2}\n\n${act3}\n\n${act4}`;
 
@@ -1644,6 +1800,49 @@
         saveAmberPrefs();
     }
 
+    async function toggleAmberWakeLock() {
+        const C = global.VaultCore;
+        const btn = document.getElementById('btn-amber-wakelock');
+        if (!('wakeLock' in navigator)) {
+            if (C) C.toast('Wake Lock nativo não suportado neste navegador.', 'info', 2200);
+            return;
+        }
+        if (wakeLockSentinel) {
+            await releaseAmberWakeLock();
+            if (C) C.toast('Bloqueio de tela restaurado ao padrão do sistema.', 'info', 1800);
+            return;
+        }
+        try {
+            wakeLockSentinel = await navigator.wakeLock.request('screen');
+            wakeLockSentinel.addEventListener('release', () => {
+                wakeLockSentinel = null;
+                if (btn) {
+                    btn.classList.remove('bg-amber-500/30', 'border-amber-400');
+                    btn.textContent = '☀️ Tela';
+                }
+            });
+            if (btn) {
+                btn.classList.add('bg-amber-500/30', 'border-amber-400');
+                btn.textContent = '☀️ Acesa';
+            }
+            if (C) C.toast('Tela mantida acesa durante a leitura noturna!', 'success', 2000);
+        } catch (_) {
+            if (C) C.toast('Não foi possível ativar Wake Lock nesta aba.', 'warning', 2000);
+        }
+    }
+
+    async function releaseAmberWakeLock() {
+        const btn = document.getElementById('btn-amber-wakelock');
+        if (wakeLockSentinel) {
+            try { await wakeLockSentinel.release(); } catch (_) {}
+            wakeLockSentinel = null;
+        }
+        if (btn) {
+            btn.classList.remove('bg-amber-500/30', 'border-amber-400');
+            btn.textContent = '☀️ Tela';
+        }
+    }
+
     function openAmberNightReader(storyObj) {
         loadAmberPrefs();
         const overlay = document.getElementById('amber-night-reader');
@@ -1654,8 +1853,8 @@
         if (!target || !target.text) {
             const params = collectStoryParams();
             target = composeModularStory(params);
-            currentComposedStory = target;
         }
+        currentComposedStory = target;
 
         const tEl = document.getElementById('amber-reader-title');
         const bEl = document.getElementById('amber-reader-body');
@@ -1671,6 +1870,16 @@
         }
         if (qEl) qEl.textContent = target.question;
 
+        // Sincronizar preferências persistidas nos selects do leitor
+        const lhSel = document.getElementById('amber-line-height-select');
+        if (lhSel) lhSel.value = String(amberLineHeight);
+        const rateSel = document.getElementById('amber-narrate-rate-select');
+        if (rateSel) rateSel.value = String(amberNarrateRate);
+        const modeSel = document.getElementById('audio-mode-select');
+        if (modeSel) modeSel.value = amberAudioMode;
+        const volSel = document.getElementById('audio-volume-slider');
+        if (volSel) volSel.value = String(amberAudioVolume);
+
         // Metadados de leitura suave (palavras e minutos estimados)
         if (target.text) {
             const words = target.text.trim().split(/\s+/).filter(Boolean).length;
@@ -1683,8 +1892,6 @@
                 estTopEl.textContent = `⏱️ ~${readMins} min (${words} pal.)`;
             }
         }
-        const lhSel = document.getElementById('amber-line-height-select');
-        if (lhSel) lhSel.value = String(amberLineHeight);
 
         // Progresso de rolagem e persistência de posição
         overlay.onscroll = () => {
@@ -1727,10 +1934,10 @@
                 updateAutoScrollUI(false);
             }
         };
-        overlay.addEventListener('wheel', handleManualScroll, { passive: true });
-        overlay.addEventListener('touchmove', handleManualScroll, { passive: true });
+        overlay.onwheel = handleManualScroll;
+        overlay.ontouchmove = handleManualScroll;
 
-        // Atalhos de teclado no modo leitor noturno
+        // Atalhos de teclado no modo leitor noturno (único handler consolidado)
         if (readerKeyHandler) {
             document.removeEventListener('keydown', readerKeyHandler);
         }
@@ -1754,7 +1961,7 @@
                 toggleAmberFullscreen();
             } else if (e.key === 't' || e.key === 'T') {
                 e.preventDefault();
-                const themesCycle = ['amber', 'red', 'sage', 'dark'];
+                const themesCycle = ['amber', 'candle', 'red', 'sage', 'sepia', 'dark'];
                 const curIdx = themesCycle.indexOf(activeAmberTheme);
                 const nextTheme = themesCycle[(curIdx + 1) % themesCycle.length];
                 applyAmberThermalPalette(nextTheme);
@@ -1790,6 +1997,7 @@
         document.body.style.overflow = '';
         stopAutoScroll();
         stopSpeechNarration();
+        releaseAmberWakeLock();
         if (readerKeyHandler) {
             document.removeEventListener('keydown', readerKeyHandler);
             readerKeyHandler = null;
@@ -1916,6 +2124,9 @@
         const C = global.VaultCore;
         const prof = C.store.getProfile();
 
+        const totalThemes = Object.keys(STORY_THEMES).length;
+        const totalScenarios = Object.keys(STORY_SCENARIOS).length;
+
         panel.innerHTML = `
             <div class="space-y-5 pb-20">
                 <!-- Cabeçalho -->
@@ -1923,7 +2134,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Pediatria do Sono &amp; Regulação Afetiva</span>
-                            <span class="text-xs font-mono text-slate-400">106 Metáforas Comportamentais &amp; 14 Biomas</span>
+                            <span class="text-xs font-mono text-slate-400">${totalThemes} Metáforas Comportamentais &amp; ${totalScenarios} Biomas</span>
                         </div>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Gerador Estruturado de Cenas Terapêuticas &amp; Contos Noturnos</h2>
                     </div>
@@ -1950,13 +2161,18 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-300 mb-1">Idade</label>
-                                    <input type="number" id="ct-child-age" min="2" max="12" value="5"
+                                    <input type="number" id="ct-child-age" min="2" max="12" value="${Number(prof.childAge) || 5}"
                                         class="w-full min-h-[40px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-center text-slate-100">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">Tema Emocional do Dia (106 Metáforas Clínicas) *</label>
+                                <div class="flex items-center justify-between gap-2 mb-1">
+                                    <label class="block text-xs font-semibold text-slate-300">Tema Emocional do Dia (${totalThemes} Metáforas) *</label>
+                                    <span id="ct-theme-match-count" class="text-[10px] font-mono text-amber-400/80">${totalThemes} temas</span>
+                                </div>
+                                <input type="text" id="ct-theme-search" placeholder="Filtrar metáfora por tema (ex: birra, escola, sono, medo, TDAH, casa...)"
+                                    class="w-full min-h-[34px] px-3 py-1 mb-1.5 rounded-lg bg-[#090d16] border border-slate-800 focus:border-amber-500/60 focus:outline-none text-xs text-slate-200 placeholder-slate-500">
                                 <select id="ct-theme" class="w-full min-h-[42px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-amber-300">
                                     ${Object.entries(STORY_THEMES).map(([k, v]) => `
                                         <option value="${k}">${v.label}</option>
@@ -2054,7 +2270,58 @@
     function bindContosEvents() {
         const C = global.VaultCore;
 
+        const childNameEl = document.getElementById('ct-child-name');
+        if (childNameEl) {
+            childNameEl.addEventListener('input', (e) => {
+                const val = e.target.value;
+                C.store.updateProfile({ childLabel: val });
+                const dfIn = document.getElementById('df-profile-label');
+                if (dfIn && document.activeElement !== dfIn) {
+                    dfIn.value = val;
+                }
+                updateModularAndPrompt();
+            });
+        }
+
+        const childAgeEl = document.getElementById('ct-child-age');
+        if (childAgeEl) {
+            childAgeEl.addEventListener('change', (e) => {
+                const age = Math.max(2, Math.min(12, Number(e.target.value) || 5));
+                C.store.updateProfile({ childAge: age });
+                updateModularAndPrompt();
+            });
+        }
+
         const themeSelect = document.getElementById('ct-theme');
+        const themeSearch = document.getElementById('ct-theme-search');
+        const themeCountEl = document.getElementById('ct-theme-match-count');
+
+        if (themeSearch && themeSelect) {
+            themeSearch.addEventListener('input', () => {
+                const q = themeSearch.value.trim().toLowerCase();
+                const currentVal = themeSelect.value;
+                const entries = Object.entries(STORY_THEMES).filter(([k, v]) =>
+                    !q ||
+                    v.label.toLowerCase().includes(q) ||
+                    v.defaultMetaphor.toLowerCase().includes(q) ||
+                    k.toLowerCase().includes(q)
+                );
+                if (entries.length === 0) {
+                    themeSelect.innerHTML = `<option value="frustracao">Nenhum tema encontrado para "${C.esc(q)}"</option>`;
+                    if (themeCountEl) themeCountEl.textContent = '0 temas';
+                    return;
+                }
+                themeSelect.innerHTML = entries.map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+                if (entries.some(([k]) => k === currentVal)) {
+                    themeSelect.value = currentVal;
+                } else {
+                    themeSelect.value = entries[0][0];
+                    themeSelect.dispatchEvent(new Event('change'));
+                }
+                if (themeCountEl) themeCountEl.textContent = `${entries.length} tema(s)`;
+            });
+        }
+
         if (themeSelect) {
             themeSelect.addEventListener('change', () => {
                 const th = STORY_THEMES[themeSelect.value] || STORY_THEMES.frustracao;
@@ -2076,6 +2343,11 @@
         if (scSelect) {
             scSelect.addEventListener('change', () => updateModularAndPrompt());
         }
+
+        const metaInput = document.getElementById('ct-metaphor');
+        if (metaInput) metaInput.addEventListener('input', updateModularAndPrompt);
+        const qInput = document.getElementById('ct-question');
+        if (qInput) qInput.addEventListener('input', updateModularAndPrompt);
 
         const btnCompose = document.getElementById('btn-ct-compose-offline');
         if (btnCompose) {
@@ -2114,7 +2386,10 @@
             });
         }
 
-        // Eventos do Modal Âmbar
+        // Eventos do Modal Âmbar (vinculados uma única vez para evitar duplicação pós-restore)
+        if (amberEventsBound) return;
+        amberEventsBound = true;
+
         const btnAmberClose = document.getElementById('btn-amber-close');
         if (btnAmberClose) btnAmberClose.addEventListener('click', closeAmberNightReader);
 
@@ -2155,59 +2430,6 @@
             });
         }
 
-        // Atalhos de teclado no modo leitor âmbar (único listener consolidado)
-        window.addEventListener('keydown', (e) => {
-            const reader = document.getElementById('amber-night-reader');
-            if (!reader || reader.classList.contains('hidden')) return;
-
-            const isInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT';
-            if (isInput) return;
-
-            if (e.key === 'Escape') {
-                closeAmberNightReader();
-            } else if (e.code === 'Space') {
-                e.preventDefault();
-                toggleAutoScroll();
-            } else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 'j') {
-                e.preventDefault();
-                stopAutoScroll();
-                reader.scrollBy({ top: 90, behavior: 'smooth' });
-            } else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                stopAutoScroll();
-                reader.scrollBy({ top: -90, behavior: 'smooth' });
-            } else if (e.key === '+' || e.key === '=') {
-                e.preventDefault();
-                amberFontSizeRem = Math.min(2.4, amberFontSizeRem + 0.1);
-                const b = document.getElementById('amber-reader-body');
-                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
-                saveAmberPrefs();
-            } else if (e.key === '-' || e.key === '_') {
-                e.preventDefault();
-                amberFontSizeRem = Math.max(0.85, amberFontSizeRem - 0.1);
-                const b = document.getElementById('amber-reader-body');
-                if (b) b.style.fontSize = `${amberFontSizeRem}rem`;
-                saveAmberPrefs();
-            } else if (e.key.toLowerCase() === 'f') {
-                e.preventDefault();
-                toggleAmberFullscreen();
-            } else if (e.key.toLowerCase() === 't') {
-                e.preventDefault();
-                const themesCycle = ['amber', 'red', 'sage', 'dark'];
-                const curIdx = themesCycle.indexOf(activeAmberTheme);
-                const nextTheme = themesCycle[(curIdx + 1) % themesCycle.length];
-                applyAmberThermalPalette(nextTheme);
-                C.toast(`Paleta: ${nextTheme}`, 'info', 1000);
-            } else if (e.key.toLowerCase() === 'm') {
-                e.preventDefault();
-                const btnAudio = document.getElementById('btn-audio-toggle');
-                if (btnAudio) btnAudio.click();
-            } else if (e.key.toLowerCase() === 'n') {
-                e.preventDefault();
-                toggleSpeechNarration();
-            }
-        });
-
         const btnAmberStar = document.getElementById('btn-amber-star');
         if (btnAmberStar) {
             btnAmberStar.addEventListener('click', () => {
@@ -2227,6 +2449,14 @@
         const btnAmberNarrate = document.getElementById('btn-amber-narrate');
         if (btnAmberNarrate) {
             btnAmberNarrate.addEventListener('click', toggleSpeechNarration);
+        }
+
+        const rateSelect = document.getElementById('amber-narrate-rate-select');
+        if (rateSelect) {
+            rateSelect.addEventListener('change', () => {
+                amberNarrateRate = parseFloat(rateSelect.value) || 0.85;
+                saveAmberPrefs();
+            });
         }
 
         const sleepSelect = document.getElementById('amber-sleep-timer-select');
@@ -2250,6 +2480,11 @@
         const btnAutoScroll = document.getElementById('btn-amber-autoscroll');
         if (btnAutoScroll) {
             btnAutoScroll.addEventListener('click', toggleAutoScroll);
+        }
+
+        const btnWakeLock = document.getElementById('btn-amber-wakelock');
+        if (btnWakeLock) {
+            btnWakeLock.addEventListener('click', toggleAmberWakeLock);
         }
 
         const btnFullscreen = document.getElementById('btn-amber-fullscreen');
@@ -2283,7 +2518,7 @@
                     stopRelaxationAudio();
                 } else {
                     const sel = document.getElementById('audio-mode-select');
-                    const mode = sel ? sel.value : 'brown';
+                    const mode = sel ? sel.value : amberAudioMode;
                     startRelaxationAudio(mode);
                 }
             });
@@ -2292,8 +2527,10 @@
         const audioModeSelect = document.getElementById('audio-mode-select');
         if (audioModeSelect) {
             audioModeSelect.addEventListener('change', () => {
+                amberAudioMode = audioModeSelect.value;
+                saveAmberPrefs();
                 if (isRelaxAudioPlaying) {
-                    startRelaxationAudio(audioModeSelect.value);
+                    startRelaxationAudio(amberAudioMode);
                 }
             });
         }
@@ -2301,7 +2538,9 @@
         const volSlider = document.getElementById('audio-volume-slider');
         if (volSlider) {
             volSlider.addEventListener('input', (e) => {
-                setRelaxationVolume(parseInt(e.target.value, 10));
+                amberAudioVolume = parseInt(e.target.value, 10);
+                setRelaxationVolume(amberAudioVolume);
+                saveAmberPrefs();
             });
         }
     }

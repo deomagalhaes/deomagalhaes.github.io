@@ -222,10 +222,24 @@
                                     <label for="df-autonomic-slider" class="text-xs font-mono text-slate-300">
                                         Ativação Fisiológica / Autonômica Atual: <strong id="df-autonomic-val" class="text-cyan-300 text-sm">5/10</strong>
                                     </label>
-                                    <span id="df-autonomic-badge" class="px-2 py-0.5 rounded text-[11px] font-mono border"></span>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" id="btn-df-sigh-timer" class="px-2.5 py-1 rounded-lg bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/30 text-[11px] font-mono text-cyan-200 transition">
+                                            Suspiro Fisiológico (30s)
+                                        </button>
+                                        <span id="df-autonomic-badge" class="px-2 py-0.5 rounded text-[11px] font-mono border"></span>
+                                    </div>
                                 </div>
                                 <input type="range" id="df-autonomic-slider" min="1" max="10" value="5" class="w-full accent-cyan-400 cursor-pointer">
                                 <p id="df-autonomic-hint" class="text-[11px] text-slate-400"></p>
+                                <div id="df-sigh-panel" class="hidden pt-2 border-t border-slate-800/80 space-y-1.5">
+                                    <div class="flex items-center justify-between text-[11px] font-mono">
+                                        <span id="df-sigh-phase" class="text-cyan-300">Inspire duplo pelo nariz...</span>
+                                        <span id="df-sigh-timer-sec" class="text-slate-400">30s</span>
+                                    </div>
+                                    <div class="w-full h-1.5 rounded-full bg-slate-900 overflow-hidden">
+                                        <div id="df-sigh-progress" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-300" style="width: 0%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -347,6 +361,10 @@
                                 <button type="submit" class="flex-1 min-h-[44px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition">
                                     <i data-lucide="save" class="w-4 h-4"></i>
                                     <span>Registrar Veredito 24h</span>
+                                </button>
+                                <button type="button" id="btn-df-copy-biff" class="min-h-[44px] px-3 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/30 text-xs text-cyan-200 flex items-center gap-1.5 transition" title="Copiar modelo de resposta BIFF (Breve, Informativo, Amigável, Firme)">
+                                    <i data-lucide="copy" class="w-4 h-4 text-cyan-300"></i>
+                                    <span>Copiar Script BIFF</span>
                                 </button>
                                 <button type="button" id="btn-df-reset-form" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition" title="Limpar formulário e iniciar novo protocolo de deliberação">
                                     <i data-lucide="rotate-ccw" class="w-4 h-4 text-cyan-400"></i>
@@ -473,14 +491,24 @@
             return;
         }
 
-        listEl.innerHTML = filtered.map((item) => `
+        const nowMs = Date.now();
+        listEl.innerHTML = filtered.map((item) => {
+            const hasMoratorium = Number.isFinite(Number(item.moratoriumUntilMs)) && Number(item.moratoriumUntilMs) > 0;
+            const moratoriumActive = hasMoratorium && Number(item.moratoriumUntilMs) > nowMs;
+            const remHours = moratoriumActive ? Math.max(1, Math.ceil((Number(item.moratoriumUntilMs) - nowMs) / 3600000)) : 0;
+            const advNum = Number(item.netAdvantage || 0);
+            const advLabel = advNum >= 0 ? `+${advNum}` : `${advNum}`;
+            return `
             <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div class="space-y-1 min-w-0">
                     <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
                         <span class="text-cyan-400">${C.formatDateBR(item.date)} ${C.esc(item.time || '')}</span>
                         <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ativação: ${item.autonomicLevel}/10</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Proteção: ${item.checksPassed}/4</span>
-                        <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">Saldo: +${item.netAdvantage}</span>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">Saldo: ${advLabel}</span>
+                        ${hasMoratorium ? (moratoriumActive
+                            ? `<span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/30 text-amber-200">Moratória 24h ativa (~${remHours}h)</span>`
+                            : `<span class="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">Janela 24h concluída</span>`) : ''}
                         ${Array.isArray(item.distortions) && item.distortions.length > 0 ? `
                             <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300">Distorções: ${item.distortions.map(C.esc).join(', ')}</span>
                         ` : ''}
@@ -504,7 +532,8 @@
                     </button>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         listEl.querySelectorAll('[data-df-load]').forEach((btn) => {
             btn.addEventListener('click', () => {
@@ -519,8 +548,8 @@
 
                 setVal('df-strict-fact', target.strictFact || '');
                 setVal('df-emotional-reading', target.emotionalReading || '');
-                setVal('df-impulsive-text', target.impulsiveReaction || '');
-                setVal('df-strategic-text', target.strategicIntervention || '');
+                setVal('df-impulsive-text', target.impulsiveReaction ?? target.impulsiveNotes ?? '');
+                setVal('df-strategic-text', target.strategicIntervention ?? target.strategicNotes ?? '');
                 setVal('df-do-action', target.doAction || '');
                 setVal('df-dont-action', target.dontAction || '');
 
@@ -532,6 +561,14 @@
                     if (target.tradeOffs.escalation !== undefined) setVal('df-esc-slider', target.tradeOffs.escalation);
                     if (target.tradeOffs.effort !== undefined) setVal('df-effort-slider', target.tradeOffs.effort);
                     if (target.tradeOffs.gain !== undefined) setVal('df-gain-slider', target.tradeOffs.gain);
+                }
+                if (target.checks && typeof target.checks === 'object') {
+                    ['df-chk-routine', 'df-chk-shield', 'df-chk-warmth', 'df-chk-documentation'].forEach((chkId) => {
+                        const chkEl = document.getElementById(chkId);
+                        if (chkEl && typeof target.checks[chkId] === 'boolean') {
+                            chkEl.checked = target.checks[chkId];
+                        }
+                    });
                 }
 
                 const dists = Array.isArray(target.distortions) ? target.distortions : [];
@@ -724,6 +761,69 @@
             });
         });
 
+        let sighTimerHandle = null;
+        const btnSigh = document.getElementById('btn-df-sigh-timer');
+        if (btnSigh) {
+            btnSigh.addEventListener('click', () => {
+                const panel = document.getElementById('df-sigh-panel');
+                const phaseEl = document.getElementById('df-sigh-phase');
+                const secEl = document.getElementById('df-sigh-timer-sec');
+                const progEl = document.getElementById('df-sigh-progress');
+                if (sighTimerHandle) {
+                    clearInterval(sighTimerHandle);
+                    sighTimerHandle = null;
+                    btnSigh.textContent = 'Suspiro Fisiológico (30s)';
+                    if (panel) panel.classList.add('hidden');
+                    return;
+                }
+                let elapsed = 0;
+                const total = 30;
+                if (panel) panel.classList.remove('hidden');
+                btnSigh.textContent = 'Parar Suspiro (30s)';
+                const tick = () => {
+                    const rem = Math.max(0, total - elapsed);
+                    const cyclePos = elapsed % 10;
+                    let phaseText = '1/2 Inspiração nasal profunda...';
+                    if (cyclePos >= 2 && cyclePos < 3.5) phaseText = '2/2 Segunda puxada curta nasal (expande alvéolos)...';
+                    else if (cyclePos >= 3.5) phaseText = 'Exalação lenta e contínua pela boca (tônus vagal)...';
+                    if (phaseEl) phaseEl.textContent = phaseText;
+                    if (secEl) secEl.textContent = `${rem}s`;
+                    if (progEl) progEl.style.width = `${Math.min(100, Math.round((elapsed / total) * 100))}%`;
+                    if (elapsed >= total) {
+                        clearInterval(sighTimerHandle);
+                        sighTimerHandle = null;
+                        btnSigh.textContent = 'Suspiro Fisiológico (30s)';
+                        if (phaseEl) phaseEl.textContent = 'Ciclo concluído. Reavalie sua ativação antes de deliberar.';
+                        C.toast('Ciclo de Suspiro Fisiológico concluído.', 'success');
+                        return;
+                    }
+                    elapsed += 1;
+                };
+                tick();
+                sighTimerHandle = setInterval(tick, 1000);
+            });
+        }
+
+        const btnCopyBiff = document.getElementById('btn-df-copy-biff');
+        if (btnCopyBiff) {
+            btnCopyBiff.addEventListener('click', async () => {
+                const fact = (document.getElementById('df-strict-fact')?.value || '').trim();
+                const doAct = (document.getElementById('df-do-action')?.value || '').trim();
+                const childRef = getNeutralChildRef();
+                const biffText = [
+                    `Olá. Sobre ${fact || 'o combinados recentes'}:`,
+                    `Para manter a rotina e o bem-estar de ${childRef}, seguirei com o seguinte encaminhamento: ${doAct || '[definir ação objetiva em 24h]'}.`,
+                    `Fico à disposição para ajustes práticos de horário ou logística pelo canal combinado. Obrigado.`
+                ].join('\n');
+                if (C.copyToClipboard) {
+                    await C.copyToClipboard(biffText);
+                } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(biffText);
+                }
+                C.toast('Modelo BIFF (Breve, Informativo, Amigável, Firme) copiado.', 'success');
+            });
+        }
+
         document.querySelectorAll('[data-df-quick-chip]').forEach((btn) => {
             btn.addEventListener('click', () => {
                 const phrase = btn.getAttribute('data-df-quick-chip');
@@ -735,6 +835,7 @@
                         emoArea.value = phrase + ' ' + emoArea.value.trim();
                     }
                     emoArea.focus();
+                    saveDesfusaoDraft();
                 }
             });
         });
@@ -761,6 +862,7 @@
                 if (!current.startsWith('Estou notando o pensamento de que')) {
                     emoArea.value = `Estou notando o pensamento de que "${current}"... mas pensamentos são eventos cognitivos transitórios, não ordens motoras.`;
                 }
+                saveDesfusaoDraft();
                 C.toast('Desfusão ACT (Rótulo Mental) aplicada.', 'info');
             });
         }
@@ -772,6 +874,7 @@
                 let current = emoArea.value.trim();
                 if (!current) current = 'preciso reagir a esta afronta ou urgência';
                 emoArea.value = `Percebo que a mente está gerando o pensamento de "${current}". Sou o céu imenso que acolhe tudo; este pensamento é só uma nuvem cinza passageira que não define minha essência nem minha ação.`;
+                saveDesfusaoDraft();
                 C.toast('Metáfora do Céu & Nuvens (Eu-Contexto) aplicada.', 'info');
             });
         }
@@ -783,6 +886,7 @@
                 let current = emoArea.value.trim();
                 if (!current) current = 'preciso controlar o que estão pensando';
                 emoArea.value = `Coloco o pensamento "${current}" em uma folha pousada sobre a água do riacho. Apenas observo a folha navegar rio abaixo ao ritmo da respiração calma, sem me apegar nem tentar empurrá-la.`;
+                saveDesfusaoDraft();
                 C.toast('Metáfora de Folhas no Riacho (Desfusão) aplicada.', 'info');
             });
         }
@@ -798,24 +902,40 @@
             const esc = Number(document.getElementById('df-esc-slider').value);
             const effort = Number(document.getElementById('df-effort-slider').value);
             const gain = Number(document.getElementById('df-gain-slider').value);
-            const checks = ['df-chk-routine', 'df-chk-shield', 'df-chk-warmth', 'df-chk-documentation']
-                .filter((id) => document.getElementById(id).checked).length;
+            const checkIds = ['df-chk-routine', 'df-chk-shield', 'df-chk-warmth', 'df-chk-documentation'];
+            const checkMap = {};
+            let checks = 0;
+            checkIds.forEach((chkId) => {
+                const el = document.getElementById(chkId);
+                const ok = Boolean(el && el.checked);
+                checkMap[chkId] = ok;
+                if (ok) checks += 1;
+            });
             const distortions = Array.from(document.querySelectorAll('#df-distortions-chips input:checked'))
                 .map((el) => el.value);
 
+            const impulsiveText = document.getElementById('df-impulsive-text').value.trim();
+            const strategicText = document.getElementById('df-strategic-text').value.trim();
             const now = new Date();
+            const nowMs = now.getTime();
             const record = {
-                id: 'DF-' + Date.now(),
+                id: 'DF-' + nowMs,
                 date: C.todayISO(),
                 time: now.toTimeString().slice(0, 5),
+                createdAtMs: nowMs,
+                moratoriumUntilMs: autoLv >= 7 ? nowMs + 86400000 : null,
                 strictFact: document.getElementById('df-strict-fact').value.trim(),
                 emotionalReading: document.getElementById('df-emotional-reading').value.trim(),
                 distortions,
                 autonomicLevel: autoLv,
-                impulsiveNotes: document.getElementById('df-impulsive-text').value.trim(),
-                strategicNotes: document.getElementById('df-strategic-text').value.trim(),
+                impulsiveReaction: impulsiveText,
+                strategicIntervention: strategicText,
+                impulsiveNotes: impulsiveText,
+                strategicNotes: strategicText,
+                tradeOffs: { loss, escalation: esc, effort, gain },
                 netAdvantage: (gain + loss + esc) - effort,
                 checksPassed: checks,
+                checks: checkMap,
                 doAction: document.getElementById('df-do-action').value.trim(),
                 dontAction: document.getElementById('df-dont-action').value.trim()
             };
@@ -830,8 +950,10 @@
             document.getElementById('df-chk-documentation').checked = true;
             updateDesfusaoLiveMetrics();
             renderDesfusaoHistory();
-            C.store.remove('dm_vault_desfusao_draft');
-            C.toast('Veredito operacional de 24h gravado com sucesso.', 'success');
+            C.store.remove(C.STORAGE_KEYS.DESFUSAO_DRAFT || 'dm_vault_desfusao_draft');
+            C.toast(autoLv >= 7
+                ? 'Veredito gravado com Moratória Estratégica de 24h ativa (ativação ≥ 7).'
+                : 'Veredito operacional de 24h gravado com sucesso.', 'success');
         });
 
         // Auto-save de rascunho de desfusão integral (textos, sliders, distorções e checks)

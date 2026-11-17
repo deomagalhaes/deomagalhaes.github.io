@@ -183,13 +183,14 @@
         const netPerHour = model.netEffectiveHourly > 0 ? model.netEffectiveHourly : 150;
 
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
+        const numOrDefault = (val, def) => (val !== undefined && val !== null && val !== '' && Number.isFinite(Number(val))) ? Math.max(0, Number(val)) : def;
         const tiers = [
             {
                 id: 'essential',
                 level: 1,
                 name: raw.nameEssential || 'Nível 1 • Sobrevivência Essencial',
                 desc: 'Moradia, serviços básicos, alimentação essencial e sobrevivência digna.',
-                cost: Math.max(0, Number(raw.expenseEssential) || 2500),
+                cost: numOrDefault(raw.expenseEssential, 2500),
                 inputKey: 'expenseEssential',
                 nameKey: 'nameEssential',
                 color: 'emerald',
@@ -200,7 +201,7 @@
                 level: 2,
                 name: raw.nameClinic || 'Nível 2 • Sustentação do Consultório',
                 desc: 'Custos operacionais fixos do consultório, laudos, plataformas, tributos e anuidade CRP.',
-                cost: Math.max(0, Number(raw.expenseClinic) || 2600),
+                cost: numOrDefault(raw.expenseClinic, 2600),
                 inputKey: 'expenseClinic',
                 nameKey: 'nameClinic',
                 color: 'cyan',
@@ -211,7 +212,7 @@
                 level: 3,
                 name: raw.nameFamily || 'Nível 3 • Família & Saúde Plena',
                 desc: 'Plano de saúde, farmácia, educação, segurança e suporte familiar.',
-                cost: Math.max(0, Number(raw.expenseFamily) || 3500),
+                cost: numOrDefault(raw.expenseFamily, 3500),
                 inputKey: 'expenseFamily',
                 nameKey: 'nameFamily',
                 color: 'amber',
@@ -222,7 +223,7 @@
                 level: 4,
                 name: raw.nameLifestyle || 'Nível 4 • Liberdade & Estilo de Vida',
                 desc: 'Viagens, congressos internacionais, hobbies, bonsai, música e lazer sem culpa.',
-                cost: Math.max(0, Number(raw.expenseLifestyle) || 2000),
+                cost: numOrDefault(raw.expenseLifestyle, 2000),
                 inputKey: 'expenseLifestyle',
                 nameKey: 'nameLifestyle',
                 color: 'purple',
@@ -262,13 +263,26 @@
         }
 
         let accumulated = 0;
+        const calcMonthsToPassive = (targetMonthlyPassive) => {
+            if (targetMonthlyPassive <= 0 || passive >= targetMonthlyPassive) return 0;
+            if (model.monthlyRate <= 0 && model.monthlyContribution <= 0) return null;
+            let simP = model.initPatrimony;
+            for (let m = 1; m <= 600; m++) {
+                simP = simP * (1 + model.monthlyRate) + model.monthlyContribution;
+                if (simP * model.monthlyRate >= targetMonthlyPassive) return m;
+            }
+            return null;
+        };
+
         const processed = tiers.map((t) => {
             const startAcc = accumulated;
             accumulated += t.cost;
             const endAcc = accumulated;
 
             let coverage = 0;
-            if (passive >= endAcc) {
+            if (t.cost <= 0) {
+                coverage = passive >= startAcc ? 100 : 0;
+            } else if (passive >= endAcc) {
                 coverage = 100;
             } else if (passive > startAcc) {
                 coverage = ((passive - startAcc) / t.cost) * 100;
@@ -277,7 +291,8 @@
             const capitalNeeded = monthlyRate > 0 ? (t.cost / monthlyRate) : 0;
             const sessionsNeeded = netPerSession > 0 ? (t.cost / netPerSession) : 0;
             const hoursNeeded = netPerHour > 0 ? (t.cost / netPerHour) : 0;
-            const survivalBufferDays = (t.cost > 0 && passive > 0) ? Math.round((passive / t.cost) * 30) : 0;
+            const survivalBufferDays = (t.cost > 0 && passive > 0) ? Math.round((passive / t.cost) * 30) : (t.cost <= 0 ? 30 : 0);
+            const monthsToCoverTier = calcMonthsToPassive(endAcc);
 
             return Object.assign({}, t, {
                 accumulatedCost: endAcc,
@@ -286,7 +301,8 @@
                 capitalNeeded,
                 sessionsNeeded,
                 hoursNeeded,
-                survivalBufferDays
+                survivalBufferDays,
+                monthsToCoverTier
             });
         });
 
@@ -310,8 +326,9 @@
     function computeStressTest(customInputs) {
         const raw = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
         const scenarioKey = raw.stressScenario || 'crash30';
-        const customDrop = Number(raw.stressCustomDrop) || 30;
-        const customInf = Number(raw.stressCustomInf) || 4;
+        const customDrop = raw.stressCustomDrop !== undefined ? Number(raw.stressCustomDrop) : 30;
+        const customInf = raw.stressCustomInf !== undefined ? Number(raw.stressCustomInf) : 4;
+        const customDivShock = raw.stressCustomDivShock !== undefined ? Number(raw.stressCustomDivShock) : null;
         const boost = !!raw.stressBoostContribution;
 
         const baseModel = computeFinancialModel(raw);
@@ -319,11 +336,12 @@
         const baseMonthlyRate = baseModel.monthlyRate;
         const baseMonthlyPassive = basePatrimony * baseMonthlyRate;
         const costsClinic = baseModel.costs;
-        const currentAporte = Number(raw.monthlyContribution) || 4200;
+        const currentAporte = raw.monthlyContribution !== undefined ? Math.max(0, Number(raw.monthlyContribution)) : 4200;
 
         let dropPatrimonyPct = 0;
         let inflationSurprisePct = 0;
         let dividendShockPct = 0;
+        let classDrops = { FII: 0.30, RF: 0.05, Acoes: 0.30, Global: 0.25 };
         let title = '';
         let desc = '';
         let clinicalPrescription = '';
@@ -332,18 +350,21 @@
             title = 'Crash Sistêmico de Mercado (−30% Geral: Ações e FIIs)';
             dropPatrimonyPct = 30.0;
             dividendShockPct = 15.0;
+            classDrops = { FII: 0.30, RF: 0.05, Acoes: 0.35, Global: 0.25 };
             desc = 'Queda severa de 30% nas cotações de bolsa e FIIs, como em Março/2020. Os ativos físicos mantêm geração de proventos.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Não resgatar nem vender em pânico. Ao reinvestir proventos e manter aportes a preços 30% menores, o Crossover futuro é acelerado.';
         } else if (scenarioKey === 'crash40') {
             title = 'Crash Severo Subprime (−40% Ações / −30% FIIs)';
             dropPatrimonyPct = 35.0;
             dividendShockPct = 20.0;
+            classDrops = { FII: 0.30, RF: 0.08, Acoes: 0.45, Global: 0.35 };
             desc = 'Contração aguda de liquidez internacional com recuo de 40% em ações e 30% em FIIs.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Acionar a reserva de oportunidade com disciplina cirúrgica. Manter a agenda clínica protegida.';
         } else if (scenarioKey === 'correction20') {
             title = 'Correção Técnica de Mercado (−20% Ativos Gerais)';
             dropPatrimonyPct = 20.0;
             dividendShockPct = 5.0;
+            classDrops = { FII: 0.18, RF: 0.02, Acoes: 0.24, Global: 0.18 };
             desc = 'Recuo cíclico de mercado com queda de 20% nas cotações em tela.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Oscilação natural de mercado. Evitar ansiedade antecipatória e comprar ativos descontados.';
         } else if (scenarioKey === 'stagflation') {
@@ -351,12 +372,14 @@
             dropPatrimonyPct = 12.0;
             inflationSurprisePct = 5.5;
             dividendShockPct = 8.0;
+            classDrops = { FII: 0.18, RF: 0.04, Acoes: 0.18, Global: 0.08 };
             desc = 'Aumento acentuado do custo operacional do consultório e redução temporária da poupança clínica.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Reajustar ticket médio de consultas e psicometria pelo IPCA. Concentrar aportes em Tesouro IPCA+.';
         } else if (scenarioKey === 'fii_drop') {
             title = 'Crise Imobiliária / Vacância de FIIs (−25% Yield)';
             dropPatrimonyPct = 18.0;
             dividendShockPct = 25.0;
+            classDrops = { FII: 0.28, RF: 0.00, Acoes: 0.10, Global: 0.05 };
             desc = 'Vacância temporária em lajes corporativas reduz os dividendos mensais da carteira.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Não girar a carteira. Imóveis de tijolo se recuperam no ciclo de expansão seguinte.';
         } else if (scenarioKey === 'black_swan') {
@@ -364,19 +387,44 @@
             dropPatrimonyPct = 50.0;
             inflationSurprisePct = 10.0;
             dividendShockPct = 30.0;
+            classDrops = { FII: 0.45, RF: 0.15, Acoes: 0.55, Global: 0.45 };
             desc = 'Colapso sistêmico agudo de liquidez com fechamento de bolsas e estagflação severa. Teste máximo de imunização existencial.';
             clinicalPrescription = 'DIRETRIZ CLÍNICA: O consultório ativo atua como a âncora soberana inabalável. Foco 100% no acolhimento de pacientes e manutenção da saúde mental.';
         } else {
             title = 'Choque Customizado Personalizado';
             dropPatrimonyPct = Math.max(0, Math.min(60, customDrop));
             inflationSurprisePct = Math.max(0, Math.min(15, customInf));
-            dividendShockPct = Math.min(40, dropPatrimonyPct * 0.5);
-            desc = `Simulação manual com queda de ${dropPatrimonyPct}% no valor dos ativos e impacto de +${inflationSurprisePct}% nos custos.`;
+            dividendShockPct = customDivShock !== null
+                ? Math.max(0, Math.min(40, customDivShock))
+                : Math.min(40, dropPatrimonyPct * 0.5);
+            const r = dropPatrimonyPct / 100;
+            classDrops = { FII: r, RF: r * 0.25, Acoes: Math.min(0.65, r * 1.15), Global: r * 0.85 };
+            desc = `Simulação manual com queda de ${dropPatrimonyPct}% no valor dos ativos, choque de −${dividendShockPct.toFixed(0)}% nos proventos e impacto de +${inflationSurprisePct}% nos custos.`;
             clinicalPrescription = 'DIRETRIZ CLÍNICA: Testar a robustez atuarial permite calibrar sua reserva de oportunidade sem ansiedade reativa.';
         }
 
         const stressedPatrimony = Math.max(0, basePatrimony * (1 - dropPatrimonyPct / 100));
         const effectiveAporte = boost ? currentAporte * 1.2 : currentAporte;
+
+        // Impacto ponderado pela alocação real da carteira do Alocador (Blindagem da Renda Fixa IPCA+)
+        const allocFII = Math.max(0, Number(raw.currentAllocFII) || 0);
+        const allocRF = Math.max(0, Number(raw.currentAllocRF) || 0);
+        const allocAcoes = Math.max(0, Number(raw.currentAllocAcoes) || 0);
+        const allocGlobal = Math.max(0, Number(raw.currentAllocGlobal) || 0);
+        const totalAllocBase = allocFII + allocRF + allocAcoes + allocGlobal;
+        let portfolioWeightedDropPct = dropPatrimonyPct;
+        let portfolioStressedPatrimony = stressedPatrimony;
+        if (totalAllocBase > 0) {
+            const weightedLossRatio = (
+                allocFII * classDrops.FII +
+                allocRF * classDrops.RF +
+                allocAcoes * classDrops.Acoes +
+                allocGlobal * classDrops.Global
+            ) / totalAllocBase;
+            portfolioWeightedDropPct = weightedLossRatio * 100;
+            portfolioStressedPatrimony = Math.max(0, basePatrimony * (1 - weightedLossRatio));
+        }
+        const diversificationShieldPct = Math.max(0, dropPatrimonyPct - portfolioWeightedDropPct);
 
         const stressedClinicCosts = costsClinic * (1 + inflationSurprisePct / 100);
         const stressedMonthlyRate = Math.max(0.001, baseMonthlyRate * (1 - dividendShockPct / 100));
@@ -410,6 +458,19 @@
         }
         if (monthsToRecoverWithBoost >= maxScan) monthsToRecoverWithBoost = Math.round(lostCapital / (boostedAporte || 1));
 
+        // Trajetória comparativa de recuperação (mês a mês) para gráfico SVG
+        const recoveryHorizon = Math.min(60, Math.max(24, monthsToRecoverDynamic + 6));
+        const recoverySeries = [];
+        let pNorm = basePatrimony;
+        let pCrash = stressedPatrimony;
+        let pBoost = stressedPatrimony;
+        for (let m = 0; m <= recoveryHorizon; m++) {
+            recoverySeries.push({ month: m, normal: pNorm, crash: pCrash, boost: pBoost });
+            pNorm = pNorm * (1 + baseMonthlyRate) + currentAporte;
+            pCrash = pCrash * (1 + stressedMonthlyRate) + currentAporte;
+            pBoost = pBoost * (1 + stressedMonthlyRate) + boostedAporte;
+        }
+
         // Avaliação de impacto na Cascata de Despesas sob estresse
         const stressedCascade = computeExpenseCascade(Object.assign({}, raw, {
             currentPatrimony: stressedPatrimony,
@@ -427,6 +488,11 @@
             basePatrimony,
             stressedPatrimony,
             dropPatrimonyPct,
+            dividendShockPct,
+            inflationSurprisePct,
+            portfolioWeightedDropPct,
+            portfolioStressedPatrimony,
+            diversificationShieldPct,
             lostCapital,
             baseMonthlyPassive,
             stressedMonthlyPassive,
@@ -440,6 +506,7 @@
             monthsToRecoverWithBoost,
             effectiveAporte,
             boost,
+            recoverySeries,
             stressedCascade,
             fullyCoveredTiersStressed,
             totalTiersCount
@@ -538,22 +605,25 @@
      * Calcula as cotas inteiras a comprar de cada ativo/ticker específico
      * com alocação ótima e saldo residual para a reserva de oportunidade
      */
-    function computeAporteByTickers(classes, customTickers) {
+    function computeAporteByTickers(classes, customTickers, maxTickersPerClass) {
         const result = [];
         let totalResidualAll = 0;
+        let totalSpentAll = 0;
+        let estimatedAnnualDividendAdded = 0;
         const classesArr = Array.isArray(classes) ? classes : [];
-        const tickerCatalog = customTickers || DEFAULT_TICKERS;
+        const baseInputs = (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs)
+            ? global.VaultTabIndependencia.getInputs()
+            : {};
+        const tickerCatalog = customTickers || (global.VaultTabIndependencia && global.VaultTabIndependencia.TICKER_DIRECTORY) || DEFAULT_TICKERS;
+        const sliceLimit = Math.max(1, Math.min(6, Number(maxTickersPerClass || baseInputs.tickersPerClass) || 2));
 
         classesArr.forEach((cls) => {
             const classAporte = cls.recommendedAporte || 0;
             let tickers = (tickerCatalog[cls.key] || DEFAULT_TICKERS[cls.key] || []).slice();
 
-            // Mesclar tickers personalizados cadastrados pelo usuário no Vault
-            const userTickers = (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs)
-                ? global.VaultTabIndependencia.getInputs().userTickers
-                : null;
-            if (Array.isArray(userTickers)) {
-                const userCls = userTickers.filter(ut => ut && ut.classKey === cls.key);
+            // Mesclar tickers personalizados apenas quando usando o catálogo padrão do Vault
+            if (!customTickers && Array.isArray(baseInputs.userTickers)) {
+                const userCls = baseInputs.userTickers.filter(ut => ut && ut.classKey === cls.key);
                 if (userCls.length > 0) {
                     tickers = userCls.concat(tickers);
                 }
@@ -561,14 +631,17 @@
 
             if (tickers.length === 0) return;
 
-            const targetTickers = tickers.slice(0, 2);
+            const targetTickers = tickers.slice(0, sliceLimit);
             const perTickerBudget = targetTickers.length > 0 ? (classAporte / targetTickers.length) : 0;
             let classSpent = 0;
+            let classAnnualDiv = 0;
 
             const tickerAlloc = targetTickers.map((t) => {
                 const shares = t.price > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / t.price) : 0;
                 const totalSpent = shares * t.price;
+                const annualDiv = totalSpent * ((Number(t.yield) || 0) / 100);
                 classSpent += totalSpent;
+                classAnnualDiv += annualDiv;
                 return {
                     ticker: t.ticker,
                     name: t.name,
@@ -577,12 +650,15 @@
                     type: t.type,
                     shares,
                     totalSpent,
-                    budget: perTickerBudget
+                    budget: perTickerBudget,
+                    estimatedMonthlyDiv: annualDiv / 12
                 };
             });
 
             const residual = Math.max(0, classAporte - classSpent);
             totalResidualAll += residual;
+            totalSpentAll += classSpent;
+            estimatedAnnualDividendAdded += classAnnualDiv;
 
             result.push({
                 classKey: cls.key,
@@ -590,14 +666,18 @@
                 classAporte,
                 classSpent,
                 residual,
+                estimatedMonthlyDiv: classAnnualDiv / 12,
                 tickers: tickerAlloc
             });
         });
+
+        const estimatedMonthlyDividendAdded = estimatedAnnualDividendAdded / 12;
 
         // Gera minuta formatada de boleta para Home Broker
         const totalAporte = classesArr.reduce((acc, c) => acc + (c.recommendedAporte || 0), 0);
         let summaryOrderText = `📋 BOLETA DE APORTE CONSOLIDADA — NEXUS VAULT\n`;
         summaryOrderText += `Data: ${new Date().toLocaleDateString('pt-BR')} | Total Aporte: R$ ${totalAporte.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+        summaryOrderText += `Renda Passiva Adicional Estimada: +R$ ${estimatedMonthlyDividendAdded.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}/mês\n`;
         summaryOrderText += `--------------------------------------------------------\n`;
         result.forEach((r) => {
             if (r.classAporte > 0) {
@@ -617,7 +697,10 @@
 
         return {
             byClass: result,
+            totalSpent: totalSpentAll,
             totalResidual: totalResidualAll,
+            estimatedAnnualDividendAdded,
+            estimatedMonthlyDividendAdded,
             summaryOrderText
         };
     }
@@ -1626,7 +1709,7 @@
         });
 
         // 51. Teste de Aceleração do Ponto de Equilíbrio sob Aporte Contracíclico (+20%) pós-Flash Crash de −30%
-        const mockContracyclic = computeStressTest({
+        const mockContracyclicCrash = computeStressTest({
             stressScenario: 'crash30',
             currentPatrimony: 300000,
             realAnnualReturn: 7.5,
@@ -1635,16 +1718,16 @@
             weeklySessions: 16,
             weeksPerMonth: 4.2,
             monthlyContribution: 5000,
-            stressBoostContribution: true
+            stressBoostContribution: false
         });
-        const testContracyclicPass = mockContracyclic.monthsToRecoverWithBoost < mockContracyclic.monthsToRecoverDynamic &&
-            mockContracyclic.monthsToRecoverWithBoost > 0 &&
-            mockContracyclic.stressedPatrimony === 210000;
+        const testContracyclicCrashPass = mockContracyclicCrash.monthsToRecoverWithBoost < mockContracyclicCrash.monthsToRecoverDynamic &&
+            mockContracyclicCrash.monthsToRecoverWithBoost > 0 &&
+            mockContracyclicCrash.stressedPatrimony === 210000;
         tests.push({
             name: 'Aceleração de Retomada sob Aporte Contracíclico (+20%) em Flash Crash de −30%',
             formula: 'T_recuperação(Aporte × 1,2) < T_recuperação(Aporte_base) ∧ Capital_Retido = 70%',
-            passed: Boolean(testContracyclicPass),
-            detail: `Tempo de recuperação reduzido de ${mockContracyclic.monthsToRecoverDynamic} meses para ${mockContracyclic.monthsToRecoverWithBoost} meses com injeção acelerada de R$ 6.000/mês durante os preços deprimidos.`
+            passed: Boolean(testContracyclicCrashPass),
+            detail: `Tempo de recuperação reduzido de ${mockContracyclicCrash.monthsToRecoverDynamic} meses para ${mockContracyclicCrash.monthsToRecoverWithBoost} meses com injeção acelerada de R$ 6.000/mês durante os preços deprimidos.`
         });
 
         // 52. Teste de Conservação do Balanço Total do Alocador em 4 Macroclasses Heterogêneas
@@ -1672,7 +1755,7 @@
         });
 
         // 53. Teste de Resiliência sob Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)
-        const mockBlackSwan = computeStressTest({
+        const mockBlackSwan53 = computeStressTest({
             stressScenario: 'black_swan',
             currentPatrimony: 400000,
             realAnnualReturn: 7.5,
@@ -1682,15 +1765,15 @@
             weeksPerMonth: 4.2,
             monthlyContribution: 4200
         });
-        const testBlackSwanPass = mockBlackSwan.stressedPatrimony === 200000 &&
-            mockBlackSwan.lostCapital === 200000 &&
-            mockBlackSwan.stressedClinicCosts === (2600 * 1.10) &&
-            mockBlackSwan.stressedMonthlyPassive > 0;
+        const testBlackSwan53Pass = mockBlackSwan53.stressedPatrimony === 200000 &&
+            mockBlackSwan53.lostCapital === 200000 &&
+            mockBlackSwan53.stressedClinicCosts === (2600 * 1.10) &&
+            mockBlackSwan53.stressedMonthlyPassive > 0;
         tests.push({
             name: 'Resiliência sob Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)',
             formula: 'Patrimônio_Stressed = 0,5 × P_0 ∧ Custos_Stressed = 1,1 × C_0 ∧ Renda_Passiva > 0',
-            passed: Boolean(testBlackSwanPass),
-            detail: `Patrimônio estressado retido: R$ 200.000 (50%). Renda passiva residual de R$ ${mockBlackSwan.stressedMonthlyPassive.toFixed(2)}/mês e custos ajustados para R$ 2.860/mês.`
+            passed: Boolean(testBlackSwan53Pass),
+            detail: `Patrimônio estressado retido: R$ 200.000 (50%). Renda passiva residual de R$ ${mockBlackSwan53.stressedMonthlyPassive.toFixed(2)}/mês e custos ajustados para R$ 2.860/mês.`
         });
 
         // 54. Teste de Monotonicidade Estrita dos 4 Marcos de Crossover FIRE
@@ -1718,7 +1801,7 @@
         });
 
         // 55. Teste de Custo de Oportunidade e Horas Clínicas Compradas por Aporte Mensal
-        const mockModelHours = computeFinancialModel({
+        const mockModelHours55 = computeFinancialModel({
             weeklySessions: 16,
             weeksPerMonth: 4.2,
             indirectWeeklyHours: 6,
@@ -1727,14 +1810,118 @@
             monthlyContribution: 4200,
             realAnnualReturn: 7.5
         });
-        const testHoursPass = mockModelHours.sessionsBoughtPerContribution > 0 &&
-            mockModelHours.netEffectiveHourly > 0 &&
-            mockModelHours.totalEffectiveHours === (16 * 4.2 + 6 * 4.2);
+        const testHours55Pass = mockModelHours55.sessionsBoughtPerContribution > 0 &&
+            mockModelHours55.netEffectiveHourly > 0 &&
+            mockModelHours55.totalEffectiveHours === (16 * 4.2 + 6 * 4.2);
         tests.push({
             name: 'Equivalência Atuarial do Custo de Oportunidade da Hora Clínica vs Aporte Perpétuo',
             formula: 'Sessões_Compradas = (Aporte × i_m) / Ticket_Líquido ∧ Horas_Efetivas = (Atend. + Indiretas)',
-            passed: Boolean(testHoursPass),
-            detail: `Cada aporte de R$ 4.200 compra perpetuamente ~${mockModelHours.sessionsBoughtPerContribution.toFixed(2)} sessões/mês a uma taxa real de R$ ${mockModelHours.netEffectiveHourly.toFixed(2)}/hora efetiva.`
+            passed: Boolean(testHours55Pass),
+            detail: `Cada aporte de R$ 4.200 compra perpetuamente ~${mockModelHours55.sessionsBoughtPerContribution.toFixed(2)} sessões/mês a uma taxa real de R$ ${mockModelHours55.netEffectiveHourly.toFixed(2)}/hora efetiva.`
+        });
+
+        // 56. Teste de Degrau Zerado na Cascata Editável (Proteção contra 0/0 = NaN)
+        const mockCascadeZero = computeExpenseCascade({
+            expenseEssential: 2000,
+            expenseClinic: 0,
+            expenseFamily: 3000,
+            expenseLifestyle: 0,
+            currentPatrimony: 400000,
+            realAnnualReturn: 7.5
+        });
+        const zeroTierClinic = mockCascadeZero.tiers.find(t => t.id === 'clinic');
+        const testZeroTierPass = zeroTierClinic &&
+            zeroTierClinic.cost === 0 &&
+            Number.isFinite(zeroTierClinic.coveragePct) &&
+            zeroTierClinic.coveragePct === 100 &&
+            mockCascadeZero.totalCost === 5000;
+        tests.push({
+            name: 'Blindagem de Degraus Zerados na Cascata Editável (Sem Divisão por Zero)',
+            formula: 'Custo_Degrau = 0 ⇒ Cobertura ∈ [0, 100] ∧ ¬NaN ∧ Total_Cascata = 5.000',
+            passed: Boolean(testZeroTierPass),
+            detail: `Degraus opcionais zerados (R$ 0) não caem em fallback nem geram NaN; soma líquida exata em R$ ${mockCascadeZero.totalCost.toLocaleString('pt-BR')}.`
+        });
+
+        // 57. Teste de Meta 0% em Classe do Alocador Inteligente
+        const mockAllocZeroTarget = computeAporteAllocation({
+            monthlyContribution: 4000,
+            targetAllocFII: 0,
+            targetAllocRF: 50,
+            targetAllocAcoes: 50,
+            targetAllocGlobal: 0,
+            currentAllocFII: 10000,
+            currentAllocRF: 0,
+            currentAllocAcoes: 0,
+            currentAllocGlobal: 0
+        });
+        const fiiZero = mockAllocZeroTarget.classes.find(c => c.key === 'FII');
+        const globalZero = mockAllocZeroTarget.classes.find(c => c.key === 'Global');
+        const testZeroTargetPass = fiiZero && fiiZero.recommendedAporte === 0 && globalZero && globalZero.recommendedAporte === 0;
+        tests.push({
+            name: 'Respeito Estrito a Metas 0% no Alocador Inteligente de Aportes',
+            formula: 'targetPct_i = 0 ⇒ Déficit_i = 0 ⇒ Aporte_i = 0',
+            passed: Boolean(testZeroTargetPass),
+            detail: `Classes com meta zerada (0%) recebem exatamente R$ 0,00 sem fallback indevido.`
+        });
+
+        // 58. Teste de Choque Customizado de Dividendos & Blindagem por Diversificação
+        const mockCustomStress = computeStressTest({
+            stressScenario: 'custom',
+            stressCustomDrop: 30,
+            stressCustomInf: 5,
+            stressCustomDivShock: 20,
+            currentPatrimony: 200000,
+            realAnnualReturn: 7.5,
+            currentAllocFII: 70000,
+            currentAllocRF: 60000,
+            currentAllocAcoes: 40000,
+            currentAllocGlobal: 30000
+        });
+        const testCustomStressPass = mockCustomStress.dividendShockPct === 20 &&
+            mockCustomStress.stressedPatrimony === 140000 &&
+            mockCustomStress.portfolioWeightedDropPct < 30 &&
+            mockCustomStress.diversificationShieldPct > 0 &&
+            Array.isArray(mockCustomStress.recoverySeries) &&
+            mockCustomStress.recoverySeries.length > 10;
+        tests.push({
+            name: 'Choque Customizado (Patrimônio, IPCA, Dividendos) & Escudo de Diversificação RF',
+            formula: 'Queda_Ponderada < Queda_Uniforme (−30%) ∧ Escudo_Diversificação > 0%',
+            passed: Boolean(testCustomStressPass),
+            detail: `Queda ponderada pela carteira real cai de 30,0% para ${mockCustomStress.portfolioWeightedDropPct.toFixed(1)}% (escudo de ${mockCustomStress.diversificationShieldPct.toFixed(1)} p.p. pela Renda Fixa).`
+        });
+
+        // 59. Teste de Monotonicidade Temporal dos Prazos de Cobertura da Cascata (ETA)
+        const mockCascadeEta = computeExpenseCascade({
+            expenseEssential: 2500,
+            expenseClinic: 2600,
+            expenseFamily: 3500,
+            expenseLifestyle: 2000,
+            currentPatrimony: 120000,
+            monthlyContribution: 4200,
+            realAnnualReturn: 7.5
+        });
+        const etas = mockCascadeEta.tiers.map(t => t.monthsToCoverTier);
+        const testEtaMonotonic = etas.every((m, idx) => m !== null && (idx === 0 || m >= etas[idx - 1]));
+        tests.push({
+            name: 'Monotonicidade Temporal das Datas Previstas de Cobertura da Cascata (ETA)',
+            formula: '∀k: ETA(Nível_k) ≥ ETA(Nível_k−1) ≥ 0',
+            passed: Boolean(testEtaMonotonic),
+            detail: `Prazos estimados sequenciais (meses): ${etas.join('m → ')}m com convergência estrita.`
+        });
+
+        // 60. Teste de Renda Passiva Mensal Adicional Gerada pela Boleta por Ticker
+        const mockTickerYield = computeAporteByTickers(
+            [{ key: 'FII', name: 'FIIs', recommendedAporte: 1042 }],
+            { FII: [{ ticker: 'KNCR11', name: 'Kinea', price: 104.20, yield: 12.0, type: 'Papel' }] }
+        );
+        // 10 cotas * 104.20 = 1042.00; 12% a.a. / 12 = 10.42/mês
+        const testTickerYieldPass = Math.abs(mockTickerYield.estimatedMonthlyDividendAdded - 10.42) < 1e-2 &&
+            mockTickerYield.totalSpent === 1042;
+        tests.push({
+            name: 'Projeção de Renda Passiva Mensal Adicional na Boleta por Ticker',
+            formula: 'Renda_Add_Mês = Σ(Gasto_Ticker × Yield_Anual / 12)',
+            passed: Boolean(testTickerYieldPass),
+            detail: `10 cotas de KNCR11 (R$ 1.042,00 @ 12% a.a.) adicionam +R$ ${mockTickerYield.estimatedMonthlyDividendAdded.toFixed(2)}/mês de proventos projetados.`
         });
 
         const allPassed = tests.every(t => t.passed);

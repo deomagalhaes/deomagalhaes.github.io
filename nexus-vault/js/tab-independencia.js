@@ -61,6 +61,7 @@
 
         // Tickers Customizados do Usuário no Alocador
         userTickers: [],
+        tickersPerClass: 2,
 
         // Parâmetros de Monte Carlo
         mcVolatility: 13.0,     // Desvio padrão anual da carteira (%)
@@ -114,6 +115,9 @@
     // 2. MOTOR MATEMÁTICO ATUARIAL & PROJEÇÃO
     // =========================================================================
     function computeFinancialModel(customInputs) {
+        if (global.VaultTabFinancas && typeof global.VaultTabFinancas.computeFinancialModel === 'function') {
+            return global.VaultTabFinancas.computeFinancialModel(customInputs || inputs);
+        }
         const raw = customInputs || inputs;
         const wSessions = Math.max(0, Number(raw.weeklySessions) || 0);
         const wPerMonth = Math.max(1, Number(raw.weeksPerMonth) || 4.2);
@@ -331,8 +335,13 @@
     // 4. ALOCADOR INTELIGENTE DE APORTES (Rebalanceamento sem Venda de Ativos)
     // =========================================================================
     function computeAporteAllocation(customInputs) {
+        if (global.VaultTabFinancas && typeof global.VaultTabFinancas.computeAporteAllocation === 'function') {
+            return global.VaultTabFinancas.computeAporteAllocation(customInputs || inputs);
+        }
         const raw = customInputs || inputs;
-        const aporte = Math.max(0, Number(raw.customAporteValue) || Number(raw.monthlyContribution) || 0);
+        const aporte = raw.customAporteValue !== undefined
+            ? Math.max(0, Number(raw.customAporteValue) || 0)
+            : Math.max(0, Number(raw.monthlyContribution) || 0);
 
         const currentFII = Math.max(0, Number(raw.currentAllocFII) || 0);
         const currentRF = Math.max(0, Number(raw.currentAllocRF) || 0);
@@ -342,10 +351,10 @@
         const totalCurrent = currentFII + currentRF + currentAcoes + currentGlobal;
         const totalAfter = totalCurrent + aporte;
 
-        const targetPctFII = Number(raw.targetAllocFII) || 35;
-        const targetPctRF = Number(raw.targetAllocRF) || 30;
-        const targetPctAcoes = Number(raw.targetAllocAcoes) || 20;
-        const targetPctGlobal = Number(raw.targetAllocGlobal) || 15;
+        const targetPctFII = raw.targetAllocFII !== undefined ? Number(raw.targetAllocFII) : 35;
+        const targetPctRF = raw.targetAllocRF !== undefined ? Number(raw.targetAllocRF) : 30;
+        const targetPctAcoes = raw.targetAllocAcoes !== undefined ? Number(raw.targetAllocAcoes) : 20;
+        const targetPctGlobal = raw.targetAllocGlobal !== undefined ? Number(raw.targetAllocGlobal) : 15;
 
         // Patrimônio alvo ideal por classe após o aporte
         const idealFII = totalAfter * (targetPctFII / 100);
@@ -459,6 +468,9 @@
     };
 
     function computeAporteByTickers(classes, customTickers) {
+        if (global.VaultTabFinancas && typeof global.VaultTabFinancas.computeAporteByTickers === 'function') {
+            return global.VaultTabFinancas.computeAporteByTickers(classes, customTickers, inputs.tickersPerClass || 2);
+        }
         const result = [];
         let totalResidualAll = 0;
 
@@ -612,6 +624,9 @@
     // 6. CASCATA DE COBERTURA DE DESPESAS (Níveis de Liberdade)
     // =========================================================================
     function computeExpenseCascade() {
+        if (global.VaultTabFinancas && typeof global.VaultTabFinancas.computeExpenseCascade === 'function') {
+            return global.VaultTabFinancas.computeExpenseCascade(inputs);
+        }
         const C = global.VaultCore;
         if (!lastModel) lastModel = computeFinancialModel();
         const passive = lastModel ? lastModel.currentPassiveMonthly : 0;
@@ -879,38 +894,58 @@
         lastModel = computeFinancialModel();
         const m = lastModel;
         const C = global.VaultCore;
+        const numOrDef = (val, def) => (val !== undefined && val !== null && val !== '' && Number.isFinite(Number(val))) ? Math.max(0, Number(val)) : def;
+        const freedomPct = Math.max(0, Math.min(100, m.currentCoveragePct || 0));
+        const firePatPct = m.targetFullFire > 0 ? Math.max(0, Math.min(100, (m.initPatrimony / m.targetFullFire) * 100)) : 0;
+        const ringR = 34;
+        const ringCirc = 2 * Math.PI * ringR;
+        const ringDash = (freedomPct / 100) * ringCirc;
 
         container.innerHTML = `
             <div class="space-y-5">
-                <!-- 4 INDICADORES VISUAIS DE INDEPENDÊNCIA POR CATEGORIA -->
+                <!-- 4 INDICADORES VISUAIS DE INDEPENDÊNCIA POR CATEGORIA + GAUGE DE LIBERDADE -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-800 pb-2.5">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="target" class="w-4 h-4 text-cyan-400"></i>
-                            <h3 class="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
-                                Indicadores de Independência por Categoria de Vida
-                            </h3>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <svg width="84" height="84" viewBox="0 0 84 84" class="shrink-0" aria-label="Termômetro Visual de Independência Clínica">
+                                <circle cx="42" cy="42" r="${ringR}" fill="none" stroke="#1e293b" stroke-width="8"></circle>
+                                <circle cx="42" cy="42" r="${ringR}" fill="none" stroke="${freedomPct >= 100 ? '#10b981' : '#22d3ee'}" stroke-width="8" stroke-linecap="round"
+                                    stroke-dasharray="${ringDash.toFixed(2)} ${ringCirc.toFixed(2)}" transform="rotate(-90 42 42)"></circle>
+                                <text x="42" y="40" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">${C.formatNum(freedomPct, 0)}%</text>
+                                <text x="42" y="53" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="8">CLÍNICA</text>
+                            </svg>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="target" class="w-4 h-4 text-cyan-400"></i>
+                                    <h3 class="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
+                                        Indicadores de Independência por Categoria de Vida
+                                    </h3>
+                                </div>
+                                <div class="text-[11px] font-mono text-slate-400 mt-1">
+                                    Patrimônio vs Meta Full FIRE (SWR ${C.formatNum(m.swr, 1)}%): <strong class="text-cyan-300">${C.formatNum(firePatPct, 1)}%</strong> (${C.formatBRL(m.initPatrimony)} / ${C.formatBRL(m.targetFullFire)})
+                                </div>
+                            </div>
                         </div>
-                        <span class="text-xs font-mono text-emerald-400">
+                        <span class="text-xs font-mono text-emerald-400 shrink-0">
                             Renda Passiva Atual Hoje: <strong>${C.formatBRL(m.currentPassiveMonthly)}/mês</strong>
                         </span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         ${[
-                            { name: '1. Sobrevivência Essencial', cost: inputs.expenseEssential || 2500, color: 'from-emerald-500 to-emerald-400', badgeColor: 'text-emerald-300 border-emerald-500/30' },
-                            { name: '2. Custos do Consultório', cost: inputs.monthlyCosts || 2600, color: 'from-cyan-500 to-cyan-400', badgeColor: 'text-cyan-300 border-cyan-500/30' },
-                            { name: '3. Família, Saúde & Educação', cost: inputs.expenseFamily || 3500, color: 'from-amber-500 to-amber-400', badgeColor: 'text-amber-300 border-amber-500/30' },
-                            { name: '4. Plenitude FIRE / Lazer', cost: inputs.expenseLifestyle || 2000, color: 'from-purple-500 to-purple-400', badgeColor: 'text-purple-300 border-purple-500/30' }
+                            { name: inputs.nameEssential || '1. Sobrevivência Essencial', cost: numOrDef(inputs.expenseEssential, 2500), color: 'from-emerald-500 to-emerald-400' },
+                            { name: inputs.nameClinic || '2. Custos do Consultório', cost: numOrDef(inputs.monthlyCosts, 2600), color: 'from-cyan-500 to-cyan-400' },
+                            { name: inputs.nameFamily || '3. Família, Saúde & Educação', cost: numOrDef(inputs.expenseFamily, 3500), color: 'from-amber-500 to-amber-400' },
+                            { name: inputs.nameLifestyle || '4. Plenitude FIRE / Lazer', cost: numOrDef(inputs.expenseLifestyle, 2000), color: 'from-purple-500 to-purple-400' }
                         ].map((cat) => {
-                            const pct = Math.min(100, cat.cost > 0 ? (m.currentPassiveMonthly / cat.cost) * 100 : 0);
+                            const pct = cat.cost <= 0 ? 100 : Math.min(100, (m.currentPassiveMonthly / cat.cost) * 100);
                             const isDone = pct >= 100;
                             return `
                                 <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col justify-between space-y-2.5">
                                     <div>
                                         <div class="flex items-center justify-between text-xs font-mono">
-                                            <span class="font-bold text-slate-200">${cat.name}</span>
-                                            <span class="px-1.5 py-0.5 rounded text-[10px] border ${isDone ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-800 text-slate-400 border-slate-700'}">
+                                            <span class="font-bold text-slate-200 truncate">${C.esc(cat.name)}</span>
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] border shrink-0 ${isDone ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-800 text-slate-400 border-slate-700'}">
                                                 ${isDone ? '✓ CONQUISTADO' : `${C.formatNum(pct, 1)}%`}
                                             </span>
                                         </div>
@@ -1307,6 +1342,9 @@
     function renderSubTabAlocador(container) {
         const C = global.VaultCore;
         const res = computeAporteAllocation();
+        const tickerData = computeAporteByTickers(res.classes);
+        const targetSum = (Number(inputs.targetAllocFII) || 0) + (Number(inputs.targetAllocRF) || 0) + (Number(inputs.targetAllocAcoes) || 0) + (Number(inputs.targetAllocGlobal) || 0);
+        const isTargetBalanced = Math.abs(targetSum - 100) < 0.1;
 
         const discBefore = res.classes.reduce((acc, c) => acc + Math.abs(c.currentPct - c.targetPct), 0);
         const discAfter = res.classes.reduce((acc, c) => acc + Math.abs(c.postPct - c.targetPct), 0);
@@ -1384,14 +1422,24 @@
                                 <p class="text-[11px] text-slate-400">Simulação de compra prática fracionada baseada na cotação de mercado para o dia do aporte.</p>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap">
-                                ${(() => {
-                                    const tickerData = computeAporteByTickers(res.classes);
-                                    return tickerData.totalResidual > 0 ? `
-                                        <div class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-400">
-                                            Troco residual: <strong>${C.formatBRL(tickerData.totalResidual)}</strong> (Reserva de Oportunidade)
-                                        </div>
-                                    ` : '';
-                                })()}
+                                <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-300 bg-slate-900 border border-slate-800 rounded px-2 py-1">
+                                    <span>Ativos/Classe:</span>
+                                    <select id="ind-tickers-per-class" class="bg-transparent text-cyan-300 font-bold focus:outline-none">
+                                        <option value="2" ${(inputs.tickersPerClass || 2) == 2 ? 'selected' : ''}>2</option>
+                                        <option value="3" ${(inputs.tickersPerClass || 2) == 3 ? 'selected' : ''}>3</option>
+                                        <option value="4" ${(inputs.tickersPerClass || 2) == 4 ? 'selected' : ''}>4</option>
+                                    </select>
+                                </label>
+                                ${tickerData.estimatedMonthlyDividendAdded > 0 ? `
+                                    <div class="px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/35 text-[11px] font-mono text-emerald-300">
+                                        Provento est.: <strong>+${C.formatBRL(tickerData.estimatedMonthlyDividendAdded)}/mês</strong>
+                                    </div>
+                                ` : ''}
+                                ${tickerData.totalResidual > 0 ? `
+                                    <div class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-amber-300">
+                                        Troco residual: <strong>${C.formatBRL(tickerData.totalResidual)}</strong>
+                                    </div>
+                                ` : ''}
                                 <button type="button" id="btn-copy-alocador-order" class="px-2.5 py-1 rounded bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/40 text-[11px] font-mono text-cyan-200 flex items-center gap-1.5 transition" title="Copiar ordem de compra formatada para colar no Home Broker">
                                     <span>📋</span>
                                     <span>Copiar Boleta</span>
@@ -1400,7 +1448,7 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            ${(computeAporteByTickers(res.classes).byClass || []).map((item) => `
+                            ${(tickerData.byClass || []).map((item) => `
                                 <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-3.5 space-y-2.5">
                                     <div class="flex items-center justify-between">
                                         <span class="font-bold text-xs text-slate-200 font-mono">${item.className}</span>
@@ -1438,7 +1486,19 @@
 
                     <!-- Configuração Rápida das Metas e Saldos Atuais -->
                     <div class="pt-4 border-t border-slate-800 space-y-3">
-                        <div class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">Ajuste de Metas Percentuais &amp; Saldos Atuais</div>
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">Ajuste de Metas Percentuais &amp; Saldos Atuais</div>
+                            <div class="flex items-center gap-2 text-[11px] font-mono">
+                                <span class="px-2 py-0.5 rounded border ${isTargetBalanced ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/40'}">
+                                    Soma das Metas: ${C.formatNum(targetSum, 0)}% ${isTargetBalanced ? '✓' : '(!= 100%)'}
+                                </span>
+                                ${!isTargetBalanced ? `
+                                    <button type="button" id="btn-normalize-alloc-targets" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 transition">
+                                        Normalizar p/ 100%
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
                             <div>
                                 <label class="block text-slate-400 mb-1">FIIs Meta (%) / Saldo (R$)</label>
@@ -1550,7 +1610,6 @@
                                 `).join('')}
                             </div>
                         ` : ''}
-                    </div>
                     </div>
                 </div>
             </div>
@@ -1768,7 +1827,10 @@
                         <i data-lucide="edit-3" class="w-4 h-4 text-cyan-400"></i>
                         <span>Altere valores ou nomes diretamente. Você pode adicionar novas despesas customizadas livremente.</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-sync-clinic-tier" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 transition" title="Sincronizar Nível 2 com os Custos do Consultório do Simulador">
+                            Sincronizar Nível 2 c/ Consultório
+                        </button>
                         <button type="button" id="btn-add-custom-expense" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold flex items-center gap-1.5 transition">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                             <span>+ Adicionar Despesa</span>
@@ -1863,9 +1925,9 @@
                                     <div class="text-sm font-bold text-amber-300 mt-0.5">${C.formatNum(t.hoursNeeded, 1)}h (atend. + laudos)</div>
                                 </div>
                                 <div class="bg-[#090d16] border border-slate-800/80 rounded-lg p-2.5">
-                                    <div class="text-[10px] text-slate-500">Buffer Passivo de Segurança</div>
-                                    <div class="text-sm font-bold ${t.isFullyCovered ? 'text-emerald-400' : 'text-slate-300'} mt-0.5">
-                                        ${t.isFullyCovered ? '30 dias (100% blindado)' : `${t.survivalBufferDays || 0} dias amparados`}
+                                    <div class="text-[10px] text-slate-500">Buffer &amp; Previsão (ETA)</div>
+                                    <div class="text-xs font-bold ${t.isFullyCovered ? 'text-emerald-400' : 'text-cyan-300'} mt-0.5">
+                                        ${t.isFullyCovered ? '✓ Blindado (30d)' : `${t.survivalBufferDays || 0}d • ${formatMonthYearFromOffset(t.monthsToCoverTier)}`}
                                     </div>
                                 </div>
                             </div>
@@ -2005,6 +2067,18 @@
             });
         }
 
+        // Botão Sincronizar Nível 2 com Custos do Consultório
+        const btnSyncClinic = document.getElementById('btn-sync-clinic-tier');
+        if (btnSyncClinic) {
+            btnSyncClinic.addEventListener('click', () => {
+                inputs.expenseClinic = Math.max(0, Number(inputs.monthlyCosts) || 0);
+                saveInputs();
+                lastModel = computeFinancialModel();
+                renderSubTabCascata(document.getElementById('ind-subtab-container'));
+                C.toast(`Nível 2 sincronizado com Custos do Consultório (${C.formatBRL(inputs.expenseClinic)}).`, 'success', 2000);
+            });
+        }
+
         // Botão Restaurar Padrões da Cascata
         const btnReset = document.getElementById('btn-reset-cascade-defaults');
         if (btnReset) {
@@ -2038,6 +2112,9 @@
     // 7.6. SUB-ABA 6: CENÁRIOS DE ESTRESSE & CHOQUES DE MERCADO
     // =========================================================================
     function computeStressTest() {
+        if (global.VaultTabFinancas && typeof global.VaultTabFinancas.computeStressTest === 'function') {
+            return global.VaultTabFinancas.computeStressTest(inputs);
+        }
         const scenarioKey = inputs.stressScenario || 'crash30';
         const customDrop = Number(inputs.stressCustomDrop) || 30;
         const customInf = Number(inputs.stressCustomInf) || 4;
@@ -2196,6 +2273,56 @@
         };
     }
 
+    function renderStressRecoverySVG(st) {
+        const series = Array.isArray(st.recoverySeries) ? st.recoverySeries : [];
+        if (series.length < 2) return '';
+        const svgW = 920;
+        const svgH = 210;
+        const padL = 72;
+        const padR = 24;
+        const padT = 20;
+        const padB = 30;
+        const plotW = svgW - padL - padR;
+        const plotH = svgH - padT - padB;
+        const maxVal = Math.max(...series.map(p => Math.max(p.normal, p.boost, p.crash)), st.basePatrimony * 1.1, 1000);
+        const minVal = Math.min(...series.map(p => p.crash)) * 0.9;
+        const span = Math.max(100, maxVal - minVal);
+        const maxM = series[series.length - 1].month || 1;
+        const getX = (m) => padL + (m / maxM) * plotW;
+        const getY = (v) => padT + plotH - ((v - minVal) / span) * plotH;
+
+        const ptsNorm = series.map(p => `${getX(p.month).toFixed(1)},${getY(p.normal).toFixed(1)}`).join(' ');
+        const ptsCrash = series.map(p => `${getX(p.month).toFixed(1)},${getY(p.crash).toFixed(1)}`).join(' ');
+        const ptsBoost = series.map(p => `${getX(p.month).toFixed(1)},${getY(p.boost).toFixed(1)}`).join(' ');
+        const yBase = getY(st.basePatrimony);
+
+        let gridSvg = '';
+        for (let i = 0; i <= 3; i++) {
+            const val = minVal + (span / 3) * i;
+            const y = getY(val);
+            gridSvg += `<line x1="${padL}" y1="${y}" x2="${svgW - padR}" y2="${y}" stroke="#1e293b" stroke-width="1"/>
+                <text x="${padL - 8}" y="${y + 4}" text-anchor="end" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="10">R$ ${(val / 1000).toFixed(0)}k</text>`;
+        }
+
+        const stepM = Math.max(6, Math.round(maxM / 4));
+        let xTicks = '';
+        for (let m = 0; m <= maxM; m += stepM) {
+            xTicks += `<text x="${getX(m)}" y="${svgH - 8}" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="10">+${m}m</text>`;
+        }
+
+        return `
+            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full h-auto select-none" role="img" aria-label="Curva de recomposição patrimonial pós-choque">
+                ${gridSvg}
+                <line x1="${padL}" y1="${yBase}" x2="${svgW - padR}" y2="${yBase}" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="4 4"/>
+                <text x="${svgW - padR}" y="${yBase - 5}" text-anchor="end" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="9">Patrimônio Pré-Choque</text>
+                <polyline points="${ptsNorm}" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="5 4"/>
+                <polyline points="${ptsCrash}" fill="none" stroke="#f43f5e" stroke-width="2.5"/>
+                <polyline points="${ptsBoost}" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                ${xTicks}
+            </svg>
+        `;
+    }
+
     function renderSubTabEstresse(container) {
         const C = global.VaultCore;
         const st = computeStressTest();
@@ -2287,20 +2414,27 @@
 
                     <!-- Sliders Manuais se o Cenário for Custom -->
                     ${st.scenarioKey === 'custom' ? `
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-rose-900/30">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-rose-900/30">
                             <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
                                 <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                                    <span>Queda no Patrimônio Total:</span>
-                                    <strong class="text-rose-400">${inputs.stressCustomDrop || 30}%</strong>
+                                    <span>Queda no Patrimônio:</span>
+                                    <strong id="lbl-stress-drop" class="text-rose-400">−${inputs.stressCustomDrop !== undefined ? inputs.stressCustomDrop : 30}%</strong>
                                 </div>
-                                <input type="range" id="stress-custom-drop-slider" min="5" max="60" value="${inputs.stressCustomDrop || 30}" class="w-full accent-rose-500 cursor-pointer">
+                                <input type="range" id="stress-custom-drop-slider" min="5" max="60" value="${inputs.stressCustomDrop !== undefined ? inputs.stressCustomDrop : 30}" class="w-full accent-rose-500 cursor-pointer">
                             </div>
                             <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
                                 <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
-                                    <span>Impacto Inflacionário em Custos:</span>
-                                    <strong class="text-amber-400">+${inputs.stressCustomInf || 4}%</strong>
+                                    <span>Choque em Proventos:</span>
+                                    <strong id="lbl-stress-div" class="text-purple-400">−${inputs.stressCustomDivShock !== undefined ? inputs.stressCustomDivShock : 15}%</strong>
                                 </div>
-                                <input type="range" id="stress-custom-inf-slider" min="0" max="15" value="${inputs.stressCustomInf || 4}" class="w-full accent-amber-500 cursor-pointer">
+                                <input type="range" id="stress-custom-div-slider" min="0" max="40" value="${inputs.stressCustomDivShock !== undefined ? inputs.stressCustomDivShock : 15}" class="w-full accent-purple-500 cursor-pointer">
+                            </div>
+                            <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3">
+                                <div class="flex justify-between text-xs font-mono text-slate-300 mb-1">
+                                    <span>Inflação em Custos:</span>
+                                    <strong id="lbl-stress-inf" class="text-amber-400">+${inputs.stressCustomInf !== undefined ? inputs.stressCustomInf : 4}%</strong>
+                                </div>
+                                <input type="range" id="stress-custom-inf-slider" min="0" max="15" value="${inputs.stressCustomInf !== undefined ? inputs.stressCustomInf : 4}" class="w-full accent-amber-500 cursor-pointer">
                             </div>
                         </div>
                     ` : ''}
@@ -2309,7 +2443,7 @@
                     <div class="pt-2 border-t border-rose-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <label class="flex items-center gap-2 cursor-pointer text-xs font-mono text-slate-200">
                             <input type="checkbox" id="stress-boost-chk" ${st.boost ? 'checked' : ''} class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-cyan-400 focus:ring-cyan-500">
-                            <span>Ativar Aporte Anticíclico na Baixa (+20%: R$ ${C.formatBRL(st.effectiveAporte)})</span>
+                            <span>Ativar Aporte Anticíclico na Baixa (+20%: ${C.formatBRL(st.effectiveAporte)})</span>
                         </label>
                         <span class="text-[11px] font-mono text-emerald-400">
                             ${st.boost ? '✓ Aceleração ativada: recomposição de capital em ritmo acelerado.' : 'Ritmo normal mantido.'}
@@ -2377,6 +2511,44 @@
                     </div>
                 </div>
 
+                <!-- Escudo de Diversificação & Curva SVG de Recomposição -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div class="lg:col-span-4 bg-[#0f172a] border border-cyan-500/30 rounded-xl p-4 space-y-2.5 flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs font-mono uppercase tracking-wider text-cyan-300 font-bold">Escudo Real da Carteira</div>
+                            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                                Comparação entre choque uniforme (−${C.formatNum(st.dropPatrimonyPct, 0)}%) e o impacto ponderado pela sua alocação atual em Renda Fixa IPCA+, FIIs, Ações e Global.
+                            </p>
+                        </div>
+                        <div class="bg-[#090d16] border border-slate-800 rounded-lg p-3 space-y-1.5 font-mono text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Queda Ponderada Real:</span>
+                                <strong class="text-amber-300">−${C.formatNum(st.portfolioWeightedDropPct !== undefined ? st.portfolioWeightedDropPct : st.dropPatrimonyPct, 1)}%</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Patrimônio Ponderado:</span>
+                                <strong class="text-emerald-300">${C.formatBRL(st.portfolioStressedPatrimony !== undefined ? st.portfolioStressedPatrimony : st.stressedPatrimony)}</strong>
+                            </div>
+                            <div class="flex justify-between pt-1 border-t border-slate-800">
+                                <span class="text-slate-400">Amortecimento IPCA+/Mix:</span>
+                                <strong class="text-cyan-300">+${C.formatNum(st.diversificationShieldPct || 0, 1)} p.p.</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">Trajetória de Recomposição Pós-Choque</span>
+                            <div class="flex flex-wrap items-center gap-3 text-[10px] font-mono">
+                                <span class="text-slate-400">--- Sem Choque</span>
+                                <span class="text-rose-400">━━ Choque Base</span>
+                                <span class="text-emerald-400">━━ Choque +20% Anticíclico</span>
+                            </div>
+                        </div>
+                        <div class="w-full overflow-x-auto">${renderStressRecoverySVG(st)}</div>
+                    </div>
+                </div>
+
                 <!-- Painel de Impacto Direto na Cascata de Liberdade sob o Choque -->
                 <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -2395,7 +2567,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-                        ${(st.stressedCascade && st.stressedCascade.tiers ? st.stressedCascade.tiers : []).slice(0, 4).map((t) => `
+                        ${(st.stressedCascade && st.stressedCascade.tiers ? st.stressedCascade.tiers : []).map((t) => `
                             <div class="bg-[#090d16] border ${t.isFullyCovered ? 'border-emerald-500/40 bg-emerald-950/15' : 'border-slate-800'} rounded-lg p-3 space-y-1.5">
                                 <div class="flex justify-between items-center text-xs">
                                     <span class="font-mono font-medium text-slate-200 truncate">${C.esc(t.name)}</span>
@@ -2436,6 +2608,7 @@
     }
 
     function bindEstresseInputs() {
+        const C = global.VaultCore;
         const scenarioSelect = document.getElementById('stress-scenario-select');
         if (scenarioSelect) {
             scenarioSelect.addEventListener('change', (e) => {
@@ -2447,12 +2620,12 @@
 
         // Chips Rápidos de Preset de Estresse
         document.querySelectorAll('[data-stress-preset]').forEach((btn) => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', () => {
                 const presetKey = btn.getAttribute('data-stress-preset');
                 inputs.stressScenario = presetKey;
                 saveInputs();
                 renderSubTabEstresse(document.getElementById('ind-subtab-container'));
-                C.toast(`Cenário de Estresse ativo: ${presetKey}`, 'info', 1500);
+                if (C && C.toast) C.toast(`Cenário de Estresse ativo: ${presetKey}`, 'info', 1500);
             });
         });
 
@@ -2460,7 +2633,24 @@
         if (dropSlider) {
             dropSlider.addEventListener('input', (e) => {
                 inputs.stressCustomDrop = Number(e.target.value);
+                const lbl = document.getElementById('lbl-stress-drop');
+                if (lbl) lbl.textContent = `−${inputs.stressCustomDrop}%`;
                 saveInputs();
+            });
+            dropSlider.addEventListener('change', () => {
+                renderSubTabEstresse(document.getElementById('ind-subtab-container'));
+            });
+        }
+
+        const divSlider = document.getElementById('stress-custom-div-slider');
+        if (divSlider) {
+            divSlider.addEventListener('input', (e) => {
+                inputs.stressCustomDivShock = Number(e.target.value);
+                const lbl = document.getElementById('lbl-stress-div');
+                if (lbl) lbl.textContent = `−${inputs.stressCustomDivShock}%`;
+                saveInputs();
+            });
+            divSlider.addEventListener('change', () => {
                 renderSubTabEstresse(document.getElementById('ind-subtab-container'));
             });
         }
@@ -2469,7 +2659,11 @@
         if (infSlider) {
             infSlider.addEventListener('input', (e) => {
                 inputs.stressCustomInf = Number(e.target.value);
+                const lbl = document.getElementById('lbl-stress-inf');
+                if (lbl) lbl.textContent = `+${inputs.stressCustomInf}%`;
                 saveInputs();
+            });
+            infSlider.addEventListener('change', () => {
                 renderSubTabEstresse(document.getElementById('ind-subtab-container'));
             });
         }
@@ -3296,7 +3490,7 @@
         });
 
         // 51. Teste de Aceleração de Retomada sob Aporte Contracíclico (+20%) em Flash Crash de −30%
-        const mockContracyclic = computeStressTest({
+        const mockContracyclicCrash = computeStressTest({
             stressScenario: 'crash30',
             currentPatrimony: 300000,
             realAnnualReturn: 7.5,
@@ -3305,16 +3499,16 @@
             weeklySessions: 16,
             weeksPerMonth: 4.2,
             monthlyContribution: 5000,
-            stressBoostContribution: true
+            stressBoostContribution: false
         });
-        const testContracyclicPass = mockContracyclic.monthsToRecoverWithBoost < mockContracyclic.monthsToRecoverDynamic &&
-            mockContracyclic.monthsToRecoverWithBoost > 0 &&
-            mockContracyclic.stressedPatrimony === 210000;
+        const testContracyclicCrashPass = mockContracyclicCrash.monthsToRecoverWithBoost < mockContracyclicCrash.monthsToRecoverDynamic &&
+            mockContracyclicCrash.monthsToRecoverWithBoost > 0 &&
+            mockContracyclicCrash.stressedPatrimony === 210000;
         tests.push({
             name: 'Aceleração de Retomada sob Aporte Contracíclico (+20%) em Flash Crash de −30%',
             formula: 'T_recuperação(Aporte × 1,2) < T_recuperação(Aporte_base) ∧ Capital_Retido = 70%',
-            passed: Boolean(testContracyclicPass),
-            detail: `Tempo de recuperação reduzido de ${mockContracyclic.monthsToRecoverDynamic} meses para ${mockContracyclic.monthsToRecoverWithBoost} meses com injeção acelerada durante preços deprimidos.`
+            passed: Boolean(testContracyclicCrashPass),
+            detail: `Tempo de recuperação reduzido de ${mockContracyclicCrash.monthsToRecoverDynamic} meses para ${mockContracyclicCrash.monthsToRecoverWithBoost} meses com injeção acelerada durante preços deprimidos.`
         });
 
         // 52. Teste de Conservação do Balanço Total do Alocador em 4 Macroclasses Heterogêneas
@@ -3342,7 +3536,7 @@
         });
 
         // 53. Teste de Resiliência sob Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)
-        const mockBlackSwan = computeStressTest({
+        const mockBlackSwan53 = computeStressTest({
             stressScenario: 'black_swan',
             currentPatrimony: 400000,
             realAnnualReturn: 7.5,
@@ -3352,15 +3546,15 @@
             weeksPerMonth: 4.2,
             monthlyContribution: 4200
         });
-        const testBlackSwanPass = mockBlackSwan.stressedPatrimony === 200000 &&
-            mockBlackSwan.lostCapital === 200000 &&
-            mockBlackSwan.stressedClinicCosts === (2600 * 1.10) &&
-            mockBlackSwan.stressedMonthlyPassive > 0;
+        const testBlackSwan53Pass = mockBlackSwan53.stressedPatrimony === 200000 &&
+            mockBlackSwan53.lostCapital === 200000 &&
+            mockBlackSwan53.stressedClinicCosts === (2600 * 1.10) &&
+            mockBlackSwan53.stressedMonthlyPassive > 0;
         tests.push({
             name: 'Resiliência sob Cisne Negro Global (−50% Ativos / −30% Proventos / +10% Custos)',
             formula: 'Patrimônio_Stressed = 0,5 × P_0 ∧ Custos_Stressed = 1,1 × C_0 ∧ Renda_Passiva > 0',
-            passed: Boolean(testBlackSwanPass),
-            detail: `Patrimônio estressado retido: R$ 200.000 (50%). Renda passiva residual de R$ ${mockBlackSwan.stressedMonthlyPassive.toFixed(2)}/mês e custos ajustados para R$ 2.860/mês.`
+            passed: Boolean(testBlackSwan53Pass),
+            detail: `Patrimônio estressado retido: R$ 200.000 (50%). Renda passiva residual de R$ ${mockBlackSwan53.stressedMonthlyPassive.toFixed(2)}/mês e custos ajustados para R$ 2.860/mês.`
         });
 
         // 54. Teste de Monotonicidade Estrita dos 4 Marcos de Crossover FIRE
@@ -3388,7 +3582,7 @@
         });
 
         // 55. Teste de Custo de Oportunidade e Horas Clínicas Compradas por Aporte Mensal
-        const mockModelHours = computeFinancialModel({
+        const mockModelHours55 = computeFinancialModel({
             weeklySessions: 16,
             weeksPerMonth: 4.2,
             indirectWeeklyHours: 6,
@@ -3397,14 +3591,14 @@
             monthlyContribution: 4200,
             realAnnualReturn: 7.5
         });
-        const testHoursPass = mockModelHours.sessionsBoughtPerContribution > 0 &&
-            mockModelHours.netEffectiveHourly > 0 &&
-            mockModelHours.totalEffectiveHours === (16 * 4.2 + 6 * 4.2);
+        const testHours55Pass = mockModelHours55.sessionsBoughtPerContribution > 0 &&
+            mockModelHours55.netEffectiveHourly > 0 &&
+            mockModelHours55.totalEffectiveHours === (16 * 4.2 + 6 * 4.2);
         tests.push({
             name: 'Equivalência Atuarial do Custo de Oportunidade da Hora Clínica vs Aporte Perpétuo',
             formula: 'Sessões_Compradas = (Aporte × i_m) / Ticket_Líquido ∧ Horas_Efetivas = (Atend. + Indiretas)',
-            passed: Boolean(testHoursPass),
-            detail: `Cada aporte de R$ 4.200 compra perpetuamente ~${mockModelHours.sessionsBoughtPerContribution.toFixed(2)} sessões/mês a uma taxa real de R$ ${mockModelHours.netEffectiveHourly.toFixed(2)}/hora efetiva.`
+            passed: Boolean(testHours55Pass),
+            detail: `Cada aporte de R$ 4.200 compra perpetuamente ~${mockModelHours55.sessionsBoughtPerContribution.toFixed(2)} sessões/mês a uma taxa real de R$ ${mockModelHours55.netEffectiveHourly.toFixed(2)}/hora efetiva.`
         });
 
         const allPassed = tests.every(t => t.passed);
@@ -3835,7 +4029,7 @@
                 const months = Object.keys(byMonth).sort();
                 const latestYM = months[months.length - 1];
                 const monthSessions = latestYM ? byMonth[latestYM] : validSessions.length;
-                const wPerMonth = Math.max(1, Number(raw.weeksPerMonth) || 4.2);
+                const wPerMonth = Math.max(1, Number(inputs.weeksPerMonth) || 4.2);
                 const estWeekly = Math.max(1, Math.round(monthSessions / wPerMonth));
                 const avgTicket = Math.round(sumPrices / validSessions.length);
 
@@ -3850,6 +4044,40 @@
 
     function bindAlocadorInputs() {
         const C = global.VaultCore;
+
+        const tickersPerClassSel = document.getElementById('ind-tickers-per-class');
+        if (tickersPerClassSel) {
+            tickersPerClassSel.addEventListener('change', (e) => {
+                inputs.tickersPerClass = Math.max(1, Math.min(6, parseInt(e.target.value, 10) || 2));
+                saveInputs();
+                renderSubTabContent();
+            });
+        }
+
+        const btnNormalizeTargets = document.getElementById('btn-normalize-alloc-targets');
+        if (btnNormalizeTargets) {
+            btnNormalizeTargets.addEventListener('click', () => {
+                const f = Math.max(0, Number(document.getElementById('ind-target-fii')?.value) || 0);
+                const r = Math.max(0, Number(document.getElementById('ind-target-rf')?.value) || 0);
+                const a = Math.max(0, Number(document.getElementById('ind-target-acoes')?.value) || 0);
+                const g = Math.max(0, Number(document.getElementById('ind-target-global')?.value) || 0);
+                const sum = f + r + a + g;
+                if (sum <= 0) {
+                    inputs.targetAllocFII = 35;
+                    inputs.targetAllocRF = 30;
+                    inputs.targetAllocAcoes = 20;
+                    inputs.targetAllocGlobal = 15;
+                } else {
+                    inputs.targetAllocFII = Math.round((f / sum) * 100);
+                    inputs.targetAllocRF = Math.round((r / sum) * 100);
+                    inputs.targetAllocAcoes = Math.round((a / sum) * 100);
+                    inputs.targetAllocGlobal = Math.max(0, 100 - inputs.targetAllocFII - inputs.targetAllocRF - inputs.targetAllocAcoes);
+                }
+                saveInputs();
+                renderSubTabContent();
+                C.toast('Metas percentuais normalizadas para 100%!', 'success', 2000);
+            });
+        }
 
         const customAporteInput = document.getElementById('ind-custom-aporte');
         if (customAporteInput) {

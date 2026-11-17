@@ -567,6 +567,42 @@
                 polarity: 'SKILL',
                 rxx: 0.85,
                 domain: 'Funções Executivas'
+            },
+            {
+                id: 'norm_stroop_victoria_c',
+                instrument: 'Teste de Stroop (Versão Vitória)',
+                subtest: 'Cartão 3 (Cores-Palavras — Tempo s)',
+                ageGroup: 'Adultos (20–49 anos)',
+                mean: 24.6,
+                sd: 5.9,
+                inverted: true,
+                polarity: 'SKILL',
+                rxx: 0.84,
+                domain: 'Funções Executivas'
+            },
+            {
+                id: 'norm_tol_total',
+                instrument: 'Torre de Londres (TOL)',
+                subtest: 'Pontuação Total de Planejamento',
+                ageGroup: 'Crianças/Adolescentes (9–14 anos)',
+                mean: 28.4,
+                sd: 3.9,
+                inverted: false,
+                polarity: 'SKILL',
+                rxx: 0.82,
+                domain: 'Funções Executivas'
+            },
+            {
+                id: 'norm_digits_back',
+                instrument: 'Dígitos (WISC/WAIS)',
+                subtest: 'Ordem Inversa (Memória Operacional)',
+                ageGroup: 'Adultos / Escolares (Norma Local)',
+                mean: 7.2,
+                sd: 2.1,
+                inverted: false,
+                polarity: 'SKILL',
+                rxx: 0.87,
+                domain: 'Atenção e Velocidade de Processamento'
             }
         ];
     }
@@ -608,13 +644,17 @@
             appState.normLibrary = Array.isArray(stored.normLibrary) && stored.normLibrary.length > 0
                 ? stored.normLibrary
                 : createDefaultNormLibrary();
+            if (stored.universalState && typeof stored.universalState === 'object') {
+                universalState = Object.assign({}, universalState, stored.universalState);
+            }
         } else {
             const firstProt = createEmptyProtocol('AV-2026-01');
             appState = {
                 activeSubTab: 'wasi',
                 activeProtocolId: firstProt.id,
                 protocols: [firstProt],
-                normLibrary: createDefaultNormLibrary()
+                normLibrary: createDefaultNormLibrary(),
+                universalState: Object.assign({}, universalState)
             };
             saveState();
         }
@@ -694,6 +734,7 @@
 
     function saveState() {
         const C = global.VaultCore;
+        appState.universalState = Object.assign({}, universalState);
         if (C && C.store) {
             C.store.set(C.STORAGE_KEYS.PSICOMETRIA, appState);
             if (typeof C.updateStorageMeter === 'function') {
@@ -1354,14 +1395,23 @@
         const bar = document.getElementById('psy-subtabs-bar');
         if (bar) {
             const rowCount = prot.report.rows.length;
+            const hasWasi = Boolean((prot.wasi.voc && prot.wasi.voc.t) || (prot.wasi.cub && prot.wasi.cub.t) || (prot.wechsler && prot.wechsler.qit));
+            const hasFdt = Boolean(prot.fdt && prot.fdt.leitura && prot.fdt.leitura.time);
+            const hasSrs2 = Boolean(prot.srs2 && (prot.srs2.totalT || (prot.srs2.ps && prot.srs2.ps.t)));
+            const hasBpaRavlt = Boolean((prot.bpa2 && prot.bpa2.ac && prot.bpa2.ac.hits) || (prot.ravlt && prot.ravlt.a1));
+            const filledMap = { wasi: hasWasi, fdt: hasFdt, srs2: hasSrs2, bpa_ravlt: hasBpaRavlt };
+
             bar.innerHTML = SUBTABS.map((tab) => {
                 const isActive = appState.activeSubTab === tab.id;
                 const activeCls = isActive
                     ? 'bg-cyan-500/15 border-cyan-400/60 text-cyan-200 shadow-md shadow-cyan-500/10'
                     : 'bg-[#090d16]/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700';
+                const statusDot = filledMap[tab.id]
+                    ? `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="Instrumento preenchido neste protocolo"></span>`
+                    : '';
                 const badge = tab.id === 'laudo'
                     ? `<span class="ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-mono ${rowCount > 0 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-slate-400'}">${rowCount}</span>`
-                    : '';
+                    : statusDot;
                 return `
                     <button type="button" data-psy-subtab="${tab.id}"
                         class="min-h-[38px] px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition ${activeCls}">
@@ -2471,38 +2521,47 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         if (btnDemo) {
             btnDemo.addEventListener('click', () => {
                 const demoProt = createEmptyProtocol('DEMO-NEURO-TDAH');
-                demoProt.patient = {
-                    birthDateISO: '2016-04-12',
-                    evalDateISO: '2026-10-20',
-                    gender: 'M',
-                    schooling: '5º Ano Fundamental',
-                    handedness: 'Destra',
-                    informant: 'Mãe e Professora'
-                };
-                demoProt.wasi.voc.raw = 32; demoProt.wasi.voc.t = 55;
-                demoProt.wasi.cub.raw = 34; demoProt.wasi.cub.t = 58;
-                demoProt.wasi.sem.raw = 28; demoProt.wasi.sem.t = 52;
-                demoProt.wasi.rm.raw = 26;  demoProt.wasi.rm.t = 56;
-                demoProt.fdt.leitura.time = 24; demoProt.fdt.leitura.errors = 0;
-                demoProt.fdt.contagem.time = 28; demoProt.fdt.contagem.errors = 0;
-                demoProt.fdt.escolha.time = 44; demoProt.fdt.escolha.errors = 1;
-                demoProt.fdt.alternancia.time = 62; demoProt.fdt.alternancia.errors = 2;
-                demoProt.srs2.rawPerception = 12;
-                demoProt.srs2.rawCognition = 18;
-                demoProt.srs2.rawCommunication = 26;
-                demoProt.srs2.rawMotivation = 14;
-                demoProt.srs2.rawRestricted = 19;
-                demoProt.bpa.acRaw = 94;
-                demoProt.bpa.adRaw = 76;
-                demoProt.bpa.aaRaw = 82;
-                demoProt.ravlt.rawA1 = 5;
-                demoProt.ravlt.rawA2 = 8;
-                demoProt.ravlt.rawA3 = 11;
-                demoProt.ravlt.rawA4 = 12;
-                demoProt.ravlt.rawA5 = 14;
-                demoProt.ravlt.rawB1 = 5;
-                demoProt.ravlt.rawA6 = 12;
-                demoProt.ravlt.rawA7 = 11;
+                demoProt.birthDate = '2016-04-12';
+                demoProt.evalDate = '2026-10-20';
+                demoProt.schooling = '5º Ano do Ensino Fundamental';
+                demoProt.handedness = 'Destro';
+                demoProt.informant = 'Genitores e Professora';
+
+                demoProt.wasi.voc.raw = '32'; demoProt.wasi.voc.t = '55';
+                demoProt.wasi.cub.raw = '34'; demoProt.wasi.cub.t = '58';
+                demoProt.wasi.sem.raw = '28'; demoProt.wasi.sem.t = '52';
+                demoProt.wasi.rm.raw  = '26'; demoProt.wasi.rm.t  = '56';
+
+                demoProt.fdt.pctConvention = 'EFFICIENCY';
+                demoProt.fdt.leitura.time = '24';     demoProt.fdt.leitura.errors = '0';     demoProt.fdt.leitura.mode = 'PCT';     demoProt.fdt.leitura.pct = '50';
+                demoProt.fdt.contagem.time = '28';    demoProt.fdt.contagem.errors = '0';    demoProt.fdt.contagem.mode = 'PCT';    demoProt.fdt.contagem.pct = '45';
+                demoProt.fdt.escolha.time = '44';     demoProt.fdt.escolha.errors = '1';     demoProt.fdt.escolha.mode = 'PCT';     demoProt.fdt.escolha.pct = '12';
+                demoProt.fdt.alternancia.time = '62'; demoProt.fdt.alternancia.errors = '2'; demoProt.fdt.alternancia.mode = 'PCT'; demoProt.fdt.alternancia.pct = '8';
+                demoProt.fdt.inibicao.mode = 'PCT';      demoProt.fdt.inibicao.pct = '10';
+                demoProt.fdt.flexibilidade.mode = 'PCT'; demoProt.fdt.flexibilidade.pct = '5';
+
+                demoProt.srs2.ps.t = '54';
+                demoProt.srs2.cs.t = '58';
+                demoProt.srs2.cos.t = '56';
+                demoProt.srs2.ms.t = '52';
+                demoProt.srs2.prr.t = '61';
+                demoProt.srs2.cisT = '56';
+                demoProt.srs2.totalT = '58';
+
+                demoProt.bpa2.ac.hits = '94'; demoProt.bpa2.ac.errors = '6';  demoProt.bpa2.ac.omissions = '12'; demoProt.bpa2.ac.pct = '18';
+                demoProt.bpa2.ad.hits = '76'; demoProt.bpa2.ad.errors = '8';  demoProt.bpa2.ad.omissions = '16'; demoProt.bpa2.ad.pct = '15';
+                demoProt.bpa2.aa.hits = '82'; demoProt.bpa2.aa.errors = '10'; demoProt.bpa2.aa.omissions = '14'; demoProt.bpa2.aa.pct = '10';
+                demoProt.bpa2.ag.pct = '12';
+
+                demoProt.ravlt.a1 = '5'; demoProt.ravlt.a2 = '8'; demoProt.ravlt.a3 = '11';
+                demoProt.ravlt.a4 = '12'; demoProt.ravlt.a5 = '14';
+                demoProt.ravlt.b1 = '5'; demoProt.ravlt.a6 = '12'; demoProt.ravlt.a7 = '11';
+                demoProt.ravlt.recHits = '14'; demoProt.ravlt.recFP = '2';
+                demoProt.ravlt.norms.total.pct = '50';
+                demoProt.ravlt.norms.alt.pct = '65';
+                demoProt.ravlt.norms.a6.pct = '55';
+                demoProt.ravlt.norms.a7.pct = '50';
+                demoProt.ravlt.norms.rec.pct = '60';
 
                 demoProt.clinicalData = Object.assign({}, CLINICAL_PRESETS.tdah, {
                     isCollapsed: false,
@@ -4483,6 +4542,7 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
             const ev = (el.tagName === 'SELECT' || isCheckbox) ? 'change' : 'input';
             el.addEventListener(ev, () => {
                 universalState[key] = isCheckbox ? el.checked : el.value;
+                saveState();
                 refreshUniversalOutputs();
             });
         };
@@ -4502,8 +4562,8 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
 
         const btnModeRaw = document.getElementById('btn-univ-mode-raw');
         const btnModeDir = document.getElementById('btn-univ-mode-direct');
-        if (btnModeRaw) btnModeRaw.addEventListener('click', () => { universalState.entryMode = 'RAW_NORM'; renderSubTabUniversal(viewport); C.refreshIcons(viewport); });
-        if (btnModeDir) btnModeDir.addEventListener('click', () => { universalState.entryMode = 'DIRECT_SCORE'; renderSubTabUniversal(viewport); C.refreshIcons(viewport); });
+        if (btnModeRaw) btnModeRaw.addEventListener('click', () => { universalState.entryMode = 'RAW_NORM'; saveState(); renderSubTabUniversal(viewport); C.refreshIcons(viewport); });
+        if (btnModeDir) btnModeDir.addEventListener('click', () => { universalState.entryMode = 'DIRECT_SCORE'; saveState(); renderSubTabUniversal(viewport); C.refreshIcons(viewport); });
 
         viewport.querySelectorAll('[data-univ-chip]').forEach((btn) => {
             btn.addEventListener('click', () => {
@@ -4514,8 +4574,8 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                 const inp = document.getElementById('univ-direct-val');
                 if (sel) sel.value = 'PCT';
                 if (inp) inp.value = pc;
-                saveAppState();
-                updateUniversalResults();
+                saveState();
+                refreshUniversalOutputs();
                 C.toast(`Corte normativo Pc ${pc} aplicado!`, 'info', 1200);
             });
         });
@@ -4672,6 +4732,7 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                 universalState.polarity = found.polarity || 'SKILL';
                 universalState.rxx = String(found.rxx || 0.88);
                 universalState.domain = found.domain || COGNITIVE_DOMAINS[0];
+                saveState();
                 const vp = document.getElementById('psy-subtab-viewport');
                 renderSubTabUniversal(vp);
                 C.refreshIcons(vp);
