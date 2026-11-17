@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 19 — Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores
+## 🎯 Projeto Prioritário Atual: Fase 20 — Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Visualizador circular estroboscópico com padrões de anéis estroboscópicos concêntricos giratórios para afinação milicêntrica (precisão de ±0.1 cent) em Web Audio API e Canvas 2D.
-  2. Análise espectral por FFT dos primeiros 8 harmônicos superiores de cada par de cordas da viola caipira e violão, diagnosticando inarmonicidade e pureza timbrística.
-  3. Módulo de entonação e compensação de rastilho e pestana: guia gráfico interativo para ajuste de compensação milimétrica de afinação nas casas 12 e 19 para canhotos e destros.
+  1. Modelagem de captadores piezoelétricos de rastilho, microfones condensadores de boca e blend duplo com controle de fase (0°/180°) e filtro notch anti-feedback (60–250 Hz).
+  2. Equalizador paramétrico interativo de 5 bandas em Web Audio API (`BiquadFilterNode`) com analisador de resposta em frequência em Canvas 2D para viola caipira e violão ao vivo.
+  3. Presets de palco e estúdio (Trio Sertanejo Ao Vivo, Gravação em Condenser Stereo, Ponteio Solista em Auditório) com proteção de integridade de áudio e compatibilidade Canhoto/Destro.
 
 ---
 
@@ -50,12 +50,31 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Percepção intervalar das modas de viola e treino auditivo de intervalos típicos (terças maiores/menores, sextas caipiras, quartas aumentadas de folia, quintas de bordão e oitavas). Síntese vocal de solfejo com formantes acústicos (F1/F2) e vibrato natural caipira, estúdio de ditado melódico com 10 clássicos (Chico Mineiro, Menino da Porteira, Pagode em Brasília, etc.) e gerador procedural. Entrada dupla interativa via braço virtual SVG e teclado de solfejo de 12 notas, gamificação com 4 patentes de violeiro (Iniciante da Roça até Mestre Tião Carreiro) e persistência total no Vault.
 16. **[x] Gerador de Introduções Clássicas em Pagode de Viola (Fase 18 Concluída):**
     - Motor algorítmico de licks em semicolcheias com repique, contratempos e batidas de tampo.
-17. **[ ] Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (Fase 19):**
-    - Visualizador circular estroboscópico para entonação de escala e compensação de rastilho.
+17. **[x] Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (Fase 19 Concluída):**
+    - Visualizador circular estroboscópico em Canvas 2D com 4 anéis concêntricos (1x a 8x), análise espectral FFT de 8 harmônicos com estimativa do coeficiente de inarmonicidade *B*, temperamentos caipiras (Igual, Cebolão Doce e Justa Pura) e calculadora de compensação milimétrica de rastilho/pestana para 12ª e 19ª casas (Canhoto e Destro).
+18. **[ ] Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco (Fase 20):**
+    - Modelagem de blend piezo/condensador, filtro notch anti-microfonia e equalizador paramétrico de 5 bandas com curva FFT em tempo real.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **17/11/2026 — Sessão 19** (Fase 19 Concluída):
+  - **Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (`StrobeTuner`)**:
+    - **Visualizador Circular Estroboscópico em Canvas 2D (`drawStrobeCanvas`, `viola-strobe-canvas`)**:
+      - Disco de laboratório com 4 anéis estroboscópicos concêntricos giratórios (`STROBE_RING_SPECS`: `1x` Fundamental / 8 segs, `2x` Oitava / 16 segs, `4x` Dupla Oitava / 32 segs e `8x` Milicêntrico / 64 segs) com rotação em 60 FPS proporcional ao desvio em cents (sentido horário quando agudo, anti-horário quando grave, travamento esmeralda dentro de `±0.5¢`).
+      - Calibração de diapasão Lá (`referenceA4`: 430.0 a 446.0 Hz), seleção de amortecimento (`fast`, `medium`, `precision`) e modo alvo (`Automático Cromático` ou trava manual em qualquer par/corda, inclusive seleção individual entre *Bordão Grave* e *Cantadeira +8ª* nos pares oitavados 3, 4 e 5).
+      - Suporte a 3 temperamentos (`STROBE_TEMPERAMENTS`): *Temperamento Igual (12-TET)*, *Cebolão Doce Caipira* (3ª maior pura −13.7¢ e 5ª justa +2.0¢ para ressonância sem batimentos no acorde aberto) e *Justa Pura (Ptolomeu 5-Limit)*.
+    - **Motor DSP Sub-Cent & Analisador Espectral de 8 Harmônicos (`detectSubCentPitch`, `analyzeEightHarmonics`)**:
+      - Detecção fundamental via YIN combinada com refinamento por autocorrelação multiperíodo sub-amostra (passo de 0.05 amostra com ajuste parabólico) atingindo resolução de `0.1¢`.
+      - Varredura FFT em `AnalyserNode` de 8192 bins com interpolação parabólica em dB nos primeiros 8 harmônicos (`H1`–`H8`), regressão ponderada do coeficiente de inarmonicidade *B* de Fletcher ($f_n = n f_1 \sqrt{1 + B n^2}$), cálculo de estiramento na 8ª parcial (`H8`), razão ímpar/par e índice de pureza timbrística.
+      - Gráfico espectral dedicado em Canvas 2D (`viola-strobe-harmonics-canvas`) sobrepondo barras dB de `H1`–`H8` e a curva teórica de inarmonicidade, além de tabela numérica completa em tempo real.
+      - **Simulador Acústico Integrado de Corda Rígida**: síntese aditiva Web Audio com 8 osciladores harmônicos reais injetados no mesmo `AnalyserNode` (com sliders ao vivo de desafinação `±25.0¢` em passos de `0.1¢` e inarmonicidade *B*, além de toggle audível), funcionando em paralelo ao modo **Microfone Real**.
+    - **Módulo de Entonação & Compensação Milimétrica de Rastilho e Pestana (`computeCourseIntonation`, `renderIntonationBlueprintSVG`)**:
+      - Cálculo analítico exato do recuo de rastilho $C_s = L(r - 1)/(2 - r)$ (com $r = 2^{\Delta c_{12}/1200}$) para a 12ª casa, verificação residual na 19ª casa, ajuste de compensação de pestana e captura direta em 1 clique da leitura estroboscópica ao vivo.
+      - Planta SVG interativa da escala compensada (`viola-intonation-svg-wrap`) espelhável nativamente entre **Modo Canhoto** (pestana à direita, rastilho à esquerda) e **Modo Destro** (pestana à esquerda, rastilho à direita), mais projeção dedicada no braço virtual (`displayMode: 'STROBE'`) e exportação de laudo técnico.
+    - **Saneamento Estrutural do `tab-viola.js`**:
+      - Corrigidos bugs legados de blocos mal aninhados no modo `PAGODE` dentro de `renderFretboardSVG()`, no manipulador de clique do braço, em `loadViolaState()` / `saveViolaState()`, e declarada `chladniRafId` para eliminar `ReferenceError` em modo estrito (`'use strict'`).
 
 - **16/11/2026 — Sessão 18** (Fase 18 Concluída):
   - **Gerador de Introduções Clássicas em Pagode de Viola (Tião Carreiro & Masters Pagode Intro Studio)**:
@@ -306,6 +325,23 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 
 ## 📝 Histórico de Implementações Diárias
 
+- **17/11/2026 — Sessão 19** (Fase 19 Concluída):
+  - **Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (`StrobeTuner`)**:
+    - **Visualizador Circular Estroboscópico em Canvas 2D (`drawStrobeCanvas`, `viola-strobe-canvas`)**:
+      - Disco de laboratório com 4 anéis estroboscópicos concêntricos giratórios (`STROBE_RING_SPECS`: `1x` Fundamental / 8 segs, `2x` Oitava / 16 segs, `4x` Dupla Oitava / 32 segs e `8x` Milicêntrico / 64 segs) com rotação em 60 FPS proporcional ao desvio em cents (sentido horário quando agudo, anti-horário quando grave, travamento esmeralda dentro de `±0.5¢`).
+      - Calibração de diapasão Lá (`referenceA4`: 430.0 a 446.0 Hz), seleção de amortecimento (`fast`, `medium`, `precision`) e modo alvo (`Automático Cromático` ou trava manual em qualquer par/corda, inclusive seleção individual entre *Bordão Grave* e *Cantadeira +8ª* nos pares oitavados 3, 4 e 5).
+      - Suporte a 3 temperamentos (`STROBE_TEMPERAMENTS`): *Temperamento Igual (12-TET)*, *Cebolão Doce Caipira* (3ª maior pura −13.7¢ e 5ª justa +2.0¢ para ressonância sem batimentos no acorde aberto) e *Justa Pura (Ptolomeu 5-Limit)*.
+    - **Motor DSP Sub-Cent & Analisador Espectral de 8 Harmônicos (`detectSubCentPitch`, `analyzeEightHarmonics`)**:
+      - Detecção fundamental via YIN combinada com refinamento por autocorrelação multiperíodo sub-amostra (passo de 0.05 amostra com ajuste parabólico) atingindo resolução de `0.1¢`.
+      - Varredura FFT em `AnalyserNode` de 8192 bins com interpolação parabólica em dB nos primeiros 8 harmônicos (`H1`–`H8`), regressão ponderada do coeficiente de inarmonicidade *B* de Fletcher ($f_n = n f_1 \sqrt{1 + B n^2}$), cálculo de estiramento na 8ª parcial (`H8`), razão ímpar/par e índice de pureza timbrística.
+      - Gráfico espectral dedicado em Canvas 2D (`viola-strobe-harmonics-canvas`) sobrepondo barras dB de `H1`–`H8` e a curva teórica de inarmonicidade, além de tabela numérica completa em tempo real.
+      - **Simulador Acústico Integrado de Corda Rígida**: síntese aditiva Web Audio com 8 osciladores harmônicos reais injetados no mesmo `AnalyserNode` (com sliders ao vivo de desafinação `±25.0¢` em passos de `0.1¢` e inarmonicidade *B*, além de toggle audível), funcionando em paralelo ao modo **Microfone Real**.
+    - **Módulo de Entonação & Compensação Milimétrica de Rastilho e Pestana (`computeCourseIntonation`, `renderIntonationBlueprintSVG`)**:
+      - Cálculo analítico exato do recuo de rastilho $C_s = L(r - 1)/(2 - r)$ (com $r = 2^{\Delta c_{12}/1200}$) para a 12ª casa, verificação residual na 19ª casa, ajuste de compensação de pestana e captura direta em 1 clique da leitura estroboscópica ao vivo.
+      - Planta SVG interativa da escala compensada (`viola-intonation-svg-wrap`) espelhável nativamente entre **Modo Canhoto** (pestana à direita, rastilho à esquerda) e **Modo Destro** (pestana à esquerda, rastilho à direita), mais projeção dedicada no braço virtual (`displayMode: 'STROBE'`) e exportação de laudo técnico.
+    - **Saneamento Estrutural do `tab-viola.js`**:
+      - Corrigidos bugs legados de blocos mal aninhados no modo `PAGODE` dentro de `renderFretboardSVG()`, no manipulador de clique do braço, em `loadViolaState()` / `saveViolaState()`, e declarada `chladniRafId` para eliminar `ReferenceError` em modo estrito (`'use strict'`).
+
 - **08/11/2026 — Sessão 10** (Fase 10 Concluída):
   - **Módulo de Afinações Históricas & Regionais Raras (Meia-Guitarra, Rio Acima, São Lourenço e Cana-Verde)**:
     - **Expansão Lutherística & Musicológica do Núcleo do Instrumento**:
@@ -338,6 +374,23 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **17/11/2026 — Sessão 19** (Fase 19 Concluída):
+  - **Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (`StrobeTuner`)**:
+    - **Visualizador Circular Estroboscópico em Canvas 2D (`drawStrobeCanvas`, `viola-strobe-canvas`)**:
+      - Disco de laboratório com 4 anéis estroboscópicos concêntricos giratórios (`STROBE_RING_SPECS`: `1x` Fundamental / 8 segs, `2x` Oitava / 16 segs, `4x` Dupla Oitava / 32 segs e `8x` Milicêntrico / 64 segs) com rotação em 60 FPS proporcional ao desvio em cents (sentido horário quando agudo, anti-horário quando grave, travamento esmeralda dentro de `±0.5¢`).
+      - Calibração de diapasão Lá (`referenceA4`: 430.0 a 446.0 Hz), seleção de amortecimento (`fast`, `medium`, `precision`) e modo alvo (`Automático Cromático` ou trava manual em qualquer par/corda, inclusive seleção individual entre *Bordão Grave* e *Cantadeira +8ª* nos pares oitavados 3, 4 e 5).
+      - Suporte a 3 temperamentos (`STROBE_TEMPERAMENTS`): *Temperamento Igual (12-TET)*, *Cebolão Doce Caipira* (3ª maior pura −13.7¢ e 5ª justa +2.0¢ para ressonância sem batimentos no acorde aberto) e *Justa Pura (Ptolomeu 5-Limit)*.
+    - **Motor DSP Sub-Cent & Analisador Espectral de 8 Harmônicos (`detectSubCentPitch`, `analyzeEightHarmonics`)**:
+      - Detecção fundamental via YIN combinada com refinamento por autocorrelação multiperíodo sub-amostra (passo de 0.05 amostra com ajuste parabólico) atingindo resolução de `0.1¢`.
+      - Varredura FFT em `AnalyserNode` de 8192 bins com interpolação parabólica em dB nos primeiros 8 harmônicos (`H1`–`H8`), regressão ponderada do coeficiente de inarmonicidade *B* de Fletcher ($f_n = n f_1 \sqrt{1 + B n^2}$), cálculo de estiramento na 8ª parcial (`H8`), razão ímpar/par e índice de pureza timbrística.
+      - Gráfico espectral dedicado em Canvas 2D (`viola-strobe-harmonics-canvas`) sobrepondo barras dB de `H1`–`H8` e a curva teórica de inarmonicidade, além de tabela numérica completa em tempo real.
+      - **Simulador Acústico Integrado de Corda Rígida**: síntese aditiva Web Audio com 8 osciladores harmônicos reais injetados no mesmo `AnalyserNode` (com sliders ao vivo de desafinação `±25.0¢` em passos de `0.1¢` e inarmonicidade *B*, além de toggle audível), funcionando em paralelo ao modo **Microfone Real**.
+    - **Módulo de Entonação & Compensação Milimétrica de Rastilho e Pestana (`computeCourseIntonation`, `renderIntonationBlueprintSVG`)**:
+      - Cálculo analítico exato do recuo de rastilho $C_s = L(r - 1)/(2 - r)$ (com $r = 2^{\Delta c_{12}/1200}$) para a 12ª casa, verificação residual na 19ª casa, ajuste de compensação de pestana e captura direta em 1 clique da leitura estroboscópica ao vivo.
+      - Planta SVG interativa da escala compensada (`viola-intonation-svg-wrap`) espelhável nativamente entre **Modo Canhoto** (pestana à direita, rastilho à esquerda) e **Modo Destro** (pestana à esquerda, rastilho à direita), mais projeção dedicada no braço virtual (`displayMode: 'STROBE'`) e exportação de laudo técnico.
+    - **Saneamento Estrutural do `tab-viola.js`**:
+      - Corrigidos bugs legados de blocos mal aninhados no modo `PAGODE` dentro de `renderFretboardSVG()`, no manipulador de clique do braço, em `loadViolaState()` / `saveViolaState()`, e declarada `chladniRafId` para eliminar `ReferenceError` em modo estrito (`'use strict'`).
 
 - **08/11/2026 — Sessão 9** (Fase 9 Concluída):
   - **Analisador de Tensão Mecânica e Calibre de Cordas (String Tension & Action Calculator)**:

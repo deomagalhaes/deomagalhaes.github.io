@@ -3561,6 +3561,57 @@ const DEFAULT_PAGODE_STATE = {
   customIntroNotes: null
 };
 
+// =========================================================================
+// FASE 19: AFINADOR ESTROBOSCÓPICO, ANÁLISE DE 8 HARMÔNICOS & ENTONAÇÃO
+// =========================================================================
+const STROBE_TEMPERAMENTS = {
+    equal: {
+        id: 'equal',
+        name: 'Temperamento Igual (12-TET)',
+        description: 'Padrão universal moderno (0.0¢ de desvio em todos os graus).'
+    },
+    cebolao_sweetened: {
+        id: 'cebolao_sweetened',
+        name: 'Cebolão Doce Caipira (Terça Pura −13.7¢)',
+        description: 'Abaixa a 3ª maior do acorde aberto em −13.7¢ (razão 5/4) e eleva a 5ª em +2.0¢ (3/2), eliminando batimentos no acorde solto da viola.'
+    },
+    just_caipira: {
+        id: 'just_caipira',
+        name: 'Justa Pura (Ptolomeu 5-Limit)',
+        description: 'Afinação acústica pura relativa à tônica da afinação ativa (3M −13.7¢, 4J −2.0¢, 5J +2.0¢, 6M −15.6¢).'
+    }
+};
+
+const STROBE_RING_SPECS = [
+    { id: '1x', mult: 1, segments: 8,  innerR: 54,  outerR: 74,  label: '1x Fundamental' },
+    { id: '2x', mult: 2, segments: 16, innerR: 78,  outerR: 98,  label: '2x Oitava' },
+    { id: '4x', mult: 4, segments: 32, innerR: 102, outerR: 122, label: '4x Dupla Oitava' },
+    { id: '8x', mult: 8, segments: 64, innerR: 126, outerR: 148, label: '8x Milicêntrico (±0.1¢)' }
+];
+
+const DEFAULT_STROBE_TUNER_STATE = {
+    isRunning: false,
+    sourceMode: 'sim',           // 'mic' | 'sim'
+    referenceA4: 440.0,
+    temperament: 'equal',        // 'equal' | 'cebolao_sweetened' | 'just_caipira'
+    targetMode: 'manual',        // 'auto' | 'manual'
+    targetCourseIdx: 0,
+    targetBranch: 'fundamental', // 'fundamental' | 'octaved_high'
+    damping: 'precision',        // 'fast' | 'medium' | 'precision'
+    simAudioAudible: true,
+    simCourseIdx: 0,
+    simDetuneCents: -3.2,
+    simInharmonicityB: 0.00018,
+    intonation: {
+        scaleLengthMm: 580,
+        nutCompMm: 0.45,
+        action12Mm: 2.6,
+        selectedCourseIdx: 0,
+        fret12Cents: [2.4, 3.6, 5.8, 7.4, 9.2, 10.5],
+        fret19Cents: [3.8, 5.5, 8.2, 10.6, 13.1, 14.8]
+    }
+};
+
 
 const DEFAULT_SOLFEGE_STATE = {
     subTab: 'interval', // 'interval' | 'dictation'
@@ -3937,7 +3988,8 @@ const CAIPIRA_DICTATION_PHRASES = [
         polyphonic: Object.assign({}, DEFAULT_POLYPHONIC_STATE),
         tonewood: Object.assign({}, DEFAULT_TONEWOOD_STATE),
         solfege: Object.assign({}, DEFAULT_SOLFEGE_STATE),
-        pagode: Object.assign({}, DEFAULT_PAGODE_STATE)
+        pagode: Object.assign({}, DEFAULT_PAGODE_STATE),
+        strobeTuner: JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE))
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -3968,6 +4020,7 @@ const CAIPIRA_DICTATION_PHRASES = [
     let polyphonicPlaybackTimer = null;
     let activePolyphonicTimers = [];
     let activeTonewoodTimers = [];
+    let chladniRafId = null;
     let activeSolfegeTimers = [];
     let pagodePlaybackTimer = null;
     let activePagodeTimers = [];
@@ -3982,6 +4035,37 @@ const CAIPIRA_DICTATION_PHRASES = [
     let micSimSynthTimer = null;
     let micLastDetectedChordName = '';
     let micChordStabilityCounter = 0;
+
+    // Fase 19: Variáveis DSP do Afinador Estroboscópico & Harmônicos
+    let strobeStream = null;
+    let strobeSourceNode = null;
+    let strobeFilterNode = null;
+    let strobeGainNode = null;
+    let strobeAnalyserNode = null;
+    let strobeSimMasterGain = null;
+    let strobeSimMonitorGain = null;
+    let strobeSimOscs = [];
+    let strobeRafId = null;
+    let strobeTimeData = null;
+    let strobeFreqData = null;
+    let strobeLastFrameTs = 0;
+    let strobeRingPhases = [0, 0, 0, 0];
+    let strobeLiveMetrics = {
+        detectedFreq: 0,
+        targetFreq: 329.628,
+        centsDeviation: 0,
+        rawCents: 0,
+        noteName: 'E4',
+        noteLabelPt: 'Mi4',
+        confidence: 0,
+        rms: 0,
+        harmonics: [],
+        inharmonicityB: 0,
+        purityScore: 0,
+        oddEvenRatio: 1.0,
+        stretch8thCents: 0,
+        statusText: 'Pronto para medição estroboscópica (±0.1¢). Escolha Microfone ou Simulador Acústico.'
+    };
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -18459,6 +18543,1510 @@ function bindSolfegeEvents() {
 
 
     // =========================================================================
+    // =========================================================================
+    // FASE 19: AFINADOR ESTROBOSCÓPICO MILICÊNTRICO, 8 HARMÔNICOS & ENTONAÇÃO
+    // =========================================================================
+
+    function getInstrumentRootPitchClass(inst) {
+        if (!inst || !inst.courses || !inst.courses.length) return 4;
+        if (inst.id === 'viola_cana_verde') return 11;
+        return inst.courses[0].pitchClass;
+    }
+
+    function getTemperamentOffsetCents(pc, temperamentId, inst) {
+        if (!temperamentId || temperamentId === 'equal') return 0;
+        const rootPc = getInstrumentRootPitchClass(inst);
+        const interval = ((pc - rootPc) % 12 + 12) % 12;
+
+        if (temperamentId === 'cebolao_sweetened') {
+            if (inst && inst.id === 'violao_padrao') {
+                const violaoSweet = { 4: 0, 9: -2.0, 2: -2.0, 7: -4.0, 11: -5.5 };
+                return violaoSweet[pc] || 0;
+            }
+            if (interval === 4) return -13.7; // Terça maior pura (5/4)
+            if (interval === 3) return 15.6;  // Terça menor pura (6/5)
+            if (interval === 7) return 2.0;   // Quinta justa pura (3/2)
+            return 0;
+        }
+
+        if (temperamentId === 'just_caipira') {
+            const ptolemy5Limit = {
+                0: 0, 1: 11.7, 2: 3.9, 3: 15.6, 4: -13.7, 5: -2.0,
+                6: -9.8, 7: 2.0, 8: 13.7, 9: -15.6, 10: 17.6, 11: -11.7
+            };
+            return ptolemy5Limit[interval] || 0;
+        }
+        return 0;
+    }
+
+    function midiToFreqCalibrated(midi, refA4, offsetCents) {
+        const a4 = refA4 || 440.0;
+        return a4 * Math.pow(2, (midi - 69 + ((offsetCents || 0) / 100)) / 12);
+    }
+
+    function getStrobeTargetSpec() {
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const st = state.strobeTuner;
+        const idx = Math.max(0, Math.min(inst.courses.length - 1, st.targetCourseIdx || 0));
+        const course = inst.courses[idx];
+        const useHighOctave = inst.isPaired && course.octaved && course.midi.length > 1 && st.targetBranch === 'octaved_high';
+        const midi = useHighOctave ? course.midi[1] : course.midi[0];
+        const tempOffset = getTemperamentOffsetCents(course.pitchClass, st.temperament, inst);
+        const freq = midiToFreqCalibrated(midi, st.referenceA4, tempOffset);
+        const oct = Math.floor(midi / 12) - 1;
+        const pc = ((midi % 12) + 12) % 12;
+        return {
+            courseIdx: idx,
+            course,
+            midi,
+            pc,
+            noteName: `${NOTE_NAMES[pc]}${oct}`,
+            noteLabelPt: `${NOTE_NAMES_PT[pc]}${oct}`,
+            freq,
+            temperamentOffsetCents: tempOffset,
+            isOctavedHigh: useHighOctave
+        };
+    }
+
+    /**
+     * Refinamento sub-amostra de período fundamental via YIN + autocorrelação multiperíodo
+     * para resolução milicêntrica (±0.1 cent) em Web Audio.
+     */
+    function detectSubCentPitch(timeBuffer, sampleRate) {
+        if (!timeBuffer || timeBuffer.length < 2048) return null;
+        const windowLen = 1024;
+        const maxTau = Math.min(920, timeBuffer.length - windowLen - 4);
+        const minTau = Math.max(4, Math.floor(sampleRate / 1400));
+        if (maxTau <= minTau + 4) return null;
+
+        const d = new Float32Array(maxTau + 1);
+        for (let tau = minTau; tau <= maxTau; tau++) {
+            let sum = 0;
+            for (let j = 0; j < windowLen; j++) {
+                const diff = timeBuffer[j] - timeBuffer[j + tau];
+                sum += diff * diff;
+            }
+            d[tau] = sum;
+        }
+
+        const dPrime = new Float32Array(maxTau + 1);
+        let runningSum = 0;
+        for (let tau = 1; tau <= maxTau; tau++) {
+            runningSum += d[tau];
+            dPrime[tau] = runningSum > 0 ? (d[tau] / (runningSum / tau)) : 1;
+        }
+
+        let foundTau = -1;
+        const threshold = 0.16;
+        for (let tau = minTau; tau <= maxTau; tau++) {
+            if (dPrime[tau] < threshold) {
+                while (tau + 1 <= maxTau && dPrime[tau + 1] < dPrime[tau]) {
+                    tau++;
+                }
+                foundTau = tau;
+                break;
+            }
+        }
+
+        if (foundTau === -1) {
+            let bestVal = 999;
+            for (let tau = minTau; tau <= maxTau; tau++) {
+                if (dPrime[tau] < bestVal) {
+                    bestVal = dPrime[tau];
+                    foundTau = tau;
+                }
+            }
+            if (bestVal > 0.35 || foundTau <= minTau) return null;
+        }
+
+        const a = dPrime[foundTau - 1] || dPrime[foundTau];
+        const b = dPrime[foundTau];
+        const c = dPrime[foundTau + 1] || dPrime[foundTau];
+        const denom = 2 * (a - 2 * b + c);
+        const coarseDelta = denom !== 0 ? (a - c) / denom : 0;
+        const coarseTau = foundTau + (Math.abs(coarseDelta) < 1 ? coarseDelta : 0);
+
+        // Refinamento sub-amostra multiperíodo ao redor de coarseTau
+        const maxPeriods = Math.max(1, Math.min(6, Math.floor((timeBuffer.length - 4) / coarseTau) - 1));
+        const span = 1.2;
+        const step = 0.05;
+        const gridN = Math.round((span * 2) / step) + 1;
+        const errGrid = new Float64Array(gridN);
+        const evalSamples = Math.min(1024, Math.floor(coarseTau * maxPeriods));
+
+        for (let gi = 0; gi < gridN; gi++) {
+            const lag = coarseTau - span + gi * step;
+            const iLag = Math.floor(lag);
+            const frac = lag - iLag;
+            let errSum = 0;
+            for (let j = 0; j < evalSamples && (j + iLag + 1) < timeBuffer.length; j++) {
+                const sDelayed = timeBuffer[j + iLag] * (1 - frac) + timeBuffer[j + iLag + 1] * frac;
+                const diff = timeBuffer[j] - sDelayed;
+                errSum += diff * diff;
+            }
+            errGrid[gi] = errSum;
+        }
+
+        let bestGi = Math.floor(gridN / 2);
+        let bestErr = errGrid[bestGi];
+        for (let gi = 1; gi < gridN - 1; gi++) {
+            if (errGrid[gi] < bestErr) {
+                bestErr = errGrid[gi];
+                bestGi = gi;
+            }
+        }
+
+        const eA = errGrid[Math.max(0, bestGi - 1)];
+        const eB = errGrid[bestGi];
+        const eC = errGrid[Math.min(gridN - 1, bestGi + 1)];
+        const eDenom = 2 * (eA - 2 * eB + eC);
+        const fineShift = eDenom !== 0 ? ((eA - eC) / eDenom) * step : 0;
+        const fineTau = (coarseTau - span + bestGi * step) + (Math.abs(fineShift) <= step ? fineShift : 0);
+
+        const freq = sampleRate / fineTau;
+        if (!isFinite(freq) || freq < 55 || freq > 1600) return null;
+
+        return {
+            freq,
+            confidence: Math.max(0, Math.min(1, 1 - b))
+        };
+    }
+
+    /**
+     * Analisa os 8 primeiros harmônicos superiores no espectro FFT (8192 bins)
+     * e ajusta o coeficiente de inarmonicidade B da equação de corda rígida de Fletcher.
+     */
+    function analyzeEightHarmonics(freqBuffer, sampleRate, f1) {
+        if (!freqBuffer || !f1 || f1 < 50) return null;
+        const binCount = freqBuffer.length;
+        const fftSize = binCount * 2;
+        const df = sampleRate / fftSize;
+        const harmonics = [];
+
+        let h1Db = -90;
+        let oddEnergy = 0;
+        let evenEnergy = 0;
+        let sumNum = 0;
+        let sumDen = 0;
+        let validCount = 0;
+
+        for (let n = 1; n <= 8; n++) {
+            const idealFreq = n * f1;
+            if (idealFreq >= sampleRate * 0.45) {
+                harmonics.push({
+                    n, idealFreq, measuredFreq: idealFreq, deviationCents: 0,
+                    amplitudeDb: -100, relativeDb: -100, relativeMag: 0, outOfBand: true
+                });
+                continue;
+            }
+
+            const lowBin = Math.max(1, Math.floor((idealFreq * 0.955) / df));
+            const highBin = Math.min(binCount - 2, Math.ceil((idealFreq * 1.045) / df));
+            let peakK = lowBin;
+            let peakDb = -160;
+            for (let k = lowBin; k <= highBin; k++) {
+                if (freqBuffer[k] > peakDb) {
+                    peakDb = freqBuffer[k];
+                    peakK = k;
+                }
+            }
+
+            let delta = 0;
+            if (peakK > 1 && peakK < binCount - 2) {
+                const alpha = freqBuffer[peakK - 1];
+                const beta = freqBuffer[peakK];
+                const gamma = freqBuffer[peakK + 1];
+                const denom = 2 * (alpha - 2 * beta + gamma);
+                if (beta >= alpha && beta >= gamma && denom !== 0) {
+                    delta = Math.max(-0.5, Math.min(0.5, (alpha - gamma) / denom));
+                }
+            }
+
+            const measuredFreq = (peakK + delta) * df;
+            const deviationCents = 1200 * Math.log2(Math.max(1, measuredFreq) / idealFreq);
+            if (n === 1) h1Db = peakDb;
+            const relativeDb = peakDb - h1Db;
+            const relativeMag = Math.max(0, Math.min(1, Math.pow(10, relativeDb / 40)));
+            const linPower = Math.pow(10, Math.max(-100, peakDb) / 20);
+
+            if (n % 2 === 1) oddEnergy += linPower;
+            else evenEnergy += linPower;
+
+            if (n >= 2 && peakDb > -85) {
+                const n2m1 = n * n - 1;
+                const yN = (measuredFreq / idealFreq) - 1;
+                const weight = Math.max(0.05, relativeMag);
+                sumNum += weight * n2m1 * yN;
+                sumDen += weight * n2m1 * n2m1;
+                validCount++;
+            }
+
+            harmonics.push({
+                n,
+                idealFreq,
+                measuredFreq,
+                deviationCents: Math.round(deviationCents * 10) / 10,
+                amplitudeDb: Math.round(peakDb * 10) / 10,
+                relativeDb: Math.round(relativeDb * 10) / 10,
+                relativeMag,
+                outOfBand: false
+            });
+        }
+
+        const inharmonicityB = sumDen > 0 ? Math.max(0, (2 * sumNum) / sumDen) : 0;
+        const stretch8thCents = 1200 * Math.log2(Math.sqrt((1 + inharmonicityB * 64) / (1 + inharmonicityB)));
+        const oddEvenRatio = evenEnergy > 0 ? (oddEnergy / evenEnergy) : 1.0;
+
+        // Pureza timbrística: combina presença harmônica coerente e baixa inarmonicidade excessiva
+        const stretchPenalty = Math.min(45, stretch8thCents * 1.1);
+        const coverageBonus = Math.min(35, (validCount / 7) * 35);
+        const purityScore = Math.round(Math.max(5, Math.min(100, 65 + coverageBonus - stretchPenalty)));
+
+        return {
+            harmonics,
+            inharmonicityB,
+            stretch8thCents: Math.round(stretch8thCents * 10) / 10,
+            oddEvenRatio: Math.round(oddEvenRatio * 100) / 100,
+            purityScore
+        };
+    }
+
+    function stopStrobeTunerAudio() {
+        if (strobeRafId) {
+            cancelAnimationFrame(strobeRafId);
+            strobeRafId = null;
+        }
+        if (strobeStream) {
+            try { strobeStream.getTracks().forEach((t) => t.stop()); } catch (_) {}
+            strobeStream = null;
+        }
+        if (strobeSourceNode) {
+            try { strobeSourceNode.disconnect(); } catch (_) {}
+            strobeSourceNode = null;
+        }
+        if (strobeFilterNode) {
+            try { strobeFilterNode.disconnect(); } catch (_) {}
+            strobeFilterNode = null;
+        }
+        if (strobeGainNode) {
+            try { strobeGainNode.disconnect(); } catch (_) {}
+            strobeGainNode = null;
+        }
+        if (strobeSimOscs.length > 0) {
+            strobeSimOscs.forEach((o) => {
+                try { o.stop(); o.disconnect(); } catch (_) {}
+            });
+            strobeSimOscs = [];
+        }
+        if (strobeSimMasterGain) {
+            try { strobeSimMasterGain.disconnect(); } catch (_) {}
+            strobeSimMasterGain = null;
+        }
+        if (strobeSimMonitorGain) {
+            try { strobeSimMonitorGain.disconnect(); } catch (_) {}
+            strobeSimMonitorGain = null;
+        }
+        if (strobeAnalyserNode) {
+            try { strobeAnalyserNode.disconnect(); } catch (_) {}
+            strobeAnalyserNode = null;
+        }
+        if (state.strobeTuner) {
+            state.strobeTuner.isRunning = false;
+        }
+        updateStrobeToggleButtonDOM();
+    }
+
+    function updateStrobeSimulatorLiveParams() {
+        if (!state.strobeTuner.isRunning || state.strobeTuner.sourceMode !== 'sim' || !audioCtx || strobeSimOscs.length === 0) {
+            return;
+        }
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const simIdx = Math.max(0, Math.min(inst.courses.length - 1, state.strobeTuner.simCourseIdx || 0));
+        const course = inst.courses[simIdx];
+        const useHigh = inst.isPaired && course.octaved && course.midi.length > 1 && state.strobeTuner.targetBranch === 'octaved_high';
+        const midi = useHigh ? course.midi[1] : course.midi[0];
+        const tempOffset = getTemperamentOffsetCents(course.pitchClass, state.strobeTuner.temperament, inst);
+        const fBase = midiToFreqCalibrated(midi, state.strobeTuner.referenceA4, tempOffset + (state.strobeTuner.simDetuneCents || 0));
+        const B = state.strobeTuner.simInharmonicityB || 0;
+        const now = audioCtx.currentTime;
+
+        strobeSimOscs.forEach((osc, i) => {
+            const n = i + 1;
+            const fn = n * fBase * Math.sqrt(1 + B * n * n);
+            osc.frequency.setTargetAtTime(Math.min(audioCtx.sampleRate * 0.45, fn), now, 0.015);
+        });
+        if (strobeSimMonitorGain) {
+            strobeSimMonitorGain.gain.setTargetAtTime(state.strobeTuner.simAudioAudible ? 0.16 : 0.0, now, 0.02);
+        }
+    }
+
+    function startStrobeSimulator() {
+        stopAllAudio();
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const simIdx = Math.max(0, Math.min(inst.courses.length - 1, state.strobeTuner.simCourseIdx || 0));
+        state.strobeTuner.targetCourseIdx = simIdx;
+        const course = inst.courses[simIdx];
+        const useHigh = inst.isPaired && course.octaved && course.midi.length > 1 && state.strobeTuner.targetBranch === 'octaved_high';
+        const midi = useHigh ? course.midi[1] : course.midi[0];
+        const tempOffset = getTemperamentOffsetCents(course.pitchClass, state.strobeTuner.temperament, inst);
+        const fBase = midiToFreqCalibrated(midi, state.strobeTuner.referenceA4, tempOffset + (state.strobeTuner.simDetuneCents || 0));
+        const B = state.strobeTuner.simInharmonicityB || 0;
+
+        strobeAnalyserNode = ctx.createAnalyser();
+        strobeAnalyserNode.fftSize = 8192;
+        strobeAnalyserNode.smoothingTimeConstant = 0.45;
+
+        strobeSimMasterGain = ctx.createGain();
+        strobeSimMasterGain.gain.setValueAtTime(0.45, ctx.currentTime);
+
+        strobeSimMonitorGain = ctx.createGain();
+        strobeSimMonitorGain.gain.setValueAtTime(state.strobeTuner.simAudioAudible ? 0.16 : 0.0, ctx.currentTime);
+
+        strobeSimMasterGain.connect(strobeAnalyserNode);
+        strobeSimMasterGain.connect(strobeSimMonitorGain);
+        strobeSimMonitorGain.connect(ctx.destination);
+
+        const harmWeights = [1.0, 0.52, 0.34, 0.22, 0.14, 0.09, 0.055, 0.032];
+        strobeSimOscs = [];
+        for (let i = 0; i < 8; i++) {
+            const n = i + 1;
+            const osc = ctx.createOscillator();
+            const hg = ctx.createGain();
+            osc.type = 'sine';
+            const fn = n * fBase * Math.sqrt(1 + B * n * n);
+            osc.frequency.setValueAtTime(Math.min(ctx.sampleRate * 0.45, fn), ctx.currentTime);
+            hg.gain.setValueAtTime(harmWeights[i] * 0.25, ctx.currentTime);
+            osc.connect(hg);
+            hg.connect(strobeSimMasterGain);
+            osc.start();
+            strobeSimOscs.push(osc);
+        }
+
+        strobeTimeData = new Float32Array(strobeAnalyserNode.fftSize);
+        strobeFreqData = new Float32Array(strobeAnalyserNode.frequencyBinCount);
+        state.strobeTuner.isRunning = true;
+        strobeLiveMetrics.statusText = 'Simulador Estroboscópico ativo (8 harmônicos reais via Web Audio AnalyserNode).';
+        strobeLastFrameTs = performance.now();
+        updateStrobeToggleButtonDOM();
+        strobeLoop(strobeLastFrameTs);
+    }
+
+    async function startStrobeMic() {
+        stopAllAudio();
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            strobeLiveMetrics.statusText = 'Microfone indisponível neste navegador. Use o modo Simulador Acústico!';
+            updateStrobeReadoutsDOM();
+            return;
+        }
+
+        try {
+            strobeLiveMetrics.statusText = 'Conectando microfone para análise estroboscópica (8192 bins)...';
+            updateStrobeReadoutsDOM();
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 }
+            });
+
+            strobeStream = stream;
+            strobeSourceNode = ctx.createMediaStreamSource(stream);
+
+            strobeFilterNode = ctx.createBiquadFilter();
+            strobeFilterNode.type = 'highpass';
+            strobeFilterNode.frequency.setValueAtTime(55, ctx.currentTime);
+
+            strobeGainNode = ctx.createGain();
+            strobeGainNode.gain.setValueAtTime(1.5, ctx.currentTime);
+
+            strobeAnalyserNode = ctx.createAnalyser();
+            strobeAnalyserNode.fftSize = 8192;
+            strobeAnalyserNode.smoothingTimeConstant = 0.5;
+
+            strobeSourceNode.connect(strobeFilterNode);
+            strobeFilterNode.connect(strobeGainNode);
+            strobeGainNode.connect(strobeAnalyserNode);
+
+            strobeTimeData = new Float32Array(strobeAnalyserNode.fftSize);
+            strobeFreqData = new Float32Array(strobeAnalyserNode.frequencyBinCount);
+            state.strobeTuner.isRunning = true;
+            strobeLiveMetrics.statusText = 'Microfone estroboscópico ativo! Toque um par da viola de forma sustentada.';
+            strobeLastFrameTs = performance.now();
+            updateStrobeToggleButtonDOM();
+            strobeLoop(strobeLastFrameTs);
+        } catch (err) {
+            stopStrobeTunerAudio();
+            strobeLiveMetrics.statusText = `Permissão de microfone recusada (${err.name || 'Erro'}). Alternando ou use o Simulador Acústico.`;
+            updateStrobeReadoutsDOM();
+        }
+    }
+
+    function strobeLoop(nowTs) {
+        if (!state.strobeTuner.isRunning || !strobeAnalyserNode || !audioCtx) return;
+
+        const dt = Math.min(0.05, Math.max(0.004, (nowTs - (strobeLastFrameTs || nowTs)) / 1000));
+        strobeLastFrameTs = nowTs;
+
+        strobeAnalyserNode.getFloatTimeDomainData(strobeTimeData);
+        strobeAnalyserNode.getFloatFrequencyData(strobeFreqData);
+
+        let sumSq = 0;
+        for (let i = 0; i < strobeTimeData.length; i++) {
+            sumSq += strobeTimeData[i] * strobeTimeData[i];
+        }
+        const rms = Math.sqrt(sumSq / strobeTimeData.length);
+        strobeLiveMetrics.rms = rms;
+
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const st = state.strobeTuner;
+        let targetSpec = getStrobeTargetSpec();
+
+        if (rms > 0.008) {
+            const pitch = detectSubCentPitch(strobeTimeData, audioCtx.sampleRate);
+            if (pitch) {
+                if (st.targetMode === 'auto') {
+                    const exactMidi = 69 + 12 * Math.log2(pitch.freq / (st.referenceA4 || 440));
+                    const nearestMidi = Math.round(exactMidi);
+                    const pc = ((nearestMidi % 12) + 12) % 12;
+                    const oct = Math.floor(nearestMidi / 12) - 1;
+                    const tempOffset = getTemperamentOffsetCents(pc, st.temperament, inst);
+                    const tFreq = midiToFreqCalibrated(nearestMidi, st.referenceA4, tempOffset);
+                    targetSpec = {
+                        midi: nearestMidi,
+                        pc,
+                        noteName: `${NOTE_NAMES[pc]}${oct}`,
+                        noteLabelPt: `${NOTE_NAMES_PT[pc]}${oct}`,
+                        freq: tFreq,
+                        temperamentOffsetCents: tempOffset
+                    };
+                }
+
+                const rawCents = 1200 * Math.log2(pitch.freq / targetSpec.freq);
+                const clampCents = Math.max(-50, Math.min(50, rawCents));
+                const alpha = st.damping === 'fast' ? 0.45 : (st.damping === 'medium' ? 0.22 : 0.11);
+                const smoothed = strobeLiveMetrics.detectedFreq > 0
+                    ? strobeLiveMetrics.centsDeviation + alpha * (clampCents - strobeLiveMetrics.centsDeviation)
+                    : clampCents;
+
+                strobeLiveMetrics.detectedFreq = pitch.freq;
+                strobeLiveMetrics.targetFreq = targetSpec.freq;
+                strobeLiveMetrics.noteName = targetSpec.noteName;
+                strobeLiveMetrics.noteLabelPt = targetSpec.noteLabelPt;
+                strobeLiveMetrics.rawCents = Math.round(rawCents * 10) / 10;
+                strobeLiveMetrics.centsDeviation = Math.round(smoothed * 10) / 10;
+                strobeLiveMetrics.confidence = pitch.confidence;
+
+                // Avança fases dos 4 anéis proporcional ao desvio em cents (estroboscópio real)
+                // > 0 (agudo/sharp) gira sentido horário; < 0 (grave/flat) gira anti-horário
+                const baseSpeed = strobeLiveMetrics.centsDeviation * 0.22;
+                for (let r = 0; r < 4; r++) {
+                    const mult = STROBE_RING_SPECS[r].mult;
+                    strobeRingPhases[r] = (strobeRingPhases[r] + baseSpeed * mult * dt) % (Math.PI * 2);
+                }
+
+                const harmAnalysis = analyzeEightHarmonics(strobeFreqData, audioCtx.sampleRate, pitch.freq);
+                if (harmAnalysis) {
+                    strobeLiveMetrics.harmonics = harmAnalysis.harmonics;
+                    strobeLiveMetrics.inharmonicityB = harmAnalysis.inharmonicityB;
+                    strobeLiveMetrics.stretch8thCents = harmAnalysis.stretch8thCents;
+                    strobeLiveMetrics.oddEvenRatio = harmAnalysis.oddEvenRatio;
+                    strobeLiveMetrics.purityScore = harmAnalysis.purityScore;
+                }
+            }
+        } else {
+            strobeLiveMetrics.confidence = 0;
+        }
+
+        drawStrobeCanvas();
+        drawHarmonicsCanvas();
+        updateStrobeReadoutsDOM();
+
+        strobeRafId = requestAnimationFrame(strobeLoop);
+    }
+
+    function drawStrobeCanvas() {
+        const canvas = document.getElementById('viola-strobe-canvas');
+        if (!canvas) return;
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const cssSize = 340;
+        const targetPx = Math.round(cssSize * dpr);
+        if (canvas.width !== targetPx || canvas.height !== targetPx) {
+            canvas.width = targetPx;
+            canvas.height = targetPx;
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+
+        const cx = cssSize / 2;
+        const cy = cssSize / 2;
+        ctx.clearRect(0, 0, cssSize, cssSize);
+
+        // Fundo circular de instrumento de laboratório
+        const bgGrad = ctx.createRadialGradient(cx, cy, 18, cx, cy, 166);
+        bgGrad.addColorStop(0, '#0f172a');
+        bgGrad.addColorStop(0.85, '#070b12');
+        bgGrad.addColorStop(1, '#020617');
+        ctx.fillStyle = bgGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 166, 0, Math.PI * 2);
+        ctx.fill();
+
+        const absCents = Math.abs(strobeLiveMetrics.centsDeviation);
+        const hasSignal = strobeLiveMetrics.detectedFreq > 0 && strobeLiveMetrics.rms > 0.005;
+        let ringHex = '#38bdf8';
+        if (!hasSignal) ringHex = '#475569';
+        else if (absCents <= 0.5) ringHex = '#10b981';
+        else if (absCents <= 3.0) ringHex = '#06b6d4';
+        else if (strobeLiveMetrics.centsDeviation > 0) ringHex = '#f59e0b';
+        else ringHex = '#f43f5e';
+
+        // Moldura externa e marcações de referência estroboscópica (0° / 90° / 180° / 270°)
+        ctx.strokeStyle = hasSignal && absCents <= 0.5 ? '#10b981' : '#1e293b';
+        ctx.lineWidth = hasSignal && absCents <= 0.5 ? 2.5 : 1.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 160, 0, Math.PI * 2);
+        ctx.stroke();
+
+        for (let a = 0; a < 12; a++) {
+            const ang = (a * Math.PI) / 6;
+            const r1 = 152;
+            const r2 = a % 3 === 0 ? 162 : 157;
+            ctx.strokeStyle = a % 3 === 0 ? '#64748b' : '#334155';
+            ctx.lineWidth = a % 3 === 0 ? 2 : 1;
+            ctx.beginPath();
+            ctx.moveTo(cx + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
+            ctx.lineTo(cx + Math.cos(ang) * r2, cy + Math.sin(ang) * r2);
+            ctx.stroke();
+        }
+
+        // Renderiza os 4 anéis estroboscópicos concêntricos (1x, 2x, 4x, 8x)
+        STROBE_RING_SPECS.forEach((ring, rIdx) => {
+            const segs = ring.segments;
+            const stepAng = (Math.PI * 2) / segs;
+            const phase = strobeRingPhases[rIdx] || 0;
+
+            for (let s = 0; s < segs; s++) {
+                const startA = phase + s * stepAng;
+                const endA = startA + stepAng * 0.52;
+                ctx.beginPath();
+                ctx.arc(cx, cy, ring.outerR, startA, endA);
+                ctx.arc(cx, cy, ring.innerR, endA, startA, true);
+                ctx.closePath();
+
+                if (s % 2 === 0) {
+                    ctx.fillStyle = ringHex;
+                    ctx.globalAlpha = hasSignal ? (0.42 + 0.14 * rIdx) : 0.22;
+                } else {
+                    ctx.fillStyle = '#0f172a';
+                    ctx.globalAlpha = 0.9;
+                }
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+
+            // Separador fino entre anéis
+            ctx.strokeStyle = '#020617';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, ring.innerR, 0, Math.PI * 2);
+            ctx.stroke();
+        });
+
+        // Hub central com leitura digital milicêntrica
+        ctx.fillStyle = '#090d16';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = ringHex;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        const targetSpec = getStrobeTargetSpec();
+        const dispNote = strobeLiveMetrics.noteName || targetSpec.noteName;
+        const dispCents = hasSignal
+            ? `${strobeLiveMetrics.centsDeviation > 0 ? '+' : ''}${strobeLiveMetrics.centsDeviation.toFixed(1)}¢`
+            : '—';
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '800 22px "JetBrains Mono", monospace';
+        ctx.fillText(dispNote, cx, cy - 4);
+
+        ctx.fillStyle = ringHex;
+        ctx.font = '700 13px "JetBrains Mono", monospace';
+        ctx.fillText(dispCents, cx, cy + 16);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 9px "JetBrains Mono", monospace';
+        const statusShort = !hasSignal
+            ? 'AGUARDANDO'
+            : (absCents <= 0.5 ? 'TRAVADO ±0.1¢' : (strobeLiveMetrics.centsDeviation > 0 ? 'AGUDO ▶' : '◀ GRAVE'));
+        ctx.fillText(statusShort, cx, cy + 31);
+
+        ctx.restore();
+    }
+
+    function drawHarmonicsCanvas() {
+        const canvas = document.getElementById('viola-strobe-harmonics-canvas');
+        if (!canvas) return;
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const cssW = 540;
+        const cssH = 190;
+        const targetW = Math.round(cssW * dpr);
+        const targetH = Math.round(cssH * dpr);
+        if (canvas.width !== targetW || canvas.height !== targetH) {
+            canvas.width = targetW;
+            canvas.height = targetH;
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, cssW, cssH);
+
+        ctx.fillStyle = '#070b12';
+        ctx.fillRect(0, 0, cssW, cssH);
+
+        const padL = 38;
+        const padR = 16;
+        const padT = 18;
+        const padB = 34;
+        const plotW = cssW - padL - padR;
+        const plotH = cssH - padT - padB;
+
+        // Linhas horizontais de grade dB
+        ctx.font = '600 9px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        [0, -20, -40, -60].forEach((db, idx) => {
+            const y = padT + (idx / 3) * plotH;
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padL, y);
+            ctx.lineTo(cssW - padR, y);
+            ctx.stroke();
+            ctx.fillStyle = '#64748b';
+            ctx.fillText(`${db}dB`, padL - 5, y + 3);
+        });
+
+        const harms = strobeLiveMetrics.harmonics || [];
+        const colW = plotW / 8;
+        const barW = Math.min(34, colW * 0.56);
+
+        // Desenha barras dos 8 harmônicos
+        const curvePts = [];
+        for (let i = 0; i < 8; i++) {
+            const h = harms[i] || { n: i + 1, relativeMag: 0, deviationCents: 0, relativeDb: -60 };
+            const cx = padL + (i + 0.5) * colW;
+            const barH = Math.max(2, h.relativeMag * plotH);
+            const x = cx - barW / 2;
+            const y = padT + plotH - barH;
+
+            const stretchAbs = Math.abs(h.deviationCents);
+            const barCol = h.n === 1
+                ? '#10b981'
+                : (stretchAbs <= 4 ? '#06b6d4' : (stretchAbs <= 15 ? '#f59e0b' : '#f43f5e'));
+
+            const grad = ctx.createLinearGradient(0, y, 0, padT + plotH);
+            grad.addColorStop(0, barCol);
+            grad.addColorStop(1, 'rgba(15, 23, 42, 0.3)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(x, y, barW, barH);
+
+            ctx.fillStyle = '#e2e8f0';
+            ctx.textAlign = 'center';
+            ctx.font = '700 10px "JetBrains Mono", monospace';
+            ctx.fillText(`H${i + 1}`, cx, cssH - 16);
+
+            ctx.fillStyle = stretchAbs > 10 ? '#fbbf24' : '#94a3b8';
+            ctx.font = '600 8.5px "JetBrains Mono", monospace';
+            const devStr = harms.length > 0 && !h.outOfBand
+                ? `${h.deviationCents > 0 ? '+' : ''}${h.deviationCents.toFixed(1)}¢`
+                : '—';
+            ctx.fillText(devStr, cx, cssH - 5);
+
+            // Ponto teórico da curva de inarmonicidade B (escala: 0 a +40¢ mapeado na altura)
+            const B = strobeLiveMetrics.inharmonicityB || 0;
+            const theoCents = 1200 * Math.log2(Math.sqrt((1 + B * (i + 1) * (i + 1)) / (1 + B)));
+            const curveY = padT + plotH - Math.min(plotH, (theoCents / 40) * plotH);
+            curvePts.push({ x: cx, y: curveY });
+        }
+
+        // Sobrepõe curva teórica de inarmonicidade de Fletcher
+        if (curvePts.length === 8 && strobeLiveMetrics.detectedFreq > 0) {
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 1.8;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            curvePts.forEach((pt, idx) => {
+                if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+            });
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        ctx.restore();
+    }
+
+    function updateStrobeToggleButtonDOM() {
+        const btn = document.getElementById('btn-viola-strobe-toggle');
+        if (!btn) return;
+        if (state.strobeTuner.isRunning) {
+            btn.className = 'min-h-[44px] px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg ring-2 ring-rose-400';
+            btn.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span><span>Parar Afinador Estroboscópico</span>';
+        } else {
+            btn.className = 'min-h-[44px] px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg';
+            btn.innerHTML = '<i data-lucide="disc" class="w-4 h-4"></i><span>Iniciar Leitura Estroboscópica</span>';
+            if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        }
+    }
+
+    function updateStrobeReadoutsDOM() {
+        const statusEl = document.getElementById('viola-strobe-status-text');
+        if (statusEl) statusEl.textContent = strobeLiveMetrics.statusText;
+
+        const freqEl = document.getElementById('viola-strobe-detected-freq');
+        if (freqEl) {
+            freqEl.textContent = strobeLiveMetrics.detectedFreq > 0
+                ? `${strobeLiveMetrics.detectedFreq.toFixed(2)} Hz`
+                : '— Hz';
+        }
+
+        const targetEl = document.getElementById('viola-strobe-target-freq');
+        if (targetEl) {
+            const spec = getStrobeTargetSpec();
+            targetEl.textContent = `${(strobeLiveMetrics.targetFreq || spec.freq).toFixed(2)} Hz`;
+        }
+
+        const centsEl = document.getElementById('viola-strobe-cents-readout');
+        if (centsEl) {
+            const c = strobeLiveMetrics.centsDeviation;
+            const hasSig = strobeLiveMetrics.detectedFreq > 0 && strobeLiveMetrics.rms > 0.005;
+            centsEl.textContent = hasSig ? `${c > 0 ? '+' : ''}${c.toFixed(1)} ¢` : '— ¢';
+            centsEl.className = !hasSig
+                ? 'text-2xl font-mono font-extrabold text-slate-500'
+                : (Math.abs(c) <= 0.5
+                    ? 'text-2xl font-mono font-extrabold text-emerald-400'
+                    : (Math.abs(c) <= 3.0
+                        ? 'text-2xl font-mono font-extrabold text-cyan-300'
+                        : 'text-2xl font-mono font-extrabold text-amber-300'));
+        }
+
+        const bEl = document.getElementById('viola-strobe-inharmonicity-val');
+        if (bEl) bEl.textContent = strobeLiveMetrics.inharmonicityB.toFixed(5);
+
+        const stretchEl = document.getElementById('viola-strobe-stretch8-val');
+        if (stretchEl) stretchEl.textContent = `${strobeLiveMetrics.stretch8thCents > 0 ? '+' : ''}${strobeLiveMetrics.stretch8thCents.toFixed(1)} ¢`;
+
+        const purityEl = document.getElementById('viola-strobe-purity-val');
+        if (purityEl) purityEl.textContent = `${strobeLiveMetrics.purityScore}%`;
+
+        const ratioEl = document.getElementById('viola-strobe-oddeven-val');
+        if (ratioEl) ratioEl.textContent = `${strobeLiveMetrics.oddEvenRatio.toFixed(2)}x`;
+
+        const tableBody = document.getElementById('viola-strobe-harmonics-tbody');
+        if (tableBody && strobeLiveMetrics.harmonics.length === 8) {
+            tableBody.innerHTML = strobeLiveMetrics.harmonics.map((h) => {
+                const devColor = Math.abs(h.deviationCents) <= 3
+                    ? 'text-emerald-300'
+                    : (Math.abs(h.deviationCents) <= 12 ? 'text-cyan-300' : 'text-amber-300');
+                return `
+                    <tr class="border-b border-slate-800/70">
+                        <td class="py-1 px-2 font-bold text-slate-200">H${h.n} (${h.n}f₁)</td>
+                        <td class="py-1 px-2 text-slate-400">${h.idealFreq.toFixed(1)} Hz</td>
+                        <td class="py-1 px-2 text-slate-200">${h.outOfBand ? 'Fora de banda' : h.measuredFreq.toFixed(1) + ' Hz'}</td>
+                        <td class="py-1 px-2 font-bold ${devColor}">${h.outOfBand ? '—' : `${h.deviationCents > 0 ? '+' : ''}${h.deviationCents.toFixed(1)}¢`}</td>
+                        <td class="py-1 px-2 text-slate-400">${h.outOfBand ? '—' : h.relativeDb.toFixed(1) + ' dB'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+
+    /**
+     * Calcula a compensação milimétrica exata do rastilho (C_s) e diagnóstico de 12ª/19ª casa.
+     * Fórmula exata: C_s = L * (r - 1) / (2 - r), onde r = 2^(deltaCents12 / 1200).
+     */
+    function computeCourseIntonation(courseIdx) {
+        const inton = state.strobeTuner.intonation || DEFAULT_STROBE_TUNER_STATE.intonation;
+        const L = inton.scaleLengthMm || 580;
+        const c12 = (inton.fret12Cents && inton.fret12Cents[courseIdx] !== undefined) ? inton.fret12Cents[courseIdx] : 4.0;
+        const c19 = (inton.fret19Cents && inton.fret19Cents[courseIdx] !== undefined) ? inton.fret19Cents[courseIdx] : 6.0;
+
+        const r = Math.pow(2, c12 / 1200);
+        const saddleCompMm = (L * (r - 1)) / Math.max(0.1, 2 - r);
+
+        // Na 19ª casa (aprox 2/3 do braço, L_19 = L / 3), verificamos desvio residual além do esperado pela compensação de 12ª
+        const compEffectAt19 = -1200 * Math.log2((3 * (L / 3 + saddleCompMm)) / (L + saddleCompMm));
+        const fret19NetCents = c19 + compEffectAt19;
+        const nutCompMm = inton.nutCompMm || 0.45;
+
+        let prescription = 'Compensação milimétrica dentro da tolerância de concerto (±0.2 mm).';
+        if (saddleCompMm > 0.25) {
+            prescription = `Recuar ponto de apoio no rastilho em +${saddleCompMm.toFixed(2)} mm (direção ao cavalete).`;
+        } else if (saddleCompMm < -0.25) {
+            prescription = `Avançar ponto de apoio no rastilho em ${saddleCompMm.toFixed(2)} mm (direção à boca).`;
+        }
+
+        return {
+            c12,
+            c19,
+            saddleCompMm,
+            fret19NetCents,
+            nutCompMm,
+            prescription
+        };
+    }
+
+    function renderIntonationBlueprintSVG() {
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const inton = state.strobeTuner.intonation || DEFAULT_STROBE_TUNER_STATE.intonation;
+        const L = inton.scaleLengthMm || (inst.isPaired ? 580 : 650);
+        const isLeft = state.isLeftHanded;
+        const numCourses = inst.courses.length;
+
+        const svgW = 860;
+        const svgH = numCourses === 5 ? 230 : 260;
+        const padX = 76;
+        const topY = 38;
+        const botY = svgH - 36;
+        const rowStep = (botY - topY) / (numCourses - 1);
+
+        // Orientação Canhoto vs Destro:
+        // CANHOTO: Pestana (Nut) à DIREITA, Rastilho (Saddle) à ESQUERDA!
+        // DESTRO:  Pestana (Nut) à ESQUERDA, Rastilho (Saddle) à DIREITA!
+        const nutBaseX = isLeft ? (svgW - padX) : padX;
+        const saddleBaseX = isLeft ? padX : (svgW - padX);
+        const spanDir = isLeft ? -1 : 1; // +1 = da esquerda p/ direita; -1 = direita p/ esquerda
+        const scalePx = Math.abs(saddleBaseX - nutBaseX);
+        const fret12X = nutBaseX + spanDir * (scalePx * 0.50);
+        const fret19X = nutBaseX + spanDir * (scalePx * 0.6667);
+        const pxPerMm = 4.2; // Escala ampliada para visualização milimétrica clara no rastilho
+
+        const getRowY = (cIdx) => {
+            const vRow = state.viewPerspective === 'diagram' ? cIdx : (numCourses - 1 - cIdx);
+            return topY + vRow * rowStep;
+        };
+
+        let stringsMarkup = '';
+        let saddlePoints = [];
+
+        inst.courses.forEach((c, cIdx) => {
+            const y = getRowY(cIdx);
+            const calc = computeCourseIntonation(cIdx);
+            const isSelected = (inton.selectedCourseIdx || 0) === cIdx;
+
+            // Deslocamento do rastilho: se saddleCompMm > 0 (alongar corda), afasta da pestana (direção spanDir)
+            const saddleX = saddleBaseX + spanDir * Math.max(-12, Math.min(26, calc.saddleCompMm * pxPerMm));
+            // Compensação de pestana: encurta ligeiramente rumo à 1ª casa (direção spanDir)
+            const nutX = nutBaseX + spanDir * Math.max(0, Math.min(8, calc.nutCompMm * pxPerMm));
+
+            saddlePoints.push({ x: saddleX, y });
+
+            stringsMarkup += `
+                <line x1="${nutX}" y1="${y}" x2="${saddleX}" y2="${y}"
+                    stroke="${isSelected ? '#38bdf8' : '#64748b'}" stroke-width="${isSelected ? 2.4 : 1.4}" opacity="0.9"/>
+                <circle cx="${saddleX}" cy="${y}" r="${isSelected ? 5.5 : 4.2}"
+                    fill="${Math.abs(calc.saddleCompMm) <= 0.3 ? '#10b981' : '#fbbf24'}" stroke="#090d16" stroke-width="1.5"/>
+                <circle cx="${nutX}" cy="${y}" r="3.5" fill="#cbd5e1"/>
+                <text x="${isLeft ? saddleX - 10 : saddleX + 10}" y="${y + 3.5}"
+                    text-anchor="${isLeft ? 'end' : 'start'}" fill="${isSelected ? '#fbbf24' : '#cbd5e1'}"
+                    font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="700">
+                    ${calc.saddleCompMm >= 0 ? '+' : ''}${calc.saddleCompMm.toFixed(2)}mm
+                </text>
+                <text x="${isLeft ? nutBaseX + 10 : nutBaseX - 10}" y="${y + 3.5}"
+                    text-anchor="${isLeft ? 'start' : 'end'}" fill="${isSelected ? '#38bdf8' : '#94a3b8'}"
+                    font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="700">
+                    ${c.num}º ${c.note.split('/')[0]}
+                </text>
+            `;
+        });
+
+        // Polilinha conectando os pontos compensados no osso do rastilho
+        const saddlePoly = saddlePoints.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+        const nutLabelX = nutBaseX;
+        const saddleLabelX = saddleBaseX;
+
+        return `
+            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full h-auto select-none" role="img" aria-label="Planta de compensação de rastilho e pestana">
+                <rect x="${Math.min(nutBaseX, saddleBaseX) - 10}" y="${topY - 14}" width="${scalePx + 20}" height="${botY - topY + 28}" rx="8" fill="#090d16" stroke="#1e293b"/>
+
+                <!-- Linha teórica da Pestana, 12ª Casa, 19ª Casa e Rastilho Zero -->
+                <line x1="${nutBaseX}" y1="${topY - 10}" x2="${nutBaseX}" y2="${botY + 10}" stroke="#e2e8f0" stroke-width="3" stroke-dasharray="4 3" opacity="0.65"/>
+                <line x1="${fret12X}" y1="${topY - 10}" x2="${fret12X}" y2="${botY + 10}" stroke="#06b6d4" stroke-width="2" opacity="0.8"/>
+                <line x1="${fret19X}" y1="${topY - 10}" x2="${fret19X}" y2="${botY + 10}" stroke="#a855f7" stroke-width="2" opacity="0.8"/>
+                <line x1="${saddleBaseX}" y1="${topY - 10}" x2="${saddleBaseX}" y2="${botY + 10}" stroke="#475569" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+                <!-- Osso compensado do rastilho -->
+                <polyline points="${saddlePoly}" fill="none" stroke="#fde68a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+                <polyline points="${saddlePoly}" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+                ${stringsMarkup}
+
+                <!-- Rótulos das marcas de escala -->
+                <text x="${nutLabelX}" y="20" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">PESTANA (L=0)</text>
+                <text x="${fret12X}" y="20" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">12ª CASA (L/2 = ${(L / 2).toFixed(1)}mm)</text>
+                <text x="${fret19X}" y="20" text-anchor="middle" fill="#c084fc" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">19ª CASA (2L/3)</text>
+                <text x="${saddleLabelX}" y="20" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">RASTILHO (L=${L}mm)</text>
+
+                <text x="${svgW / 2}" y="${svgH - 10}" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="10">
+                    ${isLeft
+                        ? '← RASTILHO / CAVALETE (Esquerda — Canhoto)        ESCALA COMPENSADA        PESTANA (Direita — Canhoto) →'
+                        : '← PESTANA (Esquerda — Destro)        ESCALA COMPENSADA        RASTILHO / CAVALETE (Direita — Destro) →'}
+                </text>
+            </svg>
+        `;
+    }
+
+    function renderStrobeTunerSection() {
+        const container = document.getElementById('viola-strobe-tuner-container');
+        if (!container) return;
+
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const st = state.strobeTuner;
+        const inton = st.intonation || DEFAULT_STROBE_TUNER_STATE.intonation;
+        const targetSpec = getStrobeTargetSpec();
+        const selectedIntonIdx = Math.max(0, Math.min(inst.courses.length - 1, inton.selectedCourseIdx || 0));
+        const selectedCourseInton = computeCourseIntonation(selectedIntonIdx);
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-cyan-500/30 rounded-xl p-4 sm:p-5 space-y-5 shadow-2xl">
+                <!-- Cabeçalho Fase 19 -->
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <i data-lucide="disc" class="w-5 h-5 text-cyan-400"></i>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Afinador Estroboscópico &amp; Análise de 8 Harmônicos</h3>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Fase 19</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Precisão ±0.1 Cent</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Anéis estroboscópicos concêntricos (1x a 8x), espectro de inarmonicidade B dos primeiros 8 harmônicos e calculadora milimétrica de rastilho/pestana (12ª e 19ª casas).</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-viola-strobe-toggle" class="min-h-[44px] px-5 py-2 rounded-xl ${st.isRunning ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950'} font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg">
+                            <i data-lucide="disc" class="w-4 h-4"></i>
+                            <span>${st.isRunning ? 'Parar Afinador Estroboscópico' : 'Iniciar Leitura Estroboscópica'}</span>
+                        </button>
+                        <button type="button" id="btn-viola-strobe-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Ver no Braço SVG</span>
+                        </button>
+                        <button type="button" id="btn-viola-strobe-copy-report" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition">
+                            <i data-lucide="clipboard" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span>Copiar Laudo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barra de Calibração (Fonte, Diapasão A4, Temperamento e Alvo) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 bg-[#090d16] border border-slate-800 rounded-xl p-3.5">
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] font-mono uppercase text-slate-400 font-semibold">Fonte de Captação</span>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button type="button" id="btn-strobe-src-sim" class="min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-mono font-semibold border transition ${st.sourceMode === 'sim' ? 'bg-cyan-600 text-slate-950 border-cyan-400' : 'bg-[#0f172a] text-slate-300 border-slate-700'}">Simulador DSP</button>
+                            <button type="button" id="btn-strobe-src-mic" class="min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-mono font-semibold border transition ${st.sourceMode === 'mic' ? 'bg-emerald-600 text-slate-950 border-emerald-400' : 'bg-[#0f172a] text-slate-300 border-slate-700'}">Microfone Real</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                            <span class="uppercase font-semibold">Calibração Lá (A4)</span>
+                            <span id="viola-strobe-a4-val" class="text-cyan-300 font-bold">${st.referenceA4.toFixed(1)} Hz</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="viola-strobe-a4-slider" min="430" max="446" step="0.5" value="${st.referenceA4}" class="w-full accent-cyan-400 cursor-pointer">
+                            <button type="button" id="btn-strobe-a4-440" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[10px] font-mono text-slate-200 border border-slate-700">440</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] font-mono uppercase text-slate-400 font-semibold">Temperamento Acústico</span>
+                        <select id="viola-strobe-temperament" class="w-full min-h-[36px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-amber-300">
+                            ${Object.values(STROBE_TEMPERAMENTS).map((t) => `<option value="${t.id}" ${st.temperament === t.id ? 'selected' : ''}>${t.name}</option>`).join('')}
+                        </select>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] font-mono uppercase text-slate-400 font-semibold">Alvo &amp; Amortecimento</span>
+                        <div class="flex items-center gap-1.5">
+                            <select id="viola-strobe-target-course" class="flex-1 min-h-[36px] px-2 py-1 rounded-lg bg-[#0f172a] border border-slate-700 text-xs font-mono text-emerald-300">
+                                <option value="auto" ${st.targetMode === 'auto' ? 'selected' : ''}>Automático (Cromático)</option>
+                                ${inst.courses.map((c, idx) => `<option value="${idx}" ${st.targetMode === 'manual' && st.targetCourseIdx === idx ? 'selected' : ''}>${c.num}º ${c.note.split('/')[0]}</option>`).join('')}
+                            </select>
+                            <select id="viola-strobe-damping" class="min-h-[36px] px-2 py-1 rounded-lg bg-[#0f172a] border border-slate-700 text-[11px] font-mono text-slate-200">
+                                <option value="fast" ${st.damping === 'fast' ? 'selected' : ''}>Rápido</option>
+                                <option value="medium" ${st.damping === 'medium' ? 'selected' : ''}>Médio</option>
+                                <option value="precision" ${st.damping === 'precision' ? 'selected' : ''}>Precisão</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Principal: Disco Estroboscópico + Análise de 8 Harmônicos -->
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                    <!-- Coluna 1: Visualizador Circular Estroboscópico -->
+                    <div class="xl:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-4 flex flex-col items-center space-y-3">
+                        <div class="w-full flex items-center justify-between text-[11px] font-mono">
+                            <span class="text-slate-400">Anéis: 1x • 2x • 4x • 8x</span>
+                            <span class="text-cyan-300 font-bold">Alvo: ${targetSpec.noteName} (${targetSpec.freq.toFixed(2)} Hz)</span>
+                        </div>
+
+                        <canvas id="viola-strobe-canvas" width="340" height="340" class="w-full max-w-[340px] aspect-square rounded-full block"></canvas>
+
+                        <div class="w-full grid grid-cols-3 gap-2 text-center bg-[#0f172a] border border-slate-800 rounded-xl p-2.5">
+                            <div>
+                                <span class="text-[10px] font-mono text-slate-400 block">Medida</span>
+                                <span id="viola-strobe-detected-freq" class="text-xs font-mono font-bold text-slate-100">— Hz</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-mono text-slate-400 block">Desvio</span>
+                                <span id="viola-strobe-cents-readout" class="text-2xl font-mono font-extrabold text-slate-500">— ¢</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-mono text-slate-400 block">Referência</span>
+                                <span id="viola-strobe-target-freq" class="text-xs font-mono font-bold text-cyan-300">${targetSpec.freq.toFixed(2)} Hz</span>
+                            </div>
+                        </div>
+
+                        ${inst.isPaired && targetSpec.course.octaved ? `
+                            <div class="w-full flex items-center justify-between gap-2 bg-[#0f172a] border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono">
+                                <span class="text-slate-400">Corda do Par Oitavado:</span>
+                                <div class="inline-flex rounded bg-[#090d16] p-0.5 border border-slate-700">
+                                    <button type="button" id="btn-strobe-branch-fund" class="px-2 py-0.5 rounded text-[11px] ${st.targetBranch === 'fundamental' ? 'bg-cyan-600 text-slate-950 font-bold' : 'text-slate-400'}">Bordão Grave</button>
+                                    <button type="button" id="btn-strobe-branch-high" class="px-2 py-0.5 rounded text-[11px] ${st.targetBranch === 'octaved_high' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400'}">Cantadeira (+8ª)</button>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <p id="viola-strobe-status-text" class="text-[11px] font-mono text-slate-400 text-center w-full">${strobeLiveMetrics.statusText}</p>
+
+                        <!-- Controles do Simulador Acústico de Precisão -->
+                        <div class="w-full bg-[#0f172a] border border-slate-800 rounded-xl p-3 space-y-2.5 ${st.sourceMode === 'sim' ? '' : 'opacity-65'}">
+                            <div class="flex items-center justify-between text-[11px] font-mono">
+                                <span class="text-cyan-300 font-bold">Simulador de Corda Rígida (Fletcher)</span>
+                                <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                                    <input type="checkbox" id="chk-strobe-sim-audible" ${st.simAudioAudible ? 'checked' : ''} class="accent-cyan-400">
+                                    <span>Ouvir Áudio</span>
+                                </label>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
+                                <div>
+                                    <div class="flex justify-between text-slate-400 mb-0.5">
+                                        <span>Desafinação:</span>
+                                        <span id="viola-strobe-sim-detune-lbl" class="text-amber-300 font-bold">${st.simDetuneCents > 0 ? '+' : ''}${st.simDetuneCents.toFixed(1)}¢</span>
+                                    </div>
+                                    <input type="range" id="viola-strobe-sim-detune" min="-25" max="25" step="0.1" value="${st.simDetuneCents}" class="w-full accent-amber-400 cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-slate-400 mb-0.5">
+                                        <span>Inarmonicidade B:</span>
+                                        <span id="viola-strobe-sim-b-lbl" class="text-cyan-300 font-bold">${(st.simInharmonicityB * 10000).toFixed(1)}×10⁻⁴</span>
+                                    </div>
+                                    <input type="range" id="viola-strobe-sim-b" min="0" max="0.0008" step="0.00002" value="${st.simInharmonicityB}" class="w-full accent-cyan-400 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 2: Análise Espectral dos 8 Harmônicos Superiores -->
+                    <div class="xl:col-span-7 bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-100 uppercase tracking-wider font-mono">Espectro dos 8 Primeiros Harmônicos (H1–H8)</h4>
+                                <p class="text-[11px] text-slate-400">Curva tracejada dourada = estiramento teórico de inarmonicidade fₙ = n·f₁·√(1 + B·n²)</p>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-cyan-300 border border-slate-700">FFT 8192 bins</span>
+                        </div>
+
+                        <canvas id="viola-strobe-harmonics-canvas" width="540" height="190" class="w-full h-[190px] rounded-lg border border-slate-800 block"></canvas>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2">
+                                <span class="text-[10px] font-mono text-slate-400 block">Coef. Inarmonicidade B</span>
+                                <span id="viola-strobe-inharmonicity-val" class="text-sm font-mono font-bold text-amber-300">${strobeLiveMetrics.inharmonicityB.toFixed(5)}</span>
+                            </div>
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2">
+                                <span class="text-[10px] font-mono text-slate-400 block">Estiramento H8</span>
+                                <span id="viola-strobe-stretch8-val" class="text-sm font-mono font-bold text-cyan-300">${strobeLiveMetrics.stretch8thCents > 0 ? '+' : ''}${strobeLiveMetrics.stretch8thCents.toFixed(1)} ¢</span>
+                            </div>
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2">
+                                <span class="text-[10px] font-mono text-slate-400 block">Pureza Timbrística</span>
+                                <span id="viola-strobe-purity-val" class="text-sm font-mono font-bold text-emerald-300">${strobeLiveMetrics.purityScore}%</span>
+                            </div>
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2">
+                                <span class="text-[10px] font-mono text-slate-400 block">Razão Ímpar / Par</span>
+                                <span id="viola-strobe-oddeven-val" class="text-sm font-mono font-bold text-purple-300">${strobeLiveMetrics.oddEvenRatio.toFixed(2)}x</span>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-[11px] font-mono text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-slate-400">
+                                        <th class="py-1.5 px-2">Harmônico</th>
+                                        <th class="py-1.5 px-2">Ideal (n·f₁)</th>
+                                        <th class="py-1.5 px-2">Medido FFT</th>
+                                        <th class="py-1.5 px-2">Estiramento</th>
+                                        <th class="py-1.5 px-2">Energia Rel.</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="viola-strobe-harmonics-tbody">
+                                    <tr><td colspan="5" class="py-3 text-center text-slate-500">Inicie o afinador estroboscópico para popular a tabela espectral H1–H8.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 3: Entonação & Compensação Milimétrica de Rastilho e Pestana (Casas 12 e 19) -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <i data-lucide="ruler" class="w-4 h-4 text-amber-400"></i>
+                                <h4 class="text-xs sm:text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Entonação &amp; Compensação de Rastilho e Pestana (Casas 12 e 19)</h4>
+                                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">${state.isLeftHanded ? 'Planta Canhota' : 'Planta Destra'}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Compare a nota presa na 12ª/19ª casa contra o harmônico natural e calcule o recuo exato em milímetros no osso do rastilho.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                            <label class="flex items-center gap-1.5 text-slate-300">
+                                <span>Escala (mm):</span>
+                                <input type="number" id="viola-inton-scale-mm" min="520" max="680" step="1" value="${inton.scaleLengthMm || (inst.isPaired ? 580 : 650)}" class="w-16 px-2 py-1 rounded bg-[#0f172a] border border-slate-700 text-cyan-300">
+                            </label>
+                            <label class="flex items-center gap-1.5 text-slate-300">
+                                <span>Pestana (mm):</span>
+                                <input type="number" id="viola-inton-nut-mm" min="0" max="2.5" step="0.05" value="${(inton.nutCompMm || 0.45).toFixed(2)}" class="w-16 px-2 py-1 rounded bg-[#0f172a] border border-slate-700 text-amber-300">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Planta SVG Espelhável (Canhoto / Destro) -->
+                    <div id="viola-intonation-svg-wrap" class="w-full overflow-x-auto">
+                        ${renderIntonationBlueprintSVG()}
+                    </div>
+
+                    <!-- Controles por par/corda + Captura Ao Vivo -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                        <div class="lg:col-span-7 overflow-x-auto">
+                            <table class="w-full text-[11px] font-mono text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-slate-400">
+                                        <th class="py-1.5 px-2">Par / Corda</th>
+                                        <th class="py-1.5 px-2">12ª Casa (¢)</th>
+                                        <th class="py-1.5 px-2">19ª Casa (¢)</th>
+                                        <th class="py-1.5 px-2">Recuo Rastilho</th>
+                                        <th class="py-1.5 px-2">19ª Pós-Comp.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${inst.courses.map((c, idx) => {
+                                        const calc = computeCourseIntonation(idx);
+                                        const isSel = idx === selectedIntonIdx;
+                                        return `
+                                            <tr data-inton-row="${idx}" class="border-b border-slate-800/60 cursor-pointer transition ${isSel ? 'bg-cyan-500/10' : 'hover:bg-slate-800/40'}">
+                                                <td class="py-1.5 px-2 font-bold ${isSel ? 'text-cyan-300' : 'text-slate-200'}">${c.num}º ${c.note.split('/')[0]}</td>
+                                                <td class="py-1.5 px-2">
+                                                    <input type="number" data-inton-f12="${idx}" min="-35" max="35" step="0.1" value="${calc.c12.toFixed(1)}" class="w-16 px-1.5 py-0.5 rounded bg-[#0f172a] border border-slate-700 text-amber-300">
+                                                </td>
+                                                <td class="py-1.5 px-2">
+                                                    <input type="number" data-inton-f19="${idx}" min="-45" max="45" step="0.1" value="${calc.c19.toFixed(1)}" class="w-16 px-1.5 py-0.5 rounded bg-[#0f172a] border border-slate-700 text-purple-300">
+                                                </td>
+                                                <td class="py-1.5 px-2 font-bold text-emerald-300">${calc.saddleCompMm >= 0 ? '+' : ''}${calc.saddleCompMm.toFixed(2)} mm</td>
+                                                <td class="py-1.5 px-2 ${Math.abs(calc.fret19NetCents) <= 3 ? 'text-emerald-300' : 'text-amber-300'}">${calc.fret19NetCents >= 0 ? '+' : ''}${calc.fret19NetCents.toFixed(1)} ¢</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="lg:col-span-5 bg-[#0f172a] border border-slate-800 rounded-xl p-3.5 space-y-2.5 text-xs font-mono">
+                            <div class="flex items-center justify-between">
+                                <span class="text-cyan-300 font-bold">Diagnóstico: ${inst.courses[selectedIntonIdx].label}</span>
+                                <span class="text-amber-300 font-bold">${selectedCourseInton.saddleCompMm >= 0 ? '+' : ''}${selectedCourseInton.saddleCompMm.toFixed(2)} mm</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">${selectedCourseInton.prescription}</p>
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <button type="button" id="btn-inton-capture-12" class="min-h-[36px] px-2.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 text-[11px] font-semibold transition">
+                                    Capturar 12ª do Strobe
+                                </button>
+                                <button type="button" id="btn-inton-capture-19" class="min-h-[36px] px-2.5 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-200 text-[11px] font-semibold transition">
+                                    Capturar 19ª do Strobe
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        bindStrobeEvents();
+        drawStrobeCanvas();
+        drawHarmonicsCanvas();
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    function bindStrobeEvents() {
+        const toggleBtn = document.getElementById('btn-viola-strobe-toggle');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                if (state.strobeTuner.isRunning) {
+                    stopStrobeTunerAudio();
+                } else if (state.strobeTuner.sourceMode === 'mic') {
+                    startStrobeMic();
+                } else {
+                    startStrobeSimulator();
+                }
+            });
+        }
+
+        const btnSim = document.getElementById('btn-strobe-src-sim');
+        const btnMic = document.getElementById('btn-strobe-src-mic');
+        if (btnSim) {
+            btnSim.addEventListener('click', () => {
+                const wasRunning = state.strobeTuner.isRunning;
+                stopStrobeTunerAudio();
+                state.strobeTuner.sourceMode = 'sim';
+                saveViolaState();
+                renderStrobeTunerSection();
+                if (wasRunning) startStrobeSimulator();
+            });
+        }
+        if (btnMic) {
+            btnMic.addEventListener('click', () => {
+                const wasRunning = state.strobeTuner.isRunning;
+                stopStrobeTunerAudio();
+                state.strobeTuner.sourceMode = 'mic';
+                saveViolaState();
+                renderStrobeTunerSection();
+                if (wasRunning) startStrobeMic();
+            });
+        }
+
+        const a4Slider = document.getElementById('viola-strobe-a4-slider');
+        if (a4Slider) {
+            a4Slider.addEventListener('input', (e) => {
+                state.strobeTuner.referenceA4 = parseFloat(e.target.value) || 440;
+                const lbl = document.getElementById('viola-strobe-a4-val');
+                if (lbl) lbl.textContent = `${state.strobeTuner.referenceA4.toFixed(1)} Hz`;
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+            });
+        }
+
+        const a4Reset = document.getElementById('btn-strobe-a4-440');
+        if (a4Reset) {
+            a4Reset.addEventListener('click', () => {
+                state.strobeTuner.referenceA4 = 440.0;
+                saveViolaState();
+                renderStrobeTunerSection();
+                updateStrobeSimulatorLiveParams();
+            });
+        }
+
+        const tempSel = document.getElementById('viola-strobe-temperament');
+        if (tempSel) {
+            tempSel.addEventListener('change', (e) => {
+                state.strobeTuner.temperament = e.target.value;
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+
+        const targetSel = document.getElementById('viola-strobe-target-course');
+        if (targetSel) {
+            targetSel.addEventListener('change', (e) => {
+                const val = e.target.value;
+                if (val === 'auto') {
+                    state.strobeTuner.targetMode = 'auto';
+                } else {
+                    state.strobeTuner.targetMode = 'manual';
+                    state.strobeTuner.targetCourseIdx = parseInt(val, 10) || 0;
+                    state.strobeTuner.simCourseIdx = state.strobeTuner.targetCourseIdx;
+                    state.strobeTuner.intonation.selectedCourseIdx = state.strobeTuner.targetCourseIdx;
+                }
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+                renderStrobeTunerSection();
+                if (state.displayMode === 'STROBE') renderFretboardSVG();
+            });
+        }
+
+        const dampSel = document.getElementById('viola-strobe-damping');
+        if (dampSel) {
+            dampSel.addEventListener('change', (e) => {
+                state.strobeTuner.damping = e.target.value;
+                saveViolaState();
+            });
+        }
+
+        const btnFund = document.getElementById('btn-strobe-branch-fund');
+        const btnHigh = document.getElementById('btn-strobe-branch-high');
+        if (btnFund) {
+            btnFund.addEventListener('click', () => {
+                state.strobeTuner.targetBranch = 'fundamental';
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+        if (btnHigh) {
+            btnHigh.addEventListener('click', () => {
+                state.strobeTuner.targetBranch = 'octaved_high';
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+
+        const chkAudible = document.getElementById('chk-strobe-sim-audible');
+        if (chkAudible) {
+            chkAudible.addEventListener('change', (e) => {
+                state.strobeTuner.simAudioAudible = !!e.target.checked;
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+            });
+        }
+
+        const simDetuneSlider = document.getElementById('viola-strobe-sim-detune');
+        if (simDetuneSlider) {
+            simDetuneSlider.addEventListener('input', (e) => {
+                const v = parseFloat(e.target.value) || 0;
+                state.strobeTuner.simDetuneCents = v;
+                const lbl = document.getElementById('viola-strobe-sim-detune-lbl');
+                if (lbl) lbl.textContent = `${v > 0 ? '+' : ''}${v.toFixed(1)}¢`;
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+            });
+        }
+
+        const simBSlider = document.getElementById('viola-strobe-sim-b');
+        if (simBSlider) {
+            simBSlider.addEventListener('input', (e) => {
+                const v = parseFloat(e.target.value) || 0;
+                state.strobeTuner.simInharmonicityB = v;
+                const lbl = document.getElementById('viola-strobe-sim-b-lbl');
+                if (lbl) lbl.textContent = `${(v * 10000).toFixed(1)}×10⁻⁴`;
+                updateStrobeSimulatorLiveParams();
+                saveViolaState();
+            });
+        }
+
+        const toFretBtn = document.getElementById('btn-viola-strobe-to-fretboard');
+        if (toFretBtn) {
+            toFretBtn.addEventListener('click', () => {
+                state.displayMode = 'STROBE';
+                saveViolaState();
+                renderAll();
+                const wrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+
+        const copyBtn = document.getElementById('btn-viola-strobe-copy-report');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+                const lines = [
+                    `LAUDO ESTROBOSCÓPICO & ENTONAÇÃO — ${inst.name}`,
+                    `Orientação: ${state.isLeftHanded ? 'Canhoto' : 'Destro'} | Lá A4: ${state.strobeTuner.referenceA4.toFixed(1)} Hz | Temperamento: ${STROBE_TEMPERAMENTS[state.strobeTuner.temperament].name}`,
+                    `Inarmonicidade B: ${strobeLiveMetrics.inharmonicityB.toFixed(5)} | Estiramento H8: ${strobeLiveMetrics.stretch8thCents}¢ | Pureza: ${strobeLiveMetrics.purityScore}%`,
+                    `Escala: ${state.strobeTuner.intonation.scaleLengthMm} mm | Pestana: ${state.strobeTuner.intonation.nutCompMm} mm`,
+                    '',
+                    'Compensação de Rastilho por Par/Corda:'
+                ];
+                inst.courses.forEach((c, idx) => {
+                    const calc = computeCourseIntonation(idx);
+                    lines.push(`- ${c.label}: 12ª=${calc.c12.toFixed(1)}¢ | 19ª=${calc.c19.toFixed(1)}¢ => Recuo Rastilho: ${calc.saddleCompMm >= 0 ? '+' : ''}${calc.saddleCompMm.toFixed(2)} mm`);
+                });
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+                }
+                copyBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Laudo Copiado!</span>';
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => renderStrobeTunerSection(), 1500);
+            });
+        }
+
+        // Eventos da Calculadora de Entonação (12ª e 19ª Casa)
+        const scaleInput = document.getElementById('viola-inton-scale-mm');
+        if (scaleInput) {
+            scaleInput.addEventListener('change', (e) => {
+                state.strobeTuner.intonation.scaleLengthMm = Math.max(500, Math.min(700, parseFloat(e.target.value) || 580));
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+        const nutInput = document.getElementById('viola-inton-nut-mm');
+        if (nutInput) {
+            nutInput.addEventListener('change', (e) => {
+                state.strobeTuner.intonation.nutCompMm = Math.max(0, Math.min(3, parseFloat(e.target.value) || 0.45));
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+
+        document.querySelectorAll('[data-inton-row]').forEach((row) => {
+            row.addEventListener('click', (e) => {
+                if (e.target && e.target.tagName === 'INPUT') return;
+                state.strobeTuner.intonation.selectedCourseIdx = parseInt(row.getAttribute('data-inton-row'), 10) || 0;
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        });
+
+        document.querySelectorAll('[data-inton-f12]').forEach((inp) => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.getAttribute('data-inton-f12'), 10);
+                state.strobeTuner.intonation.fret12Cents[idx] = parseFloat(e.target.value) || 0;
+                state.strobeTuner.intonation.selectedCourseIdx = idx;
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        });
+
+        document.querySelectorAll('[data-inton-f19]').forEach((inp) => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.getAttribute('data-inton-f19'), 10);
+                state.strobeTuner.intonation.fret19Cents[idx] = parseFloat(e.target.value) || 0;
+                state.strobeTuner.intonation.selectedCourseIdx = idx;
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        });
+
+        const cap12 = document.getElementById('btn-inton-capture-12');
+        if (cap12) {
+            cap12.addEventListener('click', () => {
+                const idx = state.strobeTuner.intonation.selectedCourseIdx || 0;
+                state.strobeTuner.intonation.fret12Cents[idx] = strobeLiveMetrics.centsDeviation || 0;
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+        const cap19 = document.getElementById('btn-inton-capture-19');
+        if (cap19) {
+            cap19.addEventListener('click', () => {
+                const idx = state.strobeTuner.intonation.selectedCourseIdx || 0;
+                state.strobeTuner.intonation.fret19Cents[idx] = strobeLiveMetrics.centsDeviation || 0;
+                saveViolaState();
+                renderStrobeTunerSection();
+            });
+        }
+    }
+
     let tunerOsc = null;
     let tunerGain = null;
     let activeTunerCourse = null;
@@ -20842,12 +22430,12 @@ function bindSolfegeEvents() {
                     });
                 });
             }
-        }
+
 
 
 
         
-                } else if (state.displayMode === 'POLYPHONIC') {
+        } else if (state.displayMode === 'POLYPHONIC') {
             // FASE 15: PROJEÃ‡ÃƒO DE CONTRAPONTO A DUAS VIOLAS
             const poly = state.polyphonic;
             const arr = POLYPHONIC_ARRANGEMENTS_CATALOG[poly.activeArrangementId] || Object.values(POLYPHONIC_ARRANGEMENTS_CATALOG)[0];
@@ -21013,27 +22601,54 @@ function bindSolfegeEvents() {
                             strokeWidth: node.strokeWidth,
                             opacity: '0.95'
                         });
-                if (state.activeMode === 'pagode') {
-                    var pNotes = getCurrentPagodeNotes();
-                    var pActiveIdx = state.pagode.activeNoteIndex;
-                    pNotes.forEach(function (pn, pidx) {
-                        if (pn.par > 0 && pn.par <= currentInstrument.courses.length) {
-                            var isCurrent = (pidx === pActiveIdx);
-                            activeMarkers.push({
-                                courseIdx: pn.par - 1,
-                                fret: pn.fret,
-                                label: pn.label || (pn.par + 'P'),
-                                sub: isCurrent ? 'TOCANDO' : ('#' + (pidx + 1)),
-                                color: isCurrent ? '#fbbf24' : '#d97706',
-                                stroke: isCurrent ? '#ffffff' : '#78350f',
-                                strokeWidth: isCurrent ? 3.5 : 1.5,
-                                opacity: isCurrent ? '1.0' : '0.85'
-                            });
-                        }
-                    });
-                }
                     });
                 });
+            } else if (state.displayMode === 'PAGODE') {
+                var pNotes = getCurrentPagodeNotes();
+                var pActiveIdx = state.pagode.activeNoteIndex;
+                pNotes.forEach(function (pn, pidx) {
+                    if (pn.par > 0 && pn.par <= inst.courses.length) {
+                        var isCurrent = (pidx === pActiveIdx);
+                        activeMarkers.push({
+                            courseIdx: pn.par - 1,
+                            fret: pn.fret,
+                            label: pn.label || (pn.par + 'P'),
+                            sub: isCurrent ? 'TOCANDO' : ('#' + (pidx + 1)),
+                            color: isCurrent ? '#fbbf24' : '#d97706',
+                            stroke: isCurrent ? '#ffffff' : '#78350f',
+                            strokeWidth: isCurrent ? 3.5 : 1.5,
+                            opacity: isCurrent ? '1.0' : '0.85'
+                        });
+                    }
+                });
+            } else if (state.displayMode === 'STROBE') {
+                // FASE 19: Projeção Estroboscópica — Alvo (0ª Casa) e Entonação 12ª Casa
+                const targetSpec = getStrobeTargetSpec();
+                inst.courses.forEach((c, cIdx) => {
+                    const isTarget = state.strobeTuner.targetMode === 'manual' && cIdx === targetSpec.courseIdx;
+                    const calc = computeCourseIntonation(cIdx);
+                    activeMarkers.push({
+                        courseIdx: cIdx,
+                        fret: 0,
+                        label: NOTE_NAMES[c.pitchClass],
+                        sub: isTarget ? 'ALVO' : `${c.num}ºP`,
+                        color: isTarget ? '#06b6d4' : '#334155',
+                        stroke: isTarget ? '#ffffff' : '#090d16',
+                        strokeWidth: isTarget ? 3.0 : 1.5,
+                        opacity: isTarget ? '1.0' : '0.65'
+                    });
+                    activeMarkers.push({
+                        courseIdx: cIdx,
+                        fret: 12,
+                        label: `${calc.c12 >= 0 ? '+' : ''}${calc.c12.toFixed(0)}¢`,
+                        sub: `${calc.saddleCompMm.toFixed(1)}mm`,
+                        color: Math.abs(calc.c12) <= 2 ? '#10b981' : '#f59e0b',
+                        stroke: isTarget ? '#ffffff' : '#090d16',
+                        strokeWidth: isTarget ? 2.8 : 1.5,
+                        opacity: isTarget ? '1.0' : '0.75'
+                    });
+                });
+            }
 
         // Construção SVG
         // FASE 13: Renderizacao da Bracadeira Fisica do Capotraste e Zona Inativa Atras
@@ -21222,8 +22837,17 @@ function bindSolfegeEvents() {
 
                 if (state.displayMode === 'SOLFEGE') {
                     handleFretboardSolfegeClick(cIdx, f);
-                } else if (state.activeMode === 'pagode') {
+                } else if (state.displayMode === 'PAGODE') {
                     playPagodeSound({ par: cIdx + 1, fret: f, dur: 0.5, dynamic: 'f' });
+                } else if (state.displayMode === 'STROBE') {
+                    state.strobeTuner.targetMode = 'manual';
+                    state.strobeTuner.targetCourseIdx = cIdx;
+                    state.strobeTuner.simCourseIdx = cIdx;
+                    state.strobeTuner.intonation.selectedCourseIdx = cIdx;
+                    updateStrobeSimulatorLiveParams();
+                    saveViolaState();
+                    renderFretboardSVG();
+                    renderStrobeTunerSection();
                 } else if (state.displayMode === 'REVERSE') {
                     const arr = inst.isPaired ? state.reverseFretsViola : state.reverseFretsViolao;
                     arr[cIdx] = arr[cIdx] === f ? -1 : f;
@@ -21811,13 +23435,16 @@ function bindSolfegeEvents() {
                 state.tonewood = Object.assign({}, DEFAULT_TONEWOOD_STATE);
             }
 
-            if (saved.solfeg
             if (saved.pagode && typeof saved.pagode === 'object') {
                 state.pagode = Object.assign({}, DEFAULT_PAGODE_STATE, saved.pagode, {
                     isPlaying: false,
                     activeNoteIndex: -1
                 });
-            }e && typeof saved.solfege === 'object') {
+            } else {
+                state.pagode = Object.assign({}, DEFAULT_PAGODE_STATE);
+            }
+
+            if (saved.solfege && typeof saved.solfege === 'object') {
                 state.solfege = Object.assign({}, DEFAULT_SOLFEGE_STATE, saved.solfege, {
                     dictationPlaying: false,
                     dictationStepIdx: -1,
@@ -21828,6 +23455,16 @@ function bindSolfegeEvents() {
                 });
             } else {
                 state.solfege = Object.assign({}, DEFAULT_SOLFEGE_STATE);
+            }
+
+            if (saved.strobeTuner && typeof saved.strobeTuner === 'object') {
+                const mergedInton = Object.assign({}, DEFAULT_STROBE_TUNER_STATE.intonation, saved.strobeTuner.intonation || {});
+                state.strobeTuner = Object.assign({}, DEFAULT_STROBE_TUNER_STATE, saved.strobeTuner, {
+                    isRunning: false,
+                    intonation: mergedInton
+                });
+            } else {
+                state.strobeTuner = JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE));
             }
         }
     }
@@ -21858,13 +23495,18 @@ function bindSolfegeEvents() {
                 intervalRevealed: false,
                 intervalSelectedOption: null,
                 intervalIsCorrect: null
-            }
+            });
+        }
         if (copy.pagode) {
             copy.pagode = Object.assign({}, copy.pagode, {
                 isPlaying: false,
                 activeNoteIndex: -1
             });
-        });
+        }
+        if (copy.strobeTuner) {
+            copy.strobeTuner = Object.assign({}, copy.strobeTuner, {
+                isRunning: false
+            });
         }
         if (copy.modalTrainer) {
             copy.modalTrainer = Object.assign({}, copy.modalTrainer, {
@@ -22002,6 +23644,10 @@ function bindSolfegeEvents() {
                             <i data-lucide="music-2" class="w-4 h-4 text-amber-400"></i>
                             <span>Introdu&ccedil;&otilde;es Pagode</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-strobe" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="disc" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Afinador Estrobosc&oacute;pico (Fase 19)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -22041,7 +23687,7 @@ function bindSolfegeEvents() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button> <button type="button" id="btn-viola-mode-pagode" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Pagode de Viola</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button> <button type="button" id="btn-viola-mode-pagode" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Pagode de Viola</button> <button type="button" id="btn-viola-mode-strobe" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128300; Estrobosc&oacute;pio (±0.1¢)</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -22230,6 +23876,8 @@ function bindSolfegeEvents() {
                 <!-- Treinador de Solfejo & Ditado Melodico Caipira (Fase 17) -->
                 <div id="viola-solfege-container" class="space-y-4"></div>
             <div id="viola-pagode-container" class="space-y-4"></div>
+            <!-- Afinador Estroboscopico de Alta Precisao & Analise de 8 Harmonicos (Fase 19) -->
+            <div id="viola-strobe-tuner-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -22403,7 +24051,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', activeClass: 'bg-indigo-600 text-white shadow' },
             { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', activeClass: 'bg-amber-600 text-slate-950 shadow' },
             { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', activeClass: 'bg-amber-600 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-strobe', mode: 'STROBE', activeClass: 'bg-cyan-500 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -22445,6 +24094,7 @@ function bindSolfegeEvents() {
         stopTonewoodAudio();
         stopSolfegeAudio();
         stopPagodeAudio();
+        stopStrobeTunerAudio();
     }
 
     function bindEvents() {
@@ -22455,6 +24105,11 @@ function bindSolfegeEvents() {
                 stopAllAudio();
                 state.instrumentId = e.target.value;
                 state.voicingVariantIdx = 0;
+                const newInst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+                state.strobeTuner.targetCourseIdx = Math.min(state.strobeTuner.targetCourseIdx || 0, newInst.courses.length - 1);
+                state.strobeTuner.simCourseIdx = state.strobeTuner.targetCourseIdx;
+                state.strobeTuner.intonation.selectedCourseIdx = Math.min(state.strobeTuner.intonation.selectedCourseIdx || 0, newInst.courses.length - 1);
+                state.strobeTuner.intonation.scaleLengthMm = newInst.isPaired ? 580 : 650;
 
                 if (state.instrumentId === 'violao_padrao' && !state.tensionCalculator.presetId.startsWith('violao_')) {
                     state.tensionCalculator.presetId = 'violao_nylon_normal';
@@ -22539,7 +24194,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' },
             { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' },
             { id: 'btn-viola-scroll-solfege', targetId: 'viola-solfege-container' },
-            { id: 'btn-viola-scroll-pagode', targetId: 'viola-pagode-container' }
+            { id: 'btn-viola-scroll-pagode', targetId: 'viola-pagode-container' },
+            { id: 'btn-viola-scroll-strobe', targetId: 'viola-strobe-tuner-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -22573,7 +24229,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' },
             { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' },
             { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', scrollTarget: 'viola-solfege-container' },
-            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', scrollTarget: 'viola-pagode-container' }
+            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', scrollTarget: 'viola-pagode-container' },
+            { id: 'btn-viola-mode-strobe', mode: 'STROBE', scrollTarget: 'viola-strobe-tuner-container' }
         ];
 
         modeList.forEach((item) => {
@@ -22861,6 +24518,7 @@ function bindSolfegeEvents() {
         renderTonewoodSection();
         renderSolfegeSection();
         renderPagodeSection();
+        renderStrobeTunerSection();
         renderMetronomeControls();
     }
 
