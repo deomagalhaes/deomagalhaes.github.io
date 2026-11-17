@@ -59,6 +59,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 50** | **Matriz de Individuação Relacional e Desarme do Salvador** | Discriminação Eu-Outro, Inibição da Compulsão por Resgate (dACC/dlPFC) e Calibração de Limites | `jogos/jogo-individuacao-relacional-salvador.html` | ✅ **Publicado** |
 | **Dia 51** | **Matriz de Significado Existencial e Calibração de Valores** | Tomada de Decisão Eudaimônica, Integração de Valores no vmPFC e Logoterapia de Frankl | `jogos/jogo-matriz-significado-valores.html` | ✅ **Publicado** |
 | **Dia 52** | **Matriz de Tolerância ao Desconforto e Aceitação Ativa** | Flexibilidade Cognitiva, Dessensibilização à Incerteza (Ínsula/dACC), Controle Inibitório e ACT | `jogos/jogo-tolerancia-desconforto-aceitacao-ativa.html` | ✅ **Publicado** |
+| **Dia 53** | **Matriz de Integração Somática e Desarme da Hiper-Racionalização** | Integração Ínsulo-Pré-Frontal (vmPFC-Ínsula), Âncoras Somáticas, Desarme da DMN e Coerência Vagal | `jogos/jogo-integracao-somatica-desarme-racionalizacao.html` | ✅ **Publicado** |
 
 ---
 

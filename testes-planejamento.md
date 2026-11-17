@@ -60,6 +60,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-51** | **Escala Multidimensional de Codependência, Papel de Salvador e Desconexão do Self (EMCS-PS)** | Codependência, Compulsão por Resgate, Ansiedade de Separação (dACC) e Parentificação | `testes/teste-codependencia-papel-salvador.html` | ✅ Concluído |
 | **T-52** | **Escala Multidimensional de Sentido de Vida, Vazio Existencial e Vontade de Sentido (EMSV-VE)** | Logoterapia, Vontade de Sentido, vácuo noogênico e Eudaimonia (vmPFC) | `testes/teste-vazio-existencial-sentido-de-vida.html` | ✅ Concluído |
 | **T-53** | **Escala Multidimensional de Esquiva Experiencial, Anestesia Afetiva e Supressão Emocional (EME-AA)** | Esquiva Experiencial, ACT, Aversão ao Desconforto, Numbing na Ínsula e Flexibilidade | `testes/teste-esquiva-experiencial-anestesia-afetiva.html` | ✅ Concluído |
+| **T-54** | **Escala Multidimensional de Hiper-Racionalização e Intelectualização Defensiva (EMHI-D)** | Intelectualização Defensiva, Desacoplamento da Ínsula, Ilusão do Insight e Análise-Paralisia | `testes/teste-hiper-racionalizacao-intelectualizacao.html` | ✅ Concluído |
 
 ---
 

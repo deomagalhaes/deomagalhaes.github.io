@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Hiper-Racionalização e da Intelectualização Defensiva: Por Que Entender Tudo Sobre Sua Dor Não Cura o Que o Corpo Ainda Sente** (Publicado em 17/11/2026)
 - [x] **A Neurobiologia da Esquiva Experiencial e da Anestesia Afetiva: Como a Tentativa de Não Sentir Amplifica a Dor e Aprisiona o Cérebro no Sofrimento** (Publicado em 16/11/2026)
 - [x] **A Neurobiologia do Vazio Existencial e da Busca de Sentido: Como a Crise de Propósito Afeta o Cérebro e os Caminhos para a Vontade de Sentido** (Publicado em 16/11/2026)
 - [x] **A Neurobiologia da Codependência e do Papel de Salvador: Como a Compulsão por Cuidar e Reparar o Outro Mascara o Pavor do Abandono e a Desconexão do Self** (Publicado em 15/11/2026)

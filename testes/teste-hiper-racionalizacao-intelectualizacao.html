@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Hiper-Racionalização e Intelectualização Defensiva (EMHI-D / T-54) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu índice de intelectualização defensiva, desconexão somática (ínsula), ilusão do insight e análise-paralisia com a escala clínica EMHI-D / T-54.">
+    
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            font-size: 1.02em;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #475569;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            font-weight: 700;
+            color: #005f73;
+        }
+
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .result-score-banner {
+            text-align: center;
+            padding: 24px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .result-score-num {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .result-level-title {
+            font-size: 1.35em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dimension-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .dimension-card {
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dimension-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.98em;
+            color: #1e293b;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.6s ease;
+        }
+
+        .score-legend-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82em;
+            color: #64748b;
+        }
+
+        .clinical-notes-card {
+            background: #ffffff;
+            border-left: 4px solid #ee9b00;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .clinical-notes-card h4 {
+            color: #ca6702;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+
+        .action-cta-box {
+            background: linear-gradient(135deg, #005f73 0%, #0a9396 100%);
+            color: #ffffff;
+            padding: 24px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .action-cta-box h3 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+
+        .action-cta-box p {
+            margin: 0 0 18px 0;
+            font-size: 0.95em;
+            color: #e0f2fe;
+        }
+
+        .btn-cta-white {
+            background: #ffffff;
+            color: #005f73;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta-white:hover {
+            background: #f1f5f9;
+            color: #0a9396;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala Multidimensional de Hiper-Racionalização e Intelectualização Defensiva (EMHI-D / T-54)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Instrumento Psicoeducativo</p>
+            </header>
+
+            <div class="quiz-container">
+                <div class="test-intro-box">
+                    <strong>Aviso Científico e Psicoeducativo:</strong> Esta escala dimensional foi estruturada com base na literatura clínica sobre mecanismos de defesa cognitivos (Anna Freud; Defense Style Questionnaire - DSQ-40), nos modelos de <em>Felt Sense</em> e Focusing (Eugene Gendlin), na neurobiologia da reconsolidação da memória emocional (Joseph LeDoux; Bruce Ecker) e na integração ínsulo-pré-frontal (Allan Schore; António Damásio).
+                    <br><br>
+                    <strong>Privacidade Absoluta:</strong> A apuração dos dados é realizada <strong>100% no seu navegador</strong>. Nenhuma informação pessoal ou resposta individual é enviada a servidores ou gravada em bancos de dados externos.
+                </div>
+
+                <form id="emhiForm" onsubmit="calculateEmhi(event)">
+
+                    <!-- Dimensão 1 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Analitismo Defensivo e Abstração do Afeto (dlPFC como Escudo)</h3>
+                        <p>Avalia a tendência automática de converter emoções ameaçadoras ou íntimas em teorias, discursos técnicos ou explicações abstratas.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">1. Quando alguém me pergunta como estou me sentindo em um momento difícil, costumo responder com uma explicação lógica do contexto em vez de expressar a emoção em si.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">2. Diante de conflitos afetivos, sinto alívio ao rotular o comportamento meu ou do outro com termos psicológicos, como se estivesse analisando um caso externo.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">3. Sinto desconforto ou vulnerabilidade excessiva se não conseguir encontrar uma justificativa racional imediata para minha tristeza, raiva ou angústia.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">4. Em discussões ou sessões terapêuticas, percebo que falo muito rápido e construo argumentos longos sempre que o assunto começa a tocar em feridas reais.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">5. Tenho o hábito de consumir artigos, vídeos ou livros sobre saúde mental para me sentir no controle, mas evito me expor às emoções que esses conteúdos descrevem.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Desacoplamento Somático-Interoceptivo (Desconexão da Ínsula Anterior)</h3>
+                        <p>Avalia a dificuldade de perceber os sinais viscerais do corpo no momento presente e o distanciamento do Felt Sense.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">6. Tenho grande dificuldade de localizar fisicamente onde uma emoção está acontecendo no meu corpo (peito, garganta, estômago, ombros) no momento em que a vivo.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">7. Muitas vezes só percebo que estou estressado ou sobrecarregado quando meu corpo adoece (dor de cabeça, gastrite, insônia ou trava muscular súbita).</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">8. Sinto que vivo quase inteiramente "da cabeça para cima", como se meu corpo fosse apenas um veículo que transporta meus pensamentos.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">9. Exercícios de escaneamento corporal ou respiração silenciosa me deixam inquieto porque parece que estou "perdendo tempo" sem resolver nada objetivamente.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">10. Quando sinto vontade de chorar ou um nó na garganta, minha mente imediatamente busca explicações racionais até que a sensação física se dissolva ou trave.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Ilusão do Insight Suficiente (Hiato Entre Compreender e Elaborar)</h3>
+                        <p>Avalia a crença de que entender cognitivamente a causa de um padrão equivale a superá-lo, gerando frustração pela persistência dos sintomas.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">11. Sinto profunda frustração por entender exatamente a origem dos meus padrões emocionais, mas continuar reagindo da mesma maneira na prática.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">12. Acredito que, se eu pensar com lógica suficiente sobre um problema emocional, eventualmente encontrarei a resposta definitiva que fará a angústia desaparecer.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">13. Costumo sentir uma sensação de superioridade ou alívio enganoso por já ter "decifrado" meus traumas, mesmo quando minha vida relacional continua bloqueada.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">14. Julgo que sentir medo ou tristeza por algo que "não faz sentido lógico" é um sinal de fraqueza cognitiva que devo corrigir com argumentos.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">15. Quando recebo apoio puramente afetivo sem soluções práticas ou explicações lógicas, sinto que o acolhimento foi inútil ou insuficiente.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Análise-Paralisia e Controle Epistêmico (Sequestro pela DMN)</h3>
+                        <p>Avalia a ruminação explicativa interminável que substitui a entrega, a espontaneidade e a ação encarnada nos vínculos.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">16. Passo horas repassando diálogos ou eventos afetivos na mente tentando encontrar a explicação "exata" do que o outro quis dizer, sem tomar uma atitude real.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">17. Evito tomar decisões importantes na vida pessoal ou afetiva enquanto não tiver analisado todas as variáveis possíveis e neutralizado o risco de erro emocional.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q17" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">18. Pessoas próximas já comentaram que pareço distante, excessivamente técnico ou "frio" justamente nos momentos em que o vínculo exigia presença emocional.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q18" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">19. Tenho dificuldade de simplesmente me entregar a momentos de prazer, música ou intimidade sem que um "narrador interno" fique analisando e avaliando a experiência.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q19" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">20. Sinto que minha mente está exausta de tanto pensar sobre mim mesmo, mas ainda assim não consigo desligar o fluxo de teorias e interpretações.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q20" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit-test">Calcular Perfil na Escala EMHI-D (T-54)</button>
+                </form>
+
+                <!-- Devolutiva Clínica do Teste -->
+                <div id="resultContainer" class="result-container">
+                    <div class="result-score-banner">
+                        <div style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: 700;">Seu Resultado Global na Escala EMHI-D</div>
+                        <div id="scoreNumber" class="result-score-num">-- / 80</div>
+                        <div id="levelTitle" class="result-level-title">Calculando...</div>
+                        <p id="levelDesc" style="color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.6; font-size: 0.95em;"></p>
+                    </div>
+
+                    <h3 style="color: #005f73; margin-bottom: 18px;">Mapeamento Dimensional da Hiper-Racionalização</h3>
+                    <div class="dimension-scores-grid">
+                        <div class="dimension-card">
+                            <h4>1. Analitismo Defensivo</h4>
+                            <div class="progress-bar-bg"><div id="dim1Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim1Score">0/20</span><span id="dim1Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>2. Desacoplamento Somático</h4>
+                            <div class="progress-bar-bg"><div id="dim2Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim2Score">0/20</span><span id="dim2Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>3. Ilusão do Insight Suficiente</h4>
+                            <div class="progress-bar-bg"><div id="dim3Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim3Score">0/20</span><span id="dim3Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>4. Análise-Paralisia (DMN)</h4>
+                            <div class="progress-bar-bg"><div id="dim4Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim4Score">0/20</span><span id="dim4Desc">--</span></div>
+                        </div>
+                    </div>
+
+                    <div class="clinical-notes-card">
+                        <h4>Diretrizes Clínicas e Neuropsicológicas (Integração Mente-Corpo)</h4>
+                        <div id="clinicalAdviceText" style="color: #334155; font-size: 0.95em; line-height: 1.7;"></div>
+                    </div>
+
+                    <div class="action-cta-box">
+                        <h3>Deseja Transformar Compreensão em Mudança Emocional Real?</h3>
+                        <p>A psicoterapia clínica baseada em evidências e neuropsicologia integrativa ajuda a unir lucidez pré-frontal com presença somática, destravando a reconsolidação de memórias emocionais.</p>
+                        <a href="/agendamento.html" class="btn-cta-white">Agendar Avaliação Clínica com Deo Magalhães</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        function calculateEmhi(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('emhiForm');
+            let d1 = 0, d2 = 0, d3 = 0, d4 = 0;
+
+            for (let i = 1; i <= 5; i++) d1 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 6; i <= 10; i++) d2 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 11; i <= 15; i++) d3 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 16; i <= 20; i++) d4 += parseInt(form[`q${i}`].value, 10);
+
+            const globalScore = d1 + d2 + d3 + d4;
+
+            const scoreNumber = document.getElementById('scoreNumber');
+            const levelTitle = document.getElementById('levelTitle');
+            const levelDesc = document.getElementById('levelDesc');
+            const clinicalAdviceText = document.getElementById('clinicalAdviceText');
+
+            scoreNumber.textContent = `${globalScore} / 80`;
+
+            if (globalScore <= 35) {
+                levelTitle.textContent = "Baixa Intelectualização Defensiva / Boa Integração Mente-Corpo";
+                levelTitle.style.color = "#0a9396";
+                levelDesc.textContent = "Você utiliza sua capacidade analítica como aliada sem desconectar-se dos sinais viscerais da ínsula anterior. Sua mente consegue pausar a explicação teórica para habitar emoções presentes com fluidez e segurança.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Equilíbrio Executivo-Visceral:</strong> O diálogo saudável entre o córtex pré-frontal (vmPFC/dlPFC) e os marcadores somáticos favorece decisões maduras e vínculos autênticos.</li><li><strong>Manutenção do Felt Sense:</strong> Continue cultivando pausas corporais breves ao longo do dia para não escorregar para o automatismo cognitivo sob estresse intenso.</li><li><strong>Presença Relacional:</strong> Sua habilidade de estar presente sem precisar 'consertar' ou justificar cada afeto sustenta intimidade genuína.</li></ul>";
+            } else if (globalScore <= 52) {
+                levelTitle.textContent = "Hiper-Racionalização Moderada / Recurso Defensivo Situacional";
+                levelTitle.style.color = "#ee9b00";
+                levelDesc.textContent = "Em situações cotidianas você acessa suas emoções, mas diante de vulnerabilidade aguda, rejeição ou incerteza, seu cérebro tende a acionar discursos explicativos e análises excessivas para manter o controle.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Detecção do Gatilho Analítico:</strong> Note quando você começa a dar 'aulas sobre si mesmo' logo após uma frustração. Esse impulso indica o dlPFC tentando blindar a amígdala.</li><li><strong>Pergunta de Ancoragem:</strong> Ao perceber que está explicando demais, faça uma pausa de 30 segundos e pergunte: 'Onde essa questão está pesando fisicamente no meu corpo agora?'.</li><li><strong>Experimentação Relacional:</strong> Pratique comunicar sentimentos simples em uma frase direta ('isso me entristeceu') sem acrescentar dez linhas de justificativa racional.</li></ul>";
+            } else if (globalScore <= 68) {
+                levelTitle.textContent = "Intelectualização Defensiva Elevada / Desacoplamento Ínsulo-Pré-Frontal";
+                levelTitle.style.color = "#ca6702";
+                levelDesc.textContent = "Há predominância clara da mente analítica sobre a experiência encarnada. Você provavelmente possui alto repertório de autoconhecimento teórico, mas sente frustração por perceber que compreender suas feridas não dissolve os sintomas corporais e relacionais.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>O Mito do Insight Suficiente:</strong> Entender a causa no dlPFC não reescreve memórias implícitas da amígdala. A atualização neural (reconsolidação) exige sentir a emoção em doses seguras, com presença corporal.</li><li><strong>Treino de Interocepção Granular:</strong> Dedique 5 minutos diários para mapear sensações puramente físicas (temperatura, pressão no peito, tensão nos ombros) sem rotulá-las com interpretações biográficas.</li><li><strong>Desarme da Análise-Paralisia:</strong> Estabeleça um limite temporal para pensar sobre conflitos. Após 15 minutos de reflexão, mova o foco da Rede de Modo Padrão (DMN) para a respiração vagal lenta (4s inspira / 6s expira).</li></ul>";
+            } else {
+                levelTitle.textContent = "Hiper-Racionalização Severa e Cisão Mente-Corpo Crônica";
+                levelTitle.style.color = "#9b2226";
+                levelDesc.textContent = "Seu sistema nervoso construiu uma fortaleza analítica sofisticada para protegê-lo da imprevisibilidade afetiva. Contudo, esse distanciamento visceral gera exaustão mental contínua, somatizações físicas inesperadas e sensação de desconexão da vida vivida.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Respeito à Função Protetora:</strong> A hiper-racionalização não é defeito; foi a estratégia mais inteligente que seu cérebro encontrou no passado para sobreviver sem colapsar diante de dores sem amparo.</li><li><strong>Terapia Somática e Processual:</strong> Abordagens puramente intelectuais podem involuntariamente reforçar sua defesa. Priorize processos psicoterapêuticos focados em regulação autonômica, Focusing (Gendlin), ACT ou reconsolidação emocional experiencial.</li><li><strong>Pequenos Retornos ao Corpo:</strong> Comece com segurança: sinta o peso dos pés no chão, a temperatura das mãos e o ritmo da expiração antes de tentar nomear qualquer história emocional.</li></ul>";
+            }
+
+            // Atualização das Barras de Dimensão (5 a 20 pontos)
+            updateBar('dim1Bar', 'dim1Score', 'dim1Desc', d1, 20, d1 > 14 ? "#9b2226" : d1 > 10 ? "#ee9b00" : "#0a9396", "Escudo analítico");
+            updateBar('dim2Bar', 'dim2Score', 'dim2Desc', d2, 20, d2 > 14 ? "#9b2226" : d2 > 10 ? "#ee9b00" : "#0a9396", "Desconexão somática");
+            updateBar('dim3Bar', 'dim3Score', 'dim3Desc', d3, 20, d3 > 14 ? "#9b2226" : d3 > 10 ? "#ee9b00" : "#0a9396", "Ilusão do insight");
+            updateBar('dim4Bar', 'dim4Score', 'dim4Desc', d4, 20, d4 > 14 ? "#9b2226" : d4 > 10 ? "#ee9b00" : "#0a9396", "Paralisia por análise");
+
+            const rc = document.getElementById('resultContainer');
+            rc.style.display = 'block';
+            rc.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateBar(barId, scoreId, descId, val, max, color, label) {
+            const pct = Math.round((val / max) * 100);
+            const bar = document.getElementById(barId);
+            bar.style.width = pct + '%';
+            bar.style.backgroundColor = color;
+            document.getElementById(scoreId).textContent = `${val} / ${max} (${pct}%)`;
+            document.getElementById(descId).textContent = `${label}: ${pct < 45 ? 'Baixo' : pct < 70 ? 'Moderado' : 'Elevado'}.`;
+        }
+    </script>
+</body>
+</html>
