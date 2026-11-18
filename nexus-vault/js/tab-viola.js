@@ -3612,6 +3612,149 @@ const DEFAULT_STROBE_TUNER_STATE = {
     }
 };
 
+// =========================================================================
+// FASE 20: CAPTAÇÃO ACÚSTICA, MICROFONIA & EQUALIZAÇÃO PARAMÉTRICA DE PALCO
+// =========================================================================
+const STAGE_EQ_BAND_LIMITS = [
+    { id: 'b1', name: 'Grave / Corpo', type: 'lowshelf', minFreq: 60, maxFreq: 260 },
+    { id: 'b2', name: 'Médio-Grave', type: 'peaking', minFreq: 180, maxFreq: 850 },
+    { id: 'b3', name: 'Médio / Turina', type: 'peaking', minFreq: 550, maxFreq: 2600 },
+    { id: 'b4', name: 'Presença / Piezo', type: 'peaking', minFreq: 1800, maxFreq: 6800 },
+    { id: 'b5', name: 'Agudo / Ar', type: 'highshelf', minFreq: 4500, maxFreq: 14000 }
+];
+
+const STAGE_PICKUP_PRESETS = {
+    trio_sertanejo_ao_vivo: {
+        id: 'trio_sertanejo_ao_vivo',
+        name: 'Trio Sertanejo Ao Vivo',
+        badge: 'Palco Alto',
+        blendMicPct: 25,
+        phaseInverted: false,
+        monitorGainPct: 72,
+        eqBypass: false,
+        notch: { enabled: true, freqHz: 112, q: 12.0, depthDb: -16.0 },
+        bands: [
+            { id: 'b1', label: 'Grave / Corpo', type: 'lowshelf', freq: 105, gain: -2.5, q: 0.7, enabled: true },
+            { id: 'b2', label: 'Médio-Grave', type: 'peaking', freq: 340, gain: -1.5, q: 1.3, enabled: true },
+            { id: 'b3', label: 'Médio / Turina', type: 'peaking', freq: 1450, gain: 3.2, q: 1.5, enabled: true },
+            { id: 'b4', label: 'Presença / Piezo', type: 'peaking', freq: 3250, gain: -3.8, q: 2.2, enabled: true },
+            { id: 'b5', label: 'Agudo / Ar', type: 'highshelf', freq: 8200, gain: 2.0, q: 0.7, enabled: true }
+        ],
+        description: '75% piezo de rastilho para máxima rejeição de microfonia, notch cirúrgico em 112 Hz, alívio de estridência piezo em 3.25 kHz e destaque da turina em 1.45 kHz para cortar a mix com sanfona e baixo.'
+    },
+    condenser_stereo_estudio: {
+        id: 'condenser_stereo_estudio',
+        name: 'Gravação em Condenser Stereo',
+        badge: 'Estúdio Puro',
+        blendMicPct: 85,
+        phaseInverted: false,
+        monitorGainPct: 26,
+        eqBypass: false,
+        notch: { enabled: false, freqHz: 108, q: 10.0, depthDb: -10.0 },
+        bands: [
+            { id: 'b1', label: 'Grave / Corpo', type: 'lowshelf', freq: 125, gain: 2.2, q: 0.7, enabled: true },
+            { id: 'b2', label: 'Médio-Grave', type: 'peaking', freq: 360, gain: 0.8, q: 1.0, enabled: true },
+            { id: 'b3', label: 'Médio / Turina', type: 'peaking', freq: 1600, gain: 1.2, q: 1.1, enabled: true },
+            { id: 'b4', label: 'Presença / Piezo', type: 'peaking', freq: 3800, gain: 0.5, q: 1.2, enabled: true },
+            { id: 'b5', label: 'Agudo / Ar', type: 'highshelf', freq: 9500, gain: 3.5, q: 0.7, enabled: true }
+        ],
+        description: '85% microfone condensador captando a respiração natural do tampo, calor harmônico em 125 Hz e brilho arejado nos pares oitavados acima de 9 kHz.'
+    },
+    ponteio_solista_auditorio: {
+        id: 'ponteio_solista_auditorio',
+        name: 'Ponteio Solista em Auditório',
+        badge: 'Concerto',
+        blendMicPct: 55,
+        phaseInverted: false,
+        monitorGainPct: 50,
+        eqBypass: false,
+        notch: { enabled: true, freqHz: 110, q: 10.0, depthDb: -10.0 },
+        bands: [
+            { id: 'b1', label: 'Grave / Corpo', type: 'lowshelf', freq: 115, gain: 1.0, q: 0.7, enabled: true },
+            { id: 'b2', label: 'Médio-Grave', type: 'peaking', freq: 310, gain: -1.8, q: 1.4, enabled: true },
+            { id: 'b3', label: 'Médio / Turina', type: 'peaking', freq: 2100, gain: 2.4, q: 1.6, enabled: true },
+            { id: 'b4', label: 'Presença / Piezo', type: 'peaking', freq: 3600, gain: -1.2, q: 1.8, enabled: true },
+            { id: 'b5', label: 'Agudo / Ar', type: 'highshelf', freq: 9000, gain: 2.8, q: 0.7, enabled: true }
+        ],
+        description: 'Blend equilibrado (45/55) para duetos de terças e sextas em teatro: limpa a caixa em 310 Hz, projeta definição de palheta em 2.1 kHz e protege o bojo com notch suave.'
+    },
+    palco_inversao_fase: {
+        id: 'palco_inversao_fase',
+        name: 'Retorno Crítico (Fase 180° + Notch)',
+        badge: 'Anti-Feedback',
+        blendMicPct: 50,
+        phaseInverted: true,
+        monitorGainPct: 82,
+        eqBypass: false,
+        notch: { enabled: true, freqHz: 108, q: 14.0, depthDb: -18.0 },
+        bands: [
+            { id: 'b1', label: 'Grave / Corpo', type: 'lowshelf', freq: 100, gain: -3.0, q: 0.7, enabled: true },
+            { id: 'b2', label: 'Médio-Grave', type: 'peaking', freq: 420, gain: 1.5, q: 1.2, enabled: true },
+            { id: 'b3', label: 'Médio / Turina', type: 'peaking', freq: 1300, gain: 2.5, q: 1.4, enabled: true },
+            { id: 'b4', label: 'Presença / Piezo', type: 'peaking', freq: 3100, gain: -2.5, q: 2.0, enabled: true },
+            { id: 'b5', label: 'Agudo / Ar', type: 'highshelf', freq: 8000, gain: 2.2, q: 0.7, enabled: true }
+        ],
+        description: 'Modo de blindagem contra microfonia em palcos com retorno próximo: inversão de polaridade (180°) entre rastilho e boca somada ao notch profundo em 108 Hz.'
+    },
+    violao_seresta_palco: {
+        id: 'violao_seresta_palco',
+        name: 'Violão Acústico / Seresta de Palco',
+        badge: 'Violão 6C',
+        blendMicPct: 65,
+        phaseInverted: false,
+        monitorGainPct: 48,
+        eqBypass: false,
+        notch: { enabled: true, freqHz: 96, q: 11.0, depthDb: -12.0 },
+        bands: [
+            { id: 'b1', label: 'Grave / Corpo', type: 'lowshelf', freq: 98, gain: 2.4, q: 0.7, enabled: true },
+            { id: 'b2', label: 'Médio-Grave', type: 'peaking', freq: 280, gain: -2.0, q: 1.4, enabled: true },
+            { id: 'b3', label: 'Médio / Turina', type: 'peaking', freq: 1200, gain: 1.0, q: 1.2, enabled: true },
+            { id: 'b4', label: 'Presença / Piezo', type: 'peaking', freq: 4100, gain: -2.2, q: 1.8, enabled: true },
+            { id: 'b5', label: 'Agudo / Ar', type: 'highshelf', freq: 8800, gain: 1.8, q: 0.7, enabled: true }
+        ],
+        description: 'Timbre encorpado para violão de 6 cordas em palco íntimo: notch calibrado na ressonância grave de 96 Hz e controle suave de estridência.'
+    },
+    bypass_flat: {
+        id: 'bypass_flat',
+        name: 'Direct Box Neutro (Flat / Bypass)',
+        badge: 'Referência A/B',
+        blendMicPct: 50,
+        phaseInverted: false,
+        monitorGainPct: 40,
+        eqBypass: true,
+        notch: { enabled: false, freqHz: 110, q: 10.0, depthDb: -12.0 },
+        bands: [
+            { id: 'b1', label: 'Grave / Corpo', type: 'lowshelf', freq: 110, gain: 0, q: 0.7, enabled: true },
+            { id: 'b2', label: 'Médio-Grave', type: 'peaking', freq: 340, gain: 0, q: 1.2, enabled: true },
+            { id: 'b3', label: 'Médio / Turina', type: 'peaking', freq: 1350, gain: 0, q: 1.4, enabled: true },
+            { id: 'b4', label: 'Presença / Piezo', type: 'peaking', freq: 3400, gain: 0, q: 1.8, enabled: true },
+            { id: 'b5', label: 'Agudo / Ar', type: 'highshelf', freq: 8500, gain: 0, q: 0.7, enabled: true }
+        ],
+        description: 'Curva plana 0.0 dB e EQ desativado para comparação auditiva A/B direta da captação sem equalização.'
+    }
+};
+
+const DEFAULT_STAGE_EQ_STATE = {
+    presetId: 'trio_sertanejo_ao_vivo',
+    blendMicPct: 25,
+    phaseInverted: false,
+    eqBypass: false,
+    limiterEnabled: true,
+    monitorGainPct: 72,
+    feedbackSimAudible: false,
+    notch: {
+        enabled: true,
+        freqHz: 112,
+        q: 12.0,
+        depthDb: -16.0
+    },
+    bands: JSON.parse(JSON.stringify(STAGE_PICKUP_PRESETS.trio_sertanejo_ao_vivo.bands)),
+    selectedBandIdx: 2,
+    audioSourceMode: 'arpeggio', // 'arpeggio' | 'ponteio' | 'rasqueado' | 'mic'
+    isPlaying: false,
+    loopDemo: true
+};
+
 
 const DEFAULT_SOLFEGE_STATE = {
     subTab: 'interval', // 'interval' | 'dictation'
@@ -3989,7 +4132,8 @@ const CAIPIRA_DICTATION_PHRASES = [
         tonewood: Object.assign({}, DEFAULT_TONEWOOD_STATE),
         solfege: Object.assign({}, DEFAULT_SOLFEGE_STATE),
         pagode: Object.assign({}, DEFAULT_PAGODE_STATE),
-        strobeTuner: JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE))
+        strobeTuner: JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE)),
+        stageEq: JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE))
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -4066,6 +4210,17 @@ const CAIPIRA_DICTATION_PHRASES = [
         stretch8thCents: 0,
         statusText: 'Pronto para medição estroboscópica (±0.1¢). Escolha Microfone ou Simulador Acústico.'
     };
+
+    // Fase 20: Variáveis DSP de Captação Acústica, Microfonia & Equalizador Paramétrico de Palco
+    let stageAudioPipeline = null;
+    let stageStream = null;
+    let stageMicSource = null;
+    let stageLoopTimer = null;
+    let stageActiveTimers = [];
+    let stageRafId = null;
+    let stageFreqData = null;
+    let stageDragState = { active: false, targetType: null, targetIdx: -1 };
+    let stageLiveStatus = 'Pronto para modelagem de captação (Piezo / Condensador) e equalização paramétrica de palco.';
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -20047,6 +20202,1551 @@ function bindSolfegeEvents() {
         }
     }
 
+    // =========================================================================
+    // FASE 20: SIMULADOR DE CAPTAÇÃO ACÚSTICA, MICROFONIA & EQ PARAMÉTRICO
+    // =========================================================================
+    function getInstrumentStageResonance(inst) {
+        const target = inst || INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        if (!target.isPaired) {
+            return {
+                f1: 96,
+                f2: 192,
+                bodyLabel: 'Ressonância Helmholtz de Violão 6 Cordas (96 Hz)'
+            };
+        }
+        if (target.id === 'viola_rio_abaixo' || target.id === 'viola_sao_lourenco' || target.id === 'viola_boiadeira') {
+            return {
+                f1: 106,
+                f2: 212,
+                bodyLabel: 'Bojo Profundo de Viola Regional (106 Hz)'
+            };
+        }
+        return {
+            f1: 112,
+            f2: 224,
+            bodyLabel: 'Ressonância Helmholtz de Viola Caipira (112 Hz)'
+        };
+    }
+
+    function cMul(a, b) {
+        return { re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re };
+    }
+
+    function cDiv(a, b) {
+        const den = b.re * b.re + b.im * b.im;
+        if (den < 1e-18) return { re: 1, im: 0 };
+        return {
+            re: (a.re * b.re + a.im * b.im) / den,
+            im: (a.im * b.re - a.re * b.im) / den
+        };
+    }
+
+    function evalBiquadComplex(type, fc, q, gainDb, f, fs = 48000) {
+        const clampedFc = Math.max(15, Math.min(fs * 0.46, fc));
+        const w0 = (2 * Math.PI * clampedFc) / fs;
+        const cosW = Math.cos(w0);
+        const sinW = Math.sin(w0);
+        const safeQ = Math.max(0.15, q || 0.707);
+        const A = Math.pow(10, (gainDb || 0) / 40);
+
+        let b0 = 1, b1 = 0, b2 = 0, a0 = 1, a1 = 0, a2 = 0;
+
+        if (type === 'highpass') {
+            const alpha = sinW / (2 * safeQ);
+            b0 = (1 + cosW) / 2;
+            b1 = -(1 + cosW);
+            b2 = (1 + cosW) / 2;
+            a0 = 1 + alpha;
+            a1 = -2 * cosW;
+            a2 = 1 - alpha;
+        } else if (type === 'lowshelf') {
+            const alpha = sinW / Math.SQRT2;
+            const twoSqrtAAlpha = 2 * Math.sqrt(A) * alpha;
+            b0 = A * ((A + 1) - (A - 1) * cosW + twoSqrtAAlpha);
+            b1 = 2 * A * ((A - 1) - (A + 1) * cosW);
+            b2 = A * ((A + 1) - (A - 1) * cosW - twoSqrtAAlpha);
+            a0 = (A + 1) + (A - 1) * cosW + twoSqrtAAlpha;
+            a1 = -2 * ((A - 1) + (A + 1) * cosW);
+            a2 = (A + 1) + (A - 1) * cosW - twoSqrtAAlpha;
+        } else if (type === 'highshelf') {
+            const alpha = sinW / Math.SQRT2;
+            const twoSqrtAAlpha = 2 * Math.sqrt(A) * alpha;
+            b0 = A * ((A + 1) + (A - 1) * cosW + twoSqrtAAlpha);
+            b1 = -2 * A * ((A - 1) + (A + 1) * cosW);
+            b2 = A * ((A + 1) + (A - 1) * cosW - twoSqrtAAlpha);
+            a0 = (A + 1) - (A - 1) * cosW + twoSqrtAAlpha;
+            a1 = 2 * ((A - 1) - (A + 1) * cosW);
+            a2 = (A + 1) - (A - 1) * cosW - twoSqrtAAlpha;
+        } else {
+            // peaking
+            const alpha = sinW / (2 * safeQ);
+            b0 = 1 + alpha * A;
+            b1 = -2 * cosW;
+            b2 = 1 - alpha * A;
+            a0 = 1 + alpha / A;
+            a1 = -2 * cosW;
+            a2 = 1 - alpha / A;
+        }
+
+        const w = (2 * Math.PI * f) / fs;
+        const c1 = Math.cos(w);
+        const s1 = -Math.sin(w);
+        const c2 = Math.cos(2 * w);
+        const s2 = -Math.sin(2 * w);
+
+        const num = {
+            re: b0 + b1 * c1 + b2 * c2,
+            im: b1 * s1 + b2 * s2
+        };
+        const den = {
+            re: a0 + a1 * c1 + a2 * c2,
+            im: a1 * s1 + a2 * s2
+        };
+        return cDiv(num, den);
+    }
+
+    function computeStageResponseAtFreq(f, stageState, inst) {
+        const st = stageState || state.stageEq;
+        const res = getInstrumentStageResonance(inst);
+        const fs = audioCtx ? audioCtx.sampleRate : 48000;
+
+        // Caminho Piezo de Rastilho: corte subsônico 75 Hz + pico piezo 3.3 kHz + roll-off suave agudo
+        let hPiezo = evalBiquadComplex('highpass', 75, 0.707, 0, f, fs);
+        hPiezo = cMul(hPiezo, evalBiquadComplex('peaking', 3300, 2.4, 4.5, f, fs));
+        hPiezo = cMul(hPiezo, evalBiquadComplex('highshelf', 7500, 0.707, -2.5, f, fs));
+
+        // Caminho Condensador Interno de Boca: ressonância Helmholtz + ar em 6.8 kHz + atraso acústico 0.42 ms
+        let hMic = evalBiquadComplex('peaking', res.f1, 2.8, 4.2, f, fs);
+        hMic = cMul(hMic, evalBiquadComplex('highshelf', 6800, 0.707, 3.0, f, fs));
+        const delayTau = 0.00042;
+        const phaseArg = -2 * Math.PI * f * delayTau;
+        hMic = cMul(hMic, { re: Math.cos(phaseArg), im: Math.sin(phaseArg) });
+
+        const alpha = Math.max(0, Math.min(1, (st.blendMicPct || 0) / 100));
+        const phaseSign = st.phaseInverted ? -1 : 1;
+        const hPickup = {
+            re: (1 - alpha) * hPiezo.re + alpha * phaseSign * hMic.re,
+            im: (1 - alpha) * hPiezo.im + alpha * phaseSign * hMic.im
+        };
+
+        let hNotch = { re: 1, im: 0 };
+        if (!st.eqBypass && st.notch && st.notch.enabled) {
+            hNotch = evalBiquadComplex('peaking', st.notch.freqHz, st.notch.q, st.notch.depthDb, f, fs);
+        }
+
+        let hEq = { re: 1, im: 0 };
+        if (!st.eqBypass && Array.isArray(st.bands)) {
+            st.bands.forEach((b) => {
+                if (b.enabled !== false) {
+                    hEq = cMul(hEq, evalBiquadComplex(b.type, b.freq, b.q, b.gain, f, fs));
+                }
+            });
+        }
+
+        const hTotal = cMul(hPickup, cMul(hNotch, hEq));
+        const magToDb = (h) => 20 * Math.log10(Math.max(1e-4, Math.hypot(h.re, h.im)));
+
+        return {
+            pickupDb: magToDb(hPickup),
+            notchDb: magToDb(hNotch),
+            eqDb: magToDb(hEq),
+            totalDb: magToDb(hTotal)
+        };
+    }
+
+    function computeStageFeedbackMetrics(stageState, inst) {
+        const st = stageState || state.stageEq;
+        const res = getInstrumentStageResonance(inst);
+        const rF1 = computeStageResponseAtFreq(res.f1, st, inst);
+        const rF2 = computeStageResponseAtFreq(res.f2, st, inst);
+
+        const micRatio = Math.max(0, Math.min(1, (st.blendMicPct || 0) / 100));
+        const monRatio = Math.max(0, Math.min(1, (st.monitorGainPct || 0) / 100));
+        const micSusceptibility = 0.30 + 0.70 * micRatio;
+
+        const riskF1 = (monRatio * 96 * micSusceptibility) + (rF1.totalDb * 3.2);
+        const riskF2 = (monRatio * 74 * micSusceptibility) + (rF2.totalDb * 2.5);
+        const riskPct = Math.round(Math.max(4, Math.min(99, Math.max(riskF1, riskF2))));
+        const criticalFreqHz = riskF1 >= riskF2 ? res.f1 : res.f2;
+
+        let riskLevel = 'ZONA SEGURA';
+        let riskTone = 'emerald';
+        let recommendation = 'Margem confortável de ganho antes da microfonia. Excelente estabilidade para retorno de palco.';
+        if (riskPct >= 70) {
+            riskLevel = 'RISCO CRÍTICO DE MICROFONIA';
+            riskTone = 'rose';
+            recommendation = `Realimentação iminente em torno de ${criticalFreqHz} Hz! Acione "Auto-Notch", reduza o Condensador no Blend ou teste Fase 180°.`;
+        } else if (riskPct >= 42) {
+            riskLevel = 'ATENÇÃO (LIMIAR DE RESSONÂNCIA)';
+            riskTone = 'amber';
+            recommendation = `Energia elevada em ${criticalFreqHz} Hz. Mantenha o Filtro Notch sintonizado ou recue o retorno de palco.`;
+        }
+
+        return {
+            f1: res.f1,
+            f2: res.f2,
+            bodyLabel: res.bodyLabel,
+            netGainAtF1Db: rF1.totalDb,
+            netGainAtF2Db: rF2.totalDb,
+            notchAttenAtF1Db: rF1.notchDb,
+            criticalFreqHz,
+            riskPct,
+            riskLevel,
+            riskTone,
+            recommendation
+        };
+    }
+
+    function ensureStageAudioPipeline() {
+        const ctx = ensureAudioContext();
+        if (!ctx) return null;
+        if (stageAudioPipeline && stageAudioPipeline.ctx === ctx) {
+            updateStageAudioLiveParams();
+            return stageAudioPipeline;
+        }
+
+        const inputNode = ctx.createGain();
+        inputNode.gain.value = 1.0;
+
+        // Ramo Piezo
+        const piezoHp = ctx.createBiquadFilter();
+        piezoHp.type = 'highpass';
+        piezoHp.frequency.value = 75;
+        piezoHp.Q.value = 0.707;
+
+        const piezoPeak = ctx.createBiquadFilter();
+        piezoPeak.type = 'peaking';
+        piezoPeak.frequency.value = 3300;
+        piezoPeak.Q.value = 2.4;
+        piezoPeak.gain.value = 4.5;
+
+        const piezoHs = ctx.createBiquadFilter();
+        piezoHs.type = 'highshelf';
+        piezoHs.frequency.value = 7500;
+        piezoHs.gain.value = -2.5;
+
+        const piezoGain = ctx.createGain();
+
+        // Ramo Condensador de Boca
+        const micDelay = ctx.createDelay(0.02);
+        micDelay.delayTime.value = 0.00042;
+
+        const micPeak = ctx.createBiquadFilter();
+        micPeak.type = 'peaking';
+        micPeak.frequency.value = 112;
+        micPeak.Q.value = 2.8;
+        micPeak.gain.value = 4.2;
+
+        const micHs = ctx.createBiquadFilter();
+        micHs.type = 'highshelf';
+        micHs.frequency.value = 6800;
+        micHs.gain.value = 3.0;
+
+        const micGain = ctx.createGain();
+
+        const blendSum = ctx.createGain();
+        blendSum.gain.value = 1.0;
+
+        const notchFilter = ctx.createBiquadFilter();
+        notchFilter.type = 'peaking';
+
+        const bandFilters = STAGE_EQ_BAND_LIMITS.map((spec) => {
+            const f = ctx.createBiquadFilter();
+            f.type = spec.type;
+            return f;
+        });
+
+        // Proteção de integridade de áudio (Brickwall Limiter + Master Trim)
+        const limiter = ctx.createDynamicsCompressor();
+        limiter.threshold.value = -6.0;
+        limiter.knee.value = 2.0;
+        limiter.ratio.value = 20.0;
+        limiter.attack.value = 0.002;
+        limiter.release.value = 0.08;
+
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = 0.72;
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.value = 0.72;
+
+        // Conexões Piezo
+        inputNode.connect(piezoHp);
+        piezoHp.connect(piezoPeak);
+        piezoPeak.connect(piezoHs);
+        piezoHs.connect(piezoGain);
+        piezoGain.connect(blendSum);
+
+        // Conexões Condensador
+        inputNode.connect(micDelay);
+        micDelay.connect(micPeak);
+        micPeak.connect(micHs);
+        micHs.connect(micGain);
+        micGain.connect(blendSum);
+
+        // Cadeia Série: Blend -> Notch -> 5 Bandas -> Limiter -> Analyser -> Master -> Destination
+        blendSum.connect(notchFilter);
+        let prev = notchFilter;
+        bandFilters.forEach((bf) => {
+            prev.connect(bf);
+            prev = bf;
+        });
+        prev.connect(limiter);
+        limiter.connect(analyser);
+        analyser.connect(masterGain);
+        masterGain.connect(ctx.destination);
+
+        stageFreqData = new Float32Array(analyser.frequencyBinCount);
+
+        stageAudioPipeline = {
+            ctx,
+            inputNode,
+            piezoGain,
+            micPeak,
+            micGain,
+            blendSum,
+            notchFilter,
+            bandFilters,
+            limiter,
+            analyser,
+            masterGain,
+            feedbackOsc: null,
+            feedbackGain: null
+        };
+
+        updateStageAudioLiveParams();
+        return stageAudioPipeline;
+    }
+
+    function updateStageAudioLiveParams() {
+        if (!stageAudioPipeline || !stageAudioPipeline.ctx) return;
+        const p = stageAudioPipeline;
+        const ctx = p.ctx;
+        const now = ctx.currentTime;
+        const st = state.stageEq;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const res = getInstrumentStageResonance(inst);
+
+        const alpha = Math.max(0, Math.min(1, (st.blendMicPct || 0) / 100));
+        const phaseSign = st.phaseInverted ? -1 : 1;
+
+        p.micPeak.frequency.setTargetAtTime(res.f1, now, 0.02);
+        p.piezoGain.gain.setTargetAtTime(1 - alpha, now, 0.015);
+        p.micGain.gain.setTargetAtTime(alpha * phaseSign, now, 0.015);
+
+        const notchActive = !st.eqBypass && st.notch && st.notch.enabled;
+        p.notchFilter.frequency.setTargetAtTime(Math.max(40, Math.min(400, st.notch.freqHz || 112)), now, 0.015);
+        p.notchFilter.Q.setTargetAtTime(Math.max(1, Math.min(30, st.notch.q || 12)), now, 0.015);
+        p.notchFilter.gain.setTargetAtTime(notchActive ? (st.notch.depthDb || -16) : 0, now, 0.015);
+
+        p.bandFilters.forEach((bf, idx) => {
+            const b = st.bands[idx];
+            if (!b) return;
+            bf.type = b.type;
+            bf.frequency.setTargetAtTime(Math.max(25, Math.min(18000, b.freq)), now, 0.015);
+            bf.Q.setTargetAtTime(Math.max(0.3, Math.min(12, b.q || 1.2)), now, 0.015);
+            bf.gain.setTargetAtTime((!st.eqBypass && b.enabled !== false) ? (b.gain || 0) : 0, now, 0.015);
+        });
+
+        p.limiter.ratio.setTargetAtTime(st.limiterEnabled ? 20.0 : 1.0, now, 0.02);
+        p.limiter.threshold.setTargetAtTime(st.limiterEnabled ? -6.0 : 0.0, now, 0.02);
+
+        const isLiveMicMuted = st.isPlaying && st.audioSourceMode === 'mic' && !st.monitorMicLive;
+        p.masterGain.gain.setTargetAtTime(isLiveMicMuted ? 0.0 : 0.72, now, 0.02);
+
+        // Simulação segura e limitada do limiar de microfonia (passa pelo próprio Notch/EQ!)
+        if (p.feedbackGain && p.feedbackOsc) {
+            const metrics = computeStageFeedbackMetrics(st, inst);
+            p.feedbackOsc.frequency.setTargetAtTime(metrics.criticalFreqHz, now, 0.02);
+            const rawAmp = (st.isPlaying && st.feedbackSimAudible && metrics.riskPct >= 45)
+                ? Math.min(0.065, ((metrics.riskPct - 45) / 55) * 0.065)
+                : 0.0;
+            p.feedbackGain.gain.setTargetAtTime(rawAmp, now, 0.03);
+        }
+    }
+
+    function stopStageAudio() {
+        if (stageLoopTimer) {
+            clearInterval(stageLoopTimer);
+            stageLoopTimer = null;
+        }
+        stageActiveTimers.forEach((t) => clearTimeout(t));
+        stageActiveTimers = [];
+        if (stageRafId) {
+            cancelAnimationFrame(stageRafId);
+            stageRafId = null;
+        }
+        if (stageAudioPipeline && stageAudioPipeline.feedbackOsc) {
+            try { stageAudioPipeline.feedbackOsc.stop(); stageAudioPipeline.feedbackOsc.disconnect(); } catch (_) {}
+            stageAudioPipeline.feedbackOsc = null;
+        }
+        if (stageAudioPipeline && stageAudioPipeline.feedbackGain) {
+            try { stageAudioPipeline.feedbackGain.disconnect(); } catch (_) {}
+            stageAudioPipeline.feedbackGain = null;
+        }
+        if (stageMicSource) {
+            try { stageMicSource.disconnect(); } catch (_) {}
+            stageMicSource = null;
+        }
+        if (stageStream) {
+            try { stageStream.getTracks().forEach((t) => t.stop()); } catch (_) {}
+            stageStream = null;
+        }
+        if (state.stageEq) {
+            state.stageEq.isPlaying = false;
+        }
+        updateStagePlaybackDOM();
+        drawStageEqCanvas();
+    }
+
+    function playStagePluckedCourse(courseIdx, fret, delaySec = 0) {
+        if (fret < 0) return;
+        const pipeline = ensureStageAudioPipeline();
+        if (!pipeline) return;
+        const ctx = pipeline.ctx;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const course = inst.courses[courseIdx];
+        if (!course) return;
+
+        const pluckIntoStage = (midi, offset, dur, detune, gainVal) => {
+            const now = ctx.currentTime + Math.max(0, offset);
+            const freq = midiToFreq(midi);
+            const noteGain = ctx.createGain();
+            const bodyFilter = ctx.createBiquadFilter();
+            bodyFilter.type = 'lowpass';
+            bodyFilter.frequency.setValueAtTime(Math.min(7200, freq * 8.0), now);
+            bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(520, freq * 2.1), now + dur * 0.78);
+            bodyFilter.Q.setValueAtTime(1.3, now);
+
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            osc1.type = 'triangle';
+            osc2.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(freq, now);
+            osc2.frequency.setValueAtTime(freq, now);
+            osc1.detune.setValueAtTime(detune, now);
+            osc2.detune.setValueAtTime(detune + 1.4, now);
+
+            const g1 = ctx.createGain();
+            const g2 = ctx.createGain();
+            g1.gain.value = 0.68;
+            g2.gain.value = 0.32;
+
+            noteGain.gain.setValueAtTime(0.0001, now);
+            noteGain.gain.linearRampToValueAtTime(gainVal, now + 0.005);
+            noteGain.gain.exponentialRampToValueAtTime(gainVal * 0.44, now + 0.16);
+            noteGain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+            osc1.connect(g1);
+            osc2.connect(g2);
+            g1.connect(bodyFilter);
+            g2.connect(bodyFilter);
+            bodyFilter.connect(noteGain);
+            noteGain.connect(pipeline.inputNode);
+
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + dur + 0.04);
+            osc2.stop(now + dur + 0.04);
+        };
+
+        if (inst.isPaired && course.midi.length === 2) {
+            pluckIntoStage(course.midi[0] + fret, delaySec, 1.6, -1.5, 0.19);
+            pluckIntoStage(course.midi[1] + fret, delaySec + 0.01, 1.6, 1.5, 0.17);
+        } else {
+            pluckIntoStage(course.midi[0] + fret, delaySec, 1.7, 0, 0.25);
+        }
+    }
+
+    function ensureStageFeedbackOsc() {
+        const p = stageAudioPipeline;
+        if (!p || !p.ctx || p.feedbackOsc) return;
+        const osc = p.ctx.createOscillator();
+        const fg = p.ctx.createGain();
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const metrics = computeStageFeedbackMetrics(state.stageEq, inst);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(metrics.criticalFreqHz, p.ctx.currentTime);
+        fg.gain.setValueAtTime(0.0, p.ctx.currentTime);
+        osc.connect(fg);
+        fg.connect(p.inputNode);
+        osc.start();
+        p.feedbackOsc = osc;
+        p.feedbackGain = fg;
+        updateStageAudioLiveParams();
+    }
+
+    function playStageDemoPhrase() {
+        if (!state.stageEq.isPlaying) return;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const mode = state.stageEq.audioSourceMode;
+        const nCourses = inst.courses.length;
+
+        if (mode === 'arpeggio') {
+            for (let i = nCourses - 1; i >= 0; i--) {
+                const idx = (nCourses - 1) - i;
+                playStagePluckedCourse(i, 0, idx * 0.16);
+            }
+            playStagePluckedCourse(nCourses - 1, 2, nCourses * 0.16 + 0.15);
+            playStagePluckedCourse(1, 2, nCourses * 0.16 + 0.34);
+            playStagePluckedCourse(0, 0, nCourses * 0.16 + 0.54);
+        } else if (mode === 'ponteio') {
+            const pairs = [
+                { c1: 0, f1: 0, c2: 2, f2: 0, t: 0.00 },
+                { c1: 0, f1: 2, c2: 2, f2: 1, t: 0.22 },
+                { c1: 0, f1: 4, c2: 2, f2: 3, t: 0.44 },
+                { c1: 0, f1: 5, c2: 2, f2: 5, t: 0.66 },
+                { c1: 0, f1: 7, c2: 2, f2: 6, t: 0.88 },
+                { c1: 0, f1: 5, c2: 2, f2: 5, t: 1.10 },
+                { c1: 0, f1: 4, c2: 2, f2: 3, t: 1.32 },
+                { c1: 0, f1: 0, c2: 2, f2: 0, t: 1.54 }
+            ];
+            pairs.forEach((step) => {
+                playStagePluckedCourse(step.c1, step.f1, step.t);
+                if (step.c2 < nCourses) playStagePluckedCourse(step.c2, step.f2, step.t + 0.008);
+            });
+        } else if (mode === 'rasqueado') {
+            const strumPattern = [
+                { t: 0.0, frets: [0, 0, 0, 0, 0, 0] },
+                { t: 0.32, frets: [0, 0, 0, 0, 0, 0] },
+                { t: 0.54, frets: [2, 2, 1, 2, 0, 0] },
+                { t: 0.92, frets: [0, 0, 1, 2, 2, 0] },
+                { t: 1.32, frets: [0, 0, 0, 0, 0, 0] }
+            ];
+            strumPattern.forEach((st) => {
+                for (let c = nCourses - 1; c >= 0; c--) {
+                    const offset = ((nCourses - 1) - c) * 0.014;
+                    playStagePluckedCourse(c, st.frets[c] || 0, st.t + offset);
+                }
+            });
+        }
+    }
+
+    function startStageDemoLoop() {
+        stopAllAudio();
+        const p = ensureStageAudioPipeline();
+        if (!p) return;
+
+        state.stageEq.isPlaying = true;
+        ensureStageFeedbackOsc();
+        stageLiveStatus = `Cadeia DSP ao vivo ativa (${STAGE_PICKUP_PRESETS[state.stageEq.presetId] ? STAGE_PICKUP_PRESETS[state.stageEq.presetId].name : 'Custom'}). Ajuste o EQ ou arraste os nós no gráfico!`;
+        updateStagePlaybackDOM();
+
+        playStageDemoPhrase();
+        const periodMs = state.stageEq.audioSourceMode === 'ponteio' ? 1950 : 1750;
+        if (state.stageEq.loopDemo) {
+            stageLoopTimer = setInterval(() => {
+                if (state.stageEq.isPlaying) playStageDemoPhrase();
+            }, periodMs);
+        } else {
+            const tStop = setTimeout(() => {
+                if (state.stageEq.isPlaying) stopStageAudio();
+            }, periodMs);
+            stageActiveTimers.push(tStop);
+        }
+        runStageCanvasRaf();
+    }
+
+    async function startStageMicInput() {
+        stopAllAudio();
+        const p = ensureStageAudioPipeline();
+        if (!p) return;
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            stageLiveStatus = 'Microfone/Linha indisponível neste navegador. Use Arpejo, Ponteio ou Rasqueado DSP!';
+            updateStagePlaybackDOM();
+            return;
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 }
+            });
+            stageStream = stream;
+            stageMicSource = p.ctx.createMediaStreamSource(stream);
+            stageMicSource.connect(p.inputNode);
+            state.stageEq.isPlaying = true;
+            updateStageAudioLiveParams();
+            stageLiveStatus = 'Entrada ao vivo conectada na cadeia Piezo/Mic + Notch + EQ 5 Bandas (Analisador FFT em tempo real).';
+            updateStagePlaybackDOM();
+            runStageCanvasRaf();
+        } catch (err) {
+            stopStageAudio();
+            stageLiveStatus = `Permissão de entrada de áudio negada (${err.name || 'Erro'}). Teste os geradores internos da viola!`;
+            updateStagePlaybackDOM();
+        }
+    }
+
+    function runStageCanvasRaf() {
+        if (!state.stageEq.isPlaying) return;
+        drawStageEqCanvas();
+        stageRafId = requestAnimationFrame(runStageCanvasRaf);
+    }
+
+    function autoKillStageFeedback() {
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const metrics = computeStageFeedbackMetrics(state.stageEq, inst);
+        state.stageEq.eqBypass = false;
+        state.stageEq.notch.enabled = true;
+        state.stageEq.notch.freqHz = metrics.criticalFreqHz;
+        state.stageEq.notch.q = 14.0;
+        state.stageEq.notch.depthDb = -20.0;
+        stageLiveStatus = `Auto-Notch sintonizado em ${metrics.criticalFreqHz} Hz (−20 dB, Q=14.0) para neutralizar ressonância de caixa!`;
+        updateStageAudioLiveParams();
+        saveViolaState();
+        renderStageEqSection();
+        if (state.displayMode === 'STAGE_EQ') renderFretboardSVG();
+    }
+
+    function stageFreqToX(freq, padL, plotW) {
+        const minLog = Math.log10(20);
+        const maxLog = Math.log10(20000);
+        const norm = (Math.log10(Math.max(20, Math.min(20000, freq))) - minLog) / (maxLog - minLog);
+        return padL + norm * plotW;
+    }
+
+    function stageXToFreq(x, padL, plotW) {
+        const norm = Math.max(0, Math.min(1, (x - padL) / plotW));
+        return Math.round(20 * Math.pow(1000, norm));
+    }
+
+    function stageDbToY(db, padT, plotH) {
+        const clamped = Math.max(-20, Math.min(18, db));
+        return padT + ((18 - clamped) / 38) * plotH;
+    }
+
+    function stageYToDb(y, padT, plotH) {
+        const norm = Math.max(0, Math.min(1, (y - padT) / plotH));
+        return Math.round((18 - norm * 38) * 10) / 10;
+    }
+
+    function drawStageEqCanvas() {
+        const canvas = document.getElementById('viola-stage-eq-canvas');
+        if (!canvas) return;
+        const ctx2d = canvas.getContext('2d');
+        if (!ctx2d) return;
+
+        const W = canvas.width;
+        const H = canvas.height;
+        const padL = 44;
+        const padR = 16;
+        const padT = 18;
+        const padB = 28;
+        const plotW = W - padL - padR;
+        const plotH = H - padT - padB;
+
+        ctx2d.clearRect(0, 0, W, H);
+        ctx2d.fillStyle = '#060a12';
+        ctx2d.fillRect(0, 0, W, H);
+
+        const st = state.stageEq;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const metrics = computeStageFeedbackMetrics(st, inst);
+
+        // Zona de Risco de Microfonia (Helmholtz f1)
+        const f1X = stageFreqToX(metrics.f1, padL, plotW);
+        const dangerAlpha = 0.06 + (metrics.riskPct / 100) * 0.20;
+        const dangerColor = metrics.riskTone === 'rose'
+            ? `rgba(244, 63, 94, ${dangerAlpha})`
+            : metrics.riskTone === 'amber'
+                ? `rgba(245, 158, 11, ${dangerAlpha})`
+                : `rgba(16, 185, 129, 0.06)`;
+        ctx2d.fillStyle = dangerColor;
+        ctx2d.fillRect(f1X - 18, padT, 36, plotH);
+
+        // Grade Horizontal dB
+        [-18, -12, -6, 0, 6, 12].forEach((db) => {
+            const y = stageDbToY(db, padT, plotH);
+            ctx2d.strokeStyle = db === 0 ? '#334155' : '#111c30';
+            ctx2d.lineWidth = db === 0 ? 1.4 : 1;
+            ctx2d.beginPath();
+            ctx2d.moveTo(padL, y);
+            ctx2d.lineTo(W - padR, y);
+            ctx2d.stroke();
+
+            ctx2d.fillStyle = db === 0 ? '#94a3b8' : '#64748b';
+            ctx2d.font = '10px JetBrains Mono, monospace';
+            ctx2d.textAlign = 'right';
+            ctx2d.fillText(`${db > 0 ? '+' : ''}${db}dB`, padL - 6, y + 3);
+        });
+
+        // Grade Vertical Logarítmica (Hz)
+        [30, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 16000].forEach((hz) => {
+            const x = stageFreqToX(hz, padL, plotW);
+            ctx2d.strokeStyle = '#111c30';
+            ctx2d.lineWidth = 1;
+            ctx2d.beginPath();
+            ctx2d.moveTo(x, padT);
+            ctx2d.lineTo(x, H - padB);
+            ctx2d.stroke();
+
+            const lbl = hz >= 1000 ? `${hz / 1000}k` : `${hz}`;
+            ctx2d.fillStyle = '#64748b';
+            ctx2d.font = '10px JetBrains Mono, monospace';
+            ctx2d.textAlign = 'center';
+            ctx2d.fillText(lbl, x, H - 10);
+        });
+
+        // Espectro FFT ao vivo (se áudio em execução)
+        if (st.isPlaying && stageAudioPipeline && stageAudioPipeline.analyser && stageFreqData) {
+            const analyser = stageAudioPipeline.analyser;
+            analyser.getFloatFrequencyData(stageFreqData);
+            const sr = stageAudioPipeline.ctx.sampleRate;
+            const binHz = sr / analyser.fftSize;
+
+            ctx2d.beginPath();
+            ctx2d.moveTo(padL, H - padB);
+            for (let px = 0; px <= plotW; px += 4) {
+                const freq = stageXToFreq(padL + px, padL, plotW);
+                const bin = Math.max(1, Math.min(stageFreqData.length - 1, Math.round(freq / binHz)));
+                const dbVal = Math.max(-100, Math.min(-10, stageFreqData[bin]));
+                const normH = ((dbVal + 100) / 90) * (plotH * 0.82);
+                ctx2d.lineTo(padL + px, (H - padB) - normH);
+            }
+            ctx2d.lineTo(padL + plotW, H - padB);
+            ctx2d.closePath();
+            ctx2d.fillStyle = 'rgba(34, 211, 238, 0.14)';
+            ctx2d.fill();
+        }
+
+        // Curvas Pickup + Total
+        const steps = 180;
+        const minLog = Math.log10(20);
+        const maxLog = Math.log10(20000);
+
+        // Curva Tracejada Âmbar: Resposta Bruta da Captação (Piezo/Mic Blend + Fase)
+        ctx2d.beginPath();
+        for (let i = 0; i <= steps; i++) {
+            const f = Math.pow(10, minLog + (i / steps) * (maxLog - minLog));
+            const r = computeStageResponseAtFreq(f, st, inst);
+            const x = stageFreqToX(f, padL, plotW);
+            const y = stageDbToY(r.pickupDb, padT, plotH);
+            if (i === 0) ctx2d.moveTo(x, y);
+            else ctx2d.lineTo(x, y);
+        }
+        ctx2d.setLineDash([5, 4]);
+        ctx2d.strokeStyle = 'rgba(245, 158, 11, 0.72)';
+        ctx2d.lineWidth = 1.6;
+        ctx2d.stroke();
+        ctx2d.setLineDash([]);
+
+        // Curva Sólida Resultante (Captação + Notch + EQ 5 Bandas)
+        const totalPoints = [];
+        ctx2d.beginPath();
+        for (let i = 0; i <= steps; i++) {
+            const f = Math.pow(10, minLog + (i / steps) * (maxLog - minLog));
+            const r = computeStageResponseAtFreq(f, st, inst);
+            const x = stageFreqToX(f, padL, plotW);
+            const y = stageDbToY(r.totalDb, padT, plotH);
+            totalPoints.push({ x, y });
+            if (i === 0) ctx2d.moveTo(x, y);
+            else ctx2d.lineTo(x, y);
+        }
+        ctx2d.strokeStyle = st.eqBypass ? '#94a3b8' : '#22d3ee';
+        ctx2d.lineWidth = 2.6;
+        ctx2d.stroke();
+
+        // Preenchimento sutil até a linha 0 dB
+        const zeroY = stageDbToY(0, padT, plotH);
+        ctx2d.beginPath();
+        ctx2d.moveTo(totalPoints[0].x, zeroY);
+        totalPoints.forEach((pt) => ctx2d.lineTo(pt.x, pt.y));
+        ctx2d.lineTo(totalPoints[totalPoints.length - 1].x, zeroY);
+        ctx2d.closePath();
+        ctx2d.fillStyle = st.eqBypass ? 'rgba(148, 163, 184, 0.08)' : 'rgba(16, 185, 129, 0.14)';
+        ctx2d.fill();
+
+        // Rótulo da Ressonância f1
+        ctx2d.fillStyle = metrics.riskTone === 'rose' ? '#fda4af' : '#fbbf24';
+        ctx2d.font = 'bold 9px JetBrains Mono, monospace';
+        ctx2d.textAlign = 'center';
+        ctx2d.fillText(`f₁ ${metrics.f1}Hz`, f1X, padT + 11);
+
+        // Nós Interativos das 5 Bandas Paramétricas
+        const bandColors = ['#10b981', '#06b6d4', '#38bdf8', '#f59e0b', '#a855f7'];
+        st.bands.forEach((b, idx) => {
+            const bx = stageFreqToX(b.freq, padL, plotW);
+            const by = stageDbToY(b.gain, padT, plotH);
+            const isSel = st.selectedBandIdx === idx;
+            const activeCol = (st.eqBypass || b.enabled === false) ? '#475569' : bandColors[idx % bandColors.length];
+
+            ctx2d.beginPath();
+            ctx2d.arc(bx, by, isSel ? 9.5 : 7.5, 0, Math.PI * 2);
+            ctx2d.fillStyle = activeCol;
+            ctx2d.fill();
+            ctx2d.lineWidth = isSel ? 2.5 : 1.5;
+            ctx2d.strokeStyle = isSel ? '#ffffff' : '#090d16';
+            ctx2d.stroke();
+
+            ctx2d.fillStyle = '#090d16';
+            ctx2d.font = 'bold 9.5px JetBrains Mono, monospace';
+            ctx2d.textAlign = 'center';
+            ctx2d.fillText(`${idx + 1}`, bx, by + 3.2);
+        });
+
+        // Nó Interativo do Filtro Notch Anti-Feedback
+        if (st.notch) {
+            const nx = stageFreqToX(st.notch.freqHz, padL, plotW);
+            const ny = stageDbToY(Math.max(-20, st.notch.depthDb), padT, plotH);
+            ctx2d.beginPath();
+            ctx2d.arc(nx, ny, 8, 0, Math.PI * 2);
+            ctx2d.fillStyle = (!st.eqBypass && st.notch.enabled) ? '#f43f5e' : '#475569';
+            ctx2d.fill();
+            ctx2d.lineWidth = 2;
+            ctx2d.strokeStyle = '#ffffff';
+            ctx2d.stroke();
+
+            ctx2d.fillStyle = '#ffffff';
+            ctx2d.font = 'bold 9px JetBrains Mono, monospace';
+            ctx2d.textAlign = 'center';
+            ctx2d.fillText('N', nx, ny + 3);
+        }
+    }
+
+    function renderStagePickupSchematicSVG() {
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const st = state.stageEq;
+        const piezoPct = 100 - (st.blendMicPct || 0);
+        const micPct = st.blendMicPct || 0;
+        const left = state.isLeftHanded;
+
+        // Coordenadas espelhadas nativamente entre Canhoto (corpo à esquerda, braço à direita) e Destro (braço à esquerda, corpo à direita)
+        const bodyCx = left ? 165 : 435;
+        const holeCx = left ? 225 : 375;
+        const bridgeX = left ? 105 : 495;
+        const neckX = left ? 270 : 40;
+        const neckW = 290;
+        const nutX = left ? 560 : 40;
+
+        return `
+            <svg viewBox="0 0 600 130" class="w-full h-auto rounded-xl bg-[#060a12] border border-slate-800 select-none" role="img" aria-label="Diagrama esquemático de captação acústica espelhado">
+                <!-- Corpo da Viola/Violão -->
+                <ellipse cx="${bodyCx}" cy="66" rx="108" ry="50" fill="#131c2e" stroke="#334155" stroke-width="2"/>
+                <!-- Braço -->
+                <rect x="${neckX}" y="53" width="${neckW}" height="26" rx="3" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+                <line x1="${nutX}" y1="51" x2="${nutX}" y2="81" stroke="#e2e8f0" stroke-width="3.5" stroke-linecap="round"/>
+
+                <!-- Cordas -->
+                ${[58, 62, 66, 70, 74].map((sy) => `<line x1="${Math.min(bridgeX, nutX)}" y1="${sy}" x2="${Math.max(bridgeX, nutX)}" y2="${sy}" stroke="#64748b" stroke-width="0.9" opacity="0.8"/>`).join('')}
+
+                <!-- Boca + Microfone Condensador Interno -->
+                <circle cx="${holeCx}" cy="66" r="22" fill="#05080f" stroke="#475569" stroke-width="2"/>
+                <circle cx="${holeCx}" cy="66" r="14" fill="none" stroke="#38bdf8" stroke-width="${1 + (micPct / 45)}" opacity="${0.25 + (micPct / 130)}"/>
+                <circle cx="${holeCx}" cy="66" r="5" fill="#06b6d4"/>
+                <text x="${holeCx}" y="18" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="700">CONDENSADOR (${micPct}%)</text>
+
+                <!-- Cavalete + Piezo de Rastilho -->
+                <rect x="${bridgeX - 5}" y="46" width="10" height="40" rx="2" fill="#1e293b" stroke="#f59e0b" stroke-width="${1 + (piezoPct / 45)}"/>
+                <line x1="${bridgeX}" y1="49" x2="${bridgeX}" y2="83" stroke="#fbbf24" stroke-width="2.5" opacity="${0.35 + (piezoPct / 150)}"/>
+                <text x="${bridgeX}" y="18" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="700">PIEZO (${piezoPct}%)</text>
+
+                <!-- Badges de Fase, Notch e Orientação -->
+                <text x="300" y="118" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="9">
+                    ${left ? 'CANHOTO: Corpo à Esquerda • Braço à Direita' : 'DESTRO: Braço à Esquerda • Corpo à Direita'} | Fase: ${st.phaseInverted ? '180° INVERTIDA' : '0° NORMAL'} | ${inst.shortName}
+                </text>
+            </svg>
+        `;
+    }
+
+    function updateStagePlaybackDOM() {
+        const btn = document.getElementById('btn-stage-play-toggle');
+        if (btn) {
+            const playing = state.stageEq.isPlaying;
+            btn.className = `min-h-[44px] px-4 py-2 rounded-xl ${playing ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950'} font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg`;
+            btn.innerHTML = `<i data-lucide="${playing ? 'square' : 'play'}" class="w-4 h-4"></i><span>${playing ? 'Parar Áudio de Palco' : 'Ouvir Cadeia DSP Ao Vivo'}</span>`;
+        }
+        const statusEl = document.getElementById('viola-stage-status-text');
+        if (statusEl) statusEl.textContent = stageLiveStatus;
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    function updateStageFeedbackCardDOM() {
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const metrics = computeStageFeedbackMetrics(state.stageEq, inst);
+        const pctEl = document.getElementById('viola-stage-risk-pct');
+        const barEl = document.getElementById('viola-stage-risk-bar');
+        const lvlEl = document.getElementById('viola-stage-risk-level');
+        const recEl = document.getElementById('viola-stage-risk-rec');
+        const critEl = document.getElementById('viola-stage-critical-hz');
+
+        if (pctEl) pctEl.textContent = `${metrics.riskPct}%`;
+        if (barEl) {
+            barEl.style.width = `${metrics.riskPct}%`;
+            barEl.className = `h-full rounded-full transition-all duration-150 ${metrics.riskTone === 'rose' ? 'bg-rose-500' : metrics.riskTone === 'amber' ? 'bg-amber-400' : 'bg-emerald-500'}`;
+        }
+        if (lvlEl) {
+            lvlEl.textContent = metrics.riskLevel;
+            lvlEl.className = `text-[11px] font-mono font-bold ${metrics.riskTone === 'rose' ? 'text-rose-400' : metrics.riskTone === 'amber' ? 'text-amber-300' : 'text-emerald-400'}`;
+        }
+        if (recEl) recEl.textContent = metrics.recommendation;
+        if (critEl) critEl.textContent = `${metrics.criticalFreqHz} Hz (Net ${metrics.netGainAtF1Db >= 0 ? '+' : ''}${metrics.netGainAtF1Db.toFixed(1)} dB)`;
+    }
+
+    function renderStageEqSection() {
+        const container = document.getElementById('viola-stage-eq-container');
+        if (!container) return;
+
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const st = state.stageEq;
+        const metrics = computeStageFeedbackMetrics(st, inst);
+        const activePreset = STAGE_PICKUP_PRESETS[st.presetId];
+        const selBand = st.bands[st.selectedBandIdx] || st.bands[0];
+        const selLimits = STAGE_EQ_BAND_LIMITS[st.selectedBandIdx] || STAGE_EQ_BAND_LIMITS[0];
+        const piezoPct = 100 - (st.blendMicPct || 0);
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-emerald-500/30 rounded-xl p-4 sm:p-5 space-y-5 shadow-2xl">
+                <!-- Cabeçalho Fase 20 -->
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <i data-lucide="sliders" class="w-5 h-5 text-emerald-400"></i>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Captação Acústica, Microfonia &amp; EQ Paramétrico de Palco</h3>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Fase 20</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">5 Bandas + Notch + Limiter</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Modelagem física Piezo de Rastilho × Condensador de Boca, inversão de fase 0°/180°, filtro Notch anti-feedback e equalizador paramétrico interativo em Web Audio API.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-stage-play-toggle" class="min-h-[44px] px-4 py-2 rounded-xl ${st.isPlaying ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950'} font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg">
+                            <i data-lucide="${st.isPlaying ? 'square' : 'play'}" class="w-4 h-4"></i>
+                            <span>${st.isPlaying ? 'Parar Áudio de Palco' : 'Ouvir Cadeia DSP Ao Vivo'}</span>
+                        </button>
+                        <button type="button" id="btn-stage-ab-bypass" class="min-h-[40px] px-3.5 py-1.5 rounded-lg border text-xs font-mono font-bold transition ${st.eqBypass ? 'bg-amber-500 text-slate-950 border-amber-400' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'}">
+                            ${st.eqBypass ? 'A/B: BYPASS ATIVO' : 'A/B: EQ ATIVO'}
+                        </button>
+                        <button type="button" id="btn-stage-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="eye" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Ver no Braço SVG</span>
+                        </button>
+                        <button type="button" id="btn-stage-copy-rider" class="min-h-[40px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition">
+                            <i data-lucide="clipboard" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span>Copiar Rider de Mesa</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Presets de Palco e Estúdio -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Presets de Palco &amp; Estúdio (${inst.shortName}):</span>
+                        <span class="text-[11px] font-mono text-cyan-300">${activePreset ? activePreset.description : 'Ajuste personalizado pelo músico.'}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                        ${Object.values(STAGE_PICKUP_PRESETS).map((pr) => {
+                            const active = st.presetId === pr.id;
+                            return `
+                                <button type="button" data-stage-preset="${pr.id}" class="text-left p-2.5 rounded-xl border transition ${active ? 'bg-emerald-500/15 border-emerald-400 ring-1 ring-emerald-400/50' : 'bg-[#090d16] border-slate-800 hover:border-slate-700'}">
+                                    <span class="block text-[10px] font-mono uppercase ${active ? 'text-emerald-300' : 'text-slate-400'}">${pr.badge}</span>
+                                    <span class="block text-xs font-bold text-slate-100 mt-0.5 leading-tight">${pr.name}</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Grid Principal: Diagrama & Captação/Notch à Esquerda + Canvas EQ 2D à Direita -->
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                    <!-- Coluna Esquerda (5 cols): Captação, Fase, Notch & Monitor de Microfonia -->
+                    <div class="xl:col-span-5 space-y-3">
+                        <!-- Esquema Espelhado Canhoto/Destro -->
+                        ${renderStagePickupSchematicSVG()}
+
+                        <!-- Blend Piezo × Condensador + Fase 0°/180° -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                            <div class="flex items-center justify-between text-xs font-mono">
+                                <span class="text-amber-300 font-bold">Piezo ${piezoPct}%</span>
+                                <span class="text-slate-400 uppercase text-[10px]">Blend Duplo de Captação</span>
+                                <span class="text-cyan-300 font-bold">Condensador ${st.blendMicPct}%</span>
+                            </div>
+                            <input type="range" id="viola-stage-blend-slider" min="0" max="100" step="1" value="${st.blendMicPct}" class="w-full accent-cyan-400 cursor-pointer">
+
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <button type="button" id="btn-stage-phase-toggle" class="min-h-[38px] px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition ${st.phaseInverted ? 'bg-purple-600/25 border-purple-400 text-purple-200' : 'bg-[#0f172a] border-slate-700 text-slate-200 hover:border-slate-600'}">
+                                    Fase: ${st.phaseInverted ? '180° (Invertida)' : '0° (Normal)'}
+                                </button>
+                                <button type="button" id="btn-stage-limiter-toggle" class="min-h-[38px] px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition ${st.limiterEnabled ? 'bg-emerald-600/20 border-emerald-500/50 text-emerald-300' : 'bg-rose-900/20 border-rose-500/40 text-rose-300'}">
+                                    Limiter: ${st.limiterEnabled ? 'ATIVO (−6 dB)' : 'DESLIGADO'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Motor Anti-Microfonia & Filtro Notch (60-250 Hz) -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-[11px] font-mono uppercase font-bold text-slate-200">Risco de Microfonia de Palco</span>
+                                    <span id="viola-stage-critical-hz" class="block text-[10px] font-mono text-slate-400">${metrics.criticalFreqHz} Hz (Net ${metrics.netGainAtF1Db >= 0 ? '+' : ''}${metrics.netGainAtF1Db.toFixed(1)} dB)</span>
+                                </div>
+                                <span id="viola-stage-risk-pct" class="text-xl font-mono font-extrabold ${metrics.riskTone === 'rose' ? 'text-rose-400' : metrics.riskTone === 'amber' ? 'text-amber-300' : 'text-emerald-400'}">${metrics.riskPct}%</span>
+                            </div>
+
+                            <div class="w-full h-2.5 rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
+                                <div id="viola-stage-risk-bar" style="width: ${metrics.riskPct}%" class="h-full rounded-full transition-all duration-150 ${metrics.riskTone === 'rose' ? 'bg-rose-500' : metrics.riskTone === 'amber' ? 'bg-amber-400' : 'bg-emerald-500'}"></div>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2">
+                                <span id="viola-stage-risk-level" class="text-[11px] font-mono font-bold ${metrics.riskTone === 'rose' ? 'text-rose-400' : metrics.riskTone === 'amber' ? 'text-amber-300' : 'text-emerald-400'}">${metrics.riskLevel}</span>
+                                <button type="button" id="btn-stage-auto-notch" class="min-h-[34px] px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-mono font-bold flex items-center gap-1 transition shadow">
+                                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                                    <span>Auto-Notch (Kill Feedback)</span>
+                                </button>
+                            </div>
+                            <p id="viola-stage-risk-rec" class="text-[11px] text-slate-400 leading-snug">${metrics.recommendation}</p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+                                <div>
+                                    <div class="flex justify-between text-slate-400 mb-0.5">
+                                        <span>Ganho de Retorno:</span>
+                                        <span id="viola-stage-mon-lbl" class="text-amber-300 font-bold">${st.monitorGainPct}%</span>
+                                    </div>
+                                    <input type="range" id="viola-stage-mon-slider" min="0" max="100" step="1" value="${st.monitorGainPct}" class="w-full accent-amber-400 cursor-pointer">
+                                </div>
+                                <div class="flex items-center justify-between gap-2 bg-[#0f172a] border border-slate-800 rounded-lg px-2.5 py-1.5">
+                                    <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                                        <input type="checkbox" id="chk-stage-notch-enabled" ${st.notch.enabled ? 'checked' : ''} class="accent-rose-500">
+                                        <span>Notch (${st.notch.freqHz} Hz)</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1 text-[10px] text-rose-300 cursor-pointer" title="Injeta ressonância controlada e segura na cadeia para testar o efeito do Filtro Notch ao vivo">
+                                        <input type="checkbox" id="chk-stage-feedback-sim" ${st.feedbackSimAudible ? 'checked' : ''} class="accent-rose-400">
+                                        <span>Sim. Howl</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2 text-[11px] font-mono">
+                                <div>
+                                    <div class="flex justify-between text-slate-400"><span>Freq</span><span id="viola-stage-notch-freq-lbl" class="text-rose-300">${st.notch.freqHz}Hz</span></div>
+                                    <input type="range" id="viola-stage-notch-freq" min="60" max="250" step="1" value="${st.notch.freqHz}" class="w-full accent-rose-500 cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-slate-400"><span>Corte</span><span id="viola-stage-notch-depth-lbl" class="text-rose-300">${st.notch.depthDb.toFixed(0)}dB</span></div>
+                                    <input type="range" id="viola-stage-notch-depth" min="-24" max="0" step="0.5" value="${st.notch.depthDb}" class="w-full accent-rose-500 cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-slate-400"><span>Q</span><span id="viola-stage-notch-q-lbl" class="text-rose-300">${st.notch.q.toFixed(1)}</span></div>
+                                    <input type="range" id="viola-stage-notch-q" min="4" max="24" step="0.5" value="${st.notch.q}" class="w-full accent-rose-500 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita (7 cols): Analisador Canvas 2D + 5 Bandas Paramétricas + Gerador de Teste -->
+                    <div class="xl:col-span-7 space-y-3">
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+                                <span class="text-slate-200 font-bold uppercase tracking-wider">Resposta em Frequência &amp; Espectro FFT (Arraste os Nós 1–5 e N)</span>
+                                <div class="flex flex-wrap items-center gap-3 text-[10px]">
+                                    <span class="inline-flex items-center gap-1 text-amber-300"><span class="w-3 h-0.5 bg-amber-400 inline-block"></span>Captação Bruta</span>
+                                    <span class="inline-flex items-center gap-1 text-cyan-300"><span class="w-3 h-0.5 bg-cyan-400 inline-block"></span>Curva Final EQ+Notch</span>
+                                    <span class="inline-flex items-center gap-1 text-rose-300"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>Notch</span>
+                                </div>
+                            </div>
+
+                            <canvas id="viola-stage-eq-canvas" width="760" height="270" class="w-full h-[240px] sm:h-[270px] rounded-lg border border-slate-800 block cursor-grab active:cursor-grabbing touch-none"></canvas>
+
+                            <!-- Fonte de Áudio para Testar o EQ -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs font-mono">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="text-[10px] uppercase text-slate-400">Fonte Teste:</span>
+                                    ${[
+                                        { id: 'arpeggio', label: 'Arpejo Solto' },
+                                        { id: 'ponteio', label: 'Ponteio 6ªs' },
+                                        { id: 'rasqueado', label: 'Rasqueado' },
+                                        { id: 'mic', label: 'Mic / Linha' }
+                                    ].map((src) => `
+                                        <button type="button" data-stage-src="${src.id}" class="px-2.5 py-1 rounded-md border text-[11px] transition ${st.audioSourceMode === src.id ? 'bg-cyan-600 text-slate-950 border-cyan-400 font-bold' : 'bg-[#0f172a] text-slate-300 border-slate-700 hover:border-slate-600'}">${src.label}</button>
+                                    `).join('')}
+                                </div>
+                                <div class="flex items-center gap-3 text-[11px]">
+                                    <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                                        <input type="checkbox" id="chk-stage-loop" ${st.loopDemo ? 'checked' : ''} class="accent-cyan-400">
+                                        <span>Loop</span>
+                                    </label>
+                                    ${st.audioSourceMode === 'mic' ? `
+                                        <label class="inline-flex items-center gap-1.5 text-amber-300 cursor-pointer" title="Use fones de ouvido antes de monitorar o microfone nos alto-falantes">
+                                            <input type="checkbox" id="chk-stage-mic-mon" ${st.monitorMicLive ? 'checked' : ''} class="accent-amber-400">
+                                            <span>Monitorar Mic</span>
+                                        </label>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <p id="viola-stage-status-text" class="text-[11px] font-mono text-slate-400">${stageLiveStatus}</p>
+                        </div>
+
+                        <!-- Seleção Rápida das 5 Bandas Paramétricas -->
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                            ${st.bands.map((b, idx) => {
+                                const isSel = st.selectedBandIdx === idx;
+                                const colors = ['emerald', 'cyan', 'sky', 'amber', 'purple'];
+                                const c = colors[idx % colors.length];
+                                return `
+                                    <div data-stage-band-card="${idx}" class="cursor-pointer rounded-xl p-2.5 border transition ${isSel ? `bg-${c}-500/15 border-${c}-400 ring-1 ring-${c}-400/50` : 'bg-[#090d16] border-slate-800 hover:border-slate-700'}">
+                                        <div class="flex items-center justify-between gap-1">
+                                            <span class="text-[10px] font-mono font-bold text-slate-300">B${idx + 1}</span>
+                                            <input type="checkbox" data-stage-band-enable="${idx}" ${b.enabled !== false ? 'checked' : ''} class="accent-cyan-400 cursor-pointer" title="Ativar/Desativar Banda ${idx + 1}">
+                                        </div>
+                                        <span class="block text-[11px] font-semibold text-slate-100 truncate mt-0.5">${b.label}</span>
+                                        <div class="flex items-center justify-between text-[10px] font-mono mt-1">
+                                            <span class="text-slate-400">${b.freq >= 1000 ? (b.freq / 1000).toFixed(2) + 'k' : b.freq + 'Hz'}</span>
+                                            <span class="${b.gain > 0 ? 'text-emerald-300' : b.gain < 0 ? 'text-rose-300' : 'text-slate-400'} font-bold">${b.gain > 0 ? '+' : ''}${b.gain.toFixed(1)}dB</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Ajuste Fino da Banda Selecionada -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                                <span class="text-cyan-300 font-bold">Ajuste Fino — Banda ${st.selectedBandIdx + 1}: ${selBand.label} (${selBand.type})</span>
+                                <button type="button" id="btn-stage-band-reset" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 border border-slate-700">Zerar Banda (0 dB)</button>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] font-mono">
+                                <div>
+                                    <div class="flex justify-between text-slate-400 mb-0.5">
+                                        <span>Frequência:</span>
+                                        <span id="viola-stage-band-freq-lbl" class="text-cyan-300 font-bold">${selBand.freq} Hz</span>
+                                    </div>
+                                    <input type="range" id="viola-stage-band-freq" min="${selLimits.minFreq}" max="${selLimits.maxFreq}" step="5" value="${selBand.freq}" class="w-full accent-cyan-400 cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-slate-400 mb-0.5">
+                                        <span>Ganho:</span>
+                                        <span id="viola-stage-band-gain-lbl" class="text-emerald-300 font-bold">${selBand.gain > 0 ? '+' : ''}${selBand.gain.toFixed(1)} dB</span>
+                                    </div>
+                                    <input type="range" id="viola-stage-band-gain" min="-12" max="12" step="0.2" value="${selBand.gain}" class="w-full accent-emerald-400 cursor-pointer">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-slate-400 mb-0.5">
+                                        <span>Largura Q:</span>
+                                        <span id="viola-stage-band-q-lbl" class="text-amber-300 font-bold">${selBand.q.toFixed(2)}</span>
+                                    </div>
+                                    <input type="range" id="viola-stage-band-q" min="0.5" max="8.0" step="0.1" value="${selBand.q}" class="w-full accent-amber-400 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        drawStageEqCanvas();
+        bindStageEqEvents();
+    }
+
+    function bindStageEqEvents() {
+        const st = state.stageEq;
+
+        const playBtn = document.getElementById('btn-stage-play-toggle');
+        if (playBtn) {
+            playBtn.addEventListener('click', () => {
+                if (st.isPlaying) stopStageAudio();
+                else if (st.audioSourceMode === 'mic') startStageMicInput();
+                else startStageDemoLoop();
+            });
+        }
+
+        const abBtn = document.getElementById('btn-stage-ab-bypass');
+        if (abBtn) {
+            abBtn.addEventListener('click', () => {
+                st.eqBypass = !st.eqBypass;
+                updateStageAudioLiveParams();
+                saveViolaState();
+                renderStageEqSection();
+                if (state.displayMode === 'STAGE_EQ') renderFretboardSVG();
+            });
+        }
+
+        const toFretBtn = document.getElementById('btn-stage-to-fretboard');
+        if (toFretBtn) {
+            toFretBtn.addEventListener('click', () => {
+                state.displayMode = 'STAGE_EQ';
+                saveViolaState();
+                renderAll();
+                const wrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+
+        const copyRiderBtn = document.getElementById('btn-stage-copy-rider');
+        if (copyRiderBtn) {
+            copyRiderBtn.addEventListener('click', () => {
+                const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+                const metrics = computeStageFeedbackMetrics(st, inst);
+                const lines = [
+                    `RIDER TÉCNICO DE CAPTAÇÃO & EQ — ${inst.name}`,
+                    `Orientação: ${state.isLeftHanded ? 'Canhoto' : 'Destro'} | Preset: ${STAGE_PICKUP_PRESETS[st.presetId] ? STAGE_PICKUP_PRESETS[st.presetId].name : 'Custom'}`,
+                    `Blend: ${100 - st.blendMicPct}% Piezo de Rastilho / ${st.blendMicPct}% Condensador de Boca | Fase: ${st.phaseInverted ? '180° Invertida' : '0° Normal'}`,
+                    `Notch Anti-Feedback: ${st.notch.enabled ? `ATIVO em ${st.notch.freqHz} Hz (Corte ${st.notch.depthDb.toFixed(1)} dB, Q=${st.notch.q.toFixed(1)})` : 'Desativado'}`,
+                    `Risco de Microfonia Estimado: ${metrics.riskPct}% (${metrics.riskLevel})`,
+                    '',
+                    'Equalizador Paramétrico (5 Bandas):',
+                    ...st.bands.map((b, i) => `- B${i + 1} (${b.label} / ${b.type}): ${b.freq} Hz | ${b.gain >= 0 ? '+' : ''}${b.gain.toFixed(1)} dB | Q=${b.q.toFixed(2)} [${b.enabled !== false ? 'ON' : 'BYPASS'}]`)
+                ];
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+                }
+                copyRiderBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Rider Copiado!</span>';
+                if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+                setTimeout(() => renderStageEqSection(), 1500);
+            });
+        }
+
+        document.querySelectorAll('[data-stage-preset]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pid = btn.getAttribute('data-stage-preset');
+                const preset = STAGE_PICKUP_PRESETS[pid];
+                if (!preset) return;
+                st.presetId = pid;
+                st.blendMicPct = preset.blendMicPct;
+                st.phaseInverted = preset.phaseInverted;
+                st.monitorGainPct = preset.monitorGainPct;
+                st.eqBypass = preset.eqBypass;
+                st.notch = Object.assign({}, preset.notch);
+                st.bands = JSON.parse(JSON.stringify(preset.bands));
+                stageLiveStatus = `Preset "${preset.name}" aplicado à cadeia DSP.`;
+                updateStageAudioLiveParams();
+                saveViolaState();
+                renderStageEqSection();
+                if (state.displayMode === 'STAGE_EQ') renderFretboardSVG();
+            });
+        });
+
+        const blendSlider = document.getElementById('viola-stage-blend-slider');
+        if (blendSlider) {
+            blendSlider.addEventListener('input', (e) => {
+                st.blendMicPct = parseInt(e.target.value, 10) || 0;
+                st.presetId = 'custom';
+                updateStageAudioLiveParams();
+                saveViolaState();
+                renderStageEqSection();
+            });
+        }
+
+        const phaseBtn = document.getElementById('btn-stage-phase-toggle');
+        if (phaseBtn) {
+            phaseBtn.addEventListener('click', () => {
+                st.phaseInverted = !st.phaseInverted;
+                st.presetId = 'custom';
+                updateStageAudioLiveParams();
+                saveViolaState();
+                renderStageEqSection();
+            });
+        }
+
+        const limBtn = document.getElementById('btn-stage-limiter-toggle');
+        if (limBtn) {
+            limBtn.addEventListener('click', () => {
+                st.limiterEnabled = !st.limiterEnabled;
+                updateStageAudioLiveParams();
+                saveViolaState();
+                renderStageEqSection();
+            });
+        }
+
+        const autoNotchBtn = document.getElementById('btn-stage-auto-notch');
+        if (autoNotchBtn) {
+            autoNotchBtn.addEventListener('click', autoKillStageFeedback);
+        }
+
+        const monSlider = document.getElementById('viola-stage-mon-slider');
+        if (monSlider) {
+            monSlider.addEventListener('input', (e) => {
+                st.monitorGainPct = parseInt(e.target.value, 10) || 0;
+                const lbl = document.getElementById('viola-stage-mon-lbl');
+                if (lbl) lbl.textContent = `${st.monitorGainPct}%`;
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        const chkNotch = document.getElementById('chk-stage-notch-enabled');
+        if (chkNotch) {
+            chkNotch.addEventListener('change', (e) => {
+                st.notch.enabled = !!e.target.checked;
+                st.presetId = 'custom';
+                updateStageAudioLiveParams();
+                saveViolaState();
+                renderStageEqSection();
+                if (state.displayMode === 'STAGE_EQ') renderFretboardSVG();
+            });
+        }
+
+        const chkSimHowl = document.getElementById('chk-stage-feedback-sim');
+        if (chkSimHowl) {
+            chkSimHowl.addEventListener('change', (e) => {
+                st.feedbackSimAudible = !!e.target.checked;
+                if (st.isPlaying) ensureStageFeedbackOsc();
+                updateStageAudioLiveParams();
+                saveViolaState();
+            });
+        }
+
+        const notchFreq = document.getElementById('viola-stage-notch-freq');
+        if (notchFreq) {
+            notchFreq.addEventListener('input', (e) => {
+                st.notch.freqHz = parseInt(e.target.value, 10) || 112;
+                st.presetId = 'custom';
+                const lbl = document.getElementById('viola-stage-notch-freq-lbl');
+                if (lbl) lbl.textContent = `${st.notch.freqHz}Hz`;
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        const notchDepth = document.getElementById('viola-stage-notch-depth');
+        if (notchDepth) {
+            notchDepth.addEventListener('input', (e) => {
+                st.notch.depthDb = parseFloat(e.target.value) || 0;
+                st.presetId = 'custom';
+                const lbl = document.getElementById('viola-stage-notch-depth-lbl');
+                if (lbl) lbl.textContent = `${st.notch.depthDb.toFixed(0)}dB`;
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        const notchQ = document.getElementById('viola-stage-notch-q');
+        if (notchQ) {
+            notchQ.addEventListener('input', (e) => {
+                st.notch.q = parseFloat(e.target.value) || 10;
+                st.presetId = 'custom';
+                const lbl = document.getElementById('viola-stage-notch-q-lbl');
+                if (lbl) lbl.textContent = st.notch.q.toFixed(1);
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        document.querySelectorAll('[data-stage-src]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const src = btn.getAttribute('data-stage-src');
+                const wasPlaying = st.isPlaying;
+                stopStageAudio();
+                st.audioSourceMode = src;
+                saveViolaState();
+                renderStageEqSection();
+                if (wasPlaying) {
+                    if (src === 'mic') startStageMicInput();
+                    else startStageDemoLoop();
+                }
+            });
+        });
+
+        const chkLoop = document.getElementById('chk-stage-loop');
+        if (chkLoop) {
+            chkLoop.addEventListener('change', (e) => {
+                st.loopDemo = !!e.target.checked;
+                saveViolaState();
+            });
+        }
+
+        const chkMicMon = document.getElementById('chk-stage-mic-mon');
+        if (chkMicMon) {
+            chkMicMon.addEventListener('change', (e) => {
+                st.monitorMicLive = !!e.target.checked;
+                updateStageAudioLiveParams();
+                saveViolaState();
+            });
+        }
+
+        document.querySelectorAll('[data-stage-band-card]').forEach((card) => {
+            card.addEventListener('click', (e) => {
+                if (e.target && e.target.tagName === 'INPUT') return;
+                st.selectedBandIdx = parseInt(card.getAttribute('data-stage-band-card'), 10) || 0;
+                saveViolaState();
+                renderStageEqSection();
+            });
+        });
+
+        document.querySelectorAll('[data-stage-band-enable]').forEach((chk) => {
+            chk.addEventListener('change', (e) => {
+                const idx = parseInt(chk.getAttribute('data-stage-band-enable'), 10);
+                if (st.bands[idx]) {
+                    st.bands[idx].enabled = !!e.target.checked;
+                    st.presetId = 'custom';
+                    updateStageAudioLiveParams();
+                    saveViolaState();
+                    renderStageEqSection();
+                }
+            });
+        });
+
+        const bandReset = document.getElementById('btn-stage-band-reset');
+        if (bandReset) {
+            bandReset.addEventListener('click', () => {
+                const b = st.bands[st.selectedBandIdx];
+                if (b) {
+                    b.gain = 0;
+                    st.presetId = 'custom';
+                    updateStageAudioLiveParams();
+                    saveViolaState();
+                    renderStageEqSection();
+                }
+            });
+        }
+
+        const bandFreq = document.getElementById('viola-stage-band-freq');
+        if (bandFreq) {
+            bandFreq.addEventListener('input', (e) => {
+                const b = st.bands[st.selectedBandIdx];
+                if (!b) return;
+                b.freq = parseInt(e.target.value, 10) || b.freq;
+                st.presetId = 'custom';
+                const lbl = document.getElementById('viola-stage-band-freq-lbl');
+                if (lbl) lbl.textContent = `${b.freq} Hz`;
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        const bandGain = document.getElementById('viola-stage-band-gain');
+        if (bandGain) {
+            bandGain.addEventListener('input', (e) => {
+                const b = st.bands[st.selectedBandIdx];
+                if (!b) return;
+                b.gain = parseFloat(e.target.value) || 0;
+                st.presetId = 'custom';
+                const lbl = document.getElementById('viola-stage-band-gain-lbl');
+                if (lbl) lbl.textContent = `${b.gain > 0 ? '+' : ''}${b.gain.toFixed(1)} dB`;
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        const bandQ = document.getElementById('viola-stage-band-q');
+        if (bandQ) {
+            bandQ.addEventListener('input', (e) => {
+                const b = st.bands[st.selectedBandIdx];
+                if (!b) return;
+                b.q = parseFloat(e.target.value) || 1.0;
+                st.presetId = 'custom';
+                const lbl = document.getElementById('viola-stage-band-q-lbl');
+                if (lbl) lbl.textContent = b.q.toFixed(2);
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+                saveViolaState();
+            });
+        }
+
+        // Arraste interativo dos nós diretamente no Canvas 2D
+        const canvas = document.getElementById('viola-stage-eq-canvas');
+        if (canvas) {
+            const getCanvasCoords = (evt) => {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: ((evt.clientX - rect.left) / rect.width) * canvas.width,
+                    y: ((evt.clientY - rect.top) / rect.height) * canvas.height
+                };
+            };
+            const padL = 44, padR = 16, padT = 18, padB = 28;
+            const plotW = canvas.width - padL - padR;
+            const plotH = canvas.height - padT - padB;
+
+            canvas.addEventListener('pointerdown', (evt) => {
+                const pt = getCanvasCoords(evt);
+                let bestDist = 22;
+                let hitType = null;
+                let hitIdx = -1;
+
+                st.bands.forEach((b, idx) => {
+                    const bx = stageFreqToX(b.freq, padL, plotW);
+                    const by = stageDbToY(b.gain, padT, plotH);
+                    const d = Math.hypot(pt.x - bx, pt.y - by);
+                    if (d < bestDist) {
+                        bestDist = d;
+                        hitType = 'band';
+                        hitIdx = idx;
+                    }
+                });
+
+                if (st.notch) {
+                    const nx = stageFreqToX(st.notch.freqHz, padL, plotW);
+                    const ny = stageDbToY(Math.max(-20, st.notch.depthDb), padT, plotH);
+                    const dn = Math.hypot(pt.x - nx, pt.y - ny);
+                    if (dn < bestDist) {
+                        hitType = 'notch';
+                        hitIdx = 0;
+                    }
+                }
+
+                if (hitType) {
+                    stageDragState = { active: true, targetType: hitType, targetIdx: hitIdx };
+                    if (hitType === 'band') st.selectedBandIdx = hitIdx;
+                    try { canvas.setPointerCapture(evt.pointerId); } catch (_) {}
+                    drawStageEqCanvas();
+                }
+            });
+
+            canvas.addEventListener('pointermove', (evt) => {
+                if (!stageDragState.active) return;
+                const pt = getCanvasCoords(evt);
+                const freq = stageXToFreq(pt.x, padL, plotW);
+                const db = stageYToDb(pt.y, padT, plotH);
+
+                if (stageDragState.targetType === 'band') {
+                    const idx = stageDragState.targetIdx;
+                    const b = st.bands[idx];
+                    const lim = STAGE_EQ_BAND_LIMITS[idx];
+                    if (b && lim) {
+                        b.freq = Math.max(lim.minFreq, Math.min(lim.maxFreq, freq));
+                        b.gain = Math.max(-12, Math.min(12, db));
+                        st.presetId = 'custom';
+                        const freqSlider = document.getElementById('viola-stage-band-freq');
+                        const gainSlider = document.getElementById('viola-stage-band-gain');
+                        const freqLbl = document.getElementById('viola-stage-band-freq-lbl');
+                        const gainLbl = document.getElementById('viola-stage-band-gain-lbl');
+                        if (freqSlider) freqSlider.value = b.freq;
+                        if (gainSlider) gainSlider.value = b.gain;
+                        if (freqLbl) freqLbl.textContent = `${b.freq} Hz`;
+                        if (gainLbl) gainLbl.textContent = `${b.gain > 0 ? '+' : ''}${b.gain.toFixed(1)} dB`;
+                    }
+                } else if (stageDragState.targetType === 'notch') {
+                    st.notch.freqHz = Math.max(60, Math.min(250, freq));
+                    st.notch.depthDb = Math.max(-24, Math.min(0, db));
+                    st.presetId = 'custom';
+                    const nFreq = document.getElementById('viola-stage-notch-freq');
+                    const nDepth = document.getElementById('viola-stage-notch-depth');
+                    const nFreqLbl = document.getElementById('viola-stage-notch-freq-lbl');
+                    const nDepthLbl = document.getElementById('viola-stage-notch-depth-lbl');
+                    if (nFreq) nFreq.value = st.notch.freqHz;
+                    if (nDepth) nDepth.value = st.notch.depthDb;
+                    if (nFreqLbl) nFreqLbl.textContent = `${st.notch.freqHz}Hz`;
+                    if (nDepthLbl) nDepthLbl.textContent = `${st.notch.depthDb.toFixed(0)}dB`;
+                }
+
+                updateStageAudioLiveParams();
+                updateStageFeedbackCardDOM();
+                drawStageEqCanvas();
+            });
+
+            const endDrag = () => {
+                if (!stageDragState.active) return;
+                stageDragState.active = false;
+                saveViolaState();
+                renderStageEqSection();
+            };
+            canvas.addEventListener('pointerup', endDrag);
+            canvas.addEventListener('pointercancel', endDrag);
+        }
+    }
+
     let tunerOsc = null;
     let tunerGain = null;
     let activeTunerCourse = null;
@@ -22648,6 +24348,43 @@ function bindSolfegeEvents() {
                         opacity: isTarget ? '1.0' : '0.75'
                     });
                 });
+            } else if (state.displayMode === 'STAGE_EQ') {
+                // FASE 20: Projeção Acústica de Captação, Microfonia & Zonas do EQ
+                const st = state.stageEq;
+                const metrics = computeStageFeedbackMetrics(st, inst);
+                inst.courses.forEach((c, cIdx) => {
+                    for (let f = 0; f <= maxFret; f++) {
+                        const freq = midiToFreq(c.midi[0] + f);
+                        const pc = (c.pitchClass + f) % 12;
+                        const nearF1 = Math.abs(freq - metrics.f1) <= metrics.f1 * 0.15;
+                        const nearF2 = Math.abs(freq - metrics.f2) <= metrics.f2 * 0.12;
+                        const coveredByNotch = !st.eqBypass && st.notch.enabled && Math.abs(freq - st.notch.freqHz) <= st.notch.freqHz * 0.16 && st.notch.depthDb <= -8;
+
+                        if (nearF1 || nearF2) {
+                            activeMarkers.push({
+                                courseIdx: cIdx,
+                                fret: f,
+                                label: NOTE_NAMES[pc],
+                                sub: coveredByNotch ? 'NOTCH' : `${Math.round(freq)}Hz`,
+                                color: coveredByNotch ? '#06b6d4' : (metrics.riskPct >= 68 ? '#f43f5e' : '#f59e0b'),
+                                stroke: '#ffffff',
+                                strokeWidth: 2.2,
+                                opacity: '0.96'
+                            });
+                        } else if (f === 0 || f === 12) {
+                            activeMarkers.push({
+                                courseIdx: cIdx,
+                                fret: f,
+                                label: NOTE_NAMES[pc],
+                                sub: f === 12 ? 'BOCA' : `${c.num}ºP`,
+                                color: f === 12 ? '#10b981' : '#334155',
+                                stroke: '#090d16',
+                                strokeWidth: 1.5,
+                                opacity: f === 12 ? '0.85' : '0.72'
+                            });
+                        }
+                    }
+                });
             }
 
         // Construção SVG
@@ -22829,6 +24566,11 @@ function bindSolfegeEvents() {
                 const f = parseInt(node.getAttribute('data-click-fret'), 10);
                 if (state.displayMode === 'TONEWOOD') {
                     playTonewoodHarmonicOrNote(cIdx, f);
+                    flashFretCell(cIdx, f, 0);
+                    return;
+                }
+                if (state.displayMode === 'STAGE_EQ') {
+                    playStagePluckedCourse(cIdx, f, 0);
                     flashFretCell(cIdx, f, 0);
                     return;
                 }
@@ -23466,6 +25208,20 @@ function bindSolfegeEvents() {
             } else {
                 state.strobeTuner = JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE));
             }
+
+            if (saved.stageEq && typeof saved.stageEq === 'object') {
+                const mergedNotch = Object.assign({}, DEFAULT_STAGE_EQ_STATE.notch, saved.stageEq.notch || {});
+                const savedBands = Array.isArray(saved.stageEq.bands) && saved.stageEq.bands.length === 5
+                    ? saved.stageEq.bands.map((b, i) => Object.assign({}, DEFAULT_STAGE_EQ_STATE.bands[i], b))
+                    : JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE.bands));
+                state.stageEq = Object.assign({}, DEFAULT_STAGE_EQ_STATE, saved.stageEq, {
+                    isPlaying: false,
+                    notch: mergedNotch,
+                    bands: savedBands
+                });
+            } else {
+                state.stageEq = JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE));
+            }
         }
     }
 
@@ -23506,6 +25262,11 @@ function bindSolfegeEvents() {
         if (copy.strobeTuner) {
             copy.strobeTuner = Object.assign({}, copy.strobeTuner, {
                 isRunning: false
+            });
+        }
+        if (copy.stageEq) {
+            copy.stageEq = Object.assign({}, copy.stageEq, {
+                isPlaying: false
             });
         }
         if (copy.modalTrainer) {
@@ -23648,6 +25409,10 @@ function bindSolfegeEvents() {
                             <i data-lucide="disc" class="w-4 h-4 text-cyan-400"></i>
                             <span>Afinador Estrobosc&oacute;pico (Fase 19)</span>
                         </button>
+                        <button type="button" id="btn-viola-scroll-stage-eq" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="sliders" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Capta&ccedil;&atilde;o &amp; EQ de Palco (Fase 20)</span>
+                        </button>
                     </div>
                 </div>
 
@@ -23679,7 +25444,7 @@ function bindSolfegeEvents() {
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 pb-2 border-b border-slate-800">
                         <div class="flex flex-wrap items-center gap-2">
                             <span class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Projeção no Braço:</span>
-                            <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                            <div class="inline-flex flex-wrap gap-0.5 rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
                                 <button type="button" id="btn-viola-mode-chord" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎵 Campo Harmônico</button>
                                 <button type="button" id="btn-viola-mode-duad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🪕 Escalas Duadas</button>
                                 <button type="button" id="btn-viola-mode-reverse" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🔍 Buscador Reverso</button>
@@ -23687,7 +25452,7 @@ function bindSolfegeEvents() {
                                 <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
                                 <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
                                 <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button> <button type="button" id="btn-viola-mode-pagode" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Pagode de Viola</button> <button type="button" id="btn-viola-mode-strobe" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128300; Estrobosc&oacute;pio (±0.1¢)</button>
+                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button> <button type="button" id="btn-viola-mode-pagode" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Pagode de Viola</button> <button type="button" id="btn-viola-mode-strobe" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128300; Estrobosc&oacute;pio (±0.1¢)</button> <button type="button" id="btn-viola-mode-stage-eq" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127898; Capta&ccedil;&atilde;o &amp; Palco</button>
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
@@ -23712,7 +25477,7 @@ function bindSolfegeEvents() {
                                 <p class="text-xs text-slate-400">Toque em um grau para projetar no braço canhoto e dedilhar</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
-                                <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                                <div class="inline-flex flex-wrap gap-0.5 rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
                                     <button type="button" id="btn-viola-mode-triad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${state.harmonicExtension === 'triad' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">Tríades</button>
                                     <button type="button" id="btn-viola-mode-tetrad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${state.harmonicExtension === 'tetrad' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}">Tétrades (7ª)</button>
                                 </div>
@@ -23878,6 +25643,8 @@ function bindSolfegeEvents() {
             <div id="viola-pagode-container" class="space-y-4"></div>
             <!-- Afinador Estroboscopico de Alta Precisao & Analise de 8 Harmonicos (Fase 19) -->
             <div id="viola-strobe-tuner-container" class="space-y-4"></div>
+            <!-- Simulador de Captacao Acustica, Microfonia & EQ Parametrico de Palco (Fase 20) -->
+            <div id="viola-stage-eq-container" class="space-y-4"></div>
 
                 <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
                 <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
@@ -23891,7 +25658,7 @@ function bindSolfegeEvents() {
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2">
-                            <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                            <div class="inline-flex flex-wrap gap-0.5 rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
                                 <button type="button" id="btn-viola-metro-mode-rhythm" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'rhythm' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
                                     Ritmo Caipira
                                 </button>
@@ -24052,7 +25819,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', activeClass: 'bg-amber-600 text-slate-950 shadow' },
             { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
             { id: 'btn-viola-mode-pagode', mode: 'PAGODE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-strobe', mode: 'STROBE', activeClass: 'bg-cyan-500 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-strobe', mode: 'STROBE', activeClass: 'bg-cyan-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ', activeClass: 'bg-emerald-500 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -24095,6 +25863,7 @@ function bindSolfegeEvents() {
         stopSolfegeAudio();
         stopPagodeAudio();
         stopStrobeTunerAudio();
+        stopStageAudio();
     }
 
     function bindEvents() {
@@ -24195,7 +25964,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' },
             { id: 'btn-viola-scroll-solfege', targetId: 'viola-solfege-container' },
             { id: 'btn-viola-scroll-pagode', targetId: 'viola-pagode-container' },
-            { id: 'btn-viola-scroll-strobe', targetId: 'viola-strobe-tuner-container' }
+            { id: 'btn-viola-scroll-strobe', targetId: 'viola-strobe-tuner-container' },
+            { id: 'btn-viola-scroll-stage-eq', targetId: 'viola-stage-eq-container' }
         ];
         scrollBtns.forEach((item) => {
             const btn = document.getElementById(item.id);
@@ -24230,7 +26000,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' },
             { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', scrollTarget: 'viola-solfege-container' },
             { id: 'btn-viola-mode-pagode', mode: 'PAGODE', scrollTarget: 'viola-pagode-container' },
-            { id: 'btn-viola-mode-strobe', mode: 'STROBE', scrollTarget: 'viola-strobe-tuner-container' }
+            { id: 'btn-viola-mode-strobe', mode: 'STROBE', scrollTarget: 'viola-strobe-tuner-container' },
+            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ', scrollTarget: 'viola-stage-eq-container' }
         ];
 
         modeList.forEach((item) => {
@@ -24519,6 +26290,7 @@ function bindSolfegeEvents() {
         renderSolfegeSection();
         renderPagodeSection();
         renderStrobeTunerSection();
+        renderStageEqSection();
         renderMetronomeControls();
     }
 

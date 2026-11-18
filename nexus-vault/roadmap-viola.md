@@ -4,13 +4,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 20 — Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco
+## 🎯 Projeto Prioritário Atual: Fase 21 — Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Modelagem de captadores piezoelétricos de rastilho, microfones condensadores de boca e blend duplo com controle de fase (0°/180°) e filtro notch anti-feedback (60–250 Hz).
-  2. Equalizador paramétrico interativo de 5 bandas em Web Audio API (`BiquadFilterNode`) com analisador de resposta em frequência em Canvas 2D para viola caipira e violão ao vivo.
-  3. Presets de palco e estúdio (Trio Sertanejo Ao Vivo, Gravação em Condenser Stereo, Ponteio Solista em Auditório) com proteção de integridade de áudio e compatibilidade Canhoto/Destro.
+  1. Looper multipista Web Audio API sincronizado ao metrônomo Lookahead (até 4 pistas sobrepostas com quantização por compasso, overdubbing limpo, mute/solo e balanço estéreo).
+  2. Gerador de bases harmônicas caipiras (Cururu em Mi, Pagode em Lá, Toada em Sol e Guarânia em Si Menor) com violão de acompanhamento + viola base + percussão de caixa/tampo.
+  3. Guia visual instantâneo no braço SVG (Canhoto e Destro) alternando escalas duadas e modos caipiras conforme o acorde ativo da base em tempo real.
 
 ---
 
@@ -52,12 +52,33 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Motor algorítmico de licks em semicolcheias com repique, contratempos e batidas de tampo.
 17. **[x] Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (Fase 19 Concluída):**
     - Visualizador circular estroboscópico em Canvas 2D com 4 anéis concêntricos (1x a 8x), análise espectral FFT de 8 harmônicos com estimativa do coeficiente de inarmonicidade *B*, temperamentos caipiras (Igual, Cebolão Doce e Justa Pura) e calculadora de compensação milimétrica de rastilho/pestana para 12ª e 19ª casas (Canhoto e Destro).
-18. **[ ] Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco (Fase 20):**
-    - Modelagem de blend piezo/condensador, filtro notch anti-microfonia e equalizador paramétrico de 5 bandas com curva FFT em tempo real.
+18. **[x] Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco (Fase 20 Concluída):**
+    - Modelagem de blend piezo/condensador com atraso acústico de 0.42 ms e inversão de fase 0°/180°, filtro notch anti-microfonia (60–250 Hz) com Auto-Notch, equalizador paramétrico interativo de 5 bandas (`BiquadFilterNode`) com nós arrastáveis e espectro FFT em Canvas 2D, limiter de segurança e 6 presets de palco/estúdio compatíveis com Canhoto e Destro.
+19. **[ ] Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas (Fase 21):**
+    - Looper sincronizado ao metrônomo Lookahead, gerador de bases harmônicas caipiras e projeção dinâmica de escalas/duetos no braço SVG.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **18/11/2026 — Sessão 20** (Fase 20 Concluída):
+  - **Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco (`StagePickupEQ`)**:
+    - **Modelagem Física de Captação Dupla & Polaridade (`ensureStageAudioPipeline`, `computeStageResponseAtFreq`)**:
+      - Ramo **Piezo de Rastilho**: filtro passa-altas mecânico em 75 Hz, pico característico de cristal piezo em 3.3 kHz (+4.5 dB, Q=2.4) e roll-off suave acima de 7.5 kHz, com alta imunidade à realimentação acústica.
+      - Ramo **Condensador Interno de Boca**: ressonância de Helmholtz calibrada ao instrumento ativo (`112 Hz` na Viola Cebolão, `106 Hz` nas afinações regionais fundas, `96 Hz` no Violão 6 cordas), brilho arejado em 6.8 kHz (+3.0 dB) e atraso de propagação acústica real de `0.42 ms` (`DelayNode`).
+      - **Blend Contínuo (0–100%) & Inversão de Fase (0° / 180°)**: soma vetorial complexa no domínio da frequência e no grafo Web Audio API revelando cancelamentos e somas de fase autênticos entre rastilho e boca.
+    - **Motor Anti-Microfonia & Filtro Notch Cirúrgico (`computeStageFeedbackMetrics`, `autoKillStageFeedback`)**:
+      - Cálculo dinâmico do **Índice de Risco de Microfonia (0–99%)** cruzando ganho de retorno de palco, proporção de condensador no blend, resposta líquida na ressonância Helmholtz (`f₁`) e 2º modo de tampo (`f₂`) e atenuação do Notch.
+      - Filtro **Notch Paramétrico (60–250 Hz, −24 a 0 dB, Q 4.0–24.0)** com botão **Auto-Notch (Kill Feedback)** em 1 clique e modo didático seguro *Sim. Howl* (injeção limitada de ressonância controlada para demonstrar o corte instantâneo do Notch).
+    - **Equalizador Paramétrico Interativo de 5 Bandas & Analisador FFT em Canvas 2D (`drawStageEqCanvas`, `viola-stage-eq-canvas`)**:
+      - 5 bandas (`B1 Grave/Corpo lowshelf`, `B2 Médio-Grave peaking`, `B3 Médio/Turina peaking`, `B4 Presença/Piezo peaking`, `B5 Agudo/Ar highshelf`) implementadas com `BiquadFilterNode` reais e matemática complexa exata do *Audio EQ Cookbook*.
+      - Gráfico logarítmico (20 Hz–20 kHz) com nós arrastáveis diretamente no Canvas (Bandas 1–5 e Notch `N`), sobreposição da curva bruta de captação (âmbar tracejada), curva total resultante (ciano/esmeralda), zona de perigo de feedback e analisador de espectro FFT em tempo real.
+    - **Presets de Palco/Estúdio, Integridade de Áudio & Comparador A/B (`STAGE_PICKUP_PRESETS`)**:
+      - 6 presets prontos: *Trio Sertanejo Ao Vivo*, *Gravação em Condenser Stereo*, *Ponteio Solista em Auditório*, *Retorno Crítico (Fase 180° + Notch)*, *Violão Acústico / Seresta de Palco* e *Direct Box Neutro (Flat / Bypass)*.
+      - Comparador A/B sem cliques (`btn-stage-ab-bypass`), proteção por **Safety Limiter** (`DynamicsCompressorNode` brickwall em −6 dB, razão 20:1), 4 fontes de audição (*Arpejo Solto*, *Ponteio 6ªs*, *Rasqueado* e *Mic / Linha Ao Vivo* com proteção contra realimentação em alto-falantes) e cópia de **Rider Técnico de Mesa** para a área de transferência.
+    - **Integração Nativa Canhoto/Destro & Braço SVG (`renderStagePickupSchematicSVG`, `displayMode: 'STAGE_EQ'`)**:
+      - Diagrama esquemático espelhado entre **Canhoto** (corpo à esquerda, braço à direita) e **Destro** (braço à esquerda, corpo à direita).
+      - Novo modo `🎚 Captação & Palco` no braço SVG interativo destacando notas sujeitas à ressonância de caixa / status do Notch (`NOTCH`) e roteando o áudio de cada casa clicada diretamente pela cadeia Piezo/Mic + Notch + EQ 5 Bandas + Limiter.
 
 - **17/11/2026 — Sessão 19** (Fase 19 Concluída):
   - **Afinador Estroboscópico de Alta Precisão com Análise de Harmônicos Superiores (`StrobeTuner`)**:
