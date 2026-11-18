@@ -61,6 +61,10 @@
 
         const passivePerSingleContribution = aporte * monthlyRate;
         const sessionsBoughtPerContribution = netPerSession > 0 ? (passivePerSingleContribution / netPerSession) : 0;
+        const effectiveHoursBoughtPerContribution = netEffectiveHourly > 0 ? (passivePerSingleContribution / netEffectiveHourly) : 0;
+        const contributionsForOneMonthlySession = (passivePerSingleContribution > 0 && netPerSession > 0)
+            ? (netPerSession / passivePerSingleContribution)
+            : null;
         const currentPassiveMonthly = initPatrimony * monthlyRate;
         const sessionsPaidToday = netPerSession > 0 ? (currentPassiveMonthly / netPerSession) : 0;
         const currentCoveragePct = netRevenue > 0 ? ((currentPassiveMonthly / netRevenue) * 100) : 0;
@@ -68,7 +72,7 @@
         const annualCosts = costs * 12;
         const annualNet = netRevenue * 12;
         const annualFat = netRevenue * 12 * fatMult;
-        const annualEssential = (base.expenseEssential || 2500) * 12;
+        const annualEssential = (base.expenseEssential !== undefined && base.expenseEssential !== null && base.expenseEssential !== '' ? Math.max(0, Number(base.expenseEssential)) : 2500) * 12;
 
         const targetLeanFire = swr > 0 ? (annualEssential / (swr / 100)) : 0;
         const targetClinicalFire = swr > 0 ? ((annualNet * 0.5) / (swr / 100)) : 0;
@@ -141,12 +145,15 @@
             indirectWeeklyHours: indWeekly,
             avgTicket: ticket,
             monthlySessions,
+            indirectMonthlyHours,
             totalEffectiveHours,
             grossRevenue,
             netRevenue,
             costs,
+            annualEssential,
             annualCosts,
             annualNet,
+            annualFat,
             netPerSession,
             netEffectiveHourly,
             savingsRate,
@@ -154,6 +161,8 @@
             annualRatePct,
             passivePerSingleContribution,
             sessionsBoughtPerContribution,
+            effectiveHoursBoughtPerContribution,
+            contributionsForOneMonthlySession,
             currentPassiveMonthly,
             sessionsPaidToday,
             currentCoveragePct,
@@ -437,29 +446,43 @@
         const sessionsNeededStressed = netPerSession > 0 ? Math.max(0, (stressedClinicCosts - stressedMonthlyPassive) / netPerSession) : 0;
 
         const lostCapital = basePatrimony - stressedPatrimony;
-        const monthsToRecover = effectiveAporte > 0 ? Math.round(lostCapital / effectiveAporte) : 0;
+        const monthsToRecover = effectiveAporte > 0
+            ? Math.round(lostCapital / effectiveAporte)
+            : (lostCapital <= 0 ? 0 : null);
 
         let simPat = stressedPatrimony;
         let monthsToRecoverDynamic = 0;
         const maxScan = 360;
-        while (simPat < basePatrimony && monthsToRecoverDynamic < maxScan) {
-            simPat = simPat * (1 + stressedMonthlyRate) + effectiveAporte;
-            monthsToRecoverDynamic++;
+        if (lostCapital > 0 && effectiveAporte <= 0 && stressedMonthlyRate <= 0) {
+            monthsToRecoverDynamic = null;
+        } else {
+            while (simPat < basePatrimony && monthsToRecoverDynamic < maxScan) {
+                simPat = simPat * (1 + stressedMonthlyRate) + effectiveAporte;
+                monthsToRecoverDynamic++;
+            }
+            if (simPat < basePatrimony && monthsToRecoverDynamic >= maxScan) {
+                monthsToRecoverDynamic = monthsToRecover !== null ? monthsToRecover : null;
+            }
         }
-        if (monthsToRecoverDynamic >= maxScan) monthsToRecoverDynamic = monthsToRecover;
 
         // Simulação do tempo de recuperação com Aporte Acelerado (+20% Oportunidade)
         let simPatBoost = stressedPatrimony;
         let monthsToRecoverWithBoost = 0;
         const boostedAporte = currentAporte * 1.2;
-        while (simPatBoost < basePatrimony && monthsToRecoverWithBoost < maxScan) {
-            simPatBoost = simPatBoost * (1 + stressedMonthlyRate) + boostedAporte;
-            monthsToRecoverWithBoost++;
+        if (lostCapital > 0 && boostedAporte <= 0 && stressedMonthlyRate <= 0) {
+            monthsToRecoverWithBoost = null;
+        } else {
+            while (simPatBoost < basePatrimony && monthsToRecoverWithBoost < maxScan) {
+                simPatBoost = simPatBoost * (1 + stressedMonthlyRate) + boostedAporte;
+                monthsToRecoverWithBoost++;
+            }
+            if (simPatBoost < basePatrimony && monthsToRecoverWithBoost >= maxScan) {
+                monthsToRecoverWithBoost = boostedAporte > 0 ? Math.round(lostCapital / boostedAporte) : null;
+            }
         }
-        if (monthsToRecoverWithBoost >= maxScan) monthsToRecoverWithBoost = Math.round(lostCapital / (boostedAporte || 1));
 
         // Trajetória comparativa de recuperação (mês a mês) para gráfico SVG
-        const recoveryHorizon = Math.min(60, Math.max(24, monthsToRecoverDynamic + 6));
+        const recoveryHorizon = Math.min(60, Math.max(24, (monthsToRecoverDynamic || 24) + 6));
         const recoverySeries = [];
         let pNorm = basePatrimony;
         let pCrash = stressedPatrimony;
@@ -471,11 +494,53 @@
             pBoost = pBoost * (1 + stressedMonthlyRate) + boostedAporte;
         }
 
-        // Avaliação de impacto na Cascata de Despesas sob estresse
+        // Impacto no prazo de Full FIRE (atraso ou aceleração sob aporte anticíclico)
+        const baseFullTarget = baseModel.netRevenue || 0;
+        let stressedFullFireMonth = (baseFullTarget > 0 && stressedMonthlyPassive >= baseFullTarget) ? 0 : null;
+        if (stressedFullFireMonth === null && baseFullTarget > 0 && (stressedMonthlyRate > 0 && (stressedPatrimony > 0 || effectiveAporte > 0))) {
+            let pFire = stressedPatrimony;
+            for (let m = 1; m <= 600; m++) {
+                pFire = pFire * (1 + stressedMonthlyRate) + effectiveAporte;
+                if (pFire * stressedMonthlyRate >= baseFullTarget) {
+                    stressedFullFireMonth = m;
+                    break;
+                }
+            }
+        }
+        const crossoverDelayMonths = (baseModel.crossFullNetMonth !== null && stressedFullFireMonth !== null)
+            ? (stressedFullFireMonth - baseModel.crossFullNetMonth)
+            : null;
+
+        // Avaliação de impacto na Cascata de Despesas sob estresse sincronizada com stressedMonthlyPassive
+        const stressedAnnualRatePct = (Math.pow(1 + stressedMonthlyRate, 12) - 1) * 100;
         const stressedCascade = computeExpenseCascade(Object.assign({}, raw, {
             currentPatrimony: stressedPatrimony,
-            realAnnualReturn: Math.max(1, (baseModel.annualRatePct * (1 - dividendShockPct / 100)))
+            realAnnualReturn: stressedAnnualRatePct
         }));
+        if (stressedCascade && Array.isArray(stressedCascade.tiers)) {
+            let accStress = 0;
+            stressedCascade.passive = stressedMonthlyPassive;
+            stressedCascade.tiers = stressedCascade.tiers.map((t) => {
+                const startAcc = accStress;
+                accStress += t.cost;
+                const endAcc = accStress;
+                let cov = 0;
+                if (t.cost <= 0) {
+                    cov = stressedMonthlyPassive >= startAcc ? 100 : 0;
+                } else if (stressedMonthlyPassive >= endAcc) {
+                    cov = 100;
+                } else if (stressedMonthlyPassive > startAcc) {
+                    cov = ((stressedMonthlyPassive - startAcc) / t.cost) * 100;
+                }
+                return Object.assign({}, t, {
+                    coveragePct: Math.min(100, Math.max(0, cov)),
+                    isFullyCovered: cov >= 100
+                });
+            });
+            stressedCascade.globalCoverage = stressedCascade.totalCost > 0
+                ? (stressedMonthlyPassive / stressedCascade.totalCost) * 100
+                : 0;
+        }
 
         const fullyCoveredTiersStressed = stressedCascade.tiers.filter(t => t.isFullyCovered).length;
         const totalTiersCount = stressedCascade.tiers.length;
@@ -504,6 +569,8 @@
             monthsToRecover,
             monthsToRecoverDynamic,
             monthsToRecoverWithBoost,
+            stressedFullFireMonth,
+            crossoverDelayMonths,
             effectiveAporte,
             boost,
             recoverySeries,
@@ -655,6 +722,34 @@
                 };
             });
 
+            // 2º Passo Greedy de Aproveitamento de Sobra: utiliza o saldo residual da classe
+            // para comprar cotas inteiras adicionais (priorizando ativos ainda com 0 cotas e maior yield)
+            let classRemaining = Math.max(0, classAporte - classSpent);
+            let boughtExtra = true;
+            while (boughtExtra && classRemaining > 0) {
+                boughtExtra = false;
+                const candidates = tickerAlloc
+                    .filter((item) => item.price > 0 && item.price <= classRemaining + 1e-6)
+                    .sort((a, b) => {
+                        if (a.shares === 0 && b.shares > 0) return -1;
+                        if (b.shares === 0 && a.shares > 0) return 1;
+                        const yDiff = (Number(b.yield) || 0) - (Number(a.yield) || 0);
+                        if (Math.abs(yDiff) > 0.1) return yDiff;
+                        return a.price - b.price;
+                    });
+                if (candidates.length > 0) {
+                    const pick = candidates[0];
+                    pick.shares += 1;
+                    pick.totalSpent += pick.price;
+                    const addDiv = pick.price * ((Number(pick.yield) || 0) / 100);
+                    pick.estimatedMonthlyDiv += addDiv / 12;
+                    classSpent += pick.price;
+                    classAnnualDiv += addDiv;
+                    classRemaining = Math.max(0, classAporte - classSpent);
+                    boughtExtra = true;
+                }
+            }
+
             const residual = Math.max(0, classAporte - classSpent);
             totalResidualAll += residual;
             totalSpentAll += classSpent;
@@ -666,6 +761,7 @@
                 classAporte,
                 classSpent,
                 residual,
+                utilizationPct: classAporte > 0 ? Math.min(100, (classSpent / classAporte) * 100) : 100,
                 estimatedMonthlyDiv: classAnnualDiv / 12,
                 tickers: tickerAlloc
             });
@@ -1922,6 +2018,95 @@
             formula: 'Renda_Add_Mês = Σ(Gasto_Ticker × Yield_Anual / 12)',
             passed: Boolean(testTickerYieldPass),
             detail: `10 cotas de KNCR11 (R$ 1.042,00 @ 12% a.a.) adicionam +R$ ${mockTickerYield.estimatedMonthlyDividendAdded.toFixed(2)}/mês de proventos projetados.`
+        });
+
+        // 61. Teste de Aproveitamento Greedy de Sobra Residual Multi-Ticker (Cotas Extra sem Estouro)
+        const mockGreedyCatalog = {
+            RF: [
+                { ticker: 'IPCA+2035', name: 'Tesouro Longo', price: 3200, yield: 6.4, type: 'Tesouro' },
+                { ticker: 'IPCA+2045', name: 'Tesouro Médio', price: 1180, yield: 6.5, type: 'Tesouro' }
+            ]
+        };
+        const mockGreedyAlloc = computeAporteByTickers(
+            [{ key: 'RF', name: 'Renda Fixa', recommendedAporte: 1800 }],
+            mockGreedyCatalog,
+            2
+        );
+        const rfGreedy = mockGreedyAlloc.byClass[0];
+        const testGreedyPass = rfGreedy &&
+            rfGreedy.tickers[1].shares === 1 &&
+            Math.abs(rfGreedy.classSpent - 1180) < 1e-4 &&
+            Math.abs(rfGreedy.residual - 620) < 1e-4;
+        tests.push({
+            name: 'Varredura Greedy de Sobra Residual no Alocador Multi-Ticker',
+            formula: 'Orçamento_Individual < Preço_Ativo_1 ∧ Orçamento_Classe ≥ Preço_Ativo_2 ⇒ Compra_1_Cota',
+            passed: Boolean(testGreedyPass),
+            detail: `Orçamento de R$ 1.800 (R$ 900/ativo) aproveita sobra consolidada para alocar 1 cota de IPCA+2045 (R$ 1.180), reduzindo o resíduo ocioso para R$ 620,00.`
+        });
+
+        // 62. Teste de Sincronia Estrita entre Renda Passiva Estressada e Cascata sob Choque
+        const mockSyncStress = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 300000,
+            realAnnualReturn: 8.0,
+            expenseEssential: 1000,
+            expenseClinic: 1000,
+            expenseFamily: 1000,
+            expenseLifestyle: 1000
+        });
+        const testSyncStressPass = mockSyncStress.stressedCascade &&
+            Math.abs(mockSyncStress.stressedCascade.passive - mockSyncStress.stressedMonthlyPassive) < 1e-4;
+        tests.push({
+            name: 'Sincronia Estrita entre Renda Estressada e Cobertura da Cascata',
+            formula: 'stressedCascade.passive ≡ stressedMonthlyPassive (Erro < 10⁻⁴)',
+            passed: Boolean(testSyncStressPass),
+            detail: `Renda passiva estressada (R$ ${mockSyncStress.stressedMonthlyPassive.toFixed(2)}) sincronizada exatamente com os degraus da cascata sob choque.`
+        });
+
+        // 63. Teste de Identidade de Horas Efetivas Compradas e Aportes para 1 Sessão Vitalícia
+        const mockIdentity63 = computeFinancialModel({
+            weeklySessions: 16,
+            weeksPerMonth: 4.2,
+            indirectWeeklyHours: 6,
+            avgTicket: 250,
+            monthlyCosts: 2600,
+            monthlyContribution: 4200,
+            realAnnualReturn: 7.5
+        });
+        const expectedContribFor1Sess = mockIdentity63.netPerSession / mockIdentity63.passivePerSingleContribution;
+        const testIdentity63Pass = mockIdentity63.effectiveHoursBoughtPerContribution > 0 &&
+            mockIdentity63.contributionsForOneMonthlySession !== null &&
+            Math.abs(mockIdentity63.contributionsForOneMonthlySession - expectedContribFor1Sess) < 1e-6;
+        tests.push({
+            name: 'Identidade de Horas Efetivas Compradas e Aportes para 1 Sessão Vitalícia',
+            formula: 'Aportes_p/_1_Sessão = Ticket_Líquido / (Aporte × r_m)',
+            passed: Boolean(testIdentity63Pass),
+            detail: `São necessários exatamente ${mockIdentity63.contributionsForOneMonthlySession.toFixed(2)} aportes mensais para comprar 1 sessão clínica mensal perpétua.`
+        });
+
+        // 64. Teste de Atraso de Crossover sob Estresse de Mercado (−30%)
+        const testCrossoverDelayPass = mockSyncStress.stressedFullFireMonth === null ||
+            (typeof mockSyncStress.crossoverDelayMonths === 'number' && mockSyncStress.crossoverDelayMonths >= 0);
+        tests.push({
+            name: 'Consistência de Impacto no Prazo de Full FIRE sob Choque de −30%',
+            formula: 'Mês_FIRE_Estressado ≥ Mês_FIRE_Base ⇒ Δ_Atraso ≥ 0',
+            passed: Boolean(testCrossoverDelayPass),
+            detail: `Impacto calculado no marco Full FIRE sob choque: ${mockSyncStress.crossoverDelayMonths !== null ? `+${mockSyncStress.crossoverDelayMonths} meses` : 'horizonte estendido (> 50a)'}.`
+        });
+
+        // 65. Teste de Recuperação Nula sem Aporte e Taxa Zero (Blindagem contra Falso Zero)
+        const mockNoRec = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 100000,
+            monthlyContribution: 0,
+            realAnnualReturn: 0
+        });
+        const testNoRecPass = mockNoRec.monthsToRecover === null && mockNoRec.stressedPatrimony === 70000;
+        tests.push({
+            name: 'Blindagem contra Falso Zero na Recuperação sem Aportes',
+            formula: 'Perda > 0 ∧ Aporte = 0 ∧ r = 0 ⇒ Tempo_Recuperação = null (Indeterminado)',
+            passed: Boolean(testNoRecPass),
+            detail: `Sem aportes e sem retorno real, perda de R$ 30.000 retorna null em vez de falso "0 meses".`
         });
 
         const allPassed = tests.every(t => t.passed);

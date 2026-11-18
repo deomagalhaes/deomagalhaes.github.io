@@ -1572,15 +1572,29 @@
         }
     ];
 
+    function daysBetweenISO(fromISO, toISO) {
+        if (!fromISO || !toISO) return null;
+        const a = new Date(fromISO + 'T12:00:00');
+        const b = new Date(toISO + 'T12:00:00');
+        if (isNaN(a.getTime()) || isNaN(b.getTime())) return null;
+        return Math.round((b.getTime() - a.getTime()) / 86400000);
+    }
+
     function evaluateIdealProcedures(plantsList, targetDate = new Date()) {
         const moon = getMoonPhase(targetDate);
         const seasonInfo = getSeasonAndClimate(targetDate);
+        const targetISO = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
         const results = [];
 
         plantsList.forEach((plant) => {
             const m = computePlantMetrics(plant);
             const popName = (plant.popularName || '').toLowerCase();
             const sciName = (plant.scientificName || '').toLowerCase();
+
+            // Métricas projetadas para a data-alvo (permite simulação futura exata de +3d/+7d/+14d)
+            const repotDiffAtTarget = m.nextRepotIso ? daysBetweenISO(targetISO, m.nextRepotIso) : m.repotDiff;
+            const isRepotOverdueAtTarget = repotDiffAtTarget !== null && repotDiffAtTarget < 0;
+            const wiringDiffAtTarget = plant.wiringDueDate ? daysBetweenISO(targetISO, plant.wiringDueDate) : m.wiringDiff;
 
             PROCEDURES_CATALOG.forEach((proc) => {
                 let score = 50;
@@ -1635,19 +1649,21 @@
 
                 // 5. Ajuste Fisiológico Baseado no Histórico Real & Calendário Fitotécnico
                 if (proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') {
-                    if (m.isRepotOverdue) { score += 15; historyDelta += 15; }
-                    if (m.repotDiff !== null && m.repotDiff > (plant.repotCycleMonths * 30 - 120)) {
+                    if (isRepotOverdueAtTarget) { score += 15; historyDelta += 15; }
+                    if (repotDiffAtTarget !== null && repotDiffAtTarget > (plant.repotCycleMonths * 30 - 120)) {
                         score -= 40;
                         historyDelta -= 40;
                     }
                 }
 
-                // Análise do Histórico de Podas e Intervenções da Planta (fix 0 || 999)
-                const pruningLogs = (plant.logs || []).filter(lg => lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha')));
-                const lastPruningLog = pruningLogs.length > 0 ? pruningLogs[0] : null;
-                const effectivePruneDate = plant.lastPruning || (lastPruningLog && lastPruningLog.date ? lastPruningLog.date : null);
-                const rawPruneDiff = effectivePruneDate ? global.VaultCore.daysDiffFromToday(effectivePruneDate) : null;
-                const daysSinceLastPrune = rawPruneDiff !== null ? Math.abs(rawPruneDiff) : 999;
+                // Análise do Histórico de Podas e Intervenções da Planta relativa à data-alvo simulada
+                const pruningLogs = (plant.logs || [])
+                    .filter(lg => lg.type && (lg.type.toLowerCase().includes('poda') || lg.type.toLowerCase().includes('pinçagem') || lg.type.toLowerCase().includes('desfolha')))
+                    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+                const lastPruningLogDate = pruningLogs.length > 0 ? pruningLogs[0].date : '';
+                const effectivePruneDate = [plant.lastPruning || '', lastPruningLogDate || ''].filter(Boolean).sort().pop() || null;
+                const rawPruneDiff = effectivePruneDate ? daysBetweenISO(effectivePruneDate, targetISO) : null;
+                const daysSinceLastPrune = rawPruneDiff !== null ? Math.max(0, rawPruneDiff) : 999;
 
                 if (proc.category === 'PODA_RAMIFICACAO' || proc.category === 'DESFOLHA' || proc.category === 'ESTRUTURA' || proc.category === 'PINCAGEM' || proc.category === 'PODA_DRASTICA') {
                     if (daysSinceLastPrune < 30) {
@@ -1843,8 +1859,8 @@
                 }
 
                 if (proc.category === 'ESTRUTURA' && plant.lastStyling) {
-                    const rawStyleDiff = global.VaultCore.daysDiffFromToday(plant.lastStyling);
-                    const daysSinceStyle = rawStyleDiff !== null ? Math.abs(rawStyleDiff) : 0;
+                    const rawStyleDiff = daysBetweenISO(plant.lastStyling, targetISO);
+                    const daysSinceStyle = rawStyleDiff !== null ? Math.max(0, rawStyleDiff) : 0;
                     if (daysSinceStyle > 120) { score += 10; historyDelta += 10; }
                 }
 
@@ -1853,7 +1869,7 @@
                     stageDelta += 8;
                 }
 
-                if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && m.isRepotOverdue) {
+                if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && isRepotOverdueAtTarget) {
                     if (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA') {
                         score += 35;
                         historyDelta += 35;
@@ -1861,7 +1877,7 @@
                 }
 
                 if (proc.id === 'DESARAME' || proc.id === 'ARAMACAO_ESTRUTURAL') {
-                    if (m.wiringDiff !== null && m.wiringDiff <= 7) {
+                    if (wiringDiffAtTarget !== null && wiringDiffAtTarget <= 7) {
                         score += 30;
                         historyDelta += 30;
                     }
@@ -1873,7 +1889,7 @@
                     let pruneContext = daysSinceLastPrune < 999
                         ? ` • Última poda há ${daysSinceLastPrune}d.`
                         : ' • Sem podas recentes na copa.';
-                    let repotContext = m.isRepotOverdue ? ' • [Transplante Atrasado: Janela Ideal]' : '';
+                    let repotContext = isRepotOverdueAtTarget ? ' • [Transplante Atrasado: Janela Ideal]' : '';
 
                     // Alerta Astrobotânico de Sangria Vascular e Proteção Cambial
                     let sapBleedWarning = null;
@@ -3280,14 +3296,20 @@
                     <div class="p-3 bg-[#090d16] border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 shrink-0">
                         <div class="flex flex-wrap items-center gap-1.5" id="prune-history-filter-bar">
                             <button type="button" data-ph-filter="PRUNING" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-600 text-slate-950">Podas / Pinçagens</button>
+                            <button type="button" data-ph-filter="STRUCTURAL" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Aramação / Jin</button>
                             <button type="button" data-ph-filter="ALL" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Todos Manejos</button>
                             <button type="button" data-ph-filter="RECOVERY" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Em Recuperação (&lt;30d)</button>
                         </div>
-                        <button type="button" id="btn-export-prune-csv" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5">
-                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
-                            <span>Exportar Podas (.csv)</span>
-                        </button>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <input type="text" id="prune-history-search" placeholder="Filtrar espécie, ID ou bancada..."
+                                class="min-h-[32px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 text-xs text-slate-200 w-44 sm:w-52 focus:outline-none focus:border-cyan-400">
+                            <button type="button" id="btn-export-prune-csv" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5">
+                                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                                <span>Exportar Podas (.csv)</span>
+                            </button>
+                        </div>
                     </div>
+                    <div id="prune-history-kpi-bar" class="px-4 py-2.5 bg-[#0b111e] border-b border-slate-800/80 grid grid-cols-3 gap-2 text-xs font-mono shrink-0"></div>
                     <div id="prune-history-list-body" class="flex-1 overflow-y-auto p-4 space-y-2.5"></div>
                 </div>
             </div>
@@ -3416,12 +3438,24 @@
                                 ${cal.speciesInFocus.map((sp) => `<button type="button" data-seasonal-sp="${C.esc(sp)}" class="px-2 py-0.5 rounded text-[11px] bg-slate-800 hover:bg-cyan-950/60 hover:text-cyan-200 border border-slate-700/70 text-slate-300 font-medium transition">${C.esc(sp)}</button>`).join('')}
                             </div>
                         </div>
-                        <div class="pt-2 border-t border-slate-800/70 text-[10px] font-mono text-slate-400 space-y-0.5">
-                            <div class="text-cyan-300 font-bold uppercase tracking-wider">Janelas Lunares em ${cal.name}:</div>
-                            <div>🌑 Nova (poda drástica/jin): <strong class="text-slate-200">dias ${lunarWindows.NOVA.join(', ') || '—'}</strong></div>
-                            <div>🌓 Crescente (alporquia/broto): <strong class="text-emerald-300">dias ${lunarWindows.CRESCENTE.join(', ') || '—'}</strong></div>
-                            <div>🌕 Cheia (adubação/foliar): <strong class="text-amber-300">dias ${lunarWindows.CHEIA.join(', ') || '—'}</strong></div>
-                            <div>🌗 Minguante (raízes/transplante): <strong class="text-cyan-300">dias ${lunarWindows.MINGUANTE.join(', ') || '—'}</strong></div>
+                        <div class="pt-2 border-t border-slate-800/70 text-[10px] font-mono text-slate-400 space-y-1">
+                            <div class="text-cyan-300 font-bold uppercase tracking-wider">Janelas Lunares em ${cal.name} (clique p/ simular):</div>
+                            ${[
+                                { key: 'NOVA', icon: '🌑', label: 'Nova (poda drástica/jin)', cls: 'text-slate-200 border-slate-700 bg-slate-900' },
+                                { key: 'CRESCENTE', icon: '🌓', label: 'Crescente (alporquia/broto)', cls: 'text-emerald-300 border-emerald-500/30 bg-emerald-950/30' },
+                                { key: 'CHEIA', icon: '🌕', label: 'Cheia (adubação/foliar)', cls: 'text-amber-300 border-amber-500/30 bg-amber-950/30' },
+                                { key: 'MINGUANTE', icon: '🌗', label: 'Minguante (raízes/transplante)', cls: 'text-cyan-300 border-cyan-500/30 bg-cyan-950/30' }
+                            ].map((w) => {
+                                const days = lunarWindows[w.key] || [];
+                                const firstDay = days[0];
+                                const simISO = firstDay ? `${new Date().getFullYear()}-${String(cal.monthIndex + 1).padStart(2, '0')}-${String(firstDay).padStart(2, '0')}` : '';
+                                return `
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span>${w.icon} ${w.label}: <strong class="${w.cls.split(' ')[0]}">dias ${days.join(', ') || '—'}</strong></span>
+                                        ${simISO ? `<button type="button" data-open-lunar-iso="${simISO}" class="px-1.5 py-0.5 rounded border ${w.cls} hover:brightness-125 transition shrink-0">Simular dia ${firstDay}</button>` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
                         </div>
                     </div>
                 </div>
@@ -3439,6 +3473,37 @@
                                 </li>
                             `).join('')}
                         </ul>
+
+                        <!-- Matriz Sazonal de Prontidão (5 Eixos Fitotécnicos) -->
+                        <div class="mt-3 pt-2.5 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[10px] font-mono">
+                            ${(() => {
+                                const s = cal.season;
+                                const isWarm = s === 'Primavera' || s === 'Verão';
+                                const isCold = s === 'Inverno';
+                                const isMild = s === 'Outono';
+                                const axes = [
+                                    { label: 'Transplante', status: s === 'Primavera' || s === 'Inverno' ? 'IDEAL' : 'CAUTELA', note: s === 'Inverno' ? 'Caducas/Coníf.' : (isWarm ? 'Tropicais' : 'Raiz proteg.') },
+                                    { label: 'Poda Drástica', status: isCold || s === 'Outono' ? 'IDEAL' : 'CAUTELA', note: isCold ? 'Baixa seiva' : 'Selar cortes' },
+                                    { label: 'Pinçagem', status: isWarm ? 'IDEAL' : (isMild ? 'MODERADA' : 'PAUSAR'), note: isWarm ? 'Alto vigor' : 'Poupar reservas' },
+                                    { label: 'Aramação', status: isMild || isCold ? 'IDEAL' : 'VIGIAR', note: isWarm ? 'Engrossa rápido' : 'Casca firme' },
+                                    { label: 'Adubação', status: isWarm || s === 'Outono' ? 'IDEAL' : 'REDUZIR', note: isCold ? 'Dormência' : 'NPK/Bokashi' }
+                                ];
+                                return axes.map((ax) => {
+                                    const badge = ax.status === 'IDEAL'
+                                        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                                        : (ax.status === 'PAUSAR' || ax.status === 'REDUZIR'
+                                            ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                                            : 'bg-amber-500/15 text-amber-300 border-amber-500/30');
+                                    return `
+                                        <div class="p-1.5 rounded-lg bg-[#0f172a] border border-slate-800">
+                                            <div class="text-slate-400 truncate">${ax.label}</div>
+                                            <div class="mt-0.5 inline-block px-1 py-0.2 rounded border text-[9px] font-bold ${badge}">${ax.status}</div>
+                                            <div class="text-slate-500 truncate mt-0.5">${ax.note}</div>
+                                        </div>
+                                    `;
+                                }).join('');
+                            })()}
+                        </div>
                     </div>
 
                     <div class="mt-3 pt-2.5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -3508,6 +3573,13 @@
                 const sIn = document.getElementById('bonsai-search');
                 if (sIn) sIn.value = sp;
                 renderAll();
+            });
+        });
+
+        container.querySelectorAll('[data-open-lunar-iso]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const iso = btn.getAttribute('data-open-lunar-iso');
+                openProcedureModal(iso);
             });
         });
 
@@ -3956,11 +4028,13 @@
     // =========================================================================
     // 8.1. MODAL DO PROCEDIMENTO IDEAL (ASTROBOTÂNICA EM AÇÃO)
     // =========================================================================
-    function openProcedureModal() {
+    function openProcedureModal(initialDateISO = null) {
         const modal = document.getElementById('bonsai-procedure-modal');
         if (!modal) return;
         currentProcedureFilter = 'ALL';
-        selectedProcedureDateISO = global.VaultCore.todayISO();
+        selectedProcedureDateISO = (initialDateISO && /^\d{4}-\d{2}-\d{2}$/.test(initialDateISO))
+            ? initialDateISO
+            : global.VaultCore.todayISO();
         renderProcedureModal('ALL');
         modal.classList.remove('hidden');
         global.VaultCore.refreshIcons(modal);
@@ -4207,7 +4281,7 @@
                     <div class="flex flex-wrap items-center justify-end gap-2.5 pt-2 border-t border-slate-800">
                         <button type="button" data-sched-proc="${p.id}" data-proc-title="${C.esc(proc.title)}" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition">
                             <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i>
-                            <span>Agendar p/ Esta Semana</span>
+                            <span>${targetISO !== C.todayISO() ? `Agendar p/ ${C.formatDateBR(targetISO)}` : 'Agendar p/ +3d'}</span>
                         </button>
                         <button type="button" data-apply-proc="${p.id}" data-proc-title="${C.esc(proc.title)}" data-proc-cat="${proc.category}" class="min-h-[38px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md transition">
                             <i data-lucide="check" class="w-4 h-4"></i>
@@ -4231,7 +4305,7 @@
             btn.addEventListener('click', () => {
                 const pId = btn.getAttribute('data-sched-proc');
                 const pTitle = btn.getAttribute('data-proc-title');
-                scheduleProcedureForPlant(pId, pTitle);
+                scheduleProcedureForPlant(pId, pTitle, targetISO);
             });
         });
 
@@ -4268,29 +4342,36 @@
         C.toast(`Intervenção '${procTitle}' registrada com sucesso no histórico de ${target.popularName} (${target.id})!`, 'success', 3000);
     }
 
-    function scheduleProcedureForPlant(plantId, procTitle) {
+    function scheduleProcedureForPlant(plantId, procTitle, targetDateISO = null) {
         const C = global.VaultCore;
         const target = plants.find((p) => p.id === plantId);
         if (!target) return;
 
-        target.nextInterventionDate = C.addDaysISO(C.todayISO(), 3);
+        const schedDate = (targetDateISO && targetDateISO !== C.todayISO())
+            ? targetDateISO
+            : C.addDaysISO(C.todayISO(), 3);
+        target.nextInterventionDate = schedDate;
         target.nextInterventionType = procTitle;
 
         saveData(false);
         renderAll();
         renderProcedureModal(currentProcedureFilter);
-        C.toast(`Intervenção '${procTitle}' agendada para daqui a 3 dias em ${target.popularName}!`, 'info', 2500);
+        C.toast(`Intervenção '${procTitle}' agendada para ${C.formatDateBR(schedDate)} em ${target.popularName}!`, 'info', 2500);
     }
 
     // =========================================================================
     // 8.2. MODAL DE HISTÓRICO GLOBAL DE PODAS & RECUPERAÇÃO DO ACERVO
     // =========================================================================
     let currentPruneHistoryFilter = 'PRUNING';
+    let currentPruneHistoryQuery = '';
 
     function openPruneHistoryModal() {
         const modal = document.getElementById('bonsai-prune-history-modal');
         if (!modal) return;
         currentPruneHistoryFilter = 'PRUNING';
+        currentPruneHistoryQuery = '';
+        const sInp = document.getElementById('prune-history-search');
+        if (sInp) sInp.value = '';
         renderPruneHistoryModal('PRUNING');
         modal.classList.remove('hidden');
         global.VaultCore.refreshIcons(modal);
@@ -4301,18 +4382,24 @@
         if (modal) modal.classList.add('hidden');
     }
 
-    function collectGlobalPruningTimeline(filterMode = 'PRUNING') {
+    function collectGlobalPruningTimeline(filterMode = 'PRUNING', searchQuery = '') {
         const C = global.VaultCore;
         const rows = [];
         const isPruningType = (tp) => {
             const low = String(tp || '').toLowerCase();
-            return low.includes('poda') || low.includes('pinçagem') || low.includes('desfolha') || low.includes('selamento');
+            return low.includes('poda') || low.includes('pinçagem') || low.includes('pinçamento') || low.includes('desfolha') || low.includes('selamento');
+        };
+        const isStructuralType = (tp) => {
+            const low = String(tp || '').toLowerCase();
+            return low.includes('arama') || low.includes('desaram') || low.includes('jin') || low.includes('shari') || low.includes('estrutura');
         };
 
         if (filterMode === 'RECOVERY') {
             plants.forEach((p) => {
-                const pLogs = (p.logs || []).filter(lg => isPruningType(lg.type));
-                const effDate = p.lastPruning || (pLogs[0] && pLogs[0].date) || '';
+                const pLogs = (p.logs || [])
+                    .filter(lg => isPruningType(lg.type))
+                    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+                const effDate = [p.lastPruning || '', (pLogs[0] && pLogs[0].date) || ''].filter(Boolean).sort().pop() || '';
                 const rawDiff = effDate ? C.daysDiffFromToday(effDate) : null;
                 const daysAgo = rawDiff !== null ? Math.abs(rawDiff) : null;
                 if (daysAgo !== null && daysAgo < 30) {
@@ -4328,30 +4415,40 @@
                 }
             });
             rows.sort((a, b) => a.daysAgo - b.daysAgo);
-            return rows;
-        }
-
-        plants.forEach((p) => {
-            (p.logs || []).forEach((lg) => {
-                if (filterMode === 'PRUNING' && !isPruningType(lg.type)) return;
-                rows.push({
-                    date: lg.date || '',
-                    plantId: p.id,
-                    popularName: p.popularName,
-                    bench: p.bench,
-                    type: lg.type || 'Manejo',
-                    detail: lg.detail || ''
+        } else {
+            plants.forEach((p) => {
+                (p.logs || []).forEach((lg) => {
+                    if (filterMode === 'PRUNING' && !isPruningType(lg.type)) return;
+                    if (filterMode === 'STRUCTURAL' && !isStructuralType(lg.type)) return;
+                    rows.push({
+                        date: lg.date || '',
+                        plantId: p.id,
+                        popularName: p.popularName,
+                        bench: p.bench,
+                        type: lg.type || 'Manejo',
+                        detail: lg.detail || ''
+                    });
                 });
             });
-        });
-        rows.sort((a, b) => String(b.date).localeCompare(String(a.date)));
-        return rows;
+            rows.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+        }
+
+        const q = String(searchQuery || '').trim().toLowerCase();
+        if (!q) return rows;
+        return rows.filter(r =>
+            r.plantId.toLowerCase().includes(q) ||
+            r.popularName.toLowerCase().includes(q) ||
+            r.bench.toLowerCase().includes(q) ||
+            r.type.toLowerCase().includes(q) ||
+            r.detail.toLowerCase().includes(q)
+        );
     }
 
     function renderPruneHistoryModal(filterMode = 'PRUNING') {
         currentPruneHistoryFilter = filterMode;
         const C = global.VaultCore;
         const body = document.getElementById('prune-history-list-body');
+        const kpiBar = document.getElementById('prune-history-kpi-bar');
         if (!body) return;
 
         document.querySelectorAll('.ph-filter-btn').forEach((btn) => {
@@ -4363,7 +4460,30 @@
             }
         });
 
-        const rows = collectGlobalPruningTimeline(filterMode);
+        if (kpiBar) {
+            const allPrunings = collectGlobalPruningTimeline('PRUNING', '');
+            const inRecovery = collectGlobalPruningTimeline('RECOVERY', '');
+            const readyCount = plants.filter((p) => {
+                const pLogs = (p.logs || []).filter(lg => String(lg.type || '').toLowerCase().match(/poda|pinçagem|desfolha/)).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+                const effDate = [p.lastPruning || '', (pLogs[0] && pLogs[0].date) || ''].filter(Boolean).sort().pop() || '';
+                if (!effDate) return true;
+                const d = C.daysDiffFromToday(effDate);
+                return d === null || Math.abs(d) >= 60;
+            }).length;
+            kpiBar.innerHTML = `
+                <div class="bg-[#090d16] border border-slate-800 rounded-lg px-3 py-1.5">
+                    <span class="text-slate-400">Podas Registradas:</span> <strong class="text-emerald-300">${allPrunings.length}</strong>
+                </div>
+                <div class="bg-[#090d16] border border-slate-800 rounded-lg px-3 py-1.5">
+                    <span class="text-slate-400">Em Recuperação (&lt;30d):</span> <strong class="text-amber-300">${inRecovery.length} planta(s)</strong>
+                </div>
+                <div class="bg-[#090d16] border border-slate-800 rounded-lg px-3 py-1.5">
+                    <span class="text-slate-400">Prontas p/ Refino (&ge;60d):</span> <strong class="text-cyan-300">${readyCount} planta(s)</strong>
+                </div>
+            `;
+        }
+
+        const rows = collectGlobalPruningTimeline(filterMode, currentPruneHistoryQuery);
         if (rows.length === 0) {
             body.innerHTML = `<div class="p-8 text-center text-sm text-slate-400">Nenhum registro encontrado para este filtro no histórico do acervo.</div>`;
             return;
@@ -4380,9 +4500,22 @@
                     </div>
                     <p class="text-slate-400">${C.esc(r.detail)}</p>
                 </div>
-                <span class="text-[11px] font-mono text-slate-500 shrink-0">${C.esc(r.bench)}</span>
+                <div class="flex items-center gap-2 shrink-0">
+                    <span class="text-[11px] font-mono text-slate-500">${C.esc(r.bench)}</span>
+                    <button type="button" data-ph-edit-plant="${C.esc(r.plantId)}" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-[11px] font-mono">
+                        Abrir Ficha
+                    </button>
+                </div>
             </div>
         `).join('');
+
+        body.querySelectorAll('[data-ph-edit-plant]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pid = btn.getAttribute('data-ph-edit-plant');
+                closePruneHistoryModal();
+                openModal(pid);
+            });
+        });
     }
 
     // =========================================================================
@@ -4415,11 +4548,19 @@
         const btnExportPruneCsv = document.getElementById('btn-export-prune-csv');
         if (btnExportPruneCsv) {
             btnExportPruneCsv.addEventListener('click', () => {
-                const rows = collectGlobalPruningTimeline(currentPruneHistoryFilter);
+                const rows = collectGlobalPruningTimeline(currentPruneHistoryFilter, currentPruneHistoryQuery);
                 const headers = ['Data', 'ID', 'Espécie', 'Bancada', 'Tipo', 'Detalhe'];
                 const csvRows = rows.map(r => [r.date, r.plantId, r.popularName, r.bench, r.type, r.detail]);
                 C.exportCSV(`historico-podas-bonsai-${C.todayISO()}.csv`, headers, csvRows);
                 C.toast('Histórico de podas exportado em CSV!', 'success');
+            });
+        }
+
+        const pruneSearchInp = document.getElementById('prune-history-search');
+        if (pruneSearchInp) {
+            pruneSearchInp.addEventListener('input', (e) => {
+                currentPruneHistoryQuery = e.target.value;
+                renderPruneHistoryModal(currentPruneHistoryFilter);
             });
         }
 

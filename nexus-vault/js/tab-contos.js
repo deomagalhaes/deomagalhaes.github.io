@@ -1066,11 +1066,151 @@
             defaultQuestion: 'Que coisinha boa e simples você gostaria de viver quando o sol gentil acordar amanhã?',
             challengeAct: 'terminou o dia cansado de tantas tarefas e pensou que amanhã teria de recomeçar tudo de novo sem descanso suficiente.',
             breathCue: 'fechou as pálpebras pesadas como pétalas dobradas, inspirou fundo a calma da madrugada e soltou num sono profundo, leve e reparador.'
+        },
+        pesadelo_espanta: {
+            label: '151. O Filtro de Folhas do Sonho Bom (Acolhimento após Pesadelos Noturnos)',
+            defaultMetaphor: 'A teia dourada de folhas macias tecida pela aranha-tecelã da floresta: ela deixa passar somente as imagens doces da noite, enquanto os sustos e sonhos bagunçados derretem feito neblina assim que o vento manso sopra.',
+            defaultQuestion: 'Qual sonho bonito e engraçado você gostaria de convidar para visitar o seu travesseiro hoje?',
+            challengeAct: 'acordou assustado lembrando de uma sombra estranha de sonho antigo e ficou olhando para a porta com o coração batendo depressa.',
+            breathCue: 'tocou a mãozinha morna do cuidador, inspirou o ar cheiroso da mata em paz e soprou devagar dissolvendo toda neblina assustada.'
+        },
+        sobrecarga_sensorial: {
+            label: '152. A Toca de Veludo do Tamanduá (Descompressão após Sobrecarga Sensorial)',
+            defaultMetaphor: 'A toquinha silenciosa forrada de musgo verde depois de um dia de festa barulhenta: quando os ouvidos e olhos recebem luzes e sons demais, entrar no casulo quietinho devolve a maciez do mundo sem pressa nenhuma.',
+            defaultQuestion: 'Como os seus ouvidos e os seus olhinhos agradecem quando o quarto fica quietinho e na meia-luz?',
+            challengeAct: 'voltou de um lugar cheio de vozes altas, luzes fortes e cheiros misturados, sentindo o corpo todo arrepiado e irritado com qualquer barulhinho.',
+            breathCue: 'cobriu as orelhinhas por dois segundos com as mãos em concha, inspirou fundo no silêncio gostoso e soltou o peso de todo o barulho do dia.'
+        },
+        hiperfoco_troca: {
+            label: '153. O Trem das Estações que Sabe Parar na Plataforma (Transição de Hiperfoco)',
+            defaultMetaphor: 'O trenzinho colorido que ama correr pelos trilhos da brincadeira favorita: ele não precisa sumir para sempre quando chega à estação do banho ou do sono — ele só estaciona na garagem iluminada para descansar e brilhar de novo amanhã.',
+            defaultQuestion: 'Onde você vai estacionar a sua brincadeira favorita na imaginação para ela esperar feliz até amanhã?',
+            challengeAct: 'estava tão mergulhado em montar peças e imaginar mundos que chorou bravo quando chegou a hora de guardar tudo para dormir.',
+            breathCue: 'deu um aceno carinhoso de "até amanhã" para os brinquedos, inspirou devagarinho e sentiu paz na mudança tranquila de estação.'
+        },
+        dor_crescimento: {
+            label: '154. As Raízes que Esticam Debaixo da Terra (Dor de Crescimento Noturna)',
+            defaultMetaphor: 'As árvores jovens do cerrado esticando os galhos durante a noite: às vezes a casca dá uma leve repuxada nas perninhas porque o corpo está ficando mais alto e mais forte exatamente enquanto a gente dorme.',
+            defaultQuestion: 'Quanto você acha que o seu coração e suas perninhas já cresceram desde a semana passada?',
+            challengeAct: 'sentiu um incômodo chatinho nas canelas ou joelhos ao esticar as pernas na cama, ficando inquieto e sem entender por que doía.',
+            breathCue: 'recebeu uma massagem morna e circular nas perninhas, inspirou fundo e soltou o ar imaginando uma luz dourada amaciando os músculos.'
+        },
+        consulta_medica: {
+            label: '155. O Estetoscópio que Ouve a Música do Peito (Medo de Médico, Vacina ou Exames)',
+            defaultMetaphor: 'O passaro-doutor da floresta que só quer escutar a batida de tambor feliz do coração e conferir se todas as engrenagens estão afinadas: mesmo quando dá uma picadinha rápida de formiga, ela dura menos que um bocejo e vira escudo protetor.',
+            defaultQuestion: 'Qual superpoder invisível você ganha toda vez que cuida direitinho da sua saúde?',
+            challengeAct: 'lembrou que tinha consulta ou exame marcado e sentiu o estômago embrulhar só de imaginar o jaleco branco.',
+            breathCue: 'pôs a mão no próprio peito sentindo o tum-tum forte e valente, inspirou como um explorador corajoso e soltou o susto devagar.'
+        },
+        mudanca_casa: {
+            label: '156. O Caramujo que Leva o Brilho por Onde Vai (Mudança de Casa ou Quarto)',
+            defaultMetaphor: 'O passarinho que constrói um novo ninho em uma árvore mais alta: as paredes e a janela mudam de lugar, mas o cheiro do cobertor, as risadas em família e o amor que mora dentro da gente viajam juntos na mesma bagagem.',
+            defaultQuestion: 'Qual cantinho novo do quarto ou da casa tem mais a sua cara e o seu jeitinho?',
+            challengeAct: 'olhou para as caixas ou para as paredes desconhecidas do quarto novo e sentiu um aperto de estranheza antes de fechar os olhos.',
+            breathCue: 'abraçou o ursinho ou travesseiro conhecido, puxou o ar sentindo o cheirinho familiar e soltou num suspiro de pertencimento.'
+        },
+        luto_pet: {
+            label: '157. A Estrela de Patinhas no Jardim do Céu (Luto Suave & Saudade de Pet)',
+            defaultMetaphor: 'O amigo bichinho que correu tudo o que podia na grama daqui e virou uma estrelinha macia no céu: toda vez que a gente lembra de uma travessura dele e sorri com carinho, a estrelinha abana a cauda lá de cima.',
+            defaultQuestion: 'Qual lembrança gostosa e engraçada faz o seu coração ficar quentinho quando lembra de quem você ama?',
+            challengeAct: 'sentiu uma lágrima silenciosa escorrer ao olhar para a caminha vazia ou para uma foto antiga, com saudade apertada no peito.',
+            breathCue: 'acolheu a lágrima com um carinho no rosto, inspirou enviando um beijo para o céu estrelado e soltou num suspiro terno de gratidão.'
+        },
+        irmaos_sono: {
+            label: '158. Os Dois Galhos da Mesma Mangueira (Rivalidade entre Irmãos na Hora de Dormir)',
+            defaultMetaphor: 'Dois galhos irmãos que crescem no mesmo tronco forte: durante o dia cada um balança para um lado diferente procurando sol, mas quando chega a noite as folhas se tocam no alto e protegem o mesmo ninho contra o vento.',
+            defaultQuestion: 'Qual coisa legal ou engraçada você e seu irmão ou amigo conseguem fazer melhor quando estão juntos?',
+            challengeAct: 'discutiu por causa do espaço no sofá ou do brinquedo antes de escovar os dentes e deitou ainda emburrado.',
+            breathCue: 'soltou os punhos fechados sobre o lençol, inspirou imaginando paz nos dois lados do quarto e soltou num suspiro conciliador.'
+        },
+        enurese_acolhimento: {
+            label: '159. A Nuvem que Ainda Aprende a Segurar a Chuva (Acolhimento sem Vergonha na Cama)',
+            defaultMetaphor: 'A nuvenzinha aprendiz que está treinando fechar as torneirinhas de madrugada: às vezes uma gotinha escapa sem querer enquanto o cérebro está descansando fundo — ninguém briga com a nuvem, a gente apenas troca o lençol seco com carinho e segue aprendendo.',
+            defaultQuestion: 'Você sabe que o seu corpinho está aprendendo coisas novas todos os dias no ritmo certinho dele?',
+            challengeAct: 'sentiu vergonha ou medo de decepcionar os pais por causa de um escape de xixi durante o sono pesado.',
+            breathCue: 'recebeu um abraço quentinho sem bronca nenhuma, inspirou aliviado e soltou toda a vergonha no ar da noite segura.'
+        },
+        trovoada_chuva: {
+            label: '160. O Tambor Distante das Nuvens Trabalhadoras (Medo de Trovoada e Relâmpagos)',
+            defaultMetaphor: 'Os gigantes gentis do céu batendo tambores para acordar as sementes dorminhocas lá embaixo: o barulho parece alto porque o céu é grande, mas aqui dentro de casa o teto é forte, os vidros são firmes e a tempestade só passa regando as flores.',
+            defaultQuestion: 'Como você imagina o jardim amanhecendo verdinho e limpinho depois que essa chuva passar?',
+            challengeAct: 'escutou um trovão forte lá fora e encolheu os ombros debaixo do lençol, querendo tapar os ouvidos até parar.',
+            breathCue: 'contou os segundos calmos entre o clarão e o som, inspirou sentindo a segurança das paredes de casa e soltou o susto em paz.'
+        },
+        autonomia_rotina: {
+            label: '161. O Pequeno Guardião do Pijama e da Escova (Autonomia na Rotina Noturna)',
+            defaultMetaphor: 'O filhote de lobo-guará que cuida sozinho das próprias patas antes de deitar: cada dentinho escovado e cada botão do pijama fechado é como vestir uma armadura macia de algodão dizendo "eu já consigo cuidar do meu descanso".',
+            defaultQuestion: 'Qual parte da sua rotina de boa-noite você já consegue fazer sozinho com muito orgulho?',
+            challengeAct: 'enrolou na sala fugindo do banho e da escova de dentes porque queria que os adultos fizessem tudo por ele ou adiassem o sono.',
+            breathCue: 'sentiu o frescor gostoso do rosto limpo e do pijama macio, inspirou satisfeito e soltou num sorriso tranquilo de dever cumprido.'
+        },
+        perfeccionismo_letra: {
+            label: '162. A Trilha Torta da Formiga Artista (Perfeccionismo na Escrita e Tarefa Escolar)',
+            defaultMetaphor: 'A formiguinha aprendiz desenhando caminhos na areia: nenhuma linha na natureza é igual à de uma régua de metal — as folhas têm nervuras tortinhas e mesmo assim formam as árvores mais lindas da floresta.',
+            defaultQuestion: 'O que você aprendeu hoje mesmo quando a letra ou o desenho não saiu do jeitinho que você imaginou?',
+            challengeAct: 'chorou frustrado em cima do caderno porque borrou uma palavra com a borracha e achou que não sabia fazer nada direito.',
+            breathCue: 'fechou o caderno suavemente para o dia seguinte, inspirou perdoando os errinhos de treino e soltou num suspiro acolhedor.'
+        },
+        saudade_avos: {
+            label: '163. O Perfume de Bolo na Ponte da Memória (Saudade de Avós ou Familiares Distantes)',
+            defaultMetaphor: 'A caixinha mágica de lembranças guardada atrás do coração: quando a gente fecha os olhos e chama por quem mora longe, o abraço da memória viaja mais rápido que qualquer avião e esquenta as cobertas na hora.',
+            defaultQuestion: 'Se você pudesse mandar um sonho abraçado para alguém que mora longe hoje, quem escolheria?',
+            challengeAct: 'sentiu saudade repentina dos avós ou de um parente querido na hora em que o quarto ficou silencioso.',
+            breathCue: 'pousou as duas mãos sobre o peito morno, inspirou lembrando do sorriso querido e soltou enviando um boa-noite silencioso.'
+        },
+        volta_aulas: {
+            label: '164. A Mochila de Descobertas da Manhã (Transição Férias para Escola)',
+            defaultMetaphor: 'O esquilo explorador arrumando sua bolsinha de nozes no fim do descanso: voltar para a clareira dos amigos traz novidades, risadas no recreio e histórias novas para contar à noite, sem perder o colinho seguro da volta para casa.',
+            defaultQuestion: 'Qual amigo ou brincadeira gostosa vai ser legal reencontrar quando a manhã chegar?',
+            challengeAct: 'ficou agitado pensando no despertador de amanhã cedo e na volta das aulas depois dos dias livres.',
+            breathCue: 'imaginou a mochila já arrumada e quietinha no canto, inspirou fundo confiante e soltou a preocupação de madrugada.'
+        },
+        inquietacao_motora: {
+            label: '165. O Rio que Vira Lago Espelhado (Inquietação Corporal & Pés Inquietos na Cama)',
+            defaultMetaphor: 'O riacho rápido que correu entre pedras o dia inteiro e finalmente encontra um lago largo e fundo: ali a água não precisa mais pular nem fazer espuma — ela se espalha lisinha refletindo a lua inteira sem pressa.',
+            defaultQuestion: 'Você consegue sentir suas perninhas e seus braços ficando quietinhos feitos água parada de lago?',
+            challengeAct: 'rolava de um lado para o outro no colchão, batendo os pés e mexendo os dedos sem conseguir desligar o movimento do corpo.',
+            breathCue: 'apertou forte os punhos e os pés por três segundos… e depois soltou tudo de uma vez, afundando pesado e macio na cama.'
+        },
+        frustracao_regras: {
+            label: '166. O Dado que Rola para Todos os Lados (Perder em Jogos de Regra & Esportividade)',
+            defaultMetaphor: 'A brincadeira de esconde-esconde das cigarras: se o jogo terminasse sempre igual, ninguém teria surpresa nenhuma — perder uma rodada só significa que o tabuleiro está vivo e pronto para outra risada amanhã.',
+            defaultQuestion: 'Qual foi a parte mais divertida de brincar junto hoje, mesmo sem olhar para o placar?',
+            challengeAct: 'perdeu no jogo de tabuleiro antes do jantar e ficou remoendo na cama que o jogo tinha sido injusto.',
+            breathCue: 'inspirou fundo soltando a vontade de ganhar todas as vezes e expirou leve, sabendo que a amizade vale mais que qualquer ponto.'
+        },
+        leitura_voz_alta: {
+            label: '167. O Sabiá que Canta no Seu Próprio Compasso (Insegurança na Leitura em Voz Alta)',
+            defaultMetaphor: 'O sabiá-laranjeira aprendendo uma melodia nova na árvore: no começo ele troca uma nota e gagueja um trinado, mas nenhuma árvore ri do sabiá — a floresta inteira espera paciente até a música sair fluida do peito.',
+            defaultQuestion: 'Que palavrinha difícil você já consegue ler hoje que antes parecia um mistério?',
+            challengeAct: 'tropeçou em algumas sílabas lendo na frente da turma e deitou com medo de precisar ler em voz alta outra vez.',
+            breathCue: 'sentiu a garganta relaxar com o ar morno, inspirou devagarinho dando tempo à própria voz e soltou num suspiro corajoso.'
+        },
+        desapego_naninha: {
+            label: '168. O Cobertor que Virou Capa de Aventureiro (Despedida Gentil da Chupeta ou Naninha)',
+            defaultMetaphor: 'A folha-berço que cuidou da lagarta quando ela era pequenina: quando as asas crescem fortes, a folha continua guardada com carinho na memória da árvore, enquanto o bichinho descobre que já sabe dormir seguro com a própria respiração.',
+            defaultQuestion: 'Como é gostoso perceber que você está ficando grande sem perder nenhum pouquinho do nosso carinho?',
+            challengeAct: 'sentiu falta de um objeto antigo de bebê na hora de pegar no sono e pediu por ele com voz chorosa.',
+            breathCue: 'segurou a própria mão no peito como uma almofadinha macia, inspirou profundo e soltou sentindo conforto próprio por dentro.'
+        },
+        choro_sem_motivo: {
+            label: '169. A Bruma que Limpa o Céu da Tardinha (Choro Cansado sem Motivo Aparente)',
+            defaultMetaphor: 'A garoa fininha que cai no fim de um dia quente mesmo sem nuvem escura: às vezes o coração juntou dezenas de pequenas emoções ao longo do dia e precisa só de algumas lágrimas mansas para esvaziar o balde e dormir leve.',
+            defaultQuestion: 'Não é bom saber que você nunca precisa explicar tudo para ganhar um abraço bem apertado?',
+            challengeAct: 'começou a chorar sentido de repente antes de deitar, sem nem saber dizer exatamente o que tinha acontecido.',
+            breathCue: 'descansou a bochecha no ombro seguro, inspirou devagarinho no ritmo do coração adulto e soltou num suspiro longo de alívio.'
+        },
+        gratidao_maos_mente: {
+            label: '170. O Baú Dourado das Três Coisas Boas (Gratidão Noturna & Consolidação Positiva)',
+            defaultMetaphor: 'O esquilo colecionador de sementes luminosas: antes de fechar os olhos da toca, ele guarda três lembranças brilhantes do dia — um sorriso, uma descoberta e um abraço — para que o sono faça esses tesouros florescerem durante a noite.',
+            defaultQuestion: 'Quais são as três coisinhas boas de hoje que você quer guardar no seu baú dourado antes de dormir?',
+            challengeAct: 'só conseguia lembrar do único momento chato da tarde, esquecendo todas as brincadeiras e carinhos que também aconteceram.',
+            breathCue: 'sorriu de leve com os olhos fechados, inspirou agradecendo ao dia que passou e soltou num sono doce, protegido e profundo.'
         }
     };
 
     // =========================================================================
-    // 2. 14 CENÁRIOS POÉTICOS BRASILEIROS E CÓSMICOS
+    // 2. 16 CENÁRIOS POÉTICOS BRASILEIROS E CÓSMICOS
     // =========================================================================
     const STORY_SCENARIOS = {
         cerrado: {
@@ -1156,23 +1296,41 @@
             opening: 'Em meio às pedras de calcário azulado e matas silenciosas de Bonito, a nascente brotava tão pura e transparente que parecia água de vidro mágico sob a luz da lua.',
             guide: 'um Peixe-Piraputanga de cauda dourada que descansava sereno na sombra de uma planta aquática fresca',
             closing: 'A água continuou fluindo macia e silenciosa entre os seixos lisos, lavando todo o cansaço e ninando os pensamentos num sossego profundo.'
+        },
+        chapada_diamantina: {
+            label: 'Chapada Diamantina & Poço Encantado Azul',
+            opening: 'Entre paredões antigos de pedra dourada na Chapada Diamantina, um feixe manso de luar atravessava a gruta silenciosa iluminando águas tão azuis e imóveis que pareciam céu líquido.',
+            guide: 'uma Coruja-Suindara de penas macias e voo sem nenhum ruído que velava o descanso do alto da fenda de pedra',
+            closing: 'O silêncio antigo da serra abraçou cada pensamento cansado, transformando o peso do dia em calma profunda e duradoura.'
+        },
+        campos_gerais: {
+            label: 'Campos Gerais & Cânion das Borboletas Azuis',
+            opening: 'Nos campos ondulados de capim macio e araucárias antigas dos Campos Gerais, a neblina da tardinha descia como um lençol de lã branca cobrindo os vales silenciosos.',
+            guide: 'um Veado-Campeiro de passos leves e orelhas atentas que escolhia a moita mais quentinha de capim para dormir',
+            closing: 'Sob a manta suave da neblina estrelada, cada flor dobrou suas pétalas e o campo inteiro adormeceu embalado pela brisa serena.'
         }
     };
 
     let savedStories = [];
     let currentComposedStory = { title: '', text: '', question: '', theme: '', scenario: '', source: 'Modular Offline' };
+    let storyVariationSeed = 0;
     let amberFontSizeRem = 1.25;
     let amberLineHeight = 1.85;
     let activeAmberTheme = 'amber';
     let amberNarrateRate = 0.85;
     let amberAudioMode = 'brown';
     let amberAudioVolume = 30;
+    let amberAutoScrollMs = 60;
+    let amberReadingPositions = {};
     let autoScrollInterval = null;
     let isAutoScrolling = false;
+    let isBreathePacerActive = false;
+    let breathePacerInterval = null;
     let sleepTimerTimeout = null;
     let sleepCountdownInterval = null;
     let sleepEndTimeMs = 0;
     let wakeLockSentinel = null;
+    let wakeLockDesired = false;
     let amberEventsBound = false;
 
     const AMBER_PREFS_KEY = 'dm_vault_amber_prefs';
@@ -1188,19 +1346,29 @@
             if (saved.narrateRate) amberNarrateRate = Math.max(0.6, Math.min(1.2, Number(saved.narrateRate)));
             if (saved.audioMode) amberAudioMode = String(saved.audioMode);
             if (saved.audioVolume !== undefined) amberAudioVolume = Math.max(0, Math.min(100, Number(saved.audioVolume)));
+            if (saved.autoScrollMs) amberAutoScrollMs = Math.max(25, Math.min(120, Number(saved.autoScrollMs)));
+            if (saved.readingPositions && typeof saved.readingPositions === 'object') {
+                amberReadingPositions = Object.assign({}, saved.readingPositions);
+            }
         }
     }
 
     function saveAmberPrefs() {
         const C = global.VaultCore;
         if (!C || !C.store) return;
+        const posKeys = Object.keys(amberReadingPositions);
+        if (posKeys.length > 20) {
+            posKeys.slice(0, posKeys.length - 20).forEach((k) => delete amberReadingPositions[k]);
+        }
         C.store.set(AMBER_PREFS_KEY, {
             fontSizeRem: amberFontSizeRem,
             lineHeight: amberLineHeight,
             theme: activeAmberTheme,
             narrateRate: amberNarrateRate,
             audioMode: amberAudioMode,
-            audioVolume: amberAudioVolume
+            audioVolume: amberAudioVolume,
+            autoScrollMs: amberAutoScrollMs,
+            readingPositions: amberReadingPositions
         });
     }
 
@@ -1211,6 +1379,7 @@
     let soundSourceNode = null;
     let soundGainNode = null;
     let isRelaxAudioPlaying = false;
+    let stopAudioFadeTimeout = null;
 
     function getOrCreateAudioContext() {
         if (!audioCtx) {
@@ -1225,7 +1394,14 @@
 
     function startRelaxationAudio(mode = 'brown') {
         const ctx = getOrCreateAudioContext();
-        stopRelaxationAudio();
+        if (stopAudioFadeTimeout) {
+            clearTimeout(stopAudioFadeTimeout);
+            stopAudioFadeTimeout = null;
+        }
+        if (soundSourceNode) {
+            try { soundSourceNode.stop(); soundSourceNode.disconnect(); } catch (_) {}
+            soundSourceNode = null;
+        }
 
         const durationSec = mode === 'wave' ? 6 : 4;
         const bufferSize = ctx.sampleRate * durationSec;
@@ -1311,16 +1487,22 @@
     }
 
     function stopRelaxationAudio() {
+        if (stopAudioFadeTimeout) {
+            clearTimeout(stopAudioFadeTimeout);
+            stopAudioFadeTimeout = null;
+        }
         if (soundGainNode && audioCtx && audioCtx.state === 'running') {
             try {
                 soundGainNode.gain.setValueAtTime(soundGainNode.gain.value, audioCtx.currentTime);
                 soundGainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
             } catch (_) {}
         }
-        setTimeout(() => {
-            if (soundSourceNode) {
-                try { soundSourceNode.stop(); soundSourceNode.disconnect(); } catch (_) {}
-                soundSourceNode = null;
+        const nodeToStop = soundSourceNode;
+        soundSourceNode = null;
+        stopAudioFadeTimeout = setTimeout(() => {
+            stopAudioFadeTimeout = null;
+            if (nodeToStop) {
+                try { nodeToStop.stop(); nodeToStop.disconnect(); } catch (_) {}
             }
         }, 220);
         isRelaxAudioPlaying = false;
@@ -1513,9 +1695,21 @@
 
         const title = `${params.childName ? params.childName + ' e ' : 'O Segredo d'}o Descanso em ${sc.label.split('&')[0].trim()}`;
 
-        const act1 = `${sc.opening} ${paceNote} Ali caminhava ${protagonist}, sentindo o frescor da noite sob os pés e observando as primeiras luzes douradas e calmas do entardecer.`;
+        const walkVariants = [
+            `Ali caminhava ${protagonist}, sentindo o frescor da noite sob os pés e observando as primeiras luzes douradas e calmas do entardecer.`,
+            `Por aquela trilha macia seguia ${protagonist}, ouvindo o vento conversar baixinho com as folhas enquanto o céu trocava o azul por um manto estrelado.`,
+            `Naquele cantinho protegido estava ${protagonist}, sentindo a temperatura gostosa da noite e reparando em como tudo na natureza ia diminuindo o passo.`
+        ];
+        const guideVariants = [
+            `Foi então que se aproximou ${sc.guide}. Com voz baixinha e acolhedora, mostrou um segredo da natureza: "${params.metaphor}".`,
+            `Bem nessa hora, chegou bem devagarinho ${sc.guide}. Com olhar manso e sorriso tranquilo, partilhou um ensinamento sereno: "${params.metaphor}".`,
+            `Então apareceu sem pressa ${sc.guide}, sentou-se ao lado na relva morna e sussurrou uma sabedoria antiga: "${params.metaphor}".`
+        ];
+        const vIdx = storyVariationSeed % walkVariants.length;
+
+        const act1 = `${sc.opening} ${paceNote} ${walkVariants[vIdx]}`;
         const act2 = `Mais cedo naquele dia, ${protagonist} ${th.challengeAct}`;
-        const act3 = `Foi então que se aproximou ${sc.guide}. Com voz baixinha e acolhedora, mostrou um segredo da natureza: "${params.metaphor}". Juntos, praticaram a pausa mágica: ${protagonist} ${th.breathCue} Pouco a pouco, os ombros soltaram todo o peso e o coração encontrou um ritmo quentinho e seguro.`;
+        const act3 = `${guideVariants[vIdx]} Juntos, praticaram a pausa mágica: ${protagonist} ${th.breathCue} Pouco a pouco, os ombros soltaram todo o peso e o coração encontrou um ritmo quentinho e seguro.`;
         const act4 = `${sc.closing} ${bridgeClosing}`;
 
         const fullText = `${act1}\n\n${act2}\n\n${act3}\n\n${act4}`;
@@ -1682,11 +1876,14 @@
     }
 
     // =========================================================================
-    // 5.1. NARRADOR VOCAL SUAVE OFFLINE (WEB SPEECH API)
+    // 5.1. NARRADOR VOCAL SUAVE OFFLINE POR BLOCOS (WEB SPEECH API ROBUSTA)
     // =========================================================================
     let speechUtterance = null;
     let isSpeaking = false;
     let speechKeepAliveTimer = null;
+    let speechChunkQueue = [];
+    let speechChunkIdx = 0;
+    let speechSessionId = 0;
     let cachedVoices = [];
 
     function populateVoices() {
@@ -1703,13 +1900,61 @@
         }
     }
 
+    function clearNarratedParagraphHighlight() {
+        document.querySelectorAll('#amber-reader-body p, #amber-reader-question-box').forEach((el) => {
+            el.classList.remove('ring-1', 'ring-amber-500/40', 'bg-amber-500/10', 'rounded-xl', 'px-3', 'py-2');
+        });
+    }
+
+    function speakNextChunk(sessionId) {
+        if (sessionId !== speechSessionId || !isSpeaking) return;
+        if (speechChunkIdx >= speechChunkQueue.length) {
+            stopSpeechNarration();
+            return;
+        }
+
+        const chunk = speechChunkQueue[speechChunkIdx];
+        clearNarratedParagraphHighlight();
+        if (chunk.el) {
+            chunk.el.classList.add('ring-1', 'ring-amber-500/40', 'bg-amber-500/10', 'rounded-xl', 'px-3', 'py-2');
+            try {
+                chunk.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (_) {}
+        }
+
+        const utt = new SpeechSynthesisUtterance(chunk.text);
+        utt.lang = 'pt-BR';
+        const rateSelect = document.getElementById('amber-narrate-rate-select');
+        utt.rate = rateSelect ? parseFloat(rateSelect.value) || 0.85 : 0.85;
+        utt.pitch = 0.95;
+
+        const allVoices = (cachedVoices && cachedVoices.length > 0) ? cachedVoices : (window.speechSynthesis.getVoices() || []);
+        const ptBrVoices = allVoices.filter(v => v.lang && (v.lang.toLowerCase().includes('pt-br') || v.lang.toLowerCase().includes('pt_br')));
+        const naturalPtBr = ptBrVoices.find(v => (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Maria') || v.name.includes('Francisca') || v.name.includes('Luciana')));
+        const ptVoice = naturalPtBr || ptBrVoices[0] || allVoices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
+        if (ptVoice) utt.voice = ptVoice;
+
+        utt.onend = () => {
+            if (sessionId !== speechSessionId || !isSpeaking) return;
+            speechChunkIdx += 1;
+            setTimeout(() => speakNextChunk(sessionId), 260);
+        };
+        utt.onerror = () => {
+            if (sessionId !== speechSessionId) return;
+            stopSpeechNarration();
+        };
+
+        speechUtterance = utt;
+        window.speechSynthesis.speak(utt);
+    }
+
     function toggleSpeechNarration() {
         if (!('speechSynthesis' in window)) {
             if (global.VaultCore) global.VaultCore.toast('Síntese vocal não suportada neste navegador.', 'warning');
             return;
         }
 
-        if (window.speechSynthesis.speaking) {
+        if (isSpeaking || window.speechSynthesis.speaking) {
             if (window.speechSynthesis.paused) {
                 window.speechSynthesis.resume();
                 updateNarrateUI(true);
@@ -1721,55 +1966,46 @@
 
         const bodyEl = document.getElementById('amber-reader-body');
         const questionEl = document.getElementById('amber-reader-question');
+        const qBoxEl = document.getElementById('amber-reader-question-box');
         const titleEl = document.getElementById('amber-reader-title');
-        const textToRead = [
-            titleEl ? titleEl.textContent : '',
-            bodyEl ? bodyEl.textContent : '',
-            questionEl ? ('Sussurro final de boa-noite: ' + questionEl.textContent) : ''
-        ].filter(Boolean).join('. ');
 
-        if (!textToRead.trim()) return;
+        const queue = [];
+        if (titleEl && titleEl.textContent.trim()) {
+            queue.push({ text: titleEl.textContent.trim(), el: null });
+        }
+        if (bodyEl) {
+            bodyEl.querySelectorAll('p').forEach((p) => {
+                const txt = p.textContent.trim();
+                if (txt) queue.push({ text: txt, el: p });
+            });
+        }
+        if (questionEl && questionEl.textContent.trim()) {
+            queue.push({ text: 'Sussurro final de boa-noite: ' + questionEl.textContent.trim(), el: qBoxEl || null });
+        }
+
+        if (queue.length === 0) return;
 
         stopSpeechNarration();
-        speechUtterance = new SpeechSynthesisUtterance(textToRead);
-        speechUtterance.lang = 'pt-BR';
-        const rateSelect = document.getElementById('amber-narrate-rate-select');
-        speechUtterance.rate = rateSelect ? parseFloat(rateSelect.value) || 0.85 : 0.85; // Leitura compassada e suave
-        speechUtterance.pitch = 0.95; // Tom morno para indução ao relaxamento
-
-        const allVoices = (cachedVoices && cachedVoices.length > 0) ? cachedVoices : (window.speechSynthesis.getVoices() || []);
-        const ptBrVoices = allVoices.filter(v => v.lang && (v.lang.toLowerCase().includes('pt-br') || v.lang.toLowerCase().includes('pt_br')));
-        const naturalPtBr = ptBrVoices.find(v => (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Google') || v.name.includes('Maria') || v.name.includes('Francisca') || v.name.includes('Luciana')));
-        const ptVoice = naturalPtBr || ptBrVoices[0] || allVoices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
-        if (ptVoice) speechUtterance.voice = ptVoice;
-
-        speechUtterance.onend = () => {
-            isSpeaking = false;
-            if (speechKeepAliveTimer) { clearInterval(speechKeepAliveTimer); speechKeepAliveTimer = null; }
-            updateNarrateUI(false);
-        };
-        speechUtterance.onerror = () => {
-            isSpeaking = false;
-            if (speechKeepAliveTimer) { clearInterval(speechKeepAliveTimer); speechKeepAliveTimer = null; }
-            updateNarrateUI(false);
-        };
-
-        window.speechSynthesis.speak(speechUtterance);
+        speechSessionId += 1;
+        speechChunkQueue = queue;
+        speechChunkIdx = 0;
         isSpeaking = true;
         updateNarrateUI(true);
+        speakNextChunk(speechSessionId);
 
         if (speechKeepAliveTimer) clearInterval(speechKeepAliveTimer);
         speechKeepAliveTimer = setInterval(() => {
-            if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            if (window.speechSynthesis && window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
                 window.speechSynthesis.pause();
                 window.speechSynthesis.resume();
-            } else {
+            } else if (!isSpeaking) {
                 if (speechKeepAliveTimer) { clearInterval(speechKeepAliveTimer); speechKeepAliveTimer = null; }
             }
-        }, 10000);
+        }, 9000);
     }
 
     function stopSpeechNarration() {
+        speechSessionId += 1;
         if ('speechSynthesis' in window) {
             try { window.speechSynthesis.cancel(); } catch (_) {}
         }
@@ -1777,7 +2013,11 @@
             clearInterval(speechKeepAliveTimer);
             speechKeepAliveTimer = null;
         }
+        speechChunkQueue = [];
+        speechChunkIdx = 0;
+        speechUtterance = null;
         isSpeaking = false;
+        clearNarratedParagraphHighlight();
         updateNarrateUI(false);
     }
 
@@ -1800,18 +2040,10 @@
         saveAmberPrefs();
     }
 
-    async function toggleAmberWakeLock() {
+    async function acquireWakeLock(silent = false) {
         const C = global.VaultCore;
         const btn = document.getElementById('btn-amber-wakelock');
-        if (!('wakeLock' in navigator)) {
-            if (C) C.toast('Wake Lock nativo não suportado neste navegador.', 'info', 2200);
-            return;
-        }
-        if (wakeLockSentinel) {
-            await releaseAmberWakeLock();
-            if (C) C.toast('Bloqueio de tela restaurado ao padrão do sistema.', 'info', 1800);
-            return;
-        }
+        if (!('wakeLock' in navigator)) return false;
         try {
             wakeLockSentinel = await navigator.wakeLock.request('screen');
             wakeLockSentinel.addEventListener('release', () => {
@@ -1825,10 +2057,28 @@
                 btn.classList.add('bg-amber-500/30', 'border-amber-400');
                 btn.textContent = '☀️ Acesa';
             }
-            if (C) C.toast('Tela mantida acesa durante a leitura noturna!', 'success', 2000);
+            if (!silent && C) C.toast('Tela mantida acesa durante a leitura noturna!', 'success', 2000);
+            return true;
         } catch (_) {
-            if (C) C.toast('Não foi possível ativar Wake Lock nesta aba.', 'warning', 2000);
+            if (!silent && C) C.toast('Não foi possível ativar Wake Lock nesta aba.', 'warning', 2000);
+            return false;
         }
+    }
+
+    async function toggleAmberWakeLock() {
+        const C = global.VaultCore;
+        if (!('wakeLock' in navigator)) {
+            if (C) C.toast('Wake Lock nativo não suportado neste navegador.', 'info', 2200);
+            return;
+        }
+        if (wakeLockSentinel) {
+            wakeLockDesired = false;
+            await releaseAmberWakeLock();
+            if (C) C.toast('Bloqueio de tela restaurado ao padrão do sistema.', 'info', 1800);
+            return;
+        }
+        wakeLockDesired = true;
+        await acquireWakeLock(false);
     }
 
     async function releaseAmberWakeLock() {
@@ -1841,6 +2091,49 @@
             btn.classList.remove('bg-amber-500/30', 'border-amber-400');
             btn.textContent = '☀️ Tela';
         }
+    }
+
+    function stopBreathePacer() {
+        if (breathePacerInterval) {
+            clearInterval(breathePacerInterval);
+            breathePacerInterval = null;
+        }
+        isBreathePacerActive = false;
+        const box = document.getElementById('amber-breathing-pacer');
+        const btn = document.getElementById('btn-amber-breathe');
+        if (box) box.classList.add('hidden');
+        if (btn) {
+            btn.classList.remove('bg-amber-500/30', 'border-amber-400');
+        }
+    }
+
+    function toggleBreathePacer() {
+        const box = document.getElementById('amber-breathing-pacer');
+        const orb = document.getElementById('amber-breathe-orb');
+        const cue = document.getElementById('amber-breathe-cue');
+        const btn = document.getElementById('btn-amber-breathe');
+        if (!box) return;
+        if (isBreathePacerActive) {
+            stopBreathePacer();
+            return;
+        }
+        isBreathePacerActive = true;
+        box.classList.remove('hidden');
+        if (btn) btn.classList.add('bg-amber-500/30', 'border-amber-400');
+        let sec = 0;
+        const runStep = () => {
+            const phase = sec % 10;
+            if (phase < 4) {
+                if (cue) cue.textContent = `Inspire mansinho pelo nariz... (${4 - phase}s)`;
+                if (orb) orb.style.transform = 'scale(1.6)';
+            } else {
+                if (cue) cue.textContent = `Sopre bem devagar como uma folhinha... (${10 - phase}s)`;
+                if (orb) orb.style.transform = 'scale(0.85)';
+            }
+            sec += 1;
+        };
+        runStep();
+        breathePacerInterval = setInterval(runStep, 1000);
     }
 
     function openAmberNightReader(storyObj) {
@@ -1879,6 +2172,8 @@
         if (modeSel) modeSel.value = amberAudioMode;
         const volSel = document.getElementById('audio-volume-slider');
         if (volSel) volSel.value = String(amberAudioVolume);
+        const speedSel = document.getElementById('amber-autoscroll-speed-select');
+        if (speedSel) speedSel.value = String(amberAutoScrollMs);
 
         // Metadados de leitura suave (palavras e minutos estimados)
         if (target.text) {
@@ -1893,36 +2188,30 @@
             }
         }
 
-        // Progresso de rolagem e persistência de posição
+        // Progresso de rolagem e persistência durável no LocalStorage
+        let scrollSaveDebounce = null;
+        const scrollKey = (target && target.title) ? encodeURIComponent(target.title.slice(0, 48)) : '';
         overlay.onscroll = () => {
             const maxScroll = overlay.scrollHeight - overlay.clientHeight;
             const pct = maxScroll > 0 ? (overlay.scrollTop / maxScroll) * 100 : 0;
             const pb = document.getElementById('amber-scroll-progress');
             if (pb) pb.style.width = `${pct}%`;
 
-            if (target && target.title && maxScroll > 0) {
-                try {
-                    const scrollKey = 'dm_vault_amber_pos_' + encodeURIComponent(target.title.slice(0, 32));
-                    sessionStorage.setItem(scrollKey, String(overlay.scrollTop));
-                } catch (_) {}
+            if (scrollKey && maxScroll > 0) {
+                amberReadingPositions[scrollKey] = Math.round(overlay.scrollTop);
+                if (scrollSaveDebounce) clearTimeout(scrollSaveDebounce);
+                scrollSaveDebounce = setTimeout(() => {
+                    saveAmberPrefs();
+                }, 400);
             }
         };
 
-        // Restaura posição prévia de leitura do conto se disponível
-        if (target && target.title) {
-            try {
-                const scrollKey = 'dm_vault_amber_pos_' + encodeURIComponent(target.title.slice(0, 32));
-                const savedPos = parseInt(sessionStorage.getItem(scrollKey) || '0', 10);
-                if (savedPos > 0) {
-                    setTimeout(() => {
-                        overlay.scrollTo({ top: savedPos, behavior: 'smooth' });
-                    }, 120);
-                } else {
-                    overlay.scrollTop = 0;
-                }
-            } catch (_) {
-                overlay.scrollTop = 0;
-            }
+        // Restaura posição prévia de leitura do conto a partir do LocalStorage
+        if (scrollKey && amberReadingPositions[scrollKey] > 0) {
+            const savedPos = parseInt(amberReadingPositions[scrollKey], 10);
+            setTimeout(() => {
+                overlay.scrollTo({ top: savedPos, behavior: 'smooth' });
+            }, 120);
         } else {
             overlay.scrollTop = 0;
         }
@@ -1997,7 +2286,10 @@
         document.body.style.overflow = '';
         stopAutoScroll();
         stopSpeechNarration();
+        stopBreathePacer();
+        wakeLockDesired = false;
         releaseAmberWakeLock();
+        saveAmberPrefs();
         if (readerKeyHandler) {
             document.removeEventListener('keydown', readerKeyHandler);
             readerKeyHandler = null;
@@ -2031,7 +2323,7 @@
                     stopAutoScroll();
                     updateAutoScrollUI(false);
                 }
-            }, 60);
+            }, amberAutoScrollMs || 60);
         }
     }
 
@@ -2058,7 +2350,7 @@
         }
     }
 
-    function renderSavedStoriesLibrary() {
+    function renderSavedStoriesLibrary(searchQuery = '') {
         const C = global.VaultCore;
         const listEl = document.getElementById('ct-saved-library-list');
         const countEl = document.getElementById('ct-library-count');
@@ -2071,22 +2363,37 @@
             return;
         }
 
-        listEl.innerHTML = savedStories.map((item, idx) => `
+        const q = String(searchQuery || '').trim().toLowerCase();
+        const filtered = savedStories
+            .map((item, origIdx) => ({ item, origIdx }))
+            .filter(({ item }) => !q ||
+                (item.title && item.title.toLowerCase().includes(q)) ||
+                (item.theme && item.theme.toLowerCase().includes(q)) ||
+                (item.scenario && item.scenario.toLowerCase().includes(q)) ||
+                (item.text && item.text.toLowerCase().includes(q))
+            );
+
+        if (filtered.length === 0) {
+            listEl.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Nenhum conto salvo encontrado para "${C.esc(searchQuery)}".</p>`;
+            return;
+        }
+
+        listEl.innerHTML = filtered.map(({ item, origIdx }) => `
             <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">${item.theme.split('(')[0].trim()}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">${C.esc((item.theme || 'Conto').split('(')[0].trim())}</span>
                         <span class="text-[11px] font-mono text-slate-400">${C.formatDateBR(item.createdAt)}</span>
                     </div>
                     <div class="font-bold text-sm text-slate-200 truncate mt-1">${C.esc(item.title)}</div>
                     <p class="text-xs text-slate-400 italic truncate mt-0.5">${C.esc(item.question)}</p>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button type="button" data-read-saved="${idx}" class="min-h-[36px] px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1">
+                    <button type="button" data-read-saved="${origIdx}" class="min-h-[36px] px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-1">
                         <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
                         <span>Ler</span>
                     </button>
-                    <button type="button" data-del-saved="${idx}" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 text-xs">
+                    <button type="button" data-del-saved="${origIdx}" class="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-300 text-xs">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                     </button>
                 </div>
@@ -2250,9 +2557,13 @@
 
                         <!-- Biblioteca Local de Contos Favoritos -->
                         <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
                                 <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-slate-200">Biblioteca Local de Contos Favoritos</h3>
-                                <span id="ct-library-count" class="text-xs font-mono text-slate-400">0 contos salvos</span>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="ct-library-search" placeholder="Filtrar salvos..."
+                                        class="min-h-[32px] px-2.5 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200 w-36 sm:w-44 focus:outline-none focus:border-amber-500">
+                                    <span id="ct-library-count" class="text-xs font-mono text-slate-400">0 contos salvos</span>
+                                </div>
                             </div>
                             <div id="ct-saved-library-list" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
                         </div>
@@ -2352,9 +2663,15 @@
         const btnCompose = document.getElementById('btn-ct-compose-offline');
         if (btnCompose) {
             btnCompose.addEventListener('click', () => {
+                storyVariationSeed += 1;
                 updateModularAndPrompt();
                 C.toast('Conto modular offline composto em 4 atos!', 'success', 2000);
             });
+        }
+
+        const libSearch = document.getElementById('ct-library-search');
+        if (libSearch) {
+            libSearch.addEventListener('input', (e) => renderSavedStoriesLibrary(e.target.value));
         }
 
         const btnGemini = document.getElementById('btn-ct-gemini-run');
@@ -2481,6 +2798,30 @@
         if (btnAutoScroll) {
             btnAutoScroll.addEventListener('click', toggleAutoScroll);
         }
+
+        const autoSpeedSel = document.getElementById('amber-autoscroll-speed-select');
+        if (autoSpeedSel) {
+            autoSpeedSel.addEventListener('change', () => {
+                amberAutoScrollMs = parseInt(autoSpeedSel.value, 10) || 60;
+                saveAmberPrefs();
+                if (isAutoScrolling) {
+                    stopAutoScroll();
+                    toggleAutoScroll();
+                }
+            });
+        }
+
+        const btnBreathe = document.getElementById('btn-amber-breathe');
+        if (btnBreathe) {
+            btnBreathe.addEventListener('click', toggleBreathePacer);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            const readerOverlay = document.getElementById('amber-night-reader');
+            if (document.visibilityState === 'visible' && wakeLockDesired && readerOverlay && !readerOverlay.classList.contains('hidden') && !wakeLockSentinel) {
+                acquireWakeLock(true);
+            }
+        });
 
         const btnWakeLock = document.getElementById('btn-amber-wakelock');
         if (btnWakeLock) {

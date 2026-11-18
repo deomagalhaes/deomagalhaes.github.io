@@ -1514,6 +1514,32 @@
             });
         }
 
+        // Cross-Checks Clínicos Automáticos (WASI ΔQIV-QIE, Wechsler IAG-ICC, RAVLT Retenção)
+        const wasiEval = computeWasiAll(prot);
+        if (wasiEval.deltaVE !== null && Math.abs(wasiEval.deltaVE) >= 15) {
+            chips.push({
+                subtab: 'wasi',
+                label: `Alerta WASI: |QIV−QIE| = ${Math.abs(Math.round(wasiEval.deltaVE))} pts (p < 0,01)`,
+                badge: 'bg-rose-500/15 text-rose-300 border-rose-500/40'
+            });
+        }
+        const wechEval = computeWechslerIndices(prot);
+        if (wechEval.deltaIagIcc !== null && wechEval.deltaIagIcc >= 15) {
+            chips.push({
+                subtab: 'wasi',
+                label: `IAG > ICC (+${Math.round(wechEval.deltaIagIcc)} pts • Sobrecarga Executiva)`,
+                badge: 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+            });
+        }
+        const ravltEval = computeRavltAll(prot);
+        if (ravltEval.velEsq !== null && ravltEval.velEsq < 0.75) {
+            chips.push({
+                subtab: 'bpa_ravlt',
+                label: `RAVLT Retenção A7/A6 = ${fmtPlain(ravltEval.velEsq, 2)} (< 0,75)`,
+                badge: 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+            });
+        }
+
         if (chips.length === 0) {
             bar.innerHTML = '';
             bar.className = 'hidden';
@@ -4527,11 +4553,26 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
 
                 <!-- Coluna Direita: Biblioteca Local de Normas Reutilizáveis -->
                 <div class="lg:col-span-5 bg-[#0f172a] border border-[#1e293b] rounded-2xl p-4 sm:p-6 space-y-4">
-                    <div class="border-b border-slate-800 pb-3">
-                        <h3 class="text-sm sm:text-base font-bold text-slate-100">Minha Biblioteca Local de Normas</h3>
+                    <div class="border-b border-slate-800 pb-3 space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h3 class="text-sm sm:text-base font-bold text-slate-100">Minha Biblioteca Local de Normas</h3>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" id="btn-univ-export-norms" title="Exportar Biblioteca de Normas (.json)"
+                                    class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-300 text-[11px] font-mono">
+                                    .JSON
+                                </button>
+                                <button type="button" id="btn-univ-import-norms" title="Importar Normas (.json)"
+                                    class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 text-[11px] font-mono">
+                                    Importar
+                                </button>
+                                <input type="file" id="input-univ-import-norms" accept=".json,application/json" class="hidden">
+                            </div>
+                        </div>
                         <p class="text-xs text-slate-400">Clique em <strong>Carregar</strong> para aplicar instantaneamente Média, DP, Polaridade e Fidedignidade no conversor.</p>
+                        <input type="text" id="univ-norm-search" placeholder="Filtrar norma por instrumento, subteste ou idade..."
+                            class="w-full min-h-[34px] px-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200 focus:outline-none focus:border-cyan-400">
                     </div>
-                    <div id="univ-norm-library-list" class="space-y-2.5 max-h-[520px] overflow-y-auto pr-1"></div>
+                    <div id="univ-norm-library-list" class="space-y-2.5 max-h-[500px] overflow-y-auto pr-1"></div>
                 </div>
             </div>
         `;
@@ -4640,6 +4681,66 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
             });
         }
 
+        const normSearch = document.getElementById('univ-norm-search');
+        if (normSearch) {
+            normSearch.addEventListener('input', (e) => renderNormLibraryList(e.target.value));
+        }
+
+        const btnExpNorms = document.getElementById('btn-univ-export-norms');
+        if (btnExpNorms) {
+            btnExpNorms.addEventListener('click', () => {
+                C.exportJSON(`biblioteca-normas-psicometria-${C.todayISO()}.json`, {
+                    app: 'dm-nexus-vault-norm-library',
+                    exportedAt: new Date().toISOString(),
+                    normLibrary: appState.normLibrary
+                });
+                C.toast(`Biblioteca com ${appState.normLibrary.length} norma(s) exportada.`, 'success');
+            });
+        }
+
+        const btnImpNorms = document.getElementById('btn-univ-import-norms');
+        const inpImpNorms = document.getElementById('input-univ-import-norms');
+        if (btnImpNorms && inpImpNorms) {
+            btnImpNorms.addEventListener('click', () => inpImpNorms.click());
+            inpImpNorms.addEventListener('change', (ev) => {
+                const file = ev.target.files && ev.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const parsed = JSON.parse(String(e.target.result || ''));
+                        const arr = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.normLibrary) ? parsed.normLibrary : null);
+                        if (!arr) throw new Error('JSON sem lista de normas.');
+                        let added = 0;
+                        arr.forEach((n) => {
+                            if (n && n.instrument && n.subtest && Number.isFinite(Number(n.mean)) && Number(n.sd) > 0) {
+                                appState.normLibrary.unshift({
+                                    id: n.id || ('norm_' + Date.now() + '_' + added),
+                                    instrument: String(n.instrument),
+                                    subtest: String(n.subtest),
+                                    ageGroup: String(n.ageGroup || 'Faixa Geral'),
+                                    mean: Number(n.mean),
+                                    sd: Number(n.sd),
+                                    inverted: Boolean(n.inverted),
+                                    polarity: n.polarity || 'SKILL',
+                                    rxx: Number(n.rxx) || 0.88,
+                                    domain: n.domain || COGNITIVE_DOMAINS[0]
+                                });
+                                added++;
+                            }
+                        });
+                        saveState();
+                        renderNormLibraryList(normSearch ? normSearch.value : '');
+                        C.toast(`${added} norma(s) importada(s) para o LocalStorage.`, 'success');
+                    } catch (err) {
+                        C.toast('Erro ao importar normas: ' + err.message, 'error');
+                    }
+                };
+                reader.readAsText(file, 'utf-8');
+                inpImpNorms.value = '';
+            });
+        }
+
         refreshUniversalOutputs();
         renderNormLibraryList();
     }
@@ -4688,15 +4789,23 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         `;
     }
 
-    function renderNormLibraryList() {
+    function renderNormLibraryList(searchQuery = '') {
         const C = global.VaultCore;
         const box = document.getElementById('univ-norm-library-list');
         if (!box) return;
-        if (appState.normLibrary.length === 0) {
-            box.innerHTML = `<div class="text-xs text-slate-500">Nenhuma norma salva na biblioteca ainda.</div>`;
+        const q = String(searchQuery || '').trim().toLowerCase();
+        const filtered = q
+            ? appState.normLibrary.filter((n) =>
+                (n.instrument && n.instrument.toLowerCase().includes(q)) ||
+                (n.subtest && n.subtest.toLowerCase().includes(q)) ||
+                (n.ageGroup && n.ageGroup.toLowerCase().includes(q))
+              )
+            : appState.normLibrary;
+        if (filtered.length === 0) {
+            box.innerHTML = `<div class="text-xs text-slate-500">${appState.normLibrary.length === 0 ? 'Nenhuma norma salva na biblioteca ainda.' : `Nenhuma norma encontrada para "${C.esc(searchQuery)}".`}</div>`;
             return;
         }
-        box.innerHTML = appState.normLibrary.map((n) => `
+        box.innerHTML = filtered.map((n) => `
             <div class="p-3 rounded-xl bg-[#090d16] border border-slate-800 hover:border-slate-700 flex items-center justify-between gap-2 text-xs">
                 <div class="space-y-0.5 min-w-0">
                     <div class="font-bold text-slate-100 truncate">${C.esc(n.instrument)} — <span class="text-cyan-300">${C.esc(n.subtest)}</span></div>
@@ -5826,8 +5935,20 @@ ${bodyRowsHtml}
 
         window.addEventListener('vault:tab-changed', (ev) => {
             if (ev && ev.detail && ev.detail.tab === 'psicometria') {
+                renderHeaderAndSubtabs();
                 if (appState.activeSubTab === 'laudo') {
                     drawHighDpiProfileCanvas();
+                }
+            }
+        });
+
+        document.addEventListener('keydown', (ev) => {
+            if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') {
+                const panel = document.getElementById('tab-panel-psicometria');
+                if (panel && !panel.classList.contains('hidden')) {
+                    ev.preventDefault();
+                    saveState();
+                    if (global.VaultCore) global.VaultCore.toast('Protocolo psicométrico salvo no LocalStorage.', 'success', 1600);
                 }
             }
         });

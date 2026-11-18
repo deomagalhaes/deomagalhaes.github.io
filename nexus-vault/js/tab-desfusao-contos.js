@@ -116,6 +116,30 @@
                                 </div>
                             </div>
 
+                            <!-- Domínio do Gatilho & Valor Guia ACT -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label for="df-trigger-category" class="block text-[11px] font-mono text-slate-400 mb-1">Domínio do Gatilho</label>
+                                    <select id="df-trigger-category" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-slate-200 focus:border-cyan-500">
+                                        <option value="Relacional">Relacional / Comunicação</option>
+                                        <option value="Familiar">Ambiente Familiar / Parentalidade</option>
+                                        <option value="Clínico">Clínico / Profissional</option>
+                                        <option value="Financeiro">Financeiro / Decisão Estratégica</option>
+                                        <option value="Existencial">Existencial / Autocuidado</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="df-core-value" class="block text-[11px] font-mono text-slate-400 mb-1">Valor Guia ACT / Virtude Estoica</label>
+                                    <select id="df-core-value" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-emerald-300 focus:border-emerald-500">
+                                        <option value="Serenidade & Presença">Serenidade &amp; Presença</option>
+                                        <option value="Proteção do Ambiente Familiar">Proteção do Ambiente Familiar</option>
+                                        <option value="Integridade & Rigor Técnico">Integridade &amp; Rigor Técnico</option>
+                                        <option value="Sobriedade & Silêncio Deliberado">Sobriedade &amp; Silêncio Deliberado</option>
+                                        <option value="Autonomia & Longo Prazo">Autonomia &amp; Longo Prazo</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-300 mb-1">Fato Objetivo Estrito *</label>
@@ -394,12 +418,23 @@
                             <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-slate-200">Histórico Local de Vereditos Registrados</h3>
                             <span id="df-history-count" class="text-xs font-mono text-cyan-300 font-semibold">0 registros</span>
                         </div>
-                        <input type="text" id="df-history-search" placeholder="Buscar no histórico..."
-                            class="min-h-[34px] px-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full sm:w-60">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select id="df-history-filter" class="min-h-[34px] px-2.5 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200 focus:outline-none focus:border-cyan-400">
+                                <option value="ALL">Todos os Domínios</option>
+                                <option value="MORATORIA">Moratória 24h Ativa</option>
+                                <option value="Relacional">Relacional</option>
+                                <option value="Familiar">Familiar</option>
+                                <option value="Clínico">Clínico</option>
+                                <option value="Financeiro">Financeiro</option>
+                                <option value="Existencial">Existencial</option>
+                            </select>
+                            <input type="text" id="df-history-search" placeholder="Buscar no histórico..."
+                                class="min-h-[34px] px-3 py-1 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full sm:w-56">
+                        </div>
                     </div>
 
                     <!-- Métricas Rápidas do Histórico -->
-                    <div id="df-history-metrics-bar" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono"></div>
+                    <div id="df-history-metrics-bar" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono"></div>
 
                     <div id="df-history-list" class="space-y-2"></div>
                 </div>
@@ -435,12 +470,15 @@
         netBadge.textContent = `Vantagem Estratégica: ${netAdvantage >= 0 ? '+' : ''}${netAdvantage} pts`;
     }
 
-    function renderDesfusaoHistory(filterText = '') {
+    function renderDesfusaoHistory(filterText = '', categoryFilter = null) {
         const listEl = document.getElementById('df-history-list');
         const cntEl = document.getElementById('df-history-count');
         const metricsEl = document.getElementById('df-history-metrics-bar');
         if (!listEl || !cntEl) return;
         const C = global.VaultCore;
+        const activeCatFilter = categoryFilter !== null
+            ? categoryFilter
+            : (document.getElementById('df-history-filter') ? document.getElementById('df-history-filter').value : 'ALL');
 
         const totalCount = desfusaoHistory.length;
         cntEl.textContent = `${totalCount} registro${totalCount === 1 ? '' : 's'}`;
@@ -453,6 +491,9 @@
                 const avgAuto = (sumAuto / totalCount).toFixed(1);
                 const passedFull = desfusaoHistory.filter(i => (i.checksPassed || 0) >= 3).length;
                 const shieldRate = Math.round((passedFull / totalCount) * 100);
+                const reviewed = desfusaoHistory.filter(i => i.outcomeStatus === 'EFICAZ' || i.outcomeStatus === 'AJUSTE');
+                const effectiveCount = reviewed.filter(i => i.outcomeStatus === 'EFICAZ').length;
+                const effLabel = reviewed.length > 0 ? `${Math.round((effectiveCount / reviewed.length) * 100)}% (${effectiveCount}/${reviewed.length})` : 'Pendente revisão';
                 metricsEl.innerHTML = `
                     <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
                         <div class="text-[10px] text-slate-400">Vereditos Registrados</div>
@@ -462,9 +503,13 @@
                         <div class="text-[10px] text-slate-400">Ativação Média</div>
                         <div class="text-sm font-bold text-amber-300">${avgAuto}/10</div>
                     </div>
-                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center col-span-2 sm:col-span-1">
+                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
                         <div class="text-[10px] text-slate-400">Blindagem Familiar</div>
                         <div class="text-sm font-bold text-emerald-300">${shieldRate}% preservada</div>
+                    </div>
+                    <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">Eficácia Pós-24h</div>
+                        <div class="text-sm font-bold text-purple-300">${effLabel}</div>
                     </div>
                 `;
             }
@@ -476,22 +521,30 @@
         }
 
         const q = String(filterText || '').toLowerCase().trim();
-        const filtered = q
-            ? desfusaoHistory.filter(item =>
+        const nowMs = Date.now();
+        const filtered = desfusaoHistory.filter((item) => {
+            if (activeCatFilter === 'MORATORIA') {
+                if (!(Number.isFinite(Number(item.moratoriumUntilMs)) && Number(item.moratoriumUntilMs) > nowMs)) return false;
+            } else if (activeCatFilter && activeCatFilter !== 'ALL') {
+                if ((item.triggerCategory || 'Relacional') !== activeCatFilter) return false;
+            }
+            if (!q) return true;
+            return (
                 (item.strictFact && item.strictFact.toLowerCase().includes(q)) ||
                 (item.emotionalReading && item.emotionalReading.toLowerCase().includes(q)) ||
                 (item.doAction && item.doAction.toLowerCase().includes(q)) ||
                 (item.dontAction && item.dontAction.toLowerCase().includes(q)) ||
+                (item.coreValue && item.coreValue.toLowerCase().includes(q)) ||
+                (item.triggerCategory && item.triggerCategory.toLowerCase().includes(q)) ||
                 (item.date && item.date.includes(q))
-              )
-            : desfusaoHistory;
+            );
+        });
 
         if (filtered.length === 0) {
-            listEl.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Nenhum veredito encontrado para "${C.esc(filterText)}".</p>`;
+            listEl.innerHTML = `<p class="text-xs text-slate-500 italic py-2">Nenhum veredito encontrado para este filtro.</p>`;
             return;
         }
 
-        const nowMs = Date.now();
         listEl.innerHTML = filtered.map((item) => {
             const hasMoratorium = Number.isFinite(Number(item.moratoriumUntilMs)) && Number(item.moratoriumUntilMs) > 0;
             const moratoriumActive = hasMoratorium && Number(item.moratoriumUntilMs) > nowMs;
@@ -503,12 +556,16 @@
                 <div class="space-y-1 min-w-0">
                     <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
                         <span class="text-cyan-400">${C.formatDateBR(item.date)} ${C.esc(item.time || '')}</span>
+                        ${item.triggerCategory ? `<span class="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/25 text-cyan-300">${C.esc(item.triggerCategory)}</span>` : ''}
+                        ${item.coreValue ? `<span class="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/25 text-purple-300">${C.esc(item.coreValue)}</span>` : ''}
                         <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ativação: ${item.autonomicLevel}/10</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Proteção: ${item.checksPassed}/4</span>
                         <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">Saldo: ${advLabel}</span>
                         ${hasMoratorium ? (moratoriumActive
                             ? `<span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/30 text-amber-200">Moratória 24h ativa (~${remHours}h)</span>`
                             : `<span class="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">Janela 24h concluída</span>`) : ''}
+                        ${item.outcomeStatus === 'EFICAZ' ? `<span class="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-200">✓ Desfecho Eficaz</span>` : ''}
+                        ${item.outcomeStatus === 'AJUSTE' ? `<span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-200">↺ Requer Ajuste</span>` : ''}
                         ${Array.isArray(item.distortions) && item.distortions.length > 0 ? `
                             <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-300">Distorções: ${item.distortions.map(C.esc).join(', ')}</span>
                         ` : ''}
@@ -518,6 +575,9 @@
                     <p class="text-xs text-rose-300"><strong>VETADO (24h):</strong> ${C.esc(item.dontAction)}</p>
                 </div>
                 <div class="flex items-center gap-1.5 self-end md:self-center shrink-0 flex-wrap justify-end">
+                    <button type="button" data-df-outcome="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-purple-950/50 hover:bg-purple-900/60 border border-purple-700/50 text-purple-300 text-xs font-mono" title="Alternar avaliação de desfecho pós-24h (Eficaz / Ajuste)">
+                        ${item.outcomeStatus === 'EFICAZ' ? '✓ Eficaz' : (item.outcomeStatus === 'AJUSTE' ? '↺ Ajuste' : 'Avaliar 24h')}
+                    </button>
                     <button type="button" data-df-quick-copy="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-700/50 text-emerald-300 text-xs font-mono" title="Copiar síntese rápida de 3 linhas (Fato, Ação e Vetos)">
                         Síntese
                     </button>
@@ -546,6 +606,8 @@
                     if (el && val !== undefined) el.value = val;
                 };
 
+                setVal('df-trigger-category', target.triggerCategory || 'Relacional');
+                setVal('df-core-value', target.coreValue || 'Serenidade & Presença');
                 setVal('df-strict-fact', target.strictFact || '');
                 setVal('df-emotional-reading', target.emotionalReading || '');
                 setVal('df-impulsive-text', target.impulsiveReaction ?? target.impulsiveNotes ?? '');
@@ -626,6 +688,20 @@
             });
         });
 
+        listEl.querySelectorAll('[data-df-outcome]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-df-outcome');
+                const target = desfusaoHistory.find((x) => x.id === id);
+                if (!target) return;
+                if (!target.outcomeStatus) target.outcomeStatus = 'EFICAZ';
+                else if (target.outcomeStatus === 'EFICAZ') target.outcomeStatus = 'AJUSTE';
+                else delete target.outcomeStatus;
+                saveDesfusaoHistory();
+                renderDesfusaoHistory(document.getElementById('df-history-search') ? document.getElementById('df-history-search').value : '');
+                C.toast('Desfecho pós-24h atualizado no LocalStorage.', 'success', 1600);
+            });
+        });
+
         listEl.querySelectorAll('[data-df-del]').forEach((btn) => {
             btn.addEventListener('click', () => {
                 const id = btn.getAttribute('data-df-del');
@@ -643,6 +719,12 @@
         if (searchInp) {
             searchInp.addEventListener('input', (e) => {
                 renderDesfusaoHistory(e.target.value);
+            });
+        }
+        const filterSel = document.getElementById('df-history-filter');
+        if (filterSel) {
+            filterSel.addEventListener('change', () => {
+                renderDesfusaoHistory(searchInp ? searchInp.value : '', filterSel.value);
             });
         }
 
@@ -924,6 +1006,8 @@
                 time: now.toTimeString().slice(0, 5),
                 createdAtMs: nowMs,
                 moratoriumUntilMs: autoLv >= 7 ? nowMs + 86400000 : null,
+                triggerCategory: document.getElementById('df-trigger-category')?.value || 'Relacional',
+                coreValue: document.getElementById('df-core-value')?.value || 'Serenidade & Presença',
                 strictFact: document.getElementById('df-strict-fact').value.trim(),
                 emotionalReading: document.getElementById('df-emotional-reading').value.trim(),
                 distortions,
@@ -956,10 +1040,10 @@
                 : 'Veredito operacional de 24h gravado com sucesso.', 'success');
         });
 
-        // Auto-save de rascunho de desfusão integral (textos, sliders, distorções e checks)
+        // Auto-save de rascunho de desfusão integral (textos, seletores, sliders, distorções e checks)
         function saveDesfusaoDraft() {
             const draft = {};
-            const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
+            const draftInputs = ['df-trigger-category', 'df-core-value', 'df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
             draftInputs.forEach((k) => {
                 const inp = document.getElementById(k);
                 if (inp) draft[k] = inp.value;
@@ -1001,11 +1085,11 @@
         function restoreDesfusaoDraft() {
             const savedDraft = C.store.get('dm_vault_desfusao_draft', null);
             if (!savedDraft || typeof savedDraft !== 'object') return;
-            const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
+            const draftInputs = ['df-trigger-category', 'df-core-value', 'df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
             draftInputs.forEach((k) => {
-                if (savedDraft[k]) {
+                if (savedDraft[k] !== undefined && savedDraft[k] !== '') {
                     const el = document.getElementById(k);
-                    if (el && !el.value) el.value = savedDraft[k];
+                    if (el) el.value = savedDraft[k];
                 }
             });
             const sliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
@@ -1029,11 +1113,11 @@
             updateDesfusaoLiveMetrics();
         }
 
-        const draftInputs = ['df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
+        const draftInputs = ['df-trigger-category', 'df-core-value', 'df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
         draftInputs.forEach((id) => {
             const el = document.getElementById(id);
             if (el) {
-                el.addEventListener('input', saveDesfusaoDraft);
+                el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', saveDesfusaoDraft);
             }
         });
 

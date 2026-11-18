@@ -890,9 +890,7 @@
     // =========================================================================
     // 7.1. SUB-ABA 1: SIMULADOR ATUARIAL & CROOSSOVERS FIRE
     // =========================================================================
-    function renderSubTabSimulador(container) {
-        lastModel = computeFinancialModel();
-        const m = lastModel;
+    function buildSimuladorTopGaugeHTML(m) {
         const C = global.VaultCore;
         const numOrDef = (val, def) => (val !== undefined && val !== null && val !== '' && Number.isFinite(Number(val))) ? Math.max(0, Number(val)) : def;
         const freedomPct = Math.max(0, Math.min(100, m.currentCoveragePct || 0));
@@ -900,70 +898,172 @@
         const ringR = 34;
         const ringCirc = 2 * Math.PI * ringR;
         const ringDash = (freedomPct / 100) * ringCirc;
+        const customTiersCount = (Array.isArray(inputs.customExpenses) ? inputs.customExpenses.length : 0) + ((Number(inputs.expenseCustom) > 0 || (inputs.nameCustom && inputs.nameCustom.trim())) ? 1 : 0);
+
+        return `
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <svg width="84" height="84" viewBox="0 0 84 84" class="shrink-0" aria-label="Termômetro Visual de Independência Clínica">
+                        <circle cx="42" cy="42" r="${ringR}" fill="none" stroke="#1e293b" stroke-width="8"></circle>
+                        <circle cx="42" cy="42" r="${ringR}" fill="none" stroke="${freedomPct >= 100 ? '#10b981' : '#22d3ee'}" stroke-width="8" stroke-linecap="round"
+                            stroke-dasharray="${ringDash.toFixed(2)} ${ringCirc.toFixed(2)}" transform="rotate(-90 42 42)"></circle>
+                        <text x="42" y="40" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">${C.formatNum(freedomPct, 0)}%</text>
+                        <text x="42" y="53" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="8">CLÍNICA</text>
+                    </svg>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <i data-lucide="target" class="w-4 h-4 text-cyan-400"></i>
+                            <h3 class="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
+                                Indicadores de Independência por Categoria de Vida
+                            </h3>
+                            ${customTiersCount > 0 ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">+${customTiersCount} degrau(s) na Cascata</span>` : ''}
+                        </div>
+                        <div class="text-[11px] font-mono text-slate-400 mt-1">
+                            Patrimônio vs Meta Full FIRE (SWR ${C.formatNum(m.swr, 1)}%): <strong class="text-cyan-300">${C.formatNum(firePatPct, 1)}%</strong> (${C.formatBRL(m.initPatrimony)} / ${C.formatBRL(m.targetFullFire)})
+                        </div>
+                    </div>
+                </div>
+                <span class="text-xs font-mono text-emerald-400 shrink-0">
+                    Renda Passiva Atual Hoje: <strong>${C.formatBRL(m.currentPassiveMonthly)}/mês</strong>
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                ${[
+                    { name: inputs.nameEssential || '1. Sobrevivência Essencial', cost: numOrDef(inputs.expenseEssential, 2500), color: 'from-emerald-500 to-emerald-400' },
+                    { name: inputs.nameClinic || '2. Custos do Consultório', cost: numOrDef(inputs.expenseClinic !== undefined ? inputs.expenseClinic : inputs.monthlyCosts, 2600), color: 'from-cyan-500 to-cyan-400' },
+                    { name: inputs.nameFamily || '3. Família, Saúde & Educação', cost: numOrDef(inputs.expenseFamily, 3500), color: 'from-amber-500 to-amber-400' },
+                    { name: inputs.nameLifestyle || '4. Plenitude FIRE / Lazer', cost: numOrDef(inputs.expenseLifestyle, 2000), color: 'from-purple-500 to-purple-400' }
+                ].map((cat) => {
+                    const pct = cat.cost <= 0 ? 100 : Math.min(100, (m.currentPassiveMonthly / cat.cost) * 100);
+                    const isDone = pct >= 100;
+                    return `
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col justify-between space-y-2.5">
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-mono gap-1">
+                                    <span class="font-bold text-slate-200 truncate">${C.esc(cat.name)}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] border shrink-0 ${isDone ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-800 text-slate-400 border-slate-700'}">
+                                        ${isDone ? '✓ CONQUISTADO' : `${C.formatNum(pct, 1)}%`}
+                                    </span>
+                                </div>
+                                <div class="text-xs font-mono text-slate-400 mt-1">Custo: ${C.formatBRL(cat.cost)}/mês</div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r ${cat.color} transition-all duration-300" style="width: ${pct}%"></div>
+                                </div>
+                                <div class="text-[10px] font-mono text-slate-500 text-right">
+                                    ${isDone ? '100% coberto pelo patrimônio' : `Faltam ${C.formatBRL(Math.max(0, cat.cost - m.currentPassiveMonthly))}/mês`}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+    function buildSimuladorRightKPIsHTML(m) {
+        const C = global.VaultCore;
+        return `
+            <!-- 3 KPIs Principais -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5">
+                    <div class="text-xs text-slate-400">Receita Clínica Líquida</div>
+                    <div class="text-xl font-mono font-bold text-emerald-300 mt-1">${C.formatBRL(m.netRevenue)}</div>
+                    <div class="text-[11px] font-mono text-slate-400 mt-1">Bruta: ${C.formatBRL(m.grossRevenue)} (${C.formatNum(m.monthlySessions, 1)} sessões)</div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5">
+                    <div class="text-xs text-slate-400">Hora Clínica (Efetiva / Direta)</div>
+                    <div class="text-xl font-mono font-bold text-cyan-300 mt-1">${C.formatBRL(m.netEffectiveHourly)}<span class="text-xs text-slate-400">/h total</span></div>
+                    <div class="text-[11px] font-mono text-slate-400 mt-1">Sessão direta: ${C.formatBRL(m.netPerSession)} (${C.formatNum(m.totalEffectiveHours, 1)}h/mês)</div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5">
+                    <div class="text-xs text-slate-400">Renda Passiva Real Hoje</div>
+                    <div class="text-xl font-mono font-bold text-amber-300 mt-1">${C.formatBRL(m.currentPassiveMonthly)}<span class="text-xs text-slate-400">/mês</span></div>
+                    <div class="text-[11px] font-mono text-slate-400 mt-1">Já paga <strong>${C.formatNum(m.sessionsPaidToday, 2)} sessões/mês</strong> (${C.formatNum(m.currentCoveragePct, 1)}%)</div>
+                </div>
+            </div>
+
+            <!-- Card de Compra de Liberdade por Aporte -->
+            <div class="bg-gradient-to-r from-emerald-950/40 via-[#0f172a] to-cyan-950/30 border border-emerald-500/35 rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="space-y-1">
+                    <div class="text-xs font-mono uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5">
+                        <i data-lucide="hourglass" class="w-3.5 h-3.5"></i>
+                        <span>Compra Perpétua de Liberdade por Novo Aporte</span>
+                    </div>
+                    <p class="text-sm text-slate-200">
+                        Cada único aporte mensal de <strong class="font-mono text-cyan-300">${C.formatBRL(inputs.monthlyContribution)}</strong>
+                        (taxa real composta de <span class="font-mono text-emerald-300">${C.formatNum(m.monthlyRate * 100, 4)}% a.m.</span>)
+                        gera <strong class="font-mono text-emerald-300">${C.formatBRL(m.passivePerSingleContribution)}/mês</strong> perpétuos acima da inflação.
+                    </p>
+                    <p class="text-xs font-mono text-slate-400">
+                        ${m.contributionsForOneMonthlySession ? `${C.formatNum(m.contributionsForOneMonthlySession, 1)} aportes compram 1 sessão mensal vitalícia.` : 'Informe aporte e retorno positivos para calcular aportes por sessão.'}
+                    </p>
+                </div>
+                <div class="bg-[#090d16]/90 border border-emerald-500/40 rounded-xl px-4 py-3 text-center shrink-0">
+                    <div class="text-2xl font-mono font-extrabold text-emerald-300">${C.formatNum(m.sessionsBoughtPerContribution, 2)}</div>
+                    <div class="text-[11px] font-mono text-slate-300">sessões/mês compradas p/ sempre</div>
+                    <div class="text-[10px] font-mono text-cyan-400 mt-0.5">ou ${C.formatNum(m.effectiveHoursBoughtPerContribution || 0, 2)}h totais/mês</div>
+                </div>
+            </div>
+
+            <!-- 4 Marcos FIRE Crossover -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-3">
+                    <div class="text-[10px] font-mono text-slate-400 uppercase">C1 • Lean FIRE</div>
+                    <div class="text-xs font-mono text-slate-300 mt-0.5">&ge; ${C.formatBRL(m.costs)}</div>
+                    <div class="text-xs font-mono font-bold text-slate-100 mt-1">${formatMonthYearFromOffset(m.crossCostMonth)}</div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-amber-500/30 rounded-xl p-3">
+                    <div class="text-[10px] font-mono text-amber-300 uppercase">C2 • Meia-Jornada</div>
+                    <div class="text-xs font-mono text-amber-200 mt-0.5">&ge; ${C.formatBRL(m.netRevenue * 0.5)}</div>
+                    <div class="text-xs font-mono font-bold text-amber-200 mt-1">${formatMonthYearFromOffset(m.crossHalfNetMonth)}</div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-cyan-500/40 rounded-xl p-3">
+                    <div class="text-[10px] font-mono text-cyan-300 uppercase">C3 • Full FIRE</div>
+                    <div class="text-xs font-mono text-cyan-200 mt-0.5">&ge; ${C.formatBRL(m.netRevenue)}</div>
+                    <div class="text-xs font-mono font-bold text-cyan-200 mt-1">${formatMonthYearFromOffset(m.crossFullNetMonth)}</div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-purple-500/40 rounded-xl p-3">
+                    <div class="text-[10px] font-mono text-purple-300 uppercase">C4 • Fat FIRE (${Math.round((inputs.fatFireMultiplier || 1.4) * 100)}%)</div>
+                    <div class="text-xs font-mono text-purple-200 mt-0.5">&ge; ${C.formatBRL(m.netRevenue * (inputs.fatFireMultiplier || 1.4))}</div>
+                    <div class="text-xs font-mono font-bold text-purple-200 mt-1">${formatMonthYearFromOffset(m.crossFatMonth)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateSimuladorLiveKPIs(m) {
+        const C = global.VaultCore;
+        const topEl = document.getElementById('ind-sim-top-gauges');
+        if (topEl) topEl.innerHTML = buildSimuladorTopGaugeHTML(m);
+        const rightEl = document.getElementById('ind-sim-right-kpis');
+        if (rightEl) rightEl.innerHTML = buildSimuladorRightKPIsHTML(m);
+        const savEl = document.getElementById('ind-sim-savings-badge');
+        if (savEl) savEl.textContent = `Poupança: ${C.formatNum(m.savingsRate, 1)}%`;
+        if (C && C.refreshIcons) {
+            if (topEl) C.refreshIcons(topEl);
+            if (rightEl) C.refreshIcons(rightEl);
+        }
+    }
+
+    function renderSubTabSimulador(container) {
+        lastModel = computeFinancialModel();
+        const m = lastModel;
+        const C = global.VaultCore;
 
         container.innerHTML = `
             <div class="space-y-5">
                 <!-- 4 INDICADORES VISUAIS DE INDEPENDÊNCIA POR CATEGORIA + GAUGE DE LIBERDADE -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-3">
-                        <div class="flex items-center gap-3">
-                            <svg width="84" height="84" viewBox="0 0 84 84" class="shrink-0" aria-label="Termômetro Visual de Independência Clínica">
-                                <circle cx="42" cy="42" r="${ringR}" fill="none" stroke="#1e293b" stroke-width="8"></circle>
-                                <circle cx="42" cy="42" r="${ringR}" fill="none" stroke="${freedomPct >= 100 ? '#10b981' : '#22d3ee'}" stroke-width="8" stroke-linecap="round"
-                                    stroke-dasharray="${ringDash.toFixed(2)} ${ringCirc.toFixed(2)}" transform="rotate(-90 42 42)"></circle>
-                                <text x="42" y="40" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">${C.formatNum(freedomPct, 0)}%</text>
-                                <text x="42" y="53" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="8">CLÍNICA</text>
-                            </svg>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="target" class="w-4 h-4 text-cyan-400"></i>
-                                    <h3 class="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
-                                        Indicadores de Independência por Categoria de Vida
-                                    </h3>
-                                </div>
-                                <div class="text-[11px] font-mono text-slate-400 mt-1">
-                                    Patrimônio vs Meta Full FIRE (SWR ${C.formatNum(m.swr, 1)}%): <strong class="text-cyan-300">${C.formatNum(firePatPct, 1)}%</strong> (${C.formatBRL(m.initPatrimony)} / ${C.formatBRL(m.targetFullFire)})
-                                </div>
-                            </div>
-                        </div>
-                        <span class="text-xs font-mono text-emerald-400 shrink-0">
-                            Renda Passiva Atual Hoje: <strong>${C.formatBRL(m.currentPassiveMonthly)}/mês</strong>
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                        ${[
-                            { name: inputs.nameEssential || '1. Sobrevivência Essencial', cost: numOrDef(inputs.expenseEssential, 2500), color: 'from-emerald-500 to-emerald-400' },
-                            { name: inputs.nameClinic || '2. Custos do Consultório', cost: numOrDef(inputs.monthlyCosts, 2600), color: 'from-cyan-500 to-cyan-400' },
-                            { name: inputs.nameFamily || '3. Família, Saúde & Educação', cost: numOrDef(inputs.expenseFamily, 3500), color: 'from-amber-500 to-amber-400' },
-                            { name: inputs.nameLifestyle || '4. Plenitude FIRE / Lazer', cost: numOrDef(inputs.expenseLifestyle, 2000), color: 'from-purple-500 to-purple-400' }
-                        ].map((cat) => {
-                            const pct = cat.cost <= 0 ? 100 : Math.min(100, (m.currentPassiveMonthly / cat.cost) * 100);
-                            const isDone = pct >= 100;
-                            return `
-                                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 flex flex-col justify-between space-y-2.5">
-                                    <div>
-                                        <div class="flex items-center justify-between text-xs font-mono">
-                                            <span class="font-bold text-slate-200 truncate">${C.esc(cat.name)}</span>
-                                            <span class="px-1.5 py-0.5 rounded text-[10px] border shrink-0 ${isDone ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-800 text-slate-400 border-slate-700'}">
-                                                ${isDone ? '✓ CONQUISTADO' : `${C.formatNum(pct, 1)}%`}
-                                            </span>
-                                        </div>
-                                        <div class="text-xs font-mono text-slate-400 mt-1">Custo: ${C.formatBRL(cat.cost)}/mês</div>
-                                    </div>
-
-                                    <div class="space-y-1">
-                                        <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                                            <div class="h-full bg-gradient-to-r ${cat.color} transition-all duration-300" style="width: ${pct}%"></div>
-                                        </div>
-                                        <div class="text-[10px] font-mono text-slate-500 text-right">
-                                            ${isDone ? '100% coberto pelo patrimônio' : `Faltam ${C.formatBRL(Math.max(0, cat.cost - m.currentPassiveMonthly))}/mês`}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
+                <div id="ind-sim-top-gauges" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                    ${buildSimuladorTopGaugeHTML(m)}
                 </div>
 
                 <!-- Grid: Parâmetros vs KPIs e Crossovers -->
@@ -980,7 +1080,7 @@
                                     <i data-lucide="calendar-sync" class="w-3 h-3"></i>
                                     <span>Sincronizar Agenda</span>
                                 </button>
-                                <span class="text-[10px] font-mono text-emerald-400">Poupança: ${C.formatNum(m.savingsRate, 1)}%</span>
+                                <span id="ind-sim-savings-badge" class="text-[10px] font-mono text-emerald-400">Poupança: ${C.formatNum(m.savingsRate, 1)}%</span>
                             </div>
                         </div>
 
@@ -1031,7 +1131,7 @@
                             </div>
                             <div>
                                 <label class="block text-[11px] font-mono text-slate-400 mb-1">Juro Real (% a.a.)</label>
-                                <input type="number" id="ind-annual-return" step="0.1" min="0.5" max="25" value="${inputs.realAnnualReturn}"
+                                <input type="number" id="ind-annual-return" step="0.1" min="0" max="25" value="${inputs.realAnnualReturn}"
                                     class="w-full min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 font-mono text-sm text-emerald-300">
                             </div>
                         </div>
@@ -1053,77 +1153,8 @@
                     </div>
 
                     <!-- Coluna de KPIs, Compra de Liberdade e Crossovers -->
-                    <div class="lg:col-span-8 space-y-4">
-                        <!-- 3 KPIs Principais -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5">
-                                <div class="text-xs text-slate-400">Receita Clínica Líquida</div>
-                                <div class="text-xl font-mono font-bold text-emerald-300 mt-1">${C.formatBRL(m.netRevenue)}</div>
-                                <div class="text-[11px] font-mono text-slate-400 mt-1">Bruta: ${C.formatBRL(m.grossRevenue)} (${C.formatNum(m.monthlySessions, 1)} sessões)</div>
-                            </div>
-
-                            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5">
-                                <div class="text-xs text-slate-400">Hora Clínica (Efetiva / Direta)</div>
-                                <div class="text-xl font-mono font-bold text-cyan-300 mt-1">${C.formatBRL(m.netEffectiveHourly)}<span class="text-xs text-slate-400">/h total</span></div>
-                                <div class="text-[11px] font-mono text-slate-400 mt-1">Sessão direta: ${C.formatBRL(m.netPerSession)} (${C.formatNum(m.totalEffectiveHours, 1)}h/mês)</div>
-                            </div>
-
-                            <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3.5">
-                                <div class="text-xs text-slate-400">Renda Passiva Real Hoje</div>
-                                <div class="text-xl font-mono font-bold text-amber-300 mt-1">${C.formatBRL(m.currentPassiveMonthly)}<span class="text-xs text-slate-400">/mês</span></div>
-                                <div class="text-[11px] font-mono text-slate-400 mt-1">Já paga <strong>${C.formatNum(m.sessionsPaidToday, 2)} sessões/mês</strong> (${C.formatNum(m.currentCoveragePct, 1)}%)</div>
-                            </div>
-                        </div>
-
-                        <!-- Card de Compra de Liberdade por Aporte -->
-                        <div class="bg-gradient-to-r from-emerald-950/40 via-[#0f172a] to-cyan-950/30 border border-emerald-500/35 rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                            <div class="space-y-1">
-                                <div class="text-xs font-mono uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5">
-                                    <i data-lucide="hourglass" class="w-3.5 h-3.5"></i>
-                                    <span>Compra Perpétua de Liberdade por Novo Aporte</span>
-                                </div>
-                                <p class="text-sm text-slate-200">
-                                    Cada único aporte mensal de <strong class="font-mono text-cyan-300">${C.formatBRL(inputs.monthlyContribution)}</strong>
-                                    (taxa real composta de <span class="font-mono text-emerald-300">${C.formatNum(m.monthlyRate * 100, 4)}% a.m.</span>)
-                                    gera <strong class="font-mono text-emerald-300">${C.formatBRL(m.passivePerSingleContribution)}/mês</strong> perpétuos acima da inflação.
-                                </p>
-                                <p class="text-xs font-mono text-slate-400">
-                                    ${m.contributionsForOneMonthlySession ? `${C.formatNum(m.contributionsForOneMonthlySession, 1)} aportes compram 1 sessão mensal vitalícia.` : ''}
-                                </p>
-                            </div>
-                            <div class="bg-[#090d16]/90 border border-emerald-500/40 rounded-xl px-4 py-3 text-center shrink-0">
-                                <div class="text-2xl font-mono font-extrabold text-emerald-300">${C.formatNum(m.sessionsBoughtPerContribution, 2)}</div>
-                                <div class="text-[11px] font-mono text-slate-300">sessões/mês compradas p/ sempre</div>
-                                <div class="text-[10px] font-mono text-cyan-400 mt-0.5">ou ${C.formatNum(m.effectiveHoursBoughtPerContribution, 2)}h totais/mês</div>
-                            </div>
-                        </div>
-
-                        <!-- 4 Marcos FIRE Crossover -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                            <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-3">
-                                <div class="text-[10px] font-mono text-slate-400 uppercase">C1 • Lean FIRE</div>
-                                <div class="text-xs font-mono text-slate-300 mt-0.5">≥ ${C.formatBRL(m.costs)}</div>
-                                <div class="text-xs font-mono font-bold text-slate-100 mt-1">${formatMonthYearFromOffset(m.crossCostMonth)}</div>
-                            </div>
-
-                            <div class="bg-[#0f172a] border border-amber-500/30 rounded-xl p-3">
-                                <div class="text-[10px] font-mono text-amber-300 uppercase">C2 • Meia-Jornada</div>
-                                <div class="text-xs font-mono text-amber-200 mt-0.5">≥ ${C.formatBRL(m.netRevenue * 0.5)}</div>
-                                <div class="text-xs font-mono font-bold text-amber-200 mt-1">${formatMonthYearFromOffset(m.crossHalfNetMonth)}</div>
-                            </div>
-
-                            <div class="bg-[#0f172a] border border-cyan-500/40 rounded-xl p-3">
-                                <div class="text-[10px] font-mono text-cyan-300 uppercase">C3 • Full FIRE</div>
-                                <div class="text-xs font-mono text-cyan-200 mt-0.5">≥ ${C.formatBRL(m.netRevenue)}</div>
-                                <div class="text-xs font-mono font-bold text-cyan-200 mt-1">${formatMonthYearFromOffset(m.crossFullNetMonth)}</div>
-                            </div>
-
-                            <div class="bg-[#0f172a] border border-purple-500/40 rounded-xl p-3">
-                                <div class="text-[10px] font-mono text-purple-300 uppercase">C4 • Fat FIRE (140%)</div>
-                                <div class="text-xs font-mono text-purple-200 mt-0.5">≥ ${C.formatBRL(m.netRevenue * inputs.fatFireMultiplier)}</div>
-                                <div class="text-xs font-mono font-bold text-purple-200 mt-1">${formatMonthYearFromOffset(m.crossFatMonth)}</div>
-                            </div>
-                        </div>
+                    <div id="ind-sim-right-kpis" class="lg:col-span-8 space-y-4">
+                        ${buildSimuladorRightKPIsHTML(m)}
                     </div>
                 </div>
 
@@ -1444,14 +1475,20 @@
                                     <span>📋</span>
                                     <span>Copiar Boleta</span>
                                 </button>
+                                <button type="button" id="btn-apply-alocador-to-balances" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-[11px] font-mono flex items-center gap-1 transition" title="Somar o aporte alocado aos saldos atuais de cada classe e atualizar o patrimônio total">
+                                    <span>✓ Efetivar nos Saldos</span>
+                                </button>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             ${(tickerData.byClass || []).map((item) => `
                                 <div class="bg-[#090d16] border border-slate-800/90 rounded-xl p-3.5 space-y-2.5">
-                                    <div class="flex items-center justify-between">
-                                        <span class="font-bold text-xs text-slate-200 font-mono">${item.className}</span>
+                                    <div class="flex items-center justify-between gap-2">
+                                        <div>
+                                            <span class="font-bold text-xs text-slate-200 font-mono">${item.className}</span>
+                                            ${item.utilizationPct !== undefined ? `<div class="text-[10px] font-mono text-emerald-400/90">Eficiência de compra: ${C.formatNum(item.utilizationPct, 1)}%</div>` : ''}
+                                        </div>
                                         <div class="text-right">
                                             <span class="text-xs font-mono font-bold text-cyan-300">Orçamento: ${C.formatBRL(item.classAporte)}</span>
                                             ${item.residual > 0 ? `<div class="text-[10px] font-mono text-slate-400">Sobra: ${C.formatBRL(item.residual)}</div>` : ''}
@@ -1636,14 +1673,43 @@
                             </span>
                             <span class="text-xs font-mono text-slate-400">Risco de Sequência de Retornos (SORR)</span>
                         </div>
-                        <h3 class="text-base font-bold text-slate-100 mt-1">Simulação de Sobrevivência de Capital em 30 Anos</h3>
+                        <h3 class="text-base font-bold text-slate-100 mt-1">Simulação de Sobrevivência de Capital em ${mc.years} Anos</h3>
                     </div>
 
                     <div class="flex items-center gap-3">
                         <button type="button" id="btn-rerun-montecarlo" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs flex items-center gap-1.5 transition">
                             <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                            <span>Rodar 1.000 Cenários</span>
+                            <span>Rodar ${mc.numSims} Cenários</span>
                         </button>
+                    </div>
+                </div>
+
+                <!-- Controles Interativos de Monte Carlo -->
+                <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1">
+                            <span>Volatilidade Anual:</span>
+                            <strong id="mc-vol-lbl" class="text-purple-300">${inputs.mcVolatility}% a.a.</strong>
+                        </div>
+                        <input type="range" id="mc-vol-slider" min="5" max="28" step="0.5" value="${inputs.mcVolatility}" class="w-full accent-purple-400 cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1">
+                            <span>Horizonte de Retirada:</span>
+                            <strong id="mc-years-lbl" class="text-cyan-300">${inputs.mcYears} anos</strong>
+                        </div>
+                        <input type="range" id="mc-years-slider" min="10" max="40" step="1" value="${inputs.mcYears}" class="w-full accent-cyan-400 cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1">
+                            <span>Cenários Box-Muller:</span>
+                            <strong class="text-emerald-300">${inputs.mcSimulations || 1000}</strong>
+                        </div>
+                        <select id="mc-sims-select" class="w-full px-2.5 py-1.5 rounded bg-[#090d16] border border-slate-700 text-slate-200">
+                            <option value="500" ${(inputs.mcSimulations || 1000) == 500 ? 'selected' : ''}>500 trajetórias</option>
+                            <option value="1000" ${(inputs.mcSimulations || 1000) == 1000 ? 'selected' : ''}>1.000 trajetórias (Padrão)</option>
+                            <option value="2000" ${(inputs.mcSimulations || 1000) == 2000 ? 'selected' : ''}>2.000 trajetórias (Alta Precisão)</option>
+                        </select>
                     </div>
                 </div>
 
@@ -1692,7 +1758,38 @@
         if (btnRerun) {
             btnRerun.addEventListener('click', () => {
                 renderSubTabContent();
-                C.toast('1.000 cenários de Monte Carlo recalculados!', 'info');
+                C.toast(`${inputs.mcSimulations || 1000} cenários de Monte Carlo recalculados!`, 'info');
+            });
+        }
+
+        const volSlider = document.getElementById('mc-vol-slider');
+        if (volSlider) {
+            volSlider.addEventListener('input', (e) => {
+                inputs.mcVolatility = Number(e.target.value);
+                const lbl = document.getElementById('mc-vol-lbl');
+                if (lbl) lbl.textContent = `${inputs.mcVolatility}% a.a.`;
+                saveInputs();
+            });
+            volSlider.addEventListener('change', () => renderSubTabContent());
+        }
+
+        const yrsSlider = document.getElementById('mc-years-slider');
+        if (yrsSlider) {
+            yrsSlider.addEventListener('input', (e) => {
+                inputs.mcYears = parseInt(e.target.value, 10) || 30;
+                const lbl = document.getElementById('mc-years-lbl');
+                if (lbl) lbl.textContent = `${inputs.mcYears} anos`;
+                saveInputs();
+            });
+            yrsSlider.addEventListener('change', () => renderSubTabContent());
+        }
+
+        const simsSel = document.getElementById('mc-sims-select');
+        if (simsSel) {
+            simsSel.addEventListener('change', (e) => {
+                inputs.mcSimulations = parseInt(e.target.value, 10) || 1000;
+                saveInputs();
+                renderSubTabContent();
             });
         }
     }
@@ -2499,14 +2596,15 @@
                     <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
                         <div class="text-xs font-mono text-slate-400">Recomposição Plena</div>
                         <div class="text-xl font-mono font-bold text-cyan-300">
-                            ~${st.monthsToRecoverDynamic} meses <span class="text-xs font-normal text-slate-400 font-sans">(dinâmica)</span>
+                            ${st.monthsToRecoverDynamic !== null ? `~${st.monthsToRecoverDynamic} meses <span class="text-xs font-normal text-slate-400 font-sans">(dinâmica)</span>` : '<span class="text-base text-rose-300">Requer aportes</span>'}
                         </div>
                         <div class="text-[11px] font-mono text-slate-300">
-                            Apenas aportes mecânicos: ~${st.monthsToRecover}m
+                            Apenas aportes mecânicos: ${st.monthsToRecover !== null ? `~${st.monthsToRecover}m` : '—'}
+                            ${st.crossoverDelayMonths !== null ? ` • Full FIRE: <strong class="text-amber-300">${st.crossoverDelayMonths >= 0 ? `+${st.crossoverDelayMonths}m` : `${st.crossoverDelayMonths}m`}</strong>` : ''}
                         </div>
                         <div class="text-[10px] font-mono text-slate-500 pt-1 border-t border-slate-800 flex items-center justify-between">
                             <span>Aporte: ${C.formatBRL(st.effectiveAporte)}/mês</span>
-                            ${st.monthsToRecoverWithBoost ? `<span class="text-emerald-400 font-semibold">+20%: ~${st.monthsToRecoverWithBoost}m</span>` : ''}
+                            ${st.monthsToRecoverWithBoost !== null ? `<span class="text-emerald-400 font-semibold">+20%: ~${st.monthsToRecoverWithBoost}m</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -3964,6 +4062,7 @@
                 }
                 saveInputs();
                 lastModel = computeFinancialModel();
+                updateSimuladorLiveKPIs(lastModel);
                 renderSVGChart(lastModel);
                 renderAnnualTable(lastModel);
             });
@@ -4159,6 +4258,32 @@
                 }
             });
         });
+
+        // Efetivar aporte recomendado diretamente nos saldos atuais da carteira
+        const btnApplyAlloc = document.getElementById('btn-apply-alocador-to-balances');
+        if (btnApplyAlloc) {
+            btnApplyAlloc.addEventListener('click', () => {
+                const res = computeAporteAllocation();
+                const mapProp = {
+                    FII: 'currentAllocFII',
+                    RF: 'currentAllocRF',
+                    Acoes: 'currentAllocAcoes',
+                    Global: 'currentAllocGlobal'
+                };
+                let added = 0;
+                res.classes.forEach((cls) => {
+                    const prop = mapProp[cls.key];
+                    if (prop && cls.recommendedAporte > 0) {
+                        inputs[prop] = Math.round(((Number(inputs[prop]) || 0) + cls.recommendedAporte) * 100) / 100;
+                        added += cls.recommendedAporte;
+                    }
+                });
+                inputs.currentPatrimony = Math.round(((Number(inputs.currentAllocFII) || 0) + (Number(inputs.currentAllocRF) || 0) + (Number(inputs.currentAllocAcoes) || 0) + (Number(inputs.currentAllocGlobal) || 0)) * 100) / 100;
+                saveInputs();
+                renderSubTabContent();
+                C.toast(`Aporte de ${C.formatBRL(added)} efetivado nos saldos! Patrimônio atualizado para ${C.formatBRL(inputs.currentPatrimony)}.`, 'success', 3500);
+            });
+        }
 
         // Copiar boleta de compras consolidada para Home Broker
         const btnCopyOrder = document.getElementById('btn-copy-alocador-order');
