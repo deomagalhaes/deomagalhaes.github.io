@@ -61,6 +61,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 52** | **Matriz de Tolerância ao Desconforto e Aceitação Ativa** | Flexibilidade Cognitiva, Dessensibilização à Incerteza (Ínsula/dACC), Controle Inibitório e ACT | `jogos/jogo-tolerancia-desconforto-aceitacao-ativa.html` | ✅ **Publicado** |
 | **Dia 53** | **Matriz de Integração Somática e Desarme da Hiper-Racionalização** | Integração Ínsulo-Pré-Frontal (vmPFC-Ínsula), Âncoras Somáticas, Desarme da DMN e Coerência Vagal | `jogos/jogo-integracao-somatica-desarme-racionalizacao.html` | ✅ **Publicado** |
 | **Dia 54** | **Matriz de Calibração da Realidade e Desarme da Limerência** | Controle Inibitório Pré-Frontal (dlPFC/vmPFC), Extinção do Loop Obsessivo (CSTC), Discriminação de Evidências Reais vs. Miragens | `jogos/jogo-calibracao-realidade-limerencia.html` | ✅ **Publicado** |
+| **Dia 55** | **Matriz de Dicotomia do Controle e Delegação Estratégica** | Dicotomia do Controle (Epicteto), Delegação Pré-Frontal (dlPFC/vmPFC), Regulação do Alarme BNST/dACC e Reserva Vagal | `jogos/jogo-dicotomia-controle-delegacao.html` | ✅ **Publicado** |
 
 ---
 
