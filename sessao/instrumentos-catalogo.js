@@ -20,6 +20,107 @@
 
 window.SESSAO_CATALOGO_EXTRA = [
     {
+        id: "EMCH_SR",
+        code: "T-59",
+        shortTitle: "EMCH-SR (Ciúme & Vigilância)",
+        fullTitle: "Escala de Ciúme Cognitivo, Hipervigilância Afetiva e Segurança Relacional (EMCH-SR / T-59)",
+        cardDescription: "20 itens (4 dimensões). Checagem compulsiva, intrusão na DMN, busca de reasseguramento e custo somático.",
+        category: "Apego & Vínculos",
+        icon: "eye",
+        accentColor: "amber",
+        protocolPrefix: "DM-CIU-",
+        instruction: "Leia cada afirmação abaixo e assinale o quanto ela reflete seu funcionamento habitual em relações afetivas nos <strong>últimos meses</strong>.",
+        options: [
+            { value: 1, label: "Discordo Totalmente", desc: "Não reflete" },
+            { value: 2, label: "Discordo Parcialmente", desc: "Pouco frequente" },
+            { value: 3, label: "Concordo Parcialmente", desc: "Frequente" },
+            { value: 4, label: "Concordo Totalmente", desc: "Reflete muito" }
+        ],
+        subscales: [
+            {
+                id: "vigilancia",
+                label: "Vigilância e Checagem Compulsiva (dACC / Estriado)",
+                desc: "Monitoramento contínuo de sinais digitais, horários, microexpressões e rastros na tentativa de detectar ameaças precoces.",
+                color: "bg-amber-600"
+            },
+            {
+                id: "intrusao",
+                label: "Intrusão Imaginativa e Simulação (DMN / Amígdala)",
+                desc: "Produção involuntária de cenas de traição, leitura hiperativa de silêncios neutros (STS) e angústia diante de hipóteses mentais.",
+                color: "bg-indigo-600"
+            },
+            {
+                id: "controle",
+                label: "Reasseguramento e Controle Relacional (Leahy)",
+                desc: "Interrogatórios repetitivos, testes velados de lealdade e exigência de certeza absoluta como comportamento de segurança.",
+                color: "bg-rose-600"
+            },
+            {
+                id: "custo",
+                label: "Custo Emocional e Erosão da Confiança (Ínsula)",
+                desc: "Repercussão autonômica visceral (circuito PANIC/GRIEF), intolerância à incerteza afetiva e desgaste progressivo do vínculo.",
+                color: "bg-orange-600"
+            }
+        ],
+        items: [
+            { id: 1, text: "Quando meu(minha) parceiro(a) demora a responder uma mensagem, checo repetidamente se esteve online ou interagindo em redes sociais.", domain: "vigilancia", domainLabel: "Vigilância e Checagem", reverse: false },
+            { id: 2, text: "Sinto um impulso intenso de olhar o celular, histórico ou conversas do(a) parceiro(a) para ter certeza de que nada está sendo escondido.", domain: "vigilancia", domainLabel: "Vigilância e Checagem", reverse: false },
+            { id: 3, text: "Presto atenção excessiva a olhares, curtidas, comentários ou interações do(a) parceiro(a) com terceiros em busca de sinais suspeitos.", domain: "vigilancia", domainLabel: "Vigilância e Checagem", reverse: false },
+            { id: 4, text: "Costumo cruzar horários, histórias ou detalhes do que a outra pessoa me contou para verificar se há contradições ocultas.", domain: "vigilancia", domainLabel: "Vigilância e Checagem", reverse: false },
+            { id: 5, text: "Mesmo quando não encontro nenhum indício concreto de traição, sinto que preciso continuar alerta para não ser pego(a) desprevenido(a).", domain: "vigilancia", domainLabel: "Vigilância e Checagem", reverse: false },
+
+            { id: 6, text: "Minha mente cria imagens mentais vívidas e perturbadoras do(a) meu(minha) parceiro(a) demonstrando interesse ou intimidade com outra pessoa.", domain: "intrusao", domainLabel: "Intrusão Imaginativa", reverse: false },
+            { id: 7, text: "Quando há uma lacuna de informação ou mudança súbita de humor no outro, imagino imediatamente o pior cenário de infidelidade ou abandono.", domain: "intrusao", domainLabel: "Intrusão Imaginativa", reverse: false },
+            { id: 8, text: "Mesmo sabendo racionalmente que não há provas, uma cena imaginada de traição provoca em mim angústia intensa como se já tivesse acontecido.", domain: "intrusao", domainLabel: "Intrusão Imaginativa", reverse: false },
+            { id: 9, text: "Passo longos períodos ruminando conversas passadas ou suposições sobre possíveis rivais afetivos.", domain: "intrusao", domainLabel: "Intrusão Imaginativa", reverse: false },
+            { id: 10, text: "Interpreto silêncios neutros, cansaço ou distração do(a) parceiro(a) como sinais de desinteresse ou envolvimento com outrem.", domain: "intrusao", domainLabel: "Intrusão Imaginativa", reverse: false },
+
+            { id: 11, text: "Faço perguntas repetitivas para confirmar se o(a) parceiro(a) ainda me ama, me acha atraente ou se sentiu atração por alguém.", domain: "controle", domainLabel: "Reasseguramento e Controle", reverse: false },
+            { id: 12, text: "Sinto necessidade de saber com exatidão onde o(a) parceiro(a) está, com quem conversa e o que está fazendo para conseguir relaxar.", domain: "controle", domainLabel: "Reasseguramento e Controle", reverse: false },
+            { id: 13, text: "Quando a ansiedade aperta, faço testes sutis ou provocações indiretas para medir a reação e a lealdade do outro.", domain: "controle", domainLabel: "Reasseguramento e Controle", reverse: false },
+            { id: 14, text: "Sinto desconforto acentuado quando o(a) parceiro(a) sai sozinho(a) ou mantém amizades e espaços individuais sem a minha presença.", domain: "controle", domainLabel: "Reasseguramento e Controle", reverse: false },
+            { id: 15, text: "Peço garantias de exclusividade e transparência que só me acalmam por alguns minutos antes que a dúvida retorne.", domain: "controle", domainLabel: "Reasseguramento e Controle", reverse: false },
+
+            { id: 16, text: "Quando o ciúme dispara, sinto taquicardia, aperto no peito, nó no estômago ou dificuldade de concentração em outras tarefas.", domain: "custo", domainLabel: "Custo Emocional", reverse: false },
+            { id: 17, text: "Minhas desconfianças e questionamentos frequentes já geraram desgaste, afastamento ou brigas recorrentes no relacionamento.", domain: "custo", domainLabel: "Custo Emocional", reverse: false },
+            { id: 18, text: "Tenho dificuldade em tolerar qualquer grau de incerteza sobre o futuro do vínculo sem tentar controlar o comportamento do outro.", domain: "custo", domainLabel: "Custo Emocional", reverse: false },
+            { id: 19, text: "Sinto que, no fundo, temo não ser suficiente e que qualquer pessoa mais interessante poderia me substituir facilmente.", domain: "custo", domainLabel: "Custo Emocional", reverse: false },
+            { id: 20, text: "Percebo que a tentativa constante de evitar ser traído(a) está me impedindo de viver o afeto com leveza e tranquilidade.", domain: "custo", domainLabel: "Custo Emocional", reverse: false }
+        ],
+        cutoffs: [
+            {
+                max: 35,
+                label: "Segurança Relacional Preservada / Baixa Hipervigilância",
+                badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
+                summary: "Boa tolerância às ambiguidades cotidianas da vida a dois, preservando a autonomia do parceiro e distinguindo intuições proporcionais de simulações catastróficas sem checagens compulsivas."
+            },
+            {
+                max: 52,
+                label: "Vigilância Moderada / Intolerância Pontual à Incerteza",
+                badgeClass: "bg-yellow-100 text-yellow-800 border-yellow-300",
+                summary: "Confiança preservada na maior parte do tempo, porém com checagens digitais pontuais, ruminação breve e busca de confirmação afetiva em momentos de lacuna comunicacional."
+            },
+            {
+                max: 68,
+                label: "Ciúme Obsessivo Elevado / Hipervigilância Afetiva Ativa",
+                badgeClass: "bg-orange-100 text-orange-800 border-orange-300",
+                summary: "Padrão consistente de monitoramento estriatal, criação de cenas aversivas na DMN e busca recorrente de reasseguramento (Leahy), gerando dor social no dACC/ínsula e desgaste da intimidade."
+            },
+            {
+                max: 80,
+                label: "Hipervigilância Severa / Sequestro Imaginativo e Risco de Erosão do Vínculo",
+                badgeClass: "bg-red-100 text-red-800 border-red-300",
+                summary: "Medo de perda em alarme contínuo, transformando ambiguidades neutras em certezas de traição com alto custo somático. Recomenda-se avaliação de esquemas de Abandono/Desconfiança e protocolo cognitivo-comportamental (EPR e regulação emocional)."
+            }
+        ],
+        references: [
+            "Buss, D. M. (2000). <em>The Dangerous Passion: Why Jealousy Is as Necessary as Love and Sex</em>. New York: Free Press.",
+            "Leahy, R. L. (2018). <em>The Jealousy Cure: Learn to Trust, Overcome Possessiveness, and Save Your Relationship</em>. Oakland: New Harbinger.",
+            "Panksepp, J., &amp; Biven, L. (2012). <em>The Archaeology of Mind: Neuroevolutionary Origins of Human Emotions</em>. New York: W. W. Norton.",
+            "Takahashi, H., et al. (2006). Men and women show distinct brain activations during imagery of sexual and emotional infidelity. <em>NeuroImage</em>, 32(3), 1299-1307."
+        ]
+    },
+    {
         id: "EMRR_HP",
         code: "T-58",
         shortTitle: "EMRR-HP (Raiva Reprimida)",

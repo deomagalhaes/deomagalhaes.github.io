@@ -718,7 +718,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="raiva-reprimida-agressividade-passiva" selected>A Neurobiologia da Raiva Reprimida e da Agressividade Passiva: O Custo de Engolir Limites</option>
+                        <option value="ciume-obsessivo-hipervigilancia-afetiva" selected>A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva: O Medo da Perda</option>
+                        <option value="raiva-reprimida-agressividade-passiva">A Neurobiologia da Raiva Reprimida e da Agressividade Passiva: O Custo de Engolir Limites</option>
                         <option value="urgencia-cronica-adiccao-adrenalina">A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina: Por Que Só Funcionar Sob Pressão?</option>
                         <option value="compulsao-controle-hiper-responsabilidade">A Neurobiologia da Compulsão por Controle e da Hiper-Responsabilidade: Por Que Soltar Assusta</option>
                         <option value="limerencia-idealizacao-compulsiva">A Neurobiologia da Limerência e da Idealização Romântica Compulsiva: Por Que o Cérebro Fica Obcecado pela Ambiguidade</option>
@@ -1038,6 +1039,63 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "ciume-obsessivo-hipervigilancia-afetiva": {
+      "articleSlug": "2026-11-19-ciume-obsessivo-hipervigilancia-afetiva",
+      "articleTitle": "A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva: O Medo da Perda",
+      "slides": [
+        {
+          "type": "cover",
+          "badge": "NEUROCIÊNCIA & VÍNCULOS",
+          "title": "Por que o cérebro ciumento *transforma silêncios comuns em provas de traição?*",
+          "body": "Uma mensagem respondida vinte minutos depois ou um nome novo nas curtidas bastam para disparar taquicardia, filmes mentais vívidos e urgência de investigar.\n\nNa neuropsicologia, o ciúme obsessivo não é 'excesso de amor': é *hipervigilância de perda sequestrando a imaginação*.",
+          "footer": "Deslize para entender a neurobiologia ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "NEUROIMAGEM (TAKAHASHI ET AL.)",
+          "title": "A ameaça de perder o vínculo *dói fisicamente no dACC e na ínsula*",
+          "body": "Estudos de fMRI mostraram que cenários de ciúme acendem o *Córtex Cingulado Anterior Dorsal (dACC)* (dor social) e a *Ínsula Anterior* (alarme visceral).\n\nAo mesmo tempo, o *Sulco Temporal Superior (STS)* passa a ler segundas intenções ocultas até em gestos cotidianos neutros.",
+          "footer": "O papel da imaginação nessa armadilha ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "SIMULAÇÃO CONTRAFACTUAL",
+          "title": "A amígdala reage às suas *cenas imaginadas* como se fossem fatos",
+          "body": "Quando falta informação, a *Rede de Modo Padrão (DMN)* preenche o vazio com simulações catastróficas de abandono ou traição.\n\nComo a amígdala não distingue bem imagem mental intensa de ameaça real, você sofre no corpo por um roteiro que só existe dentro da sua cabeça.",
+          "footer": "Por que checar o celular piora tudo ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "PSICOLOGIA CLÍNICA (LEAHY)",
+          "title": "Cada checagem traz alívio de minutos — e *reforça o vício da dúvida*",
+          "body": "Olhar o celular, testar o parceiro ou pedir garantias reduz a ansiedade na hora (*reforço negativo*).\n\nMas ensina aos *gânglios da base* que 'o perigo era real e só foi evitado porque eu vigiei'. Logo, a exigência de 100% de certeza volta ainda maior.",
+          "footer": "O que Spinoza e Proust diagnosticaram ➔"
+        },
+        {
+          "type": "contrast",
+          "badge": "SPINOZA, PROUST & EPICTETO",
+          "title": "Posse vigilante vs. *confiança em liberdade*",
+          "body": "Flutuação de Ânimo (Spinoza & Proust): Tentar aprisionar o mistério do outro transforma o amor em interrogatório policial e condena ambos à solidão.\n\nDicotomia do Controle (Epicteto): Só existe lealdade verdadeira quando a escolha do outro é livre; vigilância destrói o que tenta guardar.",
+          "footer": "4 passos clínicos de intervenção ➔"
+        },
+        {
+          "type": "steps",
+          "badge": "PROTOCOLO CLÍNICO",
+          "title": "4 passos para *desarmar a hipervigilância afetiva*",
+          "body": "1. *Moratória de 30 Minutos (EPR):* Adie o impulso de checar ou interrogar até a curva simpática descer.\n\n2. *Fato vs. Simulação da DMN:* Separe em colunas o dado concreto ('demorou 1h') da narrativa imaginada.\n\n3. *Regulação PANIC/GRIEF:* Acalme o peito antes de conversar e peça conexão sem virar investigador.",
+          "footer": "Do tribunal secreto à intimidade real ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "TESTE PSICOMÉTRICO & ARTIGO",
+          "title": "Amar sem virar carcereiro exige tolerar o risco de um encontro livre",
+          "body": "Quando o córtex pré-frontal diferencia cuidado de vigilância compulsiva, a imaginação descansa e o vínculo volta a respirar.\n\n📖 Leia o artigo completo: A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva\n\n🧠 Faça a Escala EMCH-SR (T-59) e jogue o Dia 58 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
+        }
+      ],
+      "caption": "Você já percebeu como uma simples demora para responder uma mensagem ou um detalhe mínimo nas redes sociais pode acionar um tribunal inteiro dentro da mente — com taquicardia, imagens vívidas de traição e uma vontade urgente de checar, perguntar ou testar?\n\nNa neuropsicologia clínica, o ciúme obsessivo raramente significa 'força do amor'. Ele revela um sequestro da imaginação pelo medo da perda.\n\nPesquisas com ressonância magnética funcional (fMRI) conduzidas por Hidehiko Takahashi mostraram que cenários de ciúme ativam intensamente o Córtex Cingulado Anterior Dorsal (dACC — dor social) e a Ínsula Anterior (alarme visceral), além de hiperativarem o Sulco Temporal Superior (STS), levando o cérebro a ler intenções ocultas em gestos neutros. Na ausência de dados completos, a Rede de Modo Padrão (DMN) fabrica simulações catastróficas que a amígdala processa como ameaças reais.\n\nComo explica o psicólogo cognitivo Robert Leahy, cada checagem escondida ou pedido compulsivo de garantia funciona por reforço negativo: alivia a ansiedade por alguns minutos, mas fortalece o hábito nos gânglios da base e consolida a intolerância à incerteza.\n\nJá Spinoza definia o ciúme como uma 'flutuação de ânimo' que reduz nossa potência de viver, enquanto Marcel Proust mostrava como a obsessão por controlar o mistério do outro transforma a intimidade em cárcere.\n\nO novo artigo científico completo, a Escala Multidimensional de Ciúme Cognitivo, Hipervigilância Afetiva e Segurança Relacional (EMCH-SR / T-59) e o Jogo de Calibração da Confiança (Dia 58) já estão disponíveis gratuitamente em deomagalhaes.com.br (link na bio).\n\nQuando a dúvida aperta, você consegue esperar a ansiedade baixar antes de agir ou sente urgência imediata de investigar?\n\n#neuropsicologia #neurociencias #ciume #ciumeobsessivo #apego #relacionamentos #confianca #saudemental #terapiacognitiva #spinoza #proust #epicteto #deomagalhaes #psicologiaclinica"
+    },
+
     "raiva-reprimida-agressividade-passiva": {
       "articleSlug": "2026-11-19-raiva-reprimida-agressividade-passiva",
       "articleTitle": "A Neurobiologia da Raiva Reprimida e da Agressividade Passiva: O Custo de Engolir Limites",
@@ -4827,9 +4885,10 @@
         };
 
         // Estado do Studio
-        let currentPresetKey = "raiva-reprimida-agressividade-passiva";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["raiva-reprimida-agressividade-passiva"].slides));
-        let currentCaption = PRESETS["raiva-reprimida-agressividade-passiva"].caption;
+        let currentPresetKey = "ciume-obsessivo-hipervigilancia-afetiva";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["ciume-obsessivo-hipervigilancia-afetiva"].slides));
+        let currentCaption = PRESETS["ciume-obsessivo-hipervigilancia-afetiva"].caption;
+
 
 
 

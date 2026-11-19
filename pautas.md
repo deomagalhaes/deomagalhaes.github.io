@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva: Como o Medo da Perda Sequestra a Imaginação e Corrói a Intimidade** (Publicado em 19/11/2026)
 - [x] **A Neurobiologia da Raiva Reprimida e da Agressividade Passiva: Como o Bloqueio da Expressão Assertiva Sequestra o Sistema Autonômico e Sabota os Vínculos** (Publicado em 19/11/2026)
 - [x] **A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina: Por Que o Cérebro Só Funciona Sob Pressão e Como Sair do Modo de Emergência** (Publicado em 19/11/2026)
 - [x] **A Neurobiologia da Compulsão por Controle e da Hiper-Responsabilidade: Por Que o Cérebro Tenta Prever e Gerenciar Tudo Para Não Sentir Impotência** (Publicado em 18/11/2026)

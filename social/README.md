@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **19/11/2026** | **A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva** | [social/2026-11-19-ciume-obsessivo-hipervigilancia-afetiva.md](2026-11-19-ciume-obsessivo-hipervigilancia-afetiva.md) | ✅ Pronto para postar |
 | **19/11/2026** | **A Neurobiologia da Raiva Reprimida e da Agressividade Passiva** | [social/2026-11-19-raiva-reprimida-agressividade-passiva.md](2026-11-19-raiva-reprimida-agressividade-passiva.md) | ✅ Pronto para postar |
 | **19/11/2026** | **A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina** | [social/2026-11-19-urgencia-cronica-adiccao-adrenalina.md](2026-11-19-urgencia-cronica-adiccao-adrenalina.md) | ✅ Pronto para postar |
 | **18/11/2026** | **A Neurobiologia da Compulsão por Controle e da Hiper-Responsabilidade** | [social/2026-11-18-compulsao-por-controle-hiper-responsabilidade.md](2026-11-18-compulsao-por-controle-hiper-responsabilidade.md) | ✅ Pronto para postar |

@@ -65,6 +65,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-56** | **Escala Multidimensional de Compulsão por Controle e Hiper-Responsabilidade (EMCC-HR)** | Microgerenciamento (dlPFC/CSTC), Hiper-Responsabilidade Inflada (dACC), Aversão à Delegação (BNST) e Custo Vagal | `testes/teste-compulsao-controle-hiper-responsabilidade.html` | ✅ Concluído |
 | **T-57** | **Escala Multidimensional de Urgência Crônica e Dependência de Adrenalina (EMUC-DA)** | Ativação por Pressão (LC-NE), Intolerância à Quietude (Alostase), Fabricação de Crises e Custo Pré-Frontal (Arnsten) | `testes/teste-urgencia-cronica-adiccao-adrenalina.html` | ✅ Concluído |
 | **T-58** | **Escala Multidimensional de Raiva Reprimida, Ressentimento Silencioso e Hostilidade Passiva (EMRR-HP)** | Supressão Expressiva (dlPFC/Gross), Ressentimento Ruminal (dACC), Stonewalling (Gottman) e Custo Somático (Ínsula) | `testes/teste-raiva-reprimida-agressividade-passiva.html` | ✅ Concluído |
+| **T-59** | **Escala Multidimensional de Ciúme Cognitivo, Hipervigilância Afetiva e Segurança Relacional (EMCH-SR)** | Vigilância e Checagem Compulsiva (dACC/Estriado), Intrusão Imaginativa (DMN/STS), Busca de Reasseguramento (Leahy) e Circuito PANIC/GRIEF | `testes/teste-ciume-obsessivo-hipervigilancia-afetiva.html` | ✅ Concluído |
 
 ---
 

@@ -283,6 +283,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-do-ciume-obsessivo-e-hipervigilancia-afetiva.html</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-do-efeito-zeigarnik-e-a-carga-cognitiva.html</loc>
     <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -907,6 +913,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/testes/teste-ciume-obsessivo-hipervigilancia-afetiva.html</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/testes/teste-codependencia-papel-salvador.html</loc>
     <lastmod>2026-11-15</lastmod>
     <changefreq>monthly</changefreq>
@@ -1443,6 +1455,12 @@
   <url>
     <loc>https://deomagalhaes.com.br/jogos/jogo-custo-atencional-descompressao.html</loc>
     <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/jogos/jogo-desarme-ciume-calibracao-confianca.html</loc>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
