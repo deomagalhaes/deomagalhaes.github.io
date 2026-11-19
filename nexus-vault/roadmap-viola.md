@@ -7,14 +7,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 21 — Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas
+## 🎯 Projeto Prioritário Atual: Fase 22 — Laboratório de Técnicas Expressivas Caipiras (Ligados, Arrastes/Slides, Harmônicos Artificiais & Biomecânica de Mão)
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Looper multipista Web Audio API sincronizado ao metrônomo Lookahead (até 4 pistas sobrepostas com quantização por compasso, overdubbing limpo, mute/solo e balanço estéreo).
-  2. Gerador de bases harmônicas caipiras (Cururu em Mi, Pagode em Lá, Toada em Sol e Guarânia em Si Menor) com violão de acompanhamento + viola base + percussão de caixa/tampo.
-  3. Guia visual instantâneo no braço SVG (Canhoto e Destro) alternando escalas duadas e modos caipiras conforme o acorde ativo da base em tempo real.
-
+  1. Motor de síntese física Web Audio API para *hammer-on*, *pull-off*, *slide* contínuo (`exponentialRampToValueAtTime`), *trinado*, *harmônico artificial de oitava* e *abafado de palma* nos 5 pares da viola e 6 cordas do violão.
+  2. Exercícios progressivos cronometrados com metrônomo Lookahead e projeção vetorial animada de setas/ligaduras sobre o braço SVG Canhoto/Destro.
+  3. Exportação direta de frases técnicas para o Editor de Tablaturas (Fase 7).
 ---
 
 ## 📋 Backlog de Inovações Futuras (Projetos Proativos)
@@ -57,12 +56,33 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Visualizador circular estroboscópico em Canvas 2D com 4 anéis concêntricos (1x a 8x), análise espectral FFT de 8 harmônicos com estimativa do coeficiente de inarmonicidade *B*, temperamentos caipiras (Igual, Cebolão Doce e Justa Pura) e calculadora de compensação milimétrica de rastilho/pestana para 12ª e 19ª casas (Canhoto e Destro).
 18. **[x] Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco (Fase 20 Concluída):**
     - Modelagem de blend piezo/condensador com atraso acústico de 0.42 ms e inversão de fase 0°/180°, filtro notch anti-microfonia (60–250 Hz) com Auto-Notch, equalizador paramétrico interativo de 5 bandas (`BiquadFilterNode`) com nós arrastáveis e espectro FFT em Canvas 2D, limiter de segurança e 6 presets de palco/estúdio compatíveis com Canhoto e Destro.
-19. **[ ] Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas (Fase 21):**
-    - Looper sincronizado ao metrônomo Lookahead, gerador de bases harmônicas caipiras e projeção dinâmica de escalas/duetos no braço SVG.
+19. **[x] Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas (Fase 21 Concluída):**
+    - Looper multipista Web Audio API de 4 pistas sincronizado ao Lookahead Scheduler (quantização 1/4, 1/8, 1/16 e livre, contagem de entrada, overdubbing em camadas com undo seletivo, mute/solo, volume e balanço estéreo), 5 bases harmônicas caipiras em síntese de 3 stems (Violão + Viola + Caixa/Tampo) e guia visual dinâmico no braço SVG (Canhoto/Destro) alternando modos e escalas duadas por acorde em tempo real.
+20. **[ ] Laboratório de Técnicas Expressivas Caipiras (Ligados, Arrastes/Slides, Harmônicos Artificiais & Biomecânica de Mão) (Fase 22):**
+    - Síntese expressiva de hammer-on, pull-off, slide contínuo e harmônico artificial com treino cronometrado e projeção vetorial no braço SVG Canhoto/Destro.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **19/11/2026 — Sessão 21** (Fase 21 Concluída):
+  - **Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas (`/viola/index.html` + `nexus-vault/js/tab-viola.js`)**:
+    - **Gerador de Bases Harmônicas Caipiras com Mix de 3 Stems (`IMPROVISO_BACKING_CATALOG`, `scheduleBackingBarTick`)**:
+      - 5 bases canônicas completas em 8 compassos com síntese Web Audio API pura em stems independentes (**Violão Base** em Pan `-35%`, **Viola Base** com pares oitavados em Pan `+35%` e **Percussão de Caixa/Tampo** centralizada, cada qual com slider de volume e botão Mute):
+        - *Cururu em Mi* (`cururu_em_mi`, 2/4, 94 BPM: `| E | E | B7 | B7 | A | B7 | E | B7 |`).
+        - *Pagode em Lá* (`pagode_em_la`, 2/4 em semicolcheias com repique de caixa duplo, 100 BPM: `| A | A | E7 | E7 | D | E7 | A | E7 |`).
+        - *Toada em Sol* (`toada_em_sol`, 6/8 seresteiro, 76 BPM: `| G | Em | C | D7 | G | D7 | G | D7 |`).
+        - *Guarânia em Si Menor* (`guarania_em_si_menor`, 3/4 romântico, 78 BPM: `| Bm | Bm | Em | Em | A7 | D | F#7 | Bm |` incluindo modo *Frígio Dominante* sobre `F#7`).
+        - *Folia Lídia em Ré* (`folia_lidia_em_re`, 3/4 devocional, 84 BPM: `| D | E | D | E | G | A7 | D | D |`).
+    - **Looper Polifônico de 4 Pistas Sincronizado ao Lookahead (`improvSchedulerTick`, `ensureImprovAudioGraph`, `drawLooperTimelineCanvas`)**:
+      - Scheduler Lookahead dedicado de 25 ms (`scheduleAheadSec = 0.10`) com Count-In opcional de 1 compasso, duração selecionável (`2`, `4` ou `8` compassos) e quantização em 4 grades (`1/4 Semínima`, `1/8 Colcheia`, `1/16 Semicolcheia` e `Livre 1/64`).
+      - 4 pistas polifônicas com armamento quantizado na cabeça do ciclo (`armed` → `recording` → fechamento automático ou contínuo), **Overdubbing em camadas (`pendingOverdub` → `overdub`)**, **Undo seletivo** por camada de overdub, **Mute (`M`) / Solo (`S`)** arbitrados no grafo Web Audio API via `GainNode`, **Balanço Estéreo Pan (`L100` a `R100`)** via `StereoPannerNode`, 4 timbres selecionáveis (*Viola Brilhante*, *Viola Ponteio Doce*, *Violão Base / Baixaria*, *Percussão Caixa & Tampo*), Limiter mestre de proteção (`DynamicsCompressorNode` em −4 dB) e gerador instantâneo de jam/frases modais (`seedLooperTrack`, `loadFullJamDemo`).
+      - Timeline gráfica em **Canvas 2D (`viola-looper-canvas`)** a 60 FPS exibindo as 4 pistas, régua de compassos/acordes, blocos de notas/duetos/percussão e playhead sincronizado.
+      - Exportação em 1 clique para o **Editor de Tablaturas (Fase 7)** via `exportLooperToTabEditor()`.
+    - **Guia Visual Instantâneo no Braço SVG & Pads de Improviso (`displayMode: 'IMPROVISO'`, `getImprovBarGuideSpec`)**:
+      - Atualização em tempo real do braço SVG Canhoto/Destro a cada mudança de compasso da base, com 3 modos de projeção (`Modos`, `Duadas` em 3ªs/6ªs via `computeModalDuadStepsForConfig` e `Híbrido`), alternância entre *Auto por Acorde* ou trava manual modal, e captura direta ao clicar nas casas do braço SVG (com opção *Dueto Auto 3ª/6ª*), nos 8 Pads Modais + Pads Percussivos (`TAP`/`CHOCK`) ou pelos atalhos de teclado `[1–8]`, `[Q]`, `[W]` e `[Espaço]`.
+    - **Integração na Plataforma Independente (`/viola/index.html`)**:
+      - Adicionada como recurso #23 na Estação 4 (*Ritmos, Modos & Improviso*) com `defaultShowFretboard: true`, botão de acesso rápido na Visão Geral, contagem dinâmica automática no shell de `/viola/index.html`, persistência sanitizada no `LocalStorage` (`loadViolaState`/`saveViolaState`) e parada limpa em `stopAllAudio()`, sem modificações em `nexus-vault/index.html`.
 
 - **18/11/2026 — Sessão 20** (Fase 20 Concluída):
   - **Simulador de Captação Acústica, Microfonia & Equalização Paramétrica de Palco (`StagePickupEQ`)**:

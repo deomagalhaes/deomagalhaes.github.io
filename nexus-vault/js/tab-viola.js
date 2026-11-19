@@ -3755,6 +3755,223 @@ const DEFAULT_STAGE_EQ_STATE = {
     loopDemo: true
 };
 
+// =========================================================================
+// FASE 21: ESTÚDIO DE IMPROVISO MODAL, BACKING TRACKS & LOOPER DE 4 PISTAS
+// =========================================================================
+const IMPROV_EXTRA_MODES = {
+    phrygian_dom: {
+        id: 'phrygian_dom',
+        name: 'Frígio Dominante (V7 Menor)',
+        subtitle: 'Tensão da Dominante na Guarânia & Choro',
+        badge: 'V7 Harmônico',
+        intervals: [0, 1, 4, 5, 7, 8, 10],
+        degreeNames: ['1', '♭2', '3', '4', '5', '♭6', '♭7'],
+        characteristicIntervals: [1, 4],
+        charDegreeLabel: '2ª Menor (♭2) & 3ª Maior (Sensível)',
+        description: '5º modo da Escala Menor Harmônica, essencial para resolver o acorde V7 (ex: F♯7 → Bm) destacando a sensível e a tensão exótica de ♭9.'
+    }
+};
+
+const IMPROV_TRACK_TIMBRES = {
+    viola_brilhante: {
+        id: 'viola_brilhante',
+        label: 'Viola Brilhante (Cebolão)',
+        short: 'Viola Brilh.',
+        color: '#10b981',
+        pillClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+    },
+    viola_aveludada: {
+        id: 'viola_aveludada',
+        label: 'Viola Ponteio Doce',
+        short: 'Viola Doce',
+        color: '#06b6d4',
+        pillClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+    },
+    violao_nylon: {
+        id: 'violao_nylon',
+        label: 'Violão Base / Baixaria',
+        short: 'Violão/Baixo',
+        color: '#f59e0b',
+        pillClass: 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+    },
+    tampo_perc: {
+        id: 'tampo_perc',
+        label: 'Percussão Caixa & Tampo',
+        short: 'Perc. Tampo',
+        color: '#ec4899',
+        pillClass: 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+    }
+};
+
+const IMPROVISO_BACKING_CATALOG = {
+    cururu_em_mi: {
+        id: 'cururu_em_mi',
+        title: 'Cururu em Mi',
+        subtitle: 'Desafio Paulista • 2/4',
+        keyLabel: 'Mi Maior (E)',
+        timeSignature: '2/4',
+        defaultBpm: 94,
+        ticksPerBar: 8,
+        beatsPerBar: 2,
+        ticksPerBeat: 4,
+        rootPc: 4,
+        defaultModeId: 'mixolydian',
+        duadInterval: '6th',
+        badge: '2/4 • Mi Maior',
+        description: 'Base tradicional de Cururu em Cebolão em Mi: violão alternando bordões E/B, viola base em puxadas e batida oca no tampo no tempo 2.',
+        bars: [
+            { chord: 'E', chordCode: 'E_maj', roman: 'I', rootPc: 4, tones: [4, 8, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'ionian', scaleRootPc: 4, hint: 'Acorde solto Cebolão — destaque G♯ (3M)' },
+            { chord: 'E', chordCode: 'E_maj', roman: 'I', rootPc: 4, tones: [4, 8, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Balanço Mixolídio — aproxime a ♭7 (D)' },
+            { chord: 'B7', chordCode: 'B_dom7', roman: 'V7', rootPc: 11, tones: [11, 3, 6, 9], bassMidi: 47, altBassMidi: 42, scaleModeId: 'mixolydian', scaleRootPc: 11, hint: 'Dominante V7 — mire em D♯ (3M) e A (♭7)' },
+            { chord: 'B7', chordCode: 'B_dom7', roman: 'V7', rootPc: 11, tones: [11, 3, 6, 9], bassMidi: 47, altBassMidi: 42, scaleModeId: 'mixolydian', scaleRootPc: 11, hint: 'Sustente a sexta D♯–B preparando retorno' },
+            { chord: 'A', chordCode: 'A_maj', roman: 'IV', rootPc: 9, tones: [9, 1, 4], bassMidi: 45, altBassMidi: 40, scaleModeId: 'lydian', scaleRootPc: 9, hint: 'Subdominante Lídia — brilho em D♯ (♯4)' },
+            { chord: 'B7', chordCode: 'B_dom7', roman: 'V7', rootPc: 11, tones: [11, 3, 6, 9], bassMidi: 47, altBassMidi: 42, scaleModeId: 'mixolydian', scaleRootPc: 11, hint: 'Chamada de resposta para resolver em Mi' },
+            { chord: 'E', chordCode: 'E_maj', roman: 'I', rootPc: 4, tones: [4, 8, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'ionian', scaleRootPc: 4, hint: 'Repouso na tônica E em terças/sextas' },
+            { chord: 'B7', chordCode: 'B_dom7', roman: 'V7', rootPc: 11, tones: [11, 3, 6, 9], bassMidi: 47, altBassMidi: 42, scaleModeId: 'mixolydian', scaleRootPc: 11, hint: 'Turnaround dominante para o próximo ciclo' }
+        ]
+    },
+    pagode_em_la: {
+        id: 'pagode_em_la',
+        title: 'Pagode em Lá',
+        subtitle: 'Síncopa Tião Carreiro • 2/4',
+        keyLabel: 'Lá Maior (A)',
+        timeSignature: '2/4',
+        defaultBpm: 100,
+        ticksPerBar: 8,
+        beatsPerBar: 2,
+        ticksPerBeat: 4,
+        rootPc: 9,
+        defaultModeId: 'mixolydian',
+        duadInterval: '3rd',
+        badge: '2/4 • Lá Maior',
+        description: 'Groove sincopado em semicolcheias em Lá Maior: repique de caixa duplo nos contratempos, rasqueado firme e fraseado Mixolídio.',
+        bars: [
+            { chord: 'A', chordCode: 'A_maj', roman: 'I', rootPc: 9, tones: [9, 1, 4], bassMidi: 45, altBassMidi: 40, scaleModeId: 'ionian', scaleRootPc: 9, hint: 'Ataque em terças sobre Lá (A–C♯)' },
+            { chord: 'A', chordCode: 'A_maj', roman: 'I', rootPc: 9, tones: [9, 1, 4], bassMidi: 45, altBassMidi: 40, scaleModeId: 'mixolydian', scaleRootPc: 9, hint: 'Puxada com ♭7 (G) preparando D' },
+            { chord: 'E7', chordCode: 'E_dom7', roman: 'V7', rootPc: 4, tones: [4, 8, 11, 2], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Dominante E7 — explore G♯ e D (♭7)' },
+            { chord: 'E7', chordCode: 'E_dom7', roman: 'V7', rootPc: 4, tones: [4, 8, 11, 2], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Repique estalado descendo até o 4º par' },
+            { chord: 'D', chordCode: 'D_maj', roman: 'IV', rootPc: 2, tones: [2, 6, 9], bassMidi: 50, altBassMidi: 45, scaleModeId: 'lydian', scaleRootPc: 2, hint: 'Quarto grau D — cor lídia com G♯' },
+            { chord: 'E7', chordCode: 'E_dom7', roman: 'V7', rootPc: 4, tones: [4, 8, 11, 2], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Síncopa dominante fechando a frase' },
+            { chord: 'A', chordCode: 'A_maj', roman: 'I', rootPc: 9, tones: [9, 1, 4], bassMidi: 45, altBassMidi: 40, scaleModeId: 'ionian', scaleRootPc: 9, hint: 'Resolução clara em C♯–A (casa 5/7)' },
+            { chord: 'E7', chordCode: 'E_dom7', roman: 'V7', rootPc: 4, tones: [4, 8, 11, 2], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Chamada rítmica de reinício em E7' }
+        ]
+    },
+    toada_em_sol: {
+        id: 'toada_em_sol',
+        title: 'Toada em Sol',
+        subtitle: 'Seresta Composta • 6/8',
+        keyLabel: 'Sol Maior (G)',
+        timeSignature: '6/8',
+        defaultBpm: 76,
+        ticksPerBar: 12,
+        beatsPerBar: 6,
+        ticksPerBeat: 2,
+        rootPc: 7,
+        defaultModeId: 'ionian',
+        duadInterval: '6th',
+        badge: '6/8 • Sol Maior',
+        description: 'Balanço seresteiro em 6/8 com arpejos de violão, sextas caipiras na viola e percussão acolhedora no tampo no pulso 4.',
+        bars: [
+            { chord: 'G', chordCode: 'G_maj', roman: 'I', rootPc: 7, tones: [7, 11, 2], bassMidi: 43, altBassMidi: 50, scaleModeId: 'ionian', scaleRootPc: 7, hint: 'Sextas cantadas em G (B–G / D–B)' },
+            { chord: 'Em', chordCode: 'E_min', roman: 'vi', rootPc: 4, tones: [4, 7, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'aeolian', scaleRootPc: 4, hint: 'Relativo menor Em — destaque G (3m)' },
+            { chord: 'C', chordCode: 'C_maj', roman: 'IV', rootPc: 0, tones: [0, 4, 7], bassMidi: 48, altBassMidi: 43, scaleModeId: 'lydian', scaleRootPc: 0, hint: 'Quarto grau C — nota lídia F♯ (♯4)' },
+            { chord: 'D7', chordCode: 'D_dom7', roman: 'V7', rootPc: 2, tones: [2, 6, 9, 0], bassMidi: 50, altBassMidi: 45, scaleModeId: 'mixolydian', scaleRootPc: 2, hint: 'Dominante D7 — F♯ e C (♭7)' },
+            { chord: 'G', chordCode: 'G_maj', roman: 'I', rootPc: 7, tones: [7, 11, 2], bassMidi: 43, altBassMidi: 50, scaleModeId: 'ionian', scaleRootPc: 7, hint: 'Desenho lírico no 1º e 3º pares' },
+            { chord: 'D7', chordCode: 'D_dom7', roman: 'V7', rootPc: 2, tones: [2, 6, 9, 0], bassMidi: 50, altBassMidi: 45, scaleModeId: 'mixolydian', scaleRootPc: 2, hint: 'Ponte de espera em D7 antes do repouso' },
+            { chord: 'G', chordCode: 'G_maj', roman: 'I', rootPc: 7, tones: [7, 11, 2], bassMidi: 43, altBassMidi: 50, scaleModeId: 'ionian', scaleRootPc: 7, hint: 'Acorde de Sol estável em notas longas' },
+            { chord: 'D7', chordCode: 'D_dom7', roman: 'V7', rootPc: 2, tones: [2, 6, 9, 0], bassMidi: 50, altBassMidi: 45, scaleModeId: 'mixolydian', scaleRootPc: 2, hint: 'Cadência suspensiva para o próximo verso' }
+        ]
+    },
+    guarania_em_si_menor: {
+        id: 'guarania_em_si_menor',
+        title: 'Guarânia em Si Menor',
+        subtitle: 'Ternário Romântico • 3/4',
+        keyLabel: 'Si Menor (Bm)',
+        timeSignature: '3/4',
+        defaultBpm: 78,
+        ticksPerBar: 12,
+        beatsPerBar: 3,
+        ticksPerBeat: 4,
+        rootPc: 11,
+        defaultModeId: 'dorian',
+        duadInterval: '3rd',
+        badge: '3/4 • Si Menor',
+        description: 'Ondulação ternária dramática em Si Menor com condução Dórica/Eólia e preparação dominante harmônica em F♯7 (sensível Lá♯).',
+        bars: [
+            { chord: 'Bm', chordCode: 'B_min', roman: 'i', rootPc: 11, tones: [11, 2, 6], bassMidi: 47, altBassMidi: 42, scaleModeId: 'aeolian', scaleRootPc: 11, hint: 'Lamento de Bm — sustente D (3m) e F♯ (5J)' },
+            { chord: 'Bm', chordCode: 'B_min', roman: 'i', rootPc: 11, tones: [11, 2, 6], bassMidi: 47, altBassMidi: 42, scaleModeId: 'dorian', scaleRootPc: 11, hint: 'Toque Dórico (G♯) anunciando a subdominante' },
+            { chord: 'Em', chordCode: 'E_min', roman: 'iv', rootPc: 4, tones: [4, 7, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'dorian', scaleRootPc: 4, hint: 'Subdominante Em — destaque G e B' },
+            { chord: 'Em', chordCode: 'E_min', roman: 'iv', rootPc: 4, tones: [4, 7, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'dorian', scaleRootPc: 4, hint: 'Floreio descendente em C♯ (6M) e B (5J)' },
+            { chord: 'A7', chordCode: 'A_dom7', roman: 'VII7', rootPc: 9, tones: [9, 1, 4, 7], bassMidi: 45, altBassMidi: 40, scaleModeId: 'mixolydian', scaleRootPc: 9, hint: 'Dominante A7 — C♯ e G levando a D' },
+            { chord: 'D', chordCode: 'D_maj', roman: 'III', rootPc: 2, tones: [2, 6, 9], bassMidi: 50, altBassMidi: 45, scaleModeId: 'ionian', scaleRootPc: 2, hint: 'Relativo maior D — respiro luminoso' },
+            { chord: 'F#7', chordCode: 'F#_dom7', roman: 'V7', rootPc: 6, tones: [6, 10, 1, 4], bassMidi: 42, altBassMidi: 49, scaleModeId: 'phrygian_dom', scaleRootPc: 6, hint: 'Clímax V7 harmônico — mire na sensível A♯!' },
+            { chord: 'Bm', chordCode: 'B_min', roman: 'i', rootPc: 11, tones: [11, 2, 6], bassMidi: 47, altBassMidi: 42, scaleModeId: 'aeolian', scaleRootPc: 11, hint: 'Resolução emotiva na tônica B menor' }
+        ]
+    },
+    folia_lidia_em_re: {
+        id: 'folia_lidia_em_re',
+        title: 'Folia Lídia em Ré',
+        subtitle: 'Devoção de Reis • 3/4',
+        keyLabel: 'Ré Lídio (D)',
+        timeSignature: '3/4',
+        defaultBpm: 84,
+        ticksPerBar: 12,
+        beatsPerBar: 3,
+        ticksPerBeat: 4,
+        rootPc: 2,
+        defaultModeId: 'lydian',
+        duadInterval: '6th',
+        badge: '3/4 • Ré Lídio',
+        description: 'Vamp sagrado das Folias de Reis mineiras e goianas alternando Ré (I) e Mi Maior (II lídio), destacando a 4ª aumentada (Sol♯).',
+        bars: [
+            { chord: 'D', chordCode: 'D_maj', roman: 'I', rootPc: 2, tones: [2, 6, 9], bassMidi: 50, altBassMidi: 45, scaleModeId: 'lydian', scaleRootPc: 2, hint: 'Lídio puro — realce G♯ (♯4) sobre Ré' },
+            { chord: 'E', chordCode: 'E_maj', roman: 'II', rootPc: 4, tones: [4, 8, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Acorde II característico (E) — G♯ e B' },
+            { chord: 'D', chordCode: 'D_maj', roman: 'I', rootPc: 2, tones: [2, 6, 9], bassMidi: 50, altBassMidi: 45, scaleModeId: 'lydian', scaleRootPc: 2, hint: 'Sextas em Ré subindo para a 12ª casa' },
+            { chord: 'E', chordCode: 'E_maj', roman: 'II', rootPc: 4, tones: [4, 8, 11], bassMidi: 40, altBassMidi: 47, scaleModeId: 'mixolydian', scaleRootPc: 4, hint: 'Suspensão mística de Folia no II grau' },
+            { chord: 'G', chordCode: 'G_maj', roman: 'IV', rootPc: 7, tones: [7, 11, 2], bassMidi: 43, altBassMidi: 50, scaleModeId: 'lydian', scaleRootPc: 7, hint: 'Quarto grau G — brilho de C♯ (♯4)' },
+            { chord: 'A7', chordCode: 'A_dom7', roman: 'V7', rootPc: 9, tones: [9, 1, 4, 7], bassMidi: 45, altBassMidi: 40, scaleModeId: 'mixolydian', scaleRootPc: 9, hint: 'Dominante A7 preparando a bênção final' },
+            { chord: 'D', chordCode: 'D_maj', roman: 'I', rootPc: 2, tones: [2, 6, 9], bassMidi: 50, altBassMidi: 45, scaleModeId: 'lydian', scaleRootPc: 2, hint: 'Repouso devocional em Ré Maior' },
+            { chord: 'D', chordCode: 'D_maj', roman: 'I', rootPc: 2, tones: [2, 6, 9], bassMidi: 50, altBassMidi: 45, scaleModeId: 'lydian', scaleRootPc: 2, hint: 'Ressonância aberta aguardando próximo ciclo' }
+        ]
+    }
+};
+
+const DEFAULT_IMPROV_STUDIO_STATE = {
+    trackId: 'cururu_em_mi',
+    bpm: 94,
+    isPlaying: false,
+    isCountingIn: false,
+    countInBeat: 0,
+    activeBarIdx: 0,
+    activeBeatIdx: 0,
+    guideMode: 'hybrid',         // 'modal' | 'duad' | 'hybrid'
+    duadInterval: '6th',         // '3rd' | '6th'
+    autoDuadOnFretClick: true,
+    scaleLockMode: 'auto',       // 'auto' | 'manual'
+    manualModeId: 'mixolydian',
+    manualRootPc: 4,
+    loopBars: 8,                 // 2 | 4 | 8
+    quantizeGrid: '8n',          // '4n' | '8n' | '16n' | 'free'
+    countInEnabled: true,
+    autoCloseFirstPass: true,
+    backingEnabled: true,
+    backingClickEnabled: false,
+    backingVolume: 0.80,
+    stemGuitarVol: 0.82,
+    stemGuitarMute: false,
+    stemViolaVol: 0.78,
+    stemViolaMute: false,
+    stemPercVol: 0.85,
+    stemPercMute: false,
+    activeRecordTrackIdx: 0,
+    tracks: [
+        { id: 0, name: 'Pista 1 • Prima / Solo', timbre: 'viola_brilhante', volume: 0.90, pan: -0.25, muted: false, solo: false, mode: 'idle', events: [], passCounter: 0 },
+        { id: 1, name: 'Pista 2 • Dueto / 6ªs', timbre: 'viola_aveludada', volume: 0.85, pan: 0.35, muted: false, solo: false, mode: 'idle', events: [], passCounter: 0 },
+        { id: 2, name: 'Pista 3 • Baixaria / Base', timbre: 'violao_nylon', volume: 0.85, pan: -0.55, muted: false, solo: false, mode: 'idle', events: [], passCounter: 0 },
+        { id: 3, name: 'Pista 4 • Percussão / Extra', timbre: 'tampo_perc', volume: 0.80, pan: 0.10, muted: false, solo: false, mode: 'idle', events: [], passCounter: 0 }
+    ]
+};
+
 
 const DEFAULT_SOLFEGE_STATE = {
     subTab: 'interval', // 'interval' | 'dictation'
@@ -4137,7 +4354,8 @@ const CAIPIRA_DICTATION_PHRASES = [
         solfege: Object.assign({}, DEFAULT_SOLFEGE_STATE),
         pagode: Object.assign({}, DEFAULT_PAGODE_STATE),
         strobeTuner: JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE)),
-        stageEq: JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE))
+        stageEq: JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE)),
+        improvStudio: JSON.parse(JSON.stringify(DEFAULT_IMPROV_STUDIO_STATE))
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -4225,6 +4443,24 @@ const CAIPIRA_DICTATION_PHRASES = [
     let stageFreqData = null;
     let stageDragState = { active: false, targetType: null, targetIdx: -1 };
     let stageLiveStatus = 'Pronto para modelagem de captação (Piezo / Condensador) e equalização paramétrica de palco.';
+
+    // Fase 21: Variáveis DSP do Estúdio de Improviso Modal, Backing Tracks & Looper de 4 Pistas
+    let improvAudioGraph = null;
+    let improvSchedulerTimer = null;
+    let improvRafId = null;
+    let improvVisualQueue = [];
+    let improvRuntime = {
+        nextTickAudioTime: 0,
+        cycleOriginAudioTime: 0,
+        currentLoopTick: 0,
+        passCounter: 0,
+        isCountingIn: false,
+        countInStep: 0,
+        countInTotalTicks: 0,
+        lastVisualBarIdx: -1,
+        lastVisualBeatIdx: -1,
+        liveStatus: 'Escolha uma base caipira, ligue o Play e grave até 4 pistas no Looper sincronizado!'
+    };
 
     function ensureAudioContext() {
         if (!audioCtx) {
@@ -21751,6 +21987,2221 @@ function bindSolfegeEvents() {
         }
     }
 
+    // =========================================================================
+    // MOTOR FASE 21: ESTÚDIO DE IMPROVISO MODAL, BACKING TRACKS & LOOPER 4 PISTAS
+    // =========================================================================
+    function getActiveImprovTrack() {
+        const st = state.improvStudio || DEFAULT_IMPROV_STUDIO_STATE;
+        return IMPROVISO_BACKING_CATALOG[st.trackId] || IMPROVISO_BACKING_CATALOG.cururu_em_mi;
+    }
+
+    function getImprovModalConfig(modeId) {
+        return MODAL_SCALES[modeId] || IMPROV_EXTRA_MODES[modeId] || MODAL_SCALES.mixolydian;
+    }
+
+    function getImprovTickDurationSec(track, bpm) {
+        const safeBpm = Math.max(45, Math.min(200, bpm || track.defaultBpm || 92));
+        if (track.timeSignature === '6/8') {
+            return (60 / safeBpm) / 6;
+        }
+        return (60 / safeBpm) / (track.ticksPerBeat || 4);
+    }
+
+    function getImprovChordQualityFromCode(chordCode) {
+        if (!chordCode) return 'maj';
+        const parts = chordCode.split('_');
+        return parts[1] || 'maj';
+    }
+
+    function computeModalDuadStepsForConfig(inst, rootPc, scaleOffsets, intervalType) {
+        if (!inst || !inst.courses || inst.courses.length < 3) return [];
+        const upperCourse = 0;
+        const lowerCourse = intervalType === '3rd' ? 1 : Math.min(2, inst.courses.length - 1);
+        const uBaseMidi = inst.courses[upperCourse].midi[0];
+        const lBaseMidi = inst.courses[lowerCourse].midi[0];
+        const degreeRomans = ['1', '2', '3', '4', '5', '6', '7'];
+        const seen = new Set();
+        const candidates = [];
+
+        for (let oct = 2; oct <= 6; oct++) {
+            for (let deg = 0; deg < 7; deg++) {
+                const baseRootMidi = 12 * oct + rootPc;
+                let uMidi;
+                let lMidi;
+                if (intervalType === '3rd') {
+                    lMidi = baseRootMidi + scaleOffsets[deg];
+                    const thirdDeg = deg + 2;
+                    uMidi = baseRootMidi + (thirdDeg >= 7 ? scaleOffsets[thirdDeg - 7] + 12 : scaleOffsets[thirdDeg]);
+                } else {
+                    uMidi = baseRootMidi + scaleOffsets[deg];
+                    const thirdDeg = deg + 2;
+                    lMidi = baseRootMidi + (thirdDeg >= 7 ? scaleOffsets[thirdDeg - 7] + 12 : scaleOffsets[thirdDeg]) - 12;
+                }
+                const fUpper = uMidi - uBaseMidi;
+                const fLower = lMidi - lBaseMidi;
+                if (fUpper >= 0 && fUpper <= 14 && fLower >= 0 && fLower <= 14) {
+                    const key = `${fUpper}_${fLower}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        const uPc = uMidi % 12;
+                        const lPc = lMidi % 12;
+                        candidates.push({
+                            degIdx: deg,
+                            roman: degreeRomans[deg],
+                            upperCourse,
+                            lowerCourse,
+                            upperFret: fUpper,
+                            lowerFret: fLower,
+                            upperPc: uPc,
+                            lowerPc: lPc,
+                            upperNote: NOTE_NAMES[uPc],
+                            lowerNote: NOTE_NAMES[lPc],
+                            sortPitch: intervalType === '3rd' ? lMidi : uMidi
+                        });
+                    }
+                }
+            }
+        }
+        candidates.sort((a, b) => a.sortPitch - b.sortPitch);
+        return candidates;
+    }
+
+    function getImprovBarGuideSpec(barIdx) {
+        const st = state.improvStudio;
+        const track = getActiveImprovTrack();
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const safeBarIdx = ((barIdx || 0) % track.bars.length + track.bars.length) % track.bars.length;
+        const bar = track.bars[safeBarIdx] || track.bars[0];
+        const nextBar = track.bars[(safeBarIdx + 1) % track.bars.length] || track.bars[0];
+
+        const activeModeId = st.scaleLockMode === 'manual' ? st.manualModeId : bar.scaleModeId;
+        const activeScaleRoot = st.scaleLockMode === 'manual' ? st.manualRootPc : bar.scaleRootPc;
+        const modalCfg = getImprovModalConfig(activeModeId);
+        const duadInterval = st.duadInterval || track.duadInterval || '6th';
+        const duadSteps = computeModalDuadStepsForConfig(inst, activeScaleRoot, modalCfg.intervals, duadInterval);
+
+        return {
+            track,
+            barIdx: safeBarIdx,
+            bar,
+            nextBar,
+            scaleModeId: activeModeId,
+            scaleRootPc: activeScaleRoot,
+            modalCfg,
+            chordTones: bar.tones || [bar.rootPc],
+            duadInterval,
+            duadSteps
+        };
+    }
+
+    function getImprovScalePadNotes(guideSpec) {
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const rootPc = guideSpec.scaleRootPc;
+        const modalCfg = guideSpec.modalCfg;
+        const anchorMidi = inst.courses[1] ? inst.courses[1].midi[0] : 59;
+        const rootBaseOffset = (rootPc - (anchorMidi % 12) + 12) % 12;
+        const startMidi = anchorMidi + rootBaseOffset;
+        const pads = [];
+
+        for (let i = 0; i < 8; i++) {
+            const degIdx = i % 7;
+            const octShift = i === 7 ? 12 : 0;
+            const iv = modalCfg.intervals[degIdx];
+            const targetMidi = startMidi + iv + octShift;
+            const pc = targetMidi % 12;
+
+            // Mapeia na melhor corda aguda (0 ou 1) dentro das casas 0..14
+            let bestCourse = 0;
+            let bestFret = targetMidi - inst.courses[0].midi[0];
+            if (bestFret < 0 || bestFret > 14) {
+                bestCourse = 1;
+                bestFret = targetMidi - inst.courses[1].midi[0];
+            }
+            if (bestFret < 0 || bestFret > 14) {
+                bestCourse = 0;
+                bestFret = ((pc - inst.courses[0].pitchClass + 12) % 12);
+            }
+
+            // Busca dueto correspondente caso Dueto Automático esteja ativo
+            const duadMatch = guideSpec.duadSteps.find((d) =>
+                (d.upperCourse === bestCourse && d.upperFret === bestFret) ||
+                (d.lowerCourse === bestCourse && d.lowerFret === bestFret) ||
+                d.upperPc === pc
+            );
+
+            const isChordTone = guideSpec.chordTones.includes(pc);
+            const isChar = modalCfg.characteristicIntervals.includes(iv);
+            const isRoot = degIdx === 0;
+
+            pads.push({
+                padIdx: i,
+                keyLabel: String(i + 1),
+                degreeLabel: i === 7 ? '8' : modalCfg.degreeNames[degIdx],
+                noteName: NOTE_NAMES[pc],
+                pc,
+                isRoot,
+                isChar,
+                isChordTone,
+                primaryNote: { c: bestCourse, f: Math.max(0, Math.min(14, bestFret)) },
+                duadNotes: duadMatch
+                    ? [{ c: duadMatch.upperCourse, f: duadMatch.upperFret }, { c: duadMatch.lowerCourse, f: duadMatch.lowerFret }]
+                    : [{ c: bestCourse, f: Math.max(0, Math.min(14, bestFret)) }]
+            });
+        }
+        return pads;
+    }
+
+    function ensureImprovAudioGraph() {
+        const ctx = ensureAudioContext();
+        if (!ctx) return null;
+        if (improvAudioGraph && improvAudioGraph.ctx === ctx) {
+            syncImprovAudioMixerNodes();
+            return improvAudioGraph;
+        }
+
+        const limiter = ctx.createDynamicsCompressor();
+        limiter.threshold.value = -4.0;
+        limiter.knee.value = 3.0;
+        limiter.ratio.value = 12.0;
+        limiter.attack.value = 0.002;
+        limiter.release.value = 0.08;
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.value = 0.88;
+        limiter.connect(masterGain);
+        masterGain.connect(ctx.destination);
+
+        const backingGain = ctx.createGain();
+        backingGain.connect(limiter);
+
+        const createStem = (panVal) => {
+            const panner = ctx.createStereoPanner();
+            panner.pan.value = panVal;
+            const gain = ctx.createGain();
+            gain.connect(panner);
+            panner.connect(backingGain);
+            return { panner, gain };
+        };
+
+        const stems = {
+            guitar: createStem(-0.35),
+            viola: createStem(0.35),
+            perc: createStem(0.0)
+        };
+
+        const trackBuses = [0, 1, 2, 3].map((idx) => {
+            const panner = ctx.createStereoPanner();
+            const gain = ctx.createGain();
+            gain.connect(panner);
+            panner.connect(limiter);
+            return { idx, panner, gain };
+        });
+
+        improvAudioGraph = {
+            ctx,
+            limiter,
+            masterGain,
+            backingGain,
+            stems,
+            trackBuses
+        };
+
+        syncImprovAudioMixerNodes();
+        return improvAudioGraph;
+    }
+
+    function syncImprovAudioMixerNodes() {
+        if (!improvAudioGraph || !improvAudioGraph.ctx) return;
+        const g = improvAudioGraph;
+        const now = g.ctx.currentTime;
+        const st = state.improvStudio;
+
+        g.backingGain.gain.setTargetAtTime(st.backingEnabled ? (st.backingVolume || 0.8) : 0, now, 0.015);
+        g.stems.guitar.gain.gain.setTargetAtTime(st.stemGuitarMute ? 0 : (st.stemGuitarVol ?? 0.82), now, 0.015);
+        g.stems.viola.gain.gain.setTargetAtTime(st.stemViolaMute ? 0 : (st.stemViolaVol ?? 0.78), now, 0.015);
+        g.stems.perc.gain.gain.setTargetAtTime(st.stemPercMute ? 0 : (st.stemPercVol ?? 0.85), now, 0.015);
+
+        const anySolo = st.tracks.some((tr) => tr.solo);
+        st.tracks.forEach((tr, idx) => {
+            const bus = g.trackBuses[idx];
+            if (!bus) return;
+            const audible = !tr.muted && (!anySolo || tr.solo);
+            const targetGain = audible ? Math.max(0, Math.min(1, tr.volume ?? 0.85)) : 0;
+            const targetPan = Math.max(-1, Math.min(1, tr.pan ?? 0));
+            bus.gain.gain.setTargetAtTime(targetGain, now, 0.015);
+            bus.panner.pan.setTargetAtTime(targetPan, now, 0.015);
+        });
+    }
+
+    function synthImprovStringNote(destNode, midi, timeOffsetSec, durationSec, timbreId, velocity, detuneCents) {
+        if (!improvAudioGraph || !destNode) return;
+        const ctx = improvAudioGraph.ctx;
+        const now = ctx.currentTime + Math.max(0, timeOffsetSec || 0);
+        const dur = Math.max(0.18, durationSec || 1.2);
+        const freq = midiToFreq(midi);
+        const vel = Math.max(0.05, Math.min(1, velocity || 0.85));
+
+        const env = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const g1 = ctx.createGain();
+        const g2 = ctx.createGain();
+
+        if (timbreId === 'violao_nylon' || timbreId === 'backing_guitar') {
+            osc1.type = 'triangle';
+            osc2.type = 'sine';
+            g1.gain.value = 0.74;
+            g2.gain.value = 0.26;
+            filter.frequency.setValueAtTime(Math.min(3200, freq * 4.5), now);
+            filter.frequency.exponentialRampToValueAtTime(Math.max(260, freq * 1.4), now + dur * 0.72);
+            filter.Q.setValueAtTime(1.0, now);
+        } else if (timbreId === 'viola_aveludada') {
+            osc1.type = 'triangle';
+            osc2.type = 'sawtooth';
+            g1.gain.value = 0.78;
+            g2.gain.value = 0.22;
+            filter.frequency.setValueAtTime(Math.min(4400, freq * 5.2), now);
+            filter.frequency.exponentialRampToValueAtTime(Math.max(380, freq * 1.6), now + dur * 0.78);
+            filter.Q.setValueAtTime(1.3, now);
+        } else {
+            // viola_brilhante / backing_viola
+            osc1.type = 'triangle';
+            osc2.type = 'sawtooth';
+            g1.gain.value = 0.66;
+            g2.gain.value = 0.34;
+            filter.frequency.setValueAtTime(Math.min(6400, freq * 7.2), now);
+            filter.frequency.exponentialRampToValueAtTime(Math.max(460, freq * 2.0), now + dur * 0.75);
+            filter.Q.setValueAtTime(1.5, now);
+        }
+
+        osc1.frequency.setValueAtTime(freq, now);
+        osc2.frequency.setValueAtTime(freq, now);
+        osc1.detune.setValueAtTime(detuneCents || 0, now);
+        osc2.detune.setValueAtTime((detuneCents || 0) + 1.6, now);
+
+        const peak = 0.22 * vel;
+        env.gain.setValueAtTime(0.0001, now);
+        env.gain.linearRampToValueAtTime(peak, now + 0.006);
+        env.gain.exponentialRampToValueAtTime(peak * 0.42, now + Math.min(0.16, dur * 0.4));
+        env.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+        osc1.connect(g1);
+        osc2.connect(g2);
+        g1.connect(filter);
+        g2.connect(filter);
+        filter.connect(env);
+        env.connect(destNode);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + dur + 0.03);
+        osc2.stop(now + dur + 0.03);
+    }
+
+    function synthImprovPercussion(destNode, kind, timeOffsetSec, velocity) {
+        if (!improvAudioGraph || !destNode) return;
+        const ctx = improvAudioGraph.ctx;
+        const now = ctx.currentTime + Math.max(0, timeOffsetSec || 0);
+        const vel = Math.max(0.05, Math.min(1, velocity || 0.8));
+
+        if (kind === 'tap') {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(152, now);
+            osc.frequency.exponentialRampToValueAtTime(46, now + 0.055);
+            g.gain.setValueAtTime(0.0001, now);
+            g.gain.linearRampToValueAtTime(0.38 * vel, now + 0.002);
+            g.gain.exponentialRampToValueAtTime(0.0001, now + 0.062);
+            osc.connect(g);
+            g.connect(destNode);
+            osc.start(now);
+            osc.stop(now + 0.07);
+        }
+
+        try {
+            const durSec = kind === 'chock' ? 0.032 : (kind === 'rim' ? 0.024 : 0.042);
+            const bufLen = Math.max(64, Math.floor(ctx.sampleRate * durSec));
+            const noiseBuf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+            const ch = noiseBuf.getChannelData(0);
+            for (let i = 0; i < bufLen; i++) ch[i] = Math.random() * 2 - 1;
+
+            const src = ctx.createBufferSource();
+            src.buffer = noiseBuf;
+            const bp = ctx.createBiquadFilter();
+            bp.type = 'bandpass';
+            bp.frequency.setValueAtTime(kind === 'chock' ? 880 : (kind === 'rim' ? 1480 : 285), now);
+            bp.Q.setValueAtTime(kind === 'rim' ? 4.5 : 3.2, now);
+
+            const ng = ctx.createGain();
+            ng.gain.setValueAtTime((kind === 'rim' ? 0.28 : 0.42) * vel, now);
+            ng.gain.exponentialRampToValueAtTime(0.0001, now + durSec);
+
+            src.connect(bp);
+            bp.connect(ng);
+            ng.connect(destNode);
+            src.start(now);
+            src.stop(now + durSec + 0.01);
+        } catch (_) {}
+    }
+
+    function playImprovNoteBundle(notes, perc, timbreId, destNode, timeOffsetSec, velocity, inst) {
+        if (perc) {
+            synthImprovPercussion(destNode, perc, timeOffsetSec, velocity);
+        }
+        if (!Array.isArray(notes) || notes.length === 0) return;
+
+        const activeInst = inst || INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const isNylon = timbreId === 'violao_nylon';
+
+        notes.forEach((nt, idx) => {
+            const c = Math.max(0, Math.min(activeInst.courses.length - 1, nt.c || 0));
+            const f = Math.max(0, Math.min(18, nt.f || 0));
+            const course = activeInst.courses[c];
+            if (!course) return;
+            const offset = (timeOffsetSec || 0) + idx * 0.006;
+
+            if (!isNylon && activeInst.isPaired && course.midi.length === 2) {
+                synthImprovStringNote(destNode, course.midi[0] + f, offset, 1.15, timbreId, velocity * 0.78, -1.6);
+                synthImprovStringNote(destNode, course.midi[1] + f, offset + 0.008, 1.10, timbreId, velocity * 0.72, 1.6);
+            } else {
+                const baseMidi = isNylon && c >= 3 && course.midi[0] > 48 ? course.midi[0] - 12 : course.midi[0];
+                synthImprovStringNote(destNode, baseMidi + f, offset, 1.25, timbreId, velocity, 0);
+            }
+        });
+    }
+
+    function getBackingGuitarChordMidis(chordCode, rootPc) {
+        const violao = INSTRUMENTS.violao_padrao;
+        const curated = VIOLAO_CHORD_SHAPES[chordCode];
+        if (curated && curated.length > 0) {
+            const shape = curated[0];
+            const out = [];
+            for (let i = violao.courses.length - 1; i >= 0; i--) {
+                if (shape[i] >= 0) out.push(violao.courses[i].midi[0] + shape[i]);
+            }
+            return out;
+        }
+        return [40 + rootPc, 47 + rootPc, 52 + rootPc, 56 + rootPc];
+    }
+
+    function getBackingViolaShape(bar, inst) {
+        const targetInst = inst.isPaired ? inst : INSTRUMENTS.viola_cebolao_e;
+        const qual = getImprovChordQualityFromCode(bar.chordCode);
+        const chordObj = {
+            chordCode: bar.chordCode,
+            rootPc: bar.rootPc,
+            quality: qual,
+            pitchClasses: bar.tones || [bar.rootPc]
+        };
+        if (targetInst.id === 'viola_cebolao_e' && VIOLA_CHORD_SHAPES[bar.chordCode]) {
+            return { targetInst, shape: VIOLA_CHORD_SHAPES[bar.chordCode][0] };
+        }
+        const shape = solveAlgorithmicVoicing(targetInst, bar.rootPc, chordObj.pitchClasses, 0);
+        return { targetInst, shape };
+    }
+
+    function playBackingStrum(destNode, midis, timeOffsetSec, durSec, timbreId, velocity, spreadSec = 0.011) {
+        midis.forEach((m, idx) => {
+            synthImprovStringNote(destNode, m, timeOffsetSec + idx * spreadSec, durSec, timbreId, velocity, 0);
+        });
+    }
+
+    function playBackingViolaCourses(destNode, targetInst, shape, courseIndices, timeOffsetSec, durSec, velocity, spreadSec = 0.009) {
+        let count = 0;
+        courseIndices.forEach((cIdx) => {
+            const course = targetInst.courses[cIdx];
+            const f = shape[cIdx];
+            if (!course || f === undefined || f < 0) return;
+            const t = timeOffsetSec + count * spreadSec;
+            synthImprovStringNote(destNode, course.midi[0] + f, t, durSec, 'backing_viola', velocity * 0.76, -1.5);
+            if (course.midi.length === 2) {
+                synthImprovStringNote(destNode, course.midi[1] + f, t + 0.006, durSec * 0.95, 'backing_viola', velocity * 0.70, 1.5);
+            }
+            count++;
+        });
+    }
+
+    function scheduleBackingBarTick(track, barIdx, barTick, tickAudioTime) {
+        const g = ensureImprovAudioGraph();
+        if (!g) return;
+        const ctx = g.ctx;
+        const st = state.improvStudio;
+        const offset = Math.max(0, tickAudioTime - ctx.currentTime);
+        const bar = track.bars[barIdx % track.bars.length];
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+
+        // Clique guia opcional nas cabeças de tempo
+        if (st.backingClickEnabled && (barTick % track.ticksPerBeat === 0)) {
+            const beatIdx = Math.floor(barTick / track.ticksPerBeat);
+            const osc = ctx.createOscillator();
+            const cg = ctx.createGain();
+            osc.type = beatIdx === 0 ? 'triangle' : 'sine';
+            osc.frequency.setValueAtTime(beatIdx === 0 ? 1160 : 760, tickAudioTime);
+            cg.gain.setValueAtTime(0.0001, tickAudioTime);
+            cg.gain.linearRampToValueAtTime(beatIdx === 0 ? 0.22 : 0.13, tickAudioTime + 0.002);
+            cg.gain.exponentialRampToValueAtTime(0.0001, tickAudioTime + 0.042);
+            osc.connect(cg);
+            cg.connect(g.limiter);
+            osc.start(tickAudioTime);
+            osc.stop(tickAudioTime + 0.05);
+        }
+
+        if (!st.backingEnabled) return;
+
+        const guitarMidis = getBackingGuitarChordMidis(bar.chordCode, bar.rootPc);
+        const upperGuitarMidis = guitarMidis.slice(-3);
+        const violaInfo = getBackingViolaShape(bar, inst);
+        const bassMidi = (barIdx % 2 === 1 && bar.altBassMidi) ? bar.altBassMidi : bar.bassMidi;
+
+        if (track.id === 'cururu_em_mi') {
+            if (barTick === 0) {
+                synthImprovStringNote(g.stems.guitar.gain, bassMidi, offset, 0.56, 'backing_guitar', 0.92, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4, 3], offset, 0.45, 0.72, 0.005);
+            } else if (barTick === 2) {
+                playBackingStrum(g.stems.guitar.gain, upperGuitarMidis, offset, 0.34, 'backing_guitar', 0.56, 0.01);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1], offset, 0.36, 0.65, 0.008);
+            } else if (barTick === 4) {
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.88);
+                synthImprovStringNote(g.stems.guitar.gain, bar.altBassMidi || bassMidi, offset, 0.38, 'backing_guitar', 0.58, 0);
+            } else if (barTick === 6) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1, 2], offset, 0.32, 0.64, 0.007);
+                synthImprovPercussion(g.stems.perc.gain, 'rim', offset, 0.34);
+            }
+        } else if (track.id === 'pagode_em_la') {
+            if (barTick === 0) {
+                synthImprovStringNote(g.stems.guitar.gain, bassMidi, offset, 0.42, 'backing_guitar', 0.94, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4], offset, 0.35, 0.78, 0);
+            } else if (barTick === 1) {
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.75);
+            } else if (barTick === 2) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [3], offset, 0.25, 0.68, 0);
+            } else if (barTick === 3) {
+                playBackingStrum(g.stems.guitar.gain, upperGuitarMidis, offset, 0.25, 'backing_guitar', 0.52, 0.007);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1], offset, 0.26, 0.70, 0.006);
+            } else if (barTick === 4) {
+                playBackingStrum(g.stems.guitar.gain, guitarMidis, offset, 0.38, 'backing_guitar', 0.68, 0.009);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4, 3, 2, 1, 0], offset, 0.38, 0.74, 0.007);
+            } else if (barTick === 5) {
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.80);
+            } else if (barTick === 6) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1], offset, 0.28, 0.66, 0.006);
+                synthImprovPercussion(g.stems.perc.gain, 'chock', offset, 0.45);
+            } else if (barTick === 7) {
+                synthImprovStringNote(g.stems.guitar.gain, bar.altBassMidi || bassMidi, offset, 0.24, 'backing_guitar', 0.64, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4], offset, 0.22, 0.55, 0);
+            }
+        } else if (track.id === 'toada_em_sol') {
+            if (barTick === 0) {
+                synthImprovStringNote(g.stems.guitar.gain, bassMidi, offset, 0.95, 'backing_guitar', 0.90, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4, 3], offset, 0.75, 0.65, 0.01);
+            } else if (barTick === 2) {
+                synthImprovStringNote(g.stems.guitar.gain, upperGuitarMidis[0] || bassMidi + 12, offset, 0.50, 'backing_guitar', 0.54, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [1], offset, 0.48, 0.56, 0);
+            } else if (barTick === 4) {
+                synthImprovStringNote(g.stems.guitar.gain, upperGuitarMidis[1] || bassMidi + 16, offset, 0.48, 'backing_guitar', 0.56, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0], offset, 0.48, 0.60, 0);
+            } else if (barTick === 6) {
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.72);
+                synthImprovStringNote(g.stems.guitar.gain, bar.altBassMidi || bassMidi, offset, 0.68, 'backing_guitar', 0.65, 0);
+            } else if (barTick === 8) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [2, 1, 0], offset, 0.52, 0.62, 0.012);
+            } else if (barTick === 10) {
+                playBackingStrum(g.stems.guitar.gain, upperGuitarMidis, offset, 0.42, 'backing_guitar', 0.50, 0.009);
+                synthImprovPercussion(g.stems.perc.gain, 'rim', offset, 0.30);
+            }
+        } else if (track.id === 'guarania_em_si_menor') {
+            if (barTick === 0) {
+                synthImprovStringNote(g.stems.guitar.gain, bassMidi, offset, 1.10, 'backing_guitar', 0.94, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4, 3], offset, 0.72, 0.62, 0.012);
+            } else if (barTick === 4) {
+                playBackingStrum(g.stems.guitar.gain, upperGuitarMidis, offset, 0.45, 'backing_guitar', 0.60, 0.012);
+                synthImprovPercussion(g.stems.perc.gain, 'chock', offset, 0.42);
+            } else if (barTick === 6) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1], offset, 0.42, 0.64, 0.008);
+            } else if (barTick === 8) {
+                playBackingStrum(g.stems.guitar.gain, upperGuitarMidis, offset, 0.45, 'backing_guitar', 0.58, 0.012);
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.55);
+            } else if (barTick === 10) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1, 2], offset, 0.40, 0.58, 0.008);
+            }
+        } else {
+            // folia_lidia_em_re (3/4)
+            if (barTick === 0) {
+                synthImprovStringNote(g.stems.guitar.gain, bassMidi, offset, 0.95, 'backing_guitar', 0.90, 0);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [4, 3, 2, 1, 0], offset, 0.75, 0.70, 0.011);
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.76);
+            } else if (barTick === 4) {
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 1], offset, 0.45, 0.66, 0.008);
+                synthImprovPercussion(g.stems.perc.gain, 'rim', offset, 0.42);
+            } else if (barTick === 6) {
+                synthImprovStringNote(g.stems.guitar.gain, bar.altBassMidi || bassMidi, offset, 0.55, 'backing_guitar', 0.65, 0);
+            } else if (barTick === 8) {
+                playBackingStrum(g.stems.guitar.gain, upperGuitarMidis, offset, 0.45, 'backing_guitar', 0.60, 0.010);
+                synthImprovPercussion(g.stems.perc.gain, 'tap', offset, 0.68);
+            } else if (barTick === 10) {
+                synthImprovPercussion(g.stems.perc.gain, 'rim', offset, 0.48);
+                playBackingViolaCourses(g.stems.viola.gain, violaInfo.targetInst, violaInfo.shape, [0, 2], offset, 0.38, 0.60, 0.008);
+            }
+        }
+    }
+
+    function scheduleLooperTrackEventsAtTick(loopTick, tickAudioTime, tickSec) {
+        const g = ensureImprovAudioGraph();
+        if (!g) return;
+        const st = state.improvStudio;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const anySolo = st.tracks.some((tr) => tr.solo);
+
+        st.tracks.forEach((tr, idx) => {
+            if (tr.mode === 'idle' && (!tr.events || tr.events.length === 0)) return;
+            if (tr.mode === 'recording') return; // Enquanto grava a 1ª passagem, ainda não existe loop anterior
+            const bus = g.trackBuses[idx];
+            if (!bus || !Array.isArray(tr.events)) return;
+            const audible = !tr.muted && (!anySolo || tr.solo);
+
+            tr.events.forEach((ev) => {
+                if (ev.tick >= loopTick && ev.tick < loopTick + 1) {
+                    if (ev._skipPass === improvRuntime.passCounter) {
+                        ev._skipPass = -1;
+                        return;
+                    }
+                    const fracOffset = (ev.tick - loopTick) * tickSec;
+                    const eventTime = tickAudioTime + fracOffset;
+                    const delaySec = Math.max(0, eventTime - g.ctx.currentTime);
+                    playImprovNoteBundle(ev.notes, ev.perc, tr.timbre, bus.gain, delaySec, ev.velocity || 0.85, inst);
+
+                    if (audible && Array.isArray(ev.notes)) {
+                        const delayMs = Math.max(0, delaySec * 1000);
+                        ev.notes.forEach((nt) => flashFretCell(nt.c, nt.f, delayMs));
+                    }
+                }
+            });
+        });
+    }
+
+    function improvSchedulerTick() {
+        const st = state.improvStudio;
+        if (!st.isPlaying || !audioCtx) return;
+
+        const track = getActiveImprovTrack();
+        const tickSec = getImprovTickDurationSec(track, st.bpm);
+        const totalTicks = Math.max(1, (st.loopBars || 8) * track.ticksPerBar);
+        const scheduleAheadSec = 0.10;
+
+        while (improvRuntime.nextTickAudioTime < audioCtx.currentTime + scheduleAheadSec) {
+            const tTime = improvRuntime.nextTickAudioTime;
+
+            if (improvRuntime.isCountingIn) {
+                const countIdx = improvRuntime.countInStep;
+                if (countIdx % track.ticksPerBeat === 0) {
+                    const beatNum = Math.floor(countIdx / track.ticksPerBeat) + 1;
+                    const osc = audioCtx.createOscillator();
+                    const cg = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(beatNum === 1 ? 1320 : 880, tTime);
+                    cg.gain.setValueAtTime(0.0001, tTime);
+                    cg.gain.linearRampToValueAtTime(beatNum === 1 ? 0.32 : 0.22, tTime + 0.002);
+                    cg.gain.exponentialRampToValueAtTime(0.0001, tTime + 0.06);
+                    osc.connect(cg);
+                    cg.connect(audioCtx.destination);
+                    osc.start(tTime);
+                    osc.stop(tTime + 0.07);
+
+                    improvVisualQueue.push({
+                        type: 'countin',
+                        beat: beatNum,
+                        time: tTime
+                    });
+                }
+                improvRuntime.countInStep++;
+                if (improvRuntime.countInStep >= improvRuntime.countInTotalTicks) {
+                    improvRuntime.isCountingIn = false;
+                    improvRuntime.currentLoopTick = 0;
+                    improvRuntime.cycleOriginAudioTime = tTime + tickSec;
+                    improvRuntime.passCounter = 0;
+                }
+                improvRuntime.nextTickAudioTime += tickSec;
+                continue;
+            }
+
+            const loopTick = improvRuntime.currentLoopTick % totalTicks;
+
+            // Transições quantizadas exatamente na cabeça do ciclo (Tick 0)
+            if (loopTick === 0) {
+                improvRuntime.cycleOriginAudioTime = tTime;
+                improvRuntime.passCounter++;
+                let stateMutated = false;
+
+                st.tracks.forEach((tr) => {
+                    if (tr.mode === 'armed') {
+                        tr.mode = 'recording';
+                        tr._recordStartPass = improvRuntime.passCounter;
+                        tr.passCounter = (tr.passCounter || 0) + 1;
+                        stateMutated = true;
+                    } else if (tr.mode === 'recording' && st.autoCloseFirstPass && tr._recordStartPass && improvRuntime.passCounter > tr._recordStartPass) {
+                        tr.mode = tr.events.length > 0 ? 'playing' : 'idle';
+                        delete tr._recordStartPass;
+                        stateMutated = true;
+                    } else if (tr.mode === 'pendingOverdub') {
+                        tr.mode = 'overdub';
+                        tr.passCounter = (tr.passCounter || 0) + 1;
+                        stateMutated = true;
+                    }
+                });
+
+                if (stateMutated) {
+                    improvVisualQueue.push({ type: 'refreshTracks', time: tTime });
+                }
+            }
+
+            // Transição quantizada por compasso para armar Overdub/Gravação rápida se selecionado
+            if (loopTick % track.ticksPerBar === 0 && loopTick !== 0) {
+                let barMutated = false;
+                st.tracks.forEach((tr) => {
+                    if (tr.mode === 'pendingOverdub') {
+                        tr.mode = 'overdub';
+                        tr.passCounter = (tr.passCounter || 0) + 1;
+                        barMutated = true;
+                    }
+                });
+                if (barMutated) {
+                    improvVisualQueue.push({ type: 'refreshTracks', time: tTime });
+                }
+            }
+
+            const barIdx = Math.floor(loopTick / track.ticksPerBar);
+            const barTick = loopTick % track.ticksPerBar;
+            const beatIdx = Math.floor(barTick / track.ticksPerBeat);
+
+            scheduleBackingBarTick(track, barIdx, barTick, tTime);
+            scheduleLooperTrackEventsAtTick(loopTick, tTime, tickSec);
+
+            improvVisualQueue.push({
+                type: 'step',
+                barIdx: barIdx % track.bars.length,
+                loopBarIdx: barIdx,
+                beatIdx,
+                loopTick,
+                time: tTime
+            });
+
+            improvRuntime.currentLoopTick = (loopTick + 1) % totalTicks;
+            improvRuntime.nextTickAudioTime += tickSec;
+        }
+    }
+
+    function updateImprovLiveBarDOM() {
+        const st = state.improvStudio;
+        const guide = getImprovBarGuideSpec(st.activeBarIdx);
+        const track = guide.track;
+
+        const liveChordEl = document.getElementById('viola-improv-live-chord');
+        const liveRomanEl = document.getElementById('viola-improv-live-roman');
+        const liveNextEl = document.getElementById('viola-improv-live-next');
+        const liveScaleEl = document.getElementById('viola-improv-live-scale');
+        const liveHintEl = document.getElementById('viola-improv-live-hint');
+        const liveStatusEl = document.getElementById('viola-improv-status-text');
+        const barCounterEl = document.getElementById('viola-improv-bar-counter');
+
+        if (liveChordEl) liveChordEl.textContent = guide.bar.chord;
+        if (liveRomanEl) liveRomanEl.textContent = guide.bar.roman;
+        if (liveNextEl) liveNextEl.textContent = `${guide.nextBar.chord} (${guide.nextBar.roman})`;
+        if (liveScaleEl) liveScaleEl.textContent = `${NOTE_NAMES_PT[guide.scaleRootPc]} • ${guide.modalCfg.name}`;
+        if (liveHintEl) liveHintEl.textContent = guide.bar.hint;
+        if (liveStatusEl) liveStatusEl.textContent = improvRuntime.liveStatus;
+        if (barCounterEl) barCounterEl.textContent = `Comp. ${st.activeBarIdx + 1}/${st.loopBars}`;
+
+        // Atualiza cards da régua de compassos
+        document.querySelectorAll('[data-improv-bar-pill]').forEach((el) => {
+            const idx = parseInt(el.getAttribute('data-improv-bar-pill'), 10);
+            const active = idx === st.activeBarIdx;
+            if (active) {
+                el.classList.add('bg-amber-500/20', 'border-amber-400', 'ring-2', 'ring-amber-400/50');
+                el.classList.remove('bg-[#090d16]', 'border-slate-800');
+            } else {
+                el.classList.remove('bg-amber-500/20', 'border-amber-400', 'ring-2', 'ring-amber-400/50');
+                el.classList.add('bg-[#090d16]', 'border-slate-800');
+            }
+        });
+
+        // Atualiza LEDs de tempo no compasso
+        document.querySelectorAll('[data-improv-beat-led]').forEach((led) => {
+            const bIdx = parseInt(led.getAttribute('data-improv-beat-led'), 10);
+            if (st.isCountingIn) {
+                led.className = bIdx === (st.countInBeat - 1)
+                    ? 'w-3.5 h-3.5 rounded-full bg-rose-400 shadow-[0_0_10px_#fb7185] scale-110 transition-all'
+                    : 'w-3 h-3 rounded-full bg-slate-800 border border-slate-700';
+            } else if (st.isPlaying && bIdx === st.activeBeatIdx) {
+                led.className = bIdx === 0
+                    ? 'w-3.5 h-3.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399] scale-110 transition-all'
+                    : 'w-3.5 h-3.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] transition-all';
+            } else {
+                led.className = 'w-3 h-3 rounded-full bg-slate-800 border border-slate-700';
+            }
+        });
+
+        // Atualiza destaque dos pads de escala quando acorde muda
+        const pads = getImprovScalePadNotes(guide);
+        document.querySelectorAll('[data-improv-pad]').forEach((padEl) => {
+            const pIdx = parseInt(padEl.getAttribute('data-improv-pad'), 10);
+            const p = pads[pIdx];
+            if (!p) return;
+            const noteSpan = padEl.querySelector('[data-pad-note]');
+            const degSpan = padEl.querySelector('[data-pad-deg]');
+            if (noteSpan) noteSpan.textContent = p.noteName;
+            if (degSpan) degSpan.textContent = `${p.isChar ? '★' + p.degreeLabel : p.degreeLabel} [${p.keyLabel}]`;
+            padEl.className = 'p-2 rounded-xl border text-center transition select-none active:scale-95 ' + (
+                p.isRoot
+                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-100'
+                    : (p.isChar
+                        ? 'bg-rose-500/20 border-rose-400 text-rose-100'
+                        : (p.isChordTone
+                            ? 'bg-cyan-500/15 border-cyan-400/70 text-cyan-100'
+                            : 'bg-[#090d16] hover:bg-slate-800 border-slate-800 text-slate-300'))
+            );
+        });
+    }
+
+    function drawLooperTimelineCanvas() {
+        const canvas = document.getElementById('viola-looper-canvas');
+        if (!canvas) return;
+        const ctx2d = canvas.getContext('2d');
+        if (!ctx2d) return;
+
+        const W = canvas.width;
+        const H = canvas.height;
+        const st = state.improvStudio;
+        const track = getActiveImprovTrack();
+        const loopBars = st.loopBars || 8;
+        const totalTicks = Math.max(1, loopBars * track.ticksPerBar);
+        const padL = 104;
+        const padR = 14;
+        const padT = 26;
+        const padB = 10;
+        const plotW = W - padL - padR;
+        const plotH = H - padT - padB;
+        const laneH = plotH / 4;
+
+        ctx2d.clearRect(0, 0, W, H);
+        ctx2d.fillStyle = '#060a12';
+        ctx2d.fillRect(0, 0, W, H);
+
+        // Cabeçalho de compassos e cifras
+        ctx2d.fillStyle = '#0b111e';
+        ctx2d.fillRect(0, 0, W, padT);
+        ctx2d.strokeStyle = '#1e293b';
+        ctx2d.lineWidth = 1;
+        ctx2d.beginPath();
+        ctx2d.moveTo(0, padT);
+        ctx2d.lineTo(W, padT);
+        ctx2d.stroke();
+
+        for (let b = 0; b < loopBars; b++) {
+            const x0 = padL + (b / loopBars) * plotW;
+            const bw = plotW / loopBars;
+            const barObj = track.bars[b % track.bars.length];
+            const isCurBar = st.isPlaying && !improvRuntime.isCountingIn && (b === (st.activeBarIdx % loopBars));
+
+            if (isCurBar) {
+                ctx2d.fillStyle = 'rgba(245, 158, 11, 0.14)';
+                ctx2d.fillRect(x0, padT, bw, plotH);
+            }
+
+            ctx2d.strokeStyle = '#1e293b';
+            ctx2d.lineWidth = 1.2;
+            ctx2d.beginPath();
+            ctx2d.moveTo(x0, 0);
+            ctx2d.lineTo(x0, H - padB);
+            ctx2d.stroke();
+
+            // Subdivisões internas de tempo
+            for (let bt = 1; bt < track.beatsPerBar; bt++) {
+                const bx = x0 + (bt / track.beatsPerBar) * bw;
+                ctx2d.strokeStyle = '#0f172a';
+                ctx2d.lineWidth = 1;
+                ctx2d.beginPath();
+                ctx2d.moveTo(bx, padT);
+                ctx2d.lineTo(bx, H - padB);
+                ctx2d.stroke();
+            }
+
+            ctx2d.fillStyle = isCurBar ? '#fbbf24' : '#94a3b8';
+            ctx2d.font = 'bold 10.5px JetBrains Mono, monospace';
+            ctx2d.textAlign = 'left';
+            ctx2d.fillText(`${b + 1}: ${barObj.chord}`, x0 + 6, 17);
+        }
+
+        // Borda direita final
+        ctx2d.strokeStyle = '#1e293b';
+        ctx2d.beginPath();
+        ctx2d.moveTo(padL + plotW, 0);
+        ctx2d.lineTo(padL + plotW, H - padB);
+        ctx2d.stroke();
+
+        // 4 Pistas horizontais
+        const anySolo = st.tracks.some((tr) => tr.solo);
+        st.tracks.forEach((tr, idx) => {
+            const y0 = padT + idx * laneH;
+            const timbreMeta = IMPROV_TRACK_TIMBRES[tr.timbre] || IMPROV_TRACK_TIMBRES.viola_brilhante;
+            const audible = !tr.muted && (!anySolo || tr.solo);
+            const isRecState = tr.mode === 'recording' || tr.mode === 'overdub' || tr.mode === 'armed';
+
+            // Fundo alternado da pista
+            ctx2d.fillStyle = isRecState
+                ? 'rgba(244, 63, 94, 0.08)'
+                : (idx % 2 === 0 ? 'rgba(15, 23, 42, 0.45)' : 'rgba(9, 13, 22, 0.55)');
+            ctx2d.fillRect(0, y0, W, laneH);
+
+            // Faixa colorida da pista à esquerda
+            ctx2d.fillStyle = isRecState ? '#f43f5e' : timbreMeta.color;
+            ctx2d.fillRect(0, y0 + 2, 4, laneH - 4);
+
+            // Rótulo lateral da pista
+            ctx2d.fillStyle = audible ? '#e2e8f0' : '#475569';
+            ctx2d.font = 'bold 10px JetBrains Mono, monospace';
+            ctx2d.textAlign = 'left';
+            ctx2d.fillText(`P${idx + 1} ${timbreMeta.short}`, 10, y0 + laneH * 0.44);
+
+            ctx2d.fillStyle = isRecState ? '#fda4af' : '#64748b';
+            ctx2d.font = '9px JetBrains Mono, monospace';
+            const modeTag = tr.mode === 'recording' ? '● REC'
+                : (tr.mode === 'armed' ? '⏳ ARM'
+                    : (tr.mode === 'overdub' ? '⊕ OVD'
+                        : (tr.mode === 'pendingOverdub' ? '⏳ OVD'
+                            : (tr.muted ? 'MUDO' : `${tr.events.length}ev`))));
+            ctx2d.fillText(modeTag, 10, y0 + laneH * 0.76);
+
+            // Divisor horizontal
+            ctx2d.strokeStyle = '#141e32';
+            ctx2d.lineWidth = 1;
+            ctx2d.beginPath();
+            ctx2d.moveTo(0, y0 + laneH);
+            ctx2d.lineTo(W, y0 + laneH);
+            ctx2d.stroke();
+
+            // Eventos gravados na pista
+            (tr.events || []).forEach((ev) => {
+                if (ev.tick >= totalTicks) return;
+                const ex = padL + (ev.tick / totalTicks) * plotW;
+                const ew = Math.max(5, Math.min(26, ((ev.durTicks || 2) / totalTicks) * plotW));
+                const eh = ev.perc ? Math.max(8, laneH * 0.34) : Math.max(10, laneH * 0.52);
+                const ey = y0 + (laneH - eh) / 2;
+
+                ctx2d.globalAlpha = audible ? 0.92 : 0.25;
+                ctx2d.fillStyle = ev.perc ? '#ec4899' : timbreMeta.color;
+                ctx2d.beginPath();
+                if (typeof ctx2d.roundRect === 'function') {
+                    ctx2d.roundRect(ex, ey, ew, eh, 3);
+                } else {
+                    ctx2d.rect(ex, ey, ew, eh);
+                }
+                ctx2d.fill();
+
+                if (ev.notes && ev.notes.length >= 2) {
+                    ctx2d.strokeStyle = '#ffffff';
+                    ctx2d.lineWidth = 1;
+                    ctx2d.stroke();
+                }
+                ctx2d.globalAlpha = 1.0;
+            });
+        });
+
+        // Cursor Playhead sincronizado em 60 FPS
+        if (st.isPlaying && audioCtx) {
+            if (improvRuntime.isCountingIn) {
+                ctx2d.fillStyle = 'rgba(244, 63, 94, 0.12)';
+                ctx2d.fillRect(padL, padT, plotW, plotH);
+                ctx2d.fillStyle = '#fda4af';
+                ctx2d.font = 'bold 14px JetBrains Mono, monospace';
+                ctx2d.textAlign = 'center';
+                ctx2d.fillText(`CONTAGEM REGRESSIVA • TEMPO ${st.countInBeat || 1}`, padL + plotW / 2, padT + plotH / 2 + 5);
+            } else if (improvRuntime.cycleOriginAudioTime > 0) {
+                const tickSec = getImprovTickDurationSec(track, st.bpm);
+                const cycleDur = totalTicks * tickSec;
+                const elapsed = Math.max(0, audioCtx.currentTime - improvRuntime.cycleOriginAudioTime);
+                const norm = (elapsed % cycleDur) / cycleDur;
+                const px = padL + norm * plotW;
+
+                ctx2d.strokeStyle = '#22d3ee';
+                ctx2d.lineWidth = 2;
+                ctx2d.beginPath();
+                ctx2d.moveTo(px, padT - 4);
+                ctx2d.lineTo(px, H - padB);
+                ctx2d.stroke();
+
+                ctx2d.fillStyle = '#22d3ee';
+                ctx2d.beginPath();
+                ctx2d.moveTo(px - 5, padT - 4);
+                ctx2d.lineTo(px + 5, padT - 4);
+                ctx2d.lineTo(px, padT + 4);
+                ctx2d.closePath();
+                ctx2d.fill();
+            }
+        }
+    }
+
+    function improvVisualLoop() {
+        const st = state.improvStudio;
+        if (!st.isPlaying || !audioCtx) return;
+
+        const now = audioCtx.currentTime;
+        let barChanged = false;
+        let beatChanged = false;
+        let refreshTracksNeeded = false;
+
+        while (improvVisualQueue.length > 0 && improvVisualQueue[0].time <= now) {
+            const item = improvVisualQueue.shift();
+            if (item.type === 'countin') {
+                st.isCountingIn = true;
+                st.countInBeat = item.beat;
+                improvRuntime.liveStatus = `Contagem de entrada: Tempo ${item.beat}... prepare o dedilhado!`;
+                beatChanged = true;
+            } else if (item.type === 'step') {
+                if (st.isCountingIn) {
+                    st.isCountingIn = false;
+                    refreshTracksNeeded = true;
+                }
+                if (st.activeBarIdx !== item.barIdx) {
+                    st.activeBarIdx = item.barIdx;
+                    barChanged = true;
+                }
+                if (st.activeBeatIdx !== item.beatIdx) {
+                    st.activeBeatIdx = item.beatIdx;
+                    beatChanged = true;
+                }
+            } else if (item.type === 'refreshTracks') {
+                refreshTracksNeeded = true;
+            }
+        }
+
+        if (barChanged) {
+            updateImprovLiveBarDOM();
+            if (state.displayMode === 'IMPROVISO') {
+                renderFretboardSVG();
+            }
+        } else if (beatChanged) {
+            updateImprovLiveBarDOM();
+        }
+
+        if (refreshTracksNeeded) {
+            updateImprovTrackStripsDOM();
+        }
+
+        drawLooperTimelineCanvas();
+        improvRafId = requestAnimationFrame(improvVisualLoop);
+    }
+
+    function stopImprovStudio() {
+        if (improvSchedulerTimer) {
+            clearInterval(improvSchedulerTimer);
+            improvSchedulerTimer = null;
+        }
+        if (improvRafId) {
+            cancelAnimationFrame(improvRafId);
+            improvRafId = null;
+        }
+        improvVisualQueue = [];
+        const st = state.improvStudio;
+        if (st) {
+            st.isPlaying = false;
+            st.isCountingIn = false;
+            st.countInBeat = 0;
+            st.tracks.forEach((tr) => {
+                if (tr.mode === 'recording' || tr.mode === 'overdub' || tr.mode === 'armed' || tr.mode === 'pendingOverdub') {
+                    tr.mode = (tr.events && tr.events.length > 0) ? 'playing' : 'idle';
+                }
+                delete tr._recordStartPass;
+            });
+        }
+        improvRuntime.isCountingIn = false;
+        improvRuntime.liveStatus = 'Reprodução pausada. Clique em Play ou arme uma pista para gravar.';
+        updateImprovTransportDOM();
+        updateImprovLiveBarDOM();
+        updateImprovTrackStripsDOM();
+        drawLooperTimelineCanvas();
+    }
+
+    function startImprovPlayback() {
+        const st = state.improvStudio;
+        const wasPlaying = st.isPlaying;
+        if (wasPlaying) {
+            stopImprovStudio();
+            return;
+        }
+
+        const pendingModes = st.tracks.map((tr) => tr.mode);
+        stopAllAudio();
+        if (metroRunning) toggleMetronome();
+
+        pendingModes.forEach((mode, idx) => {
+            if (mode === 'armed' || mode === 'recording' || mode === 'overdub' || mode === 'pendingOverdub') {
+                st.tracks[idx].mode = mode;
+            }
+        });
+
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        ensureImprovAudioGraph();
+
+        const track = getActiveImprovTrack();
+        const hasArmed = st.tracks.some((tr) => tr.mode === 'armed' || tr.mode === 'recording');
+
+        st.isPlaying = true;
+        st.activeBarIdx = 0;
+        st.activeBeatIdx = 0;
+        improvVisualQueue = [];
+        improvRuntime.currentLoopTick = 0;
+        improvRuntime.passCounter = 0;
+
+        if (hasArmed && st.countInEnabled) {
+            improvRuntime.isCountingIn = true;
+            improvRuntime.countInStep = 0;
+            improvRuntime.countInTotalTicks = track.ticksPerBar;
+            st.isCountingIn = true;
+            st.countInBeat = 1;
+            improvRuntime.liveStatus = 'Contagem de 1 compasso antes da gravação...';
+        } else {
+            improvRuntime.isCountingIn = false;
+            st.isCountingIn = false;
+            improvRuntime.cycleOriginAudioTime = ctx.currentTime + 0.04;
+            improvRuntime.liveStatus = `Estúdio rodando: ${track.title} (${st.bpm} BPM). Clique no braço ou nos pads para improvisar!`;
+        }
+
+        improvRuntime.nextTickAudioTime = ctx.currentTime + 0.04;
+        improvSchedulerTimer = setInterval(improvSchedulerTick, 25);
+        improvRafId = requestAnimationFrame(improvVisualLoop);
+
+        updateImprovTransportDOM();
+        updateImprovLiveBarDOM();
+        updateImprovTrackStripsDOM();
+        if (state.displayMode === 'IMPROVISO') {
+            renderFretboardSVG();
+        }
+    }
+
+    function recordImprovEventIntoArmedTracks(notes, perc) {
+        const st = state.improvStudio;
+        const g = ensureImprovAudioGraph();
+        if (!g) return;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+
+        // Encontra pista gravando/overdub ou usa a pista ativa selecionada só para monitorar o som
+        const recTracks = st.tracks.filter((tr) => tr.mode === 'recording' || tr.mode === 'overdub');
+        const monitorIdx = recTracks.length > 0 ? recTracks[0].id : (st.activeRecordTrackIdx || 0);
+        const monitorTrack = st.tracks[monitorIdx] || st.tracks[0];
+        const bus = g.trackBuses[monitorTrack.id];
+        const timbre = perc ? 'tampo_perc' : monitorTrack.timbre;
+
+        if (bus) {
+            playImprovNoteBundle(notes, perc, timbre, bus.gain, 0, 0.92, inst);
+        }
+
+        if (!st.isPlaying || improvRuntime.isCountingIn || recTracks.length === 0) {
+            return;
+        }
+
+        const track = getActiveImprovTrack();
+        const tickSec = getImprovTickDurationSec(track, st.bpm);
+        const totalTicks = Math.max(1, (st.loopBars || 8) * track.ticksPerBar);
+        let rawTick = (g.ctx.currentTime - improvRuntime.cycleOriginAudioTime) / tickSec;
+        rawTick = ((rawTick % totalTicks) + totalTicks) % totalTicks;
+
+        let qTick = rawTick;
+        if (st.quantizeGrid === '4n') {
+            const step = track.ticksPerBeat || 4;
+            qTick = Math.round(rawTick / step) * step;
+        } else if (st.quantizeGrid === '8n') {
+            qTick = Math.round(rawTick / 2) * 2;
+        } else if (st.quantizeGrid === '16n') {
+            qTick = Math.round(rawTick);
+        } else {
+            qTick = Math.round(rawTick * 4) / 4;
+        }
+        qTick = ((qTick % totalTicks) + totalTicks) % totalTicks;
+
+        // Evita eco duplo imediato caso o snap arredonde ligeiramente à frente da janela do scheduler atual
+        const forwardDist = (qTick - improvRuntime.currentLoopTick + totalTicks) % totalTicks;
+        const shouldSkipCurrentPass = forwardDist >= 0 && forwardDist <= 2.0 && rawTick < qTick;
+
+        recTracks.forEach((tr) => {
+            if (!Array.isArray(tr.events)) tr.events = [];
+            const passId = tr.passCounter || 1;
+            tr.events.push({
+                id: 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                tick: qTick,
+                durTicks: perc ? 1 : 2,
+                notes: notes ? notes.map((n) => ({ c: n.c, f: n.f })) : [],
+                perc: perc || null,
+                passId,
+                velocity: 0.9,
+                _skipPass: shouldSkipCurrentPass ? improvRuntime.passCounter : -1
+            });
+            tr.events.sort((a, b) => a.tick - b.tick);
+        });
+
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        drawLooperTimelineCanvas();
+    }
+
+    function handleImprovFretboardHit(courseIdx, fret) {
+        const st = state.improvStudio;
+        const guide = getImprovBarGuideSpec(st.activeBarIdx);
+        let notes = [{ c: courseIdx, f: fret }];
+
+        if (st.autoDuadOnFretClick && guide.duadSteps.length > 0) {
+            const match = guide.duadSteps.find((d) =>
+                (d.upperCourse === courseIdx && d.upperFret === fret) ||
+                (d.lowerCourse === courseIdx && d.lowerFret === fret)
+            );
+            if (match) {
+                notes = [
+                    { c: match.upperCourse, f: match.upperFret },
+                    { c: match.lowerCourse, f: match.lowerFret }
+                ];
+            }
+        }
+
+        notes.forEach((n) => flashFretCell(n.c, n.f, 0));
+        recordImprovEventIntoArmedTracks(notes, null);
+    }
+
+    function triggerImprovScalePad(padIdx) {
+        const guide = getImprovBarGuideSpec(state.improvStudio.activeBarIdx);
+        const pads = getImprovScalePadNotes(guide);
+        const pad = pads[padIdx];
+        if (!pad) return;
+
+        const useDuad = Boolean(state.improvStudio.autoDuadOnFretClick && pad.duadNotes.length >= 2);
+        const notes = useDuad ? pad.duadNotes : [pad.primaryNote];
+        notes.forEach((n) => flashFretCell(n.c, n.f, 0));
+        recordImprovEventIntoArmedTracks(notes, null);
+    }
+
+    function triggerImprovPercPad(kind) {
+        recordImprovEventIntoArmedTracks([], kind);
+    }
+
+    function toggleLooperTrackRec(trackIdx) {
+        const st = state.improvStudio;
+        const tr = st.tracks[trackIdx];
+        if (!tr) return;
+        st.activeRecordTrackIdx = trackIdx;
+
+        // Desarma outras pistas em gravação exclusiva para evitar sobregravação acidental
+        st.tracks.forEach((other, idx) => {
+            if (idx !== trackIdx && (other.mode === 'recording' || other.mode === 'armed' || other.mode === 'overdub' || other.mode === 'pendingOverdub')) {
+                other.mode = other.events.length > 0 ? 'playing' : 'idle';
+                delete other._recordStartPass;
+            }
+        });
+
+        if (tr.mode === 'recording' || tr.mode === 'armed') {
+            tr.mode = tr.events.length > 0 ? 'playing' : 'idle';
+            delete tr._recordStartPass;
+            improvRuntime.liveStatus = `Pista ${trackIdx + 1} em modo ${tr.mode === 'playing' ? 'Reprodução' : 'Espera'}.`;
+        } else {
+            tr.events = [];
+            tr.passCounter = 0;
+            tr.mode = 'armed';
+            improvRuntime.liveStatus = st.isPlaying
+                ? `Pista ${trackIdx + 1} armada! A gravação iniciará na cabeça do Compasso 1.`
+                : `Pista ${trackIdx + 1} armada! Aperte Play para iniciar a contagem e gravar.`;
+            if (!st.isPlaying) {
+                startImprovPlayback();
+                return;
+            }
+        }
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        updateImprovLiveBarDOM();
+        drawLooperTimelineCanvas();
+    }
+
+    function toggleLooperTrackOverdub(trackIdx) {
+        const st = state.improvStudio;
+        const tr = st.tracks[trackIdx];
+        if (!tr) return;
+        st.activeRecordTrackIdx = trackIdx;
+
+        if (tr.mode === 'overdub' || tr.mode === 'pendingOverdub') {
+            tr.mode = tr.events.length > 0 ? 'playing' : 'idle';
+            improvRuntime.liveStatus = `Overdub finalizado na Pista ${trackIdx + 1}.`;
+        } else {
+            if (!st.isPlaying) {
+                tr.passCounter = (tr.passCounter || 0) + 1;
+                tr.mode = 'overdub';
+                startImprovPlayback();
+                return;
+            }
+            tr.mode = 'pendingOverdub';
+            improvRuntime.liveStatus = `Overdub armado na Pista ${trackIdx + 1}: começará no próximo compasso sem apagar o take atual.`;
+        }
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        updateImprovLiveBarDOM();
+        drawLooperTimelineCanvas();
+    }
+
+    function undoLooperTrackPass(trackIdx) {
+        const tr = state.improvStudio.tracks[trackIdx];
+        if (!tr || !tr.events || tr.events.length === 0) return;
+        const maxPass = tr.events.reduce((acc, ev) => Math.max(acc, ev.passId || 1), 1);
+        const before = tr.events.length;
+        tr.events = tr.events.filter((ev) => (ev.passId || 1) !== maxPass);
+        if (tr.events.length === 0) tr.mode = 'idle';
+        improvRuntime.liveStatus = `Desfeita camada #${maxPass} da Pista ${trackIdx + 1} (${before - tr.events.length} eventos removidos).`;
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        updateImprovLiveBarDOM();
+        drawLooperTimelineCanvas();
+    }
+
+    function clearLooperTrack(trackIdx) {
+        const tr = state.improvStudio.tracks[trackIdx];
+        if (!tr) return;
+        tr.events = [];
+        tr.passCounter = 0;
+        tr.mode = 'idle';
+        delete tr._recordStartPass;
+        improvRuntime.liveStatus = `Pista ${trackIdx + 1} limpa.`;
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        updateImprovLiveBarDOM();
+        drawLooperTimelineCanvas();
+    }
+
+    function buildSeedEventsForTrack(trackIdx) {
+        const st = state.improvStudio;
+        const backing = getActiveImprovTrack();
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const loopBars = st.loopBars || 8;
+        const tpb = backing.ticksPerBar;
+        const beatTicks = backing.ticksPerBeat;
+        const events = [];
+
+        const pickFret = (cIdx, targetPc, minF = 0, maxF = 11) => {
+            const c = inst.courses[Math.min(cIdx, inst.courses.length - 1)];
+            let f = (targetPc - c.pitchClass + 12) % 12;
+            if (f < minF && f + 12 <= maxF) f += 12;
+            return Math.max(0, Math.min(14, f));
+        };
+
+        for (let b = 0; b < loopBars; b++) {
+            const bar = backing.bars[b % backing.bars.length];
+            const guide = getImprovBarGuideSpec(b);
+            const barStart = b * tpb;
+            const rootPc = bar.rootPc;
+            const thirdPc = bar.tones[1] !== undefined ? bar.tones[1] : (rootPc + 4) % 12;
+            const fifthPc = bar.tones[2] !== undefined ? bar.tones[2] : (rootPc + 7) % 12;
+            const charIv = guide.modalCfg.characteristicIntervals[0] || 4;
+            const charPc = (guide.scaleRootPc + charIv) % 12;
+
+            if (trackIdx === 0) {
+                // Solo Prima: melodia expressiva mirando notas alvo e nota característica
+                events.push({ id: `s0_${b}_0`, tick: barStart, durTicks: 2, notes: [{ c: 0, f: pickFret(0, rootPc, 0, 9) }], perc: null, passId: 1, velocity: 0.88 });
+                events.push({ id: `s0_${b}_1`, tick: barStart + 2, durTicks: 2, notes: [{ c: 0, f: pickFret(0, thirdPc, 0, 11) }], perc: null, passId: 1, velocity: 0.80 });
+                events.push({ id: `s0_${b}_2`, tick: barStart + beatTicks, durTicks: 2, notes: [{ c: 0, f: pickFret(0, charPc, 0, 11) }], perc: null, passId: 1, velocity: 0.86 });
+                events.push({ id: `s0_${b}_3`, tick: barStart + tpb - 2, durTicks: 2, notes: [{ c: 0, f: pickFret(0, fifthPc, 0, 11) }], perc: null, passId: 1, velocity: 0.78 });
+            } else if (trackIdx === 1) {
+                // Dueto 6ªs / 3ªs: resposta contrapontística harmônica
+                const duads = guide.duadSteps;
+                const d1 = duads.find((d) => d.upperPc === thirdPc) || duads[0];
+                const d2 = duads.find((d) => d.upperPc === rootPc) || duads[Math.min(2, duads.length - 1)];
+                if (d1) {
+                    events.push({
+                        id: `s1_${b}_0`,
+                        tick: barStart + Math.min(tpb - 2, beatTicks),
+                        durTicks: 3,
+                        notes: [{ c: d1.upperCourse, f: d1.upperFret }, { c: d1.lowerCourse, f: d1.lowerFret }],
+                        perc: null,
+                        passId: 1,
+                        velocity: 0.84
+                    });
+                }
+                if (d2 && tpb >= 8) {
+                    events.push({
+                        id: `s1_${b}_1`,
+                        tick: barStart + tpb - 2,
+                        durTicks: 2,
+                        notes: [{ c: d2.upperCourse, f: d2.upperFret }, { c: d2.lowerCourse, f: d2.lowerFret }],
+                        perc: null,
+                        passId: 1,
+                        velocity: 0.78
+                    });
+                }
+            } else if (trackIdx === 2) {
+                // Baixaria nos bordões (4º e 5º par / cordas 5 e 6)
+                const bassC1 = Math.min(4, inst.courses.length - 1);
+                const bassC2 = Math.min(3, inst.courses.length - 1);
+                events.push({ id: `s2_${b}_0`, tick: barStart, durTicks: 3, notes: [{ c: bassC1, f: pickFret(bassC1, rootPc, 0, 7) }], perc: null, passId: 1, velocity: 0.90 });
+                events.push({ id: `s2_${b}_1`, tick: barStart + beatTicks, durTicks: 2, notes: [{ c: bassC2, f: pickFret(bassC2, fifthPc, 0, 7) }], perc: null, passId: 1, velocity: 0.82 });
+                if (tpb >= 12) {
+                    events.push({ id: `s2_${b}_2`, tick: barStart + 8, durTicks: 2, notes: [{ c: bassC2, f: pickFret(bassC2, thirdPc, 0, 7) }], perc: null, passId: 1, velocity: 0.78 });
+                }
+            } else {
+                // Pista 4: Repique e Chock percussivo
+                events.push({ id: `s3_${b}_0`, tick: barStart + 2, durTicks: 1, notes: [], perc: 'rim', passId: 1, velocity: 0.70 });
+                events.push({ id: `s3_${b}_1`, tick: barStart + beatTicks, durTicks: 1, notes: [], perc: 'tap', passId: 1, velocity: 0.88 });
+                events.push({ id: `s3_${b}_2`, tick: barStart + tpb - 1, durTicks: 1, notes: [], perc: 'chock', passId: 1, velocity: 0.76 });
+            }
+        }
+
+        return events;
+    }
+
+    function seedLooperTrack(trackIdx, silentToast) {
+        const tr = state.improvStudio.tracks[trackIdx];
+        if (!tr) return;
+        tr.events = buildSeedEventsForTrack(trackIdx);
+        tr.passCounter = 1;
+        tr.mode = 'playing';
+        improvRuntime.liveStatus = `Frase modal gerada na Pista ${trackIdx + 1} (${tr.events.length} eventos sincronizados).`;
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        updateImprovLiveBarDOM();
+        drawLooperTimelineCanvas();
+        if (!silentToast && window.showToast) {
+            window.showToast(`Pista ${trackIdx + 1} preenchida com frase modal caipira.`);
+        }
+    }
+
+    function loadFullJamDemo() {
+        const backing = getActiveImprovTrack();
+        [0, 1, 2, 3].forEach((idx) => {
+            const tr = state.improvStudio.tracks[idx];
+            tr.events = buildSeedEventsForTrack(idx);
+            tr.passCounter = 1;
+            tr.mode = 'playing';
+        });
+        improvRuntime.liveStatus = `Jam completa de 4 pistas gerada para "${backing.title}"! Experimente Mute, Solo e Pan estéreo.`;
+        saveViolaState();
+        updateImprovTrackStripsDOM();
+        updateImprovLiveBarDOM();
+        drawLooperTimelineCanvas();
+        if (!state.improvStudio.isPlaying) {
+            startImprovPlayback();
+        }
+    }
+
+    function exportLooperToTabEditor(trackIdxOrAll) {
+        const st = state.improvStudio;
+        const backing = getActiveImprovTrack();
+        const loopBars = st.loopBars || 8;
+        const tpb = backing.ticksPerBar;
+        const totalTicks = loopBars * tpb;
+        const stepSize = 2; // 1 colcheia por coluna no Editor de Tablaturas
+
+        const targetTracks = trackIdxOrAll === 'all'
+            ? st.tracks.filter((tr) => !tr.muted && tr.events && tr.events.length > 0)
+            : [st.tracks[trackIdxOrAll]].filter((tr) => tr && tr.events && tr.events.length > 0);
+
+        if (targetTracks.length === 0) {
+            if (window.showToast) window.showToast('Grave ou gere uma frase no looper antes de exportar.', 'error');
+            return;
+        }
+
+        const steps = [];
+        const tickSec = getImprovTickDurationSec(backing, st.bpm);
+
+        for (let tick = 0; tick < totalTicks; tick += stepSize) {
+            const barIdx = Math.floor(tick / tpb);
+            const barTick = tick % tpb;
+            const bar = backing.bars[barIdx % backing.bars.length];
+            const beatNum = Math.floor(barTick / backing.ticksPerBeat) + 1;
+            const subBeat = (barTick % backing.ticksPerBeat) === 0 ? '' : '&';
+
+            const mergedNotesMap = new Map();
+            let hasPercTap = false;
+
+            targetTracks.forEach((tr) => {
+                tr.events.forEach((ev) => {
+                    if (ev.tick >= tick && ev.tick < tick + stepSize) {
+                        if (ev.perc === 'tap' || ev.perc === 'chock') hasPercTap = true;
+                        (ev.notes || []).forEach((nt) => {
+                            if (!mergedNotesMap.has(nt.c)) mergedNotesMap.set(nt.c, { c: nt.c, f: nt.f });
+                        });
+                    }
+                });
+            });
+
+            const notes = Array.from(mergedNotesMap.values()).sort((a, b) => a.c - b.c);
+            let rh = 'p';
+            let lh = '—';
+            if (notes.length === 0 && hasPercTap) {
+                rh = 'tap';
+            } else if (notes.length === 1) {
+                rh = notes[0].c === 0 ? 'i' : 'p';
+                lh = String(notes[0].f);
+            } else if (notes.length === 2) {
+                rh = 'p+i';
+                lh = `${notes[0].f}-${notes[1].f}`;
+            } else if (notes.length >= 3) {
+                rh = 'rasq';
+                lh = notes.map((n) => n.f).join('-');
+            }
+
+            steps.push({
+                measure: barIdx + 1,
+                beat: `${beatNum}${subBeat}`,
+                notes,
+                d: Number((tickSec * stepSize).toFixed(3)),
+                rh,
+                lh,
+                chord: barTick === 0 ? bar.chord : '',
+                ann: barTick === 0 ? `${backing.title} (${bar.roman})` : ''
+            });
+        }
+
+        if (!Array.isArray(state.tabEditor.projects)) state.tabEditor.projects = [];
+        const newProjId = 'looper_jam_' + Date.now();
+        state.tabEditor.projects.unshift({
+            id: newProjId,
+            title: `[Looper] ${backing.title}`,
+            author: 'Viola Studio • Fase 21',
+            instrumentId: state.instrumentId || 'viola_cebolao_e',
+            timeSignature: backing.timeSignature,
+            bpm: st.bpm,
+            key: backing.keyLabel,
+            updatedAt: new Date().toISOString(),
+            steps
+        });
+        state.tabEditor.activeProjectId = newProjId;
+        state.tabEditor.currentStepIdx = 0;
+
+        stopImprovStudio();
+        state.displayMode = 'TAB_EDITOR';
+        state.activeCategoryId = 'repertorio';
+        state.activeToolId = 'editor-tab';
+        saveViolaState();
+        renderAll();
+        if (window.showToast) window.showToast('Loop exportado para o Editor de Tablaturas!');
+    }
+
+    function updateImprovTransportDOM() {
+        const playBtn = document.getElementById('btn-improv-play-toggle');
+        if (playBtn) {
+            const playing = state.improvStudio.isPlaying;
+            playBtn.className = `min-h-[42px] px-4 py-2 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg ${
+                playing ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+            }`;
+            playBtn.innerHTML = `<i data-lucide="${playing ? 'square' : 'play'}" class="w-4 h-4"></i><span>${playing ? 'Parar Estúdio' : 'Iniciar Base & Looper'}</span>`;
+            if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        }
+    }
+
+    function updateImprovTrackStripsDOM() {
+        const wrap = document.getElementById('viola-improv-tracks-grid');
+        if (!wrap) return;
+        wrap.innerHTML = renderImprovTrackStripsHTML();
+        bindImprovTrackStripEvents();
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    function renderImprovTrackStripsHTML() {
+        const st = state.improvStudio;
+        const anySolo = st.tracks.some((tr) => tr.solo);
+
+        return st.tracks.map((tr, idx) => {
+            const timbre = IMPROV_TRACK_TIMBRES[tr.timbre] || IMPROV_TRACK_TIMBRES.viola_brilhante;
+            const isRec = tr.mode === 'recording';
+            const isArmed = tr.mode === 'armed';
+            const isOvd = tr.mode === 'overdub' || tr.mode === 'pendingOverdub';
+            const isSelected = st.activeRecordTrackIdx === idx;
+            const panPct = Math.round((tr.pan || 0) * 100);
+            const panLabel = panPct === 0 ? 'Centro' : (panPct < 0 ? `L ${Math.abs(panPct)}%` : `R ${panPct}%`);
+            const mutedEffective = tr.muted || (anySolo && !tr.solo);
+
+            let statusText = 'Vazia';
+            let statusClass = 'bg-slate-800 text-slate-400 border-slate-700';
+            if (isRec) {
+                statusText = '● GRAVANDO';
+                statusClass = 'bg-rose-500 text-white border-rose-400 animate-pulse';
+            } else if (isArmed) {
+                statusText = '⏳ ARMADA';
+                statusClass = 'bg-amber-500/20 text-amber-300 border-amber-400 animate-pulse';
+            } else if (isOvd) {
+                statusText = tr.mode === 'pendingOverdub' ? '⏳ OVERDUB' : '⊕ OVERDUB';
+                statusClass = 'bg-cyan-500/20 text-cyan-200 border-cyan-400 animate-pulse';
+            } else if (tr.events && tr.events.length > 0) {
+                statusText = mutedEffective ? `Silenciada (${tr.events.length})` : `Tocando (${tr.events.length})`;
+                statusClass = mutedEffective ? 'bg-slate-800 text-slate-500 border-slate-700' : timbre.pillClass;
+            }
+
+            return `
+                <div data-improv-track-card="${idx}" class="rounded-xl p-3 border transition flex flex-col justify-between gap-2.5 ${
+                    isRec || isOvd
+                        ? 'bg-rose-950/20 border-rose-500/60 ring-1 ring-rose-500/40'
+                        : (isSelected ? 'bg-[#0b1222] border-amber-500/45' : 'bg-[#090d16] border-slate-800')
+                }">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full shrink-0" style="background-color: ${timbre.color}"></span>
+                                <span class="text-xs font-bold text-slate-100 truncate">Pista ${idx + 1}</span>
+                            </div>
+                            <select data-improv-track-timbre="${idx}" aria-label="Timbre da Pista ${idx + 1}"
+                                class="mt-1 w-full px-2 py-1 rounded bg-[#070b12] border border-slate-800 text-[10px] font-mono text-slate-300 focus:border-amber-500 focus:outline-none">
+                                ${Object.values(IMPROV_TRACK_TIMBRES).map((tb) => `<option value="${tb.id}" ${tr.timbre === tb.id ? 'selected' : ''}>${tb.label}</option>`).join('')}
+                            </select>
+                        </div>
+                        <span class="shrink-0 px-1.5 py-0.5 text-[9px] font-mono font-bold rounded border ${statusClass}">${statusText}</span>
+                    </div>
+
+                    <!-- Transport da Pista: REC, OVERDUB, M, S, UNDO, SEED, CLEAR -->
+                    <div class="grid grid-cols-4 gap-1 text-[10px] font-mono">
+                        <button type="button" data-improv-track-rec="${idx}" title="Armar / Gravar 1º Take na Pista ${idx + 1}"
+                            class="min-h-[30px] rounded font-bold border transition ${isRec || isArmed ? 'bg-rose-600 text-white border-rose-400' : 'bg-slate-800 hover:bg-rose-600/25 text-rose-300 border-slate-700'}">
+                            ${isRec || isArmed ? '■ REC' : '● REC'}
+                        </button>
+                        <button type="button" data-improv-track-ovd="${idx}" title="Overdub (sobrepor camadas na Pista ${idx + 1})"
+                            class="min-h-[30px] rounded font-bold border transition ${isOvd ? 'bg-cyan-500 text-slate-950 border-cyan-300' : 'bg-slate-800 hover:bg-cyan-500/25 text-cyan-300 border-slate-700'}">
+                            ⊕ OVD
+                        </button>
+                        <button type="button" data-improv-track-mute="${idx}" title="Mute (M)"
+                            class="min-h-[30px] rounded font-bold border transition ${tr.muted ? 'bg-amber-500 text-slate-950 border-amber-300' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'}">
+                            M
+                        </button>
+                        <button type="button" data-improv-track-solo="${idx}" title="Solo (S)"
+                            class="min-h-[30px] rounded font-bold border transition ${tr.solo ? 'bg-emerald-500 text-slate-950 border-emerald-300' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'}">
+                            S
+                        </button>
+                    </div>
+
+                    <!-- Sliders de Volume & Balanço Estéreo Pan -->
+                    <div class="space-y-1.5 text-[10px] font-mono">
+                        <div>
+                            <div class="flex justify-between text-slate-400">
+                                <span>Vol:</span>
+                                <span data-track-vol-lbl="${idx}" class="text-slate-200">${Math.round((tr.volume ?? 0.85) * 100)}%</span>
+                            </div>
+                            <input type="range" data-improv-track-vol="${idx}" min="0" max="100" step="1" value="${Math.round((tr.volume ?? 0.85) * 100)}" class="w-full accent-emerald-400 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-slate-400">
+                                <span>Pan Estéreo:</span>
+                                <span data-track-pan-lbl="${idx}" class="text-cyan-300">${panLabel}</span>
+                            </div>
+                            <input type="range" data-improv-track-pan="${idx}" min="-100" max="100" step="5" value="${panPct}" class="w-full accent-cyan-400 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Ações Rápidas: Frase Seed / Undo / Limpar -->
+                    <div class="flex items-center justify-between gap-1 pt-1 border-t border-slate-800/80 text-[10px] font-mono">
+                        <button type="button" data-improv-track-seed="${idx}" title="Gerar frase modal caipira automática nesta pista"
+                            class="px-2 py-1 rounded bg-slate-800 hover:bg-amber-500/20 text-amber-300 border border-slate-700 transition">
+                            ✦ Frase
+                        </button>
+                        <button type="button" data-improv-track-undo="${idx}" title="Desfazer última camada de overdub"
+                            class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                            ↶ Undo
+                        </button>
+                        <button type="button" data-improv-track-clear="${idx}" title="Limpar pista"
+                            class="px-2 py-1 rounded bg-slate-800 hover:bg-rose-600/25 text-rose-300 border border-slate-700 transition">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderImprovisoLooperSection() {
+        const container = document.getElementById('viola-improviso-looper-container');
+        if (!container) return;
+
+        const st = state.improvStudio;
+        const guide = getImprovBarGuideSpec(st.activeBarIdx);
+        const track = guide.track;
+        const pads = getImprovScalePadNotes(guide);
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-amber-500/30 rounded-xl p-4 sm:p-5 space-y-4 shadow-2xl">
+                <!-- 1. Cabeçalho & Transporte Master -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <i data-lucide="disc-3" class="w-5 h-5 text-amber-400"></i>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Estúdio de Improviso Modal, Backing Tracks &amp; Looper 4 Pistas</h3>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Fase 21</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">${inst.shortName}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Bases caipiras em síntese pura (Violão + Viola + Caixa), looper multipista Lookahead de 4 pistas e guia modal/duado dinâmico no braço SVG (${state.isLeftHanded ? 'Canhoto' : 'Destro'}).</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-improv-play-toggle" class="min-h-[42px] px-4 py-2 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg ${st.isPlaying ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-amber-500 hover:bg-amber-400 text-slate-950'}">
+                            <i data-lucide="${st.isPlaying ? 'square' : 'play'}" class="w-4 h-4"></i>
+                            <span>${st.isPlaying ? 'Parar Estúdio' : 'Iniciar Base & Looper'}</span>
+                        </button>
+                        <button type="button" id="btn-improv-load-jam" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            <span>Carregar Jam 4 Pistas</span>
+                        </button>
+                        <button type="button" id="btn-improv-to-fretboard" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="eye" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Focar Braço SVG</span>
+                        </button>
+                        <button type="button" id="btn-improv-export-tab" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/40 text-violet-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-violet-300"></i>
+                            <span>Exportar p/ Tablatura</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Seletor de Bases Harmônicas Caipiras (5 Presets) -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                    ${Object.values(IMPROVISO_BACKING_CATALOG).map((bt) => {
+                        const active = st.trackId === bt.id;
+                        return `
+                            <button type="button" data-improv-track-select="${bt.id}"
+                                class="text-left p-2.5 rounded-xl border transition ${active ? 'bg-amber-500/15 border-amber-400 ring-1 ring-amber-400/50' : 'bg-[#090d16] border-slate-800 hover:border-slate-700'}">
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="text-[10px] font-mono font-bold ${active ? 'text-amber-300' : 'text-slate-400'}">${bt.badge}</span>
+                                    <span class="text-[10px] font-mono text-slate-500">${bt.defaultBpm} BPM</span>
+                                </div>
+                                <div class="text-xs font-bold text-slate-100 mt-0.5 truncate">${bt.title}</div>
+                                <div class="text-[10px] text-slate-400 truncate">${bt.subtitle}</div>
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- 3. Radar de Acorde Ao Vivo + Grade de 8 Compassos + Guia do Braço -->
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                    <!-- Esquerda (7 cols): Radar Ao Vivo, Grade de Compassos e Controles do Guia SVG -->
+                    <div class="xl:col-span-7 bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-3 pb-2.5 border-b border-slate-800/80">
+                            <div class="flex items-center gap-3">
+                                <div class="w-14 h-14 rounded-xl bg-amber-500/15 border border-amber-500/40 flex flex-col items-center justify-center shrink-0">
+                                    <span id="viola-improv-live-chord" class="text-xl font-mono font-extrabold text-amber-300 leading-none">${guide.bar.chord}</span>
+                                    <span id="viola-improv-live-roman" class="text-[10px] font-mono text-amber-200/80 mt-0.5">${guide.bar.roman}</span>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+                                        <span id="viola-improv-live-scale" class="text-emerald-300 font-bold">${NOTE_NAMES_PT[guide.scaleRootPc]} • ${guide.modalCfg.name}</span>
+                                        <span class="text-slate-600">•</span>
+                                        <span class="text-slate-400">Próximo: <strong id="viola-improv-live-next" class="text-cyan-300">${guide.nextBar.chord} (${guide.nextBar.roman})</strong></span>
+                                    </div>
+                                    <p id="viola-improv-live-hint" class="text-xs text-slate-300 mt-0.5 truncate">${guide.bar.hint}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 shrink-0">
+                                <div id="viola-improv-beat-leds" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-800">
+                                    ${Array.from({ length: track.timeSignature === '6/8' ? 6 : track.beatsPerBar }).map((_, bIdx) =>
+                                        `<span data-improv-beat-led="${bIdx}" class="w-3 h-3 rounded-full bg-slate-800 border border-slate-700"></span>`
+                                    ).join('')}
+                                </div>
+                                <span id="viola-improv-bar-counter" class="text-[11px] font-mono text-amber-300 bg-[#0f172a] border border-slate-800 px-2 py-1 rounded-lg">Comp. ${st.activeBarIdx + 1}/${st.loopBars}</span>
+                            </div>
+                        </div>
+
+                        <!-- Régua de 8 Compassos Clicáveis -->
+                        <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="viola-improv-bars-strip">
+                            ${track.bars.map((b, idx) => {
+                                const isCur = idx === st.activeBarIdx;
+                                const isOutsideLoop = idx >= st.loopBars;
+                                return `
+                                    <button type="button" data-improv-bar-pill="${idx}"
+                                        class="p-2 rounded-lg border text-center transition ${isOutsideLoop ? 'opacity-40' : ''} ${isCur ? 'bg-amber-500/20 border-amber-400 ring-2 ring-amber-400/50' : 'bg-[#090d16] border-slate-800 hover:border-slate-700'}">
+                                        <span class="block text-[9px] font-mono text-slate-500">C${idx + 1}</span>
+                                        <span class="block text-xs font-mono font-bold text-slate-100">${b.chord}</span>
+                                        <span class="block text-[9px] font-mono text-cyan-400">${b.roman}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Controles do Guia Visual Instantâneo no Braço SVG -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pt-1 text-xs font-mono">
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2 space-y-1">
+                                <span class="block text-[10px] text-slate-400 uppercase">Guia Visual no Braço SVG</span>
+                                <div class="grid grid-cols-3 gap-1">
+                                    ${[
+                                        { id: 'modal', label: 'Modos' },
+                                        { id: 'duad', label: 'Duadas' },
+                                        { id: 'hybrid', label: 'Híbrido' }
+                                    ].map((gm) => `
+                                        <button type="button" data-improv-guide-mode="${gm.id}" class="py-1 rounded text-[10px] font-bold transition ${st.guideMode === gm.id ? 'bg-emerald-500 text-slate-950' : 'bg-slate-900 text-slate-400 hover:text-white'}">${gm.label}</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2 space-y-1">
+                                <span class="block text-[10px] text-slate-400 uppercase">Intervalo de Duadas</span>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <button type="button" data-improv-duad-type="3rd" class="py-1 rounded text-[10px] font-bold transition ${st.duadInterval === '3rd' ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-400 hover:text-white'}">Terças (3ªs)</button>
+                                    <button type="button" data-improv-duad-type="6th" class="py-1 rounded text-[10px] font-bold transition ${st.duadInterval === '6th' ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-400 hover:text-white'}">Sextas (6ªs)</button>
+                                </div>
+                            </div>
+
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2 space-y-1">
+                                <span class="block text-[10px] text-slate-400 uppercase">Modo &amp; Clique no Braço</span>
+                                <div class="flex items-center justify-between gap-2">
+                                    <select id="viola-improv-scale-lock" aria-label="Modo de escala" class="flex-1 min-w-0 px-1.5 py-1 rounded bg-[#070b12] border border-slate-700 text-[10px] text-amber-300">
+                                        <option value="auto" ${st.scaleLockMode === 'auto' ? 'selected' : ''}>Auto (Por Acorde)</option>
+                                        ${Object.values(MODAL_SCALES).map((m) => `<option value="${m.id}" ${st.scaleLockMode === 'manual' && st.manualModeId === m.id ? 'selected' : ''}>Travar: ${m.name}</option>`).join('')}
+                                    </select>
+                                    <label class="inline-flex items-center gap-1 text-[10px] text-cyan-300 cursor-pointer shrink-0" title="Tocar e gravar o dueto completo (3ª ou 6ª) ao clicar no braço ou nos pads">
+                                        <input type="checkbox" id="chk-improv-auto-duad" ${st.autoDuadOnFretClick ? 'checked' : ''} class="accent-cyan-400">
+                                        <span>Dueto</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direita (5 cols): Mixer dos Stems da Base + Andamento BPM + Pads Rápidos -->
+                    <div class="xl:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                        <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
+                            <div>
+                                <span class="text-[11px] font-mono uppercase font-bold text-slate-200">Base Harmônica (3 Stems)</span>
+                                <div class="text-[10px] font-mono text-slate-400">Andamento: <strong id="viola-improv-bpm-lbl" class="text-cyan-300">${st.bpm} BPM</strong></div>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" data-improv-bpm-delta="-5" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[10px] font-mono text-slate-200">−5</button>
+                                <button type="button" data-improv-bpm-delta="5" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[10px] font-mono text-slate-200">+5</button>
+                                <label class="inline-flex items-center gap-1 text-[10px] font-mono text-amber-300 cursor-pointer ml-1">
+                                    <input type="checkbox" id="chk-improv-backing-enabled" ${st.backingEnabled ? 'checked' : ''} class="accent-amber-400">
+                                    <span>Base ON</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <input type="range" id="viola-improv-bpm-slider" min="50" max="180" step="1" value="${st.bpm}" class="w-full accent-cyan-400 cursor-pointer">
+
+                        <!-- Sliders dos 3 Stems: Violão Base, Viola Base, Percussão -->
+                        <div class="grid grid-cols-3 gap-2 text-[10px] font-mono">
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-amber-300 font-bold truncate">Violão</span>
+                                    <button type="button" id="btn-improv-mute-guitar" class="px-1.5 py-0.5 rounded text-[9px] ${st.stemGuitarMute ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-400'}">M</button>
+                                </div>
+                                <input type="range" id="viola-improv-vol-guitar" min="0" max="100" value="${Math.round((st.stemGuitarVol ?? 0.82) * 100)}" class="w-full accent-amber-400 cursor-pointer">
+                            </div>
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-emerald-300 font-bold truncate">Viola Base</span>
+                                    <button type="button" id="btn-improv-mute-viola" class="px-1.5 py-0.5 rounded text-[9px] ${st.stemViolaMute ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-400'}">M</button>
+                                </div>
+                                <input type="range" id="viola-improv-vol-viola" min="0" max="100" value="${Math.round((st.stemViolaVol ?? 0.78) * 100)}" class="w-full accent-emerald-400 cursor-pointer">
+                            </div>
+                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-pink-300 font-bold truncate">Caixa/Tampo</span>
+                                    <button type="button" id="btn-improv-mute-perc" class="px-1.5 py-0.5 rounded text-[9px] ${st.stemPercMute ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-400'}">M</button>
+                                </div>
+                                <input type="range" id="viola-improv-vol-perc" min="0" max="100" value="${Math.round((st.stemPercVol ?? 0.85) * 100)}" class="w-full accent-pink-400 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Teclado de Pads Modais para Tocar/Gravar com Mouse ou Teclas [1-8, Q, W] -->
+                        <div class="space-y-1.5 pt-1">
+                            <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                                <span>Pads de Improviso (Teclas [1–8] + [Q]/[W]):</span>
+                                <label class="inline-flex items-center gap-1 text-cyan-300 cursor-pointer">
+                                    <input type="checkbox" id="chk-improv-click-guide" ${st.backingClickEnabled ? 'checked' : ''} class="accent-cyan-400">
+                                    <span>Clique</span>
+                                </label>
+                            </div>
+                            <div class="grid grid-cols-5 gap-1.5">
+                                ${pads.map((p) => `
+                                    <button type="button" data-improv-pad="${p.padIdx}"
+                                        class="p-2 rounded-xl border text-center transition select-none active:scale-95 ${
+                                            p.isRoot
+                                                ? 'bg-emerald-500/20 border-emerald-400 text-emerald-100'
+                                                : (p.isChar
+                                                    ? 'bg-rose-500/20 border-rose-400 text-rose-100'
+                                                    : (p.isChordTone
+                                                        ? 'bg-cyan-500/15 border-cyan-400/70 text-cyan-100'
+                                                        : 'bg-[#090d16] hover:bg-slate-800 border-slate-800 text-slate-300'))
+                                        }">
+                                        <span data-pad-note class="block text-xs font-mono font-bold">${p.noteName}</span>
+                                        <span data-pad-deg class="block text-[9px] font-mono opacity-80">${p.isChar ? '★' + p.degreeLabel : p.degreeLabel} [${p.keyLabel}]</span>
+                                    </button>
+                                `).join('')}
+                                <button type="button" id="btn-improv-pad-tap" class="p-2 rounded-xl border bg-pink-500/15 hover:bg-pink-500/25 border-pink-500/40 text-pink-200 text-center transition active:scale-95">
+                                    <span class="block text-xs font-mono font-bold">TAP</span>
+                                    <span class="block text-[9px] font-mono opacity-80">Tampo [Q]</span>
+                                </button>
+                                <button type="button" id="btn-improv-pad-chock" class="p-2 rounded-xl border bg-amber-500/15 hover:bg-amber-500/25 border-amber-500/40 text-amber-200 text-center transition active:scale-95">
+                                    <span class="block text-xs font-mono font-bold">CHOCK</span>
+                                    <span class="block text-[9px] font-mono opacity-80">Corte [W]</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Looper Polifônico de 4 Pistas + Timeline Canvas 2D -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-slate-200 font-bold uppercase tracking-wider">Looper Polifônico de 4 Pistas (Sincronizado ao Lookahead)</span>
+                            <span id="viola-improv-status-text" class="text-[11px] text-cyan-300">${improvRuntime.liveStatus}</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-[11px]">
+                            <select id="viola-improv-loop-bars" aria-label="Tamanho do loop" class="px-2 py-1 rounded bg-[#0f172a] border border-slate-700 text-slate-200">
+                                <option value="2" ${st.loopBars === 2 ? 'selected' : ''}>Loop: 2 Compassos</option>
+                                <option value="4" ${st.loopBars === 4 ? 'selected' : ''}>Loop: 4 Compassos</option>
+                                <option value="8" ${st.loopBars === 8 ? 'selected' : ''}>Loop: 8 Compassos</option>
+                            </select>
+                            <select id="viola-improv-quantize" aria-label="Quantização" class="px-2 py-1 rounded bg-[#0f172a] border border-slate-700 text-emerald-300">
+                                <option value="4n" ${st.quantizeGrid === '4n' ? 'selected' : ''}>Quantizar: 1/4 (Semínima)</option>
+                                <option value="8n" ${st.quantizeGrid === '8n' ? 'selected' : ''}>Quantizar: 1/8 (Colcheia)</option>
+                                <option value="16n" ${st.quantizeGrid === '16n' ? 'selected' : ''}>Quantizar: 1/16 (Semicolcheia)</option>
+                                <option value="free" ${st.quantizeGrid === 'free' ? 'selected' : ''}>Quantizar: Livre (1/64)</option>
+                            </select>
+                            <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
+                                <input type="checkbox" id="chk-improv-countin" ${st.countInEnabled ? 'checked' : ''} class="accent-amber-400">
+                                <span>Contagem 1 Comp.</span>
+                            </label>
+                            <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer" title="Ao terminar a 1ª volta de gravação, fecha automaticamente o loop para Reprodução">
+                                <input type="checkbox" id="chk-improv-autoclose" ${st.autoCloseFirstPass ? 'checked' : ''} class="accent-emerald-400">
+                                <span>Auto-Loop 1 Ciclo</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <canvas id="viola-looper-canvas" width="960" height="196" class="w-full h-[180px] sm:h-[196px] rounded-lg border border-slate-800 block"></canvas>
+
+                    <div id="viola-improv-tracks-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                        ${renderImprovTrackStripsHTML()}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        drawLooperTimelineCanvas();
+        bindImprovisoEvents();
+    }
+
+    function bindImprovTrackStripEvents() {
+        const st = state.improvStudio;
+
+        document.querySelectorAll('[data-improv-track-timbre]').forEach((sel) => {
+            sel.addEventListener('change', () => {
+                const idx = parseInt(sel.getAttribute('data-improv-track-timbre'), 10);
+                if (st.tracks[idx]) {
+                    st.tracks[idx].timbre = sel.value;
+                    saveViolaState();
+                    drawLooperTimelineCanvas();
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-rec]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-rec'), 10);
+                toggleLooperTrackRec(idx);
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-ovd]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-ovd'), 10);
+                toggleLooperTrackOverdub(idx);
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-mute]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-mute'), 10);
+                if (st.tracks[idx]) {
+                    st.tracks[idx].muted = !st.tracks[idx].muted;
+                    syncImprovAudioMixerNodes();
+                    saveViolaState();
+                    updateImprovTrackStripsDOM();
+                    drawLooperTimelineCanvas();
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-solo]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-solo'), 10);
+                if (st.tracks[idx]) {
+                    st.tracks[idx].solo = !st.tracks[idx].solo;
+                    syncImprovAudioMixerNodes();
+                    saveViolaState();
+                    updateImprovTrackStripsDOM();
+                    drawLooperTimelineCanvas();
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-vol]').forEach((sl) => {
+            sl.addEventListener('input', () => {
+                const idx = parseInt(sl.getAttribute('data-improv-track-vol'), 10);
+                if (st.tracks[idx]) {
+                    const pct = parseInt(sl.value, 10) || 0;
+                    st.tracks[idx].volume = pct / 100;
+                    const lbl = document.querySelector(`[data-track-vol-lbl="${idx}"]`);
+                    if (lbl) lbl.textContent = `${pct}%`;
+                    syncImprovAudioMixerNodes();
+                }
+            });
+            sl.addEventListener('change', saveViolaState);
+        });
+
+        document.querySelectorAll('[data-improv-track-pan]').forEach((sl) => {
+            sl.addEventListener('input', () => {
+                const idx = parseInt(sl.getAttribute('data-improv-track-pan'), 10);
+                if (st.tracks[idx]) {
+                    const pct = parseInt(sl.value, 10) || 0;
+                    st.tracks[idx].pan = pct / 100;
+                    const lbl = document.querySelector(`[data-track-pan-lbl="${idx}"]`);
+                    if (lbl) lbl.textContent = pct === 0 ? 'Centro' : (pct < 0 ? `L ${Math.abs(pct)}%` : `R ${pct}%`);
+                    syncImprovAudioMixerNodes();
+                }
+            });
+            sl.addEventListener('change', saveViolaState);
+        });
+
+        document.querySelectorAll('[data-improv-track-seed]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-seed'), 10);
+                seedLooperTrack(idx, false);
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-undo]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-undo'), 10);
+                undoLooperTrackPass(idx);
+            });
+        });
+
+        document.querySelectorAll('[data-improv-track-clear]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-improv-track-clear'), 10);
+                clearLooperTrack(idx);
+            });
+        });
+    }
+
+    function bindImprovisoEvents() {
+        const st = state.improvStudio;
+
+        const playBtn = document.getElementById('btn-improv-play-toggle');
+        if (playBtn) playBtn.addEventListener('click', startImprovPlayback);
+
+        const jamBtn = document.getElementById('btn-improv-load-jam');
+        if (jamBtn) jamBtn.addEventListener('click', loadFullJamDemo);
+
+        const toFretBtn = document.getElementById('btn-improv-to-fretboard');
+        if (toFretBtn) {
+            toFretBtn.addEventListener('click', () => {
+                state.displayMode = 'IMPROVISO';
+                state.fretboardDockMode = 'show';
+                saveViolaState();
+                renderAll();
+                const wrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+
+        const expBtn = document.getElementById('btn-improv-export-tab');
+        if (expBtn) expBtn.addEventListener('click', () => exportLooperToTabEditor('all'));
+
+        document.querySelectorAll('[data-improv-track-select]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-improv-track-select');
+                const backing = IMPROVISO_BACKING_CATALOG[id];
+                if (!backing) return;
+                const wasPlaying = st.isPlaying;
+                if (wasPlaying) stopImprovStudio();
+                st.trackId = backing.id;
+                st.bpm = backing.defaultBpm;
+                st.duadInterval = backing.duadInterval || st.duadInterval;
+                st.activeBarIdx = 0;
+                st.activeBeatIdx = 0;
+                // Limpa pistas seed antigas apenas se usuário desejar, ou mantém gravações: regenera se estavam vazias ou veio de jam demo
+                improvRuntime.liveStatus = `Base selecionada: ${backing.title} (${backing.keyLabel}, ${backing.defaultBpm} BPM).`;
+                saveViolaState();
+                renderImprovisoLooperSection();
+                if (state.displayMode === 'IMPROVISO') renderFretboardSVG();
+            });
+        });
+
+        document.querySelectorAll('[data-improv-bar-pill]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const barIdx = parseInt(btn.getAttribute('data-improv-bar-pill'), 10) || 0;
+                st.activeBarIdx = barIdx;
+                if (st.isPlaying) {
+                    const track = getActiveImprovTrack();
+                    improvRuntime.currentLoopTick = (barIdx % st.loopBars) * track.ticksPerBar;
+                }
+                updateImprovLiveBarDOM();
+                drawLooperTimelineCanvas();
+                if (state.displayMode === 'IMPROVISO') renderFretboardSVG();
+            });
+        });
+
+        document.querySelectorAll('[data-improv-guide-mode]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                st.guideMode = btn.getAttribute('data-improv-guide-mode');
+                state.displayMode = 'IMPROVISO';
+                saveViolaState();
+                renderImprovisoLooperSection();
+                renderFretboardSVG();
+            });
+        });
+
+        document.querySelectorAll('[data-improv-duad-type]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                st.duadInterval = btn.getAttribute('data-improv-duad-type');
+                state.displayMode = 'IMPROVISO';
+                saveViolaState();
+                renderImprovisoLooperSection();
+                renderFretboardSVG();
+            });
+        });
+
+        const lockSel = document.getElementById('viola-improv-scale-lock');
+        if (lockSel) {
+            lockSel.addEventListener('change', () => {
+                if (lockSel.value === 'auto') {
+                    st.scaleLockMode = 'auto';
+                } else {
+                    st.scaleLockMode = 'manual';
+                    st.manualModeId = lockSel.value;
+                    st.manualRootPc = getActiveImprovTrack().rootPc;
+                }
+                saveViolaState();
+                updateImprovLiveBarDOM();
+                if (state.displayMode === 'IMPROVISO') renderFretboardSVG();
+            });
+        }
+
+        const autoDuadChk = document.getElementById('chk-improv-auto-duad');
+        if (autoDuadChk) {
+            autoDuadChk.addEventListener('change', () => {
+                st.autoDuadOnFretClick = autoDuadChk.checked;
+                saveViolaState();
+            });
+        }
+
+        const bpmSlider = document.getElementById('viola-improv-bpm-slider');
+        if (bpmSlider) {
+            bpmSlider.addEventListener('input', () => {
+                st.bpm = Math.max(50, Math.min(180, parseInt(bpmSlider.value, 10) || 94));
+                const lbl = document.getElementById('viola-improv-bpm-lbl');
+                if (lbl) lbl.textContent = `${st.bpm} BPM`;
+            });
+            bpmSlider.addEventListener('change', saveViolaState);
+        }
+
+        document.querySelectorAll('[data-improv-bpm-delta]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const delta = parseInt(btn.getAttribute('data-improv-bpm-delta'), 10) || 0;
+                st.bpm = Math.max(50, Math.min(180, (st.bpm || 94) + delta));
+                if (bpmSlider) bpmSlider.value = st.bpm;
+                const lbl = document.getElementById('viola-improv-bpm-lbl');
+                if (lbl) lbl.textContent = `${st.bpm} BPM`;
+                saveViolaState();
+            });
+        });
+
+        const backingChk = document.getElementById('chk-improv-backing-enabled');
+        if (backingChk) {
+            backingChk.addEventListener('change', () => {
+                st.backingEnabled = backingChk.checked;
+                syncImprovAudioMixerNodes();
+                saveViolaState();
+            });
+        }
+
+        const clickChk = document.getElementById('chk-improv-click-guide');
+        if (clickChk) {
+            clickChk.addEventListener('change', () => {
+                st.backingClickEnabled = clickChk.checked;
+                saveViolaState();
+            });
+        }
+
+        const bindStemSlider = (id, key) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('input', () => {
+                st[key] = (parseInt(el.value, 10) || 0) / 100;
+                syncImprovAudioMixerNodes();
+            });
+            el.addEventListener('change', saveViolaState);
+        };
+        bindStemSlider('viola-improv-vol-guitar', 'stemGuitarVol');
+        bindStemSlider('viola-improv-vol-viola', 'stemViolaVol');
+        bindStemSlider('viola-improv-vol-perc', 'stemPercVol');
+
+        const bindStemMute = (id, key) => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                st[key] = !st[key];
+                btn.className = `px-1.5 py-0.5 rounded text-[9px] ${st[key] ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-400'}`;
+                syncImprovAudioMixerNodes();
+                saveViolaState();
+            });
+        };
+        bindStemMute('btn-improv-mute-guitar', 'stemGuitarMute');
+        bindStemMute('btn-improv-mute-viola', 'stemViolaMute');
+        bindStemMute('btn-improv-mute-perc', 'stemPercMute');
+
+        document.querySelectorAll('[data-improv-pad]').forEach((pad) => {
+            pad.addEventListener('click', () => {
+                const idx = parseInt(pad.getAttribute('data-improv-pad'), 10);
+                triggerImprovScalePad(idx);
+            });
+        });
+
+        const tapPad = document.getElementById('btn-improv-pad-tap');
+        if (tapPad) tapPad.addEventListener('click', () => triggerImprovPercPad('tap'));
+        const chockPad = document.getElementById('btn-improv-pad-chock');
+        if (chockPad) chockPad.addEventListener('click', () => triggerImprovPercPad('chock'));
+
+        const loopBarsSel = document.getElementById('viola-improv-loop-bars');
+        if (loopBarsSel) {
+            loopBarsSel.addEventListener('change', () => {
+                st.loopBars = parseInt(loopBarsSel.value, 10) || 8;
+                saveViolaState();
+                renderImprovisoLooperSection();
+            });
+        }
+
+        const quantSel = document.getElementById('viola-improv-quantize');
+        if (quantSel) {
+            quantSel.addEventListener('change', () => {
+                st.quantizeGrid = quantSel.value;
+                saveViolaState();
+            });
+        }
+
+        const countInChk = document.getElementById('chk-improv-countin');
+        if (countInChk) {
+            countInChk.addEventListener('change', () => {
+                st.countInEnabled = countInChk.checked;
+                saveViolaState();
+            });
+        }
+
+        const autoCloseChk = document.getElementById('chk-improv-autoclose');
+        if (autoCloseChk) {
+            autoCloseChk.addEventListener('change', () => {
+                st.autoCloseFirstPass = autoCloseChk.checked;
+                saveViolaState();
+            });
+        }
+
+        bindImprovTrackStripEvents();
+    }
+
     let tunerOsc = null;
     let tunerGain = null;
     let activeTunerCourse = null;
@@ -24389,6 +26840,97 @@ function bindSolfegeEvents() {
                         }
                     }
                 });
+            } else if (state.displayMode === 'IMPROVISO') {
+                // FASE 21: Guia Visual Dinâmico em Tempo Real (Modos Caipiras & Escalas Duadas)
+                const guide = getImprovBarGuideSpec(state.improvStudio.activeBarIdx);
+                const gMode = guide.guideMode || state.improvStudio.guideMode || 'hybrid';
+                const usedCells = new Set();
+
+                if (gMode === 'duad' || gMode === 'hybrid') {
+                    guide.duadSteps.forEach((d) => {
+                        const isChordPair = guide.chordTones.includes(d.upperPc) && guide.chordTones.includes(d.lowerPc);
+                        const hasChordTone = guide.chordTones.includes(d.upperPc) || guide.chordTones.includes(d.lowerPc);
+                        const op = isChordPair ? '1' : (hasChordTone ? '0.88' : '0.56');
+                        const strk = isChordPair ? '#ffffff' : (hasChordTone ? '#cbd5e1' : '#090d16');
+                        const strkW = isChordPair ? 3.0 : (hasChordTone ? 2.0 : 1.5);
+
+                        usedCells.add(`${d.upperCourse}_${d.upperFret}`);
+                        usedCells.add(`${d.lowerCourse}_${d.lowerFret}`);
+
+                        activeMarkers.push({
+                            courseIdx: d.upperCourse,
+                            fret: d.upperFret,
+                            label: d.upperNote,
+                            sub: isChordPair ? `${d.roman}° ★` : `${d.roman}°`,
+                            color: isChordPair ? '#10b981' : '#06b6d4',
+                            stroke: strk,
+                            strokeWidth: strkW,
+                            opacity: op
+                        });
+                        activeMarkers.push({
+                            courseIdx: d.lowerCourse,
+                            fret: d.lowerFret,
+                            label: d.lowerNote,
+                            sub: guide.duadInterval === '3rd' ? '3ª' : '6ª',
+                            color: isChordPair ? '#f59e0b' : '#0ea5e9',
+                            stroke: strk,
+                            strokeWidth: strkW,
+                            opacity: op
+                        });
+                    });
+                }
+
+                if (gMode === 'modal' || gMode === 'hybrid') {
+                    inst.courses.forEach((c, cIdx) => {
+                        for (let f = 0; f <= maxFret; f++) {
+                            if (gMode === 'hybrid' && usedCells.has(`${cIdx}_${f}`)) continue;
+                            const pc = (c.pitchClass + f) % 12;
+                            const interval = (pc - guide.scaleRootPc + 12) % 12;
+                            const degIdx = guide.modalCfg.intervals.indexOf(interval);
+                            if (degIdx < 0) continue;
+
+                            const degName = guide.modalCfg.degreeNames[degIdx];
+                            const isChar = guide.modalCfg.characteristicIntervals.includes(interval);
+                            const isScaleRoot = interval === 0;
+                            const isChordRoot = pc === guide.bar.rootPc;
+                            const isChordTone = guide.chordTones.includes(pc);
+
+                            let color = '#818cf8';
+                            let stroke = '#090d16';
+                            let strokeWidth = 1.6;
+                            let opacity = gMode === 'hybrid' ? '0.42' : '0.68';
+
+                            if (isChordRoot || isScaleRoot) {
+                                color = '#10b981';
+                                stroke = isChordRoot ? '#fbbf24' : '#090d16';
+                                strokeWidth = isChordRoot ? 3.0 : 2.0;
+                                opacity = gMode === 'hybrid' ? '0.84' : '1';
+                            } else if (isChar) {
+                                color = '#ec4899';
+                                stroke = '#ffffff';
+                                strokeWidth = 2.6;
+                                opacity = gMode === 'hybrid' ? '0.88' : '1';
+                            } else if (isChordTone) {
+                                const relToChord = (pc - guide.bar.rootPc + 12) % 12;
+                                color = relToChord === 7 ? '#f59e0b' : '#06b6d4';
+                                stroke = '#ffffff';
+                                strokeWidth = 2.5;
+                                opacity = gMode === 'hybrid' ? '0.82' : '0.96';
+                            }
+
+                            activeMarkers.push({
+                                courseIdx: cIdx,
+                                fret: f,
+                                label: NOTE_NAMES[pc],
+                                sub: isChordRoot ? 'Ac.T' : (isChar ? `★${degName}` : degName),
+                                color,
+                                stroke,
+                                strokeWidth,
+                                opacity
+                            });
+                        }
+                    });
+                }
             }
 
         // Construção SVG
@@ -24396,7 +26938,7 @@ function bindSolfegeEvents() {
         let capoDeadZoneSvg = '';
         let capoClampSvg = '';
         const capoK = state.capoDuo.capoFret || 0;
-        if (capoK > 0 && capoK <= maxFret) {
+        if (capoK > 0 && capoK <= maxFret && state.displayMode !== 'IMPROVISO') {
             const fretX = getFretLineX(capoK);
             let deadX, deadW, clampX, knobX;
 
@@ -24576,6 +27118,10 @@ function bindSolfegeEvents() {
                 if (state.displayMode === 'STAGE_EQ') {
                     playStagePluckedCourse(cIdx, f, 0);
                     flashFretCell(cIdx, f, 0);
+                    return;
+                }
+                if (state.displayMode === 'IMPROVISO') {
+                    handleImprovFretboardHit(cIdx, f);
                     return;
                 }
                 playCourseAtFret(cIdx, f, 0);
@@ -25226,6 +27772,29 @@ function bindSolfegeEvents() {
             } else {
                 state.stageEq = JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE));
             }
+
+            if (saved.improvStudio && typeof saved.improvStudio === 'object') {
+                const defaultTracks = JSON.parse(JSON.stringify(DEFAULT_IMPROV_STUDIO_STATE.tracks));
+                const mergedTracks = Array.isArray(saved.improvStudio.tracks) && saved.improvStudio.tracks.length === 4
+                    ? saved.improvStudio.tracks.map((tr, i) => {
+                        const evs = Array.isArray(tr.events) ? tr.events : [];
+                        return Object.assign({}, defaultTracks[i], tr, {
+                            events: evs,
+                            mode: evs.length > 0 ? 'playing' : 'idle'
+                        });
+                    })
+                    : defaultTracks;
+                state.improvStudio = Object.assign({}, DEFAULT_IMPROV_STUDIO_STATE, saved.improvStudio, {
+                    isPlaying: false,
+                    isCountingIn: false,
+                    countInBeat: 0,
+                    activeBarIdx: 0,
+                    activeBeatIdx: 0,
+                    tracks: mergedTracks
+                });
+            } else {
+                state.improvStudio = JSON.parse(JSON.stringify(DEFAULT_IMPROV_STUDIO_STATE));
+            }
         }
     }
 
@@ -25324,11 +27893,37 @@ function bindSolfegeEvents() {
                 activeDemoType: null
             });
         }
+        if (copy.improvStudio) {
+            const cleanTracks = (copy.improvStudio.tracks || []).map((tr) => {
+                const cleanEvs = (tr.events || []).map((ev) => ({
+                    id: ev.id,
+                    tick: ev.tick,
+                    durTicks: ev.durTicks,
+                    notes: ev.notes || [],
+                    perc: ev.perc || null,
+                    passId: ev.passId || 1,
+                    velocity: ev.velocity || 0.85
+                }));
+                return Object.assign({}, tr, {
+                    events: cleanEvs,
+                    mode: cleanEvs.length > 0 ? 'playing' : 'idle',
+                    _recordStartPass: undefined
+                });
+            });
+            copy.improvStudio = Object.assign({}, copy.improvStudio, {
+                isPlaying: false,
+                isCountingIn: false,
+                countInBeat: 0,
+                activeBarIdx: 0,
+                activeBeatIdx: 0,
+                tracks: cleanTracks
+            });
+        }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
     // =========================================================================
-    // ARQUITETURA DE ESTAÇÕES & MODO FOCO SEM ROLAGEM (22 FERRAMENTAS / 5 ABAS)
+    // ARQUITETURA DE ESTAÇÕES & MODO FOCO SEM ROLAGEM (23 FERRAMENTAS / 5 ABAS)
     // =========================================================================
     const VIOLA_STUDIO_CATEGORIES = [
         {
@@ -25361,11 +27956,11 @@ function bindSolfegeEvents() {
         {
             id: 'ritmos',
             num: '4',
-            label: 'Ritmos & Escalas Modais',
-            shortLabel: 'Ritmos & Modos',
+            label: 'Ritmos, Modos & Improviso',
+            shortLabel: 'Ritmos & Estúdio',
             icon: 'activity',
             accent: 'rose',
-            desc: 'Caixa de ritmos tradicionais caipiras, metrônomo lookahead e treinador de modos do sertão.'
+            desc: 'Caixa de ritmos caipiras, metrônomo lookahead, escalas modais, backing tracks e looper polifônico de 4 pistas.'
         },
         {
             id: 'lutheria',
@@ -25561,7 +28156,18 @@ function bindSolfegeEvents() {
             desc: 'Síntese vocal com formantes F1/F2, 12 intervalos do sertão e ditado melódico com 10 clássicos.'
         },
 
-        // 4. RITMOS & ESCALAS MODAIS (2)
+        // 4. RITMOS, MODOS & IMPROVISO (3)
+        {
+            id: 'improviso-looper',
+            categoryId: 'ritmos',
+            title: 'Estúdio de Improviso Modal, Backing Tracks & Looper 4 Pistas',
+            shortTitle: 'Improviso & Looper 4P',
+            badge: 'Fase 21',
+            icon: 'disc-3',
+            fretboardMode: 'IMPROVISO',
+            defaultShowFretboard: true,
+            desc: 'Bases caipiras em tempo real (Cururu, Pagode, Toada, Guarânia), looper polifônico de 4 pistas e guia modal/duado dinâmico.'
+        },
         {
             id: 'metronomo-ritmos',
             categoryId: 'ritmos',
@@ -25649,7 +28255,8 @@ function bindSolfegeEvents() {
         SOLFEGE: 'solfejo',
         PAGODE: 'pagode',
         STROBE: 'estroboscopico',
-        STAGE_EQ: 'captacao-palco'
+        STAGE_EQ: 'captacao-palco',
+        IMPROVISO: 'improviso-looper'
     };
 
     let lastSyncedDisplayMode = null;
@@ -25734,6 +28341,9 @@ function bindSolfegeEvents() {
                 break;
             case 'captacao-palco':
                 renderStageEqSection();
+                break;
+            case 'improviso-looper':
+                renderImprovisoLooperSection();
                 break;
         }
     }
@@ -26054,10 +28664,10 @@ function bindSolfegeEvents() {
                                 <span id="label-viola-fretboard-dock">Braço SVG: Visível</span>
                             </button>
 
-                            <button type="button" id="btn-viola-open-catalog" title="Abrir catálogo em grade com busca de todas as 22 ferramentas (Ctrl+K)"
+                            <button type="button" id="btn-viola-open-catalog" title="Abrir catálogo em grade com busca de todas as ${VIOLA_STUDIO_TOOLS.length} ferramentas (Ctrl+K)"
                                 class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-mono font-bold flex items-center gap-1.5 shadow transition">
                                 <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
-                                <span>Catálogo (22)</span>
+                                <span>Catálogo (${VIOLA_STUDIO_TOOLS.length})</span>
                                 <kbd class="hidden sm:inline px-1 py-0.2 text-[10px] rounded bg-slate-950/20 text-slate-950">Ctrl+K</kbd>
                             </button>
 
@@ -26125,6 +28735,7 @@ function bindSolfegeEvents() {
                                     <button type="button" id="btn-viola-mode-pagode" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔥 Pagode</button>
                                     <button type="button" id="btn-viola-mode-strobe" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔬 Estrobo</button>
                                     <button type="button" id="btn-viola-mode-stage-eq" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎚️ Palco EQ</button>
+                                    <button type="button" id="btn-viola-mode-improviso" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔁 Improviso 4P</button>
                                 </div>
                             </div>
                             ${isStandalonePage ? `
@@ -26475,9 +29086,14 @@ function bindSolfegeEvents() {
                     <div data-viola-tool-panel="captacao-palco">
                         <div id="viola-stage-eq-container" class="space-y-4"></div>
                     </div>
+
+                    <!-- [23] Estúdio de Improviso Modal, Backing Tracks & Looper 4 Pistas (Fase 21) -->
+                    <div data-viola-tool-panel="improviso-looper">
+                        <div id="viola-improviso-looper-container" class="space-y-4"></div>
+                    </div>
                 </div>
 
-                <!-- 3. MODAL DE CATÁLOGO RÁPIDO DAS 22 FERRAMENTAS (Ctrl+K) -->
+                <!-- 3. MODAL DE CATÁLOGO RÁPIDO DAS 23 FERRAMENTAS (Ctrl+K) -->
                 <div id="viola-catalog-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
                     <div class="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-5xl max-h-[88vh] flex flex-col shadow-2xl overflow-hidden">
                         <div class="p-4 bg-[#090d16] border-b border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -26486,7 +29102,7 @@ function bindSolfegeEvents() {
                                     <i data-lucide="layout-grid" class="w-4 h-4"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm sm:text-base font-bold text-slate-100">Catálogo Geral • 22 Recursos de Viola &amp; Violão</h3>
+                                    <h3 class="text-sm sm:text-base font-bold text-slate-100">Catálogo Geral • ${VIOLA_STUDIO_TOOLS.length} Recursos de Viola &amp; Violão</h3>
                                     <p class="text-[11px] font-mono text-slate-400">Selecione qualquer módulo para abrir imediatamente em Modo Foco Sem Rolagem</p>
                                 </div>
                             </div>
@@ -26536,25 +29152,43 @@ function bindSolfegeEvents() {
         const progBeatsSel = document.getElementById('viola-select-prog-beats');
         if (progBeatsSel) progBeatsSel.value = String(state.progressionBeatsPerChord);
 
+        const isStandalonePage = document.body && document.body.getAttribute('data-viola-standalone') === 'true';
         const handBadge = document.getElementById('viola-hand-badge');
         const handLabel = document.getElementById('label-viola-hand');
-        if (handBadge && handLabel) {
+        const handBtn = document.getElementById('btn-viola-toggle-hand');
+        if (handBadge) {
             if (state.isLeftHanded) {
                 handBadge.textContent = 'Modo Canhoto Ativo (Espelhado)';
                 handBadge.className = 'hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-                handLabel.textContent = 'Canhoto (Pestana \u00E0 Direita)';
             } else {
                 handBadge.textContent = 'Modo Destro (Consulta Externa)';
                 handBadge.className = 'hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700';
-                handLabel.textContent = 'Destro (Pestana \u00E0 Esquerda)';
             }
+        }
+        if (handLabel) {
+            if (isStandalonePage) {
+                handLabel.textContent = state.isLeftHanded ? 'Canhoto' : 'Destro';
+            } else {
+                handLabel.textContent = state.isLeftHanded
+                    ? 'Canhoto (Pestana \u00E0 Direita)'
+                    : 'Destro (Pestana \u00E0 Esquerda)';
+            }
+        }
+        if (handBtn && isStandalonePage) {
+            handBtn.title = state.isLeftHanded
+                ? 'Orientação Canhoto (Pestana à Direita) — Clique para alternar para Destro'
+                : 'Orientação Destro (Pestana à Esquerda) — Clique para alternar para Canhoto';
         }
 
         const perspLabel = document.getElementById('label-viola-persp');
         if (perspLabel) {
-            perspLabel.textContent = state.viewPerspective === 'diagram'
-                ? 'Diagrama (1\u00BA Agudo no Topo)'
-                : 'Vis\u00E3o M\u00FAsico (Grave no Topo)';
+            if (isStandalonePage) {
+                perspLabel.textContent = state.viewPerspective === 'diagram' ? 'Diagrama' : 'M\u00FAsico';
+            } else {
+                perspLabel.textContent = state.viewPerspective === 'diagram'
+                    ? 'Diagrama (1\u00BA Agudo no Topo)'
+                    : 'Vis\u00E3o M\u00FAsico (Grave no Topo)';
+            }
         }
 
         const modeButtons = [
@@ -26574,7 +29208,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
             { id: 'btn-viola-mode-pagode', mode: 'PAGODE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
             { id: 'btn-viola-mode-strobe', mode: 'STROBE', activeClass: 'bg-cyan-500 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ', activeClass: 'bg-emerald-500 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ', activeClass: 'bg-emerald-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-improviso', mode: 'IMPROVISO', activeClass: 'bg-amber-500 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -26618,6 +29253,7 @@ function bindSolfegeEvents() {
         stopPagodeAudio();
         stopStrobeTunerAudio();
         stopStageAudio();
+        stopImprovStudio();
     }
 
     function bindEvents() {
@@ -26798,7 +29434,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE' },
             { id: 'btn-viola-mode-pagode', mode: 'PAGODE' },
             { id: 'btn-viola-mode-strobe', mode: 'STROBE' },
-            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ' }
+            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ' },
+            { id: 'btn-viola-mode-improviso', mode: 'IMPROVISO' }
         ];
 
         modeList.forEach((item) => {
@@ -27066,6 +29703,32 @@ function bindSolfegeEvents() {
         if (metroToggleBtn) {
             metroToggleBtn.addEventListener('click', toggleMetronome);
         }
+
+        // Atalhos de teclado dedicados para Improviso & Looper 4 Pistas (1–8, Q, W, Espaço)
+        document.addEventListener('keydown', (e) => {
+            if (state.activeToolId !== 'improviso-looper') return;
+            if (e.ctrlKey || e.altKey || e.metaKey) return;
+            const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+            if (tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable)) return;
+
+            const k = (e.key || '').toLowerCase();
+            if (k >= '1' && k <= '8') {
+                e.preventDefault();
+                triggerImprovScalePad(parseInt(k, 10) - 1);
+            } else if (k === 'q') {
+                e.preventDefault();
+                triggerImprovPercPad('tap');
+            } else if (k === 'w') {
+                e.preventDefault();
+                triggerImprovPercPad('chock');
+            } else if (k === ' ') {
+                e.preventDefault();
+                if (tag === 'button' && e.target && typeof e.target.blur === 'function') {
+                    e.target.blur();
+                }
+                startImprovPlayback();
+            }
+        });
     }
 
     function renderAll() {
@@ -27145,6 +29808,7 @@ function bindSolfegeEvents() {
         renderPagodeSection();
         renderStrobeTunerSection();
         renderStageEqSection();
+        renderImprovisoLooperSection();
         renderMetronomeControls();
     }
 

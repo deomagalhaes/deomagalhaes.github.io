@@ -110,7 +110,7 @@
     <div id="studio-mobile-backdrop" class="hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"></div>
 
     <!-- ===================================================================== -->
-    <!-- 1. SIDEBAR PROFISSIONAL FIXA À ESQUERDA (TODOS OS 22 RECURSOS)        -->
+    <!-- 1. SIDEBAR PROFISSIONAL FIXA À ESQUERDA (TODOS OS 23 RECURSOS)        -->
     <!-- ===================================================================== -->
     <aside id="studio-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-[280px] shrink-0 bg-[#0b111e] border-r border-slate-800/80 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out">
         <!-- Marca do Estúdio -->
@@ -134,7 +134,7 @@
             <div class="relative">
                 <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                 <input type="text" id="studio-sidebar-search" autocomplete="off"
-                    placeholder="Buscar entre 22 recursos..."
+                    placeholder="Buscar entre 23 recursos..."
                     class="w-full h-9 pl-8 pr-3 rounded-lg bg-[#070b12] border border-slate-800 focus:border-amber-500/60 focus:outline-none text-xs text-slate-200 placeholder-slate-500 transition">
             </div>
 
@@ -144,7 +144,7 @@
                     <i data-lucide="layout-grid" class="w-4 h-4 text-amber-400"></i>
                     <span>Visão Geral do Estúdio</span>
                 </span>
-                <span class="text-[10px] font-mono text-slate-500">22</span>
+                <span id="studio-overview-count" class="text-[10px] font-mono text-slate-500">23</span>
             </button>
         </div>
 
@@ -244,7 +244,7 @@
         </header>
 
         <!-- PALCO PRINCIPAL FLUIDO E BEM DIAGRAMADO -->
-        <main id="studio-main-scroll" class="flex-1 overflow-y-auto studio-stage-glow">
+        <main id="studio-main-scroll" class="flex-1 overflow-y-auto overflow-x-hidden studio-stage-glow">
             <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
 
                 <!-- DASHBOARD EDITORIAL DE VISÃO GERAL (EXIBIDO QUANDO CLICAR EM "VISÃO GERAL") -->
@@ -253,7 +253,7 @@
                         <div class="space-y-2 max-w-2xl">
                             <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-mono">
                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                                <span>Estúdio Completo • 22 Ferramentas em 5 Estações</span>
+                                <span id="studio-hero-tool-count">Estúdio Completo • 23 Ferramentas em 5 Estações</span>
                             </div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Estúdio de Viola Caipira &amp; Violão</h2>
                             <p class="text-sm text-slate-400 leading-relaxed">
@@ -264,6 +264,10 @@
                             <button type="button" data-quick-open="campo-harmonico" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition">
                                 <i data-lucide="music" class="w-4 h-4"></i>
                                 <span>Campo Harmônico</span>
+                            </button>
+                            <button type="button" data-quick-open="improviso-looper" class="px-4 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 font-semibold text-xs flex items-center gap-2 transition">
+                                <i data-lucide="disc-3" class="w-4 h-4 text-emerald-400"></i>
+                                <span>Improviso &amp; Looper 4P</span>
                             </button>
                             <button type="button" data-quick-open="estroboscopico" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold text-xs flex items-center gap-2 transition">
                                 <i data-lucide="disc" class="w-4 h-4 text-cyan-400"></i>
@@ -406,8 +410,9 @@
                 }
 
                 if (isOverviewOpen) {
+                    var totalTools = (window.VaultTabViola && window.VaultTabViola.tools) ? window.VaultTabViola.tools.length : 23;
                     if (topCat) topCat.textContent = 'Viola Studio';
-                    if (topBadge) topBadge.textContent = '22 Recursos';
+                    if (topBadge) topBadge.textContent = totalTools + ' Recursos';
                     if (topTitle) topTitle.textContent = 'Visão Geral do Estúdio';
                     renderSidebarNav();
                     var mainScroll = document.getElementById('studio-main-scroll');
@@ -569,6 +574,14 @@
                 if (window.VaultTabViola && typeof window.VaultTabViola.init === 'function') {
                     window.VaultTabViola.init();
                 }
+
+                var totalTools = (window.VaultTabViola && window.VaultTabViola.tools) ? window.VaultTabViola.tools.length : 23;
+                var ovCountEl = document.getElementById('studio-overview-count');
+                var heroCountEl = document.getElementById('studio-hero-tool-count');
+                var searchEl = document.getElementById('studio-sidebar-search');
+                if (ovCountEl) ovCountEl.textContent = String(totalTools);
+                if (heroCountEl) heroCountEl.textContent = 'Estúdio Completo • ' + totalTools + ' Ferramentas em 5 Estações';
+                if (searchEl) searchEl.placeholder = 'Buscar entre ' + totalTools + ' recursos...';
 
                 renderOverviewGrid();
                 renderSidebarNav();
