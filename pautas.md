@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina: Por Que o Cérebro Só Funciona Sob Pressão e Como Sair do Modo de Emergência** (Publicado em 19/11/2026)
 - [x] **A Neurobiologia da Compulsão por Controle e da Hiper-Responsabilidade: Por Que o Cérebro Tenta Prever e Gerenciar Tudo Para Não Sentir Impotência** (Publicado em 18/11/2026)
 - [x] **A Neurobiologia da Limerência e da Idealização Romântica Compulsiva: Por Que o Cérebro Fica Obcecado por Vínculos Ambíguos e Inacessíveis** (Publicado em 17/11/2026)
 - [x] **A Neurobiologia da Hiper-Racionalização e da Intelectualização Defensiva: Por Que Entender Tudo Sobre Sua Dor Não Cura o Que o Corpo Ainda Sente** (Publicado em 17/11/2026)

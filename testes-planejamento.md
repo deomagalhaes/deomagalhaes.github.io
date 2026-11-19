@@ -63,6 +63,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-54** | **Escala Multidimensional de Hiper-Racionalização e Intelectualização Defensiva (EMHI-D)** | Intelectualização Defensiva, Desacoplamento da Ínsula, Ilusão do Insight e Análise-Paralisia | `testes/teste-hiper-racionalizacao-intelectualizacao.html` | ✅ Concluído |
 | **T-55** | **Escala Multidimensional de Limerência, Obsessão Afetiva e Idealização Compulsiva (EMLO-IC)** | Intrusão Cognitiva (CSTC), Vigilância Dopaminérgica (VTA/RPE), Cristalização Idealizada e Desregulação Autonômica | `testes/teste-limerencia-idealizacao-compulsiva.html` | ✅ Concluído |
 | **T-56** | **Escala Multidimensional de Compulsão por Controle e Hiper-Responsabilidade (EMCC-HR)** | Microgerenciamento (dlPFC/CSTC), Hiper-Responsabilidade Inflada (dACC), Aversão à Delegação (BNST) e Custo Vagal | `testes/teste-compulsao-controle-hiper-responsabilidade.html` | ✅ Concluído |
+| **T-57** | **Escala Multidimensional de Urgência Crônica e Dependência de Adrenalina (EMUC-DA)** | Ativação por Pressão (LC-NE), Intolerância à Quietude (Alostase), Fabricação de Crises e Custo Pré-Frontal (Arnsten) | `testes/teste-urgencia-cronica-adiccao-adrenalina.html` | ✅ Concluído |
 
 ---
 

@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dia 56: Matriz de Cadência Sustentável e Desarme da Urgência – Deo Magalhães</title>
+    <meta name="description" content="Treine a regulação do Locus Coeruleus, conclua ações cadenciadas sem pânico de prazo, desvie de picos de adrenalina artificial e alcance a ressonância serena no Dia 56 com Web Audio API.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .game-wrapper {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 28px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .game-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 22px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.74em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.22em;
+            font-weight: 800;
+            color: #005f73;
+        }
+
+        .reserve-tank-container {
+            width: 140px;
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .reserve-tank-fill {
+            height: 100%;
+            background: #0a9396;
+            width: 100%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .trial-prompt-card {
+            background: #f0fdfa;
+            border-left: 4px solid #0a9396;
+            padding: 18px 22px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .trial-prompt-card h3 {
+            margin: 0 0 6px 0;
+            color: #005f73;
+            font-size: 1.12em;
+        }
+
+        .trial-prompt-card p {
+            margin: 0;
+            color: #334155;
+            font-size: 0.94em;
+            line-height: 1.5;
+        }
+
+        .legend-strip {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            font-size: 0.82em;
+            color: #475569;
+        }
+
+        .legend-pill {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .matrix-board-container {
+            display: inline-block;
+            background: #001219;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.5);
+            margin: 10px auto 22px auto;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .matrix-grid {
+            display: grid;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .matrix-cell {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            background: rgba(10, 147, 150, 0.14);
+            border: 2px solid rgba(148, 210, 189, 0.28);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            user-select: none;
+            color: #ffffff;
+            padding: 4px;
+        }
+
+        @media (max-width: 520px) {
+            .matrix-cell {
+                width: 56px;
+                height: 56px;
+            }
+        }
+
+        .matrix-cell.reachable:hover {
+            transform: scale(1.06);
+            border-color: #ee9b00;
+            background: rgba(238, 155, 0, 0.25);
+            box-shadow: 0 0 14px rgba(238, 155, 0, 0.45);
+        }
+
+        .matrix-cell.player-here {
+            background: #0a9396 !important;
+            border-color: #94d2bd !important;
+            box-shadow: 0 0 20px #0a9396;
+            animation: pulse-node 1.4s infinite alternate;
+        }
+
+        .matrix-cell.wall-node {
+            background: #0b252e;
+            border-color: rgba(100, 116, 139, 0.35);
+            border-style: dashed;
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .matrix-cell.cadence-node {
+            background: rgba(238, 155, 0, 0.22);
+            border-color: #ee9b00;
+            box-shadow: 0 0 12px rgba(238, 155, 0, 0.32);
+        }
+
+        .matrix-cell.cadence-collected {
+            background: rgba(148, 210, 189, 0.18);
+            border-color: #94d2bd;
+            opacity: 0.85;
+        }
+
+        .matrix-cell.trap-node {
+            background: rgba(155, 34, 38, 0.28);
+            border-color: rgba(248, 113, 113, 0.55);
+        }
+
+        .matrix-cell.trap-cleared {
+            background: rgba(100, 116, 139, 0.18);
+            border-color: rgba(148, 163, 184, 0.35);
+            opacity: 0.7;
+        }
+
+        .matrix-cell.anchor-node {
+            background: rgba(148, 210, 189, 0.25);
+            border-color: #94d2bd;
+        }
+
+        .matrix-cell.anchor-used {
+            background: rgba(10, 147, 150, 0.15);
+            border-color: rgba(148, 210, 189, 0.25);
+            opacity: 0.7;
+        }
+
+        .matrix-cell.goal-locked {
+            background: rgba(100, 116, 139, 0.2);
+            border-color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .matrix-cell.goal-unlocked {
+            background: rgba(238, 155, 0, 0.38);
+            border-color: #ee9b00;
+            box-shadow: 0 0 18px rgba(238, 155, 0, 0.55);
+        }
+
+        .matrix-cell.visited-safe {
+            background: rgba(10, 147, 150, 0.25);
+            border-color: rgba(148, 210, 189, 0.45);
+        }
+
+        .cell-icon {
+            font-size: 1.35em;
+            line-height: 1.1;
+        }
+
+        .cell-label {
+            font-size: 0.65em;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-top: 2px;
+        }
+
+        @keyframes pulse-node {
+            0% { transform: scale(1); box-shadow: 0 0 10px #0a9396; }
+            100% { transform: scale(1.05); box-shadow: 0 0 22px #94d2bd; }
+        }
+
+        .event-feedback-bar {
+            min-height: 26px;
+            font-size: 0.92em;
+            font-weight: 600;
+            color: #005f73;
+            margin-bottom: 16px;
+        }
+
+        .controls-toolbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-game-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92em;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cadence {
+            background: #005f73;
+            color: #ffffff;
+        }
+
+        .btn-cadence:hover:not(:disabled) {
+            background: #0a9396;
+            transform: translateY(-2px);
+        }
+
+        .btn-crisis-trap {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .btn-crisis-trap:hover:not(:disabled) {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+
+        .btn-secondary-game {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary-game:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-game-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .pause-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 18, 25, 0.78);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .pause-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .pause-circle-anim {
+            width: 136px;
+            height: 136px;
+            border-radius: 50%;
+            background: #0a9396;
+            margin: 24px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.05em;
+            padding: 10px;
+            transition: transform 2.5s ease, background 2.5s ease;
+        }
+
+        .victory-panel {
+            display: none;
+            background: #f8fafc;
+            border: 2px solid #0a9396;
+            border-radius: 12px;
+            padding: 28px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .victory-panel h2 {
+            color: #005f73;
+            margin-top: 0;
+        }
+
+        .neuro-explanation-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 28px;
+            margin: 35px 0;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .neuro-explanation-box h3 {
+            color: #005f73;
+            margin-top: 0;
+            border-bottom: 2px solid #0a9396;
+            padding-bottom: 8px;
+        }
+
+        .neuro-grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .neuro-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .neuro-card h4 {
+            color: #005f73;
+            margin: 0 0 8px 0;
+            font-size: 0.98em;
+        }
+
+        .neuro-card p {
+            color: #475569;
+            margin: 0;
+            font-size: 0.88em;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html">Testes</a>
+                <a href="/jogos.html" class="active">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Dia 56: Matriz de Cadência Sustentável e Desarme da Urgência</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Treinamento Cognitivo Diário</p>
+            </header>
+
+            <div class="game-wrapper">
+                <!-- Barra de Status do Jogo -->
+                <div class="game-header-bar">
+                    <div class="stat-badge">
+                        <span class="stat-label">Nível</span>
+                        <span id="levelDisplay" class="stat-value">1 / 5</span>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Reserva Pré-Frontal</span>
+                        <span id="reserveDisplay" class="stat-value">100 / 100</span>
+                        <div class="reserve-tank-container">
+                            <div id="reserveFill" class="reserve-tank-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Ações Cadenciadas</span>
+                        <span id="cadenceDisplay" class="stat-value" style="color: #ee9b00;">0 / 2</span>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Ressonância</span>
+                        <span id="scoreDisplay" class="stat-value">0 pts</span>
+                    </div>
+
+                    <div class="stat-badge">
+                        <span class="stat-label">Crises Artificiais</span>
+                        <span id="crisisCountDisplay" class="stat-value" style="color: #9b2226;">0</span>
+                    </div>
+                </div>
+
+                <!-- Card de Cenário Clínico -->
+                <div class="trial-prompt-card">
+                    <h3 id="scenarioTitle">Nível 1: Saindo da Inércia Sem Pânico</h3>
+                    <p id="scenarioDesc">Saia do Modo Emergência (🚨) e alcance a Ressonância Serena (🌿). Para desbloquear a meta, conclua todas as Ações Cadenciadas (🧭) e evite os Picos de Adrenalina Artificial (⚡), que drenam seu Córtex Pré-Frontal.</p>
+                </div>
+
+                <!-- Legenda Rápida -->
+                <div class="legend-strip">
+                    <span class="legend-pill">🧭 Ação Cadenciada (+15 Reserva / Obrigatória)</span>
+                    <span class="legend-pill">⏳ Âncora Contemplativa (+25 Reserva)</span>
+                    <span class="legend-pill">⚡ Pico de Adrenalina (-25 Reserva)</span>
+                    <span class="legend-pill">🔥 Saturação LC-NE (Bloqueado)</span>
+                    <span class="legend-pill">🌿 Ressonância Serena (Meta)</span>
+                </div>
+
+                <!-- Tabuleiro da Matriz -->
+                <div class="matrix-board-container">
+                    <div id="matrixGrid" class="matrix-grid"></div>
+                </div>
+
+                <div id="eventFeedback" class="event-feedback-bar">Use clique/toque nos nós adjacentes ou as setas do teclado (WASD) para navegar.</div>
+
+                <!-- Barra de Controles -->
+                <div class="controls-toolbar">
+                    <button id="btnPause" class="btn-game-action btn-cadence" onclick="triggerCadencePause()">
+                        ⏳ Pausa Contemplativa (<span id="pauseLeft">2</span>)
+                    </button>
+                    <button id="btnCrisisTrap" class="btn-game-action btn-crisis-trap" onclick="triggerArtificialCrisis()">
+                        ⚡ Forçar Crise Artificial (Choque Rápido)
+                    </button>
+                    <button class="btn-game-action btn-secondary-game" onclick="restartLevel()">
+                        🔄 Reiniciar Nível
+                    </button>
+                    <button id="btnAudio" class="btn-game-action btn-secondary-game" onclick="toggleAudio()">
+                        🔊 Som Ativo
+                    </button>
+                </div>
+
+                <!-- Painel de Vitória -->
+                <div id="victoryPanel" class="victory-panel">
+                    <h2>🎉 Cadência Sustentável e Ressonância Consolidadas!</h2>
+                    <p id="victoryReport" style="color: #334155; font-size: 1.02em; line-height: 1.6; max-width: 650px; margin: 12px auto;"></p>
+                    <div id="finalScoreVal" style="font-size: 2.2em; font-weight: 800; color: #005f73; margin: 15px 0;">0 pts</div>
+                    <p id="recordStatus" style="font-size: 0.9em; color: #0a9396; font-weight: 700;"></p>
+                    <button class="btn-game-action btn-cadence" style="margin-top: 15px;" onclick="restartFullGame()">Jogar Nova Rodada</button>
+                </div>
+            </div>
+
+            <!-- Explicação Neuropsicológica -->
+            <div class="neuro-explanation-box">
+                <h3>Fundamentação Neurocognitiva: Do Modo Emergência à Cadência Pré-Frontal</h3>
+                <p style="color: #475569; line-height: 1.65;">
+                    Quando usamos o pânico da última hora para vencer a procrastinação, o sistema <strong>Locus Coeruleus–Noradrenalina (LC-NE)</strong> e a <strong>alostase hedônica (Koob &amp; Le Moal)</strong> rebaixam a motivação em estados calmos, enquanto o excesso de catecolaminas desconecta o <strong>Córtex Pré-Frontal Dorsolateral (dlPFC, Arnsten)</strong>. Este treino exercita a navegação estratégica em ritmo estável rumo à <strong>ressonância (Hartmut Rosa)</strong>, sem ceder ao choque artificial de adrenalina.
+                </p>
+                <div class="neuro-grid-cards">
+                    <div class="neuro-card">
+                        <h4>1. Ação Cadenciada (dlPFC)</h4>
+                        <p>A Ressonância Serena permanece trancada até que todos os blocos cadenciados sejam concluídos no ritmo sustentável — substituindo a explosão da véspera.</p>
+                    </div>
+                    <div class="neuro-card">
+                        <h4>2. Picos de Adrenalina Artificial</h4>
+                        <p>Os relâmpagos simulam a tentação de fabricar urgência para sentir tração imediata, mas drenam sua reserva executiva e estreitam a visão.</p>
+                    </div>
+                    <div class="neuro-card">
+                        <h4>3. Desmame da Quietude (LC-NE)</h4>
+                        <p>Resistir ao botão de Crise Artificial e usar Âncoras Contemplativas ressensibiliza o tônus basal sem precisar do abismo de prazos.</p>
+                    </div>
+                    <div class="neuro-card">
+                        <h4>4. Solubilidade Matemática</h4>
+                        <p>Todos os 5 níveis foram previamente verificados via busca em grafo (BFS) com bitmask de estados, garantindo 100% de rotas livres de armadilhas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Pausa Contemplativa -->
+    <div id="pauseModal" class="pause-modal-overlay">
+        <div class="pause-card">
+            <h3 style="color: #005f73; margin-top: 0;">Ressonância &amp; Desaceleração do LC-NE</h3>
+            <p style="color: #475569; font-size: 0.92em;">Abandone a pressa artificial por alguns segundos. Respire devagar e devolva o comando ao Córtex Pré-Frontal.</p>
+            <div id="pauseAnimCircle" class="pause-circle-anim">Baixando ruído...</div>
+            <p id="pauseCounter" style="font-weight: 700; color: #0a9396;">Tempo restante: 5s</p>
+        </div>
+    </div>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        // --- Motor de Áudio Procedural (Web Audio API) ---
+        let audioCtx = null;
+        let audioEnabled = true;
+
+        function ensureAudio() {
+            if (!audioEnabled) return null;
+            if (!audioCtx) {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (Ctx) audioCtx = new Ctx();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playTone(freq, duration, type = 'sine', vol = 0.12, delay = 0) {
+            const ctx = ensureAudio();
+            if (!ctx) return;
+            const t = ctx.currentTime + delay;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.001, t);
+            gain.gain.exponentialRampToValueAtTime(vol, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(t);
+            osc.stop(t + duration + 0.02);
+        }
+
+        function playStepSound() {
+            playTone(349.23, 0.09, 'sine', 0.07);
+        }
+
+        function playCadenceSound() {
+            playTone(440.0, 0.15, 'triangle', 0.11, 0);
+            playTone(523.25, 0.2, 'triangle', 0.11, 0.07);
+            playTone(659.25, 0.28, 'sine', 0.12, 0.14);
+        }
+
+        function playTrapSound() {
+            playTone(220.0, 0.14, 'sawtooth', 0.08, 0);
+            playTone(146.83, 0.24, 'sawtooth', 0.08, 0.08);
+        }
+
+        function playAnchorSound() {
+            playTone(293.66, 0.28, 'sine', 0.1, 0);
+            playTone(440.0, 0.38, 'sine', 0.1, 0.12);
+        }
+
+        function playLockedSound() {
+            playTone(164.81, 0.1, 'square', 0.05);
+        }
+
+        function playGoalSound() {
+            [440.0, 554.37, 659.25, 880.0].forEach((f, idx) => {
+                playTone(f, 0.36, 'triangle', 0.12, idx * 0.09);
+            });
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('btnAudio');
+            btn.textContent = audioEnabled ? '🔊 Som Ativo' : '🔇 Som Mudo';
+        }
+
+        // --- Definição dos 5 Níveis Validados Matematicamente por BFS ---
+        // S=Modo Emergência, .=Ritmo Estável, C=Ação Cadenciada, T=Pico de Adrenalina, A=Âncora Contemplativa, W=Saturação LC-NE, G=Ressonância Serena
+        const LEVELS_DATA = [
+            {
+                title: "Nível 1: Saindo da Inércia Sem Pânico",
+                desc: "Saia do Modo Emergência (🚨), conclua as 2 Ações Cadenciadas (🧭) em ritmo calmo e alcance a Ressonância Serena (🌿). Desvie dos Picos de Adrenalina (⚡).",
+                rows: 4, cols: 4,
+                grid: [
+                    "S", ".", "T", "C",
+                    ".", "W", ".", ".",
+                    "C", "A", ".", "T",
+                    ".", "W", ".", "G"
+                ]
+            },
+            {
+                title: "Nível 2: Quebrando a Procrastinação Ativada",
+                desc: "Inicie o movimento antes do prazo estourar. Conclua as 2 Ações Cadenciadas e utilize a Âncora Contemplativa (⏳) para sustentar a Reserva Pré-Frontal.",
+                rows: 4, cols: 4,
+                grid: [
+                    "S", ".", "C", "W",
+                    "T", "W", ".", ".",
+                    "C", ".", "A", "T",
+                    ".", ".", ".", "G"
+                ]
+            },
+            {
+                title: "Nível 3: Desmame Alostático no Ritmo Lento",
+                desc: "Matriz 5x5 com 3 Ações Cadenciadas distribuídas. Contorne a Saturação Noradrenérgica (🔥) e resista ao atalho da pressa artificial.",
+                rows: 5, cols: 5,
+                grid: [
+                    "S", ".", "T", "C", ".",
+                    ".", "W", ".", ".", "A",
+                    "C", ".", ".", "W", ".",
+                    ".", "T", "A", ".", "C",
+                    ".", ".", ".", ".", "G"
+                ]
+            },
+            {
+                title: "Nível 4: Protegendo o Córtex Estratégico (Arnsten)",
+                desc: "Labirinto de alta exigência com múltiplos picos de adrenalina ao redor. Consolide as 3 Ações Cadenciadas sem perder visão de conjunto.",
+                rows: 5, cols: 5,
+                grid: [
+                    "S", "T", ".", "C", ".",
+                    ".", "W", ".", "W", "A",
+                    "C", ".", ".", "T", ".",
+                    ".", "W", "A", ".", "C",
+                    ".", ".", "T", ".", "G"
+                ]
+            },
+            {
+                title: "Nível 5: Soberania Temporal e Ressonância Plena",
+                desc: "Desafio final: atravesse o terreno da aceleração social, integre os 3 blocos de cadência sustentável e alcance a Ressonância Serena.",
+                rows: 5, cols: 5,
+                grid: [
+                    "S", ".", "C", "T", "W",
+                    ".", "W", ".", ".", "A",
+                    "C", ".", ".", "W", ".",
+                    ".", "T", "A", ".", "C",
+                    ".", ".", ".", ".", "G"
+                ]
+            }
+        ];
+
+        // --- Estado do Jogo ---
+        let currentLevelIdx = 0;
+        let playerIdx = 0;
+        let reserve = 100;
+        let score = 0;
+        let crisisCount = 0;
+        let pauseUsesLeft = 2;
+        let isPausing = false;
+        let levelFinished = false;
+
+        let collectedCadences = new Set();
+        let triggeredCells = new Set();
+        let totalCadencesInLevel = 0;
+
+        function initGame() {
+            currentLevelIdx = 0;
+            score = 0;
+            crisisCount = 0;
+            document.getElementById('victoryPanel').style.display = 'none';
+            loadLevel(0);
+        }
+
+        function loadLevel(idx) {
+            currentLevelIdx = idx;
+            const lvl = LEVELS_DATA[idx];
+            reserve = 100;
+            pauseUsesLeft = 2;
+            isPausing = false;
+            levelFinished = false;
+            collectedCadences = new Set();
+            triggeredCells = new Set();
+
+            playerIdx = lvl.grid.indexOf('S');
+            triggeredCells.add(playerIdx);
+            totalCadencesInLevel = lvl.grid.filter(c => c === 'C').length;
+
+            document.getElementById('levelDisplay').textContent = `${idx + 1} / ${LEVELS_DATA.length}`;
+            document.getElementById('scenarioTitle').textContent = lvl.title;
+            document.getElementById('scenarioDesc').textContent = lvl.desc;
+            setFeedback("Conclua todas as Ações Cadenciadas (🧭) para desbloquear a Ressonância Serena (🌿).");
+
+            updateUI();
+            renderGrid();
+        }
+
+        function setFeedback(msg, color = '#005f73') {
+            const el = document.getElementById('eventFeedback');
+            el.textContent = msg;
+            el.style.color = color;
+        }
+
+        function isAdjacent(idxA, idxB, cols) {
+            const rA = Math.floor(idxA / cols), cA = idxA % cols;
+            const rB = Math.floor(idxB / cols), cB = idxB % cols;
+            return Math.abs(rA - rB) + Math.abs(cA - cB) === 1;
+        }
+
+        function renderGrid() {
+            const lvl = LEVELS_DATA[currentLevelIdx];
+            const gridEl = document.getElementById('matrixGrid');
+            gridEl.style.gridTemplateColumns = `repeat(${lvl.cols}, auto)`;
+            gridEl.innerHTML = '';
+
+            const allCompleted = collectedCadences.size === totalCadencesInLevel;
+
+            lvl.grid.forEach((cellType, idx) => {
+                const cell = document.createElement('div');
+                cell.className = 'matrix-cell';
+
+                const isPlayer = (idx === playerIdx);
+                const adjacent = isAdjacent(playerIdx, idx, lvl.cols);
+
+                let icon = '〰️';
+                let label = 'Ritmo';
+
+                if (cellType === 'S') {
+                    icon = '🚨';
+                    label = 'Urgência';
+                } else if (cellType === 'W') {
+                    icon = '🔥';
+                    label = 'Saturação';
+                    cell.classList.add('wall-node');
+                } else if (cellType === 'C') {
+                    if (collectedCadences.has(idx)) {
+                        icon = '✅';
+                        label = 'Concluído';
+                        cell.classList.add('cadence-collected');
+                    } else {
+                        icon = '🧭';
+                        label = '+15 Res.';
+                        cell.classList.add('cadence-node');
+                    }
+                } else if (cellType === 'T') {
+                    if (triggeredCells.has(idx)) {
+                        icon = '💨';
+                        label = 'Passou';
+                        cell.classList.add('trap-cleared');
+                    } else {
+                        icon = '⚡';
+                        label = '-25 Res.';
+                        cell.classList.add('trap-node');
+                    }
+                } else if (cellType === 'A') {
+                    if (triggeredCells.has(idx)) {
+                        icon = '🛡️';
+                        label = 'Sereno';
+                        cell.classList.add('anchor-used');
+                    } else {
+                        icon = '⏳';
+                        label = '+25 Res.';
+                        cell.classList.add('anchor-node');
+                    }
+                } else if (cellType === 'G') {
+                    if (allCompleted) {
+                        icon = '🌿';
+                        label = 'Ressonância';
+                        cell.classList.add('goal-unlocked');
+                    } else {
+                        icon = '🔒';
+                        label = `${collectedCadences.size}/${totalCadencesInLevel}`;
+                        cell.classList.add('goal-locked');
+                    }
+                } else if (triggeredCells.has(idx)) {
+                    cell.classList.add('visited-safe');
+                }
+
+                if (isPlayer) {
+                    cell.classList.add('player-here');
+                    icon = '🎯';
+                    label = 'Foco';
+                } else if (adjacent && cellType !== 'W' && !(cellType === 'G' && !allCompleted)) {
+                    cell.classList.add('reachable');
+                }
+
+                cell.innerHTML = `<span class="cell-icon">${icon}</span><span class="cell-label">${label}</span>`;
+                cell.onclick = () => attemptMove(idx);
+                gridEl.appendChild(cell);
+            });
+        }
+
+        function attemptMove(targetIdx) {
+            if (isPausing || levelFinished) return;
+            const lvl = LEVELS_DATA[currentLevelIdx];
+            if (!isAdjacent(playerIdx, targetIdx, lvl.cols)) return;
+
+            const cellType = lvl.grid[targetIdx];
+            if (cellType === 'W') {
+                playLockedSound();
+                setFeedback("Saturação LC-NE bloqueada! Contorne o excesso de estímulo e siga pela cadência.", "#9b2226");
+                return;
+            }
+
+            if (cellType === 'G' && collectedCadences.size < totalCadencesInLevel) {
+                playLockedSound();
+                setFeedback(`Meta trancada! Conclua as ${totalCadencesInLevel - collectedCadences.size} Ação(ões) Cadenciada(s) restante(s).`, "#ca6702");
+                return;
+            }
+
+            playerIdx = targetIdx;
+
+            if (cellType === 'C' && !collectedCadences.has(targetIdx)) {
+                collectedCadences.add(targetIdx);
+                reserve = Math.min(100, reserve + 15);
+                score += 150;
+                playCadenceSound();
+                setFeedback("Ação Cadenciada concluída sem pânico! (+15 Reserva Pré-Frontal, +150 pts)", "#0a9396");
+            } else if (cellType === 'T' && !triggeredCells.has(targetIdx)) {
+                triggeredCells.add(targetIdx);
+                reserve = Math.max(0, reserve - 25);
+                score += 5;
+                playTrapSound();
+                setFeedback("Pico de Adrenalina Artificial! A pressa estreitou o foco do dlPFC (-25 Reserva).", "#9b2226");
+            } else if (cellType === 'A' && !triggeredCells.has(targetIdx)) {
+                triggeredCells.add(targetIdx);
+                reserve = Math.min(100, reserve + 25);
+                score += 60;
+                playAnchorSound();
+                setFeedback("Âncora Contemplativa assimilada! Silêncio sem inquietude (+25 Reserva, +60 pts).", "#005f73");
+            } else {
+                if (!triggeredCells.has(targetIdx)) {
+                    triggeredCells.add(targetIdx);
+                    score += 15;
+                }
+                playStepSound();
+                if (cellType !== 'G') {
+                    setFeedback("Passo cadenciado em ritmo sustentável.", "#334155");
+                }
+            }
+
+            if (reserve <= 0) {
+                playTrapSound();
+                updateUI();
+                renderGrid();
+                setTimeout(() => {
+                    alert("Sua Reserva Pré-Frontal zerou! Os picos de adrenalina desligaram o controle estratégico. O nível será reiniciado.");
+                    restartLevel();
+                }, 120);
+                return;
+            }
+
+            if (cellType === 'G' && collectedCadences.size === totalCadencesInLevel) {
+                levelFinished = true;
+                score += 250 + reserve;
+                playGoalSound();
+                updateUI();
+                renderGrid();
+
+                if (currentLevelIdx < LEVELS_DATA.length - 1) {
+                    setFeedback(`Nível ${currentLevelIdx + 1} concluído! Avançando para o próximo circuito...`, "#0a9396");
+                    setTimeout(() => loadLevel(currentLevelIdx + 1), 850);
+                } else {
+                    finishGame();
+                }
+                return;
+            }
+
+            updateUI();
+            renderGrid();
+        }
+
+        function triggerCadencePause() {
+            if (isPausing || levelFinished || pauseUsesLeft <= 0) return;
+            isPausing = true;
+
+            const modal = document.getElementById('pauseModal');
+            const anim = document.getElementById('pauseAnimCircle');
+            const counter = document.getElementById('pauseCounter');
+
+            modal.style.display = 'flex';
+            playAnchorSound();
+
+            let timeLeft = 5;
+            counter.textContent = `Tempo restante: ${timeLeft}s`;
+            anim.style.transform = 'scale(1.22)';
+            anim.style.background = '#005f73';
+            anim.textContent = 'Baixando ruído...';
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                counter.textContent = `Tempo restante: ${timeLeft}s`;
+
+                if (timeLeft === 2) {
+                    anim.style.transform = 'scale(0.95)';
+                    anim.style.background = '#0a9396';
+                    anim.textContent = 'Ritmo estável...';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    modal.style.display = 'none';
+                    isPausing = false;
+                    pauseUsesLeft--;
+                    reserve = Math.min(100, reserve + 20);
+                    setFeedback("Pausa Contemplativa concluída: +20 de Reserva Pré-Frontal!", "#0a9396");
+                    updateUI();
+                }
+            }, 1000);
+        }
+
+        function triggerArtificialCrisis() {
+            if (isPausing || levelFinished) return;
+            playTrapSound();
+            crisisCount++;
+            reserve = 100;
+            score = Math.max(0, score - 60);
+            setFeedback("Crise artificial acionada: choque imediato de adrenalina, mas custo de -60 pts.", "#9b2226");
+            updateUI();
+        }
+
+        function restartLevel() {
+            loadLevel(currentLevelIdx);
+        }
+
+        function restartFullGame() {
+            initGame();
+        }
+
+        function updateUI() {
+            document.getElementById('reserveDisplay').textContent = `${reserve} / 100`;
+            document.getElementById('cadenceDisplay').textContent = `${collectedCadences.size} / ${totalCadencesInLevel}`;
+            document.getElementById('scoreDisplay').textContent = `${score} pts`;
+            document.getElementById('crisisCountDisplay').textContent = `${crisisCount}`;
+            document.getElementById('pauseLeft').textContent = `${pauseUsesLeft}`;
+
+            const btnPause = document.getElementById('btnPause');
+            btnPause.disabled = (pauseUsesLeft <= 0);
+
+            const fill = document.getElementById('reserveFill');
+            fill.style.width = `${reserve}%`;
+            if (reserve > 60) fill.style.background = '#0a9396';
+            else if (reserve > 30) fill.style.background = '#ee9b00';
+            else fill.style.background = '#9b2226';
+        }
+
+        function finishGame() {
+            document.getElementById('victoryPanel').style.display = 'block';
+            document.getElementById('finalScoreVal').textContent = `${score} pts`;
+
+            let report = "";
+            if (crisisCount === 0) {
+                report = "Desempenho Clínico Exemplar! Você concluiu todas as ações cadenciadas nos 5 níveis sem recorrer a nenhuma crise artificial, preservando o córtex pré-frontal e a ressonância.";
+            } else if (crisisCount <= 2) {
+                report = "Ótima Regulação! Você recorreu poucas vezes à pressão artificial e sustentou o ritmo na maior parte do circuito.";
+            } else {
+                report = "Circuito Concluído! Você chegou à meta nos 5 níveis, mas acionou diversas crises artificiais. Na próxima rodada, priorize as Âncoras Contemplativas (⏳) e a Pausa!";
+            }
+            document.getElementById('victoryReport').textContent = report;
+
+            try {
+                const prev = parseInt(localStorage.getItem('game_dia56_score') || '0', 10);
+                if (score > prev) {
+                    localStorage.setItem('game_dia56_score', score.toString());
+                    document.getElementById('recordStatus').textContent = `Novo Recorde Pessoal Salvo: ${score} pts!`;
+                } else {
+                    document.getElementById('recordStatus').textContent = `Recorde Atual: ${prev} pts`;
+                }
+            } catch (e) {
+                // Storage indisponível
+            }
+        }
+
+        // Suporte a navegação por teclado (Setas / WASD)
+        window.addEventListener('keydown', (e) => {
+            if (isPausing || levelFinished) return;
+            const lvl = LEVELS_DATA[currentLevelIdx];
+            const row = Math.floor(playerIdx / lvl.cols);
+            const col = playerIdx % lvl.cols;
+            let nr = row, nc = col;
+
+            if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') nr--;
+            else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') nr++;
+            else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') nc--;
+            else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') nc++;
+            else return;
+
+            if (nr >= 0 && nr < lvl.rows && nc >= 0 && nc < lvl.cols) {
+                e.preventDefault();
+                attemptMove(nr * lvl.cols + nc);
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initGame();
+        });
+    </script>
+</body>
+</html>
