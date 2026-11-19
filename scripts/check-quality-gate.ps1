@@ -292,6 +292,75 @@ if ($vaultLeakCount -eq 0) {
     Report-Success "Blindagem Lab Oculto: Isolamento de rota e noindex verificados."
 }
 
+# 10. Integridade do Catalogo Clinico Modular (sessao/instrumentos-catalogo.js)
+$catalogoTarget = $targetFiles | Where-Object { $_.FullName -like '*\sessao\instrumentos-catalogo.js' }
+if ($catalogoTarget) {
+    $cTxt = [System.IO.File]::ReadAllText($catalogoTarget.FullName, [System.Text.Encoding]::UTF8)
+    $catErr = 0
+
+    $openB = ([regex]::Matches($cTxt, '\{')).Count
+    $closeB = ([regex]::Matches($cTxt, '\}')).Count
+    $openSq = ([regex]::Matches($cTxt, '\[')).Count
+    $closeSq = ([regex]::Matches($cTxt, '\]')).Count
+    if ($openB -ne $closeB -or $openSq -ne $closeSq) {
+        Report-Error "sessao/instrumentos-catalogo.js com delimitadores desbalanceados: { $openB/$closeB, [ $openSq/$closeSq"
+        $catErr++
+    }
+    if ($cTxt -notmatch 'window\.SESSAO_CATALOGO_EXTRA\s*=') {
+        Report-Error "sessao/instrumentos-catalogo.js deve definir 'window.SESSAO_CATALOGO_EXTRA = [...]'!"
+        $catErr++
+    }
+
+    $cClean = $cTxt -replace '(R|US)\$\s*\d', ''
+    $cLatexCmd = [regex]::Matches($cClean, $latexCmdPattern)
+    $cLatexDelim = [regex]::Matches($cClean, $latexDelimPattern)
+    if ($cLatexCmd.Count -gt 0 -or $cLatexDelim.Count -gt 0) {
+        $sample = if ($cLatexCmd.Count -gt 0) { $cLatexCmd[0].Value } else { $cLatexDelim[0].Value }
+        Report-Error "LaTeX bruto detectado em sessao/instrumentos-catalogo.js - exemplo: '$sample'."
+        $catErr++
+    }
+
+    $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
+    if ($nodeCmd -and $catErr -eq 0) {
+        $catPathJs = $catalogoTarget.FullName.Replace('\', '\\')
+        $nodeCheck = @"
+const fs = require('fs');
+const vm = require('vm');
+const code = fs.readFileSync('$catPathJs', 'utf8');
+const sandbox = { window: {} };
+vm.runInNewContext(code, sandbox);
+const arr = sandbox.window.SESSAO_CATALOGO_EXTRA;
+if (!Array.isArray(arr)) { console.error('SESSAO_CATALOGO_EXTRA nao e um array'); process.exit(1); }
+const coreIds = new Set(['BAI','GAD7','TRIF12','ASRS18','PHQ9','AQ50','DERS16']);
+const seen = new Set();
+for (const [idx, inst] of arr.entries()) {
+  const tag = inst && inst.id ? inst.id : 'index_' + idx;
+  if (!inst || typeof inst !== 'object') { console.error(tag + ': entrada invalida'); process.exit(1); }
+  for (const k of ['id','shortTitle','fullTitle','cardDescription','instruction']) {
+    if (!inst[k] || typeof inst[k] !== 'string') { console.error(tag + ': campo obrigatorio ausente -> ' + k); process.exit(1); }
+  }
+  const uid = inst.id.toUpperCase();
+  if (coreIds.has(uid)) { console.error(tag + ': ID colide com instrumento core'); process.exit(1); }
+  if (seen.has(uid)) { console.error(tag + ': ID duplicado no catalogo'); process.exit(1); }
+  seen.add(uid);
+  if (!Array.isArray(inst.options) || inst.options.length < 2) { console.error(tag + ': options invalido'); process.exit(1); }
+  if (!Array.isArray(inst.items) || inst.items.length < 1) { console.error(tag + ': items invalido'); process.exit(1); }
+  if (!Array.isArray(inst.cutoffs) || inst.cutoffs.length < 1) { console.error(tag + ': cutoffs invalido'); process.exit(1); }
+}
+console.log('OK:' + arr.length);
+"@
+        $nodeOut = & node -e $nodeCheck 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Report-Error "sessao/instrumentos-catalogo.js falhou na validacao estrutural JS: $($nodeOut -join ' ')"
+            $catErr++
+        } else {
+            Report-Success "Catalogo Clinico (sessao/instrumentos-catalogo.js): Sintaxe JS e schema validados ($($nodeOut -join ''))."
+        }
+    } elseif ($catErr -eq 0) {
+        Report-Success "Catalogo Clinico (sessao/instrumentos-catalogo.js): Delimitadores e integridade validados."
+    }
+}
+
 $stopwatch.Stop()
 $finalColor = if ($errorCount -eq 0) { "Green" } else { "Red" }
 Write-Host "Quality Gate Finalizado em $($stopwatch.ElapsedMilliseconds) ms. Total de Erros: $errorCount" -ForegroundColor $finalColor

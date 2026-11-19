@@ -247,7 +247,7 @@
                     <div class="flex items-start">
                         <i data-lucide="lock" class="w-5 h-5 text-amber-600 mt-0.5 mr-3 shrink-0"></i>
                         <p class="text-xs sm:text-sm text-amber-900 leading-relaxed">
-                            
+                            Nenhum dado será armazenado em servidores externos. Todas as respostas são processadas localmente no navegador e podem ser exportadas para análise clínica. A sessão é trancada com senha para aplicação controlada, garantindo foco, sigilo e conformidade com a LGPD.
                         </p>
                     </div>
                 </div>
@@ -290,12 +290,32 @@
                 </div>
 
                 <!-- Seleção do Instrumento Psicométrico -->
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
-                        Instrumento Psicométrico Selecionado
-                    </label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-[#005f73] bg-[#005f73]/5 has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                            Instrumento Psicométrico Selecionado
+                        </label>
+                        <div class="flex items-center flex-wrap gap-1.5" role="tablist" aria-label="Filtrar grupo de instrumentos">
+                            <button type="button" id="tab-group-all" onclick="window.setInstrumentGroupFilter('all')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition bg-[#005f73] text-white shadow-sm">
+                                Todos (<span id="count-group-all">7</span>)
+                            </button>
+                            <button type="button" id="tab-group-core" onclick="window.setInstrumentGroupFilter('core')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                                Bateria Clínica (<span id="count-group-core">7</span>)
+                            </button>
+                            <button type="button" id="tab-group-esteira" onclick="window.setInstrumentGroupFilter('esteira')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+                                Escalas da Esteira (<span id="count-group-esteira">0</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Busca Rápida de Escalas -->
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="input-search-instrument" oninput="window.filterInstrumentCards()" placeholder="Buscar escala por nome, sigla, código (ex: T-57) ou tema..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 bg-slate-50/70 focus:bg-white focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 outline-none text-xs sm:text-sm text-slate-800 transition" autocomplete="off" />
+                    </div>
+
+                    <div id="instrument-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="bai ansiedade beck somáticos cognitivos 21 itens">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-[#005f73] flex items-center">
                                     <i data-lucide="activity" class="w-4 h-4 mr-1.5"></i> BAI (Ansiedade)
@@ -307,7 +327,7 @@
                             </span>
                         </label>
 
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="trif12 trif-12 inteligência raciocínio fluido matrizes qi fator g">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
                                     <i data-lucide="brain" class="w-4 h-4 mr-1.5 text-purple-600"></i> TRIF-12 (Inteligência)
@@ -319,7 +339,7 @@
                             </span>
                         </label>
 
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="asrs18 asrs-18 tdah atenção hiperatividade impulsividade oms adultos">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
                                     <i data-lucide="sparkles" class="w-4 h-4 mr-1.5 text-indigo-600"></i> ASRS-18 (TDAH)
@@ -331,7 +351,7 @@
                             </span>
                         </label>
 
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="phq9 phq-9 depressão humor anedonia dsm-5 risco">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
                                     <i data-lucide="heart" class="w-4 h-4 mr-1.5 text-rose-600"></i> PHQ-9 (Depressão)
@@ -343,7 +363,7 @@
                             </span>
                         </label>
 
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="aq50 aq-50 autismo tea espectro baron-cohen social comunicação detalhes">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
                                     <i data-lucide="shield" class="w-4 h-4 mr-1.5 text-teal-600"></i> AQ-50 (Autismo / TEA)
@@ -355,7 +375,7 @@
                             </span>
                         </label>
 
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="ders16 ders-16 regulação emocional impulsividade clareza metas dbt act">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
                                     <i data-lucide="compass" class="w-4 h-4 mr-1.5 text-amber-600"></i> DERS-16 (Regulação Emocional)
@@ -367,7 +387,7 @@
                             </span>
                         </label>
 
-                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                        <label class="instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5" data-group="core" data-search="gad7 gad-7 ansiedade generalizada breve triagem preocupação dsm-5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
                                     <i data-lucide="gauge" class="w-4 h-4 mr-1.5 text-slate-500"></i> GAD-7 (Ansiedade Breve)
@@ -378,6 +398,10 @@
                                 Triagem rápida (7 itens DSM-5). Preocupação e agitação motora.
                             </span>
                         </label>
+                    </div>
+
+                    <div id="instrument-empty-state" class="hidden text-center py-6 bg-slate-50 rounded-xl border border-dashed border-slate-300 text-xs text-slate-500">
+                        Nenhuma escala encontrada com esse termo. Tente buscar por sigla, código ou tema.
                     </div>
                 </div>
 
@@ -805,6 +829,11 @@
         </div>
     </div>
 
+
+    <!-- ========================================== -->
+    <!-- CATÁLOGO MODULAR DE ESCALAS DA ESTEIRA     -->
+    <!-- ========================================== -->
+    <script src="instrumentos-catalogo.js"></script>
 
     <!-- ========================================== -->
     <!-- MOTOR JAVASCRIPT DA SESSÃO TRANCADA        -->
@@ -1344,23 +1373,142 @@
             0:  { qi: 60,  z: -2.67, ep: 2, pctl: 0.4, classif: "Muito Baixo", colorClass: "bg-red-100 text-red-900 border-red-300" }
         };
 
-        // --- 2. ESTADO DA SESSÃO ---
+        // --- 2. ESTADO DA SESSÃO & MOTOR DE CATÁLOGO DINÂMICO ---
         const sessionState = {
             status: 'setup', // 'setup', 'locked', 'lockout', 'report'
             patientName: '',
             patientAge: '',
             patientPin: '1234',
             therapistPin: '1502', // Senha exclusiva do neuropsicólogo para destrancar o laudo
-            instrument: 'BAI', // 'BAI', 'GAD7', 'TRIF12', 'ASRS18', 'PHQ9', 'AQ50' ou 'DERS16'
+            instrument: 'BAI', // Core ou ID do catálogo extra (sessao/instrumentos-catalogo.js)
             startTime: null,
             endTime: null,
             answers: {}, // { [itemId]: score }
             timerInterval: null,
-            elapsedSeconds: 0
+            elapsedSeconds: 0,
+            activeGroupFilter: 'all'
+        };
+
+        function getExtraCatalog() {
+            return Array.isArray(window.SESSAO_CATALOGO_EXTRA) ? window.SESSAO_CATALOGO_EXTRA : [];
+        }
+
+        function getCatalogInstrument(instId) {
+            if (!instId) return null;
+            const target = String(instId).toUpperCase();
+            return getExtraCatalog().find(item => String(item.id).toUpperCase() === target) || null;
+        }
+
+        function normalizeSearchText(str) {
+            return String(str || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function getAccentIconClass(accent) {
+            const map = {
+                teal: 'text-teal-600',
+                purple: 'text-purple-600',
+                indigo: 'text-indigo-600',
+                rose: 'text-rose-600',
+                amber: 'text-amber-600',
+                emerald: 'text-emerald-600',
+                blue: 'text-blue-600'
+            };
+            return map[accent] || 'text-[#005f73]';
+        }
+
+        function renderCatalogCards() {
+            const grid = document.getElementById('instrument-cards-grid');
+            if (!grid) return;
+
+            // Remover cards dinâmicos anteriores se houver re-render
+            grid.querySelectorAll('.instrument-card[data-group="esteira"]').forEach(el => el.remove());
+
+            const extraList = getExtraCatalog();
+            extraList.forEach(inst => {
+                const label = document.createElement('label');
+                label.className = 'instrument-card relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5';
+                label.dataset.group = 'esteira';
+                label.dataset.search = normalizeSearchText(`${inst.id} ${inst.code || ''} ${inst.shortTitle} ${inst.fullTitle} ${inst.cardDescription} ${inst.category || ''} esteira`);
+
+                const iconColor = getAccentIconClass(inst.accentColor);
+                const codeTag = inst.code ? `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-teal-50 text-teal-800 border border-teal-200 ml-1">${inst.code}</span>` : '';
+                const catTag = inst.category ? `<span class="mt-1.5 inline-block self-start px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600">${inst.category}</span>` : '';
+
+                label.innerHTML = `
+                    <div class="flex items-start justify-between gap-2 mb-1">
+                        <span class="text-sm font-bold text-slate-800 flex items-center flex-wrap leading-snug">
+                            <i data-lucide="${inst.icon || 'clipboard-list'}" class="w-4 h-4 mr-1.5 shrink-0 ${iconColor}"></i>
+                            <span>${inst.shortTitle}</span>${codeTag}
+                        </span>
+                        <input type="radio" name="scale-select" value="${inst.id}" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4 shrink-0 mt-0.5" onchange="window.updateInstrumentSelection()" />
+                    </div>
+                    <span class="text-xs text-slate-600 leading-snug">
+                        ${inst.cardDescription}
+                    </span>
+                    ${catTag}
+                `;
+
+                grid.appendChild(label);
+            });
+
+            // Atualizar contadores das abas
+            const coreCount = grid.querySelectorAll('.instrument-card[data-group="core"]').length;
+            const esteiraCount = extraList.length;
+            const elAll = document.getElementById('count-group-all');
+            const elCore = document.getElementById('count-group-core');
+            const elEsteira = document.getElementById('count-group-esteira');
+            if (elAll) elAll.textContent = coreCount + esteiraCount;
+            if (elCore) elCore.textContent = coreCount;
+            if (elEsteira) elEsteira.textContent = esteiraCount;
+        }
+
+        window.setInstrumentGroupFilter = function(group) {
+            sessionState.activeGroupFilter = group;
+            ['all', 'core', 'esteira'].forEach(g => {
+                const btn = document.getElementById(`tab-group-${g}`);
+                if (!btn) return;
+                if (g === group) {
+                    btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold transition bg-[#005f73] text-white shadow-sm';
+                } else {
+                    btn.className = 'px-2.5 py-1 rounded-lg text-[11px] font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200';
+                }
+            });
+            window.filterInstrumentCards();
+        };
+
+        window.filterInstrumentCards = function() {
+            const input = document.getElementById('input-search-instrument');
+            const query = normalizeSearchText(input ? input.value.trim() : '');
+            const cards = document.querySelectorAll('#instrument-cards-grid .instrument-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const group = card.dataset.group || 'core';
+                const searchBlob = normalizeSearchText(card.dataset.search || card.textContent);
+                const matchesGroup = sessionState.activeGroupFilter === 'all' || group === sessionState.activeGroupFilter;
+                const matchesQuery = !query || searchBlob.includes(query);
+
+                if (matchesGroup && matchesQuery) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            const emptyState = document.getElementById('instrument-empty-state');
+            if (emptyState) {
+                if (visibleCount === 0) emptyState.classList.remove('hidden');
+                else emptyState.classList.add('hidden');
+            }
         };
 
         // --- 3. INICIALIZAÇÃO DA PÁGINA & PARÂMETROS DE URL ---
         document.addEventListener('DOMContentLoaded', () => {
+            renderCatalogCards();
             lucide.createIcons();
             handleUrlParameters();
         });
@@ -1422,8 +1570,11 @@
             }
             if (params.has('instrument')) {
                 const inst = params.get('instrument').toUpperCase();
-                if (['GAD7', 'BAI', 'TRIF12', 'ASRS18', 'PHQ9', 'AQ50', 'DERS16'].includes(inst)) {
-                    const r = document.querySelector(`input[name="scale-select"][value="${inst}"]`);
+                const isCore = ['GAD7', 'BAI', 'TRIF12', 'ASRS18', 'PHQ9', 'AQ50', 'DERS16'].includes(inst);
+                const catInst = getCatalogInstrument(inst);
+                if (isCore || catInst) {
+                    const targetVal = catInst ? catInst.id : inst;
+                    const r = document.querySelector(`input[name="scale-select"][value="${targetVal}"]`);
                     if (r) r.checked = true;
                 }
             }
@@ -1479,7 +1630,11 @@
             // Atualizar cabeçalho da sessão trancada
             document.getElementById('locked-patient-display').textContent = `Paciente: ${sessionState.patientName}`;
 
-            if (selectedInstrument === 'BAI') {
+            const catalogInst = getCatalogInstrument(selectedInstrument);
+            if (catalogInst) {
+                document.getElementById('locked-instrument-title').textContent = catalogInst.fullTitle;
+                document.getElementById('locked-instrument-instruction').innerHTML = catalogInst.instruction;
+            } else if (selectedInstrument === 'BAI') {
                 document.getElementById('locked-instrument-title').textContent = 'Inventário de Ansiedade de Beck (BAI)';
                 document.getElementById('locked-instrument-instruction').innerHTML = 'Abaixo está uma lista de sintomas comuns de ansiedade. Por favor, avalie cada sintoma e indique o quanto você tem sido incomodado(a) por ele durante a <strong>última semana, incluindo o dia de hoje</strong>.';
             } else if (selectedInstrument === 'TRIF12') {
@@ -1634,15 +1789,17 @@
                     container.appendChild(itemCard);
                 });
             } else {
+                const catInst = getCatalogInstrument(instrument);
                 let items = BAI_ITEMS;
                 let options = BAI_OPTIONS;
-                if (instrument === 'GAD7') { items = GAD7_ITEMS; options = GAD7_OPTIONS; }
+                if (catInst) { items = catInst.items; options = catInst.options; }
+                else if (instrument === 'GAD7') { items = GAD7_ITEMS; options = GAD7_OPTIONS; }
                 else if (instrument === 'PHQ9') { items = PHQ9_ITEMS; options = PHQ9_OPTIONS; }
                 else if (instrument === 'ASRS18') { items = ASRS18_ITEMS; options = ASRS18_OPTIONS; }
                 else if (instrument === 'AQ50') { items = AQ50_ITEMS; options = AQ50_OPTIONS; }
                 else if (instrument === 'DERS16') { items = DERS16_ITEMS; options = DERS16_OPTIONS; }
 
-                const gridColsClass = options.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4';
+                const gridColsClass = options.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : (options.length === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-4');
 
                 items.forEach((item, index) => {
                     const itemCard = document.createElement('div');
@@ -1684,7 +1841,7 @@
                                     class="option-btn option-btn-${item.id}-${opt.value} flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-100/80 text-center transition"
                                 >
                                     <span class="text-xs font-bold">${opt.label}</span>
-                                    <span class="text-[10px] text-slate-500 mt-0.5 leading-tight">${opt.desc}</span>
+                                    <span class="text-[10px] text-slate-500 mt-0.5 leading-tight">${opt.desc || ''}</span>
                                 </button>
                             `).join('')}
                         </div>
@@ -1708,8 +1865,10 @@
                 const selectedBtn = document.querySelector(`.matrix-opt-${itemId}-${score}`);
                 if (selectedBtn) selectedBtn.classList.add('selected');
             } else {
+                const catInst = getCatalogInstrument(sessionState.instrument);
                 let options = BAI_OPTIONS;
-                if (sessionState.instrument === 'GAD7') options = GAD7_OPTIONS;
+                if (catInst) options = catInst.options;
+                else if (sessionState.instrument === 'GAD7') options = GAD7_OPTIONS;
                 else if (sessionState.instrument === 'PHQ9') options = PHQ9_OPTIONS;
                 else if (sessionState.instrument === 'ASRS18') options = ASRS18_OPTIONS;
                 else if (sessionState.instrument === 'AQ50') options = AQ50_OPTIONS;
@@ -1720,7 +1879,8 @@
                     if (btn) {
                         btn.classList.remove('selected-0', 'selected-1', 'selected-2', 'selected-3', 'selected-4', 'selected-5');
                         if (opt.value === score) {
-                            btn.classList.add(`selected-${score}`);
+                            const safeColorIdx = Math.max(0, Math.min(5, Number(score) || 0));
+                            btn.classList.add(`selected-${safeColorIdx}`);
                         }
                     }
                 });
@@ -1738,15 +1898,20 @@
             updateProgress();
         };
 
-        function updateProgress() {
-            let items = BAI_ITEMS;
-            if (sessionState.instrument === 'GAD7') items = GAD7_ITEMS;
-            if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
-            if (sessionState.instrument === 'PHQ9') items = PHQ9_ITEMS;
-            if (sessionState.instrument === 'ASRS18') items = ASRS18_ITEMS;
-            if (sessionState.instrument === 'AQ50') items = AQ50_ITEMS;
-            if (sessionState.instrument === 'DERS16') items = DERS16_ITEMS;
+        function getActiveItemsList() {
+            const catInst = getCatalogInstrument(sessionState.instrument);
+            if (catInst) return catInst.items;
+            if (sessionState.instrument === 'GAD7') return GAD7_ITEMS;
+            if (sessionState.instrument === 'TRIF12') return TRIF12_ITEMS;
+            if (sessionState.instrument === 'PHQ9') return PHQ9_ITEMS;
+            if (sessionState.instrument === 'ASRS18') return ASRS18_ITEMS;
+            if (sessionState.instrument === 'AQ50') return AQ50_ITEMS;
+            if (sessionState.instrument === 'DERS16') return DERS16_ITEMS;
+            return BAI_ITEMS;
+        }
 
+        function updateProgress() {
+            const items = getActiveItemsList();
             const total = items.length;
             const answeredCount = Object.keys(sessionState.answers).length;
             const pct = Math.round((answeredCount / total) * 100);
@@ -1762,13 +1927,7 @@
 
         // --- 7. FINALIZAÇÃO DA SESSÃO TRANCADA PELO PACIENTE ---
         window.submitLockedSession = function() {
-            let items = BAI_ITEMS;
-            if (sessionState.instrument === 'GAD7') items = GAD7_ITEMS;
-            if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
-            if (sessionState.instrument === 'PHQ9') items = PHQ9_ITEMS;
-            if (sessionState.instrument === 'ASRS18') items = ASRS18_ITEMS;
-            if (sessionState.instrument === 'AQ50') items = AQ50_ITEMS;
-            if (sessionState.instrument === 'DERS16') items = DERS16_ITEMS;
+            const items = getActiveItemsList();
 
             const total = items.length;
             const answeredCount = Object.keys(sessionState.answers).length;
@@ -1875,10 +2034,182 @@
             const secs = sessionState.elapsedSeconds % 60;
             document.getElementById('report-duration').textContent = `${mins}m ${secs}s`;
 
-            const protocolId = (inst === 'TRIF12' ? 'DM-COG-' : inst === 'ASRS18' ? 'DM-TDAH-' : inst === 'PHQ9' ? 'DM-DEP-' : inst === 'AQ50' ? 'DM-TEA-' : inst === 'DERS16' ? 'DM-REG-' : 'DM-ANS-') + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const catInst = getCatalogInstrument(inst);
+            const protocolPrefix = catInst
+                ? (catInst.protocolPrefix || 'DM-EST-')
+                : (inst === 'TRIF12' ? 'DM-COG-' : inst === 'ASRS18' ? 'DM-TDAH-' : inst === 'PHQ9' ? 'DM-DEP-' : inst === 'AQ50' ? 'DM-TEA-' : inst === 'DERS16' ? 'DM-REG-' : 'DM-ANS-');
+            const protocolId = protocolPrefix + Math.random().toString(36).substring(2, 8).toUpperCase();
             document.getElementById('report-protocol').textContent = protocolId;
 
-            if (inst === 'TRIF12') {
+            if (catInst) {
+                // MOTOR GENÉRICO DE LAUDO PARA ESCALAS DO CATÁLOGO MODULAR (ESTEIRA)
+                const optValues = catInst.options.map(o => Number(o.value));
+                const minOpt = Math.min(...optValues);
+                const maxOpt = Math.max(...optValues);
+                const maxScore = catInst.items.length * maxOpt;
+                const minScore = catInst.items.length * minOpt;
+
+                let totalScore = 0;
+                const subMap = {};
+                (catInst.subscales || []).forEach(sub => {
+                    subMap[sub.id] = { ...sub, score: 0, count: 0, max: 0, pct: 0 };
+                });
+
+                const criticalItems = [];
+                const highItems = [];
+
+                catInst.items.forEach(it => {
+                    const rawVal = sessionState.answers[it.id] !== undefined ? Number(sessionState.answers[it.id]) : minOpt;
+                    const effVal = it.reverse ? ((minOpt + maxOpt) - rawVal) : rawVal;
+                    totalScore += effVal;
+
+                    if (it.domain && subMap[it.domain]) {
+                        subMap[it.domain].score += effVal;
+                        subMap[it.domain].count += 1;
+                        subMap[it.domain].max += maxOpt;
+                    }
+
+                    if (it.critical && effVal > minOpt) {
+                        criticalItems.push({ item: it, raw: rawVal, eff: effVal });
+                    } else if (effVal === maxOpt) {
+                        highItems.push({ item: it, raw: rawVal, eff: effVal });
+                    }
+                });
+
+                const subList = Object.values(subMap).map(s => {
+                    s.pct = s.max > 0 ? Math.round((s.score / s.max) * 100) : 0;
+                    return s;
+                });
+
+                const matchedCutoff = (catInst.cutoffs || []).find(c => totalScore <= c.max) || (catInst.cutoffs || [])[(catInst.cutoffs || []).length - 1] || {
+                    label: 'Protocolo Registrado',
+                    badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
+                    summary: 'Protocolo concluído e registrado para interpretação clínica qualitativa.'
+                };
+
+                document.getElementById('report-instrument-name').textContent = catInst.fullTitle;
+                document.getElementById('report-total-score').textContent = totalScore;
+                document.getElementById('report-max-score').textContent = `/ ${maxScore} pontos`;
+
+                const badge = document.getElementById('report-severity-badge');
+                badge.className = `inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${matchedCutoff.badgeClass || 'bg-slate-100 text-slate-800 border-slate-300'}`;
+                badge.textContent = matchedCutoff.label;
+
+                // Subescalas nos 2 cards principais (exibe as 2 mais elevadas para destaque visual imediato)
+                const rankedSubs = [...subList].sort((a, b) => b.pct - a.pct);
+                if (rankedSubs.length >= 1) {
+                    const s1 = rankedSubs[0];
+                    document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                    document.getElementById('subscale-somatic-title').innerHTML = `<i data-lucide="bar-chart-2" class="w-3.5 h-3.5 mr-1 text-[#005f73]"></i> ${s1.label}`;
+                    document.getElementById('subscale-somatic-desc').textContent = s1.desc || `Dimensão principal (${s1.count} itens).`;
+                    document.getElementById('somatic-label-min').textContent = 'Baixo';
+                    document.getElementById('somatic-label-max').textContent = 'Elevado';
+                    document.getElementById('somatic-score-display').textContent = `${s1.score} / ${s1.max}`;
+                    document.getElementById('somatic-bar').style.width = `${s1.pct}%`;
+                    document.getElementById('somatic-bar').className = `${s1.color || 'bg-[#005f73]'} h-2 rounded-full transition-all duration-300`;
+                    document.getElementById('somatic-percent').textContent = `${s1.pct}%`;
+                } else {
+                    document.getElementById('subscale-somatic-card').classList.add('hidden');
+                }
+
+                if (rankedSubs.length >= 2) {
+                    const s2 = rankedSubs[1];
+                    document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                    document.getElementById('subscale-cognitive-title').innerHTML = `<i data-lucide="layers" class="w-3.5 h-3.5 mr-1 text-indigo-600"></i> ${s2.label}`;
+                    document.getElementById('subscale-cognitive-desc').textContent = s2.desc || `Segunda dimensão mais elevada (${s2.count} itens).`;
+                    document.getElementById('cognitive-label-min').textContent = 'Baixo';
+                    document.getElementById('cognitive-label-max').textContent = 'Elevado';
+                    document.getElementById('cognitive-score-display').textContent = `${s2.score} / ${s2.max}`;
+                    document.getElementById('cognitive-bar').style.width = `${s2.pct}%`;
+                    document.getElementById('cognitive-bar').className = `${s2.color || 'bg-indigo-600'} h-2 rounded-full transition-all duration-300`;
+                    document.getElementById('cognitive-percent').textContent = `${s2.pct}%`;
+                } else {
+                    document.getElementById('subscale-cognitive-card').classList.add('hidden');
+                }
+
+                // Box de Destaques: Mapeamento Completo das Dimensões + Itens Críticos/Máximos
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                let highlightHtml = '';
+
+                if (criticalItems.length > 0) {
+                    highlightHtml += `<div class="p-3 bg-red-100 border-2 border-red-300 rounded-xl text-red-900 font-medium text-xs mb-2"><strong>⚠️ ALERTA CLÍNICO:</strong> ${criticalItems.length} item(ns) crítico(s) assinalado(s) acima do basal. Recomenda-se investigação clínica dirigida.</div>`;
+                }
+
+                if (subList.length > 0) {
+                    highlightHtml += `<div class="space-y-1 text-xs text-slate-700"><p class="font-bold text-slate-800">• Mapeamento Completo das Dimensões:</p>`;
+                    subList.forEach(s => {
+                        highlightHtml += `<p class="pl-2">• <em>${s.label}:</em> <strong>${s.score}/${s.max} (${s.pct}%)</strong></p>`;
+                    });
+                    highlightHtml += `</div>`;
+                }
+
+                if (highItems.length > 0) {
+                    const topList = highItems.slice(0, 5).map(h => `Item ${h.item.id}`).join(', ');
+                    highlightHtml += `<p class="text-xs text-amber-900 mt-2">• <strong>Itens no Escore Máximo (${highItems.length}):</strong> ${topList}${highItems.length > 5 ? ' (entre outros)' : ''}.</p>`;
+                }
+
+                if (highlightHtml) {
+                    critList.innerHTML = highlightHtml;
+                    critBox.classList.remove('hidden');
+                } else {
+                    critBox.classList.add('hidden');
+                }
+
+                // Tabela Detalhada Item a Item
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                const span = Math.max(1, maxOpt - minOpt);
+
+                catInst.items.forEach((it, idx) => {
+                    const rawVal = sessionState.answers[it.id] !== undefined ? Number(sessionState.answers[it.id]) : minOpt;
+                    const effVal = it.reverse ? ((minOpt + maxOpt) - rawVal) : rawVal;
+                    const optObj = catInst.options.find(o => Number(o.value) === rawVal) || { label: '-' };
+                    const ratio = (effVal - minOpt) / span;
+
+                    let badgeColor = 'bg-slate-100 text-slate-700';
+                    if (ratio >= 0.85) badgeColor = 'bg-red-50 text-red-800 border border-red-200';
+                    else if (ratio >= 0.6) badgeColor = 'bg-orange-50 text-orange-800 border border-orange-200';
+                    else if (ratio >= 0.3) badgeColor = 'bg-yellow-50 text-yellow-800 border border-yellow-200';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-400">${idx + 1}</td>
+                        <td class="py-2.5 px-3.5 font-medium text-slate-800">
+                            ${it.text}
+                            ${it.reverse ? '<span class="ml-1 px-1.5 py-0.5 rounded text-[9px] font-semibold bg-slate-100 text-slate-500 border border-slate-200">Invertido</span>' : ''}
+                            ${it.critical && effVal > minOpt ? '<span class="ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-900 border border-red-300">★ Crítico</span>' : ''}
+                        </td>
+                        <td class="py-2.5 px-3.5 text-slate-500">${it.domainLabel || 'Geral'}</td>
+                        <td class="py-2.5 px-3.5 text-center font-mono font-bold text-slate-900">${effVal}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${badgeColor}">
+                                ${optObj.label}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                let subText = '';
+                if (subList.length > 0) {
+                    subText = ' A análise dimensional registrou: ' + subList.map(s => `${s.label} (${s.score}/${s.max} — ${s.pct}%)`).join('; ') + '.';
+                }
+                summaryDiv.textContent = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}${sessionState.patientAge ? ', ' + sessionState.patientAge + ' anos,' : ''} respondeu ao instrumento ${catInst.fullTitle}, obtendo escore bruto total de ${totalScore} pontos (escala de ${minScore} a ${maxScore}), enquadrando-se na faixa de ${matchedCutoff.label}. ${matchedCutoff.summary}${subText}`;
+
+                // Referências Bibliográficas ABNT
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    const refs = Array.isArray(catInst.references) && catInst.references.length > 0
+                        ? catInst.references
+                        : ['American Psychiatric Association (2023). <em>Manual Diagnóstico e Estatístico de Transtornos Mentais (DSM-5-TR)</em>. Porto Alegre: Artmed.'];
+                    refList.innerHTML = refs.map(r => `<p>• ${r}</p>`).join('');
+                }
+
+            } else if (inst === 'TRIF12') {
                 // LAUDO DE INTELIGÊNCIA FLUIDA (TRIF-12)
                 let correctCount = 0;
                 let spatialHits = 0, spatialTotal = 0;
@@ -2738,7 +3069,10 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            const prefix = inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : inst === 'ASRS18' ? 'Laudo-TDAH-ASRS18' : inst === 'PHQ9' ? 'Laudo-Depressao-PHQ9' : inst === 'AQ50' ? 'Laudo-Autismo-AQ50' : inst === 'DERS16' ? 'Laudo-Regulacao-DERS16' : 'Laudo-Ansiedade';
+            const catInst = getCatalogInstrument(inst);
+            const prefix = catInst
+                ? `Laudo-${catInst.id}`
+                : (inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : inst === 'ASRS18' ? 'Laudo-TDAH-ASRS18' : inst === 'PHQ9' ? 'Laudo-Depressao-PHQ9' : inst === 'AQ50' ? 'Laudo-Autismo-AQ50' : inst === 'DERS16' ? 'Laudo-Regulacao-DERS16' : 'Laudo-Ansiedade');
             a.download = `${prefix}-${sessionState.patientName.replace(/\s+/g, '_')}-${new Date().toISOString().slice(0,10)}.json`;
             document.body.appendChild(a);
             a.click();
@@ -2753,14 +3087,16 @@
                 i: sessionState.instrument,
                 d: sessionState.startTime ? sessionState.startTime.toISOString() : new Date().toISOString(),
                 s: sessionState.elapsedSeconds,
-                r: sessionState.answers,
-                pin: sessionState.therapistPin
+                r: sessionState.answers
             };
 
             const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
             const returnUrl = `${window.location.origin}${window.location.pathname}?token=${encodeURIComponent(b64)}`;
-            
-            const instName = sessionState.instrument === 'TRIF12' 
+
+            const catInst = getCatalogInstrument(sessionState.instrument);
+            const instName = catInst
+                ? catInst.fullTitle
+                : sessionState.instrument === 'TRIF12' 
                 ? 'Teste de Raciocínio & Inteligência Fluida (TRIF-12)' 
                 : sessionState.instrument === 'ASRS18'
                 ? 'Escala de Autoavaliação de TDAH em Adultos (ASRS-18)'

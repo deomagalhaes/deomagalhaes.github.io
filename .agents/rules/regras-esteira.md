@@ -24,11 +24,21 @@ Toda e qualquer rodada de lote de esteira contínua deve entregar OBRIGATORIAMEN
      - Inserir o preset no topo do objeto `const PRESETS = { ... }` com codificação UTF-8 estrita.
      - Atualizar as variáveis de estado inicial (`currentPresetKey`, `currentSlides`, `currentCaption`) para carregar o novo preset por padrão.
 
-3. **Pilar 3 — Escala Psicométrica / Teste Interativo (`testes/teste-slug.html`):**
+3. **Pilar 3 — Escala Psicométrica / Teste Interativo (`testes/teste-slug.html` + Espelhamento em `sessao/instrumentos-catalogo.js`):**
    - Instrumento autoaplicável baseado em literatura validada (ex: DSM-5-TR, ITQ, PG-13, Neff, etc.).
    - Cálculo 100% *client-side* seguro e privado (sem envio de dados para servidores).
    - Devolutiva clínica imediata contextualizada por faixas de pontuação com orientações psicoeducativas.
    - Card inserido **EXCLUSIVAMENTE** na grade de `testes.html`. **PROIBIDO** inserir cards de testes em `cards-artigos.html`.
+   - **Espelhamento Obrigatório na Plataforma Clínica Segura (`sessao/instrumentos-catalogo.js`):**
+     - Todo teste publicado pela esteira DEVE ser espelhado no TOPO do array `window.SESSAO_CATALOGO_EXTRA` em `sessao/instrumentos-catalogo.js` (nunca editar `sessao/index.html` diretamente).
+     - Campos obrigatórios do objeto:
+       - `id` (MAIÚSCULO sem espaços, único, ex.: `"EMUC_DA"`), `code` (ex.: `"T-57"`), `shortTitle`, `fullTitle`, `cardDescription`, `category`, `icon` (Lucide), `accentColor`, `protocolPrefix`, `instruction` (HTML sem LaTeX);
+       - `options`: array `{ value, label, desc }`;
+       - `subscales`: array `{ id, label, desc, color }`;
+       - `items`: array `{ id, text, domain, domainLabel, reverse }` (opcional `critical: true` para itens de risco);
+       - `cutoffs`: array ordenado por `max` crescente `{ max, label, badgeClass, summary }`;
+       - `references`: array de strings no padrão ABNT (HTML semântico, zero LaTeX).
+     - Isso disponibiliza o teste automaticamente na plataforma trancada `/sessao/` (com busca, filtro, cronômetro, envio criptografado via WhatsApp e liberação do laudo A4 exclusiva do neuropsicólogo).
 
 4. **Pilar 4 — Jogo Cognitivo Diário (`jogos/jogo-slug.html`):**
    - Jogo cognitivo com lógica e solubilidade matemática prévia comprovada (100% de estados resolúveis).
@@ -50,6 +60,7 @@ Critérios obrigatórios checados automaticamente:
 4. **Layout Responsivo Centralizado:** Artigos com `.container.article-container` e rodapé com `.container.footer-grid`.
 5. **Zero LaTeX Bruto em HTML e Social:** Proibição terminante de delimitadores `$ ... $`, `$$`, `\(...\)`, `\[...\]` e comandos como `\neg`, `\land`, `\lor`, `\to`, `\forall`, `\exists`, etc. Toda notação científica e lógica deve empregar caracteres Unicode nativos combinados com tags HTML semânticas (`<em>P</em>`, `<sub>`, `<sup>`). Reforçado por Git pre-commit hook e sanitizador client-side em `assets/script.js`.
 6. **Balanceamento de Sintaxe no Studio:** Objeto `PRESETS` de `social/gerador.html` com chaves `{ }` 100% íntegras.
+7. **Integridade do Catálogo Clínico (`sessao/instrumentos-catalogo.js`):** Sintaxe JavaScript válida, chaves `{ }` e colchetes `[ ]` balanceados, zero IDs duplicados, campos obrigatórios preenchidos e zero LaTeX bruto.
 
 ---
 
@@ -67,8 +78,8 @@ A esteira opera sob fila coordenada:
 ## 4. Fluxo de Publicação e Deploy (Git Flow)
 
 1. Selecionar o lote marcado com `⏳ **Próximo da Fila**` em `esteiras-programacao.md`.
-2. Desenvolver os 4 pilares completos conforme as regras acima.
-3. Atualizar `cards-artigos.html`, `testes.html`, `jogos.html` e `social/README.md`.
+2. Desenvolver os 4 pilares completos conforme as regras acima (incluindo o espelhamento do teste em `sessao/instrumentos-catalogo.js`).
+3. Atualizar `cards-artigos.html`, `testes.html`, `jogos.html`, `sessao/instrumentos-catalogo.js` e `social/README.md`.
 4. Atualizar o status do lote em `esteiras-programacao.md` e nos arquivos de fila específicos para `✅ **Concluído**`.
 5. Regenerar o sitemap:
    `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-sitemap.ps1`
