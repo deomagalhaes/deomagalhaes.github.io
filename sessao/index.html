@@ -95,6 +95,13 @@
             box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25);
         }
 
+        .option-btn.selected-5 {
+            background-color: #fdf2f8;
+            border-color: #db2777;
+            color: #9d174d;
+            box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.25);
+        }
+
         /* Estilos específicos para Matrizes de Inteligência (TRIF-12) */
         .matrix-grid-2 {
             display: grid;
@@ -333,6 +340,30 @@
                             </div>
                             <span class="text-xs text-slate-600 leading-snug">
                                 Rastreio e gravidade DSM-5 (9 itens). Anedonia, humor e sintomas somáticos.
+                            </span>
+                        </label>
+
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-800 flex items-center">
+                                    <i data-lucide="shield" class="w-4 h-4 mr-1.5 text-teal-600"></i> AQ-50 (Autismo / TEA)
+                                </span>
+                                <input type="radio" name="scale-select" value="AQ50" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Quociente do Espectro Autista (Baron-Cohen / 50 itens). Habilidade social, comunicação e detalhes.
+                            </span>
+                        </label>
+
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-800 flex items-center">
+                                    <i data-lucide="compass" class="w-4 h-4 mr-1.5 text-amber-600"></i> DERS-16 (Regulação Emocional)
+                                </span>
+                                <input type="radio" name="scale-select" value="DERS16" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Dificuldades de Regulação Emocional (16 itens). Clareza, metas, impulsividade e tolerância.
                             </span>
                         </label>
 
@@ -881,6 +912,95 @@
             { value: 4, label: "Muito frequentemente", desc: "Quase sempre" }
         ];
 
+        // --- ITENS DO QUOCIENTE DO ESPECTRO AUTISTA (AQ-50 — Baron-Cohen et al., 2001) ---
+        const AQ50_OPTIONS = [
+            { value: 0, label: "Concordo totalmente", desc: "Definitivamente sim" },
+            { value: 1, label: "Concordo parcialmente", desc: "Mais sim que não" },
+            { value: 2, label: "Discordo parcialmente", desc: "Mais não que sim" },
+            { value: 3, label: "Discordo totalmente", desc: "Definitivamente não" }
+        ];
+
+        const AQ50_ITEMS = [
+            { id: 1, text: "Prefiro fazer coisas com outras pessoas a fazer sozinho(a).", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 2, text: "Prefiro fazer as coisas sempre da mesma maneira repetidamente.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: false },
+            { id: 3, text: "Se tento imaginar algo, acho muito fácil construir uma imagem vívida em minha mente.", domain: "imagination", domainLabel: "Imaginação", reverse: true },
+            { id: 4, text: "Costumo ficar tão absorto(a) em uma coisa que perco a noção de todo o resto.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: false },
+            { id: 5, text: "Frequentemente percebo pequenos sons quando outras pessoas não percebem.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: false },
+            { id: 6, text: "Costumo reparar em placas de carros ou sequências semelhantes de informações repetitivas.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: false },
+            { id: 7, text: "As pessoas costumam me dizer que o que eu disse foi indelicado, mesmo quando achei que foi educado.", domain: "communication", domainLabel: "Comunicação", reverse: false },
+            { id: 8, text: "Quando leio uma história, consigo imaginar facilmente como os personagens se parecem.", domain: "imagination", domainLabel: "Imaginação", reverse: true },
+            { id: 9, text: "Sou fascinado(a) por datas ou registros cronológicos.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: false },
+            { id: 10, text: "Em um grupo social, consigo facilmente acompanhar as conversas de várias pessoas simultaneamente.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: true },
+            { id: 11, text: "Acho situações sociais fáceis e naturais de participar.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 12, text: "Costumo reparar em pequenos detalhes visuais ou auditivos que outros não percebem.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: false },
+            { id: 13, text: "Prefiro ir a uma biblioteca do que ir a uma festa com muitas pessoas.", domain: "social", domainLabel: "Habilidade Social", reverse: false },
+            { id: 14, text: "Acho fácil inventar histórias fictícias ou jogos de faz de conta.", domain: "imagination", domainLabel: "Imaginação", reverse: true },
+            { id: 15, text: "Sinto-me mais atraído(a) e interessado(a) por pessoas do que por coisas ou objetos.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 16, text: "Costumo ter interesses intensos e me sinto incomodado(a) se não consigo me dedicar a eles.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: false },
+            { id: 17, text: "Gosto de conversar informalmente e jogar conversa fora em encontros sociais.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 18, text: "Quando estou falando, nem sempre é fácil para os outros conseguirem expressar sua opinião.", domain: "communication", domainLabel: "Comunicação", reverse: false },
+            { id: 19, text: "Sou fascinado(a) por números, estatísticas ou tabelas.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: false },
+            { id: 20, text: "Quando leio uma história, acho difícil descobrir as reais intenções dos personagens.", domain: "imagination", domainLabel: "Imaginação", reverse: false },
+            { id: 21, text: "Não aprecio particularmente ler ficção ou literatura fantasiosa.", domain: "imagination", domainLabel: "Imaginação", reverse: false },
+            { id: 22, text: "Acho difícil fazer novos amigos e conexões interpessoais.", domain: "social", domainLabel: "Habilidade Social", reverse: false },
+            { id: 23, text: "Percebo padrões repetitivos nas coisas ao meu redor o tempo todo.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: false },
+            { id: 24, text: "Prefiro ir ao teatro com apresentações dramáticas do que a um museu.", domain: "imagination", domainLabel: "Imaginação", reverse: true },
+            { id: 25, text: "Não me incomoda se minha rotina diária é alterada ou perturbada inesperadamente.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: true },
+            { id: 26, text: "Frequentemente percebo que não sei exatamente como manter uma conversa fluindo naturalmente.", domain: "communication", domainLabel: "Comunicação", reverse: false },
+            { id: 27, text: "Acho fácil 'ler nas entrelinhas' e captar subentendidos quando alguém está falando comigo.", domain: "communication", domainLabel: "Comunicação", reverse: true },
+            { id: 28, text: "Costumo me concentrar mais na imagem geral do que nos mínimos detalhes específicos.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: true },
+            { id: 29, text: "Não sou muito bom(boa) para memorizar listas de números de telefone ou códigos.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: true },
+            { id: 30, text: "Não costumo reparar em pequenas mudanças de cenário ou na aparência das pessoas.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: true },
+            { id: 31, text: "Percebo prontamente quando alguém que está conversando comigo está ficando entediado(a).", domain: "communication", domainLabel: "Comunicação", reverse: true },
+            { id: 32, text: "Acho fácil fazer mais de uma tarefa ao mesmo tempo sem me desorganizar.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: true },
+            { id: 33, text: "Quando falo ao telefone, nem sempre tenho certeza exata de quando é a minha vez de falar.", domain: "communication", domainLabel: "Comunicação", reverse: false },
+            { id: 34, text: "Gosto de agir espontaneamente sem precisar planejar previamente.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: true },
+            { id: 35, text: "Muitas vezes sou o(a) último(a) a entender o sentido de uma piada ou trocadilho em um grupo.", domain: "communication", domainLabel: "Comunicação", reverse: false },
+            { id: 36, text: "Acho fácil intuir o que alguém está pensando ou sentindo apenas observando a expressão do rosto.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 37, text: "Se sou interrompido(a), consigo retomar o que estava fazendo quase que imediatamente.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: true },
+            { id: 38, text: "Sou muito bom(boa) em conversa informal e trivialidades cotidianas com desconhecidos.", domain: "communication", domainLabel: "Comunicação", reverse: true },
+            { id: 39, text: "As pessoas costumam me dizer que continuo falando repetidamente sobre o mesmo assunto por muito tempo.", domain: "communication", domainLabel: "Comunicação", reverse: false },
+            { id: 40, text: "Na infância, eu gostava muito de jogos e brincadeiras de faz de conta com outras crianças.", domain: "imagination", domainLabel: "Imaginação", reverse: true },
+            { id: 41, text: "Gosto de coletar informações minuciosas sobre categorias de coisas (ex: carros, plantas, trens, tecnologia).", domain: "imagination", domainLabel: "Imaginação / Hiperfoco", reverse: false },
+            { id: 42, text: "Acho difícil me colocar na perspectiva emocional ou mental de outra pessoa.", domain: "imagination", domainLabel: "Imaginação / Empatia", reverse: false },
+            { id: 43, text: "Gosto de planejar cuidadosamente qualquer atividade ou passeio que vou realizar.", domain: "switching", domainLabel: "Alternância de Atenção", reverse: false },
+            { id: 44, text: "Aprecio genuinamente participar de ocasiões sociais e confraternizações.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 45, text: "Acho difícil descobrir ou adivinhar as reais motivações e intenções das pessoas.", domain: "social", domainLabel: "Habilidade Social", reverse: false },
+            { id: 46, text: "Situações inéditas, rotas novas ou pessoas desconhecidas costumam me deixar ansioso(a).", domain: "switching", domainLabel: "Alternância de Atenção", reverse: false },
+            { id: 47, text: "Gosto de conhecer pessoas novas e expandir meu círculo de contatos.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 48, text: "Costumo ser uma pessoa diplomática, sabendo dosar palavras para não gerar mal-estar.", domain: "social", domainLabel: "Habilidade Social", reverse: true },
+            { id: 49, text: "Não sou muito bom(boa) para lembrar datas de aniversários das pessoas próximas.", domain: "detail", domainLabel: "Atenção a Detalhes", reverse: true },
+            { id: 50, text: "Acho muito fácil e natural participar de brincadeiras de imaginação e faz de conta com crianças.", domain: "communication", domainLabel: "Comunicação / Imaginação", reverse: true }
+        ];
+
+        // --- ITENS DA ESCALA DE DIFICULDADES DE REGULAÇÃO EMOCIONAL (DERS-16 — Bjureberg et al., 2016) ---
+        const DERS16_OPTIONS = [
+            { value: 1, label: "Quase nunca", desc: "0 a 10% do tempo" },
+            { value: 2, label: "Às vezes", desc: "11 a 35% do tempo" },
+            { value: 3, label: "Metade do tempo", desc: "36 a 65% do tempo" },
+            { value: 4, label: "Na maioria das vezes", desc: "66 a 90% do tempo" },
+            { value: 5, label: "Quase sempre", desc: "91 a 100% do tempo" }
+        ];
+
+        const DERS16_ITEMS = [
+            { id: 1, text: "Fico confuso(a) sobre o que realmente estou sentindo.", domain: "clarity", domainLabel: "Clareza Emocional" },
+            { id: 2, text: "Tenho dificuldade para compreender exatamente as minhas emoções.", domain: "clarity", domainLabel: "Clareza Emocional" },
+            { id: 3, text: "Quando estou chateado(a), tenho dificuldade para realizar meu trabalho ou tarefas necessárias.", domain: "goals", domainLabel: "Conduta Direcionada a Metas" },
+            { id: 4, text: "Quando estou chateado(a), sinto que perco o controle sobre mim mesmo(a).", domain: "impulse", domainLabel: "Controle de Impulsos" },
+            { id: 5, text: "Quando estou chateado(a), acredito que vou continuar me sentindo mal por muito tempo.", domain: "strategies", domainLabel: "Acesso a Estratégias de Regulação" },
+            { id: 6, text: "Quando estou chateado(a), acredito que vou acabar ficando terrivelmente deprimido(a).", domain: "strategies", domainLabel: "Acesso a Estratégias de Regulação" },
+            { id: 7, text: "Quando estou chateado(a), tenho muita dificuldade para me concentrar no que preciso fazer.", domain: "goals", domainLabel: "Conduta Direcionada a Metas" },
+            { id: 8, text: "Quando estou chateado(a), sinto que perco o controle sobre os meus próprios comportamentos.", domain: "impulse", domainLabel: "Controle de Impulsos" },
+            { id: 9, text: "Quando estou chateado(a), acredito que não há nada que eu possa fazer para me sentir melhor.", domain: "strategies", domainLabel: "Acesso a Estratégias de Regulação" },
+            { id: 10, text: "Quando estou chateado(a), começo a me sentir muito mal e descontente comigo mesmo(a).", domain: "strategies", domainLabel: "Acesso a Estratégias de Regulação" },
+            { id: 11, text: "Quando estou chateado(a), sinto que não consigo controlar os meus impulsos e reações imediatas.", domain: "impulse", domainLabel: "Controle de Impulsos" },
+            { id: 12, text: "Quando estou chateado(a), sinto vergonha de mim por estar me sentindo daquela maneira.", domain: "nonacceptance", domainLabel: "Não-Aceitação de Respostas Emocionais" },
+            { id: 13, text: "Quando estou chateado(a), sinto que leva muito tempo para eu conseguir me acalmar.", domain: "strategies", domainLabel: "Acesso a Estratégias de Regulação" },
+            { id: 14, text: "Quando estou chateado(a), sinto raiva de mim mesmo(a) por me sentir assim.", domain: "nonacceptance", domainLabel: "Não-Aceitação de Respostas Emocionais" },
+            { id: 15, text: "Quando estou chateado(a), tenho dificuldade para pensar em qualquer outra coisa além do problema.", domain: "goals", domainLabel: "Conduta Direcionada a Metas" },
+            { id: 16, text: "Quando estou chateado(a), fico irritado(a) ou impaciente comigo mesmo(a) por ter essas emoções.", domain: "nonacceptance", domainLabel: "Não-Aceitação de Respostas Emocionais" }
+        ];
+
         // --- ITENS DO TESTE DE INTELIGÊNCIA FLUIDA (TRIF-12) ---
         const TRIF12_ITEMS = [
             {
@@ -1300,7 +1420,7 @@
             }
             if (params.has('instrument')) {
                 const inst = params.get('instrument').toUpperCase();
-                if (['GAD7', 'BAI', 'TRIF12', 'ASRS18', 'PHQ9'].includes(inst)) {
+                if (['GAD7', 'BAI', 'TRIF12', 'ASRS18', 'PHQ9', 'AQ50', 'DERS16'].includes(inst)) {
                     const r = document.querySelector(`input[name="scale-select"][value="${inst}"]`);
                     if (r) r.checked = true;
                 }
@@ -1374,6 +1494,12 @@
             } else if (selectedInstrument === 'PHQ9') {
                 document.getElementById('locked-instrument-title').textContent = 'Questionário de Saúde do Paciente — Depressão (PHQ-9)';
                 document.getElementById('locked-instrument-instruction').innerHTML = 'Durante as <strong>últimas 2 semanas</strong>, com que frequência você foi incomodado(a) por qualquer um dos seguintes problemas?';
+            } else if (selectedInstrument === 'AQ50') {
+                document.getElementById('locked-instrument-title').textContent = 'Quociente do Espectro Autista (AQ-50 — Baron-Cohen et al.)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Abaixo estão 50 afirmações sobre preferências e comportamentos cotidianos. Por favor, leia atentamente cada frase e indique o quanto você concorda ou discorda dela em relação à sua vida.';
+            } else if (selectedInstrument === 'DERS16') {
+                document.getElementById('locked-instrument-title').textContent = 'Escala de Dificuldades de Regulação Emocional (DERS-16)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Por favor, indique com que frequência as seguintes afirmações se aplicam a você quando está se sentindo chateado(a), angustiado(a) ou emocionalmente sobrecarregado(a).';
             } else {
                 document.getElementById('locked-instrument-title').textContent = 'Escala de Ansiedade Generalizada (GAD-7)';
                 document.getElementById('locked-instrument-instruction').innerHTML = 'Durante as <strong>últimas 2 semanas</strong>, com que frequência você foi incomodado(a) pelos seguintes problemas?';
@@ -1516,6 +1642,8 @@
                 if (instrument === 'GAD7') { items = GAD7_ITEMS; options = GAD7_OPTIONS; }
                 else if (instrument === 'PHQ9') { items = PHQ9_ITEMS; options = PHQ9_OPTIONS; }
                 else if (instrument === 'ASRS18') { items = ASRS18_ITEMS; options = ASRS18_OPTIONS; }
+                else if (instrument === 'AQ50') { items = AQ50_ITEMS; options = AQ50_OPTIONS; }
+                else if (instrument === 'DERS16') { items = DERS16_ITEMS; options = DERS16_OPTIONS; }
 
                 const gridColsClass = options.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4';
 
@@ -1587,11 +1715,13 @@
                 if (sessionState.instrument === 'GAD7') options = GAD7_OPTIONS;
                 else if (sessionState.instrument === 'PHQ9') options = PHQ9_OPTIONS;
                 else if (sessionState.instrument === 'ASRS18') options = ASRS18_OPTIONS;
+                else if (sessionState.instrument === 'AQ50') options = AQ50_OPTIONS;
+                else if (sessionState.instrument === 'DERS16') options = DERS16_OPTIONS;
 
                 options.forEach(opt => {
                     const btn = document.querySelector(`.option-btn-${itemId}-${opt.value}`);
                     if (btn) {
-                        btn.classList.remove('selected-0', 'selected-1', 'selected-2', 'selected-3', 'selected-4');
+                        btn.classList.remove('selected-0', 'selected-1', 'selected-2', 'selected-3', 'selected-4', 'selected-5');
                         if (opt.value === score) {
                             btn.classList.add(`selected-${score}`);
                         }
@@ -1617,6 +1747,8 @@
             if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
             if (sessionState.instrument === 'PHQ9') items = PHQ9_ITEMS;
             if (sessionState.instrument === 'ASRS18') items = ASRS18_ITEMS;
+            if (sessionState.instrument === 'AQ50') items = AQ50_ITEMS;
+            if (sessionState.instrument === 'DERS16') items = DERS16_ITEMS;
 
             const total = items.length;
             const answeredCount = Object.keys(sessionState.answers).length;
@@ -1638,6 +1770,8 @@
             if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
             if (sessionState.instrument === 'PHQ9') items = PHQ9_ITEMS;
             if (sessionState.instrument === 'ASRS18') items = ASRS18_ITEMS;
+            if (sessionState.instrument === 'AQ50') items = AQ50_ITEMS;
+            if (sessionState.instrument === 'DERS16') items = DERS16_ITEMS;
 
             const total = items.length;
             const answeredCount = Object.keys(sessionState.answers).length;
@@ -1739,7 +1873,7 @@
             const secs = sessionState.elapsedSeconds % 60;
             document.getElementById('report-duration').textContent = `${mins}m ${secs}s`;
 
-            const protocolId = (inst === 'TRIF12' ? 'DM-COG-' : inst === 'ASRS18' ? 'DM-TDAH-' : inst === 'PHQ9' ? 'DM-DEP-' : 'DM-ANS-') + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const protocolId = (inst === 'TRIF12' ? 'DM-COG-' : inst === 'ASRS18' ? 'DM-TDAH-' : inst === 'PHQ9' ? 'DM-DEP-' : inst === 'AQ50' ? 'DM-TEA-' : inst === 'DERS16' ? 'DM-REG-' : 'DM-ANS-') + Math.random().toString(36).substring(2, 8).toUpperCase();
             document.getElementById('report-protocol').textContent = protocolId;
 
             if (inst === 'TRIF12') {
@@ -2122,6 +2256,269 @@
                     `;
                 }
 
+            } else if (inst === 'AQ50') {
+                // LAUDO DO QUOCIENTE DO ESPECTRO AUTISTA (AQ-50 — Baron-Cohen et al., 2001)
+                let totalScore = 0;
+                let socialScore = 0;
+                let switchingScore = 0;
+                let detailScore = 0;
+                let communicationScore = 0;
+                let imaginationScore = 0;
+
+                AQ50_ITEMS.forEach(it => {
+                    const ans = sessionState.answers[it.id];
+                    let point = 0;
+
+                    if (ans !== undefined) {
+                        if (!it.reverse) {
+                            if (ans === 0 || ans === 1) point = 1;
+                        } else {
+                            if (ans === 2 || ans === 3) point = 1;
+                        }
+                    }
+
+                    totalScore += point;
+                    if (it.domain === 'social') socialScore += point;
+                    else if (it.domain === 'switching') switchingScore += point;
+                    else if (it.domain === 'detail') detailScore += point;
+                    else if (it.domain === 'communication') communicationScore += point;
+                    else if (it.domain === 'imagination') imaginationScore += point;
+                });
+
+                document.getElementById('report-instrument-name').textContent = 'Quociente do Espectro Autista (AQ-50 — Baron-Cohen et al. / Adultos)';
+                document.getElementById('report-total-score').textContent = totalScore;
+                document.getElementById('report-max-score').textContent = '/ 50 pontos';
+
+                const isCutoffPositive = totalScore >= 32;
+                let severityText = '';
+                let severityBgClass = '';
+
+                if (totalScore >= 32) {
+                    severityText = `Rastreio Positivo para TEA (Cutoff ≥ 32 atingido)`;
+                    severityBgClass = 'bg-teal-100 text-teal-900 border-teal-300';
+                } else if (totalScore >= 26) {
+                    severityText = `Traços Autistas Moderados / Limítrofes (26–31 pts)`;
+                    severityBgClass = 'bg-amber-100 text-amber-900 border-amber-300';
+                } else {
+                    severityText = `Abaixo do Ponto de Corte (Poucos Traços Autistas)`;
+                    severityBgClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                }
+
+                const badge = document.getElementById('report-severity-badge');
+                badge.className = `inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${severityBgClass}`;
+                badge.textContent = severityText;
+
+                // Subescala 1: Habilidade Social & Comunicação (máx 20)
+                const socCommScore = socialScore + communicationScore;
+                const socCommPct = Math.round((socCommScore / 20) * 100);
+                document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                document.getElementById('subscale-cognitive-title').innerHTML = '<i data-lucide="users" class="w-3.5 h-3.5 mr-1 text-teal-600"></i> Habilidade Social &amp; Comunicação';
+                document.getElementById('subscale-cognitive-desc').textContent = 'Reciprocidade social, intuição comunicativa e pragmática social (20 itens).';
+                document.getElementById('cognitive-label-min').textContent = 'Típico';
+                document.getElementById('cognitive-label-max').textContent = 'Elevado';
+                document.getElementById('cognitive-score-display').textContent = `${socCommScore} / 20`;
+                document.getElementById('cognitive-bar').style.width = `${socCommPct}%`;
+                document.getElementById('cognitive-bar').className = 'bg-teal-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('cognitive-percent').textContent = `${socCommPct}%`;
+
+                // Subescala 2: Atenção a Detalhes & Rigidez/Alternância (máx 20)
+                const detSwitchScore = detailScore + switchingScore;
+                const detSwitchPct = Math.round((detSwitchScore / 20) * 100);
+                document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                document.getElementById('subscale-somatic-title').innerHTML = '<i data-lucide="layers" class="w-3.5 h-3.5 mr-1 text-indigo-600"></i> Atenção a Detalhes &amp; Monotropismo';
+                document.getElementById('subscale-somatic-desc').textContent = 'Percepção minuciosa, foco hiperespecífico e resistência a quebras de rotina (20 itens).';
+                document.getElementById('somatic-label-min').textContent = 'Típico';
+                document.getElementById('somatic-label-max').textContent = 'Elevado';
+                document.getElementById('somatic-score-display').textContent = `${detSwitchScore} / 20`;
+                document.getElementById('somatic-bar').style.width = `${detSwitchPct}%`;
+                document.getElementById('somatic-bar').className = 'bg-indigo-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('somatic-percent').textContent = `${detSwitchPct}%`;
+
+                // Box de Destaques Funcionais
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                critList.innerHTML = `
+                    <div class="space-y-1.5 text-xs text-slate-700">
+                        <p>• <strong>Ponto de Corte Internacional (Cutoff ≥ 32):</strong> ${totalScore} pontos (${isCutoffPositive ? '<span class="text-teal-800 font-bold">Consistente com padrão fenotípico do Espectro Autista / TEA Nível 1</span>' : '<span class="text-emerald-800 font-bold">Abaixo do limiar clínico internacional de rastreio</span>'}).</p>
+                        <p>• <strong>Perfil por Domínios (0 a 10 cada):</strong> Habilidade Social: <strong>${socialScore}/10</strong> | Alternância de Atenção: <strong>${switchingScore}/10</strong> | Atenção a Detalhes: <strong>${detailScore}/10</strong> | Comunicação: <strong>${communicationScore}/10</strong> | Imaginação: <strong>${imaginationScore}/10</strong>.</p>
+                    </div>
+                `;
+                critBox.classList.remove('hidden');
+
+                // Tabela Detalhada com os 50 Itens
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                AQ50_ITEMS.forEach((it, idx) => {
+                    const ans = sessionState.answers[it.id];
+                    const optObj = AQ50_OPTIONS.find(o => o.value === ans) || { label: '-' };
+                    let point = 0;
+                    if (ans !== undefined) {
+                        if (!it.reverse) {
+                            if (ans === 0 || ans === 1) point = 1;
+                        } else {
+                            if (ans === 2 || ans === 3) point = 1;
+                        }
+                    }
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2 px-3 text-center font-bold text-slate-400 text-xs">${idx + 1}</td>
+                        <td class="py-2 px-3 font-medium text-slate-800 text-xs">${it.text}</td>
+                        <td class="py-2 px-3 text-slate-500 text-xs">${it.domainLabel}</td>
+                        <td class="py-2 px-3 text-center text-xs">${optObj.label}</td>
+                        <td class="py-2 px-3 text-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${point === 1 ? 'bg-teal-100 text-teal-800 border border-teal-300' : 'bg-slate-100 text-slate-600'}">
+                                ${point === 1 ? '1 ponto (Traço)' : '0 ponto'}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                summaryDiv.textContent = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}${sessionState.patientAge ? ', ' + sessionState.patientAge + ' anos,' : ''} respondeu ao Quociente do Espectro Autista (AQ-50 de Baron-Cohen et al.), obtendo pontuação bruta total de ${totalScore} pontos (de 50 possíveis), enquadrando-se na faixa de ${severityText}. A decomposição das 5 subescalas funcionais indicou: Habilidade Social (${socialScore}/10), Alternância de Atenção e Rigidez Cognitiva (${switchingScore}/10), Atenção aos Detalhes (${detailScore}/10), Comunicação Social (${communicationScore}/10) e Imaginação / Teoria da Mente (${imaginationScore}/10). ${totalScore >= 32 ? 'O resultado atinge o ponto de corte estabelecido internacionalmente (≥ 32 pontos), no qual 80% dos adultos com diagnóstico confirmado de autismo/Asperger pontuam no estudo normativo original. Recomenda-se complementar a investigação com anamnese do neurodesenvolvimento, instrumentos específicos e avaliação de camuflagem social (CAT-Q).' : 'A pontuação situa-se abaixo do ponto de corte internacional, não apresentando indicadores psicométricos isolados para o espectro autista no presente protocolo.'}`;
+
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    refList.innerHTML = `
+                        <p>• Baron-Cohen, S., Wheelwright, S., Skinner, R., Martin, J., &amp; Clubley, E. (2001). <em>The Autism-Spectrum Quotient (AQ): Evidence from Asperger syndrome/high-functioning autism, males and females, scientists and mathematicians</em>. Journal of Autism and Developmental Disorders, 31(1), 5-17.</p>
+                        <p>• American Psychiatric Association (2023). <em>Manual Diagnóstico e Estatístico de Transtornos Mentais (DSM-5-TR)</em>. Porto Alegre: Artmed.</p>
+                    `;
+                }
+
+            } else if (inst === 'DERS16') {
+                // LAUDO DE DIFICULDADES DE REGULAÇÃO EMOCIONAL (DERS-16 — Bjureberg et al., 2016)
+                let totalScore = 0;
+                let clarityScore = 0;       // itens 1, 2 (máx 10)
+                let goalsScore = 0;         // itens 3, 7, 15 (máx 15)
+                let impulseScore = 0;       // itens 4, 8, 11 (máx 15)
+                let nonacceptanceScore = 0; // itens 12, 14, 16 (máx 15)
+                let strategiesScore = 0;    // itens 5, 6, 9, 10, 13 (máx 25)
+                let criticalItems = [];
+
+                DERS16_ITEMS.forEach(it => {
+                    const sc = sessionState.answers[it.id] !== undefined ? sessionState.answers[it.id] : 1;
+                    totalScore += sc;
+
+                    if (it.domain === 'clarity') clarityScore += sc;
+                    else if (it.domain === 'goals') goalsScore += sc;
+                    else if (it.domain === 'impulse') impulseScore += sc;
+                    else if (it.domain === 'nonacceptance') nonacceptanceScore += sc;
+                    else if (it.domain === 'strategies') strategiesScore += sc;
+
+                    if (sc >= 4) {
+                        criticalItems.push({ item: it, score: sc });
+                    }
+                });
+
+                document.getElementById('report-instrument-name').textContent = 'Escala de Dificuldades de Regulação Emocional (DERS-16 — Versão Breve Validada)';
+                document.getElementById('report-total-score').textContent = totalScore;
+                document.getElementById('report-max-score').textContent = '/ 80 pontos';
+
+                let severityText = '';
+                let severityBgClass = '';
+
+                if (totalScore <= 30) {
+                    severityText = 'Regulação Emocional Típica / Adaptativa';
+                    severityBgClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                } else if (totalScore <= 45) {
+                    severityText = 'Dificuldades Leves a Moderadas de Regulação';
+                    severityBgClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
+                } else if (totalScore <= 60) {
+                    severityText = 'Desregulação Emocional Acentuada';
+                    severityBgClass = 'bg-orange-100 text-orange-800 border-orange-300';
+                } else {
+                    severityText = 'Desregulação Emocional Grave';
+                    severityBgClass = 'bg-red-100 text-red-800 border-red-300';
+                }
+
+                const badge = document.getElementById('report-severity-badge');
+                badge.className = `inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${severityBgClass}`;
+                badge.textContent = severityText;
+
+                // Subescala 1: Impulsividade & Conduta Direcionada a Metas (máx 30)
+                const impGoals = impulseScore + goalsScore;
+                const impGoalsPct = Math.round((impGoals / 30) * 100);
+                document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                document.getElementById('subscale-cognitive-title').innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 mr-1 text-amber-600"></i> Impulso &amp; Foco em Metas';
+                document.getElementById('subscale-cognitive-desc').textContent = 'Capacidade de freio comportamental e concentração quando sob sofrimento (6 itens).';
+                document.getElementById('cognitive-label-min').textContent = 'Controle';
+                document.getElementById('cognitive-label-max').textContent = 'Descontrole';
+                document.getElementById('cognitive-score-display').textContent = `${impGoals} / 30`;
+                document.getElementById('cognitive-bar').style.width = `${impGoalsPct}%`;
+                document.getElementById('cognitive-bar').className = 'bg-amber-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('cognitive-percent').textContent = `${impGoalsPct}%`;
+
+                // Subescala 2: Estratégias & Não-Aceitação de Emoções (máx 40)
+                const stratNonAcc = strategiesScore + nonacceptanceScore;
+                const stratNonAccPct = Math.round((stratNonAcc / 40) * 100);
+                document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                document.getElementById('subscale-somatic-title').innerHTML = '<i data-lucide="shield-alert" class="w-3.5 h-3.5 mr-1 text-rose-600"></i> Estratégias &amp; Julgamento Emocional';
+                document.getElementById('subscale-somatic-desc').textContent = 'Crença de desamparo regulatório e tendência a sentir raiva/vergonha por sofrer (8 itens).';
+                document.getElementById('somatic-label-min').textContent = 'Aceitação';
+                document.getElementById('somatic-label-max').textContent = 'Autocrítica';
+                document.getElementById('somatic-score-display').textContent = `${stratNonAcc} / 40`;
+                document.getElementById('somatic-bar').style.width = `${stratNonAccPct}%`;
+                document.getElementById('somatic-bar').className = 'bg-rose-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('somatic-percent').textContent = `${stratNonAccPct}%`;
+
+                // Box de Destaques Funcionais
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                critList.innerHTML = `
+                    <div class="space-y-1.5 text-xs text-slate-700">
+                        <p>• <strong>Perfil das 5 Dimensões Regulatórias:</strong></p>
+                        <p class="pl-2">• <em>Clareza Emocional:</em> <strong>${clarityScore}/10</strong> (${Math.round((clarityScore/10)*100)}%)</p>
+                        <p class="pl-2">• <em>Conduta Direcionada a Metas:</em> <strong>${goalsScore}/15</strong> (${Math.round((goalsScore/15)*100)}%)</p>
+                        <p class="pl-2">• <em>Controle de Impulsos:</em> <strong>${impulseScore}/15</strong> (${Math.round((impulseScore/15)*100)}%)</p>
+                        <p class="pl-2">• <em>Não-Aceitação de Respostas Emocionais:</em> <strong>${nonacceptanceScore}/15</strong> (${Math.round((nonacceptanceScore/15)*100)}%)</p>
+                        <p class="pl-2">• <em>Acesso a Estratégias de Regulação:</em> <strong>${strategiesScore}/25</strong> (${Math.round((strategiesScore/25)*100)}%)</p>
+                    </div>
+                `;
+                critBox.classList.remove('hidden');
+
+                // Tabela Detalhada com os 16 Itens
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                DERS16_ITEMS.forEach((it, idx) => {
+                    const sc = sessionState.answers[it.id] !== undefined ? sessionState.answers[it.id] : 1;
+                    const optObj = DERS16_OPTIONS.find(o => o.value === sc) || { label: '-' };
+
+                    let badgeColor = 'bg-slate-100 text-slate-700';
+                    if (sc === 3) badgeColor = 'bg-yellow-50 text-yellow-800 border border-yellow-200';
+                    if (sc === 4) badgeColor = 'bg-orange-50 text-orange-800 border border-orange-200';
+                    if (sc === 5) badgeColor = 'bg-red-50 text-red-800 border border-red-200';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-400">${idx + 1}</td>
+                        <td class="py-2.5 px-3.5 font-medium text-slate-800">${it.text}</td>
+                        <td class="py-2.5 px-3.5 text-slate-500">${it.domainLabel}</td>
+                        <td class="py-2.5 px-3.5 text-center font-mono font-bold text-slate-900">${sc}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${badgeColor}">
+                                ${optObj.label}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                summaryDiv.textContent = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}${sessionState.patientAge ? ', ' + sessionState.patientAge + ' anos,' : ''} respondeu à Escala de Dificuldades de Regulação Emocional (DERS-16), obtendo escore bruto total de ${totalScore} pontos (escala de 16 a 80), enquadrando-se clinicamente no padrão de ${severityText}. A análise dimensional identificou pontuações de: Clareza Emocional (${clarityScore}/10), Conduta Direcionada a Metas (${goalsScore}/15), Controle de Impulsos (${impulseScore}/15), Não-Aceitação de Respostas Emocionais (${nonacceptanceScore}/15) e Acesso a Estratégias de Regulação (${strategiesScore}/25). ${totalScore > 45 ? 'Observa-se vulnerabilidade significativa no manejo do estresse emocional agudo, recomendando-se intervenções focadas em tolerância ao mal-estar (DBT), desfusão e aceitação psicológica (ACT), além de treino metacognitivo de identificação afetiva.' : 'O escore global reflete recursos regulatórios adequados para modulação e enfrentamento do sofrimento emocional cotidiano.'}`;
+
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    refList.innerHTML = `
+                        <p>• Bjureberg, J., Ljótsson, B., Tull, M. T., Hedman, E., Sahlin, H., Lundh, L. G., ... &amp; Gratz, K. L. (2016). <em>Development and validation of a brief version of the Difficulties in Emotion Regulation Scale: The DERS-16</em>. Journal of Psychopathology and Behavioral Assessment, 38(2), 284-296.</p>
+                        <p>• Miguel, F. K., Giromini, L., Colombarolli, M. S., Zuanazzi, A. C., &amp; Zennaro, A. (2017). <em>Evidências de validade da Escala de Dificuldades de Regulação Emocional (DERS-16)</em>. Avaliação Psicológica, 16(3), 320-329.</p>
+                    `;
+                }
+
             } else {
                 // LAUDO DE ANSIEDADE (BAI / GAD-7)
                 const refList = document.getElementById('report-references-list');
@@ -2339,7 +2736,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            const prefix = inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : inst === 'ASRS18' ? 'Laudo-TDAH-ASRS18' : inst === 'PHQ9' ? 'Laudo-Depressao-PHQ9' : 'Laudo-Ansiedade';
+            const prefix = inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : inst === 'ASRS18' ? 'Laudo-TDAH-ASRS18' : inst === 'PHQ9' ? 'Laudo-Depressao-PHQ9' : inst === 'AQ50' ? 'Laudo-Autismo-AQ50' : inst === 'DERS16' ? 'Laudo-Regulacao-DERS16' : 'Laudo-Ansiedade';
             a.download = `${prefix}-${sessionState.patientName.replace(/\s+/g, '_')}-${new Date().toISOString().slice(0,10)}.json`;
             document.body.appendChild(a);
             a.click();
@@ -2367,6 +2764,10 @@
                 ? 'Escala de Autoavaliação de TDAH em Adultos (ASRS-18)'
                 : sessionState.instrument === 'PHQ9'
                 ? 'Questionário de Depressão (PHQ-9)'
+                : sessionState.instrument === 'AQ50'
+                ? 'Quociente do Espectro Autista (AQ-50)'
+                : sessionState.instrument === 'DERS16'
+                ? 'Escala de Dificuldades de Regulação Emocional (DERS-16)'
                 : (sessionState.instrument === 'BAI' ? 'Inventário de Ansiedade de Beck (BAI)' : 'Escala GAD-7');
                 
             const msg = `Olá! Concluí a avaliação (${instName}) na Plataforma Clínica Segura.\n\nNome: ${sessionState.patientName}\n\nSegue o link com as minhas respostas criptografadas para o seu acesso e emissão do laudo:\n${returnUrl}`;
