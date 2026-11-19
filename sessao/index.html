@@ -285,7 +285,7 @@
                             <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                             <input type="password" id="input-session-pin" maxlength="8" value="1234" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 outline-none text-slate-800 text-sm font-bold tracking-widest transition" />
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Padrão do paciente: <strong>1234</strong>. O laudo clínico só abre com a senha do neuropsicólogo (<strong>1502</strong>).</p>
+                        <p class="text-[11px] text-slate-500 mt-1">Padrão do paciente: <strong>1234</strong>.</p>
                     </div>
                 </div>
 
@@ -555,7 +555,7 @@
                     <i data-lucide="shield-alert" class="w-4 h-4 text-slate-500"></i>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Área do Neuropsicólogo — Destrancar Laudo</h3>
                 </div>
-                <p class="text-xs text-slate-500">Para liberar o laudo psicométrico completo, digite a senha exclusiva do neuropsicólogo (1502):</p>
+                <p class="text-xs text-slate-500">Para liberar o laudo psicométrico completo, digite a senha exclusiva do neuropsicólogo:</p>
 
                 <div class="flex space-x-2">
                     <input type="password" id="input-unlock-pin" maxlength="8" placeholder="Senha (1502)" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 text-center font-mono font-bold text-lg tracking-widest outline-none" onkeydown="if(event.key==='Enter') window.verifyUnlockPin()" />
@@ -790,7 +790,7 @@
             </div>
             <h3 class="text-lg font-bold text-slate-900">Destrancar Sessão</h3>
             <p class="text-xs text-slate-500">
-                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite a senha do neuropsicólogo (1502):
+                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite a senha do neuropsicólogo:
             </p>
             <input type="password" id="input-modal-pin" maxlength="8" placeholder="Senha (1502)" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
             <p id="modal-pin-error" class="hidden text-xs text-red-600 font-semibold"></p>
@@ -1394,7 +1394,7 @@
                         const titleEl = document.getElementById('lockout-title');
                         if (titleEl) titleEl.textContent = `Respostas de ${sessionState.patientName} Carregadas!`;
                         const descEl = document.getElementById('lockout-desc');
-                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite a senha exclusiva do neuropsicólogo (1502) para liberar o laudo psicométrico completo.`;
+                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite a senha exclusiva do neuropsicólogo para liberar o laudo psicométrico completo.`;
                         
                         // Ocultar card de envio via WhatsApp já que o neuropsicólogo já está com os dados
                         const homeBox = document.getElementById('home-patient-box');
@@ -1825,11 +1825,11 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 lucide.createIcons();
             } else if (entered === '1234' || (sessionState.patientPin && entered === sessionState.patientPin)) {
-                errorMsg.textContent = 'Acesso restrito: "1234" é a senha de aplicação do paciente. Para destrancar o laudo clínico, digite a senha exclusiva do neuropsicólogo (1502).';
+                errorMsg.textContent = 'Acesso restrito: "1234" é a senha de aplicação do paciente. Para destrancar o laudo clínico, digite a senha exclusiva do neuropsicólogo.';
                 errorMsg.classList.remove('hidden');
                 document.getElementById('input-unlock-pin').focus();
             } else {
-                errorMsg.textContent = 'Senha incorreta. O laudo clínico é de acesso privativo do neuropsicólogo (1502).';
+                errorMsg.textContent = 'Senha incorreta. O laudo clínico é de acesso privativo do neuropsicólogo.';
                 errorMsg.classList.remove('hidden');
                 document.getElementById('input-unlock-pin').focus();
             }
