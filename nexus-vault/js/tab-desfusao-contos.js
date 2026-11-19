@@ -113,6 +113,8 @@
                                     <button type="button" data-df-preset="defesa" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Defesa de Imagem</button>
                                     <button type="button" data-df-preset="critica" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Crítica Pública</button>
                                     <button type="button" data-df-preset="manipulacao" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Vitimização Alheia</button>
+                                    <button type="button" data-df-preset="limite" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Limite de Agenda</button>
+                                    <button type="button" data-df-preset="autocritica" class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition">Autocrítica</button>
                                 </div>
                             </div>
 
@@ -246,9 +248,12 @@
                                     <label for="df-autonomic-slider" class="text-xs font-mono text-slate-300">
                                         Ativação Fisiológica / Autonômica Atual: <strong id="df-autonomic-val" class="text-cyan-300 text-sm">5/10</strong>
                                     </label>
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-1.5 flex-wrap">
                                         <button type="button" id="btn-df-sigh-timer" class="px-2.5 py-1 rounded-lg bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/30 text-[11px] font-mono text-cyan-200 transition">
                                             Suspiro Fisiológico (30s)
+                                        </button>
+                                        <button type="button" id="btn-df-90s-timer" class="px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/70 border border-amber-500/30 text-[11px] font-mono text-amber-200 transition" title="Regra dos 90s: dissipação neuroquímica da descarga simpática sem alimentar a ruminação">
+                                            Regra dos 90s
                                         </button>
                                         <span id="df-autonomic-badge" class="px-2 py-0.5 rounded text-[11px] font-mono border"></span>
                                     </div>
@@ -494,6 +499,14 @@
                 const reviewed = desfusaoHistory.filter(i => i.outcomeStatus === 'EFICAZ' || i.outcomeStatus === 'AJUSTE');
                 const effectiveCount = reviewed.filter(i => i.outcomeStatus === 'EFICAZ').length;
                 const effLabel = reviewed.length > 0 ? `${Math.round((effectiveCount / reviewed.length) * 100)}% (${effectiveCount}/${reviewed.length})` : 'Pendente revisão';
+                const distFreq = {};
+                desfusaoHistory.forEach((it) => {
+                    (Array.isArray(it.distortions) ? it.distortions : []).forEach((d) => {
+                        distFreq[d] = (distFreq[d] || 0) + 1;
+                    });
+                });
+                const topDist = Object.entries(distFreq).sort((a, b) => b[1] - a[1])[0];
+                const topDistLabel = topDist ? `${topDist[0]} (${topDist[1]}×)` : 'Sem recorrência';
                 metricsEl.innerHTML = `
                     <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
                         <div class="text-[10px] text-slate-400">Vereditos Registrados</div>
@@ -510,6 +523,7 @@
                     <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2 text-center">
                         <div class="text-[10px] text-slate-400">Eficácia Pós-24h</div>
                         <div class="text-sm font-bold text-purple-300">${effLabel}</div>
+                        <div class="text-[9px] text-slate-500 truncate mt-0.5" title="Distorção mais recorrente">Padrão: ${C.esc(topDistLabel)}</div>
                     </div>
                 `;
             }
@@ -573,8 +587,12 @@
                     <p class="text-xs text-slate-300"><strong>Fato:</strong> ${C.esc(item.strictFact)}</p>
                     <p class="text-xs text-emerald-300"><strong>FAREI (24h):</strong> ${C.esc(item.doAction)}</p>
                     <p class="text-xs text-rose-300"><strong>VETADO (24h):</strong> ${C.esc(item.dontAction)}</p>
+                    ${item.post24hNote ? `<p class="text-[11px] text-purple-300 italic"><strong>Aprendizado Pós-24h:</strong> ${C.esc(item.post24hNote)}</p>` : ''}
                 </div>
                 <div class="flex items-center gap-1.5 self-end md:self-center shrink-0 flex-wrap justify-end">
+                    <button type="button" data-df-note="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-purple-200 text-xs font-mono" title="Registrar nota de aprendizado pós-24h">
+                        Nota
+                    </button>
                     <button type="button" data-df-outcome="${C.esc(item.id)}" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-purple-950/50 hover:bg-purple-900/60 border border-purple-700/50 text-purple-300 text-xs font-mono" title="Alternar avaliação de desfecho pós-24h (Eficaz / Ajuste)">
                         ${item.outcomeStatus === 'EFICAZ' ? '✓ Eficaz' : (item.outcomeStatus === 'AJUSTE' ? '↺ Ajuste' : 'Avaliar 24h')}
                     </button>
@@ -685,6 +703,20 @@
                 }).catch(() => {
                     C.toast('Não foi possível copiar automaticamente.', 'error');
                 });
+            });
+        });
+
+        listEl.querySelectorAll('[data-df-note]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-df-note');
+                const target = desfusaoHistory.find((x) => x.id === id);
+                if (!target) return;
+                const val = window.prompt('Registrar aprendizado objetivo após 24h:', target.post24hNote || '');
+                if (val === null) return;
+                target.post24hNote = val.trim();
+                saveDesfusaoHistory();
+                renderDesfusaoHistory(document.getElementById('df-history-search') ? document.getElementById('df-history-search').value : '');
+                C.toast('Nota de aprendizado salva no LocalStorage.', 'success', 1600);
             });
         });
 
@@ -812,6 +844,34 @@
                 strategic: 'Firmeza compassiva e limites inegociáveis. Sentimento de culpa não é evidência de erro.',
                 doAction: 'Reiterar o combinado prévio em tom neutro e cordial sem abrir brechas.',
                 dontAction: 'Zero concessões por culpa e zero debates circulares intermináveis.'
+            },
+            limite: {
+                fact: 'Pedido de encaixe ou demanda extra fora da janela planejada quando a semana já está no limite de carga cognitiva.',
+                reading: 'Estou notando o medo de decepcionar e o impulso automático de dizer "sim" sacrificando meu descanso e qualidade clínica.',
+                distortions: ['Imperativo ("Deveria")', 'Catastrofização'],
+                autonomic: 5,
+                loss: 8,
+                esc: 7,
+                effort: 4,
+                gain: 9,
+                impulsive: 'Aceitar o encaixe na hora por culpa e passar a semana exausto e irritado.',
+                strategic: 'Dizer "não" com cordialidade e clareza protege a qualidade dos atendimentos já agendados e a presença em casa.',
+                doAction: 'Recusar educadamente oferecendo a próxima janela real disponível na agenda da semana seguinte.',
+                dontAction: 'Zero desculpas inventadas e zero sobrecarga impulsiva da agenda.'
+            },
+            autocritica: {
+                fact: 'Pequena falha operacional ou imprevisto técnico pontual durante o dia de trabalho.',
+                reading: 'Estou notando a narrativa autocrítica de que "eu deveria ter previsto tudo perfeitamente" e o peso desproporcional de cobrança.',
+                distortions: ['Tudo ou Nada', 'Filtro Negativo', 'Imperativo ("Deveria")'],
+                autonomic: 6,
+                loss: 7,
+                esc: 6,
+                effort: 3,
+                gain: 9,
+                impulsive: 'Ruminar o erro por horas à noite e tentar compensar trabalhando até tarde.',
+                strategic: 'Autocompaixão rigorosa: registrar a melhoria técnica objetiva para o sistema e encerrar o expediente no horário.',
+                doAction: 'Anotar 1 ajuste de processo em 2 minutos e fechar o computador para viver a noite com leveza.',
+                dontAction: 'Zero ruminação punitiva e zero invasão do horário familiar.'
             }
         };
 
@@ -844,47 +904,65 @@
         });
 
         let sighTimerHandle = null;
+        let activeTimerKind = null;
         const btnSigh = document.getElementById('btn-df-sigh-timer');
-        if (btnSigh) {
-            btnSigh.addEventListener('click', () => {
-                const panel = document.getElementById('df-sigh-panel');
-                const phaseEl = document.getElementById('df-sigh-phase');
-                const secEl = document.getElementById('df-sigh-timer-sec');
-                const progEl = document.getElementById('df-sigh-progress');
-                if (sighTimerHandle) {
-                    clearInterval(sighTimerHandle);
-                    sighTimerHandle = null;
-                    btnSigh.textContent = 'Suspiro Fisiológico (30s)';
-                    if (panel) panel.classList.add('hidden');
-                    return;
-                }
-                let elapsed = 0;
-                const total = 30;
-                if (panel) panel.classList.remove('hidden');
-                btnSigh.textContent = 'Parar Suspiro (30s)';
-                const tick = () => {
-                    const rem = Math.max(0, total - elapsed);
+        const btn90s = document.getElementById('btn-df-90s-timer');
+        const runAutonomicTimer = (kind, totalSec) => {
+            const panel = document.getElementById('df-sigh-panel');
+            const phaseEl = document.getElementById('df-sigh-phase');
+            const secEl = document.getElementById('df-sigh-timer-sec');
+            const progEl = document.getElementById('df-sigh-progress');
+            if (sighTimerHandle && activeTimerKind === kind) {
+                clearInterval(sighTimerHandle);
+                sighTimerHandle = null;
+                activeTimerKind = null;
+                if (btnSigh) btnSigh.textContent = 'Suspiro Fisiológico (30s)';
+                if (btn90s) btn90s.textContent = 'Regra dos 90s';
+                if (panel) panel.classList.add('hidden');
+                return;
+            }
+            if (sighTimerHandle) {
+                clearInterval(sighTimerHandle);
+                sighTimerHandle = null;
+            }
+            activeTimerKind = kind;
+            let elapsed = 0;
+            if (panel) panel.classList.remove('hidden');
+            if (btnSigh) btnSigh.textContent = kind === 'sigh' ? 'Parar Suspiro (30s)' : 'Suspiro Fisiológico (30s)';
+            if (btn90s) btn90s.textContent = kind === '90s' ? 'Parar 90s' : 'Regra dos 90s';
+            const tick = () => {
+                const rem = Math.max(0, totalSec - elapsed);
+                let phaseText = '';
+                if (kind === 'sigh') {
                     const cyclePos = elapsed % 10;
-                    let phaseText = '1/2 Inspiração nasal profunda...';
+                    phaseText = '1/2 Inspiração nasal profunda...';
                     if (cyclePos >= 2 && cyclePos < 3.5) phaseText = '2/2 Segunda puxada curta nasal (expande alvéolos)...';
                     else if (cyclePos >= 3.5) phaseText = 'Exalação lenta e contínua pela boca (tônus vagal)...';
-                    if (phaseEl) phaseEl.textContent = phaseText;
-                    if (secEl) secEl.textContent = `${rem}s`;
-                    if (progEl) progEl.style.width = `${Math.min(100, Math.round((elapsed / total) * 100))}%`;
-                    if (elapsed >= total) {
-                        clearInterval(sighTimerHandle);
-                        sighTimerHandle = null;
-                        btnSigh.textContent = 'Suspiro Fisiológico (30s)';
-                        if (phaseEl) phaseEl.textContent = 'Ciclo concluído. Reavalie sua ativação antes de deliberar.';
-                        C.toast('Ciclo de Suspiro Fisiológico concluído.', 'success');
-                        return;
-                    }
-                    elapsed += 1;
-                };
-                tick();
-                sighTimerHandle = setInterval(tick, 1000);
-            });
-        }
+                } else {
+                    if (elapsed < 30) phaseText = 'Onda simpática (0–30s): apenas observe a sensação corporal sem julgar nem digitar...';
+                    else if (elapsed < 60) phaseText = 'Metabolização (30–60s): solte os ombros e o maxilar; a química está decaindo...';
+                    else phaseText = 'Reacoplamento pré-frontal (60–90s): clareza executiva retornando sem alimentar a narrativa...';
+                }
+                if (phaseEl) phaseEl.textContent = phaseText;
+                if (secEl) secEl.textContent = `${rem}s`;
+                if (progEl) progEl.style.width = `${Math.min(100, Math.round((elapsed / totalSec) * 100))}%`;
+                if (elapsed >= totalSec) {
+                    clearInterval(sighTimerHandle);
+                    sighTimerHandle = null;
+                    activeTimerKind = null;
+                    if (btnSigh) btnSigh.textContent = 'Suspiro Fisiológico (30s)';
+                    if (btn90s) btn90s.textContent = 'Regra dos 90s';
+                    if (phaseEl) phaseEl.textContent = 'Ciclo concluído. Reavalie sua ativação antes de deliberar.';
+                    C.toast(kind === 'sigh' ? 'Ciclo de Suspiro Fisiológico concluído.' : 'Ciclo de 90s concluído: onda neuroquímica dissipada.', 'success');
+                    return;
+                }
+                elapsed += 1;
+            };
+            tick();
+            sighTimerHandle = setInterval(tick, 1000);
+        };
+        if (btnSigh) btnSigh.addEventListener('click', () => runAutonomicTimer('sigh', 30));
+        if (btn90s) btn90s.addEventListener('click', () => runAutonomicTimer('90s', 90));
 
         const btnCopyBiff = document.getElementById('btn-df-copy-biff');
         if (btnCopyBiff) {
@@ -1041,6 +1119,8 @@
         });
 
         // Auto-save de rascunho de desfusão integral (textos, seletores, sliders, distorções e checks)
+        const DRAFT_KEY = (C && C.STORAGE_KEYS && C.STORAGE_KEYS.DESFUSAO_DRAFT) || 'dm_vault_desfusao_draft';
+
         function saveDesfusaoDraft() {
             const draft = {};
             const draftInputs = ['df-trigger-category', 'df-core-value', 'df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
@@ -1062,7 +1142,7 @@
                 if (el) checks[chkId] = el.checked;
             });
             draft.checks = checks;
-            C.store.set('dm_vault_desfusao_draft', draft);
+            C.store.set(DRAFT_KEY, draft);
             const badge = document.getElementById('df-draft-status-badge');
             if (badge) badge.textContent = `✓ Rascunho salvo às ${new Date().toLocaleTimeString('pt-BR')}`;
         }
@@ -1071,7 +1151,7 @@
         if (btnClearDraft) {
             btnClearDraft.addEventListener('click', () => {
                 if (!confirm('Deseja limpar todos os campos do rascunho atual para iniciar um novo registro?')) return;
-                C.store.remove('dm_vault_desfusao_draft');
+                C.store.remove(DRAFT_KEY);
                 const form = document.getElementById('desfusao-form');
                 if (form) form.reset();
                 document.querySelectorAll('#df-distortions-chips input').forEach(c => c.checked = false);
@@ -1083,7 +1163,7 @@
         }
 
         function restoreDesfusaoDraft() {
-            const savedDraft = C.store.get('dm_vault_desfusao_draft', null);
+            const savedDraft = C.store.get(DRAFT_KEY, null);
             if (!savedDraft || typeof savedDraft !== 'object') return;
             const draftInputs = ['df-trigger-category', 'df-core-value', 'df-strict-fact', 'df-emotional-reading', 'df-impulsive-text', 'df-strategic-text', 'df-do-action', 'df-dont-action'];
             draftInputs.forEach((k) => {

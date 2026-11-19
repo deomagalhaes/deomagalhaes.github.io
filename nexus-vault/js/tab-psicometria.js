@@ -603,6 +603,54 @@
                 polarity: 'SKILL',
                 rxx: 0.87,
                 domain: 'Atenção e Velocidade de Processamento'
+            },
+            {
+                id: 'norm_tmt_a_time',
+                instrument: 'Teste de Trilhas (TMT)',
+                subtest: 'Parte A — Velocidade Visuomotora (s)',
+                ageGroup: 'Adultos (20–39 anos)',
+                mean: 29.5,
+                sd: 8.4,
+                inverted: true,
+                polarity: 'SKILL',
+                rxx: 0.84,
+                domain: 'Atenção e Velocidade de Processamento'
+            },
+            {
+                id: 'norm_hayling_b_err',
+                instrument: 'Teste Hayling (Inibição Verbal)',
+                subtest: 'Parte B — Total de Erros (Tempo/Inibição)',
+                ageGroup: 'Adultos (Norma Brasileira)',
+                mean: 3.6,
+                sd: 2.5,
+                inverted: true,
+                polarity: 'SKILL',
+                rxx: 0.81,
+                domain: 'Funções Executivas'
+            },
+            {
+                id: 'norm_brief2_gec',
+                instrument: 'BRIEF-2 (Inventário Executivo)',
+                subtest: 'Índice Global Executivo (GEC — Escore T)',
+                ageGroup: 'Escolar 5–18 anos (Norma Escore T)',
+                mean: 50.0,
+                sd: 10.0,
+                inverted: false,
+                polarity: 'SYMPTOM',
+                rxx: 0.94,
+                domain: 'Cognição Social e Comportamento (Escalas Clínicas)'
+            },
+            {
+                id: 'norm_bdefs_total',
+                instrument: 'BDEFS (Barkley — Adultos)',
+                subtest: 'Escore Total de Disfunção Executiva',
+                ageGroup: 'Adultos 18–70 anos (Percentil/T)',
+                mean: 50.0,
+                sd: 10.0,
+                inverted: false,
+                polarity: 'SYMPTOM',
+                rxx: 0.92,
+                domain: 'Cognição Social e Comportamento (Escalas Clínicas)'
             }
         ];
     }
@@ -628,7 +676,10 @@
         polarity: 'SKILL', // SKILL | SYMPTOM | SRS2
         rxx: '0.88',
         directType: 'PCT', // Z | PCT | T | EP | QI
-        directVal: '50'
+        directVal: '50',
+        rciPre: '',
+        rciPost: '',
+        rciSd: '10'
     };
 
     function loadState() {
@@ -716,13 +767,13 @@
                 ag: Object.assign({}, base.bpa2.ag, (p.bpa2 && p.bpa2.ag) || {})
             }),
             ravlt: Object.assign({}, base.ravlt, p.ravlt || {}, {
-                norms: Object.assign({}, base.ravlt.norms, (p.ravlt && p.ravlt.norms) || {
+                norms: {
                     total: Object.assign({}, base.ravlt.norms.total, (p.ravlt && p.ravlt.norms && p.ravlt.norms.total) || {}),
                     alt:   Object.assign({}, base.ravlt.norms.alt,   (p.ravlt && p.ravlt.norms && p.ravlt.norms.alt)   || {}),
                     a6:    Object.assign({}, base.ravlt.norms.a6,    (p.ravlt && p.ravlt.norms && p.ravlt.norms.a6)    || {}),
                     a7:    Object.assign({}, base.ravlt.norms.a7,    (p.ravlt && p.ravlt.norms && p.ravlt.norms.a7)    || {}),
                     rec:   Object.assign({}, base.ravlt.norms.rec,   (p.ravlt && p.ravlt.norms && p.ravlt.norms.rec)   || {})
-                })
+                }
             }),
             execScales: Object.assign({}, base.execScales, p.execScales || {}),
             report: Object.assign({}, base.report, p.report || {}, {
@@ -4532,6 +4583,32 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                     <!-- Matriz Simultânea de Resultados -->
                     <div id="univ-results-card" class="bg-[#090d16] border border-cyan-500/30 rounded-xl p-4 space-y-3"></div>
 
+                    <!-- Calculadora Clínica de Mudança Confiável (RCI — Jacobson & Truax) -->
+                    <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-2.5 text-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="font-mono font-bold text-emerald-300 uppercase tracking-wider text-[11px]">Índice de Mudança Confiável (RCI • Pré vs Pós-Intervenção)</span>
+                            <span class="text-[10px] font-mono text-slate-400">RCI = (Pós − Pré) ÷ √(2 × EPM²) • |RCI| &ge; 1,96 (p &lt; 0,05)</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-mono text-slate-400 mb-1">Escore Pré (T₁)</label>
+                                <input type="text" inputmode="decimal" id="univ-rci-pre" value="${C.esc(u.rciPre || '')}" placeholder="Ex: 72"
+                                    class="w-full min-h-[34px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 font-mono text-slate-100">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-mono text-slate-400 mb-1">Escore Pós (T₂)</label>
+                                <input type="text" inputmode="decimal" id="univ-rci-post" value="${C.esc(u.rciPost || '')}" placeholder="Ex: 58"
+                                    class="w-full min-h-[34px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 font-mono text-slate-100">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-mono text-slate-400 mb-1">DP da Escala (RCI)</label>
+                                <input type="text" inputmode="decimal" id="univ-rci-sd" value="${C.esc(u.rciSd || '10')}" placeholder="10 ou 15"
+                                    class="w-full min-h-[34px] px-2.5 py-1 rounded-lg bg-[#0f172a] border border-slate-700 font-mono text-slate-100">
+                            </div>
+                        </div>
+                        <div id="univ-rci-output" class="text-[11px] font-mono text-slate-400"></div>
+                    </div>
+
                     <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                         <div class="flex items-center gap-2">
                             <input type="text" id="univ-age-group" value="${C.esc(u.ageGroup)}" placeholder="Faixa Etária/Escolaridade p/ salvar norma"
@@ -4557,6 +4634,10 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <h3 class="text-sm sm:text-base font-bold text-slate-100">Minha Biblioteca Local de Normas</h3>
                             <div class="flex items-center gap-1.5">
+                                <button type="button" id="btn-univ-merge-defaults" title="Adicionar normas padrão novas sem apagar as suas personalizadas"
+                                    class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-[11px] font-mono">
+                                    + Padrões
+                                </button>
                                 <button type="button" id="btn-univ-export-norms" title="Exportar Biblioteca de Normas (.json)"
                                     class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-300 text-[11px] font-mono">
                                     .JSON
@@ -4600,6 +4681,9 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         bindVal('univ-direct-type', 'directType');
         bindVal('univ-direct-val', 'directVal');
         bindVal('univ-age-group', 'ageGroup');
+        bindVal('univ-rci-pre', 'rciPre');
+        bindVal('univ-rci-post', 'rciPost');
+        bindVal('univ-rci-sd', 'rciSd');
 
         const btnModeRaw = document.getElementById('btn-univ-mode-raw');
         const btnModeDir = document.getElementById('btn-univ-mode-direct');
@@ -4686,6 +4770,23 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
             normSearch.addEventListener('input', (e) => renderNormLibraryList(e.target.value));
         }
 
+        const btnMergeNorms = document.getElementById('btn-univ-merge-defaults');
+        if (btnMergeNorms) {
+            btnMergeNorms.addEventListener('click', () => {
+                const defaults = createDefaultNormLibrary();
+                let added = 0;
+                defaults.forEach((def) => {
+                    if (!appState.normLibrary.some((n) => n.id === def.id)) {
+                        appState.normLibrary.push(def);
+                        added++;
+                    }
+                });
+                saveState();
+                renderNormLibraryList(normSearch ? normSearch.value : '');
+                C.toast(added > 0 ? `${added} norma(s) padrão incorporada(s)!` : 'Todas as normas padrão já estão na biblioteca.', added > 0 ? 'success' : 'info');
+            });
+        }
+
         const btnExpNorms = document.getElementById('btn-univ-export-norms');
         if (btnExpNorms) {
             btnExpNorms.addEventListener('click', () => {
@@ -4745,6 +4846,41 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         renderNormLibraryList();
     }
 
+    function buildGaussianBellCurveSVG(zScore) {
+        const W = 480;
+        const H = 105;
+        const padX = 28;
+        const baseY = 82;
+        const amp = 62;
+        const zToX = (z) => padX + ((Math.max(-3.2, Math.min(3.2, z)) + 3.2) / 6.4) * (W - 2 * padX);
+        const pts = [];
+        for (let z = -3.2; z <= 3.201; z += 0.1) {
+            const pdf = Math.exp(-0.5 * z * z);
+            pts.push(`${zToX(z).toFixed(1)},${(baseY - pdf * amp).toFixed(1)}`);
+        }
+        const curvePath = `M ${zToX(-3.2).toFixed(1)},${baseY} L ${pts.join(' L ')} L ${zToX(3.2).toFixed(1)},${baseY} Z`;
+        const zClamped = Math.max(-3.2, Math.min(3.2, zScore));
+        const zx = zToX(zClamped);
+        const zy = baseY - Math.exp(-0.5 * zClamped * zClamped) * amp;
+        const ticks = [-2, -1, 0, 1, 2];
+
+        return `
+            <svg viewBox="0 0 ${W} ${H}" class="w-full h-auto max-h-[115px] mt-2" aria-label="Posição na Curva Normal Gaussiana">
+                <rect x="${zToX(-0.67).toFixed(1)}" y="10" width="${(zToX(0.67) - zToX(-0.67)).toFixed(1)}" height="${baseY - 10}" fill="rgba(16,185,129,0.09)" />
+                <path d="${curvePath}" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="1.8" />
+                <line x1="${padX}" y1="${baseY}" x2="${W - padX}" y2="${baseY}" stroke="#334155" stroke-width="1" />
+                ${ticks.map((t) => {
+                    const tx = zToX(t).toFixed(1);
+                    return `<line x1="${tx}" y1="${baseY - 3}" x2="${tx}" y2="${baseY + 4}" stroke="#64748b" stroke-width="1" />
+                            <text x="${tx}" y="${baseY + 15}" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="9">${t > 0 ? '+' + t : t}DP</text>`;
+                }).join('')}
+                <line x1="${zx.toFixed(1)}" y1="12" x2="${zx.toFixed(1)}" y2="${baseY}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2" />
+                <circle cx="${zx.toFixed(1)}" cy="${zy.toFixed(1)}" r="4.5" fill="#f59e0b" stroke="#090d16" stroke-width="1.5" />
+                <text x="${zx.toFixed(1)}" y="10" text-anchor="middle" fill="#fcd34d" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="bold">Z = ${fmtSigned(zScore, 2)}</text>
+            </svg>
+        `;
+    }
+
     function refreshUniversalOutputs() {
         const C = global.VaultCore;
         const card = document.getElementById('univ-results-card');
@@ -4752,41 +4888,59 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
         const res = computeUniversal();
         if (!res.metrics) {
             card.innerHTML = `<div class="text-xs text-slate-500">Preencha os valores acima para visualizar todas as conversões psicométricas simultâneas.</div>`;
-            return;
+        } else {
+            const m = res.metrics;
+            card.innerHTML = `
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center">
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400">Escore Z</div>
+                        <div class="font-mono font-bold text-sm text-cyan-300 mt-0.5">${fmtSigned(m.z, 2)}</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400">Percentil Exato</div>
+                        <div class="font-mono font-bold text-sm text-emerald-300 mt-0.5">${m.pctFormatted}</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400">Ponderado (EP)</div>
+                        <div class="font-mono font-bold text-sm text-slate-100 mt-0.5">${fmtPlain(m.ep, 1)}</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400">Escore T</div>
+                        <div class="font-mono font-bold text-sm text-amber-200 mt-0.5">${fmtPlain(m.t, 1)}</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+                        <div class="text-[10px] font-mono text-slate-400">QI / Padrão</div>
+                        <div class="font-mono font-bold text-sm text-sky-300 mt-0.5">${Math.round(m.qi)}</div>
+                    </div>
+                </div>
+                ${buildGaussianBellCurveSVG(m.z)}
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800 text-xs">
+                    <div class="font-mono text-slate-300">
+                        IC 95% QI: <strong class="text-cyan-200">[${m.ciQI.label95}]</strong> •
+                        IC 90% QI: <span class="text-slate-400">[${m.ciQI.label90}]</span> •
+                        IC 95% T: <span class="text-amber-200">[${m.ciT.label95}]</span>
+                    </div>
+                    <span class="px-2.5 py-1 rounded border font-semibold ${m.classification.badge}">${C.esc(m.classification.label)}</span>
+                </div>
+            `;
         }
-        const m = res.metrics;
-        card.innerHTML = `
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center">
-                <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                    <div class="text-[10px] font-mono text-slate-400">Escore Z</div>
-                    <div class="font-mono font-bold text-sm text-cyan-300 mt-0.5">${fmtSigned(m.z, 2)}</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                    <div class="text-[10px] font-mono text-slate-400">Percentil Exato</div>
-                    <div class="font-mono font-bold text-sm text-emerald-300 mt-0.5">${m.pctFormatted}</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                    <div class="text-[10px] font-mono text-slate-400">Ponderado (EP)</div>
-                    <div class="font-mono font-bold text-sm text-slate-100 mt-0.5">${fmtPlain(m.ep, 1)}</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                    <div class="text-[10px] font-mono text-slate-400">Escore T</div>
-                    <div class="font-mono font-bold text-sm text-amber-200 mt-0.5">${fmtPlain(m.t, 1)}</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                    <div class="text-[10px] font-mono text-slate-400">QI / Padrão</div>
-                    <div class="font-mono font-bold text-sm text-sky-300 mt-0.5">${Math.round(m.qi)}</div>
-                </div>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800 text-xs">
-                <div class="font-mono text-slate-300">
-                    IC 95% QI: <strong class="text-cyan-200">[${m.ciQI.label95}]</strong> •
-                    IC 90% QI: <span class="text-slate-400">[${m.ciQI.label90}]</span> •
-                    IC 95% T: <span class="text-amber-200">[${m.ciT.label95}]</span>
-                </div>
-                <span class="px-2.5 py-1 rounded border font-semibold ${m.classification.badge}">${C.esc(m.classification.label)}</span>
-            </div>
-        `;
+
+        const rciOut = document.getElementById('univ-rci-output');
+        if (rciOut) {
+            const pre = parseNumInput(universalState.rciPre);
+            const post = parseNumInput(universalState.rciPost);
+            const rciSd = parseNumInput(universalState.rciSd) || 10;
+            const rxx = Math.min(0.999, Math.max(0.10, Number(parseNumInput(universalState.rxx)) || 0.88));
+            if (pre !== null && post !== null && rciSd > 0) {
+                const sem = rciSd * Math.sqrt(1 - rxx);
+                const sdiff = Math.sqrt(2 * sem * sem);
+                const rci = sdiff > 0 ? (post - pre) / sdiff : 0;
+                const sig = Math.abs(rci) >= 1.96;
+                rciOut.innerHTML = `<span class="text-slate-300">EPM = ${fmtPlain(sem, 2)} • S<sub>diff</sub> = ${fmtPlain(sdiff, 2)} • </span><strong class="${sig ? 'text-emerald-300' : 'text-amber-300'}">RCI = ${fmtSigned(rci, 2)} (${sig ? 'Mudança Estatisticamente Confiável, p < 0,05' : 'Oscilação dentro da margem de erro de medida'})</strong>`;
+            } else {
+                rciOut.textContent = 'Informe Escore Pré (T₁) e Escore Pós (T₂) para verificar se houve mudança clínica confiável (|RCI| ≥ 1,96).';
+            }
+        }
     }
 
     function renderNormLibraryList(searchQuery = '') {
@@ -5477,6 +5631,147 @@ ${bodyRowsHtml}
         ctx.restore();
     }
 
+    function syncAllFilledInstrumentsToReport(prot) {
+        let count = 0;
+
+        // 1. WASI
+        const wasi = computeWasiAll(prot);
+        [
+            { key: 'voc', name: 'Vocabulário', dom: 'Linguagem e Compreensão Verbal', obj: wasi.voc },
+            { key: 'sem', name: 'Semelhanças', dom: 'Linguagem e Compreensão Verbal', obj: wasi.sem },
+            { key: 'cub', name: 'Cubos', dom: 'Visuoconstrução e Percepção', obj: wasi.cub },
+            { key: 'rm',  name: 'Raciocínio Matricial', dom: 'Inteligência Geral e Raciocínio', obj: wasi.rm }
+        ].forEach((s) => {
+            if (s.obj && s.obj.metrics) {
+                upsertReportRow({
+                    uid: `wasi_${s.key}`, domain: s.dom, instrument: 'WASI', measure: s.name,
+                    raw: s.obj.raw !== null ? s.obj.raw : '—', z: s.obj.z, ep: s.obj.metrics.ep, t: s.obj.t, qi: null,
+                    ci95: s.obj.metrics.ciT ? s.obj.metrics.ciT.label95 + ' (T)' : '—',
+                    pct: s.obj.metrics.pctFormatted, classification: s.obj.metrics.classification.label,
+                    isSymptom: false, plotInCurve: true
+                });
+                count++;
+            }
+        });
+        [
+            { key: 'qiv', label: 'QI Verbal (QIV)', obj: wasi.qiv },
+            { key: 'qie', label: 'QI de Execução (QIE)', obj: wasi.qie },
+            { key: 'qit4', label: 'QI Total — 4 Subtestes (QIT-4)', obj: wasi.qit4 },
+            { key: 'qit2', label: 'QI Estimado — 2 Subtestes (QIT-2)', obj: wasi.qit2 }
+        ].forEach((c) => {
+            if (c.obj && c.obj.metrics) {
+                upsertReportRow({
+                    uid: `wasi_${c.key}`, domain: 'Inteligência Geral e Raciocínio', instrument: 'WASI', measure: c.label,
+                    raw: c.obj.sumT !== null ? `${Math.round(c.obj.sumT)} (ΣT)` : '—', z: c.obj.z, ep: null, t: c.obj.metrics.t, qi: c.obj.finalQI,
+                    ci95: c.obj.ci ? c.obj.ci.label95 : '—', pct: c.obj.metrics.pctFormatted,
+                    classification: c.obj.metrics.classification.label, isSymptom: false, plotInCurve: true
+                });
+                count++;
+            }
+        });
+
+        // 2. FDT
+        const fdt = computeFdtAll(prot);
+        [
+            { key: 'leitura', label: 'Leitura (Velocidade Automática)', dom: 'Atenção e Velocidade de Processamento', err: fdt.leitura.errors },
+            { key: 'contagem', label: 'Contagem (Velocidade Automática)', dom: 'Atenção e Velocidade de Processamento', err: fdt.contagem.errors },
+            { key: 'escolha', label: 'Escolha (Atenção Seletiva / Inibição)', dom: 'Funções Executivas', err: fdt.escolha.errors },
+            { key: 'alternancia', label: 'Alternância (Flexibilidade Cognitiva)', dom: 'Funções Executivas', err: fdt.alternancia.errors },
+            { key: 'inibicao', label: 'Índice Executivo de Inibição (Escolha − Leitura)', dom: 'Funções Executivas', err: null },
+            { key: 'flexibilidade', label: 'Índice Executivo de Flexibilidade (Alternância − Leitura)', dom: 'Funções Executivas', err: null }
+        ].forEach((d) => {
+            const obj = fdt[d.key];
+            if (obj && obj.time !== null) {
+                const rawTxt = d.err !== null ? `${fmtPlain(obj.time, 1)}s (${d.err} err.)` : `${fmtPlain(obj.time, 1)}s`;
+                upsertReportRow({
+                    uid: `fdt_${d.key}`, domain: d.dom, instrument: 'FDT (Cinco Dígitos)', measure: d.label,
+                    raw: rawTxt, z: obj.z !== undefined ? obj.z : null,
+                    ep: obj.metrics ? obj.metrics.ep : null, t: obj.metrics ? obj.metrics.t : null,
+                    qi: obj.metrics ? Math.round(obj.metrics.qi) : null,
+                    ci95: obj.metrics && obj.metrics.ciT ? obj.metrics.ciT.label95 + ' (T)' : '—',
+                    pct: obj.metrics ? obj.metrics.pctFormatted : '—',
+                    classification: obj.metrics ? obj.metrics.classification.label : 'Registro Bruto',
+                    isSymptom: false, plotInCurve: Boolean(obj.metrics)
+                });
+                count++;
+            }
+        });
+
+        // 3. SRS-2
+        const srs = computeSrs2All(prot);
+        [
+            { key: 'ps', label: 'Percepção Social (PS) *', obj: srs.ps },
+            { key: 'cs', label: 'Cognição Social (CS) *', obj: srs.cs },
+            { key: 'cos', label: 'Comunicação Social (CoS) *', obj: srs.cos },
+            { key: 'ms', label: 'Motivação Social (MS) *', obj: srs.ms },
+            { key: 'prr', label: 'Padrões Restritos e Repetitivos (PRR — DSM-5-TR) *', obj: srs.prr },
+            { key: 'cis', label: 'Comunicação e Interação Social (CIS — DSM-5-TR) *', obj: srs.cisObj },
+            { key: 'tot', label: 'Escore Total SRS-2 *', obj: srs.totalObj }
+        ].forEach((it) => {
+            if (it.obj && it.obj.t !== null) {
+                const ciT = calcConfidenceInterval(it.obj.t, 10, 0.92, false);
+                upsertReportRow({
+                    uid: `srs2_${it.key}`, domain: 'Cognição Social e Comportamento (Escalas Clínicas)',
+                    instrument: `SRS-2 (${prot.srs2.form})`, measure: it.label,
+                    raw: it.obj.raw !== null ? it.obj.raw : '—', z: it.obj.z, ep: null, t: it.obj.t, qi: null,
+                    ci95: ciT ? ciT.label95 + ' (T)' : '—', pct: it.obj.pctFormatted || formatPercentileClinical(it.obj.pct),
+                    classification: it.obj.sev.label, isSymptom: true, plotInCurve: false
+                });
+                count++;
+            }
+        });
+
+        // 4. BPA-2
+        const bpa = computeBpa2All(prot);
+        [
+            { key: 'ac', label: 'Atenção Concentrada (AC)', obj: bpa.ac },
+            { key: 'ad', label: 'Atenção Dividida (AD)', obj: bpa.ad },
+            { key: 'aa', label: 'Atenção Alternada (AA)', obj: bpa.aa },
+            { key: 'ag', label: 'Atenção Geral (AG)', obj: bpa.ag }
+        ].forEach((it) => {
+            if (it.obj && it.obj.pts !== null) {
+                upsertReportRow({
+                    uid: `bpa2_${it.key}`, domain: 'Atenção e Velocidade de Processamento', instrument: 'BPA-2',
+                    measure: it.label, raw: it.obj.pts, z: it.obj.z,
+                    ep: it.obj.metrics ? it.obj.metrics.ep : null, t: it.obj.metrics ? it.obj.metrics.t : null,
+                    qi: it.obj.metrics ? Math.round(it.obj.metrics.qi) : null,
+                    ci95: it.obj.metrics && it.obj.metrics.ciT ? it.obj.metrics.ciT.label95 + ' (T)' : '—',
+                    pct: it.obj.metrics ? it.obj.metrics.pctFormatted : '—',
+                    classification: it.obj.metrics ? it.obj.metrics.classification.label : 'Registro Bruto',
+                    isSymptom: false, plotInCurve: Boolean(it.obj.metrics)
+                });
+                count++;
+            }
+        });
+
+        // 5. RAVLT
+        const rav = computeRavltAll(prot);
+        [
+            { key: 'total', label: 'Escore Total de Aprendizagem (Σ A1–A5)', raw: rav.total, m: rav.norms.total },
+            { key: 'alt', label: 'Aprendizagem ao Longo das Tentativas (ALT)', raw: rav.alt, m: rav.norms.alt },
+            { key: 'a6', label: 'Evocação Pós-Interferência (A6)', raw: rav.a6, m: rav.norms.a6 },
+            { key: 'a7', label: 'Evocação Tardia 30 min (A7)', raw: rav.a7, m: rav.norms.a7 },
+            { key: 'vel', label: 'Velocidade de Esquecimento (A7 ÷ A6)', raw: rav.velEsq !== null ? fmtPlain(rav.velEsq, 2) : null, m: null },
+            { key: 'rec', label: 'Reconhecimento Líquido', raw: rav.recNet, m: rav.norms.rec }
+        ].forEach((it) => {
+            if (it.raw !== null && it.raw !== undefined) {
+                upsertReportRow({
+                    uid: `ravlt_${it.key}`, domain: 'Memória e Aprendizagem Episódica', instrument: 'RAVLT',
+                    measure: it.label, raw: it.raw, z: it.m ? it.m.z : null,
+                    ep: it.m ? it.m.ep : null, t: it.m ? it.m.t : null,
+                    qi: it.m ? Math.round(it.m.qi) : null,
+                    ci95: it.m && it.m.ciT ? it.m.ciT.label95 + ' (T)' : '—',
+                    pct: it.m ? it.m.pctFormatted : '—',
+                    classification: it.m ? it.m.classification.label : 'Índice Clínico',
+                    isSymptom: false, plotInCurve: Boolean(it.m)
+                });
+                count++;
+            }
+        });
+
+        return count;
+    }
+
     function renderSubTabLaudo(viewport) {
         const C = global.VaultCore;
         const prot = getActiveProtocol();
@@ -5508,6 +5803,12 @@ ${bodyRowsHtml}
                             <p class="text-xs text-slate-400">Personalize colunas, reordene medidas, copie com estilo ABNT nativo para Word/Docs ou imprima em Folha A4.</p>
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="btn-abnt-sync-battery"
+                                class="min-h-[40px] px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 font-semibold text-xs flex items-center gap-1.5 transition" title="Coletar automaticamente todos os testes preenchidos (WASI, FDT, SRS-2, BPA-2, RAVLT) para a Tabela ABNT">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                <span>Sincronizar Bateria</span>
+                            </button>
+
                             <button type="button" id="btn-copy-abnt-word"
                                 class="min-h-[40px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/20 transition">
                                 <i data-lucide="clipboard-check" class="w-4 h-4"></i>
@@ -5809,6 +6110,22 @@ ${bodyRowsHtml}
                 renderHeaderAndSubtabs();
                 renderSubTabLaudo(viewport);
                 C.refreshIcons(viewport);
+            });
+        }
+
+        const btnSyncBat = document.getElementById('btn-abnt-sync-battery');
+        if (btnSyncBat) {
+            btnSyncBat.addEventListener('click', () => {
+                const synced = syncAllFilledInstrumentsToReport(prot);
+                if (synced === 0) {
+                    C.toast('Nenhum instrumento preenchido encontrado para sincronizar.', 'warning');
+                    return;
+                }
+                saveState();
+                renderHeaderAndSubtabs();
+                renderSubTabLaudo(viewport);
+                C.refreshIcons(viewport);
+                C.toast(`${synced} medida(s) sincronizadas automaticamente para a Tabela ABNT!`, 'success');
             });
         }
 

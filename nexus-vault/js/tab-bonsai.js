@@ -1181,6 +1181,29 @@
             biologicalNote: 'Na Lua Minguante ou sob madeira madura de outono, o turgor das células vegetais é menor, reduzindo drasticamente o risco de fratura do galho durante a dobra e prevenindo marcas prematuras.'
         },
         {
+            id: 'DESARAME_SEGURANCA',
+            category: 'ESTRUTURA',
+            categoryBadge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+            title: 'Desaramamento Preventivo & Alívio de Córtex',
+            subtitle: 'Remoção cirúrgica de arames antes que marquem ou estrangulem o câmbio vascular',
+            idealMoons: ['MINGUANTE', 'NOVA', 'CRESCENTE', 'CHEIA'],
+            avoidMoons: [],
+            idealSeasons: ['Primavera', 'Verão', 'Outono', 'Inverno'],
+            avoidSeasons: [],
+            suitableStages: ['Muda', 'Pré-bonsai', 'Bonsai', 'Yamadori'],
+            speciesKeywords: ['Amora', 'Duranta', 'Ficus', 'Figueira', 'Acerola', 'Caliandra', 'Junípero', 'Piteco'],
+            avoidKeywords: [],
+            tools: 'Alicate corta-arame de ponta rente (Kiri-yatto) para picotar o arame sem desenrolar e forçar o galho.',
+            steps: [
+                'Inspecionar todas as espirais observando se a casca começou a inchar ao redor do alumínio ou cobre.',
+                'Cortar o arame a cada meia volta utilizando o alicate corta-arame de ponta arredondada, evitando desenrolar por torção.',
+                'Remover os fragmentos cuidadosamente para não arranhar gemas laterais ou acículas.',
+                'Avaliar se o galho manteve a angulação; se houver retorno elástico parcial, aguardar 2 semanas de repouso antes de rearamar invertendo o sentido da espiral.',
+                'Limpar a data de limite de desaramamento na ficha e registrar no histórico.'
+            ],
+            biologicalNote: 'Na primavera e verão, a expansão cambial de espécies tropicais ocorre em poucas semanas; o corte segmentado do arame impede lesão mecânica no floema e preserva cicatrizes invisíveis.'
+        },
+        {
             id: 'MADEIRA_MORTA',
             category: 'ESTRUTURA',
             categoryBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
@@ -1678,183 +1701,184 @@
                 }
 
                 // Especificidades botânicas finas da flora brasileira e espécies clássicas
+                const addSpeciesAdj = (delta) => { score += delta; speciesDelta += delta; };
                 if (popName.includes('jabuticaba') || sciName.includes('myrciaria')) {
                     if (proc.id === 'PODA_LIMPEZA_SANITARIA' || proc.id === 'PINCAGEM_APICAL') {
-                        if (seasonInfo.season === 'Outono' || seasonInfo.season === 'Verão') score += 22;
+                        if (seasonInfo.season === 'Outono' || seasonInfo.season === 'Verão') addSpeciesAdj(22);
                     }
                     if (proc.category === 'PODA_DRASTICA' && (seasonInfo.season === 'Inverno')) {
-                        score -= 30; // Evitar corte pesado no frio para não estagnar gemas dormentes
+                        addSpeciesAdj(-30); // Evitar corte pesado no frio para não estagnar gemas dormentes
                     }
                 }
                 if (popName.includes('pitanga') || sciName.includes('eugenia')) {
                     if (proc.category === 'PODA_RAMIFICACAO' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
-                        score += 20;
+                        addSpeciesAdj(20);
                     }
                 }
                 if (popName.includes('caliandra') || sciName.includes('calliandra')) {
                     if (proc.category === 'PINCAGEM' && seasonInfo.season === 'Verão') {
-                        score += 24; // Resposta explosiva a pinçagem contínua de ponteiras
+                        addSpeciesAdj(24); // Resposta explosiva a pinçagem contínua de ponteiras
                     }
                 }
                 if (popName.includes('piteco') || popName.includes('tataré') || sciName.includes('chloroleucon')) {
                     if (proc.category === 'PODA_RAMIFICACAO' || proc.category === 'ESTRUTURA') {
-                        if (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'MINGUANTE') score += 20;
+                        if (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'MINGUANTE') addSpeciesAdj(20);
                     }
                 }
                 if (popName.includes('ipê') || sciName.includes('handroanthus')) {
                     if (proc.category === 'ESTRUTURA' && seasonInfo.season === 'Inverno') {
-                        score += 22; // Janela ideal pré-brotação de primavera
+                        addSpeciesAdj(22); // Janela ideal pré-brotação de primavera
                     }
                 }
                 if (popName.includes('buxinho') || sciName.includes('buxus')) {
                     if (proc.category === 'PODA_RAMIFICACAO' && moon.phaseGroup === 'MINGUANTE') {
-                        score += 18; // Poda de contenção com mínima sangria
+                        addSpeciesAdj(18); // Poda de contenção com mínima sangria
                     }
                 }
                 if (popName.includes('junípero') || popName.includes('pinheiro') || sciName.includes('juniperus')) {
-                    if (proc.id === 'PINCAGEM_VERDE_PINUS' && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
-                        score += 22;
+                    if ((proc.id === 'PINCAGEM_PINUS_VELAS' || proc.id === 'DESPONTE_VELAS_PINUS') && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
+                        addSpeciesAdj(22);
                     }
                     if (proc.category === 'MADEIRA_MORTA' && (moon.phaseGroup === 'NOVA' || moon.phaseGroup === 'MINGUANTE')) {
-                        score += 24; // Ideal para Jin e Shari
+                        addSpeciesAdj(24); // Ideal para Jin e Shari
                     }
                 }
                 if (popName.includes('ficus') || popName.includes('figueira') || sciName.includes('ficus')) {
                     if (proc.category === 'DESFOLHA' && seasonInfo.season === 'Verão') {
-                        score += 25;
+                        addSpeciesAdj(25);
                     }
                 }
                 if (popName.includes('acerola') || sciName.includes('malpighia')) {
                     if (proc.id === 'ADUBACAO_FLORACAO' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
-                        score += 25; // Estímulo a floradas e frutificação sucessiva
+                        addSpeciesAdj(25); // Estímulo a floradas e frutificação sucessiva
                     }
                     if (proc.category === 'PINCAGEM' && seasonInfo.season === 'Verão') {
-                        score += 20; // Contenção de ramos ladrões e adensamento
+                        addSpeciesAdj(20); // Contenção de ramos ladrões e adensamento
                     }
                 }
                 if (popName.includes('amora') || sciName.includes('morus')) {
-                    if (proc.id === 'DESFOLHA_TOTAL' && seasonInfo.season === 'Verão' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
-                        score += 30; // Redução de folhas em até 70% e ramificação terciária vigorosa
+                    if ((proc.id === 'DESFOLHA_TOTAL' || proc.id === 'DESFOLHA_REDUCAO_VERAO') && seasonInfo.season === 'Verão' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
+                        addSpeciesAdj(30); // Redução de folhas em até 70% e ramificação terciária vigorosa
                     }
                     if (proc.id === 'PODA_ESTRUTURAL_INVERNO' && seasonInfo.season === 'Inverno' && (moon.phaseGroup === 'NOVA' || moon.phaseGroup === 'MINGUANTE')) {
-                        score += 28; // Poda cirúrgica em dormência total
+                        addSpeciesAdj(28); // Poda cirúrgica em dormência total
                     }
                 }
                 if (popName.includes('bougainvillea') || popName.includes('primavera') || sciName.includes('bougainvillea')) {
                     if (proc.category === 'PODA_DRASTICA' && (seasonInfo.season === 'Verão' || seasonInfo.season === 'Outono')) {
-                        score += 24; // Poda vigorosa pós-queda das brácteas florais
+                        addSpeciesAdj(24); // Poda vigorosa pós-queda das brácteas florais
                     }
                     if (proc.id === 'LAVAGEM_RAIZES') {
-                        score -= 50; // Raízes frágeis: nunca lavar o torrão central de bougainvillea
+                        addSpeciesAdj(-50); // Raízes frágeis: nunca lavar o torrão central de bougainvillea
                     }
                 }
                 if (popName.includes('érica') || popName.includes('cufea') || sciName.includes('cuphea')) {
                     if ((proc.id === 'PINCAGEM_APICAL' || proc.category === 'PODA_RAMIFICACAO') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
-                        score += 26; // Refinamento de almofadas floridas com tesoura fina
+                        addSpeciesAdj(26); // Refinamento de almofadas floridas com tesoura fina
                     }
                 }
                 if (popName.includes('fruta-dos-milagres') || sciName.includes('synsepalum')) {
                     if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && seasonInfo.season === 'Inverno') {
-                        score -= 40; // Sensível ao frio: transplantar apenas no calor com solo aquecido
+                        addSpeciesAdj(-40); // Sensível ao frio: transplantar apenas no calor com solo aquecido
                     }
                 }
                 if (popName.includes('acer') || popName.includes('bordo') || sciName.includes('acer')) {
                     if (proc.id === 'DESFOLHA_TOTAL' || proc.category === 'DESFOLHA') {
                         if (seasonInfo.season === 'Verão' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
-                            score += 26; // Desfolha de verão para redução foliar em Acer vigoroso
+                            addSpeciesAdj(26); // Desfolha de verão para redução foliar em Acer vigoroso
                         } else {
-                            score -= 30; // Evitar desfolha fora da janela de alto vigor estival
+                            addSpeciesAdj(-30); // Evitar desfolha fora da janela de alto vigor estival
                         }
                     }
                     if (proc.id === 'PODA_ESTRUTURAL_INVERNO' && seasonInfo.season === 'Inverno') {
-                        score += 24; // Poda estrutural em dormência para evitar sangria de seiva
+                        addSpeciesAdj(24); // Poda estrutural em dormência para evitar sangria de seiva
                     }
                 }
                 if (popName.includes('olmo') || popName.includes('ulmus') || sciName.includes('ulmus')) {
                     if ((proc.id === 'PINCAGEM_APICAL' || proc.category === 'PODA_RAMIFICACAO') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
-                        score += 28; // Ramificação fina explosiva em Olmo com pinçagem a 2 pares de folhas
+                        addSpeciesAdj(28); // Ramificação fina explosiva em Olmo com pinçagem a 2 pares de folhas
                     }
                 }
                 if (popName.includes('serissa') || sciName.includes('serissa')) {
                     if (proc.category === 'PODA_RAMIFICACAO' && moon.phaseGroup === 'MINGUANTE') {
-                        score += 22; // Poda de contenção pós-florada com cicatrização rápida
+                        addSpeciesAdj(22); // Poda de contenção pós-florada com cicatrização rápida
                     }
                     if (proc.id === 'LAVAGEM_RAIZES') {
-                        score -= 35; // Raízes finas e sensíveis a dessecação
+                        addSpeciesAdj(-35); // Raízes finas e sensíveis a dessecação
                     }
                 }
                 if (popName.includes('resedá') || sciName.includes('lagerstroemia')) {
                     if (proc.category === 'PODA_DRASTICA' && (seasonInfo.season === 'Inverno' || seasonInfo.season === 'Primavera')) {
-                        score += 26; // Floração ocorre nos ramos novos: corte forte pré-primavera
+                        addSpeciesAdj(26); // Floração ocorre nos ramos novos: corte forte pré-primavera
                     }
                 }
                 if (popName.includes('romã') || sciName.includes('punica')) {
                     if (proc.id === 'ADUBACAO_FLORACAO' && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
-                        score += 26; // Estímulo a floradas vermelhas e frutificação persistente
+                        addSpeciesAdj(26); // Estímulo a floradas vermelhas e frutificação persistente
                     }
                     if (proc.category === 'PODA_RAMIFICACAO' && seasonInfo.season === 'Outono') {
-                        score += 22; // Poda pós-frutificação com cicatrização eficiente
+                        addSpeciesAdj(22); // Poda pós-frutificação com cicatrização eficiente
                     }
                 }
                 if (popName.includes('azaleia') || sciName.includes('rhododendron')) {
                     if (proc.category === 'PODA_DRASTICA' && seasonInfo.season === 'Primavera') {
-                        score += 28; // Janela cirúrgica imediata pós-queda das flores
+                        addSpeciesAdj(28); // Janela cirúrgica imediata pós-queda das flores
                     }
                     if (proc.id === 'DESFOLHA_TOTAL') {
-                        score -= 50; // Azaleias nunca toleram desfolha total (risco de morte de galhos)
+                        addSpeciesAdj(-50); // Azaleias nunca toleram desfolha total (risco de morte de galhos)
                     }
                 }
                 if (popName.includes('pau-ferro') || sciName.includes('libidibia') || popName.includes('guatambu')) {
                     if (proc.category === 'ESTRUTURA' && (moon.phaseGroup === 'CRESCENTE' || moon.phaseGroup === 'CHEIA')) {
-                        score += 20; // Madeira extremamente densa: aramação jovem e tensores de ancoragem
+                        addSpeciesAdj(20); // Madeira extremamente densa: aramação jovem e tensores de ancoragem
                     }
                     if (proc.category === 'MADEIRA_MORTA' && (moon.phaseGroup === 'NOVA' || moon.phaseGroup === 'MINGUANTE')) {
-                        score += 26; // Escultura de Shari e Jin em madeira nobre ultradensa
+                        addSpeciesAdj(26); // Escultura de Shari e Jin em madeira nobre ultradensa
                     }
                 }
                 if (popName.includes('cereja') || sciName.includes('involucrata')) {
                     if (proc.category === 'PODA_RAMIFICACAO' && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
-                        score += 25; // Ramificação fina vigorosa pós-brotação em Cereja-do-Rio-Grande
+                        addSpeciesAdj(25); // Ramificação fina vigorosa pós-brotação em Cereja-do-Rio-Grande
                     }
                     if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && seasonInfo.season === 'Inverno') {
-                        score -= 35; // Sensível a frio radicular: transplantar apenas no calor úmido
+                        addSpeciesAdj(-35); // Sensível a frio radicular: transplantar apenas no calor úmido
                     }
                 }
                 if (popName.includes('jabuticaba') || sciName.includes('plinia')) {
                     if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && (moon.phaseGroup === 'MINGUANTE' || moon.phaseGroup === 'NOVA')) {
                         if (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão') {
-                            score += 28; // Enraizamento rápido e vigoroso sob solo aquecido no Minguante
+                            addSpeciesAdj(28); // Enraizamento rápido e vigoroso sob solo aquecido no Minguante
                         }
                     }
                     if (proc.id === 'PINCAGEM_APICAL' && (moon.phaseGroup === 'MINGUANTE')) {
-                        score += 22; // Contenção de entrenós longos mantendo copa globular densa
+                        addSpeciesAdj(22); // Contenção de entrenós longos mantendo copa globular densa
                     }
                 }
 
                 if (popName.includes('tamarindo') || sciName.includes('tamarindus')) {
                     if (proc.category === 'PINCAGEM' || proc.category === 'PODA_RAMIFICACAO') {
-                        if (seasonInfo.season === 'Verão' || seasonInfo.season === 'Primavera') score += 22;
+                        if (seasonInfo.season === 'Verão' || seasonInfo.season === 'Primavera') addSpeciesAdj(22);
                     }
                     if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && seasonInfo.season === 'Inverno') {
-                        score -= 40; // Sensível ao frio radicular
+                        addSpeciesAdj(-40); // Sensível ao frio radicular
                     }
                 }
                 if (popName.includes('duranta') || popName.includes('ixora')) {
                     if ((proc.id === 'PINCAGEM_APICAL' || proc.category === 'PODA_RAMIFICACAO') && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Verão')) {
-                        score += 22;
+                        addSpeciesAdj(22);
                     }
                 }
                 if (popName.includes('limão') || popName.includes('mexerica') || sciName.includes('citrus')) {
                     if (proc.id === 'ADUBACAO_FLORACAO' && (seasonInfo.season === 'Primavera' || seasonInfo.season === 'Outono')) {
-                        score += 22;
+                        addSpeciesAdj(22);
                     }
                 }
                 if (popName.includes('rosa-do-deserto') || popName.includes('rainha-do-abismo') || sciName.includes('adenium') || sciName.includes('sinningia')) {
                     if ((proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') && seasonInfo.season === 'Inverno') {
-                        score -= 45; // Caudex/tubérculo em dormência invernal: risco elevado de podridão
+                        addSpeciesAdj(-45); // Caudex/tubérculo em dormência invernal: risco elevado de podridão
                     }
                     if (proc.category === 'NUTRICAO' && seasonInfo.season === 'Inverno') {
-                        score -= 40; // Suspender adubação na dormência
+                        addSpeciesAdj(-40); // Suspender adubação na dormência
                     }
                 }
 
@@ -1876,10 +1900,18 @@
                     }
                 }
 
-                if (proc.id === 'DESARAME' || proc.id === 'ARAMACAO_ESTRUTURAL') {
+                if (proc.id === 'DESARAME_SEGURANCA') {
                     if (wiringDiffAtTarget !== null && wiringDiffAtTarget <= 7) {
-                        score += 30;
-                        historyDelta += 30;
+                        score += 42;
+                        historyDelta += 42;
+                    } else {
+                        score -= 45; // Só recomendar desaramamento preventivo quando houver arame próximo do prazo
+                        historyDelta -= 45;
+                    }
+                } else if (proc.id === 'ARAMACAO_ESTRUTURAL') {
+                    if (wiringDiffAtTarget !== null && wiringDiffAtTarget <= 7) {
+                        score -= 25; // Priorizar desarame antes de rearamar
+                        historyDelta -= 25;
                     }
                 }
 
@@ -3268,7 +3300,12 @@
                             <button type="button" data-proc-filter="FITOSSANIDADE" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Calda Sulfocálcica</button>
                             <button type="button" data-proc-filter="NUTRICAO" class="proc-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">Nutrição &amp; Floração</button>
                         </div>
-                        <div class="text-xs text-slate-400 font-mono" id="procedure-match-count">0 recomendações</div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <select id="procedure-plant-filter" class="px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-cyan-300 font-mono focus:outline-none focus:border-cyan-500">
+                                <option value="ALL">Todo o Acervo</option>
+                            </select>
+                            <div class="text-xs text-slate-400 font-mono" id="procedure-match-count">0 recomendações</div>
+                        </div>
                     </div>
 
                     <!-- Conteúdo Rolável: Cards de Recomendações Cirúrgicas -->
@@ -3403,6 +3440,7 @@
 
         const cal = SEASONAL_CALENDAR_SH[selectedCalendarMonth] || SEASONAL_CALENDAR_SH[new Date().getMonth()];
         const isCurrentMonth = selectedCalendarMonth === new Date().getMonth();
+        const monthShortNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
         // Identifica no acervo as plantas que são das espécies em foco
         const focusPlantsInCollection = plants.filter((p) =>
@@ -3417,6 +3455,14 @@
             .slice(0, 3);
 
         container.innerHTML = `
+            <div class="flex flex-wrap items-center gap-1 pb-3 mb-3 border-b border-slate-800/80">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 mr-1">Calendário 12M:</span>
+                ${monthShortNames.map((mLbl, mIdx) => {
+                    const isSel = mIdx === selectedCalendarMonth;
+                    const isNow = mIdx === new Date().getMonth();
+                    return `<button type="button" data-cal-month-chip="${mIdx}" class="px-2 py-1 rounded text-[11px] font-mono transition border ${isSel ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400 font-bold' : (isNow ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/30' : 'bg-[#090d16] text-slate-400 border-slate-800 hover:text-slate-200')}">${mLbl}</button>`;
+                }).join('')}
+            </div>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
                 <div class="lg:col-span-4 bg-[#090d16] border border-slate-800 rounded-xl p-3.5 flex flex-col justify-between">
                     <div>
@@ -3553,6 +3599,18 @@
                 </div>
             ` : ''}
         `;
+
+        container.querySelectorAll('[data-cal-month-chip]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const mIdx = parseInt(btn.getAttribute('data-cal-month-chip'), 10);
+                if (!Number.isNaN(mIdx)) {
+                    selectedCalendarMonth = mIdx;
+                    const mSel = document.getElementById('seasonal-month-select');
+                    if (mSel) mSel.value = String(mIdx);
+                    renderSeasonalPanel();
+                }
+            });
+        });
 
         const filterBtn = document.getElementById('btn-filter-seasonal-focus');
         if (filterBtn) {
@@ -4170,6 +4228,16 @@
             });
         }
 
+        const plantFilterSel = document.getElementById('procedure-plant-filter');
+        const selectedPlantId = plantFilterSel ? plantFilterSel.value : 'ALL';
+        if (plantFilterSel) {
+            const optsHtml = '<option value="ALL">Todo o Acervo (' + plants.length + ')</option>' +
+                plants.map((pl) => `<option value="${C.esc(pl.id)}" ${selectedPlantId === pl.id ? 'selected' : ''}>[${C.esc(pl.id)}] ${C.esc(pl.popularName)}</option>`).join('');
+            plantFilterSel.innerHTML = optsHtml;
+            plantFilterSel.value = plants.some(pl => pl.id === selectedPlantId) ? selectedPlantId : 'ALL';
+            plantFilterSel.onchange = () => renderProcedureModal(currentProcedureFilter);
+        }
+
         const allMatches = evaluateIdealProcedures(plants, today);
         const matchesFilterCat = (cat) => {
             if (filterCategory === 'ALL') return true;
@@ -4177,7 +4245,11 @@
             if (filterCategory === 'ESTRUTURA') return cat === 'ESTRUTURA' || cat === 'MADEIRA_MORTA';
             return cat === filterCategory;
         };
-        const filtered = allMatches.filter((m) => matchesFilterCat(m.procedure.category));
+        const activePlantFilter = plantFilterSel ? plantFilterSel.value : 'ALL';
+        const filtered = allMatches.filter((m) =>
+            matchesFilterCat(m.procedure.category) &&
+            (activePlantFilter === 'ALL' || m.plant.id === activePlantFilter)
+        );
 
         const countEl = document.getElementById('procedure-match-count');
         if (countEl) {
@@ -4322,6 +4394,9 @@
             target.lastRepot = C.todayISO();
         } else if (procCat === 'ESTRUTURA') {
             target.lastStyling = C.todayISO();
+            if (String(procTitle || '').toLowerCase().includes('desaram')) {
+                target.wiringDueDate = '';
+            }
         } else if (procCat === 'PODA_DRASTICA' || procCat === 'PODA_RAMIFICACAO' || procCat === 'DESFOLHA' || procCat === 'PINCAGEM') {
             target.lastPruning = C.todayISO();
         } else if (procCat === 'NUTRICAO') {
@@ -4401,15 +4476,17 @@
                     .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
                 const effDate = [p.lastPruning || '', (pLogs[0] && pLogs[0].date) || ''].filter(Boolean).sort().pop() || '';
                 const rawDiff = effDate ? C.daysDiffFromToday(effDate) : null;
-                const daysAgo = rawDiff !== null ? Math.abs(rawDiff) : null;
+                const daysAgo = (rawDiff !== null && rawDiff <= 0) ? Math.abs(rawDiff) : null;
                 if (daysAgo !== null && daysAgo < 30) {
+                    const readyDateISO = C.addDaysISO(effDate, 30);
+                    const readyMoon = getMoonPhase(new Date(readyDateISO + 'T12:00:00'));
                     rows.push({
                         date: effDate,
                         plantId: p.id,
                         popularName: p.popularName,
                         bench: p.bench,
                         type: (pLogs[0] && pLogs[0].type) || 'Poda recente',
-                        detail: `Em recuperação fisiológica (${daysAgo}d de 30d — faltam ${30 - daysAgo}d para nova poda/desfolha).`,
+                        detail: `Em recuperação fisiológica (${daysAgo}d de 30d — liberada em ${C.formatDateBR(readyDateISO)} • ${readyMoon.phaseName}).`,
                         daysAgo
                     });
                 }

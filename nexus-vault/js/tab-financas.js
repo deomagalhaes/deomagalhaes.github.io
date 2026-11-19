@@ -438,9 +438,11 @@
         const stressedClinicCosts = costsClinic * (1 + inflationSurprisePct / 100);
         const stressedMonthlyRate = Math.max(0.001, baseMonthlyRate * (1 - dividendShockPct / 100));
         const stressedMonthlyPassive = stressedPatrimony * stressedMonthlyRate;
+        const portfolioStressedMonthlyPassive = portfolioStressedPatrimony * stressedMonthlyRate;
 
         const baseClinicCoveragePct = costsClinic > 0 ? (baseMonthlyPassive / costsClinic) * 100 : 0;
         const stressedClinicCoveragePct = stressedClinicCosts > 0 ? (stressedMonthlyPassive / stressedClinicCosts) * 100 : 0;
+        const portfolioClinicCoveragePct = stressedClinicCosts > 0 ? (portfolioStressedMonthlyPassive / stressedClinicCosts) * 100 : 0;
 
         const netPerSession = baseModel.netPerSession || 180;
         const sessionsNeededStressed = netPerSession > 0 ? Math.max(0, (stressedClinicCosts - stressedMonthlyPassive) / netPerSession) : 0;
@@ -544,6 +546,42 @@
 
         const fullyCoveredTiersStressed = stressedCascade.tiers.filter(t => t.isFullyCovered).length;
         const totalTiersCount = stressedCascade.tiers.length;
+        const monthsSavedByBoost = (monthsToRecoverDynamic !== null && monthsToRecoverWithBoost !== null)
+            ? Math.max(0, monthsToRecoverDynamic - monthsToRecoverWithBoost)
+            : null;
+
+        let scenariosMatrix = [];
+        if (!raw._skipMatrix) {
+            const presets = [
+                { key: 'correction20', label: '−20% Correção' },
+                { key: 'crash30', label: '−30% COVID / Flash Crash' },
+                { key: 'crash40', label: '−40% Subprime' },
+                { key: 'stagflation', label: 'Estagflação IPCA 9.5%' },
+                { key: 'fii_drop', label: 'Crise FIIs (−25% Yield)' },
+                { key: 'black_swan', label: '−50% Cisne Negro' }
+            ];
+            scenariosMatrix = presets.map((pr) => {
+                const subRes = computeStressTest(Object.assign({}, raw, {
+                    stressScenario: pr.key,
+                    _skipMatrix: true
+                }));
+                return {
+                    key: pr.key,
+                    label: pr.label,
+                    dropPct: subRes.dropPatrimonyPct,
+                    divShockPct: subRes.dividendShockPct,
+                    portfolioWeightedDropPct: subRes.portfolioWeightedDropPct,
+                    stressedPatrimony: subRes.stressedPatrimony,
+                    portfolioStressedPatrimony: subRes.portfolioStressedPatrimony,
+                    stressedMonthlyPassive: subRes.stressedMonthlyPassive,
+                    portfolioStressedMonthlyPassive: subRes.portfolioStressedMonthlyPassive,
+                    stressedClinicCoveragePct: subRes.stressedClinicCoveragePct,
+                    monthsToRecoverDynamic: subRes.monthsToRecoverDynamic,
+                    monthsToRecoverWithBoost: subRes.monthsToRecoverWithBoost,
+                    monthsSavedByBoost: subRes.monthsSavedByBoost
+                };
+            });
+        }
 
         return {
             scenarioKey,
@@ -557,6 +595,8 @@
             inflationSurprisePct,
             portfolioWeightedDropPct,
             portfolioStressedPatrimony,
+            portfolioStressedMonthlyPassive,
+            portfolioClinicCoveragePct,
             diversificationShieldPct,
             lostCapital,
             baseMonthlyPassive,
@@ -569,6 +609,7 @@
             monthsToRecover,
             monthsToRecoverDynamic,
             monthsToRecoverWithBoost,
+            monthsSavedByBoost,
             stressedFullFireMonth,
             crossoverDelayMonths,
             effectiveAporte,
@@ -576,7 +617,8 @@
             recoverySeries,
             stressedCascade,
             fullyCoveredTiersStressed,
-            totalTiersCount
+            totalTiersCount,
+            scenariosMatrix
         };
     }
 
@@ -672,7 +714,7 @@
      * Calcula as cotas inteiras a comprar de cada ativo/ticker específico
      * com alocação ótima e saldo residual para a reserva de oportunidade
      */
-    function computeAporteByTickers(classes, customTickers, maxTickersPerClass) {
+    function computeAporteByTickers(classes, customTickers, maxTickersPerClass, opts) {
         const result = [];
         let totalResidualAll = 0;
         let totalSpentAll = 0;
@@ -683,6 +725,11 @@
             : {};
         const tickerCatalog = customTickers || (global.VaultTabIndependencia && global.VaultTabIndependencia.TICKER_DIRECTORY) || DEFAULT_TICKERS;
         const sliceLimit = Math.max(1, Math.min(6, Number(maxTickersPerClass || baseInputs.tickersPerClass) || 2));
+        const options = opts && typeof opts === 'object' ? opts : {};
+        const rawDiscountPct = options.crisisDiscountPct !== undefined
+            ? Number(options.crisisDiscountPct)
+            : (!customTickers && baseInputs.simulateCrisisPrices ? 30 : 0);
+        const crisisDiscountPct = Math.max(0, Math.min(60, Number.isFinite(rawDiscountPct) ? rawDiscountPct : 0));
 
         classesArr.forEach((cls) => {
             const classAporte = cls.recommendedAporte || 0;
@@ -702,18 +749,26 @@
             const perTickerBudget = targetTickers.length > 0 ? (classAporte / targetTickers.length) : 0;
             let classSpent = 0;
             let classAnnualDiv = 0;
+            const applyDiscount = crisisDiscountPct > 0 && cls.key !== 'RF';
+            const discountFactor = applyDiscount ? (1 - crisisDiscountPct / 100) : 1;
 
             const tickerAlloc = targetTickers.map((t) => {
-                const shares = t.price > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / t.price) : 0;
-                const totalSpent = shares * t.price;
-                const annualDiv = totalSpent * ((Number(t.yield) || 0) / 100);
+                const basePrice = Number(t.price) || 0;
+                const effPrice = applyDiscount ? Math.max(0.01, Math.round(basePrice * discountFactor * 100) / 100) : basePrice;
+                const baseYield = Number(t.yield) || 0;
+                const effYield = applyDiscount && baseYield > 0 ? Math.round((baseYield / discountFactor) * 10) / 10 : baseYield;
+                const shares = effPrice > 0 && perTickerBudget > 0 ? Math.floor(perTickerBudget / effPrice) : 0;
+                const totalSpent = shares * effPrice;
+                const annualDiv = totalSpent * (effYield / 100);
                 classSpent += totalSpent;
                 classAnnualDiv += annualDiv;
                 return {
                     ticker: t.ticker,
                     name: t.name,
-                    price: t.price,
-                    yield: t.yield,
+                    price: effPrice,
+                    basePrice,
+                    yield: effYield,
+                    baseYield,
                     type: t.type,
                     shares,
                     totalSpent,
@@ -768,12 +823,13 @@
         });
 
         const estimatedMonthlyDividendAdded = estimatedAnnualDividendAdded / 12;
+        const weightedYieldPct = totalSpentAll > 0 ? (estimatedAnnualDividendAdded / totalSpentAll) * 100 : 0;
 
         // Gera minuta formatada de boleta para Home Broker
         const totalAporte = classesArr.reduce((acc, c) => acc + (c.recommendedAporte || 0), 0);
-        let summaryOrderText = `📋 BOLETA DE APORTE CONSOLIDADA — NEXUS VAULT\n`;
+        let summaryOrderText = `📋 BOLETA DE APORTE CONSOLIDADA — NEXUS VAULT${crisisDiscountPct > 0 ? ` (SIMULAÇÃO −${crisisDiscountPct}% CRISE)` : ''}\n`;
         summaryOrderText += `Data: ${new Date().toLocaleDateString('pt-BR')} | Total Aporte: R$ ${totalAporte.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
-        summaryOrderText += `Renda Passiva Adicional Estimada: +R$ ${estimatedMonthlyDividendAdded.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}/mês\n`;
+        summaryOrderText += `Renda Passiva Adicional Estimada: +R$ ${estimatedMonthlyDividendAdded.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}/mês (Yield médio: ${weightedYieldPct.toFixed(2)}% a.a.)\n`;
         summaryOrderText += `--------------------------------------------------------\n`;
         result.forEach((r) => {
             if (r.classAporte > 0) {
@@ -797,6 +853,8 @@
             totalResidual: totalResidualAll,
             estimatedAnnualDividendAdded,
             estimatedMonthlyDividendAdded,
+            weightedYieldPct,
+            crisisDiscountPct,
             summaryOrderText
         };
     }
@@ -2107,6 +2165,98 @@
             formula: 'Perda > 0 ∧ Aporte = 0 ∧ r = 0 ⇒ Tempo_Recuperação = null (Indeterminado)',
             passed: Boolean(testNoRecPass),
             detail: `Sem aportes e sem retorno real, perda de R$ 30.000 retorna null em vez de falso "0 meses".`
+        });
+
+        // 66. Teste de Escudo Real Ponderado de Renda Passiva pela Alocação em Renda Fixa
+        const testShieldPassive66 = mockCustomStress.portfolioStressedMonthlyPassive > mockCustomStress.stressedMonthlyPassive &&
+            mockCustomStress.portfolioClinicCoveragePct >= mockCustomStress.stressedClinicCoveragePct;
+        tests.push({
+            name: 'Escudo Real de Renda Passiva Ponderada pela Alocação em Renda Fixa',
+            formula: 'RF > 0 ⇒ Renda_Passiva_Ponderada > Renda_Passiva_Uniforme',
+            passed: Boolean(testShieldPassive66),
+            detail: `Renda passiva ponderada (R$ ${mockCustomStress.portfolioStressedMonthlyPassive.toFixed(2)}/mês) supera a queda uniforme (R$ ${mockCustomStress.stressedMonthlyPassive.toFixed(2)}/mês) pela proteção de RF.`
+        });
+
+        // 67. Teste de Economia de Meses via Aporte Anticíclico (+20%)
+        const mockBoost67 = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 200000,
+            monthlyContribution: 4000,
+            realAnnualReturn: 7.5
+        });
+        const testBoost67Pass = typeof mockBoost67.monthsSavedByBoost === 'number' &&
+            mockBoost67.monthsSavedByBoost >= 1 &&
+            mockBoost67.monthsToRecoverWithBoost < mockBoost67.monthsToRecoverDynamic;
+        tests.push({
+            name: 'Aceleração Temporal de Recomposição via Aporte Anticíclico (+20%)',
+            formula: 'Aporte_Crise = 1,2 × Aporte ⇒ Meses_Boost < Meses_Base ∧ Δ_Poupado ≥ 1',
+            passed: Boolean(testBoost67Pass),
+            detail: `Aporte +20% antecipa a recuperação em ${mockBoost67.monthsSavedByBoost} mês(es) (${mockBoost67.monthsToRecoverWithBoost}m vs ${mockBoost67.monthsToRecoverDynamic}m).`
+        });
+
+        // 68. Teste de Consistência Monotônica da Matriz Completa de 6 Cenários de Estresse
+        const mtx = mockBoost67.scenariosMatrix || [];
+        const m20 = mtx.find(x => x.key === 'correction20');
+        const m30 = mtx.find(x => x.key === 'crash30');
+        const m40 = mtx.find(x => x.key === 'crash40');
+        const m50 = mtx.find(x => x.key === 'black_swan');
+        const testMatrix68Pass = mtx.length === 6 && m20 && m30 && m40 && m50 &&
+            m50.dropPct > m40.dropPct && m40.dropPct > m30.dropPct && m30.dropPct > m20.dropPct;
+        tests.push({
+            name: 'Consistência Monotônica da Matriz Comparativa de 6 Cenários de Estresse',
+            formula: 'Queda(Cisne −50%) > Queda(Subprime) > Queda(COVID −30%) > Queda(Correção −20%)',
+            passed: Boolean(testMatrix68Pass),
+            detail: `Matriz comparativa sincronizada com ${mtx.length} cenários (${m20.dropPct}% < ${m30.dropPct}% < ${m40.dropPct}% < ${m50.dropPct}%).`
+        });
+
+        // 69. Teste de Simulação de Compra com Desconto de Crise (−30%) & Yield Ponderado
+        const mockNormalBuy = computeAporteByTickers(
+            [{ key: 'FII', name: 'FIIs', recommendedAporte: 2000 }],
+            { FII: [{ ticker: 'HGLG11', name: 'CSHG Log', price: 160, yield: 8.4, type: 'Tijolo' }] },
+            2,
+            { crisisDiscountPct: 0 }
+        );
+        const mockCrisisBuy = computeAporteByTickers(
+            [{ key: 'FII', name: 'FIIs', recommendedAporte: 2000 }],
+            { FII: [{ ticker: 'HGLG11', name: 'CSHG Log', price: 160, yield: 8.4, type: 'Tijolo' }] },
+            2,
+            { crisisDiscountPct: 30 }
+        );
+        const normalShares = mockNormalBuy.byClass[0].tickers[0].shares;
+        const crisisShares = mockCrisisBuy.byClass[0].tickers[0].shares;
+        const testCrisisBuy69Pass = crisisShares > normalShares &&
+            mockCrisisBuy.weightedYieldPct > mockNormalBuy.weightedYieldPct &&
+            mockCrisisBuy.estimatedMonthlyDividendAdded > mockNormalBuy.estimatedMonthlyDividendAdded;
+        tests.push({
+            name: 'Simulador de Aporte em Desconto de Crise (−30%) & Yield-on-Cost Ponderado',
+            formula: 'Preço_Crise = 0,70 × Preço ⇒ Cotas_Crise > Cotas_Base ∧ Yield_Crise > Yield_Base',
+            passed: Boolean(testCrisisBuy69Pass),
+            detail: `Com R$ 2.000 em −30%, compra sobe de ${normalShares} para ${crisisShares} cotas (Yield-on-Cost: ${mockNormalBuy.weightedYieldPct.toFixed(1)}% → ${mockCrisisBuy.weightedYieldPct.toFixed(1)}% a.a.).`
+        });
+
+        // 70. Teste de Invariante Cumulativa e Cobertura Global da Cascata Editável
+        const invCascade = computeExpenseCascade({
+            expenseEssential: 2200,
+            expenseClinic: 2400,
+            expenseFamily: 3100,
+            expenseLifestyle: 1800,
+            currentPatrimony: 250000,
+            realAnnualReturn: 7.5
+        });
+        let runningAcc = 0;
+        const accMatches = invCascade.tiers.every((t) => {
+            runningAcc += t.cost;
+            return Math.abs(t.accumulatedCost - runningAcc) < 1e-6;
+        });
+        const expectedGlobalCov = invCascade.totalCost > 0 ? (invCascade.passive / invCascade.totalCost) * 100 : 0;
+        const testCascade70Pass = accMatches &&
+            Math.abs(invCascade.totalCost - runningAcc) < 1e-6 &&
+            Math.abs(invCascade.globalCoverage - expectedGlobalCov) < 1e-6;
+        tests.push({
+            name: 'Invariante Cumulativa de Degraus e Cobertura Global na Cascata Editável',
+            formula: '∀k: Acumulado_k = Σ_{j≤k} Custo_j ∧ Cobertura_Global = (Renda_Passiva / Total) × 100',
+            passed: Boolean(testCascade70Pass),
+            detail: `Soma acumulada de ${invCascade.tiers.length} degraus exata em R$ ${invCascade.totalCost.toLocaleString('pt-BR')} (Cobertura global: ${invCascade.globalCoverage.toFixed(2)}%).`
         });
 
         const allPassed = tests.every(t => t.passed);

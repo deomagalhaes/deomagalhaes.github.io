@@ -395,7 +395,7 @@
 
         <div class="max-w-2xl mx-auto px-5 sm:px-8 py-6 sm:py-10 space-y-6">
             <!-- Barra de Controles Noturnos (Paletas Térmicas + Tipografia + Fechar) -->
-            <div class="border-b border-amber-800/30 pb-3 sticky top-0 bg-[#110b06]/95 backdrop-blur py-2 z-10 space-y-2">
+            <div id="amber-reader-sticky-bar" class="border-b border-amber-800/30 pb-3 sticky top-0 bg-[#110b06]/95 backdrop-blur py-2 z-10 space-y-2 transition-colors">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Modo Leitura Noturna Âmbar</span>
                     <div class="flex items-center gap-1.5 flex-wrap">
@@ -422,6 +422,7 @@
                         </select>
                         <button type="button" id="btn-amber-font-down" title="Diminuir fonte (-)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A−</button>
                         <button type="button" id="btn-amber-font-up" title="Aumentar fonte (+)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">A+</button>
+                        <button type="button" id="btn-amber-font-family" title="Alternar Fonte (Serifa Clássica / Sem Serifa)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">Aa</button>
                         <button type="button" id="btn-amber-autoscroll" title="Auto-Scroll suave (Espaço)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono text-xs">Auto ↓</button>
                         <select id="amber-autoscroll-speed-select" class="bg-black/60 border border-amber-900/60 rounded px-1 py-1 text-[10px] text-amber-300 font-mono focus:outline-none" title="Velocidade do Auto-Scroll">
                             <option value="85">Lento</option>

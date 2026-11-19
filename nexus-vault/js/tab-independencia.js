@@ -62,6 +62,7 @@
         // Tickers Customizados do Usuário no Alocador
         userTickers: [],
         tickersPerClass: 2,
+        simulateCrisisPrices: false,
 
         // Parâmetros de Monte Carlo
         mcVolatility: 13.0,     // Desvio padrão anual da carteira (%)
@@ -895,6 +896,8 @@
         const numOrDef = (val, def) => (val !== undefined && val !== null && val !== '' && Number.isFinite(Number(val))) ? Math.max(0, Number(val)) : def;
         const freedomPct = Math.max(0, Math.min(100, m.currentCoveragePct || 0));
         const firePatPct = m.targetFullFire > 0 ? Math.max(0, Math.min(100, (m.initPatrimony / m.targetFullFire) * 100)) : 0;
+        const cascadeSnap = computeExpenseCascade();
+        const stressSnap = computeStressTest();
         const ringR = 34;
         const ringCirc = 2 * Math.PI * ringR;
         const ringDash = (freedomPct / 100) * ringCirc;
@@ -918,8 +921,10 @@
                             </h3>
                             ${customTiersCount > 0 ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">+${customTiersCount} degrau(s) na Cascata</span>` : ''}
                         </div>
-                        <div class="text-[11px] font-mono text-slate-400 mt-1">
-                            Patrimônio vs Meta Full FIRE (SWR ${C.formatNum(m.swr, 1)}%): <strong class="text-cyan-300">${C.formatNum(firePatPct, 1)}%</strong> (${C.formatBRL(m.initPatrimony)} / ${C.formatBRL(m.targetFullFire)})
+                        <div class="text-[11px] font-mono text-slate-400 mt-1 flex flex-wrap items-center gap-2">
+                            <span>Patrimônio vs Meta Full FIRE (SWR ${C.formatNum(m.swr, 1)}%): <strong class="text-cyan-300">${C.formatNum(firePatPct, 1)}%</strong> (${C.formatBRL(m.initPatrimony)} / ${C.formatBRL(m.targetFullFire)})</span>
+                            <span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/25">Cascata: ${C.formatNum(cascadeSnap.globalCoverage, 1)}%</span>
+                            <span class="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/25">Sob Estresse (${C.esc(stressSnap.scenarioKey)}): ${C.formatBRL(stressSnap.portfolioStressedMonthlyPassive !== undefined ? stressSnap.portfolioStressedMonthlyPassive : stressSnap.stressedMonthlyPassive)}/mês</span>
                         </div>
                     </div>
                 </div>
@@ -1401,17 +1406,37 @@
                     </div>
                 </div>
 
-                <!-- Termômetro de Alinhamento da Carteira -->
-                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
-                        <span>Índice de Alinhamento da Carteira: <strong class="text-slate-300">${alignScoreBefore}%</strong> → <strong class="text-emerald-300 font-bold">${alignScoreAfter}% pós-aporte</strong></span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] text-slate-500">Convergência:</span>
-                        <div class="w-36 h-2 rounded-full bg-slate-800 overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-300" style="width: ${alignScoreAfter}%"></div>
+                <!-- Termômetro de Alinhamento da Carteira + Barra Comparativa Empilhada -->
+                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3 text-xs font-mono">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Índice de Alinhamento da Carteira: <strong class="text-slate-300">${alignScoreBefore}%</strong> → <strong class="text-emerald-300 font-bold">${alignScoreAfter}% pós-aporte</strong></span>
                         </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] text-slate-500">Convergência:</span>
+                            <div class="w-36 h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-300" style="width: ${alignScoreAfter}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-slate-800/80 text-[10px]">
+                        ${[
+                            { label: 'Composição Atual', field: 'currentPct' },
+                            { label: 'Pós-Aporte Hoje', field: 'postPct' },
+                            { label: 'Meta Alvo (%)', field: 'targetPct' }
+                        ].map((row) => {
+                            const barColors = { FII: 'bg-cyan-500', RF: 'bg-emerald-500', Acoes: 'bg-amber-500', Global: 'bg-purple-500' };
+                            return `
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-slate-400"><span>${row.label}</span></div>
+                                    <div class="w-full h-2.5 rounded-full bg-slate-900 overflow-hidden flex">
+                                        ${res.classes.map((c) => `<div class="${barColors[c.key] || 'bg-slate-500'} h-full" style="width: ${Math.max(0, c[row.field] || 0)}%" title="${c.key}: ${C.formatNum(c[row.field] || 0, 1)}%"></div>`).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
                 </div>
 
@@ -1453,6 +1478,10 @@
                                 <p class="text-[11px] text-slate-400">Simulação de compra prática fracionada baseada na cotação de mercado para o dia do aporte.</p>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap">
+                                <label class="inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-1 rounded border cursor-pointer transition ${inputs.simulateCrisisPrices ? 'bg-rose-500/20 border-rose-500/40 text-rose-200 font-bold' : 'bg-slate-900 border-slate-800 text-slate-300'}" title="Simula cotações de RV/FIIs com 30% de desconto de crise mantendo o aporte constante">
+                                    <input type="checkbox" id="ind-chk-crisis-prices" ${inputs.simulateCrisisPrices ? 'checked' : ''} class="w-3.5 h-3.5 rounded border-slate-600 bg-slate-950 text-rose-400">
+                                    <span>Desconto Crise −30%</span>
+                                </label>
                                 <label class="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-300 bg-slate-900 border border-slate-800 rounded px-2 py-1">
                                     <span>Ativos/Classe:</span>
                                     <select id="ind-tickers-per-class" class="bg-transparent text-cyan-300 font-bold focus:outline-none">
@@ -1463,7 +1492,7 @@
                                 </label>
                                 ${tickerData.estimatedMonthlyDividendAdded > 0 ? `
                                     <div class="px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-500/35 text-[11px] font-mono text-emerald-300">
-                                        Provento est.: <strong>+${C.formatBRL(tickerData.estimatedMonthlyDividendAdded)}/mês</strong>
+                                        Provento est.: <strong>+${C.formatBRL(tickerData.estimatedMonthlyDividendAdded)}/mês</strong>${tickerData.weightedYieldPct ? ` (${C.formatNum(tickerData.weightedYieldPct, 1)}% a.a.)` : ''}
                                     </div>
                                 ` : ''}
                                 ${tickerData.totalResidual > 0 ? `
@@ -1498,12 +1527,12 @@
                                         ${item.tickers.map((t) => `
                                             <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs">
                                                 <div>
-                                                    <div class="flex items-center gap-1.5">
-                                                        <strong class="font-mono text-slate-100 text-sm">${t.ticker}</strong>
-                                                        <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 font-mono">${t.type}</span>
-                                                        ${t.yield > 0 ? `<span class="text-[10px] font-mono text-emerald-400">${t.yield}% a.a.</span>` : ''}
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <strong class="font-mono text-slate-100 text-sm">${C.esc(t.ticker)}</strong>
+                                                        <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 font-mono">${C.esc(t.type)}</span>
+                                                        ${t.yield > 0 ? `<span class="text-[10px] font-mono text-emerald-400">${C.formatNum(t.yield, 1)}% a.a.</span>` : ''}
                                                     </div>
-                                                    <div class="text-[11px] text-slate-400 truncate mt-0.5">${t.name} • Ref.: ${C.formatBRL(t.price)}</div>
+                                                    <div class="text-[11px] text-slate-400 truncate mt-0.5">${C.esc(t.name)} • Ref.: ${C.formatBRL(t.price)}${t.basePrice && t.basePrice !== t.price ? ` <span class="text-rose-300 line-through text-[10px]">${C.formatBRL(t.basePrice)}</span>` : ''}</div>
                                                 </div>
                                                 <div class="text-right shrink-0">
                                                     <div class="font-mono font-bold ${t.shares > 0 ? 'text-emerald-300' : 'text-slate-500'}">
@@ -1838,6 +1867,13 @@
     function renderSubTabCascata(container) {
         const C = global.VaultCore;
         const cascade = computeExpenseCascade();
+        const stressRef = computeStressTest();
+        const stressTiersMap = {};
+        if (stressRef && stressRef.stressedCascade && Array.isArray(stressRef.stressedCascade.tiers)) {
+            stressRef.stressedCascade.tiers.forEach((stTier) => {
+                stressTiersMap[stTier.id] = stTier;
+            });
+        }
 
         container.innerHTML = `
             <div class="space-y-5">
@@ -1932,6 +1968,9 @@
                             <i data-lucide="plus-circle" class="w-4 h-4"></i>
                             <span>+ Adicionar Despesa</span>
                         </button>
+                        <button type="button" id="btn-export-cascade-csv" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 transition" title="Exportar Cascata de Despesas em CSV">
+                            Exportar .CSV
+                        </button>
                         <button type="button" id="btn-reset-cascade-defaults" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
                             Restaurar Padrão
                         </button>
@@ -1991,14 +2030,19 @@
                                 </div>
                             </div>
 
-                            <p class="text-xs text-slate-400 leading-relaxed">${t.desc}</p>
+                            ${t.isCustomItem ? `
+                                <input type="text" data-custom-exp-desc="${t.customIndex}" value="${C.esc(t.desc)}"
+                                    class="w-full bg-[#090d16] border border-slate-800 focus:border-cyan-400 px-3 py-1.5 rounded-lg text-xs text-slate-300 font-sans transition"
+                                    placeholder="Descrição da despesa customizada...">
+                            ` : `<p class="text-xs text-slate-400 leading-relaxed">${C.esc(t.desc)}</p>`}
 
-                            <!-- Barra de Progresso com Percentual e Badge de Status -->
+                            <!-- Barra de Progresso com Percentual e Badge de Status (Base vs Estresse) -->
                             <div class="space-y-1.5">
-                                <div class="flex items-center justify-between text-xs font-mono">
-                                    <span class="text-slate-400 flex items-center gap-1.5">
+                                <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                                    <span class="text-slate-400 flex items-center gap-1.5 flex-wrap">
                                         <span class="w-2 h-2 rounded-full ${t.isFullyCovered ? 'bg-emerald-400' : 'bg-cyan-400'}"></span>
-                                        Status: <strong class="${t.isFullyCovered ? 'text-emerald-300' : 'text-slate-200'}">${t.isFullyCovered ? '✓ Totalmente Coberto pela Renda Passiva' : `${C.formatNum(t.coveragePct, 1)}% Coberto`}</strong>
+                                        <span>Status: <strong class="${t.isFullyCovered ? 'text-emerald-300' : 'text-slate-200'}">${t.isFullyCovered ? '✓ Totalmente Coberto' : `${C.formatNum(t.coveragePct, 1)}% Coberto`}</strong></span>
+                                        ${stressTiersMap[t.id] ? `<span class="px-1.5 py-0.5 rounded text-[10px] border ${stressTiersMap[t.id].isFullyCovered ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/10 text-rose-300 border-rose-500/30'}">Sob choque (${C.esc(stressRef.scenarioKey)}): ${C.formatNum(stressTiersMap[t.id].coveragePct, 0)}%</span>` : ''}
                                     </span>
                                     <span class="text-slate-400">Acumulado até aqui: <strong class="text-slate-200">${C.formatBRL(t.accumulatedCost)}/mês</strong></span>
                                 </div>
@@ -2127,6 +2171,17 @@
             });
         });
 
+        // Inputs de Descrição de despesas customizadas
+        document.querySelectorAll('[data-custom-exp-desc]').forEach((inp) => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.getAttribute('data-custom-exp-desc'), 10);
+                if (Array.isArray(inputs.customExpenses) && inputs.customExpenses[idx]) {
+                    inputs.customExpenses[idx].desc = e.target.value;
+                    saveInputs();
+                }
+            });
+        });
+
         // Botões de Excluir Despesa Customizada
         document.querySelectorAll('[data-custom-exp-del]').forEach((btn) => {
             btn.addEventListener('click', (e) => {
@@ -2173,6 +2228,28 @@
                 lastModel = computeFinancialModel();
                 renderSubTabCascata(document.getElementById('ind-subtab-container'));
                 C.toast(`Nível 2 sincronizado com Custos do Consultório (${C.formatBRL(inputs.expenseClinic)}).`, 'success', 2000);
+            });
+        }
+
+        // Botão Exportar Cascata em CSV
+        const btnExportCascade = document.getElementById('btn-export-cascade-csv');
+        if (btnExportCascade) {
+            btnExportCascade.addEventListener('click', () => {
+                const c = computeExpenseCascade();
+                const headers = ['Nível', 'Categoria/Nome', 'Custo Mensal (R$)', 'Acumulado (R$)', 'Cobertura (%)', 'Patrimônio Necessário (R$)', 'Sessões Clínicas/Mês', 'Horas Totais/Mês', 'ETA (Meses)'];
+                const rows = c.tiers.map(t => [
+                    `Nível ${t.level}`,
+                    t.name,
+                    t.cost.toFixed(2),
+                    t.accumulatedCost.toFixed(2),
+                    t.coveragePct.toFixed(1),
+                    t.capitalNeeded.toFixed(2),
+                    t.sessionsNeeded.toFixed(1),
+                    t.hoursNeeded.toFixed(1),
+                    t.monthsToCoverTier !== null ? t.monthsToCoverTier : '—'
+                ]);
+                C.exportCSV(`cascata-independencia-${C.todayISO()}.csv`, headers, rows);
+                C.toast('Cascata de despesas exportada em CSV.', 'success');
             });
         }
 
@@ -2628,10 +2705,19 @@
                                 <strong class="text-emerald-300">${C.formatBRL(st.portfolioStressedPatrimony !== undefined ? st.portfolioStressedPatrimony : st.stressedPatrimony)}</strong>
                             </div>
                             <div class="flex justify-between pt-1 border-t border-slate-800">
+                                <span class="text-slate-400">Renda Real Ponderada:</span>
+                                <strong class="text-emerald-300">${C.formatBRL(st.portfolioStressedMonthlyPassive !== undefined ? st.portfolioStressedMonthlyPassive : st.stressedMonthlyPassive)}/mês</strong>
+                            </div>
+                            <div class="flex justify-between">
                                 <span class="text-slate-400">Amortecimento IPCA+/Mix:</span>
                                 <strong class="text-cyan-300">+${C.formatNum(st.diversificationShieldPct || 0, 1)} p.p.</strong>
                             </div>
                         </div>
+                        ${st.monthsSavedByBoost !== null && st.monthsSavedByBoost > 0 ? `
+                            <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-lg p-2.5 text-[11px] font-mono text-emerald-300">
+                                ⚡ Aporte anticíclico (+20%) antecipa a recuperação plena em <strong>${st.monthsSavedByBoost} mês(es)</strong>.
+                            </div>
+                        ` : ''}
                     </div>
 
                     <div class="lg:col-span-8 bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-2">
@@ -2646,6 +2732,49 @@
                         <div class="w-full overflow-x-auto">${renderStressRecoverySVG(st)}</div>
                     </div>
                 </div>
+
+                <!-- Matriz Comparativa Simultânea de Todos os Cenários de Estresse -->
+                ${Array.isArray(st.scenariosMatrix) && st.scenariosMatrix.length > 0 ? `
+                    <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
+                                Matriz Comparativa de Choques (Clique em um cenário para ativar)
+                            </h4>
+                            <span class="text-[11px] font-mono text-slate-400">Visão transversal de resiliência</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse font-mono text-xs">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-slate-400 text-[11px]">
+                                        <th class="py-2 px-2">Cenário</th>
+                                        <th class="py-2 px-2">Queda Unif.</th>
+                                        <th class="py-2 px-2">Queda Real Mix</th>
+                                        <th class="py-2 px-2">Patrimônio Choque</th>
+                                        <th class="py-2 px-2">Renda Sob Choque</th>
+                                        <th class="py-2 px-2">Cobertura Clínica</th>
+                                        <th class="py-2 px-2">Recuperação (Base / +20%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-800/60">
+                                    ${st.scenariosMatrix.map((row) => {
+                                        const isActive = row.key === st.scenarioKey;
+                                        return `
+                                            <tr data-stress-matrix-row="${C.esc(row.key)}" class="cursor-pointer transition ${isActive ? 'bg-rose-500/15 text-slate-100' : 'hover:bg-slate-900/80 text-slate-300'}">
+                                                <td class="py-2 px-2 font-bold">${isActive ? '▶ ' : ''}${C.esc(row.label)}</td>
+                                                <td class="py-2 px-2 text-rose-300">−${C.formatNum(row.dropPct, 0)}%</td>
+                                                <td class="py-2 px-2 text-amber-300">−${C.formatNum(row.portfolioWeightedDropPct, 1)}%</td>
+                                                <td class="py-2 px-2">${C.formatBRL(row.stressedPatrimony)}</td>
+                                                <td class="py-2 px-2 text-cyan-300">${C.formatBRL(row.stressedMonthlyPassive)}/mês</td>
+                                                <td class="py-2 px-2 ${row.stressedClinicCoveragePct >= 100 ? 'text-emerald-300 font-bold' : 'text-slate-300'}">${C.formatNum(row.stressedClinicCoveragePct, 1)}%</td>
+                                                <td class="py-2 px-2">${row.monthsToRecoverDynamic !== null ? `${row.monthsToRecoverDynamic}m` : '—'} / <span class="text-emerald-300">${row.monthsToRecoverWithBoost !== null ? `${row.monthsToRecoverWithBoost}m` : '—'}</span></td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ` : ''}
 
                 <!-- Painel de Impacto Direto na Cascata de Liberdade sob o Choque -->
                 <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-4 space-y-3">
@@ -2716,10 +2845,10 @@
             });
         }
 
-        // Chips Rápidos de Preset de Estresse
-        document.querySelectorAll('[data-stress-preset]').forEach((btn) => {
+        // Chips Rápidos de Preset de Estresse e Linhas da Matriz Comparativa
+        document.querySelectorAll('[data-stress-preset], [data-stress-matrix-row]').forEach((btn) => {
             btn.addEventListener('click', () => {
-                const presetKey = btn.getAttribute('data-stress-preset');
+                const presetKey = btn.getAttribute('data-stress-preset') || btn.getAttribute('data-stress-matrix-row');
                 inputs.stressScenario = presetKey;
                 saveInputs();
                 renderSubTabEstresse(document.getElementById('ind-subtab-container'));
@@ -4143,6 +4272,16 @@
 
     function bindAlocadorInputs() {
         const C = global.VaultCore;
+
+        const chkCrisisPrices = document.getElementById('ind-chk-crisis-prices');
+        if (chkCrisisPrices) {
+            chkCrisisPrices.addEventListener('change', (e) => {
+                inputs.simulateCrisisPrices = Boolean(e.target.checked);
+                saveInputs();
+                renderSubTabContent();
+                C.toast(inputs.simulateCrisisPrices ? 'Simulação de cotas em crise (−30%) ativada!' : 'Preços normais restaurados no Alocador.', 'info', 1800);
+            });
+        }
 
         const tickersPerClassSel = document.getElementById('ind-tickers-per-class');
         if (tickersPerClassSel) {
