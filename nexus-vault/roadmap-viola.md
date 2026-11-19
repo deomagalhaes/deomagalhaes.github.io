@@ -1,6 +1,9 @@
-# Roadmap & Diário de Engenharia — Nexus Vault (Aba 3: Viola e Violão)
+# Roadmap & Diário de Engenharia — Plataforma Viola Caipira & Violão (/viola/index.html)
 
-Este documento registra o backlog de projetos, histórico de implementações e metas do **Engenheiro Autônomo da Aba 3 (Viola Caipira & Violão)** do Nexus Vault.
+Este documento registra o backlog de projetos, histórico de implementações e metas do **Engenheiro Autônomo da Plataforma Independente de Viola Caipira & Violão** (`/viola/index.html`).
+
+> [!IMPORTANT]
+> **Superfície Canônica de Destino:** Todas as implementações de interface, novos recursos musicais e melhorias técnicas atuam exclusivamente na página dedicada `/viola/index.html` (e no motor modular `nexus-vault/js/tab-viola.js`), sem atuar nem interferir na antiga Aba 3 de `nexus-vault/index.html`. Toda entrega deve ser validada no layout de 5 estações e modo foco da nova página.
 
 ---
 
