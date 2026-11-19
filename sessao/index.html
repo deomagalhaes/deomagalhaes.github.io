@@ -276,16 +276,16 @@
                         </div>
                     </div>
 
-                    <!-- PIN de Desbloqueio do Profissional -->
+                    <!-- Senha da Sessão do Paciente -->
                     <div>
                         <label for="input-session-pin" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
-                            PIN de Desbloqueio (Neuropsicólogo) <span class="text-red-500">*</span>
+                            Senha da Sessão (Paciente) <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                             <input type="password" id="input-session-pin" maxlength="8" value="1234" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 outline-none text-slate-800 text-sm font-bold tracking-widest transition" />
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Padrão: <strong>1234</strong> (Altere para sua segurança).</p>
+                        <p class="text-[11px] text-slate-500 mt-1">Padrão do paciente: <strong>1234</strong>. O laudo clínico só abre com a senha do neuropsicólogo (<strong>1502</strong>).</p>
                     </div>
                 </div>
 
@@ -555,10 +555,10 @@
                     <i data-lucide="shield-alert" class="w-4 h-4 text-slate-500"></i>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Área do Neuropsicólogo — Destrancar Laudo</h3>
                 </div>
-                <p class="text-xs text-slate-500">Para liberar o laudo (presencial ou após receber no WhatsApp), digite o PIN:</p>
+                <p class="text-xs text-slate-500">Para liberar o laudo psicométrico completo, digite a senha exclusiva do neuropsicólogo (1502):</p>
 
                 <div class="flex space-x-2">
-                    <input type="password" id="input-unlock-pin" maxlength="8" placeholder="PIN" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 text-center font-mono font-bold text-lg tracking-widest outline-none" onkeydown="if(event.key==='Enter') window.verifyUnlockPin()" />
+                    <input type="password" id="input-unlock-pin" maxlength="8" placeholder="Senha (1502)" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 text-center font-mono font-bold text-lg tracking-widest outline-none" onkeydown="if(event.key==='Enter') window.verifyUnlockPin()" />
                     <button type="button" onclick="window.verifyUnlockPin()" class="bg-[#005f73] hover:bg-[#0a9396] text-white px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center justify-center">
                         <span>Acessar</span>
                     </button>
@@ -790,9 +790,9 @@
             </div>
             <h3 class="text-lg font-bold text-slate-900">Destrancar Sessão</h3>
             <p class="text-xs text-slate-500">
-                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite seu PIN de neuropsicólogo:
+                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite a senha do neuropsicólogo (1502):
             </p>
-            <input type="password" id="input-modal-pin" maxlength="8" placeholder="PIN de 4 dígitos" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
+            <input type="password" id="input-modal-pin" maxlength="8" placeholder="Senha (1502)" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
             <p id="modal-pin-error" class="hidden text-xs text-red-600 font-semibold"></p>
             <div class="flex space-x-2 pt-2">
                 <button type="button" onclick="window.closeEmergencyUnlockModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
@@ -1349,8 +1349,9 @@
             status: 'setup', // 'setup', 'locked', 'lockout', 'report'
             patientName: '',
             patientAge: '',
-            therapistPin: '1234',
-            instrument: 'BAI', // 'BAI', 'GAD7' ou 'TRIF12'
+            patientPin: '1234',
+            therapistPin: '1502', // Senha exclusiva do neuropsicólogo para destrancar o laudo
+            instrument: 'BAI', // 'BAI', 'GAD7', 'TRIF12', 'ASRS18', 'PHQ9', 'AQ50' ou 'DERS16'
             startTime: null,
             endTime: null,
             answers: {}, // { [itemId]: score }
@@ -1380,7 +1381,8 @@
                         sessionState.answers = data.r || {};
                         sessionState.elapsedSeconds = data.s || 0;
                         if (data.d) sessionState.startTime = new Date(data.d);
-                        if (data.pin) sessionState.therapistPin = data.pin;
+                        if (data.pin) sessionState.patientPin = data.pin;
+                        sessionState.therapistPin = '1502'; // Senha do neuropsicólogo permanece estritamente 1502
                         sessionState.status = 'lockout';
 
                         // Ocultar telas anteriores e exibir tela de desbloqueio para o neuropsicólogo
@@ -1392,7 +1394,7 @@
                         const titleEl = document.getElementById('lockout-title');
                         if (titleEl) titleEl.textContent = `Respostas de ${sessionState.patientName} Carregadas!`;
                         const descEl = document.getElementById('lockout-desc');
-                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite seu PIN de neuropsicólogo para liberar o laudo psicométrico completo.`;
+                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite a senha exclusiva do neuropsicólogo (1502) para liberar o laudo psicométrico completo.`;
                         
                         // Ocultar card de envio via WhatsApp já que o neuropsicólogo já está com os dados
                         const homeBox = document.getElementById('home-patient-box');
@@ -1440,17 +1442,11 @@
             const instrumentRadios = document.querySelectorAll('input[name="scale-select"]');
 
             const name = nameInput.value.trim();
-            const pin = pinInput.value.trim();
+            const pin = pinInput.value.trim() || '1234';
 
             if (!name) {
                 alert('Por favor, informe a identificação do paciente (nome, iniciais ou ID confidencial) antes de trancar a sessão.');
                 nameInput.focus();
-                return;
-            }
-
-            if (!pin || pin.length < 4) {
-                alert('Por favor, defina um PIN de neuropsicólogo de pelo menos 4 dígitos para segurança.');
-                pinInput.focus();
                 return;
             }
 
@@ -1462,7 +1458,8 @@
             // Configurar estado
             sessionState.patientName = name;
             sessionState.patientAge = ageInput.value.trim();
-            sessionState.therapistPin = pin;
+            sessionState.patientPin = pin;
+            sessionState.therapistPin = '1502'; // Senha exclusiva do neuropsicólogo para destrancar o laudo
             sessionState.instrument = selectedInstrument;
             sessionState.startTime = new Date();
             sessionState.answers = {};
@@ -1810,12 +1807,13 @@
             lucide.createIcons();
         };
 
-        // --- 8. DESTRANCAMENTO PELO PROFISSIONAL (PIN) ---
+        // --- 8. DESTRANCAMENTO DO LAUDO (EXCLUSIVO DO NEUROPSICÓLOGO: 1502) ---
         window.verifyUnlockPin = function() {
             const entered = document.getElementById('input-unlock-pin').value.trim();
             const errorMsg = document.getElementById('unlock-error-msg');
 
-            if (entered === sessionState.therapistPin) {
+            // Senha mestra do neuropsicólogo para destrancar o laudo: 1502
+            if (entered === '1502') {
                 // Sucesso: desbloqueia para o laudo
                 sessionState.status = 'report';
                 window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -1826,8 +1824,12 @@
                 generateReport();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 lucide.createIcons();
+            } else if (entered === '1234' || (sessionState.patientPin && entered === sessionState.patientPin)) {
+                errorMsg.textContent = 'Acesso restrito: "1234" é a senha de aplicação do paciente. Para destrancar o laudo clínico, digite a senha exclusiva do neuropsicólogo (1502).';
+                errorMsg.classList.remove('hidden');
+                document.getElementById('input-unlock-pin').focus();
             } else {
-                errorMsg.textContent = 'PIN incorreto. Por favor, verifique a senha definida na abertura da sessão.';
+                errorMsg.textContent = 'Senha incorreta. O laudo clínico é de acesso privativo do neuropsicólogo (1502).';
                 errorMsg.classList.remove('hidden');
                 document.getElementById('input-unlock-pin').focus();
             }
@@ -1848,7 +1850,7 @@
 
         window.confirmEmergencyUnlock = function() {
             const pin = document.getElementById('input-modal-pin').value.trim();
-            if (pin === sessionState.therapistPin) {
+            if (pin === '1502' || pin === sessionState.patientPin) {
                 window.closeEmergencyUnlockModal();
                 window.removeEventListener('beforeunload', handleBeforeUnload);
                 if (sessionState.timerInterval) clearInterval(sessionState.timerInterval);
@@ -1856,7 +1858,7 @@
                 window.resetToSetup();
             } else {
                 const err = document.getElementById('modal-pin-error');
-                err.textContent = 'PIN incorreto.';
+                err.textContent = 'Senha incorreta.';
                 err.classList.remove('hidden');
             }
         };
