@@ -88,6 +88,13 @@
             box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
         }
 
+        .option-btn.selected-4 {
+            background-color: #faf5ff;
+            border-color: #a855f7;
+            color: #6b21a8;
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25);
+        }
+
         /* Estilos específicos para Matrizes de Inteligência (TRIF-12) */
         .matrix-grid-2 {
             display: grid;
@@ -216,7 +223,7 @@
                             <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white tracking-wide uppercase mb-1">
                                 Plataforma Clínica Segura
                             </span>
-                            <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Sessão Trancada de Avaliação</h1>
+                            <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Sessão de Avaliação</h1>
                         </div>
                     </div>
                     <div class="text-right text-xs text-white/80 hidden sm:block">
@@ -280,7 +287,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
                         Instrumento Psicométrico Selecionado
                     </label>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-[#005f73] bg-[#005f73]/5 has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-[#005f73] flex items-center">
@@ -308,7 +315,31 @@
                         <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-sm font-bold text-slate-800 flex items-center">
-                                    <i data-lucide="gauge" class="w-4 h-4 mr-1.5 text-slate-500"></i> GAD-7 (Breve)
+                                    <i data-lucide="sparkles" class="w-4 h-4 mr-1.5 text-indigo-600"></i> ASRS-18 (TDAH)
+                                </span>
+                                <input type="radio" name="scale-select" value="ASRS18" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Escala OMS v1.1 para Adultos (18 itens). Desatenção e Hiperatividade.
+                            </span>
+                        </label>
+
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-800 flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 mr-1.5 text-rose-600"></i> PHQ-9 (Depressão)
+                                </span>
+                                <input type="radio" name="scale-select" value="PHQ9" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Rastreio e gravidade DSM-5 (9 itens). Anedonia, humor e sintomas somáticos.
+                            </span>
+                        </label>
+
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-800 flex items-center">
+                                    <i data-lucide="gauge" class="w-4 h-4 mr-1.5 text-slate-500"></i> GAD-7 (Ansiedade Breve)
                                 </span>
                                 <input type="radio" name="scale-select" value="GAD7" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
                             </div>
@@ -797,6 +828,59 @@
             { value: 3, label: "Quase todos os dias", desc: "Quase diariamente" }
         ];
 
+        // --- ITENS DO QUESTIONÁRIO DE DEPRESSÃO (PHQ-9 — DSM-5) ---
+        const PHQ9_ITEMS = [
+            { id: 1, text: "Pouco interesse ou pouco prazer em fazer as coisas", type: "cognitive" },
+            { id: 2, text: "Sentir-se para baixo, deprimido(a) ou sem perspectiva/esperança", type: "cognitive" },
+            { id: 3, text: "Dificuldade para adormecer, continuar dormindo ou dormir demais", type: "somatic" },
+            { id: 4, text: "Sentir-se cansado(a) ou com pouca energia", type: "somatic" },
+            { id: 5, text: "Falta de apetite ou comer em excesso", type: "somatic" },
+            { id: 6, text: "Sentir-se mal consigo mesmo(a) — ou achar que é um fracasso ou que decepcionou sua família ou a si mesmo(a)", type: "cognitive" },
+            { id: 7, text: "Dificuldade para se concentrar nas coisas, como ler o jornal, livros ou ver televisão", type: "cognitive" },
+            { id: 8, text: "Lentidão para se movimentar ou falar, a ponto de outras pessoas notarem; ou o oposto: ficar agitado(a) e inquieto(a)", type: "somatic" },
+            { id: 9, text: "Pensamentos de que seria melhor estar morto(a) ou de se ferir de alguma maneira", type: "critical" }
+        ];
+
+        const PHQ9_OPTIONS = [
+            { value: 0, label: "Nenhuma vez", desc: "0 dias" },
+            { value: 1, label: "Vários dias", desc: "Menos de 1 semana" },
+            { value: 2, label: "Mais da metade dos dias", desc: "Mais de 1 semana" },
+            { value: 3, label: "Quase todos os dias", desc: "Praticamente diário" }
+        ];
+
+        // --- ITENS DA ESCALA DE TDAH EM ADULTOS (ASRS-18 v1.1 — OMS / Adaptação Brasileira) ---
+        const ASRS18_ITEMS = [
+            // Parte A (Rastreio / Triagem - Itens 1 a 6)
+            { id: 1, text: "Com que frequência você comete erros por falta de atenção quando tem de trabalhar num projeto chato ou difícil?", part: "A", domain: "inattention", domainLabel: "Desatenção", threshold: 2 },
+            { id: 2, text: "Com que frequência você tem dificuldade para manter a atenção quando está fazendo um trabalho chato ou repetitivo?", part: "A", domain: "inattention", domainLabel: "Desatenção", threshold: 2 },
+            { id: 3, text: "Com que frequência você tem dificuldade para se concentrar no que as pessoas dizem, mesmo quando elas estão falando diretamente com você?", part: "A", domain: "inattention", domainLabel: "Desatenção", threshold: 2 },
+            { id: 4, text: "Com que frequência você deixa um projeto pela metade depois de ter feito a parte mais difícil?", part: "A", domain: "inattention", domainLabel: "Desatenção / Organização", threshold: 3 },
+            { id: 5, text: "Com que frequência você tem dificuldade para organizar as coisas quando tem de fazer uma tarefa que exige organização?", part: "A", domain: "inattention", domainLabel: "Planejamento Executivo", threshold: 3 },
+            { id: 6, text: "Quando você precisa fazer uma tarefa que exige muito pensamento, com que frequência você a evita ou adia o seu início?", part: "A", domain: "inattention", domainLabel: "Procrastinação / Iniciação", threshold: 3 },
+
+            // Parte B (Aprofundamento - Itens 7 a 18)
+            { id: 7, text: "Com que frequência você fica se mexendo ou batendo as mãos ou pés quando tem de ficar sentado(a) por muito tempo?", part: "B", domain: "hyperactivity", domainLabel: "Hiperatividade Motora" },
+            { id: 8, text: "Com que frequência você se sente inquieto(a) ou agitado(a) internamente?", part: "B", domain: "hyperactivity", domainLabel: "Inquietação Subjetiva" },
+            { id: 9, text: "Com que frequência você tem dificuldade para relaxar ou sossegar no seu tempo livre?", part: "B", domain: "hyperactivity", domainLabel: "Hiperatividade / Relaxamento" },
+            { id: 10, text: "Com que frequência você se pega falando demais quando está em situações sociais?", part: "B", domain: "hyperactivity", domainLabel: "Hiperatividade Verbal" },
+            { id: 11, text: "Quando você está numa conversa, com que frequência você se pega terminando a frase das outras pessoas antes que elas terminem?", part: "B", domain: "impulsivity", domainLabel: "Impulsividade Verbal" },
+            { id: 12, text: "Com que frequência você tem dificuldade para esperar a sua vez em situações em que isso é necessário?", part: "B", domain: "impulsivity", domainLabel: "Controle Inibitório" },
+            { id: 13, text: "Com que frequência você interrompe os outros quando eles estão ocupados?", part: "B", domain: "impulsivity", domainLabel: "Impulsividade Interpessoal" },
+            { id: 14, text: "Com que frequência você perde ou tem dificuldade de encontrar as coisas em casa ou no trabalho?", part: "B", domain: "inattention", domainLabel: "Desatenção / Organização Espacial" },
+            { id: 15, text: "Com que frequência você se distrai com sons, estímulos ou atividades ao seu redor?", part: "B", domain: "inattention", domainLabel: "Distratibilidade Sensorial" },
+            { id: 16, text: "Com que frequência você se esquece de compromissos ou obrigações cotidianas?", part: "B", domain: "inattention", domainLabel: "Memória Prospectiva" },
+            { id: 17, text: "Com que frequência você comete erros por descuido em tarefas do dia a dia?", part: "B", domain: "inattention", domainLabel: "Atenção a Detalhes" },
+            { id: 18, text: "Com que frequência você sente que tem um 'motor ligado dentro de você' que parece não parar?", part: "B", domain: "hyperactivity", domainLabel: "Inquietação Psicomotora" }
+        ];
+
+        const ASRS18_OPTIONS = [
+            { value: 0, label: "Nunca", desc: "Raramente ou nunca" },
+            { value: 1, label: "Raramente", desc: "Ocasional" },
+            { value: 2, label: "Às vezes", desc: "Algumas vezes" },
+            { value: 3, label: "Frequentemente", desc: "Com frequência" },
+            { value: 4, label: "Muito frequentemente", desc: "Quase sempre" }
+        ];
+
         // --- ITENS DO TESTE DE INTELIGÊNCIA FLUIDA (TRIF-12) ---
         const TRIF12_ITEMS = [
             {
@@ -1216,7 +1300,7 @@
             }
             if (params.has('instrument')) {
                 const inst = params.get('instrument').toUpperCase();
-                if (inst === 'GAD7' || inst === 'BAI' || inst === 'TRIF12') {
+                if (['GAD7', 'BAI', 'TRIF12', 'ASRS18', 'PHQ9'].includes(inst)) {
                     const r = document.querySelector(`input[name="scale-select"][value="${inst}"]`);
                     if (r) r.checked = true;
                 }
@@ -1284,6 +1368,12 @@
             } else if (selectedInstrument === 'TRIF12') {
                 document.getElementById('locked-instrument-title').textContent = 'Teste de Raciocínio Abstrato & Inteligência Fluida (TRIF-12)';
                 document.getElementById('locked-instrument-instruction').innerHTML = 'Examine atentamente cada matriz geométrica e descubra a regra lógica oculta nas linhas e colunas. Em seguida, <strong>selecione qual das alternativas numeradas substitui a interrogação (?)</strong>.';
+            } else if (selectedInstrument === 'ASRS18') {
+                document.getElementById('locked-instrument-title').textContent = 'Escala de Autoavaliação de TDAH em Adultos (ASRS-18 v1.1 — OMS)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Por favor, responda às perguntas abaixo avaliando como você se sentiu e se comportou durante os <strong>últimos 6 meses</strong> em sua rotina diária, estudos ou trabalho.';
+            } else if (selectedInstrument === 'PHQ9') {
+                document.getElementById('locked-instrument-title').textContent = 'Questionário de Saúde do Paciente — Depressão (PHQ-9)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Durante as <strong>últimas 2 semanas</strong>, com que frequência você foi incomodado(a) por qualquer um dos seguintes problemas?';
             } else {
                 document.getElementById('locked-instrument-title').textContent = 'Escala de Ansiedade Generalizada (GAD-7)';
                 document.getElementById('locked-instrument-instruction').innerHTML = 'Durante as <strong>últimas 2 semanas</strong>, com que frequência você foi incomodado(a) pelos seguintes problemas?';
@@ -1421,31 +1511,48 @@
                     container.appendChild(itemCard);
                 });
             } else {
-                // RENDERIZADOR DE ESCALAS DE ANSIEDADE (BAI / GAD-7)
-                const items = instrument === 'BAI' ? BAI_ITEMS : GAD7_ITEMS;
-                const options = instrument === 'BAI' ? BAI_OPTIONS : GAD7_OPTIONS;
+                let items = BAI_ITEMS;
+                let options = BAI_OPTIONS;
+                if (instrument === 'GAD7') { items = GAD7_ITEMS; options = GAD7_OPTIONS; }
+                else if (instrument === 'PHQ9') { items = PHQ9_ITEMS; options = PHQ9_OPTIONS; }
+                else if (instrument === 'ASRS18') { items = ASRS18_ITEMS; options = ASRS18_OPTIONS; }
+
+                const gridColsClass = options.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4';
 
                 items.forEach((item, index) => {
                     const itemCard = document.createElement('div');
                     itemCard.className = 'bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 transition';
                     itemCard.id = `item-card-${item.id}`;
 
+                    let itemDomainBadge = '';
+                    if (item.domainLabel) {
+                        const isPartA = item.part === 'A';
+                        itemDomainBadge = `
+                            <span class="inline-block text-[10px] font-semibold ${isPartA ? 'text-indigo-700 bg-indigo-50 border-indigo-200' : 'text-slate-600 bg-slate-100 border-slate-200'} px-2 py-0.5 rounded border mt-1">
+                                ${isPartA ? 'Parte A (Rastreio) • ' : ''}${item.domainLabel}
+                            </span>
+                        `;
+                    }
+
                     itemCard.innerHTML = `
                         <div class="flex items-start justify-between gap-3 mb-3">
-                            <div class="flex items-center space-x-2.5">
-                                <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center border border-slate-200">
+                            <div class="flex items-start space-x-2.5">
+                                <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center border border-slate-200 shrink-0 mt-0.5">
                                     ${index + 1}
                                 </span>
-                                <h3 class="text-sm sm:text-base font-semibold text-slate-900 leading-snug">
-                                    ${item.text}
-                                </h3>
+                                <div>
+                                    <h3 class="text-sm sm:text-base font-semibold text-slate-900 leading-snug">
+                                        ${item.text}
+                                    </h3>
+                                    ${itemDomainBadge}
+                                </div>
                             </div>
                             <span id="badge-answered-${item.id}" class="hidden px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 shrink-0">
                                 Respondido
                             </span>
                         </div>
 
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                        <div class="grid ${gridColsClass} gap-2 pt-1">
                             ${options.map(opt => `
                                 <button type="button" 
                                     onclick="window.selectAnswer(${item.id}, ${opt.value})" 
@@ -1476,11 +1583,15 @@
                 const selectedBtn = document.querySelector(`.matrix-opt-${itemId}-${score}`);
                 if (selectedBtn) selectedBtn.classList.add('selected');
             } else {
-                const options = sessionState.instrument === 'BAI' ? BAI_OPTIONS : GAD7_OPTIONS;
+                let options = BAI_OPTIONS;
+                if (sessionState.instrument === 'GAD7') options = GAD7_OPTIONS;
+                else if (sessionState.instrument === 'PHQ9') options = PHQ9_OPTIONS;
+                else if (sessionState.instrument === 'ASRS18') options = ASRS18_OPTIONS;
+
                 options.forEach(opt => {
                     const btn = document.querySelector(`.option-btn-${itemId}-${opt.value}`);
                     if (btn) {
-                        btn.classList.remove('selected-0', 'selected-1', 'selected-2', 'selected-3');
+                        btn.classList.remove('selected-0', 'selected-1', 'selected-2', 'selected-3', 'selected-4');
                         if (opt.value === score) {
                             btn.classList.add(`selected-${score}`);
                         }
@@ -1504,6 +1615,8 @@
             let items = BAI_ITEMS;
             if (sessionState.instrument === 'GAD7') items = GAD7_ITEMS;
             if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
+            if (sessionState.instrument === 'PHQ9') items = PHQ9_ITEMS;
+            if (sessionState.instrument === 'ASRS18') items = ASRS18_ITEMS;
 
             const total = items.length;
             const answeredCount = Object.keys(sessionState.answers).length;
@@ -1523,6 +1636,8 @@
             let items = BAI_ITEMS;
             if (sessionState.instrument === 'GAD7') items = GAD7_ITEMS;
             if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
+            if (sessionState.instrument === 'PHQ9') items = PHQ9_ITEMS;
+            if (sessionState.instrument === 'ASRS18') items = ASRS18_ITEMS;
 
             const total = items.length;
             const answeredCount = Object.keys(sessionState.answers).length;
@@ -1624,7 +1739,7 @@
             const secs = sessionState.elapsedSeconds % 60;
             document.getElementById('report-duration').textContent = `${mins}m ${secs}s`;
 
-            const protocolId = (inst === 'TRIF12' ? 'DM-COG-' : 'DM-ANS-') + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const protocolId = (inst === 'TRIF12' ? 'DM-COG-' : inst === 'ASRS18' ? 'DM-TDAH-' : inst === 'PHQ9' ? 'DM-DEP-' : 'DM-ANS-') + Math.random().toString(36).substring(2, 8).toUpperCase();
             document.getElementById('report-protocol').textContent = protocolId;
 
             if (inst === 'TRIF12') {
@@ -1721,6 +1836,289 @@
                         <p>• Raven, J. C. (1938/2000). <em>Standard Progressive Matrices: Sets A, B, C, D &amp; E</em>. Oxford Psychologists Press.</p>
                         <p>• Wechsler, D. (2014). <em>Escala de Inteligência Wechsler para Adultos (WAIS-III / WASI)</em>. São Paulo: Pearson.</p>
                         <p>• Carroll, J. B. (1993). <em>Human cognitive abilities: A survey of factor-analytic studies</em>. Cambridge University Press.</p>
+                    `;
+                }
+
+            } else if (inst === 'ASRS18') {
+                // LAUDO DE TDAH EM ADULTOS (ASRS-18 v1.1 — OMS)
+                let totalScore = 0;
+                let inattentionScore = 0;
+                let hyperactivityScore = 0;
+                let partAHits = 0;
+                let criticalItems = [];
+
+                ASRS18_ITEMS.forEach(it => {
+                    const sc = sessionState.answers[it.id] !== undefined ? sessionState.answers[it.id] : 0;
+                    totalScore += sc;
+
+                    if (it.domain === 'inattention') {
+                        inattentionScore += sc;
+                    } else {
+                        hyperactivityScore += sc;
+                    }
+
+                    // Checagem do limiar da Parte A da OMS (itens 1 a 6)
+                    if (it.part === 'A') {
+                        if (sc >= it.threshold) {
+                            partAHits++;
+                        }
+                    }
+
+                    if (sc >= 3) {
+                        criticalItems.push({ item: it, score: sc });
+                    }
+                });
+
+                const isScreeningPositive = partAHits >= 4;
+
+                document.getElementById('report-instrument-name').textContent = 'Escala de Autoavaliação de TDAH em Adultos (ASRS-18 v1.1 — OMS / Versão Brasileira)';
+                document.getElementById('report-total-score').textContent = totalScore;
+                document.getElementById('report-max-score').textContent = '/ 72 pontos';
+
+                const badge = document.getElementById('report-severity-badge');
+                if (isScreeningPositive) {
+                    badge.className = 'inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border bg-purple-100 text-purple-900 border-purple-300';
+                    badge.textContent = `Rastreio Positivo para TDAH (${partAHits}/6 itens na Parte A)`;
+                } else {
+                    badge.className = 'inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border bg-emerald-100 text-emerald-800 border-emerald-300';
+                    badge.textContent = `Rastreio Negativo para TDAH (${partAHits}/6 itens na Parte A)`;
+                }
+
+                // Subescala 1: Desatenção (9 itens, máx 36)
+                const inattPct = Math.round((inattentionScore / 36) * 100);
+                document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                document.getElementById('subscale-somatic-title').innerHTML = '<i data-lucide="target" class="w-3.5 h-3.5 mr-1 text-indigo-600"></i> Desatenção / Funções Executivas';
+                document.getElementById('subscale-somatic-desc').textContent = 'Sustentação atencional, organização, gerenciamento de projetos e memória prospectiva (9 itens).';
+                document.getElementById('somatic-label-min').textContent = 'Mínimo';
+                document.getElementById('somatic-label-max').textContent = 'Máximo';
+                document.getElementById('somatic-score-display').textContent = `${inattentionScore} / 36`;
+                document.getElementById('somatic-bar').style.width = `${inattPct}%`;
+                document.getElementById('somatic-bar').className = 'bg-indigo-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('somatic-percent').textContent = `${inattPct}%`;
+
+                // Subescala 2: Hiperatividade e Impulsividade (9 itens, máx 36)
+                const hypPct = Math.round((hyperactivityScore / 36) * 100);
+                document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                document.getElementById('subscale-cognitive-title').innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 mr-1 text-purple-600"></i> Hiperatividade &amp; Impulsividade';
+                document.getElementById('subscale-cognitive-desc').textContent = 'Inquietação psicomotora subjetiva, impulsividade verbal/interpessoal e controle inibitório (9 itens).';
+                document.getElementById('cognitive-label-min').textContent = 'Mínimo';
+                document.getElementById('cognitive-label-max').textContent = 'Máximo';
+                document.getElementById('cognitive-score-display').textContent = `${hyperactivityScore} / 36`;
+                document.getElementById('cognitive-bar').style.width = `${hypPct}%`;
+                document.getElementById('cognitive-bar').className = 'bg-purple-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('cognitive-percent').textContent = `${hypPct}%`;
+
+                // Box de Destaques Funcionais
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                critList.innerHTML = `
+                    <div class="space-y-1.5 text-xs text-slate-700">
+                        <p>• <strong>Critério de Triagem da OMS (Parte A):</strong> ${partAHits} de 6 itens atingiram a frequência de corte clínico (${isScreeningPositive ? '<span class="text-purple-700 font-bold">Positivo: alta sensibilidade estatística para sintomas consistentes com TDAH</span>' : '<span class="text-emerald-700 font-bold">Negativo: sintomas abaixo do limiar de rastreio</span>'}).</p>
+                        <p>• <strong>Distribuição Subfatorial:</strong> Desatenção com ${inattentionScore}/36 pontos (${inattPct}%) e Hiperatividade/Impulsividade com ${hyperactivityScore}/36 pontos (${hypPct}%).</p>
+                    </div>
+                `;
+                critBox.classList.remove('hidden');
+
+                // Tabela Detalhada com os 18 Itens
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                ASRS18_ITEMS.forEach((it, idx) => {
+                    const sc = sessionState.answers[it.id] !== undefined ? sessionState.answers[it.id] : 0;
+                    const optObj = ASRS18_OPTIONS.find(o => o.value === sc) || { label: '-' };
+                    const isPartA = it.part === 'A';
+                    const hitCutoff = isPartA && sc >= it.threshold;
+
+                    let badgeColor = 'bg-slate-100 text-slate-700';
+                    if (sc === 2) badgeColor = 'bg-yellow-50 text-yellow-800 border border-yellow-200';
+                    if (sc === 3) badgeColor = 'bg-orange-50 text-orange-800 border border-orange-200';
+                    if (sc === 4) badgeColor = 'bg-purple-50 text-purple-900 border border-purple-200';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-400">${idx + 1}</td>
+                        <td class="py-2.5 px-3.5 font-medium text-slate-800">
+                            ${it.text}
+                            ${hitCutoff ? '<span class="ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">★ Limiar Parte A</span>' : ''}
+                        </td>
+                        <td class="py-2.5 px-3.5 text-slate-500">${it.domainLabel}</td>
+                        <td class="py-2.5 px-3.5 text-center font-mono font-bold text-slate-900">${sc}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${badgeColor}">
+                                ${optObj.label}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                let presentationType = inattPct > hypPct + 15 ? 'predomínio de manifestações de Desatenção e disfunção executiva' : hypPct > inattPct + 15 ? 'predomínio de manifestações de Hiperatividade e Impulsividade' : 'apresentação combinada de sintomas desatentos e hiperativo-impulsivos';
+                summaryDiv.textContent = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}${sessionState.patientAge ? ', ' + sessionState.patientAge + ' anos,' : ''} respondeu à Escala de Autoavaliação de TDAH em Adultos (ASRS-18 v1.1 da Organização Mundial da Saúde), obtendo escore bruto total de ${totalScore} pontos (de 72 possíveis). Na Parte A (itens de triagem rápida da OMS), foram pontuados ${partAHits} de 6 itens no limiar de relevância clínica, resultando em critério de RASTREIO ${isScreeningPositive ? 'POSITIVO' : 'NEGATIVO'} para TDAH em adultos. A análise subfatorial indicou ${inattentionScore}/36 pontos (${inattPct}%) em Desatenção e ${hyperactivityScore}/36 pontos (${hypPct}%) em Hiperatividade/Impulsividade, evidenciando um perfil clínico com ${presentationType}. Recomenda-se correlacionar estes achados com o histórico de desenvolvimento desde a infância, prejuízo funcional em múltiplos contextos e investigação neuropsicológica aprofundada de flexibilidade cognitiva, controle inibitório e memória de trabalho.`;
+
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    refList.innerHTML = `
+                        <p>• Kessler, R. C., Adler, L., Ames, M., Demler, O., Faraone, S. V., Hiripi, E., ... &amp; Walters, E. E. (2005). <em>The World Health Organization Adult ADHD Self-Report Scale (ASRS)</em>. Psychological Medicine, 35(2), 245-256.</p>
+                        <p>• Mattos, P., Segenreich, D., Saboya, E., Louzã, M., Dias, G., &amp; Romano, M. (2006). <em>Adaptação transcultural para o português da escala Adult Self-Report Scale para avaliação do TDAH em adultos</em>. Revista de Psiquiatria Clínica, 33(4), 188-194.</p>
+                        <p>• American Psychiatric Association (2023). <em>Manual Diagnóstico e Estatístico de Transtornos Mentais (DSM-5-TR)</em>. Porto Alegre: Artmed.</p>
+                    `;
+                }
+
+            } else if (inst === 'PHQ9') {
+                // LAUDO DE DEPRESSÃO (PHQ-9 — DSM-5)
+                let totalScore = 0;
+                let cognitiveScore = 0; // itens 1, 2, 6, 7, 9 (máx 15)
+                let somaticScore = 0;   // itens 3, 4, 5, 8 (máx 12)
+                let item9Score = sessionState.answers[9] !== undefined ? sessionState.answers[9] : 0;
+                let criticalItems = [];
+
+                PHQ9_ITEMS.forEach(it => {
+                    const sc = sessionState.answers[it.id] !== undefined ? sessionState.answers[it.id] : 0;
+                    totalScore += sc;
+                    if (it.type === 'somatic') somaticScore += sc;
+                    else cognitiveScore += sc;
+
+                    if (sc >= 2 || (it.id === 9 && sc > 0)) {
+                        criticalItems.push({ item: it, score: sc });
+                    }
+                });
+
+                document.getElementById('report-instrument-name').textContent = 'Questionário de Saúde do Paciente — Depressão (PHQ-9 — DSM-5)';
+                document.getElementById('report-total-score').textContent = totalScore;
+                document.getElementById('report-max-score').textContent = '/ 27 pontos';
+
+                let severityText = '';
+                let severityBgClass = '';
+
+                if (totalScore <= 4) {
+                    severityText = 'Sintomas Depressivos Mínimos ou Ausentes';
+                    severityBgClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                } else if (totalScore <= 9) {
+                    severityText = 'Sintomas Depressivos Leves';
+                    severityBgClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
+                } else if (totalScore <= 14) {
+                    severityText = 'Depressão Moderada';
+                    severityBgClass = 'bg-orange-100 text-orange-800 border-orange-300';
+                } else if (totalScore <= 19) {
+                    severityText = 'Depressão Moderadamente Grave';
+                    severityBgClass = 'bg-red-100 text-red-800 border-red-300';
+                } else {
+                    severityText = 'Depressão Grave';
+                    severityBgClass = 'bg-red-200 text-red-900 border-red-400';
+                }
+
+                const badge = document.getElementById('report-severity-badge');
+                badge.className = `inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${severityBgClass}`;
+                badge.textContent = severityText;
+
+                // Subescala 1: Cognitivo-Afetiva (itens 1, 2, 6, 7, 9 - máx 15)
+                const cogPct = Math.round((cognitiveScore / 15) * 100);
+                document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                document.getElementById('subscale-cognitive-title').innerHTML = '<i data-lucide="heart" class="w-3.5 h-3.5 mr-1 text-rose-600"></i> Cognitivo-Afetivo';
+                document.getElementById('subscale-cognitive-desc').textContent = 'Humor deprimido, anedonia, culpa excessiva, concentração e desesperança.';
+                document.getElementById('cognitive-label-min').textContent = 'Basal';
+                document.getElementById('cognitive-label-max').textContent = 'Grave';
+                document.getElementById('cognitive-score-display').textContent = `${cognitiveScore} / 15`;
+                document.getElementById('cognitive-bar').style.width = `${cogPct}%`;
+                document.getElementById('cognitive-bar').className = 'bg-rose-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('cognitive-percent').textContent = `${cogPct}%`;
+
+                // Subescala 2: Somático-Vegetativa (itens 3, 4, 5, 8 - máx 12)
+                const somPct = Math.round((somaticScore / 12) * 100);
+                document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                document.getElementById('subscale-somatic-title').innerHTML = '<i data-lucide="moon" class="w-3.5 h-3.5 mr-1 text-amber-600"></i> Somático / Neurovegetativo';
+                document.getElementById('subscale-somatic-desc').textContent = 'Padrão de sono, fadiga/energia, apetite e alterações psicomotoras.';
+                document.getElementById('somatic-label-min').textContent = 'Basal';
+                document.getElementById('somatic-label-max').textContent = 'Grave';
+                document.getElementById('somatic-score-display').textContent = `${somaticScore} / 12`;
+                document.getElementById('somatic-bar').style.width = `${somPct}%`;
+                document.getElementById('somatic-bar').className = 'bg-amber-500 h-2 rounded-full transition-all duration-300';
+                document.getElementById('somatic-percent').textContent = `${somPct}%`;
+
+                // Box de Alerta Crítico
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                critList.innerHTML = '';
+
+                let riskAlertHtml = '';
+                if (item9Score > 0) {
+                    const opt9 = PHQ9_OPTIONS.find(o => o.value === item9Score) || { label: 'Pontuado' };
+                    riskAlertHtml = `
+                        <div class="p-3 bg-red-100 border-2 border-red-300 rounded-xl text-red-900 font-medium text-xs mb-2">
+                            <strong>⚠️ ALERTA DE SEGURANÇA CLÍNICA — Item 9 pontuado (${opt9.label}):</strong> O paciente assinalou pensamentos de que seria melhor estar morto(a) ou de se ferir. Recomenda-se acolhimento humanizado, investigação de intencionalidade/planejamento e manejo de suporte imediato.
+                        </div>
+                    `;
+                }
+
+                if (criticalItems.length > 0 || item9Score > 0) {
+                    critBox.classList.remove('hidden');
+                    critList.innerHTML = riskAlertHtml;
+                    criticalItems.forEach(ci => {
+                        const opt = PHQ9_OPTIONS.find(o => o.value === ci.score) || { label: '' };
+                        const row = document.createElement('div');
+                        row.className = 'flex items-center justify-between py-1 border-b border-amber-200/50 last:border-0';
+                        row.innerHTML = `
+                            <span class="font-medium">• Item ${ci.item.id}: ${ci.item.text}</span>
+                            <span class="font-bold px-2 py-0.5 rounded ${ci.item.id === 9 ? 'bg-red-200 text-red-900' : 'bg-amber-200 text-amber-900'} text-[10px]">
+                                Escore ${ci.score} (${opt.label})
+                            </span>
+                        `;
+                        critList.appendChild(row);
+                    });
+                } else {
+                    critBox.classList.add('hidden');
+                }
+
+                // Tabela Detalhada com os 9 Itens
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                PHQ9_ITEMS.forEach((it, idx) => {
+                    const sc = sessionState.answers[it.id] !== undefined ? sessionState.answers[it.id] : 0;
+                    const optObj = PHQ9_OPTIONS.find(o => o.value === sc) || { label: '-' };
+
+                    let badgeColor = 'bg-slate-100 text-slate-700';
+                    if (sc === 1) badgeColor = 'bg-yellow-50 text-yellow-800 border border-yellow-200';
+                    if (sc === 2) badgeColor = 'bg-orange-50 text-orange-800 border border-orange-200';
+                    if (sc === 3) badgeColor = 'bg-red-50 text-red-800 border border-red-200';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-400">${idx + 1}</td>
+                        <td class="py-2.5 px-3.5 font-medium text-slate-800">
+                            ${it.text}
+                            ${it.id === 9 && sc > 0 ? '<span class="ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-900 border border-red-300">★ Item de Risco</span>' : ''}
+                        </td>
+                        <td class="py-2.5 px-3.5 text-slate-500 capitalize">${it.type === 'somatic' ? 'Somático / Vegetativo' : 'Cognitivo-Afetivo'}</td>
+                        <td class="py-2.5 px-3.5 text-center font-mono font-bold text-slate-900">${sc}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${badgeColor}">
+                                ${optObj.label}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                let summaryText = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}${sessionState.patientAge ? ', ' + sessionState.patientAge + ' anos,' : ''} respondeu ao Questionário de Saúde do Paciente (PHQ-9 — DSM-5), obtendo escore bruto total de ${totalScore} pontos (de 27 possíveis), enquadrando-se clinicamente na faixa de ${severityText}.`;
+                summaryText += ` A análise subfatorial indicou ${cognitiveScore}/15 pontos (${cogPct}%) na dimensão cognitivo-afetiva e ${somaticScore}/12 pontos (${somPct}%) na dimensão somático-vegetativa.`;
+                if (item9Score > 0) {
+                    summaryText += ` ATENÇÃO CLÍNICA: O paciente pontuou positivamente no Item 9 (escore ${item9Score}), assinalando ideação de morte/autoagressão, requerendo acompanhamento presencial rigoroso, investigação de planos e suporte multiprofissional.`;
+                } else {
+                    summaryText += ` Não foram assinalados pensamentos de morte ou autoagressão no Item 9.`;
+                }
+                summaryDiv.textContent = summaryText;
+
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    refList.innerHTML = `
+                        <p>• Kroenke, K., Spitzer, R. L., &amp; Williams, J. B. (2001). <em>The PHQ-9: validity of a brief depression severity measure</em>. Journal of General Internal Medicine, 16(9), 606-613.</p>
+                        <p>• Santos, I. S., Tavares, B. F., Munhoz, T. N., Almeida, L. S. P. D., Silva, N. T. B. D., Tams, B. D., ... &amp; Matijasevich, A. (2013). <em>Sensibilidade e especificidade do Patient Health Questionnaire-9 (PHQ-9) entre adultos no Brasil</em>. Cadernos de Saúde Pública, 29(8), 1533-1543.</p>
+                        <p>• American Psychiatric Association (2023). <em>Manual Diagnóstico e Estatístico de Transtornos Mentais (DSM-5-TR)</em>. Porto Alegre: Artmed.</p>
                     `;
                 }
 
@@ -1941,7 +2339,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            const prefix = inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : 'Laudo-Ansiedade';
+            const prefix = inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : inst === 'ASRS18' ? 'Laudo-TDAH-ASRS18' : inst === 'PHQ9' ? 'Laudo-Depressao-PHQ9' : 'Laudo-Ansiedade';
             a.download = `${prefix}-${sessionState.patientName.replace(/\s+/g, '_')}-${new Date().toISOString().slice(0,10)}.json`;
             document.body.appendChild(a);
             a.click();
@@ -1965,6 +2363,10 @@
             
             const instName = sessionState.instrument === 'TRIF12' 
                 ? 'Teste de Raciocínio & Inteligência Fluida (TRIF-12)' 
+                : sessionState.instrument === 'ASRS18'
+                ? 'Escala de Autoavaliação de TDAH em Adultos (ASRS-18)'
+                : sessionState.instrument === 'PHQ9'
+                ? 'Questionário de Depressão (PHQ-9)'
                 : (sessionState.instrument === 'BAI' ? 'Inventário de Ansiedade de Beck (BAI)' : 'Escala GAD-7');
                 
             const msg = `Olá! Concluí a avaliação (${instName}) na Plataforma Clínica Segura.\n\nNome: ${sessionState.patientName}\n\nSegue o link com as minhas respostas criptografadas para o seu acesso e emissão do laudo:\n${returnUrl}`;
