@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>Viola Studio • Lutheria, Harmonia &amp; Acústica Digital</title>
+    <link rel="icon" type="image/png" href="/assets/favicon2.png">
+
+    <!-- Tipografia Editorial & Técnica -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        studio: {
+                            bg: '#070b12',
+                            sidebar: '#0b111e',
+                            surface: '#0f172a',
+                            elevated: '#131c2e',
+                            border: 'rgba(148, 163, 184, 0.12)'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+        html, body {
+            height: 100%;
+            background-color: #070b12;
+            color: #e2e8f0;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Scrollbars minimalistas e elegantes */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.35);
+        }
+
+        /* Refinamento visual dos módulos internos para visual mais limpo, amplo e sofisticado */
+        #viola-focus-stage > [data-viola-tool-panel] > .bg-\[\#0f172a\],
+        #viola-focus-stage > [data-viola-tool-panel].bg-\[\#0f172a\] {
+            background: linear-gradient(180deg, rgba(17, 25, 40, 0.92) 0%, rgba(12, 18, 30, 0.96) 100%);
+            border-color: rgba(148, 163, 184, 0.14);
+            border-radius: 1rem;
+            box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+        }
+
+        /* Item ativo na Sidebar */
+        .sidebar-tool-active {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.16) 0%, rgba(245, 158, 11, 0.04) 100%);
+            color: #fef3c7 !important;
+            border-color: rgba(245, 158, 11, 0.35) !important;
+            box-shadow: inset 2px 0 0 #f59e0b;
+        }
+
+        /* Sutil brilho ambiente no topo do palco */
+        .studio-stage-glow {
+            background-image: radial-gradient(ellipse 70% 240px at 50% -60px, rgba(245, 158, 11, 0.07), transparent 70%);
+        }
+
+        @media print {
+            html, body {
+                height: auto !important;
+                overflow: visible !important;
+                background: #ffffff !important;
+                color: #0f172a !important;
+            }
+            #studio-sidebar, #studio-topbar, #studio-mobile-backdrop {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body data-viola-standalone="true" class="h-screen overflow-hidden flex bg-[#070b12] text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
+
+    <!-- BACKDROP MOBILE DA SIDEBAR -->
+    <div id="studio-mobile-backdrop" class="hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"></div>
+
+    <!-- ===================================================================== -->
+    <!-- 1. SIDEBAR PROFISSIONAL FIXA À ESQUERDA (TODOS OS 22 RECURSOS)        -->
+    <!-- ===================================================================== -->
+    <aside id="studio-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-[280px] shrink-0 bg-[#0b111e] border-r border-slate-800/80 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out">
+        <!-- Marca do Estúdio -->
+        <div class="h-16 px-4 border-b border-slate-800/80 flex items-center justify-between shrink-0">
+            <button type="button" id="btn-sidebar-brand-home" class="flex items-center gap-3 text-left group">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition">
+                    <i data-lucide="music" class="w-4.5 h-4.5"></i>
+                </div>
+                <div>
+                    <div class="font-bold text-sm tracking-tight text-slate-100 leading-none">Viola Studio</div>
+                    <div class="text-[11px] font-mono text-amber-400/90 mt-1">Lutheria &amp; Acústica</div>
+                </div>
+            </button>
+            <button type="button" id="btn-close-mobile-sidebar" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" aria-label="Fechar menu">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Busca Rápida na Sidebar -->
+        <div class="p-3 border-b border-slate-800/60 shrink-0 space-y-2">
+            <div class="relative">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                <input type="text" id="studio-sidebar-search" autocomplete="off"
+                    placeholder="Buscar entre 22 recursos..."
+                    class="w-full h-9 pl-8 pr-3 rounded-lg bg-[#070b12] border border-slate-800 focus:border-amber-500/60 focus:outline-none text-xs text-slate-200 placeholder-slate-500 transition">
+            </div>
+
+            <button type="button" id="btn-sidebar-overview"
+                class="w-full px-3 py-2 rounded-lg border border-transparent text-xs font-semibold flex items-center justify-between text-slate-300 hover:text-white hover:bg-slate-800/60 transition">
+                <span class="flex items-center gap-2.5">
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-amber-400"></i>
+                    <span>Visão Geral do Estúdio</span>
+                </span>
+                <span class="text-[10px] font-mono text-slate-500">22</span>
+            </button>
+        </div>
+
+        <!-- Árvore de Estações & Ferramentas -->
+        <nav id="studio-sidebar-nav" aria-label="Recursos do Estúdio" class="flex-1 overflow-y-auto px-3 py-3 space-y-5"></nav>
+
+        <!-- Rodapé da Sidebar (Backup, Memória e Vault) -->
+        <div class="p-3 border-t border-slate-800/80 bg-[#080d17] shrink-0 space-y-2">
+            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>LocalStorage</span>
+                </span>
+                <strong id="viola-storage-kb" class="text-slate-200">0.0 KB</strong>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+                <button type="button" id="btn-viola-export-backup" title="Salvar backup das suas tablaturas e regulagens (.json)"
+                    class="h-8 px-2.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-slate-200 text-[11px] font-medium flex items-center justify-center gap-1.5 transition">
+                    <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>Backup</span>
+                </button>
+                <button type="button" id="btn-viola-import-backup" title="Restaurar backup (.json)"
+                    class="h-8 px-2.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-slate-200 text-[11px] font-medium flex items-center justify-center gap-1.5 transition">
+                    <i data-lucide="upload" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    <span>Restaurar</span>
+                </button>
+                <input type="file" id="input-viola-import-json" accept=".json,application/json" class="hidden">
+            </div>
+            <div class="flex items-center justify-between pt-1 px-1 text-[11px] text-slate-500">
+                <a href="/nexus-vault/index.html" class="hover:text-amber-300 flex items-center gap-1 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3"></i>
+                    <span>Nexus Vault</span>
+                </a>
+                <button type="button" id="btn-viola-fullscreen" class="hover:text-slate-200 flex items-center gap-1 transition" title="Tela Cheia">
+                    <i data-lucide="maximize-2" class="w-3 h-3"></i>
+                    <span>Tela Cheia</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ===================================================================== -->
+    <!-- 2. ÁREA PRINCIPAL AMPLA (TOPBAR ÚNICA DE 60px + PALCO WIDESCREEN)     -->
+    <!-- ===================================================================== -->
+    <div class="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
+
+        <!-- TOPBAR ÚNICA, FINA E ELEGANTE (60px) -->
+        <header id="studio-topbar" class="h-16 shrink-0 bg-[#0b111e]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 lg:px-7 flex items-center justify-between gap-3 z-20">
+            <!-- Esquerda: Botão Mobile + Título do Recurso Ativo -->
+            <div class="flex items-center gap-3 min-w-0">
+                <button type="button" id="btn-open-mobile-sidebar" class="lg:hidden h-9 w-9 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-200 flex items-center justify-center shrink-0" aria-label="Abrir menu de recursos">
+                    <i data-lucide="menu" class="w-4 h-4"></i>
+                </button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <span id="studio-topbar-category" class="text-[11px] font-mono uppercase tracking-wider text-amber-400/90 truncate">Harmonia &amp; Acordes</span>
+                        <span class="text-slate-600 text-xs">/</span>
+                        <span id="studio-topbar-badge" class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700/80">Tríades &amp; 7ª</span>
+                    </div>
+                    <h1 id="viola-active-tool-title" class="text-sm sm:text-base font-bold text-slate-100 truncate mt-0.5">Campo Harmônico &amp; Shapes</h1>
+                </div>
+            </div>
+
+            <!-- Direita: Controles Essenciais do Instrumento (Limpos e Diretos) -->
+            <div class="flex items-center gap-2 shrink-0">
+                <select id="viola-select-instrument" aria-label="Selecionar instrumento e afinação"
+                    class="h-9 max-w-[180px] sm:max-w-[260px] px-2.5 rounded-lg bg-[#070b12] border border-slate-700/90 hover:border-slate-600 text-xs font-medium text-slate-100 focus:border-amber-500 focus:outline-none transition">
+                    <option value="viola_cebolao_e">Viola • Cebolão em Mi</option>
+                    <option value="viola_cebolao_d">Viola • Cebolão em Ré</option>
+                    <option value="viola_rio_abaixo">Viola • Rio Abaixo (Sol)</option>
+                    <option value="viola_boiadeira">Viola • Boiadeira</option>
+                    <option value="viola_rio_acima_c">Viola • Rio Acima (Dó)</option>
+                    <option value="viola_meia_guitarra">Viola • Meia-Guitarra</option>
+                    <option value="viola_sao_lourenco">Viola • São Lourenço</option>
+                    <option value="viola_cana_verde">Viola • Cana-Verde (Bm)</option>
+                    <option value="violao_padrao">Violão • 6 Cordas Padrão</option>
+                </select>
+
+                <button type="button" id="btn-viola-toggle-hand" title="Alternar orientação Canhoto / Destro"
+                    class="h-9 px-3 rounded-lg bg-amber-500/12 hover:bg-amber-500/20 border border-amber-500/35 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                    <i data-lucide="flip-horizontal-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span id="label-viola-hand" class="hidden md:inline">Canhoto</span>
+                </button>
+
+                <button type="button" id="btn-viola-toggle-persp" title="Alternar ordem das cordas no diagrama"
+                    class="hidden xl:flex h-9 px-3 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 text-xs font-medium items-center gap-1.5 transition">
+                    <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-slate-400"></i>
+                    <span id="label-viola-persp">Diagrama</span>
+                </button>
+
+                <button type="button" id="btn-viola-toggle-fretboard-dock" title="Mostrar ou ocultar o Braço Interativo (Atalho: Alt+B)"
+                    class="h-9 px-3 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1.5 transition">
+                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span id="label-viola-fretboard-dock" class="hidden sm:inline">Braço SVG</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- PALCO PRINCIPAL FLUIDO E BEM DIAGRAMADO -->
+        <main id="studio-main-scroll" class="flex-1 overflow-y-auto studio-stage-glow">
+            <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
+
+                <!-- DASHBOARD EDITORIAL DE VISÃO GERAL (EXIBIDO QUANDO CLICAR EM "VISÃO GERAL") -->
+                <section id="studio-overview-page" class="hidden space-y-8 pb-12">
+                    <div class="rounded-2xl bg-gradient-to-br from-[#11192a] via-[#0d1424] to-[#0b101b] border border-slate-800/90 p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 shadow-xl">
+                        <div class="space-y-2 max-w-2xl">
+                            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-mono">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                <span>Estúdio Completo • 22 Ferramentas em 5 Estações</span>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Estúdio de Viola Caipira &amp; Violão</h2>
+                            <p class="text-sm text-slate-400 leading-relaxed">
+                                Escolha qualquer recurso abaixo ou na barra lateral esquerda. O ambiente adapta automaticamente o braço interativo (Canhoto ou Destro), síntese acústica Web Audio e análises de lutheria.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 shrink-0">
+                            <button type="button" data-quick-open="campo-harmonico" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition">
+                                <i data-lucide="music" class="w-4 h-4"></i>
+                                <span>Campo Harmônico</span>
+                            </button>
+                            <button type="button" data-quick-open="estroboscopico" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold text-xs flex items-center gap-2 transition">
+                                <i data-lucide="disc" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Afinador ±0.1¢</span>
+                            </button>
+                            <button type="button" data-quick-open="pagode" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold text-xs flex items-center gap-2 transition">
+                                <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
+                                <span>Pagode de Viola</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="studio-overview-grid" class="space-y-8"></div>
+                </section>
+
+                <!-- PALCO DA FERRAMENTA ATIVA (RENDERIZADO POR TAB-VIOLA.JS) -->
+                <section id="tab-panel-viola"></section>
+            </div>
+        </main>
+    </div>
+
+    <!-- CONTAINER DE TOASTS -->
+    <div id="vault-toast-root" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+    <!-- ===================================================================== -->
+    <!-- BRIDGE LOCALSTORAGE DIRETA (ZERO-PIN)                                 -->
+    <!-- ===================================================================== -->
+    <script>
+        (function (global) {
+            'use strict';
+
+            var STORAGE_KEYS = {
+                VIOLA: 'dm_vault_viola',
+                META: 'dm_vault_meta'
+            };
+
+            function updateStorageMeter() {
+                try {
+                    var raw = localStorage.getItem(STORAGE_KEYS.VIOLA) || '';
+                    var kb = ((raw.length * 2) / 1024).toFixed(1);
+                    var el = document.getElementById('viola-storage-kb');
+                    if (el) el.textContent = kb + ' KB';
+                } catch (e) {}
+            }
+
+            function showToast(message, type) {
+                var root = document.getElementById('vault-toast-root');
+                if (!root) return;
+                var toast = document.createElement('div');
+                var borderColor = type === 'error' ? 'border-rose-500/50 text-rose-200' : 'border-amber-500/40 text-amber-100';
+                toast.className = 'pointer-events-auto px-4 py-2.5 rounded-xl bg-[#0f172a]/95 backdrop-blur border ' + borderColor + ' shadow-2xl text-xs font-medium transition-all duration-200';
+                toast.textContent = message;
+                root.appendChild(toast);
+                setTimeout(function () {
+                    toast.style.opacity = '0';
+                    setTimeout(function () {
+                        if (toast.parentNode) toast.parentNode.removeChild(toast);
+                    }, 220);
+                }, 2800);
+            }
+
+            function refreshIcons() {
+                if (global.lucide && typeof global.lucide.createIcons === 'function') {
+                    global.lucide.createIcons();
+                }
+            }
+
+            global.VaultCore = {
+                STORAGE_KEYS: STORAGE_KEYS,
+                store: {
+                    get: function (key, fallback) {
+                        try {
+                            var raw = localStorage.getItem(key);
+                            if (!raw) return fallback;
+                            return JSON.parse(raw);
+                        } catch (e) {
+                            return fallback;
+                        }
+                    },
+                    set: function (key, value) {
+                        try {
+                            localStorage.setItem(key, JSON.stringify(value));
+                            updateStorageMeter();
+                            return true;
+                        } catch (e) {
+                            showToast('Erro ao gravar no LocalStorage.', 'error');
+                            return false;
+                        }
+                    }
+                },
+                refreshIcons: refreshIcons,
+                toast: showToast,
+                showToast: showToast
+            };
+
+            global.showToast = showToast;
+            global.updateViolaStorageMeter = updateStorageMeter;
+        })(window);
+    </script>
+
+    <!-- Motor Principal Único (Sincronizado com o Roadmap Diário) -->
+    <script src="/nexus-vault/js/tab-viola.js"></script>
+
+    <!-- Controlador da Interface Profissional (Sidebar + Visão Geral + Topbar) -->
+    <script>
+        (function () {
+            'use strict';
+
+            var isOverviewOpen = false;
+            var sidebarFilter = '';
+            var currentActiveToolId = 'campo-harmonico';
+
+            function closeMobileSidebar() {
+                var sb = document.getElementById('studio-sidebar');
+                var bd = document.getElementById('studio-mobile-backdrop');
+                if (sb) sb.classList.add('-translate-x-full');
+                if (bd) bd.classList.add('hidden');
+            }
+
+            function openMobileSidebar() {
+                var sb = document.getElementById('studio-sidebar');
+                var bd = document.getElementById('studio-mobile-backdrop');
+                if (sb) sb.classList.remove('-translate-x-full');
+                if (bd) bd.classList.remove('hidden');
+            }
+
+            function setOverviewMode(showOverview) {
+                isOverviewOpen = Boolean(showOverview);
+                var overviewEl = document.getElementById('studio-overview-page');
+                var toolPanelEl = document.getElementById('tab-panel-viola');
+                var overviewBtn = document.getElementById('btn-sidebar-overview');
+                var topCat = document.getElementById('studio-topbar-category');
+                var topBadge = document.getElementById('studio-topbar-badge');
+                var topTitle = document.getElementById('viola-active-tool-title');
+
+                if (overviewEl) overviewEl.classList.toggle('hidden', !isOverviewOpen);
+                if (toolPanelEl) toolPanelEl.classList.toggle('hidden', isOverviewOpen);
+                if (overviewBtn) {
+                    overviewBtn.classList.toggle('sidebar-tool-active', isOverviewOpen);
+                }
+
+                if (isOverviewOpen) {
+                    if (topCat) topCat.textContent = 'Viola Studio';
+                    if (topBadge) topBadge.textContent = '22 Recursos';
+                    if (topTitle) topTitle.textContent = 'Visão Geral do Estúdio';
+                    renderSidebarNav();
+                    var mainScroll = document.getElementById('studio-main-scroll');
+                    if (mainScroll) mainScroll.scrollTop = 0;
+                }
+            }
+
+            function openToolFromShell(toolId) {
+                setOverviewMode(false);
+                closeMobileSidebar();
+                if (window.VaultTabViola && typeof window.VaultTabViola.setActiveViolaTool === 'function') {
+                    window.VaultTabViola.setActiveViolaTool(toolId);
+                }
+                var mainScroll = document.getElementById('studio-main-scroll');
+                if (mainScroll) mainScroll.scrollTop = 0;
+            }
+
+            function renderSidebarNav() {
+                var nav = document.getElementById('studio-sidebar-nav');
+                if (!nav || !window.VaultTabViola) return;
+
+                var cats = window.VaultTabViola.categories || [];
+                var tools = window.VaultTabViola.tools || [];
+                var q = (sidebarFilter || '').trim().toLowerCase();
+
+                var html = cats.map(function (cat) {
+                    var catTools = tools.filter(function (t) {
+                        if (t.categoryId !== cat.id) return false;
+                        if (!q) return true;
+                        return (
+                            t.title.toLowerCase().indexOf(q) !== -1 ||
+                            t.shortTitle.toLowerCase().indexOf(q) !== -1 ||
+                            t.badge.toLowerCase().indexOf(q) !== -1 ||
+                            t.desc.toLowerCase().indexOf(q) !== -1
+                        );
+                    });
+                    if (catTools.length === 0) return '';
+
+                    return (
+                        '<div class="space-y-1">' +
+                            '<div class="px-2.5 pb-1 flex items-center justify-between">' +
+                                '<span class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500">' + cat.label + '</span>' +
+                                '<span class="text-[10px] font-mono text-slate-600">' + catTools.length + '</span>' +
+                            '</div>' +
+                            '<div class="space-y-0.5">' +
+                                catTools.map(function (t) {
+                                    var isActive = !isOverviewOpen && t.id === currentActiveToolId;
+                                    return (
+                                        '<button type="button" data-sidebar-tool="' + t.id + '" ' +
+                                            'class="w-full px-2.5 py-2 rounded-lg border border-transparent text-left text-xs flex items-center justify-between gap-2 transition ' +
+                                            (isActive ? 'sidebar-tool-active font-semibold' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50') + '">' +
+                                            '<span class="flex items-center gap-2.5 min-w-0">' +
+                                                '<i data-lucide="' + (t.icon || 'music') + '" class="w-3.5 h-3.5 shrink-0 ' + (isActive ? 'text-amber-400' : 'text-slate-500') + '"></i>' +
+                                                '<span class="truncate">' + t.shortTitle + '</span>' +
+                                            '</span>' +
+                                            '<span class="shrink-0 text-[9px] font-mono px-1.5 py-0.5 rounded ' + (isActive ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-900 text-slate-500') + '">' + t.badge + '</span>' +
+                                        '</button>'
+                                    );
+                                }).join('') +
+                            '</div>' +
+                        '</div>'
+                    );
+                }).filter(Boolean).join('');
+
+                nav.innerHTML = html || '<div class="px-3 py-6 text-center text-xs text-slate-500 font-mono">Nenhum recurso encontrado.</div>';
+
+                nav.querySelectorAll('[data-sidebar-tool]').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        openToolFromShell(btn.getAttribute('data-sidebar-tool'));
+                    });
+                });
+
+                if (window.VaultCore && window.VaultCore.refreshIcons) {
+                    window.VaultCore.refreshIcons();
+                }
+            }
+
+            function renderOverviewGrid() {
+                var grid = document.getElementById('studio-overview-grid');
+                if (!grid || !window.VaultTabViola) return;
+
+                var cats = window.VaultTabViola.categories || [];
+                var tools = window.VaultTabViola.tools || [];
+
+                grid.innerHTML = cats.map(function (cat) {
+                    var catTools = tools.filter(function (t) { return t.categoryId === cat.id; });
+                    return (
+                        '<div class="space-y-3">' +
+                            '<div class="flex items-end justify-between border-b border-slate-800/80 pb-2">' +
+                                '<div>' +
+                                    '<h3 class="text-base font-bold text-slate-100">' + cat.num + '. ' + cat.label + '</h3>' +
+                                    '<p class="text-xs text-slate-400 mt-0.5">' + cat.desc + '</p>' +
+                                '</div>' +
+                                '<span class="text-xs font-mono text-slate-500">' + catTools.length + ' recursos</span>' +
+                            '</div>' +
+                            '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">' +
+                                catTools.map(function (t) {
+                                    return (
+                                        '<button type="button" data-overview-open="' + t.id + '" ' +
+                                            'class="group text-left p-4 rounded-2xl bg-[#0e1525] hover:bg-[#131d33] border border-slate-800/90 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between gap-3">' +
+                                            '<div class="space-y-2">' +
+                                                '<div class="flex items-center justify-between gap-2">' +
+                                                    '<div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 group-hover:border-amber-500/40 flex items-center justify-center text-amber-400">' +
+                                                        '<i data-lucide="' + (t.icon || 'music') + '" class="w-4 h-4"></i>' +
+                                                    '</div>' +
+                                                    '<span class="px-2 py-0.5 text-[10px] font-mono rounded-full bg-slate-900 text-slate-300 border border-slate-800">' + t.badge + '</span>' +
+                                                '</div>' +
+                                                '<div class="font-bold text-sm text-slate-100 group-hover:text-amber-200 transition">' + t.title + '</div>' +
+                                                '<p class="text-xs text-slate-400 leading-relaxed">' + t.desc + '</p>' +
+                                            '</div>' +
+                                            '<div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono">' +
+                                                '<span class="text-slate-500">' + (t.defaultShowFretboard ? 'Com Braço Interativo' : 'Bancada Dedicada') + '</span>' +
+                                                '<span class="text-amber-400 font-semibold group-hover:translate-x-0.5 transition-transform">Abrir →</span>' +
+                                            '</div>' +
+                                        '</button>'
+                                    );
+                                }).join('') +
+                            '</div>' +
+                        '</div>'
+                    );
+                }).join('');
+
+                grid.querySelectorAll('[data-overview-open]').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        openToolFromShell(btn.getAttribute('data-overview-open'));
+                    });
+                });
+            }
+
+            // Callback acionado automaticamente pelo tab-viola.js sempre que o foco muda
+            window.onViolaFocusSync = function (activeTool, showFretboard) {
+                if (!activeTool) return;
+                currentActiveToolId = activeTool.id;
+
+                if (!isOverviewOpen) {
+                    var cats = (window.VaultTabViola && window.VaultTabViola.categories) || [];
+                    var cat = cats.find(function (c) { return c.id === activeTool.categoryId; });
+                    var topCat = document.getElementById('studio-topbar-category');
+                    var topBadge = document.getElementById('studio-topbar-badge');
+                    var topTitle = document.getElementById('viola-active-tool-title');
+                    if (topCat && cat) topCat.textContent = cat.label;
+                    if (topBadge) topBadge.textContent = activeTool.badge;
+                    if (topTitle) topTitle.textContent = activeTool.title;
+                }
+
+                var fretBtn = document.getElementById('btn-viola-toggle-fretboard-dock');
+                var fretLabel = document.getElementById('label-viola-fretboard-dock');
+                if (fretBtn && fretLabel) {
+                    fretLabel.textContent = showFretboard ? 'Braço: Visível' : 'Braço: Oculto';
+                    fretBtn.className = showFretboard
+                        ? 'h-9 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition'
+                        : 'h-9 px-3 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-400 text-xs font-medium flex items-center gap-1.5 transition';
+                }
+
+                renderSidebarNav();
+            };
+
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.VaultTabViola && typeof window.VaultTabViola.init === 'function') {
+                    window.VaultTabViola.init();
+                }
+
+                renderOverviewGrid();
+                renderSidebarNav();
+
+                if (window.VaultCore && typeof window.VaultCore.refreshIcons === 'function') {
+                    window.VaultCore.refreshIcons();
+                }
+                if (typeof window.updateViolaStorageMeter === 'function') {
+                    window.updateViolaStorageMeter();
+                }
+
+                // Eventos da Sidebar e Mobile
+                var btnOpenSb = document.getElementById('btn-open-mobile-sidebar');
+                var btnCloseSb = document.getElementById('btn-close-mobile-sidebar');
+                var backdrop = document.getElementById('studio-mobile-backdrop');
+                if (btnOpenSb) btnOpenSb.addEventListener('click', openMobileSidebar);
+                if (btnCloseSb) btnCloseSb.addEventListener('click', closeMobileSidebar);
+                if (backdrop) backdrop.addEventListener('click', closeMobileSidebar);
+
+                var btnOverview = document.getElementById('btn-sidebar-overview');
+                var btnBrandHome = document.getElementById('btn-sidebar-brand-home');
+                if (btnOverview) btnOverview.addEventListener('click', function () { setOverviewMode(true); closeMobileSidebar(); });
+                if (btnBrandHome) btnBrandHome.addEventListener('click', function () { setOverviewMode(true); closeMobileSidebar(); });
+
+                document.querySelectorAll('[data-quick-open]').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        openToolFromShell(btn.getAttribute('data-quick-open'));
+                    });
+                });
+
+                var searchInput = document.getElementById('studio-sidebar-search');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function (e) {
+                        sidebarFilter = e.target.value || '';
+                        renderSidebarNav();
+                    });
+                }
+
+                // Deep-link por hash (ex: /viola/index.html#estroboscopico ou #inicio)
+                function applyHashRoute() {
+                    var hash = (window.location.hash || '').replace(/^#/, '').trim();
+                    if (!hash || !window.VaultTabViola) return;
+                    if (hash === 'inicio' || hash === 'overview') {
+                        setOverviewMode(true);
+                        return;
+                    }
+                    var tools = window.VaultTabViola.tools || [];
+                    if (tools.some(function (t) { return t.id === hash; })) {
+                        openToolFromShell(hash);
+                    }
+                }
+                applyHashRoute();
+                window.addEventListener('hashchange', applyHashRoute);
+
+                // Atalhos de Teclado
+                document.addEventListener('keydown', function (e) {
+                    var tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+                    var isInput = tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable);
+
+                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                        e.preventDefault();
+                        if (searchInput) {
+                            openMobileSidebar();
+                            searchInput.focus();
+                            searchInput.select();
+                        }
+                        return;
+                    }
+
+                    if (isInput) return;
+
+                    if (e.altKey && e.key.toLowerCase() === 'b') {
+                        e.preventDefault();
+                        if (window.VaultTabViola) window.VaultTabViola.toggleFretboardDock();
+                    } else if (e.altKey && e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        setOverviewMode(false);
+                        if (window.VaultTabViola) window.VaultTabViola.stepViolaTool(-1);
+                    } else if (e.altKey && e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        setOverviewMode(false);
+                        if (window.VaultTabViola) window.VaultTabViola.stepViolaTool(1);
+                    }
+                });
+
+                // Exportar Backup (.json)
+                var exportBtn = document.getElementById('btn-viola-export-backup');
+                if (exportBtn) {
+                    exportBtn.addEventListener('click', function () {
+                        var data = window.VaultCore.store.get('dm_vault_viola', {});
+                        var payload = {
+                            app: 'viola-studio',
+                            version: '2.1',
+                            exportedAt: new Date().toISOString(),
+                            dm_vault_viola: data
+                        };
+                        var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                        var url = URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'viola-studio-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        window.showToast('Backup do Viola Studio salvo com sucesso.');
+                    });
+                }
+
+                // Importar Backup (.json)
+                var importBtn = document.getElementById('btn-viola-import-backup');
+                var importInput = document.getElementById('input-viola-import-json');
+                if (importBtn && importInput) {
+                    importBtn.addEventListener('click', function () {
+                        importInput.value = '';
+                        importInput.click();
+                    });
+                    importInput.addEventListener('change', function (e) {
+                        var file = e.target.files && e.target.files[0];
+                        if (!file) return;
+                        var reader = new FileReader();
+                        reader.onload = function (ev) {
+                            try {
+                                var parsed = JSON.parse(ev.target.result);
+                                var violaState = (parsed && parsed.dm_vault_viola) || (parsed && parsed.data && parsed.data.dm_vault_viola) || (parsed && parsed.instrumentId ? parsed : null);
+                                if (!violaState || typeof violaState !== 'object') {
+                                    window.showToast('Arquivo JSON inválido para o Viola Studio.', 'error');
+                                    return;
+                                }
+                                window.VaultCore.store.set('dm_vault_viola', violaState);
+                                window.dispatchEvent(new CustomEvent('vault:restored'));
+                                window.showToast('Dados restaurados com sucesso.');
+                            } catch (err) {
+                                window.showToast('Erro ao ler arquivo JSON.', 'error');
+                            }
+                        };
+                        reader.readAsText(file);
+                    });
+                }
+
+                // Tela Cheia
+                var fsBtn = document.getElementById('btn-viola-fullscreen');
+                if (fsBtn) {
+                    fsBtn.addEventListener('click', function () {
+                        if (!document.fullscreenElement) {
+                            document.documentElement.requestFullscreen().catch(function () {});
+                        } else if (document.exitFullscreen) {
+                            document.exitFullscreen().catch(function () {});
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

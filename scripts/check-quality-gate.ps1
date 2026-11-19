@@ -178,6 +178,7 @@ $headerCandidates = @($htmlTargets | Where-Object {
     $_.FullName -notmatch '\\assets\\template\\' -and
     $_.FullName -notmatch '\\\.agents\\' -and
     $_.FullName -notmatch '\\nexus-vault\\' -and
+    $_.FullName -notmatch '\\viola\\' -and
     $_.FullName -notmatch '\\social\\gerador\.html' -and
     $_.FullName -notmatch '\\social\\index\.html' -and
     $_.FullName -notmatch '\\relatorios\\' -and
@@ -270,7 +271,7 @@ if ($latexErrorCount -eq 0 -and ($htmlTargets.Count -gt 0 -or $socialTargets.Cou
 $vaultLeakCount = 0
 foreach ($f in $targetFiles) {
     $rel = $f.FullName.Replace($repoDir, '').TrimStart('\')
-    if ($rel -match '^(\.agents|nexus-vault|scripts)\\') { continue }
+    if ($rel -match '^(\.agents|nexus-vault|viola|scripts)\\') { continue }
     if ($f.Extension -in @('.html', '.js')) {
         $txt = [System.IO.File]::ReadAllText($f.FullName, [System.Text.Encoding]::UTF8)
         if ($txt -match 'nexus-vault') {

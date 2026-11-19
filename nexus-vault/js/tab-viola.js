@@ -4095,6 +4095,10 @@ const CAIPIRA_DICTATION_PHRASES = [
         isLeftHanded: true,          // Padrão: Canhoto (Pestana à direita, corpo à esquerda)
         viewPerspective: 'diagram',  // 'diagram' (1º par no topo) | 'player' (5º/6º grave no topo)
         displayMode: 'CHORD',        // 'CHORD' | 'DUAD' | 'FREE'
+        activeCategoryId: 'harmonia',
+        activeToolId: 'campo-harmonico',
+        workspaceMode: 'focus',      // 'focus' (Modo Foco Sem Rolagem) | 'all' (Visão Completa)
+        fretboardDockMode: 'auto',   // 'auto' | 'show' | 'hide'
         harmonicExtension: 'triad',  // 'triad' (Tríades) | 'tetrad' (Tétrades com 7ª)
         selectedKeyId: 'E_maj',
         selectedDegreeIdx: 0,
@@ -25323,161 +25327,840 @@ function bindSolfegeEvents() {
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
+    // =========================================================================
+    // ARQUITETURA DE ESTAÇÕES & MODO FOCO SEM ROLAGEM (22 FERRAMENTAS / 5 ABAS)
+    // =========================================================================
+    const VIOLA_STUDIO_CATEGORIES = [
+        {
+            id: 'harmonia',
+            num: '1',
+            label: 'Harmonia & Acordes',
+            shortLabel: 'Harmonia',
+            icon: 'music',
+            accent: 'emerald',
+            desc: 'Campo harmônico, escalas em terças/sextas, buscador reverso, progressões, modulações e capotraste.'
+        },
+        {
+            id: 'repertorio',
+            num: '2',
+            label: 'Repertório & Tablaturas',
+            shortLabel: 'Repertório & Tab',
+            icon: 'file-music',
+            accent: 'amber',
+            desc: 'Ponteios clássicos, introduções de pagode de viola, Folia de Reis, contraponto a 2 violas e editor de tablaturas.'
+        },
+        {
+            id: 'afinacao',
+            num: '3',
+            label: 'Afinação & Percepção',
+            shortLabel: 'Afinação & Ouvido',
+            icon: 'disc',
+            accent: 'cyan',
+            desc: 'Afinador estroboscópico sub-cent (±0.1¢), reconhecedor por microfone, diapasão, pares oitavados e solfejo.'
+        },
+        {
+            id: 'ritmos',
+            num: '4',
+            label: 'Ritmos & Escalas Modais',
+            shortLabel: 'Ritmos & Modos',
+            icon: 'activity',
+            accent: 'rose',
+            desc: 'Caixa de ritmos tradicionais caipiras, metrônomo lookahead e treinador de modos do sertão.'
+        },
+        {
+            id: 'lutheria',
+            num: '5',
+            label: 'Lutheria, Acústica & Palco',
+            shortLabel: 'Lutheria & Palco',
+            icon: 'sliders',
+            accent: 'violet',
+            desc: 'Tensão/calibre e ação, afinações históricas raras, ressonância de Chladni e captação/EQ paramétrico de palco.'
+        }
+    ];
+
+    const VIOLA_STUDIO_TOOLS = [
+        // 1. HARMONIA & ACORDES (6)
+        {
+            id: 'campo-harmonico',
+            categoryId: 'harmonia',
+            title: 'Campo Harmônico & Shapes',
+            shortTitle: 'Campo Harmônico',
+            badge: 'Tríades & 7ª',
+            icon: 'music',
+            fretboardMode: 'CHORD',
+            defaultShowFretboard: true,
+            desc: 'Graus I a vii°, tríades e tétrades, inversões pelo braço e dedilhado acústico Web Audio.'
+        },
+        {
+            id: 'escalas-duadas',
+            categoryId: 'harmonia',
+            title: 'Escalas Duadas (Terças & Sextas)',
+            shortTitle: 'Escalas Duadas',
+            badge: '3ªs e 6ªs',
+            icon: 'git-commit-horizontal',
+            fretboardMode: 'DUAD',
+            defaultShowFretboard: true,
+            desc: 'Ponteio tradicional mapeado do 1º ao 8º grau em terças e sextas nos pares da viola.'
+        },
+        {
+            id: 'buscador-reverso',
+            categoryId: 'harmonia',
+            title: 'Dicionário & Buscador Reverso de Acordes',
+            shortTitle: 'Buscador Reverso',
+            badge: 'Algorítmico',
+            icon: 'compass',
+            fretboardMode: 'REVERSE',
+            defaultShowFretboard: true,
+            desc: 'Dedução harmônica a partir de qualquer digitação no braço, inversões, funções modais e presets.'
+        },
+        {
+            id: 'progressoes',
+            categoryId: 'harmonia',
+            title: 'Estudos de Progressão Harmônica & Cadências',
+            shortTitle: 'Progressões & Cadências',
+            badge: 'Sequenciador',
+            icon: 'repeat',
+            fretboardMode: 'CHORD',
+            defaultShowFretboard: true,
+            desc: 'Laboratório prático de cadências caipiras e treino guiado de troca de shapes.'
+        },
+        {
+            id: 'modulacoes',
+            categoryId: 'harmonia',
+            title: 'Modulações & Preparação Harmônica Caipira',
+            shortTitle: 'Modulações',
+            badge: 'Fase 11',
+            icon: 'git-merge',
+            fretboardMode: 'MODULATION',
+            defaultShowFretboard: true,
+            desc: 'Dominantes secundárias V7/X, diminutos de passagem, empréstimo modal e pestanas móveis.'
+        },
+        {
+            id: 'capotraste',
+            categoryId: 'harmonia',
+            title: 'Capotraste & Transposição Inteligente p/ Duplas',
+            shortTitle: 'Capotraste & Duplas',
+            badge: 'Fase 13',
+            icon: 'crosshair',
+            fretboardMode: 'CAPO',
+            defaultShowFretboard: true,
+            desc: 'Tessitura vocal de 1ª e 2ª voz, posicionamento de braçadeira (1ª–9ª casa) e equivalência Viola ⟷ Violão.'
+        },
+
+        // 2. REPERTÓRIO & TABLATURAS (5)
+        {
+            id: 'ponteios',
+            categoryId: 'repertorio',
+            title: 'Biblioteca de Ponteios & Solos Canônicos',
+            shortTitle: 'Ponteios Clássicos',
+            badge: 'Fase 6',
+            icon: 'disc-3',
+            fretboardMode: 'PONTEIO',
+            defaultShowFretboard: true,
+            desc: '10 clássicos da viola caipira passo a passo com sincronização no braço SVG e dedilhado de mão direita.'
+        },
+        {
+            id: 'pagode',
+            categoryId: 'repertorio',
+            title: 'Gerador de Introduções Clássicas em Pagode de Viola',
+            shortTitle: 'Introduções de Pagode',
+            badge: 'Fase 18',
+            icon: 'flame',
+            fretboardMode: 'PAGODE',
+            defaultShowFretboard: true,
+            desc: 'Catálogo Tião Carreiro, sintetizador procedural em 5 estilos e treinador de velocidade progressiva.'
+        },
+        {
+            id: 'folia',
+            categoryId: 'repertorio',
+            title: 'Dicionário de Licks & Frases de Folia de Reis',
+            shortTitle: 'Folia de Reis',
+            badge: 'Fase 12',
+            icon: 'crown',
+            fretboardMode: 'FOLIA',
+            defaultShowFretboard: true,
+            desc: 'Toques litúrgicos de Minas, Goiás e Vale do Paraíba com diálogos de Mestre e Contra-Mestre.'
+        },
+        {
+            id: 'contraponto',
+            categoryId: 'repertorio',
+            title: 'Arranjos Polifônicos & Contraponto a Duas Violas',
+            shortTitle: 'Contraponto 2 Violas',
+            badge: 'Fase 15',
+            icon: 'layers',
+            fretboardMode: 'POLYPHONIC',
+            defaultShowFretboard: true,
+            desc: 'Duetos contrapontísticos com separação binaural estéreo (1ª e 2ª viola) e condução de vozes.'
+        },
+        {
+            id: 'editor-tab',
+            categoryId: 'repertorio',
+            title: 'Gerador, Editor & Exportador de Tablaturas',
+            shortTitle: 'Editor de Tablaturas',
+            badge: 'Fase 7',
+            icon: 'file-spreadsheet',
+            fretboardMode: 'TAB_EDITOR',
+            defaultShowFretboard: true,
+            desc: 'Estúdio completo de composição de tablaturas (5 pares / 6 cordas), exportação ASCII/PNG/PDF e cofre.'
+        },
+
+        // 3. AFINAÇÃO & PERCEPÇÃO AUDITIVA (5)
+        {
+            id: 'estroboscopico',
+            categoryId: 'afinacao',
+            title: 'Afinador Estroboscópico (±0.1¢) & 8 Harmônicos',
+            shortTitle: 'Estroboscópico ±0.1¢',
+            badge: 'Fase 19',
+            icon: 'disc',
+            fretboardMode: 'STROBE',
+            defaultShowFretboard: false,
+            desc: '4 anéis estroboscópicos 60 FPS, análise FFT de 8 harmônicos, inarmonicidade B e compensação de rastilho.'
+        },
+        {
+            id: 'reconhecedor-mic',
+            categoryId: 'afinacao',
+            title: 'Reconhecedor Auditivo Polifônico por Microfone',
+            shortTitle: 'Reconhecedor (Mic)',
+            badge: 'Fase 14',
+            icon: 'mic',
+            fretboardMode: 'MIC',
+            defaultShowFretboard: true,
+            desc: 'Detecção ao vivo de acordes e notas pelo microfone via FFT + YIN com diagnóstico postural.'
+        },
+        {
+            id: 'diapasao',
+            categoryId: 'afinacao',
+            title: 'Afinador Acústico de Precisão (Diapasão)',
+            shortTitle: 'Diapasão de Referência',
+            badge: 'Pitch',
+            icon: 'radio',
+            fretboardMode: 'CHORD',
+            defaultShowFretboard: true,
+            desc: 'Referência auditiva pura de cada par oitavado ou corda solta para afinação de ouvido.'
+        },
+        {
+            id: 'treinador-pares',
+            categoryId: 'afinacao',
+            title: 'Treinador Auditivo de Afinação & Pares Oitavados',
+            shortTitle: 'Pares Oitavados',
+            badge: 'Fase 5',
+            icon: 'ear',
+            fretboardMode: null,
+            defaultShowFretboard: false,
+            desc: 'Simulação física de batimentos acústicos, cravelha manual em cents e osciloscópio de envoltória.'
+        },
+        {
+            id: 'solfejo',
+            categoryId: 'afinacao',
+            title: 'Treinador de Solfejo & Ditado Melódico Caipira',
+            shortTitle: 'Solfejo & Ditado',
+            badge: 'Fase 17',
+            icon: 'audio-lines',
+            fretboardMode: 'SOLFEGE',
+            defaultShowFretboard: true,
+            desc: 'Síntese vocal com formantes F1/F2, 12 intervalos do sertão e ditado melódico com 10 clássicos.'
+        },
+
+        // 4. RITMOS & ESCALAS MODAIS (2)
+        {
+            id: 'metronomo-ritmos',
+            categoryId: 'ritmos',
+            title: 'Ritmos Tradicionais Caipiras & Metrônomo Lookahead',
+            shortTitle: 'Ritmos & Metrônomo',
+            badge: '6 Levadas',
+            icon: 'activity',
+            fretboardMode: null,
+            defaultShowFretboard: false,
+            desc: 'Cururu, Pagode de Viola, Cateretê, Guarânia, Toada e Querência com batida de caixa e guia de mão.'
+        },
+        {
+            id: 'escalas-modais',
+            categoryId: 'ritmos',
+            title: 'Treinador de Escalas Modais do Sertão',
+            shortTitle: 'Escalas Modais',
+            badge: 'Fase 8',
+            icon: 'sparkles',
+            fretboardMode: 'MODAL',
+            defaultShowFretboard: true,
+            desc: 'Modos Lídio, Mixolídio, Dórico e Nordestino mapeados no braço com 5 exercícios guiados por modo.'
+        },
+
+        // 5. LUTHERIA, ACÚSTICA & PALCO (4)
+        {
+            id: 'tensao-acao',
+            categoryId: 'lutheria',
+            title: 'Analisador de Tensão Mecânica, Calibre & Ação',
+            shortTitle: 'Tensão & Calibre',
+            badge: 'Fase 9',
+            icon: 'scale',
+            fretboardMode: null,
+            defaultShowFretboard: false,
+            desc: 'Cálculo em kgf por par (aço e nylon), alertas de fadiga do tampo e regulagem de pestana/rastilho.'
+        },
+        {
+            id: 'afinacoes-raras',
+            categoryId: 'lutheria',
+            title: 'Afinações Históricas & Regionais Raras',
+            shortTitle: 'Afinações Raras',
+            badge: 'Fase 10',
+            icon: 'compass',
+            fretboardMode: 'HISTORICAL',
+            defaultShowFretboard: true,
+            desc: 'Rio Acima, Meia-Guitarra, São Lourenço e Cana-Verde com assistente de reafinação passo a passo.'
+        },
+        {
+            id: 'madeiras-chladni',
+            categoryId: 'lutheria',
+            title: 'Simulador Acústico de Madeiras & Placas de Chladni',
+            shortTitle: 'Madeiras & Chladni',
+            badge: 'Fase 16',
+            icon: 'waves',
+            fretboardMode: 'TONEWOOD',
+            defaultShowFretboard: false,
+            desc: 'Física de tampos e fundos/laterais, 1400 partículas nodais em Canvas 2D, Tap Tone e comparador A/B.'
+        },
+        {
+            id: 'captacao-palco',
+            categoryId: 'lutheria',
+            title: 'Captação Acústica, Anti-Microfonia & EQ Paramétrico de Palco',
+            shortTitle: 'Captação & EQ Palco',
+            badge: 'Fase 20',
+            icon: 'sliders',
+            fretboardMode: 'STAGE_EQ',
+            defaultShowFretboard: false,
+            desc: 'Blend Piezo + Condensador, inversão de fase 0°/180°, filtro Notch anti-feedback e EQ paramétrico 5 bandas FFT.'
+        }
+    ];
+
+    const DISPLAY_MODE_TO_TOOL_ID = {
+        CHORD: 'campo-harmonico',
+        DUAD: 'escalas-duadas',
+        REVERSE: 'buscador-reverso',
+        PONTEIO: 'ponteios',
+        TAB_EDITOR: 'editor-tab',
+        MODAL: 'escalas-modais',
+        HISTORICAL: 'afinacoes-raras',
+        MODULATION: 'modulacoes',
+        FOLIA: 'folia',
+        CAPO: 'capotraste',
+        MIC: 'reconhecedor-mic',
+        POLYPHONIC: 'contraponto',
+        TONEWOOD: 'madeiras-chladni',
+        SOLFEGE: 'solfejo',
+        PAGODE: 'pagode',
+        STROBE: 'estroboscopico',
+        STAGE_EQ: 'captacao-palco'
+    };
+
+    let lastSyncedDisplayMode = null;
+    let catalogSearchQuery = '';
+
+    function getActiveToolMeta() {
+        return VIOLA_STUDIO_TOOLS.find((t) => t.id === state.activeToolId) || VIOLA_STUDIO_TOOLS[0];
+    }
+
+    function isFretboardVisibleInFocus() {
+        if (state.workspaceMode === 'all') return true;
+        if (state.fretboardDockMode === 'show') return true;
+        if (state.fretboardDockMode === 'hide') return false;
+        const tool = getActiveToolMeta();
+        return Boolean(tool.defaultShowFretboard);
+    }
+
+    function renderSpecificToolById(toolId) {
+        switch (toolId) {
+            case 'campo-harmonico':
+                renderHarmonicFieldPanel();
+                break;
+            case 'escalas-duadas':
+                renderDuadStrip();
+                break;
+            case 'buscador-reverso':
+                renderReverseChordPanel();
+                break;
+            case 'progressoes':
+                renderProgressionStudyPanel();
+                break;
+            case 'modulacoes':
+                renderModulationSection();
+                break;
+            case 'capotraste':
+                renderCapoDuoSection();
+                break;
+            case 'ponteios':
+                renderPonteiosSection();
+                break;
+            case 'pagode':
+                renderPagodeSection();
+                break;
+            case 'folia':
+                renderFoliaSection();
+                break;
+            case 'contraponto':
+                renderPolyphonySection();
+                break;
+            case 'editor-tab':
+                renderTabEditorSection();
+                break;
+            case 'estroboscopico':
+                renderStrobeTunerSection();
+                break;
+            case 'reconhecedor-mic':
+                renderMicRecognizerSection();
+                break;
+            case 'diapasao':
+                renderTunerButtons();
+                break;
+            case 'treinador-pares':
+                renderEarTrainerPanel();
+                break;
+            case 'solfejo':
+                renderSolfegeSection();
+                break;
+            case 'metronomo-ritmos':
+                renderMetronomeControls();
+                break;
+            case 'escalas-modais':
+                renderModalScalesSection();
+                break;
+            case 'tensao-acao':
+                renderTensionCalculatorSection();
+                break;
+            case 'afinacoes-raras':
+                renderHistoricalTuningsSection();
+                break;
+            case 'madeiras-chladni':
+                renderTonewoodSection();
+                break;
+            case 'captacao-palco':
+                renderStageEqSection();
+                break;
+        }
+    }
+
+    function setActiveViolaTool(toolId, opts) {
+        const options = opts || {};
+        const tool = VIOLA_STUDIO_TOOLS.find((t) => t.id === toolId);
+        if (!tool) return;
+
+        state.activeToolId = tool.id;
+        state.activeCategoryId = tool.categoryId;
+
+        if (!options.keepDockMode) {
+            state.fretboardDockMode = 'auto';
+        }
+        if (tool.fretboardMode && !options.preserveDisplayMode) {
+            state.displayMode = tool.fretboardMode;
+            lastSyncedDisplayMode = state.displayMode;
+        }
+
+        saveViolaState();
+        syncFocusWorkspaceUI();
+        syncControlValues();
+        if (isFretboardVisibleInFocus()) {
+            renderFretboardSVG();
+        }
+        renderSpecificToolById(tool.id);
+
+        const stage = document.getElementById('viola-focus-stage');
+        if (stage && !options.noScrollReset) {
+            stage.scrollTop = 0;
+        }
+    }
+
+    function setActiveViolaCategory(categoryId) {
+        const cat = VIOLA_STUDIO_CATEGORIES.find((c) => c.id === categoryId);
+        if (!cat) return;
+        const currentTool = getActiveToolMeta();
+        if (currentTool.categoryId === categoryId) {
+            syncFocusWorkspaceUI();
+            return;
+        }
+        const firstTool = VIOLA_STUDIO_TOOLS.find((t) => t.categoryId === categoryId);
+        if (firstTool) {
+            setActiveViolaTool(firstTool.id);
+        }
+    }
+
+    function stepViolaTool(delta) {
+        const idx = VIOLA_STUDIO_TOOLS.findIndex((t) => t.id === state.activeToolId);
+        const nextIdx = (idx + delta + VIOLA_STUDIO_TOOLS.length) % VIOLA_STUDIO_TOOLS.length;
+        setActiveViolaTool(VIOLA_STUDIO_TOOLS[nextIdx].id);
+    }
+
+    function toggleFretboardDock() {
+        const currentlyVisible = isFretboardVisibleInFocus();
+        state.fretboardDockMode = currentlyVisible ? 'hide' : 'show';
+        saveViolaState();
+        syncFocusWorkspaceUI();
+        if (isFretboardVisibleInFocus()) {
+            renderFretboardSVG();
+        }
+    }
+
+    function openToolCatalogModal() {
+        const modal = document.getElementById('viola-catalog-modal');
+        if (!modal) return;
+        catalogSearchQuery = '';
+        modal.classList.remove('hidden');
+        renderToolCatalogGrid();
+        const searchInput = document.getElementById('viola-catalog-search-input');
+        if (searchInput) {
+            searchInput.value = '';
+            setTimeout(() => searchInput.focus(), 30);
+        }
+    }
+
+    function closeToolCatalogModal() {
+        const modal = document.getElementById('viola-catalog-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    function renderToolCatalogGrid() {
+        const gridWrap = document.getElementById('viola-catalog-grid-body');
+        if (!gridWrap) return;
+
+        const q = (catalogSearchQuery || '').trim().toLowerCase();
+        const sectionsHtml = VIOLA_STUDIO_CATEGORIES.map((cat) => {
+            const tools = VIOLA_STUDIO_TOOLS.filter((t) => {
+                if (t.categoryId !== cat.id) return false;
+                if (!q) return true;
+                return (
+                    t.title.toLowerCase().includes(q) ||
+                    t.shortTitle.toLowerCase().includes(q) ||
+                    t.desc.toLowerCase().includes(q) ||
+                    t.badge.toLowerCase().includes(q)
+                );
+            });
+            if (tools.length === 0) return '';
+
+            return `
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Estação ${cat.num}</span>
+                            <h4 class="text-xs font-bold uppercase tracking-wider font-mono text-slate-200">${cat.label}</h4>
+                        </div>
+                        <span class="text-[11px] font-mono text-slate-500">${tools.length} recurso(s)</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                        ${tools.map((t) => {
+                            const isActive = t.id === state.activeToolId;
+                            return `
+                                <button type="button" data-viola-catalog-pick="${t.id}"
+                                    class="text-left p-3 rounded-xl border transition flex flex-col justify-between gap-2 ${
+                                        isActive
+                                            ? 'bg-cyan-500/15 border-cyan-400 text-slate-100 shadow-lg shadow-cyan-500/10'
+                                            : 'bg-[#090d16] hover:bg-slate-900 border-slate-800 hover:border-slate-700 text-slate-300'
+                                    }">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <span class="font-bold text-xs text-slate-100">${t.title}</span>
+                                            <span class="shrink-0 px-1.5 py-0.5 text-[10px] font-mono rounded ${
+                                                isActive ? 'bg-cyan-400 text-slate-950 font-bold' : 'bg-slate-800 text-cyan-300'
+                                            }">${t.badge}</span>
+                                        </div>
+                                        <p class="text-[11px] text-slate-400 leading-snug">${t.desc}</p>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[10px] font-mono pt-1 border-t border-slate-800/70">
+                                        <span class="${t.defaultShowFretboard ? 'text-emerald-400' : 'text-amber-300'}">
+                                            ${t.defaultShowFretboard ? '🪕 Com Braço SVG' : '🖥️ Bancada Tela Cheia'}
+                                        </span>
+                                        <span class="text-cyan-400 font-semibold">${isActive ? '● Em foco' : 'Abrir →'}</span>
+                                    </div>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }).filter(Boolean).join('');
+
+        gridWrap.innerHTML = sectionsHtml || `
+            <div class="py-10 text-center text-sm font-mono text-slate-400">
+                Nenhuma ferramenta encontrada para "<span class="text-cyan-300">${catalogSearchQuery}</span>".
+            </div>
+        `;
+
+        gridWrap.querySelectorAll('[data-viola-catalog-pick]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const tid = btn.getAttribute('data-viola-catalog-pick');
+                closeToolCatalogModal();
+                setActiveViolaTool(tid);
+            });
+        });
+    }
+
+    function syncFocusWorkspaceUI() {
+        const activeTool = getActiveToolMeta();
+        if (!VIOLA_STUDIO_CATEGORIES.some((c) => c.id === state.activeCategoryId)) {
+            state.activeCategoryId = activeTool.categoryId;
+        }
+
+        const isFocus = state.workspaceMode !== 'all';
+        const showFretboard = isFretboardVisibleInFocus();
+
+        // 1. Renderiza abas das 5 Estações (Categorias)
+        const catTabsEl = document.getElementById('viola-category-tabs');
+        if (catTabsEl) {
+            catTabsEl.innerHTML = VIOLA_STUDIO_CATEGORIES.map((cat) => {
+                const count = VIOLA_STUDIO_TOOLS.filter((t) => t.categoryId === cat.id).length;
+                const isActive = state.activeCategoryId === cat.id;
+                return `
+                    <button type="button" data-viola-cat-btn="${cat.id}"
+                        class="min-h-[38px] px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition ${
+                            isActive
+                                ? 'bg-cyan-500/20 border-cyan-400 text-cyan-100 shadow-sm shadow-cyan-500/10'
+                                : 'bg-[#090d16] hover:bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                        }">
+                        <span class="px-1.5 py-0.5 text-[10px] font-mono rounded ${
+                            isActive ? 'bg-cyan-400 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'
+                        }">${cat.num}</span>
+                        <span>${cat.label}</span>
+                        <span class="text-[10px] font-mono opacity-75">(${count})</span>
+                    </button>
+                `;
+            }).join('');
+
+            catTabsEl.querySelectorAll('[data-viola-cat-btn]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const cid = btn.getAttribute('data-viola-cat-btn');
+                    setActiveViolaCategory(cid);
+                });
+            });
+        }
+
+        // 2. Renderiza Sub-Abas das Ferramentas da Estação Ativa
+        const toolTabsEl = document.getElementById('viola-tool-subtabs');
+        if (toolTabsEl) {
+            const catTools = VIOLA_STUDIO_TOOLS.filter((t) => t.categoryId === state.activeCategoryId);
+            toolTabsEl.innerHTML = catTools.map((t, idx) => {
+                const isActive = t.id === state.activeToolId && isFocus;
+                return `
+                    <button type="button" data-viola-tool-btn="${t.id}"
+                        title="${t.title} — ${t.desc}"
+                        class="min-h-[36px] px-3 py-1 rounded-lg border text-xs font-mono flex items-center gap-1.5 whitespace-nowrap transition ${
+                            isActive
+                                ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-bold shadow-md shadow-emerald-500/15'
+                                : 'bg-[#0f172a] hover:bg-slate-800 border-slate-800 text-slate-300 hover:text-white'
+                        }">
+                        <span class="opacity-65 text-[10px]">${idx + 1}.</span>
+                        <span>${t.shortTitle}</span>
+                        <span class="px-1.5 py-0.2 text-[9px] rounded ${
+                            isActive ? 'bg-slate-950/25 text-slate-950 font-bold' : 'bg-slate-900 text-cyan-300'
+                        }">${t.badge}</span>
+                    </button>
+                `;
+            }).join('');
+
+            toolTabsEl.querySelectorAll('[data-viola-tool-btn]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const tid = btn.getAttribute('data-viola-tool-btn');
+                    state.workspaceMode = 'focus';
+                    setActiveViolaTool(tid);
+                });
+            });
+        }
+
+        // 3. Atualiza cabeçalho informativo da ferramenta em foco
+        const toolIndex = VIOLA_STUDIO_TOOLS.findIndex((t) => t.id === activeTool.id) + 1;
+        const activeTitleEl = document.getElementById('viola-active-tool-title');
+        const activeDescEl = document.getElementById('viola-active-tool-desc');
+        const activeCounterEl = document.getElementById('viola-active-tool-counter');
+        if (activeTitleEl) activeTitleEl.textContent = activeTool.title;
+        if (activeDescEl) activeDescEl.textContent = activeTool.desc;
+        if (activeCounterEl) activeCounterEl.textContent = `Recurso ${toolIndex} de ${VIOLA_STUDIO_TOOLS.length} • ${activeTool.badge}`;
+
+        // 4. Atualiza visibilidade do Dock do Braço Interativo SVG
+        const fretDock = document.getElementById('viola-fretboard-dock');
+        if (fretDock) {
+            fretDock.classList.toggle('hidden', !showFretboard);
+        }
+
+        const fretToggleBtn = document.getElementById('btn-viola-toggle-fretboard-dock');
+        const fretToggleLabel = document.getElementById('label-viola-fretboard-dock');
+        if (fretToggleBtn && fretToggleLabel) {
+            fretToggleLabel.textContent = showFretboard ? 'Braço SVG: Visível' : 'Braço SVG: Oculto';
+            fretToggleBtn.className = showFretboard
+                ? 'min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-xs font-mono font-semibold flex items-center gap-1.5 transition'
+                : 'min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition';
+        }
+
+        const layoutModeBtn = document.getElementById('btn-viola-toggle-layout-mode');
+        const layoutModeLabel = document.getElementById('label-viola-layout-mode');
+        if (layoutModeBtn && layoutModeLabel) {
+            layoutModeLabel.textContent = isFocus ? 'Modo Foco (Sem Rolagem)' : 'Visão Empilhada (Todos)';
+            layoutModeBtn.className = isFocus
+                ? 'min-h-[38px] px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 text-xs font-mono font-semibold flex items-center gap-1.5 transition'
+                : 'min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition';
+        }
+
+        // 5. Exibe apenas o painel da ferramenta ativa (Modo Foco) ou todos (Visão Empilhada)
+        document.querySelectorAll('[data-viola-tool-panel]').forEach((panelEl) => {
+            const pid = panelEl.getAttribute('data-viola-tool-panel');
+            const visible = !isFocus || pid === state.activeToolId;
+            panelEl.classList.toggle('hidden', !visible);
+        });
+
+        // 6. Notifica o shell standalone (/viola/index.html) para sincronizar Sidebar e Topbar
+        if (typeof global.onViolaFocusSync === 'function') {
+            global.onViolaFocusSync(activeTool, showFretboard, isFocus);
+        }
+    }
+
     function mountShell() {
         const panel = document.getElementById('tab-panel-viola');
         if (!panel) return;
 
+        const isStandalonePage = document.body && document.body.getAttribute('data-viola-standalone') === 'true';
+
         panel.innerHTML = `
-            <div class="space-y-5 pb-20">
-                <!-- Barra Superior de Instrumento e Orientação Canhota -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
-                    <div>
+            <div id="viola-studio-root" class="${isStandalonePage ? 'space-y-4 pb-10' : 'space-y-4 pb-16'}">
+                ${!isStandalonePage ? `
+                <!-- 1. BARRA SUPERIOR COMPACTA DO INSTRUMENTO & NAVEGAÇÃO DE ESTAÇÕES (APENAS NO VAULT) -->
+                <div class="shrink-0 bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 space-y-2.5 shadow-lg">
+                    <!-- Linha 1: Seletor de Instrumento, Orientação Canhoto/Destro e Controles de Foco -->
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-2.5">
                         <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2 py-0.5 text-[11px] font-mono uppercase tracking-wider rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Lutheria & Acústica Digital</span>
-                            <span id="viola-hand-badge" class="px-2 py-0.5 text-[11px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Modo Canhoto Ativo (Espelhado)</span>
-                        </div>
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-100 mt-1">Estúdio de Viola Caipira (Cebolão em Mi) & Violão</h2>
-                    </div>
+                            <select id="viola-select-instrument" aria-label="Selecionar instrumento e afinação"
+                                class="min-h-[38px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm font-semibold text-cyan-200 focus:border-cyan-400 focus:outline-none">
+                                <option value="viola_cebolao_e">Viola — Cebolão em Mi (E-B-G#-E-B)</option>
+                                <option value="viola_cebolao_d">Viola — Cebolão em Ré (D-A-F#-D-A)</option>
+                                <option value="viola_rio_abaixo">Viola — Rio Abaixo em Sol (D-B-G-D-G)</option>
+                                <option value="viola_boiadeira">Viola — Boiadeira (D-A-F#-D-G)</option>
+                                <option value="viola_rio_acima_c">Viola — Rio Acima em Dó (E-C-G-E-C)</option>
+                                <option value="viola_meia_guitarra">Viola — Meia-Guitarra (E-B-G-D-A)</option>
+                                <option value="viola_sao_lourenco">Viola — São Lourenço (D-B-F#-D-D grave)</option>
+                                <option value="viola_cana_verde">Viola — Cana-Verde em Bm (D-B-F#-D-B)</option>
+                                <option value="violao_padrao">Violão Padrão 6 Cordas (E-A-D-G-B-E)</option>
+                            </select>
 
-                    <div class="flex flex-wrap items-center gap-2">
-                        <select id="viola-select-instrument" aria-label="Selecionar instrumento"
-                            class="min-h-[44px] px-3 py-2 rounded-lg bg-[#090d16] border border-slate-700 text-xs sm:text-sm font-medium text-slate-100 focus:border-cyan-500">
-                            <option value="viola_cebolao_e">Viola — Cebolão em Mi (E-B-G#-E-B)</option>
-                            <option value="viola_cebolao_d">Viola — Cebolão em Ré (D-A-F#-D-A)</option>
-                            <option value="viola_rio_abaixo">Viola — Rio Abaixo em Sol (D-B-G-D-G)</option>
-                            <option value="viola_boiadeira">Viola — Boiadeira (D-A-F#-D-G)</option>
-                            <option value="viola_rio_acima_c">Viola — Rio Acima em Dó (E-C-G-E-C)</option>
-                            <option value="viola_meia_guitarra">Viola — Meia-Guitarra (E-B-G-D-A)</option>
-                            <option value="viola_sao_lourenco">Viola — São Lourenço (D-B-F#-D-D grave)</option>
-                            <option value="viola_cana_verde">Viola — Cana-Verde em Bm (D-B-F#-D-B)</option>
-                            <option value="violao_padrao">Violão Padrão 6 Cordas (E-A-D-G-B-E)</option>
-                        </select>
-
-                        <button type="button" id="btn-viola-toggle-hand" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="flip-horizontal-2" class="w-4 h-4"></i>
-                            <span id="label-viola-hand">Canhoto (Pestana à Direita)</span>
-                        </button>
-
-                        <button type="button" id="btn-viola-toggle-persp" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1.5 transition">
-                            <i data-lucide="arrow-up-down" class="w-4 h-4 text-cyan-400"></i>
-                            <span id="label-viola-persp">1º Par no Topo</span>
-                        </button>
-
-                        <button type="button" id="btn-viola-scroll-tension" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="scale" class="w-4 h-4 text-emerald-400"></i>
-                            <span>Tensão &amp; Ação (Fase 9)</span>
-                        </button>
-
-                        <button type="button" id="btn-viola-scroll-historical" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
-                            <span>Afinações Raras (Fase 10)</span>
-                        </button>
-
-                        <button type="button" id="btn-viola-scroll-modulation" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/40 text-pink-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="git-merge" class="w-4 h-4 text-pink-400"></i>
-                            <span>Modula&ccedil;&otilde;es (Fase 11)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-folia" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
-                            <span>Folia de Reis (Fase 12)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-capo" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-yellow-500/15 hover:bg-yellow-500/25 border border-yellow-500/40 text-yellow-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="crosshair" class="w-4 h-4 text-yellow-400"></i>
-                            <span>Capotraste &amp; Duplas (Fase 13)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-mic" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-red-500/15 hover:bg-red-500/25 border border-red-500/40 text-red-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="mic" class="w-4 h-4 text-red-400"></i>
-                            <span>Reconhecedor Polif&ocirc;nico (Fase 14)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-polyphony" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/40 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="layers" class="w-4 h-4 text-indigo-400"></i>
-                            <span>Contraponto Caipira (Fase 15)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-tonewood" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-600/15 hover:bg-amber-600/25 border border-amber-600/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-                            <span>Madeiras &amp; Chladni (Fase 16)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-solfege" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="mic" class="w-4 h-4 text-amber-400"></i>
-                            <span>Solfejo &amp; Ditado (Fase 17)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-pagode" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="music-2" class="w-4 h-4 text-amber-400"></i>
-                            <span>Introdu&ccedil;&otilde;es Pagode</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-strobe" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="disc" class="w-4 h-4 text-cyan-400"></i>
-                            <span>Afinador Estrobosc&oacute;pico (Fase 19)</span>
-                        </button>
-                        <button type="button" id="btn-viola-scroll-stage-eq" class="min-h-[44px] px-3.5 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="sliders" class="w-4 h-4 text-emerald-400"></i>
-                            <span>Capta&ccedil;&atilde;o &amp; EQ de Palco (Fase 20)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Afinador Auditivo de Precisão (Pitch Reference) -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-2">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
-                                <h3 class="text-xs sm:text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Afinador Acústico de Precisão</h3>
-                            </div>
-                            <p class="text-[11px] text-slate-400 mt-0.5">Clique em qualquer par/corda para soar a nota de afinação pura como diapasão de referência</p>
-                        </div>
-                        <div>
-                            <button type="button" id="btn-viola-tuner-stop" class="min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition">
-                                <i data-lucide="square" class="w-3.5 h-3.5 text-rose-400"></i>
-                                <span>Silenciar Afinador</span>
+                            <button type="button" id="btn-viola-toggle-hand" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                                <i data-lucide="flip-horizontal-2" class="w-3.5 h-3.5"></i>
+                                <span id="label-viola-hand">Canhoto (Pestana à Direita)</span>
                             </button>
+
+                            <button type="button" id="btn-viola-toggle-persp" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1.5 transition">
+                                <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                <span id="label-viola-persp">1º Par no Topo</span>
+                            </button>
+
+                            <span id="viola-hand-badge" class="hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Modo Canhoto Ativo</span>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button type="button" id="btn-viola-toggle-fretboard-dock" title="Mostrar ou ocultar o Braço Interativo SVG acima da ferramenta (Atalho: Alt+B)">
+                                <i data-lucide="guitar" class="w-3.5 h-3.5"></i>
+                                <span id="label-viola-fretboard-dock">Braço SVG: Visível</span>
+                            </button>
+
+                            <button type="button" id="btn-viola-open-catalog" title="Abrir catálogo em grade com busca de todas as 22 ferramentas (Ctrl+K)"
+                                class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-mono font-bold flex items-center gap-1.5 shadow transition">
+                                <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+                                <span>Catálogo (22)</span>
+                                <kbd class="hidden sm:inline px-1 py-0.2 text-[10px] rounded bg-slate-950/20 text-slate-950">Ctrl+K</kbd>
+                            </button>
+
+                            <button type="button" id="btn-viola-toggle-layout-mode" title="Alternar entre Modo Foco Sem Rolagem (1 recurso por vez) e Visão Completa">
+                                <i data-lucide="focus" class="w-3.5 h-3.5"></i>
+                                <span id="label-viola-layout-mode">Modo Foco (Sem Rolagem)</span>
+                            </button>
+
+                            <a href="/viola/index.html" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-mono font-bold flex items-center gap-1.5 shadow transition" title="Abrir site independente exclusivo da Viola e Violão em Modo Foco">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                <span>Abrir Site Exclusivo (/viola)</span>
+                            </a>
                         </div>
                     </div>
-                    <div id="viola-tuner-buttons" class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-6 gap-2 pt-1"></div>
-                </div>
 
-                <!-- Treinador Auditivo de Afinação & Pares Oitavados (Fase 5) -->
-                <div id="viola-ear-trainer-panel" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4"></div>
+                    <!-- Linha 2: As 5 Estações Temáticas (Categorias) -->
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto pb-0.5" id="viola-category-tabs" role="tablist" aria-label="Estações do Estúdio de Viola"></div>
 
-                <!-- Braço Interativo SVG -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-3 sm:p-4 space-y-3">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 pb-2 border-b border-slate-800">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Projeção no Braço:</span>
-                            <div class="inline-flex flex-wrap gap-0.5 rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
-                                <button type="button" id="btn-viola-mode-chord" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎵 Campo Harmônico</button>
-                                <button type="button" id="btn-viola-mode-duad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🪕 Escalas Duadas</button>
-                                <button type="button" id="btn-viola-mode-reverse" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🔍 Buscador Reverso</button>
-                                <button type="button" id="btn-viola-mode-ponteio" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🎼 Tablatura &amp; Ponteios</button>
-                                <button type="button" id="btn-viola-mode-tab-editor" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor de Tablatura</button>
-                                <button type="button" id="btn-viola-mode-modal" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos Caipiras</button>
-                                <button type="button" id="btn-viola-mode-historical" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Afinações Raras</button>
-                                <button type="button" id="btn-viola-mode-modulation" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128256; Modula&ccedil;&otilde;es Caipiras</button> <button type="button" id="btn-viola-mode-folia" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128081; Folia de Reis</button> <button type="button" id="btn-viola-mode-capo" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129522; Capotraste &amp; Duplas</button> <button type="button" id="btn-viola-mode-mic" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Reconhecedor Polif&ocirc;nico</button> <button type="button" id="btn-viola-mode-polyphony" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127928; Contraponto a Duas Violas</button> <button type="button" id="btn-viola-mode-tonewood" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Resson&acirc;ncia Luther&iacute;stica</button> <button type="button" id="btn-viola-mode-solfege" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127908; Solfejo &amp; Ditado</button> <button type="button" id="btn-viola-mode-pagode" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#129685; Pagode de Viola</button> <button type="button" id="btn-viola-mode-strobe" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#128300; Estrobosc&oacute;pio (±0.1¢)</button> <button type="button" id="btn-viola-mode-stage-eq" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200">&#127898; Capta&ccedil;&atilde;o &amp; Palco</button>
+                    <!-- Linha 3: Sub-Abas das Ferramentas da Estação Ativa + Navegação Anterior/Próxima -->
+                    <div class="pt-2 border-t border-slate-800/80 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5" id="viola-tool-subtabs" role="tablist" aria-label="Ferramentas da Estação"></div>
+
+                        <div class="flex items-center justify-between lg:justify-end gap-2 shrink-0">
+                            <span id="viola-active-tool-counter" class="text-[11px] font-mono text-cyan-300 bg-[#090d16] border border-slate-800 px-2.5 py-1 rounded-lg"></span>
+                            <div class="inline-flex items-center gap-1">
+                                <button type="button" id="btn-viola-prev-tool" title="Ferramenta Anterior (Alt + Seta Esquerda)"
+                                    class="min-h-[34px] px-2.5 py-1 rounded-lg bg-[#090d16] hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1 transition">
+                                    <span>◀</span>
+                                    <span class="hidden sm:inline">Anterior</span>
+                                </button>
+                                <button type="button" id="btn-viola-next-tool" title="Próxima Ferramenta (Alt + Seta Direita)"
+                                    class="min-h-[34px] px-2.5 py-1 rounded-lg bg-[#090d16] hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1 transition">
+                                    <span class="hidden sm:inline">Próxima</span>
+                                    <span>▶</span>
+                                </button>
                             </div>
                         </div>
-                        <div class="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>Tônica</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>Nota Caract.</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>Terça</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Quinta</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>Sétima / Sexta</span>
-                            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span>Editor</span>
-                        </div>
                     </div>
-                    <div id="viola-fretboard-svg-wrap" class="w-full overflow-x-auto pb-1"></div>
                 </div>
+                ` : ''}
 
-                <!-- Grid Inferior: Campo Harmônico + Escalas Duadas + Metrônomo -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                    <!-- Coluna 1: Campo Harmônico + Shapes -->
-                    <div class="lg:col-span-6 bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                <!-- 2. PALCO PRINCIPAL -->
+                <div id="viola-focus-stage" class="space-y-4">
+
+                    <!-- DOCK DO BRAÇO INTERATIVO SVG -->
+                    <div id="viola-fretboard-dock" class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-3 sm:p-4 space-y-2.5 shadow-lg">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
+                            <div class="${isStandalonePage ? 'hidden' : 'flex flex-wrap items-center gap-1.5'}">
+                                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold mr-1">Modo do Braço:</span>
+                                <div class="inline-flex flex-wrap gap-1 rounded-lg bg-[#090d16] border border-slate-800 p-1" role="group">
+                                    <button type="button" id="btn-viola-mode-chord" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎵 Campo</button>
+                                    <button type="button" id="btn-viola-mode-duad" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🪕 Duadas</button>
+                                    <button type="button" id="btn-viola-mode-reverse" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔍 Reverso</button>
+                                    <button type="button" id="btn-viola-mode-ponteio" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎼 Ponteios</button>
+                                    <button type="button" id="btn-viola-mode-tab-editor" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">📝 Editor Tab</button>
+                                    <button type="button" id="btn-viola-mode-modal" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🌟 Modos</button>
+                                    <button type="button" id="btn-viola-mode-historical" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🏛️ Raras</button>
+                                    <button type="button" id="btn-viola-mode-modulation" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔀 Modulações</button>
+                                    <button type="button" id="btn-viola-mode-folia" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">👑 Folia</button>
+                                    <button type="button" id="btn-viola-mode-capo" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🧷 Capo</button>
+                                    <button type="button" id="btn-viola-mode-mic" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎤 Mic</button>
+                                    <button type="button" id="btn-viola-mode-polyphony" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎸 2 Violas</button>
+                                    <button type="button" id="btn-viola-mode-tonewood" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🪵 Madeiras</button>
+                                    <button type="button" id="btn-viola-mode-solfege" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🗣️ Solfejo</button>
+                                    <button type="button" id="btn-viola-mode-pagode" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔥 Pagode</button>
+                                    <button type="button" id="btn-viola-mode-strobe" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔬 Estrobo</button>
+                                    <button type="button" id="btn-viola-mode-stage-eq" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎚️ Palco EQ</button>
+                                </div>
+                            </div>
+                            ${isStandalonePage ? `
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                    <span class="text-xs font-semibold tracking-wide text-slate-200">Braço Interativo</span>
+                                    <span class="text-[11px] text-slate-500 hidden sm:inline">• Clique em qualquer casa para ouvir</span>
+                                </div>
+                            ` : ''}
+                            <div class="flex flex-wrap items-center justify-between md:justify-end gap-2.5 font-mono text-[11px] text-slate-400">
+                                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Tônica</span>
+                                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span>Caract.</span>
+                                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-500"></span>Terça</span>
+                                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Quinta</span>
+                                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span>7ª/6ª</span>
+                                <button type="button" id="btn-viola-collapse-fretboard" class="ml-1 px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/80 text-[11px] transition" title="Ocultar Braço SVG para ampliar a ferramenta ativa">
+                                    Ocultar ▲
+                                </button>
+                            </div>
+                        </div>
+                        <div id="viola-fretboard-svg-wrap" class="w-full overflow-x-auto pb-0.5"></div>
+                    </div>
+
+                    <!-- ================================================================= -->
+                    <!-- PAINÉIS INDIVIDUAIS DAS 22 FERRAMENTAS (EXIBIDOS 1 POR VEZ)       -->
+                    <!-- ================================================================= -->
+
+                    <!-- [1] Campo Harmônico & Shapes -->
+                    <div data-viola-tool-panel="campo-harmonico" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                             <div>
-                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Campo Harmônico & Shapes</h3>
-                                <p class="text-xs text-slate-400">Toque em um grau para projetar no braço canhoto e dedilhar</p>
+                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Campo Harmônico &amp; Shapes</h3>
+                                <p class="text-xs text-slate-400">Toque em um grau para projetar no braço canhoto/destro, alternar inversões e dedilhar</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
-                                <div class="inline-flex flex-wrap gap-0.5 rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                                <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
                                     <button type="button" id="btn-viola-mode-triad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${state.harmonicExtension === 'triad' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">Tríades</button>
                                     <button type="button" id="btn-viola-mode-tetrad" class="px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${state.harmonicExtension === 'tetrad' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'}">Tétrades (7ª)</button>
                                 </div>
@@ -25487,24 +26170,22 @@ function bindSolfegeEvents() {
                                 </select>
                             </div>
                         </div>
-
                         <div id="viola-harmonic-degrees" class="grid grid-cols-4 sm:grid-cols-7 gap-2"></div>
                         <div id="viola-active-chord-info" class="bg-[#090d16] border border-slate-800 rounded-xl p-3"></div>
                     </div>
 
-                    <!-- Coluna 2: Escalas Duadas (Terças e Sextas da Viola) -->
-                    <div class="lg:col-span-6 bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                    <!-- [2] Escalas Duadas (Terças e Sextas) -->
+                    <div data-viola-tool-panel="escalas-duadas" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <div>
-                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Escalas Duadas (Terças & Sextas)</h3>
-                                <p class="text-xs text-slate-400">Ponteio tradicional mapeado do 1º ao 8º grau</p>
+                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Escalas Duadas (Terças &amp; Sextas)</h3>
+                                <p class="text-xs text-slate-400">Ponteio tradicional mapeado do 1º ao 8º grau com reprodução passo a passo</p>
                             </div>
                             <button type="button" id="btn-viola-play-duads" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5">
                                 <i data-lucide="music-2" class="w-4 h-4"></i>
                                 <span>Tocar Escala Duada</span>
                             </button>
                         </div>
-
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <select id="viola-select-duad-type" aria-label="Tipo de escala duada"
                                 class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs text-slate-200">
@@ -25515,244 +26196,317 @@ function bindSolfegeEvents() {
                                 ${DUAD_KEYS.map((k) => `<option value="${k.id}">${k.label}</option>`).join('')}
                             </select>
                         </div>
-
-                        <div id="viola-duad-strip" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
-                    </div>
-                </div>
-
-                <!-- Módulo de Dicionário & Buscador Reverso de Acordes (Canhoto & Destro) -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i>
-                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Dicionário & Buscador Reverso de Acordes</h3>
-                                <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Análise Harmônica Algorítmica</span>
-                            </div>
-                            <p class="text-xs text-slate-400 mt-0.5">Monte qualquer digitação nas cordas ou clique diretamente no braço. O motor deduz o nome do acorde, inversões, notas formadoras e função modal caipira.</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <button type="button" id="btn-viola-reverse-strum" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
-                                <i data-lucide="volume-2" class="w-4 h-4"></i>
-                                <span>Dedilhar Acorde</span>
-                            </button>
-                            <button type="button" id="btn-viola-reverse-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
-                                <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
-                                <span>Editar no Braço</span>
-                            </button>
-                            <button type="button" id="btn-viola-reverse-trans-down" title="Transpor -1 Semitom" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">♭ -1</button>
-                            <button type="button" id="btn-viola-reverse-trans-up" title="Transpor +1 Semitom" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">♯ +1</button>
-                            <button type="button" id="btn-viola-reverse-clear-open" title="Zerar todas as cordas para soltas (0)" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-300 transition">Soltas (0)</button>
-                            <button type="button" id="btn-viola-reverse-clear-mute" title="Abafar todas as cordas (X)" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 transition">Abafar (X)</button>
-                        </div>
+                        <div id="viola-duad-strip" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2"></div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                        <!-- Coluna 1: Diagnóstico Harmônico do Acorde -->
-                        <div id="viola-reverse-analysis-container" class="lg:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4"></div>
-
-                        <!-- Coluna 2: Seletor Tátil por Corda & Presets Caipiras -->
-                        <div class="lg:col-span-7 space-y-4">
-                            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
-                                <div class="flex items-center justify-between">
-                                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Digitação por Corda / Par</h4>
-                                    <span class="text-[11px] font-mono text-slate-500">Clique nas casas para posicionar</span>
-                                </div>
-                                <div id="viola-reverse-course-selectors" class="space-y-2"></div>
-                            </div>
-
-                            <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
-                                <div class="flex items-center justify-between">
-                                    <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Presets Curados & Digitações Clássicas</h4>
-                                    <span class="text-[11px] font-mono text-amber-400">1 Clique para carregar</span>
-                                </div>
-                                <div id="viola-reverse-presets-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Módulo de Estudos de Progressão Harmônica & Cadências -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="git-commit" class="w-4 h-4 text-emerald-400"></i>
-                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Estudos de Progressão Harmônica & Cadências</h3>
-                            </div>
-                            <p class="text-xs text-slate-400">Laboratório auditivo e prático de cadências caipiras, funções harmônicas e treino de transição de shapes</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <select id="viola-select-progression" aria-label="Selecione a progressão harmônica"
-                                class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-emerald-300">
-                                ${HARMONIC_PROGRESSIONS.map((p) => `<option value="${p.id}" ${state.progressionId === p.id ? 'selected' : ''}>${p.title}</option>`).join('')}
-                            </select>
-
-                            <select id="viola-select-prog-beats" aria-label="Tempos por acorde"
-                                class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-slate-200">
-                                <option value="2" ${state.progressionBeatsPerChord === 2 ? 'selected' : ''}>2 Tempos / Acorde</option>
-                                <option value="4" ${state.progressionBeatsPerChord === 4 ? 'selected' : ''}>4 Tempos (Padrão)</option>
-                                <option value="8" ${state.progressionBeatsPerChord === 8 ? 'selected' : ''}>8 Tempos (Lento)</option>
-                            </select>
-
-                            <button type="button" id="btn-viola-loop-progression" title="Alternar repetição contínua (Loop)"
-                                class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.progressionLoop ? 'bg-cyan-600/20 border border-cyan-400 text-cyan-200' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} text-xs font-mono font-semibold flex items-center gap-1.5 transition">
-                                <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
-                                <span>Loop</span>
-                            </button>
-
-                            <button type="button" id="btn-viola-play-progression" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
-                                <i data-lucide="play" class="w-4 h-4"></i>
-                                <span>Tocar Estudo da Progressão</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="viola-progression-container"></div>
-                </div>
-
-                <!-- Módulo de Ponteios e Intros Clássicas de Viola Caipira (Fase 6) -->
-                <div id="viola-ponteios-container" class="space-y-4"></div>
-
-                <!-- Módulo de Gerador, Editor e Exportador de Tablaturas e Cifras Caipiras (Fase 7) -->
-                <div id="viola-tab-editor-container" class="space-y-4"></div>
-
-                <!-- Módulo de Treinador de Escalas Modais Caipiras (Fase 8) -->
-                <div id="viola-modal-trainer-container" class="space-y-4"></div>
-
-                <!-- Módulo de Analisador de Tensão Mecânica e Calibre de Cordas (Fase 9) -->
-                <div id="viola-tension-calculator-container" class="space-y-4"></div>
-
-                <!-- Módulo de Afinações Históricas & Regionais Raras (Fase 10) -->
-                <div id="viola-historical-tunings-container" class="space-y-4"></div>
-
-                <!-- Modulo de Modulacoes & Preparacao Harmonica Caipira (Fase 11) -->
-                <div id="viola-modulation-container" class="space-y-4"></div>
-                <!-- Modulo de Dicionario de Licks & Frases de Resposta de Folia de Reis (Fase 12) -->
-                <div id="viola-folia-container" class="space-y-4"></div>
-                <!-- Simulador de Capotraste & Transposicao Inteligente para Duplas (Fase 13) -->
-                <div id="viola-capo-container" class="space-y-4"></div>
-                <!-- Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14) -->
-                <div id="viola-mic-tuner-container" class="space-y-4"></div>
-                <!-- Modulo de Arranjos Polifonicos & Contraponto Caipira a Duas Violas (Fase 15) -->
-                <div id="viola-polyphony-container" class="space-y-4"></div>
-                <!-- Simulador Acustico de Madeiras & Ressonancias Lutheristicas (Fase 16) -->
-                <div id="viola-tonewood-container" class="space-y-4"></div>
-                <!-- Treinador de Solfejo & Ditado Melodico Caipira (Fase 17) -->
-                <div id="viola-solfege-container" class="space-y-4"></div>
-            <div id="viola-pagode-container" class="space-y-4"></div>
-            <!-- Afinador Estroboscopico de Alta Precisao & Analise de 8 Harmonicos (Fase 19) -->
-            <div id="viola-strobe-tuner-container" class="space-y-4"></div>
-            <!-- Simulador de Captacao Acustica, Microfonia & EQ Parametrico de Palco (Fase 20) -->
-            <div id="viola-stage-eq-container" class="space-y-4"></div>
-
-                <!-- Módulo de Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
-                <div class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
-                                <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Ritmos Tradicionais Caipiras & Metrônomo</h3>
-                            </div>
-                            <p class="text-xs text-slate-400 mt-0.5">Síntese Web Audio precisa de batida no tampo, repique de caixa, rasqueado e guia direcional sincronizado</p>
-                        </div>
-
-                        <div class="flex flex-wrap items-center gap-2">
-                            <div class="inline-flex flex-wrap gap-0.5 rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
-                                <button type="button" id="btn-viola-metro-mode-rhythm" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'rhythm' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
-                                    Ritmo Caipira
-                                </button>
-                                <button type="button" id="btn-viola-metro-mode-click" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'click' ? 'bg-cyan-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
-                                    Metrônomo Analítico
-                                </button>
-                            </div>
-
-                            <button type="button" id="btn-viola-metro-toggle" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
-                                <i data-lucide="play" class="w-4 h-4"></i>
-                                <span>Tocar Levada Caipira</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Seção de Ritmo Caipira Ativo -->
-                    <div id="viola-rhythm-panel" class="${state.metroMode === 'rhythm' ? 'space-y-3' : 'hidden'}">
-                        <!-- Seletores dos Ritmos Caipiras -->
-                        <div class="flex flex-wrap items-center gap-2" id="viola-rhythm-selectors"></div>
-
-                        <!-- Info do Ritmo & Orientação Ergonômica -->
-                        <div id="viola-rhythm-info-box" class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs font-mono"></div>
-
-                        <!-- Régua Visual de Palhetadas / Repiques -->
-                        <div>
-                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
-                                <span>Padrão de Palhetada & Repique no Tampo (1 Compasso):</span>
-                                <span class="text-emerald-400 font-semibold" id="viola-rhythm-hand-guide"></span>
-                            </div>
-                            <div id="viola-rhythm-strip" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2"></div>
-                        </div>
-                    </div>
-
-                    <!-- Barra de Andamento (BPM) & Ajustes de Mixagem -->
-                    <div class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
-                        <div class="flex items-center gap-3 shrink-0">
+                    <!-- [3] Dicionário & Buscador Reverso de Acordes -->
+                    <div data-viola-tool-panel="buscador-reverso" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
                             <div>
-                                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Andamento</span>
-                                <div id="viola-bpm-display" class="text-xl font-mono font-bold text-cyan-300">92 BPM</div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i>
+                                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Dicionário &amp; Buscador Reverso de Acordes</h3>
+                                    <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Análise Harmônica Algorítmica</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-0.5">Monte qualquer digitação nas cordas ou clique diretamente no braço. O motor deduz o nome do acorde, inversões, notas formadoras e função modal caipira.</p>
                             </div>
-                            <div id="viola-metro-leds" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-800"></div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" id="btn-viola-reverse-strum" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                    <span>Dedilhar Acorde</span>
+                                </button>
+                                <button type="button" id="btn-viola-reverse-to-fretboard" class="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                                    <i data-lucide="eye" class="w-4 h-4 text-cyan-400"></i>
+                                    <span>Editar no Braço</span>
+                                </button>
+                                <button type="button" id="btn-viola-reverse-trans-down" title="Transpor -1 Semitom" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">♭ -1</button>
+                                <button type="button" id="btn-viola-reverse-trans-up" title="Transpor +1 Semitom" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">♯ +1</button>
+                                <button type="button" id="btn-viola-reverse-clear-open" title="Zerar todas as cordas para soltas (0)" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-300 transition">Soltas (0)</button>
+                                <button type="button" id="btn-viola-reverse-clear-mute" title="Abafar todas as cordas (X)" class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 transition">Abafar (X)</button>
+                            </div>
                         </div>
 
-                        <div class="flex-1 max-w-xl space-y-2">
-                            <input type="range" id="viola-bpm-slider" min="40" max="220" value="92"
-                                class="w-full accent-cyan-400 cursor-pointer">
-                            <div class="flex flex-wrap items-center gap-1.5">
-                                <button type="button" data-bpm-delta="-5" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−5</button>
-                                <button type="button" data-bpm-delta="-1" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−1</button>
-                                <button type="button" data-bpm-delta="1" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+1</button>
-                                <button type="button" data-bpm-delta="5" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+5</button>
-                                <button type="button" id="btn-viola-tap-tempo" class="min-h-[34px] px-2.5 py-0.5 rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 font-mono text-xs text-amber-300">Tap Tempo</button>
-
-                                <div id="viola-classic-metro-selects" class="inline-flex items-center gap-1.5 ${state.metroMode === 'click' ? '' : 'hidden'}">
-                                    <select id="viola-metro-sig" aria-label="Compasso" class="min-h-[34px] px-2 py-0.5 rounded bg-[#0f172a] border border-slate-700 font-mono text-xs text-slate-200">
-                                        <option value="2/4">2/4 Pagode / Cururu</option>
-                                        <option value="3/4">3/4 Moda / Guarânia</option>
-                                        <option value="4/4">4/4 Toada / Padrão</option>
-                                        <option value="6/8">6/8 Ternário / Ponteio</option>
-                                    </select>
-                                    <select id="viola-metro-sub" aria-label="Subdivisão" class="min-h-[34px] px-2 py-0.5 rounded bg-[#0f172a] border border-slate-700 font-mono text-xs text-slate-200">
-                                        <option value="1">1x Semínima</option>
-                                        <option value="2">2x Colcheia</option>
-                                        <option value="3">3x Tercina</option>
-                                        <option value="4">4x Semicolcheia</option>
-                                    </select>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                            <div id="viola-reverse-analysis-container" class="lg:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-4"></div>
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Digitação por Corda / Par</h4>
+                                        <span class="text-[11px] font-mono text-slate-500">Clique nas casas para posicionar</span>
+                                    </div>
+                                    <div id="viola-reverse-course-selectors" class="space-y-2"></div>
+                                </div>
+                                <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">Presets Curados &amp; Digitações Clássicas</h4>
+                                        <span class="text-[11px] font-mono text-amber-400">1 Clique para carregar</span>
+                                    </div>
+                                    <div id="viola-reverse-presets-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Opções de Mixagem Acústica Caipira -->
-                        <div class="flex flex-wrap items-center gap-2 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-800">
-                            <label class="flex items-center gap-1.5 text-xs font-mono text-slate-300 cursor-pointer" title="Harmonizar palhetada com o acorde ativo no Campo Harmônico">
-                                <input type="checkbox" id="check-viola-rhythm-chord-sync" ${state.rhythmChordSync ? 'checked' : ''} class="accent-emerald-500 rounded cursor-pointer">
-                                <span>Harmonizar Acorde</span>
-                            </label>
-
-                            <label class="flex items-center gap-1.5 text-xs font-mono text-slate-300 cursor-pointer" title="Ouvir clique do metrônomo analítico junto ao ritmo">
-                                <input type="checkbox" id="check-viola-rhythm-guide-click" ${state.rhythmGuideClick ? 'checked' : ''} class="accent-cyan-500 rounded cursor-pointer">
-                                <span>Clique Guia</span>
-                            </label>
-
-                            <div class="flex items-center gap-1.5 pl-2 border-l border-slate-800">
-                                <span class="text-[10px] font-mono text-slate-400">Caixa:</span>
-                                <input type="range" id="viola-slider-box-vol" min="0" max="100" value="${Math.round(state.rhythmBoxVolume * 100)}"
-                                    class="w-16 accent-amber-400 cursor-pointer" title="Volume da batida no tampo da viola">
+                    <!-- [4] Estudos de Progressão Harmônica & Cadências -->
+                    <div data-viola-tool-panel="progressoes" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="git-commit" class="w-4 h-4 text-emerald-400"></i>
+                                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Estudos de Progressão Harmônica &amp; Cadências</h3>
+                                </div>
+                                <p class="text-xs text-slate-400">Laboratório auditivo e prático de cadências caipiras, funções harmônicas e treino de transição de shapes</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <select id="viola-select-progression" aria-label="Selecione a progressão harmônica"
+                                    class="min-h-[40px] px-3 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-emerald-300">
+                                    ${HARMONIC_PROGRESSIONS.map((p) => `<option value="${p.id}" ${state.progressionId === p.id ? 'selected' : ''}>${p.title}</option>`).join('')}
+                                </select>
+                                <select id="viola-select-prog-beats" aria-label="Tempos por acorde"
+                                    class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-[#090d16] border border-slate-700 text-xs font-mono text-slate-200">
+                                    <option value="2" ${state.progressionBeatsPerChord === 2 ? 'selected' : ''}>2 Tempos / Acorde</option>
+                                    <option value="4" ${state.progressionBeatsPerChord === 4 ? 'selected' : ''}>4 Tempos (Padrão)</option>
+                                    <option value="8" ${state.progressionBeatsPerChord === 8 ? 'selected' : ''}>8 Tempos (Lento)</option>
+                                </select>
+                                <button type="button" id="btn-viola-loop-progression" title="Alternar repetição contínua (Loop)"
+                                    class="min-h-[40px] px-3 py-1.5 rounded-lg ${state.progressionLoop ? 'bg-cyan-600/20 border border-cyan-400 text-cyan-200' : 'bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400'} text-xs font-mono font-semibold flex items-center gap-1.5 transition">
+                                    <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                                    <span>Loop</span>
+                                </button>
+                                <button type="button" id="btn-viola-play-progression" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                    <span>Tocar Estudo da Progressão</span>
+                                </button>
                             </div>
                         </div>
+                        <div id="viola-progression-container"></div>
+                    </div>
+
+                    <!-- [5] Modulações & Preparação Harmônica Caipira (Fase 11) -->
+                    <div data-viola-tool-panel="modulacoes">
+                        <div id="viola-modulation-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [6] Capotraste & Transposição Inteligente para Duplas (Fase 13) -->
+                    <div data-viola-tool-panel="capotraste">
+                        <div id="viola-capo-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [7] Biblioteca de Ponteios & Solos Clássicos (Fase 6) -->
+                    <div data-viola-tool-panel="ponteios">
+                        <div id="viola-ponteios-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [8] Introduções Clássicas em Pagode de Viola (Fase 18) -->
+                    <div data-viola-tool-panel="pagode">
+                        <div id="viola-pagode-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [9] Dicionário de Licks & Frases de Folia de Reis (Fase 12) -->
+                    <div data-viola-tool-panel="folia">
+                        <div id="viola-folia-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [10] Arranjos Polifônicos & Contraponto a Duas Violas (Fase 15) -->
+                    <div data-viola-tool-panel="contraponto">
+                        <div id="viola-polyphony-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [11] Gerador, Editor e Exportador de Tablaturas (Fase 7) -->
+                    <div data-viola-tool-panel="editor-tab">
+                        <div id="viola-tab-editor-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [12] Afinador Estroboscópico de Alta Precisão & 8 Harmônicos (Fase 19) -->
+                    <div data-viola-tool-panel="estroboscopico">
+                        <div id="viola-strobe-tuner-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [13] Reconhecedor Auditivo Polifônico de Acordes por Microfone (Fase 14) -->
+                    <div data-viola-tool-panel="reconhecedor-mic">
+                        <div id="viola-mic-tuner-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [14] Afinador Acústico de Precisão (Diapasão de Referência) -->
+                    <div data-viola-tool-panel="diapasao" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+                                    <h3 class="text-xs sm:text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Afinador Acústico de Precisão (Diapasão de Referência)</h3>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Clique em qualquer par/corda para soar a nota de afinação pura como diapasão de referência</p>
+                            </div>
+                            <div>
+                                <button type="button" id="btn-viola-tuner-stop" class="min-h-[36px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-rose-300 flex items-center gap-1.5 transition">
+                                    <i data-lucide="square" class="w-3.5 h-3.5 text-rose-400"></i>
+                                    <span>Silenciar Afinador</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="viola-tuner-buttons" class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-6 gap-2 pt-1"></div>
+                    </div>
+
+                    <!-- [15] Treinador Auditivo de Afinação & Pares Oitavados (Fase 5) -->
+                    <div data-viola-tool-panel="treinador-pares">
+                        <div id="viola-ear-trainer-panel" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4"></div>
+                    </div>
+
+                    <!-- [16] Treinador de Solfejo & Ditado Melódico Caipira (Fase 17) -->
+                    <div data-viola-tool-panel="solfejo">
+                        <div id="viola-solfege-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [17] Ritmos Tradicionais Caipiras & Metrônomo Lookahead -->
+                    <div data-viola-tool-panel="metronomo-ritmos" class="bg-[#0f172a] border border-[#1e293b] rounded-xl p-4 space-y-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-3 border-b border-slate-800">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">Ritmos Tradicionais Caipiras &amp; Metrônomo</h3>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-0.5">Síntese Web Audio precisa de batida no tampo, repique de caixa, rasqueado e guia direcional sincronizado</p>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-700 p-0.5" role="group">
+                                    <button type="button" id="btn-viola-metro-mode-rhythm" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'rhythm' ? 'bg-emerald-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
+                                        Ritmo Caipira
+                                    </button>
+                                    <button type="button" id="btn-viola-metro-mode-click" class="px-3 py-1.5 text-xs font-mono rounded-md font-semibold transition ${state.metroMode === 'click' ? 'bg-cyan-600 text-slate-950 shadow' : 'text-slate-400 hover:text-slate-200'}">
+                                        Metrônomo Analítico
+                                    </button>
+                                </div>
+
+                                <button type="button" id="btn-viola-metro-toggle" class="min-h-[40px] px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                    <span>Tocar Levada Caipira</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="viola-rhythm-panel" class="${state.metroMode === 'rhythm' ? 'space-y-3' : 'hidden'}">
+                            <div class="flex flex-wrap items-center gap-2" id="viola-rhythm-selectors"></div>
+                            <div id="viola-rhythm-info-box" class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs font-mono"></div>
+                            <div>
+                                <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
+                                    <span>Padrão de Palhetada &amp; Repique no Tampo (1 Compasso):</span>
+                                    <span class="text-emerald-400 font-semibold" id="viola-rhythm-hand-guide"></span>
+                                </div>
+                                <div id="viola-rhythm-strip" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#090d16] border border-slate-800/80 rounded-xl p-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                            <div class="flex items-center gap-3 shrink-0">
+                                <div>
+                                    <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Andamento</span>
+                                    <div id="viola-bpm-display" class="text-xl font-mono font-bold text-cyan-300">92 BPM</div>
+                                </div>
+                                <div id="viola-metro-leds" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0f172a] border border-slate-800"></div>
+                            </div>
+
+                            <div class="flex-1 max-w-xl space-y-2">
+                                <input type="range" id="viola-bpm-slider" min="40" max="220" value="92"
+                                    class="w-full accent-cyan-400 cursor-pointer">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <button type="button" data-bpm-delta="-5" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−5</button>
+                                    <button type="button" data-bpm-delta="-1" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">−1</button>
+                                    <button type="button" data-bpm-delta="1" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+1</button>
+                                    <button type="button" data-bpm-delta="5" class="min-h-[34px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 font-mono text-xs text-slate-200">+5</button>
+                                    <button type="button" id="btn-viola-tap-tempo" class="min-h-[34px] px-2.5 py-0.5 rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 font-mono text-xs text-amber-300">Tap Tempo</button>
+
+                                    <div id="viola-classic-metro-selects" class="inline-flex items-center gap-1.5 ${state.metroMode === 'click' ? '' : 'hidden'}">
+                                        <select id="viola-metro-sig" aria-label="Compasso" class="min-h-[34px] px-2 py-0.5 rounded bg-[#0f172a] border border-slate-700 font-mono text-xs text-slate-200">
+                                            <option value="2/4">2/4 Pagode / Cururu</option>
+                                            <option value="3/4">3/4 Moda / Guarânia</option>
+                                            <option value="4/4">4/4 Toada / Padrão</option>
+                                            <option value="6/8">6/8 Ternário / Ponteio</option>
+                                        </select>
+                                        <select id="viola-metro-sub" aria-label="Subdivisão" class="min-h-[34px] px-2 py-0.5 rounded bg-[#0f172a] border border-slate-700 font-mono text-xs text-slate-200">
+                                            <option value="1">1x Semínima</option>
+                                            <option value="2">2x Colcheia</option>
+                                            <option value="3">3x Tercina</option>
+                                            <option value="4">4x Semicolcheia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-800">
+                                <label class="flex items-center gap-1.5 text-xs font-mono text-slate-300 cursor-pointer" title="Harmonizar palhetada com o acorde ativo no Campo Harmônico">
+                                    <input type="checkbox" id="check-viola-rhythm-chord-sync" ${state.rhythmChordSync ? 'checked' : ''} class="accent-emerald-500 rounded cursor-pointer">
+                                    <span>Harmonizar Acorde</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 text-xs font-mono text-slate-300 cursor-pointer" title="Ouvir clique do metrônomo analítico junto ao ritmo">
+                                    <input type="checkbox" id="check-viola-rhythm-guide-click" ${state.rhythmGuideClick ? 'checked' : ''} class="accent-cyan-500 rounded cursor-pointer">
+                                    <span>Clique Guia</span>
+                                </label>
+                                <div class="flex items-center gap-1.5 pl-2 border-l border-slate-800">
+                                    <span class="text-[10px] font-mono text-slate-400">Caixa:</span>
+                                    <input type="range" id="viola-slider-box-vol" min="0" max="100" value="${Math.round(state.rhythmBoxVolume * 100)}"
+                                        class="w-16 accent-amber-400 cursor-pointer" title="Volume da batida no tampo da viola">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- [18] Treinador de Escalas Modais Caipiras (Fase 8) -->
+                    <div data-viola-tool-panel="escalas-modais">
+                        <div id="viola-modal-trainer-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [19] Analisador de Tensão Mecânica e Calibre de Cordas (Fase 9) -->
+                    <div data-viola-tool-panel="tensao-acao">
+                        <div id="viola-tension-calculator-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [20] Afinações Históricas & Regionais Raras (Fase 10) -->
+                    <div data-viola-tool-panel="afinacoes-raras">
+                        <div id="viola-historical-tunings-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [21] Simulador Acústico de Madeiras & Ressonâncias de Chladni (Fase 16) -->
+                    <div data-viola-tool-panel="madeiras-chladni">
+                        <div id="viola-tonewood-container" class="space-y-4"></div>
+                    </div>
+
+                    <!-- [22] Simulador de Captação Acústica, Microfonia & EQ Paramétrico de Palco (Fase 20) -->
+                    <div data-viola-tool-panel="captacao-palco">
+                        <div id="viola-stage-eq-container" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- 3. MODAL DE CATÁLOGO RÁPIDO DAS 22 FERRAMENTAS (Ctrl+K) -->
+                <div id="viola-catalog-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+                    <div class="bg-[#0f172a] border border-slate-700 rounded-2xl w-full max-w-5xl max-h-[88vh] flex flex-col shadow-2xl overflow-hidden">
+                        <div class="p-4 bg-[#090d16] border-b border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+                                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm sm:text-base font-bold text-slate-100">Catálogo Geral • 22 Recursos de Viola &amp; Violão</h3>
+                                    <p class="text-[11px] font-mono text-slate-400">Selecione qualquer módulo para abrir imediatamente em Modo Foco Sem Rolagem</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="viola-catalog-search-input" autocomplete="off"
+                                    placeholder="Filtrar ferramenta (ex: Estrobo, Palco, Pagode, Chladni)..."
+                                    class="w-full sm:w-72 min-h-[38px] px-3 py-1.5 rounded-lg bg-[#0f172a] border border-slate-700 text-xs text-slate-100 placeholder-slate-500 focus:border-cyan-400 focus:outline-none">
+                                <button type="button" id="btn-viola-close-catalog" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono">
+                                    Fechar (Esc)
+                                </button>
+                            </div>
+                        </div>
+                        <div id="viola-catalog-grid-body" class="p-4 overflow-y-auto space-y-5"></div>
                     </div>
                 </div>
             </div>
         `;
 
         bindEvents();
+        syncFocusWorkspaceUI();
     }
 
     function syncControlValues() {
@@ -25787,11 +26541,11 @@ function bindSolfegeEvents() {
         if (handBadge && handLabel) {
             if (state.isLeftHanded) {
                 handBadge.textContent = 'Modo Canhoto Ativo (Espelhado)';
-                handBadge.className = 'px-2 py-0.5 text-[11px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                handBadge.className = 'hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
                 handLabel.textContent = 'Canhoto (Pestana \u00E0 Direita)';
             } else {
                 handBadge.textContent = 'Modo Destro (Consulta Externa)';
-                handBadge.className = 'px-2 py-0.5 text-[11px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700';
+                handBadge.className = 'hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-slate-300 border border-slate-700';
                 handLabel.textContent = 'Destro (Pestana \u00E0 Esquerda)';
             }
         }
@@ -25828,8 +26582,8 @@ function bindSolfegeEvents() {
             if (el) {
                 const isActive = state.displayMode === b.mode;
                 el.className = isActive
-                    ? `px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition ${b.activeClass}`
-                    : 'px-2.5 py-1 text-[11px] font-mono rounded-md font-semibold transition text-slate-400 hover:text-slate-200';
+                    ? `px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition ${b.activeClass}`
+                    : 'px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200';
             }
         });
 
@@ -25952,30 +26706,73 @@ function bindSolfegeEvents() {
             });
         }
 
-        // Atalhos de Rolagem
-        const scrollBtns = [
-            { id: 'btn-viola-scroll-tension', targetId: 'viola-tension-calculator-container' },
-            { id: 'btn-viola-scroll-historical', targetId: 'viola-historical-tunings-container' },
-            { id: 'btn-viola-scroll-modulation', targetId: 'viola-modulation-container' },
-            { id: 'btn-viola-scroll-folia', targetId: 'viola-folia-container' },
-            { id: 'btn-viola-scroll-capo', targetId: 'viola-capo-container' },
-            { id: 'btn-viola-scroll-mic', targetId: 'viola-mic-tuner-container' },
-            { id: 'btn-viola-scroll-polyphony', targetId: 'viola-polyphony-container' },
-            { id: 'btn-viola-scroll-tonewood', targetId: 'viola-tonewood-container' },
-            { id: 'btn-viola-scroll-solfege', targetId: 'viola-solfege-container' },
-            { id: 'btn-viola-scroll-pagode', targetId: 'viola-pagode-container' },
-            { id: 'btn-viola-scroll-strobe', targetId: 'viola-strobe-tuner-container' },
-            { id: 'btn-viola-scroll-stage-eq', targetId: 'viola-stage-eq-container' }
-        ];
-        scrollBtns.forEach((item) => {
-            const btn = document.getElementById(item.id);
-            if (btn) {
-                btn.addEventListener('click', () => {
-                    const el = document.getElementById(item.targetId);
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            }
-        });
+        // Controles do Modo Foco Sem Rolagem
+        const fretDockBtn = document.getElementById('btn-viola-toggle-fretboard-dock');
+        if (fretDockBtn) {
+            fretDockBtn.addEventListener('click', toggleFretboardDock);
+        }
+
+        const collapseFretBtn = document.getElementById('btn-viola-collapse-fretboard');
+        if (collapseFretBtn) {
+            collapseFretBtn.addEventListener('click', () => {
+                state.fretboardDockMode = 'hide';
+                saveViolaState();
+                syncFocusWorkspaceUI();
+            });
+        }
+
+        const layoutModeBtn = document.getElementById('btn-viola-toggle-layout-mode');
+        if (layoutModeBtn) {
+            layoutModeBtn.addEventListener('click', () => {
+                state.workspaceMode = state.workspaceMode === 'all' ? 'focus' : 'all';
+                saveViolaState();
+                syncFocusWorkspaceUI();
+                renderAll();
+            });
+        }
+
+        const prevToolBtn = document.getElementById('btn-viola-prev-tool');
+        if (prevToolBtn) {
+            prevToolBtn.addEventListener('click', () => stepViolaTool(-1));
+        }
+
+        const nextToolBtn = document.getElementById('btn-viola-next-tool');
+        if (nextToolBtn) {
+            nextToolBtn.addEventListener('click', () => stepViolaTool(1));
+        }
+
+        const openCatalogBtn = document.getElementById('btn-viola-open-catalog');
+        if (openCatalogBtn) {
+            openCatalogBtn.addEventListener('click', openToolCatalogModal);
+        }
+
+        const closeCatalogBtn = document.getElementById('btn-viola-close-catalog');
+        if (closeCatalogBtn) {
+            closeCatalogBtn.addEventListener('click', closeToolCatalogModal);
+        }
+
+        const catalogModal = document.getElementById('viola-catalog-modal');
+        if (catalogModal) {
+            catalogModal.addEventListener('click', (e) => {
+                if (e.target === catalogModal) closeToolCatalogModal();
+            });
+        }
+
+        const catalogSearchInput = document.getElementById('viola-catalog-search-input');
+        if (catalogSearchInput) {
+            catalogSearchInput.addEventListener('input', (e) => {
+                catalogSearchQuery = e.target.value || '';
+                renderToolCatalogGrid();
+            });
+            catalogSearchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeToolCatalogModal();
+                } else if (e.key === 'Enter') {
+                    const firstPick = document.querySelector('#viola-catalog-grid-body [data-viola-catalog-pick]');
+                    if (firstPick) firstPick.click();
+                }
+            });
+        }
 
         // Afinador Stop
         const stopTunerBtn = document.getElementById('btn-viola-tuner-stop');
@@ -25983,7 +26780,7 @@ function bindSolfegeEvents() {
             stopTunerBtn.addEventListener('click', stopTunerTone);
         }
 
-        // Modos de Projecao no Braco
+        // Modos de Projecao no Braco (Sincronizados com o Modo Foco)
         const modeList = [
             { id: 'btn-viola-mode-chord', mode: 'CHORD' },
             { id: 'btn-viola-mode-duad', mode: 'DUAD' },
@@ -25991,17 +26788,17 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-ponteio', mode: 'PONTEIO' },
             { id: 'btn-viola-mode-tab-editor', mode: 'TAB_EDITOR' },
             { id: 'btn-viola-mode-modal', mode: 'MODAL' },
-            { id: 'btn-viola-mode-historical', mode: 'HISTORICAL', scrollTarget: 'viola-historical-tunings-container' },
-            { id: 'btn-viola-mode-modulation', mode: 'MODULATION', scrollTarget: 'viola-modulation-container' },
-            { id: 'btn-viola-mode-folia', mode: 'FOLIA', scrollTarget: 'viola-folia-container' },
-            { id: 'btn-viola-mode-capo', mode: 'CAPO', scrollTarget: 'viola-capo-container' },
-            { id: 'btn-viola-mode-mic', mode: 'MIC', scrollTarget: 'viola-mic-tuner-container' },
-            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC', scrollTarget: 'viola-polyphony-container' },
-            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD', scrollTarget: 'viola-tonewood-container' },
-            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE', scrollTarget: 'viola-solfege-container' },
-            { id: 'btn-viola-mode-pagode', mode: 'PAGODE', scrollTarget: 'viola-pagode-container' },
-            { id: 'btn-viola-mode-strobe', mode: 'STROBE', scrollTarget: 'viola-strobe-tuner-container' },
-            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ', scrollTarget: 'viola-stage-eq-container' }
+            { id: 'btn-viola-mode-historical', mode: 'HISTORICAL' },
+            { id: 'btn-viola-mode-modulation', mode: 'MODULATION' },
+            { id: 'btn-viola-mode-folia', mode: 'FOLIA' },
+            { id: 'btn-viola-mode-capo', mode: 'CAPO' },
+            { id: 'btn-viola-mode-mic', mode: 'MIC' },
+            { id: 'btn-viola-mode-polyphony', mode: 'POLYPHONIC' },
+            { id: 'btn-viola-mode-tonewood', mode: 'TONEWOOD' },
+            { id: 'btn-viola-mode-solfege', mode: 'SOLFEGE' },
+            { id: 'btn-viola-mode-pagode', mode: 'PAGODE' },
+            { id: 'btn-viola-mode-strobe', mode: 'STROBE' },
+            { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ' }
         ];
 
         modeList.forEach((item) => {
@@ -26010,12 +26807,18 @@ function bindSolfegeEvents() {
                 btn.addEventListener('click', () => {
                     stopAllAudio();
                     state.displayMode = item.mode;
+                    lastSyncedDisplayMode = item.mode;
+                    const mappedToolId = DISPLAY_MODE_TO_TOOL_ID[item.mode];
+                    if (mappedToolId) {
+                        const tMeta = VIOLA_STUDIO_TOOLS.find((t) => t.id === mappedToolId);
+                        if (tMeta) {
+                            state.activeToolId = tMeta.id;
+                            state.activeCategoryId = tMeta.categoryId;
+                        }
+                    }
+                    state.fretboardDockMode = 'show';
                     saveViolaState();
                     renderAll();
-                    if (item.scrollTarget) {
-                        const target = document.getElementById(item.scrollTarget);
-                        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
                 });
             }
         });
@@ -26119,10 +26922,9 @@ function bindSolfegeEvents() {
         if (btnRevToFret) {
             btnRevToFret.addEventListener('click', () => {
                 state.displayMode = 'REVERSE';
+                state.fretboardDockMode = 'show';
                 saveViolaState();
                 renderAll();
-                const wrap = document.getElementById('viola-fretboard-svg-wrap');
-                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             });
         }
 
@@ -26266,8 +27068,60 @@ function bindSolfegeEvents() {
         }
     }
 
-
     function renderAll() {
+        // Intercepta exportação do Pagode de Viola (Fase 18) para criar projeto real no Editor de Tablaturas
+        if (state.activeMode === 'tab') {
+            state.activeMode = null;
+            const pNotes = typeof getCurrentPagodeNotes === 'function' ? getCurrentPagodeNotes() : [];
+            const pMeta = typeof getCurrentPagodeMetadata === 'function' ? getCurrentPagodeMetadata() : { title: 'Pagode de Viola' };
+            if (pNotes && pNotes.length > 0 && state.tabEditor) {
+                const curBpm = state.pagode && state.pagode.ladderActive ? state.pagode.ladderCurrentBpm : (state.bpm || 120);
+                const tabSteps = pNotes.map((n, i) => {
+                    const frets = [null, null, null, null, null];
+                    if (n.par >= 1 && n.par <= 5) frets[n.par - 1] = n.fret;
+                    if (n.pairPar >= 1 && n.pairPar <= 5 && typeof n.pairFret === 'number') frets[n.pairPar - 1] = n.pairFret;
+                    return {
+                        label: n.label || ('P' + (i + 1)),
+                        tech: n.tech === 'repique' ? 'TAP' : (n.tech === 'rasqueado' ? 'RASQ' : 'PLUCK'),
+                        rh: n.par >= 3 ? 'P' : 'I',
+                        dur: n.dur || 0.25,
+                        frets
+                    };
+                });
+                if (!Array.isArray(state.tabEditor.projects)) state.tabEditor.projects = [];
+                const newProjId = 'pagode_intro_' + Date.now();
+                state.tabEditor.projects.unshift({
+                    id: newProjId,
+                    title: '[Pagode] ' + pMeta.title,
+                    author: pMeta.artist || 'Tião Carreiro',
+                    instrumentId: 'viola_cebolao_e',
+                    timeSignature: '2/4',
+                    bpm: curBpm,
+                    key: pMeta.keyLabel || 'Mi Maior (E)',
+                    updatedAt: new Date().toISOString(),
+                    steps: tabSteps
+                });
+                state.tabEditor.activeProjectId = newProjId;
+                state.tabEditor.currentStepIdx = 0;
+            }
+            state.displayMode = 'TAB_EDITOR';
+            state.activeCategoryId = 'repertorio';
+            state.activeToolId = 'editor-tab';
+            saveViolaState();
+        }
+
+        // Quando um módulo clona/exporta para o Editor de Tablaturas, muda o foco automaticamente
+        if (lastSyncedDisplayMode !== null && lastSyncedDisplayMode !== state.displayMode) {
+            if (state.displayMode === 'TAB_EDITOR' && state.activeToolId !== 'editor-tab') {
+                state.activeCategoryId = 'repertorio';
+                state.activeToolId = 'editor-tab';
+            } else if (state.fretboardDockMode === 'hide') {
+                state.fretboardDockMode = 'show';
+            }
+        }
+        lastSyncedDisplayMode = state.displayMode;
+
+        syncFocusWorkspaceUI();
         syncControlValues();
         renderTunerButtons();
         renderEarTrainerPanel();
@@ -26296,6 +27150,21 @@ function bindSolfegeEvents() {
 
     function init() {
         loadViolaState();
+        if (!state.activeToolId || !VIOLA_STUDIO_TOOLS.some((t) => t.id === state.activeToolId)) {
+            state.activeToolId = 'campo-harmonico';
+        }
+        if (!state.activeCategoryId || !VIOLA_STUDIO_CATEGORIES.some((c) => c.id === state.activeCategoryId)) {
+            const activeMeta = getActiveToolMeta();
+            state.activeCategoryId = activeMeta.categoryId;
+        }
+        if (!state.workspaceMode) {
+            state.workspaceMode = 'focus';
+        }
+        if (!state.fretboardDockMode) {
+            state.fretboardDockMode = 'auto';
+        }
+        lastSyncedDisplayMode = state.displayMode;
+
         mountShell();
         renderAll();
 
@@ -26305,5 +27174,16 @@ function bindSolfegeEvents() {
         });
     }
 
-    global.VaultTabViola = { init, renderAll };
+    global.VaultTabViola = {
+        init,
+        renderAll,
+        setActiveViolaTool,
+        setActiveViolaCategory,
+        stepViolaTool,
+        toggleFretboardDock,
+        openToolCatalogModal,
+        closeToolCatalogModal,
+        categories: VIOLA_STUDIO_CATEGORIES,
+        tools: VIOLA_STUDIO_TOOLS
+    };
 })(window);
