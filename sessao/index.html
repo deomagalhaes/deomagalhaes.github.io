@@ -558,7 +558,7 @@
                 <p class="text-xs text-slate-500">Para liberar o laudo psicométrico completo, digite a senha exclusiva do neuropsicólogo:</p>
 
                 <div class="flex space-x-2">
-                    <input type="password" id="input-unlock-pin" maxlength="8" placeholder="Senha (1502)" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 text-center font-mono font-bold text-lg tracking-widest outline-none" onkeydown="if(event.key==='Enter') window.verifyUnlockPin()" />
+                    <input type="password" id="input-unlock-pin" maxlength="8" placeholder="Senha profissional" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 text-center font-mono font-bold text-lg tracking-widest outline-none" onkeydown="if(event.key==='Enter') window.verifyUnlockPin()" />
                     <button type="button" onclick="window.verifyUnlockPin()" class="bg-[#005f73] hover:bg-[#0a9396] text-white px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center justify-center">
                         <span>Acessar</span>
                     </button>
@@ -792,7 +792,7 @@
             <p class="text-xs text-slate-500">
                 Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite a senha do neuropsicólogo:
             </p>
-            <input type="password" id="input-modal-pin" maxlength="8" placeholder="Senha (1502)" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
+            <input type="password" id="input-modal-pin" maxlength="8" placeholder="Senha profissional" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
             <p id="modal-pin-error" class="hidden text-xs text-red-600 font-semibold"></p>
             <div class="flex space-x-2 pt-2">
                 <button type="button" onclick="window.closeEmergencyUnlockModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
