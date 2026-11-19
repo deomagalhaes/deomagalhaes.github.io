@@ -265,7 +265,7 @@
                     <!-- PIN de Desbloqueio do Profissional -->
                     <div>
                         <label for="input-session-pin" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
-                            PIN de Desbloqueio (Terapeuta) <span class="text-red-500">*</span>
+                            PIN de Desbloqueio (Neuropsicólogo) <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
@@ -476,11 +476,11 @@
                     <span>Realizou a Avaliação em Casa?</span>
                 </div>
                 <p class="text-xs text-emerald-900 leading-relaxed">
-                    Clique no botão abaixo para enviar o protocolo seguro diretamente para o terapeuta Deo Magalhães:
+                    Clique no botão abaixo para enviar o protocolo seguro diretamente para o profissional:
                 </p>
                 <button type="button" onclick="window.sendResultsViaWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white py-3.5 px-4 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    <span>Enviar para Deo Magalhães via WhatsApp</span>
+                    <span>Enviar via WhatsApp</span>
                 </button>
                 <div id="wa-sent-feedback" class="hidden text-xs text-emerald-800 font-semibold bg-emerald-100/80 p-2.5 rounded-lg">
                     ✓ Link enviado! O laudo oficial e a devolutiva clínica serão realizados durante o seu atendimento.
@@ -491,7 +491,7 @@
             <div class="border-t border-slate-200 pt-5 text-left space-y-3">
                 <div class="flex items-center space-x-2">
                     <i data-lucide="shield-alert" class="w-4 h-4 text-slate-500"></i>
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Área do Terapeuta — Destrancar Laudo</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Área do Neuropsicólogo — Destrancar Laudo</h3>
                 </div>
                 <p class="text-xs text-slate-500">Para liberar o laudo (presencial ou após receber no WhatsApp), digite o PIN:</p>
 
@@ -728,7 +728,7 @@
             </div>
             <h3 class="text-lg font-bold text-slate-900">Destrancar Sessão</h3>
             <p class="text-xs text-slate-500">
-                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite seu PIN de terapeuta:
+                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite seu PIN de neuropsicólogo:
             </p>
             <input type="password" id="input-modal-pin" maxlength="8" placeholder="PIN de 4 dígitos" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
             <p id="modal-pin-error" class="hidden text-xs text-red-600 font-semibold"></p>
@@ -1164,7 +1164,7 @@
         function handleUrlParameters() {
             const params = new URLSearchParams(window.location.search);
 
-            // Se o link contiver token criptografado (enviado pelo paciente ao terapeuta via WhatsApp)
+            // Se o link contiver token criptografado (enviado pelo paciente ao neuropsicólogo via WhatsApp)
             if (params.has('token')) {
                 try {
                     const rawJson = decodeURIComponent(escape(atob(params.get('token'))));
@@ -1179,7 +1179,7 @@
                         if (data.pin) sessionState.therapistPin = data.pin;
                         sessionState.status = 'lockout';
 
-                        // Ocultar telas anteriores e exibir tela de desbloqueio para o terapeuta
+                        // Ocultar telas anteriores e exibir tela de desbloqueio para o neuropsicólogo
                         document.getElementById('state-setup').classList.add('hidden');
                         document.getElementById('state-locked-test').classList.add('hidden');
                         document.getElementById('state-lockout').classList.remove('hidden');
@@ -1188,9 +1188,9 @@
                         const titleEl = document.getElementById('lockout-title');
                         if (titleEl) titleEl.textContent = `Respostas de ${sessionState.patientName} Carregadas!`;
                         const descEl = document.getElementById('lockout-desc');
-                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite seu PIN de terapeuta para liberar o laudo psicométrico completo.`;
+                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite seu PIN de neuropsicólogo para liberar o laudo psicométrico completo.`;
                         
-                        // Ocultar card de envio via WhatsApp já que o terapeuta já está com os dados
+                        // Ocultar card de envio via WhatsApp já que o neuropsicólogo já está com os dados
                         const homeBox = document.getElementById('home-patient-box');
                         if (homeBox) homeBox.classList.add('hidden');
 
@@ -1245,7 +1245,7 @@
             }
 
             if (!pin || pin.length < 4) {
-                alert('Por favor, defina um PIN de terapeuta de pelo menos 4 dígitos para segurança.');
+                alert('Por favor, defina um PIN de neuropsicólogo de pelo menos 4 dígitos para segurança.');
                 pinInput.focus();
                 return;
             }
@@ -1901,7 +1901,7 @@
             }
         }
 
-        // --- 11. AÇÕES DO TERAPEUTA (COPIAR, IMPRIMIR, EXPORTAR, RESET) ---
+        // --- 11. AÇÕES DO NEUROPSICÓLOGO (COPIAR, IMPRIMIR, EXPORTAR, RESET) ---
         window.copyReportSummary = function() {
             const summaryEl = document.getElementById('report-text-summary');
             if (!summaryEl) return;
