@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessão Segura de Avaliação Clínica — Inventário de Ansiedade — Deo Magalhães</title>
+    <meta name="description" content="Plataforma independente de avaliação psicológica e neuropsicológica com sessão trancada para aplicação controlada de inventários de ansiedade no consultório ou teleatendimento.">
+    
+    <link rel="icon" type="image/png" href="../assets/favicon2.png">
+
+    <!-- Tailwind CSS & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --brand-primary: #005f73;
+            --brand-teal: #0a9396;
+            --brand-cyan: #94d2bd;
+            --brand-warm: #ee9b00;
+            --brand-danger: #ae2012;
+            --brand-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--brand-bg);
+            color: #0f172a;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .font-serif-clinical {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* Opções de resposta amplas e táteis (acessibilidade motora e tablet) */
+        .option-btn {
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 48px;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .option-btn:active {
+            transform: translateY(1px);
+        }
+
+        .option-btn.selected-0 {
+            background-color: #ecfdf5;
+            border-color: #10b981;
+            color: #065f46;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+        }
+
+        .option-btn.selected-1 {
+            background-color: #fefce8;
+            border-color: #eab308;
+            color: #854d0e;
+            box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.25);
+        }
+
+        .option-btn.selected-2 {
+            background-color: #fff7ed;
+            border-color: #f97316;
+            color: #9a3412;
+            box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25);
+        }
+
+        .option-btn.selected-3 {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+            color: #991b1b;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+        }
+
+        /* Estilos específicos para Matrizes de Inteligência (TRIF-12) */
+        .matrix-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            max-width: 240px;
+            margin: 0 auto;
+        }
+
+        .matrix-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .matrix-cell {
+            aspect-ratio: 1;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+
+        .matrix-cell.target-missing {
+            border: 2px dashed #0a9396;
+            background: #f0fdfa;
+            color: #005f73;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .matrix-option-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            background: #ffffff;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .matrix-option-card:hover {
+            border-color: #005f73;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 95, 115, 0.12);
+        }
+
+        .matrix-option-card.selected {
+            border-color: #005f73;
+            background: #f0fdfa;
+            box-shadow: 0 0 0 2px #0a9396;
+        }
+
+        .matrix-option-card.selected .option-badge {
+            background-color: #005f73;
+            color: #ffffff;
+        }
+
+        /* Animações suaves */
+        .fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilização para impressão A4 de laudo clínico */
+        @media print {
+            body {
+                background: white !important;
+                color: #000 !important;
+                font-size: 11pt !important;
+                user-select: text !important;
+                -webkit-user-select: text !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .print-card {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        @media screen {
+            .print-only {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- ========================================== -->
+    <!-- ESTADO 1: TELA DE ABERTURA / CONFIGURAÇÃO  -->
+    <!-- ========================================== -->
+    <div id="state-setup" class="fade-in max-w-3xl w-full mx-auto px-4 py-8 md:py-12 my-auto">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden">
+            <!-- Header Institucional -->
+            <div class="bg-gradient-to-r from-[#005f73] to-[#0a9396] text-white p-6 sm:p-8">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div class="flex items-center space-x-3.5">
+                        <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center border border-white/20 shadow-inner">
+                            <i data-lucide="shield-check" class="w-7 h-7 text-white"></i>
+                        </div>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white tracking-wide uppercase mb-1">
+                                Plataforma Clínica Segura
+                            </span>
+                            <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Sessão Trancada de Avaliação</h1>
+                        </div>
+                    </div>
+                    <div class="text-right text-xs text-white/80 hidden sm:block">
+                        <p class="font-medium text-white">Deo Magalhães</p>
+                        <p>Neuropsicólogo CRP 04/42784</p>
+                        <p>Membro SBNp</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de Inicialização da Sessão -->
+            <div class="p-6 sm:p-8 space-y-6">
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                    <div class="flex items-start">
+                        <i data-lucide="lock" class="w-5 h-5 text-amber-600 mt-0.5 mr-3 shrink-0"></i>
+                        <p class="text-xs sm:text-sm text-amber-900 leading-relaxed">
+                            
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Nome ou Código do Paciente -->
+                    <div class="sm:col-span-2">
+                        <label for="input-patient-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                            Identificação do Paciente / Avaliado(a) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <i data-lucide="user" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="input-patient-name" placeholder="Ex: Maria S. ou Código Confidencial LGPD" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 outline-none text-slate-800 text-sm font-medium transition" autocomplete="off" />
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-1">Pode ser nome completo, iniciais ou ID confidencial para estrito sigilo.</p>
+                    </div>
+
+                    <!-- Idade / Data de Nascimento (Opcional) -->
+                    <div>
+                        <label for="input-patient-age" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                            Idade (Opcional)
+                        </label>
+                        <div class="relative">
+                            <i data-lucide="calendar" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="number" id="input-patient-age" min="1" max="120" placeholder="Ex: 34" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 outline-none text-slate-800 text-sm font-medium transition" />
+                        </div>
+                    </div>
+
+                    <!-- PIN de Desbloqueio do Profissional -->
+                    <div>
+                        <label for="input-session-pin" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
+                            PIN de Desbloqueio (Terapeuta) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <i data-lucide="key-round" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="password" id="input-session-pin" maxlength="8" value="1234" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 outline-none text-slate-800 text-sm font-bold tracking-widest transition" />
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-1">Padrão: <strong>1234</strong> (Altere para sua segurança).</p>
+                    </div>
+                </div>
+
+                <!-- Seleção do Instrumento Psicométrico -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
+                        Instrumento Psicométrico Selecionado
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-[#005f73] bg-[#005f73]/5 has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-[#005f73] flex items-center">
+                                    <i data-lucide="activity" class="w-4 h-4 mr-1.5"></i> BAI (Ansiedade)
+                                </span>
+                                <input type="radio" name="scale-select" value="BAI" checked class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Inventário de Beck (21 itens). Sintomas somáticos e cognitivos.
+                            </span>
+                        </label>
+
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-800 flex items-center">
+                                    <i data-lucide="brain" class="w-4 h-4 mr-1.5 text-purple-600"></i> TRIF-12 (Inteligência)
+                                </span>
+                                <input type="radio" name="scale-select" value="TRIF12" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Raciocínio Fluido Não-Verbal (12 Matrizes). Estimativa de QI, EP e Percentil.
+                            </span>
+                        </label>
+
+                        <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300 bg-white has-[:checked]:border-[#005f73] has-[:checked]:bg-[#005f73]/5">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-800 flex items-center">
+                                    <i data-lucide="gauge" class="w-4 h-4 mr-1.5 text-slate-500"></i> GAD-7 (Breve)
+                                </span>
+                                <input type="radio" name="scale-select" value="GAD7" class="text-[#005f73] focus:ring-[#005f73] h-4 w-4" onchange="window.updateInstrumentSelection()" />
+                            </div>
+                            <span class="text-xs text-slate-600 leading-snug">
+                                Triagem rápida (7 itens DSM-5). Preocupação e agitação motora.
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Opções de Ambiente -->
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-700 block">Opções da Sessão</span>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <label class="flex items-center text-xs text-slate-700 cursor-pointer select-none">
+                            <input type="checkbox" id="check-fullscreen" checked class="rounded text-[#005f73] focus:ring-[#005f73] h-4 w-4 mr-2" />
+                            <span>Ativar Tela Cheia (Recomendado para Tablet de Consultório)</span>
+                        </label>
+                        <label class="flex items-center text-xs text-slate-700 cursor-pointer select-none">
+                            <input type="checkbox" id="check-prevent-unload" checked class="rounded text-[#005f73] focus:ring-[#005f73] h-4 w-4 mr-2" />
+                            <span>Bloquear Fechamento Acidental da Página</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                    <button type="button" onclick="window.lockAndStartSession()" class="flex-1 bg-[#005f73] hover:bg-[#0a9396] text-white py-3.5 px-6 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition flex items-center justify-center space-x-2">
+                        <i data-lucide="lock" class="w-5 h-5"></i>
+                        <span>Trancar Sessão e Iniciar Questionário</span>
+                    </button>
+                    <button type="button" onclick="window.copyDirectSessionLink()" class="sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 py-3.5 px-4 rounded-xl font-semibold text-xs transition flex items-center justify-center space-x-2 border border-slate-300" title="Gera um link que já abre a sessão trancada para atendimento remoto">
+                        <i data-lucide="share-2" class="w-4 h-4 text-slate-500"></i>
+                        <span>Gerar Link Remoto</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rodapé Técnico Confidencial -->
+            <div class="bg-slate-100 border-t border-slate-200 px-6 py-4 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
+                <span>🔒 100% Client-Side / Zero-Backend (Conformidade Estrita LGPD)</span>
+                <span>Deo Magalhães — Neuropsicologia Clínica</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ESTADO 2: SESSÃO TRANCADA (QUESTIONÁRIO)   -->
+    <!-- ========================================== -->
+    <div id="state-locked-test" class="hidden flex-1 flex flex-col w-full">
+        <!-- Top Bar Fixa de Segurança do Paciente -->
+        <header class="sticky top-0 z-40 bg-[#005f73] text-white shadow-md border-b border-teal-800 select-none">
+            <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-emerald-300">Sessão Trancada</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        </div>
+                        <p class="text-sm font-bold text-white truncate max-w-[200px] sm:max-w-xs" id="locked-patient-display">Paciente: --</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- Cronômetro da Sessão -->
+                    <div class="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-black/20 text-white/90 text-xs font-mono">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-teal-300"></i>
+                        <span id="session-timer">00:00</span>
+                    </div>
+
+                    <!-- Botão Tela Cheia -->
+                    <button type="button" onclick="window.toggleFullScreen()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition text-xs" title="Alternar Tela Cheia">
+                        <i data-lucide="maximize" class="w-4 h-4"></i>
+                    </button>
+
+                    <!-- Botão de Interrupção do Profissional (Exige PIN) -->
+                    <button type="button" onclick="window.openEmergencyUnlockModal()" class="px-2.5 py-1.5 rounded-lg bg-black/25 hover:bg-red-500/80 text-white/80 hover:text-white transition text-xs flex items-center space-x-1 border border-white/10">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Destrancar (Profissional)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de Progresso Superior Integrada -->
+            <div class="w-full bg-slate-800/40 h-2">
+                <div id="progress-bar-fill" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-2 transition-all duration-300" style="width: 0%;"></div>
+            </div>
+        </header>
+
+        <!-- Corpo do Questionário -->
+        <main class="flex-1 max-w-3xl w-full mx-auto px-4 py-6 md:py-8 space-y-6">
+            <!-- Instruções Clínicas do Instrumento -->
+            <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start space-x-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-[#005f73]/10 text-[#005f73] flex items-center justify-center shrink-0">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900" id="locked-instrument-title">Inventário de Ansiedade de Beck (BAI)</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed" id="locked-instrument-instruction">
+                            Abaixo está uma lista de sintomas comuns de ansiedade. Por favor, avalie cada sintoma e indique o quanto você tem sido incomodado(a) por ele durante a <strong>última semana, incluindo o dia de hoje</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Resumo de Progresso -->
+                <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span id="progress-status-text">0 de 21 itens respondidos</span>
+                    <span id="progress-percent-text" class="font-bold text-[#005f73]">0%</span>
+                </div>
+            </div>
+
+            <!-- Container Dinâmico com os Itens do Questionário -->
+            <div id="questions-container" class="space-y-4">
+                <!-- Inserido dinamicamente via JS -->
+            </div>
+
+            <!-- Botão de Finalização Trancada -->
+            <div class="pt-4 pb-12">
+                <div id="incomplete-warning" class="hidden mb-4 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs sm:text-sm flex items-center space-x-2">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 shrink-0"></i>
+                    <span id="incomplete-warning-text">Ainda restam perguntas sem resposta. Por favor, verifique antes de concluir.</span>
+                </div>
+
+                <button type="button" onclick="window.submitLockedSession()" class="w-full bg-[#005f73] hover:bg-[#0a9396] text-white py-4 px-6 rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transition flex items-center justify-center space-x-2">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                    <span>Finalizar e Travar Respostas</span>
+                </button>
+                <p class="text-center text-xs text-slate-400 mt-2">
+                    Ao finalizar, as respostas serão blindadas e a tela exigirá o PIN do profissional para desbloqueio.
+                </p>
+            </div>
+        </main>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ESTADO 3: TELA DE BLOQUEIO FINAL (LOCKOUT) -->
+    <!-- ========================================== -->
+    <div id="state-lockout" class="hidden fade-in max-w-lg w-full mx-auto px-4 py-8 my-auto">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden text-center p-6 sm:p-8 space-y-6">
+            <!-- Ícone de Confirmação & Bloqueio -->
+            <div class="w-20 h-20 mx-auto rounded-full bg-emerald-50 text-emerald-600 border-4 border-emerald-100 flex items-center justify-center shadow-inner">
+                <i data-lucide="check" class="w-10 h-10"></i>
+            </div>
+
+            <div>
+                <span id="lockout-status-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-2">
+                    Avaliação Concluída
+                </span>
+                <h2 id="lockout-title" class="text-xl sm:text-2xl font-bold text-slate-900">Respostas Registradas!</h2>
+                <p id="lockout-desc" class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                    Agradecemos sua colaboração. Suas respostas foram salvas em ambiente criptografado e protegido por sigilo profissional.
+                </p>
+            </div>
+
+            <!-- OPÇÃO 1: PARA QUEM FEZ EM CASA (ENVIO DIRETO VIA WHATSAPP COM 1 CLIQUE) -->
+            <div id="home-patient-box" class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-300/80 rounded-2xl p-5 text-center space-y-3 shadow-sm">
+                <div class="flex items-center justify-center space-x-1.5 text-emerald-900 font-bold text-xs uppercase tracking-wider">
+                    <i data-lucide="home" class="w-4 h-4 text-emerald-700"></i>
+                    <span>Realizou a Avaliação em Casa?</span>
+                </div>
+                <p class="text-xs text-emerald-900 leading-relaxed">
+                    Clique no botão abaixo para enviar o protocolo seguro diretamente para o terapeuta Deo Magalhães:
+                </p>
+                <button type="button" onclick="window.sendResultsViaWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1ebd59] text-white py-3.5 px-4 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    <span>Enviar para Deo Magalhães via WhatsApp</span>
+                </button>
+                <div id="wa-sent-feedback" class="hidden text-xs text-emerald-800 font-semibold bg-emerald-100/80 p-2.5 rounded-lg">
+                    ✓ Link enviado! O laudo oficial e a devolutiva clínica serão realizados durante o seu atendimento.
+                </div>
+            </div>
+
+            <!-- OPÇÃO 2: CONSULTÓRIO PRESENCIAL (DESTRANCAR LAUDO) -->
+            <div class="border-t border-slate-200 pt-5 text-left space-y-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="shield-alert" class="w-4 h-4 text-slate-500"></i>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Área do Terapeuta — Destrancar Laudo</h3>
+                </div>
+                <p class="text-xs text-slate-500">Para liberar o laudo (presencial ou após receber no WhatsApp), digite o PIN:</p>
+
+                <div class="flex space-x-2">
+                    <input type="password" id="input-unlock-pin" maxlength="8" placeholder="PIN" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 focus:border-[#005f73] focus:ring-2 focus:ring-[#005f73]/20 text-center font-mono font-bold text-lg tracking-widest outline-none" onkeydown="if(event.key==='Enter') window.verifyUnlockPin()" />
+                    <button type="button" onclick="window.verifyUnlockPin()" class="bg-[#005f73] hover:bg-[#0a9396] text-white px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center justify-center">
+                        <span>Acessar</span>
+                    </button>
+                </div>
+                <p id="unlock-error-msg" class="hidden text-xs text-red-600 font-medium"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ESTADO 4: LAUDO CLÍNICO & DASHBOARD        -->
+    <!-- ========================================== -->
+    <div id="state-report" class="hidden fade-in max-w-4xl w-full mx-auto px-4 py-6 md:py-10 space-y-6">
+        <!-- Barra de Ações Rápidas (no-print) -->
+        <div class="no-print bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-2">
+                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 flex items-center">
+                    <i data-lucide="unlock" class="w-3.5 h-3.5 mr-1"></i> Sessão Destrancada
+                </span>
+                <span class="text-xs text-slate-500">Resultados exclusivos do profissional</span>
+            </div>
+
+            <div class="flex items-center space-x-2 flex-wrap">
+                <button type="button" onclick="window.copyReportSummary()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center space-x-1.5 border border-slate-300">
+                    <i data-lucide="copy" class="w-4 h-4 text-slate-500"></i>
+                    <span>Copiar Prontuário</span>
+                </button>
+                <button type="button" onclick="window.printReport()" class="px-3.5 py-2 rounded-xl bg-[#005f73] hover:bg-[#0a9396] text-white text-xs font-semibold transition flex items-center space-x-1.5 shadow">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>Imprimir Laudo A4</span>
+                </button>
+                <button type="button" onclick="window.exportReportJSON()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center space-x-1.5 border border-slate-300" title="Exportar dados brutos em JSON">
+                    <i data-lucide="download" class="w-4 h-4 text-slate-500"></i>
+                    <span>JSON</span>
+                </button>
+                <button type="button" onclick="window.resetToSetup()" class="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold transition flex items-center space-x-1.5 border border-red-200" title="Limpar dados e preparar para o próximo paciente">
+                    <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                    <span>Nova Sessão</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Documento Timbrado de Laudo Psicométrico (A4 amigável) -->
+        <article class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden print-card p-6 sm:p-10 space-y-8">
+            <!-- Cabeçalho Timbrado do Laudo -->
+            <div class="border-b-2 border-[#005f73] pb-6 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Relatório de Avaliação Psicométrica</h1>
+                    <p class="text-xs sm:text-sm font-semibold text-[#005f73] mt-0.5" id="report-instrument-name">Inventário de Ansiedade de Beck (BAI)</p>
+                    <p class="text-xs text-slate-500 mt-1">Ambiente de Aplicação Controlada &amp; Sessão Segura</p>
+                </div>
+                <div class="text-right text-xs text-slate-600">
+                    <p class="font-bold text-slate-900">Deo Magalhães</p>
+                    <p>Neuropsicólogo Clínico — CRP 04/42784</p>
+                    <p>Especialista em Neurociências | Membro SBNp</p>
+                </div>
+            </div>
+
+            <!-- Metadados da Sessão e Identificação do Paciente -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                <div>
+                    <span class="text-slate-500 block uppercase tracking-wider text-[10px] font-bold">Paciente / Código</span>
+                    <strong class="text-slate-800 text-sm font-semibold" id="report-patient-name">--</strong>
+                </div>
+                <div>
+                    <span class="text-slate-500 block uppercase tracking-wider text-[10px] font-bold">Data da Aplicação</span>
+                    <strong class="text-slate-800 text-sm font-semibold" id="report-date">--</strong>
+                </div>
+                <div>
+                    <span class="text-slate-500 block uppercase tracking-wider text-[10px] font-bold">Duração da Sessão</span>
+                    <strong class="text-slate-800 text-sm font-semibold" id="report-duration">--</strong>
+                </div>
+                <div>
+                    <span class="text-slate-500 block uppercase tracking-wider text-[10px] font-bold">Protocolo de Registro</span>
+                    <strong class="text-slate-800 text-xs font-mono" id="report-protocol">--</strong>
+                </div>
+            </div>
+
+            <!-- Cards de Resultados Quantitativos -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Escore Bruto e Severidade -->
+                <div class="p-6 rounded-2xl border-2 flex flex-col justify-between" id="score-card-container">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1">Escore Bruto Total</span>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-4xl sm:text-5xl font-black text-slate-900" id="report-total-score">0</span>
+                            <span class="text-slate-400 font-bold text-sm" id="report-max-score">/ 63</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">Classificação Normativa</span>
+                        <span class="inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider" id="report-severity-badge">
+                            --
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Subescala Somática / Neurovegetativa (BAI) ou Escore Ponderado (TRIF-12) -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between" id="subscale-somatic-card">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="subscale-somatic-title" class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+                                <i data-lucide="zap" class="w-3.5 h-3.5 mr-1 text-amber-600"></i> Somático / Autonômico
+                            </span>
+                            <span class="text-xs font-mono font-bold text-slate-800" id="somatic-score-display">0 / 42</span>
+                        </div>
+                        <p id="subscale-somatic-desc" class="text-[11px] text-slate-500 leading-snug">
+                            Reatividade fisiológica, tônus simpático, hiperventilação, sudorese, vertigem e tremores.
+                        </p>
+                    </div>
+                    <div class="mt-3">
+                        <div class="w-full bg-slate-200 rounded-full h-2">
+                            <div id="somatic-bar" class="bg-amber-500 h-2 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                            <span id="somatic-label-min">Basal</span>
+                            <span id="somatic-percent">0%</span>
+                            <span id="somatic-label-max">Crítico</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subescala Subjetiva / Cognitivo-Afetiva (BAI) ou Percentil (TRIF-12) -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between" id="subscale-cognitive-card">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="subscale-cognitive-title" class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+                                <i data-lucide="brain" class="w-3.5 h-3.5 mr-1 text-[#005f73]"></i> Cognitivo-Afetivo
+                            </span>
+                            <span class="text-xs font-mono font-bold text-slate-800" id="cognitive-score-display">0 / 21</span>
+                        </div>
+                        <p id="subscale-cognitive-desc" class="text-[11px] text-slate-500 leading-snug">
+                            Medo do pior, medo de perder o controle, medo de morrer, terror, sensação de nervosismo.
+                        </p>
+                    </div>
+                    <div class="mt-3">
+                        <div class="w-full bg-slate-200 rounded-full h-2">
+                            <div id="cognitive-bar" class="bg-[#005f73] h-2 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                            <span id="cognitive-label-min">Basal</span>
+                            <span id="cognitive-percent">0%</span>
+                            <span id="cognitive-label-max">Crítico</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sinais de Alerta / Itens Críticos -->
+            <div id="critical-items-box" class="p-4 rounded-xl bg-amber-50 border border-amber-200">
+                <div class="flex items-center space-x-2 text-amber-900 font-bold text-xs uppercase tracking-wider mb-2">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
+                    <span>Sinais de Alerta Clínico (Pontuação Máxima / Intensidade Severa)</span>
+                </div>
+                <div id="critical-items-list" class="text-xs text-amber-800 space-y-1">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
+
+            <!-- Síntese Clínica Textual para Prontuário -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-1.5 text-slate-500"></i> Parecer Clínico para Prontuário Eletrônico
+                    </h3>
+                    <button type="button" onclick="window.copyReportSummary()" class="no-print text-xs text-[#005f73] hover:underline font-semibold flex items-center">
+                        <i data-lucide="clipboard-copy" class="w-3.5 h-3.5 mr-1"></i> Copiar Texto
+                    </button>
+                </div>
+                <div id="report-text-summary" class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs sm:text-sm text-slate-800 leading-relaxed font-serif-clinical">
+                    <!-- Texto de laudo gerado dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Tabela com Detalhamento de Todos os Itens Respondidos -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+                    <i data-lucide="list-checks" class="w-4 h-4 mr-1.5 text-slate-500"></i> Apuração Item a Item
+                </h3>
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+                                <th class="py-2.5 px-3.5 w-12 text-center">#</th>
+                                <th class="py-2.5 px-3.5">Sintoma / Manifestação</th>
+                                <th class="py-2.5 px-3.5 w-32">Dimensão</th>
+                                <th class="py-2.5 px-3.5 w-20 text-center">Escore</th>
+                                <th class="py-2.5 px-3.5 w-40">Classificação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-table-body" class="divide-y divide-slate-100">
+                            <!-- Inserido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fundamentação Psicométrica e Assinatura Técnica -->
+            <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 text-xs text-slate-500">
+                <div class="space-y-1 max-w-lg" id="report-references-box">
+                    <p class="font-semibold text-slate-700">Normas e Referências Psicométricas:</p>
+                    <div id="report-references-list">
+                        <p>• Cunha, J. A. (2001). <em>Manual da versão em português das Escalas Beck</em>. São Paulo: Casa do Psicólogo.</p>
+                        <p>• Beck, A. T., &amp; Steer, R. A. (1993). <em>Beck Anxiety Inventory Manual</em>. San Antonio: Psychological Corporation.</p>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-2">
+                        Nota Ética: Este instrumento é de uso auxiliar à prática clínica profissional e deve ser interpretado em conjunto com a anamnese, observação comportamental e histórico clínico do paciente.
+                    </p>
+                </div>
+                <div class="text-center sm:text-right w-full sm:w-auto shrink-0 border-t sm:border-t-0 pt-4 sm:pt-0">
+                    <div class="w-48 border-b border-slate-400 mx-auto sm:ml-auto mb-1"></div>
+                    <p class="font-bold text-slate-800">Deo Magalhães</p>
+                    <p class="text-[11px]">Neuropsicólogo Clínico — CRP 04/42784</p>
+                    <p class="text-[10px] text-slate-400">Especialista em Neurociências e Comportamento</p>
+                </div>
+            </div>
+        </article>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL DE DESTRANCAMENTO ANTECIPADO         -->
+    <!-- ========================================== -->
+    <div id="modal-emergency-unlock" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 mx-auto flex items-center justify-center">
+                <i data-lucide="lock" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Destrancar Sessão</h3>
+            <p class="text-xs text-slate-500">
+                Esta ação cancelará a sessão do paciente e retornará ao painel profissional. Digite seu PIN de terapeuta:
+            </p>
+            <input type="password" id="input-modal-pin" maxlength="8" placeholder="PIN de 4 dígitos" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-300 font-mono font-bold text-lg tracking-widest outline-none focus:border-[#005f73]" onkeydown="if(event.key==='Enter') window.confirmEmergencyUnlock()" />
+            <p id="modal-pin-error" class="hidden text-xs text-red-600 font-semibold"></p>
+            <div class="flex space-x-2 pt-2">
+                <button type="button" onclick="window.closeEmergencyUnlockModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+                    Voltar ao Teste
+                </button>
+                <button type="button" onclick="window.confirmEmergencyUnlock()" class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition">
+                    Destrancar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MOTOR JAVASCRIPT DA SESSÃO TRANCADA        -->
+    <!-- ========================================== -->
+    <script>
+        // --- 1. ITENS DOS INSTRUMENTOS PSICOMÉTRICOS ---
+        const BAI_ITEMS = [
+            { id: 1, text: "Dormência ou formigamento", type: "somatic" },
+            { id: 2, text: "Sensação de calor", type: "somatic" },
+            { id: 3, text: "Tremores nas pernas", type: "somatic" },
+            { id: 4, text: "Incapaz de relaxar", type: "cognitive" },
+            { id: 5, text: "Medo de que aconteça o pior", type: "cognitive" },
+            { id: 6, text: "Tontura ou vertigem", type: "somatic" },
+            { id: 7, text: "Palpitação ou coração acelerado", type: "somatic" },
+            { id: 8, text: "Sensação de instabilidade / Sem equilíbrio", type: "somatic" },
+            { id: 9, text: "Aterrorizado(a) ou apavorado(a)", type: "cognitive" },
+            { id: 10, text: "Nervosismo", type: "cognitive" },
+            { id: 11, text: "Sensação de sufocação / Falta de ar", type: "somatic" },
+            { id: 12, text: "Tremores nas mãos", type: "somatic" },
+            { id: 13, text: "Trêmulo(a) / Abalado(a)", type: "somatic" },
+            { id: 14, text: "Medo de perder o controle", type: "cognitive" },
+            { id: 15, text: "Dificuldade de respirar", type: "somatic" },
+            { id: 16, text: "Medo de morrer", type: "cognitive" },
+            { id: 17, text: "Assustado(a)", type: "cognitive" },
+            { id: 18, text: "Indigestão ou desconforto no abdômen", type: "somatic" },
+            { id: 19, text: "Sensação de desmaio", type: "somatic" },
+            { id: 20, text: "Rosto afogueado / Vermelhidão no rosto", type: "somatic" },
+            { id: 21, text: "Suores (não devidos ao calor)", type: "somatic" }
+        ];
+
+        const BAI_OPTIONS = [
+            { value: 0, label: "Absolutamente não", desc: "Não me incomodou" },
+            { value: 1, label: "Levemente", desc: "Não me incomodou muito" },
+            { value: 2, label: "Moderadamente", desc: "Muito desagradável, mas suportável" },
+            { value: 3, label: "Gravemente", desc: "Quase insuportável" }
+        ];
+
+        const GAD7_ITEMS = [
+            { id: 1, text: "Sentir-se nervoso(a), ansioso(a) ou muito tenso(a)", type: "cognitive" },
+            { id: 2, text: "Não ser capaz de impedir ou de controlar as preocupações", type: "cognitive" },
+            { id: 3, text: "Preocupar-se demais com diversas coisas", type: "cognitive" },
+            { id: 4, text: "Dificuldade para relaxar", type: "somatic" },
+            { id: 5, text: "Ficar tão agitado(a) que se torna difícil permanecer sentado(a)", type: "somatic" },
+            { id: 6, text: "Ficar facilmente irritado(a) ou aborrecido(a)", type: "cognitive" },
+            { id: 7, text: "Sentir medo como se algo terrível fosse acontecer", type: "cognitive" }
+        ];
+
+        const GAD7_OPTIONS = [
+            { value: 0, label: "Nenhuma vez", desc: "0 dias" },
+            { value: 1, label: "Vários dias", desc: "Menos de 1 semana" },
+            { value: 2, label: "Mais da metade dos dias", desc: "Mais de 1 semana" },
+            { value: 3, label: "Quase todos os dias", desc: "Quase diariamente" }
+        ];
+
+        // --- ITENS DO TESTE DE INTELIGÊNCIA FLUIDA (TRIF-12) ---
+        const TRIF12_ITEMS = [
+            {
+                id: 1,
+                title: "Item 1: Continuidade de Forma e Cor",
+                domain: "spatial",
+                domainLabel: "Raciocínio Visoespacial",
+                gridSize: 2,
+                ruleText: "Todas as figuras da matriz 2x2 compartilham forma circular e cor azul uniforme.",
+                correct: 0,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="#005f73"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="20" y="20" width="60" height="60" rx="8" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,16 86,80 14,80" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 2,
+                title: "Item 2: Progressão Geométrica de Tamanho",
+                domain: "spatial",
+                domainLabel: "Raciocínio Visoespacial",
+                gridSize: 2,
+                ruleText: "A primeira coluna contém formas reduzidas e a segunda coluna contém a versão ampliada.",
+                correct: 2,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="36" y="36" width="28" height="28" rx="4" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="18" y="18" width="64" height="64" rx="8" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="14" fill="#ee9b00"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="14" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="18" y="18" width="64" height="64" rx="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="32" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,16 86,80 14,80" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 3,
+                title: "Item 3: Progressão Numérica de Elementos",
+                domain: "spatial",
+                domainLabel: "Raciocínio Visoespacial",
+                gridSize: 3,
+                ruleText: "Em cada linha, a quantidade de elementos cresce progressivamente: 1, 2 e 3 figuras.",
+                correct: 1,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="12" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="32" cy="50" r="11" fill="#005f73"/><circle cx="68" cy="50" r="11" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="22" cy="50" r="10" fill="#005f73"/><circle cx="50" cy="50" r="10" fill="#005f73"/><circle cx="78" cy="50" r="10" fill="#005f73"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="38" y="38" width="24" height="24" rx="4" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="38" width="22" height="22" rx="3" fill="#0a9396"/><rect x="56" y="38" width="22" height="22" rx="3" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="14" y="40" width="18" height="18" rx="3" fill="#0a9396"/><rect x="41" y="40" width="18" height="18" rx="3" fill="#0a9396"/><rect x="68" y="40" width="18" height="18" rx="3" fill="#0a9396"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,26 70,50 50,74 30,50" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="34,30 50,50 34,70 18,50" fill="#ee9b00"/><polygon points="66,30 82,50 66,70 50,50" fill="#ee9b00"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="34,30 50,50 34,70 18,50" fill="#ee9b00"/><polygon points="66,30 82,50 66,70 50,50" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="22,34 34,50 22,66 10,50" fill="#ee9b00"/><polygon points="50,34 62,50 50,66 38,50" fill="#ee9b00"/><polygon points="78,34 90,50 78,66 66,50" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="22" cy="50" r="10" fill="#ee9b00"/><circle cx="50" cy="50" r="10" fill="#ee9b00"/><circle cx="78" cy="50" r="10" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,26 70,50 50,74 30,50" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 4,
+                title: "Item 4: Gradação de Densidade e Preenchimento",
+                domain: "spatial",
+                domainLabel: "Raciocínio Visoespacial",
+                gridSize: 3,
+                ruleText: "A figura passa de contorno vazado para semi-preenchida e, finalmente, 100% sólida.",
+                correct: 2,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="none" stroke="#005f73" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M50 22 A28 28 0 0 1 50 78 Z" fill="#005f73"/><circle cx="50" cy="50" r="28" fill="none" stroke="#005f73" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="#005f73"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="22" width="56" height="56" rx="6" fill="none" stroke="#0a9396" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="50" y="22" width="28" height="56" fill="#0a9396"/><rect x="22" y="22" width="56" height="56" rx="6" fill="none" stroke="#0a9396" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="22" width="56" height="56" rx="6" fill="#0a9396"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 84,78 16,78" fill="none" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 84,78 50,78" fill="#ee9b00"/><polygon points="50,18 84,78 16,78" fill="none" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 84,78 16,78" fill="none" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="22" width="56" height="56" rx="6" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 84,78 16,78" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 5,
+                title: "Item 5: Rotação Angular no Sentido Horário (90°)",
+                domain: "spatial",
+                domainLabel: "Raciocínio Visoespacial",
+                gridSize: 3,
+                ruleText: "O ponteiro rotaciona 90 graus no sentido horário a cada transição de linha ou coluna.",
+                correct: 0,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="75" x2="50" y2="25" stroke="#005f73" stroke-width="8" stroke-linecap="round"/><polygon points="50,15 62,35 38,35" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="25" y1="50" x2="75" y2="50" stroke="#005f73" stroke-width="8" stroke-linecap="round"/><polygon points="85,50 65,62 65,38" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="25" x2="50" y2="75" stroke="#005f73" stroke-width="8" stroke-linecap="round"/><polygon points="50,85 38,65 62,65" fill="#005f73"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="25" y1="50" x2="75" y2="50" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/><polygon points="85,50 65,62 65,38" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="25" x2="50" y2="75" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/><polygon points="50,85 38,65 62,65" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="75" y1="50" x2="25" y2="50" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/><polygon points="15,50 35,38 35,62" fill="#0a9396"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="25" x2="50" y2="75" stroke="#ee9b00" stroke-width="8" stroke-linecap="round"/><polygon points="50,85 38,65 62,65" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="75" y1="50" x2="25" y2="50" stroke="#ee9b00" stroke-width="8" stroke-linecap="round"/><polygon points="15,50 35,38 35,62" fill="#ee9b00"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="75" x2="50" y2="25" stroke="#ee9b00" stroke-width="8" stroke-linecap="round"/><polygon points="50,15 62,35 38,35" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="25" y1="50" x2="75" y2="50" stroke="#ee9b00" stroke-width="8" stroke-linecap="round"/><polygon points="85,50 65,62 65,38" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="25" x2="50" y2="75" stroke="#ee9b00" stroke-width="8" stroke-linecap="round"/><polygon points="50,85 38,65 62,65" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="75" y1="50" x2="25" y2="50" stroke="#ee9b00" stroke-width="8" stroke-linecap="round"/><polygon points="15,50 35,38 35,62" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 6,
+                title: "Item 6: Adição Cumulativa de Segmentos",
+                domain: "operations",
+                domainLabel: "Operações Lógicas & Composição",
+                gridSize: 3,
+                ruleText: "A terceira coluna resulta da soma e sobreposição dos traços da primeira e segunda colunas.",
+                correct: 2,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="20" y1="50" x2="80" y2="50" stroke="#005f73" stroke-width="8" stroke-linecap="round"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="20" x2="50" y2="80" stroke="#005f73" stroke-width="8" stroke-linecap="round"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="20" y1="50" x2="80" y2="50" stroke="#005f73" stroke-width="8" stroke-linecap="round"/><line x1="50" y1="20" x2="50" y2="80" stroke="#005f73" stroke-width="8" stroke-linecap="round"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="24" y1="24" x2="76" y2="76" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="76" y1="24" x2="24" y2="76" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="24" y1="24" x2="76" y2="76" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/><line x1="76" y1="24" x2="24" y2="76" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="none" stroke="#ee9b00" stroke-width="7"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="8" fill="#ee9b00"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="none" stroke="#ee9b00" stroke-width="7"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="none" stroke="#ee9b00" stroke-width="7"/><circle cx="50" cy="50" r="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="30" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 7,
+                title: "Item 7: Translação Orbital em Vértices de Moldura",
+                domain: "operations",
+                domainLabel: "Operações Lógicas & Composição",
+                gridSize: 3,
+                ruleText: "O satélite transita pelos quatro vértices da moldura no sentido horário a cada célula.",
+                correct: 1,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#005f73" stroke-width="4"/><circle cx="25" cy="25" r="8" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#005f73" stroke-width="4"/><circle cx="75" cy="25" r="8" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#005f73" stroke-width="4"/><circle cx="75" cy="75" r="8" fill="#005f73"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#0a9396" stroke-width="4"/><circle cx="75" cy="25" r="8" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#0a9396" stroke-width="4"/><circle cx="75" cy="75" r="8" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#0a9396" stroke-width="4"/><circle cx="25" cy="75" r="8" fill="#0a9396"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#ee9b00" stroke-width="4"/><circle cx="75" cy="75" r="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#ee9b00" stroke-width="4"/><circle cx="25" cy="75" r="8" fill="#ee9b00"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#ee9b00" stroke-width="4"/><circle cx="50" cy="50" r="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#ee9b00" stroke-width="4"/><circle cx="25" cy="25" r="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#ee9b00" stroke-width="4"/><circle cx="75" cy="25" r="8" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="4" fill="none" stroke="#ee9b00" stroke-width="4"/><circle cx="75" cy="75" r="8" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 8,
+                title: "Item 8: Relação Bidimensional Cruzada de Formas e Texturas",
+                domain: "operations",
+                domainLabel: "Operações Lógicas & Composição",
+                gridSize: 3,
+                ruleText: "As colunas ditam a forma geométrica externa e as linhas ditam o estilo de contorno.",
+                correct: 3,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="6" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,20 68,50 50,80 32,50" fill="#005f73"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="6" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,20 68,50 50,80 32,50" fill="#ee9b00"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="none" stroke="#0a9396" stroke-width="6" stroke-dasharray="6,4"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="6" fill="none" stroke="#0a9396" stroke-width="6" stroke-dasharray="6,4"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="6" fill="none" stroke="#0a9396" stroke-width="6" stroke-dasharray="6,4"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,20 68,50 50,80 32,50" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,20 68,50 50,80 32,50" fill="none" stroke="#0a9396" stroke-width="6" stroke-dasharray="6,4"/></svg>`
+                ]
+            },
+            {
+                id: 9,
+                title: "Item 9: Disjunção Exclusiva / Cancelamento XOR",
+                domain: "inductive",
+                domainLabel: "Pensamento Indutivo Abstrato",
+                gridSize: 3,
+                ruleText: "Segmentos presentes em ambas as colunas se anulam; segmentos exclusivos persistem na terceira coluna.",
+                correct: 1,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="20" y1="50" x2="80" y2="50" stroke="#005f73" stroke-width="8"/><line x1="50" y1="20" x2="50" y2="80" stroke="#005f73" stroke-width="8"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="20" y1="50" x2="80" y2="50" stroke="#005f73" stroke-width="8"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="20" x2="50" y2="80" stroke="#005f73" stroke-width="8"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="24" y1="24" x2="76" y2="76" stroke="#0a9396" stroke-width="8"/><line x1="76" y1="24" x2="24" y2="76" stroke="#0a9396" stroke-width="8"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="24" y1="24" x2="76" y2="76" stroke="#0a9396" stroke-width="8"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="76" y1="24" x2="24" y2="76" stroke="#0a9396" stroke-width="8"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="22" width="56" height="56" rx="4" fill="none" stroke="#ee9b00" stroke-width="6"/><line x1="22" y1="22" x2="78" y2="78" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="22" y1="22" x2="78" y2="78" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="22" y1="22" x2="78" y2="78" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="22" width="56" height="56" rx="4" fill="none" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="78" y1="22" x2="22" y2="78" stroke="#ee9b00" stroke-width="6"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="22" y="22" width="56" height="56" rx="4" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 10,
+                title: "Item 10: Rotação Composta de 45° com Inversão de Polaridade",
+                domain: "inductive",
+                domainLabel: "Pensamento Indutivo Abstrato",
+                gridSize: 3,
+                ruleText: "O elemento rotaciona 45 graus no sentido horário e a bolinha do vértice inverte entre sólida e oca.",
+                correct: 1,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="75" x2="50" y2="25" stroke="#005f73" stroke-width="7"/><circle cx="50" cy="25" r="9" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="32" y1="68" x2="68" y2="32" stroke="#005f73" stroke-width="7"/><circle cx="68" cy="32" r="9" fill="none" stroke="#005f73" stroke-width="4"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="25" y1="50" x2="75" y2="50" stroke="#005f73" stroke-width="7"/><circle cx="75" cy="50" r="9" fill="#005f73"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="32" y1="68" x2="68" y2="32" stroke="#0a9396" stroke-width="7"/><circle cx="68" cy="32" r="9" fill="none" stroke="#0a9396" stroke-width="4"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="25" y1="50" x2="75" y2="50" stroke="#0a9396" stroke-width="7"/><circle cx="75" cy="50" r="9" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="32" y1="32" x2="68" y2="68" stroke="#0a9396" stroke-width="7"/><circle cx="68" cy="68" r="9" fill="none" stroke="#0a9396" stroke-width="4"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="25" y1="50" x2="75" y2="50" stroke="#ee9b00" stroke-width="7"/><circle cx="75" cy="50" r="9" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="32" y1="32" x2="68" y2="68" stroke="#ee9b00" stroke-width="7"/><circle cx="68" cy="68" r="9" fill="none" stroke="#ee9b00" stroke-width="4"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="25" x2="50" y2="75" stroke="#ee9b00" stroke-width="7"/><circle cx="50" cy="75" r="9" fill="none" stroke="#ee9b00" stroke-width="4"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="50" y1="25" x2="50" y2="75" stroke="#ee9b00" stroke-width="7"/><circle cx="50" cy="75" r="9" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="75" y1="50" x2="25" y2="50" stroke="#ee9b00" stroke-width="7"/><circle cx="25" cy="50" r="9" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="68" y1="32" x2="32" y2="68" stroke="#ee9b00" stroke-width="7"/><circle cx="32" cy="68" r="9" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 11,
+                title: "Item 11: Transformação de Vértices e Densidade Radial",
+                domain: "inductive",
+                domainLabel: "Pensamento Indutivo Abstrato",
+                gridSize: 3,
+                ruleText: "A figura externa ganha 1 lado e o elemento interno ganha 1 segmento a cada posição.",
+                correct: 0,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,20 80,75 20,75" fill="none" stroke="#005f73" stroke-width="5"/><line x1="50" y1="75" x2="50" y2="35" stroke="#005f73" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="3" fill="none" stroke="#005f73" stroke-width="5"/><line x1="50" y1="25" x2="50" y2="75" stroke="#005f73" stroke-width="5"/><line x1="25" y1="50" x2="75" y2="50" stroke="#005f73" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,42 70,78 30,78 18,42" fill="none" stroke="#005f73" stroke-width="5"/><line x1="50" y1="50" x2="50" y2="20" stroke="#005f73" stroke-width="5"/><line x1="50" y1="50" x2="72" y2="75" stroke="#005f73" stroke-width="5"/><line x1="50" y1="50" x2="28" y2="75" stroke="#005f73" stroke-width="5"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="3" fill="none" stroke="#0a9396" stroke-width="5"/><line x1="50" y1="25" x2="50" y2="75" stroke="#0a9396" stroke-width="5"/><line x1="25" y1="50" x2="75" y2="50" stroke="#0a9396" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,42 70,78 30,78 18,42" fill="none" stroke="#0a9396" stroke-width="5"/><line x1="50" y1="50" x2="50" y2="20" stroke="#0a9396" stroke-width="5"/><line x1="50" y1="50" x2="72" y2="75" stroke="#0a9396" stroke-width="5"/><line x1="50" y1="50" x2="28" y2="75" stroke="#0a9396" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 78,34 78,66 50,82 22,66 22,34" fill="none" stroke="#0a9396" stroke-width="5"/><line x1="22" y1="34" x2="78" y2="66" stroke="#0a9396" stroke-width="4"/><line x1="78" y1="34" x2="22" y2="66" stroke="#0a9396" stroke-width="4"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,42 70,78 30,78 18,42" fill="none" stroke="#ee9b00" stroke-width="5"/><line x1="50" y1="50" x2="50" y2="20" stroke="#ee9b00" stroke-width="5"/><line x1="50" y1="50" x2="72" y2="75" stroke="#ee9b00" stroke-width="5"/><line x1="50" y1="50" x2="28" y2="75" stroke="#ee9b00" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 78,34 78,66 50,82 22,66 22,34" fill="none" stroke="#ee9b00" stroke-width="5"/><line x1="22" y1="34" x2="78" y2="66" stroke="#ee9b00" stroke-width="4"/><line x1="78" y1="34" x2="22" y2="66" stroke="#ee9b00" stroke-width="4"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="32" fill="none" stroke="#ee9b00" stroke-width="5"/><line x1="50" y1="18" x2="50" y2="82" stroke="#ee9b00" stroke-width="4"/><line x1="18" y1="50" x2="82" y2="50" stroke="#ee9b00" stroke-width="4"/><line x1="28" y1="28" x2="72" y2="72" stroke="#ee9b00" stroke-width="4"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,20 80,75 20,75" fill="none" stroke="#ee9b00" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="25" y="25" width="50" height="50" rx="3" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="32" fill="#ee9b00"/></svg>`
+                ]
+            },
+            {
+                id: 12,
+                title: "Item 12: Permutação de Atributos Triplos (Quadrado Latino)",
+                domain: "inductive",
+                domainLabel: "Pensamento Indutivo Abstrato",
+                gridSize: 3,
+                ruleText: "Em cada linha e coluna, cada forma (círculo, quadrado, triângulo) e cada centro (ponto, cruz, barra) aparece exatamente uma vez.",
+                correct: 2,
+                cells: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="none" stroke="#005f73" stroke-width="5"/><circle cx="50" cy="50" r="7" fill="#005f73"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="4" fill="none" stroke="#005f73" stroke-width="5"/><line x1="38" y1="50" x2="62" y2="50" stroke="#005f73" stroke-width="5"/><line x1="50" y1="38" x2="50" y2="62" stroke="#005f73" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,78 18,78" fill="none" stroke="#005f73" stroke-width="5"/><line x1="36" y1="56" x2="64" y2="56" stroke="#005f73" stroke-width="5"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="4" fill="none" stroke="#0a9396" stroke-width="5"/><line x1="36" y1="50" x2="64" y2="50" stroke="#0a9396" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,78 18,78" fill="none" stroke="#0a9396" stroke-width="5"/><circle cx="50" cy="56" r="7" fill="#0a9396"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="none" stroke="#0a9396" stroke-width="5"/><line x1="38" y1="50" x2="62" y2="50" stroke="#0a9396" stroke-width="5"/><line x1="50" y1="38" x2="50" y2="62" stroke="#0a9396" stroke-width="5"/></svg>`,
+
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,78 18,78" fill="none" stroke="#ee9b00" stroke-width="5"/><line x1="38" y1="56" x2="62" y2="56" stroke="#ee9b00" stroke-width="5"/><line x1="50" y1="44" x2="50" y2="68" stroke="#ee9b00" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="none" stroke="#ee9b00" stroke-width="5"/><line x1="36" y1="50" x2="64" y2="50" stroke="#ee9b00" stroke-width="5"/></svg>`,
+                    null
+                ],
+                options: [
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="28" fill="none" stroke="#ee9b00" stroke-width="5"/><circle cx="50" cy="50" r="7" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="4" fill="none" stroke="#ee9b00" stroke-width="5"/><line x1="36" y1="50" x2="64" y2="50" stroke="#ee9b00" stroke-width="5"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><rect x="24" y="24" width="52" height="52" rx="4" fill="none" stroke="#ee9b00" stroke-width="5"/><circle cx="50" cy="50" r="7" fill="#ee9b00"/></svg>`,
+                    `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,18 82,78 18,78" fill="none" stroke="#ee9b00" stroke-width="5"/><circle cx="50" cy="56" r="7" fill="#ee9b00"/></svg>`
+                ]
+            }
+        ];
+
+        // Tabela Normativa do TRIF-12 (Escore Bruto -> Z, EP, QI, Percentil, Classificação)
+        const TRIF_NORMS = {
+            12: { qi: 136, z: 2.40, ep: 17, pctl: 99, classif: "Muito Superior / Altas Habilidades", colorClass: "bg-purple-100 text-purple-900 border-purple-300" },
+            11: { qi: 129, z: 1.95, ep: 16, pctl: 97, classif: "Superior", colorClass: "bg-indigo-100 text-indigo-900 border-indigo-300" },
+            10: { qi: 123, z: 1.50, ep: 15, pctl: 93, classif: "Superior", colorClass: "bg-indigo-100 text-indigo-900 border-indigo-300" },
+            9:  { qi: 116, z: 1.05, ep: 13, pctl: 85, classif: "Médio Superior", colorClass: "bg-blue-100 text-blue-900 border-blue-300" },
+            8:  { qi: 109, z: 0.60, ep: 12, pctl: 73, classif: "Médio / Típico", colorClass: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+            7:  { qi: 103, z: 0.20, ep: 11, pctl: 58, classif: "Médio / Típico", colorClass: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+            6:  { qi: 97,  z: -0.20, ep: 9, pctl: 42, classif: "Médio / Típico", colorClass: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+            5:  { qi: 90,  z: -0.65, ep: 8, pctl: 26, classif: "Médio / Típico", colorClass: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+            4:  { qi: 84,  z: -1.10, ep: 7, pctl: 14, classif: "Médio Inferior", colorClass: "bg-yellow-100 text-yellow-900 border-yellow-300" },
+            3:  { qi: 77,  z: -1.55, ep: 5, pctl: 6,  classif: "Limítrofe", colorClass: "bg-orange-100 text-orange-900 border-orange-300" },
+            2:  { qi: 70,  z: -2.00, ep: 4, pctl: 2,  classif: "Limítrofe", colorClass: "bg-orange-100 text-orange-900 border-orange-300" },
+            1:  { qi: 64,  z: -2.40, ep: 3, pctl: 1,  classif: "Muito Baixo", colorClass: "bg-red-100 text-red-900 border-red-300" },
+            0:  { qi: 60,  z: -2.67, ep: 2, pctl: 0.4, classif: "Muito Baixo", colorClass: "bg-red-100 text-red-900 border-red-300" }
+        };
+
+        // --- 2. ESTADO DA SESSÃO ---
+        const sessionState = {
+            status: 'setup', // 'setup', 'locked', 'lockout', 'report'
+            patientName: '',
+            patientAge: '',
+            therapistPin: '1234',
+            instrument: 'BAI', // 'BAI', 'GAD7' ou 'TRIF12'
+            startTime: null,
+            endTime: null,
+            answers: {}, // { [itemId]: score }
+            timerInterval: null,
+            elapsedSeconds: 0
+        };
+
+        // --- 3. INICIALIZAÇÃO DA PÁGINA & PARÂMETROS DE URL ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            handleUrlParameters();
+        });
+
+        // Suporte a URL para link direto de teleconsulta ou carregamento de token via WhatsApp
+        function handleUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+
+            // Se o link contiver token criptografado (enviado pelo paciente ao terapeuta via WhatsApp)
+            if (params.has('token')) {
+                try {
+                    const rawJson = decodeURIComponent(escape(atob(params.get('token'))));
+                    const data = JSON.parse(rawJson);
+                    if (data && data.r) {
+                        sessionState.patientName = data.p || 'Paciente';
+                        sessionState.patientAge = data.a || '';
+                        sessionState.instrument = data.i || 'BAI';
+                        sessionState.answers = data.r || {};
+                        sessionState.elapsedSeconds = data.s || 0;
+                        if (data.d) sessionState.startTime = new Date(data.d);
+                        if (data.pin) sessionState.therapistPin = data.pin;
+                        sessionState.status = 'lockout';
+
+                        // Ocultar telas anteriores e exibir tela de desbloqueio para o terapeuta
+                        document.getElementById('state-setup').classList.add('hidden');
+                        document.getElementById('state-locked-test').classList.add('hidden');
+                        document.getElementById('state-lockout').classList.remove('hidden');
+                        document.getElementById('state-report').classList.add('hidden');
+
+                        const titleEl = document.getElementById('lockout-title');
+                        if (titleEl) titleEl.textContent = `Respostas de ${sessionState.patientName} Carregadas!`;
+                        const descEl = document.getElementById('lockout-desc');
+                        if (descEl) descEl.textContent = `O protocolo respondido à distância por ${sessionState.patientName} foi carregado com sucesso. Digite seu PIN de terapeuta para liberar o laudo psicométrico completo.`;
+                        
+                        // Ocultar card de envio via WhatsApp já que o terapeuta já está com os dados
+                        const homeBox = document.getElementById('home-patient-box');
+                        if (homeBox) homeBox.classList.add('hidden');
+
+                        setTimeout(() => {
+                            const unlockInput = document.getElementById('input-unlock-pin');
+                            if (unlockInput) unlockInput.focus();
+                        }, 300);
+                        return;
+                    }
+                } catch (err) {
+                    console.error('Erro ao decodificar token de respostas:', err);
+                }
+            }
+
+            if (params.has('paciente')) {
+                document.getElementById('input-patient-name').value = params.get('paciente');
+            }
+            if (params.has('idade')) {
+                document.getElementById('input-patient-age').value = params.get('idade');
+            }
+            if (params.has('pin')) {
+                document.getElementById('input-session-pin').value = params.get('pin');
+            }
+            if (params.has('instrument')) {
+                const inst = params.get('instrument').toUpperCase();
+                if (inst === 'GAD7' || inst === 'BAI' || inst === 'TRIF12') {
+                    const r = document.querySelector(`input[name="scale-select"][value="${inst}"]`);
+                    if (r) r.checked = true;
+                }
+            }
+            if (params.get('lock') === '1' || params.get('trancado') === '1') {
+                setTimeout(() => {
+                    window.lockAndStartSession();
+                }, 300);
+            }
+        }
+
+        // --- 4. ATIVAÇÃO DA SESSÃO TRANCADA ---
+        window.lockAndStartSession = function() {
+            const nameInput = document.getElementById('input-patient-name');
+            const pinInput = document.getElementById('input-session-pin');
+            const ageInput = document.getElementById('input-patient-age');
+            const instrumentRadios = document.querySelectorAll('input[name="scale-select"]');
+
+            const name = nameInput.value.trim();
+            const pin = pinInput.value.trim();
+
+            if (!name) {
+                alert('Por favor, informe a identificação do paciente (nome, iniciais ou ID confidencial) antes de trancar a sessão.');
+                nameInput.focus();
+                return;
+            }
+
+            if (!pin || pin.length < 4) {
+                alert('Por favor, defina um PIN de terapeuta de pelo menos 4 dígitos para segurança.');
+                pinInput.focus();
+                return;
+            }
+
+            let selectedInstrument = 'BAI';
+            instrumentRadios.forEach(r => {
+                if (r.checked) selectedInstrument = r.value;
+            });
+
+            // Configurar estado
+            sessionState.patientName = name;
+            sessionState.patientAge = ageInput.value.trim();
+            sessionState.therapistPin = pin;
+            sessionState.instrument = selectedInstrument;
+            sessionState.startTime = new Date();
+            sessionState.answers = {};
+            sessionState.elapsedSeconds = 0;
+            sessionState.status = 'locked';
+
+            // Tela Cheia opcional
+            if (document.getElementById('check-fullscreen').checked) {
+                requestFullscreenSafe();
+            }
+
+            // Bloqueio de fechamento acidental
+            if (document.getElementById('check-prevent-unload').checked) {
+                window.addEventListener('beforeunload', handleBeforeUnload);
+            }
+
+            // Atualizar cabeçalho da sessão trancada
+            document.getElementById('locked-patient-display').textContent = `Paciente: ${sessionState.patientName}`;
+
+            if (selectedInstrument === 'BAI') {
+                document.getElementById('locked-instrument-title').textContent = 'Inventário de Ansiedade de Beck (BAI)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Abaixo está uma lista de sintomas comuns de ansiedade. Por favor, avalie cada sintoma e indique o quanto você tem sido incomodado(a) por ele durante a <strong>última semana, incluindo o dia de hoje</strong>.';
+            } else if (selectedInstrument === 'TRIF12') {
+                document.getElementById('locked-instrument-title').textContent = 'Teste de Raciocínio Abstrato & Inteligência Fluida (TRIF-12)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Examine atentamente cada matriz geométrica e descubra a regra lógica oculta nas linhas e colunas. Em seguida, <strong>selecione qual das alternativas numeradas substitui a interrogação (?)</strong>.';
+            } else {
+                document.getElementById('locked-instrument-title').textContent = 'Escala de Ansiedade Generalizada (GAD-7)';
+                document.getElementById('locked-instrument-instruction').innerHTML = 'Durante as <strong>últimas 2 semanas</strong>, com que frequência você foi incomodado(a) pelos seguintes problemas?';
+            }
+
+            // Renderizar itens
+            renderQuestionnaire(selectedInstrument);
+
+            // Iniciar Timer
+            startSessionTimer();
+
+            // Alternar Telas
+            document.getElementById('state-setup').classList.add('hidden');
+            document.getElementById('state-locked-test').classList.remove('hidden');
+            document.getElementById('state-lockout').classList.add('hidden');
+            document.getElementById('state-report').classList.add('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        };
+
+        function handleBeforeUnload(e) {
+            if (sessionState.status === 'locked' || sessionState.status === 'lockout') {
+                e.preventDefault();
+                e.returnValue = 'A sessão do paciente está trancada em andamento. Deseja realmente sair?';
+                return e.returnValue;
+            }
+        }
+
+        function requestFullscreenSafe() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(() => {});
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
+        }
+
+        window.toggleFullScreen = function() {
+            if (!document.fullscreenElement) {
+                requestFullscreenSafe();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }
+        };
+
+        function startSessionTimer() {
+            if (sessionState.timerInterval) clearInterval(sessionState.timerInterval);
+            const timerEl = document.getElementById('session-timer');
+            sessionState.timerInterval = setInterval(() => {
+                sessionState.elapsedSeconds++;
+                const mins = String(Math.floor(sessionState.elapsedSeconds / 60)).padStart(2, '0');
+                const secs = String(sessionState.elapsedSeconds % 60).padStart(2, '0');
+                if (timerEl) timerEl.textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // --- 5. RENDERIZAÇÃO DO QUESTIONÁRIO / TESTE ---
+        function renderQuestionnaire(instrument) {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            if (instrument === 'TRIF12') {
+                // RENDERIZADOR ESPECÍFICO DE MATRIZES DE INTELIGÊNCIA
+                TRIF12_ITEMS.forEach((item, index) => {
+                    const itemCard = document.createElement('div');
+                    itemCard.className = 'bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 transition';
+                    itemCard.id = `item-card-${item.id}`;
+
+                    const gridClass = item.gridSize === 2 ? 'matrix-grid-2' : 'matrix-grid-3';
+
+                    let matrixCellsHtml = '';
+                    item.cells.forEach(cellSvg => {
+                        if (cellSvg !== null) {
+                            matrixCellsHtml += `<div class="matrix-cell">${cellSvg}</div>`;
+                        } else {
+                            matrixCellsHtml += `<div class="matrix-cell target-missing"><span class="animate-pulse">?</span></div>`;
+                        }
+                    });
+
+                    let optionsHtml = '';
+                    item.options.forEach((optSvg, optIdx) => {
+                        optionsHtml += `
+                            <button type="button" 
+                                onclick="window.selectAnswer(${item.id}, ${optIdx})" 
+                                class="matrix-option-card matrix-opt-${item.id}-${optIdx}"
+                            >
+                                <span class="option-badge px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 mb-1.5 transition">Opção ${optIdx + 1}</span>
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center p-1">
+                                    ${optSvg}
+                                </div>
+                            </button>
+                        `;
+                    });
+
+                    itemCard.innerHTML = `
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-7 h-7 rounded-lg bg-[#005f73]/10 text-[#005f73] font-bold text-xs flex items-center justify-center border border-[#005f73]/20">
+                                    ${index + 1}
+                                </span>
+                                <div>
+                                    <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                                        ${item.title}
+                                    </h3>
+                                    <span class="inline-block text-[10px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded mt-0.5 border border-purple-200">
+                                        ${item.domainLabel}
+                                    </span>
+                                </div>
+                            </div>
+                            <span id="badge-answered-${item.id}" class="hidden px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 shrink-0">
+                                Respondido
+                            </span>
+                        </div>
+
+                        <!-- Matriz de Raciocínio -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 my-3 text-center">
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Matriz de Raciocínio</span>
+                            <div class="${gridClass}">
+                                ${matrixCellsHtml}
+                            </div>
+                        </div>
+
+                        <!-- Alternativas de Escolha -->
+                        <div>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Selecione a Alternativa Correta:</span>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                ${optionsHtml}
+                            </div>
+                        </div>
+                    `;
+
+                    container.appendChild(itemCard);
+                });
+            } else {
+                // RENDERIZADOR DE ESCALAS DE ANSIEDADE (BAI / GAD-7)
+                const items = instrument === 'BAI' ? BAI_ITEMS : GAD7_ITEMS;
+                const options = instrument === 'BAI' ? BAI_OPTIONS : GAD7_OPTIONS;
+
+                items.forEach((item, index) => {
+                    const itemCard = document.createElement('div');
+                    itemCard.className = 'bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 transition';
+                    itemCard.id = `item-card-${item.id}`;
+
+                    itemCard.innerHTML = `
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center border border-slate-200">
+                                    ${index + 1}
+                                </span>
+                                <h3 class="text-sm sm:text-base font-semibold text-slate-900 leading-snug">
+                                    ${item.text}
+                                </h3>
+                            </div>
+                            <span id="badge-answered-${item.id}" class="hidden px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 shrink-0">
+                                Respondido
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                            ${options.map(opt => `
+                                <button type="button" 
+                                    onclick="window.selectAnswer(${item.id}, ${opt.value})" 
+                                    class="option-btn option-btn-${item.id}-${opt.value} flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-100/80 text-center transition"
+                                >
+                                    <span class="text-xs font-bold">${opt.label}</span>
+                                    <span class="text-[10px] text-slate-500 mt-0.5 leading-tight">${opt.desc}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    container.appendChild(itemCard);
+                });
+            }
+
+            updateProgress();
+        }
+
+        // --- 6. SELEÇÃO DE RESPOSTAS ---
+        window.selectAnswer = function(itemId, score) {
+            sessionState.answers[itemId] = score;
+
+            if (sessionState.instrument === 'TRIF12') {
+                document.querySelectorAll(`.matrix-option-card[class*="matrix-opt-${itemId}-"]`).forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                const selectedBtn = document.querySelector(`.matrix-opt-${itemId}-${score}`);
+                if (selectedBtn) selectedBtn.classList.add('selected');
+            } else {
+                const options = sessionState.instrument === 'BAI' ? BAI_OPTIONS : GAD7_OPTIONS;
+                options.forEach(opt => {
+                    const btn = document.querySelector(`.option-btn-${itemId}-${opt.value}`);
+                    if (btn) {
+                        btn.classList.remove('selected-0', 'selected-1', 'selected-2', 'selected-3');
+                        if (opt.value === score) {
+                            btn.classList.add(`selected-${score}`);
+                        }
+                    }
+                });
+            }
+
+            // Badge de item respondido
+            const badge = document.getElementById(`badge-answered-${itemId}`);
+            if (badge) badge.classList.remove('hidden');
+
+            const itemCard = document.getElementById(`item-card-${itemId}`);
+            if (itemCard) {
+                itemCard.classList.remove('border-amber-400', 'bg-amber-50/20');
+            }
+
+            updateProgress();
+        };
+
+        function updateProgress() {
+            let items = BAI_ITEMS;
+            if (sessionState.instrument === 'GAD7') items = GAD7_ITEMS;
+            if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
+
+            const total = items.length;
+            const answeredCount = Object.keys(sessionState.answers).length;
+            const pct = Math.round((answeredCount / total) * 100);
+
+            const bar = document.getElementById('progress-bar-fill');
+            const statusText = document.getElementById('progress-status-text');
+            const pctText = document.getElementById('progress-percent-text');
+
+            if (bar) bar.style.width = `${pct}%`;
+            if (statusText) statusText.textContent = `${answeredCount} de ${total} itens respondidos`;
+            if (pctText) pctText.textContent = `${pct}%`;
+        }
+
+        // --- 7. FINALIZAÇÃO DA SESSÃO TRANCADA PELO PACIENTE ---
+        window.submitLockedSession = function() {
+            let items = BAI_ITEMS;
+            if (sessionState.instrument === 'GAD7') items = GAD7_ITEMS;
+            if (sessionState.instrument === 'TRIF12') items = TRIF12_ITEMS;
+
+            const total = items.length;
+            const answeredCount = Object.keys(sessionState.answers).length;
+
+            if (answeredCount < total) {
+                const missingIds = items.filter(it => sessionState.answers[it.id] === undefined);
+                const warningBox = document.getElementById('incomplete-warning');
+                const warningText = document.getElementById('incomplete-warning-text');
+
+                warningBox.classList.remove('hidden');
+                warningText.textContent = `Atenção: faltam ${missingIds.length} pergunta(s) sem resposta. Por favor, complete todos os itens antes de finalizar.`;
+
+                // Destacar visualmente o primeiro item faltante
+                if (missingIds.length > 0) {
+                    const firstEl = document.getElementById(`item-card-${missingIds[0].id}`);
+                    if (firstEl) {
+                        firstEl.classList.add('border-amber-400', 'bg-amber-50/20');
+                        firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+                return;
+            }
+
+            // Confirmação de entrega
+            sessionState.endTime = new Date();
+            if (sessionState.timerInterval) clearInterval(sessionState.timerInterval);
+            sessionState.status = 'lockout';
+
+            // Entrar na tela de lockout
+            document.getElementById('state-locked-test').classList.add('hidden');
+            document.getElementById('state-lockout').classList.remove('hidden');
+            document.getElementById('input-unlock-pin').value = '';
+            document.getElementById('unlock-error-msg').classList.add('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        };
+
+        // --- 8. DESTRANCAMENTO PELO PROFISSIONAL (PIN) ---
+        window.verifyUnlockPin = function() {
+            const entered = document.getElementById('input-unlock-pin').value.trim();
+            const errorMsg = document.getElementById('unlock-error-msg');
+
+            if (entered === sessionState.therapistPin) {
+                // Sucesso: desbloqueia para o laudo
+                sessionState.status = 'report';
+                window.removeEventListener('beforeunload', handleBeforeUnload);
+
+                document.getElementById('state-lockout').classList.add('hidden');
+                document.getElementById('state-report').classList.remove('hidden');
+
+                generateReport();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                lucide.createIcons();
+            } else {
+                errorMsg.textContent = 'PIN incorreto. Por favor, verifique a senha definida na abertura da sessão.';
+                errorMsg.classList.remove('hidden');
+                document.getElementById('input-unlock-pin').focus();
+            }
+        };
+
+        // --- 9. MODAL DE EMERGÊNCIA (DESTRANCAR DURANTE O TESTE) ---
+        window.openEmergencyUnlockModal = function() {
+            document.getElementById('modal-emergency-unlock').classList.remove('hidden');
+            document.getElementById('input-modal-pin').value = '';
+            document.getElementById('modal-pin-error').classList.add('hidden');
+            document.getElementById('input-modal-pin').focus();
+            lucide.createIcons();
+        };
+
+        window.closeEmergencyUnlockModal = function() {
+            document.getElementById('modal-emergency-unlock').classList.add('hidden');
+        };
+
+        window.confirmEmergencyUnlock = function() {
+            const pin = document.getElementById('input-modal-pin').value.trim();
+            if (pin === sessionState.therapistPin) {
+                window.closeEmergencyUnlockModal();
+                window.removeEventListener('beforeunload', handleBeforeUnload);
+                if (sessionState.timerInterval) clearInterval(sessionState.timerInterval);
+                // Retornar ao setup inicial limpo
+                window.resetToSetup();
+            } else {
+                const err = document.getElementById('modal-pin-error');
+                err.textContent = 'PIN incorreto.';
+                err.classList.remove('hidden');
+            }
+        };
+
+        // --- 10. GERAÇÃO DO LAUDO PSICOMÉTRICO (ESTADO 4) ---
+        function generateReport() {
+            const inst = sessionState.instrument;
+
+            // Metadados
+            document.getElementById('report-patient-name').textContent = sessionState.patientName + (sessionState.patientAge ? ` (${sessionState.patientAge} anos)` : '');
+            document.getElementById('report-date').textContent = sessionState.startTime ? sessionState.startTime.toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
+
+            const mins = Math.floor(sessionState.elapsedSeconds / 60);
+            const secs = sessionState.elapsedSeconds % 60;
+            document.getElementById('report-duration').textContent = `${mins}m ${secs}s`;
+
+            const protocolId = (inst === 'TRIF12' ? 'DM-COG-' : 'DM-ANS-') + Math.random().toString(36).substring(2, 8).toUpperCase();
+            document.getElementById('report-protocol').textContent = protocolId;
+
+            if (inst === 'TRIF12') {
+                // LAUDO DE INTELIGÊNCIA FLUIDA (TRIF-12)
+                let correctCount = 0;
+                let spatialHits = 0, spatialTotal = 0;
+                let opHits = 0, opTotal = 0;
+                let indHits = 0, indTotal = 0;
+
+                TRIF12_ITEMS.forEach(it => {
+                    const ans = sessionState.answers[it.id];
+                    const isHit = ans === it.correct;
+                    if (isHit) correctCount++;
+
+                    if (it.domain === 'spatial') { spatialTotal++; if (isHit) spatialHits++; }
+                    if (it.domain === 'operations') { opTotal++; if (isHit) opHits++; }
+                    if (it.domain === 'inductive') { indTotal++; if (isHit) indHits++; }
+                });
+
+                const norm = TRIF_NORMS[correctCount] || TRIF_NORMS[0];
+
+                document.getElementById('report-instrument-name').textContent = 'Teste de Raciocínio Abstrato & Inteligência Fluida (TRIF-12) — Fator g';
+                document.getElementById('report-total-score').textContent = correctCount;
+                document.getElementById('report-max-score').textContent = '/ 12 acertos';
+
+                const badge = document.getElementById('report-severity-badge');
+                badge.className = `inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${norm.colorClass}`;
+                badge.textContent = `${norm.classif} — QI Estimado: ${norm.qi}`;
+
+                // Card Subescala 1: Escore Ponderado (EP) e Escore Z
+                document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                document.getElementById('subscale-somatic-title').innerHTML = '<i data-lucide="calculator" class="w-3.5 h-3.5 mr-1 text-purple-600"></i> Escore Ponderado (EP)';
+                document.getElementById('subscale-somatic-desc').textContent = 'Padronização normativa Wechsler (Média = 10, Desvio-Padrão = 3).';
+                document.getElementById('somatic-label-min').textContent = 'EP 1';
+                document.getElementById('somatic-label-max').textContent = 'EP 19';
+                document.getElementById('somatic-score-display').textContent = `EP = ${norm.ep} (M=10, DP=3)`;
+                const epPct = Math.min(100, Math.round((norm.ep / 19) * 100));
+                document.getElementById('somatic-bar').style.width = `${epPct}%`;
+                document.getElementById('somatic-bar').className = 'bg-purple-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('somatic-percent').textContent = `Z = ${norm.z >= 0 ? '+' : ''}${norm.z.toFixed(2)}`;
+
+                // Card Subescala 2: Percentil Normativo e IC 95%
+                document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                document.getElementById('subscale-cognitive-title').innerHTML = '<i data-lucide="activity" class="w-3.5 h-3.5 mr-1 text-blue-600"></i> Percentil &amp; IC 95%';
+                document.getElementById('subscale-cognitive-desc').textContent = 'Posição relativa populacional e intervalo de confiança a 95% do QI.';
+                document.getElementById('cognitive-label-min').textContent = 'P1';
+                document.getElementById('cognitive-label-max').textContent = 'P99';
+                document.getElementById('cognitive-score-display').textContent = `Percentil ${norm.pctl} (QI ${norm.qi - 5} a ${norm.qi + 5})`;
+                document.getElementById('cognitive-bar').style.width = `${norm.pctl}%`;
+                document.getElementById('cognitive-bar').className = 'bg-blue-600 h-2 rounded-full transition-all duration-300';
+                document.getElementById('cognitive-percent').textContent = `P${norm.pctl}`;
+
+                // Box de Destaques Funcionais
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                critList.innerHTML = `
+                    <div class="space-y-1.5 text-xs text-slate-700">
+                        <p>• <strong>Raciocínio Visoespacial</strong> (Itens 1 a 5): <strong>${spatialHits} de ${spatialTotal} acertos (${Math.round((spatialHits/spatialTotal)*100)}%)</strong></p>
+                        <p>• <strong>Operações Lógicas &amp; Composição</strong> (Itens 6 a 8): <strong>${opHits} de ${opTotal} acertos (${Math.round((opHits/opTotal)*100)}%)</strong></p>
+                        <p>• <strong>Pensamento Indutivo Abstrato</strong> (Itens 9 a 12): <strong>${indHits} de ${indTotal} acertos (${Math.round((indHits/indTotal)*100)}%)</strong></p>
+                    </div>
+                `;
+                critBox.classList.remove('hidden');
+
+                // Tabela Detalhada com Itens
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                TRIF12_ITEMS.forEach((it, idx) => {
+                    const ans = sessionState.answers[it.id];
+                    const isHit = ans === it.correct;
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-400">${idx + 1}</td>
+                        <td class="py-2.5 px-3.5 font-medium text-slate-800">${it.title}</td>
+                        <td class="py-2.5 px-3.5 text-slate-500">${it.domainLabel}</td>
+                        <td class="py-2.5 px-3.5 text-center font-mono font-bold">${ans !== undefined ? 'Opção ' + (ans + 1) : '-'}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${isHit ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-red-100 text-red-800 border border-red-300'}">
+                                ${isHit ? '✓ Acerto' : '✗ Erro (Gabarito: Opção ' + (it.correct + 1) + ')'}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                summaryDiv.textContent = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}${sessionState.patientAge ? ', ' + sessionState.patientAge + ' anos,' : ''} foi submetido(a) ao Teste de Raciocínio Abstrato e Inteligência Fluida (TRIF-12 / Matrizes Não-Verbais — Fator g), obtendo escore bruto de ${correctCount} acertos (de 12 itens possíveis). Esta pontuação corresponde a uma estimativa de Quociente de Inteligência (QI) = ${norm.qi} (Intervalo de Confiança 95%: ${norm.qi - 5}–${norm.qi + 5}), Escore Ponderado EP = ${norm.ep} (Média=10, DP=3, escore Z = ${norm.z >= 0 ? '+' : ''}${norm.z.toFixed(2)}) e Percentil Normativo P${norm.pctl}, enquadrando seu desempenho na faixa de inteligência ${norm.classif} segundo os parâmetros normativos padronizados. A análise funcional dos domínios demonstrou taxa de acerto de ${Math.round((spatialHits/spatialTotal)*100)}% em Raciocínio Visoespacial, ${Math.round((opHits/opTotal)*100)}% em Operações Lógicas e ${Math.round((indHits/indTotal)*100)}% em Pensamento Indutivo Abstrato.`;
+
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    refList.innerHTML = `
+                        <p>• Raven, J. C. (1938/2000). <em>Standard Progressive Matrices: Sets A, B, C, D &amp; E</em>. Oxford Psychologists Press.</p>
+                        <p>• Wechsler, D. (2014). <em>Escala de Inteligência Wechsler para Adultos (WAIS-III / WASI)</em>. São Paulo: Pearson.</p>
+                        <p>• Carroll, J. B. (1993). <em>Human cognitive abilities: A survey of factor-analytic studies</em>. Cambridge University Press.</p>
+                    `;
+                }
+
+            } else {
+                // LAUDO DE ANSIEDADE (BAI / GAD-7)
+                const refList = document.getElementById('report-references-list');
+                if (refList) {
+                    refList.innerHTML = `
+                        <p>• Cunha, J. A. (2001). <em>Manual da versão em português das Escalas Beck</em>. São Paulo: Casa do Psicólogo.</p>
+                        <p>• Beck, A. T., &amp; Steer, R. A. (1993). <em>Beck Anxiety Inventory Manual</em>. San Antonio: Psychological Corporation.</p>
+                    `;
+                }
+                const items = inst === 'BAI' ? BAI_ITEMS : GAD7_ITEMS;
+
+                // Calcular Escore Total
+                let totalScore = 0;
+                let somaticScore = 0;
+                let cognitiveScore = 0;
+                let criticalItems = [];
+
+                items.forEach(it => {
+                    const val = sessionState.answers[it.id] || 0;
+                    totalScore += val;
+                    if (it.type === 'somatic') somaticScore += val;
+                    if (it.type === 'cognitive') cognitiveScore += val;
+
+                    // Itens críticos (escore máximo 3 ou sintomas de alarme)
+                    if (val === 3 || (val >= 2 && [5, 11, 14, 16].includes(it.id))) {
+                        criticalItems.push({ item: it, score: val });
+                    }
+                });
+
+                document.getElementById('report-total-score').textContent = totalScore;
+                let maxScore = inst === 'BAI' ? 63 : 21;
+                document.getElementById('report-max-score').textContent = `/ ${maxScore}`;
+
+                let severityText = '';
+                let severityBgClass = '';
+
+                if (inst === 'BAI') {
+                    document.getElementById('report-instrument-name').textContent = 'Inventário de Ansiedade de Beck (BAI) — 21 Itens';
+                    if (totalScore <= 7) {
+                        severityText = 'Grau Mínimo de Ansiedade';
+                        severityBgClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                    } else if (totalScore <= 15) {
+                        severityText = 'Grau Leve de Ansiedade';
+                        severityBgClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
+                    } else if (totalScore <= 25) {
+                        severityText = 'Grau Moderado de Ansiedade';
+                        severityBgClass = 'bg-orange-100 text-orange-800 border-orange-300';
+                    } else {
+                        severityText = 'Grau Grave de Ansiedade';
+                        severityBgClass = 'bg-red-100 text-red-800 border-red-300';
+                    }
+
+                    // Subescalas BAI
+                    const somMax = 42;
+                    const cogMax = 21;
+                    const somPct = Math.round((somaticScore / somMax) * 100);
+                    const cogPct = Math.round((cognitiveScore / cogMax) * 100);
+
+                    document.getElementById('subscale-somatic-title').innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 mr-1 text-amber-600"></i> Somático / Autonômico';
+                    document.getElementById('subscale-somatic-desc').textContent = 'Reatividade fisiológica, tônus simpático, hiperventilação, sudorese, vertigem e tremores.';
+                    document.getElementById('somatic-label-min').textContent = 'Basal';
+                    document.getElementById('somatic-label-max').textContent = 'Crítico';
+                    document.getElementById('somatic-score-display').textContent = `${somaticScore} / ${somMax}`;
+                    document.getElementById('somatic-bar').style.width = `${somPct}%`;
+                    document.getElementById('somatic-bar').className = 'bg-amber-500 h-2 rounded-full transition-all duration-300';
+                    document.getElementById('somatic-percent').textContent = `${somPct}%`;
+
+                    document.getElementById('subscale-cognitive-title').innerHTML = '<i data-lucide="brain" class="w-3.5 h-3.5 mr-1 text-[#005f73]"></i> Cognitivo-Afetivo';
+                    document.getElementById('subscale-cognitive-desc').textContent = 'Medo do pior, medo de perder o controle, medo de morrer, terror, sensação de nervosismo.';
+                    document.getElementById('cognitive-label-min').textContent = 'Basal';
+                    document.getElementById('cognitive-label-max').textContent = 'Crítico';
+                    document.getElementById('cognitive-score-display').textContent = `${cognitiveScore} / ${cogMax}`;
+                    document.getElementById('cognitive-bar').style.width = `${cogPct}%`;
+                    document.getElementById('cognitive-bar').className = 'bg-[#005f73] h-2 rounded-full transition-all duration-300';
+                    document.getElementById('cognitive-percent').textContent = `${cogPct}%`;
+
+                    document.getElementById('subscale-somatic-card').classList.remove('hidden');
+                    document.getElementById('subscale-cognitive-card').classList.remove('hidden');
+                } else {
+                    document.getElementById('report-instrument-name').textContent = 'Escala de Transtorno de Ansiedade Generalizada (GAD-7)';
+                    if (totalScore <= 4) {
+                        severityText = 'Ansiedade Mínima';
+                        severityBgClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                    } else if (totalScore <= 9) {
+                        severityText = 'Ansiedade Leve';
+                        severityBgClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
+                    } else if (totalScore <= 14) {
+                        severityText = 'Ansiedade Moderada';
+                        severityBgClass = 'bg-orange-100 text-orange-800 border-orange-300';
+                    } else {
+                        severityText = 'Ansiedade Grave';
+                        severityBgClass = 'bg-red-100 text-red-800 border-red-300';
+                    }
+                    document.getElementById('subscale-somatic-card').classList.add('hidden');
+                    document.getElementById('subscale-cognitive-card').classList.add('hidden');
+                }
+
+                const badge = document.getElementById('report-severity-badge');
+                badge.className = `inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${severityBgClass}`;
+                badge.textContent = severityText;
+
+                // Sinais Críticos
+                const critBox = document.getElementById('critical-items-box');
+                const critList = document.getElementById('critical-items-list');
+                critList.innerHTML = '';
+
+                if (criticalItems.length > 0) {
+                    critBox.classList.remove('hidden');
+                    criticalItems.forEach(ci => {
+                        const row = document.createElement('div');
+                        row.className = 'flex items-center justify-between py-1 border-b border-amber-200/50 last:border-0';
+                        row.innerHTML = `
+                            <span class="font-medium">• Item ${ci.item.id}: ${ci.item.text}</span>
+                            <span class="font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px]">
+                                Escore ${ci.score} (${ci.score === 3 ? 'Gravemente' : 'Moderadamente'})
+                            </span>
+                        `;
+                        critList.appendChild(row);
+                    });
+                } else {
+                    critBox.classList.add('hidden');
+                }
+
+                // Tabela Detalhada
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                const options = inst === 'BAI' ? BAI_OPTIONS : GAD7_OPTIONS;
+
+                items.forEach((it, idx) => {
+                    const sc = sessionState.answers[it.id] || 0;
+                    const optObj = options.find(o => o.value === sc) || { label: '-' };
+
+                    let badgeColor = 'bg-slate-100 text-slate-700';
+                    if (sc === 1) badgeColor = 'bg-yellow-50 text-yellow-800 border border-yellow-200';
+                    if (sc === 2) badgeColor = 'bg-orange-50 text-orange-800 border border-orange-200';
+                    if (sc === 3) badgeColor = 'bg-red-50 text-red-800 border border-red-200';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50/60 transition';
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-400">${idx + 1}</td>
+                        <td class="py-2.5 px-3.5 font-medium text-slate-800">${it.text}</td>
+                        <td class="py-2.5 px-3.5 text-slate-500 capitalize">${it.type === 'somatic' ? 'Somático / Vagal' : 'Cognitivo-Afetivo'}</td>
+                        <td class="py-2.5 px-3.5 text-center font-mono font-bold text-slate-900">${sc}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${badgeColor}">
+                                ${optObj.label}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Parecer Clínico para Prontuário
+                const summaryDiv = document.getElementById('report-text-summary');
+                let summaryText = `Em avaliação realizada nesta data (${new Date().toLocaleDateString('pt-BR')}), o(a) paciente ${sessionState.patientName}`;
+                if (sessionState.patientAge) summaryText += `, ${sessionState.patientAge} anos,`;
+                summaryText += ` respondeu ao ${inst === 'BAI' ? 'Inventário de Ansiedade de Beck (BAI)' : 'GAD-7'}, obtendo escore bruto total de ${totalScore} pontos (de ${maxScore} possíveis), enquadrando-se clinicamente na faixa de ${severityText}.`;
+
+                if (inst === 'BAI') {
+                    const somPct = Math.round((somaticScore / 42) * 100);
+                    const cogPct = Math.round((cognitiveScore / 21) * 100);
+                    let predominant = somPct > cogPct ? 'predomínio de manifestações neurovegetativas e somáticas' : cogPct > somPct ? 'predomínio de manifestações cognitivo-afetivas e hipervigilância' : 'distribuição equilibrada entre manifestações somáticas e cognitivas';
+                    summaryText += ` A análise subfatorial indicou ${predominant} (Somático: ${somaticScore}/42 [${somPct}%]; Cognitivo-Afetivo: ${cognitiveScore}/21 [${cogPct}%]).`;
+                }
+
+                if (criticalItems.length > 0) {
+                    const names = criticalItems.map(c => `"${c.item.text}"`).join(', ');
+                    summaryText += ` Destacam-se com pontuação de severidade acentuada os sintomas: ${names}, recomendando-se atenção clínica imediata e intervenções específicas de regulação autonômica e reestruturação cognitiva.`;
+                } else {
+                    summaryText += ` Não foram assinalados sintomas com intensidade extrema no presente protocolo.`;
+                }
+
+                summaryDiv.textContent = summaryText;
+            }
+        }
+
+        // --- 11. AÇÕES DO TERAPEUTA (COPIAR, IMPRIMIR, EXPORTAR, RESET) ---
+        window.copyReportSummary = function() {
+            const summaryEl = document.getElementById('report-text-summary');
+            if (!summaryEl) return;
+            navigator.clipboard.writeText(summaryEl.textContent.trim()).then(() => {
+                alert('Parecer clínico copiado para a área de transferência com sucesso!');
+            }).catch(() => {
+                alert('Não foi possível copiar automaticamente. Por favor, selecione e copie manualmente.');
+            });
+        };
+
+        window.printReport = function() {
+            window.print();
+        };
+
+        window.exportReportJSON = function() {
+            const inst = sessionState.instrument;
+            const dataToExport = {
+                metadata: {
+                    plataforma: "Sessão Clínica Segura - Deo Magalhães",
+                    protocolo: document.getElementById('report-protocol').textContent,
+                    dataAplicacao: sessionState.startTime ? sessionState.startTime.toISOString() : new Date().toISOString(),
+                    duracaoSegundos: sessionState.elapsedSeconds,
+                    instrumento: sessionState.instrument
+                },
+                paciente: {
+                    identificador: sessionState.patientName,
+                    idade: sessionState.patientAge || null
+                },
+                resultados: {
+                    escoreTotal: parseInt(document.getElementById('report-total-score').textContent, 10),
+                    classificacao: document.getElementById('report-severity-badge').textContent.trim(),
+                    respostas: sessionState.answers
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const prefix = inst === 'TRIF12' ? 'Laudo-Inteligencia-TRIF12' : 'Laudo-Ansiedade';
+            a.download = `${prefix}-${sessionState.patientName.replace(/\s+/g, '_')}-${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        window.sendResultsViaWhatsApp = function() {
+            const payload = {
+                p: sessionState.patientName,
+                a: sessionState.patientAge,
+                i: sessionState.instrument,
+                d: sessionState.startTime ? sessionState.startTime.toISOString() : new Date().toISOString(),
+                s: sessionState.elapsedSeconds,
+                r: sessionState.answers,
+                pin: sessionState.therapistPin
+            };
+
+            const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+            const returnUrl = `${window.location.origin}${window.location.pathname}?token=${encodeURIComponent(b64)}`;
+            
+            const instName = sessionState.instrument === 'TRIF12' 
+                ? 'Teste de Raciocínio & Inteligência Fluida (TRIF-12)' 
+                : (sessionState.instrument === 'BAI' ? 'Inventário de Ansiedade de Beck (BAI)' : 'Escala GAD-7');
+                
+            const msg = `Olá Deo Magalhães! Concluí a avaliação (${instName}) na Plataforma Clínica Segura.\n\nNome: ${sessionState.patientName}\n\nSegue o link com as minhas respostas criptografadas para o seu acesso e emissão do laudo:\n${returnUrl}`;
+
+            const waLink = `https://wa.me/5535933003807?text=${encodeURIComponent(msg)}`;
+            
+            const feedback = document.getElementById('wa-sent-feedback');
+            if (feedback) feedback.classList.remove('hidden');
+
+            window.open(waLink, '_blank');
+        };
+
+        window.copyDirectSessionLink = function() {
+            const name = document.getElementById('input-patient-name').value.trim() || 'Paciente';
+            const pin = document.getElementById('input-session-pin').value.trim() || '1234';
+            let inst = 'BAI';
+            document.querySelectorAll('input[name="scale-select"]').forEach(r => {
+                if (r.checked) inst = r.value;
+            });
+
+            const baseUrl = window.location.origin + window.location.pathname;
+            const fullUrl = `${baseUrl}?paciente=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}&instrument=${inst}&lock=1`;
+
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                alert('Link de sessão trancada copiado!\n\nEnvie este link ao paciente. Ao abrir, o questionário iniciará automaticamente trancado.');
+            }).catch(() => {
+                prompt('Copie o link abaixo para enviar ao paciente:', fullUrl);
+            });
+        };
+
+        window.resetToSetup = function() {
+            if (confirm('Deseja encerrar este atendimento e limpar todos os dados da memória?')) {
+                sessionState.status = 'setup';
+                sessionState.answers = {};
+                sessionState.startTime = null;
+                sessionState.endTime = null;
+                sessionState.elapsedSeconds = 0;
+                if (sessionState.timerInterval) clearInterval(sessionState.timerInterval);
+
+                document.getElementById('input-patient-name').value = '';
+                document.getElementById('input-patient-age').value = '';
+                document.getElementById('input-unlock-pin').value = '';
+
+                document.getElementById('state-setup').classList.remove('hidden');
+                document.getElementById('state-locked-test').classList.add('hidden');
+                document.getElementById('state-lockout').classList.add('hidden');
+                document.getElementById('state-report').classList.add('hidden');
+
+                if (document.fullscreenElement && document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+
+        window.updateInstrumentSelection = function() {
+            // Callback para atualizar radio selections se necessário
+        };
+    </script>
+</body>
+</html>
