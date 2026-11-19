@@ -1967,7 +1967,7 @@
                 ? 'Teste de Raciocínio & Inteligência Fluida (TRIF-12)' 
                 : (sessionState.instrument === 'BAI' ? 'Inventário de Ansiedade de Beck (BAI)' : 'Escala GAD-7');
                 
-            const msg = `Olá Deo Magalhães! Concluí a avaliação (${instName}) na Plataforma Clínica Segura.\n\nNome: ${sessionState.patientName}\n\nSegue o link com as minhas respostas criptografadas para o seu acesso e emissão do laudo:\n${returnUrl}`;
+            const msg = `Olá! Concluí a avaliação (${instName}) na Plataforma Clínica Segura.\n\nNome: ${sessionState.patientName}\n\nSegue o link com as minhas respostas criptografadas para o seu acesso e emissão do laudo:\n${returnUrl}`;
 
             const waLink = `https://wa.me/5535933003807?text=${encodeURIComponent(msg)}`;
             
