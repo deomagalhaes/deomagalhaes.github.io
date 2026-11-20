@@ -66,6 +66,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 57** | **Matriz de Calibração Assertiva e Desarme da Hostilidade Passiva** | Firmeza Assertiva (Frontal Esquerdo), Desarme de Stonewalling (Gottman), Regulação Somática (Ínsula/Gross) e Justiça Relacional | `jogos/jogo-calibracao-assertiva-desarme-passivo.html` | ✅ **Publicado** |
 | **Dia 58** | **Matriz de Desarme do Ciúme e Calibração da Confiança Relacional** | Discriminação Fato vs. Simulação da DMN, Prevenção de Checagens (EPR/Leahy), Regulação dACC/Ínsula e Amor em Liberdade (Spinoza/Epicteto) | `jogos/jogo-desarme-ciume-calibracao-confianca.html` | ✅ **Publicado** |
 | **Dia 59** | **Matriz de Compromisso Decisório e Desarme do Arrependimento** | Critérios Suficientes (Satisficing/Schwartz), Simulação Contrafactual (OFC/Coricelli), Aceitação da Renúncia (Kierkegaard/Sartre) e Amor Fati (Nietzsche) | `jogos/jogo-compromisso-decisorio-desarme-arrependimento.html` | ✅ **Publicado** |
+| **Dia 60** | **Matriz de Tolerância ao Silêncio e Atenção Contemplativa** | Comutação Ínsula Anterior (CEN–DMN), Desmame de Hipernovidade (Estriado/Wilson), Tédio Fértil e Vita Contemplativa (Pascal, Heidegger, Han) | `jogos/jogo-tolerancia-silencio-atencao-contemplativa.html` | ✅ **Publicado** |
 
 ---
 

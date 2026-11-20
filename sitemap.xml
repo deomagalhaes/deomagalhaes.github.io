@@ -331,6 +331,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-do-tedio-cronico-e-intolerancia-ao-silencio.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-do-vazio-existencial-e-busca-de-sentido.html</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
@@ -1183,6 +1189,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/testes/teste-tedio-cronico-fome-estimulos.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/testes/teste-trauma-complexo-cptsd.html</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>
@@ -1779,6 +1791,12 @@
   <url>
     <loc>https://deomagalhaes.com.br/jogos/jogo-tolerancia-desconforto-aceitacao-ativa.html</loc>
     <lastmod>2026-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/jogos/jogo-tolerancia-silencio-atencao-contemplativa.html</loc>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

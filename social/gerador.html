@@ -775,7 +775,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="paralisia-decisoria-arrependimento-antecipado" selected>A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado</option>
+                        <option value="tedio-cronico-intolerancia-ao-silencio" selected>A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior</option>
+                        <option value="paralisia-decisoria-arrependimento-antecipado">A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado</option>
                         <option value="ciume-obsessivo-hipervigilancia-afetiva">A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva: O Medo da Perda</option>
                         <option value="raiva-reprimida-agressividade-passiva">A Neurobiologia da Raiva Reprimida e da Agressividade Passiva: O Custo de Engolir Limites</option>
                         <option value="urgencia-cronica-adiccao-adrenalina">A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina: Por Que Só Funcionar Sob Pressão?</option>
@@ -1117,6 +1118,63 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "tedio-cronico-intolerancia-ao-silencio": {
+      "articleSlug": "2026-11-20-tedio-cronico-intolerancia-ao-silencio",
+      "articleTitle": "A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior",
+      "slides": [
+        {
+          "type": "cover",
+          "badge": "NEUROCIÊNCIA & ATENÇÃO",
+          "title": "Por que ficar 5 minutos em silêncio consigo mesmo *parece insuportável ao cérebro?*",
+          "body": "Basta uma fila de trinta segundos ou a pausa entre duas tarefas para a mão buscar o celular automaticamente.\n\nNa neuropsicologia, isso não é 'vício banal': é *intolerância ao tédio e ao silêncio interior*.",
+          "footer": "Deslize para entender o experimento da Science ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "SCIENCE (WILSON ET AL., 2014)",
+          "title": "Pessoas preferiram *tomar choques elétricos* a ficar 15 minutos a sós com a mente",
+          "body": "Em um estudo na revista Science, voluntários ficaram sozinhos em uma sala sem telas por 15 minutos apenas para pensar.\n\nResultado: *67% dos homens e 25% das mulheres preferiram autoadministrar choques dolorosos* a suportar o próprio silêncio.",
+          "footer": "O que acontece no cérebro durante o tédio? ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "EASTWOOD, DANCKERT & MERRIFIELD",
+          "title": "O tédio não é falta de o que fazer — é um *conflito entre redes neurais*",
+          "body": "A *Ínsula Anterior* comuta a atenção entre a *Rede Executiva (CEN)* e a *Rede de Modo Padrão (DMN)*.\n\nNo tédio crônico, essas redes falham em se alternar, enquanto a hiperestimulação digital eleva o limiar do *Estriado Ventral* e faz o silêncio doer.",
+          "footer": "A diferença que salva sua criatividade ➔"
+        },
+        {
+          "type": "contrast",
+          "badge": "TÉDIO AGITADO VS. TÉDIO FÉRTIL",
+          "title": "Anestesia de feed vs. *incubação criativa da DMN*",
+          "body": "Tédio Agitado: Busca compulsiva por microestímulos rápidos que fragmentam o córtex pré-frontal e deixam a mente mais exausta.\n\nTédio Fértil (Mann & Cadman): Atravessar 5 a 10 minutos de quietude sem tela libera a DMN para síntese autobiográfica e criatividade profunda.",
+          "footer": "O diagnóstico de Pascal, Heidegger e Han ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "PASCAL, HEIDEGGER & BYUNG-CHUL HAN",
+          "title": "Divertissement e hiperatenção vs. *Vita Contemplativa*",
+          "body": "Blaise Pascal alertou que toda a infelicidade humana vem de não saber ficar quieto em um quarto — usamos o *divertissement* para fugir da finitude.\n\n*Heidegger & Byung-Chul Han:* O tédio profundo abre a autenticidade, mas a hiperatenção digital destruiu a capacidade contemplativa.",
+          "footer": "4 passos clínicos para resgatar o silêncio ➔"
+        },
+        {
+          "type": "steps",
+          "badge": "PROTOCOLO CLÍNICO",
+          "title": "4 passos para *reeducar o cérebro para o silêncio*",
+          "body": "1. *Protocolo dos 5 Minutos:* Fique em fila ou pausa observando a inquietação sem sacar a tela.\n\n2. *Intervalos Analógicos:* Caminhe sem fones e tome café sem feed.\n\n3. *Imersão Lenta:* Leia 20 páginas contínuas para reativar o tônus executivo.",
+          "footer": "Do ruído contínuo à presença viva ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "TESTE PSICOMÉTRICO & ARTIGO",
+          "title": "Uma mente que não tolera o silêncio torna-se refém de qualquer algoritmo",
+          "body": "Quando atravessamos o desconforto inicial do tédio sem anestesia imediata, o silêncio volta a ser solo fértil de liberdade.\n\n📖 Leia o artigo completo: A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior\n\n🧠 Faça a Escala EMIT-FE (T-61) e jogue o Dia 60 no portal.",
+          "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
+        }
+      ],
+      "caption": "Você já percebeu que basta uma fila de trinta segundos, um semáforo fechado ou a pausa entre duas tarefas para a sua mão buscar automaticamente o celular?\n\nEm 2014, Timothy Wilson publicou na revista Science um experimento emblemático: participantes ficaram sozinhos em uma sala sem telas por apenas 15 minutos, apenas com os próprios pensamentos. A conclusão chocou a psicologia — 67% dos homens e 25% das mulheres preferiram autoadministrar choques elétricos dolorosos a permanecer a sós com o próprio silêncio interior.\n\nA neurociência explica por quê. Pesquisas de John Eastwood e James Danckert mostram que o tédio crônico não é 'falta do que fazer', mas uma falha de engajamento entre a Rede Executiva Central (CEN) e a Rede de Modo Padrão (DMN), sinalizada pela Ínsula Anterior como desconforto visceral. Somada à hiperestimulação dos feeds curtos, que desregulam os picos fásicos de dopamina no estriado ventral, a quietude analógica passa a parecer fisicamente insuportável.\n\nSéculos antes dos smartphones, Blaise Pascal já advertia que toda a infelicidade humana nasce de não saber ficar quieto em um quarto. Hoje, como analisa Byung-Chul Han em Vita Contemplativa, a hiperatenção fragmentada destrói o 'tédio profundo' — justamente o estado que alimenta a criatividade, o senso de si e o pensamento autônomo.\n\nO novo artigo científico completo, a Escala Multidimensional de Intolerância ao Tédio, Fome de Estímulos e Desconexão Contemplativa (EMIT-FE / T-61) e o Jogo de Tolerância ao Silêncio e Atenção Contemplativa (Dia 60) já estão disponíveis gratuitamente em deomagalhaes.com.br (link na bio).\n\nQuantos minutos por dia você ainda consegue permanecer em silêncio absoluto, sem telas, fones ou ocupações automáticas?\n\n#neuropsicologia #neurociencias #tedio #silenciointerior #atencaoprofunda #dopamina #saudemental #byungchulhan #pascal #heidegger #vitacontemplativa #act #terapiacognitiva #deomagalhaes #psicologiaclinica"
+    },
+
     "paralisia-decisoria-arrependimento-antecipado": {
       "articleSlug": "2026-11-20-paralisia-decisoria-arrependimento-antecipado",
       "articleTitle": "A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado",
@@ -5157,9 +5215,9 @@
         };
 
         // Estado do Studio
-        let currentPresetKey = "paralisia-decisoria-arrependimento-antecipado";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["paralisia-decisoria-arrependimento-antecipado"].slides));
-        let currentCaption = PRESETS["paralisia-decisoria-arrependimento-antecipado"].caption;
+        let currentPresetKey = "tedio-cronico-intolerancia-ao-silencio";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["tedio-cronico-intolerancia-ao-silencio"].slides));
+        let currentCaption = PRESETS["tedio-cronico-intolerancia-ao-silencio"].caption;
 
 
 

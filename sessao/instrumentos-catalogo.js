@@ -20,6 +20,107 @@
 
 window.SESSAO_CATALOGO_EXTRA = [
     {
+        id: "EMIT_FE",
+        code: "T-61",
+        shortTitle: "EMIT-FE (Intolerância ao Tédio)",
+        fullTitle: "Escala de Intolerância ao Tédio, Fome de Estímulos e Desconexão Contemplativa (EMIT-FE / T-61)",
+        cardDescription: "20 itens (4 dimensões). Fome dopaminérgica de estímulos, aversão ao silêncio interior (Wilson), falha atencional (Ínsula–CEN) e erosão contemplativa.",
+        category: "Funções Executivas",
+        icon: "sparkles",
+        accentColor: "teal",
+        protocolPrefix: "DM-TED-",
+        instruction: "Leia cada afirmação abaixo e assinale o quanto ela reflete seu funcionamento habitual diante de pausas e silêncio nos <strong>últimos meses</strong>.",
+        options: [
+            { value: 1, label: "Discordo Totalmente", desc: "Não reflete" },
+            { value: 2, label: "Discordo Parcialmente", desc: "Pouco frequente" },
+            { value: 3, label: "Concordo Parcialmente", desc: "Frequente" },
+            { value: 4, label: "Concordo Totalmente", desc: "Reflete muito" }
+        ],
+        subscales: [
+            {
+                id: "fome_estimulos",
+                label: "Fome de Estímulos e Busca Dopaminérgica (Estriado / Hipernovidade)",
+                desc: "Reflexo automático de checar telas em micro-pausas, necessidade de ruído de fundo contínuo e dependência de novidade fásica.",
+                color: "bg-teal-600"
+            },
+            {
+                id: "aversao_silencio",
+                label: "Aversão ao Silêncio Interior e Fuga do Pensamento (Wilson / DMN)",
+                desc: "Desconforto agudo ao ficar a sós com a própria consciência sem distrações e uso de estímulos externos para silenciar emoções internas.",
+                color: "bg-indigo-600"
+            },
+            {
+                id: "falha_atencional",
+                label: "Falha de Engajamento Atencional (Eastwood / Ínsula–CEN)",
+                desc: "Incapacidade de sustentar interesse em atividades de cadência lenta, bloqueio executivo no arranque e sensação de tempo arrastado.",
+                color: "bg-amber-600"
+            },
+            {
+                id: "erosao_contemplativa",
+                label: "Erosão Contemplativa e Inquietação Somática (Pascal / Han)",
+                desc: "Perda da capacidade de descanso reparador no ócio, sensação de culpa ao desacelerar e desaparecimento da incubação criativa.",
+                color: "bg-rose-600"
+            }
+        ],
+        items: [
+            { id: 1, text: "Basta esperar trinta segundos em uma fila, semáforo ou carregamento de página para minha mão buscar automaticamente o celular.", domain: "fome_estimulos", domainLabel: "Fome de Estímulos", reverse: false },
+            { id: 2, text: "Preciso manter algum som de fundo (vídeos, podcasts, música ou televisão) ligado durante tarefas simples ou até para dormir, pois o silêncio me incomoda.", domain: "fome_estimulos", domainLabel: "Fome de Estímulos", reverse: false },
+            { id: 3, text: "Costumo alternar rapidamente entre várias abas, aplicativos ou vídeos curtos quando um conteúdo leva mais de alguns segundos para me prender.", domain: "fome_estimulos", domainLabel: "Fome de Estímulos", reverse: false },
+            { id: 4, text: "Ao assistir a um filme ou ouvir uma aula, sinto forte impulso de checar mensagens ou rolar outro feed ao mesmo tempo para 'preencher' o ritmo.", domain: "fome_estimulos", domainLabel: "Fome de Estímulos", reverse: false },
+            { id: 5, text: "Quando fico sem acesso à internet ou a distrações imediatas, sinto uma espécie de 'coceira mental' em busca de qualquer estímulo novo.", domain: "fome_estimulos", domainLabel: "Fome de Estímulos", reverse: false },
+
+            { id: 6, text: "Ficar dez ou quinze minutos sentado(a) em silêncio absoluto, apenas com os próprios pensamentos e sem nada para fazer, parece-me penoso ou angustiante.", domain: "aversao_silencio", domainLabel: "Aversão ao Silêncio", reverse: false },
+            { id: 7, text: "Quando o ambiente fica quieto demais, minha mente imediatamente traz preocupações, lembranças incômodas ou autocríticas que me fazem buscar uma distração.", domain: "aversao_silencio", domainLabel: "Aversão ao Silêncio", reverse: false },
+            { id: 8, text: "Percebo que preencho minha agenda ou consumo conteúdo compulsivamente principalmente para não entrar em contato com o que estou sentindo por dentro.", domain: "aversao_silencio", domainLabel: "Aversão ao Silêncio", reverse: false },
+            { id: 9, text: "Prefiro realizar uma tarefa irritante, cansativa ou até causar um pequeno conflito ao meu redor do que permanecer em ociosidade silenciosa.", domain: "aversao_silencio", domainLabel: "Aversão ao Silêncio", reverse: false },
+            { id: 10, text: "Ao final de um dia exaustivo, mesmo sem energia, continuo consumindo estímulos até tarde porque desligar tudo me deixa desconfortável comigo mesmo(a).", domain: "aversao_silencio", domainLabel: "Aversão ao Silêncio", reverse: false },
+
+            { id: 11, text: "Tenho grande dificuldade em ler um livro denso ou estudar por mais de dez minutos seguidos sem que o cérebro comece a 'implorar' por uma pausa estimulante.", domain: "falha_atencional", domainLabel: "Falha Atencional", reverse: false },
+            { id: 12, text: "Muitas vezes sinto tédio profundo mesmo estando cercado(a) de opções de lazer, cursos ou entretenimento, sem conseguir me conectar com nenhuma delas.", domain: "falha_atencional", domainLabel: "Falha Atencional", reverse: false },
+            { id: 13, text: "Atividades cotidianas de ritmo natural (cozinhar em silêncio, caminhar sem fones, conversar sem checar o telefone) parecem-me lentas demais e quase irritantes.", domain: "falha_atencional", domainLabel: "Falha Atencional", reverse: false },
+            { id: 14, text: "Costumo acelerar áudios e vídeos para 1.5x ou 2x porque a cadência normal da fala humana me provoca impaciência atencional.", domain: "falha_atencional", domainLabel: "Falha Atencional", reverse: false },
+            { id: 15, text: "Quando tento focar em uma tarefa importante que exige paciência inicial, sinto um peso físico na cabeça e desisto nos primeiros minutos por tédio.", domain: "falha_atencional", domainLabel: "Falha Atencional", reverse: false },
+
+            { id: 16, text: "Mesmo em momentos legítimos de descanso ou fim de semana, sinto inquietação no corpo e culpa por 'não estar produzindo ou consumindo algo útil'.", domain: "erosao_contemplativa", domainLabel: "Erosão Contemplativa", reverse: false },
+            { id: 17, text: "Quase nunca me permito contemplar uma paisagem, o céu ou uma obra de arte sem tentar fotografar, postar ou passar rapidamente para a próxima coisa.", domain: "erosao_contemplativa", domainLabel: "Erosão Contemplativa", reverse: false },
+            { id: 18, text: "Percebo que minha capacidade de ter ideias originais, devanear livremente ou refletir com profundidade sobre a própria vida diminuiu nos últimos anos.", domain: "erosao_contemplativa", domainLabel: "Erosão Contemplativa", reverse: false },
+            { id: 19, text: "Quando passo horas preenchendo o tédio com estímulos digitais, termino mais drenado(a), irritado(a) e vazio(a) do que quando comecei.", domain: "erosao_contemplativa", domainLabel: "Erosão Contemplativa", reverse: false },
+            { id: 20, text: "Sinto que perdi o prazer simples de 'apenas estar presente' em um lugar tranquilo sem precisar fazer nada para justificar aquele momento.", domain: "erosao_contemplativa", domainLabel: "Erosão Contemplativa", reverse: false }
+        ],
+        cutoffs: [
+            {
+                max: 35,
+                label: "Presença Contemplativa Preservada / Baixa Intolerância ao Tédio",
+                badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
+                summary: "Tolera com serenidade o silêncio interior e os intervalos sem estímulos digitais, preservando a alternância saudável entre Rede Executiva (CEN) e Rede de Modo Padrão (DMN)."
+            },
+            {
+                max: 52,
+                label: "Inquietação Atencional Moderada / Fome Pontual de Estímulos",
+                badgeClass: "bg-yellow-100 text-yellow-800 border-yellow-300",
+                summary: "Sustenta atividades estruturadas, mas já manifesta reflexo condicionado de preencher lacunas de espera com telas ou áudios acelerados, reduzindo momentos de incubação contemplativa."
+            },
+            {
+                max: 68,
+                label: "Intolerância Elevada ao Tédio / Dependência de Hiperestimulação",
+                badgeClass: "bg-orange-100 text-orange-800 border-orange-300",
+                summary: "Padrão consistente de desregulação fásica no Estriado Ventral e conflito DMN–CEN na Ínsula Anterior: a ausência de estímulo externo gera agitação visceral imediata e reduz restauração no ócio."
+            },
+            {
+                max: 80,
+                label: "Intolerância Severa ao Silêncio Interior / Desacoplamento Contemplativo",
+                badgeClass: "bg-red-100 text-red-800 border-red-300",
+                summary: "A quietude e a falta de novidade disparam forte sofrimento aversivo (padrão Wilson et al.), levando à saturação dopaminérgica, exaustão pré-frontal e fuga experiencial. Recomenda-se protocolo ACT/TCC e higiene atencional."
+            }
+        ],
+        references: [
+            "Danckert, J., & Merrifield, C. (2018). Boredom, sustained attention and the default mode network. <em>Experimental Brain Research</em>, 236(9), 2507-2518.",
+            "Eastwood, J. D., et al. (2012). The unengaged mind: defining boredom in terms of attention. <em>Perspectives on Psychological Science</em>, 7(5), 482-495.",
+            "Han, B.-C. (2023). <em>Vita Contemplativa: Ou Sobre a Inatividade</em>. Petrópolis: Vozes.",
+            "Wilson, T. D., et al. (2014). Just think: the challenges of the disengaged mind. <em>Science</em>, 345(6192), 75-77."
+        ]
+    },
+    {
         id: "EMPD_AM",
         code: "T-60",
         shortTitle: "EMPD-AM (Paralisia Decisória)",

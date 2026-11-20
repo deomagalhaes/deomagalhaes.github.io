@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **20/11/2026** | **A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior** | [social/2026-11-20-tedio-cronico-intolerancia-ao-silencio.md](2026-11-20-tedio-cronico-intolerancia-ao-silencio.md) | ✅ Pronto para postar |
 | **20/11/2026** | **A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado** | [social/2026-11-20-paralisia-decisoria-arrependimento-antecipado.md](2026-11-20-paralisia-decisoria-arrependimento-antecipado.md) | ✅ Pronto para postar |
 | **19/11/2026** | **A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva** | [social/2026-11-19-ciume-obsessivo-hipervigilancia-afetiva.md](2026-11-19-ciume-obsessivo-hipervigilancia-afetiva.md) | ✅ Pronto para postar |
 | **19/11/2026** | **A Neurobiologia da Raiva Reprimida e da Agressividade Passiva** | [social/2026-11-19-raiva-reprimida-agressividade-passiva.md](2026-11-19-raiva-reprimida-agressividade-passiva.md) | ✅ Pronto para postar |
