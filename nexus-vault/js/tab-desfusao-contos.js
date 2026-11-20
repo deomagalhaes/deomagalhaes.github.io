@@ -260,6 +260,13 @@
                                 </div>
                                 <input type="range" id="df-autonomic-slider" min="1" max="10" value="5" class="w-full accent-cyan-400 cursor-pointer">
                                 <p id="df-autonomic-hint" class="text-[11px] text-slate-400"></p>
+                                <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-800/70">
+                                    <label for="df-autonomic-post-slider" class="text-[11px] font-mono text-slate-400">
+                                        Ativação Pós-Regulação (após 30s/90s): <strong id="df-autonomic-post-val" class="text-emerald-300">5/10</strong>
+                                        <span id="df-autonomic-delta-badge" class="ml-1 text-[10px] font-mono text-cyan-300"></span>
+                                    </label>
+                                    <input type="range" id="df-autonomic-post-slider" min="1" max="10" value="5" class="w-40 accent-emerald-400 cursor-pointer">
+                                </div>
                                 <div id="df-sigh-panel" class="hidden pt-2 border-t border-slate-800/80 space-y-1.5">
                                     <div class="flex items-center justify-between text-[11px] font-mono">
                                         <span id="df-sigh-phase" class="text-cyan-300">Inspire duplo pelo nariz...</span>
@@ -411,6 +418,11 @@
                                     <i data-lucide="file-text" class="w-4 h-4 text-amber-400"></i>
                                     <span>MD</span>
                                 </button>
+                                <button type="button" id="btn-df-import-json" class="min-h-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 flex items-center gap-1.5" title="Importar histórico JSON">
+                                    <i data-lucide="upload" class="w-4 h-4 text-cyan-400"></i>
+                                    <span>Importar</span>
+                                </button>
+                                <input type="file" id="input-df-import-json" accept=".json,application/json" class="hidden">
                             </div>
                         </div>
                     </div>
@@ -453,12 +465,21 @@
 
     function updateDesfusaoLiveMetrics() {
         const autoLv = Number(document.getElementById('df-autonomic-slider').value);
+        const postEl = document.getElementById('df-autonomic-post-slider');
+        const postLv = postEl ? Number(postEl.value) : autoLv;
         const loss = Number(document.getElementById('df-loss-slider').value);
         const esc = Number(document.getElementById('df-esc-slider').value);
         const effort = Number(document.getElementById('df-effort-slider').value);
         const gain = Number(document.getElementById('df-gain-slider').value);
 
         document.getElementById('df-autonomic-val').textContent = `${autoLv}/10`;
+        const postValEl = document.getElementById('df-autonomic-post-val');
+        const deltaEl = document.getElementById('df-autonomic-delta-badge');
+        if (postValEl) postValEl.textContent = `${postLv}/10`;
+        if (deltaEl) {
+            const delta = postLv - autoLv;
+            deltaEl.textContent = delta < 0 ? `(Δ ${delta} • Regulado)` : (delta > 0 ? `(Δ +${delta})` : '');
+        }
         document.getElementById('df-loss-val').textContent = `${loss}/10`;
         document.getElementById('df-esc-val').textContent = `${esc}/10`;
         document.getElementById('df-effort-val').textContent = `${effort}/10`;
@@ -572,7 +593,7 @@
                         <span class="text-cyan-400">${C.formatDateBR(item.date)} ${C.esc(item.time || '')}</span>
                         ${item.triggerCategory ? `<span class="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/25 text-cyan-300">${C.esc(item.triggerCategory)}</span>` : ''}
                         ${item.coreValue ? `<span class="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/25 text-purple-300">${C.esc(item.coreValue)}</span>` : ''}
-                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ativação: ${item.autonomicLevel}/10</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Ativação: ${item.autonomicLevel}/10${item.postAutonomicLevel !== undefined && item.postAutonomicLevel !== item.autonomicLevel ? ` → ${item.postAutonomicLevel}/10` : ''}</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Proteção: ${item.checksPassed}/4</span>
                         <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">Saldo: ${advLabel}</span>
                         ${hasMoratorium ? (moratoriumActive
@@ -971,7 +992,7 @@
                 const doAct = (document.getElementById('df-do-action')?.value || '').trim();
                 const childRef = getNeutralChildRef();
                 const biffText = [
-                    `Olá. Sobre ${fact || 'o combinados recentes'}:`,
+                    `Olá. Sobre ${fact || 'os combinados recentes'}:`,
                     `Para manter a rotina e o bem-estar de ${childRef}, seguirei com o seguinte encaminhamento: ${doAct || '[definir ação objetiva em 24h]'}.`,
                     `Fico à disposição para ajustes práticos de horário ou logística pelo canal combinado. Obrigado.`
                 ].join('\n');
@@ -1051,13 +1072,16 @@
             });
         }
 
-        ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'].forEach((id) => {
-            document.getElementById(id).addEventListener('input', updateDesfusaoLiveMetrics);
+        ['df-autonomic-slider', 'df-autonomic-post-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'].forEach((id) => {
+            const slEl = document.getElementById(id);
+            if (slEl) slEl.addEventListener('input', updateDesfusaoLiveMetrics);
         });
 
         document.getElementById('desfusao-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const autoLv = Number(document.getElementById('df-autonomic-slider').value);
+            const postEl = document.getElementById('df-autonomic-post-slider');
+            const postLv = postEl ? Number(postEl.value) : autoLv;
             const loss = Number(document.getElementById('df-loss-slider').value);
             const esc = Number(document.getElementById('df-esc-slider').value);
             const effort = Number(document.getElementById('df-effort-slider').value);
@@ -1090,6 +1114,8 @@
                 emotionalReading: document.getElementById('df-emotional-reading').value.trim(),
                 distortions,
                 autonomicLevel: autoLv,
+                postAutonomicLevel: postLv,
+                autonomicDelta: postLv - autoLv,
                 impulsiveReaction: impulsiveText,
                 strategicIntervention: strategicText,
                 impulsiveNotes: impulsiveText,
@@ -1128,7 +1154,7 @@
                 const inp = document.getElementById(k);
                 if (inp) draft[k] = inp.value;
             });
-            const sliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
+            const sliders = ['df-autonomic-slider', 'df-autonomic-post-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
             sliders.forEach((k) => {
                 const s = document.getElementById(k);
                 if (s) draft[k] = s.value;
@@ -1172,7 +1198,7 @@
                     if (el) el.value = savedDraft[k];
                 }
             });
-            const sliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
+            const sliders = ['df-autonomic-slider', 'df-autonomic-post-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
             sliders.forEach((k) => {
                 if (savedDraft[k] !== undefined) {
                     const el = document.getElementById(k);
@@ -1201,7 +1227,7 @@
             }
         });
 
-        const draftSliders = ['df-autonomic-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
+        const draftSliders = ['df-autonomic-slider', 'df-autonomic-post-slider', 'df-loss-slider', 'df-esc-slider', 'df-effort-slider', 'df-gain-slider'];
         draftSliders.forEach((id) => {
             const el = document.getElementById(id);
             if (el) {
@@ -1263,6 +1289,39 @@
                     history: desfusaoHistory
                 });
                 C.toast('Histórico de desfusão exportado em JSON.', 'success');
+            });
+        }
+
+        const btnImportJson = document.getElementById('btn-df-import-json');
+        const inpImportJson = document.getElementById('input-df-import-json');
+        if (btnImportJson && inpImportJson) {
+            btnImportJson.addEventListener('click', () => inpImportJson.click());
+            inpImportJson.addEventListener('change', (ev) => {
+                const file = ev.target.files && ev.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const parsed = JSON.parse(String(e.target.result || ''));
+                        const arr = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.history) ? parsed.history : null);
+                        if (!arr) throw new Error('JSON sem lista de protocolos.');
+                        let added = 0;
+                        arr.forEach((item) => {
+                            if (item && item.strictFact && !desfusaoHistory.some(ex => ex.id === item.id)) {
+                                desfusaoHistory.push(item);
+                                added++;
+                            }
+                        });
+                        desfusaoHistory.sort((a, b) => (Number(b.createdAtMs) || 0) - (Number(a.createdAtMs) || 0));
+                        saveDesfusaoHistory();
+                        renderDesfusaoHistory();
+                        C.toast(`${added} veredito(s) importado(s) para o histórico local.`, 'success');
+                    } catch (err) {
+                        C.toast('Erro ao importar histórico: ' + err.message, 'error');
+                    }
+                };
+                reader.readAsText(file, 'utf-8');
+                inpImportJson.value = '';
             });
         }
 

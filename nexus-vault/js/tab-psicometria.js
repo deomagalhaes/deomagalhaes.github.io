@@ -4587,7 +4587,10 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                     <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-2.5 text-xs">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <span class="font-mono font-bold text-emerald-300 uppercase tracking-wider text-[11px]">Índice de Mudança Confiável (RCI • Pré vs Pós-Intervenção)</span>
-                            <span class="text-[10px] font-mono text-slate-400">RCI = (Pós − Pré) ÷ √(2 × EPM²) • |RCI| &ge; 1,96 (p &lt; 0,05)</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-mono text-slate-400">RCI = (Pós − Pré) ÷ √(2 × EPM²) • |RCI| &ge; 1,96</span>
+                                <button type="button" id="btn-univ-copy-rci" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-[10px] font-mono">Copiar RCI</button>
+                            </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
                             <div>
@@ -4665,7 +4668,25 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
             el.addEventListener(ev, () => {
                 universalState[key] = isCheckbox ? el.checked : el.value;
                 saveState();
-                refreshUniversalOutputs();
+                const btnCopyRci = document.getElementById('btn-univ-copy-rci');
+        if (btnCopyRci) {
+            btnCopyRci.addEventListener('click', () => {
+                const rciOut = document.getElementById('univ-rci-output');
+                const txt = rciOut ? rciOut.innerText.trim() : '';
+                if (!txt || txt.includes('Informe Escore Pré')) {
+                    C.toast('Preencha os escores Pré (T₁) e Pós (T₂) antes de copiar o RCI.', 'warning');
+                    return;
+                }
+                const inst = (universalState.instrument || 'Instrumento').trim();
+                const sub = (universalState.subtest || 'Escore').trim();
+                const payload = `${inst} (${sub}) — Pré: ${universalState.rciPre} | Pós: ${universalState.rciPost} | ${txt}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(payload).then(() => C.toast('Nota estatística RCI copiada!', 'success'));
+                }
+            });
+        }
+
+        refreshUniversalOutputs();
             });
         };
 
@@ -4700,7 +4721,25 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                 if (sel) sel.value = 'PCT';
                 if (inp) inp.value = pc;
                 saveState();
-                refreshUniversalOutputs();
+                const btnCopyRci = document.getElementById('btn-univ-copy-rci');
+        if (btnCopyRci) {
+            btnCopyRci.addEventListener('click', () => {
+                const rciOut = document.getElementById('univ-rci-output');
+                const txt = rciOut ? rciOut.innerText.trim() : '';
+                if (!txt || txt.includes('Informe Escore Pré')) {
+                    C.toast('Preencha os escores Pré (T₁) e Pós (T₂) antes de copiar o RCI.', 'warning');
+                    return;
+                }
+                const inst = (universalState.instrument || 'Instrumento').trim();
+                const sub = (universalState.subtest || 'Escore').trim();
+                const payload = `${inst} (${sub}) — Pré: ${universalState.rciPre} | Pós: ${universalState.rciPost} | ${txt}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(payload).then(() => C.toast('Nota estatística RCI copiada!', 'success'));
+                }
+            });
+        }
+
+        refreshUniversalOutputs();
                 C.toast(`Corte normativo Pc ${pc} aplicado!`, 'info', 1200);
             });
         });
@@ -4842,6 +4881,24 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
             });
         }
 
+        const btnCopyRci = document.getElementById('btn-univ-copy-rci');
+        if (btnCopyRci) {
+            btnCopyRci.addEventListener('click', () => {
+                const rciOut = document.getElementById('univ-rci-output');
+                const txt = rciOut ? rciOut.innerText.trim() : '';
+                if (!txt || txt.includes('Informe Escore Pré')) {
+                    C.toast('Preencha os escores Pré (T₁) e Pós (T₂) antes de copiar o RCI.', 'warning');
+                    return;
+                }
+                const inst = (universalState.instrument || 'Instrumento').trim();
+                const sub = (universalState.subtest || 'Escore').trim();
+                const payload = `${inst} (${sub}) — Pré: ${universalState.rciPre} | Pós: ${universalState.rciPost} | ${txt}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(payload).then(() => C.toast('Nota estatística RCI copiada!', 'success'));
+                }
+            });
+        }
+
         refreshUniversalOutputs();
         renderNormLibraryList();
     }
@@ -4936,7 +4993,17 @@ Criança de 9 anos, 4º ano fundamental, destro. Mãe e professora relatam muita
                 const sdiff = Math.sqrt(2 * sem * sem);
                 const rci = sdiff > 0 ? (post - pre) / sdiff : 0;
                 const sig = Math.abs(rci) >= 1.96;
-                rciOut.innerHTML = `<span class="text-slate-300">EPM = ${fmtPlain(sem, 2)} • S<sub>diff</sub> = ${fmtPlain(sdiff, 2)} • </span><strong class="${sig ? 'text-emerald-300' : 'text-amber-300'}">RCI = ${fmtSigned(rci, 2)} (${sig ? 'Mudança Estatisticamente Confiável, p < 0,05' : 'Oscilação dentro da margem de erro de medida'})</strong>`;
+                const isSymp = universalState.polarity !== 'SKILL';
+                let label = 'Oscilação dentro da margem de erro de medida (p ≥ 0,05)';
+                let clsColor = 'text-amber-300';
+                if (sig) {
+                    const improved = isSymp ? rci < 0 : rci > 0;
+                    label = improved
+                        ? (isSymp ? 'Melhora / Redução Sintomática Confiável (p < 0,05)' : 'Melhora Clínica Confiável (p < 0,05)')
+                        : (isSymp ? 'Agravamento Sintomático Confiável (p < 0,05)' : 'Declínio Clínico Confiável (p < 0,05)');
+                    clsColor = improved ? 'text-emerald-300' : 'text-rose-300';
+                }
+                rciOut.innerHTML = `<span class="text-slate-300">EPM = ${fmtPlain(sem, 2)} • S<sub>diff</sub> = ${fmtPlain(sdiff, 2)} • r<sub>xx</sub> = ${fmtPlain(rxx, 2)} • </span><strong class="${clsColor}">RCI = ${fmtSigned(rci, 2)} (${label})</strong>`;
             } else {
                 rciOut.textContent = 'Informe Escore Pré (T₁) e Escore Pós (T₂) para verificar se houve mudança clínica confiável (|RCI| ≥ 1,96).';
             }
@@ -5202,12 +5269,15 @@ ${bodyRowsHtml}
     function composeAssistedDiagnosticSynthesis(prot) {
         const bits = [];
 
-        // Inteligência
+        // Inteligência (WASI ou Wechsler WISC-IV/WAIS-III)
         const wasi = computeWasiAll(prot);
+        const wech = computeWechslerIndices(prot);
         if (wasi.qit4.metrics) {
             bits.push(`potencial intelectual global na faixa ${wasi.qit4.metrics.classification.label} (QIT-4 = ${Math.round(wasi.qit4.finalQI)}, Percentil ${wasi.qit4.metrics.pctFormatted})`);
         } else if (wasi.qit2.metrics) {
             bits.push(`potencial intelectual estimado na faixa ${wasi.qit2.metrics.classification.label} (QIT-2 = ${Math.round(wasi.qit2.finalQI)})`);
+        } else if (wech.qit && wech.qit.metrics) {
+            bits.push(`eficiência intelectual global na faixa ${wech.qit.metrics.classification.label} (${prot.wechsler.scaleName} QIT = ${wech.qit.score}, Percentil ${wech.qit.metrics.pctFormatted})`);
         }
 
         // Funções Executivas e Atenção
@@ -5670,6 +5740,28 @@ ${bodyRowsHtml}
             }
         });
 
+        // 1.1. Wechsler (WISC-IV / WAIS-III)
+        const wech = computeWechslerIndices(prot);
+        [
+            { key: 'icv', label: 'Compreensão Verbal (ICV)', dom: 'Linguagem e Compreensão Verbal', obj: wech.icv },
+            { key: 'iop', label: 'Organização Perceptual (IOP)', dom: 'Visuoconstrução e Percepção', obj: wech.iop },
+            { key: 'imo', label: 'Memória Operacional (IMO)', dom: 'Memória e Aprendizagem Episódica', obj: wech.imo },
+            { key: 'ivp', label: 'Velocidade de Processamento (IVP)', dom: 'Atenção e Velocidade de Processamento', obj: wech.ivp },
+            { key: 'qit', label: 'QI Total (QIT)', dom: 'Inteligência Geral e Raciocínio', obj: wech.qit },
+            { key: 'iag', label: 'Índice de Habilidade Geral (IAG)', dom: 'Inteligência Geral e Raciocínio', obj: wech.iag },
+            { key: 'icc', label: 'Índice de Proficiência Cognitiva (ICC)', dom: 'Atenção e Velocidade de Processamento', obj: wech.icc }
+        ].forEach((w) => {
+            if (w.obj && w.obj.metrics) {
+                upsertReportRow({
+                    uid: `wechsler_${w.key}`, domain: w.dom, instrument: prot.wechsler.scaleName || 'Wechsler',
+                    measure: w.label, raw: '—', z: w.obj.z, ep: null, t: w.obj.metrics.t, qi: w.obj.score,
+                    ci95: w.obj.ci ? w.obj.ci.label95 : '—', pct: w.obj.metrics.pctFormatted,
+                    classification: w.obj.metrics.classification.label, isSymptom: false, plotInCurve: true
+                });
+                count++;
+            }
+        });
+
         // 2. FDT
         const fdt = computeFdtAll(prot);
         [
@@ -5751,6 +5843,8 @@ ${bodyRowsHtml}
             { key: 'alt', label: 'Aprendizagem ao Longo das Tentativas (ALT)', raw: rav.alt, m: rav.norms.alt },
             { key: 'a6', label: 'Evocação Pós-Interferência (A6)', raw: rav.a6, m: rav.norms.a6 },
             { key: 'a7', label: 'Evocação Tardia 30 min (A7)', raw: rav.a7, m: rav.norms.a7 },
+            { key: 'ip', label: 'Interferência Proativa (B1 ÷ A1)', raw: rav.ip !== null ? fmtPlain(rav.ip, 2) : null, m: null },
+            { key: 'ir', label: 'Interferência Retroativa (A6 ÷ A5)', raw: rav.ir !== null ? fmtPlain(rav.ir, 2) : null, m: null },
             { key: 'vel', label: 'Velocidade de Esquecimento (A7 ÷ A6)', raw: rav.velEsq !== null ? fmtPlain(rav.velEsq, 2) : null, m: null },
             { key: 'rec', label: 'Reconhecimento Líquido', raw: rav.recNet, m: rav.norms.rec }
         ].forEach((it) => {
@@ -5768,6 +5862,26 @@ ${bodyRowsHtml}
                 count++;
             }
         });
+
+        // 6. Escala Executiva Ecológica (BDEFS / BRIEF)
+        const ex = prot.execScales || {};
+        const bPct = parseNumInput(ex.bdefsPct);
+        const bT = parseNumInput(ex.bdefsT);
+        if (bPct !== null || bT !== null) {
+            const z = bT !== null ? tToZ(bT) : percentileToZ(bPct);
+            const m = buildMetricsFromZ(z, { rxx: 0.90, isSymptom: true, symptomMode: 'GENERAL' });
+            if (m) {
+                upsertReportRow({
+                    uid: 'exec_bdefs', domain: 'Funções Executivas',
+                    instrument: (ex.bdefsName || 'BDEFS').split('—')[0].trim(),
+                    measure: (ex.bdefsName || 'Escore Total Disfunção Executiva') + ' *',
+                    raw: ex.bdefsRaw || '—', z: m.z, ep: null, t: m.t, qi: null,
+                    ci95: m.ciT.label95 + ' (T)', pct: m.pctFormatted,
+                    classification: m.classification.label, isSymptom: true, plotInCurve: false
+                });
+                count++;
+            }
+        }
 
         return count;
     }
@@ -6248,6 +6362,10 @@ ${bodyRowsHtml}
         window.addEventListener('vault:restored', () => {
             loadState();
             renderAll();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            saveState();
         });
 
         window.addEventListener('vault:tab-changed', (ev) => {

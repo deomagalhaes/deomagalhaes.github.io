@@ -1524,26 +1524,34 @@
                                         </div>
                                     </div>
                                     <div class="space-y-2">
-                                        ${item.tickers.map((t) => `
-                                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs">
-                                                <div>
-                                                    <div class="flex items-center gap-1.5 flex-wrap">
-                                                        <strong class="font-mono text-slate-100 text-sm">${C.esc(t.ticker)}</strong>
-                                                        <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 font-mono">${C.esc(t.type)}</span>
-                                                        ${t.yield > 0 ? `<span class="text-[10px] font-mono text-emerald-400">${C.formatNum(t.yield, 1)}% a.a.</span>` : ''}
+                                        ${item.tickers.map((t) => {
+                                            const sharePct = item.classAporte > 0 ? Math.min(100, (t.totalSpent / item.classAporte) * 100) : 0;
+                                            return `
+                                            <div class="bg-[#0f172a] border border-slate-800 rounded-lg p-2.5 space-y-1.5 text-xs">
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <div class="min-w-0">
+                                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                                            <strong class="font-mono text-slate-100 text-sm">${C.esc(t.ticker)}</strong>
+                                                            <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-300 font-mono">${C.esc(t.type)}</span>
+                                                            ${t.yield > 0 ? `<span class="text-[10px] font-mono text-emerald-400">${C.formatNum(t.yield, 1)}% a.a.</span>` : ''}
+                                                        </div>
+                                                        <div class="text-[11px] text-slate-400 truncate mt-0.5">${C.esc(t.name)} • Ref.: ${C.formatBRL(t.price)}${t.basePrice && t.basePrice !== t.price ? ` <span class="text-rose-300 line-through text-[10px]">${C.formatBRL(t.basePrice)}</span>` : ''}</div>
                                                     </div>
-                                                    <div class="text-[11px] text-slate-400 truncate mt-0.5">${C.esc(t.name)} • Ref.: ${C.formatBRL(t.price)}${t.basePrice && t.basePrice !== t.price ? ` <span class="text-rose-300 line-through text-[10px]">${C.formatBRL(t.basePrice)}</span>` : ''}</div>
+                                                    <div class="text-right shrink-0">
+                                                        <div class="font-mono font-bold ${t.shares > 0 ? 'text-emerald-300' : 'text-slate-500'}">
+                                                            ${t.shares > 0 ? `Comprar ~${t.shares} cota(s)` : 'Aguardar novo ciclo'}
+                                                        </div>
+                                                        <div class="text-[11px] font-mono text-slate-400">
+                                                            ${t.shares > 0 ? `Total: ${C.formatBRL(t.totalSpent)} (${C.formatNum(sharePct, 0)}%)` : 'R$ 0'}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="text-right shrink-0">
-                                                    <div class="font-mono font-bold ${t.shares > 0 ? 'text-emerald-300' : 'text-slate-500'}">
-                                                        ${t.shares > 0 ? `Comprar ~${t.shares} cota(s)` : 'Aguardar novo ciclo'}
-                                                    </div>
-                                                    <div class="text-[11px] font-mono text-slate-400">
-                                                        ${t.shares > 0 ? `Total: ${C.formatBRL(t.totalSpent)}` : 'R$ 0'}
-                                                    </div>
+                                                <div class="w-full h-1 rounded-full bg-slate-900 overflow-hidden">
+                                                    <div class="h-full ${t.shares > 0 ? 'bg-gradient-to-r from-cyan-500 to-emerald-400' : 'bg-slate-800'}" style="width: ${sharePct}%"></div>
                                                 </div>
                                             </div>
-                                        `).join('')}
+                                        `;
+                                        }).join('')}
                                     </div>
                                 </div>
                             `).join('')}
@@ -1661,7 +1669,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pt-1">
                                 ${inputs.userTickers.map((ut, idx) => `
                                     <div class="bg-[#090d16] border border-slate-800 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs font-mono">
-                                        <div>
+                                        <div class="min-w-0">
                                             <div class="flex items-center gap-1.5">
                                                 <strong class="text-slate-100 text-sm">${C.esc(ut.ticker)}</strong>
                                                 <span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-cyan-300">${C.esc(ut.classKey)}</span>
@@ -1669,9 +1677,10 @@
                                             <div class="text-[11px] text-slate-400 mt-0.5 truncate max-w-[180px]">${C.esc(ut.name)}</div>
                                             <div class="text-[10px] text-emerald-400 mt-0.5">${C.formatBRL(ut.price)} ${ut.yield ? `&bull; ${ut.yield}% a.a.` : ''}</div>
                                         </div>
-                                        <button type="button" data-del-user-ticker="${idx}" title="Remover Ativo" class="min-h-[32px] px-2 rounded bg-slate-800 hover:bg-rose-950/60 text-slate-400 hover:text-rose-300 transition">
-                                            &times;
-                                        </button>
+                                        <div class="flex items-center gap-1 shrink-0">
+                                            <button type="button" data-edit-user-ticker="${idx}" title="Atualizar Cotação/Yield" class="min-h-[32px] px-2 rounded bg-slate-800 hover:bg-cyan-950/60 text-cyan-300 transition">✎</button>
+                                            <button type="button" data-del-user-ticker="${idx}" title="Remover Ativo" class="min-h-[32px] px-2 rounded bg-slate-800 hover:bg-rose-950/60 text-slate-400 hover:text-rose-300 transition">&times;</button>
+                                        </div>
                                     </div>
                                 `).join('')}
                             </div>
@@ -1900,7 +1909,7 @@
                         </div>
 
                         <!-- Card de Cobertura Global -->
-                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 text-center shrink-0 min-w-[200px]">
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-4 text-center shrink-0 min-w-[215px]">
                             <div class="text-[11px] font-mono text-slate-400">Renda Passiva Atual</div>
                             <div class="text-xl font-mono font-extrabold text-emerald-300 mt-0.5">${C.formatBRL(cascade.passive)}/mês</div>
                             <div class="text-[10px] font-mono text-slate-500 mt-0.5">Custo Total: ${C.formatBRL(cascade.totalCost)}/mês</div>
@@ -1909,6 +1918,7 @@
                                 <div class="text-2xl font-mono font-extrabold ${cascade.globalCoverage >= 100 ? 'text-emerald-400' : 'text-cyan-300'}">
                                     ${C.formatNum(cascade.globalCoverage, 1)}%
                                 </div>
+                                ${cascade.tiers.length > 0 ? `<div class="text-[10px] font-mono text-slate-400 mt-1">100% Cascata: <strong class="text-amber-300">${formatMonthYearFromOffset(cascade.tiers[cascade.tiers.length - 1].monthsToCoverTier)}</strong></div>` : ''}
                             </div>
                         </div>
                     </div>
@@ -2520,6 +2530,7 @@
                         <!-- Seletor Rápido de Cenário -->
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
                             <select id="stress-scenario-select" class="min-h-[42px] px-3.5 py-2 rounded-xl bg-[#090d16] border border-rose-500/40 font-mono text-xs font-bold text-rose-200 focus:outline-none">
+                                <option value="correction20" ${st.scenarioKey === 'correction20' ? 'selected' : ''}>Correção Técnica (−20% Ativos Gerais)</option>
                                 <option value="crash30" ${st.scenarioKey === 'crash30' ? 'selected' : ''}>Crash de Mercado (−30% Geral: Ações e FIIs)</option>
                                 <option value="crash40" ${st.scenarioKey === 'crash40' ? 'selected' : ''}>Crash Severo Subprime (−40% Ações / −30% FIIs)</option>
                                 <option value="stagflation" ${st.scenarioKey === 'stagflation' ? 'selected' : ''}>Estagflação (IPCA 9.5% / Juro Real 2.8%)</option>
@@ -2711,6 +2722,10 @@
                             <div class="flex justify-between">
                                 <span class="text-slate-400">Amortecimento IPCA+/Mix:</span>
                                 <strong class="text-cyan-300">+${C.formatNum(st.diversificationShieldPct || 0, 1)} p.p.</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Recuperação Mix Real:</span>
+                                <strong class="text-emerald-300">${st.portfolioMonthsToRecoverDynamic !== null && st.portfolioMonthsToRecoverDynamic !== undefined ? `~${st.portfolioMonthsToRecoverDynamic}m` : '—'}${st.portfolioMonthsSavedByShield ? ` (−${st.portfolioMonthsSavedByShield}m)` : ''}</strong>
                             </div>
                         </div>
                         ${st.monthsSavedByBoost !== null && st.monthsSavedByBoost > 0 ? `
@@ -4383,6 +4398,26 @@
                 C.toast(`Ativo ${ticker} adicionado à carteira.`, 'success');
             });
         }
+
+        // Editar cotação / yield de ticker personalizado
+        document.querySelectorAll('[data-edit-user-ticker]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-edit-user-ticker'), 10);
+                if (!Array.isArray(inputs.userTickers) || !inputs.userTickers[idx]) return;
+                const ut = inputs.userTickers[idx];
+                const pStr = window.prompt(`Nova cotação (R$) para ${ut.ticker}:`, String(ut.price));
+                if (pStr === null) return;
+                const yStr = window.prompt(`Novo Dividend Yield (% a.a.) para ${ut.ticker}:`, String(ut.yield || 0));
+                if (yStr === null) return;
+                const newP = Math.max(0.01, Number(String(pStr).replace(',', '.')) || ut.price);
+                const newY = Math.max(0, Number(String(yStr).replace(',', '.')) || 0);
+                ut.price = newP;
+                ut.yield = newY;
+                saveInputs();
+                renderSubTabContent();
+                C.toast(`Cotação de ${ut.ticker} atualizada para ${C.formatBRL(newP)} (${newY}% a.a.).`, 'success');
+            });
+        });
 
         // Remover ticker personalizado
         document.querySelectorAll('[data-del-user-ticker]').forEach((btn) => {

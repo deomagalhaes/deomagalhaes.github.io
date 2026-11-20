@@ -1671,6 +1671,12 @@
                 score += speciesDelta;
 
                 // 5. Ajuste Fisiológico Baseado no Histórico Real & Calendário Fitotécnico
+                if (proc.category === 'NUTRICAO') {
+                    if (m.fertDiff !== null && m.fertDiff < 0 && seasonInfo.season !== 'Inverno') {
+                        score += 22;
+                        historyDelta += 22;
+                    }
+                }
                 if (proc.category === 'TRANSPLANTE' || proc.category === 'RAIZES') {
                     if (isRepotOverdueAtTarget) { score += 15; historyDelta += 15; }
                     if (repotDiffAtTarget !== null && repotDiffAtTarget > (plant.repotCycleMonths * 30 - 120)) {
@@ -1953,6 +1959,42 @@
 
         results.sort((a, b) => b.score - a.score);
         return results;
+    }
+
+    function findNextIdealWindows(plantId, categoryFilter = 'ALL', startISO = null, horizonDays = 30) {
+        const C = global.VaultCore;
+        const baseISO = startISO || C.todayISO();
+        const targetPlants = plantId && plantId !== 'ALL' ? plants.filter(p => p.id === plantId) : plants;
+        if (targetPlants.length === 0) return [];
+        const matchesCat = (cat) => {
+            if (categoryFilter === 'ALL') return true;
+            if (categoryFilter === 'PODA_RAMIFICACAO') return cat === 'PODA_RAMIFICACAO' || cat === 'PINCAGEM';
+            if (categoryFilter === 'ESTRUTURA') return cat === 'ESTRUTURA' || cat === 'MADEIRA_MORTA';
+            return cat === categoryFilter;
+        };
+        const found = [];
+        for (let offset = 1; offset <= horizonDays; offset++) {
+            const dISO = C.addDaysISO(baseISO, offset);
+            const dt = new Date(dISO + 'T12:00:00');
+            const evals = evaluateIdealProcedures(targetPlants, dt).filter(r => matchesCat(r.procedure.category) && r.score >= 82);
+            if (evals.length > 0) {
+                const top = evals[0];
+                if (!found.some(f => f.moonGroup === top.moon.phaseGroup && f.procTitle === top.procedure.title)) {
+                    found.push({
+                        dateISO: dISO,
+                        offset,
+                        score: top.score,
+                        moonGroup: top.moon.phaseGroup,
+                        moonName: top.moon.phaseName,
+                        procTitle: top.procedure.title,
+                        plantName: top.plant.popularName,
+                        plantId: top.plant.id
+                    });
+                }
+                if (found.length >= 3) break;
+            }
+        }
+        return found;
     }
 
     // =========================================================================
@@ -3334,8 +3376,9 @@
                         <div class="flex flex-wrap items-center gap-1.5" id="prune-history-filter-bar">
                             <button type="button" data-ph-filter="PRUNING" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-600 text-slate-950">Podas / Pinçagens</button>
                             <button type="button" data-ph-filter="STRUCTURAL" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Aramação / Jin</button>
-                            <button type="button" data-ph-filter="ALL" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Todos Manejos</button>
                             <button type="button" data-ph-filter="RECOVERY" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Em Recuperação (&lt;30d)</button>
+                            <button type="button" data-ph-filter="READY" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Prontas p/ Refino (&ge;60d)</button>
+                            <button type="button" data-ph-filter="ALL" class="ph-filter-btn px-3 py-1 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">Todos Manejos</button>
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
                             <input type="text" id="prune-history-search" placeholder="Filtrar espécie, ID ou bancada..."
@@ -3448,9 +3491,11 @@
         );
         const lunarWindows = getMonthLunarWindows(new Date().getFullYear(), cal.monthIndex);
 
-        // Próximas intervenções agendadas no acervo
-        const upcomingInterventions = plants
-            .filter((p) => p.nextInterventionDate)
+        // Próximas intervenções agendadas no acervo (prioriza o mês selecionado no calendário)
+        const monthNumStr = String(cal.monthIndex + 1).padStart(2, '0');
+        const scheduledInMonth = plants.filter((p) => p.nextInterventionDate && p.nextInterventionDate.slice(5, 7) === monthNumStr);
+        const upcomingInterventions = (scheduledInMonth.length > 0 ? scheduledInMonth : plants.filter((p) => p.nextInterventionDate))
+            .slice()
             .sort((a, b) => a.nextInterventionDate.localeCompare(b.nextInterventionDate))
             .slice(0, 3);
 
@@ -3555,6 +3600,7 @@
                     <div class="mt-3 pt-2.5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
                         <span class="text-slate-400">
                             Exemplares no seu acervo deste grupo: <strong class="text-cyan-300">${focusPlantsInCollection.length} planta(s)</strong>
+                            ${scheduledInMonth.length > 0 ? ` • <strong class="text-amber-300">${scheduledInMonth.length} agendada(s) em ${cal.name}</strong>` : ''}
                         </span>
                         ${focusPlantsInCollection.length > 0 ? `
                             <button type="button" id="btn-filter-seasonal-focus" class="text-cyan-400 hover:text-cyan-300 font-medium underline flex items-center gap-1">
@@ -4186,9 +4232,8 @@
                     </span>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         ${[3, 7, 10, 14].map((offset) => {
-                            const d = new Date();
-                            d.setDate(d.getDate() + offset);
-                            const offISO = d.toISOString().slice(0, 10);
+                            const offISO = C.addDaysISO(C.todayISO(), offset);
+                            const d = new Date(offISO + 'T12:00:00');
                             const mForecast = getMoonPhase(d);
                             let reco = '';
                             if (mForecast.phaseGroup === 'CRESCENTE') reco = 'Alporquias, estaquia e brotação';
@@ -4260,13 +4305,37 @@
         if (!listEl) return;
 
         if (filtered.length === 0) {
+            const upcomingWin = findNextIdealWindows(activePlantFilter, filterCategory, targetISO, 32);
             listEl.innerHTML = `
-                <div class="p-8 text-center bg-[#090d16] border border-slate-800 rounded-xl space-y-2">
+                <div class="p-6 text-center bg-[#090d16] border border-slate-800 rounded-xl space-y-3">
                     <i data-lucide="info" class="w-8 h-8 text-slate-500 mx-auto"></i>
-                    <p class="text-sm font-semibold text-slate-300">Nenhuma intervenção com janela perfeita nesta categoria hoje.</p>
-                    <p class="text-xs text-slate-500">A combinação de fase lunar e estágio das plantas não atinge o limiar seguro de 70% de compatibilidade para esta categoria. Selecione 'Todas as Melhores' para ver as janelas ativas.</p>
+                    <p class="text-sm font-semibold text-slate-300">Nenhuma intervenção com janela perfeita nesta categoria na data selecionada.</p>
+                    <p class="text-xs text-slate-500">A combinação de fase lunar e estágio das plantas não atinge o limiar seguro de 70% para esta categoria.</p>
+                    ${upcomingWin.length > 0 ? `
+                        <div class="pt-3 border-t border-slate-800/80 text-left max-w-2xl mx-auto space-y-2">
+                            <div class="text-[11px] font-mono uppercase tracking-wider text-cyan-300 font-semibold">Próximas Janelas Ideais Detectadas (Próx. 32 dias):</div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                ${upcomingWin.map((w) => `
+                                    <button type="button" data-jump-win-iso="${w.dateISO}" class="text-left p-2.5 rounded-lg bg-[#0f172a] hover:border-cyan-400 border border-slate-800 text-xs space-y-1 transition">
+                                        <div class="flex items-center justify-between font-mono text-[10px]">
+                                            <span class="text-cyan-300 font-bold">${C.formatDateBR(w.dateISO)} (+${w.offset}d)</span>
+                                            <span class="text-emerald-300">${w.score}%</span>
+                                        </div>
+                                        <div class="font-semibold text-slate-200 truncate">${C.esc(w.procTitle)}</div>
+                                        <div class="text-[10px] text-slate-400 truncate">${C.esc(w.moonName)} • ${C.esc(w.plantName)}</div>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             `;
+            listEl.querySelectorAll('[data-jump-win-iso]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    selectedProcedureDateISO = btn.getAttribute('data-jump-win-iso');
+                    renderProcedureModal(currentProcedureFilter);
+                });
+            });
             C.refreshIcons(listEl);
             return;
         }
@@ -4492,6 +4561,28 @@
                 }
             });
             rows.sort((a, b) => a.daysAgo - b.daysAgo);
+        } else if (filterMode === 'READY') {
+            plants.forEach((p) => {
+                const pLogs = (p.logs || [])
+                    .filter(lg => isPruningType(lg.type))
+                    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+                const effDate = [p.lastPruning || '', (pLogs[0] && pLogs[0].date) || ''].filter(Boolean).sort().pop() || '';
+                const rawDiff = effDate ? C.daysDiffFromToday(effDate) : null;
+                const daysAgo = (rawDiff !== null && rawDiff <= 0) ? Math.abs(rawDiff) : 999;
+                if (daysAgo >= 60) {
+                    rows.push({
+                        date: effDate || C.todayISO(),
+                        plantId: p.id,
+                        popularName: p.popularName,
+                        bench: p.bench,
+                        type: effDate ? `Sem poda há ${daysAgo}d` : 'Sem histórico recente',
+                        detail: `Reservas recompostas (${p.stage}) — apta para pinçagem apical ou refino de copa.`,
+                        isReadyForPrune: true,
+                        daysAgo
+                    });
+                }
+            });
+            rows.sort((a, b) => b.daysAgo - a.daysAgo);
         } else {
             plants.forEach((p) => {
                 (p.logs || []).forEach((lg) => {
@@ -4579,12 +4670,21 @@
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <span class="text-[11px] font-mono text-slate-500">${C.esc(r.bench)}</span>
+                    ${r.isReadyForPrune ? `<button type="button" data-ph-quick-prune="${C.esc(r.plantId)}" class="px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/35 border border-emerald-500/40 text-emerald-300 text-[11px] font-mono font-bold">✂️ Registrar Pinçagem</button>` : ''}
                     <button type="button" data-ph-edit-plant="${C.esc(r.plantId)}" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 text-[11px] font-mono">
                         Abrir Ficha
                     </button>
                 </div>
             </div>
         `).join('');
+
+        body.querySelectorAll('[data-ph-quick-prune]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const pid = btn.getAttribute('data-ph-quick-prune');
+                applyProcedureToPlant(pid, 'Pinçagem de Refinamento de Copa', 'PINCAGEM');
+                renderPruneHistoryModal(currentPruneHistoryFilter);
+            });
+        });
 
         body.querySelectorAll('[data-ph-edit-plant]').forEach((btn) => {
             btn.addEventListener('click', () => {

@@ -99,6 +99,15 @@
             #vault-app-shell {
                 padding: 0 !important;
             }
+            #psy-a4-sheet, #psy-profile-canvas {
+                box-shadow: none !important;
+                border-color: #cbd5e1 !important;
+            }
+            #tab-panel-psicometria .bg-\[\#0f172a\] {
+                background: #ffffff !important;
+                border-color: #cbd5e1 !important;
+                color: #0f172a !important;
+            }
         }
     </style>
 </head>
@@ -399,6 +408,8 @@
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Modo Leitura Noturna Âmbar</span>
                     <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" id="btn-amber-prev-story" title="Conto anterior da biblioteca (←)" class="min-h-[38px] px-2 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-800/40 text-amber-300 font-mono text-xs hidden">‹</button>
+                        <button type="button" id="btn-amber-next-story" title="Próximo conto da biblioteca (→)" class="min-h-[38px] px-2 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-800/40 text-amber-300 font-mono text-xs hidden">›</button>
                         <button type="button" id="btn-amber-copy-text" title="Copiar conto formatado para a área de transferência" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-800/40 text-amber-300 font-mono text-xs flex items-center gap-1">
                             <span>📋</span>
                             <span class="hidden sm:inline">Copiar</span>
@@ -408,13 +419,16 @@
                             <span class="hidden sm:inline">.TXT</span>
                         </button>
                         <button type="button" id="btn-amber-star" title="Salvar conto na biblioteca local" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-800/40 text-amber-300 font-mono text-xs flex items-center gap-1">
-                            <span>★</span>
-                            <span class="hidden sm:inline">Salvar</span>
+                            <span id="amber-star-icon">★</span>
+                            <span class="hidden sm:inline" id="amber-star-label">Salvar</span>
                         </button>
                         <button type="button" id="btn-amber-narrate" title="Narrador Vocal Suave Offline (Web Speech API)" class="min-h-[38px] px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 border border-amber-800/40 text-amber-300 font-mono text-xs flex items-center gap-1">
                             <span id="amber-narrate-icon">🔊</span>
                             <span class="hidden sm:inline" id="amber-narrate-label">Narrador</span>
                         </button>
+                        <select id="amber-voice-select" class="hidden sm:inline-block max-w-[140px] bg-black/60 border border-amber-900/60 rounded px-1.5 py-1 text-[11px] text-amber-300 font-mono focus:outline-none" title="Voz Offline (PT-BR)">
+                            <option value="">Voz Automática (PT-BR)</option>
+                        </select>
                         <select id="amber-narrate-rate-select" class="bg-black/60 border border-amber-900/60 rounded px-1.5 py-1 text-[11px] text-amber-300 font-mono focus:outline-none" title="Velocidade da voz pré-sono">
                             <option value="0.75">0.75x (Lenta / Pré-Sono)</option>
                             <option value="0.85" selected>0.85x (Calma)</option>
@@ -504,9 +518,18 @@
             </div>
             <article id="amber-reader-body" class="font-serif text-[#f3cfa0]"></article>
 
-            <div id="amber-reader-question-box" class="bg-[#1b1209] border border-amber-800/40 rounded-2xl p-5 space-y-2">
-                <div class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Sussurro Final de Boa-Noite</div>
+            <div id="amber-reader-question-box" class="bg-[#1b1209] border border-amber-800/40 rounded-2xl p-5 space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="text-xs font-mono uppercase tracking-widest text-amber-500/80">Sussurro Final de Boa-Noite</div>
+                    <span id="amber-ritual-streak" class="text-[11px] font-mono text-amber-400/80"></span>
+                </div>
                 <p id="amber-reader-question" class="font-serif italic text-lg text-[#fbe0b4] leading-relaxed"></p>
+                <div class="pt-2 border-t border-amber-900/30 flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-[11px] font-mono text-amber-500/70">Leitura offline preservada no dispositivo</span>
+                    <button type="button" id="btn-amber-finish-night" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-amber-700/35 hover:bg-amber-700/55 border border-amber-600/40 text-amber-200 text-xs font-semibold transition">
+                        🌙 Concluir Ritual de Boa-Noite
+                    </button>
+                </div>
             </div>
         </div>
     </div>

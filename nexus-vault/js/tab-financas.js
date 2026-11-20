@@ -24,6 +24,12 @@
         }
     }
 
+    function numOr(val, def) {
+        if (val === undefined || val === null || val === '') return def;
+        const n = Number(val);
+        return Number.isFinite(n) ? n : def;
+    }
+
     /**
      * Retorna o modelo atuarial completo com projeções de crossover,
      * taxas mensais reais compostas, compra de liberdade e SWR
@@ -31,17 +37,17 @@
     function computeFinancialModel(customInputs) {
         // Engine matemático autônomo auditado
         const base = customInputs || (global.VaultTabIndependencia && global.VaultTabIndependencia.getInputs ? global.VaultTabIndependencia.getInputs() : {});
-        const wSessions = base.weeklySessions !== undefined ? Math.max(0, Number(base.weeklySessions)) : 16;
-        const wPerMonth = base.weeksPerMonth !== undefined ? Math.max(0.1, Number(base.weeksPerMonth)) : 4.2;
-        const indWeekly = base.indirectWeeklyHours !== undefined ? Math.max(0, Number(base.indirectWeeklyHours)) : 6;
-        const ticket = base.avgTicket !== undefined ? Math.max(0, Number(base.avgTicket)) : 250;
-        const costs = base.monthlyCosts !== undefined ? Math.max(0, Number(base.monthlyCosts)) : 2600;
-        const aporte = base.monthlyContribution !== undefined ? Math.max(0, Number(base.monthlyContribution)) : 4200;
-        const initPatrimony = base.currentPatrimony !== undefined ? Math.max(0, Number(base.currentPatrimony)) : 120000;
-        const annualRatePct = base.realAnnualReturn !== undefined ? Math.max(0, Math.min(40, Number(base.realAnnualReturn))) : 7.5;
-        const horizonYears = base.horizonYears !== undefined ? Math.max(1, Math.min(30, parseInt(base.horizonYears, 10))) : 15;
-        const swr = base.safeWithdrawalRate !== undefined ? Math.max(0.1, Math.min(10, Number(base.safeWithdrawalRate))) : 4.0;
-        const fatMult = base.fatFireMultiplier !== undefined ? Math.max(1.1, Math.min(3.0, Number(base.fatFireMultiplier))) : 1.4;
+        const wSessions = Math.max(0, numOr(base.weeklySessions, 16));
+        const wPerMonth = Math.max(0.1, numOr(base.weeksPerMonth, 4.2));
+        const indWeekly = Math.max(0, numOr(base.indirectWeeklyHours, 6));
+        const ticket = Math.max(0, numOr(base.avgTicket, 250));
+        const costs = Math.max(0, numOr(base.monthlyCosts, 2600));
+        const aporte = Math.max(0, numOr(base.monthlyContribution, 4200));
+        const initPatrimony = Math.max(0, numOr(base.currentPatrimony, 120000));
+        const annualRatePct = Math.max(0, Math.min(40, numOr(base.realAnnualReturn, 7.5)));
+        const horizonYears = Math.max(1, Math.min(30, parseInt(numOr(base.horizonYears, 15), 10) || 15));
+        const swr = Math.max(0.1, Math.min(10, numOr(base.safeWithdrawalRate, 4.0)));
+        const fatMult = Math.max(1.1, Math.min(3.0, numOr(base.fatFireMultiplier, 1.4)));
 
         const monthlySessions = wSessions * wPerMonth;
         const indirectMonthlyHours = indWeekly * wPerMonth;
@@ -436,7 +442,9 @@
         const diversificationShieldPct = Math.max(0, dropPatrimonyPct - portfolioWeightedDropPct);
 
         const stressedClinicCosts = costsClinic * (1 + inflationSurprisePct / 100);
-        const stressedMonthlyRate = Math.max(0.001, baseMonthlyRate * (1 - dividendShockPct / 100));
+        const stressedMonthlyRate = baseMonthlyRate > 0
+            ? Math.max(0, baseMonthlyRate * (1 - dividendShockPct / 100))
+            : 0;
         const stressedMonthlyPassive = stressedPatrimony * stressedMonthlyRate;
         const portfolioStressedMonthlyPassive = portfolioStressedPatrimony * stressedMonthlyRate;
 
@@ -482,6 +490,25 @@
                 monthsToRecoverWithBoost = boostedAporte > 0 ? Math.round(lostCapital / boostedAporte) : null;
             }
         }
+
+        // Simulação do tempo de recuperação considerando a blindagem real da carteira (Mix RF/FII/Ações/Global)
+        const portfolioLostCapital = basePatrimony - portfolioStressedPatrimony;
+        let simPatMix = portfolioStressedPatrimony;
+        let portfolioMonthsToRecoverDynamic = 0;
+        if (portfolioLostCapital > 0 && effectiveAporte <= 0 && stressedMonthlyRate <= 0) {
+            portfolioMonthsToRecoverDynamic = null;
+        } else {
+            while (simPatMix < basePatrimony && portfolioMonthsToRecoverDynamic < maxScan) {
+                simPatMix = simPatMix * (1 + stressedMonthlyRate) + effectiveAporte;
+                portfolioMonthsToRecoverDynamic++;
+            }
+            if (simPatMix < basePatrimony && portfolioMonthsToRecoverDynamic >= maxScan) {
+                portfolioMonthsToRecoverDynamic = effectiveAporte > 0 ? Math.round(portfolioLostCapital / effectiveAporte) : null;
+            }
+        }
+        const portfolioMonthsSavedByShield = (monthsToRecoverDynamic !== null && portfolioMonthsToRecoverDynamic !== null)
+            ? Math.max(0, monthsToRecoverDynamic - portfolioMonthsToRecoverDynamic)
+            : null;
 
         // Trajetória comparativa de recuperação (mês a mês) para gráfico SVG
         const recoveryHorizon = Math.min(60, Math.max(24, (monthsToRecoverDynamic || 24) + 6));
@@ -577,6 +604,7 @@
                     portfolioStressedMonthlyPassive: subRes.portfolioStressedMonthlyPassive,
                     stressedClinicCoveragePct: subRes.stressedClinicCoveragePct,
                     monthsToRecoverDynamic: subRes.monthsToRecoverDynamic,
+                    portfolioMonthsToRecoverDynamic: subRes.portfolioMonthsToRecoverDynamic,
                     monthsToRecoverWithBoost: subRes.monthsToRecoverWithBoost,
                     monthsSavedByBoost: subRes.monthsSavedByBoost
                 };
@@ -608,6 +636,8 @@
             sessionsNeededStressed,
             monthsToRecover,
             monthsToRecoverDynamic,
+            portfolioMonthsToRecoverDynamic,
+            portfolioMonthsSavedByShield,
             monthsToRecoverWithBoost,
             monthsSavedByBoost,
             stressedFullFireMonth,
@@ -640,15 +670,21 @@
         const totalCurrent = currentFII + currentRF + currentAcoes + currentGlobal;
         const totalAfter = totalCurrent + aporte;
 
-        const targetPctFII = raw.targetAllocFII !== undefined ? Number(raw.targetAllocFII) : 35;
-        const targetPctRF = raw.targetAllocRF !== undefined ? Number(raw.targetAllocRF) : 30;
-        const targetPctAcoes = raw.targetAllocAcoes !== undefined ? Number(raw.targetAllocAcoes) : 20;
-        const targetPctGlobal = raw.targetAllocGlobal !== undefined ? Number(raw.targetAllocGlobal) : 15;
+        const targetPctFII = Math.max(0, numOr(raw.targetAllocFII, 35));
+        const targetPctRF = Math.max(0, numOr(raw.targetAllocRF, 30));
+        const targetPctAcoes = Math.max(0, numOr(raw.targetAllocAcoes, 20));
+        const targetPctGlobal = Math.max(0, numOr(raw.targetAllocGlobal, 15));
 
-        const idealFII = totalAfter * (targetPctFII / 100);
-        const idealRF = totalAfter * (targetPctRF / 100);
-        const idealAcoes = totalAfter * (targetPctAcoes / 100);
-        const idealGlobal = totalAfter * (targetPctGlobal / 100);
+        const targetSum = targetPctFII + targetPctRF + targetPctAcoes + targetPctGlobal;
+        const wFII = targetSum > 0 ? (targetPctFII / targetSum) : 0.25;
+        const wRF = targetSum > 0 ? (targetPctRF / targetSum) : 0.25;
+        const wAcoes = targetSum > 0 ? (targetPctAcoes / targetSum) : 0.25;
+        const wGlobal = targetSum > 0 ? (targetPctGlobal / targetSum) : 0.25;
+
+        const idealFII = totalAfter * wFII;
+        const idealRF = totalAfter * wRF;
+        const idealAcoes = totalAfter * wAcoes;
+        const idealGlobal = totalAfter * wGlobal;
 
         const defFII = Math.max(0, idealFII - currentFII);
         const defRF = Math.max(0, idealRF - currentRF);
@@ -665,10 +701,10 @@
             allocAcoes = (defAcoes / totalDeficit) * aporte;
             allocGlobal = (defGlobal / totalDeficit) * aporte;
         } else if (aporte > 0) {
-            allocFII = aporte * (targetPctFII / 100);
-            allocRF = aporte * (targetPctRF / 100);
-            allocAcoes = aporte * (targetPctAcoes / 100);
-            allocGlobal = aporte * (targetPctGlobal / 100);
+            allocFII = aporte * wFII;
+            allocRF = aporte * wRF;
+            allocAcoes = aporte * wAcoes;
+            allocGlobal = aporte * wGlobal;
         }
 
         const classes = [
@@ -2257,6 +2293,117 @@
             formula: '∀k: Acumulado_k = Σ_{j≤k} Custo_j ∧ Cobertura_Global = (Renda_Passiva / Total) × 100',
             passed: Boolean(testCascade70Pass),
             detail: `Soma acumulada de ${invCascade.tiers.length} degraus exata em R$ ${invCascade.totalCost.toLocaleString('pt-BR')} (Cobertura global: ${invCascade.globalCoverage.toFixed(2)}%).`
+        });
+
+        // 71. Teste de Taxa Zero Real no Estresse (Blindagem contra Retorno Fantasma)
+        const zeroRateStress = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 100000,
+            monthlyContribution: 0,
+            realAnnualReturn: 0
+        });
+        const testZeroRate71Pass = zeroRateStress.stressedMonthlyPassive === 0 &&
+            zeroRateStress.monthsToRecoverDynamic === null &&
+            zeroRateStress.portfolioMonthsToRecoverDynamic === null;
+        tests.push({
+            name: 'Invariante de Retorno Nulo no Estresse (Zero Taxa Fantasma)',
+            formula: 'r = 0 ∧ Aporte = 0 ⇒ Renda_Estresse = 0 ∧ Meses_Dinâmicos = null',
+            passed: Boolean(testZeroRate71Pass),
+            detail: `Com taxa real 0% e aporte zero, renda passiva sob choque é R$ ${zeroRateStress.stressedMonthlyPassive.toFixed(2)} e recuperação dinâmica retorna null.`
+        });
+
+        // 72. Teste de Conservação do Aporte com Metas Percentuais Desbalanceadas (Σ ≠ 100%)
+        const unbalAlloc = computeAporteAllocation({
+            customAporteValue: 5000,
+            targetAllocFII: 40,
+            targetAllocRF: 40,
+            targetAllocAcoes: 30,
+            targetAllocGlobal: 10,
+            currentAllocFII: 10000,
+            currentAllocRF: 10000,
+            currentAllocAcoes: 10000,
+            currentAllocGlobal: 10000
+        });
+        const unbalSum = unbalAlloc.classes.reduce((acc, c) => acc + c.recommendedAporte, 0);
+        const testUnbal72Pass = Math.abs(unbalSum - 5000) < 0.01 &&
+            unbalAlloc.classes.every(c => c.recommendedAporte >= 0);
+        tests.push({
+            name: 'Conservação Estrita do Aporte mesmo com Metas Não-Normalizadas (Σ = 120%)',
+            formula: 'Σ Meta_i ≠ 100% ⇒ Σ Aporte_i = Aporte_Disponível',
+            passed: Boolean(testUnbal72Pass),
+            detail: `Mesmo com soma das metas em 120%, o algoritmo normaliza pesos e aloca exatamente R$ ${unbalSum.toFixed(2)} de R$ 5.000,00.`
+        });
+
+        // 73. Teste de Recuperação Temporal Ponderada pelo Escudo de Renda Fixa
+        const shieldRecStress = computeStressTest({
+            stressScenario: 'crash30',
+            currentPatrimony: 250000,
+            monthlyContribution: 4000,
+            realAnnualReturn: 7.5,
+            currentAllocFII: 60000,
+            currentAllocRF: 110000,
+            currentAllocAcoes: 50000,
+            currentAllocGlobal: 30000
+        });
+        const testShieldRec73Pass = shieldRecStress.portfolioMonthsToRecoverDynamic !== null &&
+            shieldRecStress.monthsToRecoverDynamic !== null &&
+            shieldRecStress.portfolioMonthsToRecoverDynamic < shieldRecStress.monthsToRecoverDynamic &&
+            shieldRecStress.portfolioMonthsSavedByShield >= 1;
+        tests.push({
+            name: 'Aceleração da Recomposição pelo Escudo Ponderado de Renda Fixa',
+            formula: 'RF > 0 ⇒ Meses_Rec_Mix < Meses_Rec_Uniforme',
+            passed: Boolean(testShieldRec73Pass),
+            detail: `Escudo RF reduz queda e antecipa recomposição de ${shieldRecStress.monthsToRecoverDynamic}m (uniforme) para ${shieldRecStress.portfolioMonthsToRecoverDynamic}m (mix real).`
+        });
+
+        // 74. Teste de Extensibilidade Dinâmica da Cascata com Níveis Customizados
+        const customCascade = computeExpenseCascade({
+            expenseEssential: 2000,
+            expenseClinic: 2000,
+            expenseFamily: 2000,
+            expenseLifestyle: 2000,
+            customExpenses: [
+                { id: 'c1', name: 'Fundo Educacional', cost: 1000 },
+                { id: 'c2', name: 'Reserva Sabática', cost: 1000 }
+            ],
+            currentPatrimony: 1000000,
+            realAnnualReturn: 7.5
+        });
+        const testCustom74Pass = customCascade.tiers.length === 6 &&
+            Math.abs(customCascade.totalCost - 10000) < 0.01 &&
+            customCascade.tiers[5].level === 6 &&
+            Math.abs(customCascade.tiers[5].accumulatedCost - 10000) < 0.01;
+        tests.push({
+            name: 'Extensibilidade Dinâmica da Cascata com Despesas Customizadas',
+            formula: 'N_Total = 4 + N_Custom ⇒ Acumulado_Final = Σ Custo_Base + Σ Custo_Custom',
+            passed: Boolean(testCustom74Pass),
+            detail: `Cascata com 2 níveis customizados soma ${customCascade.tiers.length} degraus e total acumulado exato de R$ ${customCascade.totalCost.toLocaleString('pt-BR')}.`
+        });
+
+        // 75. Teste de Proteção da Renda Fixa contra Desconto de Crise (−30%) no Alocador
+        const rfAndFiiCrisis = computeAporteByTickers(
+            [
+                { key: 'FII', name: 'FIIs', recommendedAporte: 2000 },
+                { key: 'RF', name: 'Renda Fixa', recommendedAporte: 4000 }
+            ],
+            {
+                FII: [{ ticker: 'HGLG11', name: 'CSHG Log', price: 160, yield: 8.4, type: 'Tijolo' }],
+                RF: [{ ticker: 'IPCA+2035', name: 'Tesouro IPCA+', price: 2000, yield: 6.4, type: 'Tesouro' }]
+            },
+            2,
+            { crisisDiscountPct: 30 }
+        );
+        const fiiPicked = rfAndFiiCrisis.byClass.find(c => c.classKey === 'FII')?.tickers[0];
+        const rfPicked = rfAndFiiCrisis.byClass.find(c => c.classKey === 'RF')?.tickers[0];
+        const testCrisis75Pass = fiiPicked && rfPicked &&
+            Math.abs(fiiPicked.price - 112) < 0.01 &&
+            Math.abs(rfPicked.price - 2000) < 0.01 &&
+            rfPicked.shares === 2;
+        tests.push({
+            name: 'Blindagem de Preço da Renda Fixa no Simulador de Compras em Crise (−30%)',
+            formula: 'Desconto_Crise(FII/Ações) = 30% ∧ Desconto_Crise(RF) = 0%',
+            passed: Boolean(testCrisis75Pass),
+            detail: `Em crise −30%, FII cai de R$ 160 para R$ ${fiiPicked?.price.toFixed(2)} enquanto Tesouro IPCA+ permanece em R$ ${rfPicked?.price.toFixed(2)}.`
         });
 
         const allPassed = tests.every(t => t.passed);
