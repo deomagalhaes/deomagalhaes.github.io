@@ -42,10 +42,10 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-deep);
             color: var(--text-main);
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* Top Bar */
@@ -60,6 +60,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .brand-box {
@@ -134,7 +135,9 @@
         .workspace-grid {
             display: grid;
             grid-template-columns: 380px 1fr;
+            grid-template-rows: minmax(0, 1fr);
             flex: 1;
+            min-height: 0;
             gap: 0;
             height: calc(100vh - 67px);
             overflow: hidden;
@@ -147,13 +150,21 @@
         }
 
         @media (max-width: 860px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+            }
             .workspace-grid {
                 grid-template-columns: 1fr;
+                grid-template-rows: auto;
                 height: auto;
                 overflow: visible;
             }
             .sidebar {
                 height: auto;
+                overflow-y: visible;
+                padding-bottom: 24px;
             }
             .workspace-main-content {
                 height: auto;
@@ -161,16 +172,49 @@
             }
         }
 
-        /* Sidebar Panels */
+        /* Sidebar Panels (Rolagem independente enquanto visualiza os slides) */
         .sidebar {
             background: var(--bg-panel);
             border-right: 1px solid var(--border-glass);
-            padding: 20px;
-            overflow-y: auto;
+            padding: 20px 16px 48px 20px;
+            overflow-y: scroll;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
             height: 100%;
+            min-height: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 210, 189, 0.5) rgba(0, 18, 25, 0.5);
+        }
+
+        .sidebar > * {
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar,
+        .workspace-main-content::-webkit-scrollbar {
+            width: 9px;
+        }
+
+        .sidebar::-webkit-scrollbar-track,
+        .workspace-main-content::-webkit-scrollbar-track {
+            background: rgba(0, 18, 25, 0.5);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb,
+        .workspace-main-content::-webkit-scrollbar-thumb {
+            background: rgba(148, 210, 189, 0.4);
+            border-radius: 999px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover,
+        .workspace-main-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(238, 155, 0, 0.75);
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
 
         /* Área Restante Dividida na Horizontal (Slides em cima, Legenda embaixo) */
@@ -178,8 +222,11 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 0;
             overflow-y: auto;
             background: radial-gradient(circle at center top, #00222e 0%, #001219 100%);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 210, 189, 0.45) rgba(0, 18, 25, 0.5);
         }
 
         .caption-panel {
@@ -600,6 +647,16 @@
             border: 1px solid var(--border-glass);
         }
 
+        .cover-mode-pills {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            background: rgba(0, 18, 25, 0.6);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-glass);
+        }
+
         .ratio-btn {
             background: transparent;
             border: none;
@@ -819,14 +876,25 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="themeSelect">Paleta de Cores:</label>
+                <label class="control-label" for="themeSelect">Paleta de Cores & Estilo Visual:</label>
                 <select id="themeSelect" onchange="onThemeChange(this.value)">
-                    <option value="deep-teal" selected>Petróleo & Âmbar (#005f73 & #ee9b00)</option>
-                    <option value="dark-obsidian">Obsidian Minimal (#001219 & #0a9396)</option>
-                    <option value="clean-light">Editorial Light (#f8fafc & #005f73)</option>
-                    <option value="terracotta">Terracota & Âmbar Quente</option>
-                    <option value="sage-clinic">Verde Sálvia & Ouro Clínico</option>
-                    <option value="indigo-night">Noturno Índigo & Ciano</option>
+                    <optgroup label="✨ Estilos Completos (Visual Premium em Todos os Slides)">
+                        <option value="impact-neural" selected>⚡ Impacto Neural (Visual da Capa em Todos)</option>
+                        <option value="editorial-ivory">📰 Editorial Revista (Creme & Bronze)</option>
+                        <option value="cyber-synapse">🧬 Sinapse Neon (Grafite & Ciano Elétrico)</option>
+                        <option value="stoic-marble">🏛️ Estoico Clássico (Carvão & Ouro Velho)</option>
+                        <option value="clinical-botanical">🌿 Clínica Botânica (Esmeralda & Creme)</option>
+                        <option value="crimson-focus">🔥 Foco Editorial (Vinho Profundo & Coral)</option>
+                        <option value="swiss-minimal">◼️ Suíço Alto Contraste (Preto & Âmbar)</option>
+                    </optgroup>
+                    <optgroup label="🎨 Paletas Clássicas (Layout Padrão)">
+                        <option value="deep-teal">Petróleo & Âmbar (#005f73 & #ee9b00)</option>
+                        <option value="dark-obsidian">Obsidian Minimal (#001219 & #0a9396)</option>
+                        <option value="clean-light">Editorial Light (#f8fafc & #005f73)</option>
+                        <option value="terracotta">Terracota & Âmbar Quente</option>
+                        <option value="sage-clinic">Verde Sálvia & Ouro Clínico</option>
+                        <option value="indigo-night">Noturno Índigo & Ciano</option>
+                    </optgroup>
                 </select>
             </div>
 
@@ -873,6 +941,15 @@
                 </select>
             </div>
 
+            <div class="control-group" id="coverModeGroup">
+                <label class="control-label">Estilo da Capa (Objetividade):</label>
+                <div class="cover-mode-pills">
+                    <button type="button" class="ratio-btn active" id="btnCoverImpact" onclick="setCoverMode('impact')" title="Título de alto impacto + frase-chave objetiva + botão Deslize">🎯 Impacto</button>
+                    <button type="button" class="ratio-btn" id="btnCoverMinimal" onclick="setCoverMode('minimal-hook')" title="Apenas título gigante centralizado para máxima atenção no feed">⚡ Só Título</button>
+                    <button type="button" class="ratio-btn" id="btnCoverFull" onclick="setCoverMode('full')" title="Título + texto completo do subtítulo">📄 Completo</button>
+                </div>
+            </div>
+
             <div class="control-group">
                 <label class="control-label" for="editBadge">Badge / Categoria Superior:</label>
                 <input type="text" id="editBadge" oninput="updateCurrentSlideData()">
@@ -885,7 +962,7 @@
                 </div>
                 <textarea id="editTitle" style="min-height: 55px;" oninput="updateCurrentSlideData()"></textarea>
                 <div class="slider-row">
-                    <input type="range" id="titleSizeRange" min="32" max="68" step="2" value="52" oninput="onTitleSizeChange(this.value)">
+                    <input type="range" id="titleSizeRange" min="32" max="96" step="2" value="52" oninput="onTitleSizeChange(this.value)">
                     <button type="button" class="btn-tool" id="btnAutoTitle" onclick="toggleAutoTitleSize()" style="padding: 2px 7px; font-size: 0.72rem;">Auto</button>
                 </div>
             </div>
@@ -1090,7 +1167,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Nenhuma escolha tem garantia antecipada — mas toda inércia cobra um preço",
-          "body": "Quando o cérebro aceita renunciar ao infinito abstrato para habitar o real concreto, a liberdade volta a ser movimento.\n\n📖 Leia o artigo completo: A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado\n\n🧠 Faça a Escala EMPD-AM (T-60) e jogue o Dia 59 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Quando o cérebro aceita renunciar ao infinito abstrato para habitar o real concreto, a liberdade volta a ser movimento.\n\n📖 Leia o artigo completo: A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado\n\n🧠 Faça a Escala EMPD-AM (T-60) e jogue o Dia 59 no portal.",
           "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1147,7 +1224,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Amar sem virar carcereiro exige tolerar o risco de um encontro livre",
-          "body": "Quando o córtex pré-frontal diferencia cuidado de vigilância compulsiva, a imaginação descansa e o vínculo volta a respirar.\n\n📖 Leia o artigo completo: A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva\n\n🧠 Faça a Escala EMCH-SR (T-59) e jogue o Dia 58 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Quando o córtex pré-frontal diferencia cuidado de vigilância compulsiva, a imaginação descansa e o vínculo volta a respirar.\n\n📖 Leia o artigo completo: A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva\n\n🧠 Faça a Escala EMCH-SR (T-59) e jogue o Dia 58 no portal.",
           "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1204,7 +1281,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Paz construída sobre o silenciamento da sua verdade não é paz",
-          "body": "Quando aprendemos a dar voz firme e respeitosa aos nossos limites, o sistema autonômico descansa e os vínculos tornam-se respiráveis.\n\n📖 Leia o artigo completo: A Neurobiologia da Raiva Reprimida e da Agressividade Passiva\n\n🧠 Faça a Escala EMRR-HP (T-58) e jogue o Dia 57 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Quando aprendemos a dar voz firme e respeitosa aos nossos limites, o sistema autonômico descansa e os vínculos tornam-se respiráveis.\n\n📖 Leia o artigo completo: A Neurobiologia da Raiva Reprimida e da Agressividade Passiva\n\n🧠 Faça a Escala EMRR-HP (T-58) e jogue o Dia 57 no portal.",
           "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1261,7 +1338,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Funcionar apenas na emergência cobra o preço no seu sistema nervoso",
-          "body": "Quando você devolve ao cérebro a capacidade de agir sem precisar de uma ameaça iminente, recupera a soberania sobre o seu tempo.\n\n📖 Leia o artigo completo: A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina\n\n🧠 Faça a Escala EMUC-DA (T-57) e jogue o Dia 56 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Quando você devolve ao cérebro a capacidade de agir sem precisar de uma ameaça iminente, recupera a soberania sobre o seu tempo.\n\n📖 Leia o artigo completo: A Neurobiologia da Urgência Crônica e da Adicção à Adrenalina\n\n🧠 Faça a Escala EMUC-DA (T-57) e jogue o Dia 56 no portal.",
           "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1318,7 +1395,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Soltar o que não lhe pertence não é fraqueza — é lucidez",
-          "body": "Quando você abre mão de garantir todos os desfechos, recupera a presença no único lugar onde é livre: o próximo passo íntegro.\n\n📖 Leia o artigo completo: A Neurobiologia da Compulsão por Controle e da Hiper-Responsabilidade\n\n🧠 Faça a Escala EMCC-HR (T-56) e jogue o Dia 55 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Quando você abre mão de garantir todos os desfechos, recupera a presença no único lugar onde é livre: o próximo passo íntegro.\n\n📖 Leia o artigo completo: A Neurobiologia da Compulsão por Controle e da Hiper-Responsabilidade\n\n🧠 Faça a Escala EMCC-HR (T-56) e jogue o Dia 55 no portal.",
           "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1375,7 +1452,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Amar de olhos abertos exige coragem para ver o real",
-          "body": "Quando você desarma a miragem da ambiguidade, recupera a lucidez e a posse de si mesmo.\n\n📖 Leia o artigo completo: A Neurobiologia da Limerência e da Idealização Romântica Compulsiva\n\n🧠 Faça a Escala EMLO-IC (T-55) e jogue o Dia 54 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Quando você desarma a miragem da ambiguidade, recupera a lucidez e a posse de si mesmo.\n\n📖 Leia o artigo completo: A Neurobiologia da Limerência e da Idealização Romântica Compulsiva\n\n🧠 Faça a Escala EMLO-IC (T-55) e jogue o Dia 54 no portal.",
           "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1432,7 +1509,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "A inteligência liberta quando caminha com o corpo",
-          "body": "Entender sua história ilumina o mapa. Sentir com segurança reconstrói o território.\n\n📖 Leia o artigo completo: A Neurobiologia da Hiper-Racionalização e da Intelectualização Defensiva\n\n🧠 Faça a Escala EMHI-D (T-54) e jogue o Dia 53 no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Entender sua história ilumina o mapa. Sentir com segurança reconstrói o território.\n\n📖 Leia o artigo completo: A Neurobiologia da Hiper-Racionalização e da Intelectualização Defensiva\n\n🧠 Faça a Escala EMHI-D (T-54) e jogue o Dia 53 no portal.",
           "footer": "Salve para reler e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -1496,7 +1573,7 @@
           "type": "cta",
           "badge": "TESTE PSICOMÉTRICO & ARTIGO",
           "title": "Você não precisa se anestesiar para sobreviver",
-          "body": "Coragem não é ausência de vulnerabilidade, mas a capacidade de carregar o desconforto enquanto caminha em direção ao que importa.\n\n📖 Leia o ensaio completo: A Neurobiologia da Esquiva Experiencial e da Anestesia Afetiva\n\n🧠 Faça a Escala EME-AA (T-53): Teste 100% gratuito e privado no portal.\n\nAcesse: deomagalhaes.com.br",
+          "body": "Coragem não é ausência de vulnerabilidade, mas a capacidade de carregar o desconforto enquanto caminha em direção ao que importa.\n\n📖 Leia o ensaio completo: A Neurobiologia da Esquiva Experiencial e da Anestesia Afetiva\n\n🧠 Faça a Escala EME-AA (T-53): Teste 100% gratuito e privado no portal.",
           "footer": "Salve para consultar e compartilhe @deomagalhaesneuro"
         }
       ],
@@ -4860,8 +4937,127 @@
                  }
 };
 
-        // Temas Visuais Expandidos
+        // Temas Visuais Expandidos (Estilos Completos + Paletas Clássicas)
         const THEMES = {
+            "impact-neural": {
+                name: "⚡ Impacto Neural (Visual da Capa em Todos)",
+                bgGradientTop: "#001219",
+                bgGradientBottom: "#002b36",
+                accent: "#ee9b00",
+                secondaryGlow: "#0a9396",
+                textMain: "#ffffff",
+                textMuted: "#94d2bd",
+                cardBg: "rgba(238, 155, 0, 0.09)",
+                cardBorder: "rgba(238, 155, 0, 0.26)",
+                solidCardBg: "rgba(0, 35, 45, 0.90)",
+                solidCardBorder: "rgba(238, 155, 0, 0.38)",
+                progressFill: "#ee9b00",
+                fullCoverStyle: true,
+                atmosphere: "neural",
+                isLight: false
+            },
+            "editorial-ivory": {
+                name: "📰 Editorial Revista (Creme & Bronze)",
+                bgGradientTop: "#faf6ef",
+                bgGradientBottom: "#efe6d5",
+                accent: "#9a6324",
+                secondaryGlow: "#c89d66",
+                textMain: "#1c1712",
+                textMuted: "#625648",
+                cardBg: "rgba(255, 255, 255, 0.82)",
+                cardBorder: "rgba(154, 99, 36, 0.25)",
+                solidCardBg: "#ffffff",
+                solidCardBorder: "rgba(154, 99, 36, 0.35)",
+                progressFill: "#9a6324",
+                fullCoverStyle: true,
+                atmosphere: "editorial",
+                isLight: true
+            },
+            "cyber-synapse": {
+                name: "🧬 Sinapse Neon (Grafite & Ciano Elétrico)",
+                bgGradientTop: "#070b14",
+                bgGradientBottom: "#10192d",
+                accent: "#00e5ff",
+                secondaryGlow: "#7c3aed",
+                textMain: "#f8fafc",
+                textMuted: "#94a3b8",
+                cardBg: "rgba(0, 229, 255, 0.08)",
+                cardBorder: "rgba(0, 229, 255, 0.28)",
+                solidCardBg: "rgba(15, 23, 42, 0.90)",
+                solidCardBorder: "rgba(0, 229, 255, 0.42)",
+                progressFill: "#00e5ff",
+                fullCoverStyle: true,
+                atmosphere: "cyber",
+                isLight: false
+            },
+            "stoic-marble": {
+                name: "🏛️ Estoico Clássico (Carvão & Ouro Velho)",
+                bgGradientTop: "#101010",
+                bgGradientBottom: "#1d1a16",
+                accent: "#d4af37",
+                secondaryGlow: "#8c6d1f",
+                textMain: "#f5f2eb",
+                textMuted: "#b8ae9c",
+                cardBg: "rgba(212, 175, 55, 0.08)",
+                cardBorder: "rgba(212, 175, 55, 0.28)",
+                solidCardBg: "rgba(24, 22, 19, 0.92)",
+                solidCardBorder: "rgba(212, 175, 55, 0.40)",
+                progressFill: "#d4af37",
+                fullCoverStyle: true,
+                atmosphere: "stoic",
+                isLight: false
+            },
+            "clinical-botanical": {
+                name: "🌿 Clínica Botânica (Esmeralda & Creme)",
+                bgGradientTop: "#06211b",
+                bgGradientBottom: "#0e3b30",
+                accent: "#f2cc8f",
+                secondaryGlow: "#52b788",
+                textMain: "#f5faf7",
+                textMuted: "#a3d9c5",
+                cardBg: "rgba(242, 204, 143, 0.09)",
+                cardBorder: "rgba(242, 204, 143, 0.26)",
+                solidCardBg: "rgba(10, 44, 36, 0.90)",
+                solidCardBorder: "rgba(242, 204, 143, 0.38)",
+                progressFill: "#f2cc8f",
+                fullCoverStyle: true,
+                atmosphere: "neural",
+                isLight: false
+            },
+            "crimson-focus": {
+                name: "🔥 Foco Editorial (Vinho Profundo & Coral)",
+                bgGradientTop: "#1a090e",
+                bgGradientBottom: "#311019",
+                accent: "#ff6b6b",
+                secondaryGlow: "#e07a5f",
+                textMain: "#fff5f5",
+                textMuted: "#ebb5b5",
+                cardBg: "rgba(255, 107, 107, 0.09)",
+                cardBorder: "rgba(255, 107, 107, 0.28)",
+                solidCardBg: "rgba(42, 14, 22, 0.90)",
+                solidCardBorder: "rgba(255, 107, 107, 0.40)",
+                progressFill: "#ff6b6b",
+                fullCoverStyle: true,
+                atmosphere: "neural",
+                isLight: false
+            },
+            "swiss-minimal": {
+                name: "◼️ Suíço Alto Contraste (Preto & Âmbar)",
+                bgGradientTop: "#080808",
+                bgGradientBottom: "#141414",
+                accent: "#ffb703",
+                secondaryGlow: "#ffffff",
+                textMain: "#ffffff",
+                textMuted: "#a8a8a8",
+                cardBg: "rgba(255, 255, 255, 0.06)",
+                cardBorder: "rgba(255, 183, 3, 0.28)",
+                solidCardBg: "rgba(20, 20, 20, 0.94)",
+                solidCardBorder: "rgba(255, 183, 3, 0.42)",
+                progressFill: "#ffb703",
+                fullCoverStyle: true,
+                atmosphere: "swiss",
+                isLight: false
+            },
             "deep-teal": {
                 name: "Petróleo & Âmbar (#005f73 & #ee9b00)",
                 bgGradientTop: "#001219",
@@ -4873,7 +5069,10 @@
                 cardBorder: "rgba(148, 210, 189, 0.3)",
                 solidCardBg: "rgba(0, 43, 54, 0.85)",
                 solidCardBorder: "rgba(148, 210, 189, 0.4)",
-                progressFill: "#ee9b00"
+                progressFill: "#ee9b00",
+                fullCoverStyle: false,
+                atmosphere: "neural",
+                isLight: false
             },
             "dark-obsidian": {
                 name: "Obsidian Minimal (#001219 & #0a9396)",
@@ -4886,7 +5085,10 @@
                 cardBorder: "rgba(10, 147, 150, 0.4)",
                 solidCardBg: "rgba(28, 37, 65, 0.85)",
                 solidCardBorder: "rgba(10, 147, 150, 0.5)",
-                progressFill: "#0a9396"
+                progressFill: "#0a9396",
+                fullCoverStyle: false,
+                atmosphere: "neural",
+                isLight: false
             },
             "clean-light": {
                 name: "Editorial Light (#f8fafc & #005f73)",
@@ -4899,7 +5101,10 @@
                 cardBorder: "#cbd5e1",
                 solidCardBg: "#f1f5f9",
                 solidCardBorder: "#94a3b8",
-                progressFill: "#005f73"
+                progressFill: "#005f73",
+                fullCoverStyle: false,
+                atmosphere: "editorial",
+                isLight: true
             },
             "terracotta": {
                 name: "Terracota & Âmbar Quente",
@@ -4912,7 +5117,10 @@
                 cardBorder: "rgba(244, 162, 97, 0.3)",
                 solidCardBg: "rgba(61, 30, 19, 0.85)",
                 solidCardBorder: "rgba(244, 162, 97, 0.4)",
-                progressFill: "#e76f51"
+                progressFill: "#e76f51",
+                fullCoverStyle: false,
+                atmosphere: "neural",
+                isLight: false
             },
             "sage-clinic": {
                 name: "Verde Sálvia & Ouro Clínico",
@@ -4925,7 +5133,10 @@
                 cardBorder: "rgba(148, 210, 189, 0.25)",
                 solidCardBg: "rgba(19, 56, 44, 0.85)",
                 solidCardBorder: "rgba(233, 216, 166, 0.4)",
-                progressFill: "#e9d8a6"
+                progressFill: "#e9d8a6",
+                fullCoverStyle: false,
+                atmosphere: "neural",
+                isLight: false
             },
             "indigo-night": {
                 name: "Noturno Índigo & Ciano",
@@ -4938,7 +5149,10 @@
                 cardBorder: "rgba(88, 166, 255, 0.25)",
                 solidCardBg: "rgba(17, 28, 56, 0.85)",
                 solidCardBorder: "rgba(88, 166, 255, 0.4)",
-                progressFill: "#58a6ff"
+                progressFill: "#58a6ff",
+                fullCoverStyle: false,
+                atmosphere: "cyber",
+                isLight: false
             }
         };
 
@@ -4953,9 +5167,10 @@
 
         let currentSlideIndex = 0;
         let currentFormat = "1:1"; // '1:1' ou '4:5'
-        let currentTheme = "deep-teal";
+        let currentTheme = "impact-neural";
         let currentCardStyle = "glass"; // 'glass', 'solid', 'minimal'
         let currentFontFamily = "modern"; // 'modern', 'editorial', 'clean'
+        let currentCoverMode = "impact"; // 'impact', 'minimal-hook', 'full'
 
         // Inicialização Robusta
         function initStudio() {
@@ -5109,6 +5324,9 @@
         function onThemeChange(val) {
             currentTheme = val;
             renderCurrentSlide();
+            if (THEMES[val]) {
+                showToast("Estilo: " + THEMES[val].name);
+            }
         }
 
         function onCardStyleChange(val) {
@@ -5119,6 +5337,32 @@
         function onFontFamilyChange(val) {
             currentFontFamily = val;
             renderCurrentSlide();
+        }
+
+        function setCoverMode(mode) {
+            currentCoverMode = mode;
+            const btns = {
+                'impact': document.getElementById('btnCoverImpact'),
+                'minimal-hook': document.getElementById('btnCoverMinimal'),
+                'full': document.getElementById('btnCoverFull')
+            };
+            Object.keys(btns).forEach(k => {
+                if (btns[k]) btns[k].classList.toggle('active', k === mode);
+            });
+            renderCurrentSlide();
+            const labels = {
+                'impact': 'Capa: Impacto Objetivo',
+                'minimal-hook': 'Capa: Só Título (Alto Impacto)',
+                'full': 'Capa: Texto Completo'
+            };
+            showToast(labels[mode] || 'Estilo da capa atualizado!');
+        }
+
+        function updateCoverModeVisibility(type) {
+            const grp = document.getElementById('coverModeGroup');
+            if (grp) {
+                grp.style.display = (type === 'cover') ? 'flex' : 'none';
+            }
         }
 
         // ==========================================
@@ -5191,6 +5435,7 @@
 
         function onSlideTypeChange(type) {
             currentSlides[currentSlideIndex].type = type;
+            updateCoverModeVisibility(type);
             renderThumbs();
             updateCounterDisplay();
             renderCurrentSlide();
@@ -5308,6 +5553,7 @@
                 }
                 typeSel.value = val;
             }
+            updateCoverModeVisibility(s.type || 'normal');
 
             const titleDisplay = document.getElementById('titleSizeDisplay');
             const titleRange = document.getElementById('titleSizeRange');
@@ -5487,7 +5733,7 @@
             if (canvas.width !== canvasWidth) canvas.width = canvasWidth;
             if (canvas.height !== canvasHeight) canvas.height = canvasHeight;
 
-            const colors = THEMES[currentTheme] || THEMES["deep-teal"];
+            const colors = THEMES[currentTheme] || THEMES["impact-neural"];
 
             // Font Families
             let titleFontFamily = "'Outfit', 'Inter', sans-serif";
@@ -5498,6 +5744,15 @@
                 titleFontFamily = "'Inter', sans-serif";
             }
 
+            const slideType = s.type || 'normal';
+            const textAlign = s.textAlign || 'left';
+            const isLightTheme = !!colors.isLight;
+            const usePremiumSkin = !!colors.fullCoverStyle;
+            const accentInk = isLightTheme ? "#ffffff" : "#001219";
+            const dividerColor = isLightTheme ? "rgba(0, 18, 25, 0.12)" : "rgba(255, 255, 255, 0.14)";
+            const progress = (currentSlideIndex + 1) / currentSlides.length;
+            const counterText = `${(currentSlideIndex + 1).toString().padStart(2, '0')} / ${currentSlides.length.toString().padStart(2, '0')}`;
+
             // 1. Limpa e desenha Fundo Gradiente
             const bgGrad = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
             bgGrad.addColorStop(0, colors.bgGradientTop);
@@ -5505,104 +5760,176 @@
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-            // 2. Elementos Gráficos Sutis de Fundo (Arcos Neurais adaptados à altura)
-            drawSubtleBackground(ctx, colors, canvasWidth, canvasHeight);
+            // ==================== SLIDE CAPA DE ALTO IMPACTO & OBJETIVO ====================
+            if (slideType === "cover") {
+                // Atmosfera visual dedicada do tema
+                drawCoverAtmosphere(ctx, colors, canvasWidth, canvasHeight, isLightTheme);
 
-            // 3. Barra de Progresso no Topo
-            const progress = (currentSlideIndex + 1) / currentSlides.length;
-            ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-            ctx.fillRect(70, 48, 940, 8);
-            ctx.fillStyle = colors.progressFill;
-            ctx.fillRect(70, 48, 940 * progress, 8);
+                // Header Premium (Progresso + Pill Badge + Contador)
+                drawPremiumHeader(ctx, s, colors, counterText, progress, isLightTheme);
 
-            // 4. Header do Slide (Categoria + Contador)
-            ctx.fillStyle = colors.accent;
-            ctx.font = "bold 26px 'Inter', sans-serif";
-            ctx.textAlign = "left";
-            ctx.fillText((s.badge || "NEUROCIÊNCIA & CLÍNICA").toUpperCase(), 70, 110);
+                // Zona nobre central da capa
+                const coverTopY = is45 ? 168 : 150;
+                const coverFooterLineY = canvasHeight - 138;
+                const coverBottomLimitY = coverFooterLineY - 36;
+                const availableHeroHeight = coverBottomLimitY - coverTopY;
 
-            // Contador de Slide
-            const counterText = `${(currentSlideIndex + 1).toString().padStart(2, '0')} / ${currentSlides.length.toString().padStart(2, '0')}`;
-            ctx.font = "bold 24px 'Inter', sans-serif";
-            ctx.textAlign = "right";
-            ctx.fillStyle = colors.textMuted;
-            ctx.fillText(counterText, 1010, 110);
+                const coverMode = currentCoverMode || 'impact';
+                const coverBodyText = coverMode === 'minimal-hook'
+                    ? ''
+                    : (coverMode === 'impact' ? getObjectiveCoverBody(s.body) : (s.body || '').trim());
 
-            // 5. Linha divisória sutil superior
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(70, 135);
-            ctx.lineTo(1010, 135);
-            ctx.stroke();
+                // Medição do Headline Hero (Maior, mais forte e mais objetivo)
+                const defaultTitleSize = coverMode === 'minimal-hook'
+                    ? (is45 ? 92 : 84)
+                    : (coverMode === 'impact' ? (is45 ? 80 : 72) : (is45 ? 70 : 62));
+
+                let titleSize = s.titleSize || defaultTitleSize;
+                let titleLineHeight = Math.round(titleSize * 1.16);
+                ctx.font = `800 ${titleSize}px ${titleFontFamily}`;
+                let titleLines = wrapTextTokens(ctx, s.title, 940);
+                let titleTotalHeight = measureWrappedHeight(titleLines, titleLineHeight, titleLineHeight);
+
+                const maxTitleLines = coverMode === 'minimal-hook' ? 5 : 4;
+                const maxTitleHeight = coverBodyText ? Math.round(availableHeroHeight * 0.62) : availableHeroHeight - 50;
+                if (!s.titleSize) {
+                    while ((titleLines.length > maxTitleLines || titleTotalHeight > maxTitleHeight) && titleSize > 46) {
+                        titleSize -= 3;
+                        titleLineHeight = Math.round(titleSize * 1.16);
+                        ctx.font = `800 ${titleSize}px ${titleFontFamily}`;
+                        titleLines = wrapTextTokens(ctx, s.title, 940);
+                        titleTotalHeight = measureWrappedHeight(titleLines, titleLineHeight, titleLineHeight);
+                    }
+                }
+
+                // Medição do Subtítulo Objetivo (se visível)
+                let bodyLines = [];
+                let bodySize = s.bodySize || (is45 ? 32 : 30);
+                let bodyLineHeight = Math.round(bodySize * 1.44);
+                let blankGap = Math.round(bodySize * 0.75);
+                let calloutHeight = 0;
+                const calloutInnerWidth = 860;
+                const barGapTop = 26;
+                const barHeight = 7;
+                const barGapBottom = 28;
+
+                if (coverBodyText) {
+                    const maxCalloutHeight = Math.max(130, availableHeroHeight - titleTotalHeight - barGapTop - barHeight - barGapBottom);
+                    ctx.font = `500 ${bodySize}px ${bodyFontFamily}`;
+                    bodyLines = wrapTextTokens(ctx, coverBodyText, calloutInnerWidth);
+                    let totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+
+                    if (!s.bodySize) {
+                        while ((totalBodyHeight + 52) > maxCalloutHeight && bodySize > 22) {
+                            bodySize -= 2;
+                            bodyLineHeight = Math.round(bodySize * 1.44);
+                            blankGap = Math.round(bodySize * 0.75);
+                            ctx.font = `500 ${bodySize}px ${bodyFontFamily}`;
+                            bodyLines = wrapTextTokens(ctx, coverBodyText, calloutInnerWidth);
+                            totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                        }
+                    }
+                    calloutHeight = Math.min(maxCalloutHeight, Math.max(108, totalBodyHeight + 52));
+                }
+
+                // Centralização vertical equilibrada do bloco principal
+                const totalBlockHeight = coverBodyText
+                    ? (titleTotalHeight + barGapTop + barHeight + barGapBottom + calloutHeight)
+                    : (titleTotalHeight + 36);
+                const blockStartY = coverTopY + Math.max(0, Math.round((availableHeroHeight - totalBlockHeight) / 2));
+
+                // Renderiza Headline Hero com sombra sutil para máximo contraste
+                ctx.save();
+                ctx.font = `800 ${titleSize}px ${titleFontFamily}`;
+                if (!isLightTheme) {
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
+                    ctx.shadowBlur = 20;
+                    ctx.shadowOffsetY = 5;
+                }
+                const titleEndY = renderTokenLines(ctx, titleLines, 70, blockStartY + Math.round(titleSize * 0.9), 940, titleLineHeight, titleLineHeight, textAlign, colors);
+                ctx.restore();
+
+                // Barra de destaque gradiente
+                const barY = titleEndY + (barGapTop - 10);
+                const barW = 190;
+                const barX = textAlign === 'center' ? (canvasWidth - barW) / 2 : 70;
+                const barGrad = ctx.createLinearGradient(barX, barY, barX + barW, barY);
+                barGrad.addColorStop(0, colors.accent);
+                barGrad.addColorStop(1, hexToRgba(colors.accent, 0.15));
+                drawRoundedRect(ctx, barX, barY, barW, barHeight, 4, barGrad, null);
+
+                // Callout Objetivo (leve, limpo e escaneável)
+                if (coverBodyText) {
+                    const calloutY = barY + barHeight + barGapBottom;
+                    const calloutBg = currentCardStyle === 'minimal'
+                        ? null
+                        : (currentCardStyle === 'solid' ? colors.solidCardBg : hexToRgba(colors.accent, isLightTheme ? 0.06 : 0.09));
+                    const calloutBorder = currentCardStyle === 'minimal'
+                        ? null
+                        : hexToRgba(colors.accent, isLightTheme ? 0.22 : 0.25);
+
+                    if (calloutBg) {
+                        drawRoundedRect(ctx, 70, calloutY, 940, calloutHeight, 16, calloutBg, calloutBorder);
+                    }
+                    // Faixa vertical de destaque à esquerda
+                    drawRoundedRect(ctx, 70, calloutY, 7, calloutHeight, 4, colors.accent, null);
+
+                    ctx.font = `500 ${bodySize}px ${bodyFontFamily}`;
+                    const totalBodyH = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                    const textOffsetY = calloutY + Math.max(26, Math.round((calloutHeight - totalBodyH) / 2)) + Math.round(bodySize * 0.85);
+                    renderTokenLines(ctx, bodyLines, 110, textOffsetY, calloutInnerWidth, bodyLineHeight, blankGap, textAlign, colors);
+                }
+
+                // Rodapé Exclusivo da Capa: Autoridade + Botão CTA "Deslize"
+                drawPremiumFooter(ctx, s, colors, canvasWidth, canvasHeight, isLightTheme, accentInk, dividerColor);
+                return;
+            }
+
+            // 2. Fundo & Cabeçalho dos Slides Internos (Premium Completo vs. Clássico)
+            if (usePremiumSkin) {
+                drawCoverAtmosphere(ctx, colors, canvasWidth, canvasHeight, isLightTheme);
+                drawPremiumHeader(ctx, s, colors, counterText, progress, isLightTheme);
+            } else {
+                drawSubtleBackground(ctx, colors, canvasWidth, canvasHeight);
+
+                // Barra de Progresso no Topo
+                ctx.fillStyle = isLightTheme ? "rgba(0, 18, 25, 0.08)" : "rgba(255, 255, 255, 0.1)";
+                ctx.fillRect(70, 48, 940, 8);
+                ctx.fillStyle = colors.progressFill;
+                ctx.fillRect(70, 48, 940 * progress, 8);
+
+                // Header do Slide (Categoria + Contador)
+                ctx.fillStyle = colors.accent;
+                ctx.font = "bold 26px 'Inter', sans-serif";
+                ctx.textAlign = "left";
+                ctx.fillText((s.badge || "NEUROCIÊNCIA & CLÍNICA").toUpperCase(), 70, 110);
+
+                // Contador de Slide
+                ctx.font = "bold 24px 'Inter', sans-serif";
+                ctx.textAlign = "right";
+                ctx.fillStyle = colors.textMuted;
+                ctx.fillText(counterText, 1010, 110);
+
+                // Linha divisória sutil superior
+                ctx.strokeStyle = dividerColor;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(70, 135);
+                ctx.lineTo(1010, 135);
+                ctx.stroke();
+            }
 
             // Delimitações verticais do conteúdo
-            const contentTopY = is45 ? 190 : 175;
-            const footerDividerY = canvasHeight - 110;
+            const contentTopY = usePremiumSkin ? (is45 ? 168 : 152) : (is45 ? 190 : 175);
+            const footerDividerY = usePremiumSkin ? (canvasHeight - 138) : (canvasHeight - 110);
             const footerTextY = canvasHeight - 55;
-            const contentBottomY = footerDividerY - 25;
+            const contentBottomY = footerDividerY - 26;
             const maxContentHeight = contentBottomY - contentTopY;
-
-            const textAlign = s.textAlign || 'left';
-            const slideType = s.type || 'normal';
 
             ctx.textAlign = "left";
 
             // 6. RENDERIZAÇÃO POR TIPO DE SLIDE COM AUTO-FIT TOTAL
-            if (slideType === "cover") {
-                // ==================== SLIDE CAPA ====================
-                let titleSize = s.titleSize || (is45 ? 68 : 62);
-                let titleLineHeight = Math.round(titleSize * 1.25);
-                ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
-
-                let titleLines = wrapTextTokens(ctx, s.title, 940);
-                if (!s.titleSize) {
-                    while (titleLines.length > 3 && titleSize > 44) {
-                        titleSize -= 3;
-                        titleLineHeight = Math.round(titleSize * 1.25);
-                        ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
-                        titleLines = wrapTextTokens(ctx, s.title, 940);
-                    }
-                }
-
-                const titleTotalHeight = measureWrappedHeight(titleLines, titleLineHeight, titleLineHeight);
-                const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
-
-                // Linha de Destaque Âmbar
-                ctx.fillStyle = colors.accent;
-                ctx.fillRect(70, titleDrawnEndY + 18, 130, 8);
-
-                // Subtítulo em Cartão
-                const cardStartY = titleDrawnEndY + 45;
-                const availableCardHeight = contentBottomY - cardStartY;
-                const innerWidth = 850;
-                const innerMaxHeight = availableCardHeight - 90;
-
-                let bodySize = s.bodySize || (is45 ? 36 : 34);
-                let bodyLineHeight = Math.round(bodySize * 1.48);
-                let blankGap = Math.round(bodySize * 0.9);
-                ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
-
-                let bodyLines = wrapTextTokens(ctx, s.body, innerWidth);
-                let totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
-
-                if (!s.bodySize) {
-                    while (totalBodyHeight > innerMaxHeight && bodySize > 22) {
-                        bodySize -= 2;
-                        bodyLineHeight = Math.round(bodySize * 1.48);
-                        blankGap = Math.round(bodySize * 0.9);
-                        ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
-                        bodyLines = wrapTextTokens(ctx, s.body, innerWidth);
-                        totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
-                    }
-                }
-
-                const cardHeight = Math.min(availableCardHeight, Math.max(160, totalBodyHeight + 90));
-                drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
-
-                renderTokenLines(ctx, bodyLines, 115, cardStartY + 50 + bodySize, innerWidth, bodyLineHeight, blankGap, textAlign, colors);
-
-            } else if (slideType === "steps") {
+            if (slideType === "steps") {
                 // ==================== SLIDE PASSOS ====================
                 let titleSize = s.titleSize || (is45 ? 56 : 50);
                 let titleLineHeight = Math.round(titleSize * 1.25);
@@ -5645,7 +5972,7 @@
                     ctx.arc(125, badgeY, 24, 0, Math.PI * 2);
                     ctx.fill();
 
-                    ctx.fillStyle = "#001219";
+                    ctx.fillStyle = accentInk;
                     ctx.font = `bold 24px 'Inter', sans-serif`;
                     ctx.textAlign = "center";
                     ctx.fillText(`${idx + 1}`, 125, badgeY + 8);
@@ -5750,69 +6077,59 @@
 
             } else if (slideType === "cta") {
                 // ==================== SLIDE FECHAMENTO & CTA ====================
-                let titleSize = s.titleSize || (is45 ? 60 : 54);
-                let titleLineHeight = Math.round(titleSize * 1.25);
+                let titleSize = s.titleSize || (is45 ? 58 : 52);
+                let titleLineHeight = Math.round(titleSize * 1.22);
                 ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
                 let titleLines = wrapTextTokens(ctx, s.title, 940);
+                if (!s.titleSize) {
+                    while (titleLines.length > 2 && titleSize > 38) {
+                        titleSize -= 3;
+                        titleLineHeight = Math.round(titleSize * 1.22);
+                        ctx.font = `bold ${titleSize}px ${titleFontFamily}`;
+                        titleLines = wrapTextTokens(ctx, s.title, 940);
+                    }
+                }
                 const titleDrawnEndY = renderTokenLines(ctx, titleLines, 70, contentTopY + titleSize, 940, titleLineHeight, titleLineHeight, textAlign, colors);
 
-                const cardStartY = titleDrawnEndY + 30;
+                const cardStartY = titleDrawnEndY + 28;
                 const cardHeight = contentBottomY - cardStartY;
                 drawCardBackground(ctx, 70, cardStartY, 940, cardHeight, colors, currentCardStyle);
 
-                // Avatar Monograma DM
-                ctx.fillStyle = colors.accent;
-                ctx.beginPath();
-                ctx.arc(150, cardStartY + 95, 45, 0, Math.PI * 2);
-                ctx.fill();
+                // Corpo do CTA limpo (sem cabeçalho interno redundante e sem "Acesse: deomagalhaes.com.br")
+                const cleanCtaBody = (s.body || "").replace(/\n*\s*acesse:\s*deomagalhaes\.com\.br\.?\s*$/i, "").trim();
+                const ctaInnerWidth = 850;
+                const maxCtaTextHeight = Math.max(120, cardHeight - 155);
 
-                ctx.fillStyle = "#001219";
-                ctx.font = "bold 34px 'Outfit', sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("DM", 150, cardStartY + 107);
-
-                ctx.textAlign = "left";
-                ctx.fillStyle = colors.textMain;
-                ctx.font = `bold 34px ${titleFontFamily}`;
-                ctx.fillText("Deo Magalhães", 225, cardStartY + 90);
-                ctx.font = "500 24px 'Inter', sans-serif";
-                ctx.fillStyle = colors.textMuted;
-                ctx.fillText("Neuropsicólogo & Neurocientista • CRP 04/42784", 225, cardStartY + 125);
-
-                // Divisória no CTA
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(115, cardStartY + 165);
-                ctx.lineTo(965, cardStartY + 165);
-                ctx.stroke();
-
-                // Corpo do CTA com Auto-Fit
-                let bodySize = s.bodySize || (is45 ? 36 : 32);
+                let bodySize = s.bodySize || (is45 ? 36 : 34);
                 let bodyLineHeight = Math.round(bodySize * 1.48);
-                let blankGap = Math.round(bodySize * 0.9);
+                let blankGap = Math.round(bodySize * 0.85);
                 ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
 
-                let bodyLines = wrapTextTokens(ctx, s.body, 850);
+                let bodyLines = wrapTextTokens(ctx, cleanCtaBody, ctaInnerWidth);
                 let totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
 
-                while (totalBodyHeight > (cardHeight - 290) && bodySize > 22) {
-                    bodySize -= 2;
-                    bodyLineHeight = Math.round(bodySize * 1.48);
-                    ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
-                    bodyLines = wrapTextTokens(ctx, s.body, 850);
-                    totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                if (!s.bodySize) {
+                    while (totalBodyHeight > maxCtaTextHeight && bodySize > 22) {
+                        bodySize -= 2;
+                        bodyLineHeight = Math.round(bodySize * 1.48);
+                        blankGap = Math.round(bodySize * 0.85);
+                        ctx.font = `400 ${bodySize}px ${bodyFontFamily}`;
+                        bodyLines = wrapTextTokens(ctx, cleanCtaBody, ctaInnerWidth);
+                        totalBodyHeight = measureWrappedHeight(bodyLines, bodyLineHeight, blankGap);
+                    }
                 }
 
-                const drawnBodyEnd = renderTokenLines(ctx, bodyLines, 115, cardStartY + 215, 850, bodyLineHeight, blankGap, textAlign, colors);
+                const textAreaHeight = cardHeight - 110;
+                const ctaTextStartY = cardStartY + Math.max(36, Math.round((textAreaHeight - totalBodyHeight) / 2)) + Math.round(bodySize * 0.85);
+                renderTokenLines(ctx, bodyLines, 115, ctaTextStartY, ctaInnerWidth, bodyLineHeight, blankGap, textAlign, colors);
 
                 // Botão de Chamada para Ação no Fundo do Cartão
-                const pillY = Math.max(drawnBodyEnd + 25, cardStartY + cardHeight - 85);
-                drawRoundedRect(ctx, 115, pillY, 850, 60, 30, colors.accent, null);
-                ctx.fillStyle = "#001219";
+                const pillY = cardStartY + cardHeight - 84;
+                drawRoundedRect(ctx, 115, pillY, 850, 58, 29, colors.accent, null);
+                ctx.fillStyle = accentInk;
                 ctx.font = "bold 26px 'Inter', sans-serif";
                 ctx.textAlign = "center";
-                ctx.fillText("🔗 Toque no Link da Bio • deomagalhaes.com.br", 115 + 425, pillY + 39);
+                ctx.fillText("🔗 Toque no Link da Bio • deomagalhaes.com.br", 115 + 425, pillY + 38);
 
             } else {
                 // ==================== SLIDE NORMAL / CONCEITO ====================
@@ -5863,25 +6180,29 @@
                 renderTokenLines(ctx, bodyLines, 120, cardStartY + 45 + bodySize, innerWidth, bodyLineHeight, blankGap, textAlign, colors);
             }
 
-            // 7. Rodapé Fixo Institucional Canônico
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(70, footerDividerY);
-            ctx.lineTo(1010, footerDividerY);
-            ctx.stroke();
+            // 7. Rodapé (Premium Completo vs. Institucional Canônico)
+            if (usePremiumSkin) {
+                drawPremiumFooter(ctx, s, colors, canvasWidth, canvasHeight, isLightTheme, accentInk, dividerColor);
+            } else {
+                ctx.strokeStyle = dividerColor;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(70, footerDividerY);
+                ctx.lineTo(1010, footerDividerY);
+                ctx.stroke();
 
-            // Identidade no rodapé esquerdo
-            ctx.textAlign = "left";
-            ctx.fillStyle = colors.accent;
-            ctx.font = "bold 26px 'Inter', sans-serif";
-            ctx.fillText("@deomagalhaesneuro", 70, footerTextY);
+                // Identidade no rodapé esquerdo
+                ctx.textAlign = "left";
+                ctx.fillStyle = colors.accent;
+                ctx.font = "bold 26px 'Inter', sans-serif";
+                ctx.fillText("@deomagalhaesneuro", 70, footerTextY);
 
-            // Ação ou chamada no rodapé direito
-            ctx.textAlign = "right";
-            ctx.fillStyle = colors.textMuted;
-            ctx.font = "600 24px 'Inter', sans-serif";
-            ctx.fillText(s.footer || "deomagalhaes.com.br", 1010, footerTextY);
+                // Ação ou chamada no rodapé direito
+                ctx.textAlign = "right";
+                ctx.fillStyle = colors.textMuted;
+                ctx.font = "600 24px 'Inter', sans-serif";
+                ctx.fillText(s.footer || "deomagalhaes.com.br", 1010, footerTextY);
+            }
         }
 
         // ==========================================
@@ -5889,14 +6210,117 @@
         // ==========================================
         function drawCardBackground(ctx, x, y, width, height, colors, style) {
             if (style === 'minimal') {
+                if (colors.fullCoverStyle) {
+                    drawRoundedRect(ctx, x, y, 7, height, 4, colors.accent, null);
+                }
                 return; // Sem cartão
             }
             if (style === 'solid') {
-                drawRoundedRect(ctx, x, y, width, height, 20, colors.solidCardBg, colors.solidCardBorder);
-                return;
+                drawRoundedRect(ctx, x, y, width, height, 18, colors.solidCardBg, colors.solidCardBorder);
+            } else {
+                // Padrão Glassmorphism
+                drawRoundedRect(ctx, x, y, width, height, 18, colors.cardBg, colors.cardBorder);
             }
-            // Padrão Glassmorphism
-            drawRoundedRect(ctx, x, y, width, height, 20, colors.cardBg, colors.cardBorder);
+            if (colors.fullCoverStyle) {
+                // Faixa vertical de destaque (mesma assinatura visual da capa)
+                drawRoundedRect(ctx, x, y, 7, height, 4, colors.accent, null);
+            }
+        }
+
+        function drawPremiumHeader(ctx, s, colors, counterText, progress, isLightTheme) {
+            // Barra de progresso discreta no topo
+            ctx.fillStyle = isLightTheme ? "rgba(0, 18, 25, 0.08)" : "rgba(255, 255, 255, 0.12)";
+            ctx.fillRect(70, 34, 940, 5);
+            ctx.fillStyle = colors.progressFill;
+            ctx.fillRect(70, 34, 940 * progress, 5);
+
+            // Pill Badge de Categoria de Alto Contraste
+            const badgeLabel = (s.badge || "NEUROCIÊNCIA & CLÍNICA").toUpperCase();
+            ctx.font = "800 21px 'Inter', sans-serif";
+            const badgeTextW = ctx.measureText(badgeLabel).width;
+            const pillW = Math.min(730, badgeTextW + 72);
+            const pillH = 48;
+            const pillX = 70;
+            const pillY = 66;
+            drawRoundedRect(ctx, pillX, pillY, pillW, pillH, 24, hexToRgba(colors.accent, isLightTheme ? 0.13 : 0.18), colors.accent);
+
+            // Ponto luminoso dentro da Pill
+            ctx.fillStyle = colors.accent;
+            ctx.beginPath();
+            ctx.arc(pillX + 26, pillY + pillH / 2, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.textAlign = "left";
+            ctx.fillStyle = colors.accent;
+            ctx.fillText(badgeLabel, pillX + 44, pillY + 31);
+
+            // Contador discreto à direita
+            ctx.font = "700 22px 'Inter', sans-serif";
+            ctx.textAlign = "right";
+            ctx.fillStyle = colors.textMuted;
+            ctx.fillText(counterText, 1010, pillY + 31);
+            ctx.textAlign = "left";
+        }
+
+        function drawPremiumFooter(ctx, s, colors, canvasWidth, canvasHeight, isLightTheme, accentInk, dividerColor) {
+            const footerLineY = canvasHeight - 138;
+            ctx.strokeStyle = dividerColor;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(70, footerLineY);
+            ctx.lineTo(1010, footerLineY);
+            ctx.stroke();
+
+            const footerCenterY = footerLineY + 68;
+
+            // Assinatura compacta à esquerda
+            ctx.fillStyle = colors.accent;
+            ctx.beginPath();
+            ctx.arc(98, footerCenterY, 27, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = accentInk;
+            ctx.font = "800 22px 'Outfit', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("DM", 98, footerCenterY + 8);
+
+            ctx.textAlign = "left";
+            ctx.fillStyle = colors.textMain;
+            ctx.font = "700 24px 'Inter', sans-serif";
+            ctx.fillText("Deo Magalhães", 140, footerCenterY - 2);
+            ctx.fillStyle = colors.textMuted;
+            ctx.font = "500 19px 'Inter', sans-serif";
+            ctx.fillText("@deomagalhaesneuro", 140, footerCenterY + 23);
+
+            // Botão Pill Chamativo à direita
+            const ctaLabel = (s.footer || "Deslize para ler ➔").trim();
+            let ctaFontSize = 21;
+            ctx.font = `800 ${ctaFontSize}px 'Inter', sans-serif`;
+            let ctaTextW = ctx.measureText(ctaLabel).width;
+            while (ctaTextW > 450 && ctaFontSize > 16) {
+                ctaFontSize -= 1;
+                ctx.font = `800 ${ctaFontSize}px 'Inter', sans-serif`;
+                ctaTextW = ctx.measureText(ctaLabel).width;
+            }
+            const ctaPillW = Math.min(500, Math.max(210, ctaTextW + 52));
+            const ctaPillH = 54;
+            const ctaPillX = 1010 - ctaPillW;
+            const ctaPillY = footerCenterY - ctaPillH / 2;
+
+            ctx.save();
+            if (!isLightTheme) {
+                ctx.shadowColor = hexToRgba(colors.accent, 0.35);
+                ctx.shadowBlur = 18;
+                ctx.shadowOffsetY = 4;
+            }
+            drawRoundedRect(ctx, ctaPillX, ctaPillY, ctaPillW, ctaPillH, 27, colors.accent, null);
+            ctx.restore();
+
+            ctx.fillStyle = accentInk;
+            ctx.font = `800 ${ctaFontSize}px 'Inter', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.fillText(ctaLabel, ctaPillX + ctaPillW / 2, ctaPillY + Math.round(ctaPillH / 2) + Math.round(ctaFontSize * 0.35));
+            ctx.textAlign = "left";
         }
 
         function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke) {
@@ -5920,6 +6344,150 @@
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
             }
+        }
+
+        function hexToRgba(hex, alpha) {
+            if (!hex || typeof hex !== 'string') return `rgba(238, 155, 0, ${alpha})`;
+            const clean = hex.replace('#', '').trim();
+            if (clean.length === 3) {
+                const r = parseInt(clean[0] + clean[0], 16);
+                const g = parseInt(clean[1] + clean[1], 16);
+                const b = parseInt(clean[2] + clean[2], 16);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+            if (clean.length === 6) {
+                const r = parseInt(clean.substring(0, 2), 16);
+                const g = parseInt(clean.substring(2, 4), 16);
+                const b = parseInt(clean.substring(4, 6), 16);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+            return `rgba(238, 155, 0, ${alpha})`;
+        }
+
+        function getObjectiveCoverBody(rawBody) {
+            const text = (rawBody || "").trim();
+            if (!text) return "";
+            const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+            if (paragraphs.length <= 1) return text;
+            // Prefere o parágrafo com destaque *...* (tese/gancho clínico central); senão usa o mais conciso
+            const highlighted = paragraphs.find(p => /\*[^*]+\*/.test(p));
+            if (highlighted) return highlighted;
+            return paragraphs.reduce((a, b) => (a.length <= b.length ? a : b));
+        }
+
+        function drawCoverAtmosphere(ctx, colors, canvasWidth, canvasHeight, isLightTheme) {
+            ctx.save();
+            const mode = colors.atmosphere || "neural";
+            const secondaryColor = colors.secondaryGlow || colors.progressFill || colors.accent;
+
+            // Faixa superior vibrante (identidade forte no grid do Instagram)
+            ctx.fillStyle = colors.accent;
+            ctx.fillRect(0, 0, canvasWidth, mode === "swiss" ? 14 : 12);
+
+            // Spotlight radial principal atrás do título
+            const glow1 = ctx.createRadialGradient(
+                canvasWidth * 0.24, canvasHeight * 0.34, 20,
+                canvasWidth * 0.24, canvasHeight * 0.34, canvasWidth * 0.68
+            );
+            glow1.addColorStop(0, hexToRgba(colors.accent, isLightTheme ? 0.12 : 0.21));
+            glow1.addColorStop(0.55, hexToRgba(colors.accent, isLightTheme ? 0.04 : 0.07));
+            glow1.addColorStop(1, "rgba(0, 0, 0, 0)");
+            ctx.fillStyle = glow1;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            // Brilho secundário sutil no canto inferior direito
+            const glow2 = ctx.createRadialGradient(
+                canvasWidth * 0.88, canvasHeight * 0.84, 10,
+                canvasWidth * 0.88, canvasHeight * 0.84, canvasWidth * 0.55
+            );
+            glow2.addColorStop(0, hexToRgba(secondaryColor, isLightTheme ? 0.09 : 0.16));
+            glow2.addColorStop(1, "rgba(0, 0, 0, 0)");
+            ctx.fillStyle = glow2;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            if (mode === "editorial") {
+                // Moldura dupla editorial de revista
+                ctx.strokeStyle = hexToRgba(colors.accent, isLightTheme ? 0.22 : 0.26);
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(26, 26, canvasWidth - 52, canvasHeight - 52);
+                ctx.strokeStyle = hexToRgba(colors.accent, isLightTheme ? 0.10 : 0.12);
+                ctx.lineWidth = 1;
+                ctx.strokeRect(34, 34, canvasWidth - 68, canvasHeight - 68);
+            } else if (mode === "cyber") {
+                // Matriz de pontos sinápticos + arcos neon
+                ctx.fillStyle = hexToRgba(colors.accent, 0.16);
+                for (let gx = 60; gx < canvasWidth; gx += 64) {
+                    for (let gy = 60; gy < canvasHeight; gy += 64) {
+                        ctx.beginPath();
+                        ctx.arc(gx, gy, 1.6, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                const cx = canvasWidth - 40;
+                const cy = 90;
+                ctx.strokeStyle = hexToRgba(colors.accent, 0.22);
+                ctx.lineWidth = 1.5;
+                [170, 290].forEach(r => {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+            } else if (mode === "stoic") {
+                // Cantoneiras clássicas filosóficas em ouro velho
+                const m = 34;
+                const len = 46;
+                ctx.strokeStyle = hexToRgba(colors.accent, 0.45);
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(m, m + len); ctx.lineTo(m, m); ctx.lineTo(m + len, m);
+                ctx.moveTo(canvasWidth - m - len, m); ctx.lineTo(canvasWidth - m, m); ctx.lineTo(canvasWidth - m, m + len);
+                ctx.moveTo(m, canvasHeight - m - len); ctx.lineTo(m, canvasHeight - m); ctx.lineTo(m + len, canvasHeight - m);
+                ctx.moveTo(canvasWidth - m - len, canvasHeight - m); ctx.lineTo(canvasWidth - m, canvasHeight - m); ctx.lineTo(canvasWidth - m, canvasHeight - m - len);
+                ctx.stroke();
+            } else if (mode === "swiss") {
+                // Grade arquitetônica suíça de alto contraste
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+                ctx.lineWidth = 1;
+                [70, 383, 696, 1010].forEach(vx => {
+                    ctx.beginPath();
+                    ctx.moveTo(vx, 14);
+                    ctx.lineTo(vx, canvasHeight);
+                    ctx.stroke();
+                });
+                [140, Math.round(canvasHeight * 0.5), canvasHeight - 138].forEach(hy => {
+                    ctx.beginPath();
+                    ctx.moveTo(0, hy);
+                    ctx.lineTo(canvasWidth, hy);
+                    ctx.stroke();
+                });
+            } else {
+                // Padrão "neural": Arcos neurais geométricos + nós sinápticos
+                const cx = canvasWidth - 40;
+                const cy = 90;
+                ctx.strokeStyle = hexToRgba(colors.accent, isLightTheme ? 0.14 : 0.18);
+                ctx.lineWidth = 1.5;
+                [170, 275, 385].forEach(r => {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+
+                const nodes = [
+                    { angle: 2.35, r: 170, size: 5 },
+                    { angle: 2.65, r: 275, size: 6.5 },
+                    { angle: 2.05, r: 385, size: 5 }
+                ];
+                nodes.forEach(n => {
+                    const nx = cx + Math.cos(n.angle) * n.r;
+                    const ny = cy + Math.sin(n.angle) * n.r;
+                    ctx.fillStyle = hexToRgba(colors.accent, isLightTheme ? 0.35 : 0.55);
+                    ctx.beginPath();
+                    ctx.arc(nx, ny, n.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+
+            ctx.restore();
         }
 
         function drawSubtleBackground(ctx, colors, canvasWidth, canvasHeight) {
